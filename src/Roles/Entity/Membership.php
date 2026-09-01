@@ -10,7 +10,6 @@ use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Users\Entity\User;
 use DateTime;
-use Throwable;
 
 /**
  * @brief Handle memberships of roles and manage it in the database table adm_members
@@ -51,49 +50,12 @@ class Membership extends Entity
     }
 
     /**
-     * Set a new value for a column of the database table. The value is only saved in the object.
-     * You must call the method **save** to store the new value to the database. If the unique key
-     * column is set to 0, then this record will be a new record and all other columns are marked as changed.
-     * This method also queues the changes to the field for admin notification
-     * messages. Apart from this, the parent's **setValue** is used to set the new value.
-     * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed $newValue The new value that should be stored in the database field
-     * @param bool $checkValue The value will be checked if it's valid. If set to **false** then the value will not be checked.
-     * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception
-     * @see Entity#getValue
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
      */
-    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
+    public function getHookId(): ?string
     {
-        global $gChangeNotification, $gCurrentSession, $gSettingsManager;
-
-        // New records will be logged in save, because their ID is only generated during first save
-        if (!$this->newRecord && isset($gCurrentSession)) {
-            if (in_array($columnName, array('mem_begin', 'mem_end'))) {
-                $oldValue = $this->getValue($columnName, $gSettingsManager->getString('system_date'));
-            } else {
-                $oldValue = $this->getValue($columnName);
-            }
-            // format the new value in system date format for logging and notification
-            $newValueLogging = $newValue;
-            try {
-                $date = new DateTime($newValue);
-                $newValueLogging = $date->format($gSettingsManager->getString('system_date'));
-            } catch (Throwable) {
-                // not a date, so keep original value
-            }
-            if ($oldValue != $newValueLogging) {
-                $memId = $this->getValue('mem_id');
-                $obj = new self($this->db, $memId);
-                $gChangeNotification->logRoleChange(
-                    $obj,
-                    $columnName,
-                    (string)$oldValue,
-                    (string)$newValueLogging
-                );
-            }
-        }
-        return parent::setValue($columnName, $newValue, $checkValue);
+        return 'membership';
     }
 
     /**
@@ -129,42 +91,13 @@ class Membership extends Entity
     }
 
     /**
-     * Deletes the selected record of the table and optionally sends an admin notification if configured
+     * Deletes the selected record of the table and renews the user object of the affected user
      * @return true Returns **true** if no error occurred
      * @throws Exception
      */
     public function delete(): bool
     {
-        // Queue admin notification about membership deletion
-        global $gChangeNotification, $gCurrentSession, $gSettingsManager;
-
-        // If this is a new record that hasn't been written to the database, simply ignore it
-        if (!$this->newRecord && is_object($gChangeNotification)) {
-            $memId = $this->getValue('mem_id');
-            $obj = new self($this->db, $memId);
-
-            // Log begin, end and leader as changed (set to NULL)
-            $gChangeNotification->logRoleChange(
-                $obj,
-                'mem_begin',
-                $this->getValue('mem_begin', $gSettingsManager->getString('system_date')),
-                ''
-            );
-            $gChangeNotification->logRoleChange(
-                $obj,
-                'mem_end',
-                $this->getValue('mem_end', $gSettingsManager->getString('system_date')),
-                ''
-            );
-            if ($this->getValue('mem_leader')) {
-                $gChangeNotification->logRoleChange(
-                    $obj,
-                    'mem_leader',
-                    $this->getValue('mem_leader'),
-                    ''
-                );
-            }
-        }
+        global $gCurrentSession;
 
         if (isset($gCurrentSession)) {
             // renew a user object of the affected user because of edited role assignment
@@ -185,7 +118,7 @@ class Membership extends Entity
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        global $gCurrentSession, $gChangeNotification, $gCurrentUser, $gSettingsManager;
+        global $gCurrentSession, $gCurrentUser;
 
         // if a role is administrator than only administrator can add new user,
         // but don't change their own membership, because there must be at least one administrator
@@ -193,45 +126,11 @@ class Membership extends Entity
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $newRecord = $this->newRecord;
-
         $returnStatus = parent::save($updateFingerPrint);
 
         if ($returnStatus && isset($gCurrentSession)) {
             // renew a user object of the affected user because of edited role assignment
             $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
-        }
-
-        if ($newRecord && is_object($gChangeNotification)) {
-            // Queue admin notification about membership deletion
-
-            // storing a record for the first time does NOT update the fields from
-            // the role table => need to create a new object that loads the
-            // role name from the database too!
-            $memId = $this->getValue('mem_id');
-            $obj = new self($this->db, $memId);
-
-            // Log begin, end and leader as changed (set to NULL)
-            $gChangeNotification->logRoleChange(
-                $obj,
-                'mem_begin',
-                '',
-                $obj->getValue('mem_begin', $gSettingsManager->getString('system_date'))
-            );
-            $gChangeNotification->logRoleChange(
-                $obj,
-                'mem_end',
-                '',
-                $obj->getValue('mem_end', $gSettingsManager->getString('system_date'))
-            );
-            if ($obj->getValue('mem_leader')) {
-                $gChangeNotification->logRoleChange(
-                    $obj,
-                    'mem_leader',
-                    '',
-                    $obj->getValue('mem_leader')
-                );
-            }
         }
 
         return $returnStatus;

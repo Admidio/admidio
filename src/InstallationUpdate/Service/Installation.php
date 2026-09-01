@@ -491,6 +491,7 @@ class Installation
          * changelog. Beside that the tables of the changelog don't exist before db.sql was executed.
          */
         Entity::setLoggingEnabled(false);
+        Entity::setHooksEnabled(false);
 
         $gL10n->setLanguage($config->language);
 

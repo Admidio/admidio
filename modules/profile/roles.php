@@ -60,7 +60,7 @@ try {
     }
 
     // we need a page object even in inline mode for the smarty engine
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-roles', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_roles', $headline);
     $smarty = $page->createSmartyObject();
 
     $javascript = '
@@ -130,7 +130,7 @@ try {
         <div class="modal-body">';
     } else {
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-roles', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_roles', $headline);
         $page->addJavascript($javascript, true);
         $messageId = '';
 

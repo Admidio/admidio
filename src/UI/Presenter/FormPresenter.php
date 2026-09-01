@@ -2,6 +2,7 @@
 
 namespace Admidio\UI\Presenter;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
@@ -107,6 +108,17 @@ class FormPresenter
      * @var array Array with all elements of the form and their attributes as array
      */
     protected array $elements = array();
+    /**
+     * @var bool Whether the form is finished and form_built has been dispatched for it.
+     */
+    protected bool $finalized = false;
+
+    /**
+     * The element types whose offered entries validate() checks the submitted value against. Only
+     * these are handed to the **form_select_options** filter, because only for these does taking an
+     * entry away also mean that it is not accepted any more.
+     */
+    protected const TYPES_WITH_OFFERED_VALUES = array('select', 'radio', 'button-group.radio');
 
     /**
      * Constructor creates the form element
@@ -212,7 +224,7 @@ class FormPresenter
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements');
+        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements', 'finalized');
     }
 
     /**
@@ -1296,6 +1308,9 @@ class FormPresenter
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          another array with the combination of attributes name and attributes value.
+     *                        - **allowCustomValues** : If set to **true** the validation of the form accepts a value that is
+     *                          not one of the entries above. Set it for a select box whose select2 is created with **tags**,
+     *                          where the user may enter an entry of their own.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
      *                          If you need an additional parameter for the text you can add an array. The first entry
@@ -1326,6 +1341,7 @@ class FormPresenter
             'placeholder' => '',
             'maximumSelectionNumber' => 0,
             'valueAttributes' => '',
+            'allowCustomValues' => false,
             'toggleable' => false
         ), $options));
         $attributes = array('name' => $id);
@@ -1886,6 +1902,8 @@ class FormPresenter
      */
     public function addToHtmlPage(bool $ajaxSubmit = true): void
     {
+        $this->finalize();
+
         try {
             if (isset($this->htmlPage)) {
                 if ($this->type === 'navbar') {
@@ -1917,6 +1935,8 @@ class FormPresenter
     public function addToSmarty(Smarty $smarty): void
     {
         global $gL10n, $gSettingsManager;
+
+        $this->finalize();
 
         $smarty->assign('urlAdmidio', ADMIDIO_URL);
         $smarty->assign('l10n', $gL10n);
@@ -1950,6 +1970,8 @@ class FormPresenter
     public function appendToSmarty(Smarty $smarty): void
     {
         global $gL10n, $gSettingsManager;
+
+        $this->finalize();
 
         if (!isset($smarty->tpl_vars['urlAdmidio'])) {
             $smarty->assign('urlAdmidio', ADMIDIO_URL);
@@ -2024,20 +2046,194 @@ class FormPresenter
     }
 
     /**
-     * This method returns the attributes array.
+     * The form is finished: everything that builds it has run, and what it holds now is what is
+     * rendered and what the POST of it is validated against. The **form_built** action is dispatched
+     * here, so a callback can add, remove or replace an element through hasElement(), getElement(),
+     * insertElement(), replaceElement() and removeElement(), and the change reaches both the browser
+     * and the validation.
+     *
+     * It runs at most once per form. Every way of reading a finished form calls it - addToHtmlPage(),
+     * addToSmarty(), appendToSmarty(), getAttributes(), getElements() - and so does
+     * Session::addFormObject(), for a form that is stored without being rendered. Code that is still
+     * building a form must therefore not call any of those; getElement() is the way to look at a
+     * single element in between, and it does not finalize.
+     *
+     * A callback must not put a closure into an element: FormPresenter is serialized into the session
+     * and a closure cannot be. The form is passed rather than the elements, because getElements()
+     * returns a copy.
+     *
+     * @return void
+     */
+    public function finalize(): void
+    {
+        if ($this->finalized) {
+            return;
+        }
+
+        // set before the dispatch, so that a callback which reads the form does not recurse
+        $this->finalized = true;
+
+        Hooks::doAction('form_built', $this);
+
+        // after form_built, so that a select which a callback has just added is filtered as well
+        $this->filterOfferedValues();
+    }
+
+    /**
+     * Let the **form_select_options** filter change the entries that a select box, a radio group or a
+     * button group offers. It is called once per form, at the end of finalize(), and only for the
+     * element types whose entries validate() enforces - taking an entry away here also means that a
+     * request which submits it is refused, which is the whole point of the hook.
+     *
+     * The callback is handed the entries, the ID of the element, its type and the form. The entries
+     * have the shape the element type uses and must keep it: a **select** and a **button-group.radio**
+     * carry a list of **array('id' => ..., 'value' => ...)**, a **radio** an array of value to label.
+     * The filter has to answer with an array.
+     *
+     * An element that was built with **allowCustomValues** - the borrower of an inventory item is the
+     * one in the core - is filtered like any other, but its entries are not enforced, because that
+     * control deliberately accepts an entry the user typed.
+     *
+     * @return void
+     */
+    protected function filterOfferedValues(): void
+    {
+        if (!Hooks::hasFilter('form_select_options')) {
+            return;
+        }
+
+        foreach ($this->elements as $elementId => $element) {
+            if (!in_array($element['type'] ?? '', self::TYPES_WITH_OFFERED_VALUES, true)
+                || !array_key_exists('values', $element)) {
+                continue;
+            }
+
+            $this->elements[$elementId]['values'] = Hooks::applyTypedFilters(
+                'form_select_options',
+                $element['values'],
+                $elementId,
+                $element['type'],
+                $this
+            );
+        }
+    }
+
+    /**
+     * @return string Returns the ID of the form, which is also the HTML id of the form element.
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Whether the form has an element with that ID. It does not finalize the form, so it may be used
+     * while the form is still being built.
+     * @param string $id ID of the element.
+     * @return bool Returns **true** if the form has that element.
+     */
+    public function hasElement(string $id): bool
+    {
+        return array_key_exists($id, $this->elements);
+    }
+
+    /**
+     * One element of the form. It does not finalize the form, so it may be used while the form is
+     * still being built, which is what a presenter that looks at an element before it adds the next
+     * one needs.
+     * @param string $id ID of the element.
+     * @return array|null Returns the element, or **null** if the form has no element with that ID.
+     */
+    public function getElement(string $id): ?array
+    {
+        return $this->elements[$id] ?? null;
+    }
+
+    /**
+     * Replace one element of the form, keeping its position.
+     * @param string $id ID of the element that should be replaced.
+     * @param array $element The element that takes its place.
+     * @return bool Returns **true** if the element was replaced.
+     */
+    public function replaceElement(string $id, array $element): bool
+    {
+        if (!array_key_exists($id, $this->elements)) {
+            return false;
+        }
+
+        $this->elements[$id] = $element;
+
+        return true;
+    }
+
+    /**
+     * Remove one element from the form. It is then neither rendered nor accepted by validate().
+     * @param string $id ID of the element that should be removed.
+     * @return bool Returns **true** if the element was removed.
+     */
+    public function removeElement(string $id): bool
+    {
+        if (!array_key_exists($id, $this->elements)) {
+            return false;
+        }
+
+        unset($this->elements[$id]);
+
+        return true;
+    }
+
+    /**
+     * Put an element into the form at a given position. The order of the elements is the order in
+     * which the form is rendered, so an element that is appended ends up after the buttons unless a
+     * position is named.
+     * @param string $id ID of the new element.
+     * @param array $element The element.
+     * @param string|null $beforeId ID of the element it should precede. If it is **null** or the form
+     *                              has no element with that ID, the element is appended.
+     * @return void
+     */
+    public function insertElement(string $id, array $element, ?string $beforeId = null): void
+    {
+        if ($beforeId === null || !array_key_exists($beforeId, $this->elements)) {
+            $this->elements[$id] = $element;
+            return;
+        }
+
+        $reordered = array();
+        foreach ($this->elements as $elementId => $existing) {
+            if ($elementId === $beforeId) {
+                $reordered[$id] = $element;
+            }
+            if ($elementId !== $id) {
+                $reordered[$elementId] = $existing;
+            }
+        }
+
+        $this->elements = $reordered;
+    }
+
+    /**
+     * This method returns the attributes array. Reading the finished form finalizes it.
      * @return array Returns all attributes of the form.
+     * @throws Exception
      */
     public function getAttributes(): array
     {
+        $this->finalize();
+
         return $this->attributes;
     }
 
     /**
-     * This method returns the elements array.
+     * This method returns the elements array. Reading the finished form finalizes it, so a presenter
+     * that is still building the form has to use getElement() or hasElement() instead.
      * @return array Returns all elements of the form.
+     * @throws Exception
      */
     public function getElements(): array
     {
+        $this->finalize();
+
         return $this->elements;
     }
 
@@ -2128,6 +2324,11 @@ class FormPresenter
     {
         global $gSettingsManager;
 
+        // the POST is judged against the finished form. A form that comes out of the session was
+        // finished before it was stored; one that is validated right after it was built is finished
+        // here, so that both are judged against the same elements.
+        $this->finalize();
+
         $validFieldValues = array();
         $selectedFields = array();
 
@@ -2197,6 +2398,10 @@ class FormPresenter
                 // remove html from every input value
                 $validFieldValues[$element['id']] = StringUtils::strStripTags($fieldValues[$element['id']]);
 
+                // a value that the form did not offer must not be accepted, no matter whether the
+                // control submits one value or a list of them
+                $this->validateOfferedValues($element, $validFieldValues[$element['id']]);
+
                 // check value depending on the field type
                 if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
                     switch ($element['type']) {
@@ -2228,11 +2433,6 @@ class FormPresenter
                                 throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
                             }
                             break;
-                        case 'select':
-                            if (!in_array($fieldValues[$element['id']], array_column($element['values'], 'id'))) {
-                                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
-                            }
-                            break;
                         case 'url':
                             if (!StringUtils::strValidCharacters($fieldValues[$element['id']], 'url')) {
                                 throw new Exception('SYS_URL_INVALID_CHAR', array($element['label']));
@@ -2248,6 +2448,54 @@ class FormPresenter
             }
         }
         return $validFieldValues;
+    }
+
+    /**
+     * Check the submitted value or values of a control that offers a fixed set of entries against
+     * that set. The set of an element is the one the form was built with, and the form is stored in
+     * the session, so a value that the user was never offered is rejected here even if the browser
+     * submitted it.
+     * @param array $element The form element that should be checked.
+     * @param mixed $value The submitted value, an array for a control that allows several entries.
+     * @return void
+     * @throws Exception SYS_FIELD_INVALID_INPUT
+     */
+    protected function validateOfferedValues(array $element, mixed $value): void
+    {
+        if (!empty($element['allowCustomValues'])) {
+            // the control lets the user enter an entry of their own, e.g. a select2 with tags
+            return;
+        }
+
+        switch ($element['type']) {
+            case 'select':
+            case 'button-group.radio':
+                // the entries were reorganized into an array of id and visible value
+                $offeredValues = array_column($element['values'], 'id');
+                break;
+
+            case 'radio':
+                // the entries were kept as they were given, the key of an entry is its value
+                $offeredValues = array_keys($element['values']);
+                if (!empty($element['showNoValueButton'])) {
+                    $offeredValues[] = '0';
+                }
+                break;
+
+            default:
+                return;
+        }
+
+        // an empty value means that nothing was selected, which the required check has covered
+        foreach ((is_array($value) ? $value : array($value)) as $singleValue) {
+            if ((string)$singleValue === '') {
+                continue;
+            }
+
+            if (!in_array((string)$singleValue, array_map('strval', $offeredValues), true)) {
+                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
+            }
+        }
     }
 
     /**

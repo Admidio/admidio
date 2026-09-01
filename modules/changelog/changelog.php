@@ -36,8 +36,6 @@ use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\Role;
 
-
-
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
 
@@ -141,7 +139,6 @@ try {
             $headline = $gL10n->get('SYS_CHANGE_HISTORY_GENERIC2', [$objName, implode(', ', $tableTitles)]);
         }
     }
-
     // add page to navigation history
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
@@ -162,7 +159,7 @@ try {
 
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-history', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_changelog', $headline);
     $page->setContentFullWidth();
 
     // Logic for hiding certain columns:

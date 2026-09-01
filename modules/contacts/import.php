@@ -34,7 +34,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-members-import', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_contacts_import', $headline);
 
     // show form
     $form = new FormPresenter(

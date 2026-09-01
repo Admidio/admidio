@@ -96,7 +96,7 @@ try {
     }
 
     // create an HTML page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-photos', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_photos', $headline);
     $page->setContentFullWidth();
 
     // add rss feed to photos

@@ -85,6 +85,15 @@ class Organization extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'organization';
+    }
+
+    /**
      * Read the organization that carries the given short name.
      *
      * The short name identifies the organization in the configuration file, in the login and in the
@@ -1014,9 +1023,11 @@ class Organization extends Entity
     public function readableName(): string
     {
         if (array_key_exists($this->columnPrefix.'_longname', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_longname'];
+            $name = $this->dbColumns[$this->columnPrefix.'_longname'];
         } else {
-            return $this->dbColumns[$this->keyColumnName];
+            $name = $this->dbColumns[$this->keyColumnName];
         }
+
+        return $this->filterReadableName($name);
     }
 }

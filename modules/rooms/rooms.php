@@ -31,7 +31,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create an HTML page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-rooms', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_rooms', $headline);
 
     // show a link to create new room
     $page->addPageFunctionsMenuItem(

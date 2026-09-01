@@ -59,7 +59,7 @@ try {
     $gNavigation->addUrl(CURRENT_URL, $headline, 'bi-envelope-fill');
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-messages', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_messages', $headline);
     $page->setContentFullWidth();
 
     // link to write new email

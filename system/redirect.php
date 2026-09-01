@@ -29,7 +29,7 @@ try {
     }
 
     // create an HTML page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-redirect', $gL10n->get('SYS_REDIRECT'));
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_redirect', $gL10n->get('SYS_REDIRECT'));
 
     // add special header for automatic redirection after x seconds
     $page->addHeader('<meta http-equiv="refresh" content="' . $gSettingsManager->getInt('weblinks_redirect_seconds') . '; url=' . $getUrl . '">');

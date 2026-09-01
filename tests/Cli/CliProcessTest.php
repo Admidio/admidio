@@ -576,7 +576,7 @@ class CliProcessTest extends DatabaseTestCase
                 $rows,
                 'A symmetrical relation must be persisted in both directions by production code.'
             );
-            $this->assertNotSame((int)$rows[0]['user1_id'], (int)$rows[1]['user1_id']);
+            $this->assertNotSame($rows[0]['user1_uuid'], $rows[1]['user1_uuid']);
 
             $this->adminCliOk(array('relation:delete', $relationUuid, '--yes'));
             $relationUuid = '';

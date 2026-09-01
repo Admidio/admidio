@@ -1,4 +1,5 @@
 <?php
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\ValueObject\SettingsManager;
@@ -16,7 +17,7 @@ use Admidio\Users\Entity\User;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new ModuleContacts('admidio-contacts', $headline);
+ * $page = new ModuleContacts('adm_contacts', $headline);
  * $page->createContentAssignUser();
  * $page->show();
  * ```
@@ -128,13 +129,33 @@ class ModuleLogin
     /**
      * Check if a user with that username exists and the password is set correct. If the user choose a different
      * organization than the session data will be updated.
+     *
+     * This is the boundary of one login attempt and therefore where the login hooks live. It is
+     * deliberately not User::checkLogin(): a user name that belongs to nobody is refused here, before
+     * a User object exists, and an attempt with an unknown name is exactly what a consumer of
+     * **login_failed** wants to hear about.
+     *
+     * Three actions are dispatched, none of which is ever given the password:
+     *
+     * - **login_attempt** before anything is looked up, with the login name and the organization that
+     *   was chosen. It is dispatched with doAction(), so a callback that throws refuses the attempt -
+     *   which is how a rate limit or a block list is applied;
+     * - **login_succeeded** with the user, once the login is established;
+     * - **login_failed** with the login name and the reason, for every attempt that does not succeed.
+     *   It is a diagnostic and is dispatched with doActionCatchErrors(), so that a failing listener
+     *   cannot replace the reason the login was refused. It has two dispatch sites: every check of
+     *   User::checkLogin() signals a failure by throwing, so the one for a **false** return is the
+     *   defensive half of that method's bool contract and does not fire today.
+     *
+     * The hooks describe the interactive login form. A login through SSO or through the updater does
+     * not pass here.
+     *
      * @return bool Returns **true** if the login data are valid
      * @throws Exception
      */
     public function checkLogin(): bool
     {
-        global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
-        global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gLogger;
+        global $gCurrentOrganization, $gCurrentSession;
 
         // check form field input and sanitized it from malicious content
         $loginForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -145,6 +166,33 @@ class ModuleLogin
         $postTotpCode = ($formValues['usr_totp_code'] ?? $formValues['plg_usr_totp_code'] ?? null);
         $postOrgShortName = ($formValues['org_shortname'] ?? ($formValues['plg_org_shortname'] ?? $gCurrentOrganization->getValue('org_shortname')));
         $postAutoLogin = ($formValues['auto_login'] ?? $formValues['plg_auto_login'] ?? false);
+
+        Hooks::doAction('login_attempt', (string)$postLoginName, (string)$postOrgShortName);
+
+        try {
+            return $this->authenticate((string)$postLoginName, (string)$postPassword, $postTotpCode, (string)$postOrgShortName, (bool)$postAutoLogin);
+        } catch (\Throwable $exception) {
+            Hooks::doActionCatchErrors('login_failed', (string)$postLoginName, $exception->getMessage(), (string)$postOrgShortName);
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Look the user up, switch the organization if another one was chosen, and let the user object
+     * check the password and everything that goes with it.
+     * @param string $postLoginName The login name or, if that is enabled, the email address.
+     * @param string $postPassword The password of the login form.
+     * @param string|null $postTotpCode The second factor, if one was asked for.
+     * @param string $postOrgShortName The organization that was chosen.
+     * @param bool $postAutoLogin Whether the login should be remembered.
+     * @return bool Returns **true** if the login data are valid
+     * @throws Exception
+     */
+    private function authenticate(string $postLoginName, string $postPassword, ?string $postTotpCode, string $postOrgShortName, bool $postAutoLogin): bool
+    {
+        global $gDb, $gCurrentOrganization, $gCurrentOrgId, $gProfileFields, $gCurrentSession, $gSettingsManager;
+        global $gMenu, $gCurrentUser, $gCurrentUserId, $gCurrentUserUUID, $gLogger;
 
         // Search for username
         $sql = 'SELECT usr_id
@@ -200,6 +248,14 @@ class ModuleLogin
         $gCurrentUserId = $gCurrentUser->getValue('usr_id');
         $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
 
-        return $gCurrentUser->checkLogin(password: $postPassword, totpCode: $postTotpCode, setAutoLogin: $postAutoLogin);
+        $loggedIn = $gCurrentUser->checkLogin(password: $postPassword, totpCode: $postTotpCode, setAutoLogin: $postAutoLogin);
+
+        if ($loggedIn) {
+            Hooks::doAction('login_succeeded', $gCurrentUser, $postOrgShortName);
+        } else {
+            Hooks::doActionCatchErrors('login_failed', $postLoginName, 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT', $postOrgShortName);
+        }
+
+        return $loggedIn;
     }
 }

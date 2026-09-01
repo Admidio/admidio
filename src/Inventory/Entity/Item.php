@@ -76,6 +76,15 @@ class Item extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'inventory_item';
+    }
+
+    /**
      * Changes to user data could be sent as a notification email to a specific role if this
      * function is enabled in the settings. If you want to suppress this logic you can
      * explicit disable it with this method for this user. So no changes to this user object will
@@ -185,7 +194,7 @@ class Item extends Entity
             $itemName = (string)$this->mItemsData->getValue('ITEMNAME', 'database');
         }
 
-        return $itemName;
+        return $this->filterReadableName($itemName);
     }
 
     /**

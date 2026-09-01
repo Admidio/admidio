@@ -17,6 +17,7 @@
  * config            : the selected configuration
  ***********************************************************************************************
  */
+use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -29,23 +30,25 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Admidio\Hooks\Hooks;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // check if the module is enabled and disallow access if it's disabled
-    if (!$gSettingsManager->getBool('category_report_module_enabled')) {
+    if (!Hooks::applyFilters('category_report_enabled', $gSettingsManager->getBool('category_report_module_enabled'))) {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // user must have the permission "rol_all_lists_view"
-    if (!$gCurrentUser->checkRolesRight('rol_all_lists_view')) {
+    // user must have the permission "rol_all_lists_view", which is what the component says
+    if (!Component::isVisible('CATEGORY-REPORT')) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
     // Read in the configuration array
     $report = new CategoryReport();
     $config = $report->getConfigArray();
+    $config = Hooks::applyFilters('category_report_config', $config);
 
     $getCrtId = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
@@ -109,9 +112,16 @@ try {
     $columnCount = count($report->headerData);
 
     // define title (html) and headline
-    $title = $gL10n->get('SYS_CATEGORY_REPORT');
-    $headline = $gL10n->get('SYS_CATEGORY_REPORT');
+    // Both are handed to the page below and read back filtered through getFilteredTitle() /
+    // getFilteredHeadline() (page_title / page_headline), because the export filename and the PDF
+    // header need the filtered text too and neither of them reaches PagePresenter::show().
     $subHeadline = $config[$report->getConfiguration()]['name'];
+
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
+    $page->setTitle($gL10n->get('SYS_CATEGORY_REPORT'));
+    $page->setHeadline($gL10n->get('SYS_CATEGORY_REPORT'));
+    $title = $page->getFilteredTitle();
+    $headline = $page->getFilteredHeadline();
 
     $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . $headline . '-' . $subHeadline;
 
@@ -120,14 +130,11 @@ try {
     }
 
     if ($getMode !== 'csv') {
-        $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
         $smarty = $page->createSmartyObject();
         $smarty->assign('l10n', $gL10n);
         if ($getMode === 'print') {
             $page->setContentFullWidth();
             $page->setPrintMode();
-            $page->setTitle($title);
-            $page->setHeadline($headline);
             $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
             $smarty->assign('classTable', $classTable);
         } elseif ($getMode === 'pdf') {
@@ -170,8 +177,6 @@ try {
         } elseif ($getMode === 'html') {
             // create html page object
             $page->setContentFullWidth();
-            $page->setTitle($title);
-            $page->setHeadline($headline);
 
             $page->addJavascript(
                 '

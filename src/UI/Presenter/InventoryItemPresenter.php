@@ -290,7 +290,7 @@ class InventoryItemPresenter extends PagePresenter
         }
 
         if ($getCopy) {
-            if ($form->getElements()['INF-CATEGORY']['type'] === 'text') {
+            if ($form->getElement('INF-CATEGORY')['type'] === 'text') {
                 // when copying an item and the user is not allowed to change the category, we cannot create copies
                 $form->addSubmitButton(
                     'adm_button_save',
@@ -901,7 +901,10 @@ class InventoryItemPresenter extends PagePresenter
                                 'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
                                 'defaultValue' => $items->getValue($infNameIntern),
-                                'multiselect' => false
+                                'multiselect' => false,
+                                // the select2 below is created with tags, so the receiver may be a
+                                // name that is not among the users of the organization
+                                'allowCustomValues' => true
                             )
                         );
 

@@ -65,6 +65,15 @@ class Category extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'category';
+    }
+
+    /**
      * Deletes the selected record of the table and all references in other tables.
      * After that the class will be initialized. The method throws exceptions if
      * the category couldn't be deleted.

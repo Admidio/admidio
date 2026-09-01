@@ -122,7 +122,11 @@ class UserImport extends User
             } elseif ($this->importMode === self::USER_IMPORT_DUPLICATE) {
                 // save as new user
                 $this->clear();
+                $this->initializeNewRecord();
             }
+        } else {
+            // no matching contact, the clear() above left a new record without its defaults
+            $this->initializeNewRecord();
         }
 
         return true;
@@ -152,6 +156,7 @@ class UserImport extends User
                 } elseif ($this->importMode === self::USER_IMPORT_DUPLICATE) {
                     // save as new user
                     $this->clear();
+                    $this->initializeNewRecord();
                 }
             }
         }

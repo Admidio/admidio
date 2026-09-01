@@ -313,7 +313,7 @@ class SSOClient extends Entity
      */
     public function readableName(): string
     {
-        return $this->dbColumns[$this->columnPrefix . '_client_name']??'';
+        return $this->filterReadableName($this->dbColumns[$this->columnPrefix . '_client_name']??'');
     }
 
 

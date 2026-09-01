@@ -41,6 +41,15 @@ class Folder extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'folder';
+    }
+
+    /**
      * @param array<string,array<int,array<string,mixed>>> $completeFolder
      * @return array<string,array<int,array<string,mixed>>>
      * @throws Exception

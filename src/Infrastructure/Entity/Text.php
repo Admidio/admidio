@@ -85,14 +85,12 @@ class Text extends Entity
 //        $textLabel = Language::translateIfTranslationStrId($textLabels[$row['name']]);
         if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
             $textLabel = $this->dbColumns[$this->columnPrefix.'_name'];
-            if (array_key_exists($textLabel, $textLabels)) {
-                return $textLabels[$textLabel];
-            } else {
-                return $textLabel;
-            }
+            $name = array_key_exists($textLabel, $textLabels) ? $textLabels[$textLabel] : $textLabel;
         } else {
-            return $this->dbColumns[$this->keyColumnName];
+            $name = $this->dbColumns[$this->keyColumnName];
         }
+
+        return $this->filterReadableName($name);
     }
     /**
      * Retrieve the list of database fields that are ignored for the changelog.

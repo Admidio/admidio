@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\UI\Presenter;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
@@ -19,7 +20,7 @@ use Smarty\Smarty;
  * **Code example**
  * ```
  * // create a simple HTML page with some text
- * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
+ * $page = PagePresenter::withHtmlIDAndHeadline('adm_example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple HTML page');
  * $page->addHtml('<strong>This is a simple HTML page!</strong>');
@@ -103,6 +104,13 @@ class PagePresenter
      * @var bool The Flag that will be responsible for a back button with the url to the previous page will be shown.
      */
     protected bool $showBackLink = false;
+    /**
+     * @var bool Whether page_title and page_headline have already been dispatched. A caller that
+     * needs the filtered text before show() runs - to build an export filename or an embedded
+     * document's title, for example - asks through getFilteredTitle()/getFilteredHeadline() instead
+     * of reading the raw text, and show() then finds the work already done instead of doing it again.
+     */
+    protected bool $textFiltered = false;
 
     /**
      * Static method which will return an instance of the PagePresenter. The HTML ID of the page will be set and
@@ -506,6 +514,46 @@ class PagePresenter
     }
 
     /**
+     * Dispatch page_title and page_headline exactly once, however many times this is called and
+     * whether it runs before or after show(): the same guarantee finalize() gives a form's elements.
+     * @return void
+     */
+    private function filterText(): void
+    {
+        if ($this->textFiltered) {
+            return;
+        }
+        $this->textFiltered = true;
+
+        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
+        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+    }
+
+    /**
+     * Returns the title of the page after page_title has run. Call this instead of getTitle() when
+     * the filtered text is needed before show() - to build an export filename or the title of an
+     * embedded document, for example.
+     * @return string Returns the filtered title of the HTML page.
+     */
+    public function getFilteredTitle(): string
+    {
+        $this->filterText();
+
+        return $this->title;
+    }
+
+    /**
+     * Returns the headline of the page after page_headline has run. See getFilteredTitle().
+     * @return string Returns the filtered headline of the HTML page.
+     */
+    public function getFilteredHeadline(): string
+    {
+        $this->filterText();
+
+        return $this->headline;
+    }
+
+    /**
      * If this method is called than the backlink to the previous page will not be shown.
      */
     public function hideBackLink(): void
@@ -548,13 +596,29 @@ class PagePresenter
 
 
     /**
-     * Set the HTML ID of the current HTML page.
+     * Set the HTML ID of the current HTML page. It is written into the **id** attribute of the body
+     * element and it is the stable name of the page for the **page_before_render** hook.
+     *
+     * The value is handed to the template here, the same way setHeadline() does it: the basic
+     * variables are assigned in the constructor, and every caller sets the ID afterwards.
      * @param string $htmlID The HTML ID of the current page.
      * @return void
      */
     public function setHtmlID(string $htmlID): void
     {
         $this->id = $htmlID;
+
+        if (isset($this->smarty)) {
+            $this->smarty->assign('id', $this->id);
+        }
+    }
+
+    /**
+     * @return string Returns the HTML ID of the page, its stable name in the page hooks.
+     */
+    public function getHtmlID(): string
+    {
+        return $this->id;
     }
 
     /** If set to true, then a page without a header menu and sidebar menu will be created.
@@ -606,6 +670,16 @@ class PagePresenter
     public function show(): void
     {
         global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
+
+        // The page is finished. The two texts that name it can still be changed, and
+        // page_before_render is the last point at which anything can be added to it; everything the
+        // three of them touch is handed to the template below, so nothing has to be assigned twice.
+        $this->filterText();
+        Hooks::doAction('page_before_render', $this);
+
+        $this->smarty->assign('id', $this->id);
+        $this->smarty->assign('title', $this->title);
+        $this->smarty->assign('headline', $this->headline);
 
         $hasPreviousUrl = false;
 
