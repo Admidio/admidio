@@ -124,6 +124,9 @@ class UserImport extends User
                 $this->clear();
                 $this->initializeNewRecord();
             }
+        } else {
+            // no matching contact, the clear() above left a new record without its defaults
+            $this->initializeNewRecord();
         }
 
         return true;
