@@ -396,11 +396,42 @@ final class PluginRegistry
     }
 
     /**
-     * Run one page of a plugin. This is what a generated stub below modules/ calls, and it is the
-     * one place that decides whether the page may run at all.
+     * Resolve one page of an enabled plugin to its absolute file name.
+     *
+     * The generated stub below modules/ must perform the actual require itself. An included PHP
+     * file inherits the variable scope of the statement that includes it; requiring the page here
+     * would therefore hide the globals created by system/common.php inside this method scope.
      *
      * The page is resolved inside the plugin's own pages directory, so a stub can never reach
      * another file, whatever it was generated with.
+     * @param string $id Plugin ID.
+     * @param string $page File name of the page, e.g. **list.php**.
+     * @return string Absolute file name of the page.
+     * @throws Exception
+     */
+    public static function resolvePage(string $id, string $page): string
+    {
+        $plugin = self::requireEnabled($id);
+        $page = basename($page);
+        $directory = $plugin->getDirectory(Plugin::DIR_PAGES);
+
+        if ($directory === null || !in_array($page, $plugin->getPages(), true)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $file = $directory . '/' . $page;
+        if (!is_file($file)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        return $file;
+    }
+
+    /**
+     * Run one page of a plugin.
+     *
+     * @deprecated Generated module stubs use resolvePage() and require the returned file in their
+     *             own scope. Keep this method for callers that do not depend on bootstrap globals.
      * @param string $id Plugin ID.
      * @param string $page File name of the page, e.g. **list.php**.
      * @return void
@@ -408,14 +439,7 @@ final class PluginRegistry
      */
     public static function requirePage(string $id, string $page): void
     {
-        $plugin = self::requireEnabled($id);
-
-        $file = $plugin->getDirectory(Plugin::DIR_PAGES) . '/' . basename($page);
-        if (!in_array(basename($page), $plugin->getPages(), true) || !is_file($file)) {
-            throw new Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        require $file;
+        require self::resolvePage($id, $page);
     }
 
     /**
