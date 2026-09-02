@@ -157,7 +157,7 @@ final class PluginLoader
      * A file below plugins/ is a file the browser can request directly, so being disabled has to
      * mean something at the moment it runs, and only the declared pages of a plugin are entry points
      * at all. The same request through a generated stub below modules/ is checked by
-     * PluginRegistry::requirePage() in exactly the same way.
+     * PluginRegistry::resolvePage() in exactly the same way.
      *
      * This can only protect a file that reaches the Admidio bootstrap. A file that does not - the
      * entry file, a class below src/ - never gets this far; it cannot do anything without the
