@@ -28,6 +28,7 @@ use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPackage;
+use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Service\RegistrationService;
@@ -2067,6 +2068,13 @@ final class CoreTasks
             'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
         self::task('plugin:update', 'pluginUpdate', 'Update a plugin, fetching newer files where the store publishes them.',
             'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:sync-pages', 'pluginSyncPages',
+            'Rewrite the generated module stubs of every plugin from its current page list. '
+                . 'Run this after adding or removing a page file of a plugin during development; '
+                . 'installing or updating a plugin does it automatically.',
+            'plugin:sync-pages [--format=FORMAT]', 'PLUGINS', true, array(),
+            array(self::opt('format', 'Output format.', 'FORMAT')),
+            array('plugin:sync-pages'));
         self::task('plugin:archive', 'pluginArchive', 'Build the distributable ZIP archive of a plugin.',
             'plugin:archive PLUGIN [--output=FILE] [--overwrite]', 'PLUGINS', true,
             array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')));
@@ -8838,6 +8846,31 @@ final class CoreTasks
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
         $plugin = PluginInstaller::updateWithNewerFiles($plugin);
         CliApplication::writeSuccess('Plugin updated to version ' . $plugin->version . '.', $options);
+        return 0;
+    }
+
+    public static function pluginSyncPages(array $arguments, array $options): int
+    {
+        if (!PluginPages::isAllowed()) {
+            CliApplication::writeSuccess(
+                'Plugin pages are served from below plugins/; nothing to synchronise. '
+                    . 'Enable the preference "' . PluginPages::SETTING . '" to publish them below modules/.',
+                $options
+            );
+            return 0;
+        }
+
+        $report = PluginPages::syncAll();
+        if ($report === array()) {
+            CliApplication::writeSuccess('The generated module stubs are already up to date.', $options);
+            return 0;
+        }
+
+        $rows = array();
+        foreach ($report as $id => $result) {
+            $rows[] = array('plugin' => $id, 'result' => $result);
+        }
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
         return 0;
     }
 
