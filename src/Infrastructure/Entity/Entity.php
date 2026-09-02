@@ -1013,7 +1013,8 @@ class Entity
      * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns, the format can be **database** that would return the original database value without any transformations
+     *                           For text, date, time and timestamp columns, the format **database** returns the
+     *                           original database value without any transformation (e.g. a date as **Y-m-d**).
      * @return mixed Returns the value of the database column.
      *               If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
@@ -1071,6 +1072,13 @@ class Entity
                 case 'date': // fallthrough
                 case 'time':
                     if (isset($columnValue) && $columnValue !== '') {
+                        if ($format === 'database') {
+                            // the value exactly as the database holds it, e.g. a date as Y-m-d, for a
+                            // comparison or a re-insert - never run through DateTime::format().
+                            $columnValue = $this->dbColumns[$columnName];
+                            break;
+                        }
+
                         if ($format === '' && isset($gSettingsManager)) {
                             if (str_contains($this->columnsInfos[$columnName]['type'], 'timestamp')) {
                                 $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
