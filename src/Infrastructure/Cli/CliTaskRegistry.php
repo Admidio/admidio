@@ -159,11 +159,11 @@ final class CliTaskRegistry
     }
 
     /**
-     * Register a module-specific command.
+     * Register a module- or plugin-specific command.
      *
-     * A module provides modules/<module>/cli.php, which is loaded on every CLI invocation. It may
-     * only register commands of its own namespace, which is the name of its directory or the
-     * singular form of it, and not one that Admidio core already uses. An acting user is always
+     * A module provides modules/<module>/cli.php and a plugin provides plugins/<plugin>/cli.php.
+     * Each may only register commands of its own namespace, derived from its directory name, and not
+     * one that Admidio core already uses. An acting user is always
      * required, and before the callback runs the component is checked through
      * Component::isAdministrable(), or through Component::isVisible() when the command declares
      * ACCESS_VISIBLE.
@@ -208,16 +208,16 @@ final class CliTaskRegistry
         bool $supportsDryRun = false
     ): void {
         if (!str_contains($taskName, ':')) {
-            throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
+            throw new InvalidArgumentException('Extension CLI task names must use the form extension:task.');
         }
 
         if ($componentName === '') {
-            throw new InvalidArgumentException('A module CLI task must specify an Admidio component.');
+            throw new InvalidArgumentException('An extension CLI task must specify an Admidio component.');
         }
 
         self::registerTask(
             $taskName,
-            strtoupper($componentName),
+            $componentName,
             $componentAccess,
             null,
             null,
@@ -333,7 +333,7 @@ final class CliTaskRegistry
         }
 
         if (!$core && !str_contains($taskName, ':')) {
-            throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
+            throw new InvalidArgumentException('Extension CLI task names must use the form extension:task.');
         }
 
         if (!in_array($componentAccess, array(self::ACCESS_ADMINISTRABLE, self::ACCESS_VISIBLE), true)) {
@@ -408,12 +408,15 @@ final class CliTaskRegistry
             }
         }
 
-        // A module registering through modules/<module>/cli.php must show up in getAll().
+        // An extension registering through its cli.php must show up in getAll().
         self::$sortedTasks = null;
 
         self::$tasks[$taskName] = array(
             'name' => $taskName,
-            'component' => $componentName === null ? null : strtoupper($componentName),
+            'component' => $componentName === null ? null : (
+                self::$moduleContext !== null && self::$moduleContextKind === 'Plugin'
+                    ? $componentName : strtoupper($componentName)
+            ),
             'componentAccess' => $componentAccess,
             'aliasOf' => $aliasOf,
             'requiredRight' => $requiredRight,

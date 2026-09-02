@@ -767,6 +767,37 @@ final class CliApplication
         }
 
         PluginLoader::loadEnabled();
+        $this->loadPluginTasks();
+    }
+
+    /**
+     * Load optional CLI registrations of enabled plugins.
+     *
+     * Plugin runtime is loaded first so its autoload mappings, settings and languages are available.
+     * The cli.php file itself only registers metadata and callbacks; command work runs later after
+     * actor and component authorization.
+     */
+    private function loadPluginTasks(): void
+    {
+        foreach (PluginLoader::getLoaded() as $plugin) {
+            $registrationFile = $plugin->path . '/cli.php';
+            if (!is_file($registrationFile)) {
+                continue;
+            }
+
+            CliTaskRegistry::setPluginContext($plugin->id);
+            try {
+                require_once $registrationFile;
+            } catch (Throwable $exception) {
+                self::writeWarning(
+                    'CLI_PLUGIN_REGISTRATION_FAILED',
+                    'The CLI commands of plugin "' . $plugin->id . '" were not registered: '
+                    . $exception->getMessage()
+                );
+            } finally {
+                CliTaskRegistry::setPluginContext(null);
+            }
+        }
     }
 
     /**
