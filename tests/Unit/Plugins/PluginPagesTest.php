@@ -34,7 +34,7 @@ final class PluginPagesTest extends PluginTestCase
     protected function tearDown(): void
     {
         PluginPages::setModulesPath(null);
-        unset($GLOBALS['gSettingsManager']);
+        unset($GLOBALS['gSettingsManager'], $GLOBALS['helloPageScopeProbe']);
         self::removeDirectory($this->modulesPath);
 
         parent::tearDown();
@@ -77,7 +77,7 @@ final class PluginPagesTest extends PluginTestCase
 
         $this->assertStringContainsString("require_once(__DIR__ . '/../../system/common.php');", $stub);
         $this->assertStringContainsString(
-            "Admidio\\Infrastructure\\Plugins\\PluginRegistry::requirePage('hello', 'list.php');",
+            "require Admidio\\Infrastructure\\Plugins\\PluginRegistry::resolvePage('hello', 'list.php');",
             $stub
         );
 
@@ -274,6 +274,29 @@ final class PluginPagesTest extends PluginTestCase
     {
         $this->assertSame(array(), PluginPages::syncAll());
         $this->assertFalse(PluginPages::isPublished('hello'));
+    }
+
+    /**
+     * @testdox resolvePage returns a page for the caller to require in its own scope
+     */
+    public function testResolvePageUsesCallerScope(): void
+    {
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+        $pluginPageScopeProbe = 'bootstrap-global';
+
+        require PluginRegistry::resolvePage('hello', 'list.php');
+
+        $this->assertSame(array('list.php'), $GLOBALS['helloPageRuns']);
+        $this->assertSame('bootstrap-global', $GLOBALS['helloPageScopeProbe']);
+    }
+
+    /**
+     * @testdox A resolved page of a plugin that is not installed here is refused
+     */
+    public function testResolvePageOfDisabledPlugin(): void
+    {
+        $this->expectExceptionMessage('SYS_NO_RIGHTS');
+        PluginRegistry::resolvePage('hello', 'list.php');
     }
 
     /**

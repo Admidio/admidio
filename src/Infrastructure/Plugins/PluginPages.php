@@ -22,9 +22,11 @@ use Admidio\Preferences\Service\PreferenceDefinitions;
  * ```
  *
  * is a real file at that path. This class writes one generated stub per page, which loads the
- * Admidio bootstrap and hands over to the page inside the plugin. The page itself is unchanged and
- * works through either URL, because **__DIR__** is per file: the relative includes of the page still
- * resolve against its real location.
+ * Admidio bootstrap, asks PluginRegistry to validate and resolve the plugin page, and requires the
+ * returned file itself. The require deliberately stays in the generated top-level script so that
+ * the plugin page inherits the same bootstrap globals as an ordinary module. The page itself is
+ * unchanged and works through either URL, because **__DIR__** is per file: the relative includes of
+ * the page still resolve against its real location.
  *
  * Publishing writes into the Admidio core tree, which a Git-managed or read-only deployment does not
  * want, so it is off by default and the administrator turns it on with the preference
@@ -328,7 +330,7 @@ final class PluginPages
             . " * " . self::SETTING . " is switched off.\n"
             . " */\n\n"
             . "require_once(__DIR__ . '/../../system/common.php');\n\n"
-            . "Admidio\\Infrastructure\\Plugins\\PluginRegistry::requirePage('" . $id . "', '" . $page . "');\n";
+            . "require Admidio\\Infrastructure\\Plugins\\PluginRegistry::resolvePage('" . $id . "', '" . $page . "');\n";
     }
 
     /**
