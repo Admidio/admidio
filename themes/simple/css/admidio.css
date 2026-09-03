@@ -354,6 +354,19 @@ label {
 
 .form-separator-line + label {
     font-size: 1.25em;
+    text-decoration: underline;
+}
+
+.admidio-form-separator-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding-right: calc(var(--bs-gutter-x) * 0.25);
+}
+
+.admidio-form-separator-label .admidio-open-close-caret {
+    flex: 0 0 auto;
+    align-self: center;
 }
 
 @media (min-width: 768px) {
