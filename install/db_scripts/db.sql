@@ -57,6 +57,14 @@ DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_access_tokens                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_auth_codes                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_refresh_tokens               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_consents                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_session_participants         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_clients                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_logout_transactions          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_session_participants         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
 
