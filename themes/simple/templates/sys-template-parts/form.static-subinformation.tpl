@@ -1,7 +1,7 @@
 <div class="{$data.id}_head subinfo subinfo_head">
 {foreach from=$data.data key=label item=info name=staticInfoLoop}
     <div class="admidio-form-group admidio-form-custom-content row mb-3 subinfo-row{if !$smarty.foreach.staticInfoLoop.first} subinfo-sub-row{/if}">
-        <label class="col-sm-3 col-form-label{if !$smarty.foreach.staticInfoLoop.first} col-form-sublabel{/if}">
+        <label class="col-sm-3 col-form-label{if !$smarty.foreach.staticInfoLoop.first} col-form-sublabel{/if} {$data.class}">
         {if $smarty.foreach.staticInfoLoop.first}
             <a id="{$data.id}_caret" class=" admidio-open-close-caret" data-target="{$data.id}_contents">
                 <i class="bi bi-caret-right-fill" style="margin-right: 0"></i>

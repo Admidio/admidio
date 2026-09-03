@@ -2492,27 +2492,27 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '',
-            array('data' => $samlService->getStaticSettings())
+            array('data' => $samlService->getStaticSettings(), 'class' => 'if-saml-enabled')
         );
 
         // Link to SAML Client administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox if-saml-enabled" href="javascript:void(0);" data-buttons="yes-no"
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
-            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
-            data-href="window.location.href=\'' . $url . '\'">
+        // The warning about unsaved changes is attached by the SSO template, which shows
+        // it only if the form was actually modified.
+        $html = '<a class="btn btn-secondary sso-client-admin-button if-saml-enabled" href="javascript:void(0);"
+            data-href="' . $url . '">
             <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
         $formSSO->addCustomContent(
             'sso_saml_clients',
             $gL10n->get('SYS_SSO_CLIENTS_SAML'),
             $html,
-            array()
+            array('class' => 'if-saml-enabled')
         );
 
         $formSSO->addSeparator(
             'sso_saml_advanced_settings', 
             $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
-            array('collapse' => "sso_saml_advanced", 'collapsed' => true, 'separator_line' => false)
+            array('collapse' => "sso_saml_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-saml-enabled')
         );
 
 
@@ -2614,28 +2614,28 @@ class PreferencesPresenter extends PagePresenter
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '',
-            array('data' => $oidcService->getStaticSettings())
+            array('data' => $oidcService->getStaticSettings(), 'class' => 'if-oidc-enabled')
         );
 
         // Link to OIDC Client administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox if-oidc-enabled" href="javascript:void(0);" data-buttons="yes-no"
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
-            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
-            data-href="window.location.href=\'' . $url . '\'">
+        // The warning about unsaved changes is attached by the SSO template, which shows
+        // it only if the form was actually modified.
+        $html = '<a class="btn btn-secondary sso-client-admin-button if-oidc-enabled" href="javascript:void(0);"
+            data-href="' . $url . '">
             <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
         $formSSO->addCustomContent(
             'sso_oidc_clients',
             $gL10n->get('SYS_SSO_CLIENTS_OIDC'),
             $html,
-            array()
+            array('class' => 'if-oidc-enabled')
         );
 
 
         $formSSO->addSeparator(
             'sso_oidc_advanced_settings', 
             $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
-            array('collapse' => "sso_oidc_advanced", 'collapsed' => true, 'separator_line' => false)
+            array('collapse' => "sso_oidc_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-oidc-enabled')
         );
 
 

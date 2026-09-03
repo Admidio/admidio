@@ -6,7 +6,7 @@
         <hr id="{$data.id}"{if $data.class neq ""} class="{$data.class}"{else} class="form-separator-line"{/if}>
     {/if}
     {if $data.label neq ""}
-        <label for="{$data.id}" class="admidio-form-separator-label {if $formType neq "vertical" and $formType neq "navbar"}col-form-label{else}form-label{/if}">
+        <label for="{$data.id}" class="admidio-form-separator-label {if $formType neq "vertical" and $formType neq "navbar"}col-form-label{else}form-label{/if} {$data.class}">
             {if !empty($data.collapse)}
             <a id="{$data.id}_caret" class=" admidio-open-close-caret" data-target="{$data.collapse}">
             <i class="bi bi-caret-{if !empty($data.collapsed)}right{else}down{/if}-fill" style="margin-right: 0"></i>

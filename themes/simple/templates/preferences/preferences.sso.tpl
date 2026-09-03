@@ -117,21 +117,33 @@
 
         $("#sso_key_admin_button_container").remove();
 
-        $(".sso-key-admin-button").on("click", function() {
-            const keyAdminUrl = "{$ssoKeyAdminUrl}";
-
-            if ($ssoForm.serialize() === initialSsoFormState) {
-                window.location.href = keyAdminUrl;
+        // Navigate away from the preferences, but warn about unsaved changes beforehand.
+        // Without any modification the target page is opened directly, so an untouched form
+        // never triggers the warning.
+        function leaveSsoPreferences(targetUrl) {
+            if (!targetUrl) {
                 return;
             }
 
-            const continueAction = "window.location.href=" + JSON.stringify(keyAdminUrl) + ";";
+            if ($ssoForm.serialize() === initialSsoFormState) {
+                window.location.href = targetUrl;
+                return;
+            }
+
             messageBox(
                 "{$l10n->get('ORG_NOT_SAVED_SETTINGS_LOST')}" + "<br>" + "{$l10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE')}",
                 undefined, undefined,
                 "yes-no",
-                continueAction
+                "window.location.href=" + JSON.stringify(targetUrl) + ";"
             );
+        }
+
+        $(".sso-key-admin-button").on("click", function() {
+            leaveSsoPreferences("{$ssoKeyAdminUrl}");
+        });
+
+        $(".sso-client-admin-button").on("click", function() {
+            leaveSsoPreferences($(this).data("href"));
         });
     });
 
