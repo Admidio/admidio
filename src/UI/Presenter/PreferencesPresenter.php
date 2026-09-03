@@ -101,6 +101,30 @@ class PreferencesPresenter extends PagePresenter
     }
 
     /**
+     * Determine the entry a signing key select box should be preselected with.
+     *
+     * A protocol cannot be used without a signing key, so a configuration that has no key yet
+     * offers the first usable key, or the creation of a default key if no usable key exists.
+     * This way enabling SAML or OIDC on a fresh installation never saves an empty key selection.
+     *
+     * @param string $configuredKeyId Key ID that is currently stored in the preferences.
+     * @param array<int|string,string> $usableKeys Usable keys, without the "create default key" entry.
+     * @return string Value that should be preselected in the select box.
+     */
+    private static function preselectedSigningKey(string $configuredKeyId, array $usableKeys): string
+    {
+        if ((int) $configuredKeyId > 0) {
+            return $configuredKeyId;
+        }
+
+        if (count($usableKeys) > 0) {
+            return (string) array_key_first($usableKeys);
+        }
+
+        return KeyService::CREATE_DEFAULT_KEY_VALUE;
+    }
+
+    /**
      * @param array{required:bool} $rules
      * @return array<string,mixed>
      */
@@ -2420,8 +2444,9 @@ class PreferencesPresenter extends PagePresenter
             // We can add the certificates as additional value attributes to the select entries
             $samlSigningValueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
         }
+        $samlSigningKeyPreselection = self::preselectedSigningKey($formValues['sso_saml_signing_key'], $samlSigningKeys);
         $samlSigningKeys[KeyService::CREATE_DEFAULT_KEY_VALUE] = $gL10n->get('SYS_SSO_KEY_CREATE_DEFAULT');
-        
+
         $samlEncryptionKeys = array();
         $samlEncryptionValueAttributes = array();
         foreach ($keyService->getKeysData(true, KeyService::USAGE_SAML_ENCRYPTION) as $key) {
@@ -2444,7 +2469,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_signing_key',
             $gL10n->get('SYS_SSO_SIGNING_KEY'),
             $samlSigningKeys,
-            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
+            array('defaultValue' => $samlSigningKeyPreselection, 'firstEntry' => $gL10n->get('SYS_NONE'),
                 'valueAttributes' => $samlSigningValueAttributes, 'class' => 'if-saml-enabled sso-key-select')
         );
 
@@ -2528,6 +2553,7 @@ class PreferencesPresenter extends PagePresenter
             // We can add the certificates as additional value attributes to the select entries
             $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
         }
+        $oidcSigningKeyPreselection = self::preselectedSigningKey($formValues['sso_oidc_signing_key'], $keys);
         $keys[KeyService::CREATE_DEFAULT_KEY_VALUE] = $gL10n->get('SYS_SSO_KEY_CREATE_DEFAULT');
 
         // Add current signing and/or encryption keys, even if they are invalid, but indicate them as invalid!
@@ -2540,7 +2566,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_oidc_signing_key',
             $gL10n->get('SYS_SSO_SIGNING_KEY'),
             $keys,
-            array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
+            array('defaultValue' => $oidcSigningKeyPreselection, 'firstEntry' => $gL10n->get('SYS_NONE'),
                 'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled sso-key-select')
         );
 

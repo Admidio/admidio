@@ -421,16 +421,36 @@ class PreferencesService
                 }
                 $formValues['sso_oidc_issuer_url'] = $issuerURL;
 
-                // if any key selection dropdown is set to "Create new key", create one default key and assign 
+                // if any key selection dropdown is set to "Create new key", create one default key and assign
                 $keySettingNames = array('sso_saml_signing_key', 'sso_saml_encryption_key', 'sso_oidc_signing_key');
-                $newKeyId = 0;
+
+                // A protocol cannot be used without a signing key, so enabling it without any key
+                // selected creates the default key instead of rejecting the configuration. A key that
+                // is selected but unusable is still reported, so a broken setup is not silently replaced.
+                $signingKeySettings = array(
+                    'sso_saml_signing_key' => 'sso_saml_enabled',
+                    'sso_oidc_signing_key' => 'sso_oidc_enabled'
+                );
+
+                $settingsNeedingDefaultKey = array();
 
                 foreach ($keySettingNames as $settingName) {
                     if (($formValues[$settingName] ?? '') === KeyService::CREATE_DEFAULT_KEY_VALUE) {
-                        if ($newKeyId === 0) {
-                            $keyService = new KeyService($gDb);
-                            $newKeyId = $keyService->createDefaultKey();
-                        }
+                        $settingsNeedingDefaultKey[] = $settingName;
+                    } elseif (array_key_exists($settingName, $signingKeySettings)
+                        && (bool) ($formValues[$signingKeySettings[$settingName]] ?? false)
+                        && (int) ($formValues[$settingName] ?? 0) <= 0) {
+                        $settingsNeedingDefaultKey[] = $settingName;
+                    }
+                }
+
+                // One generated RSA key serves SAML signing/encryption as well as OIDC signing,
+                // so all requests within this save share a single new key.
+                if (count($settingsNeedingDefaultKey) > 0) {
+                    $keyService = new KeyService($gDb);
+                    $newKeyId = $keyService->createDefaultKey();
+
+                    foreach ($settingsNeedingDefaultKey as $settingName) {
                         $formValues[$settingName] = $newKeyId;
                     }
                 }
