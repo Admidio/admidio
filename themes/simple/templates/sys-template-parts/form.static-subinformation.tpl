@@ -8,7 +8,7 @@
             </a>
         {/if}
         {$label}:&nbsp;</label>
-        <div class="col-sm-9 form-control-plaintext">
+        <div class="col-sm-9 form-text">
             <div class="copy-container {if isset($info.class)}{$info.class}{/if}" id="{$info.id}" 
                 {if isset($info.style) and $info.style neq ''} style="{$info.style}"{/if}
                 >{$info.value}</div>

@@ -1541,6 +1541,8 @@
   <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
   <string name="SYS_SSO_ACS_URL_DESC">Die URL des Assertion Consumer Servicer (ACS) ist der Haupteinstiegspunkt für den Client. Nach erfolgreicher Anmeldung bei Admidio wird der Benutzer zu dieser URL weitergeleitet und am Client angemeldet.</string>
+  <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Anfragen ins lokale Netzwerk erlauben</string>
+  <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">Serverseitige SSO-Anfragen (Abruf der Metadaten, Back-Channel-Logout) dürfen standardmäßig nur an öffentliche HTTPS-Adressen gehen. Aktivieren Sie dies nur, wenn ein Service Provider ausschließlich unter einer privaten Adresse im eigenen Netzwerk erreichbar ist.</string>
   <string name="SYS_SSO_ATTRIBUTE">Name des SSO-Attributs</string>
   <string name="SYS_SSO_ATTRIBUTES">Enthaltene Benutzer:innne-Attribute</string>
   <string name="SYS_SSO_ATTRIBUTES_ALLOTHER">Alle verbleibenden Felder mit dem internen Feldnamen von Admidio einschließen</string>
@@ -1575,6 +1577,7 @@
   <string name="SYS_SSO_EDIT_SAML_CLIENT">SAML Client (Service Provider) bearbeiten</string>
   <string name="SYS_SSO_ENCRYPT_ASSERTIONS">Verschlüsselung der an den Client gesendeten Assertions (SP)</string>
   <string name="SYS_SSO_ENCRYPTION_KEY">Schlüssel für Verschlüsselung</string>
+  <string name="SYS_SSO_EXPLANATION">Als Identity Provider ermöglicht es Admidio, dass sich Benutzer:innen mit ihrem Admidio-Account bei anderen Webanwendungen anmelden. Unterstützt werden die Protokolle SAML 2.0 und OpenID Connect (OIDC).</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Passwort für den Schlüsselexport</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Der exportierte private Schlüssel und das Zertifikat können und sollen aus Sicherheitsgründen mit einem Passwort verschlüsselt werden. Dieses Kennwort ist erforderlich, um die heruntergeladene Datei zu öffnen oder zu importieren. Ohne dieses Kennwort kann der Schlüssel nicht aus der Datei wiederhergestellt werden. Die Verwendung eines leeren Passworts ist möglich, wird aber dringend abgeraten!</string>
   <string name="SYS_SSO_INVALID_CLIENT">Ungültiger Client</string>

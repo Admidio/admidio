@@ -2380,28 +2380,28 @@ class PreferencesPresenter extends PagePresenter
             )
         );
 
-        // Applies to both protocols: the metadata request and the OIDC back-channel logout
-        // are the two requests that Admidio sends from the server to a configured address.
-        $formSSO->addCheckbox(
-            'sso_allow_private_network',
-            $gL10n->get('SYS_SSO_ALLOW_PRIVATE_NETWORK'),
-            (bool)$formValues['sso_allow_private_network'],
-            array('helpTextId' => 'SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC')
+        // Explanation text about the SSO capabilities
+        $formSSO->addDescription(
+            'sso_explanation',
+            $gL10n->get('SYS_SSO_EXPLANATION')
         );
+
+
+
+
+        /* *******************************************************************************
+         * SAML 2.0 Settings
+         */
 
         $samlService = new \Admidio\SSO\Service\SAMLService($gDb, $gCurrentUser);
 
-        $formSSO->addCustomContent(
-            'sso_saml_settings',
-            '',
-            '<h5>' . $gL10n->get('SYS_SSO_SAML') . '</h5>',
-            array()
-        );
+        $formSSO->addSeparator('sso_saml_settings', $gL10n->get('SYS_SSO_SAML'));
+
         $formSSO->addCheckbox(
             'sso_saml_enabled',
             $gL10n->get('SYS_SSO_SAML_ENABLED'),
             (bool)$formValues['sso_saml_enabled'],
-            array('helpTextId' => 'SYS_SSO_SAML_ENABLED_DESC')
+            array(/* 'helpTextId' => 'SYS_SSO_SAML_ENABLED_DESC' */)
         );
         $formSSO->addInput(
             'sso_saml_entity_id',
@@ -2484,6 +2484,11 @@ class PreferencesPresenter extends PagePresenter
             array()
         );
 
+        $formSSO->addSeparator(
+            'sso_saml_advanced_settings', 
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
+            array('collapse' => "sso_saml_advanced", 'collapsed' => true, 'separator_line' => false)
+        );
 
 
 
@@ -2492,17 +2497,13 @@ class PreferencesPresenter extends PagePresenter
          */
         $oidcService = new OIDCService($gDb, $gCurrentUser);
 
-        $formSSO->addCustomContent(
-            'sso_oidc_settings',
-            '',
-            '<h5>' . $gL10n->get('SYS_SSO_OIDC') . '</h5>',
-            array()
-        );
+        $formSSO->addSeparator('sso_oidc_settings', $gL10n->get('SYS_SSO_OIDC'));
+
         $formSSO->addCheckbox(
             'sso_oidc_enabled',
             $gL10n->get('SYS_SSO_OIDC_ENABLED'),
             (bool)$formValues['sso_oidc_enabled'],
-            array('helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC')
+            array(/* 'helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC' */)
         );
 
         // An empty IssuerURL indicates the use of the default admidio base URL
@@ -2605,6 +2606,27 @@ class PreferencesPresenter extends PagePresenter
         );
 
 
+        $formSSO->addSeparator(
+            'sso_oidc_advanced_settings', 
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
+            array('collapse' => "sso_oidc_advanced", 'collapsed' => true, 'separator_line' => false)
+        );
+
+
+
+        $formSSO->addSeparator(
+            'sso_advanced_settings', 
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
+            array('collapse' => "sso_advanced_settings_contents", 'collapsed' => true)
+        );
+        // Applies to both protocols: the metadata request and the OIDC back-channel logout
+        // are the two requests that Admidio sends from the server to a configured address.
+        $formSSO->addCheckbox(
+            'sso_allow_private_network',
+            $gL10n->get('SYS_SSO_ALLOW_PRIVATE_NETWORK'),
+            (bool)$formValues['sso_allow_private_network'],
+            array('helpTextId' => 'SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC')
+        );
 
 
         $formSSO->addSubmitButton(

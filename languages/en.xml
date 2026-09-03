@@ -1582,8 +1582,8 @@
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
   <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
-  <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow requests into the local network</string>
-  <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">Admidio requests service provider metadata and sends OpenID Connect back-channel logout notifications from the server itself. Normally only public HTTPS addresses are allowed for these requests. Enable this only if a service provider runs inside your own network and can be reached solely under a private address.</string>
+  <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
+  <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
   <string name="SYS_SSO_ATTRIBUTE">SSO attribute name</string>
   <string name="SYS_SSO_ATTRIBUTES">Included user attributes</string>
   <string name="SYS_SSO_ATTRIBUTES_ALLOTHER">Include all remaining fields with Admidio's internal field name</string>
@@ -1618,12 +1618,13 @@
   <string name="SYS_SSO_CLIENT_SECRET_DESC">Secret the application uses to authenticate to Admidio. Copy it when created; Admidio will not show it again after saving.</string>
   <string name="SYS_SSO_CLIENT_SECRET_HIDDEN">Not shown again after saving.</string>
   <string name="SYS_SSO_CLIENT_SECRET_RECREATE">Regenerate</string>
-  <string name="SYS_SSO_CLIENTS_OIDC">OpenID Connect (OIDC) clients</string>
+  <string name="SYS_SSO_CLIENTS_OIDC">OIDC clients</string>
   <string name="SYS_SSO_CLIENTS_SAML">SAML 2.0 clients</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">Edit OIDC Client</string>
   <string name="SYS_SSO_EDIT_SAML_CLIENT">Edit SAML Client (Service Provider)</string>
   <string name="SYS_SSO_ENCRYPT_ASSERTIONS">Encrypt assertions sent to the client (SP)</string>
   <string name="SYS_SSO_ENCRYPTION_KEY">Key for encryption</string>
+  <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>

@@ -147,23 +147,24 @@
         {include 'sys-template-parts/form.button.tpl' data=$elements['sso_key_admin_button_template']}
     </div>
     
-{include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_allow_private_network']}
+    {include 'sys-template-parts/form.description.tpl' data=$elements['sso_explanation']}
 
 {* ********************************************************************************** 
  * SAML settings 
  * **********************************************************************************}
 
-    {$elements['sso_saml_settings'].content}
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['sso_saml_settings']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_enabled']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_entity_id']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['sso_saml_signing_key']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['sso_saml_encryption_key']}
-
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_want_requests_signed']}
-
     {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_saml_sso_staticsettings']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_saml_clients']}
 
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['sso_saml_advanced_settings']}
+    <div id="sso_saml_advanced" {if !empty($elements['sso_saml_advanced_settings'].collapsed)} style="display: none;" {/if}>
+        {include 'sys-template-parts/form.select.tpl' data=$elements['sso_saml_signing_key']}
+        {include 'sys-template-parts/form.select.tpl' data=$elements['sso_saml_encryption_key']}
+        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_want_requests_signed']}
+    </div>
 
 
 
@@ -171,17 +172,30 @@
  * OIDC settings 
  * **********************************************************************************}
 
-    {$elements['sso_oidc_settings'].content}
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['sso_oidc_settings']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_oidc_enabled']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_issuer_url']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['sso_oidc_signing_key']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_auth_code_lifetime']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_access_token_lifetime']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_refresh_token_lifetime']}
-
     {include 'sys-template-parts/form.static-subinformation.tpl' data=$elements['sso_oidc_sso_staticsettings']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['sso_oidc_clients']}
+
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['sso_oidc_advanced_settings']}
+    <div id="sso_oidc_advanced" {if !empty($elements['sso_oidc_advanced_settings'].collapsed)} style="display: none;" {/if}>
+        {include 'sys-template-parts/form.select.tpl' data=$elements['sso_oidc_signing_key']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_auth_code_lifetime']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_access_token_lifetime']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_oidc_refresh_token_lifetime']}
+    </div>
     
+
+{* ********************************************************************************** 
+ * Advanced general settings 
+ * **********************************************************************************}
+
+    {include 'sys-template-parts/form.separator.tpl' data=$elements['sso_advanced_settings']}
+    <div id="sso_advanced_settings_contents" {if !empty($elements['sso_advanced_settings'].collapsed)} style="display: none;" {/if}>
+        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_allow_private_network']}
+    </div>
+
 
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_sso']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
