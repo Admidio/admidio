@@ -875,10 +875,10 @@ div.adm-changelog-details-table {
     padding-bottom: 2pt;
 }
 
-.subinfo-row .form-control-plaintext {
+.subinfo-row .form-text {
   width: 75%;
 }
-.subinfo-sub-row .form-control-plaintext {
+.subinfo-sub-row .form-text {
   width: 75%;
   padding-bottom: 0;
   padding-top: 0;
