@@ -38,6 +38,7 @@ use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\IdTokenResponse;
 use Admidio\SSO\Entity\OIDCConsent;
+use Admidio\Session\Entity\Session;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -107,6 +108,7 @@ class OIDCService extends SSOService {
 
     public const AUTHENTICATION_CONTEXT_PASSWORD = 'urn:admidio:authentication:password';
     public const AUTHENTICATION_CONTEXT_PASSWORD_TOTP = 'urn:admidio:authentication:password-totp';
+    public const AUTHENTICATION_CONTEXT_AUTO_LOGIN = 'urn:admidio:authentication:auto-login';
 
     /**
      * The parameters of an authorization request that a client may send in a form POST.
@@ -837,12 +839,27 @@ class OIDCService extends SSOService {
                 $this->showOIDCConsentForm($authRequest);
             }
 
-            $authenticationMethods = preg_split('/\s+/', trim($gCurrentSession->getValue('ses_authentication_methods')));
+            $authenticationMethods = preg_split('/\s+/', trim((string) $gCurrentSession->getValue('ses_authentication_methods')));
+            $authenticationMethods = array_values(array_filter($authenticationMethods, static function ($method) {
+                return $method !== '';
+            }));
 
-            $authenticationContext = self::AUTHENTICATION_CONTEXT_PASSWORD;
-            if (in_array('otp', $authenticationMethods, true)) {
+            if (in_array(Session::AUTHENTICATION_METHOD_AUTO_LOGIN, $authenticationMethods, true)) {
+                $authenticationContext = self::AUTHENTICATION_CONTEXT_AUTO_LOGIN;
+            } elseif (in_array('otp', $authenticationMethods, true)) {
                 $authenticationContext = self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP;
+            } else {
+                $authenticationContext = self::AUTHENTICATION_CONTEXT_PASSWORD;
             }
+
+            /*
+            * amr may only name authentication methods of the IANA registry (RFC 8176), so
+            * the internal marker of an auto login session is not reported as one.
+            */
+            $authenticationMethods = array_values(array_diff(
+                $authenticationMethods,
+                array(Session::AUTHENTICATION_METHOD_AUTO_LOGIN)
+            ));
 
             $externalSessionId = $gCurrentSession->getExternalSessionId();
             if ($externalSessionId !== '') {

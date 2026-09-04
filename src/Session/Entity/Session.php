@@ -36,6 +36,12 @@ use Admidio\Infrastructure\Database;
 class Session extends Entity
 {
     /**
+     * Value stored in ses_authentication_methods for a session that was established from
+     * an auto login token instead of an interactive login.
+     */
+    public const AUTHENTICATION_METHOD_AUTO_LOGIN = 'auto';
+
+    /**
      * @var array<string,mixed> Array with all objects of this session object.
      */
     protected array $mObjectArray = array();
@@ -310,6 +316,26 @@ class Session extends Entity
     }
 
     /**
+     * Record that the user of this session was authenticated by an auto login token.
+     *
+     * Presenting the token is an authentication event, so the session must carry the time
+     * it happened: without it the SSO services cannot state when the user authenticated
+     * and refuse to issue an assertion or an ID token. An authentication time that is
+     * already stored is kept, so that an interactive login is never overwritten and the
+     * time does not creep forward with every request of an auto login session.
+     * @throws Exception
+     */
+    private function markAutoLoginAuthentication()
+    {
+        if ((int)$this->getValue('ses_authentication_time', 'U') > 0) {
+            return;
+        }
+
+        $this->setValue('ses_authentication_time', DATETIME_NOW);
+        $this->setValue('ses_authentication_methods', self::AUTHENTICATION_METHOD_AUTO_LOGIN);
+    }
+
+    /**
      * Reload auto login data from database table adm_auto_login. if cookie PREFIX_AUTO_LOGIN_ID
      * is set then there could be an auto login the auto login must be done here because after
      * that the corresponding organization must be set.
@@ -329,6 +355,7 @@ class Session extends Entity
                 $this->mAutoLogin->save();
 
                 $this->setValue('ses_usr_id', (int)$this->mAutoLogin->getValue('atl_usr_id'));
+                $this->markAutoLoginAuthentication();
 
                 // save cookie for autologin
                 $currDateTime = new \DateTime();
@@ -397,6 +424,7 @@ class Session extends Entity
         if (isset($this->mAutoLogin)) {
             if ((int)$this->getValue('ses_usr_id') === 0) {
                 $this->setValue('ses_usr_id', (int)$this->mAutoLogin->getValue('atl_usr_id'));
+                $this->markAutoLoginAuthentication();
             }
         } elseif (array_key_exists($this->cookieAutoLoginId, $_COOKIE)) {
             $this->refreshAutoLogin();
