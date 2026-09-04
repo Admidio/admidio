@@ -23,6 +23,7 @@ use LightSaml\Context\Profile\ProfileContext;
 use LightSaml\Credential\X509Certificate;
 use LightSaml\Credential\KeyHelper;
 use LightSaml\Binding\HttpRedirectBinding;
+use Psr\Http\Message\ResponseInterface;
 use LightSaml\Binding\HttpPostBinding;
 use LightSaml\Model\Metadata\EntityDescriptor;
 use LightSaml\Model\Metadata\KeyDescriptor;
@@ -1140,11 +1141,11 @@ class SAMLService extends SSOService {
         $message = $this->receiveMessage();
 
         if ($message instanceof LogoutRequest) {
-            $this->handleIncomingLogoutRequest($message);
+            $this->emitPsrResponse($this->handleIncomingLogoutRequest($message));
             return;
         }
         if ($message instanceof LogoutResponse) {
-            $this->handleIncomingLogoutResponse($message);
+            $this->emitPsrResponse($this->handleIncomingLogoutResponse($message));
             return;
         }
         throw new Exception('Invalid request in SAMLService->handleSLORequest().');
@@ -1154,9 +1155,9 @@ class SAMLService extends SSOService {
      * Start an SP-initiated logout transaction.
      * @throws Exception
      */
-    private function handleIncomingLogoutRequest(LogoutRequest $request): void
+    private function handleIncomingLogoutRequest(LogoutRequest $request): ResponseInterface
     {
-        global $gCurrentOrgId, $gLogger;
+        global $gLogger;
 
         $issuer = $request->getIssuer();
         if ($issuer === null || empty($issuer->getValue())) {
@@ -1177,32 +1178,18 @@ class SAMLService extends SSOService {
             }
 
             $externalSessionId = (string) $initiatorParticipant['ssp_external_session_id'];
-            $participantService = new SAMLSessionParticipantService($this->db);
-            $participants = $participantService->getParticipants($gCurrentOrgId, $externalSessionId);
-            $pendingClients = array();
 
-            foreach ($participants as $participant) {
-                $participantId = (int) $participant['ssp_id'];
-                $participantClientId = (int) $participant['ssp_client_id'];
+            $frontChannelLogoutUris = $this->notifyOIDCClients($externalSessionId);
 
-                if ($participantId === (int) $initiatorParticipant['ssp_id']) {
-                    continue;
-                }
-
-                $pendingClients[] = array(
-                    'participantId' => $participantId,
-                    'clientId' => $participantClientId,
-                    'nameId' => (string) $participant['ssp_name_id'],
-                    'nameIdFormat' => (string) $participant['ssp_name_id_format'],
-                    'nameIdSPNameQualifier' => $participant['ssp_name_id_sp_name_qualifier'],
-                    'sessionIndex' => (string) $participant['ssp_session_index']
-                );
-            }
-
-            $transaction = new SAMLLogoutTransaction($this->db);
-            $transaction->initialize($gCurrentOrgId, $initiatorClientId,
-                (int) $initiatorParticipant['ssp_id'], $request->getID(), $request->getRelayState(), $pendingClients);
-            $transaction->save();
+            $transaction = $this->prepareLogoutTransaction(
+                $externalSessionId,
+                (int) $initiatorParticipant['ssp_id'],
+                array('type' => SAMLLogoutTransaction::COMPLETION_SAML_RESPONSE),
+                $initiatorClientId,
+                (int) $initiatorParticipant['ssp_id'],
+                $request->getID(),
+                $request->getRelayState()
+            );
 
             /*
              * All information required for downstream LogoutRequests is now
@@ -1212,11 +1199,158 @@ class SAMLService extends SSOService {
              */
             $this->performLocalLogout($externalSessionId);
 
-            $this->continueLogoutTransaction($transaction);
+            return $this->beginLogoutFlow($transaction, $frontChannelLogoutUris);
         } catch (Exception $exception) {
             $gLogger->error($exception->getMessage());
-            $this->sendLogoutResponse($initiatorClient, $request->getID(), $request->getRelayState(), SamlConstants::STATUS_RESPONDER);
+            return $this->createRedirectResponse(
+                $this->createLogoutResponseUrl($initiatorClient, $request->getID(),
+                    $request->getRelayState(), SamlConstants::STATUS_RESPONDER)
+            );
         }
+    }
+
+    /**
+     * Start a logout that no SAML service provider initiated.
+     *
+     * Used for a logout triggered inside Admidio and for an OIDC RP-initiated logout, so
+     * that those also reach the SAML service providers of the session. The caller stays
+     * responsible for ending the Admidio session itself.
+     *
+     * @param string $externalSessionId Session whose clients should be logged out.
+     * @param string|null $returnUrl Where the browser goes once every client was notified.
+     * @return ResponseInterface Response that continues the logout in the browser.
+     * @throws Exception
+     */
+    public function startSessionLogout(string $externalSessionId, ?string $returnUrl = null): ResponseInterface
+    {
+        $completion = ($returnUrl === null || $returnUrl === '')
+            ? array('type' => SAMLLogoutTransaction::COMPLETION_DONE)
+            : array('type' => SAMLLogoutTransaction::COMPLETION_REDIRECT, 'url' => $returnUrl);
+
+        $frontChannelLogoutUris = $this->notifyOIDCClients($externalSessionId);
+        $transaction = $this->prepareLogoutTransaction($externalSessionId, 0, $completion, 0, null, '', null);
+
+        return $this->beginLogoutFlow($transaction, $frontChannelLogoutUris);
+    }
+
+    /**
+     * Record the SAML clients of a session that still have to be contacted.
+     *
+     * @param string $externalSessionId Session that is being logged out.
+     * @param int $excludeParticipantId Participant that must not be contacted, 0 for none.
+     * @param array<string,mixed> $completion What to do once the SAML chain has finished.
+     * @return SAMLLogoutTransaction The saved transaction.
+     * @throws Exception
+     */
+    private function prepareLogoutTransaction(string $externalSessionId, int $excludeParticipantId,
+        array $completion, int $initiatorClientId = 0, ?int $initiatorParticipantId = null,
+        string $initiatorRequestId = '', ?string $initiatorRelayState = null): SAMLLogoutTransaction
+    {
+        global $gCurrentOrgId, $gSettingsManager;
+
+        if ($externalSessionId === '') {
+            throw new Exception('The SAML logout target has no external session identifier.');
+        }
+
+        $participantService = new SAMLSessionParticipantService($this->db);
+        $pendingClients = array();
+        $samlParticipants = $gSettingsManager->get('sso_saml_enabled') === '1'
+            ? $participantService->getParticipants($gCurrentOrgId, $externalSessionId)
+            : array();
+
+        foreach ($samlParticipants as $participant) {
+            $participantId = (int) $participant['ssp_id'];
+
+            if ($excludeParticipantId > 0 && $participantId === $excludeParticipantId) {
+                continue;
+            }
+
+            $pendingClients[] = array(
+                'participantId' => $participantId,
+                'clientId' => (int) $participant['ssp_client_id'],
+                'nameId' => (string) $participant['ssp_name_id'],
+                'nameIdFormat' => (string) $participant['ssp_name_id_format'],
+                'nameIdSPNameQualifier' => $participant['ssp_name_id_sp_name_qualifier'],
+                'sessionIndex' => (string) $participant['ssp_session_index']
+            );
+        }
+
+        $transaction = new SAMLLogoutTransaction($this->db);
+        $transaction->initialize($gCurrentOrgId, $initiatorClientId, $initiatorParticipantId,
+            $initiatorRequestId, $initiatorRelayState, $pendingClients, $completion);
+        $transaction->save();
+
+        return $transaction;
+    }
+
+    /**
+     * Notify the OIDC clients of a session.
+     *
+     * The back-channel clients are contacted here, server to server. The front-channel
+     * clients are only reported back, because they are loaded through the browser.
+     *
+     * @param string $externalSessionId Session that is being logged out.
+     * @return array<int,string> Front-channel logout URIs that still have to be loaded.
+     * @throws Exception
+     */
+    private function notifyOIDCClients(string $externalSessionId): array
+    {
+        global $gCurrentOrgId, $gDb, $gSettingsManager;
+
+        if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
+            return array();
+        }
+
+        $oidcService = new OIDCService($gDb, $this->currentUser);
+        $notificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
+
+        $frontChannelLogoutUris = $notificationService->notifySession($gCurrentOrgId, $externalSessionId);
+
+        // Every OIDC client of the session has been contacted or is about to be loaded.
+        (new OIDCSessionParticipantService($gDb))->deleteParticipants($gCurrentOrgId, $externalSessionId);
+
+        return $frontChannelLogoutUris;
+    }
+
+    /**
+     * Enter a prepared logout transaction.
+     *
+     * The OIDC front-channel clients are loaded first, in one page of parallel iframes, and
+     * that page then continues into the first step of the SAML chain. Notifying them before
+     * the chain matters because the chain sends the browser through one service provider
+     * after another, and a logout abandoned halfway would never reach them.
+     *
+     * @param SAMLLogoutTransaction $transaction The saved transaction to start.
+     * @param array<int,string> $frontChannelLogoutUris OIDC clients to load before the chain.
+     * @return ResponseInterface The first response of the logout for the browser.
+     * @throws Exception
+     */
+    private function beginLogoutFlow(SAMLLogoutTransaction $transaction, array $frontChannelLogoutUris): ResponseInterface
+    {
+        global $gDb;
+
+        $nextStep = $this->continueLogoutTransaction($transaction);
+
+        if (count($frontChannelLogoutUris) === 0) {
+            return $nextStep;
+        }
+
+        /*
+        * The iframe page can only continue to a location, so a next step that renders a
+        * page of its own has nowhere to hand over to. That only happens for a logout with
+        * no destination at all, where stopping at the iframe page is the correct end.
+        */
+        $continueUrl = $nextStep->getStatusCode() === 302
+            ? $nextStep->getHeaderLine('Location')
+            : '';
+
+        $oidcService = new OIDCService($gDb, $this->currentUser);
+        $notificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
+
+        return $notificationService->createFrontChannelResponse(
+            $frontChannelLogoutUris,
+            $continueUrl === '' ? null : $continueUrl
+        );
     }
 
     private function isPartialLogoutStatus(\LightSaml\Model\Protocol\Status $status): bool 
@@ -1237,7 +1371,7 @@ class SAMLService extends SSOService {
      * Handle and correlate a LogoutResponse from a service provider.
      * @throws Exception
      */
-    private function handleIncomingLogoutResponse(LogoutResponse $response): void
+    private function handleIncomingLogoutResponse(LogoutResponse $response): ResponseInterface
     {
         global $gCurrentOrgId, $gLogger;
 
@@ -1308,7 +1442,7 @@ class SAMLService extends SSOService {
             $transaction->setCurrentRequest(null, null, null);
             $transaction->save();
 
-            $this->continueLogoutTransaction($transaction);
+            return $this->continueLogoutTransaction($transaction);
         } catch (Exception $exception) {
             $gLogger->error($exception->getMessage());
             throw $exception;
@@ -1320,7 +1454,7 @@ class SAMLService extends SSOService {
      *
      * @throws Exception
      */
-    private function continueLogoutTransaction(SAMLLogoutTransaction $transaction): void 
+    private function continueLogoutTransaction(SAMLLogoutTransaction $transaction): ResponseInterface
     {
         $pendingClients = $transaction->getPendingClients();
 
@@ -1356,7 +1490,7 @@ class SAMLService extends SSOService {
             }
 
 
-            $this->sendLogoutRequest(
+            return $this->createLogoutRequestRedirect(
                 $transaction,
                 $participantId,
                 $client,
@@ -1365,21 +1499,35 @@ class SAMLService extends SSOService {
                 is_string($nameIDSPNameQualifier) ? $nameIDSPNameQualifier : null,
                 $sessionIndex
             );
-            return;
         }
 
-        $initiatorClient = new SAMLClient($this->db, $transaction->getInitiatorClientId());
+        return $this->finalizeLogoutTransaction($transaction);
+    }
 
-        $status = $transaction->hasPartialLogout()
-            ? SamlConstants::STATUS_PARTIAL_LOGOUT
-            : SamlConstants::STATUS_SUCCESS;
+    /**
+     * Finish a logout transaction once every SAML service provider has answered.
+     *
+     * Where the browser goes from here depends on who started the logout: the initiating
+     * service provider receives its LogoutResponse, and any other caller gets the URL it
+     * asked for.
+     *
+     * @param SAMLLogoutTransaction $transaction The transaction that has no pending clients left.
+     * @return ResponseInterface The final response for the browser.
+     * @throws Exception
+     */
+    private function finalizeLogoutTransaction(SAMLLogoutTransaction $transaction): ResponseInterface
+    {
+        $completionType = $transaction->getCompletionType();
+        $completionUrl = $transaction->getCompletionUrl();
+        $partialLogout = $transaction->hasPartialLogout();
 
+        $initiatorClientId = $transaction->getInitiatorClientId();
         $initiatorRequestId = $transaction->getInitiatorRequestId();
         $initiatorRelayState = $transaction->getInitiatorRelayState();
         $initiatorParticipantId = $transaction->getInitiatorParticipantId();
 
         /*
-        * The initiating SP requested logout and receives the final response,
+        * The initiating SP requested the logout and receives the final response,
         * so its participant record no longer represents an active session.
         */
         if ($initiatorParticipantId > 0) {
@@ -1388,7 +1536,72 @@ class SAMLService extends SSOService {
 
         $transaction->delete();
 
-        $this->sendLogoutResponse($initiatorClient, $initiatorRequestId, $initiatorRelayState, $status);
+        if ($completionType === SAMLLogoutTransaction::COMPLETION_SAML_RESPONSE && $initiatorClientId > 0) {
+            $status = $partialLogout
+                ? SamlConstants::STATUS_PARTIAL_LOGOUT
+                : SamlConstants::STATUS_SUCCESS;
+
+            $completionUrl = $this->createLogoutResponseUrl(
+                new SAMLClient($this->db, $initiatorClientId),
+                $initiatorRequestId,
+                $initiatorRelayState,
+                $status
+            );
+        }
+
+        if ($completionUrl !== '') {
+            return $this->createRedirectResponse($completionUrl);
+        }
+
+        return $this->createLogoutCompletedResponse();
+    }
+
+    /**
+     * Build a 302 response to the given location.
+     */
+    private function createRedirectResponse(string $url): ResponseInterface
+    {
+        return (new \Laminas\Diactoros\Response())
+            ->withStatus(302)
+            ->withHeader('Location', $url)
+            ->withHeader('Cache-Control', 'no-store')
+            ->withHeader('Pragma', 'no-cache');
+    }
+
+    /**
+     * Build the response for a logout that has nowhere to return to.
+     */
+    private function createLogoutCompletedResponse(): ResponseInterface
+    {
+        $body = new \Laminas\Diactoros\Stream(fopen('php://temp', 'r+'));
+        $body->write(
+            '<!doctype html><html><head><meta charset="utf-8">'
+            . '<meta name="referrer" content="no-referrer">'
+            . '<title>Logout</title></head><body></body></html>'
+        );
+
+        return (new \Laminas\Diactoros\Response())
+            ->withStatus(200)
+            ->withHeader('Content-Type', 'text/html; charset=UTF-8')
+            ->withHeader('Cache-Control', 'no-store')
+            ->withHeader('Pragma', 'no-cache')
+            ->withBody($body);
+    }
+
+    /**
+     * Send a PSR-7 response to the client.
+     */
+    private function emitPsrResponse(ResponseInterface $response): void
+    {
+        http_response_code($response->getStatusCode());
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
+        }
+
+        echo (string) $response->getBody();
     }
 
     private function shouldSignProtocolResponses(SAMLClient $client): bool
@@ -1403,8 +1616,8 @@ class SAMLService extends SSOService {
      *
      * @throws Exception
      */
-    private function sendLogoutRequest(SAMLLogoutTransaction $transaction, int $participantId, 
-        SAMLClient $client, string $nameID, string $nameIDFormat, ?string $nameIDSPNameQualifier, string $sessionIndex): void 
+    private function createLogoutRequestRedirect(SAMLLogoutTransaction $transaction, int $participantId,
+        SAMLClient $client, string $nameID, string $nameIDFormat, ?string $nameIDSPNameQualifier, string $sessionIndex): ResponseInterface
     {
         $sloUrl = trim((string) $client->getValue('smc_slo_url'));
 
@@ -1448,10 +1661,7 @@ class SAMLService extends SSOService {
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($logoutRequest);
 
-        $binding = new HttpRedirectBinding();
-        $httpResponse = $binding->send($messageContext, $sloUrl);
-
-        $this->emitSAMLResponse($httpResponse);
+        return $this->createRedirectResponse($this->buildRedirectBindingUrl($messageContext, $sloUrl));
     }
 
     /**
@@ -1459,7 +1669,7 @@ class SAMLService extends SSOService {
      *
      * @throws Exception
      */
-    private function sendLogoutResponse(SAMLClient $client, string $inResponseTo, ?string $relayState, string $statusCode): void 
+    private function createLogoutResponseUrl(SAMLClient $client, string $inResponseTo, ?string $relayState, string $statusCode): string
     {
         $sloUrl = trim((string) $client->getValue('smc_slo_url'));
 
@@ -1498,10 +1708,32 @@ class SAMLService extends SSOService {
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($logoutResponse);
 
-        $binding = new HttpRedirectBinding();
-        $httpResponse = $binding->send($messageContext, $sloUrl);
+        return $this->buildRedirectBindingUrl($messageContext, $sloUrl);
+    }
 
-        $this->emitSAMLResponse($httpResponse);
+    /**
+     * Serialize a SAML message into a URL of the HTTP Redirect binding.
+     *
+     * The URL is needed as a plain string, because it can also become the continue target of
+     * the OIDC front-channel page instead of being sent as a redirect right away.
+     *
+     * @param \LightSaml\Context\Profile\MessageContext $messageContext The message to send.
+     * @param string $destination Endpoint of the service provider.
+     * @return string The URL that carries the message.
+     * @throws Exception
+     */
+    private function buildRedirectBindingUrl(\LightSaml\Context\Profile\MessageContext $messageContext,
+        string $destination): string
+    {
+        $binding = new HttpRedirectBinding();
+        $httpResponse = $binding->send($messageContext, $destination);
+        $url = (string) $httpResponse->headers->get('Location');
+
+        if ($url === '') {
+            throw new Exception('The SAML redirect binding did not produce a destination URL.');
+        }
+
+        return $url;
     }
 
     /**
@@ -1547,16 +1779,6 @@ class SAMLService extends SSOService {
 
         if ($externalSessionId === '') {
             throw new Exception('The SAML logout target has no external session identifier.');
-        }
-
-        if ($gSettingsManager->get('sso_oidc_enabled') === '1') {
-            $oidcService = new OIDCService($gDb, $gCurrentUser);
-            $oidcLogoutNotificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
-
-            // A SAML front-channel transaction is already in progress. Send
-            // OIDC back-channel notifications now. Keep participant records because
-            // front-channel-only OIDC clients have not been notified by this flow.
-            $oidcLogoutNotificationService->notifySession($gCurrentOrgId, $externalSessionId, false);
         }
 
         $currentExternalSessionId = $gValidLogin
@@ -1630,22 +1852,6 @@ class SAMLService extends SSOService {
         $this->db->queryPrepared($sql);
     }
 
-    /**
-     * Forward the generated Symfony response to the browser.
-     */
-    private function emitSAMLResponse(\Symfony\Component\HttpFoundation\Response $response): void 
-    {
-        http_response_code($response->getStatusCode());
-
-        foreach ($response->headers->allPreserveCaseWithoutCookies() as $name => $values) {
-            foreach ($values as $value) {
-                header($name . ': ' . $value, false);
-            }
-        }
-
-        echo $response->getContent();
-    }
-    
 /*
     public function handleAttributeQuery() {
         // TODO: This should work like the Response to an AuthnRequest, just with the requested attributes

@@ -1443,8 +1443,7 @@ class OIDCService extends SSOService {
                 isset($context['post_logout_redirect_uri'])
                     ? (string) $context['post_logout_redirect_uri']
                     : null,
-                isset($context['state']) ? (string) $context['state'] : null,
-                $participantService
+                isset($context['state']) ? (string) $context['state'] : null
             );
         }
 
@@ -1525,7 +1524,7 @@ class OIDCService extends SSOService {
             if ($matchesCurrentSession) {
                 try {
                     $participantService->assertParticipant($gCurrentOrgId, $hintSessionId, (int) $client->getValue('ocl_id'), $hintClaims['sub']);
-                    return $this->completeOIDCLogout($hintSessionId, $postLogoutRedirectUri, $state, $participantService);
+                    return $this->completeOIDCLogout($hintSessionId, $postLogoutRedirectUri, $state);
                 } catch (\Throwable $exception) {
                     // The hint is valid but cannot be tied to an active tracked
                     // participant. Continue with explicit user confirmation.
@@ -1559,22 +1558,14 @@ class OIDCService extends SSOService {
     private function completeOIDCLogout(
         string $externalSessionId,
         ?string $postLogoutRedirectUri,
-        ?string $state,
-        OIDCSessionParticipantService $participantService
+        ?string $state
     ): ResponseInterface {
-        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId;
-
-        $notificationService = new OIDCLogoutNotificationService($this->db, $this->issuerURL);
-        $frontChannelLogoutUris = $externalSessionId === '' ? array() : $notificationService->notifySession($gCurrentOrgId, $externalSessionId);
+        global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
 
         $gValidLogin = false;
         $gCurrentSession->logout();
         $gCurrentUser->clear();
         $gMenu->initialize();
-
-        if ($externalSessionId !== '') {
-            $participantService->deleteParticipants($gCurrentOrgId, $externalSessionId);
-        }
 
         $redirectLocation = null;
         if ($postLogoutRedirectUri !== null) {
@@ -1585,8 +1576,15 @@ class OIDCService extends SSOService {
             }
         }
 
-        if (!empty($frontChannelLogoutUris)) {
-            return $notificationService->createFrontChannelResponse($frontChannelLogoutUris, $redirectLocation);
+        /*
+        * Hand the logout to the SAML service, which notifies the OIDC back-channel clients,
+        * loads the OIDC front-channel clients and then walks the SAML service providers
+        * through the browser. A relying party that starts the logout this way therefore
+        * ends the sessions of both protocols.
+        */
+        if ($externalSessionId !== '') {
+            return (new SAMLService($this->db, $gCurrentUser))
+                ->startSessionLogout($externalSessionId, $redirectLocation);
         }
 
         if ($redirectLocation !== null) {
