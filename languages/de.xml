@@ -1738,7 +1738,8 @@
   <string name="SYS_SSO_SAML_SIGNATURE_MISSING">In der SAML-Nachricht fehlt eine kryptografische Signatur.</string>
   <string name="SYS_SSO_SAML_SLO_ENDPOINT">SLO-Endpunkt</string>
   <string name="SYS_SSO_SAML_SSO_ENDPOINT">SSO-Endpunkt</string>
-  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Signierte SAML-Authentifizierungsanfragen verlangen</string>
+  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Signierte Authentifizierungsanfragen verlangen, sofern der Client signieren kann</string>
+  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">Gilt für alle Clients mit hinterlegtem Zertifikat, denn nur damit lässt sich eine Signatur prüfen. Clients ohne Zertifikat sind nicht betroffen. Um von einem einzelnen Client trotzdem eine Signatur zu verlangen, verwende die Einstellung dieses Clients.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Bisher ausgewählter Schlüssel – nicht mehr verwendbar</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">SAML-Antworten zusätzlich signieren</string>
   <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signatur und Verschlüsselung</string>
