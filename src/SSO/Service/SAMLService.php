@@ -348,7 +348,9 @@ class SAMLService extends SSOService {
         }
 
         // Add NameIDFormats
-        $idpDescriptor->addNameIDFormat(SamlConstants::NAME_ID_FORMAT_UNSPECIFIED);
+        foreach ($this->getSupportedNameIDFormats() as $nameIDFormat) {
+            $idpDescriptor->addNameIDFormat($nameIDFormat);
+        }
 
         // Add SingleSignOnService endpoints with different bindings
         $ssoServiceRedirect = new SingleSignOnService();
@@ -484,17 +486,41 @@ class SAMLService extends SSOService {
     }
 
     /**
+     * Return the NameID formats that the identity provider can serve.
+     *
+     * The unspecified format is always available, because it puts no constraint on the
+     * value of the identifier. The e-mail format promises that the NameID is an e-mail
+     * address, so it can only be served by a client whose user identifier is the e-mail
+     * address of the user.
+     *
+     * @param SAMLClient|null $client The client to be served, or null for the formats that
+     *                                the identity provider advertises in its metadata.
+     * @return string[]
+     */
+    private function getSupportedNameIDFormats(?SAMLClient $client = null): array {
+        $formats = array(SamlConstants::NAME_ID_FORMAT_UNSPECIFIED);
+
+        if ($client === null || $client->getUserIdField() === 'EMAIL') {
+            $formats[] = SamlConstants::NAME_ID_FORMAT_EMAIL;
+        }
+
+        return $formats;
+    }
+
+    /**
      * Process the NameID policy of an authentication request.
      *
-     * Admidio currently supports only the unspecified NameID format. If no
-     * format is requested, the supported unspecified format is used.
+     * The requested format is echoed back in the assertion, so only a format that the
+     * client can actually be served may be accepted. If no format is requested, the
+     * unspecified format is used.
      *
      * @param AuthnRequest $request
      * @param string $serviceProviderEntityID
+     * @param SAMLClient $client
      * @return array
      * @throws \InvalidArgumentException
      */
-    private function processNameIDPolicy(AuthnRequest $request, string $serviceProviderEntityID): array {
+    private function processNameIDPolicy(AuthnRequest $request, string $serviceProviderEntityID, SAMLClient $client): array {
         $nameIDFormat = SamlConstants::NAME_ID_FORMAT_UNSPECIFIED;
         $spNameQualifier = null;
         $nameIDPolicy = $request->getNameIDPolicy();
@@ -507,11 +533,16 @@ class SAMLService extends SSOService {
         }
 
         $requestedFormat = $nameIDPolicy->getFormat();
+        $supportedFormats = $this->getSupportedNameIDFormats($client);
 
-        if (!empty($requestedFormat) && $requestedFormat !== SamlConstants::NAME_ID_FORMAT_UNSPECIFIED) {
-            throw new \InvalidArgumentException(
-                'The SAML client requested the unsupported NameID format "' . $requestedFormat . '".'
-            );
+        if (!empty($requestedFormat)) {
+            if (!in_array($requestedFormat, $supportedFormats, true)) {
+                throw new \InvalidArgumentException(
+                    'The SAML client requested the unsupported NameID format "' . $requestedFormat
+                    . '". This client can be served the formats ' . implode(', ', $supportedFormats) . '.'
+                );
+            }
+            $nameIDFormat = $requestedFormat;
         }
 
         $requestedSPNameQualifier = $nameIDPolicy->getSPNameQualifier();
@@ -646,7 +677,7 @@ class SAMLService extends SSOService {
             }
 
             $this->validateRequestContext($client, $request, $this->ssoUrl);
-            $nameIDPolicy = $this->processNameIDPolicy($request, $entityIdClient);
+            $nameIDPolicy = $this->processNameIDPolicy($request, $entityIdClient, $client);
 
             $cancelAuthentication = admFuncVariableIsValid($_GET, 'sso_cancel', 'bool', array('defaultValue' => false));
 
