@@ -2485,7 +2485,7 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_want_requests_signed',
             $gL10n->get('SYS_SSO_SAML_WANT_REQUESTS_SIGNED'),
             (bool)$formValues['sso_saml_want_requests_signed'],
-            array('class' => 'if-saml-enabled')
+            array('class' => 'if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC')
         );
 
         $formSSO->addCustomContent(

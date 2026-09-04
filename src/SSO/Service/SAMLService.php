@@ -615,10 +615,27 @@ class SAMLService extends SSOService {
                 throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Login is no possible.");
             }
 
-            // The global metadata flag and the per-client flag both mean that
-            // an AuthnRequest signature is mandatory.
-            $signatureRequired = $gSettingsManager->getBool('sso_saml_want_requests_signed')
-                || (bool) $client->getValue('smc_require_auth_signed');
+            /*
+            * A signature can only be verified when a certificate is stored for the client.
+            * The global preference is advertised as WantAuthnRequestsSigned in the IdP
+            * metadata and applies to every client that is able to sign, but a client without
+            * a certificate cannot, so the global requirement is not enforced for it. Only the
+            * per-client flag demands a signature unconditionally, so an explicit
+            * misconfiguration is still reported instead of being ignored.
+            */
+            $clientHasCertificate = trim((string) $client->getValue('smc_x509_certificate')) !== '';
+            $globalSignatureRequired = $gSettingsManager->getBool('sso_saml_want_requests_signed');
+            $signatureRequired = (bool) $client->getValue('smc_require_auth_signed')
+                || ($globalSignatureRequired && $clientHasCertificate);
+
+            if ($globalSignatureRequired && !$clientHasCertificate
+                && !(bool) $client->getValue('smc_require_auth_signed')) {
+                $gLogger->notice(
+                    'Signed AuthnRequests are required globally, but the SAML client has no certificate '
+                    . 'configured, so the signature of its requests cannot be verified.',
+                    array('client' => $client->getIdentifier())
+                );
+            }
 
             if ($signatureRequired
                 || $request->getSignature() !== null

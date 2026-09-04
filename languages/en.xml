@@ -1773,7 +1773,8 @@
   <string name="SYS_SSO_SAML_SIGNATURE_KEY_MISSING">A client certificate is required to validate the SAML message signature.</string>
   <string name="SYS_SSO_SAML_SLO_ENDPOINT">Logout URL</string>
   <string name="SYS_SSO_SAML_SSO_ENDPOINT">Login URL</string>
-  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Require signed SAML authentication requests</string>
+  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Require signed authentication requests where the client can sign</string>
+  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">Applies to every client with a stored certificate, because only a certificate allows a signature to be verified. Clients without one are not affected. To demand a signature from a single client regardless, use the setting of that client.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Previously selected key — no longer usable</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Also sign SAML responses</string>
   <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signature and Encryption</string>
@@ -1782,7 +1783,7 @@
   <string name="SYS_SSO_SLO_URL_DESC">Application endpoint used for SAML logout.</string>
   <string name="SYS_SSO_STATIC_SETTINGS">IdP metadata for client setup</string>
   <string name="SYS_SSO_USERDATA_ACCESS">User data and access permissions</string>
-  <string name="SYS_SSO_USERID_FIELD">User idnetifier</string>
+  <string name="SYS_SSO_USERID_FIELD">User identifier</string>
   <string name="SYS_SSO_USERID_FIELD_DESC">Admidio field used to identify the user to this application. OpenID Connect requires an identifier that is unique and is never given to another person, so only the user UUID and the numeric user ID can be used. Use the user UUID unless the application requires the numeric ID.</string>
   <string name="SYS_SSO_USERID_FIELD_INVALID">#VAR1# cannot be used as the user identifier. OpenID Connect requires an identifier that is unique and is never given to another person.</string>
   <string name="SYS_SSO_USERID_FIELD_UNSUPPORTED">no longer supported</string>
