@@ -341,7 +341,7 @@ class SSOClientPresenter extends PagePresenter
                 'property' => FormPresenter::FIELD_REQUIRED,
                 'defaultValue' => $client->getValue('smc_userid_field'),
                 'multiselect' => false,
-                'helpTextId' => 'SYS_SSO_USERID_FIELD_DESC'
+                'helpTextId' => 'SYS_SSO_SAML_USERID_FIELD_DESC'
                 )
             );
 

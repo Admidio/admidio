@@ -1738,6 +1738,7 @@
   <string name="SYS_SSO_SAML_SIGNATURE_MISSING">In der SAML-Nachricht fehlt eine kryptografische Signatur.</string>
   <string name="SYS_SSO_SAML_SLO_ENDPOINT">SLO-Endpunkt</string>
   <string name="SYS_SSO_SAML_SSO_ENDPOINT">SSO-Endpunkt</string>
+  <string name="SYS_SSO_SAML_USERID_FIELD_DESC">Admidio-Feld, das als NameID gesendet wird. Verwende die Benutzer-UUID, sofern die Anwendung nichts anderes erwartet. Fordert der Client eine transiente oder persistente NameID an, erzeugt Admidio die Kennung selbst.</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Signierte Authentifizierungsanfragen verlangen, sofern vom Client unterstützt</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">Gilt für alle Clients mit hinterlegtem Zertifikat. Clients ohne Zertifikat sind nicht betroffen und können unsignierte Anfragen senden.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Bisher ausgewählter Schlüssel – nicht mehr verwendbar</string>
@@ -1749,7 +1750,7 @@
   <string name="SYS_SSO_STATIC_SETTINGS">IdP-Metadaten für die Client-Einrichtung</string>
   <string name="SYS_SSO_USERDATA_ACCESS">Benutzerdaten und Zugangsberechtigungen</string>
   <string name="SYS_SSO_USERID_FIELD">Benutzerkennung</string>
-  <string name="SYS_SSO_USERID_FIELD_DESC">Admidio-Feld, mit dem der Benutzer gegenüber dieser Anwendung identifiziert wird. Verwende für neue Clients die Benutzer-UUID, sofern die Anwendung keinen anderen Wert benötigt.</string>
+  <string name="SYS_SSO_USERID_FIELD_DESC">Admidio-Feld, mit dem der Benutzer gegenüber dieser Anwendung identifiziert wird. OpenID Connect verlangt eine Kennung, die eindeutig ist und nie an eine andere Person vergeben wird, daher sind nur die Benutzer-UUID und die numerische Benutzer-ID möglich. Verwende die Benutzer-UUID, sofern die Anwendung nicht die numerische ID benötigt.</string>
   <string name="SYS_SSO_USERID_FIELDS">Benutzer-ID-Felder</string>
   <string name="SYS_SSO_USERID_ID">Benutzer-ID (numerisch)</string>
   <string name="SYS_SSO_USERID_LOGIN">Anmeldename</string>
