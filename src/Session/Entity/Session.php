@@ -318,11 +318,12 @@ class Session extends Entity
     /**
      * Record that the user of this session was authenticated by an auto login token.
      *
-     * Presenting the token is an authentication event, so the session must carry the time
-     * it happened: without it the SSO services cannot state when the user authenticated
-     * and refuse to issue an assertion or an ID token. An authentication time that is
-     * already stored is kept, so that an interactive login is never overwritten and the
-     * time does not creep forward with every request of an auto login session.
+     * Presenting the token is an authentication event, so the session must carry everything
+     * that a login records: without the time the SSO services cannot state when the user
+     * authenticated, and without the external session identifier they cannot address the
+     * session when a client asks for a logout. Values that are already stored are kept, so
+     * that an interactive login is never overwritten and the authentication time does not
+     * creep forward with every request of an auto login session.
      * @throws Exception
      */
     private function markAutoLoginAuthentication()
@@ -333,6 +334,10 @@ class Session extends Entity
 
         $this->setValue('ses_authentication_time', DATETIME_NOW);
         $this->setValue('ses_authentication_methods', self::AUTHENTICATION_METHOD_AUTO_LOGIN);
+
+        if ($this->getExternalSessionId() === '') {
+            $this->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
+        }
     }
 
     /**
