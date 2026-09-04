@@ -61,9 +61,12 @@ define('DATE_NOW', date('Y-m-d'));
 define('DATETIME_NOW', date('Y-m-d H:i:s'));
 define('SCRIPT_START_TIME', microtime(true));
 define('DOMAIN', 'admidio.test');
-define('ADMIDIO_URL', 'http://admidio.test');
+// An installation that serves OIDC has to be reachable over HTTPS, so the test environment
+// describes one: the issuer URL of the default preferences is derived from ADMIDIO_URL and is
+// rejected by OIDCService::assertValidIssuerURL() when it is not an HTTPS URL.
+define('ADMIDIO_URL', 'https://admidio.test');
 define('ADMIDIO_URL_PATH', '');
-define('SCHEME', 'http');
+define('SCHEME', 'https');
 define('HOST', 'admidio.test');
 
 // Database table constants that entities require

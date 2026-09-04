@@ -32,7 +32,7 @@ class SsoServicePathTest extends AdministratorTestCase
                 'ocl_redirect_uri' => 'https://client.example/' . $suffix . '/callback',
                 'ocl_grant_types' => 'authorization_code refresh_token',
                 'ocl_scope' => array('profile', 'email'),
-                'ocl_userid_field' => 'usr_login_name',
+                'ocl_userid_field' => 'usr_uuid',
                 'ocl_enabled' => true,
                 'fieldsmap_sso' => array('mail'),
                 'fieldsmap_Admidio' => array('EMAIL'),
@@ -62,7 +62,7 @@ class SsoServicePathTest extends AdministratorTestCase
         $this->assertStringContainsString('authorization_code', (string)$row['ocl_grant_types']);
         $this->assertStringContainsString('openid', (string)$row['ocl_scope']);
         $this->assertStringContainsString('profile', (string)$row['ocl_scope']);
-        $this->assertSame('usr_login_name', (string)$row['ocl_userid_field']);
+        $this->assertSame('usr_uuid', (string)$row['ocl_userid_field']);
         $this->assertTrue((bool)$row['ocl_enabled']);
 
         $mapping = json_decode((string)$row['ocl_field_mapping'], true);
@@ -78,7 +78,7 @@ class SsoServicePathTest extends AdministratorTestCase
                 'ocl_redirect_uri' => 'https://client.example/' . $suffix . '/changed',
                 'ocl_grant_types' => 'authorization_code',
                 'ocl_scope' => array('email'),
-                'ocl_userid_field' => 'usr_login_name',
+                'ocl_userid_field' => 'usr_uuid',
                 'ocl_enabled' => false,
                 'fieldsmap_sso' => array('email'),
                 'fieldsmap_Admidio' => array('EMAIL'),
