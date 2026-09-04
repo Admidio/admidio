@@ -695,7 +695,27 @@ class SAMLService extends SSOService {
             * request would demand a login again and again.
             */
             $isPassive = (bool) $request->getIsPassive();
+
+            /*
+            * The assertion has to state when the user authenticated, so a session that
+            * carries no authentication time cannot be used, however it came to be. Asking
+            * for a login is the graceful way out of that state: it fills the missing time
+            * in, whereas rejecting the request would leave the session unusable for SSO
+            * until it expires.
+            */
+            $authenticationTimeMissing = $gValidLogin
+                && (int) $gCurrentSession->getValue('ses_authentication_time', 'U') <= 0;
+
+            if ($authenticationTimeMissing) {
+                $gLogger->notice(
+                    'The Admidio session has no authentication time, so the user is asked to log in again '
+                    . 'before the SAML assertion is issued.',
+                    array('client' => $client->getIdentifier())
+                );
+            }
+
             $authenticationRequired = !$gValidLogin
+                || $authenticationTimeMissing
                 || ((bool) $request->getForceAuthn() && !$this->hasCompletedReauthentication($request));
 
             if ($authenticationRequired && $isPassive) {

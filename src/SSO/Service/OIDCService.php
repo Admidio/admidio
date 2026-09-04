@@ -763,6 +763,20 @@ class OIDCService extends SSOService {
             $reauthenticationCompleted = $this->hasCompletedReauthentication($request);
             $authenticationRequired = !$gValidLogin;
 
+            /*
+            * A session that carries no authentication time cannot state when the user
+            * authenticated, however it came to be. Asking for a login fills the missing
+            * time in, whereas continuing would issue an ID token without auth_time.
+            */
+            if ($gValidLogin && (int) $gCurrentSession->getValue('ses_authentication_time', 'U') <= 0) {
+                $gLogger->notice(
+                    'The Admidio session has no authentication time, so the user is asked to log in again '
+                    . 'before the OIDC authorization continues.',
+                    array('client' => self::$client->getIdentifier())
+                );
+                $authenticationRequired = true;
+            }
+
             if (!$reauthenticationCompleted && $maxAge !== null && !$this->isAuthenticationWithinMaxAge($maxAge)) {
                 $authenticationRequired = true;
             }
