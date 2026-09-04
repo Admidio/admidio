@@ -140,7 +140,7 @@
             slt_token                   varchar(64)         NOT NULL,
             slt_org_id                  integer unsigned    NOT NULL,
             slt_data                    text                NOT NULL,
-            slt_expires_at              timestamp           NOT NULL,
+            slt_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (slt_id)
         )
         ENGINE = InnoDB
@@ -158,7 +158,7 @@
             ssp_name_id_sp_name_qualifier varchar(255)      NULL,
             ssp_external_session_id     varchar(64)         NOT NULL,
             ssp_session_index           varchar(255)        NOT NULL,
-            ssp_authn_instant           timestamp           NOT NULL,
+            ssp_authn_instant           timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
             ssp_expires_at              timestamp           NOT NULL,
             PRIMARY KEY (ssp_id)
         )
@@ -177,7 +177,7 @@
             osp_client_id               integer unsigned    NOT NULL,
             osp_external_session_id     varchar(64)         NOT NULL,
             osp_subject                 varchar(255)        NOT NULL,
-            osp_expires_at              timestamp           NOT NULL,
+            osp_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
             osp_timestamp_create        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (osp_id)
         )
@@ -200,5 +200,17 @@
     <step id="1150">UpdateStepsCode::updateStep51WarnAboutMutableOIDCSubjects</step>
     <step id="1160">CREATE UNIQUE INDEX %PREFIX%_idx_oco_user_client ON %PREFIX%_oidc_consents (oco_org_id, oco_usr_id, oco_ocl_id)</step>
     <step id="1170">ALTER TABLE %PREFIX%_oidc_consents ADD COLUMN oco_policy_hash varchar(64) NULL</step>
+    <!--
+        A TIMESTAMP column without an explicit default makes MySQL add both
+        DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP to the first such column
+        of a table. Every UPDATE then silently resets the expiry, so a logout transaction
+        expired as soon as it was continued. Declaring the default removes the auto-update.
+    -->
+    <step id="1180" database="mysql">ALTER TABLE %PREFIX%_oidc_access_tokens MODIFY COLUMN oat_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1190" database="mysql">ALTER TABLE %PREFIX%_oidc_refresh_tokens MODIFY COLUMN ort_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1200" database="mysql">ALTER TABLE %PREFIX%_oidc_auth_codes MODIFY COLUMN oac_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1210" database="mysql">ALTER TABLE %PREFIX%_oidc_session_participants MODIFY COLUMN osp_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1220" database="mysql">ALTER TABLE %PREFIX%_saml_logout_transactions MODIFY COLUMN slt_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1230" database="mysql">ALTER TABLE %PREFIX%_saml_session_participants MODIFY COLUMN ssp_authn_instant timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step>stop</step>
 </update>
