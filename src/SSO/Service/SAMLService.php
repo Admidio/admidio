@@ -990,18 +990,68 @@ class SAMLService extends SSOService {
         global $gCurrentOrgId;
 
         $sessionIndex = (string) ($request->getSessionIndex() ?? '');
-        if ($sessionIndex === '') {
+
+        if ($sessionIndex !== '') {
+            $participantService = new SAMLSessionParticipantService($this->db);
+            $participants = $participantService->getParticipantsByClientAndSessionIndex(
+                $gCurrentOrgId, $clientId, $sessionIndex);
+
+            foreach ($participants as $participant) {
+                if ($this->logoutRequestMatchesParticipant($request, $participant)) {
+                    return $participant;
+                }
+            }
+
+            return null;
+        }
+
+        /*
+        * SessionIndex is optional in a LogoutRequest. Without it the request asks to end
+        * the sessions of the principal it names, and a service provider that did not keep
+        * the NameID of the login names no principal at all. This endpoint only serves the
+        * front-channel bindings, so the browser session carrying the request identifies
+        * the session that is meant.
+        */
+        return $this->findCurrentSessionParticipant($request, $clientId);
+    }
+
+    /**
+     * Resolve the participant of the browser session that sent a LogoutRequest.
+     *
+     * Used for a LogoutRequest that carries no SessionIndex, where the session to end
+     * cannot be addressed by the message itself.
+     *
+     * @param LogoutRequest $request The incoming LogoutRequest.
+     * @param int $clientId ID of the SAML client that sent the request.
+     * @return array|null The participant of the current session, or null if there is none.
+     */
+    private function findCurrentSessionParticipant(LogoutRequest $request, int $clientId): ?array
+    {
+        global $gCurrentOrgId, $gCurrentSession, $gValidLogin;
+
+        if (!$gValidLogin) {
+            return null;
+        }
+
+        $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
+
+        if ($externalSessionId === '') {
             return null;
         }
 
         $participantService = new SAMLSessionParticipantService($this->db);
-        $participants = $participantService->getParticipantsByClientAndSessionIndex(
-            $gCurrentOrgId, $clientId, $sessionIndex);
 
-        foreach ($participants as $participant) {
-            if ($this->logoutRequestMatchesParticipant($request, $participant)) {
-                return $participant;
+        foreach ($participantService->getParticipants($gCurrentOrgId, $externalSessionId) as $participant) {
+            if ((int) $participant['ssp_client_id'] !== $clientId) {
+                continue;
             }
+
+            // A request that does name a principal must name the one of this session.
+            if (!$this->logoutRequestNameIDMatchesParticipant($request, $participant)) {
+                continue;
+            }
+
+            return $participant;
         }
 
         return null;
@@ -1012,10 +1062,48 @@ class SAMLService extends SSOService {
      */
     private function logoutRequestMatchesParticipant(LogoutRequest $request, array $participant): bool 
     {
+        if ($request->getNameID() === null) {
+            return false;
+        }
+
+        if (!$this->logoutRequestNameIDMatchesParticipant($request, $participant)) {
+            return false;
+        }
+
+        $requestSessionIndex = (string) ($request->getSessionIndex() ?? '');
+
+        if ($requestSessionIndex === '' || !hash_equals((string) $participant['ssp_session_index'], $requestSessionIndex)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check whether the NameID of a LogoutRequest addresses a session participant.
+     *
+     * A request that names no principal cannot contradict the participant, so it matches.
+     *
+     * @param LogoutRequest $request The incoming LogoutRequest.
+     * @param array $participant The stored session participant.
+     * @return bool Whether the NameID addresses this participant.
+     */
+    private function logoutRequestNameIDMatchesParticipant(LogoutRequest $request, array $participant): bool
+    {
         $requestNameID = $request->getNameID();
 
         if ($requestNameID === null) {
-            return false;
+            return true;
+        }
+
+        /*
+        * The entity format identifies a SAML entity, not a principal. A service provider
+        * that did not keep the NameID of the login sends the entity ID of the identity
+        * provider under this format, which says nothing about the session to end.
+        */
+        if ((string) $requestNameID->getFormat() === SamlConstants::NAME_ID_FORMAT_ENTITY) {
+            return true;
         }
 
         if (!hash_equals((string) $participant['ssp_name_id'],(string) $requestNameID->getValue())) {
@@ -1032,18 +1120,7 @@ class SAMLService extends SSOService {
         $storedSPNameQualifier = (string) ($participant['ssp_name_id_sp_name_qualifier'] ?? '');
         $requestSPNameQualifier = (string) ($requestNameID->getSPNameQualifier() ?? '');
 
-        if (!hash_equals($storedSPNameQualifier,$requestSPNameQualifier)) {
-            return false;
-        }
-
-        $requestSessionIndex = (string) ($request->getSessionIndex() ?? '');
-
-        if ($requestSessionIndex === '' || !hash_equals((string) $participant['ssp_session_index'], $requestSessionIndex)
-        ) {
-            return false;
-        }
-
-        return true;
+        return hash_equals($storedSPNameQualifier, $requestSPNameQualifier);
     }
 
     /**
