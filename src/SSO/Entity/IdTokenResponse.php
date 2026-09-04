@@ -128,7 +128,11 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         if (!empty($this->nonce)) {
             $builder = $builder->withClaim('nonce', $this->nonce);
         }
-        if ($this->authenticationTime !== null) {
+        /*
+        * An absent auth_time says that the time of the authentication is not known, while
+        * a zero would assert that the user authenticated at the start of the epoch.
+        */
+        if ($this->authenticationTime !== null && $this->authenticationTime > 0) {
             $builder = $builder->withClaim('auth_time', $this->authenticationTime);
         }
         if ($this->externalSessionId !== '') {
