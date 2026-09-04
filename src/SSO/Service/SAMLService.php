@@ -498,13 +498,107 @@ class SAMLService extends SSOService {
      * @return string[]
      */
     private function getSupportedNameIDFormats(?SAMLClient $client = null): array {
+        /*
+        * The order is the order of the metadata, and a client that reads it as a ranking
+        * has to find the unspecified format first: that is the format Admidio has always
+        * issued, and it is the one that carries the configured user identifier.
+        */
         $formats = array(SamlConstants::NAME_ID_FORMAT_UNSPECIFIED);
 
         if ($client === null || $client->getUserIdField() === 'EMAIL') {
             $formats[] = SamlConstants::NAME_ID_FORMAT_EMAIL;
         }
 
+        $formats[] = SamlConstants::NAME_ID_FORMAT_PERSISTENT;
+        $formats[] = SamlConstants::NAME_ID_FORMAT_TRANSIENT;
+
         return $formats;
+    }
+
+    /**
+     * Determine the value of the NameID that is sent to a client.
+     *
+     * @param SAMLClient $client
+     * @param string $nameIDFormat The format that the assertion states.
+     * @return string
+     * @throws Exception
+     */
+    private function getNameIDValue(SAMLClient $client, string $nameIDFormat): string {
+        /*
+        * A transient identifier must say nothing about the user and must not be recognised
+        * again in a later session, so a fresh random value is generated for every
+        * authentication. The client identifies the user by the attributes of the assertion,
+        * and the value is only kept so that a LogoutRequest can address this session.
+        */
+        if ($nameIDFormat === SamlConstants::NAME_ID_FORMAT_TRANSIENT) {
+            return '_' . bin2hex(random_bytes(32));
+        }
+
+        if ($nameIDFormat === SamlConstants::NAME_ID_FORMAT_PERSISTENT) {
+            return $this->getPersistentNameID($client);
+        }
+
+        return (string) ($this->currentUser->getValue($client->getValue('smc_userid_field')) ?? '');
+    }
+
+    /**
+     * Derive the persistent identifier of the current user at a client.
+     *
+     * A persistent identifier has to be the same in every session, has to differ between
+     * clients so that they cannot recognise the same person in each other's data, and must
+     * never address a second person. Deriving it from the user UUID gives the first and the
+     * third property, because that UUID identifies exactly one person for as long as the
+     * installation exists, and mixing in the entity ID of the client gives the second.
+     *
+     * The derivation is keyed, because the user UUID is handed to clients as an attribute
+     * and entity IDs are public: a plain hash of the two could be recomputed by anyone who
+     * learns the UUID of a user, who could then recognise that person at every other client.
+     *
+     * @param SAMLClient $client
+     * @return string
+     * @throws Exception
+     */
+    private function getPersistentNameID(SAMLClient $client): string {
+        $userUUID = (string) $this->currentUser->getValue('usr_uuid');
+
+        if ($userUUID === '') {
+            throw new Exception('The current user has no UUID, so no persistent identifier can be derived.');
+        }
+
+        $identifier = hash_hmac(
+            'sha256',
+            $userUUID . '|' . $client->getIdentifier(),
+            $this->getPersistentNameIDSecret(),
+            true
+        );
+
+        // base64url without padding, so that the identifier survives every transport unchanged
+        return rtrim(strtr(base64_encode($identifier), '+/', '-_'), '=');
+    }
+
+    /**
+     * The key of the persistent identifier derivation, generated once per organization.
+     *
+     * Losing or changing it makes every persistent identifier a different one, which is the
+     * same to a client as every user having been replaced by a new person, so it is stored
+     * with the other settings and never rotated on its own.
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function getPersistentNameIDSecret(): string {
+        global $gSettingsManager;
+
+        $secret = $gSettingsManager->has('sso_saml_persistent_id_secret')
+            ? (string) $gSettingsManager->getString('sso_saml_persistent_id_secret')
+            : '';
+
+        if ($secret === '') {
+            $secret = bin2hex(random_bytes(32));
+            $gSettingsManager->set('sso_saml_persistent_id_secret', $secret);
+        }
+
+        return $secret;
     }
 
     /**
@@ -775,7 +869,7 @@ class SAMLService extends SSOService {
             }
 
             $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
-            $login = $this->currentUser->getValue($client->getValue('smc_userid_field'))??'';
+            $nameIDValue = $this->getNameIDValue($client, $nameIDPolicy['format']);
 
             // Set up validity periods for the assertions and confirmationData -> Use allowed clock skew and assertion lifetime
             $issueInstant = new \DateTime();
@@ -818,9 +912,16 @@ class SAMLService extends SSOService {
                 ->setSubjectConfirmationData($subjectConfirmationData);
 
             $subject = new Subject();
-            $nameID = new NameID($login, $nameIDPolicy['format']);
+            $nameID = new NameID($nameIDValue, $nameIDPolicy['format']);
             if ($nameIDPolicy['spNameQualifier'] !== null) {
                 $nameID->setSPNameQualifier($nameIDPolicy['spNameQualifier']);
+            } elseif ($nameIDPolicy['format'] === SamlConstants::NAME_ID_FORMAT_PERSISTENT) {
+                /*
+                * A persistent identifier is only meaningful together with the two parties it
+                * belongs to, so it states them even when the request did not ask for it.
+                */
+                $nameID->setNameQualifier($this->getIdPEntityId());
+                $nameID->setSPNameQualifier($entityIdClient);
             }
             $subject->setNameID($nameID);
             $subject->addSubjectConfirmation($subjectConfirmation);
