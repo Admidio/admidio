@@ -582,7 +582,7 @@ CREATE TABLE %PREFIX%_oidc_access_tokens (
     oat_ocl_id                  integer unsigned    NOT NULL,
     oat_token                   text,
     oat_scope                   text,
-    oat_expires_at              timestamp           NOT NULL,
+    oat_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     oat_revoked                 boolean             DEFAULT FALSE,
     oat_usr_id_create           integer unsigned,
     oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -600,7 +600,7 @@ CREATE TABLE %PREFIX%_oidc_session_participants (
     osp_client_id               integer unsigned    NOT NULL,
     osp_external_session_id     varchar(64)         NOT NULL,
     osp_subject                 varchar(255)        NOT NULL,
-    osp_expires_at              timestamp           NOT NULL,
+    osp_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     osp_timestamp_create        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (osp_id)
 )
@@ -620,7 +620,7 @@ CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_usr_id                  integer unsigned    NULL,
     ort_token                   text,
     ort_scope                   text,
-    ort_expires_at              timestamp           NOT NULL,
+    ort_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ort_revoked                 boolean             DEFAULT FALSE,
     ort_usr_id_create           integer unsigned,
     ort_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -642,7 +642,7 @@ CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_external_session_id     varchar(64)         NULL,
     oac_authentication_methods  varchar(255)        NULL,
     oac_authentication_context  varchar(255)        NULL,
-    oac_expires_at              timestamp           NOT NULL,
+    oac_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     oac_revoked                 boolean             DEFAULT FALSE,
     oac_redirect_uri            text                NOT NULL,
     oac_used                    boolean             DEFAULT FALSE,
@@ -719,7 +719,7 @@ CREATE TABLE %PREFIX%_saml_logout_transactions (
     slt_token                   varchar(64)         NOT NULL,
     slt_org_id                  integer unsigned    NOT NULL,
     slt_data                    text                NOT NULL,
-    slt_expires_at              timestamp           NOT NULL,
+    slt_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (slt_id)
 )
 ENGINE = InnoDB
@@ -743,7 +743,7 @@ CREATE TABLE %PREFIX%_saml_session_participants (
     ssp_name_id_sp_name_qualifier varchar(255)      NULL,
     ssp_external_session_id     varchar(64)         NOT NULL,
     ssp_session_index           varchar(255)        NOT NULL,
-    ssp_authn_instant           timestamp           NOT NULL,
+    ssp_authn_instant           timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ssp_expires_at              timestamp           NOT NULL,
     PRIMARY KEY (ssp_id)
 )
