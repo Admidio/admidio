@@ -9,6 +9,13 @@ use JsonException;
 
 class SAMLLogoutTransaction extends Entity
 {
+    /** Send the final LogoutResponse to the service provider that started the logout. */
+    public const COMPLETION_SAML_RESPONSE = 'saml_response';
+    /** Redirect the browser to a URL once every participant has been notified. */
+    public const COMPLETION_REDIRECT = 'redirect';
+    /** Nothing left to go back to, only confirm the logout. */
+    public const COMPLETION_DONE = 'done';
+
     /**
      * @var array<string,mixed>
      */
@@ -49,7 +56,9 @@ class SAMLLogoutTransaction extends Entity
      *
      * @throws JsonException
      */
-    public function initialize(int $organizationId, int $initiatorClientId, ?int $initiatorParticipantId, string $initiatorRequestId, ?string $initiatorRelayState, array $pendingClients): void 
+    public function initialize(int $organizationId, int $initiatorClientId, ?int $initiatorParticipantId,
+        string $initiatorRequestId, ?string $initiatorRelayState, array $pendingClients,
+        array $completion = array('type' => self::COMPLETION_DONE)): void
     {
         $this->setValue('slt_token', bin2hex(random_bytes(32)));
         $this->setValue('slt_org_id', $organizationId);
@@ -64,7 +73,9 @@ class SAMLLogoutTransaction extends Entity
             'currentParticipantId' => null,
             'currentClientId' => null,
             'currentRequestId' => null,
-            'partialLogout' => false
+            'partialLogout' => false,
+            // What to do once the SAML chain has finished.
+            'completion' => $completion
         );
 
         $this->writeTransactionData();
@@ -88,6 +99,16 @@ class SAMLLogoutTransaction extends Entity
     public function getInitiatorRelayState(): string
     {
         return (string) ($this->transactionData['initiatorRelayState'] ?? '');
+    }
+
+    public function getCompletionType(): string
+    {
+        return (string) ($this->transactionData['completion']['type'] ?? self::COMPLETION_DONE);
+    }
+
+    public function getCompletionUrl(): string
+    {
+        return (string) ($this->transactionData['completion']['url'] ?? '');
     }
 
     /**
