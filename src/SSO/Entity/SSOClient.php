@@ -36,7 +36,9 @@ class SSOClient extends Entity
                 );
                 $this->dbColumns[$this->columnPrefix . '_field_mapping'] = json_encode($defaultMapping, JSON_THROW_ON_ERROR);
                 // Use setValue() so this default participates in Entity change tracking for new clients.
-                $this->setValue($this->columnPrefix . '_userid_field', 'usr_login_name');
+                // A login name can be changed and then names a different person to the client,
+                // so a new client starts with the identifier that never changes.
+                $this->setValue($this->columnPrefix . '_userid_field', 'usr_uuid');
             }
         }
     }
