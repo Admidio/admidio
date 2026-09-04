@@ -1773,8 +1773,8 @@
   <string name="SYS_SSO_SAML_SIGNATURE_KEY_MISSING">A client certificate is required to validate the SAML message signature.</string>
   <string name="SYS_SSO_SAML_SLO_ENDPOINT">Logout URL</string>
   <string name="SYS_SSO_SAML_SSO_ENDPOINT">Login URL</string>
-  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Require signed authentication requests where the client can sign</string>
-  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">Applies to every client with a stored certificate, because only a certificate allows a signature to be verified. Clients without one are not affected. To demand a signature from a single client regardless, use the setting of that client.</string>
+  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Require signed authentication requests, if the client supports it</string>
+  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">If a client supports signing and a certificate is entered in the client configuration, all requests must be signed. Clients without a certificate are not affected and do not require signatures.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Previously selected key — no longer usable</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Also sign SAML responses</string>
   <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signature and Encryption</string>
