@@ -1942,6 +1942,10 @@ class SAMLService extends SSOService {
             $att->setName($samlAttribute);
 //            $att->setFriendlyName($friendlyName ?: $gL10n->get('SYS_ROLES'));
 
+            // Always send the roles attribute, even if the user is not a member of any mapped
+            // role. Some service providers (e.g. the DokuWiki SAML plugin) reject an assertion
+            // when the configured group attribute is missing entirely, so send it without values.
+            $att->setAttributeValue([]);
             foreach ($client->getMappedRoleMemberships($user) as $r) {
                 $att->addAttributeValue($r);
             }
