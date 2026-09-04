@@ -355,6 +355,7 @@ final class PreferenceDefinitions
             'sso_saml_want_requests_signed' => array('default' => '1', 'type' => 'bool'),
             'sso_saml_signing_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
             'sso_saml_encryption_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
+            'sso_saml_persistent_id_secret' => array('default' => '', 'internal' => true, 'sensitive' => true),
             'sso_oidc_enabled' => array('default' => '0', 'type' => 'bool'),
             'sso_oidc_issuer_url' => array('defaultProvider' => self::DEFAULT_OIDC_ISSUER_URL, 'validator' => self::VALIDATOR_OIDC_ISSUER),
             'sso_oidc_signing_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_OIDC_SIGNING_KEY),
