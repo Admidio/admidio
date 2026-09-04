@@ -183,7 +183,8 @@ class SAMLLogoutTransaction extends Entity
      */
     private function loadTransactionData(): void
     {
-        $data = $this->getValue('slt_data');
+        // Read the raw string from the database, so the quotes of the JSON don't get HTML encoded!
+        $data = $this->getValue('slt_data', 'database');
 
         if (empty($data)) {
             $this->transactionData = array();
