@@ -1709,7 +1709,7 @@
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout URL</string>
   <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Enter a valid HTTPS URL. HTTP is allowed only for localhost.</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Allowed logout return URLs</string>
-  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Enter one URL per line. After logout, Admidio may redirect users only to these exact URLs.</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Enter one URL per line. After logout, Admidio may redirect users only to these URLs. Each URL must match exactly, unless it contains a "*", which stands for any part of the path or of the query string, e.g. https://example.org/logout*. The protocol, the host name and the port must always be given without a "*". If no URL is entered, Admidio will not redirect anywhere after the logout.</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Refresh token lifetime</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">How long refresh tokens can be used, in seconds. Default: 2592000 (30 days).</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Requested permissions</string>
