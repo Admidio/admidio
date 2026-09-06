@@ -125,11 +125,16 @@ class SSOClientPresenter extends PagePresenter
             }
             ';
 
-        // Add a row for each configured field / role
+        // Add a row for each configured field / role. The field mapping is passed in as an array
+        // keyed by the SSO field name, the role mapping as a list of [SSO role, Admidio role] pairs,
+        // because the same SSO role name may be assigned to several Admidio roles.
         $js .= '';
         foreach ($config as $ssoField => $admidioField) {
+            if (is_array($admidioField)) {
+                list($ssoField, $admidioField) = $admidioField;
+            }
             $js .= '
-            addColumn_' . $type . '("' . $ssoField . '", "' . $admidioField . '");';
+            addColumn_' . $type . '(' . json_encode((string) $ssoField) . ', ' . json_encode((string) $admidioField) . ');';
         }
 
         return array('js' => $js, 'jsInit' => $jsInit);
@@ -375,7 +380,7 @@ class SSOClientPresenter extends PagePresenter
         );
 
 
-        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
+        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMappingList(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
         $this->addJavascript('$("#rolesmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
@@ -862,7 +867,7 @@ class SSOClientPresenter extends PagePresenter
         );
 
 
-        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
+        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMappingList(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
         $this->addJavascript('$("#rolesmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
