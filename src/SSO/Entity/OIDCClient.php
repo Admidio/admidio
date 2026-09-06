@@ -152,10 +152,104 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         )));
     }
 
+    /**
+     * Check whether the client may send the user to the given URI after a logout.
+     *
+     * A registered URI without a "*" has to match exactly, as required by OpenID Connect
+     * RP-Initiated Logout. A registered URI may use "*" as a placeholder for any part of the path
+     * or of the query string, which allows applications that append varying parameters (e.g. the
+     * user's language) to be registered with a single entry.
+     *
+     * @param string $uri The post-logout redirect URI requested by the client.
+     * @return bool Returns **true** if the URI may be used for the redirect after the logout.
+     */
     public function isPostLogoutRedirectUriAllowed(string $uri): bool
     {
-        return in_array($uri, $this->getPostLogoutRedirectUris(), true);
+        foreach ($this->getPostLogoutRedirectUris() as $registeredUri) {
+            if (!str_contains($registeredUri, '*')) {
+                if ($registeredUri === $uri) {
+                    return true;
+                }
+            } elseif (self::matchesPostLogoutRedirectUriPattern($registeredUri, $uri)) {
+                return true;
+            }
+        }
 
+        return false;
+    }
+
+    /**
+     * Match a post-logout redirect URI against a registered URI containing at least one "*".
+     *
+     * Scheme, host and port must be given without a placeholder and must match exactly, so that a
+     * pattern can never match a different site. Without that restriction an entry like
+     * "https://example.org*" would also allow "https://example.org.attacker.example/", which would
+     * turn the logout endpoint into an open redirect. The placeholder therefore only applies to the
+     * part after the host, and it does not match line breaks.
+     *
+     * @param string $pattern The registered URI, containing at least one "*".
+     * @param string $uri The post-logout redirect URI requested by the client.
+     * @return bool Returns **true** if the requested URI matches the registered URI.
+     */
+    private static function matchesPostLogoutRedirectUriPattern(string $pattern, string $uri): bool
+    {
+        $patternParts = parse_url($pattern);
+        $uriParts = parse_url($uri);
+        if (!is_array($patternParts) || !is_array($uriParts)) {
+            return false;
+        }
+
+        // Credentials in a redirect URI are used to disguise the actual target, so neither the
+        // registered nor the requested URI may contain them.
+        foreach (array('user', 'pass') as $part) {
+            if (isset($patternParts[$part]) || isset($uriParts[$part])) {
+                return false;
+            }
+        }
+
+        // Scheme and host are compared case-insensitively, as they are case-insensitive by RFC 3986.
+        foreach (array('scheme', 'host') as $part) {
+            $patternValue = (string) ($patternParts[$part] ?? '');
+            $uriValue = (string) ($uriParts[$part] ?? '');
+            if ($patternValue === '' || $uriValue === ''
+                || str_contains($patternValue, '*')
+                || strcasecmp($patternValue, $uriValue) !== 0
+            ) {
+                return false;
+            }
+        }
+
+        if (($patternParts['port'] ?? null) !== ($uriParts['port'] ?? null)) {
+            return false;
+        }
+
+        $patternPath = self::getUriPathQueryFragment($patternParts);
+        if (!str_contains($patternPath, '*')) {
+            // The only placeholder was part of the host, which is never accepted.
+            return false;
+        }
+
+        $regex = '#^' . str_replace('\*', '.*', preg_quote($patternPath, '#')) . '$#';
+        return preg_match($regex, self::getUriPathQueryFragment($uriParts)) === 1;
+    }
+
+    /**
+     * Reassemble everything after the host of a URI parsed by parse_url().
+     *
+     * @param array<string,mixed> $uriParts Result of parse_url().
+     * @return string Path, query string and fragment of the URI.
+     */
+    private static function getUriPathQueryFragment(array $uriParts): string
+    {
+        $path = (string) ($uriParts['path'] ?? '');
+        if (isset($uriParts['query'])) {
+            $path .= '?' . $uriParts['query'];
+        }
+        if (isset($uriParts['fragment'])) {
+            $path .= '#' . $uriParts['fragment'];
+        }
+
+        return $path;
     }
 
     public function getFrontChannelLogoutUri(): string
