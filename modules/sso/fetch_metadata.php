@@ -19,7 +19,7 @@ try {
     $csrfToken = admFuncVariableIsValid($_POST, 'adm_csrf_token', 'string');
     SecurityUtils::validateCsrfToken($csrfToken);
 
-    $url = trim(admFuncVariableIsValid($_POST, 'url', 'string'));
+    $url = trim(admFuncVariableIsValid($_POST, 'url', 'url'));
 
     // The metadata URL is requested by the server, so it must be a public HTTPS target.
     // The returned options pin cURL to the address that was validated here.
