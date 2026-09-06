@@ -162,23 +162,24 @@ abstract class SSOService {
             (bool) $fieldMappingCatchall
         );
         
-        // Collect all role mappings and the catch-all checkbox
-        $ssoRoles = $formValues['rolesmap_sso'] ?? array();
-        $admRoles = $formValues['rolesmap_Admidio'] ?? array();
-        $ssoRoles = array_map(
-            function ($ssoRole, $admRole) {
-                if (empty($ssoRole)) {
-                    $role = new Role($this->db, $admRole);
-                    return $role->readableName();
-                }
-                return $ssoRole;
-            },
-            $ssoRoles,
-            $admRoles
-        );
+        // Collect all role mappings and the catch-all checkbox. Several Admidio roles may be mapped
+        // to the same client role, so the assignments are passed on as a list of pairs. Combining
+        // them into an array keyed by the client role name would silently drop all but one of them.
+        // If a client role is left empty, use the Admidio role name!
+        $ssoRoles = array_values($formValues['rolesmap_sso'] ?? array());
+        $admRoles = array_values($formValues['rolesmap_Admidio'] ?? array());
+        $roleMapping = array();
+        foreach ($admRoles as $index => $admRole) {
+            $ssoRole = $ssoRoles[$index] ?? '';
+            if (empty($ssoRole)) {
+                $role = new Role($this->db, $admRole);
+                $ssoRole = $role->readableName();
+            }
+            $roleMapping[] = array($ssoRole, $admRole);
+        }
         $client->setRoleMapping(
-            array_combine($ssoRoles, $admRoles),
-            $formValues['sso_roles_all_other'] ?? false
+            $roleMapping,
+            (bool) ($formValues['sso_roles_all_other'] ?? false)
         );
 
         // write all other form values

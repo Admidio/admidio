@@ -11759,12 +11759,13 @@ final class CoreTasks
 
         if ($client !== null) {
             $fieldMapping = $client->getFieldMapping();
-            $roleMapping = $client->getRoleMapping();
+            // One entry per assignment, since the same client role may be mapped to several Admidio roles.
+            $roleMapping = $client->getRoleMappingList();
 
             $values['fieldsmap_sso'] = array_keys($fieldMapping);
             $values['fieldsmap_Admidio'] = array_values($fieldMapping);
-            $values['rolesmap_sso'] = array_keys($roleMapping);
-            $values['rolesmap_Admidio'] = array_values($roleMapping);
+            $values['rolesmap_sso'] = array_column($roleMapping, 0);
+            $values['rolesmap_Admidio'] = array_column($roleMapping, 1);
             $values['sso_fields_no_other'] = $client->getFieldMappingCatchall();
             $values['sso_roles_all_other'] = $client->getRoleMappingCatchall();
             $accessRoles = array_map('intval', $client->getAccessRolesIds());
