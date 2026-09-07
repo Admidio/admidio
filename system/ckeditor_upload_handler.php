@@ -23,7 +23,7 @@ try {
 
     $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
 
-    if ($gDisableFileUpload) {
+    if (isset($gDisableFileUpload) && $gDisableFileUpload === true) {
         throw new Exception('File upload disabled in global config file!');
     }
 
