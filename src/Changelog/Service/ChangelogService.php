@@ -1392,7 +1392,7 @@ class ChangelogService {
                     $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_PROFILE_FIELD'), $gL10n->get('SYS_SSO_ATTRIBUTE'), new ProfileField($gDb), ["*" => $gL10n->get('SYS_SSO_ATTRIBUTES_NOOTHER')]);
                     break;
                 case 'SSO_roles_mapping':
-                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_ROLES_ALLOTHER')]);
+                    $htmlValue = self::createMappingTable($value, $gL10n->get('SYS_ROLE'), $gL10n->get('SYS_SSO_ROLE'), new Role($gDb), ["*" => $gL10n->get('SYS_SSO_ROLES_ALLOTHER')], true);
                     break;
 
                 case 'PICTURE':
@@ -1420,7 +1420,21 @@ class ChangelogService {
     }
 
 
-    public static function createMappingTable(string $value, string $admidioField, string $targetField, Entity $object, array $messages = []) {
+    /**
+     * Render a stored mapping as a two-column table of Admidio object and target name.
+     *
+     * @param string $value The mapping as it is stored, a JSON object of target name => Admidio object(s).
+     * @param string $admidioField Header of the column that names the Admidio objects.
+     * @param string $targetField Header of the column that names the targets at the client.
+     * @param Entity $object Entity used to resolve a stored ID to a name.
+     * @param array $messages Pseudo entries like the catchall '*', rendered as a full-width note.
+     * @param bool $negativeIdIsLeader Whether a negative ID maps the leaders of that object instead
+     *                                 of its members. This is how the role mapping stores a
+     *                                 leadership, see SSOClient::getMappedRoleMemberships().
+     * @return string The mapping as an HTML table, or the unchanged value if it is not a mapping.
+     * @throws Exception
+     */
+    public static function createMappingTable(string $value, string $admidioField, string $targetField, Entity $object, array $messages = [], bool $negativeIdIsLeader = false) {
         $mapping = json_decode($value, true);
         // If value is not a json array, don't transform it
         if (empty($mapping)) {
@@ -1437,18 +1451,54 @@ class ChangelogService {
                     $table .= '<tr><td colspan="2" style="border: solid 1pt gray; background: lightgray;">' . $msg . "</td></tr>\n";
                 }
             } else {
-                if (is_numeric($admVal)) {
-                    $object->readDataById($admVal);
-                    $admVal = $object->readableName();
+                // Several Admidio objects can be mapped to the same target name, so an entry holds
+                // a list. Mappings stored before that was supported hold a single value.
+                $admValues = is_array($admVal) ? $admVal : array($admVal);
+
+                foreach ($admValues as $mappedValue) {
+                    // formatValue() deliberately skips its encoding for the mapping types, so the
+                    // values decoded from the JSON are still raw and have to be encoded here.
+                    $table .= '<tr><td>'
+                        . SecurityUtils::encodeHTML(self::describeMappedObject($mappedValue, $object, $negativeIdIsLeader))
+                        . '</td><td>' . SecurityUtils::encodeHTML((string)$ssoVal) . "</td></tr>\n";
                 }
-                // formatValue() deliberately skips its encoding for the mapping types, so the
-                // values decoded from the JSON are still raw and have to be encoded here.
-                $table .= '<tr><td>' . SecurityUtils::encodeHTML((string)$admVal) . '</td><td>'
-                    . SecurityUtils::encodeHTML((string)$ssoVal) . "</td></tr>\n";
             }
         }
         $table .= '</table>';
         return $table;
+    }
+
+    /**
+     * Name of the Admidio object that one entry of a mapping refers to.
+     *
+     * @param mixed $mappedValue One stored mapping entry, an object ID or an already readable name.
+     * @param Entity $object Entity used to resolve the ID.
+     * @param bool $negativeIdIsLeader Whether a negative ID refers to the leaders of the object.
+     * @return string The readable name, the raw value if the object cannot be read any more.
+     * @throws Exception
+     */
+    private static function describeMappedObject(mixed $mappedValue, Entity $object, bool $negativeIdIsLeader): string
+    {
+        global $gL10n;
+
+        if (!is_numeric($mappedValue)) {
+            return (string) $mappedValue;
+        }
+
+        $objectId = (int) $mappedValue;
+        // A negative ID maps the leaders of the object, so the record itself is the positive one.
+        $isLeader = $negativeIdIsLeader && $objectId < 0;
+
+        $object->readDataById(abs($objectId));
+        $name = (string) $object->readableName();
+
+        if ($name === '') {
+            // The object was deleted in the meantime, so the stored ID is all that is left to show.
+            return (string) $mappedValue;
+        }
+
+        // The same distinction the edit form makes for a role and its leaders.
+        return $isLeader ? $name . ' - ' . $gL10n->get('SYS_LEADER') : $name;
     }
 
     /**
