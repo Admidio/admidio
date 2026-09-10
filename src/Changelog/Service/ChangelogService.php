@@ -36,6 +36,7 @@ use Admidio\Roles\Service\RolesService;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Entity\OIDCClient;
+use Admidio\SSO\Entity\OIDCConsent;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
 use Admidio\Users\Entity\UserRelation;
@@ -103,7 +104,14 @@ class ChangelogService {
     public static array $noLogTables = [
         'auto_login', 'components', 'id', 'log_changes',
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
-        'oidc_access_tokens', 'oidc_refresh_tokens', 'oidc_auth_codes', 'registrations',
+        // SSO runtime bookkeeping: tokens and session/logout state are written and expired by the
+        // OIDC/SAML flows themselves, never edited by a person, so they carry no audit value.
+        // Logged are the SSO configuration (saml_clients, oidc_clients, sso_keys) and
+        // oidc_consents, which records a user granting a client access to their account.
+        'oidc_access_tokens', 'oidc_refresh_tokens', 'oidc_auth_codes',
+        'oidc_session_participants',
+        'registrations',
+        'saml_logout_transactions', 'saml_session_participants',
         'sessions'];
 
     /**
@@ -307,6 +315,7 @@ class ChangelogService {
             'texts' => 'SYS_SETTINGS',
             'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
             'oidc_clients' => 'SYS_SSO_CLIENTS_OIDC',
+            'oidc_consents' => 'SYS_SSO_OIDC_CONSENTS',
             'sso_keys' => 'SYS_SSO_KEYS',
             'others' => 'SYS_ALL_OTHERS',
         );
@@ -430,7 +439,7 @@ class ChangelogService {
                 'label' => 'SYS_SSO',
                 'section' => 'settings',
                 'enabledBy' => array('sso_saml_enabled', 'sso_oidc_enabled'),
-                'tables' => array('saml_clients', 'oidc_clients', 'sso_keys')
+                'tables' => array('saml_clients', 'oidc_clients', 'oidc_consents', 'sso_keys')
             ),
             'preferences' => array(
                 'label' => 'SYS_SETTINGS',
@@ -603,6 +612,8 @@ class ChangelogService {
                 return new SAMLClient($gDb);
             case 'oidc_clients':
                 return new OIDCClient($gDb);
+            case 'oidc_consents':
+                return new OIDCConsent($gDb);
             case 'sso_keys':
                 return new Key($gDb);
             case 'inventory_field_select_options':
@@ -943,7 +954,9 @@ class ChangelogService {
             'ocl_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'OIDC_field_mapping'),
             'ocl_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
             // 'ocl_grant_types' =>            'TODO',
-            // 'ocl_scope' =>                  'TODO',        
+            // 'ocl_scope' =>                  'TODO',
+
+            'oco_scopes' =>                 'SYS_SSO_OIDC_CONSENT_SCOPES',
 
             'key_org_id' =>                 array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'key_name' =>                   'SYS_NAME',
@@ -1077,6 +1090,8 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $uuid)); break;
                 case 'oidc_clients':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $uuid)); break;
+                case 'oidc_consents': // A consent has no edit page, its uuid is the one of the user who granted it
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $uuid)); break;
                 case 'sso_keys':
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/sso/keys.php', array('mode' => 'edit', 'uuid' => $uuid)); break;
             }
@@ -1466,6 +1481,8 @@ class ChangelogService {
         switch ($table) {
             case 'members':
                 return 'roles';
+            case 'oidc_consents': // The related object of a consent is the client it was granted for
+                return 'oidc_clients';
             case 'roles_rights_data':
                 return 'roles';
             case 'roles_dependencies':

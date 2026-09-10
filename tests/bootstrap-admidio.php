@@ -94,6 +94,7 @@ const TBL_MESSAGES_ATTACHMENTS = TABLE_PREFIX . '_messages_attachments';
 const TBL_MESSAGES_CONTENT = TABLE_PREFIX . '_messages_content';
 const TBL_MESSAGES_RECIPIENTS = TABLE_PREFIX . '_messages_recipients';
 const TBL_OIDC_CLIENTS = TABLE_PREFIX . '_oidc_clients';
+const TBL_OIDC_CONSENTS = TABLE_PREFIX . '_oidc_consents';
 const TBL_OIDC_ACCESS_TOKENS = TABLE_PREFIX . '_oidc_access_tokens';
 const TBL_OIDC_REFRESH_TOKENS = TABLE_PREFIX . '_oidc_refresh_tokens';
 const TBL_OIDC_AUTH_CODES = TABLE_PREFIX . '_oidc_auth_codes';
