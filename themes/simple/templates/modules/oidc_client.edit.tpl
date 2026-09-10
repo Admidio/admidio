@@ -20,6 +20,7 @@
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_redirect_uri']}
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['ocl_post_logout_redirect_uris']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_trusted']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_require_pkce']}
         </div>
     </div>
     <div class="card admidio-field-group">
@@ -123,7 +124,6 @@
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_frontchannel_logout_session_required']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_backchannel_logout_uri']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_backchannel_logout_session_required']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_require_pkce']}
         </div>
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>
