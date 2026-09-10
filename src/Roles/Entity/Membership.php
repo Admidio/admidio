@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\SSO\Service\SSOAccessRevocationService;
 use Admidio\Users\Entity\User;
 use DateTime;
 use Throwable;
@@ -129,6 +130,41 @@ class Membership extends Entity
     }
 
     /**
+     * End the single sign-on access that this membership justified.
+     *
+     * A client whose access is restricted to roles is only checked while an authorization request
+     * is running, so the tokens issued from it would outlive the membership that allowed them.
+     * Nothing happens unless a client actually names this role, which is one cheap query.
+     *
+     * @param int $roleId Role of the membership, by default the one of this record.
+     * @param int $userId User of the membership, by default the one of this record. Both are passed
+     *                    explicitly by delete(), where the record is already gone.
+     * @return void
+     * @throws Exception
+     */
+    private function revokeSSOAccessOfMembership(int $roleId = 0, int $userId = 0): void
+    {
+        if ($roleId === 0) {
+            $roleId = (int) $this->getValue('mem_rol_id');
+        }
+        if ($userId === 0) {
+            $userId = (int) $this->getValue('mem_usr_id');
+        }
+
+        if ($roleId === 0 || $userId === 0) {
+            return;
+        }
+
+        $revocationService = new SSOAccessRevocationService($this->db);
+
+        if (!$revocationService->isRoleUsedForClientAccess($roleId)) {
+            return;
+        }
+
+        $revocationService->revokeLostClientAccess($userId);
+    }
+
+    /**
      * Deletes the selected record of the table and optionally sends an admin notification if configured
      * @return true Returns **true** if no error occurred
      * @throws Exception
@@ -171,7 +207,17 @@ class Membership extends Entity
             $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
         }
 
-        return parent::delete();
+        $roleId = (int) $this->getValue('mem_rol_id');
+        $userId = (int) $this->getValue('mem_usr_id');
+
+        $returnStatus = parent::delete();
+
+        // Only now is the membership gone, so only now does the access right answer differently.
+        if ($returnStatus) {
+            $this->revokeSSOAccessOfMembership($roleId, $userId);
+        }
+
+        return $returnStatus;
     }
 
     /**
@@ -200,6 +246,12 @@ class Membership extends Entity
         if ($returnStatus && isset($gCurrentSession)) {
             // renew a user object of the affected user because of edited role assignment
             $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
+        }
+
+        if ($returnStatus && !$newRecord) {
+            // A membership that already existed may just have been ended or shortened. A new one
+            // can only add rights, so it cannot cost anybody their single sign-on access.
+            $this->revokeSSOAccessOfMembership();
         }
 
         if ($newRecord && is_object($gChangeNotification)) {

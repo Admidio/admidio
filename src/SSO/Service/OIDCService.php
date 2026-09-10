@@ -1183,6 +1183,18 @@ class OIDCService extends SSOService {
                 return new JsonResponse(['active' => false]);
             }
 
+            /*
+             * The access right is not only a condition of the authorization request: a token is
+             * inactive as soon as the user may no longer use the client, whether the membership
+             * that granted it was removed or simply expired.
+             */
+            if ((int) $token->getValue($token->getColumnPrefix() . '_usr_id') > 0) {
+                $tokenUser = $token->getUser();
+                if ($tokenUser instanceof UserEntity && !$tokenClient->hasAccessRight($tokenUser)) {
+                    return new JsonResponse(['active' => false]);
+                }
+            }
+
             return new JsonResponse([
                 'active' => true,
                 'sub' => $token->getUserIdentifier(),

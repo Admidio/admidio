@@ -325,17 +325,28 @@ class SSOClient extends Entity
     }
 
     /**
-     * Checks if the current user has access rights to the SAML client.
-     * @return bool Return **true** if the user has access rights to the SAML client
+     * Checks if a user has access rights to the client.
+     *
+     * The user is normally the one who is logged in, but the access right also has to be judged
+     * for a user who is not present in the request: when a role membership ends, the tokens that
+     * this right justified are revoked for the affected user.
+     *
+     * @param User|null $user User to judge, by default the currently logged-in user.
+     * @return bool Return **true** if the user has access rights to the client
      * @throws Exception
      */
-   public function hasAccessRight(): bool
+   public function hasAccessRight(?User $user = null): bool
     {
         global $gCurrentUser;
+
+        if ($user === null) {
+            $user = $gCurrentUser;
+        }
+
         if (empty($this->rolesAccess) || empty($this->rolesAccess->getRolesIds())) {
             return true;
         } else {
-            return $this->rolesAccess->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->isAdministrator();
+            return $this->rolesAccess->hasRight($user->getRoleMemberships()) || $user->isAdministrator();
         }
     }
 

@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Roles\ValueObject\RoleDependency;
+use Admidio\SSO\Service\SSOAccessRevocationService;
 use Admidio\Users\Entity\User;
 use DateInterval;
 use DateTime;
@@ -264,6 +265,14 @@ class Role extends Entity
 
         $this->db->startTransaction();
 
+        /*
+         * The members are collected before the memberships are deleted, because they go in one
+         * bulk statement that never reaches Membership::delete(). The list is empty unless a
+         * single sign-on client restricts its access to this role.
+         */
+        $revocationService = new SSOAccessRevocationService($this->db);
+        $usersToRecheck = $revocationService->getUsersToRecheckForRole($rolId);
+
         // Deleting a role is one action of the user, so the role and everything that is removed
         // together with it belong into one change set of the changelog.
         $previousChangeSet = LogChanges::startChangeSet();
@@ -301,6 +310,15 @@ class Role extends Entity
         $return = parent::delete();
 
         LogChanges::endChangeSet($previousChangeSet);
+
+        /*
+         * Judged against the state the deletion leaves behind: a client that is now restricted to
+         * roles the user is not in loses its tokens, a client whose last access role this was is
+         * open to everybody and keeps them.
+         */
+        foreach ($usersToRecheck as $userId) {
+            $revocationService->revokeLostClientAccess($userId);
+        }
 
         if (isset($gCurrentSession)) {
             // all active users must renew their user data because maybe their
