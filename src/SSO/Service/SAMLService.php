@@ -39,6 +39,7 @@ use Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\Session\Entity\Session;
 use Admidio\Users\Entity\User;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -50,6 +51,14 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Service\KeyService;
 
 class SAMLService extends SSOService {
+    /**
+     * Authentication context classes that Admidio can honestly claim. LightSaml only defines the
+     * first two of them, the other two are taken from the same SAML 2.0 authentication context
+     * specification.
+     */
+    public const AUTHN_CONTEXT_TIME_SYNC_TOKEN = 'urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken';
+    public const AUTHN_CONTEXT_PREVIOUS_SESSION = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PreviousSession';
+
     private $idpEntityId;
     private $ssoUrl;
     private $sloUrl;
@@ -956,7 +965,7 @@ class SAMLService extends SSOService {
                     ->setSessionNotOnOrAfter($sessionNotOnOrAfter)
                     ->setAuthnContext(
                         (new \LightSaml\Model\Assertion\AuthnContext())
-                            ->setAuthnContextClassRef(SamlConstants::AUTHN_CONTEXT_UNSPECIFIED)
+                            ->setAuthnContextClassRef($this->getAuthenticationContextClassRef())
                     )
             );
 
@@ -1056,6 +1065,46 @@ class SAMLService extends SSOService {
             );
             $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
         }
+    }
+
+    /**
+     * The authentication context class that describes how the current session was authenticated.
+     *
+     * Admidio records the methods that established a session in `ses_authentication_methods`, the
+     * same value that the OIDC side turns into an `acr` claim. A service provider can only act on
+     * the context of an assertion if it is the achieved one, so the recorded methods are mapped to
+     * the standard SAML classes instead of always claiming `unspecified`.
+     *
+     * @return string Authentication context class reference for the AuthnStatement.
+     * @throws Exception
+     */
+    private function getAuthenticationContextClassRef(): string
+    {
+        global $gCurrentSession;
+
+        $authenticationMethods = preg_split('/\s+/', trim((string) $gCurrentSession->getValue('ses_authentication_methods')));
+        $authenticationMethods = array_values(array_filter($authenticationMethods, static function ($method) {
+            return $method !== '';
+        }));
+
+        if (count($authenticationMethods) === 0) {
+            // Nothing was recorded, so nothing can be claimed.
+            return SamlConstants::AUTHN_CONTEXT_UNSPECIFIED;
+        }
+
+        if (in_array(Session::AUTHENTICATION_METHOD_AUTO_LOGIN, $authenticationMethods, true)) {
+            // The session was resumed from the auto login cookie, nobody authenticated just now.
+            return self::AUTHN_CONTEXT_PREVIOUS_SESSION;
+        }
+
+        if (in_array('otp', $authenticationMethods, true)) {
+            return self::AUTHN_CONTEXT_TIME_SYNC_TOKEN;
+        }
+
+        // A password is only protected by the transport if the transport actually protected it.
+        return HTTPS
+            ? SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT
+            : SamlConstants::AUTHN_CONTEXT_PASSWORD;
     }
 
     /**
