@@ -230,6 +230,7 @@ final class PreferenceDefinitions
             'changelog_table_inventory_item_borrow_data' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_saml_clients' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_oidc_clients' => array('default' => '0', 'type' => 'bool'),
+            'changelog_table_oidc_consents' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_sso_keys' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_others' => array('default' => '0', 'type' => 'bool'),
             'mail_send_method' => array('default' => 'phpmail', 'type' => 'enum', 'values' => array('phpmail', 'SMTP')),

@@ -1658,6 +1658,8 @@
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# möchte auf dein Admidio-Konto zugreifen.</string>
   <string name="SYS_SSO_OIDC_CONSENT_SAVED">Deine Zustimmung wurde gespeichert.</string>
+  <string name="SYS_SSO_OIDC_CONSENT_SCOPES">Zugestimmte Bereiche</string>
+  <string name="SYS_SSO_OIDC_CONSENTS">OIDC-Zugriffszustimmungen</string>
   <string name="SYS_SSO_OIDC_DENY_ACCESS">Zugriff ablehnen</string>
   <string name="SYS_SSO_OIDC_DISCOVERY_URL">Discovery-URL</string>
   <string name="SYS_SSO_OIDC_ENABLED">Single-Sign-On über OpenID Connect (OIDC) aktivieren</string>
