@@ -38,7 +38,6 @@ const ADMIDIO_VERSION_PATCH = 0;
 const ADMIDIO_VERSION_BETA = 0;
 const ADMIDIO_VERSION = ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH;
 const ADMIDIO_HOMEPAGE = 'https://www.admidio.org/';
-const HTTPS = false;
 const FOLDER_SYSTEM = '/system';
 const FOLDER_INSTALLATION = '/install';
 const FOLDER_LIBS = '/libs';
@@ -67,6 +66,9 @@ define('DOMAIN', 'admidio.test');
 define('ADMIDIO_URL', 'https://admidio.test');
 define('ADMIDIO_URL_PATH', '');
 define('SCHEME', 'https');
+// Derived from the scheme exactly as system/bootstrap/constants.php does it, so that code which
+// branches on the transport sees the same installation that ADMIDIO_URL describes.
+define('HTTPS', SCHEME === 'https');
 define('HOST', 'admidio.test');
 
 // Database table constants that entities require
@@ -98,6 +100,7 @@ const TBL_OIDC_CONSENTS = TABLE_PREFIX . '_oidc_consents';
 const TBL_OIDC_ACCESS_TOKENS = TABLE_PREFIX . '_oidc_access_tokens';
 const TBL_OIDC_REFRESH_TOKENS = TABLE_PREFIX . '_oidc_refresh_tokens';
 const TBL_OIDC_AUTH_CODES = TABLE_PREFIX . '_oidc_auth_codes';
+const TBL_OIDC_SESSION_PARTICIPANTS = TABLE_PREFIX . '_oidc_session_participants';
 const TBL_ORGANIZATIONS = TABLE_PREFIX . '_organizations';
 const TBL_PHOTOS = TABLE_PREFIX . '_photos';
 const TBL_PREFERENCES = TABLE_PREFIX . '_preferences';
@@ -108,6 +111,8 @@ const TBL_ROLES_RIGHTS = TABLE_PREFIX . '_roles_rights';
 const TBL_ROLES_RIGHTS_DATA = TABLE_PREFIX . '_roles_rights_data';
 const TBL_ROOMS = TABLE_PREFIX . '_rooms';
 const TBL_SAML_CLIENTS = TABLE_PREFIX . '_saml_clients';
+const TBL_SAML_LOGOUT_TRANSACTIONS = TABLE_PREFIX . '_saml_logout_transactions';
+const TBL_SAML_SESSION_PARTICIPANTS = TABLE_PREFIX . '_saml_session_participants';
 const TBL_SSO_KEYS = TABLE_PREFIX . '_sso_keys';
 const TBL_USERS = TABLE_PREFIX . '_users';
 const TBL_USER_DATA = TABLE_PREFIX . '_user_data';
