@@ -894,6 +894,7 @@ class OIDCService extends SSOService {
             return $this->authServer->completeAuthorizationRequest($authRequest, $response);
 
         } catch (OAuthServerException $exception) {
+            $this->enrichInvalidClientException($exception, $request);
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
@@ -915,6 +916,7 @@ class OIDCService extends SSOService {
             return $this->authServer->respondToAccessTokenRequest($request, $response);
 
         } catch (OAuthServerException $exception) {
+            $this->enrichInvalidClientException($exception, $request);
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
@@ -1340,6 +1342,64 @@ class OIDCService extends SSOService {
     }
 
     /**
+     * League's invalid_client exception carries no more than the generic "Client
+     * authentication failed", whether the client_id is unknown, disabled, or the
+     * secret was wrong. That is appropriate for the response sent back to the
+     * client, but makes diagnosing a typo while setting up a new client needlessly
+     * hard. The requested client_id is already known to whoever sent the request,
+     * so echoing it back into the error description and the log does not disclose
+     * anything the caller did not send.
+     */
+    private function enrichInvalidClientException(OAuthServerException $exception, ServerRequestInterface $request): void
+    {
+        $payload = $exception->getPayload();
+        if (($payload['error'] ?? null) !== 'invalid_client') {
+            return;
+        }
+
+        $clientId = $this->extractRequestedClientId($request);
+        if ($clientId === null) {
+            return;
+        }
+
+        $payload['error_description'] = ($payload['error_description'] ?? 'Client authentication failed')
+            . ' (client_id "' . $clientId . '")';
+        $exception->setPayload($payload);
+    }
+
+    /**
+     * Best-effort extraction of the client_id a request named, for diagnostics only.
+     * Looks at the query string and parsed body (the /authorize and /token ways of
+     * naming a client), then falls back to the username of HTTP Basic credentials.
+     */
+    private function extractRequestedClientId(ServerRequestInterface $request): ?string
+    {
+        $queryParams = $request->getQueryParams();
+        if (is_string($queryParams['client_id'] ?? null) && $queryParams['client_id'] !== '') {
+            return $queryParams['client_id'];
+        }
+
+        $body = $request->getParsedBody();
+        if (is_array($body) && is_string($body['client_id'] ?? null) && $body['client_id'] !== '') {
+            return $body['client_id'];
+        }
+
+        $authorizationHeader = trim($request->getHeaderLine('Authorization'));
+        if (strncasecmp($authorizationHeader, 'Basic ', 6) === 0) {
+            $decoded = base64_decode(trim(substr($authorizationHeader, 6)), true);
+            if ($decoded !== false && str_contains($decoded, ':')) {
+                [$clientId] = explode(':', $decoded, 2);
+                $clientId = urldecode($clientId);
+                if ($clientId !== '') {
+                    return $clientId;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Create the response for failed OIDC endpoint client authentication.
      * @return JsonResponse
      */
@@ -1549,7 +1609,7 @@ class OIDCService extends SSOService {
         ) {
             return $this->createOIDCErrorResponse(
                 'invalid_request',
-                'Unregistered post_logout_redirect_uri.',
+                'Unregistered post_logout_redirect_uri "' . $postLogoutRedirectUri . '". Add it to the client\'s registered post-logout redirect URIs.',
                 400
             );
         }
