@@ -109,8 +109,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
     public function getRoles(): array
     {
         if (!$this->isNewRecord()) {
-            $roles = $this->getRoleMemberships();
-            return array_keys($roles);
+            return $this->getRoleMemberships();
         } else {
             return [];
         }
@@ -124,8 +123,8 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         $roleNames = [];
         if (!$this->isNewRecord()) {
             $roles = $this->getRoleMemberships();
-            foreach ($roles as $roleId => $roleRights) {
-                $role = new Role($this->db, $roleId );
+            foreach ($roles as $roleId) {
+                $role = new Role($this->db, $roleId);
                 if (!$role->isNewRecord()) {
                     $roleNames[$roleId] = $role->getValue('rol_name');
                 }
