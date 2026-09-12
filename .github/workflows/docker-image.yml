@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    if: ${{ github.repository_owner == 'Admidio' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
