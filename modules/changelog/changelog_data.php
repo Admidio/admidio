@@ -302,7 +302,7 @@ try {
         log_action as action,
         log_value_new as value_new, log_value_old as value_old,
         log_usr_id_create as usr_id_create, usr_create.usr_uuid as uuid_usr_create, create_last_name.usd_value AS create_last_name, create_first_name.usd_value AS create_first_name,
-        log_timestamp_create as timestamp
+        log_timestamp_create as timestamp, log_comment as comment
         FROM ' . TBL_LOG_CHANGES . '
         -- Extract data of the creating user...
         LEFT JOIN '.TBL_USERS.' usr_create
@@ -379,7 +379,7 @@ try {
                 MAX(entries.value_new) AS value_new, MAX(entries.value_old) AS value_old,
                 MAX(entries.usr_id_create) AS usr_id_create, MAX(entries.uuid_usr_create) AS uuid_usr_create,
                 MAX(entries.create_last_name) AS create_last_name, MAX(entries.create_first_name) AS create_first_name,
-                MAX(entries.timestamp) AS timestamp
+                MAX(entries.timestamp) AS timestamp, MAX(entries.comment) AS comment
               FROM (' . $entriesSql . ') AS entries
              GROUP BY ' . $changeKey;
         $queryParamsMain = $entriesParams;
@@ -482,6 +482,14 @@ try {
 
         $timestampCreate = DateTime::createFromFormat('Y-m-d H:i:s', $row['timestamp']);
         $columnValues    = array('DT_RowId' => 'row_log_' . $row['id'], '0' => $rowNumber);
+
+        // A change made in a particular context - on the command line, or by an administrator who
+        // acted as another user - carries a comment. The row number is marked and the comment is
+        // its tooltip. All entries of one change share the comment, so a grouped row has it too.
+        if ((string)($row['comment'] ?? '') !== '') {
+            $columnValues['0'] .= '<span class="admidio-changelog-comment ms-1" data-bs-toggle="tooltip" title="'
+                . SecurityUtils::encodeHTML((string)$row['comment']) . '">*</span>';
+        }
 
         // 1. Column showing DB table name (only if more then one tables are shown; One table should be displayed in the headline!)
         if ($showTableColumn) {

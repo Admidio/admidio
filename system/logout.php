@@ -16,6 +16,15 @@ use Admidio\SSO\Service\SAMLService;
 try {
     require_once(__DIR__ . '/common.php');
 
+    // A listener may take over the logout instead of ending the session: a plugin that lets an
+    // administrator act as another user returns to the administrator here. It is asked before
+    // anything else happens, so that the single sign-on clients of the session stay logged in.
+    $logoutTarget = Hooks::resolve('logout_target', null, $gCurrentUser);
+    if (is_string($logoutTarget) && $logoutTarget !== '') {
+        admRedirect($logoutTarget);
+        // => EXIT
+    }
+
     $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
 
     /*
@@ -60,8 +69,8 @@ try {
     $gCurrentUser->clear();
     $gMenu->initialize();
 
-    // set homepage to logout page
-    $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
+    // set homepage to logout page; a listener may send the visitor somewhere else after the logout
+    $gHomepage = Hooks::applyTypedFilters('logout_homepage', ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout'));
 
     if ($ssoLogoutService !== null) {
         $response = $ssoLogoutService->startSessionLogout($externalSessionId, $gHomepage);
