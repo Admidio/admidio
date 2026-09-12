@@ -32,7 +32,7 @@ class OrganizationPresenter extends PagePresenter
      */
     public function createEditForm()
     {
-        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession, $gSettingsManager;
+        global $gL10n, $gCurrentOrganization, $gDb, $gCurrentOrgId, $gCurrentSession;
 
         $this->setHtmlID('adm_organization_edit');
         $this->setHeadline($gL10n->get('SYS_ORGANIZATION'));
@@ -84,9 +84,6 @@ class OrganizationPresenter extends PagePresenter
         );
 
         if ($gCurrentOrganization->countAllRecords() > 1) {
-            $suborganizationUseSameMembers = $gSettingsManager->has('contacts_suborganization_use_same_members')
-                && $gSettingsManager->getBool('contacts_suborganization_use_same_members');
-
             // Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
             if (!$gCurrentOrganization->isParentOrganization()) {
                 $sqlData = array();
@@ -117,9 +114,9 @@ class OrganizationPresenter extends PagePresenter
             );
             if (!$gCurrentOrganization->isChildOrganization() && $gCurrentOrganization->isParentOrganization()) {
                 $formOrganization->addCheckbox(
-                    'contacts_suborganization_use_same_members',
+                    'org_suborg_use_same_members',
                     $gL10n->get('ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS'),
-                    $suborganizationUseSameMembers,
+                    $gCurrentOrganization->getValue('org_suborg_use_same_members'),
                     array('helpTextId' => 'ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS_DESC')
                 );
             }
