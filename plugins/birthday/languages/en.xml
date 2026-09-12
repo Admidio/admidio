@@ -7,6 +7,9 @@
   <string name="PLG_BIRTHDAY_MORE_MEMBERS">Today #VAR1# members have birthday.</string>
   <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">There are no member's birthdays available for visitors. Log in to see the member's birthdays.</string>
   <string name="PLG_BIRTHDAY_NO_MEMBERS">Today is not a member's birthday.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">No birthdays in the next #VAR1# days.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">No birthdays in the last #VAR1# days.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">No birthdays in the last #VAR1# and next #VAR2# days.</string>
   <string name="PLG_BIRTHDAY_ONE_MEMBER">Today is a member's birthday.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# became #VAR3# years old #VAR2# days before, on the #VAR4#</string>
   <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# had their birthday #VAR2# days ago</string>

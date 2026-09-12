@@ -26,6 +26,7 @@ use DateTime;
 class Birthday extends PluginAbstract
 {
     private static bool $birthdayShowNames = false;
+    private static array $pluginConfig = array();
     /** 
      * Get the plugin configuration
      * @return array Returns the plugin configuration
@@ -97,7 +98,9 @@ class Birthday extends PluginAbstract
     {
         global $gSettingsManager, $gCurrentUser, $gDb, $gL10n, $gProfileFields, $gValidLogin, $gDbType, $gCurrentOrgId;
 
-        $config = self::getPluginConfigValues();
+        self::$birthdayShowNames = false;
+        self::$pluginConfig = self::getPluginConfigValues();
+        $config = self::$pluginConfig;
 
         // check if only members of configured roles could view birthday
         if ($gValidLogin) {
@@ -404,9 +407,24 @@ class Birthday extends PluginAbstract
                             }
                         }
                     } else {                   
-                        // If the configuration is set accordingly, a message is output if no member has a birthday today
+                        // If the configuration is set accordingly, a message is output if no member has a birthday in the configured time span
                         if ($gSettingsManager->getBool('birthday_show_notice_none')) {
-                            $birthdayPlugin->assignTemplateVariable('message',$gL10n->get('PLG_BIRTHDAY_NO_MEMBERS'));
+                            $config = !empty(self::$pluginConfig) ? self::$pluginConfig : self::getPluginConfigValues();
+                            $pastDays = isset($config['birthday_show_past']) ? (int) $config['birthday_show_past'] : 0;
+                            $futureDays = isset($config['birthday_show_future']) ? (int) $config['birthday_show_future'] : 0;
+
+                            if (self::$birthdayShowNames && ($pastDays > 0 || $futureDays > 0)) {
+                                if ($pastDays > 0 && $futureDays > 0) {
+                                    $message = $gL10n->get('PLG_BIRTHDAY_NO_MEMBERS_PERIOD', array($pastDays, $futureDays));
+                                } elseif ($futureDays > 0) {
+                                    $message = $gL10n->get('PLG_BIRTHDAY_NO_MEMBERS_FUTURE', array($futureDays));
+                                } else {
+                                    $message = $gL10n->get('PLG_BIRTHDAY_NO_MEMBERS_PAST', array($pastDays));
+                                }
+                            } else {
+                                $message = $gL10n->get('PLG_BIRTHDAY_NO_MEMBERS');
+                            }
+                            $birthdayPlugin->assignTemplateVariable('message', $message);
                         }
                     }
                 } else {

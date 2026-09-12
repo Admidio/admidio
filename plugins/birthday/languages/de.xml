@@ -5,10 +5,16 @@
   <string name="PLG_BIRTHDAY_HEADLINE">Geburtstage</string>
   <string name="PLG_BIRTHDAY_MAN_VAR">Herr #VAR1#</string>
   <string name="PLG_BIRTHDAY_MORE_MEMBERS">Heute haben #VAR1# Mitglieder Geburtstag.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">Für Besucher sind keine Geburtstage von Mitgliedern verfügbar. Melde dich an, um die Geburtstage der Mitglieder zu sehen.</string>
   <string name="PLG_BIRTHDAY_NO_MEMBERS">Heute hat kein Mitglied Geburtstag.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">Keine Geburtstage in den nächsten #VAR1# Tagen.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">Keine Geburtstage in den letzten #VAR1# Tagen.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">Keine Geburtstage in den letzten #VAR1# und nächsten #VAR2# Tagen.</string>
   <string name="PLG_BIRTHDAY_ONE_MEMBER">Heute hat ein Mitglied Geburtstag.</string>
   <string name="PLG_BIRTHDAY_PAST">#VAR1# wurde vor #VAR2# Tagen #VAR3# Jahre, am #VAR4#</string>
   <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# hatte vor #VAR2# Tagen Geburtstag</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Dieses Plugin zeigt eine Vorschau der aktuellen Geburtstage auf der Übersichtsseite an.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Geburtstage</string>
   <string name="PLG_BIRTHDAY_TODAY">#VAR1# wird heute #VAR2#</string>
   <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# hat heute Geburtstag</string>
   <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# wird morgen #VAR3# Jahre, am #VAR4#</string>
@@ -16,4 +22,29 @@
   <string name="PLG_BIRTHDAY_WOMAN_VAR">Frau #VAR1#</string>
   <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# wurde gestern #VAR3# Jahre, am #VAR4#</string>
   <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# hatte gestern Geburtstag</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Namen für Besucher anzeigen</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">Wenn diese Einstellung aktiviert ist, sehen Besucher alle Namen (nicht das Alter) von Geburtstagskindern heute, in der Zukunft und in der Vergangenheit. Andernfalls sehen Besucher nur die Anzahl der Personen, die heute Geburtstag haben, nichts weiter. (Standard: deaktiviert)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Anzeigestil für den Namen des Geburtstagskinds</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">Mit dieser Einstellung kannst du festlegen, wie die Namen von Geburtstagskindern angezeigt werden. (Standard: Vorname Nachname)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Alter anzeigen</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">Wenn diese Einstellung aktiviert ist, sehen angemeldete Benutzer das Alter der Geburtstagskinder. (Standard: deaktiviert)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Name mit Anrede anzeigen</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Legt das Alter fest, ab dem der Vorname eines Geburtstagskinds für Besucher durch die Anrede ersetzt wird. (deaktivieren: -1, Standard: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Hinweis bei keinen Geburtstagskindern anzeigen</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">Wenn diese Einstellung aktiviert ist, wird ein Hinweis angezeigt, wenn im ausgewählten Zeitraum kein Mitglied Geburtstag hat. (Standard: aktiviert)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">Vergangene Geburtstage anzeigen (Tage)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">Mit dieser Einstellung kannst du festlegen, wie viele Tage in der Vergangenheit Geburtstage angezeigt werden sollen. (Standard: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">Zukünftige Geburtstage anzeigen (Tage)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">Mit dieser Einstellung kannst du festlegen, wie viele Tage in der Zukunft Geburtstage angezeigt werden sollen. (Standard: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">Maximale Anzahl Geburtstagskinder</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">Mit dieser Einstellung kannst du die maximale Anzahl an Geburtstagskindern festlegen, die angezeigt werden. (Standard: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">E-Mail-Adresse für Besucher anzeigen</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">Mit dieser Einstellung kannst du festlegen, ob die E-Mail-Adresse von Geburtstagskindern für Besucher angezeigt werden soll. (Standard: nur Name (Besucher))</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">Berechtigte Rollen für Inhalt</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Hier kannst du auswählen, welche Rollen den Inhalt dieses Plugins sehen dürfen. Ist ein Benutzer in keiner der ausgewählten Rollen, wird nur die Anzahl der Geburtstage angezeigt. (Standard: alle Rollen)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">Berücksichtigte Rollen für Geburtstage</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Hier kannst du auswählen, welche Rollen Benutzer haben müssen, deren Geburtstage angezeigt werden sollen. (Standard: alle Rollen)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Sortierreihenfolge der Geburtstagskinder</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Mit dieser Einstellung kannst du die Sortierreihenfolge der Geburtstagskinder festlegen. (Standard: DESC)</string>
 </resources>
