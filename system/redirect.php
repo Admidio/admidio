@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PagePresenter;
 
 try {
@@ -28,11 +29,14 @@ try {
         throw new \Admidio\Infrastructure\Exception('SYS_REDIRECT_URL_INVALID');
     }
 
+    // The URL is rendered in HTML attributes and as text below.
+    $htmlUrl = SecurityUtils::encodeHTML($getUrl);
+
     // create an HTML page object
     $page = PagePresenter::withHtmlIDAndHeadline('admidio-redirect', $gL10n->get('SYS_REDIRECT'));
 
     // add special header for automatic redirection after x seconds
-    $page->addHeader('<meta http-equiv="refresh" content="' . $gSettingsManager->getInt('weblinks_redirect_seconds') . '; url=' . $getUrl . '">');
+    $page->addHeader('<meta http-equiv="refresh" content="' . $gSettingsManager->getInt('weblinks_redirect_seconds') . '; url=' . $htmlUrl . '">');
 
     // Counter zählt die sekunden bis zur Weiterleitung runter
     $page->addJavascript(
@@ -55,8 +59,8 @@ try {
             'SYS_REDIRECT_DESC',
             array($gCurrentOrganization->getValue('org_longname'),
                 '<span id="counter">' . $gSettingsManager->getInt('weblinks_redirect_seconds') . '</span>',
-                '<strong>' . $getUrl . '</strong>',
-                '<a href="' . $getUrl . '" target="_self">',
+                '<strong>' . $htmlUrl . '</strong>',
+                '<a href="' . $htmlUrl . '" target="_self">',
                 '</a>')
         ) .
         '</p>'
