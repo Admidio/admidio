@@ -431,7 +431,8 @@ function admFuncVariableIsValid(array $array, string $variableName, string $data
             break;
 
         case 'url':
-            if (!StringUtils::strValidCharacters($value, 'url')) {
+            if (!StringUtils::strValidCharacters($value, 'url')
+                || !in_array(strtolower((string) parse_url($value, PHP_URL_SCHEME)), array('http', 'https'), true)) {
                 throw new Exception('The parameter "' . $variableName . '" has an invalid URL!');
             }
             break;
@@ -690,5 +691,4 @@ function getThemedFile(string $filePath): string
     }
     return $themePath;
 }
-
 
