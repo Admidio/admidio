@@ -396,7 +396,18 @@ class Event extends Entity
             throw new Exception('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
-        return parent::save($updateFingerPrint);
+        $eventSaved = parent::save($updateFingerPrint);
+
+        // The event is the source of truth for the participant limit. Keep its
+        // participation role in sync so generic role assignments enforce it, too.
+        if ((int) $this->getValue('dat_rol_id') > 0) {
+            $role = new Role($this->db, (int) $this->getValue('dat_rol_id'));
+            if ($role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
+                $role->save($updateFingerPrint);
+            }
+        }
+
+        return $eventSaved;
     }
 
     /**

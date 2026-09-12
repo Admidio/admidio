@@ -18,6 +18,7 @@
  *                false : Show only active members of the current organization
  *****************************************************************************/
 
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -65,6 +66,13 @@ try {
 
         if ((isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true')
             || $leadership) {
+            $event = new Event($gDb);
+            if ($event->readDataByRoleId((int) $role->getValue('rol_id'))
+                && !$user->isMemberOfRole((int) $role->getValue('rol_id'))
+                && $event->participantLimitReached()) {
+                throw new Exception('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name')));
+            }
+
             $role->startMembership($user->getValue('usr_id'), $leadership);
         } else {
             $role->stopMembership($user->getValue('usr_id'));
