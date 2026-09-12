@@ -27,6 +27,15 @@ $r = Hooks::removeAction('t1b', 'probeListener');
 Hooks::doAction('t1b');
 check('removeAction by an explicit id equal to the function name', $r === true && calls() === []);
 
+// 1c removal by an explicit id that is not also the name of a function. This is the ordinary shape
+// of an id, and the case above cannot catch a regression in it: "probeListener" is a real function,
+// so it is removed by the callback key even when the id key is never reached.
+reset_calls();
+Hooks::addAction('t1c', 'probeListener', 10, null, 'my-scanner');
+$r = Hooks::removeAction('t1c', 'my-scanner');
+Hooks::doAction('t1c');
+check('removeAction by an explicit id that names no function', $r === true && calls() === []);
+
 // 2 removal by [Class,method] and by its string form
 reset_calls();
 Hooks::addAction('t2', ['ProbeC', 'm']);

@@ -359,7 +359,13 @@ final class Hooks
     private static function remove(string $type, string $name, string|callable $idOrCallback): bool
     {
         if (is_string($idOrCallback)) {
-            $keys = array('id:' . $idOrCallback, self::callableId($idOrCallback));
+            // The callback key is only computed when the string really names one. An explicit
+            // registration ID usually does not, and callableId() is typed callable, so asking it
+            // about a plain ID raises a TypeError before the ID itself is ever tried.
+            $keys = array('id:' . $idOrCallback);
+            if (is_callable($idOrCallback)) {
+                $keys[] = self::callableId($idOrCallback);
+            }
         } else {
             $keys = array(self::callableId($idOrCallback));
         }
