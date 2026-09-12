@@ -403,6 +403,15 @@ class Event extends Entity
             $inserted = $this->wasInserted();
             $this->readDataById((int) $this->getValue('dat_id'));
             $this->insertedRecord = $inserted;
+
+            // The event is the source of truth for the participant limit. Keep its
+            // participation role in sync so generic role assignments enforce it, too.
+            if ((int) $this->getValue('dat_rol_id') > 0) {
+                $role = new Role($this->db, (int) $this->getValue('dat_rol_id'));
+                if ($role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
+                    $role->save($updateFingerPrint);
+                }
+            }
         }
 
         return $returnCode;

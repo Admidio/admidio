@@ -553,6 +553,18 @@ class Role extends Entity
     }
 
     /**
+     * Synchronize the maximum number of members of an event participation role with its event.
+     *
+     * @param int $maxMembers Maximum number of participants; 0 means unlimited.
+     * @return bool Returns true if the value was changed.
+     * @throws Exception
+     */
+    public function setMaxMembersFromEvent(int $maxMembers): bool
+    {
+        return parent::setValue('rol_max_members', max(0, $maxMembers));
+    }
+
+    /**
      * Method will set a membership with the given start and end date. If there are cutting time periods these periods
      * be adjusted. Periods within the new periods will be deleted. The leader flag will be respected and could lead
      * to separate membership periods. If someone has already a membership and get a leader than he has two
