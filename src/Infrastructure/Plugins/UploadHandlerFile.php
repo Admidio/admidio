@@ -66,9 +66,15 @@ class UploadHandlerFile extends UploadHandler
                 throw new Exception('SYS_FILE_EXTENSION_INVALID');
             }
 
-            // check filesize against module settings
-            if ($file->size > $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024) {
+            // check filesize against module settings (check total size if content-range is used)
+            $totalSize = ($content_range && isset($content_range[3])) ? (int)$content_range[3] : $file->size;
+            if ($totalSize > $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024) {
                 throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('documents_files_max_upload_size')));
+            }
+
+            // If a chunked upload is still in progress, return without creating a database entry yet
+            if ($content_range && empty($file->url)) {
+                return $file;
             }
 
             // replace invalid characters in filename
