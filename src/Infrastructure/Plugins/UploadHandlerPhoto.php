@@ -62,6 +62,11 @@ class UploadHandlerPhoto extends UploadHandler
                 throw new Exception('File upload disabled in global config file!');
             }
 
+            // If a chunked upload is still in progress, return without processing the photo yet
+            if ($content_range && empty($file->url)) {
+                return $file;
+            }
+
             $fileLocation = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload/' . $file->name;
             $albumFolder = ADMIDIO_PATH . FOLDER_DATA . '/photos/' . $photoAlbum->getValue('pho_begin', 'Y-m-d') . '_' . (int)$photoAlbum->getValue('pho_id');
 
