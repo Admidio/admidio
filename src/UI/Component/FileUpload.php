@@ -2,6 +2,7 @@
 namespace Admidio\UI\Component;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -98,6 +99,10 @@ class FileUpload
         $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
         $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/jquery.fileupload.js');
 
+        $serverMaxUpload = PhpIniUtils::getUploadMaxSize();
+        // Capped at 10 MB, minimum 1 MB, leaving 100 KB headroom for multipart form headers
+        $maxChunkSize = min(10000000, max(1000000, $serverMaxUpload - 102400));
+
         $this->page->addJavascript(
             '
             var countErrorFiles = 0;
@@ -110,8 +115,7 @@ class FileUpload
             $("#fileupload").fileupload({
                 url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
                 sequentialUploads: true,
-                maxChunkSize: 10000000,
-                maxFileSize: ' . ($GLOBALS['gSettingsManager']->getInt('documents_files_max_upload_size') * 1024 * 1024) . ',
+                maxChunkSize: ' . $maxChunkSize . ',
                 dataType: "json",
                 formData: [{
                     name: "adm_csrf_token",
