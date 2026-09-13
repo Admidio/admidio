@@ -755,6 +755,12 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['system_browser_update_check'],
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
+        $formCommon->addCheckbox(
+            'system_pwa_enabled',
+            $gL10n->get('SYS_PWA_ENABLED'),
+            (bool) ($formValues['system_pwa_enabled'] ?? true),
+            array('helpTextId' => 'SYS_PWA_ENABLED_DESC')
+        );
         $formCommon->addInput(
             'path_for_calculating_disk_usage',
             $gL10n->get('ORG_PATH_FOR_CALCULATING_DISK_USAGE'),
