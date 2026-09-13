@@ -263,6 +263,7 @@ class EventFormPresenter extends PagePresenter
         $page = $this;
         $page->setHtmlID('admidio-events-edit');
         $page->setHeadline($headline);
+        $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
 
         $page->addJavascript('
         /**
@@ -378,6 +379,23 @@ class EventFormPresenter extends PagePresenter
         setEventParticipation();
         setLocationCountry();
         setEventRecurrence();
+
+        // Reveal invalid fields before the browser tries to focus them.
+        document.getElementById("adm_events_edit_form").addEventListener("invalid", function(event) {
+            var pane = event.target.closest(".tab-pane");
+            if (!pane || this.querySelector(":invalid") !== event.target) {
+                return;
+            }
+            if (window.matchMedia("(min-width: 768px)").matches) {
+                bootstrap.Tab.getOrCreateInstance(document.getElementById(pane.getAttribute("aria-labelledby"))).show();
+            } else {
+                var collapse = pane.querySelector(".accordion-collapse");
+                collapse.addEventListener("shown.bs.collapse", function() {
+                    event.target.focus();
+                }, {once: true});
+                bootstrap.Collapse.getOrCreateInstance(collapse, {toggle: false}).show();
+            }
+        }, true);
 
         $("#event_participation_possible").click(function() {
             setEventParticipation();
