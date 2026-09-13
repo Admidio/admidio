@@ -325,6 +325,7 @@ class EventFormPresenter extends PagePresenter
             var recurrenceSelected = recurrenceFrequency !== "none";
 
             $("#event_recurrence_interval, #event_recurrence_end_type").prop("disabled", !recurrenceSelected);
+            $("#event_recurrence_interval_group, #event_recurrence_end_type_group").toggle(recurrenceSelected);
 
             setRecurrenceFieldRequired("event_recurrence_interval", recurrenceSelected, true);
             setRecurrenceFieldRequired("event_recurrence_end_type", recurrenceSelected, true);
