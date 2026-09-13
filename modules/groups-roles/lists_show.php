@@ -212,7 +212,8 @@ try {
     }
 
     // check if user has the right to export lists
-    if (in_array($getMode, array('csv', 'xlsx', 'ods', 'pdf'), true)
+    // Include landscape PDF here because pdfl is normalized to pdf only after this check.
+    if (in_array($getMode, array('csv', 'xlsx', 'ods', 'pdf', 'pdfl'), true)
         && ($gSettingsManager->getInt('groups_roles_export') === 0 // no one should export lists
             || ($gSettingsManager->getInt('groups_roles_export') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user')))) { // users who don't have the right to edit all profiles
         throw new Exception('SYS_NO_RIGHTS');
