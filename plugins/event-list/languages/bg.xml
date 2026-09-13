@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Всички събития</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Събития</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Събитията не са достъпни за посетители. Влезте за да видите събития.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Тази добавка показва предварителен списък с най-новите събития на обзорната страница.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Списък със събития</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Брой събития</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Брой събития за показване. (По подразбиране: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Показване на крайната дата</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Ако е включено, се показват крайната дата и час на събитието, иначе само началната дата и час. (По подразбиране: включено)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Знаци преди нов ред</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Максимален брой знаци в дума преди пренасяне на нов ред. (0: без пренасяне, по подразбиране: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Показвани категории</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Изберете категориите, чиито събития да се показват. (По подразбиране: всички категории)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Показване на пълното описание</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Ако е включено, се показва пълното описание, иначе само преглед на текста. (По подразбиране: изключено)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Текст за предварителен преглед</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Брой знаци в текста за преглед. (0: без кратък преглед, по подразбиране: 70)</string>
 </resources>

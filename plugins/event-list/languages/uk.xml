@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Всі події</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Події</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Немає подій, доступних для відвідувачів. Увійдіть, щоб переглянути події.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Цей плагін показує попередній список найновіших подій на сторінці огляду.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Список подій</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Кількість подій</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Кількість подій для показу. (Типово: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Показувати дату завершення</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Якщо ввімкнено, показуються дата й час завершення події, інакше лише дата й час початку. (Типово: ввімкнено)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Символів до перенесення рядка</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Максимальна кількість символів у слові до перенесення рядка. (0: без перенесення, типово: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Категорії для показу</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Виберіть категорії, події яких слід показувати. (Типово: усі категорії)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Показувати повний опис</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Якщо ввімкнено, показується повний опис, інакше лише попередній перегляд тексту. (Типово: вимкнено)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Текст попереднього перегляду</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Кількість символів тексту попереднього перегляду. (0: без короткого перегляду, типово: 70)</string>
 </resources>

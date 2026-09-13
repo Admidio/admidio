@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Количество входов</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Участник</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Старший участник</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Плагин показывает форму входа на странице обзора. После входа вместо полей отображается полезная информация о пользователе.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Форма входа</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Ранг участника</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Показывать ссылку на регистрацию</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Если включено, в форме входа отображается ссылка на форму регистрации. (По умолчанию: выключено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Показывать ссылку электронной почты</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Если включено, в форме входа отображается ссылка для отправки письма администратору при проблемах со входом. (По умолчанию: включено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Показывать ссылку выхода</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Если включено, после входа отображается ссылка выхода. (По умолчанию: выключено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Показывать ранги</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Если включено, после имени пользователя отображается ранг в зависимости от количества входов. (По умолчанию: включено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Ранги</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Задайте ранги, отображаемые после имени пользователя при включённой настройке «Показывать ранги». Ключ — количество входов, значение — название ранга.\n Чтобы удалить ранг, очистите поля «Количество входов» и «Ранг участника» в таблице.</string>
 </resources>

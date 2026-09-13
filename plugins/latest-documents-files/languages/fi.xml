@@ -4,4 +4,12 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Lisää dokumentteja &amp; tiedostoja</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Asiakirjoja tai tiedostoja ei ole saatavilla.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Lataaja #VAR1# pävämäärällä #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Tämä lisäosa näyttää yleiskatsaussivulla käyttäjien viimeksi lähettämät asiakirjat ja tiedostot.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Uusimmat asiakirjat ja tiedostot</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Tiedostojen määrä</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Näytettävien tiedostojen määrä. (Oletus: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Näytä lähetysaika</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Kun käytössä, tiedoston lähetysaika näytetään. Muuten se piilotetaan. (Oletus: käytössä)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Tiedostonimen merkkien enimmäismäärä</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Tiedostonimen merkkien enimmäismäärä ennen lyhentämistä. (0: ei lyhentämistä, oletus: 0)</string>
 </resources>

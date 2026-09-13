@@ -7,4 +7,17 @@
     <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Numero di accessi</string>
     <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Membro online</string>
     <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior membro online</string>
+    <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Questo plugin mostra un modulo di accesso nella pagina di riepilogo. Dopo l’accesso, i campi vengono sostituiti da informazioni utili sull’utente.</string>
+    <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Modulo di accesso</string>
+    <string name="PLG_LOGIN_FORM_MEMBERRANK">Grado del membro</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Mostra il collegamento di registrazione</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se attivata, questa opzione mostra nel modulo di accesso un collegamento al modulo di registrazione. (Predefinito: disattivato)</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Mostra il collegamento e-mail</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Se attivata, questa opzione mostra nel modulo di accesso un collegamento per inviare un’e-mail all’amministratore in caso di problemi di accesso. (Predefinito: attivato)</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Mostra il collegamento di disconnessione</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Se attivata, questa opzione mostra un collegamento di disconnessione dopo l’accesso. (Predefinito: disattivato)</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Mostra i gradi</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Se attivata, questa opzione mostra dopo il nome utente un grado basato sul numero di accessi. (Predefinito: attivato)</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Gradi</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Definisci i gradi visualizzati dopo il nome utente quando «Mostra i gradi» è attivato. La chiave è il numero di accessi e il valore è il nome del grado.\n Per eliminare un grado, svuota i campi «Numero di accessi» e «Grado del membro» nella tabella.</string>
 </resources>

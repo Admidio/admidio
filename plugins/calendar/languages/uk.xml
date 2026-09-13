@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">СБ</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">НД</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Кілька днів</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Цей плагін показує на сторінці огляду календар усіх подій поточного місяця.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Календар</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Показувати події</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Якщо ввімкнено, події показуються в календарі. (Типово: ввімкнено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Показувати дні народження</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Якщо ввімкнено, дні народження учасників показуються в календарі. (Типово: ввімкнено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Показувати дні народження відвідувачам</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Якщо ввімкнено, відвідувачі бачать дні народження учасників. (Типово: вимкнено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Показувати піктограму дня народження</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Якщо ввімкнено, у календарі показується піктограма дня народження. (Типово: ввімкнено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Формат імені іменинника</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Виберіть формат показу імен іменинників. (Типово: ім’я)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Враховані категорії</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Виберіть категорії для подій у календарі. (Типово: усі категорії)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Показувати назви календарів</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Якщо ввімкнено, для кожної події показується назва календаря. (Типово: вимкнено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Ролі з доступом до вмісту</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Виберіть ролі, яким доступний вміст плагіна. Користувачі без вибраних ролей бачать лише кількість подій і днів народження. (Типово: усі ролі)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Ролі для днів народження</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Виберіть ролі, дні народження учасників яких слід показувати. (Типово: усі ролі)</string>
 </resources>

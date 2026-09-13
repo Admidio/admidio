@@ -5,4 +5,22 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# 访客</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# 会员</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# 会员</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">访客无法查看此数据。请登录后查看谁在线。</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">当前在线：#VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">当前在线：#VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">此插件在概览页面显示访客和已注册会员。</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">谁在线</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">在线状态保留时间</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">用户最后一次操作后仍被视为在线的时间，单位为分钟。（默认：10）</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">显示访客</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">启用后，显示访客人数，否则只显示已登录用户。（默认：启用）</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">向访客显示会员</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">选择向访客显示会员的方式。（默认：已登录会员人数）</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">不显示已登录会员</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">显示已登录会员</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">已登录会员人数</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">显示自己的状态</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">启用后，无论登录还是退出，都会显示自己的状态。（默认：启用）</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">并排显示用户</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">启用后，用户并排显示，否则纵向逐个显示。（默认：禁用）</string>
 </resources>

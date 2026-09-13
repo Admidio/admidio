@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Antall pålogginger</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Onlinemedlem</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior onlinemedlem</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Dette tillegget viser et innloggingsskjema på oversiktssiden. Etter innlogging erstattes feltene med nyttig informasjon om brukeren.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Innloggingsskjema</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Medlemsrang</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Vis registreringslenke</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Hvis aktivert vises en lenke til registreringsskjemaet i innloggingsskjemaet. (Standard: av)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Vis e-postlenke</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Hvis aktivert vises en lenke i innloggingsskjemaet for å sende e-post til administratoren ved innloggingsproblemer. (Standard: på)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Vis utloggingslenke</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Hvis aktivert vises en utloggingslenke etter innlogging. (Standard: av)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Vis rangeringer</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Hvis aktivert vises en rangering etter brukernavnet basert på antallet innlogginger. (Standard: på)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangeringer</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Definer rangeringene som vises etter brukernavnet når «Vis rangeringer» er aktivert. Nøkkelen er antallet innlogginger, og verdien er navnet på rangeringen.\n Slett en rangering ved å tømme feltene «Antall innlogginger» og «Medlemsrang» i tabellen.</string>
 </resources>

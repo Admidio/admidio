@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# учасників</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Онлайн #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Онлайн #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Дані недоступні відвідувачам. Увійдіть, щоб побачити, хто зараз на сайті.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Цей плагін показує відвідувачів і зареєстрованих учасників на сторінці огляду.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Хто зараз на сайті</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Тривалість статусу присутності</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Час у хвилинах, протягом якого користувач вважається присутнім після останньої дії. (Типово: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Показувати відвідувачів</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Якщо ввімкнено, показується кількість відвідувачів, інакше лише користувачі, які увійшли. (Типово: ввімкнено)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Показувати учасників відвідувачам</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Виберіть спосіб показу учасників відвідувачам. (Типово: кількість учасників, які увійшли)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Не показувати учасників, які увійшли</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Показувати учасників, які увійшли</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Кількість учасників, які увійшли</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Показувати власний статус</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Якщо ввімкнено, показується власний статус як після входу, так і після виходу. (Типово: ввімкнено)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Показувати користувачів поруч</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Якщо ввімкнено, користувачі показуються поруч, інакше один під одним. (Типово: вимкнено)</string>
 </resources>

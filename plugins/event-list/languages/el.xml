@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Όλες οι εκδηλώσεις</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Εκδηλώσεις</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Δεν υπάρχουν διαθέσιμες εκδηλώσεις για τους επισκέπτες. Κάντε είσοδο για να δείτε τις εκδηλώσεις.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Αυτό το πρόσθετο εμφανίζει προεπισκόπηση των νεότερων εκδηλώσεων στη σελίδα επισκόπησης.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Λίστα εκδηλώσεων</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Αριθμός εκδηλώσεων</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Αριθμός εκδηλώσεων προς εμφάνιση. (Προεπιλογή: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Εμφάνιση ημερομηνίας λήξης</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Αν ενεργοποιηθεί, εμφανίζονται η ημερομηνία και η ώρα λήξης της εκδήλωσης, διαφορετικά μόνο η ημερομηνία και η ώρα έναρξης. (Προεπιλογή: ενεργό)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Χαρακτήρες πριν την αλλαγή γραμμής</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Μέγιστος αριθμός χαρακτήρων σε μια λέξη πριν την αλλαγή γραμμής. (0: χωρίς αλλαγή γραμμής, προεπιλογή: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Εμφανιζόμενες κατηγορίες</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Επιλέξτε τις κατηγορίες των οποίων οι εκδηλώσεις θα εμφανίζονται. (Προεπιλογή: όλες οι κατηγορίες)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Εμφάνιση πλήρους περιγραφής</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Αν ενεργοποιηθεί, εμφανίζεται ολόκληρη η περιγραφή, διαφορετικά μόνο προεπισκόπηση του κειμένου. (Προεπιλογή: ανενεργό)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Κείμενο προεπισκόπησης</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Αριθμός χαρακτήρων του κειμένου προεπισκόπησης. (0: χωρίς σύντομη προεπισκόπηση, προεπιλογή: 70)</string>
 </resources>

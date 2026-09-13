@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Усі записи</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Оголошення</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Немає оголошень для відвідувачів. Увійдіть, щоб побачити оголошення.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Цей плагін показує попередній список найновіших оголошень на сторінці огляду.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Список оголошень</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Кількість оголошень</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Кількість оголошень для показу. (Типово: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Символів до перенесення рядка</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Максимальна кількість символів у слові до перенесення рядка. (0: без перенесення, типово: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Категорії для показу</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Виберіть категорії, оголошення яких слід показувати. (Типово: усі категорії)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Показувати повний опис</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Якщо ввімкнено, показується повний опис, інакше лише попередній перегляд тексту. (Типово: вимкнено)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Текст попереднього перегляду</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Кількість символів тексту попереднього перегляду. (0: без короткого перегляду, типово: 70)</string>
 </resources>

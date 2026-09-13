@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Er zijn geen foto\'s beschikbaar voor bezoekers. Log in om de foto\'s te zien.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Deze plug-in toont een willekeurig gekozen foto uit de fotomodule.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Willekeurige foto</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Aantal tekens per woord</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maximumaantal tekens in een woord vóór een regeleinde. Bij 0 worden geen regeleinden ingevoegd. (Standaard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maximale fotobreedte</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Maximale fotobreedte in pixels. Bij 0 wordt de foto dynamisch geschaald naar de HTML-container van de plug-in. (Standaard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maximale fotohoogte</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Maximale fotohoogte in pixels. Bij 0 wordt de foto dynamisch geschaald naar de HTML-container van de plug-in. (Standaard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Meegenomen albums</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Aantal albums waaruit de foto kan komen, gerekend vanaf het nieuwste album. Bij 0 worden alle albums meegenomen. (Standaard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Fotonummer</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Nummer van de weer te geven foto uit het album. Bij 0 wordt een willekeurige foto getoond, anders de foto met het opgegeven nummer. (Standaard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Albumlink tonen</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Indien ingeschakeld verschijnt onder de foto een link met de naam van het album. (Standaard: aan)</string>
 </resources>

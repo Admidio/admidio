@@ -11,4 +11,24 @@
     <string name="PLG_CALENDAR_SATURDAY_SHORT">Sa</string>
     <string name="PLG_CALENDAR_SUNDAY_SHORT">So</string>
     <string name="PLG_CALENDAR_SEVERAL_DAYS">Mehrtägig</string>
+    <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Dieses Plugin zeigt auf der Übersichtsseite einen Kalender mit allen Terminen des aktuellen Monats an.</string>
+    <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Termine anzeigen</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Bei aktivierter Einstellung werden Termine im Kalender angezeigt. (Standard: aktiviert)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Geburtstage anzeigen</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Bei aktivierter Einstellung werden die Geburtstage der Mitglieder im Kalender angezeigt. (Standard: aktiviert)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Geburtstage für Besucher anzeigen</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Bei aktivierter Einstellung werden Besuchern die Geburtstage der Mitglieder angezeigt. (Standard: deaktiviert)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Geburtstagssymbol anzeigen</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Bei aktivierter Einstellung wird ein Geburtstagssymbol im Kalender angezeigt. (Standard: aktiviert)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Namensdarstellung der Geburtstagskinder</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Legt fest, wie die Namen der Geburtstagskinder angezeigt werden. (Standard: Vorname)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Berücksichtigte Kategorien</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Auswahl der Kategorien, deren Termine im Kalender berücksichtigt werden sollen. (Standard: alle Kategorien)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Kalendernamen anzeigen</string>
+    <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Bei aktivierter Einstellung wird zu jedem Termin der Kalendername angezeigt. (Standard: deaktiviert)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Berechtigte Rollen für Inhalte</string>
+    <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Auswahl der Rollen, die den Inhalt dieses Plugins sehen dürfen. Ohne Mitgliedschaft in einer ausgewählten Rolle wird nur die Anzahl der Termine und Geburtstage angezeigt. (Standard: alle Rollen)</string>
+    <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Berücksichtigte Rollen für Geburtstage</string>
+    <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Auswahl der Rollen, deren Mitglieder mit ihren Geburtstagen angezeigt werden sollen. (Standard: alle Rollen)</string>
 </resources>

@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Немає доступних фотографій для відвідувачів. Увійдіть, щоб побачити фотографії.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Цей плагін показує випадково вибрану фотографію з фотомодуля.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Випадкова фотографія</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Кількість символів у слові</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Максимальна кількість символів у слові до перенесення рядка. За значення 0 перенесення не виконується. (Типово: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Максимальна ширина фотографії</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Максимальна ширина фотографії в пікселях. За значення 0 зображення динамічно масштабується відповідно до HTML-контейнера плагіна. (Типово: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Максимальна висота фотографії</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Максимальна висота фотографії в пікселях. За значення 0 зображення динамічно масштабується відповідно до HTML-контейнера плагіна. (Типово: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Враховані альбоми</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Кількість альбомів для вибору фотографії, починаючи з найновішого. За значення 0 враховуються всі альбоми. (Типово: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Номер фотографії</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Номер фотографії в альбомі для показу. За значення 0 показується випадкова фотографія, інакше фотографія з указаним номером. (Типово: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Показувати посилання на альбом</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Якщо ввімкнено, під фотографією показується посилання на альбом із його назвою. (Типово: ввімкнено)</string>
 </resources>

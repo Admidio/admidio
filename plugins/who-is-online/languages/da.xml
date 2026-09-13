@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# Medlemmer</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online er #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online er #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Ingen data er tilgængelige for besøgende. Log ind for at se, hvem der er online.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Dette plugin viser besøgende og registrerede medlemmer på oversigtssiden.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Hvem er online?</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Varighed af onlinestatus</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Tid i minutter, hvor en bruger stadig regnes som online efter sin sidste handling. (Standard: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Vis besøgende</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Hvis aktiveret vises antallet af besøgende, ellers kun indloggede brugere. (Standard: til)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Vis medlemmer for besøgende</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Vælg, hvordan medlemmer vises for besøgende. (Standard: antal indloggede medlemmer)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Vis ikke indloggede medlemmer</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Vis indloggede medlemmer</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Antal indloggede medlemmer</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Vis egen status</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Hvis aktiveret vises egen status, både logget ind og logget ud. (Standard: til)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Vis brugere side om side</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Hvis aktiveret vises brugerne side om side, ellers under hinanden. (Standard: fra)</string>
 </resources>

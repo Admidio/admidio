@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Il n\'y a pas de photos disponibles pour les visiteurs. Veuillez vous connecter pour les voir.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Ce plugin affiche une photo choisie au hasard dans le module Photos.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Photo aléatoire</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Nombre de caractères par mot</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Nombre maximal de caractères d’un mot avant un saut de ligne. La valeur 0 désactive les sauts de ligne. (Par défaut : 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Largeur maximale de la photo</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Largeur maximale de la photo en pixels. Avec 0, la photo est redimensionnée dynamiquement selon le conteneur HTML du plugin. (Par défaut : 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Hauteur maximale de la photo</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Hauteur maximale de la photo en pixels. Avec 0, la photo est redimensionnée dynamiquement selon le conteneur HTML du plugin. (Par défaut : 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Albums pris en compte</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Nombre d’albums pouvant fournir la photo, en partant du plus récent. Avec 0, tous les albums sont pris en compte. (Par défaut : 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Numéro de la photo</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Numéro de la photo à afficher dans l’album. Avec 0, une photo est choisie au hasard ; sinon, la photo portant le numéro indiqué est affichée. (Par défaut : 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Afficher le lien vers l’album</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Si cette option est activée, un lien portant le nom de l’album apparaît sous la photo. (Par défaut : activée)</string>
 </resources>

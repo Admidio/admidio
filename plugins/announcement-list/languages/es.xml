@@ -2,4 +2,17 @@
 <resources>
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Todos los mensajes</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Anuncios</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">No hay anuncios disponibles para los visitantes. Inicie sesión para ver los anuncios.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Este complemento muestra una vista previa de los últimos anuncios en la página de resumen.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Lista de anuncios</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Número de anuncios</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Número de anuncios que se mostrarán. (Predeterminado: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caracteres antes del salto de línea</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Número máximo de caracteres de una palabra antes de insertar un salto de línea. (0: sin saltos de línea, predeterminado: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Categorías mostradas</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Seleccione las categorías cuyos anuncios desea mostrar. (Predeterminado: todas las categorías)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Mostrar la descripción completa</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Si se activa, se muestra la descripción completa; de lo contrario, solo una vista previa del texto. (Predeterminado: desactivado)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Texto de vista previa</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Número de caracteres de la vista previa. (0: sin vista previa breve, predeterminado: 70)</string>
 </resources>

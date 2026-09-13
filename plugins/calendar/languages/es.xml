@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Sab</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Dom</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Más días</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Este complemento muestra un calendario con todos los eventos del mes actual en la página de resumen.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Calendario</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Mostrar eventos</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Si se activa, se muestran los eventos en el calendario. (Predeterminado: activado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Mostrar cumpleaños</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Si se activa, se muestran los cumpleaños de los miembros en el calendario. (Predeterminado: activado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Mostrar los cumpleaños a los visitantes</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Si se activa, los visitantes ven los cumpleaños de los miembros. (Predeterminado: desactivado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Mostrar el icono de cumpleaños</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Si se activa, se muestra un icono de cumpleaños en el calendario. (Predeterminado: activado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Formato del nombre de quienes cumplen años</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Permite elegir cómo se muestran los nombres de quienes cumplen años. (Predeterminado: nombre de pila)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Categorías incluidas</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Seleccione las categorías que se tendrán en cuenta para los eventos del calendario. (Predeterminado: todas las categorías)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Mostrar los nombres de los calendarios</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Si se activa, se muestra el nombre del calendario en cada evento. (Predeterminado: desactivado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Roles autorizados para ver el contenido</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Seleccione los roles que pueden ver el contenido del complemento. Los usuarios sin ninguno de estos roles solo ven el número de eventos y cumpleaños. (Predeterminado: todos los roles)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roles incluidos en los cumpleaños</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Seleccione los roles cuyos miembros deben aparecer en los cumpleaños. (Predeterminado: todos los roles)</string>
 </resources>

@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Lø</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Sø</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Flere dage</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Dette plugin viser en kalender med alle begivenheder i den aktuelle måned på oversigtssiden.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Vis begivenheder</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Hvis aktiveret vises begivenheder i kalenderen. (Standard: til)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Vis fødselsdage</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Hvis aktiveret vises medlemmernes fødselsdage i kalenderen. (Standard: til)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Vis fødselsdage for besøgende</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Hvis aktiveret vises medlemmernes fødselsdage for besøgende. (Standard: fra)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Vis fødselsdagsikon</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Hvis aktiveret vises et fødselsdagsikon i kalenderen. (Standard: til)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Navneformat for fødselarer</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Vælg, hvordan fødselarernes navne vises. (Standard: fornavn)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Medtagne kategorier</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Vælg kategorierne for begivenheder i kalenderen. (Standard: alle kategorier)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Vis kalendernavne</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Hvis aktiveret vises kalendernavnet for hver begivenhed. (Standard: fra)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Roller med adgang til indholdet</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Vælg de roller, der må se dette plugins indhold. Brugere uden en valgt rolle ser kun antallet af begivenheder og fødselsdage. (Standard: alle roller)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roller for fødselsdage</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Vælg de roller, hvis medlemmers fødselsdage skal vises. (Standard: alle roller)</string>
 </resources>

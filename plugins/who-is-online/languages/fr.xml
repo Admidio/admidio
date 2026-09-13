@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# Membres</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">En ligne sont #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">En ligne est #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Aucune donnée n’est accessible aux visiteurs. Connectez-vous pour voir qui est en ligne.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Ce plugin affiche les visiteurs et les membres inscrits sur la page de présentation.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Qui est en ligne ?</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Durée du statut en ligne</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Durée en minutes pendant laquelle un utilisateur est considéré en ligne après sa dernière action. (Par défaut : 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Afficher les visiteurs</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Si cette option est activée, le nombre de visiteurs est affiché ; sinon, seuls les utilisateurs connectés apparaissent. (Par défaut : activée)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Afficher les membres aux visiteurs</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Définit la présentation des membres aux visiteurs. (Par défaut : nombre de membres connectés)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Ne pas afficher les membres connectés</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Afficher les membres connectés</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Nombre de membres connectés</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Afficher son propre statut</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Si cette option est activée, votre propre statut est affiché, que vous soyez connecté ou déconnecté. (Par défaut : activée)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Afficher les utilisateurs côte à côte</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Si cette option est activée, les utilisateurs apparaissent côte à côte ; sinon, les uns sous les autres. (Par défaut : désactivée)</string>
 </resources>

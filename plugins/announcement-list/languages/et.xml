@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Kõik sissekanded</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Teated</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Külastajatele pole teadaandeid. Teadete nägemiseks logige sisse.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">See plugin kuvab ülevaatelehel uusimate teadete eelvaate.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Teadete loend</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Teadete arv</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Kuvatavate teadete arv. (Vaikimisi: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Märke enne reavahetust</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksimaalne märkide arv sõnas enne reavahetust. (0: reavahetust ei lisata, vaikimisi: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Kuvatavad kategooriad</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Valige kategooriad, mille teateid kuvada. (Vaikimisi: kõik kategooriad)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Kuva täielik kirjeldus</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Kui lubatud, kuvatakse täielik kirjeldus, vastasel juhul ainult teksti eelvaade. (Vaikimisi: välja lülitatud)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Eelvaate tekst</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Eelvaate teksti märkide arv. (0: lühikest eelvaadet ei kuvata, vaikimisi: 70)</string>
 </resources>

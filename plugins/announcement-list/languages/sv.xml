@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Alla poster</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Tillkännagivanden</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Det finns inga tillkännagivanden för besökare. Logga in för att se tillkännagivanden.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Detta tillägg visar en förhandsvisning av de senaste meddelandena på översiktssidan.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Meddelandelista</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Antal meddelanden</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Antal meddelanden som ska visas. (Standard: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tecken före radbrytning</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximalt antal tecken i ett ord före radbrytning. (0: ingen radbrytning, standard: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Visade kategorier</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Välj de kategorier vars meddelanden ska visas. (Standard: alla kategorier)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Visa hela beskrivningen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Om aktiverat visas hela beskrivningen, annars endast en förhandsvisning av texten. (Standard: av)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Förhandsvisningstext</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Antal tecken i förhandsvisningstexten. (0: ingen kort förhandsvisning, standard: 70)</string>
 </resources>

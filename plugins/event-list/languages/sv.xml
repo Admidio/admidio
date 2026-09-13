@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Alla evenemang</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Evenemang</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Det finns inga evenemang tillgängliga för besökare. Logga in för att se evenemangen.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Detta tillägg visar en förhandsvisning av de senaste händelserna på översiktssidan.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Händelselista</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Antal händelser</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Antal händelser som ska visas. (Standard: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Visa slutdatum</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Om aktiverat visas händelsens slutdatum och sluttid, annars endast startdatum och starttid. (Standard: på)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tecken före radbrytning</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximalt antal tecken i ett ord före radbrytning. (0: ingen radbrytning, standard: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Visade kategorier</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Välj de kategorier vars händelser ska visas. (Standard: alla kategorier)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Visa hela beskrivningen</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Om aktiverat visas hela beskrivningen, annars endast en förhandsvisning av texten. (Standard: av)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Förhandsvisningstext</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Antal tecken i förhandsvisningstexten. (0: ingen kort förhandsvisning, standard: 70)</string>
 </resources>

@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# участников</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Онлайн #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Онлайн #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Данные недоступны посетителям. Войдите, чтобы увидеть, кто сейчас на сайте.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Плагин показывает посетителей и зарегистрированных участников на странице обзора.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Кто сейчас на сайте</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Время сохранения статуса присутствия</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Время в минутах, в течение которого пользователь считается присутствующим после последнего действия. (По умолчанию: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Показывать посетителей</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Если включено, показывается количество посетителей, иначе только вошедшие пользователи. (По умолчанию: включено)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Показывать участников посетителям</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Выберите способ отображения участников для посетителей. (По умолчанию: количество вошедших участников)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Не показывать вошедших участников</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Показывать вошедших участников</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Количество вошедших участников</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Показывать собственный статус</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Если включено, показывается собственный статус как при входе, так и после выхода. (По умолчанию: включено)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Показывать пользователей рядом</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Если включено, пользователи отображаются рядом друг с другом, иначе друг под другом. (По умолчанию: выключено)</string>
 </resources>

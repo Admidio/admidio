@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Det finns inga foton tillgängliga för besökare. Logga in för att se bilderna.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Detta tillägg visar ett slumpmässigt valt foto från fotomodulen.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Slumpmässigt foto</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Antal tecken per ord</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maximalt antal tecken i ett ord före radbrytning. Vid 0 görs ingen radbrytning. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maximal fotobredd</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Fotots maximala bredd i pixlar. Vid 0 anpassas bilden dynamiskt till tilläggets HTML-behållare. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maximal fotohöjd</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Fotots maximala höjd i pixlar. Vid 0 anpassas bilden dynamiskt till tilläggets HTML-behållare. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Inkluderade album</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Antal album som fotot kan hämtas från, räknat från det senaste albumet. Vid 0 inkluderas alla album. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Fotonummer</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Numret på fotot som ska visas från albumet. Vid 0 visas ett slumpmässigt foto, annars fotot med angivet nummer. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Visa albumlänk</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Om aktiverat visas en länk med albumets namn under fotot. (Standard: på)</string>
 </resources>

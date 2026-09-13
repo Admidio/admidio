@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Aantal keer ingelogd</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Online lid</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Online senior lid</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Deze plug-in toont een inlogformulier op de overzichtspagina. Na het inloggen verschijnt nuttige informatie over de gebruiker in plaats van de velden.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Inlogformulier</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Ledenrang</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Registratielink tonen</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Indien ingeschakeld verschijnt in het inlogformulier een link naar het registratieformulier. (Standaard: uit)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">E-maillink tonen</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Indien ingeschakeld verschijnt in het inlogformulier een link om bij inlogproblemen een e-mail naar de beheerder te sturen. (Standaard: aan)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Uitloglink tonen</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Indien ingeschakeld verschijnt na het inloggen een link om uit te loggen. (Standaard: uit)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Rangen tonen</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Indien ingeschakeld verschijnt na de gebruikersnaam een rang op basis van het aantal aanmeldingen. (Standaard: aan)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangen</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Definieer de rangen die na de gebruikersnaam verschijnen als ‘Rangen tonen’ is ingeschakeld. De sleutel is het aantal aanmeldingen en de waarde is de rangnaam.\n Maak de velden ‘Aantal aanmeldingen’ en ‘Ledenrang’ in de tabel leeg om een rang te verwijderen.</string>
 </resources>

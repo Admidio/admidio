@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Alle aktiviteter</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Aktivitet</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Der er ingen arrangementer tilgængelige for besøgende. Log ind for at se begivenhederne.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Dette plugin viser en forhåndsvisning af de seneste begivenheder på oversigtssiden.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Begivenhedsliste</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Antal begivenheder</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Antal begivenheder, der skal vises. (Standard: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Vis slutdato</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Hvis aktiveret vises begivenhedens slutdato og sluttidspunkt, ellers kun startdato og starttidspunkt. (Standard: til)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tegn før linjeskift</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksimalt antal tegn i et ord før linjeskift. (0: intet linjeskift, standard: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Viste kategorier</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Vælg de kategorier, hvis begivenheder skal vises. (Standard: alle kategorier)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Vis hele beskrivelsen</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Hvis aktiveret vises hele beskrivelsen, ellers kun en forhåndsvisning af teksten. (Standard: fra)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Forhåndsvisningstekst</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Antal tegn i forhåndsvisningsteksten. (0: ingen kort forhåndsvisning, standard: 70)</string>
 </resources>

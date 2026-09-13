@@ -2,4 +2,19 @@
 <resources>
   <string name="PLG_EVENT_LIST_ALL_EVENTS">所有项目</string>
   <string name="PLG_EVENT_LIST_HEADLINE">项目</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">访客无法查看活动。请登录后查看。</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">此插件在概览页面显示最新活动的预览列表。</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">活动列表</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">活动数量</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">要显示的活动数量。（默认：2）</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">显示结束日期</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">启用后，显示活动的结束日期和时间，否则只显示开始日期和时间。（默认：启用）</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">换行前的字符数</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">单词换行前允许的最大字符数。（0：不换行，默认：0）</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">显示的类别</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">选择要显示哪些类别的活动。（默认：所有类别）</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">显示完整描述</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">启用后显示完整描述，否则仅显示文字预览。（默认：禁用）</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">预览文字</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">预览文字的字符数。（0：不显示简短预览，默认：70）</string>
 </resources>
