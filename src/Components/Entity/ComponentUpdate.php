@@ -195,10 +195,21 @@ class ComponentUpdate extends Component
 
         // only execute if sql statement is for all databases or for the used database
         if (!isset($xmlNode['database']) || (string) $xmlNode['database'] === $this->db->getEngine()) {
-            $errorMessage = '<p>An error occured within the update script. Please visit our
+            // The web installer renders the message as markup, a run on the command line has
+            // nobody who does, so the same information is reported as plain text there.
+            $cli = PHP_SAPI === 'cli';
+
+            if ($cli) {
+                $errorMessage = 'An error occured within the update script. Please visit our support'
+                    . ' forum https://www.admidio.org/forum and provide the following information.' . PHP_EOL
+                    . 'VERSION: ' . $version . PHP_EOL
+                    . 'STEP: ' . (int) $xmlNode['id'];
+            } else {
+                $errorMessage = '<p>An error occured within the update script. Please visit our
                 support forum <a href="https://www.admidio.org/forum">https://www.admidio.org/forum</a> and
                 provide the following information.</p>
                 <p><b>VERSION:</b> ' . $version . '<br><b>STEP:</b> ' . (int) $xmlNode['id'] . '</p>';
+            }
             $gLogger->info('UPDATE: Execute update step Nr: ' . (int) $xmlNode['id']);
 
             // if a method of this class was set in the update step
@@ -207,6 +218,12 @@ class ComponentUpdate extends Component
                 try {
                     self::executeUpdateMethod($updateStepContent, $namespace);
                 } catch (Throwable $e) {
+                    if ($cli) {
+                        throw new Exception('SCRIPT ERROR: ' . $errorMessage . PHP_EOL
+                            . 'MESSAGE: ' . $e->getMessage() . PHP_EOL
+                            . $e->getTraceAsString());
+                    }
+
                     throw new Exception('
                         <div style="font-family: monospace;">
                              <p><strong>S C R I P T - E R R O R</strong></p>
@@ -226,7 +243,7 @@ class ComponentUpdate extends Component
                 try {
                     $this->executeUpdateSql($updateStepContent, $showError);
                 } catch (Throwable $e) {
-                    throw new Exception($errorMessage . '<br />' . $e->getMessage());
+                    throw new Exception($errorMessage . ($cli ? PHP_EOL : '<br />') . $e->getMessage());
                 }
             }
             $gLogger->debug('UPDATE: Execution time ' . getExecutionTime($startTime));
