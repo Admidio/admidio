@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Número de Sessões</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Membro Ativo</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membro Sénior Ativo</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Este plugin apresenta um formulário de login na página de visão geral. Após o login, informações úteis sobre o usuário substituem os campos.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Formulário de login</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Classificação do membro</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Apresentar o link de cadastro</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se ativado, o formulário de login apresenta um link para o formulário de cadastro. (Padrão: desativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Apresentar o link de e-mail</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Se ativado, o formulário de login apresenta um link para enviar um e-mail ao administrador em caso de problemas de acesso. (Padrão: ativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Apresentar o link para sair</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Se ativado, apresenta um link para sair após o login. (Padrão: desativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Apresentar classificações</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Se ativado, apresenta uma classificação após o nome de usuário, de acordo com o número de logins. (Padrão: ativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Classificações</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Defina as classificações apresentadas após o nome de usuário quando «Apresentar classificações» está ativado. A chave é o número de logins e o valor é o nome da classificação.\n Para eliminar uma classificação, limpe os campos «Número de logins» e «Classificação do membro» na tabela.</string>
 </resources>

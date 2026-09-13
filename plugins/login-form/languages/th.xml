@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_FORM_ACTIVE_SINCE">เริ่มใช้งานตั้งแต่</string>
+  <string name="PLG_LOGIN_FORM_HONORARY_MEMBER">สมาชิกกิตติมศักดิ์</string>
+  <string name="PLG_LOGIN_FORM_LAST_LOGIN">เข้าสู่ระบบครั้งล่าสุด</string>
+  <string name="PLG_LOGIN_FORM_NEW_ONLINE_MEMBER">สมาชิกออนไลน์ใหม่</string>
+  <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">จำนวนครั้งที่เข้าสู่ระบบ</string>
+  <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">สมาชิกออนไลน์</string>
+  <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">สมาชิกออนไลน์อาวุโส</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงแบบฟอร์มเข้าสู่ระบบในหน้าภาพรวม เมื่อเข้าสู่ระบบแล้ว ช่องกรอกข้อมูลจะถูกแทนที่ด้วยข้อมูลที่เป็นประโยชน์เกี่ยวกับผู้ใช้</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">แบบฟอร์มเข้าสู่ระบบ</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">ระดับสมาชิก</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">แสดงลิงก์ลงทะเบียน</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">เมื่อเปิดใช้งาน จะแสดงลิงก์ไปยังแบบฟอร์มลงทะเบียนในแบบฟอร์มเข้าสู่ระบบ (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">แสดงลิงก์อีเมล</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">เมื่อเปิดใช้งาน แบบฟอร์มเข้าสู่ระบบจะแสดงลิงก์สำหรับส่งอีเมลถึงผู้ดูแลระบบเมื่อมีปัญหาในการเข้าสู่ระบบ (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">แสดงลิงก์ออกจากระบบ</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">เมื่อเปิดใช้งาน จะแสดงลิงก์ออกจากระบบหลังเข้าสู่ระบบ (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">แสดงระดับ</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">เมื่อเปิดใช้งาน จะแสดงระดับตามจำนวนครั้งที่เข้าสู่ระบบต่อท้ายชื่อผู้ใช้ (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">ระดับ</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">กำหนดระดับที่แสดงต่อท้ายชื่อผู้ใช้เมื่อเปิด “แสดงระดับ” คีย์คือจำนวนครั้งที่เข้าสู่ระบบ และค่าคือชื่อระดับ\n หากต้องการลบระดับ ให้ล้างช่อง “จำนวนครั้งที่เข้าสู่ระบบ” และ “ระดับสมาชิก” ในตาราง</string>
+</resources>

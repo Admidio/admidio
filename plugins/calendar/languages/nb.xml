@@ -10,4 +10,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">L</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">S</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Flerdaglig</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Dette tillegget viser en kalender med alle arrangementene i inneværende måned på oversiktssiden.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Vis arrangementer</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Hvis aktivert vises arrangementer i kalenderen. (Standard: på)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Vis fødselsdager</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Hvis aktivert vises medlemmenes fødselsdager i kalenderen. (Standard: på)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Vis fødselsdager til besøkende</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Hvis aktivert vises medlemmenes fødselsdager til besøkende. (Standard: av)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Vis fødselsdagsikon</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Hvis aktivert vises et fødselsdagsikon i kalenderen. (Standard: på)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Navneformat for fødselsdagsbarn</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Velg hvordan navnene til fødselsdagsbarna vises. (Standard: fornavn)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Inkluderte kategorier</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Velg kategoriene som skal tas med for arrangementer i kalenderen. (Standard: alle kategorier)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Vis kalendernavn</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Hvis aktivert vises kalendernavnet for hvert arrangement. (Standard: av)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Roller med tilgang til innholdet</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Velg rollene som får se innholdet i tillegget. Brukere uten noen valgt rolle ser bare antallet arrangementer og fødselsdager. (Standard: alle roller)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roller for fødselsdager</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Velg rollene som medlemmene må ha for at fødselsdagene deres skal vises. (Standard: alle roller)</string>
 </resources>

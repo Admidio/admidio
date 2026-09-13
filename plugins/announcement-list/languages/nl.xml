@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Alle berichten</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Aankondigingen</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Er zijn geen mededelingen beschikbaar voor bezoekers. Log in om de mededelingen te zien.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Deze plug-in toont een voorvertoning van de nieuwste aankondigingen op de overzichtspagina.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Aankondigingenlijst</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Aantal aankondigingen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Aantal weer te geven aankondigingen. (Standaard: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tekens vóór een regeleinde</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximumaantal tekens in een woord vóór een regeleinde. (0: geen regeleinden, standaard: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Weergegeven categorieën</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Selecteer de categorieën waarvan aankondigingen worden weergegeven. (Standaard: alle categorieën)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Volledige beschrijving tonen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Indien ingeschakeld wordt de volledige beschrijving getoond, anders alleen een tekstvoorbeeld. (Standaard: uit)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Voorbeeldtekst</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Aantal tekens in de voorbeeldtekst. (0: geen kort voorbeeld, standaard: 70)</string>
 </resources>

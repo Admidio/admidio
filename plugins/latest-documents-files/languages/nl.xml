@@ -4,4 +4,12 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Meer documenten &amp; bestanden</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Er zijn geen documenten of bestanden beschikbaar.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Geüpload door #VAR1# op #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Deze plug-in toont op de overzichtspagina de nieuwste documenten en bestanden die gebruikers hebben geüpload.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Nieuwste documenten en bestanden</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Aantal bestanden</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Aantal weer te geven bestanden. (Standaard: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Uploadtijdstip tonen</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Indien ingeschakeld wordt het uploadtijdstip van het bestand getoond, anders verborgen. (Standaard: aan)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Maximumaantal tekens in bestandsnaam</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Maximumaantal tekens van een bestandsnaam voordat deze wordt ingekort. (0: niet inkorten, standaard: 0)</string>
 </resources>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# என்பவருக்கு இன்னும் #VAR2# நாட்களில், #VAR4# அன்று, #VAR3# வயதாகும்</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# என்பவரின் பிறந்தநாள் இன்னும் #VAR2# நாட்களில் வருகிறது</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">பிறந்தநாட்கள்</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">திரு #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">இன்று #VAR1# உறுப்பினர்களுக்குப் பிறந்தநாள்.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">உறுப்பினர்களின் பிறந்தநாட்கள் பார்வையாளர்களுக்குக் கிடைக்காது. அவற்றைக் காண உள்நுழையவும்.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">இன்று எந்த உறுப்பினருக்கும் பிறந்தநாள் இல்லை.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">அடுத்த #VAR1# நாட்களில் பிறந்தநாட்கள் இல்லை.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">கடந்த #VAR1# நாட்களில் பிறந்தநாட்கள் இல்லை.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">கடந்த #VAR1# நாட்களிலும் அடுத்த #VAR2# நாட்களிலும் பிறந்தநாட்கள் இல்லை.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">இன்று ஒரு உறுப்பினருக்குப் பிறந்தநாள்.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# என்பவருக்கு #VAR2# நாட்களுக்கு முன்பு, #VAR4# அன்று, #VAR3# வயதானது</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# என்பவரின் பிறந்தநாள் #VAR2# நாட்களுக்கு முன்பு இருந்தது</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">இந்தச் செருகுநிரல் மேலோட்டப் பக்கத்தில் சமீபத்திய பிறந்தநாட்களின் முன்னோட்டத்தைக் காட்டுகிறது.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">பிறந்தநாள்</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# என்பவருக்கு இன்று #VAR2# வயதாகிறது</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">இன்று #VAR1# என்பவரின் பிறந்தநாள்</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# என்பவருக்கு நாளை, #VAR4# அன்று, #VAR3# வயதாகிறது</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">நாளை #VAR1# என்பவரின் பிறந்தநாள்</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">திருமதி #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# என்பவருக்கு நேற்று, #VAR4# அன்று, #VAR3# வயதானது</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">நேற்று #VAR1# என்பவரின் பிறந்தநாள்</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">பார்வையாளர்களுக்குப் பெயர்களைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">இயக்கப்பட்டால் இன்று, எதிர்காலத்தில் மற்றும் கடந்த காலத்தில் பிறந்தநாள் கொண்டவர்களின் பெயர்களைப் பார்வையாளர்கள் காண்பார்கள்; வயது காட்டப்படாது. இல்லையெனில் இன்று பிறந்தநாள் கொண்டவர்களின் எண்ணிக்கை மட்டும் காட்டப்படும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">பிறந்தநாள் கொண்டவர்களின் பெயர் வடிவம்</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">பிறந்தநாள் கொண்டவர்களின் பெயர்கள் எவ்வாறு காட்டப்பட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: முதற்பெயர் குடும்பப்பெயர்)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">வயதைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">இயக்கப்பட்டால் உள்நுழைந்த பயனர்கள் பிறந்தநாள் கொண்டவர்களின் வயதைக் காண்பார்கள். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">மரியாதைச் சொல்லுடன் பெயரைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">பார்வையாளர்களுக்குக் காட்டும்போது எந்த வயதிலிருந்து பிறந்தநாள் கொண்டவரின் முதற்பெயருக்குப் பதிலாக மரியாதைச் சொல்லைப் பயன்படுத்த வேண்டும் என்பதைக் குறிப்பிடுகிறது. (முடக்கு: -1, இயல்புநிலை: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">பிறந்தநாட்கள் இல்லாதபோது அறிவிப்பைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">இயக்கப்பட்டால் தேர்ந்தெடுத்த காலப்பகுதியில் எந்த உறுப்பினருக்கும் பிறந்தநாள் இல்லாதபோது அறிவிப்பு காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">கடந்த பிறந்தநாட்களைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">கடந்த எத்தனை நாட்களின் பிறந்தநாட்களைக் காட்ட வேண்டும் என்பதைக் குறிப்பிடுகிறது. (இயல்புநிலை: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">வரவிருக்கும் பிறந்தநாட்களைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">அடுத்த எத்தனை நாட்களின் பிறந்தநாட்களைக் காட்ட வேண்டும் என்பதைக் குறிப்பிடுகிறது. (இயல்புநிலை: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">பிறந்தநாள் கொண்டவர்களின் எண்ணிக்கையைக் கட்டுப்படுத்து</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">காட்ட வேண்டிய பிறந்தநாள் கொண்டவர்களின் அதிகபட்ச எண்ணிக்கை. (இயல்புநிலை: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">பார்வையாளர்களுக்கு மின்னஞ்சல் முகவரியைக் காட்டு</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">பிறந்தநாள் கொண்டவர்களின் மின்னஞ்சல் முகவரிகளைக் காட்ட வேண்டுமா என்பதைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: பார்வையாளர்களுக்குப் பெயர் மட்டும்)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">உள்ளடக்கத்தைக் காண அனுமதிக்கப்பட்ட பங்குகள்</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">இந்தச் செருகுநிரலின் உள்ளடக்கத்தைக் காண அனுமதிக்கப்பட்ட பங்குகளைத் தேர்ந்தெடுக்கவும். தேர்ந்தெடுத்த பங்குகள் எதுவும் இல்லாத பயனர்களுக்குப் பிறந்தநாட்களின் எண்ணிக்கை மட்டும் காட்டப்படும். (இயல்புநிலை: அனைத்துப் பங்குகளும்)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">பிறந்தநாட்களுக்கான பங்குகள்</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">எந்தப் பங்குகளின் உறுப்பினர்களுடைய பிறந்தநாட்களைக் காட்ட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: அனைத்துப் பங்குகளும்)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">பிறந்தநாள் கொண்டவர்களின் வரிசை</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">பிறந்தநாள் கொண்டவர்களை வரிசைப்படுத்தும் முறையைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: DESC)</string>
+</resources>

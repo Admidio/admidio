@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Nombre de connexions</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Membre en ligne</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membre senior en ligne</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Ce plugin affiche un formulaire de connexion sur la page de présentation. Après la connexion, des informations utiles sur l’utilisateur remplacent les champs.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Formulaire de connexion</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Rang du membre</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Afficher le lien d’inscription</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Si cette option est activée, le formulaire de connexion contient un lien vers le formulaire d’inscription. (Par défaut : désactivée)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Afficher le lien e-mail</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Si cette option est activée, le formulaire de connexion contient un lien permettant d’envoyer un e-mail à l’administrateur en cas de problème de connexion. (Par défaut : activée)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Afficher le lien de déconnexion</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Si cette option est activée, un lien de déconnexion apparaît après la connexion. (Par défaut : désactivée)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Afficher les rangs</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Si cette option est activée, un rang déterminé par le nombre de connexions apparaît après le nom d’utilisateur. (Par défaut : activée)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangs</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Définissez les rangs affichés après le nom d’utilisateur lorsque « Afficher les rangs » est activé. La clé est le nombre de connexions et la valeur est le nom du rang.\n Pour supprimer un rang, videz les champs « Nombre de connexions » et « Rang du membre » dans le tableau.</string>
 </resources>

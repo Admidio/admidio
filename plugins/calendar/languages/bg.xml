@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">съ</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">не</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Няколко дни</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Тази добавка показва календар с всички събития за текущия месец на обзорната страница.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Календар</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Показване на събития</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Ако е включено, събитията се показват в календара. (По подразбиране: включено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Показване на рождени дни</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Ако е включено, рождените дни на членовете се показват в календара. (По подразбиране: включено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Показване на рождените дни на посетители</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Ако е включено, посетителите виждат рождените дни на членовете. (По подразбиране: изключено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Показване на икона за рожден ден</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Ако е включено, в календара се показва икона за рожден ден. (По подразбиране: включено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Формат на имената на рождениците</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Изберете как да се показват имената на рождениците. (По подразбиране: собствено име)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Включени категории</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Изберете категориите за събитията в календара. (По подразбиране: всички категории)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Показване на имената на календарите</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Ако е включено, за всяко събитие се показва името на календара. (По подразбиране: изключено)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Роли с достъп до съдържанието</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Изберете ролите, които могат да виждат съдържанието на добавката. Потребителите без избрана роля виждат само броя на събитията и рождените дни. (По подразбиране: всички роли)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Роли за рождените дни</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Изберете ролите, чиито членове да се показват с рождените си дни. (По подразбиране: всички роли)</string>
 </resources>

@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Δεν υπάρχουν διαθέσιμες φωτογραφίες για τους επισκέπτες. Συνδεθείτε για να δείτε τις φωτογραφίες.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Αυτό το πρόσθετο εμφανίζει μια τυχαία επιλεγμένη φωτογραφία από τη μονάδα φωτογραφιών.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Τυχαία φωτογραφία</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Αριθμός χαρακτήρων ανά λέξη</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Μέγιστος αριθμός χαρακτήρων σε μια λέξη πριν την αλλαγή γραμμής. Με 0 δεν γίνεται αλλαγή γραμμής. (Προεπιλογή: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Μέγιστο πλάτος φωτογραφίας</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Μέγιστο πλάτος φωτογραφίας σε pixel. Με 0 η εικόνα προσαρμόζεται δυναμικά στο πλαίσιο HTML του πρόσθετου. (Προεπιλογή: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Μέγιστο ύψος φωτογραφίας</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Μέγιστο ύψος φωτογραφίας σε pixel. Με 0 η εικόνα προσαρμόζεται δυναμικά στο πλαίσιο HTML του πρόσθετου. (Προεπιλογή: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Άλμπουμ που λαμβάνονται υπόψη</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Αριθμός άλμπουμ από τα οποία μπορεί να επιλεγεί η φωτογραφία, ξεκινώντας από το νεότερο. Με 0 λαμβάνονται υπόψη όλα τα άλμπουμ. (Προεπιλογή: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Αριθμός φωτογραφίας</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Αριθμός της φωτογραφίας του άλμπουμ προς εμφάνιση. Με 0 εμφανίζεται τυχαία φωτογραφία, διαφορετικά η φωτογραφία με τον συγκεκριμένο αριθμό. (Προεπιλογή: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Εμφάνιση συνδέσμου άλμπουμ</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Αν ενεργοποιηθεί, κάτω από τη φωτογραφία εμφανίζεται σύνδεσμος προς το άλμπουμ με το όνομά του. (Προεπιλογή: ενεργό)</string>
 </resources>

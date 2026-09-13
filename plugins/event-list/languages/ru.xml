@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Все события</string>
   <string name="PLG_EVENT_LIST_HEADLINE">События</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Для посетителей нет доступных событий. Войдите в систему, чтобы увидеть события.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Плагин показывает предварительный список последних событий на странице обзора.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Список событий</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Количество событий</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Количество отображаемых событий. (По умолчанию: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Показывать дату окончания</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Если включено, показываются дата и время окончания события, иначе только дата и время начала. (По умолчанию: включено)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Символов до переноса строки</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Максимальное число символов в слове до переноса строки. (0: без переноса, по умолчанию: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Отображаемые категории</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Выберите категории, события которых следует показывать. (По умолчанию: все категории)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Показывать полное описание</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Если включено, показывается полное описание, иначе только предварительный текст. (По умолчанию: выключено)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Предварительный текст</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Число символов предварительного текста. (0: без краткого просмотра, по умолчанию: 70)</string>
 </resources>

@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Número de sesiónes</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Miembro en línea</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Miembro mayor en línea</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Este complemento muestra un formulario de inicio de sesión en la página de resumen. Tras iniciar sesión, los campos se sustituyen por información útil sobre el usuario.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Formulario de inicio de sesión</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Rango del miembro</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Mostrar el enlace de registro</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Si se activa, el formulario de inicio de sesión muestra un enlace al formulario de registro. (Predeterminado: desactivado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Mostrar el enlace de correo electrónico</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Si se activa, el formulario de inicio de sesión muestra un enlace para enviar un correo al administrador si hay problemas de acceso. (Predeterminado: activado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Mostrar el enlace para cerrar sesión</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Si se activa, se muestra un enlace para cerrar sesión después de iniciar sesión. (Predeterminado: desactivado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Mostrar rangos</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Si se activa, se muestra un rango después del nombre de usuario según el número de inicios de sesión. (Predeterminado: activado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangos</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Defina los rangos que aparecen después del nombre de usuario cuando «Mostrar rangos» está activado. La clave es el número de inicios de sesión y el valor es el nombre del rango.\n Para eliminar un rango, vacíe los campos «Número de inicios de sesión» y «Rango del miembro» de la tabla.</string>
 </resources>

@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# membros</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Estão #VAR1# on-line</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Está #VAR1# on-line</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Não há dados disponíveis para visitantes. Inicie sessão para ver quem está online.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Este plugin apresenta os visitantes e membros registados na página de visão geral.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Quem está online</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Duração do estado online</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Tempo em minutos durante o qual um utilizador é considerado online após a última ação. (Predefinição: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Apresentar visitantes</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Se ativado, apresenta o número de visitantes; caso contrário, apenas os utilizadores com sessão iniciada. (Predefinição: ativado)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Apresentar membros aos visitantes</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Define como os membros são apresentados aos visitantes. (Predefinição: número de membros com sessão iniciada)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Não apresentar membros com sessão iniciada</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Apresentar membros com sessão iniciada</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Número de membros com sessão iniciada</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Apresentar o próprio estado</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Se ativado, apresenta o próprio estado, com ou sem sessão iniciada. (Predefinição: ativado)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Apresentar utilizadores lado a lado</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Se ativado, apresenta os utilizadores lado a lado; caso contrário, uns por baixo dos outros. (Predefinição: desativado)</string>
 </resources>

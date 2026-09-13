@@ -44,4 +44,7 @@
   <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Itt kiválaszthatja azokat a szerepköröket, amelyekhez tartozó felhasználók születésnapját szeretné megjeleníteni. (alapértelmezés: minden szerepkör)</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">A születésnaposok sorrendje</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Ezzel a beállítással kiválaszthatja a születésnaposok sorrendjét. (alapértelmezett: CSÖKKENŐ)</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">A következő #VAR1# napban nincs születésnap.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">Az elmúlt #VAR1# napban nem volt születésnap.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">Az elmúlt #VAR1# és a következő #VAR2# napban nincs születésnap.</string>
 </resources>

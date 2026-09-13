@@ -5,4 +5,22 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# visitantes</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# Membro</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# Membros</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">No hay datos disponibles para los visitantes. Inicie sesión para ver quién está en línea.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Están en línea: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Está en línea: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Este complemento muestra los visitantes y miembros registrados en la página de resumen.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Quién está en línea</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Duración del estado en línea</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Tiempo en minutos durante el que se considera que un usuario sigue en línea después de su última acción. (Predeterminado: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Mostrar visitantes</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Si se activa, se muestra el número de visitantes; de lo contrario, solo los usuarios que han iniciado sesión. (Predeterminado: activado)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Mostrar los miembros a los visitantes</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Permite elegir cómo se muestran los miembros a los visitantes. (Predeterminado: número de miembros que han iniciado sesión)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">No mostrar los miembros que han iniciado sesión</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Mostrar los miembros que han iniciado sesión</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Número de miembros que han iniciado sesión</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Mostrar el estado propio</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Si se activa, se muestra el estado propio tanto con la sesión iniciada como cerrada. (Predeterminado: activado)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Mostrar los usuarios uno al lado del otro</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Si se activa, los usuarios se muestran uno al lado del otro; de lo contrario, uno debajo del otro. (Predeterminado: desactivado)</string>
 </resources>

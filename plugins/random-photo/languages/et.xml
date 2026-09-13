@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Külastajatele pole fotosid saadaval. Fotode vaatamiseks logi sisse.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">See plugin kuvab fotomoodulist juhuslikult valitud foto.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Juhuslik foto</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Märkide arv sõnas</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maksimaalne märkide arv sõnas enne reavahetust. Väärtuse 0 korral reavahetust ei lisata. (Vaikimisi: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Foto maksimaalne laius</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Foto maksimaalne laius pikslites. Väärtuse 0 korral kohandatakse pildi suurust dünaamiliselt plugina HTML-konteineri järgi. (Vaikimisi: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Foto maksimaalne kõrgus</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Foto maksimaalne kõrgus pikslites. Väärtuse 0 korral kohandatakse pildi suurust dünaamiliselt plugina HTML-konteineri järgi. (Vaikimisi: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Arvesse võetavad albumid</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Albumite arv, millest foto võib pärineda, alates uusimast albumist. Väärtuse 0 korral arvestatakse kõiki albumeid. (Vaikimisi: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Foto number</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Albumist kuvatava foto number. Väärtuse 0 korral kuvatakse juhuslik foto, muidu antud numbriga foto. (Vaikimisi: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Kuva albumilink</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Kui lubatud, kuvatakse foto all albumi nimega link albumile. (Vaikimisi: sisse lülitatud)</string>
 </resources>

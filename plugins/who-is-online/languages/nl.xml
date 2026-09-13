@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# leden</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online zijn #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online is #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Er zijn geen gegevens beschikbaar voor bezoekers. Log in om te zien wie online is.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Deze plug-in toont bezoekers en geregistreerde leden op de overzichtspagina.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Wie is online?</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Duur van de onlinestatus</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Tijd in minuten dat een gebruiker na de laatste actie nog als online wordt beschouwd. (Standaard: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Bezoekers tonen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Indien ingeschakeld wordt het aantal bezoekers getoond, anders alleen ingelogde gebruikers. (Standaard: aan)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Leden aan bezoekers tonen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Bepaalt hoe leden aan bezoekers worden getoond. (Standaard: aantal ingelogde leden)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Ingelogde leden niet tonen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Ingelogde leden tonen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Aantal ingelogde leden</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Eigen status tonen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Indien ingeschakeld wordt de eigen status getoond, zowel ingelogd als uitgelogd. (Standaard: aan)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Gebruikers naast elkaar tonen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Indien ingeschakeld worden gebruikers naast elkaar getoond, anders onder elkaar. (Standaard: uit)</string>
 </resources>

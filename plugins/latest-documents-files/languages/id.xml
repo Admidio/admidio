@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">Dokumen dan berkas</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Dokumen dan berkas lainnya</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Tidak ada dokumen atau berkas yang tersedia.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Diunggah oleh #VAR1# pada #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Plugin ini menampilkan dokumen dan berkas terbaru yang diunggah pengguna di halaman ringkasan.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Dokumen dan berkas terbaru</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Jumlah berkas</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Jumlah berkas yang ditampilkan. (Bawaan: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Tampilkan waktu unggah</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Jika diaktifkan, tanggal dan waktu unggah berkas ditampilkan; jika tidak, disembunyikan. (Bawaan: aktif)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Karakter maksimum dalam nama berkas</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Jumlah karakter maksimum dalam nama berkas sebelum dipendekkan. (0: tanpa pemendekan, bawaan: 0)</string>
+</resources>

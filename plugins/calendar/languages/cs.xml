@@ -11,4 +11,23 @@
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Ne</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Poslední dny</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Kalendář</string>
-  </resources>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na stránce přehledu kalendář všech událostí aktuálního měsíce.</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Zobrazit události</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Je-li zapnuto, události se zobrazují v kalendáři. (Výchozí: zapnuto)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Zobrazit narozeniny</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Je-li zapnuto, narozeniny členů se zobrazují v kalendáři. (Výchozí: zapnuto)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Zobrazit narozeniny návštěvníkům</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Je-li zapnuto, návštěvníkům se zobrazují narozeniny členů. (Výchozí: vypnuto)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Zobrazit ikonu narozenin</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Je-li zapnuto, v kalendáři se zobrazuje ikona narozenin. (Výchozí: zapnuto)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Způsob zobrazení jmen oslavenců</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Určuje způsob zobrazení jmen oslavenců. (Výchozí: křestní jméno)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Zahrnuté kategorie</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Vyberte kategorie, které se mají zohlednit u událostí v kalendáři. (Výchozí: všechny kategorie)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Zobrazit názvy kalendářů</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Je-li zapnuto, u každé události se zobrazí název kalendáře. (Výchozí: vypnuto)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Role s přístupem k obsahu</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Vyberte role, které smějí zobrazit obsah tohoto doplňku. Uživatelům bez některé z vybraných rolí se zobrazí pouze počet událostí a narozenin. (Výchozí: všechny role)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Role zahrnuté do narozenin</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Vyberte role, jejichž členům se mají zobrazovat narozeniny. (Výchozí: všechny role)</string>
+</resources>

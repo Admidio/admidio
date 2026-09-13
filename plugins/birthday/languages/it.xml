@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# compirà #VAR3# anni fra #VAR2# giorni, il #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# compie gli anni fra #VAR2# giorni</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Compleanni</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Sig. #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Oggi #VAR1# membri compiono gli anni.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">I compleanni dei membri non sono disponibili per i visitatori. Accedi per visualizzarli.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Oggi nessun membro compie gli anni.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">Nessun compleanno nei prossimi #VAR1# giorni.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">Nessun compleanno negli ultimi #VAR1# giorni.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">Nessun compleanno negli ultimi #VAR1# giorni e nei prossimi #VAR2# giorni.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Oggi un membro compie gli anni.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# ha compiuto #VAR3# anni #VAR2# giorni fa, il #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# ha compiuto gli anni #VAR2# giorni fa</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Questo plugin mostra un’anteprima dei compleanni più recenti nella pagina di riepilogo.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Compleanno</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# compie oggi #VAR2# anni</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# compie gli anni oggi</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# compie domani, il #VAR4#, #VAR3# anni</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# compie gli anni domani</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Sig.ra #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# ha compiuto ieri, il #VAR4#, #VAR3# anni</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# ha compiuto gli anni ieri</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Mostra i nomi ai visitatori</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">Se attivata, questa opzione mostra ai visitatori i nomi, senza l’età, dei festeggiati di oggi, futuri e passati. Altrimenti, mostra solo il numero dei festeggiati di oggi. (Predefinito: disattivato)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Formato del nome dei festeggiati</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">Permette di scegliere come visualizzare i nomi dei festeggiati. (Predefinito: nome cognome)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Mostra l’età</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">Se attivata, questa opzione mostra l’età dei festeggiati agli utenti che hanno effettuato l’accesso. (Predefinito: disattivato)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Mostra il nome con l’appellativo</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Età a partire dalla quale l’appellativo sostituisce il nome del festeggiato per i visitatori. (Disattivazione: -1, predefinito: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Avvisa quando non ci sono compleanni</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">Se attivata, questa opzione mostra un avviso quando nessun membro compie gli anni nel periodo selezionato. (Predefinito: attivato)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">Mostra i compleanni passati</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">Numero di giorni passati di cui visualizzare i compleanni. (Predefinito: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">Mostra i compleanni futuri</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">Numero di giorni futuri di cui visualizzare i compleanni. (Predefinito: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">Limita il numero di festeggiati</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">Numero massimo di festeggiati da visualizzare. (Predefinito: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">Mostra l’indirizzo e-mail ai visitatori</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">Permette di scegliere se visualizzare l’indirizzo e-mail dei festeggiati. (Predefinito: solo il nome per i visitatori)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">Ruoli autorizzati a vedere il contenuto</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Seleziona i ruoli che possono vedere il contenuto del plugin. Gli utenti senza nessuno dei ruoli selezionati vedono solo il numero dei compleanni. (Predefinito: tutti i ruoli)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">Ruoli inclusi nei compleanni</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Seleziona i ruoli dei membri di cui visualizzare i compleanni. (Predefinito: tutti i ruoli)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Ordinamento dei festeggiati</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Permette di scegliere l’ordinamento dei festeggiati. (Predefinito: DESC)</string>
+</resources>

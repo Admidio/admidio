@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Alle hendelser</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Hendelser</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Arrangementer er ikke tilgjengelig for besøkende. Logg inn for å se arrangementene.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Dette tillegget viser en forhåndsvisning av de nyeste arrangementene på oversiktssiden.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Arrangementsliste</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Antall arrangementer</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Antall arrangementer som skal vises. (Standard: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Vis sluttdato</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Hvis aktivert vises arrangementets sluttdato og sluttid, ellers bare startdato og starttid. (Standard: på)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tegn før linjeskift</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksimalt antall tegn i et ord før linjeskift. (0: ingen linjeskift, standard: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Viste kategorier</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Velg kategoriene det skal vises arrangementer fra. (Standard: alle kategorier)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Vis hele beskrivelsen</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Hvis aktivert vises hele beskrivelsen, ellers bare en forhåndsvisning av teksten. (Standard: av)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Forhåndsvisningstekst</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Antall tegn i forhåndsvisningsteksten. (0: ingen kort forhåndsvisning, standard: 70)</string>
 </resources>

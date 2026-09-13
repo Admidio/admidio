@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Alle Einträge</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Ankündigungen</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Es stehen keine Ankündigungen für Besucher zur Verfügung. Melden Sie sich an um die Ankündigungen zu sehen.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Dieses Plugin zeigt auf der Übersichtsseite eine Vorschau der neuesten Ankündigungen an.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Ankündigungsliste</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Anzahl der Ankündigungen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Anzahl der anzuzeigenden Ankündigungen. (Standard: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Zeichen vor dem Zeilenumbruch</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximale Zeichenanzahl eines Wortes vor einem Zeilenumbruch. (0: kein Zeilenumbruch, Standard: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Angezeigte Kategorien</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Auswahl der Kategorien, deren Ankündigungen angezeigt werden sollen. (Standard: alle Kategorien)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Vollständige Beschreibung anzeigen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Bei aktivierter Einstellung wird die vollständige Beschreibung angezeigt, sonst nur eine Textvorschau. (Standard: deaktiviert)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Vorschautext</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Zeichenanzahl des Vorschautextes. (0: keine Kurzvorschau, Standard: 70)</string>
 </resources>

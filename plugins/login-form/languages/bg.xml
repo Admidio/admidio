@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Брой влизания</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Онлайн участник</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Старши онлайн участник</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Тази добавка показва формуляр за вход на обзорната страница. След влизане полетата се заменят с полезна информация за потребителя.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Формуляр за вход</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Ранг на члена</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Показване на връзка за регистрация</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Ако е включено, във формуляра за вход се показва връзка към формуляра за регистрация. (По подразбиране: изключено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Показване на имейл връзка</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Ако е включено, във формуляра за вход се показва връзка за изпращане на имейл до администратора при проблеми с влизането. (По подразбиране: включено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Показване на връзка за изход</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Ако е включено, след влизане се показва връзка за изход. (По подразбиране: изключено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Показване на рангове</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Ако е включено, след потребителското име се показва ранг според броя влизания. (По подразбиране: включено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Рангове</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Определете ранговете, които се показват след потребителското име при включено „Показване на рангове“. Ключът е броят влизания, а стойността е името на ранга.\n За изтриване на ранг изчистете полетата „Брой влизания“ и „Ранг на члена“ в таблицата.</string>
 </resources>

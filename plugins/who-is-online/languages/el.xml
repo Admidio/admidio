@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# μέλη</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online είναι #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online είναι #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Δεν υπάρχουν διαθέσιμα δεδομένα για επισκέπτες. Συνδεθείτε για να δείτε ποιοι είναι συνδεδεμένοι.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Αυτό το πρόσθετο εμφανίζει επισκέπτες και εγγεγραμμένα μέλη στη σελίδα επισκόπησης.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Ποιοι είναι συνδεδεμένοι</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Διάρκεια ενεργής κατάστασης</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Χρόνος σε λεπτά κατά τον οποίο ο χρήστης θεωρείται συνδεδεμένος μετά την τελευταία του ενέργεια. (Προεπιλογή: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Εμφάνιση επισκεπτών</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Αν ενεργοποιηθεί, εμφανίζεται ο αριθμός επισκεπτών, διαφορετικά μόνο οι συνδεδεμένοι χρήστες. (Προεπιλογή: ενεργό)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Εμφάνιση μελών στους επισκέπτες</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Επιλέξτε πώς εμφανίζονται τα μέλη στους επισκέπτες. (Προεπιλογή: αριθμός συνδεδεμένων μελών)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Απόκρυψη συνδεδεμένων μελών</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Εμφάνιση συνδεδεμένων μελών</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Αριθμός συνδεδεμένων μελών</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Εμφάνιση δικής μου κατάστασης</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Αν ενεργοποιηθεί, εμφανίζεται η δική σας κατάσταση τόσο όταν είστε συνδεδεμένοι όσο και αποσυνδεδεμένοι. (Προεπιλογή: ενεργό)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Εμφάνιση χρηστών δίπλα δίπλα</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Αν ενεργοποιηθεί, οι χρήστες εμφανίζονται δίπλα δίπλα, διαφορετικά ο ένας κάτω από τον άλλο. (Προεπιλογή: ανενεργό)</string>
 </resources>

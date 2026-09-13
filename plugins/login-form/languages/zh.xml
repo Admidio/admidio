@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">登录次数</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">在线会员</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">高级在线会员</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">此插件在概览页面显示登录表单。用户登录后，输入框将替换为有关该用户的实用信息。</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">登录表单</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">会员等级</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">显示注册链接</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">启用后，在登录表单中显示指向注册表单的链接。（默认：禁用）</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">显示电子邮件链接</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">启用后，在登录表单中显示电子邮件链接，以便在遇到登录问题时联系管理员。（默认：启用）</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">显示退出登录链接</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">启用后，在登录后显示退出登录链接。（默认：禁用）</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">显示等级</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">启用后，在用户名后显示根据登录次数确定的等级。（默认：启用）</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">等级</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">在此定义启用“显示等级”时显示在用户名后的等级。键是登录次数，值是等级名称。\n 要删除等级，请清空表格中的“登录次数”和“会员等级”字段。</string>
 </resources>

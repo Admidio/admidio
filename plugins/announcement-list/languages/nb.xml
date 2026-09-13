@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Alle oppføringer</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Kunngjøringer</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Kunngjøringer er ikke tilgjengelig for besøkende. Logg inn for å se kunngjøringene.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Dette tillegget viser en forhåndsvisning av de nyeste kunngjøringene på oversiktssiden.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Kunngjøringsliste</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Antall kunngjøringer</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Antall kunngjøringer som skal vises. (Standard: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tegn før linjeskift</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksimalt antall tegn i et ord før linjeskift. (0: ingen linjeskift, standard: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Viste kategorier</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Velg kategoriene det skal vises kunngjøringer fra. (Standard: alle kategorier)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Vis hele beskrivelsen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Hvis aktivert vises hele beskrivelsen, ellers bare en forhåndsvisning av teksten. (Standard: av)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Forhåndsvisningstekst</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Antall tegn i forhåndsvisningsteksten. (0: ingen kort forhåndsvisning, standard: 70)</string>
 </resources>

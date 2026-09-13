@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">billeder.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Dette plugin viser et tilfældigt valgt foto fra fotomodulet.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Tilfældigt foto</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Antal tegn pr. ord</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maksimalt antal tegn i et ord før linjeskift. Ved 0 indsættes ingen linjeskift. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maksimal fotobredde</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Fotoets maksimale bredde i pixels. Ved 0 tilpasses billedet dynamisk til pluginets HTML-beholder. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maksimal fotohøjde</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Fotoets maksimale højde i pixels. Ved 0 tilpasses billedet dynamisk til pluginets HTML-beholder. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Medtagne album</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Antal album, fotoet kan komme fra, regnet fra det nyeste album. Ved 0 medtages alle album. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Fotonummer</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Nummeret på det foto fra albummet, der skal vises. Ved 0 vises et tilfældigt foto, ellers fotoet med det angivne nummer. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Vis albumlink</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Hvis aktiveret vises et link med albummets navn under fotoet. (Standard: til)</string>
 </resources>

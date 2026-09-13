@@ -6,4 +6,21 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# členové </string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online jsou #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online je #VAR1#</string>
-  </resources>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Pro návštěvníky nejsou dostupná žádná data. Přihlaste se a zjistěte, kdo je online.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Na webu nejsou žádní návštěvníci.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje návštěvníky a registrované členy na stránce přehledu.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Kdo je online</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Doba zachování online stavu</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Doba v minutách, po kterou je uživatel od poslední akce považován za online. (Výchozí: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Zobrazit návštěvníky</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Je-li zapnuto, zobrazí se počet návštěvníků, jinak pouze přihlášení uživatelé. (Výchozí: zapnuto)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Zobrazit členy návštěvníkům</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Určuje způsob zobrazení členů návštěvníkům. (Výchozí: počet přihlášených členů)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Nezobrazovat přihlášené členy</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Zobrazit přihlášené členy</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Počet přihlášených členů</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Zobrazit vlastní stav</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Je-li zapnuto, zobrazí se vlastní stav při přihlášení i odhlášení. (Výchozí: zapnuto)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Zobrazit uživatele vedle sebe</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Je-li zapnuto, uživatelé se zobrazí vedle sebe, jinak pod sebou. (Výchozí: vypnuto)</string>
+</resources>

@@ -4,4 +4,12 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Plus de documents &amp; des dossiers</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Il n\'y a pas de documents ou fichiers disponibles.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Téléchargé de #VAR1# le #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Ce plugin affiche sur la page de présentation les derniers documents et fichiers téléversés par les utilisateurs.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Derniers documents et fichiers</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Nombre de fichiers</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Nombre de fichiers à afficher. (Par défaut : 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Afficher la date et l’heure du téléversement</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Si cette option est activée, la date et l’heure du téléversement sont affichées ; sinon, elles sont masquées. (Par défaut : activée)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Nombre maximal de caractères du nom de fichier</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Nombre maximal de caractères du nom de fichier avant troncature. (0 : aucune troncature, par défaut : 0)</string>
 </resources>

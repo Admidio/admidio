@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Sáb</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Dom</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Vários dias</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Este plugin apresenta um calendário com todos os eventos do mês atual na página de visão geral.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Calendário</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Apresentar eventos</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Se ativado, apresenta os eventos no calendário. (Predefinição: ativado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Apresentar aniversários</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Se ativado, apresenta os aniversários dos membros no calendário. (Predefinição: ativado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Apresentar aniversários aos visitantes</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Se ativado, os visitantes veem os aniversários dos membros. (Predefinição: desativado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Apresentar o ícone de aniversário</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Se ativado, apresenta um ícone de aniversário no calendário. (Predefinição: ativado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Formato do nome dos aniversariantes</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Define como apresentar os nomes dos aniversariantes. (Predefinição: nome próprio)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Categorias consideradas</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Selecione as categorias a considerar nos eventos do calendário. (Predefinição: todas as categorias)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Apresentar os nomes dos calendários</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Se ativado, apresenta o nome do calendário em cada evento. (Predefinição: desativado)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Papéis autorizados a ver o conteúdo</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Selecione os papéis que podem ver o conteúdo deste plugin. Os utilizadores sem nenhum destes papéis veem apenas o número de eventos e aniversários. (Predefinição: todos os papéis)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Papéis incluídos nos aniversários</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Selecione os papéis cujos membros devem aparecer nos aniversários. (Predefinição: todos os papéis)</string>
 </resources>

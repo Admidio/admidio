@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Počet přihlášení</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Online člen</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online člen</string>
-  </resources>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na stránce přehledu přihlašovací formulář. Po přihlášení se místo polí zobrazí užitečné informace o uživateli.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Přihlašovací formulář</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Hodnost člena</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Zobrazit odkaz na registraci</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Je-li zapnuto, v přihlašovacím formuláři se zobrazí odkaz na registrační formulář. (Výchozí: vypnuto)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Zobrazit e-mailový odkaz</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Je-li zapnuto, v přihlašovacím formuláři se zobrazí odkaz pro odeslání e-mailu správci při potížích s přihlášením. (Výchozí: zapnuto)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Zobrazit odkaz na odhlášení</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Je-li zapnuto, po přihlášení se zobrazí odkaz na odhlášení. (Výchozí: vypnuto)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Zobrazit hodnosti</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Je-li zapnuto, za uživatelským jménem se zobrazí hodnost podle počtu přihlášení. (Výchozí: zapnuto)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Hodnosti</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Zde určíte hodnosti zobrazované za uživatelským jménem při zapnuté volbě „Zobrazit hodnosti“. Klíčem je počet přihlášení a hodnotou název hodnosti.\n Pro odstranění hodnosti vymažte v tabulce pole „Počet přihlášení“ a „Hodnost člena“.</string>
+</resources>

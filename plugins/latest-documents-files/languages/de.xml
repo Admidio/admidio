@@ -4,4 +4,12 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Weitere Dokumente &amp; Dateien</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Es stehen keine Dokumente oder Dateien zur Verfügung.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Hochgeladen von #VAR1# am #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Dieses Plugin zeigt auf der Übersichtsseite die zuletzt von Benutzern hochgeladenen Dokumente und Dateien an.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Neueste Dokumente und Dateien</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Anzahl der Dateien</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Anzahl der anzuzeigenden Dateien. (Standard: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Zeitpunkt des Hochladens anzeigen</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Bei aktivierter Einstellung wird der Zeitpunkt des Hochladens der Datei angezeigt, sonst ausgeblendet. (Standard: aktiviert)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Maximale Zeichenanzahl im Dateinamen</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Maximale Zeichenanzahl eines Dateinamens, bevor er gekürzt wird. (0: keine Kürzung, Standard: 0)</string>
 </resources>

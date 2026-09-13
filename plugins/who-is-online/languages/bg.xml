@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# членове</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Онлайн има #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Онлайн е #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Няма данни за посетители. Влезте, за да видите кой е онлайн.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Тази добавка показва посетители и регистрирани членове на обзорната страница.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Кой е онлайн</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Продължителност на онлайн състоянието</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Времето в минути, през което потребителят се счита за онлайн след последното си действие. (По подразбиране: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Показване на посетители</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Ако е включено, се показва броят на посетителите, иначе само влезлите потребители. (По подразбиране: включено)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Показване на членовете на посетители</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Изберете как членовете се показват на посетителите. (По подразбиране: брой влезли членове)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Без показване на влезлите членове</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Показване на влезлите членове</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Брой влезли членове</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Показване на собственото състояние</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Ако е включено, се показва собственото състояние както след вход, така и след изход. (По подразбиране: включено)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Показване на потребителите един до друг</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Ако е включено, потребителите се показват един до друг, иначе един под друг. (По подразбиране: изключено)</string>
 </resources>

@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Número de sessões</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Membro on-line</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membro sénior on-line</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Este plugin apresenta um formulário de início de sessão na página de visão geral. Após o início de sessão, informações úteis sobre o utilizador substituem os campos.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Formulário de início de sessão</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Classificação do membro</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Apresentar a ligação de registo</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se ativado, o formulário de início de sessão apresenta uma ligação para o formulário de registo. (Predefinição: desativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Apresentar a ligação de e-mail</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Se ativado, o formulário de início de sessão apresenta uma ligação para enviar um e-mail ao administrador em caso de problemas de acesso. (Predefinição: ativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Apresentar a ligação para terminar sessão</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Se ativado, apresenta uma ligação para terminar sessão após o início de sessão. (Predefinição: desativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Apresentar classificações</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Se ativado, apresenta uma classificação após o nome de utilizador, de acordo com o número de inícios de sessão. (Predefinição: ativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Classificações</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Defina as classificações apresentadas após o nome de utilizador quando «Apresentar classificações» está ativado. A chave é o número de inícios de sessão e o valor é o nome da classificação.\n Para eliminar uma classificação, limpe os campos «Número de inícios de sessão» e «Classificação do membro» na tabela.</string>
 </resources>

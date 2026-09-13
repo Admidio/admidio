@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Denna månad</string>
-  <string name="PLG_CALENDAR_MONTH">Januari,Februati,Mars,April,Maj,Juni,July,Augusti,September,Oktober,November,December</string>
+  <string name="PLG_CALENDAR_MONTH">Januari,Februari,Mars,April,Maj,Juni,Juli,Augusti,September,Oktober,November,December</string>
   <string name="PLG_CALENDAR_MORE">(... mer)</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Mån</string>
   <string name="PLG_CALENDAR_TUESDAY_SHORT">Tis</string>
@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Lör</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Sön</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Flera dagar</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Detta tillägg visar en kalender med alla händelser under aktuell månad på översiktssidan.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Visa händelser</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Om aktiverat visas händelser i kalendern. (Standard: på)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Visa födelsedagar</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Om aktiverat visas medlemmarnas födelsedagar i kalendern. (Standard: på)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Visa födelsedagar för besökare</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Om aktiverat visas medlemmarnas födelsedagar för besökare. (Standard: av)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Visa födelsedagsikon</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Om aktiverat visas en födelsedagsikon i kalendern. (Standard: på)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Namnformat för födelsedagsbarn</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Välj hur födelsedagsbarnens namn visas. (Standard: förnamn)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Inkluderade kategorier</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Välj kategorier för händelser i kalendern. (Standard: alla kategorier)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Visa kalendernamn</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Om aktiverat visas kalendernamnet för varje händelse. (Standard: av)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Roller med åtkomst till innehållet</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Välj vilka roller som får se tilläggets innehåll. Användare utan någon vald roll ser endast antalet händelser och födelsedagar. (Standard: alla roller)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roller för födelsedagar</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Välj de roller vars medlemmars födelsedagar ska visas. (Standard: alla roller)</string>
 </resources>

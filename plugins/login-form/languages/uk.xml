@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Кількість логінів</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Онлайн-учасник</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Старший онлайн-учасник</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Цей плагін показує форму входу на сторінці огляду. Після входу замість полів показується корисна інформація про користувача.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Форма входу</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Ранг учасника</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Показувати посилання на реєстрацію</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Якщо ввімкнено, у формі входу показується посилання на форму реєстрації. (Типово: вимкнено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Показувати посилання електронної пошти</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Якщо ввімкнено, у формі входу показується посилання для надсилання листа адміністратору в разі проблем зі входом. (Типово: ввімкнено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Показувати посилання виходу</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Якщо ввімкнено, після входу показується посилання виходу. (Типово: вимкнено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Показувати ранги</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Якщо ввімкнено, після імені користувача показується ранг залежно від кількості входів. (Типово: ввімкнено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Ранги</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Визначте ранги, що показуються після імені користувача, коли ввімкнено «Показувати ранги». Ключ — кількість входів, значення — назва рангу.\n Щоб видалити ранг, очистьте поля «Кількість входів» і «Ранг учасника» в таблиці.</string>
 </resources>

@@ -44,4 +44,7 @@
   <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Aici puteți selecta rolurile pe care trebuie să le aibă utilizatorii ale căror zile de naștere trebuie afișate. (implicit: toate rolurile)</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Ordinea de sortare a persoanelor cu ziua de naștere</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Această setare vă permite să alegeți ordinea de sortare a persoanelor care își serbează ziua de naștere. (implicit: DESC)</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">Nu sunt aniversări în următoarele #VAR1# zile.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">Nu au fost aniversări în ultimele #VAR1# zile.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">Nu sunt aniversări în ultimele #VAR1# zile și în următoarele #VAR2# zile.</string>
 </resources>

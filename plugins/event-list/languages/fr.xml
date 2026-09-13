@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Tous les événements</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Événements</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Il n\'y a pas d\'événements disponibles pour les visiteurs. Veuillez vous connecter pour voir les événements.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Ce plugin affiche un aperçu des derniers événements sur la page de présentation.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Liste des événements</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Nombre d’événements</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Nombre d’événements à afficher. (Par défaut : 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Afficher la date de fin</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Si cette option est activée, la date et l’heure de fin de l’événement sont affichées ; sinon, seules celles de début apparaissent. (Par défaut : activée)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caractères avant le saut de ligne</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Nombre maximal de caractères d’un mot avant un saut de ligne. (0 : aucun saut de ligne, par défaut : 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Catégories affichées</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Sélectionnez les catégories dont les événements doivent être affichés. (Par défaut : toutes les catégories)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Afficher la description complète</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Si cette option est activée, la description complète est affichée ; sinon, seul un aperçu du texte apparaît. (Par défaut : désactivée)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Texte d’aperçu</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Nombre de caractères du texte d’aperçu. (0 : aucun aperçu court, par défaut : 70)</string>
 </resources>

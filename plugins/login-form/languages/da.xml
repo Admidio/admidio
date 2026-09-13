@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Antal logins</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Online medlem</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online medlem</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Dette plugin viser en loginformular på oversigtssiden. Efter login erstattes felterne af nyttige oplysninger om brugeren.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Loginformular</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Medlemsrang</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Vis registreringslink</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Hvis aktiveret vises et link til registreringsformularen i loginformularen. (Standard: fra)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Vis e-maillink</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Hvis aktiveret vises et link i loginformularen til at sende en e-mail til administratoren ved loginproblemer. (Standard: til)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Vis link til at logge ud</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Hvis aktiveret vises et link til at logge ud efter login. (Standard: fra)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Vis rangtrin</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Hvis aktiveret vises et rangtrin efter brugernavnet baseret på antallet af login. (Standard: til)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Rangtrin</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Angiv de rangtrin, der vises efter brugernavnet, når »Vis rangtrin« er aktiveret. Nøglen er antallet af login, og værdien er rangtrinnets navn.\n Slet et rangtrin ved at tømme felterne »Antal login« og »Medlemsrang« i tabellen.</string>
 </resources>

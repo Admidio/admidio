@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">Semua acara</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">Acara</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Tidak ada acara yang tersedia bagi pengunjung. Masuk untuk melihat acara.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Plugin ini menampilkan pratinjau daftar acara terbaru di halaman ringkasan.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Daftar acara</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Jumlah acara</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Jumlah acara yang ditampilkan. (Bawaan: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Tampilkan tanggal selesai</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Jika diaktifkan, tanggal dan waktu selesai acara ditampilkan; jika tidak, hanya tanggal dan waktu mulai. (Bawaan: aktif)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Karakter sebelum pergantian baris</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Jumlah karakter maksimum dalam satu kata sebelum berganti baris. (0: tanpa pergantian baris, bawaan: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Kategori yang ditampilkan</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Pilih kategori acara yang ingin ditampilkan. (Bawaan: semua kategori)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Tampilkan deskripsi lengkap</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Jika diaktifkan, deskripsi lengkap ditampilkan; jika tidak, hanya pratinjau teks. (Bawaan: nonaktif)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Teks pratinjau</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Jumlah karakter teks pratinjau. (0: tanpa pratinjau singkat, bawaan: 70)</string>
+</resources>

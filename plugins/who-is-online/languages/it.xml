@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Chi è online?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Non ci sono dati disponibili per i visitatori. Accedi per vedere chi è online.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Non ci sono visitatori sul sito.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# visitatori</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# membro</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# membri</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Sono online: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">È online: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Questo plugin mostra i visitatori e i membri registrati nella pagina di riepilogo.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Chi è online</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Durata dello stato online</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Tempo in minuti durante il quale un utente è considerato online dopo l’ultima azione. (Predefinito: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Mostra i visitatori</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Se attivata, questa opzione mostra il numero di visitatori; altrimenti, solo gli utenti che hanno effettuato l’accesso. (Predefinito: attivato)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Mostra i membri ai visitatori</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Permette di scegliere come visualizzare i membri ai visitatori. (Predefinito: numero di membri che hanno effettuato l’accesso)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Non mostrare i membri che hanno effettuato l’accesso</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Mostra i membri che hanno effettuato l’accesso</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Numero di membri che hanno effettuato l’accesso</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Mostra il proprio stato</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Se attivata, questa opzione mostra il proprio stato sia dopo l’accesso sia dopo la disconnessione. (Predefinito: attivato)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Mostra gli utenti affiancati</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Se attivata, questa opzione mostra gli utenti affiancati; altrimenti, uno sotto l’altro. (Predefinito: disattivato)</string>
+</resources>
