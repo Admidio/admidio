@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">Siapa yang daring?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Tidak ada data yang tersedia bagi pengunjung. Masuk untuk melihat siapa yang sedang daring.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">Tidak ada pengunjung di situs web.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# pengunjung</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# anggota</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# anggota</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Yang sedang daring: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Yang sedang daring: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Plugin ini menampilkan pengunjung dan anggota terdaftar di halaman ringkasan.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Siapa yang daring</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Durasi status daring</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Waktu dalam menit selama pengguna masih dianggap daring setelah tindakan terakhirnya. (Bawaan: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Tampilkan pengunjung</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Jika diaktifkan, jumlah pengunjung ditampilkan; jika tidak, hanya pengguna yang sudah masuk. (Bawaan: aktif)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Tampilkan anggota kepada pengunjung</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Pilih cara menampilkan anggota kepada pengunjung. (Bawaan: jumlah anggota yang sudah masuk)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Jangan tampilkan anggota yang sudah masuk</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Tampilkan anggota yang sudah masuk</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Jumlah anggota yang sudah masuk</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Tampilkan status sendiri</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Jika diaktifkan, status sendiri ditampilkan baik saat masuk maupun saat keluar. (Bawaan: aktif)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Tampilkan pengguna berdampingan</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Jika diaktifkan, pengguna ditampilkan berdampingan; jika tidak, tersusun ke bawah. (Bawaan: nonaktif)</string>
+</resources>

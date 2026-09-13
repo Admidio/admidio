@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">நடப்பு மாதம்</string>
+  <string name="PLG_CALENDAR_MONTH">ஜனவரி,பிப்ரவரி,மார்ச்,ஏப்ரல்,மே,ஜூன்,ஜூலை,ஆகஸ்ட்,செப்டம்பர்,அக்டோபர்,நவம்பர்,டிசம்பர்</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">திங்</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">செவ்</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">புத</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">வியா</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">வெள்</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">சனி</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">ஞாயி</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">பல நாட்கள்</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">இந்தச் செருகுநிரல் மேலோட்டப் பக்கத்தில் நடப்பு மாதத்தின் அனைத்து நிகழ்வுகளையும் கொண்ட நாள்காட்டியைக் காட்டுகிறது.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">நாள்காட்டி</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">நிகழ்வுகளைக் காட்டு</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">இயக்கப்பட்டால் நாள்காட்டியில் நிகழ்வுகள் காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">பிறந்தநாட்களைக் காட்டு</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">இயக்கப்பட்டால் நாள்காட்டியில் உறுப்பினர்களின் பிறந்தநாட்கள் காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">பார்வையாளர்களுக்குப் பிறந்தநாட்களைக் காட்டு</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">இயக்கப்பட்டால் பார்வையாளர்களுக்கு உறுப்பினர்களின் பிறந்தநாட்கள் காட்டப்படும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">பிறந்தநாள் சின்னத்தைக் காட்டு</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">இயக்கப்பட்டால் நாள்காட்டியில் பிறந்தநாள் சின்னம் காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">பிறந்தநாள் கொண்டவர்களின் பெயர் வடிவம்</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">பிறந்தநாள் கொண்டவர்களின் பெயர்கள் எவ்வாறு காட்டப்பட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: முதற்பெயர்)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">கருத்தில் கொள்ளப்படும் வகைகள்</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">நாள்காட்டியின் நிகழ்வுகளுக்குக் கருத்தில் கொள்ள வேண்டிய வகைகளைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: அனைத்து வகைகளும்)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">நாள்காட்டிப் பெயர்களைக் காட்டு</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">இயக்கப்பட்டால் ஒவ்வொரு நிகழ்விற்கும் நாள்காட்டியின் பெயர் காட்டப்படும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">உள்ளடக்கத்தைக் காண அனுமதிக்கப்பட்ட பங்குகள்</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">இந்தச் செருகுநிரலின் உள்ளடக்கத்தைக் காண அனுமதிக்கப்பட்ட பங்குகளைத் தேர்ந்தெடுக்கவும். தேர்ந்தெடுத்த பங்குகள் எதுவும் இல்லாத பயனர்களுக்கு நிகழ்வுகள் மற்றும் பிறந்தநாட்களின் எண்ணிக்கை மட்டும் காட்டப்படும். (இயல்புநிலை: அனைத்துப் பங்குகளும்)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">பிறந்தநாட்களுக்கான பங்குகள்</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">எந்தப் பங்குகளின் உறுப்பினர்களுடைய பிறந்தநாட்களைக் காட்ட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: அனைத்துப் பங்குகளும்)</string>
+</resources>

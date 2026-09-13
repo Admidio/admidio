@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">ไม่มีรูปภาพสำหรับผู้เยี่ยมชม กรุณาเข้าสู่ระบบเพื่อดูรูปภาพ</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงรูปภาพที่สุ่มเลือกจากโมดูลรูปภาพ</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">รูปภาพสุ่ม</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">จำนวนอักขระต่อคำ</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">จำนวนอักขระสูงสุดในคำก่อนขึ้นบรรทัดใหม่ หากตั้งเป็น 0 จะไม่ขึ้นบรรทัดใหม่ (ค่าเริ่มต้น: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">ความกว้างสูงสุดของรูปภาพ</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">ความกว้างสูงสุดของรูปภาพเป็นพิกเซล หากตั้งเป็น 0 ภาพจะปรับขนาดตามคอนเทนเนอร์ HTML ที่วางปลั๊กอินนี้โดยอัตโนมัติ (ค่าเริ่มต้น: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">ความสูงสูงสุดของรูปภาพ</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">ความสูงสูงสุดของรูปภาพเป็นพิกเซล หากตั้งเป็น 0 ภาพจะปรับขนาดตามคอนเทนเนอร์ HTML ที่วางปลั๊กอินนี้โดยอัตโนมัติ (ค่าเริ่มต้น: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">อัลบั้มที่นำมาพิจารณา</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">จำนวนอัลบั้มที่สามารถเลือกรูปภาพได้ โดยนับจากอัลบั้มล่าสุดย้อนหลัง หากตั้งเป็น 0 จะพิจารณาทุกอัลบั้ม (ค่าเริ่มต้น: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">หมายเลขรูปภาพ</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">หมายเลขรูปภาพในอัลบั้มที่จะแสดง หากตั้งเป็น 0 จะแสดงรูปภาพแบบสุ่ม มิฉะนั้นจะแสดงรูปภาพตามหมายเลขที่ระบุ (ค่าเริ่มต้น: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">แสดงลิงก์อัลบั้ม</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">เมื่อเปิดใช้งาน จะแสดงลิงก์ไปยังอัลบั้มพร้อมชื่ออัลบั้มใต้รูปภาพ (ค่าเริ่มต้น: เปิด)</string>
+</resources>

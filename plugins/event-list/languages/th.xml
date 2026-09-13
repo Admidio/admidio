@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_EVENT_LIST_ALL_EVENTS">กิจกรรมทั้งหมด</string>
+  <string name="PLG_EVENT_LIST_HEADLINE">กิจกรรม</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">ไม่มีกิจกรรมสำหรับผู้เยี่ยมชม กรุณาเข้าสู่ระบบเพื่อดูกิจกรรม</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงรายการตัวอย่างกิจกรรมล่าสุดในหน้าภาพรวม</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">รายการกิจกรรม</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">จำนวนกิจกรรม</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">จำนวนกิจกรรมที่แสดง (ค่าเริ่มต้น: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">แสดงวันที่สิ้นสุด</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">เมื่อเปิดใช้งาน จะแสดงวันที่และเวลาสิ้นสุดกิจกรรม มิฉะนั้นจะแสดงเฉพาะวันที่และเวลาเริ่มต้น (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">จำนวนอักขระก่อนขึ้นบรรทัดใหม่</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">จำนวนอักขระสูงสุดในคำก่อนขึ้นบรรทัดใหม่ (0: ไม่ขึ้นบรรทัดใหม่, ค่าเริ่มต้น: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">หมวดหมู่ที่แสดง</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">เลือกหมวดหมู่ของกิจกรรมที่ต้องการแสดง (ค่าเริ่มต้น: ทุกหมวดหมู่)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">แสดงคำอธิบายทั้งหมด</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">เมื่อเปิดใช้งาน จะแสดงคำอธิบายทั้งหมด มิฉะนั้นจะแสดงเพียงข้อความตัวอย่าง (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">ข้อความตัวอย่าง</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">จำนวนอักขระของข้อความตัวอย่าง (0: ไม่แสดงตัวอย่างแบบย่อ, ค่าเริ่มต้น: 70)</string>
+</resources>

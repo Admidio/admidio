@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">இணையத்தில் யார் உள்ளனர்?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">பார்வையாளர்களுக்குத் தகவல்கள் கிடைக்காது. இணையத்தில் யார் உள்ளனர் என்பதைக் காண உள்நுழையவும்.</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">இணையதளத்தில் பார்வையாளர்கள் யாரும் இல்லை.</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">#VAR1# பார்வையாளர்கள்</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">#VAR1# உறுப்பினர்</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# உறுப்பினர்கள்</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">இணையத்தில் உள்ளவர்கள்: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">இணையத்தில் உள்ளவர்: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">இந்தச் செருகுநிரல் மேலோட்டப் பக்கத்தில் பார்வையாளர்களையும் பதிவுசெய்த உறுப்பினர்களையும் காட்டுகிறது.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">இணையத்தில் யார் உள்ளனர்</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">இணைய நிலை நீடிக்கும் நேரம்</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">கடைசிச் செயலுக்குப் பிறகு ஒரு பயனர் இன்னும் இணையத்தில் இருப்பதாகக் கருதப்படும் நேரம், நிமிடங்களில். (இயல்புநிலை: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">பார்வையாளர்களைக் காட்டு</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">இயக்கப்பட்டால் பார்வையாளர்களின் எண்ணிக்கை காட்டப்படும்; இல்லையெனில் உள்நுழைந்த பயனர்கள் மட்டும் காட்டப்படுவார்கள். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">பார்வையாளர்களுக்கு உறுப்பினர்களைக் காட்டு</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">பார்வையாளர்களுக்கு உறுப்பினர்கள் எவ்வாறு காட்டப்பட வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும். (இயல்புநிலை: உள்நுழைந்த உறுப்பினர்களின் எண்ணிக்கை)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">உள்நுழைந்த உறுப்பினர்களைக் காட்ட வேண்டாம்</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">உள்நுழைந்த உறுப்பினர்களைக் காட்டு</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">உள்நுழைந்த உறுப்பினர்களின் எண்ணிக்கை</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">சொந்த நிலையைக் காட்டு</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">இயக்கப்பட்டால் உள்நுழைந்த நிலையிலும் வெளியேறிய நிலையிலும் சொந்த நிலை காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">பயனர்களை அருகருகே காட்டு</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">இயக்கப்பட்டால் பயனர்கள் அருகருகே காட்டப்படுவார்கள்; இல்லையெனில் ஒருவர் கீழ் ஒருவராகக் காட்டப்படுவார்கள். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+</resources>

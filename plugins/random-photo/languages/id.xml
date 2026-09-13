@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Tidak ada foto yang tersedia bagi pengunjung. Masuk untuk melihat foto.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Plugin ini menampilkan foto yang dipilih secara acak dari modul foto.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Foto acak</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Jumlah karakter per kata</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Jumlah karakter maksimum dalam satu kata sebelum berganti baris. Jika 0, tidak ada pergantian baris. (Bawaan: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Lebar foto maksimum</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Lebar foto maksimum dalam piksel. Jika 0, gambar diskalakan secara dinamis sesuai wadah HTML plugin. (Bawaan: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Tinggi foto maksimum</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Tinggi foto maksimum dalam piksel. Jika 0, gambar diskalakan secara dinamis sesuai wadah HTML plugin. (Bawaan: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Album yang disertakan</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Jumlah album yang dapat menjadi sumber foto, dihitung dari album terbaru. Jika 0, semua album disertakan. (Bawaan: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Nomor foto</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Nomor foto dalam album yang ditampilkan. Jika 0, foto acak ditampilkan; jika nomor tertentu, foto dengan nomor itu yang ditampilkan. (Bawaan: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Tampilkan tautan album</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Jika diaktifkan, tautan ke album dengan nama album ditampilkan di bawah foto. (Bawaan: aktif)</string>
+</resources>
