@@ -567,7 +567,7 @@ label {
 .accordion {
     --bs-accordion-bg: var(--bs-body-bg);
     --bs-accordion-btn-color: var(--bs-link-color);
-    --bs-accordion-active-color: var(--bs-tertiary);
+    --bs-accordion-active-color: var(--bs-body-color);
     --bs-accordion-active-bg: var(--bs-secondary);
 }
 

@@ -4,7 +4,7 @@
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {$eventSections = ['basic' => 'SYS_BASIC_DATA', 'participation' => 'SYS_REGISTRATION', 'recurrence' => 'SYS_REPEAT']}
+    {$eventSections = ['basic' => 'SYS_BASIC_DATA', 'participation' => 'SYS_EVENT_REGISTRATION', 'recurrence' => 'SYS_RECURRENCE']}
     <div class="tabs-x tabs-above tab-bordered admidio-event-tabs" data-max-title-length="-1">
         <ul class="nav nav-tabs admidio-tabs d-none d-md-flex" role="tablist">
             {foreach $eventSections as $section => $label}
@@ -64,7 +64,7 @@
                                 </div>
                             {elseif $section === 'participation'}
                                 <div class="card admidio-tabbed-field-group">
-                                    <div class="card-header">{$l10n->get('SYS_REGISTRATION')}</div>
+                                    <div class="card-header">{$l10n->get('SYS_EVENT_REGISTRATION')}</div>
                                     <div class="card-body">
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['event_participation_possible']}
                                         {include 'sys-template-parts/form.select.tpl' data=$elements['adm_event_participation_right']}
@@ -80,7 +80,7 @@
                             {else}
                                 {if isset($elements['event_recurrence_frequency'])}
                                     <div class="card admidio-tabbed-field-group">
-                                        <div class="card-header">{$l10n->get('SYS_REPEAT')}</div>
+                                        <div class="card-header">{$l10n->get('SYS_RECURRENCE')}</div>
                                         <div class="card-body">
                                             {include 'sys-template-parts/form.select.tpl' data=$elements['event_recurrence_frequency']}
                                             {include 'sys-template-parts/form.input.tpl' data=$elements['event_recurrence_interval']}

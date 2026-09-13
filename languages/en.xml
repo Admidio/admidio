@@ -79,6 +79,7 @@
   <string name="SYS_COHABITANT_MALE">Partner</string>
   <string name="SYS_COMPANION">Companion</string>
   <string name="SYS_DAUGHTER">Daughter</string>
+  <string name="SYS_EVENT_REGISTRATION">Registration</string>
   <string name="SYS_FATHER">Father</string>
   <string name="SYS_GIRLFRIEND">Girlfriend</string>
   <string name="SYS_HUSBAND">Husband</string>
@@ -1320,6 +1321,7 @@
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail recipient</string>
+  <string name="SYS_RECURRENCE">Recurrence</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
