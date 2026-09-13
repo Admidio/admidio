@@ -98,6 +98,29 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
+     * Enforce the inventory module access level for both page and data requests.
+     *
+     * @throws Exception
+     */
+    public static function checkModuleAccess(): void
+    {
+        global $gSettingsManager, $gCurrentUser, $gValidLogin;
+
+        $level = $gSettingsManager->getInt('inventory_module_enabled');
+
+        if ($level === 0) {
+            throw new Exception('SYS_MODULE_DISABLED');
+        }
+
+        if (($level === 2 && !$gValidLogin)
+            || ($level === 3 && !$gCurrentUser->isAdministratorInventory())
+            || ($level === 4 && !self::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory())
+            || ($level === 5 && !$gCurrentUser->isAllowedToViewInventory() && !$gCurrentUser->isAdministratorInventory())) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+    }
+
+    /**
      * Check if the current user is the keeper of an item.
      * This method checks if the current user is listed as a keeper in the inventory item data.
      *

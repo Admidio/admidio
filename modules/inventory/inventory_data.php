@@ -41,6 +41,9 @@ try {
 
     global $gDb, $gCurrentOrgId, $gSettingsManager, $gProfileFields, $gCurrentUser, $gCurrentSession, $gL10n;
 
+    // Apply the same module access restriction as the inventory page before reading any items.
+    InventoryPresenter::checkModuleAccess();
+
     // read item fields to construct column order mapping (same as prepareData())
     $itemsData = new Admidio\Inventory\ValueObjects\ItemsData($gDb, $gCurrentOrgId);
     $itemFields = $itemsData->getItemFields();
