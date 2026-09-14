@@ -631,7 +631,7 @@ class ListConfiguration extends Entity
                         break;
 
                     case 'DATE':
-                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\')';
+                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\') COLLATE utf8mb4_unicode_ci';
                         break;
 
                     default:
@@ -644,7 +644,7 @@ class ListConfiguration extends Entity
                     case 'usr_timestamp_create': // fallthrough
                     case 'usr_timestamp_change': // fallthrough
                     case 'mem_timestamp_change':
-                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')';
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\') COLLATE utf8mb4_unicode_ci';
                         break;
 
                     default:
