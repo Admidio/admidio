@@ -5,7 +5,8 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -557,27 +558,27 @@ class Installation
 
         // create all modules components
         $sql = 'INSERT INTO ' . TBL_COMPONENTS . '
-                       (com_type, com_name, com_name_intern, com_version, com_beta)
-                VALUES (\'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CHANGE_HISTORY\',  \'CHANGELOG\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
-                     , (\'MODULE\', \'SYS_PLUGIN_MANAGER\',  \'PLUGINS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
+                       (com_uuid, com_type, com_name, com_name_intern, com_version, com_beta)
+                VALUES (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_ANNOUNCEMENTS\',   \'ANNOUNCEMENTS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CATEGORIES\',      \'CATEGORIES\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CATEGORY_REPORT\', \'CATEGORY-REPORT\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CHANGE_HISTORY\',  \'CHANGELOG\',      \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_EVENTS\',          \'EVENTS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_DOCUMENTS_FILES\', \'DOCUMENTS-FILES\',\''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_INVENTORY\',        \'INVENTORY\',     \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_FORUM\',           \'FORUM\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_WEBLINKS\',        \'LINKS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_GROUPS_ROLES\',    \'GROUPS-ROLES\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_CONTACTS\',        \'CONTACTS\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_MESSAGES\',        \'MESSAGES\',       \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_MENU\',            \'MENU\',           \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_ORGANIZATION\',    \'ORGANIZATIONS\',  \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_PHOTOS\',          \'PHOTOS\',         \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_SETTINGS\',        \'PREFERENCES\',    \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_PROFILE\',         \'PROFILE\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_REGISTRATION\',    \'REGISTRATION\',   \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_ROOM_MANAGEMENT\', \'ROOMS\',          \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')
+                     , (\'' . Uuid::uuid4() . '\', \'MODULE\', \'SYS_PLUGIN_MANAGER\',  \'PLUGINS\',        \''.ADMIDIO_VERSION.'\', '.ADMIDIO_VERSION_BETA.')';
         $db->query($sql); // TODO add more params
     }
 
@@ -897,25 +898,16 @@ class Installation
     }
 
     /**
-     * Install all overview plugins that are delivered with Admidio.
+     * Install the plugins that are delivered with Admidio.
      * @return void
      * @throws Exception
      */
     private static function installPlugins(): void
     {
-        $pluginManager = new PluginManager();
-        $plugins = $pluginManager->getAvailablePlugins();
-
-        foreach ($plugins as $plugin) {
-            // check, if the plugin has an interface, if not, scip it
-            if (!isset($plugin['interface']) || $plugin['interface'] == null) {
-                continue;
-            }
-            // check if the plugin is an overview plugin, if so, install it
-            $instance = $plugin['interface']::getInstance();
-            if ($instance->isAdmidioPlugin()) {
-                // Install the overview plugin
-                $instance->doInstall();
+        foreach (PluginRegistry::BUILT_IN as $id) {
+            $plugin = PluginRegistry::get($id);
+            if ($plugin !== null && $plugin->isValid() && !PluginRegistry::isInstalled($id)) {
+                PluginInstaller::install($plugin);
             }
         }
     }

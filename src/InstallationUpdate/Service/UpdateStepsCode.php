@@ -2,7 +2,9 @@
 
 namespace Admidio\InstallationUpdate\Service;
 
-use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginLoader;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -223,64 +225,71 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method will check if there are overview plugins available and if yes, it will try to install them.
-     * Because we added the new column com_overview_plugin to the components table before, we need to reload the
-     * database columns before we can check if the plugin is an overview plugin or not.
-     * @return void
+     * Move the built-in plugins onto the new plugin runtime.
+     *
+     * The previous runtime identified a plugin by its translated display name and stored an
+     * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
+     * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
+
+    /**
+     * Give every component a UUID.
+     *
+     * The column is added empty, so the rows that already exist need one before the unique index can
+     * be created. A component is what records an installed plugin, so its UUID is what the changelog
+     * relates a plugin's settings to.
      * @throws Exception
      */
-    public static function updateStep51InstallOverviewPlugins(): void
+    public static function updateStep51AddComponentUuid(): void
     {
-        global $gDb;
+        $statement = self::$db->queryPrepared('SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_uuid IS NULL');
 
-        // because we added the new column com_overview_plugin to the components table before, we need to reload the database columns
-        $gDb->initializeTableColumnProperties();
-
-        $pluginManager = new PluginManager();
-        $plugins = $pluginManager->getAvailablePlugins();
-
-        foreach ($plugins as $plugin) {
-            // check, if the plugin has an interface, if not, scip it
-            if (!isset($plugin['interface']) || $plugin['interface'] == null) {
-                continue;
-            }
-            // check if the plugin is an overview plugin, if so, install it
-            $instance = $plugin['interface']::getInstance();
-            if ($instance->isAdmidioPlugin()) {
-                // Install the overview plugin
-                $instance->doInstall();
-            }
+        while ($row = $statement->fetch()) {
+            $sql = 'UPDATE ' . TBL_COMPONENTS . ' SET com_uuid = ? -- $uuid
+                     WHERE com_id = ? -- $row[\'com_id\']';
+            self::$db->queryPrepared($sql, array(Uuid::uuid4(), $row['com_id']));
         }
+
+        self::$db->initializeTableColumnProperties();
     }
 
     /**
-     * Give every organization a row for every preference of every plugin.
+     * Move the built-in plugins onto the new plugin runtime.
      *
-     * Until now a plugin wrote its preferences with the settings manager of the organization the
-     * administrator happened to be in, so every other organization had none. Reading one of them
-     * there answered a registered default instead of a stored value, which is not what a
-     * preference is.
+     * The previous runtime identified a plugin by its translated display name and stored an
+     * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
+     * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
+     * again with everything it already has - its version, its preferences and its data.
      *
+     * A built-in plugin that has no component row at all is installed here, and the menu entry of a
+     * plugin that only contributes a widget is removed, because the file it pointed at is gone.
+     * @return void
      * @throws Exception
      */
-    public static function updateStep51SeedPluginPreferences(): void
+    public static function updateStep51ConvertBuiltInPlugins(): void
     {
-        $pluginManager = new PluginManager();
-        $names = array();
+        PluginRegistry::reset();
 
-        foreach ($pluginManager->getAvailablePlugins() as $plugin) {
-            if (!isset($plugin['interface']) || $plugin['interface'] === null) {
+        foreach (PluginRegistry::BUILT_IN as $id) {
+            $plugin = PluginRegistry::get($id);
+            if ($plugin === null || !$plugin->isValid()) {
+                // The plugin is still on the previous runtime, or it is not shipped any more.
                 continue;
             }
 
-            // reading the metadata registers the definitions of the plugin
-            $instance = $plugin['interface']::getInstance();
-            if ($instance->isInstalled()) {
-                $names = array_merge($names, $instance->getPreferenceNames());
+            if (!PluginRegistry::isInstalled($id)) {
+                PluginInstaller::install($plugin);
+                continue;
+            }
+
+            // The plugin keeps its component row and every setting an administrator made. What it
+            // needs is a row for the preferences the new format adds - loading it registers them.
+            PluginLoader::load($plugin);
+            PreferencesService::seedDefaults(PluginInstaller::getPreferenceNames($plugin));
+
+            if (!$plugin->wantsMenuEntry()) {
+                PluginInstaller::removeMenuEntries(PluginRegistry::getComponentId($id));
             }
         }
-
-        PreferencesService::seedDefaults(array_values(array_unique($names)));
     }
 
     /**

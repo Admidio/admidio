@@ -1,0 +1,64 @@
+{
+    "name": "Hello",
+    "description": "The smallest plugin that still uses every convention.",
+    "version": "1.2.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-emoji-smile",
+    "requires": {
+        "admidio": ">=5.0",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\Hello\\": "src/"
+    },
+    "preferences": {
+        "section": "content_management",
+        "sequence": 30
+    },
+    "settings": {
+        "hello_greeting": {
+            "type": "string",
+            "default": "Hello",
+            "label": "Greeting"
+        },
+        "hello_shout": {
+            "type": "boolean",
+            "default": false,
+            "label": "Shout"
+        },
+        "hello_repeat": {
+            "type": "integer",
+            "default": 3,
+            "min": 0,
+            "max": 20,
+            "step": 1,
+            "label": "Repeat"
+        },
+        "hello_delay": {
+            "type": "integer",
+            "default": 5,
+            "min": "1",
+            "max": "60",
+            "step": "often",
+            "label": "Delay"
+        },
+        "hello_names": {
+            "type": "array",
+            "default": [],
+            "label": "Names"
+        },
+        "hello_volume": {
+            "type": "enum",
+            "default": "1",
+            "values": {"0": "Quiet", "1": "Normal", "2": "Loud"},
+            "label": "Volume"
+        },
+        "hello_order": {
+            "type": "enum",
+            "default": "ASC",
+            "values": ["ASC", "DESC"],
+            "label": "Order"
+        }
+    }
+}
