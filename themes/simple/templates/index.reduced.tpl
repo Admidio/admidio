@@ -1,3 +1,6 @@
+{if !isset($pwaEnabled)}
+    {assign var="pwaEnabled" value=(!isset($settings) || !$settings->has('system_pwa_enabled') || $settings->getBool('system_pwa_enabled'))}
+{/if}
 <!DOCTYPE html>
 <html lang="{$languageIsoCode}">
 <head>
@@ -8,6 +11,14 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="{get_themed_file filepath='/images/favicon.ico'}" />
     <link rel="apple-touch-icon" type="image/png" href="{get_themed_file filepath='/images/apple-touch-icon.png'}" sizes="180x180" />
+    <meta name="theme-color" content="{$themeColorPrimary}" />
+    {if $pwaEnabled}
+    <link rel="manifest" href="{$urlAdmidio}/system/manifest.json.php" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="{$organizationName|escape}" />
+    {/if}
 
     <title>{$title}</title>
 
@@ -22,6 +33,18 @@
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
         var gThemePath = "{$urlTheme}";
+
+        {if $pwaEnabled}
+        // Register Service Worker for PWA support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('{$urlAdmidio}/sw.js', { scope: '{$urlAdmidio}/' })
+                    .catch(function(err) {
+                        console.error('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+        {/if}
 
         {$javascriptContent}
 

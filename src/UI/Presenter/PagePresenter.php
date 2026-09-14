@@ -360,6 +360,7 @@ class PagePresenter
         if (!empty($styles)) {
             $this->smarty->assign('additionalStyles', ":root {\n$styles};");
         }
+        $this->smarty->assign('themeColorPrimary', ($color_primary && $this->isValidHexColor($color_primary)) ? $color_primary : '#349aaa');
 
 
         // add imprint and data protection
@@ -372,6 +373,8 @@ class PagePresenter
         $this->smarty->assign('urlImprint', $urlImprint);
         $this->smarty->assign('urlDataProtection', $urlDataProtection);
         $this->smarty->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+        $pwaEnabled = $gSettingsManager->has('system_pwa_enabled') ? $gSettingsManager->getBool('system_pwa_enabled') : true;
+        $this->smarty->assign('pwaEnabled', $pwaEnabled);
 
         // show cookie note
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note')) {
