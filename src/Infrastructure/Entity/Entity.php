@@ -1383,7 +1383,7 @@ class Entity
             } elseif (array_key_exists($this->columnPrefix . '_usr_id_change', $this->dbColumns)) {
                 // Do not update data if the same user has done so within 15 minutes
                 if ($GLOBALS['gCurrentUserId'] !== $this->getValue($this->columnPrefix . '_usr_id_create')
-                    || time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900)) {
+                    && time() > (strtotime($this->getValue($this->columnPrefix . '_timestamp_create')) + 900)) {
                     $this->setValue($this->columnPrefix . '_timestamp_change', DATETIME_NOW);
                     $this->setValue($this->columnPrefix . '_usr_id_change', $GLOBALS['gCurrentUserId']);
                 }

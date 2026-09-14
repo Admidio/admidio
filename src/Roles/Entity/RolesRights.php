@@ -177,7 +177,8 @@ class RolesRights extends Entity
      */
     public function hasRight(array $assignedRoles): bool
     {
-        return count($assignedRoles) > 0 && count(array_intersect($this->rolesIds, $assignedRoles)) > 0;
+        // an object that carries no role restriction at all is open to everyone
+        return count($this->rolesIds) === 0 || count(array_intersect($this->rolesIds, $assignedRoles)) > 0;
     }
 
     /**
