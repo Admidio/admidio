@@ -670,7 +670,7 @@ final class CoreTasks
             self::opt('email', 'Administrator email address.', 'EMAIL'),
             self::opt('homepage', 'Organization homepage.', 'URL'),
             self::opt('show-organization-select', 'Show organization selection at login.', 'BOOL'),
-            self::opt('share-members', 'Set contacts_suborganization_use_same_members on the PARENT organization, so its suborganizations share its members.', 'BOOL')
+            self::opt('share-members', 'Set member sharing on the parent organization, so its suborganizations share its members.', 'BOOL')
         );
         $orgAddOptions = $orgOptions;
         array_splice($orgAddOptions, 4, 0, array(
@@ -3387,7 +3387,8 @@ final class CoreTasks
             'parent_id' => (int)$organization->getValue('org_org_id_parent'),
             'homepage' => (string)$organization->getValue('org_homepage'),
             'email' => (string)$organization->getValue('org_email_administrator'),
-            'show_organization_select' => (bool)$organization->getValue('org_show_org_select')
+            'show_organization_select' => (bool)$organization->getValue('org_show_org_select'),
+            'suborganization_use_same_members' => (bool)$organization->getValue('org_suborg_use_same_members')
         );
 
         CliApplication::writeValue($data, $options);
@@ -3446,17 +3447,16 @@ final class CoreTasks
             Entity::setLoggingEnabled(true);
 
             /*
-             * The preference belongs to the parent: it decides whether its suborganizations
-             * reuse its members. It is therefore written on the parent, not on the new
-             * organization.
+             * The setting belongs to the parent: it decides whether its suborganizations
+             * reuse its members. It is therefore written on the parent, not on the new organization.
              */
             if (CliApplication::optionExists($options, 'share-members')) {
                 $parent = new Organization($gDb, $parentId);
-                $parentSettingsManager =& $parent->getSettingsManager();
-                $parentSettingsManager->set(
-                    'contacts_suborganization_use_same_members',
+                $parent->setValue(
+                    'org_suborg_use_same_members',
                     (int)(CliApplication::optionBool($options, 'share-members', false) ?? false)
                 );
+                $parent->save();
             }
 
             if ($gCurrentOrganization->countAllRecords() === 2) {
@@ -3481,7 +3481,7 @@ final class CoreTasks
 
     public static function organizationUpdate(array $arguments, array $options): int
     {
-        global $gCurrentOrgId, $gCurrentOrganization, $gSettingsManager;
+        global $gCurrentOrgId, $gCurrentOrganization;
 
         $organization = self::resolveOrganization(CliApplication::requireArgument($arguments, 0, 'org'));
         if ((int)$organization->getValue('org_id') !== $gCurrentOrgId) {
@@ -3518,10 +3518,11 @@ final class CoreTasks
         if (CliApplication::optionExists($options, 'share-members')
             && !$gCurrentOrganization->isChildOrganization()
             && $gCurrentOrganization->isParentOrganization()) {
-            $gSettingsManager->set(
-                'contacts_suborganization_use_same_members',
+            $organization->setValue(
+                'org_suborg_use_same_members',
                 (int)(CliApplication::optionBool($options, 'share-members', false) ?? false)
             );
+            $organization->save();
         }
 
         self::reloadAllSessions();

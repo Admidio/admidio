@@ -819,7 +819,7 @@ class Organization extends Entity
 
     /**
      * Determine all organization ids that share users with the current organization.
-     * Child organizations inherit the member-sharing preference from their direct parent and
+     * Child organizations inherit the member-sharing setting from their direct parent and
      * cannot define a separate scope.
      * @return array<int,int>
      * @throws Exception
@@ -832,13 +832,9 @@ class Organization extends Entity
 
         if ($parentOrganizationId > 0) {
             $sharingRootOrganization = new self($this->db, $parentOrganizationId);
-            $settingsManager = $sharingRootOrganization->getSettingsManager();
-        } else {
-            $settingsManager = $this->getSettingsManager();
         }
 
-        $memberSharingEnabled = $settingsManager->has('contacts_suborganization_use_same_members')
-            && $settingsManager->getBool('contacts_suborganization_use_same_members');
+        $memberSharingEnabled = (bool)$sharingRootOrganization->getValue('org_suborg_use_same_members');
 
         if (!$memberSharingEnabled) {
             return array($currentOrganizationId);
@@ -978,6 +974,12 @@ class Organization extends Entity
                 $newValue = admFuncCheckUrl($newValue);
 
                 if ($newValue === false) {
+                    return false;
+                }
+            } elseif ($columnName === 'org_suborg_use_same_members'
+                && filter_var($newValue, FILTER_VALIDATE_BOOLEAN)) {
+                // Member sharing belongs exclusively to a top-level parent organization.
+                if ($this->isChildOrganization() || !$this->isParentOrganization()) {
                     return false;
                 }
             }

@@ -212,5 +212,11 @@
     <step id="1210" database="mysql">ALTER TABLE %PREFIX%_oidc_session_participants MODIFY COLUMN osp_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1220" database="mysql">ALTER TABLE %PREFIX%_saml_logout_transactions MODIFY COLUMN slt_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1230" database="mysql">ALTER TABLE %PREFIX%_saml_session_participants MODIFY COLUMN ssp_authn_instant timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <!-- Move the member-sharing setting from preferences to its owning organization.
+         Organizations predating the preference retain the former implicit shared-member behavior. -->
+    <step id="1240">ALTER TABLE %PREFIX%_organizations ADD COLUMN org_suborg_use_same_members boolean NOT NULL DEFAULT false</step>
+    <step id="1250" database="mysql">UPDATE %PREFIX%_organizations org INNER JOIN (SELECT DISTINCT org_org_id_parent FROM %PREFIX%_organizations WHERE org_org_id_parent IS NOT NULL) child ON child.org_org_id_parent = org.org_id LEFT JOIN %PREFIX%_preferences prf ON prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' SET org.org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND (prf.prf_org_id IS NULL OR prf.prf_value = '1')</step>
+    <step id="1260" database="pgsql">UPDATE %PREFIX%_organizations org SET org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND EXISTS (SELECT 1 FROM %PREFIX%_organizations child WHERE child.org_org_id_parent = org.org_id) AND (NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members') OR EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' AND prf.prf_value = '1'))</step>
+    <step id="1270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
     <step>stop</step>
 </update>

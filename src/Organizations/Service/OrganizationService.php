@@ -1,7 +1,6 @@
 <?php
 namespace Admidio\Organizations\Service;
 
-use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Infrastructure\Exception;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -98,7 +97,7 @@ class OrganizationService
      */
     public function save(array $formValues)
     {
-        global $gCurrentSession, $gCurrentOrganization, $gSettingsManager;
+        global $gCurrentSession, $gCurrentOrganization;
 
         // check form field input and sanitized it from malicious content
         $organizationEditForm = $gCurrentSession->getFormObject($formValues['adm_csrf_token']);
@@ -114,18 +113,5 @@ class OrganizationService
         // write category into database
         $gCurrentOrganization->save();
 
-        if (
-            array_key_exists('contacts_suborganization_use_same_members', $validatedFormValues)
-            && !$gCurrentOrganization->isChildOrganization()
-            && $gCurrentOrganization->isParentOrganization()
-        ) {
-            $gSettingsManager->set(
-                'contacts_suborganization_use_same_members',
-                PreferenceDefinitions::normalize(
-                    'contacts_suborganization_use_same_members',
-                    $validatedFormValues['contacts_suborganization_use_same_members']
-                )
-            );
-        }
     }
 }

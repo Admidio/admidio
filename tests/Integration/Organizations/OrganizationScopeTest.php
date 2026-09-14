@@ -9,6 +9,7 @@ namespace Admidio\Tests\Integration\Organizations;
 
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\AdmidioTestFixture;
+use Admidio\Organizations\Entity\Organization;
 
 class OrganizationScopeTest extends DatabaseTestCase
 {
@@ -88,6 +89,31 @@ class OrganizationScopeTest extends DatabaseTestCase
             '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i',
             $stored['org_uuid']
         );
+        $this->assertFalse((bool) $stored['org_suborg_use_same_members']);
+    }
+
+    /**
+     * @testdox Only top-level parent organizations can enable member sharing
+     */
+    public function testOnlyTopLevelParentCanEnableMemberSharing(): void
+    {
+        $fixture = $this->getFixture();
+        $parentData = $fixture->createAndSaveOrganization('Parent Organization', 'parent');
+        $childData = $fixture->createAndSaveOrganization('Child Organization', 'child');
+        $standaloneData = $fixture->createAndSaveOrganization('Standalone Organization', 'single');
+
+        $child = new Organization($this->getDatabase(), $childData['org_id']);
+        $child->setValue('org_org_id_parent', $parentData['org_id']);
+        $child->save();
+
+        $parent = new Organization($this->getDatabase(), $parentData['org_id']);
+        $this->assertTrue($parent->setValue('org_suborg_use_same_members', true));
+        $parent->save();
+
+        $this->assertFalse($child->setValue('org_suborg_use_same_members', true));
+
+        $standalone = new Organization($this->getDatabase(), $standaloneData['org_id']);
+        $this->assertFalse($standalone->setValue('org_suborg_use_same_members', true));
     }
 
     /**
