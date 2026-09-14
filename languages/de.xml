@@ -77,6 +77,7 @@
   <string name="SYS_COHABITANT_MALE">Partner/-in</string>
   <string name="SYS_COMPANION">Freund/-in</string>
   <string name="SYS_DAUGHTER">Tochter</string>
+  <string name="SYS_EVENT_REGISTRATION">Anmeldung</string>
   <string name="SYS_FATHER">Vater</string>
   <string name="SYS_GIRLFRIEND">Freundin</string>
   <string name="SYS_HUSBAND">Ehemann</string>
@@ -1309,6 +1310,7 @@
   <string name="SYS_REDIRECT_URL_INVALID">Die angegebene Weiterleitungs-URL ist nicht gültig.</string>
   <string name="SYS_REGISTER">Registrieren</string>
   <string name="SYS_REGISTERED_AS">Angemeldet als</string>
+  <string name="SYS_RECURRENCE">Wiederholung</string>
   <string name="SYS_REGISTRATION">Registrierung</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA">Alle Daten aus Registrierung bei existierendem Benutzer:innen übernehmen</string>
   <string name="SYS_REGISTRATION_ADOPT_ALL_DATA_DESC">Existiert eine neu registrierte Benutzerin oder ein neu registrierter Benutzer bereits in der Datenbank, so werden bei gesetzter Einstellung alle Daten aus der Registrierung in den bestehenden Datensatz übernommen. Wenn diese Einstellung nicht gesetzt ist, werden nur der Anmeldename und das Passwort übernommen. Bei Benutzerinnen und Benutzern, welche bisher noch nicht vorhanden waren, werden unabhängig von dieser Einstellung immer alle Daten aus der Registrierung übernommen. (Voreinstellung: ja)</string>

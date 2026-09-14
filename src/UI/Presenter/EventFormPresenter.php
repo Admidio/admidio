@@ -263,6 +263,7 @@ class EventFormPresenter extends PagePresenter
         $page = $this;
         $page->setHtmlID('admidio-events-edit');
         $page->setHeadline($headline);
+        $page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
 
         $page->addJavascript('
         /**
@@ -284,27 +285,17 @@ class EventFormPresenter extends PagePresenter
             }
         }
 
+        function getEventParticipationFields() {
+            return $("#adm_event_participation_right_group, #event_current_user_assigned_group, " +
+                "#dat_max_members_group, #event_right_list_view_group, #event_right_send_mail_group, " +
+                "#dat_allow_comments_group, #dat_additional_guests_group, #event_deadline_group")
+                .find("input, select");
+        }
+
         function setEventParticipation() {
-            if ($("#event_participation_possible:checked").val() !== undefined) {
-                $("#adm_event_participation_right_group").addClass("admidio-form-group-required");
-                $("#adm_event_participation_right_group").show("slow");
-                $("#event_current_user_assigned_group").show("slow");
-                $("#dat_max_members_group").show("slow");
-                $("#event_right_list_view_group").show("slow");
-                $("#event_right_send_mail_group").show("slow");
-                $("#dat_allow_comments_group").show("slow");
-                $("#dat_additional_guests_group").show("slow");
-                $("#event_deadline_group").show("slow");
-            } else {
-                $("#adm_event_participation_right_group").hide();
-                $("#event_current_user_assigned_group").hide();
-                $("#dat_max_members_group").hide();
-                $("#event_right_list_view_group").hide();
-                $("#event_right_send_mail_group").hide();
-                $("#dat_allow_comments_group").hide();
-                $("#dat_additional_guests_group").hide();
-                $("#event_deadline_group").hide("slow");
-            }
+            var participationEnabled = $("#event_participation_possible").is(":checked");
+            $("#adm_event_participation_right_group").toggleClass("admidio-form-group-required", participationEnabled);
+            getEventParticipationFields().prop("disabled", !participationEnabled);
         }
 
         function setLocationCountry() {
@@ -333,6 +324,9 @@ class EventFormPresenter extends PagePresenter
             var recurrenceEndType = $("#event_recurrence_end_type").val();
             var recurrenceSelected = recurrenceFrequency !== "none";
 
+            $("#event_recurrence_interval, #event_recurrence_end_type").prop("disabled", !recurrenceSelected);
+            $("#event_recurrence_interval_group, #event_recurrence_end_type_group").toggle(recurrenceSelected);
+
             setRecurrenceFieldRequired("event_recurrence_interval", recurrenceSelected, true);
             setRecurrenceFieldRequired("event_recurrence_end_type", recurrenceSelected, true);
             setRecurrenceFieldRequired("event_recurrence_count", recurrenceSelected && recurrenceEndType === "count", true);
@@ -342,15 +336,10 @@ class EventFormPresenter extends PagePresenter
             setRecurrenceFieldRequired("event_recurrence_weekdays", recurrenceSelected && recurrenceFrequency === "weekly", false);
 
             if (recurrenceFrequency === "none") {
-                $("#event_recurrence_interval_group").hide();
                 $("#event_recurrence_weekdays_group").hide();
-                $("#event_recurrence_end_type_group").hide();
                 $("#event_recurrence_count_group").hide();
                 $("#event_recurrence_until_group").hide();
             } else {
-                $("#event_recurrence_interval_group").show("slow");
-                $("#event_recurrence_end_type_group").show("slow");
-
                 if (recurrenceFrequency === "weekly") {
                     $("#event_recurrence_weekdays_group").show("slow");
                 } else {
@@ -378,6 +367,38 @@ class EventFormPresenter extends PagePresenter
         setEventParticipation();
         setLocationCountry();
         setEventRecurrence();
+
+        // Disabled controls are omitted by FormData. Keep their settings in the save request.
+        document.getElementById("adm_events_edit_form").addEventListener("formdata", function(event) {
+            getEventParticipationFields().filter(":disabled").each(function() {
+                if (!this.name || (this.type === "checkbox" && !this.checked)) {
+                    return;
+                }
+                var values = $(this).val();
+                if (values !== null) {
+                    (Array.isArray(values) ? values : [values]).forEach(function(value) {
+                        event.formData.append(this.name, value);
+                    }, this);
+                }
+            });
+        });
+
+        // Reveal invalid fields before the browser tries to focus them.
+        document.getElementById("adm_events_edit_form").addEventListener("invalid", function(event) {
+            var pane = event.target.closest(".tab-pane");
+            if (!pane || this.querySelector(":invalid") !== event.target) {
+                return;
+            }
+            if (window.matchMedia("(min-width: 768px)").matches) {
+                bootstrap.Tab.getOrCreateInstance(document.getElementById(pane.getAttribute("aria-labelledby"))).show();
+            } else {
+                var collapse = pane.querySelector(".accordion-collapse");
+                collapse.addEventListener("shown.bs.collapse", function() {
+                    event.target.focus();
+                }, {once: true});
+                bootstrap.Collapse.getOrCreateInstance(collapse, {toggle: false}).show();
+            }
+        }, true);
 
         $("#event_participation_possible").click(function() {
             setEventParticipation();

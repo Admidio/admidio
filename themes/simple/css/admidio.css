@@ -530,6 +530,28 @@ label {
 /* Tabs */
 /***********************************/
 
+/* Event fields are shared by desktop tabs and the mobile accordion. */
+@media (min-width: 768px) {
+    .admidio-event-tabs .accordion-item {
+        border: 0;
+    }
+
+    .admidio-event-tabs .accordion-collapse {
+        display: block;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .tabs-x.admidio-event-tabs .tab-content > .tab-pane {
+        display: block;
+    }
+
+    .tabs-x.admidio-event-tabs .tab-content {
+        padding: 0;
+        border: 0;
+    }
+}
+
 .tab-content {
     padding: 1rem 1rem 0 1rem;
 }
@@ -545,7 +567,7 @@ label {
 .accordion {
     --bs-accordion-bg: var(--bs-body-bg);
     --bs-accordion-btn-color: var(--bs-link-color);
-    --bs-accordion-active-color: var(--bs-tertiary);
+    --bs-accordion-active-color: var(--bs-body-color);
     --bs-accordion-active-bg: var(--bs-secondary);
 }
 
