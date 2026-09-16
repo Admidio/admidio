@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">L</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">P</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Mitu päeva</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">See plugin kuvab ülevaatelehel kalendri kõigi käesoleva kuu sündmustega.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Kuva sündmused</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Kui lubatud, kuvatakse kalendris sündmused. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Kuva sünnipäevad</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Kui lubatud, kuvatakse kalendris liikmete sünnipäevad. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Kuva sünnipäevad külastajatele</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Kui lubatud, kuvatakse külastajatele liikmete sünnipäevad. (Vaikimisi: välja lülitatud)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Kuva sünnipäevaikoon</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Kui lubatud, kuvatakse kalendris sünnipäevaikoon. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Sünnipäevalaste nimede kuvamise viis</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Määrab sünnipäevalaste nimede kuvamise viisi. (Vaikimisi: eesnimi)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Arvesse võetavad kategooriad</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Valige kalendri sündmuste puhul arvesse võetavad kategooriad. (Vaikimisi: kõik kategooriad)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Kuva kalendrite nimed</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Kui lubatud, kuvatakse iga sündmuse juures kalendri nimi. (Vaikimisi: välja lülitatud)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Sisule juurdepääsu lubavad rollid</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Valige rollid, mis lubavad näha selle plugina sisu. Ilma ühegi valitud rollita kasutajatele kuvatakse ainult sündmuste ja sünnipäevade arv. (Vaikimisi: kõik rollid)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Sünnipäevade jaoks valitud rollid</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Valige rollid, mille liikmete sünnipäevi kuvada. (Vaikimisi: kõik rollid)</string>
 </resources>

@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">sa</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">di</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">plusieurs jours</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Ce plugin affiche sur la page de présentation un calendrier de tous les événements du mois en cours.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Calendrier</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Afficher les événements</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Si cette option est activée, les événements apparaissent dans le calendrier. (Par défaut : activée)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Afficher les anniversaires</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Si cette option est activée, les anniversaires des membres apparaissent dans le calendrier. (Par défaut : activée)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Afficher les anniversaires aux visiteurs</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Si cette option est activée, les visiteurs voient les anniversaires des membres. (Par défaut : désactivée)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Afficher l’icône d’anniversaire</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Si cette option est activée, une icône d’anniversaire apparaît dans le calendrier. (Par défaut : activée)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Format du nom des personnes fêtant leur anniversaire</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Définit le format d’affichage des noms des personnes fêtant leur anniversaire. (Par défaut : prénom)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Catégories prises en compte</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Sélectionnez les catégories à prendre en compte pour les événements du calendrier. (Par défaut : toutes les catégories)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Afficher les noms des calendriers</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Si cette option est activée, le nom du calendrier est affiché pour chaque événement. (Par défaut : désactivée)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Rôles autorisés à consulter le contenu</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Sélectionnez les rôles autorisés à consulter le contenu du plugin. Les utilisateurs n’ayant aucun de ces rôles voient uniquement le nombre d’événements et d’anniversaires. (Par défaut : tous les rôles)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Rôles retenus pour les anniversaires</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Sélectionnez les rôles dont les membres doivent figurer dans les anniversaires. (Par défaut : tous les rôles)</string>
 </resources>

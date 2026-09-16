@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# jäsentä</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE"> #VAR1# linjoilla</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS"> #VAR1# on linjoilla</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Tietoja ei ole saatavilla vierailijoille. Kirjaudu sisään nähdäksesi, ketkä ovat paikalla.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Tämä lisäosa näyttää vierailijat ja rekisteröityneet jäsenet yleiskatsaussivulla.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Ketkä ovat paikalla?</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Paikallaolotilan kesto</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Aika minuutteina, jonka käyttäjän katsotaan olevan paikalla viimeisen toiminnon jälkeen. (Oletus: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Näytä vierailijat</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Kun käytössä, vierailijoiden määrä näytetään. Muuten näytetään vain kirjautuneet käyttäjät. (Oletus: käytössä)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Näytä jäsenet vierailijoille</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Valitse, miten jäsenet näytetään vierailijoille. (Oletus: kirjautuneiden jäsenten määrä)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Älä näytä kirjautuneita jäseniä</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Näytä kirjautuneet jäsenet</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Kirjautuneiden jäsenten määrä</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Näytä oma tila</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Kun käytössä, oma tila näytetään sekä sisään että ulos kirjautuneena. (Oletus: käytössä)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Näytä käyttäjät vierekkäin</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Kun käytössä, käyttäjät näytetään vierekkäin. Muuten heidät näytetään allekkain. (Oletus: pois käytöstä)</string>
 </resources>

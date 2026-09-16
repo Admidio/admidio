@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Kaikki merkinnät</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Ilmoitukset</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Vierailijoille ei ole saatavilla ilmoituksia. Kirjaudu sisään nähdäksesi ilmoitukset.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Tämä lisäosa näyttää yleiskatsaussivulla esikatselun uusimmista tiedotteista.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Tiedoteluettelo</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Tiedotteiden määrä</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Näytettävien tiedotteiden määrä. (Oletus: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Merkkejä ennen rivinvaihtoa</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Sanan merkkien enimmäismäärä ennen rivinvaihtoa. (0: ei rivinvaihtoa, oletus: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Näytettävät luokat</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Valitse luokat, joiden tiedotteet näytetään. (Oletus: kaikki luokat)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Näytä koko kuvaus</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Kun käytössä, koko kuvaus näytetään. Muuten näytetään vain tekstin esikatselu. (Oletus: pois käytöstä)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Esikatseluteksti</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Esikatselutekstin merkkimäärä. (0: ei lyhyttä esikatselua, oletus: 70)</string>
 </resources>

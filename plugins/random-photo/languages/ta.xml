@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">பார்வையாளர்களுக்குப் புகைப்படங்கள் கிடைக்காது. புகைப்படங்களைக் காண உள்நுழையவும்.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">இந்தச் செருகுநிரல் புகைப்படத் தொகுதியிலிருந்து தோராயமாகத் தேர்ந்தெடுத்த புகைப்படத்தைக் காட்டுகிறது.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">தோராயமான புகைப்படம்</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">ஒரு சொல்லின் எழுத்து எண்ணிக்கை</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">ஒரு சொல்லில் வரி முறிவுக்கு முன் அனுமதிக்கப்படும் அதிகபட்ச எழுத்துகளின் எண்ணிக்கை. 0 என அமைத்தால் வரி முறிவு செய்யப்படாது. (இயல்புநிலை: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">புகைப்படத்தின் அதிகபட்ச அகலம்</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">புகைப்படத்தின் அதிகபட்ச அகலம் பிக்சல்களில். 0 என அமைத்தால் செருகுநிரல் உள்ள HTML கொள்கலனுக்கு ஏற்ப படத்தின் அளவு தானாக மாற்றப்படும். (இயல்புநிலை: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">புகைப்படத்தின் அதிகபட்ச உயரம்</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">புகைப்படத்தின் அதிகபட்ச உயரம் பிக்சல்களில். 0 என அமைத்தால் செருகுநிரல் உள்ள HTML கொள்கலனுக்கு ஏற்ப படத்தின் அளவு தானாக மாற்றப்படும். (இயல்புநிலை: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">கருத்தில் கொள்ளப்படும் ஆல்பங்கள்</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">புகைப்படத்தைத் தேர்ந்தெடுக்கக்கூடிய ஆல்பங்களின் எண்ணிக்கை, புதிய ஆல்பத்திலிருந்து பின்னோக்கி எண்ணப்படுகிறது. 0 என அமைத்தால் அனைத்து ஆல்பங்களும் கருத்தில் கொள்ளப்படும். (இயல்புநிலை: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">புகைப்பட எண்</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">ஆல்பத்தில் காட்ட வேண்டிய புகைப்படத்தின் எண். 0 என அமைத்தால் தோராயமான புகைப்படம் காட்டப்படும்; இல்லையெனில் குறிப்பிட்ட எண்ணின் புகைப்படம் காட்டப்படும். (இயல்புநிலை: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">ஆல்ப இணைப்பைக் காட்டு</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">இயக்கப்பட்டால் புகைப்படத்தின் கீழ் ஆல்பத்தின் பெயருடன் அதற்கான இணைப்பு காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+</resources>

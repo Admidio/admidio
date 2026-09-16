@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# akan berusia #VAR3# tahun dalam #VAR2# hari, pada #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# berulang tahun dalam #VAR2# hari</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">Ulang tahun</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">Bapak #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">Hari ini #VAR1# anggota berulang tahun.</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">Ulang tahun anggota tidak tersedia bagi pengunjung. Masuk untuk melihatnya.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">Tidak ada anggota yang berulang tahun hari ini.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">Tidak ada ulang tahun dalam #VAR1# hari mendatang.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">Tidak ada ulang tahun dalam #VAR1# hari terakhir.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">Tidak ada ulang tahun dalam #VAR1# hari terakhir dan #VAR2# hari mendatang.</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">Seorang anggota berulang tahun hari ini.</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# genap berusia #VAR3# tahun #VAR2# hari yang lalu, pada #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# berulang tahun #VAR2# hari yang lalu</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">Plugin ini menampilkan pratinjau ulang tahun terbaru di halaman ringkasan.</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">Ulang tahun</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# berusia #VAR2# tahun hari ini</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">#VAR1# berulang tahun hari ini</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# akan berusia #VAR3# tahun besok, pada #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">#VAR1# berulang tahun besok</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">Ibu #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# genap berusia #VAR3# tahun kemarin, pada #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">#VAR1# berulang tahun kemarin</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">Tampilkan nama kepada pengunjung</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">Jika diaktifkan, pengunjung melihat nama, tanpa usia, orang yang berulang tahun hari ini, mendatang, dan sebelumnya. Jika tidak, hanya jumlah orang yang berulang tahun hari ini yang ditampilkan. (Bawaan: nonaktif)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">Format nama orang yang berulang tahun</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">Pilih cara menampilkan nama orang yang berulang tahun. (Bawaan: nama depan nama belakang)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">Tampilkan usia</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">Jika diaktifkan, pengguna yang sudah masuk dapat melihat usia orang yang berulang tahun. (Bawaan: nonaktif)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">Tampilkan nama dengan sapaan</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">Usia mulai saat nama depan orang yang berulang tahun diganti dengan sapaan bagi pengunjung. (Nonaktifkan: -1, bawaan: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">Tampilkan pemberitahuan jika tidak ada ulang tahun</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">Jika diaktifkan, pemberitahuan ditampilkan saat tidak ada anggota yang berulang tahun dalam rentang waktu yang dipilih. (Bawaan: aktif)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">Tampilkan ulang tahun sebelumnya</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">Jumlah hari ke belakang yang ulang tahunnya ditampilkan. (Bawaan: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">Tampilkan ulang tahun mendatang</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">Jumlah hari ke depan yang ulang tahunnya ditampilkan. (Bawaan: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">Batasi jumlah orang yang berulang tahun</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">Jumlah maksimum orang yang berulang tahun untuk ditampilkan. (Bawaan: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">Tampilkan alamat email kepada pengunjung</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">Pilih apakah alamat email orang yang berulang tahun ditampilkan. (Bawaan: hanya nama bagi pengunjung)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">Peran yang boleh melihat konten</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Pilih peran yang boleh melihat konten plugin ini. Pengguna tanpa salah satu peran yang dipilih hanya melihat jumlah ulang tahun. (Bawaan: semua peran)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">Peran untuk ulang tahun</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Pilih peran yang ulang tahun anggotanya ditampilkan. (Bawaan: semua peran)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Urutan orang yang berulang tahun</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">Pilih urutan orang yang berulang tahun. (Bawaan: DESC)</string>
+</resources>

@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Bilder er ikke tilgjengelige for gjester. Logg inn for å se bilder.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Dette tillegget viser et tilfeldig valgt bilde fra bildemodulen.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Tilfeldig bilde</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Antall tegn per ord</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maksimalt antall tegn i et ord før linjeskift. Ved 0 settes ingen linjeskift inn. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maksimal bildebredde</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Maksimal bildebredde i piksler. Ved 0 skaleres bildet dynamisk etter tilleggets HTML-beholder. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maksimal bildehøyde</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Maksimal bildehøyde i piksler. Ved 0 skaleres bildet dynamisk etter tilleggets HTML-beholder. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Inkluderte album</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Antall album bildet kan hentes fra, regnet fra det nyeste albumet. Ved 0 tas alle album med. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Bildenummer</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Nummeret på bildet i albumet som skal vises. Ved 0 vises et tilfeldig bilde, ellers bildet med det angitte nummeret. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Vis albumlenke</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Hvis aktivert vises en lenke med albumets navn under bildet. (Standard: på)</string>
 </resources>

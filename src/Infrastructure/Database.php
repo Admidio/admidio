@@ -1207,6 +1207,13 @@ class Database
 
         $gLogger->critical($code . ': ' . $errorMessage);
 
+        // The command line and the test suite have nobody to render the markup, and PHPUnit
+        // repeats the whole message for every failing test. Report the error as one plain
+        // paragraph there and leave the call stack to the exception itself.
+        if (PHP_SAPI === 'cli') {
+            throw new Exception('SQL error ' . $code . ': ' . trim($errorMessage));
+        }
+
         throw new Exception('
             <div style="font-family: monospace;">
                  <p><strong>S Q L - E R R O R</strong></p>

@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Não há fotografias disponíveis para os visitantes. Inicie a sessão para ver as fotografias.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Este plugin apresenta uma fotografia escolhida aleatoriamente no módulo de fotografias.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Fotografia aleatória</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Número de caracteres por palavra</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Número máximo de caracteres de uma palavra antes de inserir uma quebra de linha. Com 0, não são inseridas quebras de linha. (Predefinição: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Largura máxima da fotografia</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Largura máxima da fotografia em píxeis. Com 0, a imagem é dimensionada dinamicamente pelo contentor HTML do plugin. (Predefinição: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Altura máxima da fotografia</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Altura máxima da fotografia em píxeis. Com 0, a imagem é dimensionada dinamicamente pelo contentor HTML do plugin. (Predefinição: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Álbuns considerados</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Número de álbuns dos quais a fotografia pode ser escolhida, a contar do mais recente. Com 0, são considerados todos os álbuns. (Predefinição: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Número da fotografia</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Número da fotografia do álbum a apresentar. Com 0, é escolhida uma fotografia aleatória; com outro número, é apresentada a fotografia correspondente. (Predefinição: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Apresentar a ligação para o álbum</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Se ativado, apresenta sob a fotografia uma ligação para o álbum com o respetivo nome. (Predefinição: ativado)</string>
 </resources>

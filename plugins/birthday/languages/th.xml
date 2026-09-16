@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_BIRTHDAY_FUTURE">#VAR1# จะมีอายุครบ #VAR3# ปีในอีก #VAR2# วัน วันที่ #VAR4#</string>
+  <string name="PLG_BIRTHDAY_FUTURE_NO_AGE">#VAR1# จะมีวันเกิดในอีก #VAR2# วัน</string>
+  <string name="PLG_BIRTHDAY_HEADLINE">วันเกิด</string>
+  <string name="PLG_BIRTHDAY_MAN_VAR">นาย #VAR1#</string>
+  <string name="PLG_BIRTHDAY_MORE_MEMBERS">วันนี้มีสมาชิก #VAR1# คนที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_NO_ENTRIES_VISITORS">ผู้เยี่ยมชมไม่สามารถดูวันเกิดของสมาชิกได้ กรุณาเข้าสู่ระบบเพื่อดู</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS">วันนี้ไม่มีสมาชิกที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">ไม่มีวันเกิดในอีก #VAR1# วันข้างหน้า</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">ไม่มีวันเกิดในช่วง #VAR1# วันที่ผ่านมา</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">ไม่มีวันเกิดในช่วง #VAR1# วันที่ผ่านมาและอีก #VAR2# วันข้างหน้า</string>
+  <string name="PLG_BIRTHDAY_ONE_MEMBER">วันนี้มีสมาชิกหนึ่งคนที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_PAST">#VAR1# มีอายุครบ #VAR3# ปีเมื่อ #VAR2# วันที่แล้ว วันที่ #VAR4#</string>
+  <string name="PLG_BIRTHDAY_PAST_NO_AGE">#VAR1# มีวันเกิดเมื่อ #VAR2# วันที่แล้ว</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงตัวอย่างวันเกิดล่าสุดในหน้าภาพรวม</string>
+  <string name="PLG_BIRTHDAY_PLUGIN_NAME">วันเกิด</string>
+  <string name="PLG_BIRTHDAY_TODAY">#VAR1# มีอายุครบ #VAR2# ปีวันนี้</string>
+  <string name="PLG_BIRTHDAY_TODAY_NO_AGE">วันนี้เป็นวันเกิดของ #VAR1#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW">#VAR1# จะมีอายุครบ #VAR3# ปีพรุ่งนี้ วันที่ #VAR4#</string>
+  <string name="PLG_BIRTHDAY_TOMORROW_NO_AGE">พรุ่งนี้เป็นวันเกิดของ #VAR1#</string>
+  <string name="PLG_BIRTHDAY_WOMAN_VAR">นาง #VAR1#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY">#VAR1# มีอายุครบ #VAR3# ปีเมื่อวาน วันที่ #VAR4#</string>
+  <string name="PLG_BIRTHDAY_YESTERDAY_NO_AGE">เมื่อวานเป็นวันเกิดของ #VAR1#</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN">แสดงชื่อให้ผู้เยี่ยมชมเห็น</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_EXTERN_DESC">เมื่อเปิดใช้งาน ผู้เยี่ยมชมจะเห็นชื่อของผู้ที่มีวันเกิดวันนี้ ในอนาคต และในอดีต แต่ไม่เห็นอายุ มิฉะนั้นจะแสดงเฉพาะจำนวนผู้ที่มีวันเกิดวันนี้ (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES">รูปแบบชื่อของผู้ที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NAMES_DESC">เลือกรูปแบบการแสดงชื่อของผู้ที่มีวันเกิด (ค่าเริ่มต้น: ชื่อ นามสกุล)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE">แสดงอายุ</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_DESC">เมื่อเปิดใช้งาน ผู้ใช้ที่เข้าสู่ระบบจะเห็นอายุของผู้ที่มีวันเกิด (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION">แสดงชื่อพร้อมคำนำหน้า</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_AGE_SALUTATION_DESC">อายุที่เริ่มใช้คำนำหน้าแทนชื่อจริงของผู้ที่มีวันเกิดเมื่อแสดงให้ผู้เยี่ยมชมเห็น (ปิดใช้งาน: -1, ค่าเริ่มต้น: 18)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE">แจ้งเมื่อไม่มีผู้ที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_NOTICE_NONE_DESC">เมื่อเปิดใช้งาน จะแสดงข้อความแจ้งหากไม่มีสมาชิกที่มีวันเกิดในช่วงเวลาที่เลือก (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST">แสดงวันเกิดย้อนหลัง</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_PAST_DESC">จำนวนวันย้อนหลังที่ต้องการแสดงวันเกิด (ค่าเริ่มต้น: 1)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE">แสดงวันเกิดล่วงหน้า</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_FUTURE_DESC">จำนวนวันล่วงหน้าที่ต้องการแสดงวันเกิด (ค่าเริ่มต้น: 2)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT">จำกัดจำนวนผู้ที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_DISPLAY_LIMIT_DESC">จำนวนผู้ที่มีวันเกิดสูงสุดที่แสดง (ค่าเริ่มต้น: 200)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN">แสดงอีเมลให้ผู้เยี่ยมชมเห็น</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SHOW_EMAIL_EXTERN_DESC">เลือกว่าจะแสดงอีเมลของผู้ที่มีวันเกิดหรือไม่ (ค่าเริ่มต้น: แสดงเฉพาะชื่อให้ผู้เยี่ยมชม)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN">บทบาทที่อนุญาตให้ดูเนื้อหา</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">เลือกบทบาทที่สามารถดูเนื้อหาของปลั๊กอินนี้ ผู้ใช้ที่ไม่มีบทบาทใดในรายการที่เลือกจะเห็นเฉพาะจำนวนวันเกิด (ค่าเริ่มต้น: ทุกบทบาท)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL">บทบาทสำหรับวันเกิด</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">เลือกบทบาทของสมาชิกที่ต้องการแสดงวันเกิด (ค่าเริ่มต้น: ทุกบทบาท)</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">ลำดับการเรียงผู้ที่มีวันเกิด</string>
+  <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">เลือกลำดับการเรียงผู้ที่มีวันเกิด (ค่าเริ่มต้น: DESC)</string>
+</resources>

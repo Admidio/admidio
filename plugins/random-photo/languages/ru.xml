@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Для посетителей нет доступных фотографий. Войдите в систему, чтобы увидеть фотографии.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Плагин показывает случайно выбранную фотографию из фотомодуля.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Случайная фотография</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Количество символов в слове</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Максимальное число символов в слове до переноса строки. При 0 переносы не выполняются. (По умолчанию: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Максимальная ширина фотографии</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Максимальная ширина фотографии в пикселях. При 0 изображение динамически масштабируется по HTML-контейнеру плагина. (По умолчанию: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Максимальная высота фотографии</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Максимальная высота фотографии в пикселях. При 0 изображение динамически масштабируется по HTML-контейнеру плагина. (По умолчанию: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Учитываемые альбомы</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Количество альбомов для выбора фотографии, начиная с самого нового. При 0 учитываются все альбомы. (По умолчанию: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Номер фотографии</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Номер отображаемой фотографии в альбоме. При 0 показывается случайная фотография, иначе фотография с указанным номером. (По умолчанию: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Показывать ссылку на альбом</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Если включено, под фотографией отображается ссылка на альбом с его названием. (По умолчанию: включено)</string>
 </resources>

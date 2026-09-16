@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Todas as entradas</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Anúncios</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Não há anúncios disponíveis para os visitantes. Inicie a sessão para ver os anúncios.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Este plugin apresenta uma pré-visualização dos anúncios mais recentes na página de visão geral.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Lista de anúncios</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Número de anúncios</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Número de anúncios a apresentar. (Predefinição: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caracteres antes da quebra de linha</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Número máximo de caracteres de uma palavra antes de inserir uma quebra de linha. (0: sem quebra de linha, predefinição: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Categorias apresentadas</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Selecione as categorias cujos anúncios pretende apresentar. (Predefinição: todas as categorias)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Apresentar a descrição completa</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Se ativado, apresenta a descrição completa; caso contrário, apenas uma pré-visualização do texto. (Predefinição: desativado)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Texto de pré-visualização</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Número de caracteres da pré-visualização. (0: sem pré-visualização curta, predefinição: 70)</string>
 </resources>

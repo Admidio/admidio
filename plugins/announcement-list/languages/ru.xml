@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Все записи</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Анонсы</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Для посетителей нет анонсов. Войдите в систему, чтобы увидеть анонсы.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Плагин показывает предварительный список последних объявлений на странице обзора.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Список объявлений</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Количество объявлений</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Количество отображаемых объявлений. (По умолчанию: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Символов до переноса строки</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Максимальное число символов в слове до переноса строки. (0: без переноса, по умолчанию: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Отображаемые категории</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Выберите категории, объявления которых следует показывать. (По умолчанию: все категории)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Показывать полное описание</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Если включено, показывается полное описание, иначе только предварительный текст. (По умолчанию: выключено)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Предварительный текст</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Число символов предварительного текста. (0: без краткого просмотра, по умолчанию: 70)</string>
 </resources>

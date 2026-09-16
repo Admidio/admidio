@@ -1,14 +1,34 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">本月</string>
-  <string name="PLG_CALENDAR_MONTH">一月，二月，三月，四月，五月，六月，七月，八月，九月，十月，十一月，十二月</string>
+  <string name="PLG_CALENDAR_MONTH">一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月</string>
   <string name="PLG_CALENDAR_MORE">(... 更多)</string>
-  <string name="PLG_CALENDAR_MONDAY_SHORT">Mo</string>
-  <string name="PLG_CALENDAR_TUESDAY_SHORT">Tu</string>
-  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">We</string>
-  <string name="PLG_CALENDAR_THURSDAY_SHORT">Th</string>
-  <string name="PLG_CALENDAR_FRIDAY_SHORT">Fr</string>
-  <string name="PLG_CALENDAR_SATURDAY_SHORT">Sa</string>
-  <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">周一</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">周二</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">周三</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">周四</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">周五</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">周六</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">周日</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">几天</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">此插件在概览页面显示包含本月所有活动的日历。</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">日历</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">显示活动</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">启用后，在日历中显示活动。（默认：启用）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">显示生日</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">启用后，在日历中显示会员生日。（默认：启用）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">向访客显示生日</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">启用后，访客可以看到会员生日。（默认：禁用）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">显示生日图标</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">启用后，在日历中显示生日图标。（默认：启用）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">寿星姓名显示格式</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">选择寿星姓名的显示方式。（默认：名）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">包含的类别</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">选择日历活动应包含的类别。（默认：所有类别）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">显示日历名称</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">启用后，为每个活动显示其日历名称。（默认：禁用）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">允许查看内容的角色</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">选择可以查看此插件内容的角色。不属于任何所选角色的用户只能看到活动和生日的数量。（默认：所有角色）</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">显示生日的会员角色</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">选择哪些角色的会员可以显示生日。（默认：所有角色）</string>
 </resources>

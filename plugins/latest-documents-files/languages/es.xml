@@ -4,4 +4,12 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Más descargas</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">No hay archivos disponibles para descargar.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Subido de #VAR1# el #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Este complemento muestra los últimos documentos y archivos subidos por los usuarios en la página de resumen.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Últimos documentos y archivos</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Número de archivos</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Número de archivos que se mostrarán. (Predeterminado: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Mostrar la fecha y hora de subida</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Si se activa, se muestran la fecha y hora de subida del archivo; de lo contrario, se ocultan. (Predeterminado: activado)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Máximo de caracteres del nombre de archivo</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Número máximo de caracteres del nombre de archivo antes de recortarlo. (0: sin recorte, predeterminado: 0)</string>
 </resources>

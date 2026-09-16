@@ -3,4 +3,18 @@
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Kõik sündmused</string>
   <string name="PLG_EVENT_LIST_HEADLINE">sündmused</string>
   <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Külastajatele pole üritusi saadaval. Sündmuste vaatamiseks logige sisse.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">See plugin kuvab ülevaatelehel uusimate sündmuste eelvaate.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Sündmuste loend</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Sündmuste arv</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Kuvatavate sündmuste arv. (Vaikimisi: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Kuva lõppkuupäev</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Kui lubatud, kuvatakse sündmuse lõppkuupäev ja -kellaaeg, muidu ainult alguskuupäev ja -kellaaeg. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Märke enne reavahetust</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksimaalne märkide arv sõnas enne reavahetust. (0: reavahetust ei lisata, vaikimisi: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Kuvatavad kategooriad</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Valige kategooriad, mille sündmusi kuvada. (Vaikimisi: kõik kategooriad)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Kuva täielik kirjeldus</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Kui lubatud, kuvatakse täielik kirjeldus, vastasel juhul ainult teksti eelvaade. (Vaikimisi: välja lülitatud)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Eelvaate tekst</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Eelvaate teksti märkide arv. (0: lühikest eelvaadet ei kuvata, vaikimisi: 70)</string>
 </resources>

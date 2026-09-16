@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Es stehen keine Fotos für Besucher zur Verfügung. Melden Sie sich an um die Fotos zu sehen.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Dieses Plugin zeigt ein zufällig ausgewähltes Foto aus dem Fotomodul an.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Zufallsfoto</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Zeichenanzahl pro Wort</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Maximale Zeichenanzahl eines Wortes vor einem Zeilenumbruch. Bei 0 erfolgt kein Zeilenumbruch. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Maximale Fotobreite</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Maximale Breite des Fotos in Pixeln. Bei 0 wird das Foto dynamisch an den HTML-Container des Plugins angepasst. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Maximale Fotohöhe</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Maximale Höhe des Fotos in Pixeln. Bei 0 wird das Foto dynamisch an den HTML-Container des Plugins angepasst. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Berücksichtigte Alben</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Anzahl der Alben, aus denen das Foto stammen darf, absteigend vom neuesten Album gezählt. Bei 0 werden alle Alben berücksichtigt. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Fotonummer</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Nummer des anzuzeigenden Fotos im Album. Bei 0 wird ein zufälliges Foto angezeigt, bei einer bestimmten Nummer das entsprechende Foto. (Standard: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Albumlink anzeigen</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Bei aktivierter Einstellung wird unter dem Foto ein Link zum Album mit dessen Namen angezeigt. (Standard: aktiviert)</string>
 </resources>

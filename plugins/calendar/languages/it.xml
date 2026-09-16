@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Mese corrente</string>
+  <string name="PLG_CALENDAR_MONTH">Gennaio,Febbraio,Marzo,Aprile,Maggio,Giugno,Luglio,Agosto,Settembre,Ottobre,Novembre,Dicembre</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Lu</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ma</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Me</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Gi</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Ve</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Sa</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Do</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Più giorni</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Questo plugin mostra nella pagina di riepilogo un calendario con tutti gli eventi del mese corrente.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Calendario</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Mostra gli eventi</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Se attivata, questa opzione mostra gli eventi nel calendario. (Predefinito: attivato)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Mostra i compleanni</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Se attivata, questa opzione mostra i compleanni dei membri nel calendario. (Predefinito: attivato)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Mostra i compleanni ai visitatori</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Se attivata, questa opzione mostra i compleanni dei membri ai visitatori. (Predefinito: disattivato)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Mostra l’icona del compleanno</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Se attivata, questa opzione mostra un’icona del compleanno nel calendario. (Predefinito: attivato)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Formato del nome dei festeggiati</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Permette di scegliere come visualizzare i nomi dei festeggiati. (Predefinito: nome)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Categorie considerate</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Seleziona le categorie da considerare per gli eventi nel calendario. (Predefinito: tutte le categorie)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Mostra i nomi dei calendari</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Se attivata, questa opzione mostra il nome del calendario per ogni evento. (Predefinito: disattivato)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Ruoli autorizzati a vedere il contenuto</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Seleziona i ruoli che possono vedere il contenuto del plugin. Gli utenti senza nessuno dei ruoli selezionati vedono solo il numero di eventi e compleanni. (Predefinito: tutti i ruoli)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Ruoli inclusi nei compleanni</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Seleziona i ruoli dei membri di cui visualizzare i compleanni. (Predefinito: tutti i ruoli)</string>
+</resources>

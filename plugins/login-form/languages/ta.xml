@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LOGIN_FORM_ACTIVE_SINCE">செயலில் உள்ள தொடக்க நாள்</string>
+  <string name="PLG_LOGIN_FORM_HONORARY_MEMBER">கௌரவ உறுப்பினர்</string>
+  <string name="PLG_LOGIN_FORM_LAST_LOGIN">கடைசி உள்நுழைவு</string>
+  <string name="PLG_LOGIN_FORM_NEW_ONLINE_MEMBER">புதிய இணைய உறுப்பினர்</string>
+  <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">உள்நுழைந்த எண்ணிக்கை</string>
+  <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">இணைய உறுப்பினர்</string>
+  <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">மூத்த இணைய உறுப்பினர்</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">இந்தச் செருகுநிரல் மேலோட்டப் பக்கத்தில் உள்நுழைவுப் படிவத்தைக் காட்டுகிறது. உள்நுழைந்த பிறகு உள்ளீட்டுப் புலங்களுக்குப் பதிலாக பயனரைப் பற்றிய பயனுள்ள தகவல்கள் காட்டப்படும்.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">உள்நுழைவுப் படிவம்</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">உறுப்பினர் தரநிலை</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">பதிவுசெய்யும் இணைப்பைக் காட்டு</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">இயக்கப்பட்டால் உள்நுழைவுப் படிவத்தில் பதிவுப் படிவத்திற்கான இணைப்பு காட்டப்படும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">மின்னஞ்சல் இணைப்பைக் காட்டு</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">இயக்கப்பட்டால் உள்நுழைவதில் சிக்கல் ஏற்படும்போது நிர்வாகிக்கு மின்னஞ்சல் அனுப்புவதற்கான இணைப்பு உள்நுழைவுப் படிவத்தில் காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">வெளியேறும் இணைப்பைக் காட்டு</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">இயக்கப்பட்டால் உள்நுழைந்த பிறகு வெளியேறும் இணைப்பு காட்டப்படும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">தரநிலைகளைக் காட்டு</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">இயக்கப்பட்டால் உள்நுழைந்த எண்ணிக்கையின் அடிப்படையிலான தரநிலை பயனர்பெயருக்குப் பிறகு காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">தரநிலைகள்</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">“தரநிலைகளைக் காட்டு” இயக்கப்பட்டிருக்கும்போது பயனர்பெயருக்குப் பிறகு காட்ட வேண்டிய தரநிலைகளை வரையறுக்கவும். விசை என்பது உள்நுழைந்த எண்ணிக்கை; மதிப்பு என்பது தரநிலையின் பெயர்.\n ஒரு தரநிலையை நீக்க, அட்டவணையில் உள்ள “உள்நுழைந்த எண்ணிக்கை” மற்றும் “உறுப்பினர் தரநிலை” புலங்களை காலியாக்கவும்.</string>
+</resources>

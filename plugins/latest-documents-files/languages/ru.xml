@@ -4,4 +4,12 @@
   <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">Больше документов и файлов</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">Нет документов или файлов.</string>
   <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">Загружено #VAR1# #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">Плагин показывает на странице обзора последние документы и файлы, загруженные пользователями.</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">Последние документы и файлы</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">Количество файлов</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">Количество отображаемых файлов. (По умолчанию: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">Показывать время загрузки</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">Если включено, показываются дата и время загрузки файла, иначе они скрыты. (По умолчанию: включено)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">Максимум символов в имени файла</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">Максимальное число символов в имени файла до его сокращения. (0: без сокращения, по умолчанию: 0)</string>
 </resources>

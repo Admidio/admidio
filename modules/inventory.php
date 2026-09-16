@@ -62,14 +62,7 @@ try {
     $getNewPicture = admFuncVariableIsValid($_GET, 'new_picture', 'bool', array('defaultValue' => false));
 
     // check if module is active
-    if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('inventory_module_enabled') === 2 && !$gValidLogin
-        || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && !$gCurrentUser->isAdministratorInventory())
-        || ($gSettingsManager->getInt('inventory_module_enabled') === 4 && !InventoryPresenter::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory())
-        || ($gSettingsManager->getInt('inventory_module_enabled') === 5 && !$gCurrentUser->isAllowedToViewInventory() && !$gCurrentUser->isAdministratorInventory())) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
+    InventoryPresenter::checkModuleAccess();
 
     // when saving folders, check whether the subfolder in adm_my_files exists with the corresponding rights
     if ((int)$gSettingsManager->get('inventory_item_picture_storage') === 1) {

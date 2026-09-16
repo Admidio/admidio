@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Alle</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Meddelelser</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Der er ingen meddelelser tilgængelige for besøgende. Log ind for at se meddelelserne.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Dette plugin viser en forhåndsvisning af de seneste meddelelser på oversigtssiden.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Meddelelsesliste</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Antal meddelelser</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Antal meddelelser, der skal vises. (Standard: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Tegn før linjeskift</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maksimalt antal tegn i et ord før linjeskift. (0: intet linjeskift, standard: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Viste kategorier</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Vælg de kategorier, hvis meddelelser skal vises. (Standard: alle kategorier)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Vis hele beskrivelsen</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Hvis aktiveret vises hele beskrivelsen, ellers kun en forhåndsvisning af teksten. (Standard: fra)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Forhåndsvisningstekst</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Antal tegn i forhåndsvisningsteksten. (0: ingen kort forhåndsvisning, standard: 70)</string>
 </resources>

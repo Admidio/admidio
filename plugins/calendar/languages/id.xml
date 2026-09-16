@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">Bulan ini</string>
+  <string name="PLG_CALENDAR_MONTH">Januari,Februari,Maret,April,Mei,Juni,Juli,Agustus,September,Oktober,November,Desember</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Sen</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Sel</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Rab</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Kam</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Jum</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Sab</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Min</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Beberapa hari</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Plugin ini menampilkan kalender berisi semua acara bulan ini di halaman ringkasan.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Tampilkan acara</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Jika diaktifkan, acara ditampilkan di kalender. (Bawaan: aktif)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Tampilkan ulang tahun</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Jika diaktifkan, ulang tahun anggota ditampilkan di kalender. (Bawaan: aktif)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Tampilkan ulang tahun kepada pengunjung</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Jika diaktifkan, pengunjung dapat melihat ulang tahun anggota. (Bawaan: nonaktif)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Tampilkan ikon ulang tahun</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Jika diaktifkan, ikon ulang tahun ditampilkan di kalender. (Bawaan: aktif)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Format nama orang yang berulang tahun</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Pilih cara menampilkan nama orang yang berulang tahun. (Bawaan: nama depan)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Kategori yang disertakan</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Pilih kategori yang disertakan untuk acara di kalender. (Bawaan: semua kategori)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Tampilkan nama kalender</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Jika diaktifkan, nama kalender ditampilkan untuk setiap acara. (Bawaan: nonaktif)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Peran yang boleh melihat konten</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Pilih peran yang boleh melihat konten plugin ini. Pengguna tanpa salah satu peran yang dipilih hanya melihat jumlah acara dan ulang tahun. (Bawaan: semua peran)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Peran untuk ulang tahun</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Pilih peran yang ulang tahun anggotanya ditampilkan. (Bawaan: semua peran)</string>
+</resources>

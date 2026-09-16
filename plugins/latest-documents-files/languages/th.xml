@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_HEADLINE">เอกสารและไฟล์</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS">เอกสารและไฟล์เพิ่มเติม</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_NO_DOWNLOADS_AVAILABLE">ไม่มีเอกสารหรือไฟล์ที่พร้อมใช้งาน</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_UPLOAD_FROM_AT">อัปโหลดโดย #VAR1# เมื่อ #VAR2#</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงเอกสารและไฟล์ล่าสุดที่ผู้ใช้อัปโหลดในหน้าภาพรวม</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PLUGIN_NAME">เอกสารและไฟล์ล่าสุด</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT">จำนวนไฟล์</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_FILES_COUNT_DESC">จำนวนไฟล์ที่แสดง (ค่าเริ่มต้น: 2)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP">แสดงเวลาอัปโหลด</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_SHOW_UPLOAD_TIMESTAMP_DESC">เมื่อเปิดใช้งาน จะแสดงวันที่และเวลาอัปโหลดไฟล์ มิฉะนั้นจะซ่อนไว้ (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME">จำนวนอักขระสูงสุดในชื่อไฟล์</string>
+  <string name="PLG_LATEST_DOCUMENTS_FILES_PREFERENCES_MAX_CHARS_FILENAME_DESC">จำนวนอักขระสูงสุดในชื่อไฟล์ก่อนตัดให้สั้นลง (0: ไม่ตัดให้สั้นลง, ค่าเริ่มต้น: 0)</string>
+</resources>

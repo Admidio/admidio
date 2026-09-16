@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# liikmed</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Internetis on #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Internetis on #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Andmed pole külastajatele nähtavad. Logige sisse, et näha, kes on võrgus.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">See plugin kuvab ülevaatelehel külastajaid ja registreeritud liikmeid.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Kes on võrgus?</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Võrgusoleku kestus</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Aeg minutites, mille jooksul loetakse kasutaja pärast viimast tegevust endiselt võrgus olevaks. (Vaikimisi: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Kuva külastajad</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Kui lubatud, kuvatakse külastajate arv, muidu ainult sisselogitud kasutajad. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Kuva liikmed külastajatele</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Valige, kuidas liikmeid külastajatele kuvatakse. (Vaikimisi: sisselogitud liikmete arv)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Ära kuva sisselogitud liikmeid</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Kuva sisselogitud liikmed</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Sisselogitud liikmete arv</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Kuva enda olek</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Kui lubatud, kuvatakse enda olek nii sisse- kui ka väljalogituna. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Kuva kasutajad kõrvuti</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Kui lubatud, kuvatakse kasutajad kõrvuti, muidu üksteise all. (Vaikimisi: välja lülitatud)</string>
 </resources>

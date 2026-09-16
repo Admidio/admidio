@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_WHO_IS_ONLINE_HEADLINE">ใครออนไลน์?</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">ไม่มีข้อมูลสำหรับผู้เยี่ยมชม กรุณาเข้าสู่ระบบเพื่อดูว่าใครออนไลน์</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_VISITORS_ON_WEBSITE">ไม่มีผู้เยี่ยมชมบนเว็บไซต์</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_VISITORS">ผู้เยี่ยมชม #VAR1# คน</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBER">สมาชิก #VAR1# คน</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">สมาชิก #VAR1# คน</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">ผู้ที่ออนไลน์: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">ผู้ที่ออนไลน์: #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงผู้เยี่ยมชมและสมาชิกที่ลงทะเบียนในหน้าภาพรวม</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">ใครออนไลน์</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">ระยะเวลาคงสถานะออนไลน์</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">ระยะเวลาเป็นนาทีที่ยังถือว่าผู้ใช้ออนไลน์หลังการกระทำครั้งล่าสุด (ค่าเริ่มต้น: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">แสดงผู้เยี่ยมชม</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">เมื่อเปิดใช้งาน จะแสดงจำนวนผู้เยี่ยมชม มิฉะนั้นจะแสดงเฉพาะผู้ใช้ที่เข้าสู่ระบบ (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">แสดงสมาชิกให้ผู้เยี่ยมชมเห็น</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">เลือกวิธีแสดงสมาชิกให้ผู้เยี่ยมชมเห็น (ค่าเริ่มต้น: จำนวนสมาชิกที่เข้าสู่ระบบ)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">ไม่แสดงสมาชิกที่เข้าสู่ระบบ</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">แสดงสมาชิกที่เข้าสู่ระบบ</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">จำนวนสมาชิกที่เข้าสู่ระบบ</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">แสดงสถานะของตนเอง</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">เมื่อเปิดใช้งาน จะแสดงสถานะของตนเองทั้งขณะเข้าสู่ระบบและออกจากระบบ (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">แสดงผู้ใช้เรียงข้างกัน</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">เมื่อเปิดใช้งาน จะแสดงผู้ใช้เรียงข้างกัน มิฉะนั้นจะเรียงลงมาตามแนวตั้ง (ค่าเริ่มต้น: ปิด)</string>
+</resources>

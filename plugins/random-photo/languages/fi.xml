@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">Vierailijoille ei ole saatavilla valokuvia. Kirjaudu sisään nähdäksesi kuvat.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Tämä lisäosa näyttää satunnaisesti valitun kuvan kuvamoduulista.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Satunnainen kuva</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Merkkien määrä sanaa kohden</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Sanan merkkien enimmäismäärä ennen rivinvaihtoa. Arvolla 0 rivinvaihtoja ei tehdä. (Oletus: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Kuvan enimmäisleveys</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Kuvan enimmäisleveys pikseleinä. Arvolla 0 kuva skaalataan dynaamisesti lisäosan HTML-säiliön mukaan. (Oletus: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Kuvan enimmäiskorkeus</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Kuvan enimmäiskorkeus pikseleinä. Arvolla 0 kuva skaalataan dynaamisesti lisäosan HTML-säiliön mukaan. (Oletus: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Huomioitavat albumit</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Albumien määrä, joista kuva voidaan valita, uusimmasta albumista alkaen. Arvolla 0 huomioidaan kaikki albumit. (Oletus: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Kuvan numero</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Albumista näytettävän kuvan numero. Arvolla 0 näytetään satunnainen kuva, muuten annetun numeron mukainen kuva. (Oletus: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Näytä albumilinkki</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Kun käytössä, kuvan alapuolella näytetään albumin nimellä varustettu linkki albumiin. (Oletus: käytössä)</string>
 </resources>

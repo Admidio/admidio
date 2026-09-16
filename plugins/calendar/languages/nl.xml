@@ -11,4 +11,24 @@
   <string name="PLG_CALENDAR_SATURDAY_SHORT">Za</string>
   <string name="PLG_CALENDAR_SUNDAY_SHORT">Zo</string>
   <string name="PLG_CALENDAR_SEVERAL_DAYS">Meerdaags</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Deze plug-in toont op de overzichtspagina een kalender met alle evenementen van de huidige maand.</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Evenementen tonen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Indien ingeschakeld worden evenementen in de kalender getoond. (Standaard: aan)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Verjaardagen tonen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Indien ingeschakeld worden verjaardagen van leden in de kalender getoond. (Standaard: aan)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Verjaardagen aan bezoekers tonen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">Indien ingeschakeld zien bezoekers de verjaardagen van leden. (Standaard: uit)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">Verjaardagspictogram tonen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">Indien ingeschakeld wordt een verjaardagspictogram in de kalender getoond. (Standaard: aan)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">Naamweergave van jarigen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">Bepaalt hoe de namen van jarigen worden weergegeven. (Standaard: voornaam)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">Meegenomen categorieën</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Selecteer de categorieën voor evenementen in de kalender. (Standaard: alle categorieën)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Kalendernamen tonen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Indien ingeschakeld wordt bij elk evenement de kalendernaam getoond. (Standaard: uit)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Rollen met toegang tot de inhoud</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Selecteer de rollen die de inhoud van deze plug-in mogen zien. Gebruikers zonder een geselecteerde rol zien alleen het aantal evenementen en verjaardagen. (Standaard: alle rollen)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Rollen voor verjaardagen</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Selecteer de rollen waarvan de verjaardagen van leden worden getoond. (Standaard: alle rollen)</string>
 </resources>

@@ -2,4 +2,19 @@
 <resources>
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Todas las citas</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Citas</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">No hay eventos disponibles para los visitantes. Inicie sesión para ver los eventos.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Este complemento muestra una vista previa de los últimos eventos en la página de resumen.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Lista de eventos</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Número de eventos</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Número de eventos que se mostrarán. (Predeterminado: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Mostrar la fecha de finalización</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Si se activa, se muestran la fecha y hora de finalización del evento; de lo contrario, solo la fecha y hora de inicio. (Predeterminado: activado)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caracteres antes del salto de línea</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Número máximo de caracteres de una palabra antes de insertar un salto de línea. (0: sin saltos de línea, predeterminado: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Categorías mostradas</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Seleccione las categorías cuyos eventos desea mostrar. (Predeterminado: todas las categorías)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Mostrar la descripción completa</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Si se activa, se muestra la descripción completa; de lo contrario, solo una vista previa del texto. (Predeterminado: desactivado)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Texto de vista previa</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Número de caracteres de la vista previa. (0: sin vista previa breve, predeterminado: 70)</string>
 </resources>

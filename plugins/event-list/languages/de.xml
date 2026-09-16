@@ -3,4 +3,18 @@
     <string name="PLG_EVENT_LIST_ALL_EVENTS">Alle Veranstaltungen</string>
     <string name="PLG_EVENT_LIST_HEADLINE">Veranstaltungen</string>
     <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Es stehen keine Veranstaltungen für Besucher zur Verfügung. Melde dich an, um die Veranstaltungen zu sehen.</string>
+    <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Dieses Plugin zeigt auf der Übersichtsseite eine Vorschau der neuesten Termine an.</string>
+    <string name="PLG_EVENT_LIST_PLUGIN_NAME">Terminliste</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Anzahl der Termine</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Anzahl der anzuzeigenden Termine. (Standard: 2)</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Enddatum anzeigen</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Bei aktivierter Einstellung werden Enddatum und Endzeit des Termins angezeigt, sonst nur Startdatum und Startzeit. (Standard: aktiviert)</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Zeichen vor dem Zeilenumbruch</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Maximale Zeichenanzahl eines Wortes vor einem Zeilenumbruch. (0: kein Zeilenumbruch, Standard: 0)</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Angezeigte Kategorien</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Auswahl der Kategorien, deren Termine angezeigt werden sollen. (Standard: alle Kategorien)</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Vollständige Beschreibung anzeigen</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Bei aktivierter Einstellung wird die vollständige Beschreibung angezeigt, sonst nur eine Textvorschau. (Standard: deaktiviert)</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Vorschautext</string>
+    <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Zeichenanzahl des Vorschautextes. (0: keine Kurzvorschau, Standard: 70)</string>
 </resources>

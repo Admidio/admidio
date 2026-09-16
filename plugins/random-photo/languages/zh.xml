@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">访客无法查看照片。请登录后查看。</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">此插件显示从照片模块中随机选择的一张照片。</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">随机照片</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">每个单词的字符数</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">单词换行前允许的最大字符数。设为 0 时不换行。（默认：0）</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">照片最大宽度</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">照片的最大宽度，单位为像素。设为 0 时，图片将根据插件所在的 HTML 容器动态缩放。（默认：0）</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">照片最大高度</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">照片的最大高度，单位为像素。设为 0 时，图片将根据插件所在的 HTML 容器动态缩放。（默认：0）</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">包含的相册</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">可从中选择照片的相册数量，从最新的相册开始倒序计算。设为 0 时包含所有相册。（默认：0）</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">照片编号</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">要显示的相册内照片编号。设为 0 时显示随机照片，否则显示指定编号的照片。（默认：0）</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">显示相册链接</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">启用后，在照片下方显示带有相册名称的相册链接。（默认：启用）</string>
+</resources>

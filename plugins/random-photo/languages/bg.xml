@@ -1,4 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_RANDOM_PHOTO_NO_ENTRIES_VISITORS">За посетители снимките не са достъпни. Влезте за да разглеждате снимки.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_DESCRIPTION">Тази добавка показва случайно избрана снимка от модула за снимки.</string>
+  <string name="PLG_RANDOM_PHOTO_PLUGIN_NAME">Случайна снимка</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD">Брой знаци в дума</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_CHAR_PER_WORD_DESC">Максимален брой знаци в дума преди нов ред. При 0 не се извършва пренасяне. (По подразбиране: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH">Максимална ширина на снимката</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_WIDTH_DESC">Максимална ширина на снимката в пиксели. При 0 изображението се мащабира динамично според HTML контейнера на добавката. (По подразбиране: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT">Максимална височина на снимката</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_MAX_HEIGHT_DESC">Максимална височина на снимката в пиксели. При 0 изображението се мащабира динамично според HTML контейнера на добавката. (По подразбиране: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS">Включени албуми</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUMS_DESC">Брой албуми, от които може да бъде избрана снимката, започвайки от най-новия. При 0 се включват всички албуми. (По подразбиране: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER">Номер на снимката</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_ALBUM_PHOTO_NUMBER_DESC">Номер на снимката в албума за показване. При 0 се показва случайна снимка, иначе снимката с посочения номер. (По подразбиране: 0)</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK">Показване на връзка към албума</string>
+  <string name="PLG_RANDOM_PHOTO_PREFERENCES_SHOW_ALBUM_LINK_DESC">Ако е включено, под снимката се показва връзка към албума с неговото име. (По подразбиране: включено)</string>
 </resources>

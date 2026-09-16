@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_CALENDAR_CURRENT_MONTH">เดือนปัจจุบัน</string>
+  <string name="PLG_CALENDAR_MONTH">มกราคม,กุมภาพันธ์,มีนาคม,เมษายน,พฤษภาคม,มิถุนายน,กรกฎาคม,สิงหาคม,กันยายน,ตุลาคม,พฤศจิกายน,ธันวาคม</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">จ.</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">อ.</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">พ.</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">พฤ.</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">ศ.</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">ส.</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">อา.</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">หลายวัน</string>
+  <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">ปลั๊กอินนี้แสดงปฏิทินกิจกรรมทั้งหมดของเดือนปัจจุบันในหน้าภาพรวม</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">ปฏิทิน</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">แสดงกิจกรรม</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">เมื่อเปิดใช้งาน จะแสดงกิจกรรมในปฏิทิน (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">แสดงวันเกิด</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">เมื่อเปิดใช้งาน จะแสดงวันเกิดของสมาชิกในปฏิทิน (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">แสดงวันเกิดให้ผู้เยี่ยมชมเห็น</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS_DESC">เมื่อเปิดใช้งาน ผู้เยี่ยมชมจะเห็นวันเกิดของสมาชิก (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON">แสดงไอคอนวันเกิด</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_ICON_DESC">เมื่อเปิดใช้งาน จะแสดงไอคอนวันเกิดในปฏิทิน (ค่าเริ่มต้น: เปิด)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES">รูปแบบชื่อของผู้ที่มีวันเกิด</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAY_NAMES_DESC">เลือกรูปแบบการแสดงชื่อของผู้ที่มีวันเกิด (ค่าเริ่มต้น: ชื่อจริง)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES">หมวดหมู่ที่นำมาพิจารณา</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">เลือกหมวดหมู่ที่จะนำมาพิจารณาสำหรับกิจกรรมในปฏิทิน (ค่าเริ่มต้น: ทุกหมวดหมู่)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">แสดงชื่อปฏิทิน</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">เมื่อเปิดใช้งาน จะแสดงชื่อปฏิทินสำหรับแต่ละกิจกรรม (ค่าเริ่มต้น: ปิด)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">บทบาทที่อนุญาตให้ดูเนื้อหา</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">เลือกบทบาทที่สามารถดูเนื้อหาของปลั๊กอินนี้ ผู้ใช้ที่ไม่มีบทบาทใดในรายการที่เลือกจะเห็นเฉพาะจำนวนกิจกรรมและวันเกิด (ค่าเริ่มต้น: ทุกบทบาท)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">บทบาทสำหรับวันเกิด</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">เลือกบทบาทของสมาชิกที่ต้องการแสดงวันเกิด (ค่าเริ่มต้น: ทุกบทบาท)</string>
+</resources>

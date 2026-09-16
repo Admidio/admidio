@@ -7,4 +7,17 @@
   <string name="PLG_LOGIN_FORM_NUMBER_OF_LOGINS">Antal logins</string>
   <string name="PLG_LOGIN_FORM_ONLINE_MEMBER">Online-medlem</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online-medlem</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_DESCRIPTION">Detta tillägg visar ett inloggningsformulär på översiktssidan. Efter inloggning ersätts fälten med användbar information om användaren.</string>
+  <string name="PLG_LOGIN_FORM_PLUGIN_NAME">Inloggningsformulär</string>
+  <string name="PLG_LOGIN_FORM_MEMBERRANK">Medlemsrang</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Visa registreringslänk</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Om aktiverat visas en länk till registreringsformuläret i inloggningsformuläret. (Standard: av)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">Visa e-postlänk</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Om aktiverat visas en länk i inloggningsformuläret för att skicka e-post till administratören vid inloggningsproblem. (Standard: på)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Visa utloggningslänk</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Om aktiverat visas en utloggningslänk efter inloggning. (Standard: av)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS">Visa ranger</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Om aktiverat visas en rang efter användarnamnet baserat på antalet inloggningar. (Standard: på)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Ranger</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Ange de ranger som visas efter användarnamnet när ”Visa ranger” är aktiverat. Nyckeln är antalet inloggningar och värdet är rangens namn.\n För att ta bort en rang, töm fälten ”Antal inloggningar” och ”Medlemsrang” i tabellen.</string>
 </resources>

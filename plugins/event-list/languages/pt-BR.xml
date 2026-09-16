@@ -2,4 +2,19 @@
 <resources>
   <string name="PLG_EVENT_LIST_ALL_EVENTS">Todos os eventos</string>
   <string name="PLG_EVENT_LIST_HEADLINE">Eventos</string>
+  <string name="PLG_EVENT_LIST_NO_ENTRIES_VISITORS">Não há eventos disponíveis para visitantes. Entre na sua conta para ver os eventos.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_DESCRIPTION">Este plugin apresenta uma pré-visualização dos eventos mais recentes na página de visão geral.</string>
+  <string name="PLG_EVENT_LIST_PLUGIN_NAME">Lista de eventos</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT">Número de eventos</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_EVENTS_COUNT_DESC">Número de eventos a apresentar. (Padrão: 2)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END">Apresentar a data de fim</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_EVENT_DATE_END_DESC">Se ativado, apresenta a data e hora de fim do evento; caso contrário, apenas a data e hora de início. (Padrão: ativado)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caracteres antes da quebra de linha</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Número máximo de caracteres de uma palavra antes de inserir uma quebra de linha. (0: sem quebra de linha, padrão: 0)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Categorias apresentadas</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Selecione as categorias cujos eventos pretende apresentar. (Padrão: todas as categorias)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Apresentar a descrição completa</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Se ativado, apresenta a descrição completa; caso contrário, apenas uma pré-visualização do texto. (Padrão: desativado)</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Texto de pré-visualização</string>
+  <string name="PLG_EVENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Número de caracteres da pré-visualização. (0: sem pré-visualização curta, padrão: 70)</string>
 </resources>

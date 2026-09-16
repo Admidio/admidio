@@ -44,4 +44,7 @@
   <string name="PLG_BIRTHDAY_PREFERENCES_ROLES_SQL_DESC">Tutaj możesz wybrać role, które muszą mieć użytkownicy, aby ich urodziny były wyświetlane. (domyślnie: wszystkie role)</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL">Kolejność sortowania jubilatów</string>
   <string name="PLG_BIRTHDAY_PREFERENCES_SORT_SQL_DESC">To ustawienie pozwala wybrać kolejność sortowania osób obchodzących urodziny. (domyślnie: DESC)</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_FUTURE">Brak urodzin w ciągu najbliższych #VAR1# dni.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PAST">Brak urodzin w ciągu ostatnich #VAR1# dni.</string>
+  <string name="PLG_BIRTHDAY_NO_MEMBERS_PERIOD">Brak urodzin w ciągu ostatnich #VAR1# i najbliższych #VAR2# dni.</string>
 </resources>

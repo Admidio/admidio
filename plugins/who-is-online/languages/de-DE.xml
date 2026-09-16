@@ -7,4 +7,20 @@
   <string name="PLG_WHO_IS_ONLINE_VAR_NUM_MEMBERS">#VAR1# Mitglieder</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_ARE">Online sind #VAR1#</string>
   <string name="PLG_WHO_IS_ONLINE_VAR_ONLINE_IS">Online ist #VAR1#</string>
+  <string name="PLG_WHO_IS_ONLINE_NO_DATA_VISITORS">Für Besucher sind keine Daten verfügbar. Bitte anmelden, um zu sehen, wer online ist.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_DESCRIPTION">Dieses Plugin zeigt Besucher und registrierte Mitglieder auf der Übersichtsseite an.</string>
+  <string name="PLG_WHO_IS_ONLINE_PLUGIN_NAME">Wer ist online?</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE">Dauer des Online-Status</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_TIME_STILL_ACTIVE_DESC">Zeitraum in Minuten, in dem ein Benutzer nach der letzten Aktion noch als online gilt. (Standard: 10)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS">Besucher anzeigen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_VISITORS_DESC">Bei aktivierter Einstellung wird die Besucheranzahl angezeigt, sonst nur angemeldete Benutzer. (Standard: aktiviert)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS">Mitglieder für Besucher anzeigen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_DESC">Legt fest, wie Mitglieder für Besucher angezeigt werden. (Standard: Anzahl angemeldeter Mitglieder)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_1">Angemeldete Mitglieder nicht anzeigen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_2">Angemeldete Mitglieder anzeigen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_MEMBERS_TO_VISITORS_SELECTION_3">Anzahl angemeldeter Mitglieder</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF">Eigenen Status anzeigen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_SELF_DESC">Bei aktivierter Einstellung wird der eigene Status sowohl angemeldet als auch abgemeldet angezeigt. (Standard: aktiviert)</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE">Benutzer nebeneinander anzeigen</string>
+  <string name="PLG_WHO_IS_ONLINE_PREFERENCES_SHOW_USERS_SIDE_BY_SIDE_DESC">Bei aktivierter Einstellung werden Benutzer nebeneinander angezeigt, sonst untereinander. (Standard: deaktiviert)</string>
 </resources>

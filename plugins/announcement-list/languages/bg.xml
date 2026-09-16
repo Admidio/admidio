@@ -3,4 +3,16 @@
   <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Всички обявления</string>
   <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Обявления</string>
   <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Обявления не са достъпни за посетители. Влезте за да видите обявления.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Тази добавка показва предварителен списък с най-новите обяви на обзорната страница.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Списък с обяви</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Брой обяви</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Брой обяви за показване. (По подразбиране: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Знаци преди нов ред</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Максимален брой знаци в дума преди пренасяне на нов ред. (0: без пренасяне, по подразбиране: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Показвани категории</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Изберете категориите, чиито обяви да се показват. (По подразбиране: всички категории)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Показване на пълното описание</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Ако е включено, се показва пълното описание, иначе само преглед на текста. (По подразбиране: изключено)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Текст за предварителен преглед</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Брой знаци в текста за преглед. (0: без кратък преглед, по подразбиране: 70)</string>
 </resources>
