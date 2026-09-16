@@ -97,7 +97,27 @@ try {
         // reload role memberships
         $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));
         $countRole = $roleStatement->rowCount();
-        echo getRoleMemberships('role_list', $user, $roleStatement);
+        try {
+            echo getRoleMemberships('role_list', $user, $roleStatement);
+        } catch (Exception $e) {
+            if ($e->getMessage() === 'NO_VISIBLE_ROLES') {
+                $countRole = 0;
+            } else {
+                throw $e;
+            }
+        }
+
+        if ($countRole === 0) {
+            /* Tabs */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_current_pane_content").css({ \'display\':\'none\' })</script>';
+            /* Accordions */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_current_accordion_content").css({ \'display\':\'none\' })</script>';
+        } else {
+            /* Tabs */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_current_pane_content").css({ \'display\':\'block\' })</script>';
+            /* Accordions */
+            echo '<script type="text/javascript">$("#adm_profile_role_memberships_current_accordion_content").css({ \'display\':\'block\' })</script>';
+        }
     } elseif ($getMode === 'reload_former_memberships') {
         // reload former role memberships
         $roleStatement = getFormerRolesFromDatabase($user->getValue('usr_id'));
