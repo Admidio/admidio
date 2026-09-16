@@ -602,6 +602,12 @@ class ListConfiguration extends Entity
 
         $arrSearchConditions = array();
 
+        // MySQL/MariaDB assigns the COALESCE() result of date/timestamp columns a different
+        // (binary) collation than the other utf8mb4 search columns, which leads to "Illegal
+        // mix of collations" errors. PostgreSQL does not have this problem, so the COLLATE
+        // clause is only needed for MySQL/MariaDB.
+        $dateCollateSuffix = (DB_ENGINE === Database::PDO_ENGINE_PGSQL) ? '' : ' COLLATE utf8mb4_unicode_ci';
+
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
 
@@ -631,7 +637,7 @@ class ListConfiguration extends Entity
                         break;
 
                     case 'DATE':
-                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\') COLLATE utf8mb4_unicode_ci';
+                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\')' . $dateCollateSuffix;
                         break;
 
                     default:
@@ -644,7 +650,7 @@ class ListConfiguration extends Entity
                     case 'usr_timestamp_create': // fallthrough
                     case 'usr_timestamp_change': // fallthrough
                     case 'mem_timestamp_change':
-                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\') COLLATE utf8mb4_unicode_ci';
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')' . $dateCollateSuffix;
                         break;
 
                     default:
