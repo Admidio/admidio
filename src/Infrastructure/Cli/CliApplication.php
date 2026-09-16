@@ -30,6 +30,9 @@ final class CliApplication
 
     private static string $currentCommand = '';
 
+    /** Acting Admidio user of this process, for the log of the command line. */
+    private static string $actorDescription = '';
+
     /** json-api transport state. */
     private static bool $jsonApiRequested = false;
     private static bool $jsonApiResultSet = false;
@@ -177,7 +180,17 @@ final class CliApplication
             );
         }
 
-        $this->validateInput($task, $input['arguments'], $input['options']);
+        try {
+            $this->validateInput($task, $input['arguments'], $input['options']);
+        } catch (InvalidArgumentException $exception) {
+            /*
+             * A value that nobody typed has to name where it came from, otherwise the message
+             * describes an option that is nowhere on the command line that was entered.
+             */
+            throw new InvalidArgumentException(
+                $exception->getMessage() . CliPolicy::current()->defaultsHint($exception->getMessage())
+            );
+        }
 
         if ($task['unavailableReason'] !== null) {
             throw new RuntimeException(
@@ -221,7 +234,12 @@ final class CliApplication
          * changelog record so an administrator can tell a headless change apart from one the user
          * made in the browser.
          */
-        LogChanges::setOriginComment('CLI: ' . $command);
+        $origin = 'CLI: ' . $command;
+        $systemAccount = CliSystemAccount::current();
+        if ($systemAccount->isKnown()) {
+            $origin .= ' (' . $systemAccount->description() . ')';
+        }
+        LogChanges::setOriginComment($origin);
 
         try {
             $result = ($task['callback'])($input['arguments'], $input['options']);
@@ -239,6 +257,16 @@ final class CliApplication
     public static function currentCommand(): string
     {
         return self::$currentCommand;
+    }
+
+    /**
+     * The acting Admidio user of this process, empty while none was selected.
+     *
+     * Only the log of the command line uses this; every rights check works with $gCurrentUser.
+     */
+    public static function actorDescription(): string
+    {
+        return self::$actorDescription;
     }
 
     /**
@@ -310,6 +338,8 @@ final class CliApplication
     {
         $exitCode = match (true) {
             $exception instanceof InvalidArgumentException => self::EXIT_USAGE,
+            // The command line was used in a way that adm_my_files/cli-config.php forbids.
+            $exception instanceof CliAccessDeniedException => self::EXIT_REJECTED,
             $exception instanceof Exception => self::EXIT_REJECTED,
             // PDOException extends RuntimeException, but a database failure is an internal error.
             $exception instanceof \PDOException, $exception instanceof \Error => self::EXIT_ERROR,
@@ -589,6 +619,13 @@ final class CliApplication
         if (!$commandConsumed && $command !== 'help') {
             throw new InvalidArgumentException('Command "' . $command . '" could not be parsed.');
         }
+
+        /*
+         * Options that were not given fall back to the environment and to the defaults of
+         * adm_my_files/cli-config.php. They are added before the validation, so a configured
+         * value is checked exactly like one that was typed.
+         */
+        $options = CliPolicy::current()->applyDefaults($command, $task, $options);
 
         return array('arguments' => $arguments, 'options' => $options);
     }
@@ -1273,8 +1310,14 @@ final class CliApplication
 
         $reference = self::optionString($options, 'as');
         if ($reference === '') {
+            $policyFile = CliPolicy::current()->path();
+
             throw new InvalidArgumentException(
                 'This command requires --as=<user UUID, login name or id>.'
+                . ($policyFile === ''
+                    ? ''
+                    : ' An account it uses when --as is not given is configured as'
+                        . ' $gCliDefaults[\'as\'] in ' . $policyFile . '.')
             );
         }
 
@@ -1305,10 +1348,29 @@ final class CliApplication
             );
         }
 
+        /*
+         * --as is an impersonation and not an authentication, so an installation that opens the
+         * command line to an account of its own can restrict which Admidio identity that account
+         * may assume.
+         */
+        $policy = CliPolicy::current();
+        if (!$policy->allowsActor(array(
+            (string)$user->getValue('usr_login_name'),
+            (string)$user->getValue('usr_uuid'),
+            (string)$user->getValue('usr_id')
+        ))) {
+            throw new CliAccessDeniedException(
+                'The Admidio account "' . $reference . '" may not be used with --as. Allowed are: '
+                . $policy->allowedActors() . ' (configured in ' . $policy->path()
+                . ', $gCliAllowedActors).'
+            );
+        }
+
         $gCurrentUser = $user;
         $gCurrentUserId = (int)$user->getValue('usr_id');
         $gCurrentUserUUID = (string)$user->getValue('usr_uuid');
         $gValidLogin = true;
+        self::$actorDescription = (string)$user->getValue('usr_login_name');
 
         return $user;
     }

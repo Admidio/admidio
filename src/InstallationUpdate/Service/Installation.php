@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Cli\CliPolicy;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
@@ -405,6 +406,49 @@ class Installation
         );
 
         return StringUtils::strMultiReplace($configFileContent, $replaces);
+    }
+
+    /**
+     * Write the configuration file of the command line, adm_my_files/cli-config.php.
+     *
+     * The template of install/cli-config.php disables the command line and documents every setting,
+     * so a new installation offers no command-line access until an administrator enables it, and an
+     * administrator who wants it finds the settings where the rest of the configuration is. An
+     * existing file is never touched: it contains decisions that an installation or an update must
+     * not revise.
+     *
+     * @param string|null $configPath Path of the file. Default is adm_my_files/cli-config.php.
+     * @return bool Returns false if the file was already there.
+     * @throws Exception Throws if the template could not be read.
+     * @throws RuntimeException Throws if the file could not be written.
+     */
+    public static function writeCliConfigFile(?string $configPath = null): bool
+    {
+        $configPath ??= ADMIDIO_PATH . FOLDER_DATA . '/' . CliPolicy::FILE_NAME;
+
+        if (is_file($configPath)) {
+            return false;
+        }
+
+        $templatePath = ADMIDIO_PATH . FOLDER_INSTALLATION . '/' . CliPolicy::FILE_NAME;
+
+        try {
+            $content = FileSystemUtils::readFile($templatePath);
+        } catch (RuntimeException | UnexpectedValueException $e) {
+            throw new Exception('INS_ERROR_OPEN_FILE', array($templatePath));
+        }
+
+        if (file_put_contents($configPath, $content) === false) {
+            throw new RuntimeException('The file ' . $configPath . ' could not be written.');
+        }
+
+        try {
+            FileSystemUtils::chmodFile($configPath);
+        } catch (RuntimeException | UnexpectedValueException) {
+            // The mode of the file is a convenience; a file that exists is what matters here.
+        }
+
+        return true;
     }
 
     /**
