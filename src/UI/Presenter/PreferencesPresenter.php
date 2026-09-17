@@ -2510,8 +2510,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $formSSO->addSeparator(
-            'sso_saml_advanced_settings', 
-            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
+            'sso_saml_advanced_settings',
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
             array('collapse' => "sso_saml_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-saml-enabled')
         );
 
@@ -2532,14 +2532,14 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // An empty IssuerURL indicates the use of the default admidio base URL
-        // Leave the input box exmpty, but show the default value as 
+        // Leave the input box exmpty, but show the default value as
         // placeholder/hint and copy that value when the copy icon is clicked!
         $defaultIssuerURL = OIDCService::getDefaultIssuerURL();
         $formSSO->addInput(
             'sso_oidc_issuer_url',
             $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
             (string)$formValues['sso_oidc_issuer_url'],
-            array('class' => 'copy-container if-oidc-enabled', 
+            array('class' => 'copy-container if-oidc-enabled',
                   'placeholder' => $defaultIssuerURL,
                   'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
         );
@@ -2560,7 +2560,7 @@ class PreferencesPresenter extends PagePresenter
         $currentOidcKeyId = (int) $formValues['sso_oidc_signing_key'];
         if ($currentOidcKeyId > 0 && !array_key_exists($currentOidcKeyId, $keys)) {
             $keys[$currentOidcKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
-        }        
+        }
 
         $formSSO->addSelectBox(
             'sso_oidc_signing_key',
@@ -2633,16 +2633,16 @@ class PreferencesPresenter extends PagePresenter
 
 
         $formSSO->addSeparator(
-            'sso_oidc_advanced_settings', 
-            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
+            'sso_oidc_advanced_settings',
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
             array('collapse' => "sso_oidc_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-oidc-enabled')
         );
 
 
 
         $formSSO->addSeparator(
-            'sso_advanced_settings', 
-            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'), 
+            'sso_advanced_settings',
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
             array('collapse' => "sso_advanced_settings_contents", 'collapsed' => true)
         );
         // Applies to both protocols: the metadata request and the OIDC back-channel logout
@@ -3048,8 +3048,6 @@ class PreferencesPresenter extends PagePresenter
                         // Mobile mode
                         $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show").attr("aria-expanded", "true");
                         $("#heading_' . $this->preferencesPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
-                        // --- Hash setzen, damit Bookmark/Scroll stimmt und zum Element scrollen
-                        location.hash = "#heading_' . $this->preferencesPanelToShow . '";
                     }
                 ', true);
             }
