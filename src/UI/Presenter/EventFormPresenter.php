@@ -417,10 +417,10 @@ class EventFormPresenter extends PagePresenter
         });
         $("#event_from").change(function() {
             if ($("#event_from").val() > $("#event_to").val()) {
-                $("#event_to").val($("#event_from").val());
+                $("#event_to").val($("#event_from").val()).trigger("change");
             }
             if ($("#event_recurrence_until").length > 0 && $("#event_recurrence_until").val() < $("#event_from").val()) {
-                $("#event_recurrence_until").val($("#event_from").val());
+                $("#event_recurrence_until").val($("#event_from").val()).trigger("change");
             }
         });
 

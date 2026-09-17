@@ -767,19 +767,32 @@ class FormPresenter
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
+            global $gSettingsManager;
+
+            $weekdayFormat = $optionsAll['weekdayFormat'] ?? (
+                isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format')
+                    ? $gSettingsManager->getString('events_weekday_format')
+                    : 'short'
+            );
+
             $datetime = DateTimeUtils::parseDateTime($value);
 
             $attributes['dateValue'] = null;
             $attributes['timeValue'] = null;
+            $attributes['weekday'] = '';
+            $attributes['weekdayFormat'] = $weekdayFormat;
 
             if ($datetime !== null) {
                 $attributes['dateValue'] = $datetime->format('Y-m-d');
                 $attributes['timeValue'] = $datetime->format('H:i');
+                if ($weekdayFormat !== 'none') {
+                    $attributes['weekday'] = DateTimeUtils::getLocalizedWeekday($datetime, $weekdayFormat);
+                }
             }
 
             // now add a date and a time field to the form
             $attributes['dateValueAttributes'] = array();
-            $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control';
+            $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control' . ($weekdayFormat !== 'none' ? ' admidio-date-with-weekday' : '');
             $attributes['dateValueAttributes']['pattern'] = '\d{4}-\d{2}-\d{2}';
 
             $attributes['timeValueAttributes'] = array();
@@ -798,6 +811,12 @@ class FormPresenter
                 $value = $datetime->format('Y-m-d');
             }
             $attributes['pattern'] = '\d{4}-\d{2}-\d{2}';
+
+            if (isset($optionsAll['weekdayFormat']) && $optionsAll['weekdayFormat'] !== 'none') {
+                $attributes['weekdayFormat'] = $optionsAll['weekdayFormat'];
+                $attributes['weekday'] = ($datetime !== null) ? DateTimeUtils::getLocalizedWeekday($datetime, $optionsAll['weekdayFormat']) : '';
+                $attributes['class'] = ($attributes['class'] ?? '') . ' admidio-date-with-weekday';
+            }
         } elseif ($optionsAll['type'] === 'time') {
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
             if (!empty($value) && is_object($datetime))

@@ -1957,6 +1957,10 @@
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>
   <string name="SYS_WEEKDAY">Weekday</string>
+  <string name="SYS_WEEKDAY_FORMAT">Weekday format</string>
+  <string name="SYS_WEEKDAY_FORMAT_DESC">Specify whether and in which format the weekday should be displayed for events.</string>
+  <string name="SYS_WEEKDAY_LONG">Full name (e.g. Tuesday)</string>
+  <string name="SYS_WEEKDAY_SHORT">Abbreviated (e.g. Tue)</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Width</string>

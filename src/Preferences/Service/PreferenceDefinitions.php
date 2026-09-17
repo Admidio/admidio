@@ -308,6 +308,7 @@ final class PreferenceDefinitions
             'events_save_cancellations' => array('default' => '1', 'type' => 'bool'),
             'events_show_map_link' => array('default' => '1', 'type' => 'bool'),
             'events_view' => array('default' => 'detail', 'type' => 'enum', 'values' => array('detail', 'compact', 'room', 'participants', 'description'), 'validator' => self::VALIDATOR_EVENTS_VIEW),
+            'events_weekday_format' => array('default' => 'short', 'type' => 'enum', 'values' => array('none', 'short', 'long')),
             'forum_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'forum_posts_per_page' => array('default' => '15', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
             'forum_topics_per_page' => array('default' => '10', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),

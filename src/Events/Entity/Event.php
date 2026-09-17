@@ -10,6 +10,7 @@ use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 
 /**
@@ -187,35 +188,62 @@ class Event extends Entity
     /**
      * This Method will return a string with the date and time period of the current event.
      * If the start and end of the event is at the same day then the date will only include once.
-     * Also, the all-day flag will be considered.
+     * Also, the all-day flag and weekday format will be considered.
+     * @param bool        $showPeriodEnd Whether to include the end date/time
+     * @param string|null $weekdayFormat 'none', 'short', 'long', or null to read from settings
      * @return string Returns a formatted date and time string corresponding to the event settings.
      * @throws Exception
      */
-    public function getDateTimePeriod($showPeriodEnd = true): string
+    public function getDateTimePeriod(bool $showPeriodEnd = true, ?string $weekdayFormat = null, bool $asHtml = false): string
     {
         global $gSettingsManager;
 
-        $beginDate = $this->getValue('dat_begin', $gSettingsManager->getString('system_date')) . ' ';
+        if ($weekdayFormat === null) {
+            $weekdayFormat = (isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format'))
+                ? $gSettingsManager->getString('events_weekday_format')
+                : 'short';
+        }
+
+        $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
+            ? $gSettingsManager->getString('system_date')
+            : 'd.m.Y';
+
+        $timeFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_time'))
+            ? $gSettingsManager->getString('system_time')
+            : 'H:i';
+
+        $dateBeginRaw = $this->getValue('dat_begin', $dateFormat);
+        $dateEndRaw = $this->getValue('dat_end', $dateFormat);
+
+        $beginDateTime = DateTimeUtils::parseDateTime($this->getValue('dat_begin', 'Y-m-d H:i:s'));
+        $endDateTime = DateTimeUtils::parseDateTime($this->getValue('dat_end', 'Y-m-d H:i:s'));
+
+        $beginDate = ($beginDateTime !== null)
+            ? DateTimeUtils::formatWithWeekday($beginDateTime, $weekdayFormat, $dateFormat, null, $asHtml) . ' '
+            : $dateBeginRaw . ' ';
+
         $endDate   = '';
 
         if ($this->getValue('dat_all_day') != 1) {
-            $beginDate .= $this->getValue('dat_begin', $gSettingsManager->getString('system_time'));
+            $beginDate .= $this->getValue('dat_begin', $timeFormat);
         }
 
         if ($showPeriodEnd) {
             // Show date end and time
-            if ($this->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $this->getValue('dat_end', $gSettingsManager->getString('system_date'))) {
-                $endDate .= $this->getValue('dat_end', $gSettingsManager->getString('system_date'));
+            if ($dateBeginRaw !== $dateEndRaw) {
+                $endDate .= ($endDateTime !== null)
+                    ? DateTimeUtils::formatWithWeekday($endDateTime, $weekdayFormat, $dateFormat, null, $asHtml)
+                    : $dateEndRaw;
             }
             if ($this->getValue('dat_all_day') != 1) {
-                $endDate .= ' '. $this->getValue('dat_end', $gSettingsManager->getString('system_time'));
+                $endDate .= ' ' . $this->getValue('dat_end', $timeFormat);
             }
-            if ($endDate !== '') {
-                $endDate = ' - '. $endDate;
+            if (trim($endDate) !== '') {
+                $endDate = ' - ' . trim($endDate);
             }
         }
 
-        return $beginDate . $endDate;
+        return trim($beginDate . $endDate);
     }
 
     /**
