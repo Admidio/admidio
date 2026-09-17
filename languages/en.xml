@@ -161,8 +161,6 @@
   <string name="ORG_FIELD_URL_DESC">The entered URL later links in the profile to the content that the user has entered in this field. Optionally, even the wildcard #user_content# can be defined in the URL. This is the content that the user has entered in the field..\n\nExample:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Could not find a valid theme.</string>
-  <string name="ORG_INVALID_THEME_FALLBACK">The fallback theme selected is not valid.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Using the JavaScript editor</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor is being used in many modules of Admidio. Events, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
@@ -1644,7 +1642,6 @@
   <string name="SYS_SSO_KEY_DELETE">Delete Key</string>
   <string name="SYS_SSO_KEY_EDIT">Edit Key</string>
   <string name="SYS_SSO_KEY_EXPIRATION_INVALID">The selected key has an invalid expiration date.</string>
-  <string name="SYS_SSO_KEY_EXPIRATION_MISSING">The selected key has no expiration date.</string>
   <string name="SYS_SSO_KEY_EXPIRED">The selected key has expired.</string>
   <string name="SYS_SSO_KEY_EXPIRES">Expiration date</string>
   <string name="SYS_SSO_KEY_EXPORT">Export private key</string>
@@ -1694,7 +1691,6 @@
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
-  <string name="SYS_SSO_OIDC_CONSENT_SAVED">Your consent has been saved.</string>
   <string name="SYS_SSO_OIDC_CONSENT_SCOPES">Approved scopes</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_DENY_ACCESS">Deny access</string>
@@ -1783,7 +1779,6 @@
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">If a client supports signing and a certificate is entered in the client configuration, all requests must be signed. Clients without a certificate are not affected and do not require signatures.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Previously selected key — no longer usable</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Also sign SAML responses</string>
-  <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signature and Encryption</string>
   <string name="SYS_SSO_SIGNING_KEY">Key for signatures</string>
   <string name="SYS_SSO_SLO_URL">Single Logout endpoint (optional)</string>
   <string name="SYS_SSO_SLO_URL_DESC">Application endpoint used for SAML logout.</string>
@@ -1923,7 +1918,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="SYS_VIEWS">Views</string>
   <string name="SYS_VIEWS_VAR">#VAR1# views</string>
-  <string name="SYS_VISIBILITY">Visibility</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISITORS">Guests</string>
