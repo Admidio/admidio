@@ -24,8 +24,13 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Language;
-use Admidio\Infrastructure\Plugins\PluginAbstract;
-use Admidio\Infrastructure\Plugins\PluginManager;
+use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginLoader;
+use Admidio\Infrastructure\Plugins\PluginPackage;
+use Admidio\Infrastructure\Plugins\PluginPages;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
@@ -322,30 +327,21 @@ final class CoreTasks
      * Add the "record" format to a --format option that can render it.
      *
      * CliApplication::writeRows() renders "record" - the field/value layout - for every result set
-     * it can render as a table, and writeValue() renders it for a single data record. Those are
-     * exactly the commands whose values contain "table", or the pair "text" and "json". Listing it
-     * in each of the roughly one hundred registrations would be pure repetition, so it is derived
-     * here; the rule lives in one place instead of being an unexplained side effect of opt().
+     * it can render as a table, which are exactly the commands whose values contain "table".
+     * Listing it in each of the roughly one hundred registrations would be pure repetition, so it
+     * is derived here; the rule lives in one place instead of being an unexplained side effect of
+     * opt(). A command that shows one record needs no entry: "text" already is that layout there.
      *
      * @param array<int,string> $values
      * @return array<int,string>
      */
     private static function withRecordFormat(array $values): array
     {
-        if (in_array('record', $values, true)) {
+        if (in_array('record', $values, true) || !in_array('table', $values, true)) {
             return $values;
         }
 
-        $rendersTable = in_array('table', $values, true);
-        $rendersSingleRecord = count($values) === 2
-            && in_array('text', $values, true)
-            && in_array('json', $values, true);
-
-        if (!$rendersTable && !$rendersSingleRecord) {
-            return $values;
-        }
-
-        $position = array_search($rendersTable ? 'table' : 'text', $values, true);
+        $position = array_search('table', $values, true);
         array_splice($values, $position + 1, 0, array('record'));
 
         return $values;
@@ -2021,38 +2017,71 @@ final class CoreTasks
 
     private static function registerPluginTasks(): void
     {
-        self::task('plugin:list', 'pluginList', 'List discovered plugins and installation/update state.',
-            'plugin:list [--installed] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
+        self::task('plugin:list', 'pluginList', 'List the plugins and their state.',
+            'plugin:list [--state=STATE] [--installed] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
+                self::opt('state', 'Only plugins in that state.', 'STATE', false, false, false, array(
+                    PluginRegistry::STATE_AVAILABLE,
+                    PluginRegistry::STATE_DISABLED,
+                    PluginRegistry::STATE_ENABLED,
+                    PluginRegistry::STATE_UPDATE,
+                    PluginRegistry::STATE_BROKEN,
+                    PluginRegistry::STATE_ORPHANED
+                )),
                 self::opt('installed', 'Only installed plugins.', '', false, false, true),
                 self::opt('updates', 'Only plugins with updates.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))
             ));
-        self::task('plugin:show', 'pluginShow', 'Show plugin metadata/state.',
+        self::task('plugin:show', 'pluginShow', 'Show the manifest and the state of a plugin.',
             'plugin:show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin name.')),
+            array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
-        self::task('plugin:install', 'pluginInstall', 'Install a current-interface plugin.',
-            'plugin:install PLUGIN [--add-menu=BOOL]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin name.')),
-            array(self::opt('add-menu', 'Add plugin menu entry.', 'BOOL')));
-        self::task('plugin:update', 'pluginUpdate', 'Run a plugin update.',
-            'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin name.')));
-        self::task('plugin:remove', 'pluginRemove', 'Uninstall a current-interface plugin.',
-            'plugin:remove PLUGIN [--remove-menu=BOOL] [--yes]', 'PLUGINS', true,
-            array(self::arg('plugin', 'Plugin name.')), array(
-                self::opt('remove-menu', 'Remove plugin menu entry.', 'BOOL'),
-                self::opt('yes', 'Confirm uninstall.', '', false, false, true)
+        self::task('plugin:install', 'pluginInstall', 'Install a plugin from the store or from an archive file.',
+            'plugin:install SOURCE [--replace]', 'PLUGINS', true,
+            array(self::arg('source', 'Plugin ID the store offers, or the path of a ZIP archive.')),
+            array(self::opt(
+                'replace',
+                'Overwrite a plugin of the same ID that is already there. Only an archive may.',
+                '',
+                false,
+                false,
+                true
+            )));
+        self::task('plugin:inspect', 'pluginInspect', 'Show what a plugin archive holds, without installing it.',
+            'plugin:inspect FILE [--format=text|json|json-api]', 'PLUGINS', true,
+            array(self::arg('file', 'ZIP archive of a plugin.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
+        self::task('plugin:store-list', 'pluginStoreList', 'List the plugins the store publishes for this Admidio.',
+            'plugin:store-list [--available] [--updates] [--format=FORMAT]', 'PLUGINS', true, array(), array(
+                self::opt('available', 'Only plugins this installation does not have yet.', '', false, false, true),
+                self::opt('updates', 'Only installed plugins the store publishes something newer for.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
-        self::task(
-            'plugin:move',
-            'pluginMove',
-            'Move plugin ordering.',
-            'plugin:move PLUGIN up|down',
-            'PLUGINS',
-            true,
-            array(self::arg('plugin', 'Plugin name.'), self::arg('direction', 'up or down.'))
-        );
-
+        self::task('plugin:store-show', 'pluginStoreShow', 'Show what the store publishes for one plugin.',
+            'plugin:store-show PLUGIN [--format=text|json|json-api]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID, as the store names it.')),
+            array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
+        self::task('plugin:store-refresh', 'pluginStoreRefresh', 'Fetch the plugin catalogue now instead of waiting for the cache to expire.',
+            'plugin:store-refresh', 'PLUGINS', true);
+        self::task('plugin:enable', 'pluginEnable', 'Enable a plugin for the current organization, preparing it if that has not happened yet.',
+            'plugin:enable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:disable', 'pluginDisable', 'Disable a plugin for the current organization, keeping its data.',
+            'plugin:disable PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:update', 'pluginUpdate', 'Update a plugin, fetching newer files where the store publishes them.',
+            'plugin:update PLUGIN', 'PLUGINS', true, array(self::arg('plugin', 'Plugin ID.')));
+        self::task('plugin:sync-pages', 'pluginSyncPages',
+            'Rewrite the generated module stubs of every plugin from its current page list. '
+                . 'Run this after adding or removing a page file of a plugin during development; '
+                . 'installing or updating a plugin does it automatically.',
+            'plugin:sync-pages [--format=FORMAT]', 'PLUGINS', true, array(),
+            array(self::opt('format', 'Output format.', 'FORMAT')),
+            array('plugin:sync-pages'));
+        self::task('plugin:archive', 'pluginArchive', 'Build the distributable ZIP archive of a plugin.',
+            'plugin:archive PLUGIN [--output=FILE] [--overwrite]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID, the name of its directory below plugins/.')));
+        self::task('plugin:remove', 'pluginRemove', 'Remove a plugin from every organization, with its data and its files.',
+            'plugin:remove PLUGIN [--yes]', 'PLUGINS', true,
+            array(self::arg('plugin', 'Plugin ID. The ID of an orphaned plugin whose files are gone is accepted too.')),
+            array(self::opt('yes', 'Confirm the removal.', '', false, false, true)));
     }
 
     private static function registerSsoTasks(): void
@@ -8543,38 +8572,32 @@ final class CoreTasks
 
     public static function pluginList(array $arguments, array $options): int
     {
+        $state = CliApplication::optionString($options, 'state', '');
         $rows = array();
-        foreach ((new PluginManager())->getAvailablePlugins() as $folder => $pluginData) {
-            $interface = $pluginData['interface'] ?? null;
-            if ($interface === null) {
-                $row = array(
-                    'plugin' => $folder,
-                    'name' => $folder,
-                    'installed' => false,
-                    'installed_version' => '',
-                    'available_version' => '',
-                    'update_available' => false,
-                    'interface' => false
-                );
-            } else {
-                /** @var PluginAbstract $plugin */
-                $plugin = $interface::getInstance();
-                $metadata = $plugin::getMetadata();
-                $row = array(
-                    'plugin' => $folder,
-                    'name' => $plugin::getName(),
-                    'installed' => $plugin::isInstalled(),
-                    'installed_version' => $plugin::getVersion(),
-                    'available_version' => (string)($metadata['version'] ?? ''),
-                    'update_available' => $plugin::isUpdateAvailable(),
-                    'interface' => true
-                );
-            }
 
-            if (CliApplication::optionBool($options, 'installed', false) === true && !$row['installed']) {
+        foreach (self::pluginIds() as $id) {
+            $plugin = PluginRegistry::get($id);
+            $rowState = PluginRegistry::getState($plugin ?? $id);
+            $installed = PluginRegistry::isInstalled($id);
+
+            $row = array(
+                'plugin' => $id,
+                'name' => $plugin === null ? $id : self::pluginText($plugin, $plugin->name, $options),
+                'state' => $rowState,
+                'version' => $plugin?->version ?? '',
+                'installed_version' => PluginRegistry::getInstalledVersion($id),
+                'installed' => $installed,
+                'enabled' => $installed && PluginRegistry::isEnabled($id)
+            );
+
+            if ($state !== '' && $rowState !== $state) {
                 continue;
             }
-            if (CliApplication::optionBool($options, 'updates', false) === true && !$row['update_available']) {
+            if (CliApplication::optionBool($options, 'installed', false) === true && !$installed) {
+                continue;
+            }
+            if (CliApplication::optionBool($options, 'updates', false) === true
+                && $rowState !== PluginRegistry::STATE_UPDATE) {
                 continue;
             }
             $rows[] = $row;
@@ -8590,16 +8613,43 @@ final class CoreTasks
 
     public static function pluginShow(array $arguments, array $options): int
     {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        $id = CliApplication::requireArgument($arguments, 0, 'plugin');
+        $plugin = PluginRegistry::get($id);
+
+        if ($plugin === null) {
+            if (!PluginRegistry::isInstalled($id)) {
+                throw new InvalidArgumentException('Plugin "' . $id . '" was not found.');
+            }
+
+            // An orphaned plugin has nothing left but its database row.
+            CliApplication::writeValue(array(
+                'plugin' => $id,
+                'state' => PluginRegistry::STATE_ORPHANED,
+                'component_id' => PluginRegistry::getComponentId($id),
+                'installed_version' => PluginRegistry::getInstalledVersion($id)
+            ), $options);
+            return 0;
+        }
+
         $data = array(
-            'name' => $plugin::getName(),
-            'component_name' => $plugin::getComponentName(),
-            'component_id' => $plugin::getComponentId(),
-            'installed' => $plugin::isInstalled(),
-            'activated' => $plugin::isActivated(),
-            'installed_version' => $plugin::getVersion(),
-            'update_available' => $plugin::isUpdateAvailable(),
-            'metadata' => $plugin::getMetadata()
+            'plugin' => $plugin->id,
+            'name' => self::pluginText($plugin, $plugin->name, $options),
+            'description' => self::pluginText($plugin, $plugin->description, $options),
+            'state' => PluginRegistry::getState($plugin),
+            'version' => $plugin->version,
+            'installed_version' => PluginRegistry::getInstalledVersion($plugin->id),
+            'component_id' => PluginRegistry::getComponentId($plugin->id),
+            'enabled' => PluginRegistry::isEnabled($plugin->id),
+            'author' => $plugin->author,
+            'url' => $plugin->homepage,
+            'icon' => $plugin->icon,
+            'path' => $plugin->path,
+            'page_url' => $plugin->hasPages() ? $plugin->getUrl() : '',
+            'pages' => $plugin->getPages(),
+            'settings' => array_keys($plugin->settings),
+            // The manifest error and the unmet requirements are developer diagnostics in English.
+            'error' => $plugin->error ?? '',
+            'requirement_problems' => $plugin->checkRequirements(PluginRegistry::getEnabledVersions())
         );
         CliApplication::writeValue($data, $options);
         return 0;
@@ -8607,61 +8657,288 @@ final class CoreTasks
 
     public static function pluginInstall(array $arguments, array $options): int
     {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        $addMenu = CliApplication::optionBool($options, 'add-menu', true) ?? true;
-        if (!$plugin::doInstall($addMenu)) {
-            throw new RuntimeException('Plugin is already installed or could not be installed.');
+        $source = CliApplication::requireArgument($arguments, 0, 'source');
+        $replace = CliApplication::optionBool($options, 'replace', false) === true;
+
+        /*
+         * A plugin ID has neither a separator nor a dot in it, so anything that is not one names a
+         * file, and an ID that also exists as a file in the working directory is that file. This is
+         * how one command covers both ways of naming a plugin without guessing wrongly about the
+         * common case, and a mistyped path is reported as an unreadable archive rather than as a
+         * plugin the store does not offer.
+         */
+        if (Plugin::isValidId($source) && !is_file($source)) {
+            if ($replace) {
+                throw new InvalidArgumentException(
+                    '--replace applies to an archive file. A plugin the store offers is updated with plugin:update.'
+                );
+            }
+
+            /*
+             * The store refuses this too, but it can only say that the plugin is there. Which
+             * command does what the caller wanted is something only this front end knows, so the
+             * refusal is worded here rather than in a language string every front end shares.
+             */
+            if (PluginRegistry::get($source) !== null) {
+                throw new Exception(
+                    'Plugin "' . $source . '" is already installed. plugin:update fetches a newer release.'
+                );
+            }
+
+            self::requirePluginStore();
+            $id = PluginStore::install($source);
+        } else {
+            /*
+             * Reading the archive first costs one pass over its directory and no extraction, and it
+             * buys the refusal the name of the flag that would have allowed it.
+             */
+            $inArchive = PluginPackage::inspect($source);
+            if (!$replace && PluginRegistry::get($inArchive) !== null) {
+                throw new Exception(
+                    'Plugin "' . $inArchive . '" is already installed. Pass --replace to install this file over it.'
+                );
+            }
+
+            $id = PluginPackage::install($source, $replace);
         }
-        CliApplication::writeSuccess('Plugin installed.', $options);
+
+        $plugin = PluginRegistry::get($id);
+        CliApplication::writeSuccess(
+            'Plugin "' . $id . '"' . ($plugin === null ? '' : ' ' . $plugin->version)
+                . ' installed. Enable it with plugin:enable ' . $id . '.',
+            $options
+        );
+        return 0;
+    }
+
+    public static function pluginInspect(array $arguments, array $options): int
+    {
+        $plugin = PluginPackage::describe(CliApplication::requireArgument($arguments, 0, 'file'));
+        $installed = PluginRegistry::get($plugin->id);
+
+        /*
+         * Everything here comes out of the manifest, because that is all an archive that was not
+         * installed can be asked about - PluginPackage::describe() reads it and keeps no files. The
+         * name and the description are therefore printed as written: they are usually keys of the
+         * plugin's own language file, and that file is still inside the archive.
+         */
+        CliApplication::writeValue(array(
+            'plugin' => $plugin->id,
+            'name' => $plugin->name,
+            'description' => $plugin->description,
+            'version' => $plugin->version,
+            'installed_version' => $installed?->version ?? '',
+            'author' => $plugin->author,
+            'url' => $plugin->homepage,
+            'icon' => $plugin->icon,
+            'settings' => array_keys($plugin->settings),
+            // The unmet requirements are developer diagnostics in English.
+            'requirement_problems' => $plugin->checkRequirements(PluginRegistry::getEnabledVersions())
+        ), $options);
+        return 0;
+    }
+
+    public static function pluginStoreList(array $arguments, array $options): int
+    {
+        self::requirePluginStore();
+        $entries = PluginStore::getPlugins();
+
+        $rows = array();
+        foreach ($entries as $entry) {
+            $installed = (bool)$entry['installed'];
+            $offered = (string)$entry['release']['version'];
+            $installedVersion = (string)$entry['installedVersion'];
+            $update = $installed && version_compare($offered, $installedVersion, '>');
+
+            if (CliApplication::optionBool($options, 'available', false) === true && $installed) {
+                continue;
+            }
+            if (CliApplication::optionBool($options, 'updates', false) === true && !$update) {
+                continue;
+            }
+
+            $rows[] = array(
+                'plugin' => (string)$entry['id'],
+                'name' => self::pluginText(null, (string)($entry['name'] ?? $entry['id']), $options),
+                'version' => $offered,
+                'installed_version' => $installedVersion,
+                'installed' => $installed,
+                'update' => $update,
+                'author' => (string)($entry['author'] ?? '')
+            );
+        }
+
+        CliApplication::writeRows(
+            $rows,
+            CliApplication::optionString($options, 'format', 'table'),
+            $options
+        );
+        return 0;
+    }
+
+    public static function pluginStoreShow(array $arguments, array $options): int
+    {
+        $id = CliApplication::requireArgument($arguments, 0, 'plugin');
+
+        self::requirePluginStore();
+        $entry = PluginStore::getEntry($id);
+
+        if ($entry === null) {
+            throw new Exception('SYS_PLUGIN_STORE_NOT_OFFERED', array($id));
+        }
+
+        $release = (array)$entry['release'];
+        $versions = array();
+        foreach ((array)($entry['releases'] ?? array()) as $published) {
+            if (is_array($published) && isset($published['version'])) {
+                $versions[] = (string)$published['version'];
+            }
+        }
+
+        CliApplication::writeValue(array(
+            'plugin' => (string)$entry['id'],
+            'name' => self::pluginText(null, (string)($entry['name'] ?? $entry['id']), $options),
+            'description' => self::pluginText(null, PluginStore::getDescription($entry), $options),
+            'version' => (string)$release['version'],
+            'installed_version' => (string)$entry['installedVersion'],
+            'installed' => (bool)$entry['installed'],
+            'author' => (string)($entry['author'] ?? ''),
+            'url' => (string)($entry['url'] ?? ''),
+            'download' => (string)($release['download'] ?? ''),
+            'requires' => (array)($release['requires'] ?? array()),
+            // Every version the catalogue publishes, not only the one this Admidio may have.
+            'published_versions' => $versions
+        ), $options);
+        return 0;
+    }
+
+    public static function pluginStoreRefresh(array $arguments, array $options): int
+    {
+        PluginStore::refresh();
+        self::requirePluginStore();
+
+        CliApplication::writeSuccess(
+            'Plugin catalogue refreshed from ' . PluginStore::getUrl() . ': '
+                . count(PluginStore::getPlugins()) . ' plugins for this Admidio.',
+            $options
+        );
+        return 0;
+    }
+
+    public static function pluginEnable(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        PluginInstaller::enable($plugin);
+        CliApplication::writeSuccess('Plugin enabled.', $options);
+        return 0;
+    }
+
+    public static function pluginDisable(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+        PluginInstaller::disable($plugin);
+        CliApplication::writeSuccess('Plugin disabled.', $options);
         return 0;
     }
 
     public static function pluginUpdate(array $arguments, array $options): int
     {
         $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        if (!$plugin::isInstalled()) {
-            throw new RuntimeException('Plugin is not installed.');
-        }
-        if (!$plugin::doUpdate()) {
-            throw new RuntimeException('Plugin update was not performed.');
-        }
-        CliApplication::writeSuccess('Plugin updated.', $options);
+        $plugin = PluginInstaller::updateWithNewerFiles($plugin);
+        CliApplication::writeSuccess('Plugin updated to version ' . $plugin->version . '.', $options);
         return 0;
     }
 
+    public static function pluginSyncPages(array $arguments, array $options): int
+    {
+        if (!PluginPages::isAllowed()) {
+            CliApplication::writeSuccess(
+                'Plugin pages are served from below plugins/; nothing to synchronise. '
+                    . 'Enable the preference "' . PluginPages::SETTING . '" to publish them below modules/.',
+                $options
+            );
+            return 0;
+        }
+
+        $report = PluginPages::syncAll();
+        if ($report === array()) {
+            CliApplication::writeSuccess('The generated module stubs are already up to date.', $options);
+            return 0;
+        }
+
+        $rows = array();
+        foreach ($report as $id => $result) {
+            $rows[] = array('plugin' => $id, 'result' => $result);
+        }
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return 0;
+    }
+
+
+    public static function pluginArchive(array $arguments, array $options): int
+    {
+        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
+
+        /*
+         * The archive is published like every other file a command writes: the global --output names
+         * the file, or the directory it goes into, and --overwrite decides whether an existing one
+         * may be replaced. It is built beside nothing else first, because the packager names the
+         * file after the plugin and its version, and only then moved to where it was asked for.
+         */
+        $target = CliApplication::resolveOutputPath(
+            $options,
+            $plugin->id . '-' . $plugin->version . '.zip'
+        );
+
+        $directory = rtrim(str_replace('\\', '/', sys_get_temp_dir()), '/')
+            . '/admidio-plugin-archive-' . uniqid('', true);
+        if (!@mkdir($directory, 0o700, true) && !is_dir($directory)) {
+            throw new RuntimeException('Could not create the temporary directory ' . $directory . '.');
+        }
+
+        try {
+            $archive = PluginPackage::create($plugin, $directory);
+            CliApplication::copyToNewFile($archive, $target, false, self::overwriteRequested($options));
+        } finally {
+            foreach ((array)glob($directory . '/*') as $leftover) {
+                @unlink((string)$leftover);
+            }
+            @rmdir($directory);
+        }
+
+        // The confirmation belongs on the terminal, not into the file the archive was written to.
+        CliApplication::writeSuccess(
+            'Archive written: ' . $target . ' (' . number_format((int)filesize($target)) . ' bytes).',
+            $options,
+            false
+        );
+        return 0;
+    }
     public static function pluginRemove(array $arguments, array $options): int
     {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        if (!$plugin::isInstalled()) {
-            throw new RuntimeException('Plugin is not installed.');
+        $id = CliApplication::requireArgument($arguments, 0, 'plugin');
+        $plugin = PluginRegistry::get($id);
+
+        if ($plugin === null && !PluginRegistry::isInstalled($id)) {
+            throw new InvalidArgumentException('Plugin "' . $id . '" was not found.');
         }
 
-        CliApplication::confirm('Uninstall plugin "' . $plugin::getName() . '"?', $options);
-        $removeMenu = CliApplication::optionBool($options, 'remove-menu', true) ?? true;
-        if (!$plugin::doUninstall($removeMenu)) {
-            throw new RuntimeException('Plugin uninstall was not performed.');
-        }
-        CliApplication::writeSuccess('Plugin removed.', $options);
-        return 0;
-    }
+        $organizations = PluginRegistry::getEnabledOrganizations($id);
+        CliApplication::confirm(
+            'Remove plugin "' . ($plugin?->name ?? $id) . '"'
+                . ($organizations === array()
+                    ? ''
+                    : ', still enabled in ' . implode(', ', $organizations) . ',')
+                . ' from every organization, destroying its data and deleting its files?',
+            $options
+        );
 
-    public static function pluginMove(array $arguments, array $options): int
-    {
-        $plugin = self::resolvePlugin(CliApplication::requireArgument($arguments, 0, 'plugin'));
-        $direction = self::direction(CliApplication::requireArgument($arguments, 1, 'direction'));
-
-        if (!$plugin::isInstalled()) {
-            throw new RuntimeException('Plugin is not installed.');
-        }
-
-        $sequence = $plugin::getPluginSequence();
-        $newSequence = $direction === 'up' ? max(1, $sequence - 1) : $sequence + 1;
-
-        if (!$plugin::setPluginSequence($newSequence)) {
-            throw new RuntimeException('Plugin sequence could not be updated.');
-        }
-
-        CliApplication::writeSuccess('Plugin moved.', $options);
+        // The ID keeps the orphan case working: the files are gone, but the row is not.
+        $filesDeleted = PluginInstaller::remove($plugin ?? $id);
+        CliApplication::writeSuccess(
+            $filesDeleted ? 'Plugin removed.' : 'Plugin removed, but its directory could not be deleted.',
+            $options
+        );
         return 0;
     }
 
@@ -11289,20 +11566,88 @@ final class CoreTasks
         $selectOptions->setSequence($sequence);
     }
 
-    private static function resolvePlugin(string $reference): PluginAbstract
+    /**
+     * A plugin by its ID, which is the name of its directory below plugins/ and its only identity.
+     * @param string $reference
+     * @return Plugin
+     * @throws Exception
+     */
+    private static function resolvePlugin(string $reference): Plugin
     {
-        $manager = new PluginManager();
-        $plugin = $manager->getPluginByName($reference);
+        $plugin = PluginRegistry::get($reference);
         if ($plugin === null) {
-            $plugin = $manager->getPluginByComponentName(strtoupper($reference));
+            throw new InvalidArgumentException('Plugin "' . $reference . '" was not found.');
         }
-        if ($plugin === null && ctype_digit($reference)) {
-            $plugin = $manager->getPluginById((int)$reference);
+        if (!$plugin->isValid()) {
+            throw new InvalidArgumentException('Plugin "' . $reference . '" is broken: ' . $plugin->error);
         }
-        if ($plugin === null) {
-            throw new InvalidArgumentException('Plugin "' . $reference . '" was not found or has no current PluginAbstract interface.');
-        }
+
         return $plugin;
+    }
+
+    /**
+     * The name or the description of a plugin, as the caller wants to read it.
+     *
+     * Both are usually keys of the plugin's own language file, and that file is only on the search
+     * path once the plugin has been loaded - the plugin commands list plugins that are not, so they
+     * put it there themselves like the plugin administration does. A script asked for the value the
+     * manifest holds, a terminal for the text the web interface shows.
+     *
+     * @param Plugin|null $plugin The plugin the text belongs to, or **null** for a text of the
+     *                            store: a plugin this installation does not have has no language
+     *                            file here, so there is nothing to put on the search path.
+     * @param array<string,mixed> $options
+     */
+    private static function pluginText(?Plugin $plugin, string $value, array $options): string
+    {
+        if ($value === '' || CliApplication::isMachineFormat($options)) {
+            return $value;
+        }
+
+        if ($plugin !== null) {
+            PluginLoader::registerLanguages($plugin);
+        }
+
+        return Language::translateIfTranslationStrId($value);
+    }
+
+    /**
+     * Read the plugin catalogue, and fail if it could not be read.
+     *
+     * PluginStore answers with an empty catalogue whether nothing is published or the host is
+     * unreachable, because a page must never fail over the store. A command must: a listing that
+     * silently prints nothing says that no plugin is published, and "not offered" says that nobody
+     * published this one, when in truth nobody could ask.
+     *
+     * @throws Exception
+     */
+    private static function requirePluginStore(): void
+    {
+        PluginStore::read();
+        $error = PluginStore::getError();
+
+        if ($error !== null) {
+            // The diagnostic names a host or a file, like the one a broken plugin gives, and is English.
+            throw new Exception($error);
+        }
+    }
+
+    /**
+     * The IDs of every plugin the installation knows: the directories below plugins/ and the
+     * plugins that are only left in the database because their files were deleted.
+     * @return array<int,string>
+     * @throws Exception
+     */
+    private static function pluginIds(): array
+    {
+        $ids = array_merge(
+            array_keys(PluginRegistry::all()),
+            array_keys(PluginRegistry::getInstallations())
+        );
+        $ids = array_unique($ids);
+        sort($ids);
+
+        return $ids;
     }
 
     /**

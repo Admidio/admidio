@@ -1,13 +1,24 @@
+{* The plugins that threw while they were loaded. Without this they would merely be absent. *}
+{if count($failures) > 0}
+    <div class="alert alert-danger" id="adm_plugins_failures">
+        <i class="bi bi-exclamation-circle-fill"></i> {$l10n->get('SYS_PLUGIN_LOAD_FAILED')}
+        <ul class="mb-0">
+            {foreach $failures as $failedPlugin => $failureReason}
+                <li><strong>{$failedPlugin}</strong>: {$failureReason}</li>
+            {/foreach}
+        </ul>
+    </div>
+{/if}
+
 <!-- for big screens: Table -->
 <div class="d-none d-md-block">
     <div class="table-responsive" id="adm_plugins_table">
         <table id="adm_table_plugins" class="table table-condensed table-hover" style="max-width: 100%;">
             <thead>
                 <tr>
-                    <th>{$l10n->get('SYS_NAME')}</th>
+                    <th style="width: 1%;">&nbsp;</th> {* the enabled switch *}
+                    <th style="width: 20%; white-space: nowrap;">{$l10n->get('SYS_NAME')}</th>
                     <th>{$l10n->get('SYS_DESCRIPTION')}</th>
-                    <th>{$l10n->get('SYS_AUTHOR')}</th>
-                    <th>{$l10n->get('SYS_WEBSITE')}</th>
                     <th>{$l10n->get('SYS_PLUGIN_VERSION')}</th>
                     <th>{$l10n->get('SYS_INSTALLED_VERSION')}</th>
                     <th>&nbsp;</th> {* actions *}
@@ -16,38 +27,57 @@
             {foreach $list as $pluginNode}
                 <tbody>
                     <tr class="admidio-group-heading">
-                        <td id="adm_plugin_group_{$pluginNode.id}" colspan="8">
+                        <td id="adm_plugin_group_{$pluginNode.id}" colspan="6">
                             <a id="adm_plugin_caret_{$pluginNode.id}" class="admidio-icon-link admidio-open-close-caret" data-target="adm_plugin_entries_{$pluginNode.id}">
                                 <i class="bi bi-caret-down-fill"></i>
                             </a> {$pluginNode.name}
                         </td>
                     </tr>
                 </tbody>
-                {if isset($pluginNode.entries)}
                 <tbody id="adm_plugin_entries_{$pluginNode.id}">
                     {foreach $pluginNode.entries as $pluginEntry}
                         <tr id="adm_plugin_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
-                            <td>{if isset($pluginEntry.icon)}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}</td>
-                            <td>{$pluginEntry.description}</td>
-                            <td>{$pluginEntry.author}</td>
-                            <td>{$pluginEntry.url}</td>
+                            {* The switch shows the state the plugin is in and flips it when clicked. *}
+                            <td class="text-center">
+                                {if $pluginEntry.toggle}
+                                    <a class="admidio-messagebox {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                       data-buttons="yes-no" data-message="{$pluginEntry.toggle.dataMessage}"
+                                       data-href="{$pluginEntry.toggle.dataHref}"
+                                       data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip}"
+                                       aria-label="{$pluginEntry.toggle.label}">
+                                        <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
+                                {/if}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if}
+                                <strong>{$pluginEntry.name}</strong>
+                            </td>
+                            <td>
+                                {$pluginEntry.description}
+                                {include 'modules/plugins.author.tpl' data=$pluginEntry}
+                                {* Nothing is wrong with the plugin here, so this is not a diagnostic. *}
+                                {foreach $pluginEntry.notes as $note}
+                                    <div class="text-warning-emphasis"><small><i class="bi bi-info-circle"></i> {$note}</small></div>
+                                {/foreach}
+                                {* Developer diagnostics in English, not a translated message. *}
+                                {foreach $pluginEntry.diagnostics as $diagnostic}
+                                    <div class="text-danger"><small><code>{$diagnostic}</code></small></div>
+                                {/foreach}
+                            </td>
                             <td>{$pluginEntry.version}</td>
                             <td data-bs-toggle="tooltip"
-                                {if $pluginEntry.installedVersion === ''}
-                                    style="color: var(--bs-danger);"
-                                {else if {version_compare firstVersion=$pluginEntry.installedVersion secondVersion=$pluginEntry.version operator='<'} }
+                                {if $pluginEntry.versionState === 'update'}
                                     style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
-                                {else}
+                                {elseif $pluginEntry.versionState === 'current'}
                                     style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE')}"
                                 {/if}
-                                >{if $pluginEntry.installedVersion === ''}{$l10n->get('SYS_NOT_INSTALLED')}{else}{$pluginEntry.installedVersion}{/if}</td>
+                                >{if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}</td>
                             <td class="text-end">
                                 {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
                         </tr>
                     {/foreach}
                 </tbody>
-                {/if}
             {/foreach}
         </table>
     </div>
@@ -68,27 +98,29 @@
                 {foreach $pluginNode.entries as $pluginEntry}
                     <div class="card admidio-accordion-field-group" id="adm_plugin_card_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
                         <div class="card-header">
-                            {if isset($pluginEntry.icon)}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
+                            {if $pluginEntry.toggle}
+                                <a class="admidio-messagebox {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                   data-buttons="yes-no" data-message="{$pluginEntry.toggle.dataMessage}"
+                                   data-href="{$pluginEntry.toggle.dataHref}"
+                                   aria-label="{$pluginEntry.toggle.label}">
+                                    <i class="{$pluginEntry.toggle.icon}"></i></a>
+                            {/if}
+                            {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
                             <div class="dropdown float-end d-flex">
-                                <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                                {if {array_key_exists array=$pluginEntry key="actions"} && count($pluginEntry.actions) > 0 || isset({$pluginEntry.url})}
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {if {array_key_exists array=$pluginEntry key="actions"} && count($pluginEntry.actions) > 0}
-                                            {foreach $pluginEntry.actions as $actionItem}
-                                                <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
+                                {if count($pluginEntry.actions) > 0}
+                                    <ul class="dropdown-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
+                                        {foreach $pluginEntry.actions as $actionItem}
+                                            <li>
+                                                <a {if isset($actionItem.popup)} class="dropdown-item openPopup" href="javascript:void(0);"
+                                                    data-class="modal-lg" data-href="{$actionItem.dataHref}"
+                                                        {elseif isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
                                                     data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                                                         {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
                                                     <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
-                                            {/foreach}
-                                            {if isset($pluginEntry.url)}
-                                                <li><hr class="dropdown-divider"></li>
-                                            {/if}
-                                        {/if}
-                                        {if isset($pluginEntry.url)}
-                                            <li style="padding: 0 var(--bs-dropdown-item-padding-x);">{$l10n->get('SYS_WEBSITE')}:</li>
-                                            <li class="dropdown-item">{$pluginEntry.url}</li>
-                                        {/if}
+                                            </li>
+                                        {/foreach}
                                     </ul>
                                 {/if}
                             </div>
@@ -97,23 +129,28 @@
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_description">
                                 <strong>{$l10n->get('SYS_DESCRIPTION')}:</strong>
                                 <p>{$pluginEntry.description}</p>
-                            </div>
-                            <div id="adm_plugin_card_entry_{$pluginEntry.id}_author">
-                                <strong>{$l10n->get('SYS_AUTHOR')}:</strong>
-                                <p>{$pluginEntry.author}</p>
+                                {include 'modules/plugins.author.tpl' data=$pluginEntry}
+                                {foreach $pluginEntry.notes as $note}
+                                    <p class="text-warning-emphasis"><small><i class="bi bi-info-circle"></i> {$note}</small></p>
+                                {/foreach}
+                                {foreach $pluginEntry.diagnostics as $diagnostic}
+                                    <p class="text-danger"><small><code>{$diagnostic}</code></small></p>
+                                {/foreach}
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_version">
                                 <strong>{$l10n->get('SYS_PLUGIN_VERSION')}:</strong>
                                 <p>{$pluginEntry.version}</p>
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
-                                <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong> 
-                                {if $pluginEntry.installedVersion === ''}
-                                    <p><span style="color: var(--bs-danger);">{$l10n->get('SYS_NOT_INSTALLED')}</span></p>
-                                {else if {version_compare firstVersion=$pluginEntry.installedVersion secondVersion=$pluginEntry.version operator='<'} }
+                                <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong>
+                                {if $pluginEntry.versionState === 'not_installed'}
+                                    <p>&ndash;</p>
+                                {elseif $pluginEntry.versionState === 'update'}
                                     <p><span style="color: var(--bs-warning);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
-                                {else}
+                                {elseif $pluginEntry.versionState === 'current'}
                                     <p><span style="color: var(--bs-success);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
+                                {else}
+                                    <p>{$pluginEntry.installedVersion}</p>
                                 {/if}
                             </div>
                         </div>
