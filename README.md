@@ -25,7 +25,7 @@ You can try out the [demo system](https://www.admidio.org/demo) to have a look t
 - **Event Management**: Easily publish events online and allow members to participate.
 - **Media Gallery**: Create and manage photo albums and enable users to send e-cards.
 - **Effective Communication**: Send HTML emails to users, roles, and groups.
-- **Data Export and Import**: Export lists to CSV, Excel, ODF or PDF, and import users from CSV.
+- **Progressive Web App (PWA)**: Install Admidio as a standalone app on Android, iOS, Windows, and macOS.
 - **And Much More**: Explore additional features and functionalities.
 
 ## Installation

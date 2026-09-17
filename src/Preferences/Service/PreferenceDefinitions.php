@@ -160,6 +160,7 @@ final class PreferenceDefinitions
             'enable_password_recovery' => array('default' => '1', 'type' => 'bool'),
             'two_factor_authentication_enabled' => array('default' => '0', 'type' => 'bool'),
             'system_browser_update_check' => array('default' => '0', 'type' => 'bool'),
+            'system_pwa_enabled' => array('default' => '1', 'type' => 'bool'),
             'system_cookie_note' => array('default' => '1', 'type' => 'bool'),
             'system_currency' => array('default' => '€', 'maxLength' => 20),
             'system_date' => array('default' => 'd.m.Y', 'maxLength' => 20, 'required' => true),
