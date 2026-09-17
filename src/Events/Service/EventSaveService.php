@@ -587,7 +587,7 @@ class EventSaveService
                 // if the data of the role must be changed
                 $role = new Role($gDb, (int)$event->getValue('dat_rol_id'));
 
-                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline'));
+                $role->setValue('rol_name', $event->getDateTimePeriod(false, 'none') . ' ' . $event->getValue('dat_headline'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description'), 0, 3999));
                 // role members are allowed to view lists
                 $role->setValue('rol_view_memberships', ($formValues['event_right_list_view']) ? Role::VIEW_ROLE_MEMBERS : Role::VIEW_LEADERS);
@@ -628,7 +628,7 @@ class EventSaveService
                     $role->setValue('rol_leader_rights', Role::ROLE_LEADER_MEMBERS_ASSIGN);    // leaders are allowed to add or remove participants
                 }
 
-                $role->setValue('rol_name', $event->getDateTimePeriod(false) . ' ' . $event->getValue('dat_headline', 'database'));
+                $role->setValue('rol_name', $event->getDateTimePeriod(false, 'none') . ' ' . $event->getValue('dat_headline', 'database'));
                 $role->setValue('rol_description', substr($event->getValue('dat_description', 'database'), 0, 3999));
 
                 $role->save();
