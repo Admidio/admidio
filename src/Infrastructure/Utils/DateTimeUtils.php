@@ -102,6 +102,132 @@ final class DateTimeUtils
     }
 
     /**
+     * Get the localized weekday name for a DateTime object or date string.
+     *
+     * @param DateTime|string $date   DateTime object or date string
+     * @param string          $format 'short' (e.g. "Di" / "Tue") or 'long' (e.g. "Dienstag" / "Tuesday")
+     * @param string|null     $locale (optional) Locale identifier (e.g. 'de' or 'en'). Defaults to current user language.
+     * @return string
+     */
+    public static function getLocalizedWeekday(DateTime|string $date, string $format = 'short', ?string $locale = null): string
+    {
+        if ($format === 'none') {
+            return '';
+        }
+
+        if (is_string($date)) {
+            $parsedDate = self::parseDate($date);
+            if ($parsedDate === null) {
+                return '';
+            }
+            $date = $parsedDate;
+        }
+
+        global $gL10n;
+
+        if ($locale === null && isset($gL10n)) {
+            $locale = $gL10n->getLanguage();
+        }
+
+        if (class_exists('\IntlDateFormatter')) {
+            $pattern = ($format === 'long') ? 'cccc' : 'ccc';
+            $formatter = new \IntlDateFormatter(
+                $locale ?: 'en',
+                \IntlDateFormatter::NONE,
+                \IntlDateFormatter::NONE,
+                $date->getTimezone(),
+                \IntlDateFormatter::GREGORIAN,
+                $pattern
+            );
+            if ($formatter !== false) {
+                $result = $formatter->format($date);
+                if ($result !== false && $result !== '') {
+                    return rtrim($result, '.');
+                }
+            }
+        }
+
+        // Fallback using Admidio language strings if ext-intl is not available
+        $weekdays = array(
+            1 => 'SYS_MONDAY',
+            2 => 'SYS_TUESDAY',
+            3 => 'SYS_WEDNESDAY',
+            4 => 'SYS_THURSDAY',
+            5 => 'SYS_FRIDAY',
+            6 => 'SYS_SATURDAY',
+            7 => 'SYS_SUNDAY'
+        );
+        $dayOfWeek = (int)$date->format('N');
+        $weekdayKey = $weekdays[$dayOfWeek] ?? 'SYS_MONDAY';
+        $weekdayName = isset($gL10n) ? $gL10n->get($weekdayKey) : $date->format('l');
+
+        if ($format === 'short') {
+            return mb_substr($weekdayName, 0, 2);
+        }
+
+        return $weekdayName;
+    }
+
+    /**
+     * Format a date with an optional localized weekday prefix.
+     *
+     * @param DateTime|string $date          DateTime object or date string
+     * @param string|null     $weekdayFormat 'none', 'short', 'long', or null to read from settings
+     * @param string|null     $dateFormat    Date format (e.g. 'd.m.Y'). Defaults to system_date
+     * @param string|null     $locale        (optional) Locale identifier
+     * @param bool            $asHtml        (optional) Whether to wrap weekday in a styled span for column alignment
+     * @return string
+     */
+    public static function formatWithWeekday(
+        DateTime|string $date,
+        ?string $weekdayFormat = null,
+        ?string $dateFormat = null,
+        ?string $locale = null,
+        bool $asHtml = false
+    ): string {
+        global $gSettingsManager;
+
+        if ($dateFormat === null) {
+            $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
+                ? $gSettingsManager->getString('system_date')
+                : 'd.m.Y';
+        }
+
+        if (is_string($date)) {
+            $dateTime = self::parseDate($date);
+            if ($dateTime === null) {
+                return $date;
+            }
+        } else {
+            $dateTime = $date;
+        }
+
+        $formattedDate = $dateTime->format($dateFormat);
+
+        if ($weekdayFormat === null) {
+            $weekdayFormat = (isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format'))
+                ? $gSettingsManager->getString('events_weekday_format')
+                : 'short';
+        }
+
+        if ($weekdayFormat === 'none') {
+            return $formattedDate;
+        }
+
+        $weekday = self::getLocalizedWeekday($dateTime, $weekdayFormat, $locale);
+        if ($weekday === '') {
+            return $formattedDate;
+        }
+
+        if ($asHtml) {
+            $weekdayClass = 'admidio-event-weekday admidio-event-weekday-' . htmlspecialchars($weekdayFormat, ENT_QUOTES, 'UTF-8');
+            return '<span class="' . $weekdayClass . '">' . $weekday . ',</span> ' . $formattedDate;
+        }
+
+        return $weekday . ', ' . $formattedDate;
+    }
+
+    /**
      * Create a date from a specific format and reject parsing warnings/errors.
      *
      * @param string $format Date format
