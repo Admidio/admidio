@@ -240,10 +240,10 @@
                 {if $pwaEnabled}
                 <!-- PWA Install Button -->
                 <div id="adm_pwa_install_container" class="btn-group btn-group-sm me-2 d-none" role="group">
-                    <button id="adm_pwa_install_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_PWA_INSTALL_APP')}">
-                        <i class="bi bi-download"></i> <span class="d-none d-sm-inline">{$l10n->get('SYS_PWA_INSTALL_APP')}</span><span class="d-sm-none">{$l10n->get('SYS_PWA_INSTALL')}</span>
+                    <button id="adm_pwa_install_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_INSTALL_APP')}">
+                        <i class="bi bi-download"></i> <span class="d-none d-sm-inline">{$l10n->get('SYS_INSTALL_APP')}</span><span class="d-sm-none">{$l10n->get('SYS_INSTALL')}</span>
                     </button>
-                    <button id="adm_pwa_install_dismiss_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_PWA_DO_NOT_SHOW_AGAIN')}" aria-label="{$l10n->get('SYS_CLOSE')}">
+                    <button id="adm_pwa_install_dismiss_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_DO_NOT_SHOW_AGAIN')}" aria-label="{$l10n->get('SYS_CLOSE')}">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
@@ -265,7 +265,7 @@
                         </li>
                         {if $pwaEnabled}
                         <li class="nav-item mb-2 d-none" id="adm_pwa_profile_menu_item">
-                            <a class="nav-link link-primary" href="#" id="adm_pwa_profile_install_btn"><i class="bi bi-download me-1"></i> {$l10n->get('SYS_PWA_INSTALL_APP')}</a>
+                            <a class="nav-link link-primary" href="#" id="adm_pwa_profile_install_btn"><i class="bi bi-download me-1"></i> {$l10n->get('SYS_INSTALL_APP')}</a>
                         </li>
                         {/if}
                         <li class="nav-item">
@@ -280,10 +280,10 @@
                     {if $pwaEnabled}
                     <!-- PWA Install Button -->
                     <div id="adm_pwa_install_container" class="btn-group btn-group-sm me-2 d-none" role="group">
-                        <button id="adm_pwa_install_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_PWA_INSTALL_APP')}">
-                            <i class="bi bi-download"></i> <span class="d-none d-sm-inline">{$l10n->get('SYS_PWA_INSTALL_APP')}</span><span class="d-sm-none">{$l10n->get('SYS_PWA_INSTALL')}</span>
+                        <button id="adm_pwa_install_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_INSTALL_APP')}">
+                            <i class="bi bi-download"></i> <span class="d-none d-sm-inline">{$l10n->get('SYS_INSTALL_APP')}</span><span class="d-sm-none">{$l10n->get('SYS_INSTALL')}</span>
                         </button>
-                        <button id="adm_pwa_install_dismiss_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_PWA_DO_NOT_SHOW_AGAIN')}" aria-label="{$l10n->get('SYS_CLOSE')}">
+                        <button id="adm_pwa_install_dismiss_btn" class="btn btn-outline-primary btn-sm" type="button" title="{$l10n->get('SYS_DO_NOT_SHOW_AGAIN')}" aria-label="{$l10n->get('SYS_CLOSE')}">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
@@ -359,7 +359,7 @@
                             {/foreach}
                         {/if}
                         {if $pwaEnabled}
-                            <span id="adm_pwa_footer_item" class="d-none">&nbsp;&nbsp;-&nbsp;&nbsp;<a href="#" id="adm_pwa_footer_install_btn">{$l10n->get('SYS_PWA_INSTALL_APP')}</a></span>
+                            <span id="adm_pwa_footer_item" class="d-none">&nbsp;&nbsp;-&nbsp;&nbsp;<a href="#" id="adm_pwa_footer_install_btn">{$l10n->get('SYS_INSTALL_APP')}</a></span>
                         {/if}
                     </div>
                 </div>
@@ -372,9 +372,9 @@
             <img src="{if ($faviconFile)}{$urlAdmidio}/{$faviconFile}{else}{$urlAdmidio}/system/logo/admidio_logo_64.png{/if}" width="40" height="40" class="rounded me-3 shadow-sm" alt="App Icon" />
             <div class="flex-grow-1">
                 <strong class="d-block text-dark">{$organizationName}</strong>
-                <small class="text-muted">{$l10n->get('SYS_PWA_INSTALL_AS_APP')}</small>
+                <small class="text-muted">{$l10n->get('SYS_INSTALL_AS_APP')}</small>
             </div>
-            <button id="adm_pwa_banner_install_btn" class="btn btn-sm btn-primary me-2"><i class="bi bi-download"></i> {$l10n->get('SYS_PWA_INSTALL')}</button>
+            <button id="adm_pwa_banner_install_btn" class="btn btn-sm btn-primary me-2"><i class="bi bi-download"></i> {$l10n->get('SYS_INSTALL')}</button>
             <button type="button" class="btn-close" id="adm_pwa_banner_close" aria-label="{$l10n->get('SYS_CLOSE')}"></button>
         </div>
     </div>
@@ -384,7 +384,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-phone"></i> {$l10n->get('SYS_PWA_INSTALL_APP')}</h5>
+                    <h5 class="modal-title"><i class="bi bi-phone"></i> {$l10n->get('SYS_INSTALL_APP')}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$l10n->get('SYS_CLOSE')}"></button>
                 </div>
                 <div class="modal-body" id="adm_pwa_guide_body">
@@ -422,7 +422,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-link btn-sm text-muted text-decoration-none" id="adm_pwa_modal_dismiss_forever" data-bs-dismiss="modal">
-                        {$l10n->get('SYS_PWA_DO_NOT_SHOW_AGAIN')}
+                        {$l10n->get('SYS_DO_NOT_SHOW_AGAIN')}
                     </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$l10n->get('SYS_CLOSE')}</button>
                 </div>

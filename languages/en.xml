@@ -562,6 +562,7 @@
   <string name="SYS_DISPLAY_REDIRECT_DESC">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</string>
   <string name="SYS_DIVERSE">Diverse</string>
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
+  <string name="SYS_DO_NOT_SHOW_AGAIN">Do not show again</string>
   <string name="SYS_DOCUMENTS_FILES">Documents &amp; Files</string>
   <string name="SYS_DOCUMENTS_FILES_DESC">Different documents and files can be viewed or provided for download. These files can be categorized in folders with different access permission levels.</string>
   <string name="SYS_DOCUMENTS_FILES_ROLES_VIEW">Members of the following roles can view the documents and files in this folder: #VAR1#</string>
@@ -812,6 +813,9 @@
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
+  <string name="SYS_INSTALL">Install</string>
+  <string name="SYS_INSTALL_APP">Install app</string>
+  <string name="SYS_INSTALL_AS_APP">Install as app</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation successful</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">The Admidio database is now installed and completely set up. The configuration file with the access data to the database has been created and stored. You can now work with Admidio and log in with the administrator data.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">The installation and setup of the database was successfully completed.</string>
@@ -1313,7 +1317,6 @@
   <string name="SYS_PROFILE_PHOTO">Profile photo</string>
   <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">You should be in the photo yourself. The photo may have a maximum resolution of #VAR1# MegaPixels. The photo file must not be larger than #VAR1# MB and must be in JPG or PNG format.</string>
   <string name="SYS_PROPERTIES">Properties</string>
-  <string name="SYS_PWA_DO_NOT_SHOW_AGAIN">Do not show again</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tap the three dots menu at the top or bottom.</string>
@@ -1331,9 +1334,6 @@
   <string name="SYS_PWA_GUIDE_IOS_STEP2">Scroll down and select 'Add to Home Screen'.</string>
   <string name="SYS_PWA_GUIDE_IOS_STEP3">Tap 'Add' in the top right corner.</string>
   <string name="SYS_PWA_GUIDE_IOS_TITLE">How to install #VAR1# on your iPhone or iPad:</string>
-  <string name="SYS_PWA_INSTALL">Install</string>
-  <string name="SYS_PWA_INSTALL_APP">Install app</string>
-  <string name="SYS_PWA_INSTALL_AS_APP">Install as app</string>
   <string name="SYS_QR_CODE">QR Code</string>
   <string name="SYS_QUANTITY">Quantity</string>
   <string name="SYS_QUARTERLY">Quarterly</string>

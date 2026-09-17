@@ -28,27 +28,6 @@ You can try out the [demo system](https://www.admidio.org/demo) to have a look t
 - **Progressive Web App (PWA)**: Install Admidio as a standalone app on Android, iOS, Windows, and macOS.
 - **And Much More**: Explore additional features and functionalities.
 
-## Progressive Web App (PWA)
-
-Admidio includes Progressive Web App (PWA) support, allowing members and administrators to install Admidio directly onto their mobile home screen or desktop as a standalone application.
-
-### Highlights
-- **Standalone App Experience**: Launches in standalone mode without browser toolbars or address bars.
-- **Install Prompts & Guided Setup**: Direct one-click installation on Chromium-based browsers (Chrome, Edge), and clear step-by-step instructions for iOS Safari and mobile Firefox.
-- **Dynamic Organization Name**: The app name automatically reflects your configured organization name.
-- **Customizable App Icons**: Custom icons can be configured without modifying core files:
-  1. Place square PNG icons in `adm_my_files/`:
-     - `adm_my_files/app_icon_512.png` (512×512 px, recommended)
-     - `adm_my_files/app_icon_192.png` (192×192 px)
-     - Or `adm_my_files/app_icon.png` (or custom `admidio_logo_512.png` / `admidio_logo_192.png`)
-     - Dedicated full-bleed adaptive icon (optional): `adm_my_files/app_icon_maskable.png`
-  2. If a custom PNG favicon is configured in **Preferences → Design**, it is used as a fallback.
-  3. Fallback to theme or system logos if no custom icon is provided.
-- **Configuration & Toggle**:
-  - PWA support is enabled by default.
-  - Administrators can toggle PWA on or off at any time under **Settings → Preferences → General** (**Progressive Web App (PWA) aktivieren**).
-  - When disabled, manifest tags, service workers, install prompts, and buttons are omitted, and `system/manifest.json.php` returns HTTP 404.
-
 ## Installation
 
 To install Admidio on your web server, ensure you have PHP 8.2 or higher and either a MariaDB (version 10 or higher), MySQL (version 5.0 or higher) or PostgreSQL (version 11.0 or higher) database available. Follow our [online installation instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation) for a successful setup.
