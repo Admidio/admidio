@@ -48,6 +48,17 @@ final class PluginStore
     public const TIMEOUT_SECONDS = 10;
 
     /**
+     * The release statuses each channel admits. Channels are cumulative, and none admits a
+     * withdrawn release.
+     */
+    public const CHANNELS = array(
+        'stable' => array('stable'),
+        'rc' => array('stable', 'rc'),
+        'beta' => array('stable', 'rc', 'beta'),
+        'alpha' => array('stable', 'rc', 'beta', 'alpha')
+    );
+
+    /**
      * The catalogue of this request, or **null** while it has not been read yet.
      * @var array<string,mixed>|null
      */
@@ -317,13 +328,17 @@ final class PluginStore
      * The newest release of a catalogue entry this Admidio satisfies, or **null** if there is none.
      *
      * The constraint is read with the same matcher a manifest is read with, so the catalogue says
-     * what a plugin requires in exactly the syntax the plugin itself would.
+     * what a plugin requires in exactly the syntax the plugin itself would. Only releases of the
+     * statuses the channel admits are considered - whatever the catalogue sent, because a static
+     * file or a developer catalogue does not filter by the request parameters.
      * @param array<string,mixed> $entry
      * @return array<string,mixed>|null
      */
     private static function pickRelease(array $entry): ?array
     {
         $best = null;
+        $statuses = self::CHANNELS[self::getChannel()];
+        $php = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION;
 
         foreach ((array)($entry['releases'] ?? array()) as $release) {
             if (!is_array($release)) {
@@ -336,8 +351,17 @@ final class PluginStore
                 continue;
             }
 
+            if (!in_array(self::getReleaseStatus($release), $statuses, true)) {
+                continue;
+            }
+
             $constraint = (string)($release['requires']['admidio'] ?? '');
             if ($constraint !== '' && !Plugin::versionMatches(ADMIDIO_VERSION, $constraint)) {
+                continue;
+            }
+
+            $constraint = (string)($release['requires']['php'] ?? '');
+            if ($constraint !== '' && !Plugin::versionMatches($php, $constraint)) {
                 continue;
             }
 
@@ -347,6 +371,62 @@ final class PluginStore
         }
 
         return $best;
+    }
+
+    /**
+     * How mature a release is: stable, rc, beta or alpha - or withdrawn, which no channel admits.
+     *
+     * A catalogue that states no status is taken at its word that the release is stable, unless the
+     * version itself says otherwise: 1.2.0-beta1 is not offered as a stable release just because a
+     * catalogue forgot to say so. An unknown status is returned as it is, so no channel admits it.
+     * @param array<string,mixed> $release
+     * @return string
+     */
+    public static function getReleaseStatus(array $release): string
+    {
+        $status = strtolower(trim((string)($release['status'] ?? '')));
+        if ($status !== '' && $status !== 'final') {
+            return $status;
+        }
+
+        // The words version_compare() orders below a release; "pl" and "p" (patch level) rank above it.
+        if (preg_match('/^\d+(?:\.\d+)*[.\-_+]?([a-z]+)/i', (string)($release['version'] ?? ''), $matches) === 1) {
+            $suffix = strtolower($matches[1]);
+            if ($suffix === 'rc') {
+                return 'rc';
+            }
+            if ($suffix === 'beta' || $suffix === 'b') {
+                return 'beta';
+            }
+            if ($suffix !== 'pl' && $suffix !== 'p') {
+                return 'alpha';
+            }
+        }
+
+        return 'stable';
+    }
+
+    /**
+     * The channel of this installation: how early it is offered plugin releases.
+     *
+     * Always **stable**, unless a developer sets **$gPluginStoreChannel** in config.php to rc, beta
+     * or alpha - which, like the catalogue address, only applies while $gDebug is on. Trying
+     * pre-releases is something a developer does on a test installation; a production installation
+     * must not end up with alpha code because of a line left over from testing.
+     * @return string A key of CHANNELS.
+     */
+    public static function getChannel(): string
+    {
+        global $gDebug, $gPluginStoreChannel;
+
+        if (!empty($gDebug) && isset($gPluginStoreChannel) && is_string($gPluginStoreChannel)) {
+            $channel = strtolower(trim($gPluginStoreChannel));
+            if (isset(self::CHANNELS[$channel])) {
+                return $channel;
+            }
+        }
+
+        return 'stable';
     }
 
     /**
@@ -376,7 +456,7 @@ final class PluginStore
     {
         self::$error = null;
 
-        $url = self::getUrl();
+        $url = self::getRequestUrl();
         $body = self::fetch($url);
 
         if ($body === null) {
@@ -463,6 +543,39 @@ final class PluginStore
     }
 
     /**
+     * The address the catalogue is actually requested from: getUrl() plus what this installation
+     * is, so that the directory can leave out every release that could never be installed here
+     * instead of sending the whole history of every plugin to every installation.
+     *
+     * The parameters only narrow what is sent. pickRelease() applies the same rules to whatever
+     * comes back, because a static file or an older directory ignores them. A path on disk gets
+     * none, since it has no query string to receive them.
+     *
+     * The cache is kept per request address, so after an upgrade of Admidio or PHP the next read
+     * fetches the catalogue for the new versions instead of answering from the old one.
+     * @return string
+     */
+    public static function getRequestUrl(): string
+    {
+        $url = self::getUrl();
+
+        if (preg_match('#^https?://#i', $url) !== 1) {
+            return $url;
+        }
+
+        $query = http_build_query(array(
+            'format' => self::FORMAT,
+            'admidio' => ADMIDIO_VERSION,
+            'php' => PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION,
+            'channel' => self::getChannel(),
+            // The newest release of each status is all pickRelease() needs.
+            'releases' => 'latest'
+        ));
+
+        return $url . (str_contains($url, '?') ? '&' : '?') . $query;
+    }
+
+    /**
      * Where a configured address or path actually points.
      *
      * A path is taken to be relative to the Admidio directory unless it is absolute, so that a
@@ -530,9 +643,10 @@ final class PluginStore
         /*
          * A cache belongs to the catalogue it came from. Without this, turning the developer
          * override in config.php on or off would keep answering from the other catalogue until the
-         * cache went stale, which is exactly when somebody is trying to see their own plugin.
+         * cache went stale, which is exactly when somebody is trying to see their own plugin. The
+         * request address also names the Admidio and PHP versions, so an upgrade is a new catalogue.
          */
-        if ((string)($cached['url'] ?? '') !== self::getUrl()) {
+        if ((string)($cached['url'] ?? '') !== self::getRequestUrl()) {
             return null;
         }
 
@@ -547,7 +661,7 @@ final class PluginStore
     private static function writeCache(array $catalogue): void
     {
         $payload = json_encode(array(
-            'url' => self::getUrl(),
+            'url' => self::getRequestUrl(),
             'catalogue' => $catalogue
         ));
 

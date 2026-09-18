@@ -56,7 +56,7 @@ final class PluginStoreTest extends PluginTestCase
         $this->directories = array();
 
         // The developer override is read from config.php globals, so a case that set them clears them.
-        unset($GLOBALS['gDebug'], $GLOBALS['gPluginStoreUrl']);
+        unset($GLOBALS['gDebug'], $GLOBALS['gPluginStoreUrl'], $GLOBALS['gPluginStoreChannel']);
 
         PluginRegistry::setPluginsPath(null);
         PluginRegistry::setInstallations(null);
@@ -120,6 +120,97 @@ final class PluginStoreTest extends PluginTestCase
 
         $this->assertCount(1, $available);
         $this->assertSame('2.3.0', $available[0]['release']['version']);
+    }
+
+    /**
+     * @testdox Only stable releases are offered by default, and never a withdrawn one
+     *
+     * A catalogue that lists a beta must not have it offered as an update to every installation.
+     * A release without a status counts as stable unless its version says otherwise.
+     */
+    public function testOnlyStableReleasesAreOfferedByDefault(): void
+    {
+        $this->catalogue(array(
+            $this->entry('dummy-plugin', array(
+                array('version' => '1.0.0', 'download' => 'https://example.org/1.zip'),
+                array('version' => '1.1.0', 'status' => 'stable', 'download' => 'https://example.org/2.zip'),
+                array('version' => '1.2.0', 'status' => 'withdrawn', 'download' => 'https://example.org/3.zip'),
+                array('version' => '1.3.0-rc1', 'status' => 'rc', 'download' => 'https://example.org/4.zip'),
+                array('version' => '1.4.0-beta1', 'download' => 'https://example.org/5.zip'),
+                array('version' => '1.5.0', 'status' => 'nightly', 'download' => 'https://example.org/6.zip')
+            ))
+        ));
+
+        $this->assertSame('stable', PluginStore::getChannel());
+        $this->assertSame('1.1.0', PluginStore::getPlugins()[0]['release']['version']);
+    }
+
+    /**
+     * @testdox A developer may choose a less stable channel in config.php
+     */
+    public function testConfiguredChannelAdmitsPreReleases(): void
+    {
+        $GLOBALS['gDebug'] = true;
+        $GLOBALS['gPluginStoreChannel'] = 'beta';
+
+        $this->catalogue(array(
+            $this->entry('dummy-plugin', array(
+                array('version' => '1.1.0', 'status' => 'stable', 'download' => 'https://example.org/2.zip'),
+                array('version' => '1.2.0', 'status' => 'withdrawn', 'download' => 'https://example.org/3.zip'),
+                array('version' => '1.3.0-beta1', 'download' => 'https://example.org/4.zip'),
+                array('version' => '1.4.0-alpha1', 'status' => 'alpha', 'download' => 'https://example.org/5.zip')
+            ))
+        ));
+
+        $this->assertSame('beta', PluginStore::getChannel());
+        $this->assertSame('1.3.0-beta1', PluginStore::getPlugins()[0]['release']['version']);
+    }
+
+    /**
+     * @testdox Without debugging, or with an unknown value, the configured channel is ignored
+     */
+    public function testConfiguredChannelNeedsDebug(): void
+    {
+        $GLOBALS['gPluginStoreChannel'] = 'alpha';
+
+        $GLOBALS['gDebug'] = false;
+        $this->assertSame('stable', PluginStore::getChannel());
+
+        $GLOBALS['gDebug'] = true;
+        $GLOBALS['gPluginStoreChannel'] = 'nightly';
+        $this->assertSame('stable', PluginStore::getChannel());
+    }
+
+    /**
+     * @testdox The status of a release is read from the catalogue, or else from its version
+     */
+    public function testReleaseStatus(): void
+    {
+        $status = static fn(array $release): string => PluginStore::getReleaseStatus($release);
+
+        $this->assertSame('stable', $status(array('version' => '1.0.0')));
+        $this->assertSame('stable', $status(array('version' => '1.0.0', 'status' => 'final')));
+        $this->assertSame('stable', $status(array('version' => '1.0.0-pl1')));
+        $this->assertSame('rc', $status(array('version' => '1.0.0-RC2')));
+        $this->assertSame('beta', $status(array('version' => '1.0.0b3')));
+        $this->assertSame('alpha', $status(array('version' => '1.0.0-dev')));
+        $this->assertSame('beta', $status(array('version' => '1.0.0-alpha1', 'status' => 'beta')));
+        $this->assertSame('withdrawn', $status(array('version' => '1.0.0', 'status' => 'Withdrawn')));
+    }
+
+    /**
+     * @testdox A release that needs another PHP version is not offered
+     */
+    public function testReleaseForAnotherPhpIsNotOffered(): void
+    {
+        $this->catalogue(array(
+            $this->entry('dummy-plugin', array(
+                array('version' => '1.0.0', 'requires' => array('php' => '>=7.4'), 'download' => 'https://example.org/1.zip'),
+                array('version' => '2.0.0', 'requires' => array('php' => '>=99.0'), 'download' => 'https://example.org/2.zip')
+            ))
+        ));
+
+        $this->assertSame('1.0.0', PluginStore::getPlugins()[0]['release']['version']);
     }
 
     /**
@@ -400,6 +491,56 @@ final class PluginStoreTest extends PluginTestCase
 
         $this->assertSame(ADMIDIO_HOMEPAGE . 'plugins.json', PluginStore::getUrl());
         $this->assertFalse(PluginStore::isDeveloperCatalogue());
+    }
+
+    /**
+     * @testdox A catalogue address is asked only for what this installation could install
+     */
+    public function testRequestUrlNamesThisInstallation(): void
+    {
+        PluginStore::setUrl('https://example.org/plugins.json');
+
+        $this->assertSame(
+            'https://example.org/plugins.json?format=1&admidio=' . urlencode(ADMIDIO_VERSION)
+                . '&php=' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION
+                . '&channel=stable&releases=latest',
+            PluginStore::getRequestUrl()
+        );
+    }
+
+    /**
+     * @testdox A catalogue address that already has a query keeps it
+     */
+    public function testRequestUrlKeepsAnExistingQuery(): void
+    {
+        PluginStore::setUrl('https://example.org/doku.php?do=admidioplugins');
+
+        $this->assertStringStartsWith(
+            'https://example.org/doku.php?do=admidioplugins&format=1&admidio=',
+            PluginStore::getRequestUrl()
+        );
+    }
+
+    /**
+     * @testdox The catalogue is asked for the channel configured by a developer
+     */
+    public function testRequestUrlNamesTheConfiguredChannel(): void
+    {
+        $GLOBALS['gDebug'] = true;
+        $GLOBALS['gPluginStoreChannel'] = 'rc';
+        PluginStore::setUrl('https://example.org/plugins.json');
+
+        $this->assertStringContainsString('&channel=rc&', PluginStore::getRequestUrl());
+    }
+
+    /**
+     * @testdox A catalogue on disk is read without request parameters
+     */
+    public function testLocalCatalogueGetsNoRequestParameters(): void
+    {
+        $file = $this->catalogue(array());
+
+        $this->assertSame($file, PluginStore::getRequestUrl());
     }
 
     /**
