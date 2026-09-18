@@ -175,7 +175,7 @@ class PreferencesPresenter extends PagePresenter
             $formValues['announcements_per_page'],
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
         );
-         $formAnnouncements->addInput(
+        $formAnnouncements->addInput(
             'announcements_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES'),
             $formValues['announcements_clamp_text_lines'],
@@ -1248,7 +1248,7 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(10)))
         );
-         $formEvents->addInput(
+        $formEvents->addInput(
             'events_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES', array($gL10n->get('SYS_DESCRIPTION'))),
             $formValues['events_clamp_text_lines'],
@@ -2225,8 +2225,8 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
             (string)$formValues['sso_oidc_issuer_url'],
             array('class' => 'copy-container if-oidc-enabled',
-                  'placeholder' => $defaultIssuerURL,
-                  'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
+                'placeholder' => $defaultIssuerURL,
+                'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
         );
 
         $keyService = new KeyService($gDb);
@@ -2416,7 +2416,7 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('diskSpaceContent', $diskSpaceContent);
 
         // Admidio PHP Information
-                if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
+        if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
             $phpVersionColorClass = 'text-danger';
             $phpVersionInfo = ' &rarr; ' . $gL10n->get('SYS_PHP_VERSION_REQUIRED', array(MIN_PHP_VERSION));
         } elseif (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
@@ -2656,8 +2656,6 @@ class PreferencesPresenter extends PagePresenter
                         // Mobile mode
                         $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show").attr("aria-expanded", "true");
                         $("#heading_' . $this->preferencesPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
-                        // --- Hash setzen, damit Bookmark/Scroll stimmt und zum Element scrollen
-                        location.hash = "#heading_' . $this->preferencesPanelToShow . '";
                     }
                 ', true);
             }
