@@ -3,7 +3,6 @@
 namespace Admidio\Infrastructure\Utils;
 
 use Admidio\Infrastructure\PdfDocument;
-use TCPDF;
 
 /**
  * PDF export configuration shared by web and CLI exports.
@@ -13,19 +12,13 @@ use TCPDF;
  */
 class PdfUtils
 {
-    public static function createDocument(string $orientation): TCPDF
+    public static function createDocument(string $orientation, string $heading): PdfDocument
     {
-        // TCPDF 7 needs JSON font metrics, which its Composer package does not ship.
-        // Configure our bundled core fonts before TCPDF is autoloaded.
+        // tc-lib-pdf-font discovers the bundled JSON font metrics through this path.
         if (!defined('K_PATH_FONTS')) {
             define('K_PATH_FONTS', dirname(__DIR__, 3) . '/libs/pdf-fonts/');
         }
 
-        $pdf = new PdfDocument($orientation, 'mm', 'A4', true, 'UTF-8', false);
-        // HTML cells define their own padding. TCPDF's default cell padding would
-        // additionally indent repeated table headers after an automatic page break.
-        $pdf->setCellPadding(0);
-
-        return $pdf;
+        return new PdfDocument($orientation, $heading);
     }
 }

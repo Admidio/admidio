@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "164eb5de3172a1a68604b96f03002b0d",
+    "content-hash": "db42a63d88faee46105ee23b417eaa38",
     "packages": [
         {
             "name": "bjeavons/zxcvbn-php",
@@ -3786,77 +3786,6 @@
                 }
             ],
             "time": "2026-09-05T07:33:19+00:00"
-        },
-        {
-            "name": "tecnickcom/tcpdf",
-            "version": "7.0.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "e61f8791490e5f8c274f2d57b7e95a899b8d09cb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/e61f8791490e5f8c274f2d57b7e95a899b8d09cb",
-                "reference": "e61f8791490e5f8c274f2d57b7e95a899b8d09cb",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "php": ">=8.2",
-                "tecnickcom/tc-lib-pdf": "^8.75"
-            },
-            "require-dev": {
-                "carthage-software/mago": "1.47.6",
-                "pdepend/pdepend": "^2.16",
-                "phpunit/phpunit": "^11.5 || ^12.5 || ^13.3"
-            },
-            "suggest": {
-                "ext-gd": "Enables additional image handling in some workflows.",
-                "ext-imagick": "Enables additional image format support when available.",
-                "ext-zlib": "Recommended for compressed streams and related features.",
-                "tecnickcom/tc-lib-pdf": "Modern replacement for TCPDF for new projects."
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "config",
-                    "tcpdf.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Nicola Asuni",
-                    "email": "info@tecnick.com",
-                    "role": "lead"
-                }
-            ],
-            "description": "Deprecated legacy PDF engine for PHP. Use instead tecnickcom/tc-lib-pdf.",
-            "homepage": "https://tcpdf.org",
-            "keywords": [
-                "PDFD32000-2008",
-                "TCPDF",
-                "barcodes",
-                "datamatrix",
-                "pdf",
-                "pdf417",
-                "qrcode"
-            ],
-            "support": {
-                "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/tecnickcom",
-                    "type": "github"
-                }
-            ],
-            "time": "2026-09-14T14:38:11+00:00"
         },
         {
             "name": "twbs/bootstrap",

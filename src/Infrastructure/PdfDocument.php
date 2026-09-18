@@ -2,29 +2,64 @@
 
 namespace Admidio\Infrastructure;
 
-use TCPDF;
+use Com\Tecnick\Pdf\Tcpdf;
 
 /**
- * PDF document with a borderless page heading.
+ * List export document using the native tc-lib-pdf API.
  *
  * @copyright The Admidio Team
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class PdfDocument extends TCPDF
+class PdfDocument extends Tcpdf
 {
-    public function Header()
-    {
-        $font = $this->getHeaderFont();
-        $header = $this->getHeaderData();
-        $margins = $this->getMargins();
-        $this->SetXY($margins['left'], $this->getHeaderMargin());
-        $this->setTextColorArray($header['text_color']);
-        $this->SetFont($font[0], 'B', $font[2] + 1);
-        $this->MultiCell(0, 0, $header['title'], 0, 'L');
+    private string $heading;
 
-        if ($header['string'] !== '') {
-            $this->SetFont($font[0], $font[1], $font[2]);
-            $this->MultiCell(0, 0, $header['string'], 0, 'L');
+    public function __construct(string $orientation, string $heading)
+    {
+        $this->heading = $heading;
+        parent::__construct(unit: 'mm');
+        $this->setCreator('Admidio');
+        $this->setAuthor('Admidio');
+        $this->setTitle($heading);
+        $this->font->insert($this->pon, 'helvetica', '', 10);
+        $this->enableDefaultPageContent();
+        $this->addPage([
+            'format' => 'A4',
+            'orientation' => $orientation,
+            'autobreak' => true,
+            'margin' => [
+                'PL' => 10, 'PR' => 10, 'PT' => 0, 'HB' => 0,
+                'CT' => 20, 'CB' => 25, 'FT' => 0, 'PB' => 0,
+            ],
+        ]);
+    }
+
+    public function defaultPageContent(int $pid = -1): string
+    {
+        $page = $this->page->getPage($pid);
+        $font = $this->font->insert($this->pon, 'helvetica', 'B', 11);
+        try {
+            return $this->graph->getStartTransform()
+                . $font['out']
+                . $this->color->getPdfFillColor('black')
+                . $this->getTextCell($this->heading, 10, 10, $page['width'] - 20, 0, 0, 0, 'T', 'L', self::ZEROCELL)
+                . $this->graph->getStopTransform();
+        } finally {
+            $this->font->popLastFont();
         }
+    }
+
+    public function writeTable(string $html): void
+    {
+        $region = $this->page->getRegion();
+        // Keep the existing line spacing and let HTML define the cell padding.
+        $this->addHTMLCell(
+            '<div style="font-family:helvetica;font-size:10pt;line-height:1.25;">' . $html . '</div>',
+            $region['RX'],
+            $region['RY'],
+            $region['RW'],
+            0,
+            self::ZEROCELL
+        );
     }
 }

@@ -143,34 +143,7 @@ try {
                 ini_set('max_execution_time', 600); //600 seconds = 10 minutes
             }
 
-            $pdf = PdfUtils::createDocument($orientation);
-
-            // set document information
-            $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Admidio');
-            $pdf->SetTitle($headline);
-
-            // remove default header/footer
-            $pdf->setPrintHeader(true);
-            $pdf->setPrintFooter(false);
-            // set header and footer fonts
-            $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-            $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-            // set auto page breaks
-            $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-            $pdf->SetMargins(10, 20, 10);
-            $pdf->setHeaderMargin(10);
-            $pdf->setFooterMargin(0);
-
-            // headline for PDF
-            $pdf->setHeaderData('', 0, $headline);
-
-            // set font
-            $pdf->SetFont('helvetica', '', 10);
-
-            // add a page
-            $pdf->AddPage();
+            $pdf = PdfUtils::createDocument($orientation, $headline);
 
             // set subHeadline and class for table
             $smarty->assign('subHeadline', $subHeadline);
@@ -517,22 +490,22 @@ try {
         $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
         $smarty->assign('columnAlign', $data['column_align']);
         $smarty->assign('headers', $data['headers']);
-        $smarty->assign('headersStyle', 'font-size:10;background-color:#C7C7C7;');
+        $smarty->assign('headersStyle', 'font-size:10pt;background-color:#C7C7C7;');
         $smarty->assign('rows', $data['rows']);
-        $smarty->assign('rowsStyle', 'font-size:10;');
+        $smarty->assign('rowsStyle', 'font-size:10pt;');
 
         // Fetch the HTML table from our Smarty template
         $smarty->assign('exportMode', true);
         $htmlTable = $smarty->fetch('modules/category-report.list.tpl');
 
         // output the HTML content
-        $pdf->writeHTML($htmlTable, true, false, true);
+        $pdf->writeTable($htmlTable);
 
         $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
         // Save PDF to file
-        // TCPDF 7 sanitizes filenames in file-output mode. Preserve our exact path.
-        FileSystemUtils::writeFile($file, $pdf->Output('', 'S'));
+        // Preserve the exact export path instead of the engine's sanitized filename.
+        FileSystemUtils::writeFile($file, $pdf->getOutPDFString());
 
         // Redirect
         header('Content-Type: application/pdf');

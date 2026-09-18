@@ -4,8 +4,10 @@ namespace Admidio\Tests\Integration;
 
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PdfUtils;
+use Admidio\Roles\ValueObject\ListData;
 use Com\Tecnick\Pdf\Parser\Parser;
 use PHPUnit\Framework\TestCase;
+use Smarty\Smarty;
 
 /**
  * Exercises the PDF dependency without a database or an initialized web request.
@@ -15,17 +17,49 @@ use PHPUnit\Framework\TestCase;
  */
 class PdfExportTest extends TestCase
 {
-    public function testPortraitExport(): void
+    public function testListDataExportWithoutLegacyTcpdf(): void
     {
-        $this->assertExport('P');
+        $directory = sys_get_temp_dir() . '/admidio-list-pdf-test-' . bin2hex(random_bytes(8));
+        mkdir($directory);
+        define('ADMIDIO_PATH', $directory);
+        define('FOLDER_TEMP_DATA', '');
+        $file = $directory . '/member.report.pdf';
+
+        try {
+            $this->assertFalse(class_exists('TCPDF'));
+            $list = new ListData();
+            $list->setColumnHeadlines(array('Name', 'Number'));
+            $list->setDataByArray(array(array('Member One', '123')));
+            $export = $list->createExportFile('member.report', 'pdf');
+            $this->assertSame($file, $export['path']);
+            $this->assertSame('application/pdf', $export['contentType']);
+            $data = file_get_contents($file);
+            $this->assertStringStartsWith('%PDF-', $data);
+            [, $objects] = (new Parser())->parse($data);
+            $content = serialize($objects);
+            $this->assertStringContainsString('(Member One)', $content);
+            $this->assertStringContainsString('(123)', $content);
+        } finally {
+            if (is_file($file)) {
+                unlink($file);
+            }
+            rmdir($directory);
+        }
     }
 
-    public function testLandscapeExport(): void
+    public static function exportTemplates(): array
     {
-        $this->assertExport('L');
+        $cases = array();
+        foreach (array('groups-roles.list.tpl', 'category-report.list.tpl', 'inventory.list.export.tpl') as $template) {
+            foreach (array('P', 'L') as $orientation) {
+                $cases[$template . '-' . $orientation] = array($template, $orientation);
+            }
+        }
+        return $cases;
     }
 
-    private function assertExport(string $orientation): void
+    /** @dataProvider exportTemplates */
+    public function testExport(string $template, string $orientation): void
     {
         $directory = sys_get_temp_dir() . '/admidio-pdf-test-' . bin2hex(random_bytes(8));
         mkdir($directory);
@@ -35,34 +69,38 @@ class PdfExportTest extends TestCase
         $file = $directory . '/member.report final';
 
         try {
-            $pdf = PdfUtils::createDocument($orientation);
-            $pdf->setPrintHeader(true);
-            $pdf->setPrintFooter(false);
-            $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-            $pdf->SetMargins(10, 20, 10);
-            $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-            $pdf->setHeaderMargin(10);
-            $pdf->setHeaderData('', 0, 'Export heading', '');
-            $pdf->SetFont('helvetica', '', 10);
-            $pdf->AddPage();
-
-            $this->assertSame($orientation === 'P', $pdf->getPageWidth() < $pdf->getPageHeight());
-            $html = '<table border="1" cellpadding="1"><thead><tr>'
-                . '<th style="text-align:left;padding-left:3px;padding-right:3px;">Name</th>'
-                . '<th>Details</th></tr></thead><tbody>';
+            $pdf = PdfUtils::createDocument($orientation, 'Export heading');
+            $page = $pdf->page->getPage();
+            $this->assertSame($orientation === 'P', $page['width'] < $page['height']);
+            $smarty = new Smarty();
+            $smarty->setTemplateDir(dirname(__DIR__, 2) . '/themes/simple/templates');
+            mkdir($directory . '/compiled');
+            $smarty->setCompileDir($directory . '/compiled');
+            $rows = array();
             for ($row = 1; $row <= 100; ++$row) {
-                $html .= '<tr><td style="padding-left:3px;padding-right:3px;">Member ' . $row
-                    . '</td><td><i>Registered</i></td></tr>';
+                $rows[] = array('id' => 'row' . $row, 'data' => array('Member ' . $row, '<i>Registered</i>'));
             }
-            $pdf->writeHTML($html . '</tbody></table>', true, false, true);
-            $data = $pdf->Output('', 'S');
-            $this->assertGreaterThan(1, $pdf->getNumPages());
+            $smarty->assign(array(
+                'classTable' => '',
+                'attributes' => array('border' => '1', 'cellpadding' => '1'),
+                'exportMode' => true,
+                'subHeadline' => 'Section heading',
+                'headers' => array('Name', 'Details'),
+                'headersStyle' => 'font-size:10pt;background-color:#C7C7C7;',
+                'rowsStyle' => 'font-size:10pt;',
+                'columnAlign' => array('left', 'left'),
+                'column_align' => array('start', 'start'),
+                'rows' => $rows,
+            ));
+            $pdf->writeTable($smarty->fetch('modules/' . $template));
+            $data = $pdf->getOutPDFString();
+            $this->assertGreaterThan(1, count($pdf->page->getPages()));
             $this->assertStringStartsWith('%PDF-', $data);
 
             // The extensionless/dotted path must survive without a renamed sibling file.
             FileSystemUtils::writeFile($file, $data);
             $this->assertSame($data, file_get_contents($file));
-            $this->assertSame(array(basename($file)), array_values(array_diff(scandir($directory), array('.', '..'))));
+            $this->assertSame(array('compiled', basename($file)), array_values(array_diff(scandir($directory), array('.', '..'))));
 
             // Decode PDF streams to verify actual rendered content, not just a PDF header.
             [, $objects] = (new Parser())->parse($data);
@@ -73,14 +111,18 @@ class PdfExportTest extends TestCase
                 }
             });
             $content = implode("\n", $strings);
-            $this->assertStringContainsString('(Export heading)', $content);
+            $this->assertSame(count($pdf->page->getPages()), substr_count($content, '(Export heading)'));
+            $this->assertStringContainsString('0.780392 0.780392 0.780392 rg', $content);
+            if ($template !== 'inventory.list.export.tpl') {
+                $this->assertSame(1, substr_count($content, '(Section heading)'));
+            }
             $this->assertStringContainsString('(Member 1)', $content);
             $this->assertStringContainsString('(Member 100)', $content);
             $this->assertStringContainsString('(Registered)', $content);
 
             // Repeated table headers must keep the same horizontal position on every page.
             preg_match_all('/([-\d.]+)\s+[-\d.]+\s+Td\s+\(Name\)/', $content, $headings);
-            $this->assertCount($pdf->getNumPages(), $headings[1]);
+            $this->assertCount(count($pdf->page->getPages()), $headings[1]);
             foreach ($headings[1] as $x) {
                 $this->assertEqualsWithDelta((float) $headings[1][0], (float) $x, 0.01);
             }
@@ -91,6 +133,12 @@ class PdfExportTest extends TestCase
             chdir($cwd);
             if (is_file($file)) {
                 unlink($file);
+            }
+            foreach (glob($directory . '/compiled/*') as $compiledFile) {
+                unlink($compiledFile);
+            }
+            if (is_dir($directory . '/compiled')) {
+                rmdir($directory . '/compiled');
             }
             rmdir($directory);
         }

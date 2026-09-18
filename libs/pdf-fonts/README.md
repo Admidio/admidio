@@ -1,6 +1,6 @@
 # PDF core font metrics
 
-TCPDF 7 uses JSON font metrics from `tecnickcom/tc-lib-pdf-font`. Composer
+The native PDF engine uses JSON font metrics from `tecnickcom/tc-lib-pdf-font`. Composer
 installs the importer but does not include generated font assets. These bundled
 Core 14 metrics let web, CLI and release-archive exports run without downloading
 or generating fonts at runtime, or requiring a writable vendor directory.

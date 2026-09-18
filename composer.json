@@ -33,7 +33,7 @@
         "ramsey/uuid": "^4.1",
         "robthree/twofactorauth": "^3.0",
         "smarty/smarty": "^5.0",
-        "tecnickcom/tcpdf": "^7.0.10",
+        "tecnickcom/tc-lib-pdf": "^8.75",
         "twbs/bootstrap": "5.3.*",
         "twbs/bootstrap-icons": "^1.11",
         "paragonie/sodium_compat_ext_sodium": "^1.0",
