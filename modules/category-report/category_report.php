@@ -20,6 +20,7 @@
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
@@ -142,7 +143,7 @@ try {
                 ini_set('max_execution_time', 600); //600 seconds = 10 minutes
             }
 
-            $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf = PdfUtils::createDocument($orientation);
 
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
@@ -530,7 +531,8 @@ try {
         $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
         // Save PDF to file
-        $pdf->Output($file, 'F');
+        // TCPDF 7 sanitizes filenames in file-output mode. Preserve our exact path.
+        FileSystemUtils::writeFile($file, $pdf->Output('', 'S'));
 
         // Redirect
         header('Content-Type: application/pdf');

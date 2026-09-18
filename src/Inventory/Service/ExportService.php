@@ -11,12 +11,10 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-// TCPDF namespace
-use TCPDF;
-
 // Admidio namespaces
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\UI\Presenter\InventoryPresenter;
 
 // PHP namespaces
@@ -117,7 +115,7 @@ class ExportService
 
         switch ($exportMode) {
             case 'pdf':
-                $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+                $pdf = PdfUtils::createDocument($orientation);
 
                 $pdf->SetCreator(PDF_CREATOR);
                 $pdf->SetAuthor('Admidio');
@@ -171,7 +169,8 @@ class ExportService
 
                 $htmlTable = $smarty->fetch('modules/inventory.list.export.tpl');
                 $pdf->writeHTML($htmlTable, true, false, true);
-                $pdf->Output($file, 'F');
+                // TCPDF 7 sanitizes filenames in file-output mode. Preserve our exact path.
+                FileSystemUtils::writeFile($file, $pdf->Output('', 'S'));
 
                 $contentType = 'application/pdf';
                 break;

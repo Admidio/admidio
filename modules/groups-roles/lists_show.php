@@ -27,6 +27,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 
@@ -393,7 +394,7 @@ try {
         $headline = html_entity_decode($headline, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $subHeadline = html_entity_decode($htmlSubHeadline, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-        $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = PdfUtils::createDocument($orientation);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -785,7 +786,8 @@ try {
         $pdf->writeHTML($htmlTable, true, false, true);
 
         // Save PDF to file
-        $pdf->Output($file, 'F');
+        // TCPDF 7 sanitizes filenames in file-output mode. Preserve our exact path.
+        FileSystemUtils::writeFile($file, $pdf->Output('', 'S'));
 
         readfile($file);
         ignore_user_abort(true);
