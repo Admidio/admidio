@@ -43,7 +43,7 @@ class PdfExportTest extends TestCase
             $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
             $pdf->setHeaderMargin(10);
             $pdf->setHeaderData('', 0, 'Export heading', '');
-            $pdf->SetFont('times', '', 10);
+            $pdf->SetFont('helvetica', '', 10);
             $pdf->AddPage();
 
             $this->assertSame($orientation === 'P', $pdf->getPageWidth() < $pdf->getPageHeight());

@@ -418,7 +418,7 @@ try {
         $pdf->setHeaderData('', 0, $headline);
 
         // set font
-        $pdf->SetFont('times', '', 10);
+        $pdf->SetFont('helvetica', '', 10);
 
         // add a page
         $pdf->AddPage();

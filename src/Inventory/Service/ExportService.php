@@ -130,7 +130,7 @@ class ExportService
                 $pdf->setHeaderMargin(10);
                 $pdf->setFooterMargin(0);
                 $pdf->setHeaderData('', 0, $inventoryPage->getHeadline(), '');
-                $pdf->SetFont('times', '', 10);
+                $pdf->SetFont('helvetica', '', 10);
                 $pdf->AddPage();
 
                 $smarty = $inventoryPage->createSmartyObject();
