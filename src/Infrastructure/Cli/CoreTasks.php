@@ -8803,7 +8803,8 @@ final class CoreTasks
             'url' => (string)($entry['url'] ?? ''),
             'download' => (string)($release['download'] ?? ''),
             'requires' => (array)($release['requires'] ?? array()),
-            // Every version the catalogue publishes, not only the one this Admidio may have.
+            // Every version the catalogue sent, not only the one this Admidio may have. A directory
+            // that honours the request parameters sends only the newest of each release status.
             'published_versions' => $versions
         ), $options);
         return 0;
