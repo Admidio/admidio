@@ -1,10 +1,8 @@
+{if isset($exportMode)}
+    <h2 style="font-size:12pt;font-weight:bold;text-align:center;margin-top:0;margin-bottom:15px;">{$subHeadline}</h2>
+{/if}
 <table id="adm_lists_table" class="{$classTable}" {foreach $attributes as $attribute} {$attribute@key}="{$attribute}" {/foreach} {if !isset($exportMode)}style="max-width: 100%;"{/if}>
     <thead>
-    {if isset($exportMode)}
-        <tr style="text-align: center">
-            <th colspan="{count($headers)}" style="{if isset($exportMode)}padding-left:3px;padding-right:3px;{/if}">{$subHeadline}</th>
-        </tr>
-    {/if}
         <tr {if isset($exportMode)}style="{$headersStyle}"{/if}>
             {foreach $headers as $key => $header}
                 <th style="{if isset($exportMode)}padding-left:3px;padding-right:3px;{/if}text-align:{$columnAlign[$key]};">{$header}</th>

@@ -2,6 +2,7 @@
 
 namespace Admidio\Infrastructure\Utils;
 
+use Admidio\Infrastructure\PdfDocument;
 use TCPDF;
 
 /**
@@ -20,6 +21,11 @@ class PdfUtils
             define('K_PATH_FONTS', dirname(__DIR__, 3) . '/libs/pdf-fonts/');
         }
 
-        return new TCPDF($orientation, 'mm', 'A4', true, 'UTF-8', false);
+        $pdf = new PdfDocument($orientation, 'mm', 'A4', true, 'UTF-8', false);
+        // HTML cells define their own padding. TCPDF's default cell padding would
+        // additionally indent repeated table headers after an automatic page break.
+        $pdf->setCellPadding(0);
+
+        return $pdf;
     }
 }

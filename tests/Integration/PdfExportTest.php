@@ -47,11 +47,14 @@ class PdfExportTest extends TestCase
             $pdf->AddPage();
 
             $this->assertSame($orientation === 'P', $pdf->getPageWidth() < $pdf->getPageHeight());
-            $html = '<table border="1" cellpadding="1"><tr><th><b>Name</b></th><th>Details</th></tr>';
+            $html = '<table border="1" cellpadding="1"><thead><tr>'
+                . '<th style="text-align:left;padding-left:3px;padding-right:3px;">Name</th>'
+                . '<th>Details</th></tr></thead><tbody>';
             for ($row = 1; $row <= 100; ++$row) {
-                $html .= '<tr><td>Member ' . $row . '</td><td><i>Registered</i></td></tr>';
+                $html .= '<tr><td style="padding-left:3px;padding-right:3px;">Member ' . $row
+                    . '</td><td><i>Registered</i></td></tr>';
             }
-            $pdf->writeHTML($html . '</table>', true, false, true);
+            $pdf->writeHTML($html . '</tbody></table>', true, false, true);
             $data = $pdf->Output('', 'S');
             $this->assertGreaterThan(1, $pdf->getNumPages());
             $this->assertStringStartsWith('%PDF-', $data);
@@ -74,6 +77,16 @@ class PdfExportTest extends TestCase
             $this->assertStringContainsString('(Member 1)', $content);
             $this->assertStringContainsString('(Member 100)', $content);
             $this->assertStringContainsString('(Registered)', $content);
+
+            // Repeated table headers must keep the same horizontal position on every page.
+            preg_match_all('/([-\d.]+)\s+[-\d.]+\s+Td\s+\(Name\)/', $content, $headings);
+            $this->assertCount($pdf->getNumPages(), $headings[1]);
+            foreach ($headings[1] as $x) {
+                $this->assertEqualsWithDelta((float) $headings[1][0], (float) $x, 0.01);
+            }
+            preg_match('/([-\d.]+)\s+[-\d.]+\s+Td\s+\(Member 1\)/', $content, $firstRow);
+            $this->assertNotEmpty($firstRow);
+            $this->assertEqualsWithDelta((float) $firstRow[1], (float) $headings[1][0], 0.01);
         } finally {
             chdir($cwd);
             if (is_file($file)) {

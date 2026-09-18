@@ -774,7 +774,7 @@ try {
         $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
         $smarty->assign('columnAlign', $arrColumnAlign);
         $smarty->assign('headers', $arrColumnNames);
-        $smarty->assign('headersStyle', 'font-size:14;background-color:#C7C7C7;');
+        $smarty->assign('headersStyle', 'font-size:10;background-color:#C7C7C7;');
         $smarty->assign('rows', $rows);
         $smarty->assign('rowsStyle', 'font-size:10;');
 
