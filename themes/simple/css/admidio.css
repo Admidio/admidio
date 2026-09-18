@@ -111,12 +111,29 @@
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
-    color: var(--bs-secondary);
+    color: var(--bs-primary);
     letter-spacing: 2px;
 }
 
-.admidio-headline-mobile-menu .btn {
+.admidio-headline-mobile-menu .btn,
+.admidio-headline-mobile-menu .btn:hover,
+.admidio-headline-mobile-menu .btn:focus,
+.admidio-headline-mobile-menu .btn:active {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0;
+    line-height: 1;
+    color: inherit;
+}
+
+.admidio-headline-mobile-menu .btn .bi {
+    margin-right: 0;
+}
+
+.admidio-headline-mobile-menu .bi::before {
+    vertical-align: 0;
+    line-height: 1;
 }
 
 .admidio-menu-list {
