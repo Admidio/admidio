@@ -67,6 +67,10 @@
     }
 }
 
+#adm_dropdown_user_photo {
+    min-width: fit-content;
+}
+
 #adm_dropdown_user_photo .dropdown-menu {
     padding: 1rem;
     width: 250px;
