@@ -602,6 +602,22 @@ class ListConfiguration extends Entity
 
         $arrSearchConditions = array();
 
+        // MySQL/MariaDB assigns the COALESCE() result of date/timestamp columns a different
+        // collation than the other search columns, which leads to "Illegal mix of collations"
+        // errors. The correct collation to pin depends on the charset the installation's
+        // tables actually use (utf8/utf8mb3 on older installations, utf8mb4 on newer ones) -
+        // hardcoding one breaks the other, so it is looked up from an existing column instead.
+        // PostgreSQL does not have this problem at all.
+        $dateCollateSuffix = '';
+        if (DB_ENGINE !== Database::PDO_ENGINE_PGSQL) {
+            $columnCollationStatement = $this->db->queryPrepared('SHOW FULL COLUMNS FROM ' . TBL_USERS . ' WHERE Field = \'usr_login_name\'');
+            $columnCollation = $columnCollationStatement->fetch();
+
+            if ($columnCollation !== false && !empty($columnCollation['Collation'])) {
+                $dateCollateSuffix = ' COLLATE ' . $columnCollation['Collation'];
+            }
+        }
+
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
 
@@ -631,7 +647,7 @@ class ListConfiguration extends Entity
                         break;
 
                     case 'DATE':
-                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\')';
+                        $arrSearchConditions[] = 'COALESCE(' . strtolower($gProfileFields->getPropertyById($lscUsfId, 'usf_name_intern')) . ', \'1900-02-01\')' . $dateCollateSuffix;
                         break;
 
                     default:
@@ -644,7 +660,7 @@ class ListConfiguration extends Entity
                     case 'usr_timestamp_create': // fallthrough
                     case 'usr_timestamp_change': // fallthrough
                     case 'mem_timestamp_change':
-                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')';
+                        $arrSearchConditions[] = 'COALESCE(' . $listColumn->getValue('lsc_special_field') . ', \'1900-02-01\')' . $dateCollateSuffix;
                         break;
 
                     default:
