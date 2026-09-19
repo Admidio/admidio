@@ -890,6 +890,7 @@ class ChangelogService {
             'org_homepage' =>              array('name' => 'SYS_HOMEPAGE', 'type'=> 'URL'),
             'org_email_administrator' =>   array('name' => 'SYS_EMAIL_ADMINISTRATOR', 'type' => 'EMAIL'),
             'org_show_org_select' =>       array('name' => 'SYS_SHOW_ORGANIZATION_SELECT', 'type' => 'BOOL'),
+            'org_suborg_use_same_members' => array('name' => 'ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS', 'type' => 'BOOL'),
 
             'men_name' =>                  'SYS_NAME',
             'men_name_intern' =>           'SYS_INTERNAL_NAME',

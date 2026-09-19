@@ -24,7 +24,6 @@ final class PreferenceDefinitions
     private const DEFAULT_DOMAIN_COPYRIGHT = 'domain_copyright';
     private const DEFAULT_ADMIDIO_URL = 'admidio_url';
 
-    private const VALIDATOR_MEMBER_SHARING = 'member_sharing';
     private const VALIDATOR_EVENTS_VIEW = 'events_view';
     private const VALIDATOR_EMAIL = 'email';
     private const VALIDATOR_URL_OPTIONAL = 'url_optional';
@@ -49,7 +48,6 @@ final class PreferenceDefinitions
 
     /** @var array<int,string> */
     private const VALIDATORS = array(
-        self::VALIDATOR_MEMBER_SHARING,
         self::VALIDATOR_EVENTS_VIEW,
         self::VALIDATOR_EMAIL,
         self::VALIDATOR_URL_OPTIONAL,
@@ -273,7 +271,6 @@ final class PreferenceDefinitions
             'contacts_list_configuration' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_CONTACTS_LIST),
             'contacts_per_page' => array('default' => '25', 'type' => 'enum', 'values' => array('10', '25', '50', '100', '-1')),
             'contacts_show_all' => array('default' => '1', 'type' => 'bool'),
-            'contacts_suborganization_use_same_members' => array('default' => '0', 'type' => 'bool', 'validator' => self::VALIDATOR_MEMBER_SHARING),
             'contacts_user_relations_enabled' => array('default' => '1', 'type' => 'bool'),
             'documents_files_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'documents_files_max_upload_size' => array('default' => '3', 'type' => 'int', 'minimum' => 0, 'maximum' => 999999999),
@@ -813,7 +810,7 @@ final class PreferenceDefinitions
         callable|string $validator,
         array $proposedValues
     ): string {
-        global $gDb, $gCurrentOrgId, $gCurrentOrganization, $gL10n, $gSettingsManager;
+        global $gDb, $gCurrentOrgId, $gL10n, $gSettingsManager;
 
         if (!is_string($validator)) {
             return (string)$validator($name, $value, $proposedValues);
@@ -821,15 +818,6 @@ final class PreferenceDefinitions
 
         switch ($validator) {
             case '':
-                return $value;
-            case self::VALIDATOR_MEMBER_SHARING:
-                if (!isset($gCurrentOrganization)
-                    || $gCurrentOrganization->isChildOrganization()
-                    || !$gCurrentOrganization->isParentOrganization()) {
-                    throw new InvalidArgumentException(
-                        'Preference "contacts_suborganization_use_same_members" can only be edited for a parent organization.'
-                    );
-                }
                 return $value;
             case self::VALIDATOR_EVENTS_VIEW:
                 $roomsEnabled = array_key_exists('events_rooms_enabled', $proposedValues)
