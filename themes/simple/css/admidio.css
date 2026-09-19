@@ -114,7 +114,7 @@
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
-    color: var(--bs-primary);
+    color: var(--admidio-menu-font-color-hover);
     letter-spacing: 2px;
 }
 
