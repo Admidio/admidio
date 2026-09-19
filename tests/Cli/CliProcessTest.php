@@ -1318,4 +1318,38 @@ class CliProcessTest extends DatabaseTestCase
         $this->assertStringContainsString('was not found', $process->getErrorOutput());
         $this->assertStringContainsString('no-such-config.php', $process->getErrorOutput());
     }
+
+    /**
+     * Test that the template of the command-line configuration can be printed
+     *
+     * @testdox The configuration of the command line can be printed as a documented template
+     */
+    public function testTheConfigurationOfTheCommandLineCanBePrintedAsATemplate(): void
+    {
+        $process = $this->runCli(array('cli:defaultconfig'));
+
+        $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+
+        $template = $process->getOutput();
+        $this->assertStringContainsString('$gCliEnabled = false;', $template);
+        $this->assertStringContainsString('$gCliAllowedUsers', $template);
+        $this->assertStringContainsString('$gCliDefaults', $template);
+    }
+
+    /**
+     * Test that an option can be supplied through the environment
+     *
+     * @testdox An acting user that was not given on the command line is read from the environment
+     */
+    public function testAnActingUserThatWasNotGivenIsReadFromTheEnvironment(): void
+    {
+        $process = $this->runCli(
+            array('whoami', '--format=json'),
+            null,
+            array('ADMIDIO_AS' => 'admin')
+        );
+
+        $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+        $this->assertSame('admin', $this->cliJson($process)['login'] ?? null);
+    }
 }

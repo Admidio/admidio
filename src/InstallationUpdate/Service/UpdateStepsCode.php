@@ -112,6 +112,31 @@ final class UpdateStepsCode
     }
 
     /**
+     * Write adm_my_files/cli-config.php, the configuration file of the command line.
+     *
+     * An installation that was updated has no such file, so the command line would be disabled -
+     * which is the intended state - without the administrator having anything to edit in order to
+     * change it. The template documents every setting and disables the command line, so the update
+     * makes the configuration discoverable without granting anything.
+     *
+     * A data directory that cannot be written is not a reason to fail an update: the command line
+     * prints the same template with "admidio cli:defaultconfig".
+     */
+    public static function updateStep51WriteCliConfigTemplate(): void
+    {
+        global $gLogger;
+
+        try {
+            Installation::writeCliConfigFile();
+        } catch (Exception | RuntimeException | UnexpectedValueException $exception) {
+            $gLogger->warning(
+                'The configuration file of the command line could not be written: '
+                . $exception->getMessage()
+            );
+        }
+    }
+
+    /**
      * This method will convert the charset of the database tables to utf8mb4 if not already done.
      * This is necessary to support emojis and other special characters in the future.
      * @throws Exception

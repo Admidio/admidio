@@ -392,6 +392,22 @@ final class CoreTasks
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
         self::task(
+            'cli:defaultconfig',
+            'cliDefaultConfig',
+            'Print the documented template of adm_my_files/cli-config.php, which configures who may '
+                . 'use the command line and what its options default to. Available while the command '
+                . 'line is disabled, because it only prints a file that disables it.',
+            'cli:defaultconfig [--output=FILE] [--overwrite]',
+            null,
+            false,
+            array(),
+            array(),
+            array(
+                'admidio cli:defaultconfig',
+                'admidio cli:defaultconfig --output=adm_my_files/cli-config.php'
+            )
+        );
+        self::task(
             'cli:selfcheck',
             'selfCheck',
             'Validate the command line itself: registration, help and the internal consistency of its source. '
@@ -2280,10 +2296,35 @@ final class CoreTasks
         return (new CliApplication())->showList($arguments, $options);
     }
 
+    /**
+     * Print the template of the configuration file of the command line.
+     *
+     * The command writes nothing by itself. An administrator who wants the file creates it with the
+     * shell or with the --output of the command line, which refuses to replace an existing file
+     * unless --overwrite is given; the template always disables the command line, so neither route
+     * can enable it by accident.
+     *
+     * @param array<int,string> $arguments
+     * @param array<string,mixed> $options
+     */
+    public static function cliDefaultConfig(array $arguments, array $options): int
+    {
+        $template = ADMIDIO_PATH . FOLDER_INSTALLATION . '/' . CliPolicy::FILE_NAME;
+
+        if (!is_file($template)) {
+            throw new RuntimeException('The template ' . $template . ' was not found.');
+        }
+
+        CliApplication::writeOutput(FileSystemUtils::readFile($template), $options);
+
+        return CliApplication::EXIT_SUCCESS;
+    }
+
     public static function selfCheck(array $arguments, array $options): int
     {
         $problems = CliSelfCheck::run();
         $statistics = CliSelfCheck::statistics();
+        $policy = CliPolicy::current()->describe();
         $format = CliApplication::optionString($options, 'format', 'table');
 
         if (in_array($format, array('json', 'json-api'), true)) {
@@ -2291,6 +2332,7 @@ final class CoreTasks
                 array(
                     'ok' => $problems === array(),
                     'checked' => $statistics,
+                    'policy' => $policy,
                     'problems' => $problems
                 ),
                 $options,
@@ -2300,6 +2342,15 @@ final class CoreTasks
             return $problems === array()
                 ? CliApplication::EXIT_SUCCESS
                 : CliApplication::EXIT_STATE_NOT_OK;
+        }
+
+        /*
+         * A refused command is explained by the configuration, so the self-check reports what that
+         * configuration currently is. Without it, a denial can only be diagnosed by reading the
+         * file on the server, which is exactly what the person who was denied cannot do.
+         */
+        if (!CliApplication::optionBool($options, 'quiet', false)) {
+            CliApplication::writeOutput(self::renderCliPolicy($policy), $options);
         }
 
         if ($problems !== array()) {
@@ -2318,6 +2369,46 @@ final class CoreTasks
         return $problems === array()
             ? CliApplication::EXIT_SUCCESS
             : CliApplication::EXIT_STATE_NOT_OK;
+    }
+
+    /**
+     * The configuration of the command line as the self-check reports it.
+     *
+     * @param array<string,mixed> $policy Description of CliPolicy.
+     */
+    private static function renderCliPolicy(array $policy): string
+    {
+        $defaults = array();
+        foreach ($policy['defaults'] as $name => $value) {
+            if (is_array($value)) {
+                foreach ($value as $option => $commandValue) {
+                    $defaults[] = $name . ' --' . $option . '=' . (is_scalar($commandValue) ? (string)$commandValue : '?');
+                }
+                continue;
+            }
+
+            $defaults[] = '--' . $name . '=' . (is_scalar($value) ? (string)$value : '?');
+        }
+
+        $logFile = $policy['log_file'] === ''
+            ? '(none)'
+            : $policy['log_file'] . ($policy['log_writable'] === false ? ' (not writable)' : '');
+
+        $lines = array(
+            'Command-line configuration',
+            '  file             ' . $policy['file'] . ($policy['exists'] ? '' : ' (does not exist)'),
+            '  enabled          ' . ($policy['enabled'] ? 'yes' : 'no'),
+            '  system account   ' . $policy['system_account'],
+            '  allowed accounts ' . ($policy['allowed_users'] === '' ? '(everyone)' : $policy['allowed_users']),
+            '  allowed commands ' . ($policy['allowed_commands'] === '' ? '(all)' : $policy['allowed_commands']),
+            '  denied commands  ' . ($policy['denied_commands'] === '' ? '(none)' : $policy['denied_commands']),
+            '  allowed actors   ' . ($policy['allowed_actors'] === '' ? '(every valid account)' : $policy['allowed_actors']),
+            '  log file         ' . $logFile,
+            '  option defaults  ' . ($defaults === array() ? '(none)' : implode(', ', $defaults)),
+            ''
+        );
+
+        return implode(PHP_EOL, $lines) . PHP_EOL;
     }
 
     public static function completion(array $arguments, array $options): int
@@ -2869,6 +2960,22 @@ final class CoreTasks
 
         if (!$configFileExists) {
             Installation::writeConfigFile($config, self::installationConfigPath());
+        }
+
+        /*
+         * An installation performed from the command line deliberately does not enable the command
+         * line: the template is written disabled, exactly as for an installation from the browser.
+         * Whoever installs from a shell still has to state that the installation may be
+         * administered from one.
+         */
+        try {
+            Installation::writeCliConfigFile(dirname(self::installationConfigPath()) . '/' . CliPolicy::FILE_NAME);
+        } catch (\Throwable $exception) {
+            CliApplication::writeWarning(
+                'cli_config_not_written',
+                'The configuration file of the command line could not be written: ' . $exception->getMessage(),
+                $options
+            );
         }
 
         $result = Installation::install($db, $config);
