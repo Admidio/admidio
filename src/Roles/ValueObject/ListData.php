@@ -2,11 +2,14 @@
 namespace Admidio\Roles\ValueObject;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\Roles\Entity\ListConfiguration;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Writer\Html;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -297,8 +300,10 @@ class ListData
                 $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
             case 'pdf':
+                $this->spreadsheet->getDefaultStyle()->getFont()->setName('Helvetica')->setSize(10);
                 $this->format();
-                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf($this->spreadsheet);
+                $writer = new Html($this->spreadsheet);
+                $writer->setUseInlineCss(true);
                 $filename .= '.pdf';
                 $contentType = 'application/pdf';
                 break;
@@ -310,7 +315,13 @@ class ListData
         }
 
         $tempFilePath = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-        $writer->save($tempFilePath);
+        if ($writer instanceof Html) {
+            $pdf = PdfUtils::createDocument('P', pathinfo($filename, PATHINFO_FILENAME));
+            $pdf->writeTable($writer->generateSheetData());
+            FileSystemUtils::writeFile($tempFilePath, $pdf->getOutPDFString());
+        } else {
+            $writer->save($tempFilePath);
+        }
 
         return array(
             'path' => $tempFilePath,
