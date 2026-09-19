@@ -603,10 +603,20 @@ class ListConfiguration extends Entity
         $arrSearchConditions = array();
 
         // MySQL/MariaDB assigns the COALESCE() result of date/timestamp columns a different
-        // (binary) collation than the other utf8mb4 search columns, which leads to "Illegal
-        // mix of collations" errors. PostgreSQL does not have this problem, so the COLLATE
-        // clause is only needed for MySQL/MariaDB.
-        $dateCollateSuffix = (DB_ENGINE === Database::PDO_ENGINE_PGSQL) ? '' : ' COLLATE utf8mb4_unicode_ci';
+        // collation than the other search columns, which leads to "Illegal mix of collations"
+        // errors. The correct collation to pin depends on the charset the installation's
+        // tables actually use (utf8/utf8mb3 on older installations, utf8mb4 on newer ones) -
+        // hardcoding one breaks the other, so it is looked up from an existing column instead.
+        // PostgreSQL does not have this problem at all.
+        $dateCollateSuffix = '';
+        if (DB_ENGINE !== Database::PDO_ENGINE_PGSQL) {
+            $columnCollationStatement = $this->db->queryPrepared('SHOW FULL COLUMNS FROM ' . TBL_USERS . ' WHERE Field = \'usr_login_name\'');
+            $columnCollation = $columnCollationStatement->fetch();
+
+            if ($columnCollation !== false && !empty($columnCollation['Collation'])) {
+                $dateCollateSuffix = ' COLLATE ' . $columnCollation['Collation'];
+            }
+        }
 
         foreach ($this->columns as $listColumn) {
             $lscUsfId = (int)$listColumn->getValue('lsc_usf_id');
