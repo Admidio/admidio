@@ -40,7 +40,8 @@ final class CliSelfCheck
             self::checkRegistry(),
             self::checkHelp(),
             self::checkPreferenceDefinitions(),
-            self::checkSources()
+            self::checkSources(),
+            self::checkPolicy()
         );
 
         usort(
@@ -75,6 +76,123 @@ final class CliSelfCheck
             'internal_calls' => $calls,
             'imports' => $imports
         );
+    }
+
+    /**
+     * The access rights of the files that decide who may use the command line.
+     *
+     * adm_my_files/cli-config.php only expresses an intent; the operating system is what enforces
+     * it. A configuration file that its own subjects may rewrite, or a config.php that everybody
+     * may read, silently turns every restriction of the command line into decoration, and that is
+     * a state an administrator has to be told about rather than one the command line can repair.
+     *
+     * @return array<int,array<string,string>>
+     */
+    private static function checkPolicy(): array
+    {
+        $problems = array();
+        $policy = CliPolicy::current();
+
+        foreach ($policy->warnings() as $warning) {
+            $problems[] = self::problem('policy', $policy->path(), $warning);
+        }
+
+        /*
+         * Whoever may read config.php holds the credentials of the database and needs no command
+         * line to reach the data, so a world-readable configuration file makes every restriction
+         * configured here pointless. Group access is deliberately not reported: the web server has
+         * to read the file, and that is normally arranged through the group.
+         *
+         * Windows has no mode bits that fileperms() could report, so the check only runs where
+         * its answer means something.
+         */
+        if (DIRECTORY_SEPARATOR !== '\\'
+            && defined('ADMIDIO_CONFIG_FILE')
+            && is_file(ADMIDIO_CONFIG_FILE)) {
+            $mode = @fileperms(ADMIDIO_CONFIG_FILE);
+            if ($mode !== false && ($mode & 0004) !== 0) {
+                $problems[] = self::problem(
+                    'policy',
+                    ADMIDIO_CONFIG_FILE,
+                    'The configuration file is readable by everyone, so every local account has the '
+                        . 'credentials of the database and can reach the data without the command line.'
+                );
+            }
+        }
+
+        $problems = array_merge($problems, self::checkPolicyDefaults($policy));
+
+        $logFile = $policy->logFilePath();
+        if ($logFile !== '' && !is_writable(is_file($logFile) ? $logFile : dirname($logFile))) {
+            $problems[] = self::problem(
+                'policy',
+                $logFile,
+                'The configured log file of the command line cannot be written, so invocations are '
+                    . 'not recorded.'
+            );
+        }
+
+        return $problems;
+    }
+
+    /**
+     * The option defaults of adm_my_files/cli-config.php must address options that exist.
+     *
+     * A default for an option a command does not have is silently ignored while the command runs -
+     * it cannot be passed on without making every command fail on the options of another one - so a
+     * misspelled entry would quietly do nothing. This is where it is named instead.
+     *
+     * @return array<int,array<string,string>>
+     */
+    private static function checkPolicyDefaults(CliPolicy $policy): array
+    {
+        $problems = array();
+        $globalOptions = CliApplication::globalOptionNames();
+        $defaults = $policy->describe(false)['defaults'];
+
+        foreach ($defaults as $name => $value) {
+            $name = (string)$name;
+
+            if (!is_array($value)) {
+                if (!in_array($name, $globalOptions, true)) {
+                    $problems[] = self::problem(
+                        'policy',
+                        $policy->path(),
+                        'The default "' . $name . '" of $gCliDefaults is neither a global option nor a '
+                            . 'command; a command needs an array of its own options.'
+                    );
+                }
+                continue;
+            }
+
+            $task = CliTaskRegistry::get($name);
+            if ($task === null) {
+                $problems[] = self::problem(
+                    'policy',
+                    $policy->path(),
+                    'The defaults of $gCliDefaults address the unknown command "' . $name . '".'
+                );
+                continue;
+            }
+
+            $known = array_merge($globalOptions, array_map(
+                static fn (array $definition): string => (string)$definition['name'],
+                $task['options']
+            ));
+
+            foreach (array_keys($value) as $option) {
+                if (!in_array((string)$option, $known, true)) {
+                    $problems[] = self::problem(
+                        'policy',
+                        $policy->path(),
+                        'The command "' . $name . '" has no option --' . $option . ', so its default in '
+                            . '$gCliDefaults is never used.'
+                    );
+                }
+            }
+        }
+
+        return $problems;
     }
 
     /**

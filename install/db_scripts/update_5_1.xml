@@ -212,5 +212,6 @@
     <step id="1210" database="mysql">ALTER TABLE %PREFIX%_oidc_session_participants MODIFY COLUMN osp_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1220" database="mysql">ALTER TABLE %PREFIX%_saml_logout_transactions MODIFY COLUMN slt_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
     <step id="1230" database="mysql">ALTER TABLE %PREFIX%_saml_session_participants MODIFY COLUMN ssp_authn_instant timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1240">UpdateStepsCode::updateStep51WriteCliConfigTemplate</step>
     <step>stop</step>
 </update>

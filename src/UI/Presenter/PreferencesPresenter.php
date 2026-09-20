@@ -3,6 +3,8 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Cli\CliApplication;
+use Admidio\Infrastructure\Cli\CliPolicy;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
@@ -2886,9 +2888,12 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
         $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
 
+        $this->assignCommandLineVariables();
+
         //assign card titles and corresponding template files
         $cards = array(
             array('title'=>$gL10n->get('SYS_ADMIDIO'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_COMMAND_LINE'),        'icon'=>'bi-terminal-fill', 'templateFile'=>'preferences/preferences.command-line.tpl'),
             array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
             array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
         );
@@ -2896,6 +2901,100 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('cards', $cards);
         $smarty = $this->getSmartyTemplate();
         return $smarty->fetch('preferences/preferences.system-informations.tpl');
+    }
+
+    /**
+     * Describe the configuration of the command line, adm_my_files/cli-config.php.
+     *
+     * The panel only reports. The browser must not be able to change these settings: the command
+     * line is disabled by default, and a switch that everything holding the credentials of the
+     * database could turn on again would restrict nobody. What the panel can do is make the file
+     * discoverable and show the state an administrator would otherwise have to read on the server.
+     *
+     * @throws Exception
+     */
+    private function assignCommandLineVariables(): void
+    {
+        global $gL10n;
+
+        /*
+         * Reading the file means executing it, and a file that an administrator edits by hand can
+         * contain a syntax error. The panel reports on that file and must not be taken down by it.
+         */
+        try {
+            $policy = CliPolicy::read(ADMIDIO_PATH);
+            $description = $policy->describe(false);
+        } catch (\Throwable) {
+            $policy = CliPolicy::fromValues(array(), ADMIDIO_PATH . FOLDER_DATA . '/' . CliPolicy::FILE_NAME);
+            $description = $policy->describe(false);
+        }
+
+        $this->assignSmartyVariable('cliEnabledColorClass', $description['enabled'] ? 'text-success' : 'text-danger');
+        $this->assignSmartyVariable('cliEnabledText', $gL10n->get($description['enabled'] ? 'SYS_ON' : 'SYS_OFF'));
+        $this->assignSmartyVariable('cliFile', $description['file']);
+        $this->assignSmartyVariable(
+            'cliFileInfo',
+            $description['exists'] ? '' : ' &rarr; ' . $gL10n->get('SYS_COMMAND_LINE_FILE_MISSING')
+        );
+        $this->assignSmartyVariable(
+            'cliAccounts',
+            $description['allowed_users'] === ''
+                ? $gL10n->get('SYS_COMMAND_LINE_EVERY_ACCOUNT')
+                : $description['allowed_users']
+        );
+        $this->assignSmartyVariable(
+            'cliAllowedCommands',
+            $description['allowed_commands'] === '' ? $gL10n->get('SYS_ALL') : $description['allowed_commands']
+        );
+        $this->assignSmartyVariable(
+            'cliDeniedCommands',
+            $description['denied_commands'] === '' ? $gL10n->get('SYS_NONE') : $description['denied_commands']
+        );
+        $this->assignSmartyVariable(
+            'cliActors',
+            $description['allowed_actors'] === '' ? $gL10n->get('SYS_ALL') : $description['allowed_actors']
+        );
+
+        /*
+         * The account is configured as a login name, an id or a UUID. Resolving it here is what
+         * turns a typo into something visible: in the command line the same mistake only appears
+         * when a scheduled command fails.
+         */
+        $actor = $policy->optionDefault('', 'as');
+        $actorColorClass = '';
+
+        if ($actor === null || $actor === '') {
+            $actorText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            try {
+                $user = CliApplication::resolveUser($actor);
+                $actorText = $user->readableName() . ' (' . $actor . ')';
+            } catch (\Throwable) {
+                $actorText = $actor . ' &rarr; ' . $gL10n->get('SYS_COMMAND_LINE_UNKNOWN_ACCOUNT');
+                $actorColorClass = 'text-danger';
+            }
+        }
+
+        $this->assignSmartyVariable('cliActor', $actorText);
+        $this->assignSmartyVariable('cliActorColorClass', $actorColorClass);
+
+        $logFile = (string)$description['log_file'];
+        $this->assignSmartyVariable(
+            'cliLogFile',
+            $logFile === ''
+                ? $gL10n->get('SYS_NONE')
+                : $logFile . ($description['log_writable'] === false
+                    ? ' &rarr; ' . $gL10n->get('SYS_COMMAND_LINE_NOT_WRITABLE')
+                    : '')
+        );
+        $this->assignSmartyVariable(
+            'cliLogFileColorClass',
+            $description['log_writable'] === false ? 'text-danger' : ''
+        );
+        $this->assignSmartyVariable(
+            'cliDescription',
+            $gL10n->get('SYS_COMMAND_LINE_DESC', array($description['file']))
+        );
     }
 
     /**
