@@ -10,8 +10,6 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
-use Admidio\Infrastructure\Plugins\PluginManager;
-use Admidio\Infrastructure\Language;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\SSO\Service\OIDCService;
@@ -31,113 +29,6 @@ class PreferencesService
 {
     private const CONFIG_DOCUMENT_SCHEMA = 'admidio-preferences';
     private const CONFIG_DOCUMENT_VERSION = 1;
-
-    /**
-     * Registered presenter callbacks by component ID.
-     * @var array<int, callable[]>
-     */
-    private static array $pluginPresenters = array();
-    /**
-     * Registered presenter callbacks by component ID.
-     * @var array<int, callable[]>
-     */
-    private static array $overviewPluginPresenters = array();
-
-    /**
-     * Register a preferences presenter for a plugin.
-     *
-     * @param int $componentId   The component ID of the plugin.
-     * @param callable $presenterCallback  A callable that renders the plugin's preferences panel.
-     */
-    public static function addPluginPreferencesPresenter(int $componentId, callable $presenterCallback): void
-    {
-        if (!isset(self::$pluginPresenters[$componentId])) {
-            self::$pluginPresenters[$componentId] = array();
-        }
-        self::$pluginPresenters[$componentId][] = $presenterCallback;
-    }
-
-    /**
-     * Get all registered presenter callbacks, grouped by component ID.
-     *
-     * @return array<int, callable[]>
-     */
-    public static function getPluginPresenters(): array
-    {
-        return array_merge(self::$overviewPluginPresenters, self::$pluginPresenters);
-    }
-
-    /**
-     * Build the panel definitions for the "Plugins" tab.
-     *
-     * This method gathers metadata from each plugin and prepares
-     * the structure used by the PreferencesPresenter to render the accordion.
-     *
-     * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
-     * @throws Exception
-     */
-    public static function getPluginPanels(): array
-    {
-        $panels = array();
-
-        foreach (self::$pluginPresenters as $comId => $callbacks) {
-            // Retrieve plugin metadata by component ID (you may need to implement this lookup)
-            $pluginManager = new PluginManager();
-            $metadata = $pluginManager->getMetadataByComponentId($comId);
-
-            $panels[] = array(
-                'id'       => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($metadata['name'])))),
-                'title'    => Language::translateIfTranslationStrId($metadata['name']),
-                'icon'     => $metadata['icon'] ?? 'bi-puzzle',
-                'subcards' => $metadata['hasSubcards'] ?? false,
-            );
-        }
-
-        return $panels;
-    }
-
-    /**
-     * Register a preferences presenter for a plugin.
-     *
-     * @param int $componentId   The component ID of the plugin.
-     * @param callable $presenterCallback  A callable that renders the plugin's preferences panel.
-     */
-    public static function addOverviewPluginPreferencesPresenter(int $componentId, callable $presenterCallback): void
-    {
-        if (!isset(self::$overviewPluginPresenters[$componentId])) {
-            self::$overviewPluginPresenters[$componentId] = array();
-        }
-        self::$overviewPluginPresenters[$componentId][] = $presenterCallback;
-    }
-
-    /**
-     * Build the panel definitions for the "Plugins" tab.
-     *
-     * This method gathers metadata from each plugin and prepares
-     * the structure used by the PreferencesPresenter to render the accordion.
-     *
-     * @return array<int, array{id:string, title:string, icon?:string, subcards?:bool}>
-     * @throws Exception
-     */
-    public static function getOverviewPluginPanels(): array
-    {
-        $panels = array();
-
-        foreach (self::$overviewPluginPresenters as $comId => $callbacks) {
-            // Retrieve plugin metadata by component ID (you may need to implement this lookup)
-            $pluginManager = new PluginManager();
-            $metadata = $pluginManager->getMetadataByComponentId($comId);
-
-            $panels[] = array(
-                'id'       => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($metadata['name'])))),
-                'title'    => Language::translateIfTranslationStrId($metadata['name']),
-                'icon'     => $metadata['icon'] ?? 'bi-puzzle',
-                'subcards' => $metadata['hasSubcards'] ?? false,
-            );
-        }
-
-        return $panels;
-    }
 
     /**
      * Function to check an update
@@ -551,8 +442,17 @@ class PreferencesService
             );
         }
 
+        /*
+         * A preference that was added after the last update of this installation has no row yet -
+         * updateOrgPreferences() writes it, and until then the declared default is what the
+         * installation actually behaves like. Reporting that is more useful than refusing the name.
+         */
+        $value = $gSettingsManager->has($name, true)
+            ? $gSettingsManager->get($name)
+            : (string)PreferenceDefinitions::defaults()[$name];
+
         return array(
-            'value' => $gSettingsManager->get($name, true),
+            'value' => $value,
             'type' => $definition['type'],
             'sensitive' => $definition['sensitive']
         );

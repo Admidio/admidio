@@ -1261,14 +1261,10 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
-  <string name="SYS_PLUGIN_INSTALL">Plugin installieren</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Hier kannst du die Plugins von Admidio verwalten. Plugins sind zusätzliche Module, die installiert werden können, um die Funktionalität von Admidio zu erweitern. Du kannst Plugins installieren, aktualisieren oder entfernen.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Kein Plugin-Name angegeben.</string>
-  <string name="SYS_PLUGIN_NO_INTERFACE">Das Plugin hat keine Schnittstelle.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin ist nicht installiert.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-Einstellungen</string>
-  <string name="SYS_PLUGIN_UNINSTALL">Plugin deinstallieren</string>
   <string name="SYS_PLUGIN_UPDATE">Plugin aktualisieren</string>
   <string name="SYS_PLUGIN_VERSION">Plugin-Version</string>
   <string name="SYS_PORT">Port</string>

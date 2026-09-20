@@ -29,47 +29,9 @@ admidioTestLoadEnvironment($admidioRoot . '/.env.test');
 // Load Admidio's autoloader
 require_once $admidioRoot . '/vendor/autoload.php';
 
-// Define constants needed by Admidio infrastructure
-// These are normally defined in system/bootstrap/constants.php
-const MIN_PHP_VERSION = '8.2.0';
-const ADMIDIO_VERSION_MAIN = 5;
-const ADMIDIO_VERSION_MINOR = 1;
-const ADMIDIO_VERSION_PATCH = 0;
-const ADMIDIO_VERSION_BETA = 0;
-const ADMIDIO_VERSION = ADMIDIO_VERSION_MAIN . '.' . ADMIDIO_VERSION_MINOR . '.' . ADMIDIO_VERSION_PATCH;
-const ADMIDIO_HOMEPAGE = 'https://www.admidio.org/';
-const FOLDER_SYSTEM = '/system';
-const FOLDER_INSTALLATION = '/install';
-const FOLDER_LIBS = '/libs';
-const FOLDER_LANGUAGES = '/languages';
-const FOLDER_THEMES = '/themes';
-const FOLDER_MODULES = '/modules';
-const FOLDER_PLUGINS = '/plugins';
-const DATE_MAX = '9999-12-31';
-const TABLE_PREFIX = 'adm';
-
-// Define as PHP define() since they depend on runtime values
-define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
-define('ADMIDIO_PATH', $admidioRoot);
-
-// Installation::install() creates ecard_templates, logs, mail_templates and temp below this
-// folder, so it has to be the directory of the test run and not the adm_my_files of the checkout
-define('FOLDER_DATA', admidioTestDataFolder($admidioRoot));
-define('FOLDER_TEMP_DATA', FOLDER_DATA . '/temp');
-define('DATE_NOW', date('Y-m-d'));
-define('DATETIME_NOW', date('Y-m-d H:i:s'));
-define('SCRIPT_START_TIME', microtime(true));
-define('DOMAIN', 'admidio.test');
-// An installation that serves OIDC has to be reachable over HTTPS, so the test environment
-// describes one: the issuer URL of the default preferences is derived from ADMIDIO_URL and is
-// rejected by OIDCService::assertValidIssuerURL() when it is not an HTTPS URL.
-define('ADMIDIO_URL', 'https://admidio.test');
-define('ADMIDIO_URL_PATH', '');
-define('SCHEME', 'https');
-// Derived from the scheme exactly as system/bootstrap/constants.php does it, so that code which
-// branches on the transport sees the same installation that ADMIDIO_URL describes.
-define('HTTPS', SCHEME === 'https');
-define('HOST', 'admidio.test');
+// The bootstrap constants live in tests/constants.php, because the unit test cases need the same
+// values and whichever runs first in a combined run decides them for the whole process.
+require_once __DIR__ . '/constants.php';
 
 // Database table constants that entities require
 const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';

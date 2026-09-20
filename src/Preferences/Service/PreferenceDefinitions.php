@@ -232,6 +232,8 @@ final class PreferenceDefinitions
             'changelog_table_oidc_consents' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_sso_keys' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_others' => array('default' => '0', 'type' => 'bool'),
+            'plugin_module_pages' => array('default' => '0', 'type' => 'bool'),
+            'plugin_module_pages_applied' => array('default' => '0', 'type' => 'bool', 'internal' => true),
             'mail_send_method' => array('default' => 'phpmail', 'type' => 'enum', 'values' => array('phpmail', 'SMTP')),
             'mail_sending_mode' => array('default' => '0', 'type' => 'enum', 'values' => array('0', '1')),
             'mail_recipients_with_roles' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
