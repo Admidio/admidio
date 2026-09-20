@@ -228,7 +228,7 @@
   <string name="SYS_ADD_TO_DATABASE">Zur Datenbank hinzufügen</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Zusätzliche Spalten</string>
   <string name="SYS_ADDITIONAL_CSS_FILE">Zusätzliche CSS-Datei</string>
-  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">Der Pfad zu einer .css-Datei mit zusätzlichen Stildefinitionen. Diese Datei wird als letzte geladen, auch nach der Datei admidio.css des Themes. (Standard: leer)</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">Der relative Pfad zu einer .css-Datei mit zusätzlichen Stildefinitionen, ausgehend vom Admidio-Hauptverzeichnis. Diese Datei wird zuletzt geladen, auch nach der admidio.css des Themes. (Standard: leer)</string>
   <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
   <string name="SYS_ADDRESS">Adresse</string>
   <string name="SYS_ADMIDIO">Admidio</string>
@@ -694,7 +694,7 @@
   <string name="SYS_EXTENSIONS_AVAILABLE">Verfügbare Erweiterungen</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon-Datei</string>
-  <string name="SYS_FAVICON_FILE_DESC">Der Pfad zur Favicon-Datei für deine Installation. Der Pfad sollte relativ zum Stammverzeichnis deiner Installation sein. Wenn er leer gelassen wird, wird das Standard-Favicon des Themes verwendet. (Standard: leer)</string>
+  <string name="SYS_FAVICON_FILE_DESC">Der relative Pfad zur Logodatei, ausgehend vom Admidio-Hauptverzeichnis. Das Logo wird in der oberen linken Ecke angezeigt. Bleibt das Feld leer, wird das Standardlogo des Themes verwendet. (Standard: leer)</string>
   <string name="SYS_FEMALE">Weiblich</string>
   <string name="SYS_FIELD">Feld</string>
   <string name="SYS_FIELD_EMPTY">Das Feld #VAR1_BOLD# ist nicht gefüllt.</string>

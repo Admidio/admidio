@@ -230,7 +230,7 @@
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Additional columns</string>
   <string name="SYS_ADDITIONAL_CSS_FILE">Additional CSS File</string>
-  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The path to a .css file with additional style definitions. This file will be loaded last, even after the theme's admidio.css file. (default: empty)</string>
+  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The relative path to a .css file with additional style definitions, starting from the Admidio root directory. This file is loaded last, even after the theme's admidio.css. (default: empty)</string>
   <string name="SYS_ADDITIONAL_FILES">This list intends to provide an overview of files and folders not imported into the database yet. They can be added to the database. Access rights will be copied from selected folder.</string>
   <string name="SYS_ADDRESS">Address</string>
   <string name="SYS_ADMIDIO">Admidio</string>
@@ -701,7 +701,7 @@
   <string name="SYS_EXTENSIONS_AVAILABLE">Available extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Favicon File</string>
-  <string name="SYS_FAVICON_FILE_DESC">The path to the favicon file for your installation. The path should be relative to your installation's root directory. If left empty, the default favicon of the theme will be used. (default: empty)</string>
+  <string name="SYS_FAVICON_FILE_DESC">The relative path to the logo file, starting from the Admidio root directory. The logo is displayed in the upper-left corner. If left empty, the theme's default logo will be used. (default: empty)</string>
   <string name="SYS_FEMALE">Female</string>
   <string name="SYS_FIELD">Field</string>
   <string name="SYS_FIELD_EMPTY">Field #VAR1_BOLD# is empty.</string>
