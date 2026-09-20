@@ -27,6 +27,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 
@@ -393,34 +394,7 @@ try {
         $headline = html_entity_decode($headline, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $subHeadline = html_entity_decode($htmlSubHeadline, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-        $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Admidio');
-        $pdf->SetTitle($headline);
-
-        // remove default header/footer
-        $pdf->setPrintHeader();
-        $pdf->setPrintFooter(false);
-        // set header and footer fonts
-        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-        $pdf->SetMargins(10, 20, 10);
-        $pdf->setHeaderMargin();
-        $pdf->setFooterMargin(0);
-
-        // headline for PDF
-        $pdf->setHeaderData('', 0, $headline);
-
-        // set font
-        $pdf->SetFont('times', '', 10);
-
-        // add a page
-        $pdf->AddPage();
+        $pdf = PdfUtils::createDocument($orientation, $headline);
 
         // set subHeadline for table
         $smarty->assign('subHeadline', $subHeadline);
@@ -773,19 +747,20 @@ try {
         $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
         $smarty->assign('columnAlign', $arrColumnAlign);
         $smarty->assign('headers', $arrColumnNames);
-        $smarty->assign('headersStyle', 'font-size:14;background-color:#C7C7C7;');
+        $smarty->assign('headersStyle', 'font-size:10pt;background-color:#C7C7C7;');
         $smarty->assign('rows', $rows);
-        $smarty->assign('rowsStyle', 'font-size:10;');
+        $smarty->assign('rowsStyle', 'font-size:10pt;');
 
         // Fetch the HTML table from our Smarty template
         $smarty->assign('exportMode', true);
         $htmlTable = $smarty->fetch('modules/groups-roles.list.tpl');
 
         // output the HTML content
-        $pdf->writeHTML($htmlTable, true, false, true);
+        $pdf->writeTable($htmlTable);
 
         // Save PDF to file
-        $pdf->Output($file, 'F');
+        // Preserve the exact export path instead of the engine's sanitized filename.
+        FileSystemUtils::writeFile($file, $pdf->getOutPDFString());
 
         readfile($file);
         ignore_user_abort(true);

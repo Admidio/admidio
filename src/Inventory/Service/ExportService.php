@@ -11,12 +11,10 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-// TCPDF namespace
-use TCPDF;
-
 // Admidio namespaces
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\UI\Presenter\InventoryPresenter;
 
 // PHP namespaces
@@ -117,23 +115,7 @@ class ExportService
 
         switch ($exportMode) {
             case 'pdf':
-                $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-                $pdf->SetCreator(PDF_CREATOR);
-                $pdf->SetAuthor('Admidio');
-                $pdf->SetTitle($inventoryPage->getHeadline());
-
-                $pdf->setPrintHeader(true);
-                $pdf->setPrintFooter(false);
-                $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-                $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-                $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-                $pdf->SetMargins(10, 20, 10);
-                $pdf->setHeaderMargin(10);
-                $pdf->setFooterMargin(0);
-                $pdf->setHeaderData('', 0, $inventoryPage->getHeadline(), '');
-                $pdf->SetFont('times', '', 10);
-                $pdf->AddPage();
+                $pdf = PdfUtils::createDocument($orientation, $inventoryPage->getHeadline());
 
                 $smarty = $inventoryPage->createSmartyObject();
 
@@ -165,13 +147,14 @@ class ExportService
                 $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
                 $smarty->assign('column_align', $data['column_align']);
                 $smarty->assign('headers', $data['headers']);
-                $smarty->assign('headersStyle', 'font-size:10;font-weight:bold;background-color:#C7C7C7;');
+                $smarty->assign('headersStyle', 'font-size:10pt;font-weight:bold;background-color:#C7C7C7;');
                 $smarty->assign('rows', $data['rows']);
-                $smarty->assign('rowsStyle', 'font-size:10;');
+                $smarty->assign('rowsStyle', 'font-size:10pt;');
 
                 $htmlTable = $smarty->fetch('modules/inventory.list.export.tpl');
-                $pdf->writeHTML($htmlTable, true, false, true);
-                $pdf->Output($file, 'F');
+                $pdf->writeTable($htmlTable);
+                // Preserve the exact export path instead of the engine's sanitized filename.
+                FileSystemUtils::writeFile($file, $pdf->getOutPDFString());
 
                 $contentType = 'application/pdf';
                 break;
