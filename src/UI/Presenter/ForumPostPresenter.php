@@ -52,10 +52,10 @@ class ForumPostPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentSession;
 
-        // check if topic is editable for the current user
+        // check if the current user may create or edit a post in the topic's category
         $topic = new Topic($gDb);
         $topic->readDataByUuid($topicUUID);
-        if (!$topic->isEditable()) {
+        if (!$topic->isCategoryEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -64,6 +64,9 @@ class ForumPostPresenter extends PagePresenter
 
         if ($this->postUUID !== '') {
             $post->readDataByUuid($this->postUUID);
+            if (!$post->isEditableByCurrentUser()) {
+                throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
+            }
         }
 
         $this->setHtmlID('adm_forum_post_edit');

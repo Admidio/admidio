@@ -112,10 +112,10 @@ class ForumTopicService
         $postEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $postEditForm->validate($_POST);
 
-        // check if topic exists and is visible for the current user
+        // check if the current user may create or edit a post in the topic's category
         $topic = new Topic($gDb);
         $topic->readDataByUuid($topicUUID);
-        if (!$topic->isEditable()) {
+        if (!$topic->isCategoryEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -123,7 +123,7 @@ class ForumTopicService
         if ($postUUID !== '') {
             $post->readDataByUuid($postUUID);
 
-            if (!$gCurrentUser->isAdministratorForum() && $post->getValue('fop_usr_id_create') !== $gCurrentUser->getValue('usr_id')) {
+            if (!$post->isEditableByCurrentUser()) {
                 throw new Exception('You are not allowed to edit this post.');
             }
         } else {

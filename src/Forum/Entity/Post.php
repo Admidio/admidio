@@ -67,6 +67,19 @@ class Post extends Entity
     }
 
     /**
+     * Check whether the current user may change or delete this post.
+     * @return bool Return **true** if the current user may modify this post
+     * @throws Exception
+     */
+    public function isEditableByCurrentUser(): bool
+    {
+        global $gCurrentUser;
+
+        return $gCurrentUser->isAdministratorForum()
+            || (int)$this->getValue('fop_usr_id_create') === (int)$gCurrentUser->getValue('usr_id');
+    }
+
+    /**
      * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update
      * the changed columns. If the table has columns for creator or editor than these column

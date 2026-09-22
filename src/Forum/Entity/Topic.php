@@ -134,14 +134,14 @@ class Topic extends Entity
     }
 
     /**
-     * This method checks if the current user is allowed to edit this topic. Therefore,
-     * the topic must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage topic.
-     * Global topic could be only edited by the parent organization.
-     * @return bool Return true if the current user is allowed to edit this topic
+     * This method checks if the current user is allowed to work in the category of this topic.
+     * Therefore, the topic must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that has the right to manage topics.
+     * Global topics can only be edited by the parent organization.
+     * @return bool Return **true** if the current user may work in this topic's category
      * @throws Exception
      */
-    public function isEditable(): bool
+    public function isCategoryEditable(): bool
     {
         global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
@@ -161,6 +161,23 @@ class Topic extends Entity
         }
 
         return false;
+    }
+
+    /**
+     * Check whether the current user may change or delete this topic.
+     *
+     * In addition to category and organization access, only the creator of
+     * the first post or a forum administrator may modify an existing topic.
+     * @return bool Return **true** if the current user may modify this topic
+     * @throws Exception
+     */
+    public function isEditable(): bool
+    {
+        global $gCurrentUser;
+
+        return $this->isCategoryEditable()
+            && ($gCurrentUser->isAdministratorForum()
+                || (int)$this->getValue('fop_usr_id_create') === (int)$gCurrentUser->getValue('usr_id'));
     }
 
     /**
