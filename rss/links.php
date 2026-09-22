@@ -13,6 +13,7 @@
  * organization : Short name of the organization whose topics should be shown in the RSS feed
  * *********************************************************************************************
  */
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -43,6 +44,14 @@ try {
     } else {
         $organizationName = $gCurrentOrganization->getValue('org_longname');
         $organizationID = $gCurrentOrgId;
+    }
+
+    $currentUserOrganizationID = $gCurrentUser->getOrganization();
+    try {
+        $gCurrentUser->setOrganization((int)$organizationID);
+        $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
+    } finally {
+        $gCurrentUser->setOrganization($currentUserOrganizationID);
     }
 
     if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
@@ -76,8 +85,10 @@ try {
                ' . $additionalTables . '
          WHERE cat_type = \'LNK\'
            AND cat_org_id = ? -- $organizationID
+           AND cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ')
       ORDER BY lnk_timestamp_create DESC';
     $queryParams[] = $organizationID;
+    $queryParams = array_merge($queryParams, $visibleCategoryIDs);
     $statement = $gDb->queryPrepared($sql, $queryParams);
 
     // create RSS feed object with channel information
