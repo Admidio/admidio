@@ -185,6 +185,44 @@ class RoleDependency
     }
 
     /**
+     * Check whether assigning the given child roles to a parent role would create a circular dependency.
+     * Existing dependencies are traversed so indirect cycles are detected as well.
+     * @param Database $database Database connection used to read the existing role dependencies
+     * @param int $parentId ID of the parent role whose dependent roles should be changed
+     * @param array<int,int> $childIds IDs of the roles that should become direct children of the parent role
+     * @return bool Return **true** if assigning one of the child roles would create a direct or indirect cycle
+     * @throws Exception
+     */
+    public static function createsCircularDependency(Database $database, int $parentId, array $childIds): bool
+    {
+        if ($parentId <= 0) {
+            return false;
+        }
+
+        $rolesToCheck = array_values(array_unique(array_map('intval', $childIds)));
+        $checkedRoles = array();
+
+        while (count($rolesToCheck) > 0) {
+            $roleId = array_pop($rolesToCheck);
+
+            if ($roleId === $parentId) {
+                return true;
+            }
+
+            if ($roleId <= 0 || array_key_exists($roleId, $checkedRoles)) {
+                continue;
+            }
+
+            $checkedRoles[$roleId] = true;
+            foreach (self::getChildRoles($database, $roleId) as $childId) {
+                $rolesToCheck[] = $childId;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check if roleIdParent and roleIdChild is 0
      * @return bool Returns true if roleIdParent and roleIdChild is 0
      */
@@ -201,6 +239,10 @@ class RoleDependency
     public function insert(int $loginUserId): bool
     {
         if ($loginUserId > 0 && !$this->isEmpty()) {
+            if (self::createsCircularDependency($this->db, $this->roleIdParent, array($this->roleIdChild))) {
+                throw new Exception('SYS_ROLE_DEPENDENCY_CIRCULAR');
+            }
+
             $dep = new RolesDependencies($this->db);
             $dep->setValue('rld_rol_id_parent', $this->roleIdParent);
             $dep->setValue('rld_rol_id_child', $this->roleIdChild);
