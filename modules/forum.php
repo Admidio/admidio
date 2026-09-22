@@ -138,7 +138,7 @@ try {
             $post->readDataByUuid($getPostUUID);
             $topic = new Topic($gDb);
             $topic->readDataByUuid($post->getValue('fot_uuid'));
-            if ($topic->isEditable()) {
+            if ($topic->isCategoryEditable() && $post->isEditableByCurrentUser()) {
                 $post->delete();
                 echo json_encode(array('status' => 'success'));
             } else {
