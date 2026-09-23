@@ -338,13 +338,24 @@ class RolesService
             }
         }
 
+        $sentChildRoles = array();
+        if (array_key_exists('dependent_roles', $_POST) && !$this->eventRole) {
+            $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
+        }
+
         $this->db->startTransaction();
         $this->roleRessource->save();
 
+        if (RoleDependency::createsCircularDependency(
+            $this->db,
+            (int)$this->roleRessource->getValue('rol_id'),
+            $sentChildRoles
+        )) {
+            throw new Exception('SYS_ROLE_DEPENDENCY_CIRCULAR');
+        }
+
         // save role dependencies in database
         if (array_key_exists('dependent_roles', $_POST) && !$this->eventRole) {
-            $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
-
             $roleDep = new RoleDependency($this->db);
 
             // Fetches a list of the selected dependent roles

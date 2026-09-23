@@ -1397,6 +1397,7 @@
   <string name="SYS_ROLE">Rolle</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administrierende besitzen alle Berechtigungen für den Ordner.</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Rollenzuordnung für #VAR1# #VAR2#</string>
+  <string name="SYS_ROLE_DEPENDENCY_CIRCULAR">Diese Rollenabhängigkeit kann nicht gespeichert werden, da die andere Rolle bereits direkt oder indirekt von dieser Rolle abhängt.</string>
   <string name="SYS_ROLE_DEPENDENCIES_DESC">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der #VAR1# sein!\n\nBeim Hinzufügen dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der #VAR1#. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</string>
   <string name="SYS_ROLE_INFORMATION">Rolleninformationen</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Speichern ist nicht möglich, bei der Rolle #VAR1_BOLD# würde die maximale Mitgliederzahl überschritten.</string>

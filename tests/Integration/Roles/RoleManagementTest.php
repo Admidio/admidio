@@ -7,6 +7,8 @@
 
 namespace Admidio\Tests\Integration\Roles;
 
+use Admidio\Infrastructure\Exception as AdmidioException;
+use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\AdmidioTestFixture;
 
@@ -143,5 +145,73 @@ class RoleManagementTest extends DatabaseTestCase
             // the name has to survive the round trip through the database unchanged
             $this->assertEquals($name, $fixture->getRoleById($role['rol_id'])['rol_name']);
         }
+    }
+
+    /**
+     * @testdox A direct circular role dependency cannot be saved
+     */
+    public function testDirectCircularRoleDependencyIsRejected(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Test Org');
+        $user = $fixture->createAndSaveUser('dependency-admin', 'dependency-admin@example.local');
+        $roleA = $fixture->createAndSaveRole('Role A', $org['org_id']);
+        $roleB = $fixture->createAndSaveRole('Role B', $org['org_id']);
+
+        $dependency = new RoleDependency($this->getDatabase());
+        $dependency->setParent($roleA['rol_id']);
+        $dependency->setChild($roleB['rol_id']);
+        $this->assertTrue($dependency->insert($user['usr_id']));
+
+        $reverseDependency = new RoleDependency($this->getDatabase());
+        $reverseDependency->setParent($roleB['rol_id']);
+        $reverseDependency->setChild($roleA['rol_id']);
+
+        try {
+            $reverseDependency->insert($user['usr_id']);
+            $this->fail('A direct circular role dependency was saved.');
+        } catch (AdmidioException $exception) {
+            $this->assertSame('SYS_ROLE_DEPENDENCY_CIRCULAR', $exception->getTranslationId());
+        }
+
+        $savedDependency = new RoleDependency($this->getDatabase());
+        $this->assertFalse($savedDependency->get($roleA['rol_id'], $roleB['rol_id']));
+    }
+
+    /**
+     * @testdox An indirect circular role dependency cannot be saved
+     */
+    public function testIndirectCircularRoleDependencyIsRejected(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Test Org');
+        $user = $fixture->createAndSaveUser('dependency-admin', 'dependency-admin@example.local');
+        $roleA = $fixture->createAndSaveRole('Role A', $org['org_id']);
+        $roleB = $fixture->createAndSaveRole('Role B', $org['org_id']);
+        $roleC = $fixture->createAndSaveRole('Role C', $org['org_id']);
+
+        $dependencyAB = new RoleDependency($this->getDatabase());
+        $dependencyAB->setParent($roleA['rol_id']);
+        $dependencyAB->setChild($roleB['rol_id']);
+        $this->assertTrue($dependencyAB->insert($user['usr_id']));
+
+        $dependencyBC = new RoleDependency($this->getDatabase());
+        $dependencyBC->setParent($roleB['rol_id']);
+        $dependencyBC->setChild($roleC['rol_id']);
+        $this->assertTrue($dependencyBC->insert($user['usr_id']));
+
+        $dependencyCA = new RoleDependency($this->getDatabase());
+        $dependencyCA->setParent($roleC['rol_id']);
+        $dependencyCA->setChild($roleA['rol_id']);
+
+        try {
+            $dependencyCA->insert($user['usr_id']);
+            $this->fail('An indirect circular role dependency was saved.');
+        } catch (AdmidioException $exception) {
+            $this->assertSame('SYS_ROLE_DEPENDENCY_CIRCULAR', $exception->getTranslationId());
+        }
+
+        $savedDependency = new RoleDependency($this->getDatabase());
+        $this->assertFalse($savedDependency->get($roleA['rol_id'], $roleC['rol_id']));
     }
 }
