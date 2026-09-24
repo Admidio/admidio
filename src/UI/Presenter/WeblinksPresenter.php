@@ -59,14 +59,25 @@ class WeblinksPresenter extends PagePresenter
                 $(".admidio-link-move").click(function() {
                     moveTableRow($(this), "' . ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php", "' . $gCurrentSession->getCsrfToken() . '");
                 });
+                function updateWeblinkMoveActions() {
+                    $(".admidio-weblinks-grid").each(function() {
+                        var cards = $(this).children("[id^=lnk_]").filter(function() {
+                            return $(this).css("display") !== "none";
+                        });
+                        cards.each(function(index) {
+                            $(this).find(".admidio-link-move[data-direction=UP]").toggle(index > 0);
+                            $(this).find(".admidio-link-move[data-direction=DOWN]").toggle(index < cards.length - 1);
+                        });
+                    });
+                }
                 $(document).ajaxComplete(function(event, xhr, settings) {
                     if (settings.url.indexOf("mode=delete") !== -1) {
-                        setTimeout(function() { updateMoveActions(".card-body", "lnk_", "admidio-link-move"); }, 1000);
+                        setTimeout(updateWeblinkMoveActions, 1000);
                     } else {
-                        updateMoveActions(".card-body", "lnk_", "admidio-link-move");
+                        updateWeblinkMoveActions();
                     }
                 });
-                updateMoveActions(".card-body", "lnk_", "admidio-link-move");', true);
+                updateWeblinkMoveActions();', true);
         }
 
         $weblink = new Weblink($gDb);
@@ -76,13 +87,34 @@ class WeblinksPresenter extends PagePresenter
             $weblink->setArray($row);
             $uuid = $weblink->getValue('lnk_uuid');
             $catId = (int)$weblink->getValue('lnk_cat_id');
+            $destination = (string)$weblink->getValue('lnk_url', 'database');
+            $destinationHost = parse_url($destination, PHP_URL_HOST);
+            $description = trim((string)$weblink->getValue('lnk_description', 'database'));
+            $description = preg_replace('/\s+/u', ' ', $description) ?? $description;
+            $descriptionPreview = $description;
+            $descriptionRest = '';
+            $descriptionCharacters = preg_split('//u', $description, -1, PREG_SPLIT_NO_EMPTY);
+            if (is_array($descriptionCharacters) && count($descriptionCharacters) > 200) {
+                $cut = 200;
+                for ($i = $cut - 1; $i >= 100; --$i) {
+                    if ($descriptionCharacters[$i] === ' ') {
+                        $cut = $i;
+                        break;
+                    }
+                }
+                $descriptionPreview = implode('', array_slice($descriptionCharacters, 0, $cut));
+                $descriptionRest = implode('', array_slice($descriptionCharacters, $cut));
+            }
             if (!isset($categories[$catId])) {
                 $categories[$catId] = array('name' => $weblink->getValue('cat_name'), 'links' => array());
             }
             $categories[$catId]['links'][] = array(
                 'uuid' => $uuid,
                 'name' => $weblink->getValue('lnk_name'),
-                'description' => $weblink->getValue('lnk_description'),
+                'descriptionPreview' => SecurityUtils::encodeHTML($descriptionPreview),
+                'descriptionRest' => SecurityUtils::encodeHTML($descriptionRest),
+                'destination' => $weblink->getValue('lnk_url'),
+                'destinationHost' => $destinationHost ?: $destination,
                 'counter' => (int)$weblink->getValue('lnk_counter'),
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'redirect', 'link_uuid' => $uuid)),
                 'editUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)),

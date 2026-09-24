@@ -1,27 +1,44 @@
 <div id="links_overview">
-{if count($categories) === 0}
-    <p>{$l10n->get($singleLink ? 'SYS_NO_ENTRY' : 'SYS_NO_ENTRIES')}</p>
-{else}
-    {foreach $categories as $category}
-        <div class="card admidio-blog">
-            <div class="card-header">{$category.name}</div>
-            <div class="card-body">
+    {if count($categories) === 0}
+        <p>{$l10n->get($singleLink ? 'SYS_NO_ENTRY' : 'SYS_NO_ENTRIES')}</p>
+    {else}
+        {foreach $categories as $category}
+            <h2>{$category.name}</h2>
+            <div class="row admidio-margin-bottom admidio-weblinks-grid">
                 {foreach $category.links as $link}
-                    <div class="mb-3" id="lnk_{$link.uuid}">
-                        <a class="icon-link" href="{$link.url}" target="{$target}"><i class="bi bi-link"></i>{$link.name}</a>
-                        {if $link.editable}
-                            <a class="admidio-icon-link" href="{$link.editUrl}"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT')}"></i></a>
-                            <a class="admidio-icon-link admidio-link-move" href="javascript:void(0)" data-uuid="{$link.uuid}" data-direction="UP" data-target="lnk_{$link.uuid}"><i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_WEBLINK'))}"></i></a>
-                            <a class="admidio-icon-link admidio-link-move" href="javascript:void(0)" data-uuid="{$link.uuid}" data-direction="DOWN" data-target="lnk_{$link.uuid}"><i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_WEBLINK'))}"></i></a>
-                            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($link.name))}" data-href="callUrlHideElement('lnk_{$link.uuid}', '{$link.deleteUrl}', '{$csrfToken}')"><i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE')}"></i></a>
-                        {/if}
-                        {if $link.description !== ''}<div class="admidio-weblink-description">{$link.description}</div>{/if}
-                        <div class="weblink-counter"><small>{$l10n->get('SYS_COUNTER')}: {$link.counter}</small></div>
+                    <div id="lnk_{$link.uuid}" class="col-sm-6 col-lg-4 col-xl-3">
+                        <div class="card admidio-card">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="{$link.url|escape:'html'}" target="{$target}" rel="noopener noreferrer" title="{$link.destination}">
+                                        {$link.name}<i class="bi bi-box-arrow-up-right fs-6 ms-2" aria-hidden="true"></i>
+                                    </a>
+                                </h5>
+                                <div class="small text-body-secondary text-break" data-bs-toggle="tooltip" title="{$link.destination}">
+                                    <span class="visually-hidden">{$l10n->get('SYS_LINK_ADDRESS')}: </span>{$link.destinationHost|escape:'html'}
+                                </div>
+                                {if $link.descriptionPreview !== ''}
+                                    <div class="admidio-weblink-description mt-3">
+                                        {$link.descriptionPreview}{if $link.descriptionRest !== ''}<span class="collapse" id="viewdetails-link-{$link.uuid}">{$link.descriptionRest}</span> <a class="admidio-icon-link" href="#viewdetails-link-{$link.uuid}" data-bs-toggle="collapse" aria-expanded="false" aria-controls="viewdetails-link-{$link.uuid}" title="{$l10n->get('SYS_SHOW_MORE')}" aria-label="{$l10n->get('SYS_SHOW_MORE')}">»</a>{/if}
+                                    </div>
+                                {/if}
+                                <div class="mt-auto pt-3 d-flex justify-content-between align-items-center">
+                                    <small class="text-body-secondary">{$l10n->get('SYS_COUNTER')}: {$link.counter}</small>
+                                    {if $link.editable}
+                                        <div>
+                                            <a class="admidio-icon-link admidio-link-move" href="javascript:void(0)" data-uuid="{$link.uuid}" data-direction="UP" data-target="lnk_{$link.uuid}" aria-label="{$l10n->get('SYS_MOVE_LEFT', array('SYS_WEBLINK'))}"{if $link@first} style="display: none;"{/if}><i class="bi bi-arrow-left-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_LEFT', array('SYS_WEBLINK'))}"></i></a>
+                                            <a class="admidio-icon-link admidio-link-move" href="javascript:void(0)" data-uuid="{$link.uuid}" data-direction="DOWN" data-target="lnk_{$link.uuid}" aria-label="{$l10n->get('SYS_MOVE_RIGHT', array('SYS_WEBLINK'))}"{if $link@last} style="display: none;"{/if}><i class="bi bi-arrow-right-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_RIGHT', array('SYS_WEBLINK'))}"></i></a>
+                                            <a class="admidio-icon-link" href="{$link.editUrl}"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT')}"></i></a>
+                                            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($link.name))}" data-href="callUrlHideElement('lnk_{$link.uuid}', '{$link.deleteUrl}', '{$csrfToken}')"><i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE')}"></i></a>
+                                        </div>
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 {/foreach}
             </div>
-        </div>
-    {/foreach}
-{/if}
+        {/foreach}
+    {/if}
 </div>
 {$pagination}
