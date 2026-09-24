@@ -165,6 +165,11 @@ class MenuNode
                         $badgeCount = count($registration->findAll());
                     }
 
+                    // Existing installations may still store the former weblinks module URL.
+                    if ($node['men_name_intern'] === 'weblinks' && $node['men_url'] === '/modules/links/links.php') {
+                        $node['men_url'] = '/modules/links.php';
+                    }
+
                     $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], (string) $node['men_icon'], '', $badgeCount, (string) $node['men_description']);
                 }
             }
