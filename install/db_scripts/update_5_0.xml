@@ -538,5 +538,7 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1910" database="pgsql">ALTER TABLE %PREFIX%_category_report ALTER COLUMN crt_col_fields TYPE varchar(255)</step>
     <step id="1920">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_col_conditions varchar(255)</step>
     <step id="1930">UpdateStepsCode::updateStep50FixInventorySelectOptions</step>
+    <!-- Restore registration visibility of system profile fields cleared when saving disabled checkboxes. -->
+    <step id="1940">UPDATE %PREFIX%_user_fields SET usf_registration = true WHERE usf_name_intern IN ('LAST_NAME', 'FIRST_NAME', 'EMAIL')</step>
     <step>stop</step>
 </update>
