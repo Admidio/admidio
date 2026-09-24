@@ -14,29 +14,22 @@
  * *********************************************************************************************
  */
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 use Admidio\Weblinks\Entity\Weblink;
-use Admidio\Weblinks\Service\WeblinksService;
 
 require_once(__DIR__ . '/../system/common.php');
 
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
-    $organization = $getOrganization !== ''
-        ? new Organization($gDb, $getOrganization)
-        : $gCurrentOrganization;
+    $organization = RssFeedAccess::resolveOrganization($gDb, $gCurrentOrganization, $getOrganization);
     $organizationID = (int)$organization->getValue('org_id');
-    if ($organizationID === 0) {
-        throw new Exception('SYS_INVALID_PAGE_VIEW');
-    }
     $organizationName = $organization->getValue('org_longname');
     $organizationSettings = $organization->getSettingsManager();
 
-    (new WeblinksService($gDb))->assertRssFeedAccessible($organization, $gValidLogin);
+    RssFeedAccess::assertAccessible($organization, 'weblinks_module_enabled', $gValidLogin);
 
     $currentUserOrganizationID = $gCurrentUser->getOrganization();
     try {

@@ -13,10 +13,9 @@
  * organization : Short name of the organization whose topics should be shown in the RSS feed
  * *********************************************************************************************
  */
-use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 use Admidio\Photos\Entity\Album;
 
 require_once(__DIR__ . '/../system/common.php');
@@ -24,28 +23,13 @@ require_once(__DIR__ . '/../system/common.php');
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
-    // check if module is active
-    if (!$gSettingsManager->getBool('enable_rss')) {
-        throw new Exception('SYS_RSS_DISABLED');
-    }
+    $organization = RssFeedAccess::resolveOrganization($gDb, $gCurrentOrganization, $getOrganization);
+    RssFeedAccess::assertAccessible($organization, 'photo_module_enabled', $gValidLogin);
+    $organizationName = $organization->getValue('org_longname');
+    $organizationID = (int)$organization->getValue('org_id');
+    $organizationSettings = $organization->getSettingsManager();
 
-    // check if the module is enabled and disallow access if it's disabled
-    if ($gSettingsManager->getInt('photo_module_enabled') === 0) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('photo_module_enabled') === 2 && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-
-    if ($getOrganization !== '') {
-        $organization = new Organization($gDb, $getOrganization);
-        $organizationName = $organization->getValue('org_longname');
-        $organizationID = $organization->getValue('org_id');
-    } else {
-        $organizationName = $gCurrentOrganization->getValue('org_longname');
-        $organizationID = $gCurrentOrgId;
-    }
-
-    if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
+    if ($organizationSettings->getInt('system_show_create_edit') === 1) {
         // show firstname and lastname of create and last change user
         $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
         $additionalTables = '
@@ -84,7 +68,7 @@ try {
     // add the RSS items to the RssFeed object
     $rss = new RssFeed(
         $organizationName . ' - ' . $gL10n->get('SYS_PHOTO_ALBUMS'),
-        $gCurrentOrganization->getValue('org_homepage'),
+        $organization->getValue('org_homepage'),
         $gL10n->get('SYS_RECENT_ALBUMS_OF_ORGA', array($organizationName)),
         $organizationName
     );
@@ -113,10 +97,10 @@ try {
             $phoParentId = $admPhotoParent['pho_pho_id_parent'];
         }
 
-        $description = $photoAlbum->getValue('pho_begin', $gSettingsManager->getString('system_date'));
+        $description = $photoAlbum->getValue('pho_begin', $organizationSettings->getString('system_date'));
         // Show end date only if different from start date
         if ($photoAlbum->getValue('pho_end') !== $photoAlbum->getValue('pho_begin')) {
-            $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $gSettingsManager->getString('system_date'))));
+            $description = $gL10n->get('SYS_DATE_FROM_TO', array($description, $photoAlbum->getValue('pho_end', $organizationSettings->getString('system_date'))));
         }
         $description .= '<br />' . $photoAlbum->countImages() . ' ' . $gL10n->get('SYS_PHOTOS_BY_VAR', array($photoAlbum->getPhotographer()));
 

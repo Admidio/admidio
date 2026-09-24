@@ -15,7 +15,6 @@
  */
 
 use Admidio\Announcements\Service\AnnouncementsService;
-use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -23,14 +22,7 @@ try {
     // Initialize and check the parameters
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
-    // check if module is active
-    if ($gSettingsManager->getInt('announcements_module_enabled') === 0) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('announcements_module_enabled') === 2 && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-
-    // Show the RSS feed of the forum topics
+    // The service checks RSS and module access for the requested organization.
     $announcementsService = new AnnouncementsService($gDb);
     $announcementsService->rssFeed($getOrganization);
 } catch (Throwable $e) {
