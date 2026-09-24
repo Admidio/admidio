@@ -6,12 +6,34 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\Entity\MenuEntry;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\Weblinks\Entity\Weblink;
 
 class WeblinksService
 {
     public function __construct(private readonly Database $db)
     {
+    }
+
+    /**
+     * Check RSS access using the settings of the organization whose links will be served.
+     * @throws Exception
+     */
+    public function assertRssFeedAccessible(Organization $organization, bool $validLogin): void
+    {
+        $settings = $organization->getSettingsManager();
+
+        if (!$settings->getBool('enable_rss')) {
+            throw new Exception('SYS_RSS_DISABLED');
+        }
+
+        $moduleAccess = $settings->getInt('weblinks_module_enabled');
+        if ($moduleAccess === 0) {
+            throw new Exception('SYS_MODULE_DISABLED');
+        }
+        if ($moduleAccess === 2 && !$validLogin) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
     }
 
     /** @return array{0: string, 1: array<int, int|string>} */

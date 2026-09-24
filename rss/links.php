@@ -19,32 +19,24 @@ use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Weblinks\Entity\Weblink;
+use Admidio\Weblinks\Service\WeblinksService;
 
 require_once(__DIR__ . '/../system/common.php');
 
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
-    // Check if RSS is active...
-    if (!$gSettingsManager->getBool('enable_rss')) {
-        throw new Exception('SYS_RSS_DISABLED');
+    $organization = $getOrganization !== ''
+        ? new Organization($gDb, $getOrganization)
+        : $gCurrentOrganization;
+    $organizationID = (int)$organization->getValue('org_id');
+    if ($organizationID === 0) {
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
+    $organizationName = $organization->getValue('org_longname');
+    $organizationSettings = $organization->getSettingsManager();
 
-    // check if module is active or is public
-    if ($gSettingsManager->getInt('weblinks_module_enabled') === 0) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('weblinks_module_enabled') === 2 && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
-    }
-
-    if ($getOrganization !== '') {
-        $organization = new Organization($gDb, $getOrganization);
-        $organizationName = $organization->getValue('org_longname');
-        $organizationID = $organization->getValue('org_id');
-    } else {
-        $organizationName = $gCurrentOrganization->getValue('org_longname');
-        $organizationID = $gCurrentOrgId;
-    }
+    (new WeblinksService($gDb))->assertRssFeedAccessible($organization, $gValidLogin);
 
     $currentUserOrganizationID = $gCurrentUser->getOrganization();
     try {
@@ -54,7 +46,7 @@ try {
         $gCurrentUser->setOrganization($currentUserOrganizationID);
     }
 
-    if ((int)$gSettingsManager->get('system_show_create_edit') === 1) {
+    if ($organizationSettings->getInt('system_show_create_edit') === 1) {
         // show firstname and lastname of create and last change user
         $additionalFields = ' cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name ';
         $additionalTables = '
@@ -94,7 +86,7 @@ try {
     // create RSS feed object with channel information
     $rss = new RssFeed(
         $organizationName . ' - ' . $gL10n->get('SYS_WEBLINKS'),
-        $gCurrentOrganization->getValue('org_homepage'),
+        $organization->getValue('org_homepage'),
         $gL10n->get('SYS_LINK_COLLECTION_FROM', array($organizationName)),
         $organizationName
     );
