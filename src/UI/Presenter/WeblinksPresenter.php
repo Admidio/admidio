@@ -40,7 +40,7 @@ class WeblinksPresenter extends PagePresenter
         if ($linkUUID === '') {
             if (count($gCurrentUser->getAllEditableCategories('LNK')) > 0) {
                 $this->addPageFunctionsMenuItem('menu_item_links_add', $gL10n->get('SYS_CREATE_WEBLINK'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('mode' => 'edit')), 'bi-plus-circle-fill');
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit')), 'bi-plus-circle-fill');
             }
             if ($gCurrentUser->isAdministratorWeblinks()) {
                 $this->addPageFunctionsMenuItem('menu_item_links_maintain_categories', $gL10n->get('SYS_EDIT_CATEGORIES'),
@@ -49,7 +49,7 @@ class WeblinksPresenter extends PagePresenter
             ChangelogService::displayHistoryButton($this, 'weblinks', 'links');
 
             $form = new FormPresenter('adm_navbar_filter_form', 'sys-template-parts/form.filter.tpl',
-                ADMIDIO_URL . FOLDER_MODULES . '/links.php', $this, array('type' => 'navbar', 'setFocus' => false));
+                ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', $this, array('type' => 'navbar', 'setFocus' => false));
             $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK',
                 FormPresenter::SELECT_BOX_MODUS_FILTER, array('defaultValue' => $categoryUUID));
             $form->addToHtmlPage();
@@ -57,7 +57,7 @@ class WeblinksPresenter extends PagePresenter
             $this->addJavascript('
                 $("#cat_uuid").change(function() { $("#adm_navbar_filter_form").submit(); });
                 $(".admidio-link-move").click(function() {
-                    moveTableRow($(this), "' . ADMIDIO_URL . FOLDER_MODULES . '/links.php", "' . $gCurrentSession->getCsrfToken() . '");
+                    moveTableRow($(this), "' . ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php", "' . $gCurrentSession->getCsrfToken() . '");
                 });
                 $(document).ajaxComplete(function(event, xhr, settings) {
                     if (settings.url.indexOf("mode=delete") !== -1) {
@@ -84,21 +84,21 @@ class WeblinksPresenter extends PagePresenter
                 'name' => $weblink->getValue('lnk_name'),
                 'description' => $weblink->getValue('lnk_description'),
                 'counter' => (int)$weblink->getValue('lnk_counter'),
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('mode' => 'redirect', 'link_uuid' => $uuid)),
-                'editUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('mode' => 'edit', 'link_uuid' => $uuid)),
-                'deleteUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('mode' => 'delete', 'link_uuid' => $uuid)),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'redirect', 'link_uuid' => $uuid)),
+                'editUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)),
+                'deleteUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'delete', 'link_uuid' => $uuid)),
                 'editable' => $weblink->isEditable()
             );
         }
 
-        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('cat_uuid' => $categoryUUID));
+        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('cat_uuid' => $categoryUUID));
         $this->smarty->assign('categories', array_values($categories));
         $this->smarty->assign('singleLink', $linkUUID !== '');
         $this->smarty->assign('target', $gSettingsManager->getString('weblinks_target'));
         $this->smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $count, $perPage > 0 ? $perPage : $count, $start));
-        $this->addHtmlByTemplate('modules/links.cards.tpl');
+        $this->addHtmlByTemplate('modules/weblinks.cards.tpl');
     }
 
     public function createEditForm(string $uuid): void
@@ -118,8 +118,8 @@ class WeblinksPresenter extends PagePresenter
         $this->setHeadline($gL10n->get($uuid !== '' ? 'SYS_EDIT_WEBLINK' : 'SYS_CREATE_WEBLINK'));
         ChangelogService::displayHistoryButton($this, 'weblinks', 'links', $uuid !== '', array('uuid' => $uuid));
 
-        $form = new FormPresenter('adm_weblinks_edit_form', 'modules/links.edit.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('mode' => 'save', 'link_uuid' => $uuid)), $this);
+        $form = new FormPresenter('adm_weblinks_edit_form', 'modules/weblinks.edit.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'save', 'link_uuid' => $uuid)), $this);
         $form->addInput('lnk_name', $gL10n->get('SYS_LINK_NAME'), $link->getValue('lnk_name'),
             array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED));
         $form->addInput('lnk_url', $gL10n->get('SYS_LINK_ADDRESS'), $link->getValue('lnk_url'),
@@ -160,6 +160,6 @@ class WeblinksPresenter extends PagePresenter
             '<strong>' . htmlspecialchars($link->getValue('lnk_name'), ENT_QUOTES) . '</strong> (' . htmlspecialchars($url, ENT_QUOTES) . ')',
             '<a href="' . htmlspecialchars($url, ENT_QUOTES) . '" target="_self">', '</a>'
         )));
-        $this->addHtmlByTemplate('modules/links.redirect.tpl');
+        $this->addHtmlByTemplate('modules/weblinks.redirect.tpl');
     }
 }

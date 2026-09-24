@@ -113,7 +113,7 @@ try {
         $rss->addItem(
             $weblink->getValue('lnk_name'),
             '<a href="' . $lnkUrl . '" target="_blank">' . $lnkUrl . '</a><br /><br />' . $weblink->getValue('lnk_description'),
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('link_uuid' => $weblink->getValue('lnk_uuid'))),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('link_uuid' => $weblink->getValue('lnk_uuid'))),
             $row['create_name'],
             DateTime::createFromFormat('Y-m-d H:i:s', $weblink->getValue('lnk_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
             $weblink->getValue('cat_name'),

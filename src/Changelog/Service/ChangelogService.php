@@ -1044,7 +1044,7 @@ class ChangelogService {
                 case 'inventory_item_borrow_data' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
                 case 'links' :
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/links.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
                 case 'lists' :
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
                 case 'list_columns':
