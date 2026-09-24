@@ -65,6 +65,9 @@ define('DOMAIN', 'admidio.test');
 // rejected by OIDCService::assertValidIssuerURL() when it is not an HTTPS URL.
 define('ADMIDIO_URL', 'https://admidio.test');
 define('ADMIDIO_URL_PATH', '');
+// CLI tests have no current HTTP request; use the test installation's homepage
+// wherever application code expects the current URL.
+define('CURRENT_URL', ADMIDIO_URL . '/');
 define('SCHEME', 'https');
 // Derived from the scheme exactly as system/bootstrap/constants.php does it, so that code which
 // branches on the transport sees the same installation that ADMIDIO_URL describes.
