@@ -11,6 +11,24 @@
                 $(fieldsToHideOnSingleMode).slideDown("slow");
             }
         });
+        if($("input[name='mail_send_method']:checked").val() !== "SMTP") {
+            $("#smtp_settings").hide();
+        }
+        $("input[name='mail_send_method']").on("change", function() {
+            if($(this).val() === "SMTP") {
+                $("#smtp_settings").slideDown("slow");
+            } else {
+                $("#smtp_settings").slideUp("slow");
+            }
+        });
+        $("#mail_smtp_secure").on("change", function() {
+            var smtpPorts = {
+                "": 25,
+                "ssl": 465,
+                "tls": 587
+            };
+            $("#mail_smtp_port").val(smtpPorts[$(this).val()]);
+        });
     });
 </script>
 
@@ -19,7 +37,7 @@
     {/foreach}>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['mail_send_method']}
+    {include 'sys-template-parts/form.radio.tpl' data=$elements['mail_send_method']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_sender_mode']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_sender_email']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_sender_name']}
@@ -28,13 +46,15 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['mail_recipients_with_roles']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_into_to']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['mail_number_recipients']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_host']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_smtp_auth']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_port']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_secure']}
-    {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_authentication_type']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_user']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_password']}
+    <div id="smtp_settings">
+        {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_host']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_port']}
+        {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_secure']}
+        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_smtp_auth']}
+        {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_authentication_type']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_user']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_password']}
+    </div>
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['send_test_email']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_email_dispatch']}
     <div class="form-alert" style="display: none;">&nbsp;</div>

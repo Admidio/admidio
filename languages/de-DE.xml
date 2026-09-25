@@ -1555,10 +1555,10 @@
   <string name="SYS_SMTP_PORT">SMTP Port</string>
   <string name="SYS_SMTP_PORT_DESC">Angabe des Ports über den die SMTP-Verbindung aufgebaut werden soll. (Voreinstellung: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP Verschlüsselung</string>
-  <string name="SYS_SMTP_SECURE_DESC">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Voreinstellung: TLS)</string>
-  <string name="SYS_SMTP_SECURE_NO">ohne</string>
-  <string name="SYS_SMTP_SECURE_SSL">SSL</string>
-  <string name="SYS_SMTP_SECURE_TLS">TLS</string>
+  <string name="SYS_SMTP_SECURE_DESC">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Voreinstellung: #VAR1#)</string>
+  <string name="SYS_SMTP_SECURE_NO">Keine Verschlüsselung</string>
+  <string name="SYS_SMTP_SECURE_SSL">SMTPS / implizites TLS</string>
+  <string name="SYS_SMTP_SECURE_TLS">STARTTLS</string>
   <string name="SYS_SMTP_USER">SMTP Anmeldename</string>
   <string name="SYS_SMTP_USER_DESC">Der Anmeldename, der bei der SMTP-Authentifizierung verwendet wird.</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Möchten Sie einen Link zu Ihrem Profil in diesem sozialen Netzwerk setzen? Ihr Anmeldename ist erforderlich. Melden Sie sich bei Ihrem Konto des sozialen Netzwerks an und gehen Sie zu Ihrem Profil. Kopieren Sie nun die URL in dieses Feld und speichern Sie Ihr Profil hier. Besucher Ihres Profils können nun direkt Ihr Profil des sozialen Netzwerks öffnen.</string>
