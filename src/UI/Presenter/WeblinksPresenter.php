@@ -158,7 +158,8 @@ class WeblinksPresenter extends PagePresenter
             array('type' => 'url', 'maxLength' => 2000, 'property' => FormPresenter::FIELD_REQUIRED));
         $form->addSelectBoxForCategories('lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK',
             FormPresenter::SELECT_BOX_MODUS_EDIT, array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $link->getValue('cat_uuid')));
-        $form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'));
+        $form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'),
+            array('toolbar' => 'AdmidioComments'));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
         $this->assignSmartyVariable('userCreatedName', $link->getNameOfCreatingUser());
