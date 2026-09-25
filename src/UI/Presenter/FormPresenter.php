@@ -601,6 +601,7 @@ class FormPresenter
      *                        - **enableMultiUploads** : If set to true a button will be added where the user can
      *                          add new upload fields to upload more than one file.
      *                        - **multiUploadLabel** : The label for the button who will add new upload fields to the form.
+     *                        - **removeUploadLabel** : The accessible label for removing an added upload field.
      *                        - **hideUploadField** : Hide the upload field if multi uploads are enabled. Then the first
      *                          upload field will be shown if the user will click the multi upload button.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
@@ -621,7 +622,8 @@ class FormPresenter
             'allowedMimeTypes' => array(),
             'enableMultiUploads' => false,
             'hideUploadField' => false,
-            'multiUploadLabel' => ''
+            'multiUploadLabel' => '',
+            'removeUploadLabel' => ''
         ), $options));
 
         $attributes = array();
@@ -644,13 +646,24 @@ class FormPresenter
             $javascriptCode = '
                 // add new line to add new attachment to this mail
                 $("#btn_add_attachment_' . $id . '").click(function() {
-                    newAttachment = document.createElement("input");
-                    $(newAttachment).attr("type", "file");
-                    $(newAttachment).attr("name", "userfile[]");
-                    $(newAttachment).attr("class", "form-control mb-2 focus-ring ' . $optionsAll['class'] . '");
-                    $(newAttachment).hide();
-                    $("#btn_add_attachment_' . $id . '").before(newAttachment);
-                    $(newAttachment).show("slow");
+                    var attachmentRow = $("<div>").addClass("input-group mb-2 admidio-attachment-upload");
+                    var newAttachment = $("<input>").attr({
+                        type: "file",
+                        name: "userfile[]",
+                        class: "form-control btn-secondary focus-ring ' . $optionsAll['class'] . '"
+                    });
+                    var removeButton = $("<button>").attr({
+                        type: "button",
+                        title: ' . json_encode($optionsAll['removeUploadLabel'], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP) . ',
+                        "aria-label": ' . json_encode($optionsAll['removeUploadLabel'], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP) . '
+                    }).addClass("btn btn-secondary focus-ring")
+                        .append($("<i>").addClass("bi bi-trash").attr("aria-hidden", "true"));
+                    removeButton.on("click", function() {
+                        attachmentRow.remove();
+                    });
+                    attachmentRow.append(newAttachment, removeButton).hide();
+                    $("#btn_add_attachment_' . $id . '").before(attachmentRow);
+                    attachmentRow.show("slow");
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string

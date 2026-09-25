@@ -229,6 +229,24 @@ a {
     border-color: var(--bs-primary) !important;
 }
 
+/* Use the btn-secondary variables on file inputs for their native buttons. */
+input[type="file"].btn-secondary::file-selector-button {
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color);
+}
+
+input[type="file"].btn-secondary:hover:not(:disabled):not([readonly])::file-selector-button {
+    color: var(--bs-btn-hover-color);
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
+}
+
+.admidio-attachment-upload button.btn-secondary:hover {
+    background-color: var(--bs-danger);
+    border-color: var(--bs-danger);
+}
+
 .btn-check:checked + .btn {
     color: var(--bs-body-bg) !important;
     background-color: var(--bs-secondary);

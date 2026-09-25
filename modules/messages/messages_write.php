@@ -603,6 +603,7 @@ try {
                     'enableMultiUploads' => true,
                     'maxUploadSize' => Email::getMaxAttachmentSize(),
                     'multiUploadLabel' => $gL10n->get('SYS_ADD_ATTACHMENT'),
+                    'removeUploadLabel' => $gL10n->get('SYS_REMOVE'),
                     'hideUploadField' => true,
                     'helpTextId' => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                     'icon' => 'bi-paperclip'
