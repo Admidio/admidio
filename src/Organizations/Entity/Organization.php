@@ -3,6 +3,7 @@
 namespace Admidio\Organizations\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\CategoryReport\Entity\CategoryReport;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Events\Entity\Event;
 use Admidio\Forum\Service\ForumService;
@@ -459,20 +460,16 @@ class Organization extends Entity
             'r' . $roleManagement->getValue('rol_id'),
             'r' . $roleMember->getValue('rol_id')
         );
-        $categoryReport = new Entity($this->db, TBL_CATEGORY_REPORT, 'crt');
+        $categoryReport = new CategoryReport($this->db);
         $categoryReport->setValue('crt_org_id', $orgId);
         $categoryReport->setValue('crt_name', $gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
         $categoryReport->setValue('crt_number_col', 0);
+        $categoryReport->setColumns(array_map(
+            static fn(string $field): array => array('field' => $field, 'condition' => ''),
+            $categoryReportColumns
+        ));
         $categoryReport->save();
         $categoryReportId = (int)$categoryReport->getValue('crt_id');
-        foreach ($categoryReportColumns as $index => $field) {
-            $this->db->queryPrepared(
-                'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
-                        (crc_crt_id, crc_number, crc_field, crc_condition)
-                 VALUES (?, ?, ?, ?)',
-                array($categoryReportId, $index + 1, $field, '')
-            );
-        }
 
         // set new default configuration to the module settings
         $organizationSettings = new SettingsManager($this->db, $orgId);

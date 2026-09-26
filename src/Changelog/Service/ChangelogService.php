@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Photos\Entity\Album;
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Categories\Entity\Category;
+use Admidio\CategoryReport\Entity\CategoryReport;
 use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
 use Admidio\Documents\Entity\File;
@@ -103,6 +104,8 @@ class ChangelogService {
      */
     public static array $noLogTables = [
         'auto_login', 'components', 'id', 'log_changes',
+        // Column changes are logged as one readable change of their category report.
+        'category_report_columns',
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
         // SSO runtime bookkeeping: tokens and session/logout state are written and expired by the
         // OIDC/SAML flows themselves, never edited by a person, so they carry no audit value.
@@ -560,7 +563,7 @@ class ChangelogService {
             case 'categories':
                 return new Category($gDb);
             case 'category_report' :
-                return  new Entity($gDb, TBL_CATEGORY_REPORT, 'crt');
+                return new CategoryReport($gDb);
             case 'events' :
                 return new Event($gDb);
             case 'files':
@@ -912,6 +915,7 @@ class ChangelogService {
             'crt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'crt_name' =>                  'SYS_NAME',
             'crt_col_fields' =>            'SYS_COLUMN_SELECTION',
+            'crt_col_conditions' =>        'SYS_CONDITION',
             'crt_selection_role' =>        array('name' => 'SYS_ROLE_SELECTION', 'type' => 'ROLE'),
             'crt_selection_cat' =>         array('name' => 'SYS_CAT_SELECTION', 'type' => 'CATEGORY'),
             'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),

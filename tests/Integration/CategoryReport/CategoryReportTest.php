@@ -2,6 +2,8 @@
 
 namespace Admidio\Tests\Integration\CategoryReport;
 
+use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\Tests\Support\DatabaseTestCase;
 
 class CategoryReportTest extends DatabaseTestCase
@@ -46,15 +48,15 @@ class CategoryReportTest extends DatabaseTestCase
         $this->assertSame(array('Smith, John', '', '{2020-01-01'), array_column($columns, 'crc_condition'));
         $this->assertSame($gCurrentOrgId, (int)$configuration['organization_id']);
 
-        $configuration['name'] = 'Column storage test';
-        $configuration['columns'] = array(
+        $entity = new CategoryReportEntity($this->getDatabase(), $reportId);
+        $this->assertContainsOnlyInstancesOf(CategoryReportColumn::class, $entity->getColumns());
+        $entity->setColumns(array(
             array('field' => 'p3', 'condition' => ''),
             array('field' => 'p2', 'condition' => 'Jones')
-        );
-        $configuration['col_fields'] = 'p3,p2';
-        $configuration['col_conditions'] = ',Jones';
-        $configuration['default_conf'] = true;
-        $updated = (new \CategoryReport())->saveConfigArray(array($configuration));
+        ));
+        $entity->save();
+
+        $updated = (new \CategoryReport())->getConfigArray();
         $updatedConfiguration = array_values(array_filter(
             $updated,
             static fn(array $values): bool => (int)$values['id'] === $reportId
@@ -62,10 +64,13 @@ class CategoryReportTest extends DatabaseTestCase
 
         $this->assertSame('p3,p2', $updatedConfiguration['col_fields']);
         $this->assertSame(',Jones', $updatedConfiguration['col_conditions']);
-        $this->assertSame($configuration['columns'], $updatedConfiguration['columns']);
+        $this->assertSame($entity->getColumnDefinitions(), $updatedConfiguration['columns']);
 
-        $configuration['id'] = -$reportId;
-        (new \CategoryReport())->saveConfigArray(array($configuration));
+        $entity->delete();
+        $this->assertSame(0, (int)$this->getDatabase()->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_CATEGORY_REPORT . ' WHERE crt_id = ?',
+            array($reportId)
+        )->fetchColumn());
         $this->assertSame(0, (int)$this->getDatabase()->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_CATEGORY_REPORT_COLUMNS . ' WHERE crc_crt_id = ?',
             array($reportId)

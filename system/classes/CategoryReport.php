@@ -2,10 +2,10 @@
 
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
 use Admidio\Roles\ValueObject\ConditionParser;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\Membership;
-use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Users\Entity\User;
 
@@ -937,44 +937,30 @@ class CategoryReport
         global $gDb, $gSettingsManager, $gCurrentOrgId;
 
         if (count($this->arrConfiguration) === 0) {
-            $sql = ' SELECT *
+            $sql = ' SELECT crt_id
                        FROM ' . TBL_CATEGORY_REPORT . '
                       WHERE ( crt_org_id = ? -- $gCurrentOrgId
                          OR crt_org_id IS NULL ) ';
             $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
             while ($row = $statement->fetch()) {
-                $columnStatement = $gDb->queryPrepared(
-                    'SELECT crc_field, crc_condition
-                       FROM ' . TBL_CATEGORY_REPORT_COLUMNS . '
-                      WHERE crc_crt_id = ?
-                   ORDER BY crc_number',
-                    array((int)$row['crt_id'])
-                );
-                $columnFields = array();
-                $columnConditions = array();
-                $columns = array();
-                while ($column = $columnStatement->fetch()) {
-                    $columnFields[] = $column['crc_field'];
-                    $columnConditions[] = $column['crc_condition'] ?? '';
-                    $columns[] = array(
-                        'field' => $column['crc_field'],
-                        'condition' => $column['crc_condition'] ?? ''
-                    );
-                }
+                $categoryReport = new CategoryReportEntity($gDb, (int)$row['crt_id']);
+                $columns = $categoryReport->getColumnDefinitions();
+                $columnFields = array_column($columns, 'field');
+                $columnConditions = array_column($columns, 'condition');
 
                 $values = array();
-                $values['id'] = $row['crt_id'];
-                $values['organization_id'] = $row['crt_org_id'];
-                $values['name'] = SecurityUtils::encodeHTML($row['crt_name']);
+                $values['id'] = $categoryReport->getValue('crt_id');
+                $values['organization_id'] = $categoryReport->getValue('crt_org_id');
+                $values['name'] = SecurityUtils::encodeHTML($categoryReport->getValue('crt_name', 'database'));
                 $values['columns'] = $columns;
                 $values['col_fields'] = implode(',', $columnFields);
                 $values['col_conditions'] = implode(',', $columnConditions);
-                $values['selection_role'] = $row['crt_selection_role'];
-                $values['selection_cat'] = $row['crt_selection_cat'];
-                $values['number_col'] = $row['crt_number_col'];
+                $values['selection_role'] = $categoryReport->getValue('crt_selection_role', 'database');
+                $values['selection_cat'] = $categoryReport->getValue('crt_selection_cat', 'database');
+                $values['number_col'] = $categoryReport->getValue('crt_number_col');
                 $values['default_conf'] = false;
-                if ($gSettingsManager->getInt('category_report_default_configuration') == $row['crt_id']) {
+                if ($gSettingsManager->getInt('category_report_default_configuration') === (int)$categoryReport->getValue('crt_id')) {
                     $values['default_conf'] = true;
                 }
                 $this->arrConfiguration[] = $values;
@@ -1074,19 +1060,12 @@ class CategoryReport
 
         foreach ($arrConfiguration as $values) {
             if ($values['id'] === '' || $values['id'] > 0) {                  // id > 0 (=edit a configuration) or '' (=append a configuration)
-                $categoryReport = new Entity($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
+                $categoryReport = new CategoryReportEntity($gDb, (int)$values['id']);
                 $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
                 $categoryReport->setValue('crt_name', $values['name']);
                 $categoryReport->setValue('crt_selection_role', $values['selection_role']);
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
-                $categoryReport->save();
-
-                $reportId = (int)$categoryReport->getValue('crt_id');
-                $gDb->queryPrepared(
-                    'DELETE FROM ' . TBL_CATEGORY_REPORT_COLUMNS . ' WHERE crc_crt_id = ?',
-                    array($reportId)
-                );
                 $columns = $values['columns'] ?? array();
                 $serializedFields = implode(',', array_column($columns, 'field'));
                 $serializedConditions = implode(',', array_map(
@@ -1111,14 +1090,9 @@ class CategoryReport
                         );
                     }
                 }
-                foreach ($columns as $index => $column) {
-                    $gDb->queryPrepared(
-                        'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
-                                (crc_crt_id, crc_number, crc_field, crc_condition)
-                         VALUES (?, ?, ?, ?)',
-                        array($reportId, $index + 1, $column['field'], $column['condition'] ?? '')
-                    );
-                }
+                $categoryReport->setColumns($columns);
+                $categoryReport->save();
+                $reportId = (int)$categoryReport->getValue('crt_id');
 
                 if ($values['default_conf'] === true || $defaultConfiguration === 0) {
                     $defaultConfiguration = $reportId;
@@ -1127,7 +1101,7 @@ class CategoryReport
                 $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
             } else {                                                            // delete
                 $values['id'] = $values['id'] * (-1);
-                $categoryReport = new Entity($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
+                $categoryReport = new CategoryReportEntity($gDb, (int)$values['id']);
                 $categoryReport->delete();
             }
         }
