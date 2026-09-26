@@ -37,6 +37,7 @@ class CategoryReport
 {
     public array $headerData = array();          ///< Array mit allen Spaltenueberschriften
     public array $listData = array();          ///< Array mit den Daten für den Report
+    public array $userUuids = array();         ///< UUIDs of report members, keyed by user ID
     public array $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
     public array $headerRolePropSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
     protected int $conf;                               ///< die gewaehlte Konfiguration
@@ -89,6 +90,7 @@ class CategoryReport
         $workArray = array();
         $number_row_pos = -1;
         $number_col = array();
+        $this->userUuids = array();
 
         $columns = $this->arrConfiguration[$this->conf]['columns'];
 
@@ -123,6 +125,7 @@ class CategoryReport
                 case 'p':                    //p=profileField
                     // nur bei Profilfeldern wird 'id' mit der 'usf_id' ueberschrieben
                     $this->headerData[$key + 1]['id'] = $id;
+                    $workArray[$key + 1]['profile_name'] = $gProfileFields->getPropertyById($id, 'usf_name_intern');
                     $number_col[$key + 1] = '';
                     break;
                 case 'c':                    //c=categorie
@@ -146,7 +149,7 @@ class CategoryReport
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
                     while ($row = $statement->fetch()) {
-                        $workArray[$key + 1]['usr_id'][] = $row['mem_usr_id'];
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
                     }
                     $number_col[$key + 1] = 0;
                     break;
@@ -168,7 +171,7 @@ class CategoryReport
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
                     while ($row = $statement->fetch()) {
-                        $workArray[$key + 1]['usr_id'][] = $row['mem_usr_id'];
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
                     }
                     $number_col[$key + 1] = 0;
                     break;
@@ -190,7 +193,7 @@ class CategoryReport
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
                     while ($row = $statement->fetch()) {
-                        $workArray[$key + 1]['usr_id'][] = $row['mem_usr_id'];
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
                         // NOTE: By default, all current members as of the given date are included. However, if
                         // a column has the "former members" type, then we need to include all former members
                         // of that role, too (it will be marked as former members, so no risk of confusion)
@@ -217,7 +220,7 @@ class CategoryReport
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
                     while ($row = $statement->fetch()) {
-                        $workArray[$key + 1]['usr_id'][] = $row['mem_usr_id'];
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
                     }
                     $number_col[$key + 1] = 0;
                     break;
@@ -240,7 +243,7 @@ class CategoryReport
                     $statement = $gDb->queryPrepared($sql, $queryParams);
 
                     while ($row = $statement->fetch()) {
-                        $workArray[$key + 1]['usr_id'][] = $row['mem_usr_id'];
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
                     }
                     $number_col[$key + 1] = 0;
                     break;
@@ -633,34 +636,79 @@ class CategoryReport
             $this->listData[$row['mem_usr_id']] = array();
         }
 
-        $user = new User($gDb, $gProfileFields);
+        $roleSelection = trim((string)($this->arrConfiguration[$this->conf]['selection_role'] ?? ''));
+        $selectedRoles = $roleSelection === '' ? array() : array_map('intval', explode(',', $roleSelection));
+        $needsMemberships = count($selectedRoles) > 0;
+        $needsUser = $needsMemberships;
+        $needsRoleNames = false;
+        foreach ($workArray as $column) {
+            if ($column['type'] === 'p' || $column['type'] === 'u') {
+                $needsUser = true;
+            }
+            if ($column['type'] === 'a' || ($column['type'] === 'd' && $column['field'] === 'dummy')) {
+                $needsMemberships = true;
+                $needsUser = true;
+                $needsRoleNames = true;
+            }
+        }
+        $categorySelection = trim((string)($this->arrConfiguration[$this->conf]['selection_cat'] ?? ''));
+        $selectedCategories = $categorySelection === '' ? array() : array_map('intval', explode(',', $categorySelection));
+        $categoryMatches = array();
+
+        if (count($selectedCategories) > 0) {
+            $placeholders = implode(', ', array_fill(0, count($selectedCategories), '?'));
+            $categoryStatement = $gDb->queryPrepared(
+                'SELECT mem_usr_id, cat_id
+                   FROM ' . TBL_MEMBERS . '
+                  INNER JOIN ' . TBL_ROLES . ' ON mem_rol_id = rol_id
+                  INNER JOIN ' . TBL_CATEGORIES . ' ON rol_cat_id = cat_id
+                  WHERE cat_id IN (' . $placeholders . ')
+                    AND mem_begin <= ?
+                    AND mem_end > ?
+                    AND rol_valid = true
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)
+               GROUP BY mem_usr_id, cat_id
+                 HAVING COUNT(*) = 1',
+                array_merge($selectedCategories, array(DATE_NOW, DATE_NOW, $gCurrentOrgId))
+            );
+            while ($row = $categoryStatement->fetch()) {
+                $categoryMatches[(int)$row['mem_usr_id']][(int)$row['cat_id']] = true;
+            }
+        }
+
+        $user = $needsUser ? new User($gDb, $gProfileFields) : null;
+        $role = $needsRoleNames ? new Role($gDb) : null;
+        $roleNames = array();
 
         // go through all members
         foreach ($this->listData as $member => $dummy) {
-            $user->readDataById($member);
-            $memberShips = $user->getRoleMemberships();
+            if ($needsUser) {
+                $user->readDataById($member);
+            }
+            $memberShips = $needsMemberships ? $user->getRoleMemberships() : array();
+            $memberRoleSet = count($selectedRoles) > 0 ? array_fill_keys($memberShips, true) : array();
+            $membershipCache = array();
             $number_row_count = 0;
 
             // Are there role and/or category restrictions?
-            $roleSel = trim((string)($this->arrConfiguration[$this->conf]['selection_role'] ?? ''));
-            $catSel  = trim((string)($this->arrConfiguration[$this->conf]['selection_cat']  ?? ''));
-
             $roleMarker = true;
-            if ($roleSel !== '') {
+            if (count($selectedRoles) > 0) {
                 $roleMarker = false;
-                foreach (explode(',', $roleSel) as $rol) {
-                    if ($user->isMemberOfRole((int)$rol)) {
+                foreach ($selectedRoles as $rol) {
+                    if (isset($memberRoleSet[$rol])) {
                         $roleMarker = true;
+                        break;
                     }
                 }
             }
 
             $categoryMarker = true;
-            if ($catSel !== '') {
+            if (count($selectedCategories) > 0) {
                 $categoryMarker = false;
-                foreach (explode(',', $catSel) as $cat) {
-                    if ($this->isMemberOfCategory((int)$cat, $member)) {
+                foreach ($selectedCategories as $cat) {
+                    if (isset($categoryMatches[(int)$member][$cat])) {
                         $categoryMarker = true;
+                        break;
                     }
                 }
             }
@@ -670,9 +718,13 @@ class CategoryReport
                 continue;
             }
 
+            if ($needsUser) {
+                $this->userUuids[(int)$member] = $user->getValue('usr_uuid');
+            }
+
             foreach ($workArray as $key => $data) {
                 if ($data['type'] == 'p') {
-                    $this->listData[$member][$key] = $user->getValue($gProfileFields->getPropertyById($data['id'], 'usf_name_intern'), 'database');
+                    $this->listData[$member][$key] = $user->getValue($data['profile_name'], 'database');
 
                 } elseif ($data['type'] == 'u') {       // User profile fields (UUID, login, photo, text, ...)
                     $fieldId = null;
@@ -700,12 +752,13 @@ class CategoryReport
                     }
 
                 } elseif ($data['type'] == 'a') {              // Sonderfall: Rollengesamtuebersicht erstellen
-                    $role = new Role($gDb);
-
                     $this->listData[$member][$key] = '';
                     foreach ($memberShips as $rol_id) {
-                        $role->readDataById($rol_id);
-                        $this->listData[$member][$key] .= $role->getValue('rol_name') . '; ';
+                        if (!array_key_exists($rol_id, $roleNames)) {
+                            $role->readDataById($rol_id);
+                            $roleNames[$rol_id] = $role->getValue('rol_name');
+                        }
+                        $this->listData[$member][$key] .= $roleNames[$rol_id] . '; ';
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
 
@@ -713,44 +766,38 @@ class CategoryReport
 
                     // Get membership durations for all roles
                     $this->listData[$member][$key] = '';
-                    $membership = new Membership($gDb);
 
                     foreach ($memberShips as $rol_id) {
-                        $role = new Role($gDb);
-                        $role->readDataById($rol_id);
-
-                        // Get membership data for this role
-                        // TODO_RK: readDataByColumns returns false for multiple DB entries!!!
-                        $membershipData = $membership->readDataByColumns(array('mem_rol_id' => $rol_id, 'mem_usr_id' => $member));
-
-                        if ($membershipData) {
+                        $membership = $this->getCachedMembership($membershipCache, $rol_id, $member);
+                        if ($membership !== null) {
+                            if (!array_key_exists($rol_id, $roleNames)) {
+                                $role->readDataById($rol_id);
+                                $roleNames[$rol_id] = $role->getValue('rol_name');
+                            }
                             $duration = $membership->calculateDuration();
-                            $this->listData[$member][$key] .= $role->getValue('rol_name') . ': ' . $duration['formatted'] . '; ';
+                            $this->listData[$member][$key] .= $roleNames[$rol_id] . ': ' . $duration['formatted'] . '; ';
                         }
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
 
                 } elseif ($data['type'] === 'b') {      // Membership begin
-                    // TODO_RK: readDataByColumns returns false for multiple DB entries!!!
                     $this->listData[$member][$key] = '';
-                    $membership = new Membership($gDb);
-                    if ($membership->readDataByColumns(array('mem_rol_id' => $data['id'], 'mem_usr_id' => $member))) {
+                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member);
+                    if ($membership !== null) {
                         $this->listData[$member][$key] = $membership->getValue('mem_begin', 'Y-m-d');
                     }
 
                 } elseif ($data['type'] === 'e') {      // Membership end
-                    // TODO_RK: readDataByColumns returns false for multiple DB entries!!!
                     $this->listData[$member][$key] = '';
-                    $membership = new Membership($gDb);
-                    if ($membership->readDataByColumns(array('mem_rol_id' => $data['id'], 'mem_usr_id' => $member))) {
+                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member);
+                    if ($membership !== null) {
                         $this->listData[$member][$key] = $membership->getValue('mem_end', 'Y-m-d');
                     }
 
                 } elseif ($data['type'] === 'd') {      // Membership duration
-                    // TODO_RK: readDataByColumns returns false for multiple DB entries!!!
                     $this->listData[$member][$key] = '';
-                    $membership = new Membership($gDb);
-                    if ($membership->readDataByColumns(array('mem_rol_id' => $data['id'], 'mem_usr_id' => $member))) {
+                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member);
+                    if ($membership !== null) {
                         $duration = $membership->calculateDuration();
                         if (isset($duration['formatted'])) {
                             $this->listData[$member][$key] = $duration['formatted'];
@@ -761,7 +808,7 @@ class CategoryReport
                     $this->listData[$member][$key] = '';
 
                 } else {
-                    if (isset($data['usr_id']) and in_array($member, $data['usr_id'])) {
+                    if (isset($data['usr_id'][(int)$member])) {
                         $this->listData[$member][$key] = true;
                         $number_row_count++;
                         $number_col[$key]++;
@@ -778,6 +825,31 @@ class CategoryReport
         if ($this->arrConfiguration[$this->conf]['number_col'] == 1) {
             $this->listData[] = $number_col;
         }
+    }
+
+    /**
+     * Returns a membership already loaded for this report row or loads it once.
+     * A missing or ambiguous membership is cached as null as well.
+     *
+     * @param array<int,Membership|null> $cache Memberships for the current user, keyed by role ID.
+     * @param int $roleId Role whose membership should be loaded.
+     * @param int $userId User whose membership should be loaded.
+     * @return Membership|null The unique membership, if one exists.
+     * @throws Exception
+     */
+    private function getCachedMembership(array &$cache, int $roleId, int $userId): ?Membership
+    {
+        global $gDb;
+
+        if (!array_key_exists($roleId, $cache)) {
+            $membership = new Membership($gDb);
+            $cache[$roleId] = $membership->readDataByColumns(array(
+                'mem_rol_id' => $roleId,
+                'mem_usr_id' => $userId
+            )) ? $membership : null;
+        }
+
+        return $cache[$roleId];
     }
 
     /**
@@ -995,53 +1067,6 @@ class CategoryReport
             }
         }
         return $ret;
-    }
-
-    /**
-     * Funktion prueft, ob ein User Angehoeriger einer bestimmten Kategorie ist
-     *
-     * @param int $cat_id ID der zu pruefenden Kategorie
-     * @param int $user_id ID des Users, fuer den die Mitgliedschaft geprueft werden soll
-     * @return  bool
-     * @throws Exception
-     */
-    private function isMemberOfCategory(int $cat_id, int $user_id = 0): bool
-    {
-        global $gCurrentUserId, $gDb, $gCurrentOrgId;
-
-        if ($user_id == 0) {
-            $user_id = $gCurrentUserId;
-        } elseif (is_numeric($user_id) === false) {
-            return false;
-        }
-
-        $sql = 'SELECT mem_id
-                  FROM ' . TBL_MEMBERS . ', ' . TBL_ROLES . ', ' . TBL_CATEGORIES . '
-                 WHERE mem_usr_id = ? -- $user_id
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
-                   AND mem_rol_id = rol_id
-                   AND cat_id   = ? -- $cat_id
-                   AND rol_valid  = true
-                   AND rol_cat_id = cat_id
-                   AND (  cat_org_id = ? -- $gCurrentOrgId
-                    OR cat_org_id IS NULL ) ';
-
-        $queryParams = array(
-            $user_id,
-            DATE_NOW,
-            DATE_NOW,
-            $cat_id,
-            $gCurrentOrgId
-        );
-        $statement = $gDb->queryPrepared($sql, $queryParams);
-        $user_found = $statement->rowCount();
-
-        if ($user_found == 1) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**

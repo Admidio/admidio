@@ -25,7 +25,6 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
-use Admidio\Users\Entity\User;
 use Admidio\Changelog\Service\ChangelogService;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -281,15 +280,22 @@ try {
     $columnAlign = array('right');
     $columnValues = array($gL10n->get('SYS_ABR_NO'));
     $columnNumber = 1;
+    $profileFieldTypes = array();
+    $profileFieldNames = array();
+    $profileFieldOptions = array();
 
     foreach ($report->headerData as $columnHeader) {
         // bei Profilfeldern ist in 'id' die usf_id, ansonsten 0
         $usf_id = $columnHeader['id'];
+        if ($usf_id !== 0 && !isset($profileFieldTypes[$usf_id])) {
+            $profileFieldTypes[$usf_id] = $gProfileFields->getPropertyById($usf_id, 'usf_type');
+            $profileFieldNames[$usf_id] = $gProfileFields->getPropertyById($usf_id, 'usf_name_intern');
+        }
+        $fieldType = $profileFieldTypes[$usf_id] ?? '';
 
-        if ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMBER'
-            || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DECIMAL_NUMBER') {
+        if ($fieldType == 'NUMBER' || $fieldType == 'DECIMAL_NUMBER') {
             $columnAlign[] = 'right';
-        } elseif ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX' || $usf_id === 0) {
+        } elseif ($fieldType == 'CHECKBOX' || $usf_id === 0) {
             // bei allen Feldern, die kein Profilfeld sind (usf_id = 0) und Checkboxen wird zentriert
             $columnAlign[] = 'center';
         } else {
@@ -323,12 +329,12 @@ try {
     }
 
     $listRowNumber = 1;
-    $user = new User($gDb, $gProfileFields);
 
     // die Daten einlesen
     foreach ($report->listData as $member => $memberdata) {
         $columnValues = array();
         $tmp_csv = '';
+        $userUuid = $report->userUuids[(int)$member] ?? '';
 
         // Felder zu Datensatz
         $columnNumber = 1;
@@ -349,17 +355,18 @@ try {
             // create output format
 
 
-            $usf_id = 0;
             $usf_id = $report->headerData[$key]['id'];
+            $fieldType = $profileFieldTypes[$usf_id] ?? '';
 
             if ($usf_id !== 0
                 && in_array($getMode, array('xlsx', 'csv', 'pdf'), true)
                 && $content > 0
-                && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-                    || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN_MULTISELECT'
-                    || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON')) {
+                && in_array($fieldType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON'), true)) {
                 // show selected text of optionfield or combobox
-                $arrOptions = $gProfileFields->getPropertyById($usf_id, 'ufo_usf_options', 'text');
+                if (!isset($profileFieldOptions[$usf_id])) {
+                    $profileFieldOptions[$usf_id] = $gProfileFields->getPropertyById($usf_id, 'ufo_usf_options', 'text');
+                }
+                $arrOptions = $profileFieldOptions[$usf_id];
                 // if the content is an array, then we have to loop through the array
                 if (is_array($content)) {
                     $content = array_map(function ($value) use ($arrOptions) {
@@ -381,49 +388,42 @@ try {
 
             if ($getMode == 'csv') {
                 // special case for checkbox profile fields
-                if ($usf_id !== 0 && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                if ($usf_id !== 0 && $fieldType === 'CHECKBOX') {
                     $content = ($content) ? 'X' : '';
                 }
                 $tmp_csv .= $separator . $valueQuotes . $content . $valueQuotes;
             } // pdf should show only text and not much html content
             elseif ($getMode === 'pdf') {
                 // special case for checkbox profile fields
-                if ($usf_id !== 0 && $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                if ($usf_id !== 0 && $fieldType === 'CHECKBOX') {
                     $content = ($content) ? 'X' : '';
                 }
                 $columnValues[] = $content;
             } else {                   // create output in html layout for getMode = html or print
                 if ($usf_id !== 0) {     // profile fields
-                    $user->readDataById($member);
-
                     if ($getMode === 'html'
                         && ($usf_id === (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id')
                             || $usf_id === (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'))) {
-                        $htmlValue = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
-                        $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user->getValue('usr_uuid'))) . '">' . $htmlValue . '</a>';
+                        $htmlValue = $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content);
+                        $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuid)) . '">' . $htmlValue . '</a>';
                     } else {
                         // within print or Excel mode no links should be set
                         if (($getMode === 'print' || $getMode === 'xlsx')
-                            && ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'EMAIL'
-                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'PHONE'
-                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'URL')) {
+                            && in_array($fieldType, array('EMAIL', 'PHONE', 'URL'), true)) {
                             $columnValues[] = $content;
                         } elseif ($getMode === 'xlsx'
-                            && ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN_MULTISELECT'
-                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON'
-                                || $gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX')) {
-                            if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
+                            && in_array($fieldType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON', 'CHECKBOX'), true)) {
+                            if ($fieldType === 'CHECKBOX') {
                                 $columnValues[] = ($content) ? 'X' : '';
                             } else {
                                 $columnValues[] = $content;
                             }
                         } else {
                             // checkbox must set a sorting value
-                            if ($gProfileFields->getPropertyById($usf_id, 'usf_type') === 'CHECKBOX') {
-                                $columnValues[] = array('value' => $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content), 'order' => $content);
+                            if ($fieldType === 'CHECKBOX') {
+                                $columnValues[] = array('value' => $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content), 'order' => $content);
                             } else {
-                                $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $user->getValue('usr_uuid'));
+                                $columnValues[] = $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content, $userUuid);
                             }
                         }
                     }
