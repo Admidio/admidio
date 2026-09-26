@@ -6,6 +6,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\CollapsibleHtml;
 use Admidio\Weblinks\Entity\Weblink;
 use Admidio\Weblinks\Service\WeblinksService;
 
@@ -89,30 +90,20 @@ class WeblinksPresenter extends PagePresenter
             $catId = (int)$weblink->getValue('lnk_cat_id');
             $destination = (string)$weblink->getValue('lnk_url', 'database');
             $destinationHost = parse_url($destination, PHP_URL_HOST);
-            $description = trim((string)$weblink->getValue('lnk_description', 'database'));
-            $description = preg_replace('/\s+/u', ' ', $description) ?? $description;
-            $descriptionPreview = $description;
-            $descriptionRest = '';
-            $descriptionCharacters = preg_split('//u', $description, -1, PREG_SPLIT_NO_EMPTY);
-            if (is_array($descriptionCharacters) && count($descriptionCharacters) > 200) {
-                $cut = 200;
-                for ($i = $cut - 1; $i >= 100; --$i) {
-                    if ($descriptionCharacters[$i] === ' ') {
-                        $cut = $i;
-                        break;
-                    }
-                }
-                $descriptionPreview = implode('', array_slice($descriptionCharacters, 0, $cut));
-                $descriptionRest = implode('', array_slice($descriptionCharacters, $cut));
-            }
+            $description = trim((string)$weblink->getValue('lnk_description'));
+            $description = CollapsibleHtml::render(
+                $description,
+                200,
+                'viewdetails-link-' . $uuid,
+                $gL10n->get('SYS_SHOW_MORE')
+            );
             if (!isset($categories[$catId])) {
                 $categories[$catId] = array('name' => $weblink->getValue('cat_name'), 'links' => array());
             }
             $categories[$catId]['links'][] = array(
                 'uuid' => $uuid,
                 'name' => $weblink->getValue('lnk_name'),
-                'descriptionPreview' => SecurityUtils::encodeHTML($descriptionPreview),
-                'descriptionRest' => SecurityUtils::encodeHTML($descriptionRest),
+                'description' => $description,
                 'destination' => $weblink->getValue('lnk_url'),
                 'destinationHost' => $destinationHost ?: $destination,
                 'counter' => (int)$weblink->getValue('lnk_counter'),

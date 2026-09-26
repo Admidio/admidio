@@ -14,15 +14,15 @@
                                         {$link.name}<i class="bi bi-box-arrow-up-right fs-6 ms-2" aria-hidden="true"></i>
                                     </a>
                                 </h5>
-                                <div class="small text-body-secondary text-break" data-bs-toggle="tooltip" title="{$link.destination}">
+                                <div class="small text-body-secondary text-break" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{$link.destination}">
                                     <span class="visually-hidden">{$l10n->get('SYS_LINK_ADDRESS')}: </span>{$link.destinationHost|escape:'html'}
                                 </div>
-                                {if $link.descriptionPreview !== ''}
+                                {if $link.description !== ''}
                                     <div class="admidio-weblink-description mt-3">
-                                        {$link.descriptionPreview}{if $link.descriptionRest !== ''}<span class="collapse" id="viewdetails-link-{$link.uuid}">{$link.descriptionRest}</span> <a class="admidio-icon-link" href="#viewdetails-link-{$link.uuid}" data-bs-toggle="collapse" aria-expanded="false" aria-controls="viewdetails-link-{$link.uuid}" title="{$l10n->get('SYS_SHOW_MORE')}" aria-label="{$l10n->get('SYS_SHOW_MORE')}">»</a>{/if}
+                                        {$link.description}
                                     </div>
                                 {/if}
-                                <div class="mt-auto pt-3 d-flex justify-content-between align-items-center">
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
                                     <small class="text-body-secondary">{$l10n->get('SYS_COUNTER')}: {$link.counter}</small>
                                     {if $link.editable}
                                         <div>
