@@ -16,7 +16,7 @@
     {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
 
     {if $data.hideUploadField != true OR !$data.enableMultiUploads}
-        <input type="file" name="userfile[]" class="form-control mb-3 focus-ring {$data.class}"
+        <input type="file" name="userfile[]" class="form-control btn-secondary mb-3 focus-ring {$data.class}"
             {foreach $data.attributes as $itemvar}
                 {$itemvar@key}="{$itemvar}"
             {/foreach}
