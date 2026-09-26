@@ -1099,6 +1099,8 @@
   <string name="SYS_MOVE_FILE_DESC">Wähle einen Ordner, in den du die Datei #VAR1_BOLD# verschieben möchtest. Die Rollenberechtigungen für die Anzeige der Datei werden aus dem Zielordner übernommen.</string>
   <string name="SYS_MOVE_FOLDER">Ordner verschieben</string>
   <string name="SYS_MOVE_FOLDER_DESC">Wähle einen Ordner, in den du den Ordner #VAR1_BOLD# verschieben möchten. Die Rollenberechtigungen zum Anzeigen und Hochladen von Dateien aus dem Zielordner werden auf diesen Ordner und alle Unterordner angewendet.</string>
+  <string name="SYS_MOVE_LEFT">#VAR1# nach links verschieben</string>
+  <string name="SYS_MOVE_RIGHT">#VAR1# nach rechts verschieben</string>
   <string name="SYS_MOVE_TO">Verschieben nach</string>
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
@@ -1919,6 +1921,8 @@
   <string name="SYS_WEBLINK">Weblink</string>
   <string name="SYS_WEBLINKS">Weblinks</string>
   <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
+  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS">Zeichen in der Beschreibungsvorschau</string>
+  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC">Anzahl der Zeichen, die in der Vorschau einer Weblink-Beschreibung angezeigt werden. Der Text wird am letzten Leerzeichen vor dieser Anzahl gekürzt. Beim Klick auf einen Link kann der vollständige Text angezeigt werden. (Voreinstellung: 200)</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
   <string name="SYS_WEBSITE">Webseite</string>
   <string name="SYS_WEDNESDAY">Mittwoch</string>

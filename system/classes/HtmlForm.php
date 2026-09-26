@@ -395,7 +395,7 @@ class HtmlForm
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager, $gL10n, $gCurrentSession;
 
         $flagLabelVertical = $this->type;
         ++$this->countElements;
@@ -440,7 +440,9 @@ class HtmlForm
             ' . $toolbarJS . '
             language: "' . $gL10n->getLanguageLibs() . '",
             simpleUpload: {
-                uploadUrl: "' . ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php?id=' . $id . '"
+                uploadUrl: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php',
+                    array('id' => $id)) . '",
+                headers: { "X-CSRF-TOKEN": "' . $gCurrentSession->getCsrfToken() . '" }
             }
         } )
         .then( newEditor => {

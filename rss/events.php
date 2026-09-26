@@ -15,44 +15,34 @@
  */
 
 use Admidio\Events\Entity\Event;
-use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 
 require_once(__DIR__ . '/../system/common.php');
 
 try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
-    // Check if RSS is active...
-    if (!$gSettingsManager->getBool('enable_rss')) {
-        throw new Exception('SYS_RSS_DISABLED');
-    }
+    $organization = RssFeedAccess::resolveOrganization($gDb, $gCurrentOrganization, $getOrganization);
+    RssFeedAccess::assertAccessible($organization, 'events_module_enabled', $gValidLogin);
+    $organizationName = $organization->getValue('org_longname');
+    $organizationSettings = $organization->getSettingsManager();
 
-    // check if the module is enabled and disallow access if it's disabled
-    if ($gSettingsManager->getInt('events_module_enabled') === 0) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    } elseif ($gSettingsManager->getInt('events_module_enabled') === 2 && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
+    $previousUserOrganizationID = $gCurrentUser->getOrganization();
+    try {
+        $gCurrentUser->setOrganization((int)$organization->getValue('org_id'));
+        $events = new ModuleEvents();
+        $events->setDateRange();
+        $eventsResult = $events->getDataSet(0, 50);
+    } finally {
+        $gCurrentUser->setOrganization($previousUserOrganizationID);
     }
-
-    if ($getOrganization !== '') {
-        $organization = new Organization($gDb, $getOrganization);
-        $organizationName = $organization->getValue('org_longname');
-        $gCurrentUser->setOrganization($organization->getValue('org_id'));
-    } else {
-        $organizationName = $gCurrentOrganization->getValue('org_longname');
-    }
-
-    $events = new ModuleEvents();
-    $events->setDateRange();
-    $eventsResult = $events->getDataSet(0, 50);
 
     // create RSS feed object with channel information
     $rss = new RssFeed(
         $organizationName . ' - ' . $gL10n->get('SYS_EVENTS'),
-        $gCurrentOrganization->getValue('org_homepage'),
+        $organization->getValue('org_homepage'),
         $gL10n->get('SYS_CURRENT_EVENTS_OF_ORGA', array($organizationName)),
         $organizationName
     );
@@ -66,8 +56,8 @@ try {
             $event->setArray($row);
 
             $eventUuid = $event->getValue('dat_uuid');
-            $eventFrom = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
-            $eventTo = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+            $eventFrom = $event->getValue('dat_begin', $organizationSettings->getString('system_date'));
+            $eventTo = $event->getValue('dat_end', $organizationSettings->getString('system_date'));
             $eventLocation = $event->getValue('dat_location');
 
             // set data for attributes of this entry
@@ -83,12 +73,12 @@ try {
             $description = $descEventFrom;
 
             if ($event->getValue('dat_all_day') == 0) {
-                $descEventFrom .= ' ' . $event->getValue('dat_begin', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
+                $descEventFrom .= ' ' . $event->getValue('dat_begin', $organizationSettings->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
 
                 if ($eventFrom !== $eventTo) {
                     $descEventTo = $eventTo . ' ';
                 }
-                $descEventTo .= ' ' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
+                $descEventTo .= ' ' . $event->getValue('dat_end', $organizationSettings->getString('system_time')) . ' ' . $gL10n->get('SYS_CLOCK');
                 $description = $gL10n->get('SYS_DATE_FROM_TO', array($descEventFrom, $descEventTo));
             } else {
                 if ($eventFrom !== $eventTo) {
@@ -118,7 +108,6 @@ try {
         }
     }
 
-    $gCurrentUser->setOrganization($gCurrentOrgId);
     $rss->getRssFeed();
 } catch (Throwable $e) {
     handleException($e);

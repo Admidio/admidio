@@ -551,7 +551,7 @@ label {
     border: none;
     background-color: var(--bs-tertiary);
     margin: 1rem 0;
-    height: 95%;
+    min-height: 95%;
 }
 
 .admidio-blog img, .admidio-card img {
