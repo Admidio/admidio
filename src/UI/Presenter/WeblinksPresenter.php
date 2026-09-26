@@ -93,7 +93,7 @@ class WeblinksPresenter extends PagePresenter
             $description = trim((string)$weblink->getValue('lnk_description'));
             $description = CollapsibleHtml::render(
                 $description,
-                200,
+                $gSettingsManager->getInt('weblinks_preview_characters'),
                 'viewdetails-link-' . $uuid,
                 $gL10n->get('SYS_SHOW_MORE')
             );

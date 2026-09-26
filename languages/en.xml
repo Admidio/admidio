@@ -1956,6 +1956,8 @@
   <string name="SYS_WEBLINK">Web link</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
+  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS">Characters in the description preview</string>
+  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a web link description. The text is shortened at the last space before this limit. Clicking a link displays the complete text. (Default: 200)</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>

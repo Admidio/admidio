@@ -18,7 +18,7 @@
                                     <span class="visually-hidden">{$l10n->get('SYS_LINK_ADDRESS')}: </span>{$link.destinationHost|escape:'html'}
                                 </div>
                                 {if $link.description !== ''}
-                                    <div class="admidio-weblink-description mt-3">
+                                    <div class="admidio-weblink-description text-break mt-3">
                                         {$link.description}
                                     </div>
                                 {/if}
