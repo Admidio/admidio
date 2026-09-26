@@ -32,7 +32,7 @@ class WeblinksRssAccessTest extends DatabaseTestCase
         $currentOrganization->getSettingsManager()->set('enable_rss', '1');
         $currentOrganization->getSettingsManager()->set('weblinks_module_enabled', '1');
 
-        // Resolve the target by the same short name accepted by rss/links.php.
+        // Resolve the target by the same short name accepted by rss/weblinks.php.
         $requestedOrganization = new Organization($this->getDatabase(), $requested['org_shortname']);
         $settings = $requestedOrganization->getSettingsManager();
         $settings->set('enable_rss', '0');

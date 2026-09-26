@@ -33,7 +33,7 @@ class WeblinksPresenter extends PagePresenter
 
         if ($gSettingsManager->getBool('enable_rss')) {
             $this->addRssFile(
-                ADMIDIO_URL . '/rss/links.php?organization=' . $gCurrentOrganization->getValue('org_shortname'),
+                ADMIDIO_URL . '/rss/weblinks.php?organization=' . $gCurrentOrganization->getValue('org_shortname'),
                 $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $headline))
             );
         }
