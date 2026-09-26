@@ -16,6 +16,7 @@ use Admidio\Photos\Service\AlbumService;
 use Admidio\Photos\Service\ECardService;
 use Admidio\Photos\Service\PhotoService;
 use Admidio\Photos\ValueObject\ECard;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\UI\Presenter\PhotosPresenter;
 use Ramsey\Uuid\Uuid;
@@ -253,7 +254,14 @@ try {
             break;
 
         case 'ecard_preview':
-            $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $form = clone $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            foreach (array('ecard_recipients', 'ecard_message') as $optionalElementId) {
+                $element = $form->getElement($optionalElementId);
+                if ($element !== null) {
+                    $element['property'] = FormPresenter::FIELD_DEFAULT;
+                    $form->replaceElement($optionalElementId, $element);
+                }
+            }
             $formValues = $form->validate($_POST);
             $imageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos.php', array(
                 'mode' => 'photo_show', 'photo_uuid' => $formValues['photo_uuid'],
@@ -268,7 +276,7 @@ try {
             $smarty = PagePresenter::createSmartyObject();
             $smarty->assign('l10n', $gL10n);
             $smarty->assign('ecardContent', $ecard->parseEcardTemplate(
-                $imageUrl, $formValues['ecard_message'], $ecardTemplate, '', ''
+                $imageUrl, $formValues['ecard_message'] ?? '', $ecardTemplate, '', ''
             ));
             echo $smarty->fetch('modules/photos.ecard.preview.tpl');
             break;
