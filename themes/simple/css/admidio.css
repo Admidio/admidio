@@ -75,10 +75,12 @@
 
 .admidio-content-col {
     padding: 0;
+    min-width: 0;
 }
 
 .admidio-content, .admidio-reduced {
     order: 1;
+    min-width: 0;
     padding-left: 1rem;
     padding-right: 1rem;
     max-width: 1000px;
@@ -254,7 +256,8 @@ a {
 
 .admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group),
 .admidio-tabbed-field-group .table-responsive, .admidio-accordion-field-group .table-responsive,
-.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container {
+.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container,
+.table-responsive .dt-container {
     margin-bottom: 0;
 }
 
@@ -666,6 +669,85 @@ label {
     color: var(--bs-body-color);
 }
 
+#adm_events_table td,
+#adm_events_table th {
+    vertical-align: middle;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    line-height: 1.25;
+}
+
+#adm_events_table th:last-child,
+#adm_events_table td:last-child,
+#adm_events_table th:first-child,
+#adm_events_table td:first-child {
+    white-space: nowrap !important;
+}
+
+#adm_events_table .btn {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.875rem;
+    line-height: 1.25;
+}
+
+#adm_events_table .admidio-event-approval .dropdown-toggle::after {
+    display: none !important;
+}
+
+#adm_events_table .admidio-event-approval .btn,
+#adm_events_table td:first-child .btn {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    max-width: 26px !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    border-radius: 0.375rem !important;
+}
+
+#adm_events_table .admidio-event-approval .btn i,
+#adm_events_table td:first-child .btn i {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+
+#adm_events_table .admidio-event-approval .btn i::before,
+#adm_events_table td:first-child .btn i::before {
+    vertical-align: 0 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+    text-align: start !important;
+}
+
+div.table-responsive > div.dt-container > div.row,
+div.dt-container > div.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+div.table-responsive > div.dt-container > div.row > div[class^=col-]:first-child,
+div.dt-container > div.row > div[class^=col-]:first-child {
+    padding-left: 0 !important;
+}
+
+div.table-responsive > div.dt-container > div.row > div[class^=col-]:last-child,
+div.dt-container > div.row > div[class^=col-]:last-child {
+    padding-right: 0 !important;
+}
+
 .table-hover tbody tr td .admidio-functions {
     visibility: hidden;
 }
@@ -942,4 +1024,29 @@ div.adm-changelog-details-table {
   -webkit-line-clamp: unset;
   line-clamp: unset;
   overflow: visible;
+}
+
+/***********************************/
+/* Date field weekday prefix */
+/***********************************/
+.admidio-input-weekday {
+  font-weight: 500;
+  justify-content: center;
+  min-width: 2.75rem;
+}
+
+/***********************************/
+/* Event table and card weekdays */
+/***********************************/
+.admidio-event-weekday {
+  display: inline-block;
+  text-align: right;
+}
+
+.admidio-event-weekday-short {
+  min-width: 1.6em;
+}
+
+.admidio-event-weekday-long {
+  min-width: 4.6em;
 }
