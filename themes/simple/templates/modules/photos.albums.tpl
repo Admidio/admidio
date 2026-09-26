@@ -1,13 +1,32 @@
 {if $albumInfo !== null}
-    {if $albumInfo.locked}
-        <div class="alert alert-warning alert-small" role="alert">
-            <i class="bi bi-exclamation-triangle-fill"></i>{$l10n->get('SYS_ALBUM_NOT_APPROVED')}
+    <div class="admidio-album-info rounded p-3 mb-4">
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-calendar-range text-body-secondary" aria-hidden="true"></i>
+                    <span><span class="visually-hidden">{$l10n->get('SYS_PERIOD')}: </span>{$albumInfo.datePeriod}</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <span class="d-flex align-items-center gap-2">
+                        <i class="bi bi-images text-body-secondary" aria-hidden="true"></i>
+                        <span><span class="visually-hidden">{$l10n->get('SYS_PHOTOS')}: </span>{$albumInfo.photoCount} {$l10n->get('SYS_PHOTOS_BY_VAR', array($albumInfo.photographer))}</span>
+                    </span>
+                    {if $albumInfo.locked}
+                        <span class="badge rounded-pill text-bg-danger ms-auto" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ALBUM_NOT_APPROVED')}">
+                            <i class="bi bi-lock-fill me-1" aria-hidden="true"></i>{$l10n->get('SYS_LOCKED')}
+                        </span>
+                    {/if}
+                </div>
+            </div>
         </div>
-    {/if}
-    <div class="lead">
-        <p class="fw-bold">{$albumInfo.datePeriod}</p>
-        <p>{$albumInfo.photoCount} {$l10n->get('SYS_PHOTOS_BY_VAR', array($albumInfo.photographer))}</p>
-        {if $albumInfo.description !== ''}<div>{$albumInfo.description}</div>{/if}
+        {if $albumInfo.description !== ''}
+            <div class="d-flex align-items-start gap-2 mt-3 pt-3 border-top">
+                <i class="bi bi-card-text text-body-secondary" aria-hidden="true"></i>
+                <div><span class="visually-hidden">{$l10n->get('SYS_DESCRIPTION')}: </span>{$albumInfo.description}</div>
+            </div>
+        {/if}
     </div>
 {/if}
 
@@ -69,50 +88,37 @@
             <div class="admidio-album col-sm-6 col-lg-4 col-xl-3" id="panel_pho_{$album.uuid}">
                 <div class="card admidio-card">
                     <a href="{$album.url}"><img class="card-img-top" src="{$album.imageUrl}" alt="{$l10n->get('SYS_PHOTOS')}" /></a>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title">
                             <a href="{$album.url}">{$album.name}</a>
-                            {if $album.editable}
-                                <div class="dropdown float-end">
-                                    <a class="admidio-icon-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{$album.editUrl}">
-                                            <i class="bi bi-pencil-square"></i> {$l10n->get('SYS_EDIT_ALBUM')}
-                                        </a></li>
-                                        {if !$album.locked}
-                                            <li><a class="dropdown-item admidio-album-lock" href="javascript:void(0)" data-id="{$album.uuid}" data-mode="lock">
-                                                <i class="bi bi-lock"></i> {$l10n->get('SYS_LOCK_ALBUM')}
-                                            </a></li>
-                                        {/if}
-                                        <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                               data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($album.name))}"
-                                               data-href="callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')">
-                                            <i class="bi bi-trash"></i> {$l10n->get('SYS_DELETE_ALBUM')}
-                                        </a></li>
-                                    </ul>
-                                </div>
+                            {if $album.locked}
+                                <i class="bi bi-lock-fill text-danger ms-1" role="img" aria-label="{$l10n->get('SYS_ALBUM_NOT_APPROVED')}" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ALBUM_NOT_APPROVED')}"></i>
                             {/if}
                         </h5>
-                        <p class="card-text">{$album.date}</p>
-                        {if $album.description !== ''}<div class="card-text">{$album.description}</div>{/if}
-                        <p class="card-text">{$album.photoCount} {$l10n->get('SYS_PHOTOS_BY_VAR', array($album.photographer))}</p>
+                        <div class="small text-body-secondary">{$album.date}</div>
+                        {if $album.description !== ''}<div class="card-text text-break mt-3">{$album.description}</div>{/if}
                         {if $album.folderMissing && $album.editable}
-                            <div class="alert alert-warning alert-small" role="alert">
+                            <div class="alert alert-warning alert-small mt-3" role="alert">
                                 <i class="bi bi-exclamation-triangle-fill"></i>{$l10n->get('SYS_ALBUM_FOLDER_NOT_FOUND')}
                             </div>
                         {/if}
-                        {if $album.locked}
-                            <div class="alert alert-warning alert-small" role="alert">
-                                <i class="bi bi-exclamation-triangle-fill"></i>{$l10n->get('SYS_ALBUM_NOT_APPROVED')}
-                            </div>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <small class="text-body-secondary">{$album.photoCount} {$l10n->get('SYS_PHOTOS')}</small>
                             {if $album.editable}
-                                <button class="btn btn-primary admidio-album-lock" data-id="{$album.uuid}" data-mode="unlock">
-                                    {$l10n->get('SYS_UNLOCK_ALBUM')}
-                                </button>
+                                <div>
+                                    {if $album.locked}
+                                        <a class="admidio-icon-link admidio-album-lock" href="javascript:void(0)" data-id="{$album.uuid}" data-mode="unlock" aria-label="{$l10n->get('SYS_UNLOCK_ALBUM')}"><i class="bi bi-unlock" data-bs-toggle="tooltip" title="{$l10n->get('SYS_UNLOCK_ALBUM')}"></i></a>
+                                    {else}
+                                        <a class="admidio-icon-link admidio-album-lock" href="javascript:void(0)" data-id="{$album.uuid}" data-mode="lock" aria-label="{$l10n->get('SYS_LOCK_ALBUM')}"><i class="bi bi-lock" data-bs-toggle="tooltip" title="{$l10n->get('SYS_LOCK_ALBUM')}"></i></a>
+                                    {/if}
+                                    <a class="admidio-icon-link" href="{$album.editUrl}" aria-label="{$l10n->get('SYS_EDIT_ALBUM')}"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT_ALBUM')}"></i></a>
+                                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
+                                       data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($album.name))}"
+                                       data-href="callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')"
+                                       aria-label="{$l10n->get('SYS_DELETE_ALBUM')}"><i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE_ALBUM')}"></i></a>
+                                </div>
                             {/if}
-                        {/if}
+                        </div>
                     </div>
                 </div>
             </div>

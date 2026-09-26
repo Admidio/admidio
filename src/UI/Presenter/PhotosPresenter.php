@@ -213,7 +213,6 @@ class PhotosPresenter extends PagePresenter
                 'date' => $date,
                 'description' => $description,
                 'photoCount' => $childAlbum->countImages(),
-                'photographer' => $childAlbum->getPhotographer(),
                 'locked' => (bool)$childAlbum->getValue('pho_locked'),
                 'folderMissing' => !is_dir($folder) && !$hasChildren,
                 'editable' => $gCurrentUser->isAdministratorPhotos()
