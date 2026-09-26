@@ -1056,7 +1056,7 @@ class ChangelogService {
                 // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 case 'photos':
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos.php', array('photo_uuid' => $uuid)); break;
                 // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 // case 'registrations':
