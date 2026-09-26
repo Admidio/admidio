@@ -93,8 +93,9 @@ class ECardService
         }
 
         $imageUrl = SecurityUtils::encodeUrl(
-            ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php',
+            ADMIDIO_URL . FOLDER_MODULES . '/photos.php',
             array(
+                'mode' => 'photo_show',
                 'photo_uuid' => $albumUuid,
                 'photo_nr' => $photoNumber,
                 'max_width' => $gSettingsManager->getInt('photo_ecard_scale'),
