@@ -6009,7 +6009,7 @@ final class CoreTasks
         if (!$link->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-        self::applyLinkOptions($link, $options, false);
+        self::applyLinkOptions($link, $options, true);
         if ($link->save()) {
             $link->sendNotification();
         }
