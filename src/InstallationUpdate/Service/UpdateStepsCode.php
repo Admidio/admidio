@@ -34,6 +34,37 @@ const TBL_DATES = TABLE_PREFIX . '_dates';
 final class UpdateStepsCode
 {
     /**
+     * Move category report columns and their conditions to the normalized child table.
+     * @throws Exception
+     */
+    public static function updateStep51MigrateCategoryReportColumns(): void
+    {
+        $sql = 'SELECT crt_id, crt_col_fields, crt_col_conditions
+                  FROM ' . TBL_CATEGORY_REPORT;
+        $statement = self::$db->queryPrepared($sql);
+
+        while ($row = $statement->fetch()) {
+            $fields = array_values(array_filter(
+                explode(',', (string)$row['crt_col_fields']),
+                static fn(string $field): bool => $field !== ''
+            ));
+            $conditions = explode(',', (string)$row['crt_col_conditions']);
+
+            foreach ($fields as $index => $field) {
+                $sql = 'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
+                               (crc_crt_id, crc_number, crc_field, crc_condition)
+                        VALUES (?, ?, ?, ?)';
+                self::$db->queryPrepared($sql, array(
+                    (int)$row['crt_id'],
+                    $index + 1,
+                    $field,
+                    $conditions[$index] ?? ''
+                ));
+            }
+        }
+    }
+
+    /**
      * @var Database
      */
     private static Database $db;

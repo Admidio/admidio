@@ -90,16 +90,11 @@ class CategoryReport
         $number_row_pos = -1;
         $number_col = array();
 
-        $columns = explode(',', $this->arrConfiguration[$this->conf]['col_fields']);
-
-        // Optional per-column conditions (aligned with col_fields)
-        $conditions = array();
-        if (!empty($this->arrConfiguration[$this->conf]['col_conditions'])) {
-            $conditions = explode(',', (string) $this->arrConfiguration[$this->conf]['col_conditions']);
-        }
+        $columns = $this->arrConfiguration[$this->conf]['columns'];
 
         // run through the saved configurations
-        foreach ($columns as $key => $data) {
+        foreach ($columns as $key => $column) {
+            $data = $column['field'];
             // This is only to check whether this release still exists.
             // It could be that a profile field or role has been deleted since the last save
             $found = $this->isInHeaderSelection($data);
@@ -119,7 +114,7 @@ class CategoryReport
             $workArray[$key + 1]['field'] = $field;
 
             // store the optional condition for this column
-            $workArray[$key + 1]['condition'] = $conditions[$key] ?? '';
+            $workArray[$key + 1]['condition'] = $column['condition'];
 
             $this->headerData[$key + 1]['id'] = 0;
             $this->headerData[$key + 1]['data'] = $this->headerSelection[$found]['data'];
@@ -949,11 +944,32 @@ class CategoryReport
             $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
             while ($row = $statement->fetch()) {
+                $columnStatement = $gDb->queryPrepared(
+                    'SELECT crc_field, crc_condition
+                       FROM ' . TBL_CATEGORY_REPORT_COLUMNS . '
+                      WHERE crc_crt_id = ?
+                   ORDER BY crc_number',
+                    array((int)$row['crt_id'])
+                );
+                $columnFields = array();
+                $columnConditions = array();
+                $columns = array();
+                while ($column = $columnStatement->fetch()) {
+                    $columnFields[] = $column['crc_field'];
+                    $columnConditions[] = $column['crc_condition'] ?? '';
+                    $columns[] = array(
+                        'field' => $column['crc_field'],
+                        'condition' => $column['crc_condition'] ?? ''
+                    );
+                }
+
                 $values = array();
                 $values['id'] = $row['crt_id'];
+                $values['organization_id'] = $row['crt_org_id'];
                 $values['name'] = SecurityUtils::encodeHTML($row['crt_name']);
-                $values['col_fields'] = $row['crt_col_fields'];
-                $values['col_conditions'] = $row['crt_col_conditions'];
+                $values['columns'] = $columns;
+                $values['col_fields'] = implode(',', $columnFields);
+                $values['col_conditions'] = implode(',', $columnConditions);
                 $values['selection_role'] = $row['crt_selection_role'];
                 $values['selection_cat'] = $row['crt_selection_cat'];
                 $values['number_col'] = $row['crt_number_col'];
@@ -1061,15 +1077,51 @@ class CategoryReport
                 $categoryReport = new Entity($gDb, TBL_CATEGORY_REPORT, 'crt', $values['id']);
                 $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
                 $categoryReport->setValue('crt_name', $values['name']);
-                $categoryReport->setValue('crt_col_fields', $values['col_fields']);
-                $categoryReport->setValue('crt_col_conditions', $values['col_conditions']);
                 $categoryReport->setValue('crt_selection_role', $values['selection_role']);
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
                 $categoryReport->save();
 
+                $reportId = (int)$categoryReport->getValue('crt_id');
+                $gDb->queryPrepared(
+                    'DELETE FROM ' . TBL_CATEGORY_REPORT_COLUMNS . ' WHERE crc_crt_id = ?',
+                    array($reportId)
+                );
+                $columns = $values['columns'] ?? array();
+                $serializedFields = implode(',', array_column($columns, 'field'));
+                $serializedConditions = implode(',', array_map(
+                    static fn(array $column): string => (string)($column['condition'] ?? ''),
+                    $columns
+                ));
+                $legacyFields = (string)($values['col_fields'] ?? $serializedFields);
+                $legacyConditions = (string)($values['col_conditions'] ?? $serializedConditions);
+                if (count($columns) === 0
+                    || $serializedFields !== $legacyFields
+                    || $serializedConditions !== $legacyConditions) {
+                    $columns = array();
+                    $fields = array_values(array_filter(
+                        explode(',', $legacyFields),
+                        static fn(string $field): bool => $field !== ''
+                    ));
+                    $conditions = explode(',', $legacyConditions);
+                    foreach ($fields as $index => $field) {
+                        $columns[] = array(
+                            'field' => $field,
+                            'condition' => $conditions[$index] ?? ''
+                        );
+                    }
+                }
+                foreach ($columns as $index => $column) {
+                    $gDb->queryPrepared(
+                        'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
+                                (crc_crt_id, crc_number, crc_field, crc_condition)
+                         VALUES (?, ?, ?, ?)',
+                        array($reportId, $index + 1, $column['field'], $column['condition'] ?? '')
+                    );
+                }
+
                 if ($values['default_conf'] === true || $defaultConfiguration === 0) {
-                    $defaultConfiguration = $categoryReport->getValue('crt_id');
+                    $defaultConfiguration = $reportId;
                 }
                 // set default configuration
                 $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);

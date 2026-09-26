@@ -218,5 +218,21 @@
     <step id="1250" database="mysql">UPDATE %PREFIX%_organizations org INNER JOIN (SELECT DISTINCT org_org_id_parent FROM %PREFIX%_organizations WHERE org_org_id_parent IS NOT NULL) child ON child.org_org_id_parent = org.org_id LEFT JOIN %PREFIX%_preferences prf ON prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' SET org.org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND (prf.prf_org_id IS NULL OR prf.prf_value = '1')</step>
     <step id="1260" database="pgsql">UPDATE %PREFIX%_organizations org SET org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND EXISTS (SELECT 1 FROM %PREFIX%_organizations child WHERE child.org_org_id_parent = org.org_id) AND (NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members') OR EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' AND prf.prf_value = '1'))</step>
     <step id="1270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
+    <step id="1280">CREATE TABLE %PREFIX%_category_report_columns (
+            crc_id          integer unsigned AUTO_INCREMENT,
+            crc_crt_id      integer unsigned NOT NULL,
+            crc_number      smallint NOT NULL,
+            crc_field       varchar(255) NOT NULL,
+            crc_condition   varchar(255),
+            PRIMARY KEY (crc_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="1290">CREATE UNIQUE INDEX %PREFIX%_idx_crc_report_number ON %PREFIX%_category_report_columns (crc_crt_id, crc_number)</step>
+    <step id="1300">ALTER TABLE %PREFIX%_category_report_columns ADD CONSTRAINT %PREFIX%_fk_crc_crt FOREIGN KEY (crc_crt_id) REFERENCES %PREFIX%_category_report (crt_id) ON DELETE CASCADE ON UPDATE RESTRICT</step>
+    <step id="1310">UpdateStepsCode::updateStep51MigrateCategoryReportColumns</step>
+    <step id="1320">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_fields</step>
+    <step id="1330">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_conditions</step>
     <step>stop</step>
 </update>

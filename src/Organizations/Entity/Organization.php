@@ -450,19 +450,29 @@ class Organization extends Entity
         $contactsList->save();
 
         // create default category report configuration
-        $categoryReportColumns = 'p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . ',' .
-            'p' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . ',' .
-            'p' . $gProfileFields->getProperty('STREET', 'usf_id') . ',' .
-            'p' . $gProfileFields->getProperty('CITY', 'usf_id') . ',' .
-            'r' . $roleAdministrator->getValue('rol_id') . ',' .
-            'r' . $roleManagement->getValue('rol_id') . ',' .
-            'r' . $roleMember->getValue('rol_id');
+        $categoryReportColumns = array(
+            'p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            'p' . $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            'p' . $gProfileFields->getProperty('STREET', 'usf_id'),
+            'p' . $gProfileFields->getProperty('CITY', 'usf_id'),
+            'r' . $roleAdministrator->getValue('rol_id'),
+            'r' . $roleManagement->getValue('rol_id'),
+            'r' . $roleMember->getValue('rol_id')
+        );
         $categoryReport = new Entity($this->db, TBL_CATEGORY_REPORT, 'crt');
         $categoryReport->setValue('crt_org_id', $orgId);
         $categoryReport->setValue('crt_name', $gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
-        $categoryReport->setValue('crt_col_fields', $categoryReportColumns);
         $categoryReport->setValue('crt_number_col', 0);
         $categoryReport->save();
+        $categoryReportId = (int)$categoryReport->getValue('crt_id');
+        foreach ($categoryReportColumns as $index => $field) {
+            $this->db->queryPrepared(
+                'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
+                        (crc_crt_id, crc_number, crc_field, crc_condition)
+                 VALUES (?, ?, ?, ?)',
+                array($categoryReportId, $index + 1, $field, '')
+            );
+        }
 
         // set new default configuration to the module settings
         $organizationSettings = new SettingsManager($this->db, $orgId);
@@ -471,7 +481,7 @@ class Organization extends Entity
         $organizationSettings->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
         $organizationSettings->set('events_list_configuration', $participantList->getValue('lst_id'));
         $organizationSettings->set('contacts_list_configuration', $contactsList->getValue('lst_id'));
-        $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
+        $organizationSettings->set('category_report_default_configuration', $categoryReportId);
     }
 
     /**

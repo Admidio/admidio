@@ -69,7 +69,7 @@ try {
                 $conditions = array_map(function ($c) {
                     $c = (string) $c;
                     $c = str_replace(array('<', '>'), array('{', '}'), $c);
-                    // remove line breaks to keep CSV stable
+                    // Conditions are stored on one line.
                     $c = str_replace(array("\r", "\n"), ' ', $c);
                     return trim($c);
                 }, $conditions);
@@ -80,6 +80,14 @@ try {
                     $conditions[] = '';
                 }
 
+                $values['columns'] = array_map(
+                    static fn(string $field, string $condition): array => array(
+                        'field' => $field,
+                        'condition' => $condition
+                    ),
+                    $columns,
+                    $conditions
+                );
                 $values['col_conditions'] = implode(',', $conditions);
 
                 $config[] = $values;

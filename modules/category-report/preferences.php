@@ -47,7 +47,7 @@ try {
     $headline = $gL10n->get('SYS_CATEGORY_REPORT') . ' - ' . $gL10n->get('SYS_CONFIGURATIONS');
 
     if ($getAdd) {
-        $config[] = array('id' => '', 'name' => '', 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
+        $config[] = array('id' => '', 'name' => '', 'columns' => array(), 'col_fields' => '', 'col_conditions' => '', 'selection_role' => '', 'selection_cat' => '', 'number_col' => '', 'default_conf' => false);
         // ohne $report->saveConfigArray(); ansonsten würden 'name' und 'col_fields' ohne Daten gespeichert sein
     }
 
@@ -61,6 +61,7 @@ try {
         SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
         $config[] = array('id' => '',
             'name' => $report->createName($config[$getCopy - 1]['name']),
+            'columns' => $config[$getCopy - 1]['columns'],
             'col_fields' => $config[$getCopy - 1]['col_fields'],
             'col_conditions' => $config[$getCopy - 1]['col_conditions'] ?? '',
             'selection_role' => $config[$getCopy - 1]['selection_role'],
@@ -215,15 +216,13 @@ try {
         $catReportConfigs[$key] = $value['name'];
 
         // Function to generate the list of selected fields incl. conditions
-        $fields = array_values(array_filter(explode(',', (string) ($value['col_fields'] ?? '')), 'strlen'));
-        $conds  = array_values(explode(',', (string) ($value['col_conditions'] ?? '')));
-
         $columns = array();
-        foreach ($fields as $idx => $fieldId) {
+        foreach ($value['columns'] as $column) {
+            $fieldId = $column['field'];
             if ($report->isInHeaderSelection($fieldId) > 0) {
                 $columns[] = array(
                     'id' => $fieldId,
-                    'cond' => $conds[$idx] ?? ''
+                    'cond' => $column['condition']
                 );
             }
         }

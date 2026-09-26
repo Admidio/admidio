@@ -8114,24 +8114,29 @@ final class CoreTasks
 
     public static function categoryReportList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gSettingsManager;
+        global $gSettingsManager;
 
         $defaultId = $gSettingsManager->getInt('category_report_default_configuration');
-        $rows = $gDb->queryPrepared(
-            'SELECT crt_id AS id, crt_org_id AS organization_id, crt_name AS name,
-                    crt_col_fields AS columns, crt_col_conditions AS conditions,
-                    crt_selection_role AS role_selection, crt_selection_cat AS category_selection,
-                    crt_number_col AS number_column
-               FROM ' . TBL_CATEGORY_REPORT . '
-              WHERE crt_org_id = ? OR crt_org_id IS NULL
-           ORDER BY crt_name, crt_id',
-            array($gCurrentOrgId)
-        )->fetchAll();
-
-        foreach ($rows as &$row) {
-            $row['default'] = (int)$row['id'] === $defaultId;
+        $rows = array();
+        foreach ((new \CategoryReport())->getConfigArray() as $configuration) {
+            $rows[] = array(
+                'id' => (int)$configuration['id'],
+                'organization_id' => $configuration['organization_id'] === null
+                    ? null
+                    : (int)$configuration['organization_id'],
+                'name' => html_entity_decode((string)$configuration['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'columns' => $configuration['col_fields'],
+                'conditions' => $configuration['col_conditions'],
+                'role_selection' => $configuration['selection_role'],
+                'category_selection' => $configuration['selection_cat'],
+                'number_column' => (bool)$configuration['number_col'],
+                'default' => (int)$configuration['id'] === $defaultId
+            );
         }
-        unset($row);
+
+        usort($rows, static fn(array $left, array $right): int =>
+            array($left['name'], $left['id']) <=> array($right['name'], $right['id'])
+        );
 
         CliApplication::writeRows(
             $rows,
@@ -8143,47 +8148,21 @@ final class CoreTasks
 
     public static function categoryReportShow(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gSettingsManager;
+        global $gSettingsManager;
 
         $selector = CliApplication::requireArgument($arguments, 0, 'config');
-        if (ctype_digit($selector)) {
-            $statement = $gDb->queryPrepared(
-                'SELECT *
-                   FROM ' . TBL_CATEGORY_REPORT . '
-                  WHERE crt_id = ?
-                    AND (crt_org_id = ? OR crt_org_id IS NULL)',
-                array((int)$selector, $gCurrentOrgId)
-            );
-        } else {
-            $statement = $gDb->queryPrepared(
-                'SELECT *
-                   FROM ' . TBL_CATEGORY_REPORT . '
-                  WHERE crt_name = ?
-                    AND (crt_org_id = ? OR crt_org_id IS NULL)',
-                array($selector, $gCurrentOrgId)
-            );
-        }
-
-        $rows = $statement->fetchAll();
-        if (count($rows) !== 1) {
-            throw new InvalidArgumentException(
-                count($rows) === 0
-                    ? 'Unknown category-report configuration.'
-                    : 'Category-report configuration name is ambiguous; use the numeric id.'
-            );
-        }
-
-        $row = $rows[0];
+        $configurations = (new \CategoryReport())->getConfigArray();
+        $row = $configurations[self::categoryReportConfigIndex($configurations, $selector)];
         $data = array(
-            'id' => (int)$row['crt_id'],
-            'organization_id' => $row['crt_org_id'] === null ? null : (int)$row['crt_org_id'],
-            'name' => $row['crt_name'],
-            'columns' => $row['crt_col_fields'],
-            'conditions' => $row['crt_col_conditions'],
-            'role_selection' => $row['crt_selection_role'],
-            'category_selection' => $row['crt_selection_cat'],
-            'number_column' => (bool)$row['crt_number_col'],
-            'default' => (int)$row['crt_id'] === $gSettingsManager->getInt('category_report_default_configuration')
+            'id' => (int)$row['id'],
+            'organization_id' => $row['organization_id'] === null ? null : (int)$row['organization_id'],
+            'name' => html_entity_decode((string)$row['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'columns' => $row['col_fields'],
+            'conditions' => $row['col_conditions'],
+            'role_selection' => $row['selection_role'],
+            'category_selection' => $row['selection_cat'],
+            'number_column' => (bool)$row['number_col'],
+            'default' => (int)$row['id'] === $gSettingsManager->getInt('category_report_default_configuration')
         );
 
         CliApplication::writeValue($data, $options);
@@ -8197,6 +8176,7 @@ final class CoreTasks
         $values = self::categoryReportFormValues($options, array(
             'id' => '',
             'name' => '',
+            'columns' => array(),
             'col_fields' => '',
             'col_conditions' => '',
             'selection_role' => '',
@@ -11728,6 +11708,14 @@ final class CoreTasks
                     $condition = str_replace(array('<', '>'), array('{', '}'), $condition);
                     return trim(str_replace(array("\r", "\n"), ' ', $condition));
                 },
+                $conditions
+            );
+            $values['columns'] = array_map(
+                static fn(string $field, string $condition): array => array(
+                    'field' => $field,
+                    'condition' => $condition
+                ),
+                $columns,
                 $conditions
             );
             $values['col_conditions'] = implode(',', $conditions);
