@@ -133,8 +133,8 @@ try {
                 // show only photo if that photo exists
                 if (is_file($photoPath)) {
                     $description .=
-                        '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_presenter.php', array('photo_uuid' => $phoUuid, 'photo_nr' => $photoNr)) . '"><img
-                    src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_show.php', array('photo_uuid' => $phoUuid, 'photo_nr' => $photoNr,
+                        '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos.php', array('mode' => 'photo_present', 'photo_uuid' => $phoUuid, 'photo_nr' => $photoNr)) . '"><img
+                    src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos.php', array('mode' => 'photo_show', 'photo_uuid' => $phoUuid, 'photo_nr' => $photoNr,
                             'pho_begin' => $photoAlbum->getValue('pho_begin', 'Y-m-d'), 'thumb' => '1')) . '" alt="' . $photoNr . '" /></a>&nbsp;';
                 }
             }
@@ -144,7 +144,7 @@ try {
         $rss->addItem(
             $parents . $photoAlbum->getValue('pho_name'),
             $description,
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photos.php', array('photo_uuid' => $phoUuid)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos.php', array('photo_uuid' => $phoUuid)),
             $row['create_name'],
             DateTime::createFromFormat('Y-m-d H:i:s', $photoAlbum->getValue('pho_timestamp_create', 'Y-m-d H:i:s'))->format('r'),
             '',

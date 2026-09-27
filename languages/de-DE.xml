@@ -241,7 +241,7 @@
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Dieses Album enthält leider noch keine Fotos.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">Ein neues Fotoalbum wurde angelegt auf #VAR1#</string>
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesucher:innen der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</string>
-  <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist momentan gesperrt und wird Gästen und Mitgliedern aus diesem Grund nicht angezeigt.</string>
+  <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist gesperrt und wird Gästen und Mitgliedern nicht angezeigt.</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_CONTACTS">Alle Kontakte</string>
   <string name="SYS_ALL_DAY">Ganztägig</string>

@@ -1070,7 +1070,7 @@ INSERT INTO `%PREFIX%_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_u
 (9, 1, 60, '168ad66e-e34d-4f14-8a65-a78dd7dbd058', 'contacts', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', 0, 7, 1, '/modules/contacts/contacts.php', 'person-vcard-fill'),
 (10, 1, 70, '187c7c07-4b2a-4f3f-925c-6f40c03e740b', 'documents-files', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', 0, 8, 1, '/modules/documents-files.php', 'file-earmark-arrow-down-fill'),
 (11, 1, 80, '21db7ac5-7aae-4616-bf88-5b29507d4a02', 'photo', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', 0, 10, 1, '/modules/photos/photos.php', 'image-fill'),
-(12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 0, 11, 1, '/modules/category_report.php', 'list-stars'),
+(12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 0, 11, 1, '/modules/category-report/category_report.php', 'list-stars'),
 (13, 1, 100, '5b8b3e60-bc71-4375-bfc3-a9783a63bb72', 'weblinks', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', 0, 12, 1, '/modules/links/links.php', 'link-45deg'),
 (14, 1, 110, 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e', 'forum', 'SYS_FORUM', 'SYS_FORUM_DESC', 0, 6, 1, '/modules/forum.php', 'chat-dots-fill'),
 (15, 2, 120, '2965d083-8dd3-4a43-9b27-53018e5f22c1', 'orgprop', 'SYS_SETTINGS', 'ORG_ORGANIZATION_PROPERTIES_DESC', 0, 1, 1, '/modules/preferences.php', 'gear-fill'),
