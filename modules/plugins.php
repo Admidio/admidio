@@ -10,6 +10,8 @@
  *  Parameters:
  *
  *  mode     : list          - (default) Show the list of all plugins with their state
+ *             list_refresh  - The list content alone, for the state toggle to re-fetch after it
+ *                             enabled or disabled a plugin without reloading the page
  *             settings      - Show the settings of a plugin as the content of a dialog
  *             settings_save - Save the settings a plugin was given in that dialog
  *             install       - Install a plugin
@@ -37,9 +39,9 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
-    // Everything but the list and the settings dialog answers with JSON.
-    $isAjax = !in_array($getMode, array('list', 'add', 'settings'), true);
+        'validValues' => array('list', 'list_refresh', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
+    // Everything but the list, the list refresh and the settings dialog answers with JSON.
+    $isAjax = !in_array($getMode, array('list', 'list_refresh', 'add', 'settings'), true);
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
@@ -53,7 +55,7 @@ try {
      */
     $getPluginId = '';
     $plugin = null;
-    if (!in_array($getMode, array('list', 'add', 'upload', 'store_refresh'), true)) {
+    if (!in_array($getMode, array('list', 'list_refresh', 'add', 'upload', 'store_refresh'), true)) {
         $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
         $plugin = PluginRegistry::get($getPluginId);
     }
@@ -65,6 +67,11 @@ try {
             $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-puzzle-fill');
             $page->show();
+            break;
+
+        case 'list_refresh':
+            // The state toggle re-fetches just this after enabling or disabling a plugin.
+            echo (new PluginsPresenter())->createListContent();
             break;
 
         case 'add':
