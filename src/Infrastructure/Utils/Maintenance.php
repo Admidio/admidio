@@ -2,7 +2,6 @@
 namespace Admidio\Infrastructure\Utils;
 
 use Admidio\Categories\Entity\Category;
-use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 
@@ -71,8 +70,8 @@ class Maintenance
     }
 
     /**
-     * Reset all path values of every folder in the database. The script will start at every root folder
-     * of every organization and will set the path of every folder to the path of the root folder.
+     * Repair the path of every descendant folder using its parent folder's path and name.
+     * The root paths of all organizations remain unchanged.
      * @return void
      * @throws Exception
      */
@@ -81,19 +80,31 @@ class Maintenance
         $sql = 'SELECT fol_id, fol_name, fol_path
                   FROM ' . TBL_FOLDERS . '
                  WHERE fol_fol_id_parent IS NULL ';
-        $rootFolderStatement = $this->database->queryPrepared($sql);
+        $rootFolders = $this->database->queryPrepared($sql)->fetchAll();
+        $childSql = 'SELECT fol_id, fol_name, fol_path
+                       FROM ' . TBL_FOLDERS . '
+                      WHERE fol_fol_id_parent = ?';
+        $updateSql = 'UPDATE ' . TBL_FOLDERS . ' SET fol_path = ? WHERE fol_id = ?';
 
-        while ($rowRootFolder = $rootFolderStatement->fetch()) {
-            $rootFolder = new Folder($this->database, $rowRootFolder['fol_id']);
+        foreach ($rootFolders as $rowRootFolder) {
+            // Maintenance runs across organizations, so folder entities cannot be loaded here:
+            // Folder::readData() only accepts folders of the current organization.
+            $folders = array($rowRootFolder);
 
-            $sql = 'SELECT fol_id, fol_name, fol_path
-                  FROM ' . TBL_FOLDERS . '
-                 WHERE fol_fol_id_parent = ? -- $rowRootFolder[\'fol_id\']';
-            $folderStatement = $this->database->queryPrepared($sql, array($rowRootFolder['fol_id']));
+            while ($folders !== array()) {
+                $parent = array_pop($folders);
+                $parentFullPath = $parent['fol_path'] . '/' . $parent['fol_name'];
 
-            while ($row = $folderStatement->fetch()) {
-                $folder = new Folder($this->database, $row['fol_id']);
-                $folder->rename($row['fol_name'], $rootFolder->getValue('fol_path') . '/' . $rowRootFolder['fol_name']);
+                $children = $this->database->queryPrepared($childSql, array($parent['fol_id']))->fetchAll();
+
+                foreach ($children as $folder) {
+                    if ($folder['fol_path'] !== $parentFullPath) {
+                        $this->database->queryPrepared($updateSql, array($parentFullPath, $folder['fol_id']));
+                    }
+
+                    $folder['fol_path'] = $parentFullPath;
+                    $folders[] = $folder;
+                }
             }
         }
     }

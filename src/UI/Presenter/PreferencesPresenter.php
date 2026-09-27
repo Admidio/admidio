@@ -1366,11 +1366,11 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
         $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
-        $formEmailDispatch->addSelectBox(
+        $formEmailDispatch->addRadioButton(
             'mail_send_method',
             $gL10n->get('SYS_SEND_METHOD'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
+            array('defaultValue' => $formValues['mail_send_method'], 'helpTextId' => 'SYS_SEND_METHOD_DESC')
         );
         $selectBoxEntries = array('1' => $gL10n->get('SYS_SYSTEM_EMAIL_WITH_REPLY_TO'), '2' => $gL10n->get('SYS_SYSTEM_EMAIL'), '3' => $gL10n->get('SYS_USER_EMAIL'));
         $formEmailDispatch->addSelectBox(
@@ -1431,12 +1431,6 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_host'],
             self::preferenceInputOptions('mail_smtp_host', array('helpTextId' => 'SYS_SMTP_HOST_DESC'))
         );
-        $formEmailDispatch->addCheckbox(
-            'mail_smtp_auth',
-            $gL10n->get('SYS_SMTP_AUTH'),
-            (bool) $formValues['mail_smtp_auth'],
-            array('helpTextId' => 'SYS_SMTP_AUTH_DESC')
-        );
         $formEmailDispatch->addInput(
             'mail_smtp_port',
             $gL10n->get('SYS_SMTP_PORT'),
@@ -1445,14 +1439,20 @@ class PreferencesPresenter extends PagePresenter
         );
         $selectBoxEntries = array(
             '' => $gL10n->get('SYS_SMTP_SECURE_NO'),
-            'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL'),
-            'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS')
+            'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS'),
+            'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL')
         );
         $formEmailDispatch->addSelectBox(
             'mail_smtp_secure',
             $gL10n->get('SYS_SMTP_SECURE'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SMTP_SECURE_DESC')
+            array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SMTP_SECURE_DESC', array($gL10n->get('SYS_SMTP_SECURE_TLS'))))
+        );
+        $formEmailDispatch->addCheckbox(
+            'mail_smtp_auth',
+            $gL10n->get('SYS_SMTP_AUTH'),
+            (bool) $formValues['mail_smtp_auth'],
+            array('helpTextId' => 'SYS_SMTP_AUTH_DESC')
         );
         $selectBoxEntries = array(
             '' => $gL10n->get('SYS_AUTO_DETECT'),
