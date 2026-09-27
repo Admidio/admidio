@@ -45,9 +45,9 @@ CREATE TABLE `%PREFIX%_announcements` (
 --
 
 INSERT INTO `%PREFIX%_announcements` (`ann_id`, `ann_cat_id`, `ann_uuid`, `ann_headline`, `ann_description`, `ann_usr_id_create`, `ann_timestamp_create`, `ann_usr_id_change`, `ann_timestamp_change`) VALUES
-(1, 13, 'e49d66f4-0546-4a23-bb57-27eb2b97d271', 'New jerseys', 'Starting next season, there are new jerseys for all active players. These can be picked up before the first training at the trainer.', 1, '2025-08-19 07:12:34', NULL, NULL),
-(2, 13, 'e84aae2a-7e1d-4f91-b2e1-ead4bac900ed', 'Aerobics course', 'During the holidays we offer a <i>aerobic course</i> to all interested members.<br /><br />Registrations are accepted on our <b>homepage</b> or in our <b>office</b>.', 1, '2025-08-23 09:30:59', 1, '2025-09-25 17:21:32'),
-(3, 300, '934346cc-123c-4162-9506-86b07c6c08ce', 'Welcome to the demo area', '<p>In this area you can play around with Admidio and see whether the program\'s functions meet your needs.</p><p>We have also provided some test data so that you can see in the individual modules how this could look later on your site. However, emails are not actually sent in the demo area so that this function cannot be abused. You are welcome to play with this installation.</p><p>We have created a few test accounts with different rights:</p><p><span style=\"color:#008080;\"><strong>Administrator</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Admin</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can see and edit everything. More rights are not possible :)</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Chairman</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Chairman</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rights:</td><td>Can edit and view everything, except assigning roles and changing program/module settings.</td></tr></tbody></table><p><span style=\"color:#008080;\"><strong>Member</strong></span></p><table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" style=\"width: 100%;\"><tbody><tr><td>Username:</td><td><strong>Member</strong></td></tr><tr><td>Password:</td><td><strong>Admidio</strong></td></tr><tr><td>Rechte:</td><td>Can edit his profile and view lists of roles, where he is a member.</td></tr></tbody></table><p>Have fun trying !<br />The Admidio Team</p>', 1, '2025-09-05 22:15:33', NULL, NULL);
+('1', '13', 'e49d66f4-0546-4a23-bb57-27eb2b97d271', 'DEM_ANNOUNCEMENTS_E49D66F4_0546_4A23_BB57_27EB2B97D271_HEADLINE', 'DEM_ANNOUNCEMENTS_E49D66F4_0546_4A23_BB57_27EB2B97D271_DESCRIPTION', '1', '2025-08-19 07:12:34', NULL, NULL),
+('2', '13', 'e84aae2a-7e1d-4f91-b2e1-ead4bac900ed', 'DEM_ANNOUNCEMENTS_E84AAE2A_7E1D_4F91_B2E1_EAD4BAC900ED_HEADLINE', 'DEM_ANNOUNCEMENTS_E84AAE2A_7E1D_4F91_B2E1_EAD4BAC900ED_DESCRIPTION', '1', '2025-08-23 09:30:59', '1', '2025-09-25 17:21:32'),
+('3', '300', '934346cc-123c-4162-9506-86b07c6c08ce', 'DEM_ANNOUNCEMENTS_934346CC_123C_4162_9506_86B07C6C08CE_HEADLINE', 'DEM_ANNOUNCEMENTS_934346CC_123C_4162_9506_86B07C6C08CE_DESCRIPTION', '1', '2025-09-05 22:15:33', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -108,7 +108,7 @@ INSERT INTO `%PREFIX%_categories` (`cat_id`, `cat_org_id`, `cat_uuid`, `cat_type
 (6, 1, '22a1c65c-588c-427a-939e-0ea30dad2012', 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
 (7, 1, 'c0778d6e-804b-4d19-b624-802663ebcdca', 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
 (8, NULL, 'ad3a3cd8-3108-4df2-b08b-60aa3dad4975', 'USF', 'ADDIDIONAL_DATA', 'INS_ADDIDIONAL_DATA', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
-(9, 1, '32edc214-cb7b-42f1-a4af-7336a28ada5e', 'LNK', 'ADMIDIO', 'Admidio', 0, 1, 3, 1, '2011-04-06 20:05:20', 2, '2025-09-27 09:00:21'),
+('9', '1', '32edc214-cb7b-42f1-a4af-7336a28ada5e', 'LNK', 'ADMIDIO', 'DEM_CATEGORIES_32EDC214_CB7B_42F1_A4AF_7336A28ADA5E_NAME', '0', '1', '3', '1', '2011-04-06 20:05:20', '2', '2025-09-27 09:00:21'),
 (10, 1, '67850ca7-990b-4791-a238-5fd370caa23d', 'EVT', 'COMMON', 'SYS_COMMON', 0, 1, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
 (11, 1, '22c1edc4-4af3-4098-9bb9-375341f1e6c4', 'EVT', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
 (12, 1, '63573db9-9ad4-47c6-9064-ff77f53d9e6e', 'EVT', 'TRAINING', 'INS_TRAINING', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
@@ -119,7 +119,7 @@ INSERT INTO `%PREFIX%_categories` (`cat_id`, `cat_org_id`, `cat_uuid`, `cat_type
 (102, 2, 'cd47a540-d0e1-4cac-8ef9-e1c64880dedd', 'ROL', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', NULL, NULL),
 (103, 2, '160819d4-d192-4120-82f7-88e565e2bf18', 'ROL', 'TEAMS', 'INS_TEAMS', 0, 0, 4, 1, '2012-01-08 10:12:05', NULL, NULL),
 (104, 2, '9bf1a1ea-69b4-4226-aa55-2517455ed32d', 'LNK', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
-(105, 2, '9a4b3de1-3cab-40db-97f6-77719c731f01', 'LNK', 'ADMIDIO', 'Admidio', 0, 0, 3, 1, '2011-04-06 20:05:20', 2, '2025-09-27 09:00:21'),
+('105', '2', '9a4b3de1-3cab-40db-97f6-77719c731f01', 'LNK', 'ADMIDIO', 'DEM_CATEGORIES_32EDC214_CB7B_42F1_A4AF_7336A28ADA5E_NAME', '0', '0', '3', '1', '2011-04-06 20:05:20', '2', '2025-09-27 09:00:21'),
 (106, 2, '1141cb37-7e15-4107-aa3f-15e1cd740860', 'EVT', 'COMMON', 'SYS_COMMON', 0, 0, 2, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
 (107, 2, 'b1c33600-6e8a-47db-88a0-0665e7005fec', 'EVT', 'COURSES', 'INS_COURSES', 0, 0, 3, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
 (108, 2, '0001df5c-1ef1-49da-bed2-c88152cfa792', 'EVT', 'TRAINING', 'INS_TRAINING', 0, 0, 4, 1, '2012-01-08 10:12:05', 2, '2025-09-27 09:00:21'),
@@ -134,7 +134,7 @@ INSERT INTO `%PREFIX%_categories` (`cat_id`, `cat_org_id`, `cat_uuid`, `cat_type
 (304, 2, 'bea45e89-b8c7-4624-b997-f2c4f69eac4c', 'FOT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
 (305, 1, 'f6b2e061-4db1-411a-9371-85d1d19666da', 'IVT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
 (306, 2, 'c16e3a6d-49f3-4ce7-bb0c-0d6f2b6a585f', 'IVT', 'COMMON', 'SYS_COMMON', 0, 1, 1, 2, '2025-09-27 09:00:21', NULL, NULL),
-(307, 1, 'dd6630ae-4362-40cb-9c5a-a948e0365582', 'IVT', '', 'Audio Equipment', 0, 0, 2, 1, '2025-10-12 16:52:02', NULL, NULL);
+('307', '1', 'dd6630ae-4362-40cb-9c5a-a948e0365582', 'IVT', '', 'DEM_CATEGORIES_DD6630AE_4362_40CB_9C5A_A948E0365582_NAME', '0', '0', '2', '1', '2025-10-12 16:52:02', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -157,8 +157,8 @@ CREATE TABLE `%PREFIX%_category_report` (
 --
 
 INSERT INTO `%PREFIX%_category_report` (`crt_id`, `crt_org_id`, `crt_name`, `crt_col_fields`, `crt_selection_role`, `crt_selection_cat`, `crt_number_col`) VALUES
-(1, 1, 'General role assignment', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
-(2, 2, 'General role assignment', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
+('1', '1', 'DEM_CATEGORY_REPORT_1_NAME', 'p2,p1,p3,p5,r1', NULL, NULL, '0'),
+('2', '2', 'DEM_CATEGORY_REPORT_1_NAME', 'p2,p1,p3,p5,r6', NULL, NULL, '0');
 
 -- --------------------------------------------------------
 
@@ -238,21 +238,21 @@ CREATE TABLE `%PREFIX%_events` (
 --
 
 INSERT INTO `%PREFIX%_events` (`dat_id`, `dat_cat_id`, `dat_rol_id`, `dat_room_id`, `dat_uuid`, `dat_begin`, `dat_end`, `dat_all_day`, `dat_headline`, `dat_description`, `dat_highlight`, `dat_location`, `dat_country`, `dat_deadline`, `dat_max_members`, `dat_usr_id_create`, `dat_timestamp_create`, `dat_usr_id_change`, `dat_timestamp_change`, `dat_allow_comments`, `dat_additional_guests`) VALUES
-(3, 12, NULL, NULL, 'e539f6d4-a5ac-4536-8779-df203a83ef39', '2025-12-25 14:00:00', '2025-12-25 16:00:00', 0, 'Youth training 1', 'Today we will put the focus on physical fitness and stamina.<br /><br />Please appear all in time with running shoes on the sports field!', 0, 'Sports field Norwich', 'GBR', NULL, 0, 1, '2017-07-06 15:38:26', NULL, NULL, 0, 0),
-(4, 10, 8, NULL, '2bc7d168-7b4e-4ec1-9765-18989e32030c', '2026-03-01 17:00:00', '2026-03-01 21:30:00', 0, 'Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 1, NULL, NULL, NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 1, 1),
-(5, 10, NULL, NULL, '10408fec-1534-4115-a83d-60681c13bcfd', '2026-02-26 23:00:00', '2026-04-08 22:59:59', 1, 'Trainer course', 'A four-day training course for youth coaches from the tennis department :)', 1, 'Youth hostel Lyon', 'FRA', NULL, 0, 1, '2017-07-06 15:49:13', NULL, NULL, 0, 0),
-(6, 301, NULL, NULL, '0df388d7-b8f0-4c11-88f4-fbac697b2297', '2026-01-09 13:00:00', '2026-01-09 17:00:00', 0, 'Computer course', 'The focus of this course lies with the Office products.', 0, 'Munich Marienplatz', 'DEU', NULL, 0, 1, '2017-01-06 10:25:13', NULL, NULL, 0, 0),
-(7, 301, NULL, NULL, '2a0151ef-2f03-4b6f-abe3-ce86d5a74ba8', '2025-11-10 22:00:00', '2025-11-11 21:59:59', 1, 'Trip to Amsterdam', 'On this hopefully sunny day it goes to Amsterdam.<br /><br />A canal cruise and a shopping trip are planned.', 0, 'Amsterdam Gracht', 'NLD', NULL, 0, 1, '2018-01-06 10:25:13', NULL, NULL, 0, 0),
-(8, 12, NULL, NULL, '2c610a75-15e8-4ab2-9bd5-63769800d2e8', '2025-12-23 15:00:00', '2025-12-23 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(9, 12, NULL, NULL, '236c9f98-c826-4f42-a0e4-8421f83e11ff', '2026-01-19 15:00:00', '2026-01-19 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(10, 12, NULL, NULL, '9dbbb1d4-ec43-4704-b4d5-3a4f29d5dab1', '2026-01-19 15:00:00', '2026-01-19 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(11, 12, NULL, NULL, '86c27d41-caf3-49b6-9d68-a079c532dbe3', '2025-12-28 15:00:00', '2025-12-28 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(12, 12, NULL, NULL, 'fadeff52-a0e0-4ab9-8e43-a2a0578ab5ed', '2025-12-03 15:00:00', '2025-12-03 16:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(13, 12, NULL, NULL, 'cd9f4490-ddae-4949-a083-a826a12ea3d1', '2026-01-19 16:00:00', '2026-01-19 17:30:00', 0, 'Team training', NULL, 0, 'Sports hall Alpenstraße Salzburg', 'AUT', NULL, 0, 1, '2017-09-06 10:05:26', NULL, NULL, 0, 0),
-(14, 107, 9, NULL, '6fa731ef-e166-49ed-bb56-182243cbc5c8', '2025-12-16 11:00:00', '2025-12-16 12:00:00', 0, 'Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 1, 'Madrid center', 'ESP', NULL, 0, 1, '2017-07-06 15:41:18', NULL, NULL, 0, 0),
-(15, 10, 10, NULL, '7095ed97-9cf5-4247-b057-613164aaa512', '2026-02-07 18:00:00', '2026-02-07 20:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
-(16, 10, 11, NULL, '217da340-7419-4e07-8f5f-bf037cbd2a4f', '2026-01-03 19:00:00', '2026-01-03 21:00:00', 0, 'Board meeting', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 1, '2018-05-06 21:03:18', NULL, NULL, 0, 0),
-(17, 10, 12, NULL, 'b89b03a5-867b-4747-8429-981c76e0b61e', '2025-12-03 17:00:00', '2025-12-03 21:30:00', 0, 'Team evening', NULL, 0, 'Clubhouse', 'DEU', NULL, 0, 355, '2018-02-14 17:38:18', NULL, NULL, 0, 0);
+('3', '12', NULL, NULL, 'e539f6d4-a5ac-4536-8779-df203a83ef39', '2025-12-25 14:00:00', '2025-12-25 16:00:00', '0', 'DEM_EVENTS_E539F6D4_A5AC_4536_8779_DF203A83EF39_HEADLINE', 'DEM_EVENTS_E539F6D4_A5AC_4536_8779_DF203A83EF39_DESCRIPTION', '0', 'DEM_EVENTS_E539F6D4_A5AC_4536_8779_DF203A83EF39_LOCATION', 'GBR', NULL, '0', '1', '2017-07-06 15:38:26', NULL, NULL, '0', '0'),
+('4', '10', '8', NULL, '2bc7d168-7b4e-4ec1-9765-18989e32030c', '2026-03-01 17:00:00', '2026-03-01 21:30:00', '0', 'DEM_EVENTS_2BC7D168_7B4E_4EC1_9765_18989E32030C_HEADLINE', 'DEM_EVENTS_2BC7D168_7B4E_4EC1_9765_18989E32030C_DESCRIPTION', '1', NULL, NULL, NULL, '0', '1', '2017-07-06 15:41:18', NULL, NULL, '1', '1'),
+('5', '10', NULL, NULL, '10408fec-1534-4115-a83d-60681c13bcfd', '2026-02-26 23:00:00', '2026-04-08 22:59:59', '1', 'DEM_EVENTS_10408FEC_1534_4115_A83D_60681C13BCFD_HEADLINE', 'DEM_EVENTS_10408FEC_1534_4115_A83D_60681C13BCFD_DESCRIPTION', '1', 'DEM_EVENTS_10408FEC_1534_4115_A83D_60681C13BCFD_LOCATION', 'FRA', NULL, '0', '1', '2017-07-06 15:49:13', NULL, NULL, '0', '0'),
+('6', '301', NULL, NULL, '0df388d7-b8f0-4c11-88f4-fbac697b2297', '2026-01-09 13:00:00', '2026-01-09 17:00:00', '0', 'DEM_EVENTS_0DF388D7_B8F0_4C11_88F4_FBAC697B2297_HEADLINE', 'DEM_EVENTS_0DF388D7_B8F0_4C11_88F4_FBAC697B2297_DESCRIPTION', '0', 'DEM_EVENTS_0DF388D7_B8F0_4C11_88F4_FBAC697B2297_LOCATION', 'DEU', NULL, '0', '1', '2017-01-06 10:25:13', NULL, NULL, '0', '0'),
+('7', '301', NULL, NULL, '2a0151ef-2f03-4b6f-abe3-ce86d5a74ba8', '2025-11-10 22:00:00', '2025-11-11 21:59:59', '1', 'DEM_EVENTS_2A0151EF_2F03_4B6F_ABE3_CE86D5A74BA8_HEADLINE', 'DEM_EVENTS_2A0151EF_2F03_4B6F_ABE3_CE86D5A74BA8_DESCRIPTION', '0', 'DEM_EVENTS_2A0151EF_2F03_4B6F_ABE3_CE86D5A74BA8_LOCATION', 'NLD', NULL, '0', '1', '2018-01-06 10:25:13', NULL, NULL, '0', '0'),
+('8', '12', NULL, NULL, '2c610a75-15e8-4ab2-9bd5-63769800d2e8', '2025-12-23 15:00:00', '2025-12-23 16:30:00', '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_HEADLINE', NULL, '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_LOCATION', 'AUT', NULL, '0', '1', '2017-09-06 10:05:26', NULL, NULL, '0', '0'),
+('9', '12', NULL, NULL, '236c9f98-c826-4f42-a0e4-8421f83e11ff', '2026-01-19 15:00:00', '2026-01-19 16:30:00', '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_HEADLINE', NULL, '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_LOCATION', 'AUT', NULL, '0', '1', '2017-09-06 10:05:26', NULL, NULL, '0', '0'),
+('10', '12', NULL, NULL, '9dbbb1d4-ec43-4704-b4d5-3a4f29d5dab1', '2026-01-19 15:00:00', '2026-01-19 16:30:00', '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_HEADLINE', NULL, '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_LOCATION', 'AUT', NULL, '0', '1', '2017-09-06 10:05:26', NULL, NULL, '0', '0'),
+('11', '12', NULL, NULL, '86c27d41-caf3-49b6-9d68-a079c532dbe3', '2025-12-28 15:00:00', '2025-12-28 16:30:00', '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_HEADLINE', NULL, '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_LOCATION', 'AUT', NULL, '0', '1', '2017-09-06 10:05:26', NULL, NULL, '0', '0'),
+('12', '12', NULL, NULL, 'fadeff52-a0e0-4ab9-8e43-a2a0578ab5ed', '2025-12-03 15:00:00', '2025-12-03 16:30:00', '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_HEADLINE', NULL, '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_LOCATION', 'AUT', NULL, '0', '1', '2017-09-06 10:05:26', NULL, NULL, '0', '0'),
+('13', '12', NULL, NULL, 'cd9f4490-ddae-4949-a083-a826a12ea3d1', '2026-01-19 16:00:00', '2026-01-19 17:30:00', '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_HEADLINE', NULL, '0', 'DEM_EVENTS_2C610A75_15E8_4AB2_9BD5_63769800D2E8_LOCATION', 'AUT', NULL, '0', '1', '2017-09-06 10:05:26', NULL, NULL, '0', '0'),
+('14', '107', '9', NULL, '6fa731ef-e166-49ed-bb56-182243cbc5c8', '2025-12-16 11:00:00', '2025-12-16 12:00:00', '0', 'DEM_EVENTS_6FA731EF_E166_49ED_BB56_182243CBC5C8_HEADLINE', 'DEM_EVENTS_6FA731EF_E166_49ED_BB56_182243CBC5C8_DESCRIPTION', '1', 'DEM_EVENTS_6FA731EF_E166_49ED_BB56_182243CBC5C8_LOCATION', 'ESP', NULL, '0', '1', '2017-07-06 15:41:18', NULL, NULL, '0', '0'),
+('15', '10', '10', NULL, '7095ed97-9cf5-4247-b057-613164aaa512', '2026-02-07 18:00:00', '2026-02-07 20:00:00', '0', 'DEM_EVENTS_7095ED97_9CF5_4247_B057_613164AAA512_HEADLINE', NULL, '0', 'DEM_EVENTS_7095ED97_9CF5_4247_B057_613164AAA512_LOCATION', 'DEU', NULL, '0', '1', '2018-05-06 21:03:18', NULL, NULL, '0', '0'),
+('16', '10', '11', NULL, '217da340-7419-4e07-8f5f-bf037cbd2a4f', '2026-01-03 19:00:00', '2026-01-03 21:00:00', '0', 'DEM_EVENTS_7095ED97_9CF5_4247_B057_613164AAA512_HEADLINE', NULL, '0', 'DEM_EVENTS_7095ED97_9CF5_4247_B057_613164AAA512_LOCATION', 'DEU', NULL, '0', '1', '2018-05-06 21:03:18', NULL, NULL, '0', '0'),
+('17', '10', '12', NULL, 'b89b03a5-867b-4747-8429-981c76e0b61e', '2025-12-03 17:00:00', '2025-12-03 21:30:00', '0', 'DEM_EVENTS_B89B03A5_867B_4747_8429_981C76E0B61E_HEADLINE', NULL, '0', 'DEM_EVENTS_7095ED97_9CF5_4247_B057_613164AAA512_LOCATION', 'DEU', NULL, '0', '355', '2018-02-14 17:38:18', NULL, NULL, '0', '0');
 
 -- --------------------------------------------------------
 
@@ -340,13 +340,13 @@ CREATE TABLE `%PREFIX%_forum_posts` (
 --
 
 INSERT INTO `%PREFIX%_forum_posts` (`fop_id`, `fop_fot_id`, `fop_uuid`, `fop_text`, `fop_usr_id_create`, `fop_timestamp_create`, `fop_usr_id_change`, `fop_timestamp_change`) VALUES
-(4, 4, 'e01359ab-98a3-4024-ae1e-55d2dfdfa002', '<p>Hi everyone,<br>the new <strong>training plan</strong> for the upcoming season is now available in the members’ area.</p><p>We’ve adjusted some of the sessions to better fit everyone’s fitness levels and training goals.</p><p>There are also a few new activities designed for beginners who want to build endurance gradually.</p><p>I’d love to hear your thoughts — what do you think about the new structure?</p>', 355, '2025-10-05 12:56:26', NULL, NULL),
-(5, 4, '4a26f9a7-8810-407f-9ea6-2c5f5804eae1', '<p>I really like the idea of adding more variety to the sessions.<br>Mixing running drills with strength exercises keeps things interesting.</p><p>Will we still have separate groups for different experience levels?</p>', 354, '2025-10-05 12:57:25', NULL, NULL),
-(6, 4, '7b1131e0-e70e-4fd9-8b87-ff083c76ee04', '<p>Yes, Eric — we’ll continue with the same three training groups: beginners, intermediate, and advanced.</p><p>The goal is to make sure everyone trains at a pace that suits their current level while still being challenged.</p>', 355, '2025-10-05 12:58:18', NULL, NULL),
-(7, 4, '21de6139-e513-4c35-8243-d722232e6f9f', '<p>Love it!<br>The new plan seems balanced and motivating.<br>Thanks to everyone who worked on organizing it — really appreciate the effort that goes into keeping this club running smoothly.</p>', 1, '2025-10-05 12:58:54', NULL, NULL),
-(8, 5, '02354806-5e4d-42a2-943b-0a7c04d3ec2b', '<p>Hi everyone,<br>as we prepare for our upcoming club events, we’re looking for a few <strong>volunteers</strong> to help with organization and setup.</p><p>Tasks include welcoming guests, handing out water and snacks, and assisting with registration.</p><p>It’s a great way to get involved and meet other members — no special experience required!</p><p>Anyone interested?</p>', 354, '2025-10-05 13:00:30', NULL, NULL),
-(9, 5, '103e21c4-52b5-4170-ba49-0df98b92be25', '<p>Count me in!<br>I can help with registration or setup — whatever’s needed.<br>Always happy to give something back to the club.</p>', 355, '2025-10-05 13:01:07', NULL, NULL),
-(10, 6, '2f19c641-617d-4ffa-b9d3-b5c5e6b8ee0b', '<p>Hi everyone,<br>next week we’ll be organizing a <strong>community clean-up day</strong> at the club grounds.</p><p>It’s a great opportunity to keep our training area in top shape and spend some time together outside of regular practice.</p><p>All members are welcome to join — tools and materials will be provided by the club.</p><p>Thanks in advance to everyone who helps make our environment clean and welcoming for all!</p>', 1, '2025-10-05 13:02:03', NULL, NULL);
+('4', '4', 'e01359ab-98a3-4024-ae1e-55d2dfdfa002', 'DEM_FORUM_POSTS_E01359AB_98A3_4024_AE1E_55D2DFDFA002_TEXT', '355', '2025-10-05 12:56:26', NULL, NULL),
+('5', '4', '4a26f9a7-8810-407f-9ea6-2c5f5804eae1', 'DEM_FORUM_POSTS_4A26F9A7_8810_407F_9EA6_2C5F5804EAE1_TEXT', '354', '2025-10-05 12:57:25', NULL, NULL),
+('6', '4', '7b1131e0-e70e-4fd9-8b87-ff083c76ee04', 'DEM_FORUM_POSTS_7B1131E0_E70E_4FD9_8B87_FF083C76EE04_TEXT', '355', '2025-10-05 12:58:18', NULL, NULL),
+('7', '4', '21de6139-e513-4c35-8243-d722232e6f9f', 'DEM_FORUM_POSTS_21DE6139_E513_4C35_8243_D722232E6F9F_TEXT', '1', '2025-10-05 12:58:54', NULL, NULL),
+('8', '5', '02354806-5e4d-42a2-943b-0a7c04d3ec2b', 'DEM_FORUM_POSTS_02354806_5E4D_42A2_943B_0A7C04D3EC2B_TEXT', '354', '2025-10-05 13:00:30', NULL, NULL),
+('9', '5', '103e21c4-52b5-4170-ba49-0df98b92be25', 'DEM_FORUM_POSTS_103E21C4_52B5_4170_BA49_0DF98B92BE25_TEXT', '355', '2025-10-05 13:01:07', NULL, NULL),
+('10', '6', '2f19c641-617d-4ffa-b9d3-b5c5e6b8ee0b', 'DEM_FORUM_POSTS_2F19C641_617D_4FFA_B9D3_B5C5E6B8EE0B_TEXT', '1', '2025-10-05 13:02:03', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -370,9 +370,9 @@ CREATE TABLE `%PREFIX%_forum_topics` (
 --
 
 INSERT INTO `%PREFIX%_forum_topics` (`fot_id`, `fot_uuid`, `fot_cat_id`, `fot_fop_id_first_post`, `fot_title`, `fot_views`, `fot_usr_id_create`, `fot_timestamp_create`) VALUES
-(4, '85944966-4967-44f3-8b76-b6a425225970', 303, 4, 'Thoughts on the New Training Plan?', 8, 355, '2025-10-05 12:56:26'),
-(5, '5cb5159a-8cea-4dc2-a154-f9faadfc8d48', 303, 8, 'Volunteers Needed for Upcoming Club Events', 3, 354, '2025-10-05 13:00:30'),
-(6, 'a5807ef6-92c3-4eda-bb12-10c66ca0a9b8', 303, 10, 'Community Clean-Up Day at the Club Grounds', 0, 1, '2025-10-05 13:02:03');
+('4', '85944966-4967-44f3-8b76-b6a425225970', '303', '4', 'DEM_FORUM_TOPICS_85944966_4967_44F3_8B76_B6A425225970_TITLE', '8', '355', '2025-10-05 12:56:26'),
+('5', '5cb5159a-8cea-4dc2-a154-f9faadfc8d48', '303', '8', 'DEM_FORUM_TOPICS_5CB5159A_8CEA_4DC2_A154_F9FAADFC8D48_TITLE', '3', '354', '2025-10-05 13:00:30'),
+('6', 'a5807ef6-92c3-4eda-bb12-10c66ca0a9b8', '303', '10', 'DEM_FORUM_TOPICS_A5807EF6_92C3_4EDA_BB12_10C66CA0A9B8_TITLE', '0', '1', '2025-10-05 13:02:03');
 
 -- --------------------------------------------------------
 
@@ -522,13 +522,13 @@ CREATE TABLE `%PREFIX%_inventory_item_data` (
 --
 
 INSERT INTO `%PREFIX%_inventory_item_data` (`ind_id`, `ind_inf_id`, `ind_ini_id`, `ind_value`) VALUES
-(1, 1, 1, 'Portable PA Speaker'),
+('1', '1', '1', 'DEM_INVENTORY_ITEM_DATA_1_VALUE'),
 (2, 4, 1, '355'),
-(3, 1, 2, 'Folding Chairs'),
+('3', '1', '2', 'DEM_INVENTORY_ITEM_DATA_3_VALUE'),
 (4, 4, 2, '1'),
-(5, 1, 3, 'Adjustable Microphone Stand'),
+('5', '1', '3', 'DEM_INVENTORY_ITEM_DATA_5_VALUE'),
 (6, 4, 3, '355'),
-(7, 1, 4, 'Beamer'),
+('7', '1', '4', 'DEM_INVENTORY_ITEM_DATA_7_VALUE'),
 (8, 4, 4, '354');
 
 -- --------------------------------------------------------
@@ -557,11 +557,11 @@ CREATE TABLE `%PREFIX%_links` (
 --
 
 INSERT INTO `%PREFIX%_links` (`lnk_id`, `lnk_cat_id`, `lnk_uuid`, `lnk_name`, `lnk_description`, `lnk_url`, `lnk_counter`, `lnk_usr_id_create`, `lnk_timestamp_create`, `lnk_usr_id_change`, `lnk_timestamp_change`, `lnk_sequence`) VALUES
-(1, 7, '07bdb749-e925-4715-ba92-360bf3b2821d', 'Sample page', 'On this site there\'s not much news :(', 'https://www.example.com', 6, 1, '2025-09-22 22:00:00', 1, '2025-09-23 22:00:00', 1),
-(2, 9, 'ae39a20e-b5b2-4ebb-8b1a-882bd6d777d5', 'Admidio', 'The homepage of the <b>best</b> open source membership management in the net.', 'https://www.admidio.org/', 157, 1, '2025-09-22 22:00:00', NULL, NULL, 1),
-(3, 9, '476855ec-6c36-449c-a4ac-c17b27a34e11', 'Forum', 'The forum for the online membership management software. Here gets everyone support, who has encountered a problem while installing or setting up Admidio. But also suggestions and tips can be posted here.', 'https://www.admidio.org/forum/', 46, 1, '2025-09-22 22:00:00', NULL, NULL, 2),
-(4, 9, '69e19ac6-1744-495b-bd70-bf8c3baaf15c', 'Documentation', 'The documentation for Admidio with valuable help and tips.', 'https://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 12:13:23', NULL, NULL, 3),
-(5, 9, '325564f8-4630-4efe-912b-79358b6cae98', 'GitHub', '<p>Our developement area at Github. If you want to help us and add some new feature to Admidio go there and get the code.</p>', 'https://github.com/Admidio/admidio', 0, 1, '2025-10-04 08:52:40', NULL, NULL, 4);
+('1', '7', '07bdb749-e925-4715-ba92-360bf3b2821d', 'DEM_LINKS_07BDB749_E925_4715_BA92_360BF3B2821D_NAME', 'DEM_LINKS_07BDB749_E925_4715_BA92_360BF3B2821D_DESCRIPTION', 'https://www.example.com', '6', '1', '2025-09-22 22:00:00', '1', '2025-09-23 22:00:00', '1'),
+('2', '9', 'ae39a20e-b5b2-4ebb-8b1a-882bd6d777d5', 'DEM_CATEGORIES_32EDC214_CB7B_42F1_A4AF_7336A28ADA5E_NAME', 'DEM_LINKS_AE39A20E_B5B2_4EBB_8B1A_882BD6D777D5_DESCRIPTION', 'https://www.admidio.org/', '157', '1', '2025-09-22 22:00:00', NULL, NULL, '1'),
+('3', '9', '476855ec-6c36-449c-a4ac-c17b27a34e11', 'DEM_LINKS_476855EC_6C36_449C_A4AC_C17B27A34E11_NAME', 'DEM_LINKS_476855EC_6C36_449C_A4AC_C17B27A34E11_DESCRIPTION', 'https://www.admidio.org/forum/', '46', '1', '2025-09-22 22:00:00', NULL, NULL, '2'),
+('4', '9', '69e19ac6-1744-495b-bd70-bf8c3baaf15c', 'DEM_LINKS_69E19AC6_1744_495B_BD70_BF8C3BAAF15C_NAME', 'DEM_LINKS_69E19AC6_1744_495B_BD70_BF8C3BAAF15C_DESCRIPTION', 'https://www.admidio.org/dokuwiki', '21', '1', '2012-04-05 12:13:23', NULL, NULL, '3'),
+('5', '9', '325564f8-4630-4efe-912b-79358b6cae98', 'DEM_LINKS_325564F8_4630_4EFE_912B_79358B6CAE98_NAME', 'DEM_LINKS_325564F8_4630_4EFE_912B_79358B6CAE98_DESCRIPTION', 'https://github.com/Admidio/admidio', '0', '1', '2025-10-04 08:52:40', NULL, NULL, '4');
 
 -- --------------------------------------------------------
 
@@ -584,22 +584,22 @@ CREATE TABLE `%PREFIX%_lists` (
 --
 
 INSERT INTO `%PREFIX%_lists` (`lst_id`, `lst_org_id`, `lst_usr_id`, `lst_uuid`, `lst_name`, `lst_timestamp`, `lst_global`) VALUES
-(1, 1, 1, '485a11f0-e4f9-4771-a71c-1eacff12dd4c', 'Address list', '2009-02-27 20:50:57', 1),
-(2, 1, 1, '914693d9-5e08-42f9-a97f-1b1e8ed8ae2a', 'Phone list', '2009-02-27 20:50:57', 1),
-(3, 1, 1, 'c28f0e74-d95f-44d7-8e02-2ca80ee220ae', 'Contact information', '2009-02-27 20:50:57', 1),
-(4, 1, 1, '4e3d9b48-eeff-4760-98c6-a69b38221342', 'Membership', '2009-02-27 20:50:57', 1),
-(5, 1, 1, '3a28db85-bf2c-4828-82f7-f8c67a0ff692', 'Social networks', '2009-02-27 20:56:52', 0),
-(6, 1, 1, 'ca9a32ec-efd2-46da-a9ee-8cf6aa0c179e', 'Birthday', '2009-02-27 20:57:38', 0),
-(7, 1, 351, 'a4889bdb-e294-46a6-a76f-4456707012e3', 'Website', '2009-02-27 21:34:28', 0),
+('1', '1', '1', '485a11f0-e4f9-4771-a71c-1eacff12dd4c', 'DEM_LISTS_485A11F0_E4F9_4771_A71C_1EACFF12DD4C_NAME', '2009-02-27 20:50:57', '1'),
+('2', '1', '1', '914693d9-5e08-42f9-a97f-1b1e8ed8ae2a', 'DEM_LISTS_914693D9_5E08_42F9_A97F_1B1E8ED8AE2A_NAME', '2009-02-27 20:50:57', '1'),
+('3', '1', '1', 'c28f0e74-d95f-44d7-8e02-2ca80ee220ae', 'DEM_LISTS_C28F0E74_D95F_44D7_8E02_2CA80EE220AE_NAME', '2009-02-27 20:50:57', '1'),
+('4', '1', '1', '4e3d9b48-eeff-4760-98c6-a69b38221342', 'DEM_LISTS_4E3D9B48_EEFF_4760_98C6_A69B38221342_NAME', '2009-02-27 20:50:57', '1'),
+('5', '1', '1', '3a28db85-bf2c-4828-82f7-f8c67a0ff692', 'DEM_LISTS_3A28DB85_BF2C_4828_82F7_F8C67A0FF692_NAME', '2009-02-27 20:56:52', '0'),
+('6', '1', '1', 'ca9a32ec-efd2-46da-a9ee-8cf6aa0c179e', 'DEM_LISTS_CA9A32EC_EFD2_46DA_A9EE_8CF6AA0C179E_NAME', '2009-02-27 20:57:38', '0'),
+('7', '1', '351', 'a4889bdb-e294-46a6-a76f-4456707012e3', 'DEM_LISTS_A4889BDB_E294_46A6_A76F_4456707012E3_NAME', '2009-02-27 21:34:28', '0'),
 (8, 1, 351, '5ebcd56b-3095-4656-82b7-70f451de07b8', NULL, '2009-02-27 21:34:47', 0),
-(9, 2, 1, '82b5af7a-d535-4383-8f0e-befbd6e8d9e8', 'Address list', '2012-02-27 20:50:57', 1),
-(10, 2, 1, 'df811fdd-89cd-49f2-9031-49a8aab71860', 'Phone list', '2012-02-27 20:50:57', 1),
-(11, 2, 1, '77afdf9a-1d25-4993-8680-6fc556c2972c', 'Contact information', '2012-02-27 20:50:57', 1),
-(12, 2, 1, 'a834cebe-3592-4f05-8c9b-73551615f570', 'Membership', '2012-02-27 20:50:57', 1),
-(13, 1, 1, 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 'Members', '2018-04-05 19:50:57', 1),
-(14, 2, 1, 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 'Members', '2018-04-05 19:50:57', 1),
-(15, 1, 1, 'd39d0642-c367-43ca-bc73-578219febbc6', 'Contacts', '2021-11-13 14:08:45', 1),
-(16, 2, 1, '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 'Contacts', '2021-11-13 14:08:45', 1);
+('9', '2', '1', '82b5af7a-d535-4383-8f0e-befbd6e8d9e8', 'DEM_LISTS_485A11F0_E4F9_4771_A71C_1EACFF12DD4C_NAME', '2012-02-27 20:50:57', '1'),
+('10', '2', '1', 'df811fdd-89cd-49f2-9031-49a8aab71860', 'DEM_LISTS_914693D9_5E08_42F9_A97F_1B1E8ED8AE2A_NAME', '2012-02-27 20:50:57', '1'),
+('11', '2', '1', '77afdf9a-1d25-4993-8680-6fc556c2972c', 'DEM_LISTS_C28F0E74_D95F_44D7_8E02_2CA80EE220AE_NAME', '2012-02-27 20:50:57', '1'),
+('12', '2', '1', 'a834cebe-3592-4f05-8c9b-73551615f570', 'DEM_LISTS_4E3D9B48_EEFF_4760_98C6_A69B38221342_NAME', '2012-02-27 20:50:57', '1'),
+('13', '1', '1', 'afc87e5f-fffa-46f3-82d1-6e8c65472ae4', 'DEM_LISTS_AFC87E5F_FFFA_46F3_82D1_6E8C65472AE4_NAME', '2018-04-05 19:50:57', '1'),
+('14', '2', '1', 'a94a023b-56fa-4d6e-b05e-267a3d37ba09', 'DEM_LISTS_AFC87E5F_FFFA_46F3_82D1_6E8C65472AE4_NAME', '2018-04-05 19:50:57', '1'),
+('15', '1', '1', 'd39d0642-c367-43ca-bc73-578219febbc6', 'DEM_LISTS_D39D0642_C367_43CA_BC73_578219FEBBC6_NAME', '2021-11-13 14:08:45', '1'),
+('16', '2', '1', '6efad974-5b15-4bb7-a1f8-350fa4b7a452', 'DEM_LISTS_D39D0642_C367_43CA_BC73_578219FEBBC6_NAME', '2021-11-13 14:08:45', '1');
 
 -- --------------------------------------------------------
 
@@ -1100,14 +1100,14 @@ CREATE TABLE `%PREFIX%_messages` (
 --
 
 INSERT INTO `%PREFIX%_messages` (`msg_id`, `msg_uuid`, `msg_type`, `msg_subject`, `msg_usr_id_sender`, `msg_timestamp`, `msg_read`) VALUES
-(1, '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'Events on the website', 1, '2021-01-20 13:58:16', 0),
-(2, 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'New module unlocked', 1, '2021-02-01 15:07:01', 0),
-(3, '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'New training times', 1, '2021-02-03 11:08:02', 0),
-(4, '42fb2917-a25b-4d1f-92ae-2cc837aae4a6', 'EMAIL', 'Invitation to members meeting', 354, '2021-02-03 04:11:37', 0),
-(5, '9be7e4cc-4cf9-4945-84e8-0cb387063501', 'PM', 'Reserve room', 354, '2021-02-02 08:12:35', 1),
-(6, '62d38fd3-b392-43f5-983a-bf563e780c07', 'PM', 'Membership fee missing', 354, '2021-02-03 04:14:22', 1),
-(7, '693a032a-fee7-4a03-8e21-05647b6b6848', 'EMAIL', 'Training', 355, '2021-02-03 04:16:19', 0),
-(8, 'c727b421-e303-4381-b097-9f6eeb56ca39', 'PM', 'No access to documents', 1, '2021-02-03 04:18:18', 1);
+('1', '39a0e3e2-8163-4cbf-bb9b-ac87dbf8ab77', 'EMAIL', 'DEM_MESSAGES_39A0E3E2_8163_4CBF_BB9B_AC87DBF8AB77_SUBJECT', '1', '2021-01-20 13:58:16', '0'),
+('2', 'd12a108d-0bc7-468c-86a5-b05626a21f15', 'EMAIL', 'DEM_MESSAGES_D12A108D_0BC7_468C_86A5_B05626A21F15_SUBJECT', '1', '2021-02-01 15:07:01', '0'),
+('3', '479fb7ae-52eb-401e-aba7-a3ca74f69c32', 'EMAIL', 'DEM_MESSAGES_479FB7AE_52EB_401E_ABA7_A3CA74F69C32_SUBJECT', '1', '2021-02-03 11:08:02', '0'),
+('4', '42fb2917-a25b-4d1f-92ae-2cc837aae4a6', 'EMAIL', 'DEM_MESSAGES_42FB2917_A25B_4D1F_92AE_2CC837AAE4A6_SUBJECT', '354', '2021-02-03 04:11:37', '0'),
+('5', '9be7e4cc-4cf9-4945-84e8-0cb387063501', 'PM', 'DEM_MESSAGES_9BE7E4CC_4CF9_4945_84E8_0CB387063501_SUBJECT', '354', '2021-02-02 08:12:35', '1'),
+('6', '62d38fd3-b392-43f5-983a-bf563e780c07', 'PM', 'DEM_MESSAGES_62D38FD3_B392_43F5_983A_BF563E780C07_SUBJECT', '354', '2021-02-03 04:14:22', '1'),
+('7', '693a032a-fee7-4a03-8e21-05647b6b6848', 'EMAIL', 'DEM_MESSAGES_693A032A_FEE7_4A03_8E21_05647B6B6848_SUBJECT', '355', '2021-02-03 04:16:19', '0'),
+('8', 'c727b421-e303-4381-b097-9f6eeb56ca39', 'PM', 'DEM_MESSAGES_C727B421_E303_4381_B097_9F6EEB56CA39_SUBJECT', '1', '2021-02-03 04:18:18', '1');
 
 -- --------------------------------------------------------
 
@@ -1142,15 +1142,15 @@ CREATE TABLE `%PREFIX%_messages_content` (
 --
 
 INSERT INTO `%PREFIX%_messages_content` (`msc_id`, `msc_msg_id`, `msc_usr_id`, `msc_message`, `msc_timestamp`) VALUES
-(1, 1, 1, '<p>Hi all,</p><br /><p>please maintain your schedules on the website so that all members have the opportunity to view and participate.</p><br /><p>Regards</p><br /><p>Paul</p><br />', '2021-02-03 03:58:16'),
-(2, 2, 1, '<p>Hello Board,</p><br /><p>I have now unlocked the <strong>Documents and Files</strong> module. Please log in and have a look at this module</p><br /><p>The module has among others. following functions:</p><br /><ul><br /> <li>Files and documents can be uploaded by the board</li><br /> <li>Files and documents can be downloaded by all members</li><br /> <li>Files and documents can be displayed directly on the web</li><br /><br /ul><br /><p>You can send feedback directly to me. </p><br /><p>Best regards</p><br /><p>Paul</p><br />', '2021-02-03 04:07:01'),
-(3, 3, 1, '<p>Hello everyone,</p><br /><p>I have put the new training times on the website.</p><br /><p>Many greetings</p><br /><p>Paul</p><br />', '2021-02-03 04:08:02'),
-(4, 4, 354, '<p>Dear Ladies and Gentlemen,</p><br /><p>the board of directors hereby invites you to the annual members meeting in our clubhouse.</p><br /><p>Yours sincerely</p><br /><p>Paul Schmidt</p><br />', '2021-02-03 04:11:37'),
-(5, 5, 354, 'Hi Paul,<br />can you reserve the room for the general meeting?<br />Greetings<br />Eric', '2021-02-03 04:12:35'),
-(6, 6, 354, 'Hi Jennifer,<br />you haven\'t transferred your membership fee yet. <br />Can you please do it yet.<br />Regards<br />Eric', '2021-02-03 04:14:22'),
-(7, 7, 355, '<p>Hi Dana and Daria,</p><br /><p>are you coming for training next week?</p><br /><p>Please write me a short answer</p><br /><p>Many greetings</p><br /><p>Jennifer</p><br />', '2021-02-03 04:16:19'),
-(8, 8, 355, 'Hi Paul,<br />unfortunately I don\'t have access to the documents.<br />Can you check it out.<br />Regards<br />Jennifer', '2021-02-03 04:17:23'),
-(9, 8, 1, 'Hi Jennifer,<br />I have redeposited the rights. Please check this again.<br />Greetings<br />Paul', '2021-02-03 04:18:18');
+('1', '1', '1', 'DEM_MESSAGES_CONTENT_1_MESSAGE', '2021-02-03 03:58:16'),
+('2', '2', '1', 'DEM_MESSAGES_CONTENT_2_MESSAGE', '2021-02-03 04:07:01'),
+('3', '3', '1', 'DEM_MESSAGES_CONTENT_3_MESSAGE', '2021-02-03 04:08:02'),
+('4', '4', '354', 'DEM_MESSAGES_CONTENT_4_MESSAGE', '2021-02-03 04:11:37'),
+('5', '5', '354', 'DEM_MESSAGES_CONTENT_5_MESSAGE', '2021-02-03 04:12:35'),
+('6', '6', '354', 'DEM_MESSAGES_CONTENT_6_MESSAGE', '2021-02-03 04:14:22'),
+('7', '7', '355', 'DEM_MESSAGES_CONTENT_7_MESSAGE', '2021-02-03 04:16:19'),
+('8', '8', '355', 'DEM_MESSAGES_CONTENT_8_MESSAGE', '2021-02-03 04:17:23'),
+('9', '8', '1', 'DEM_MESSAGES_CONTENT_9_MESSAGE', '2021-02-03 04:18:18');
 
 -- --------------------------------------------------------
 
@@ -1291,8 +1291,8 @@ CREATE TABLE `%PREFIX%_organizations` (
 --
 
 INSERT INTO `%PREFIX%_organizations` (`org_id`, `org_uuid`, `org_shortname`, `org_longname`, `org_org_id_parent`, `org_homepage`, `org_email_administrator`, `org_show_org_select`) VALUES
-(1, 'f04eef83-91ad-40bf-8267-09cd40ce0799', 'DEMO', 'Demo-Organisation', NULL, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1),
-(2, '8418cd76-3ac9-455f-bfb4-ed6561abdb7b', 'TEST', 'Test-Organisation', 1, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1);
+('1', 'f04eef83-91ad-40bf-8267-09cd40ce0799', 'DEMO', 'DEM_ORGANIZATIONS_F04EEF83_91AD_40BF_8267_09CD40CE0799_LONGNAME', NULL, 'https://www.admidio.org/demo/', 'administrator@admidio.org', '1'),
+('2', '8418cd76-3ac9-455f-bfb4-ed6561abdb7b', 'TEST', 'DEM_ORGANIZATIONS_8418CD76_3AC9_455F_BFB4_ED6561ABDB7B_LONGNAME', '1', 'https://www.admidio.org/demo/', 'administrator@admidio.org', '1');
 
 -- --------------------------------------------------------
 
@@ -1323,10 +1323,10 @@ CREATE TABLE `%PREFIX%_photos` (
 --
 
 INSERT INTO `%PREFIX%_photos` (`pho_id`, `pho_org_id`, `pho_pho_id_parent`, `pho_uuid`, `pho_quantity`, `pho_name`, `pho_begin`, `pho_end`, `pho_description`, `pho_photographers`, `pho_locked`, `pho_usr_id_create`, `pho_timestamp_create`, `pho_usr_id_change`, `pho_timestamp_change`) VALUES
-(1, 1, NULL, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', 0, 'Croatia', '2022-10-05', '2022-10-11', 'An unforgettable vacation in Croatia with most beautiful sunshine and much nature.', 'Steven Smith and others', 0, 1, '2022-10-23 16:15:37', NULL, NULL),
-(2, 1, 1, '3d45f9cf-957e-41be-bb48-f452429fcd05', 5, 'Plitvice lakes', '2022-10-05', '2022-10-07', NULL, 'Steven Smith and others', 0, 1, '2022-10-23 16:17:44', NULL, NULL),
-(3, 1, 1, 'bf174cf8-f190-4898-bb3e-af881ad68780', 4, 'Krka', '2022-10-08', '2022-10-11', NULL, 'Steven Smith and others', 0, 1, '2022-10-23 16:18:44', NULL, NULL),
-(4, 1, NULL, 'f6af3421-f80c-4145-89f2-75bec24640b8', 6, 'Machu Picchu', '2022-09-14', '2022-09-17', 'A trip to the legendary Inca city of Machu Picchu in the mountains of Peru.', 'Admin', 0, 1, '2022-10-23 16:20:50', NULL, NULL);
+('1', '1', NULL, 'b4aaf3eb-8735-45b3-a2f0-f2a7e9d289eb', '0', 'DEM_PHOTOS_B4AAF3EB_8735_45B3_A2F0_F2A7E9D289EB_NAME', '2022-10-05', '2022-10-11', 'DEM_PHOTOS_B4AAF3EB_8735_45B3_A2F0_F2A7E9D289EB_DESCRIPTION', 'Steven Smith and others', '0', '1', '2022-10-23 16:15:37', NULL, NULL),
+('2', '1', '1', '3d45f9cf-957e-41be-bb48-f452429fcd05', '5', 'DEM_PHOTOS_3D45F9CF_957E_41BE_BB48_F452429FCD05_NAME', '2022-10-05', '2022-10-07', NULL, 'Steven Smith and others', '0', '1', '2022-10-23 16:17:44', NULL, NULL),
+('3', '1', '1', 'bf174cf8-f190-4898-bb3e-af881ad68780', '4', 'DEM_PHOTOS_BF174CF8_F190_4898_BB3E_AF881AD68780_NAME', '2022-10-08', '2022-10-11', NULL, 'Steven Smith and others', '0', '1', '2022-10-23 16:18:44', NULL, NULL),
+('4', '1', NULL, 'f6af3421-f80c-4145-89f2-75bec24640b8', '6', 'DEM_PHOTOS_F6AF3421_F80C_4145_89F2_75BEC24640B8_NAME', '2022-09-14', '2022-09-17', 'DEM_PHOTOS_F6AF3421_F80C_4145_89F2_75BEC24640B8_DESCRIPTION', 'Admin', '0', '1', '2022-10-23 16:20:50', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1827,18 +1827,18 @@ CREATE TABLE `%PREFIX%_roles` (
 --
 
 INSERT INTO `%PREFIX%_roles` (`rol_id`, `rol_cat_id`, `rol_lst_id`, `rol_uuid`, `rol_name`, `rol_description`, `rol_assign_roles`, `rol_approve_users`, `rol_announcements`, `rol_events`, `rol_documents_files`, `rol_edit_user`, `rol_mail_to_all`, `rol_mail_this_role`, `rol_photo`, `rol_profile`, `rol_weblinks`, `rol_all_lists_view`, `rol_default_registration`, `rol_leader_rights`, `rol_view_memberships`, `rol_view_members_profiles`, `rol_start_date`, `rol_start_time`, `rol_end_date`, `rol_end_time`, `rol_weekday`, `rol_location`, `rol_max_members`, `rol_cost`, `rol_cost_period`, `rol_usr_id_create`, `rol_timestamp_create`, `rol_usr_id_change`, `rol_timestamp_change`, `rol_valid`, `rol_system`, `rol_administrator`, `rol_forum_admin`, `rol_inventory_admin`) VALUES
-(1, 3, NULL, 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 'Administrator', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 20:35:08', 1, '2008-04-20 20:35:08', 1, 0, 1, 1, 1),
-(2, 3, NULL, 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 'Member', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:36', 1, '2008-05-03 14:26:36', 1, 0, 0, 0, 0),
-(3, 3, NULL, '621fa25f-2fac-4310-af52-af939041cb66', 'Association\'s board', 'Administrative board of association', 0, 0, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 2, 2, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 14:26:12', 1, '2008-05-03 14:26:12', 1, 0, 0, 0, 0),
-(4, 6, NULL, '685c8a84-e58c-4d40-8297-8d2671e1fb89', '1. youth team', 'Young people between 12 and 15 years', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 3, 1, 1, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 14:24:41', 1, '2008-05-03 14:24:41', 1, 0, 0, 0, 0),
-(5, 6, NULL, '5f4fb933-806c-4161-a333-212cba85ae6c', '2. youth team', 'Young people between 16 and 18 years', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 3, 1, 1, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 14:25:58', 1, '2008-05-03 14:25:58', 1, 0, 0, 0, 0),
-(6, 100, NULL, '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 'Administrator', 'Group of system administrators', 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 20:35:08', 1, '2010-01-21 19:35:08', 1, 0, 1, 1, 1),
-(7, 100, NULL, '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 'Member', 'All organization members', 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 1, 1, 0, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 14:26:36', 1, '2010-12-22 05:34:06', 1, 0, 0, 0, 0),
-(8, 200, NULL, '515c99a1-28d6-4395-b966-4b04cd512f12', '2026-03-01 17:00 Barbecue', 'Today we have our barbecue. In addition to crisp sausages, chops and bacon, there are also various salads.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
-(9, 200, NULL, '1b3d4123-2898-40e5-b9c4-b4db65207133', '2025-12-16 11:00 Yoga for beginners', 'This course teaches the basics of yoga.<br /><br />A registration for this course is required.', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2016-11-24 11:08:23', NULL, NULL, 1, 0, 0, 0, 0),
-(10, 200, NULL, '040b4f49-2e45-460a-a354-1004d8bef27e', '2026-02-07 18:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
-(11, 200, NULL, '7450a81b-5b69-43c6-906b-47e343ecb55f', '2026-01-03 19:00 Board meeting', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 08:08:00', NULL, NULL, 1, 0, 0, 0, 0),
-(12, 200, NULL, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', '2025-12-03 17:00 Team evening', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2018-02-14 17:38:18', NULL, NULL, 1, 0, 0, 0, 0);
+('1', '3', NULL, 'a8fd58c3-c926-40ca-96fb-5db86bfe6a16', 'DEM_ROLES_A8FD58C3_C926_40CA_96FB_5DB86BFE6A16_NAME', 'DEM_ROLES_A8FD58C3_C926_40CA_96FB_5DB86BFE6A16_DESCRIPTION', '1', '1', '1', '1', '1', '1', '1', '3', '1', '1', '1', '1', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2008-04-20 20:35:08', '1', '2008-04-20 20:35:08', '1', '0', '1', '1', '1'),
+('2', '3', NULL, 'd1dc4c6e-eb17-4d1a-a491-237257f6b1fb', 'DEM_ROLES_D1DC4C6E_EB17_4D1A_A491_237257F6B1FB_NAME', 'DEM_ROLES_D1DC4C6E_EB17_4D1A_A491_237257F6B1FB_DESCRIPTION', '0', '0', '0', '0', '0', '0', '0', '2', '0', '1', '0', '0', '1', '1', '0', '0', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, '1', '2008-05-03 14:26:36', '1', '2008-05-03 14:26:36', '1', '0', '0', '0', '0'),
+('3', '3', NULL, '621fa25f-2fac-4310-af52-af939041cb66', 'DEM_ROLES_621FA25F_2FAC_4310_AF52_AF939041CB66_NAME', 'DEM_ROLES_621FA25F_2FAC_4310_AF52_AF939041CB66_DESCRIPTION', '0', '0', '1', '1', '1', '1', '1', '3', '1', '1', '1', '1', '0', '1', '2', '2', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, '1', '2008-05-03 14:26:12', '1', '2008-05-03 14:26:12', '1', '0', '0', '0', '0'),
+('4', '6', NULL, '685c8a84-e58c-4d40-8297-8d2671e1fb89', 'DEM_ROLES_685C8A84_E58C_4D40_8297_8D2671E1FB89_NAME', 'DEM_ROLES_685C8A84_E58C_4D40_8297_8D2671E1FB89_DESCRIPTION', '0', '0', '0', '0', '0', '0', '0', '2', '0', '1', '0', '0', '0', '3', '1', '1', NULL, '15:00:00', NULL, '16:00:00', '3', 'DEM_ROLES_685C8A84_E58C_4D40_8297_8D2671E1FB89_LOCATION', NULL, NULL, NULL, '1', '2008-05-03 14:24:41', '1', '2008-05-03 14:24:41', '1', '0', '0', '0', '0'),
+('5', '6', NULL, '5f4fb933-806c-4161-a333-212cba85ae6c', 'DEM_ROLES_5F4FB933_806C_4161_A333_212CBA85AE6C_NAME', 'DEM_ROLES_5F4FB933_806C_4161_A333_212CBA85AE6C_DESCRIPTION', '0', '0', '0', '0', '0', '0', '0', '2', '0', '1', '0', '0', '0', '3', '1', '1', NULL, '16:00:00', NULL, '17:00:00', '5', 'DEM_ROLES_685C8A84_E58C_4D40_8297_8D2671E1FB89_LOCATION', NULL, NULL, NULL, '1', '2008-05-03 14:25:58', '1', '2008-05-03 14:25:58', '1', '0', '0', '0', '0'),
+('6', '100', NULL, '7a9e3ff4-197a-48db-9abc-c32c4cc79567', 'DEM_ROLES_A8FD58C3_C926_40CA_96FB_5DB86BFE6A16_NAME', 'DEM_ROLES_A8FD58C3_C926_40CA_96FB_5DB86BFE6A16_DESCRIPTION', '1', '1', '1', '1', '1', '1', '1', '3', '1', '1', '1', '1', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2009-05-20 20:35:08', '1', '2010-01-21 19:35:08', '1', '0', '1', '1', '1'),
+('7', '100', NULL, '77b0c6cc-cc66-4384-a34e-3277cdf081c6', 'DEM_ROLES_D1DC4C6E_EB17_4D1A_A491_237257F6B1FB_NAME', 'DEM_ROLES_D1DC4C6E_EB17_4D1A_A491_237257F6B1FB_DESCRIPTION', '0', '0', '0', '0', '0', '0', '0', '2', '0', '1', '0', '0', '1', '1', '0', '0', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, '1', '2009-05-20 14:26:36', '1', '2010-12-22 05:34:06', '1', '0', '0', '0', '0'),
+('8', '200', NULL, '515c99a1-28d6-4395-b966-4b04cd512f12', 'DEM_ROLES_515C99A1_28D6_4395_B966_4B04CD512F12_NAME', 'DEM_EVENTS_2BC7D168_7B4E_4EC1_9765_18989E32030C_DESCRIPTION', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2011-06-03 08:08:00', NULL, NULL, '1', '0', '0', '0', '0'),
+('9', '200', NULL, '1b3d4123-2898-40e5-b9c4-b4db65207133', 'DEM_ROLES_1B3D4123_2898_40E5_B9C4_B4DB65207133_NAME', 'DEM_EVENTS_6FA731EF_E166_49ED_BB56_182243CBC5C8_DESCRIPTION', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2016-11-24 11:08:23', NULL, NULL, '1', '0', '0', '0', '0'),
+('10', '200', NULL, '040b4f49-2e45-460a-a354-1004d8bef27e', 'DEM_ROLES_040B4F49_2E45_460A_A354_1004D8BEF27E_NAME', NULL, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2011-06-03 08:08:00', NULL, NULL, '1', '0', '0', '0', '0'),
+('11', '200', NULL, '7450a81b-5b69-43c6-906b-47e343ecb55f', 'DEM_ROLES_7450A81B_5B69_43C6_906B_47E343ECB55F_NAME', NULL, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2011-06-03 08:08:00', NULL, NULL, '1', '0', '0', '0', '0'),
+('12', '200', NULL, '3c16c9da-9425-4ee3-9b53-8aed1c19bc34', 'DEM_ROLES_3C16C9DA_9425_4EE3_9B53_8AED1C19BC34_NAME', NULL, '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', '2018-02-14 17:38:18', NULL, NULL, '1', '0', '0', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -1936,8 +1936,8 @@ CREATE TABLE `%PREFIX%_rooms` (
 --
 
 INSERT INTO `%PREFIX%_rooms` (`room_id`, `room_uuid`, `room_name`, `room_description`, `room_capacity`, `room_overhang`, `room_usr_id_create`, `room_timestamp_create`, `room_usr_id_change`, `room_timestamp_change`) VALUES
-(1, 'fcc15de8-0c3c-4e2a-a3a5-df20f0fee1c3', 'Meeting room', 'In this room meetings can take place. The room must be reserved in advance. A projector is available.', 15, NULL, 1, '2011-04-07 17:15:08', NULL, NULL),
-(2, '0faef968-2a2d-41bd-a668-911e322b4e50', 'Function room', 'The function room can be used for birthday parties, annual meetings or party\'s. Advance booking is desirable.', 65, 15, 1, '2012-01-15 09:03:38', NULL, NULL);
+('1', 'fcc15de8-0c3c-4e2a-a3a5-df20f0fee1c3', 'DEM_ROOMS_FCC15DE8_0C3C_4E2A_A3A5_DF20F0FEE1C3__NAME', 'DEM_ROOMS_FCC15DE8_0C3C_4E2A_A3A5_DF20F0FEE1C3__DESCRIPTION', '15', NULL, '1', '2011-04-07 17:15:08', NULL, NULL),
+('2', '0faef968-2a2d-41bd-a668-911e322b4e50', 'DEM_ROOMS_0FAEF968_2A2D_41BD_A668_911E322B4E50__NAME', 'DEM_ROOMS_0FAEF968_2A2D_41BD_A668_911E322B4E50__DESCRIPTION', '65', '15', '1', '2012-01-15 09:03:38', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4036,8 +4036,8 @@ INSERT INTO `%PREFIX%_user_fields` (`usf_id`, `usf_cat_id`, `usf_uuid`, `usf_typ
 (12, 1, '09556bd3-0bc5-4e97-800a-4ed347f6327e', 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 1, 2, 12, 1, '2012-01-08 10:12:05', NULL, NULL),
 (13, 1, '627c57a6-f17b-44df-9d31-3d668634eb97', 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1, 0, 13, 1, '2012-01-08 10:12:05', NULL, NULL),
 (14, 1, 'd1b9314d-953c-4198-8250-d10f4661abe7', 'CHECKBOX', 'DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION', 'SYS_DATA_PROTECTION_PERMISSION_DESC', NULL, NULL, NULL, NULL, 0, 0, 0, 1, 2, 14, 1, '2012-01-08 10:12:05', NULL, NULL),
-(20, 8, '89b33bc0-913a-404c-9899-e53ad5080fec', 'NUMBER', 'MEMBERSHIP_NUMBER', 'Membership number', NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 0, 1, 1, '2011-04-06 20:05:20', NULL, NULL),
-(21, 8, '15b324bc-29d8-4b79-bee9-10072b8d7489', 'TEXT', 'FAVORITE_COLOR', 'Favorite color', 'Any member may enter his favorite color', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0, 2, 1, '2011-04-06 20:05:20', NULL, NULL),
+('20', '8', '89b33bc0-913a-404c-9899-e53ad5080fec', 'NUMBER', 'MEMBERSHIP_NUMBER', 'DEM_USER_FIELDS_89B33BC0_913A_404C_9899_E53AD5080FEC_NAME', NULL, NULL, NULL, NULL, NULL, '0', '1', '0', '0', '0', '1', '1', '2011-04-06 20:05:20', NULL, NULL),
+('21', '8', '15b324bc-29d8-4b79-bee9-10072b8d7489', 'TEXT', 'FAVORITE_COLOR', 'DEM_USER_FIELDS_15B324BC_29D8_4B79_BEE9_10072B8D7489_NAME', 'DEM_USER_FIELDS_15B324BC_29D8_4B79_BEE9_10072B8D7489_DESCRIPTION', NULL, NULL, NULL, NULL, '0', '0', '0', '0', '0', '2', '1', '2011-04-06 20:05:20', NULL, NULL),
 (22, 2, '041f1bb5-4305-47d7-8538-c1e7163339a6', 'TEXT', 'FACEBOOK', 'SYS_FACEBOOK', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, 'facebook', 'https://www.facebook.com/#user_content#', 0, 0, 0, 0, 0, 1, 1, '2012-01-08 10:11:40', NULL, NULL),
 (24, 2, '1b2045a6-bae3-4948-91fa-f0e669c488b4', 'TEXT', 'XING', 'SYS_XING', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, NULL, 'https://www.xing.com/profile/#user_content#', 0, 0, 0, 0, 0, 6, 1, '2012-01-08 10:11:40', NULL, NULL),
 (26, 2, '1b204526-bae3-4948-91fa-f0e669c48826', 'TEXT', 'INSTAGRAM', 'SYS_INSTAGRAM', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC', NULL, NULL, 'instagram', 'https://www.instagram.com/#user_content#', 0, 0, 0, 0, 0, 2, 1, '2012-01-08 10:11:40', NULL, NULL),
