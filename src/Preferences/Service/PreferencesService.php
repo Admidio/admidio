@@ -67,6 +67,17 @@ class PreferencesService
         return array_merge(self::$overviewPluginPresenters, self::$pluginPresenters);
     }
 
+    /** Panel routing must use the registered method, never the translated display name. */
+    private static function getPluginPanelId(array $callbacks): string
+    {
+        $callback = reset($callbacks);
+        if (!is_array($callback) || !isset($callback[1])
+            || preg_match('/^create(.+)Form$/', $callback[1], $matches) !== 1) {
+            throw new \UnexpectedValueException('Plugin preferences require a create...Form callback.');
+        }
+        return strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $matches[1]));
+    }
+
     /**
      * Build the panel definitions for the "Plugins" tab.
      *
@@ -86,7 +97,7 @@ class PreferencesService
             $metadata = $pluginManager->getMetadataByComponentId($comId);
 
             $panels[] = array(
-                'id'       => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($metadata['name'])))),
+                'id'       => self::getPluginPanelId($callbacks),
                 'title'    => Language::translateIfTranslationStrId($metadata['name']),
                 'icon'     => $metadata['icon'] ?? 'bi-puzzle',
                 'subcards' => $metadata['hasSubcards'] ?? false,
@@ -129,7 +140,7 @@ class PreferencesService
             $metadata = $pluginManager->getMetadataByComponentId($comId);
 
             $panels[] = array(
-                'id'       => preg_replace('/\s+/', '_', preg_replace('/[^a-z0-9_ ]/', '', strtolower(Language::translateIfTranslationStrId($metadata['name'])))),
+                'id'       => self::getPluginPanelId($callbacks),
                 'title'    => Language::translateIfTranslationStrId($metadata['name']),
                 'icon'     => $metadata['icon'] ?? 'bi-puzzle',
                 'subcards' => $metadata['hasSubcards'] ?? false,
