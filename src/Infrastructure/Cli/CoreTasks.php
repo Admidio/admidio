@@ -8155,12 +8155,13 @@ final class CoreTasks
                 array((int)$selector, $gCurrentOrgId)
             );
         } else {
+            $names = Language::getTranslationCandidates($selector, array('SYS_GENERAL_ROLE_ASSIGNMENT'));
             $statement = $gDb->queryPrepared(
                 'SELECT *
                    FROM ' . TBL_CATEGORY_REPORT . '
-                  WHERE crt_name = ?
+                  WHERE crt_name IN (' . implode(', ', array_fill(0, count($names), '?')) . ')
                     AND (crt_org_id = ? OR crt_org_id IS NULL)',
-                array($selector, $gCurrentOrgId)
+                array_merge($names, array($gCurrentOrgId))
             );
         }
 
@@ -9451,13 +9452,14 @@ final class CoreTasks
                 array((int)$reference, $gCurrentOrgId)
             )->fetchAll(PDO::FETCH_COLUMN);
         } else {
+            $names = array_map(array(StringUtils::class, 'strToUpper'), Language::getTranslationCandidates($reference, array('SYS_ADMINISTRATOR', 'SYS_MEMBER', 'INS_BOARD')));
             $rows = $gDb->queryPrepared(
                 'SELECT rol_id
                    FROM ' . TBL_ROLES . '
              INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-                  WHERE (rol_uuid = ? OR UPPER(rol_name) = UPPER(?))
+                  WHERE (rol_uuid = ? OR UPPER(rol_name) IN (' . implode(', ', array_fill(0, count($names), '?')) . '))
                     AND (cat_org_id = ? OR cat_org_id IS NULL)',
-                array($reference, $reference, $gCurrentOrgId)
+                array_merge(array($reference), $names, array($gCurrentOrgId))
             )->fetchAll(PDO::FETCH_COLUMN);
         }
 
@@ -9477,15 +9479,16 @@ final class CoreTasks
     {
         global $gDb, $gCurrentOrgId;
 
+        $names = Language::getTranslationCandidates($name, array('SYS_ADMINISTRATOR', 'SYS_MEMBER', 'INS_BOARD'));
         $count = (int)$gDb->queryPrepared(
             'SELECT COUNT(*)
                FROM ' . TBL_ROLES . '
          INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
-              WHERE rol_name = ?
+              WHERE rol_name IN (' . implode(', ', array_fill(0, count($names), '?')) . ')
                 AND rol_cat_id = ?
                 AND rol_id <> ?
                 AND (cat_org_id = ? OR cat_org_id IS NULL)',
-            array($name, $categoryId, $excludeRoleId, $gCurrentOrgId)
+            array_merge($names, array($categoryId, $excludeRoleId, $gCurrentOrgId))
         )->fetchColumn();
 
         if ($count > 0) {
@@ -10606,9 +10609,10 @@ final class CoreTasks
                 array((int)$reference)
             )->fetchAll(PDO::FETCH_COLUMN);
         } else {
+            $names = Language::getTranslationCandidates($reference, array('INS_CONFERENCE_ROOM'));
             $rows = $gDb->queryPrepared(
-                'SELECT room_id FROM ' . TBL_ROOMS . ' WHERE room_uuid = ? OR room_name = ?',
-                array($reference, $reference)
+                'SELECT room_id FROM ' . TBL_ROOMS . ' WHERE room_uuid = ? OR room_name IN (' . implode(', ', array_fill(0, count($names), '?')) . ')',
+                array_merge(array($reference), $names)
             )->fetchAll(PDO::FETCH_COLUMN);
         }
 

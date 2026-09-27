@@ -2,6 +2,7 @@
 
 namespace Admidio\UI\Presenter;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
@@ -335,7 +336,7 @@ class DocumentsPresenter extends PagePresenter
 
         $adminRoles = array();
         while ($row = $statementAdminRoles->fetch()) {
-            $adminRoles[] = $row['rol_name'];
+            $adminRoles[] = Language::translateIfTranslationStrId($row['rol_name']);
         }
 
         // create html page object

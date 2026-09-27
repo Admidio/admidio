@@ -23,6 +23,7 @@
  *
  *****************************************************************************/
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
@@ -351,13 +352,13 @@ try {
                 foreach ($rolesArray as $roleArray) {
                     $role = new Role($gDb);
                     $role->setArray($roleArray);
-                    $list[] = array('groupID: ' . $roleArray['rol_uuid'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
+                    $list[] = array('groupID: ' . $roleArray['rol_uuid'], Language::translateIfTranslationStrId($roleArray['rol_name']), $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
                     $listRoleIdsArray[] = $roleArray['rol_uuid'];
                     if ($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former')) {
                         // list role with former members
-                        $listFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+1', $roleArray['rol_name'] . ' ' . '(' . $gL10n->get('SYS_FORMER_PL') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')');
+                        $listFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+1', Language::translateIfTranslationStrId($roleArray['rol_name']) . ' ' . '(' . $gL10n->get('SYS_FORMER_PL') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')');
                         // list role with active and former members
-                        $listActiveAndFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+2', $roleArray['rol_name'] . ' ' . '(' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
+                        $listActiveAndFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+2', Language::translateIfTranslationStrId($roleArray['rol_name']) . ' ' . '(' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                     }
                 }
 
@@ -440,7 +441,7 @@ try {
 
             $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
             while ($row = $statement->fetch()) {
-                $list[] = array('groupID: ' . $row['rol_uuid'], $row['rol_name'], '');
+                $list[] = array('groupID: ' . $row['rol_uuid'], Language::translateIfTranslationStrId($row['rol_name']), '');
             }
         }
 

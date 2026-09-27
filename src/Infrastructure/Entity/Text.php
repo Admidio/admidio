@@ -13,6 +13,15 @@ use Admidio\Infrastructure\Exception;
  */
 class Text extends Entity
 {
+    public const SYSTEM_MAIL_DEFAULTS = array(
+        'SYSMAIL_REGISTRATION_CONFIRMATION' => 'SYS_SYSMAIL_REGISTRATION_CONFIRMATION',
+        'SYSMAIL_REGISTRATION_NEW' => 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR',
+        'SYSMAIL_REGISTRATION_APPROVED' => 'SYS_SYSMAIL_REGISTRATION_USER',
+        'SYSMAIL_REGISTRATION_REFUSED' => 'SYS_SYSMAIL_REFUSE_REGISTRATION',
+        'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SYSMAIL_LOGIN_INFORMATION',
+        'SYSMAIL_PASSWORD_RESET' => 'SYS_SYSMAIL_PASSWORD_RESET',
+    );
+
     /**
      * Constructor that will create an object of a recordset of the table adm_texts.
      * If the id is set than the specific text will be loaded.
@@ -24,6 +33,15 @@ class Text extends Entity
     public function __construct(Database $database, string $name = '')
     {
         parent::__construct($database, TBL_TEXTS, 'txt', $name);
+    }
+
+    /** The text format resolves a template ID without HTML-encoding the mail body. */
+    public function getValue(string $columnName, string $format = ''): mixed
+    {
+        if ($columnName === 'txt_text' && $format === 'text') {
+            return self::translateColumnValue($columnName, parent::getValue($columnName, 'database'));
+        }
+        return parent::getValue($columnName, $format);
     }
 
     /**

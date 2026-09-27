@@ -1103,7 +1103,19 @@ class User extends Entity
         global $gSettingsManager;
 
         if (!str_starts_with($columnName, 'usr_')) {
-            return $this->mProfileFieldsData->getValue($columnName, $format);
+            $value = $this->mProfileFieldsData->getValue($columnName, $format);
+            if ($columnName === 'LAST_NAME' && $format !== 'database' && $value === 'SYS_SYSTEM'
+                && parent::getValue('usr_login_name', 'database') === 'SYS_SYSTEM'
+                && !parent::getValue('usr_valid', 'database')) {
+                return $GLOBALS['gL10n']->get('SYS_SYSTEM');
+            }
+            return $value;
+        }
+
+        if ($columnName === 'usr_login_name' && $format !== 'database'
+            && parent::getValue($columnName, 'database') === 'SYS_SYSTEM'
+            && !parent::getValue('usr_valid', 'database')) {
+            return $GLOBALS['gL10n']->get('SYS_SYSTEM');
         }
 
         if ($columnName === 'usr_photo' && (int)$gSettingsManager->get('profile_photo_storage') === 0) {

@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Events\Entity;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
@@ -54,7 +55,7 @@ class Room extends Entity
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['room_description']));
             } else {
-                $value = $this->dbColumns['room_description'];
+                $value = Language::translateIfTranslationStrId($this->dbColumns['room_description']);
             }
 
             return $value;

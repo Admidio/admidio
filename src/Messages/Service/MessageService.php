@@ -2,6 +2,7 @@
 
 namespace Admidio\Messages\Service;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
@@ -110,7 +111,7 @@ class MessageService
                     $message->addRole(
                         (int)$row['rol_id'],
                         (int)$group['role_mode'],
-                        (string)$row['rol_name']
+                        (string)Language::translateIfTranslationStrId($row['rol_name'])
                     );
                     $email->addRecipientsByRole((string)$group['uuid'], (int)$group['status']);
                 } else {

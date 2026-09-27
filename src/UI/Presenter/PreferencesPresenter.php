@@ -1144,7 +1144,7 @@ class PreferencesPresenter extends PagePresenter
             // Each role is now added to this array
             $selectBoxEntries[] = array(
                 $rowViewRoles['rol_id'],
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ')',
                 $rowViewRoles['cat_name']
             );
         }
