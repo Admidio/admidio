@@ -469,9 +469,12 @@ class PreferencesService
             }
 
             if (str_starts_with($key, 'SYSMAIL_')) {
+                if (!isset(Text::SYSTEM_MAIL_DEFAULTS[$key])) {
+                    continue; // Switches and read-only previews are not separate templates.
+                }
                 $text = new Text($gDb);
                 $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
-                $text->setValue('txt_text', $value);
+                $text->setSystemMailTemplate((bool)($formValues[$key . '_USE_DEFAULT'] ?? false), (string)$value);
                 $text->save();
                 continue;
             }

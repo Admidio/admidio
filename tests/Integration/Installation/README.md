@@ -24,3 +24,12 @@ list selectors and exports, room selection in events, profile-field descriptions
 and system-mail settings. Save these forms unchanged and confirm the stored IDs
 remain intact; then customize a value and confirm it stays literal after switching
 language. Check mail text and placeholder substitution without sending real mail.
+
+`SystemMailTemplateModeTest.php` also renders the system-mail preferences form and
+submits it through the production form validator and preferences service. It covers
+all six templates, switching back and forth after reloading, translation-ID resets,
+language-dependent defaults, explicit custom text equal to a default, empty custom
+versions, ignored preview submissions, and migration of existing custom templates.
+The active value remains in `txt_text`; `txt_custom_text` retains the custom version
+while the system default is selected. Run the database updater for existing installs
+to add this column (steps 1290 and 1300).

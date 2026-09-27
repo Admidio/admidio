@@ -857,6 +857,7 @@ class ChangelogService {
             'lnk_sequence' =>             'SYS_ORDER',
 
             'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
+            'txt_custom_text' =>           array('name' => 'SYS_SYSTEM_MAIL_CUSTOM_TEXT', 'type' => 'TEXT_BIG'),
             'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
 
             'fol_name' =>                  'SYS_NAME',

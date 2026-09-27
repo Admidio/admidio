@@ -1846,4 +1846,7 @@
   <string name="SYS_YOUR_LISTS">Deine Listen</string>
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT">Systemstandard verwenden</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT_DESC">Wenn aktiviert, wird die aktuelle Systemvorlage verwendet und kann nicht bearbeitet werden. Deaktivieren Sie den Schalter, um Ihren eigenen Text zu bearbeiten. Aktivieren Sie ihn erneut, um zum Systemstandard zurückzukehren. Ihr eigener Text bleibt erhalten und wird beim erneuten Deaktivieren wiederhergestellt.</string>
+  <string name="SYS_SYSTEM_MAIL_CUSTOM_TEXT">Eigene E-Mail-Vorlage</string>
 </resources>

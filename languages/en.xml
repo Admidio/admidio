@@ -1974,4 +1974,7 @@
   <string name="SYS_YOUR_LISTS">Own lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT">Use system default</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT_DESC">When enabled, the current system template is used and cannot be edited. Disable this switch to edit your own text. Enable it again to restore the system default. Your own text is retained and restored when you disable the switch again.</string>
+  <string name="SYS_SYSTEM_MAIL_CUSTOM_TEXT">Custom mail template</string>
 </resources>
