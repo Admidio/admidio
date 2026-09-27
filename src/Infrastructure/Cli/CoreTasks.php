@@ -4693,7 +4693,7 @@ final class CoreTasks
 
         $rows = $gDb->queryPrepared(
             'SELECT rol.rol_id AS id, rol.rol_uuid AS uuid, rol.rol_name AS name,
-                    cat.cat_name AS category, rol.rol_valid AS active, rol.rol_system AS system,
+                    cat.cat_name AS category, rol.rol_valid AS active, rol.rol_system AS "system",
                     rol.rol_administrator AS administrator
                FROM ' . TBL_ROLES . ' rol
          INNER JOIN ' . TBL_CATEGORIES . ' cat ON cat.cat_id = rol.rol_cat_id
@@ -5396,7 +5396,7 @@ final class CoreTasks
         $rows = $gDb->queryPrepared(
             'SELECT cat_id AS id, cat_uuid AS uuid, cat_type AS type, cat_name AS name,
                     cat_name_intern AS internal_name, cat_default AS default_category,
-                    cat_system AS system, cat_sequence AS sequence, cat_org_id AS organization_id
+                    cat_system AS "system", cat_sequence AS sequence, cat_org_id AS organization_id
                FROM ' . TBL_CATEGORIES . '
               WHERE ' . implode(' AND ', $where) . '
            ORDER BY cat_type, cat_sequence, cat_name',
@@ -7704,7 +7704,7 @@ final class CoreTasks
         $rows = $gDb->queryPrepared(
             'SELECT inf_id AS id, inf_uuid AS uuid, inf_name_intern AS internal_name,
                     inf_name AS name, inf_type AS type, inf_description AS description,
-                    inf_system AS system, inf_required_input AS required_input,
+                    inf_system AS "system", inf_required_input AS required_input,
                     inf_sequence AS sequence, inf_inf_uuid_connected AS connected_uuid
                FROM ' . TBL_INVENTORY_FIELDS . '
               WHERE inf_org_id = ?
