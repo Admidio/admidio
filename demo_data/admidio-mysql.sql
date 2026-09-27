@@ -157,8 +157,8 @@ CREATE TABLE `%PREFIX%_category_report` (
 --
 
 INSERT INTO `%PREFIX%_category_report` (`crt_id`, `crt_org_id`, `crt_name`, `crt_col_fields`, `crt_selection_role`, `crt_selection_cat`, `crt_number_col`) VALUES
-(1, 1, 'General role assignment', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
-(2, 2, 'General role assignment', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
+(1, 1, 'General role assignment', 'p2,p1,p3,p5,r1,r2,r3', NULL, NULL, 0),
+(2, 2, 'General role assignment', 'p2,p1,p3,p5,r6,r7', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
