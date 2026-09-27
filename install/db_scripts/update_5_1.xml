@@ -219,6 +219,7 @@
     <step id="1260" database="pgsql">UPDATE %PREFIX%_organizations org SET org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND EXISTS (SELECT 1 FROM %PREFIX%_organizations child WHERE child.org_org_id_parent = org.org_id) AND (NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members') OR EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' AND prf.prf_value = '1'))</step>
     <step id="1270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
     <step id="1280">UpdateStepsCode::updateStep51TranslateDefaultEntries</step>
+    <step id="1285">UpdateStepsCode::updateStep51TranslateDemoEntries</step>
     <step id="1290">ALTER TABLE %PREFIX%_texts ADD COLUMN txt_custom_text text NULL</step>
     <step id="1300">UPDATE %PREFIX%_texts SET txt_custom_text = txt_text WHERE txt_custom_text IS NULL AND txt_name IN ('SYSMAIL_REGISTRATION_CONFIRMATION', 'SYSMAIL_REGISTRATION_NEW', 'SYSMAIL_REGISTRATION_APPROVED', 'SYSMAIL_REGISTRATION_REFUSED', 'SYSMAIL_LOGIN_INFORMATION', 'SYSMAIL_PASSWORD_RESET') AND txt_text NOT IN ('SYS_SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR', 'SYS_SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_LOGIN_INFORMATION', 'SYS_SYSMAIL_PASSWORD_RESET')</step>
     <step>stop</step>

@@ -67,7 +67,7 @@ class Post extends Entity
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['fop_text']));
             } else {
-                $value = $this->dbColumns['fop_text'];
+                $value = self::translateColumnValue($columnName, $this->dbColumns['fop_text']);
             }
 
             return $value;

@@ -87,7 +87,7 @@ class Announcement extends Entity
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
             } else {
-                $value = $this->dbColumns['ann_description'];
+                $value = self::translateColumnValue($columnName, $this->dbColumns['ann_description']);
             }
 
             return $value;

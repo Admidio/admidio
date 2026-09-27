@@ -65,7 +65,7 @@ class Weblink extends Entity
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['lnk_description']));
             } else {
-                $value = $this->dbColumns['lnk_description'];
+                $value = self::translateColumnValue($columnName, $this->dbColumns['lnk_description']);
             }
         } else {
             $value = parent::getValue($columnName, $format);
