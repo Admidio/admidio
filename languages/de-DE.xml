@@ -1031,9 +1031,9 @@
   <string name="SYS_MAKE_FORMER">Sie können diesen Kontakt zu einer/einem Ehemaligen machen. Dabei werden die Daten nicht gelöscht, sondern nur alle Rollenmitgliedschaften beendet. Das hat den Vorteil, dass Sie später immer sehen können, welche Daten und Rollen Sie diesem Kontakt zugewiesen hatten.</string>
   <string name="SYS_MAKE_FORMER_SELECTION">Sie können die ausgewählten Kontakte zu Ehemaligen machen. Dabei werden die Daten nicht gelöscht, sondern nur alle Rollenmitgliedschaften beendet. Das hat den Vorteil, dass Sie später immer sehen können, welche Daten und Rollen Sie diesen Kontakten zugewiesen hatten.</string>
   <string name="SYS_MALE">Männlich</string>
+  <string name="SYS_MANAGE_CATEGORY_REPORTS">Kategoriereporte verwalten</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher:innen, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
-  <string name="SYS_MANAGE_REPORTS">Reports verwalten</string>
   <string name="SYS_MANUAL_APPROVAL">Manuelle Freigabe</string>
   <string name="SYS_MANUAL_APPROVAL_DESC">Neue Registrierungen müssen manuell von Rollenmitgliedern mit dem Recht #VAR1_BOLD# freigegeben werden. Erst danach ist es für das neue Mitglied möglich sich am System anzumelden. Wird die Einstellung deaktiviert, so können sich neue Mitglieder nach erfolgreicher Registrierung direkt am System anmelden. (Voreinstellung: ja)</string>
   <string name="SYS_MAP">Karte</string>
@@ -1396,7 +1396,6 @@
   <string name="SYS_RIGHT_VIEW_PARTICIPANTS">Teilnehmende können die Liste aller Teilnehmenden einsehen</string>
   <string name="SYS_RIGHT_WEBLINKS">Weblinks verwalten</string>
   <string name="SYS_ROLE">Rolle</string>
-  <string name="SYS_REPORT">Report</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite können Sie einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen Ihnen nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administrierende besitzen alle Berechtigungen für den Ordner.</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Rollenzuordnung für #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCY_CIRCULAR">Diese Rollenabhängigkeit kann nicht gespeichert werden, da die andere Rolle bereits direkt oder indirekt von dieser Rolle abhängt.</string>

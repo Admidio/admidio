@@ -14,13 +14,13 @@ class CategoryReportAdministrationPresenter extends PagePresenter
         global $gCurrentOrgId, $gCurrentSession, $gL10n;
 
         $this->setHtmlID('adm_category_report_manage');
-        $this->setHeadline($gL10n->get('SYS_MANAGE_REPORTS'));
+        $this->setHeadline($gL10n->get('SYS_MANAGE_CATEGORY_REPORTS'));
         $baseUrl = ADMIDIO_URL . FOLDER_MODULES . '/category_report.php';
         $this->addJavascript('function refreshCategoryReportList() { location.reload(); }');
 
         $this->addPageFunctionsMenuItem(
             'menu_item_category_report_add',
-            $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_REPORT'))),
+            $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_CATEGORY_REPORT'))),
             SecurityUtils::encodeUrl($baseUrl, array('mode' => 'new')),
             'bi-plus-circle-fill'
         );

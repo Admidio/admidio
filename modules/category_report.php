@@ -28,7 +28,7 @@ try {
     switch ($getMode) {
         case 'manage':
             require_once(__DIR__ . '/../system/login_valid.php');
-            $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_MANAGE_REPORTS'));
+            $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_MANAGE_CATEGORY_REPORTS'));
             $page = new CategoryReportAdministrationPresenter();
             $page->createList();
             $page->show();

@@ -1,7 +1,7 @@
 <table id="adm_table_category_reports" class="table table-hover" width="100%" style="width: 100%;">
     <thead>
         <tr>
-            <th>{$l10n->get('SYS_REPORT')}</th>
+            <th>{$l10n->get('SYS_CATEGORY_REPORT')}</th>
             <th>{$l10n->get('SYS_DESCRIPTION')}</th>
             <th class="text-end">{$l10n->get('SYS_NUMBER_OF_COLUMNS')}</th>
             <th class="text-center"><i class="bi bi-star-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DEFAULT_REPORT')}"></i></th>

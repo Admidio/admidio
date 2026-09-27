@@ -1041,9 +1041,9 @@
   <string name="SYS_MAKE_FORMER">You can make this contact to a former contact. This does not delete the data, but only terminates all role memberships. This has the advantage that you can always see later which data and roles you had assigned to this contact.</string>
   <string name="SYS_MAKE_FORMER_SELECTION">You can make the selected contacts to former contacts. This does not delete the data, but only terminates all role memberships. This has the advantage that you can always see later which data and roles you had assigned to these contacts.</string>
   <string name="SYS_MALE">Male</string>
+  <string name="SYS_MANAGE_CATEGORY_REPORTS">Manage category reports</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">New profile fields and their properties can be defined as well as changes to existing profile fields. The fields can be assigned to categories and provided with rights, which roles can see or edit which profile fields.</string>
-  <string name="SYS_MANAGE_REPORTS">Manage reports</string>
   <string name="SYS_MANUAL_APPROVAL">Manual approval</string>
   <string name="SYS_MANUAL_APPROVAL_DESC">New registrations must be approved manually by role members with the #VAR1_BOLD# right. Only then it is possible for the new member to log in to the system. If the setting is deactivated, new members can log on to the system directly after successful registration. (Default: Enabled)</string>
   <string name="SYS_MAP">Map</string>
@@ -1435,7 +1435,6 @@
   <string name="SYS_RIGHT_VIEW_PARTICIPANTS">Participants can view the list of participants</string>
   <string name="SYS_RIGHT_WEBLINKS">Manage web links</string>
   <string name="SYS_ROLE">Role</string>
-  <string name="SYS_REPORT">Report</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Role assignment for #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCIES_DESC">A member of a dependent role will become automatically a member of #VAR1#!\n\nWhen this dependency is set all existing members of the dependent role will become a member of #VAR1#. When a dependency is going to be deleted, memberships will remain the same!</string>

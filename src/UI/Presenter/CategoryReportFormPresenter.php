@@ -28,7 +28,7 @@ class CategoryReportFormPresenter extends PagePresenter
             $report['name'] = $repository->createName(html_entity_decode((string)$report['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
         }
         $title = $gL10n->get(array('new' => 'SYS_CREATE_VAR', 'edit' => 'SYS_EDIT_VAR', 'copy' => 'SYS_COPY_VAR')[$action],
-            array($gL10n->get('SYS_REPORT')));
+            array($gL10n->get('SYS_CATEGORY_REPORT')));
         $this->setHtmlID('adm_category_report_edit');
         $this->setHeadline($title);
 

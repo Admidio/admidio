@@ -35,7 +35,7 @@ class CategoryReportPresenter
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php',
                 array('mode' => 'manage'));
             $page->addHtml('<a class="btn btn-primary" href="' . $url . '"><i class="bi bi-gear-fill"></i> ' .
-                $gL10n->get('SYS_MANAGE_REPORTS') . '</a>');
+                $gL10n->get('SYS_MANAGE_CATEGORY_REPORTS') . '</a>');
             $page->show();
             return;
         }
@@ -211,7 +211,7 @@ class CategoryReportPresenter
                 if ($gCurrentUser->isAdministrator()) {
                     $page->addPageFunctionsMenuItem(
                         'menu_item_category_report_manage',
-                        $gL10n->get('SYS_MANAGE_REPORTS'),
+                        $gL10n->get('SYS_MANAGE_CATEGORY_REPORTS'),
                         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array('mode' => 'manage')),
                         'bi-gear-fill'
                     );
