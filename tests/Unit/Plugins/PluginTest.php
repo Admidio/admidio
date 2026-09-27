@@ -259,6 +259,23 @@ final class PluginTest extends PluginTestCase
     }
 
     /**
+     * @testdox A broken plugin still reports no disabled modules instead of a warning
+     *
+     * A broken plugin never reached readRequires(), so its requires array must still carry every
+     * key getDisabledModules() reads, or the plugin list crashes while rendering the very error the
+     * administrator needs to see.
+     */
+    public function testBrokenPluginReportsNoDisabledModules(): void
+    {
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array());
+
+        $plugin = Plugin::read(self::fixturePath('does-not-exist'));
+
+        $this->assertFalse($plugin->isValid());
+        $this->assertSame(array(), $plugin->getDisabledModules());
+    }
+
+    /**
      * @testdox A directory that is not there at all is reported as a missing manifest
      */
     public function testMissingDirectory(): void
