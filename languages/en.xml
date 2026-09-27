@@ -1303,7 +1303,7 @@
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">The plugin.json of this plugin cannot be read: #VAR1#</string>
   <string name="SYS_PLUGIN_PACKAGE_EMPTY">The file is an empty archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_INSTALLED">The plugin #VAR1# was added. Enable it to start using it.</string>
-  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">The folder in the archive is called #VAR1#, which cannot be a plugin name. A plugin name may only contain lowercase letters, digits and hyphens.</string>
+  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">The folder in the archive is called #VAR1#, which cannot be a plugin name. A plugin name may only contain lowercase letters, digits, hyphens and underscores.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_A_ZIP">The file is not a ZIP archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_EXTRACTED">The archive could not be unpacked. Check that Admidio may write into its temporary folder.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_INSTALLED">The plugin #VAR1# could not be moved into the plugins folder. Check that Admidio may write into it.</string>

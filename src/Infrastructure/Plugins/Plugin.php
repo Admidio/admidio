@@ -68,7 +68,8 @@ final class Plugin
     public const RESERVED_NAMESPACE = 'Admidio\\';
 
     /**
-     * Plugin ID, which is the directory name. Lowercase letters, digits and single hyphens.
+     * Plugin ID, which is the directory name. Lowercase letters, digits and single hyphens or
+     * underscores as separators.
      */
     public readonly string $id;
 
@@ -190,7 +191,8 @@ final class Plugin
 
         if (!self::isValidId($id)) {
             return new self($id, $path, array(), array(), array(), $empty,
-                'The plugin directory name "' . $id . '" must consist of lowercase letters, digits and single hyphens.');
+                'The plugin directory name "' . $id . '" must consist of lowercase letters, digits and single '
+                . 'hyphens or underscores as separators.');
         }
 
         $manifestFile = $path . '/' . self::MANIFEST_FILE;
@@ -239,7 +241,7 @@ final class Plugin
      */
     public static function isValidId(string $id): bool
     {
-        return (bool)preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $id);
+        return (bool)preg_match('/^[a-z0-9]+(?:[-_][a-z0-9]+)*$/', $id);
     }
 
     /**
