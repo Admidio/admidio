@@ -1146,7 +1146,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Rola powiadomienia</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Powiadomienia o nowych wpisach i zmianach w profilach są wysyłane wszystkim członkom w tej roli.</string>
   <string name="SYS_NUMBER">Numer</string>
-  <string name="SYS_NUMBER_COL_DESC">Odpowiednie pole wyboru musi być zaznaczone, jeśli chcesz wyświetlić na końcu raportu linię z liczbą członkostw.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Odpowiednie pole wyboru musi być zaznaczone, jeśli chcesz wyświetlić na końcu raportu linię z liczbą członkostw.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Ilość albumów na stronie</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Ilość wpisów na stronie</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Liczba wpisów wyświetlanych na stronie. Jeśli wpisów jest więcej, do strony zostanie dodana paginacja. Jeśli wartość wynosi 0, wszystkie wpisy zostaną pokazane na jednej stronie, a paginacja zostanie wyłączona. (domyślnie: #VAR1#)</string>

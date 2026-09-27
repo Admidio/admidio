@@ -1178,7 +1178,6 @@
   <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rolle erhalten die Benachrichtigungen über neue oder geänderte Einträge in den Modulen und Änderungen in den Profildaten der Mitglieder. Aus Datenschutzgründen können nur Rollen hinterlegt werden, die das Rollenrecht #VAR1_BOLD# haben.</string>
   <string name="SYS_NUMBER">Zahl</string>
-  <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
   <string name="SYS_NUMBER_OF_COLUMNS">Anzahl Spalten</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
@@ -1804,6 +1803,8 @@
   <string name="SYS_SUBSCRIBE">Abonnieren</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Unterorganisationen</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Unterorganisationen können Profildaten von Kontakten gemeinsam nutzen. In einigen Modulen (Ankündigungen, Veranstaltungen) ist es möglich, Einträge aus der Hauptorganisation in den Unterorganisationen anzuzeigen. Die Verwaltung einer Unterorganisation ist völlig eigenständig und kann mit einem eigenen Rechtekonzept versehen werden. Weitere Informationen findest du im #VAR1#Admidio Wiki#VAR2#.</string>
+  <string name="SYS_SUMMARY_ROW">Summenzeile</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Zeigt am Ende des Reports eine Summenzeile mit der Anzahl der Mitgliedschaften je Spalte an.</string>
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Wechsel zur Kalenderverwaltung</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorie Verwaltung</string>
@@ -1858,6 +1859,7 @@
   <string name="SYS_TITLE">Titel</string>
   <string name="SYS_TO" description="E-Mail">An</string>
   <string name="SYS_TOPIC">Thema</string>
+  <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNIDIRECTIONAL">unidirektional</string>

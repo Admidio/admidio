@@ -1135,7 +1135,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Notifikationsrolle</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Medlemmer af denne rolle modtager meddelelser om nye eller ændrede poster i modulerne og ændringer i medlemmernes profildata. Af databeskyttelsesmæssige årsager kan der kun deponeres roller, som har rolleretten #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Nummer</string>
-  <string name="SYS_NUMBER_COL_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal albums pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering på siden. Hvis værdien er 0, vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>

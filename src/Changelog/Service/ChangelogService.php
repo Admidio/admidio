@@ -919,7 +919,7 @@ class ChangelogService {
             'crt_col_conditions' =>        'SYS_CONDITION',
             'crt_selection_role' =>        array('name' => 'SYS_ROLE_SELECTION', 'type' => 'ROLE'),
             'crt_selection_cat' =>         array('name' => 'SYS_CAT_SELECTION', 'type' => 'CATEGORY'),
-            'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),
+            'crt_number_col' =>            array('name' => 'SYS_SUMMARY_ROW', 'type' => 'BOOL'),
 
             'lst_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'lst_usr_id' =>                array('name' => 'SYS_MEMBER', 'type' => 'USER'),

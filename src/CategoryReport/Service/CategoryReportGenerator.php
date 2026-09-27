@@ -242,7 +242,7 @@ class CategoryReportGenerator
             }
         }
 
-        $number_col[1] = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')';
+        $number_col[1] = $gL10n->get('SYS_TOTAL');
 
 
         // ---------------------------------------------------------------------

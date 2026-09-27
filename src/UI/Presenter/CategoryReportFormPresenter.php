@@ -50,8 +50,8 @@ class CategoryReportFormPresenter extends PagePresenter
         $form->addSelectBoxFromSql('selection_cat', $gL10n->get('SYS_CAT_SELECTION'), $gDb, $sql,
             array('defaultValue' => explode(',', (string)$report['selection_cat']), 'multiselect' => true,
                 'helpTextId' => 'SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC'));
-        $form->addCheckbox('number_col', $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')',
-            $report['number_col'], array('helpTextId' => 'SYS_NUMBER_COL_DESC'));
+        $form->addCheckbox('number_col', $gL10n->get('SYS_SUMMARY_ROW'),
+            $report['number_col'], array('helpTextId' => 'SYS_SUMMARY_ROW_DESC'));
         $form->addInput('report_action', '', $action, array('property' => FormPresenter::FIELD_HIDDEN));
         $form->addInput('source_id', '', $action === 'new' ? 0 : $reportId, array('property' => FormPresenter::FIELD_HIDDEN));
         $form->addButton('category_report_add_column', $gL10n->get('SYS_ADD_COLUMN'),

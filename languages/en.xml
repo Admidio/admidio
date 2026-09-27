@@ -1185,7 +1185,6 @@
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Members of this role receive the notifications about new or changed entries in the modules and changes in the members' profile data. For data protection reasons only roles can be deposited, which have the role right #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
   <string name="SYS_NUMBER_OF_COLUMNS">Number of columns</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
@@ -1837,6 +1836,8 @@
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Sub-organizations</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share profile data of contacts. In some modules (announcements, events) it is possible to display entries from the main organization in the sub-organizations. The administration of a sub-organization is completely independent and can be provided with its own rights concept. You can find more information in the #VAR1#Admidio Wiki#VAR2#.</string>
   <string name="SYS_SUBSCRIBE">Subscribe</string>
+  <string name="SYS_SUMMARY_ROW">Summary row</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Displays a summary row at the end of the report with the number of memberships in each column.</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
@@ -1891,6 +1892,7 @@
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TOPIC">Topic</string>
+  <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>

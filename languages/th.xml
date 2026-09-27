@@ -896,7 +896,7 @@
   <string name="SYS_NOTIFICATION_ROLE">บทบาทการแจ้งเตือน</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">การแจ้งเตือนเกี่ยวกับรายการใหม่หรือการเปลี่ยนแปลงโปรไฟล์จะถูกส่งไปยังสมาชิกทุกคนในบทบาทนี้</string>
   <string name="SYS_NUMBER">ตัวเลข</string>
-  <string name="SYS_NUMBER_COL_DESC">ต้อง เปิดใช้งาน ช่องทำเครื่องหมายที่เกี่ยวข้อง หากคุณต้องการแสดงบรรทัดพร้อมจำนวนสมาชิกที่ส่วนท้ายของรายงาน</string>
+  <string name="SYS_SUMMARY_ROW_DESC">ต้อง เปิดใช้งาน ช่องทำเครื่องหมายที่เกี่ยวข้อง หากคุณต้องการแสดงบรรทัดพร้อมจำนวนสมาชิกที่ส่วนท้ายของรายงาน</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">จำนวนอัลบั้มต่อหน้า</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">จำนวนรายการที่แสดงบนเพจ หากมีรายการมากกว่านี้ องค์ประกอบการนำทางจะแสดงขึ้นเพื่อเลื่อนระหว่างหน้าต่างๆ (ค่าเริ่มต้น: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">จำนวนรายการที่แสดงบนเพจ หากมีรายการมากกว่านี้ องค์ประกอบการนำทางจะแสดงขึ้นเพื่อเลื่อนระหว่างหน้าต่างๆ (ค่าเริ่มต้น: #VAR1#)</string>
