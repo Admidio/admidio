@@ -3,6 +3,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Components\Entity\Component;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
