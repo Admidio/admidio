@@ -2,6 +2,7 @@
 
 namespace Admidio\UI\Presenter;
 
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\CollapsibleHtml;
@@ -83,7 +84,13 @@ class GroupsRolesPresenter extends PagePresenter
             $templateRow = array();
             $templateRow['category'] = $role->getValue('cat_name');
             $templateRow['id'] = 'role_' . $role->getValue('rol_uuid');
-            $templateRow['title'] = $role->getValue('rol_name');
+            if ($roleType === self::ROLE_TYPE_EVENT_PARTICIPATION && !empty($row['dat_begin'])) {
+                $event = new Event($gDb);
+                $event->setArray($row);
+                $templateRow['title'] = $event->getValue('dat_begin', 'Y-m-d H:i') . ' ' . $event->getValue('dat_headline');
+            } else {
+                $templateRow['title'] = $role->getValue('rol_name');
+            }
 
             // send mail to all role members
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getInt('mail_module_enabled') > 0) {

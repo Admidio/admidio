@@ -359,7 +359,7 @@ class EventListPresenter extends PagePresenter
                     }
                 }
 
-                $eventLocation = (string)$event->getValue('dat_location', 'database');
+                $eventLocation = (string)$event->getValue('dat_location');
                 if ($eventLocation !== '') {
                     // Show a map link, when at least 2 words available
                     // having more than 3 characters each
