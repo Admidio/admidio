@@ -157,13 +157,13 @@ class ForumTopicPresenter extends PagePresenter
         $form->addInput(
             'fot_title',
             $gL10n->get('SYS_TITLE'),
-            $this->topic->getValue('fot_title'),
+            htmlentities((string)$this->topic->getValue('fot_title', 'database'), ENT_QUOTES),
             array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addEditor(
             'fop_text',
             $gL10n->get('SYS_TEXT'),
-            $post->getValue('fop_text'),
+            $post->getValue('fop_text', 'edit'),
             array('property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton(

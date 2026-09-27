@@ -95,7 +95,7 @@ class ForumPostPresenter extends PagePresenter
         $form->addEditor(
             'fop_text',
             $gL10n->get('SYS_TEXT'),
-            $post->getValue('fop_text'),
+            $post->getValue('fop_text', 'edit'),
             array('property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton(

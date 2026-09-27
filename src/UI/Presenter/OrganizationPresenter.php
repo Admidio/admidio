@@ -67,7 +67,7 @@ class OrganizationPresenter extends PagePresenter
         $formOrganization->addInput(
             'org_longname',
             $gL10n->get('SYS_NAME'),
-            $gCurrentOrganization->getValue('org_longname'),
+            htmlentities((string)$gCurrentOrganization->getValue('org_longname', 'database'), ENT_QUOTES),
             array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $formOrganization->addInput(

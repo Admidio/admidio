@@ -9,7 +9,6 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Service\ChangelogService;
-use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -111,14 +110,14 @@ class InventoryFieldsPresenter extends PagePresenter
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name'), ENT_QUOTES),
+                htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name'), ENT_QUOTES),
+                htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
@@ -184,7 +183,6 @@ class InventoryFieldsPresenter extends PagePresenter
 
         $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));
         foreach ($options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options')) as $option) {
-            $option['value'] = Language::translateIfTranslationStrId($option['value']);
             $optionValueList[] = $option;
         }
         if (empty($optionValueList)) {
@@ -210,7 +208,7 @@ class InventoryFieldsPresenter extends PagePresenter
         $form->addEditor(
             'inf_description',
             $gL10n->get('SYS_DESCRIPTION'),
-            $itemField->getValue('inf_description', 'database'),
+            $itemField->getValue('inf_description', 'edit'),
             array('toolbar' => 'AdmidioComments'));
 
         $form->addSubmitButton(

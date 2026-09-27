@@ -241,14 +241,14 @@ try {
             $form->addInput(
                 'msg_subject',
                 $gL10n->get('SYS_SUBJECT'),
-                $message->getValue('msg_subject'),
+                htmlentities((string)$message->getValue('msg_subject', 'database'), ENT_QUOTES),
                 array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         } else {
             $form->addInput(
                 'msg_subject',
                 '',
-                $message->getValue('msg_subject'),
+                htmlentities((string)$message->getValue('msg_subject', 'database'), ENT_QUOTES),
                 array('property' => FormPresenter::FIELD_HIDDEN)
             );
         }
@@ -570,7 +570,7 @@ try {
         $form->addInput(
             'msg_subject',
             $gL10n->get('SYS_SUBJECT'),
-            $message->getValue('msg_subject'),
+            htmlentities((string)$message->getValue('msg_subject', 'database'), ENT_QUOTES),
             array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 

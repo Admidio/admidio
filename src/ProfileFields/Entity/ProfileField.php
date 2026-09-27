@@ -223,7 +223,7 @@ class ProfileField extends Entity
             return '';
         }
 
-        if ($format !== 'database') {
+        if ($format !== 'database' && $format !== 'edit') {
             switch ($columnName) {
                 case 'usf_description': // fallthrough
                 case 'usf_name': // fallthrough

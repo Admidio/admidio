@@ -439,18 +439,18 @@ class EventFormPresenter extends PagePresenter
 
         // show form
         $form = new FormPresenter('adm_events_edit_form', 'modules/events.edit.tpl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', ['dat_uuid' => $getEventUuid, 'mode' => 'save', 'copy' => $getCopy, 'recurrence_scope' => $getRecurrenceScope]), $page);
-        $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $event->getValue('dat_headline'), ['maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED]);
+        $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), htmlentities((string)$event->getValue('dat_headline', 'database'), ENT_QUOTES), ['maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED]);
 
         // if a map link should be shown in the event then show help text and a field where the user could choose the country
         if ($gSettingsManager->getBool('events_show_map_link')) {
-            $form->addInput('dat_location', $gL10n->get('SYS_VENUE'), (string)$event->getValue('dat_location'), ['maxLength' => 100, 'helpTextId' => 'SYS_VENUE_LINK']);
+            $form->addInput('dat_location', $gL10n->get('SYS_VENUE'), htmlentities((string)$event->getValue('dat_location', 'database'), ENT_QUOTES), ['maxLength' => 100, 'helpTextId' => 'SYS_VENUE_LINK']);
 
             if (!$event->getValue('dat_country') && $getEventUuid === '') {
                 $event->setValue('dat_country', $gSettingsManager->getString('default_country'));
             }
             $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), ['defaultValue' => $event->getValue('dat_country', 'database')]);
         } else {
-            $form->addInput('dat_location', $gL10n->get('SYS_VENUE'), $event->getValue('dat_location'), ['maxLength' => 100]);
+            $form->addInput('dat_location', $gL10n->get('SYS_VENUE'), htmlentities((string)$event->getValue('dat_location', 'database'), ENT_QUOTES), ['maxLength' => 100]);
         }
 
         // if room selection is activated then show a select box with all rooms
@@ -505,7 +505,7 @@ class EventFormPresenter extends PagePresenter
         $form->addInput('event_deadline', $gL10n->get('SYS_DEADLINE'), $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC']);
         $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
         $form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
-        $form->addEditor('dat_description', '', $event->getValue('dat_description'));
+        $form->addEditor('dat_description', '', $event->getValue('dat_description', 'edit'));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), ['icon' => 'bi-check-lg']);
 
         $page->assignSmartyVariable('userCreatedName', $event->getNameOfCreatingUser());

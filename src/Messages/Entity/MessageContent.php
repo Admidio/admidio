@@ -50,7 +50,9 @@ class MessageContent extends Entity
     public function getValue(string $columnName, string $format = ''): mixed
     {
         if ($columnName === 'msc_message') {
-            if ($format === 'database') {
+            if ($format === 'edit') {
+                $value = $this->dbColumns['msc_message'];
+            } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['msc_message']));
             } elseif($this->dbColumns['msc_message'] != strip_tags($this->dbColumns['msc_message'])) {
                 // text contains html

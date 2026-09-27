@@ -1105,7 +1105,7 @@ class Entity
                 case 'tinytext':
                 case 'mediumtext':
                 case 'longtext':
-                    if ($format !== 'database') {
+                    if ($format !== 'database' && $format !== 'edit') {
                         // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
                     } else {
@@ -1133,7 +1133,7 @@ class Entity
                 case 'date': // fallthrough
                 case 'time':
                     if (isset($columnValue) && $columnValue !== '') {
-                        if ($format === 'database') {
+                        if ($format === 'database' || $format === 'edit') {
                             // the value exactly as the database holds it, e.g. a date as Y-m-d, for a
                             // comparison or a re-insert - never run through DateTime::format().
                             $columnValue = $this->dbColumns[$columnName];
@@ -1164,7 +1164,7 @@ class Entity
             }
         }
 
-        if ($format !== 'database' && is_string($columnValue) && self::isTranslatableColumn($columnName)) {
+        if ($format !== 'database' && $format !== 'edit' && is_string($columnValue) && self::isTranslatableColumn($columnName)) {
             $translatedValue = self::translateColumnValue($columnName, $columnValue);
             $columnValue = $columnName === 'txt_text' && $translatedValue !== $columnValue
                 ? SecurityUtils::encodeHTML($translatedValue) : $translatedValue;

@@ -62,6 +62,8 @@ class Weblink extends Entity
         if ($columnName === 'lnk_description') {
             if (!isset($this->dbColumns['lnk_description'])) {
                 $value = '';
+            } elseif ($format === 'edit') {
+                $value = $this->dbColumns['lnk_description'];
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['lnk_description']));
             } else {

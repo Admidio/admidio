@@ -249,7 +249,7 @@ class AnnouncementsPresenter extends PagePresenter
         $form->addInput(
             'ann_headline',
             $gL10n->get('SYS_TITLE'),
-            $announcement->getValue('ann_headline'),
+            htmlentities((string)$announcement->getValue('ann_headline', 'database'), ENT_QUOTES),
             array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSelectBoxForCategories(
@@ -263,7 +263,7 @@ class AnnouncementsPresenter extends PagePresenter
         $form->addEditor(
             'ann_description',
             $gL10n->get('SYS_TEXT'),
-            $announcement->getValue('ann_description'),
+            $announcement->getValue('ann_description', 'edit'),
             array('property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
