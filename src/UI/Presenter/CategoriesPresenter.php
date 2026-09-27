@@ -331,7 +331,7 @@ class CategoriesPresenter extends PagePresenter
 
             $adminRoles = array();
             while ($roleName = $statementAdminRoles->fetchColumn()) {
-                $adminRoles[] = $roleName;
+                $adminRoles[] = Language::translateIfTranslationStrId($roleName);
             }
 
             $form->addInput(
@@ -475,7 +475,7 @@ class CategoriesPresenter extends PagePresenter
 
         $adminRoles = array();
         while ($roleName = $statementAdminRoles->fetchColumn()) {
-            $adminRoles[] = $roleName;
+            $adminRoles[] = Language::translateIfTranslationStrId($roleName);
         }
 
         $this->setHeadline($headline);

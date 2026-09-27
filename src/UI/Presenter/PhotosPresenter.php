@@ -394,7 +394,7 @@ class PhotosPresenter extends PagePresenter
                     WHERE rol_uuid IN (' . Database::getQmForValues($writeRoleUuids) . ')
                       AND cat_name_intern <> \'EVENTS\' ORDER BY rol_name';
             foreach ($gDb->queryPrepared($sql, $writeRoleUuids) as $row) {
-                $recipients[] = array('groupID: ' . $row['rol_uuid'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
+                $recipients[] = array('groupID: ' . $row['rol_uuid'], Language::translateIfTranslationStrId($row['rol_name']), $gL10n->get('SYS_ROLES'));
             }
         }
         $visibleRoleUuids = array_values(array_unique(array_merge(

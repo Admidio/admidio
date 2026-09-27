@@ -1615,9 +1615,9 @@ class FormPresenter
                 // translate category name
                 $row[2] = Language::translateIfTranslationStrId((string)$row[2]);
 
-                $selectBoxEntries[] = array($row[0], (string)$row[1], $row[2]);
+                $selectBoxEntries[] = array($row[0], Language::translateIfTranslationStrId((string)$row[1]), $row[2]);
             } else {
-                $selectBoxEntries[$row[0]] = (string)$row[1];
+                $selectBoxEntries[$row[0]] = Language::translateIfTranslationStrId((string)$row[1]);
             }
         }
 
