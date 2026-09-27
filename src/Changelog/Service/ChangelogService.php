@@ -1045,7 +1045,7 @@ class ChangelogService {
                 case 'inventory_item_borrow_data' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
                 case 'links' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
                 case 'lists' :
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
                 case 'list_columns':
@@ -1057,7 +1057,7 @@ class ChangelogService {
                 // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 case 'photos':
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos.php', array('photo_uuid' => $uuid)); break;
                 // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 // case 'registrations':

@@ -40,6 +40,17 @@
     padding-top: 0;
 }
 
+#adm_main_navbar .navbar-brand {
+    color: var(--admidio-header-font-color);
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+#adm_main_navbar .navbar-brand:hover,
+#adm_main_navbar .navbar-brand:focus {
+    color: var(--admidio-header-font-color);
+}
+
 #adm_main_navbar .navbar-brand img {
     margin-right: 1rem;
 }
@@ -551,7 +562,11 @@ label {
     border: none;
     background-color: var(--bs-tertiary);
     margin: 1rem 0;
-    height: 95%;
+    min-height: 95%;
+}
+
+.admidio-album-info {
+    background-color: var(--bs-tertiary);
 }
 
 .admidio-blog img, .admidio-card img {

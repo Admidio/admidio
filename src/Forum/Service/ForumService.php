@@ -6,8 +6,8 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 use DateTime;
 
 /**
@@ -155,30 +155,27 @@ class ForumService
 
     public function getRssFeedContent(string $organizationShortName): string
     {
-        global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n, $gCurrentOrgId;
+        global $gCurrentUser, $gCurrentOrganization, $gL10n, $gValidLogin;
 
-        // Check if RSS is active...
-        if (!$gSettingsManager->getBool('enable_rss')) {
-            throw new Exception('SYS_RSS_DISABLED');
-        }
-
-        if ($organizationShortName !== '') {
-            $organization = new Organization($gDb, $organizationShortName);
-            $organizationName = $organization->getValue('org_longname');
-            $gCurrentUser->setOrganization($organization->getValue('org_id'));
-        } else {
-            $organizationName = $gCurrentOrganization->getValue('org_longname');
-        }
+        $organization = RssFeedAccess::resolveOrganization($this->db, $gCurrentOrganization, $organizationShortName);
+        RssFeedAccess::assertAccessible($organization, 'forum_module_enabled', $gValidLogin);
+        $organizationName = $organization->getValue('org_longname');
 
         // create RSS feed object with channel information
         $rss = new RssFeed(
             $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
-            $gCurrentOrganization->getValue('org_homepage'),
+            $organization->getValue('org_homepage'),
             $gL10n->get('SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION', array($organizationName)),
             $organizationName
         );
 
-        $forumTopics = $this->findAll(0, 50);
+        $previousUserOrganizationID = $gCurrentUser->getOrganization();
+        try {
+            $gCurrentUser->setOrganization((int)$organization->getValue('org_id'));
+            $forumTopics = $this->findAll(0, 50);
+        } finally {
+            $gCurrentUser->setOrganization($previousUserOrganizationID);
+        }
 
         if (count($forumTopics) > 0) {
             foreach ($forumTopics as $topic) {
@@ -195,7 +192,6 @@ class ForumService
             }
         }
 
-        $gCurrentUser->setOrganization($gCurrentOrgId);
         return $rss->getRssFeedContent();
     }
 

@@ -364,6 +364,7 @@ final class PreferenceDefinitions
             'sso_oidc_refresh_token_lifetime' => array('default' => '2592000', 'type' => 'int', 'minimum' => 1, 'required' => true),
             'weblinks_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'weblinks_per_page' => array('default' => '0', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
+            'weblinks_preview_characters' => array('default' => '200', 'type' => 'int', 'minimum' => 1, 'maximum' => 9999),
             'weblinks_redirect_seconds' => array('default' => '10', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
             'weblinks_target' => array('default' => '_blank', 'type' => 'enum', 'values' => array('_self', '_blank')),
         );

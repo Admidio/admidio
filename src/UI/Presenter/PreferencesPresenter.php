@@ -1830,6 +1830,12 @@ class PreferencesPresenter extends PagePresenter
             $formValues['weblinks_per_page'],
             self::preferenceInputOptions('weblinks_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0))))
         );
+        $formWeblinks->addInput(
+            'weblinks_preview_characters',
+            $gL10n->get('SYS_WEBLINKS_PREVIEW_CHARACTERS'),
+            $formValues['weblinks_preview_characters'],
+            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => 'SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC'))
+        );
         $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
         $formWeblinks->addSelectBox(
             'weblinks_target',
