@@ -72,19 +72,34 @@ class PluginsPresenter extends PagePresenter
         );
 
         $this->addJavascript('
-            $(".admidio-open-close-caret").click(function() {
+            $(document).on("click", ".admidio-open-close-caret", function() {
                 showHideBlock($(this));
             });
         ', true);
 
         $this->addActionJavascript();
 
+        $this->pageContent .= $this->createListContent();
+    }
+
+    /**
+     * The list content alone, without the surrounding page: the group headings, the table and the
+     * card view. This is what the page shows on first load and what the state toggle re-fetches
+     * afterwards, so that enabling or disabling a plugin never has to reload the whole page - only
+     * the list, which is also the only part a toggle actually changes.
+     * @return string The HTML of the list content, wrapped in one container the toggle replaces.
+     * @throws Exception
+     */
+    public function createListContent(): string
+    {
+        global $gL10n;
+
         $this->smarty->assign('list', $this->getGroups());
         $this->smarty->assign('failures', PluginLoader::getFailures());
         $this->smarty->assign('l10n', $gL10n);
 
         try {
-            $this->pageContent .= $this->smarty->fetch('modules/plugins.list.tpl');
+            return $this->smarty->fetch('modules/plugins.list.tpl');
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -306,42 +321,57 @@ class PluginsPresenter extends PagePresenter
     }
 
     /**
-     * The JavaScript that performs one operation of the plugin manager and reloads the page.
+     * The JavaScript that performs the operations of the plugin manager.
      *
-     * Installing, enabling, updating and removing all change what the other rows may offer, so
-     * the page is reloaded rather than one row being patched. Both pages of the module use it.
+     * Installing, updating and removing all change what the other rows may offer, so those still
+     * reload the whole page rather than one row being patched. Enabling and disabling is different:
+     * an administrator switches several plugins in a row, so it neither asks for confirmation - there
+     * is nothing destructive about it - nor reloads the page. The toggle flips its own icon and dims
+     * its row before the request even answers, so the click itself already looks like something
+     * happened; once the answer arrives it re-fetches the list content and replaces it, which still
+     * lets a plugin move to another group or change its actions, without the wait of a full reload.
      * @return void
      * @throws Exception
      */
     private function addActionJavascript(): void
     {
         $this->addJavascript('
+            function parsePluginResponse(data) {
+                let status = "error";
+                let message = "";
+
+                try {
+                    const parsed = JSON.parse(data);
+                    status = parsed.status;
+                    if (typeof parsed.message !== "undefined") {
+                        message = parsed.message;
+                    }
+                } catch (e) {
+                    message = data;
+                }
+
+                return { status: status, message: message };
+            }
+
+            function showPluginActionMessage(status, message) {
+                const messageText = $("#adm_status_message");
+
+                if (status === "success") {
+                    messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i> "
+                        + message + "</div>");
+                } else {
+                    if (message.length === 0) {
+                        message = "Error: Undefined error occurred!";
+                    }
+                    messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i> "
+                        + message + "</div>");
+                }
+            }
+
             function callPluginAction(url, csrfToken) {
                 $.post(url, { "adm_csrf_token": csrfToken }, function(data) {
-                    const messageText = $("#adm_status_message");
-                    let returnStatus = "error";
-                    let returnMessage = "";
-
-                    try {
-                        const returnData = JSON.parse(data);
-                        returnStatus = returnData.status;
-                        if (typeof returnData.message !== "undefined") {
-                            returnMessage = returnData.message;
-                        }
-                    } catch (e) {
-                        returnMessage = data;
-                    }
-
-                    if (returnStatus === "success") {
-                        messageText.html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i> "
-                            + returnMessage + "</div>");
-                    } else {
-                        if (returnMessage.length === 0) {
-                            returnMessage = "Error: Undefined error occurred!";
-                        }
-                        messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i> "
-                            + returnMessage + "</div>");
-                    }
+                    const result = parsePluginResponse(data);
+                    showPluginActionMessage(result.status, result.message);
 
                     setTimeout(function() {
                         $("#adm_modal").modal("hide");
@@ -349,6 +379,43 @@ class PluginsPresenter extends PagePresenter
                         location.reload();
                     }, 2000);
                 });
+            }
+
+            function togglePlugin(link, url, csrfToken, refreshUrl) {
+                const $link = $(link);
+                const $row = $link.closest("tr, .card");
+
+                // A row already mid-flight ignores a second click rather than firing another request.
+                if ($row.css("pointer-events") === "none") {
+                    return;
+                }
+
+                const $icon = $link.find("i");
+
+                // Optimistic update: flip the icon and dim the row right away, so the click gives
+                // immediate feedback instead of looking unresponsive until the request comes back.
+                $icon.toggleClass("bi-toggle-on bi-toggle-off");
+                $link.toggleClass("text-success text-secondary");
+                $row.css({ "opacity": 0.5, "pointer-events": "none" });
+
+                function revert() {
+                    $icon.toggleClass("bi-toggle-on bi-toggle-off");
+                    $link.toggleClass("text-success text-secondary");
+                    $row.css({ "opacity": "", "pointer-events": "" });
+                }
+
+                $.post(url, { "adm_csrf_token": csrfToken }, function(data) {
+                    const result = parsePluginResponse(data);
+                    showPluginActionMessage(result.status, result.message);
+
+                    if (result.status === "success") {
+                        $.get(refreshUrl, function(html) {
+                            $("#adm_plugins_list").replaceWith(html);
+                        });
+                    } else {
+                        revert();
+                    }
+                }).fail(revert);
             }
         ');
     }
@@ -425,8 +492,7 @@ class PluginsPresenter extends PagePresenter
             'class' => $enabled ? 'text-success' : 'text-secondary',
             'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
             'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
-            'dataMessage' => $gL10n->get($enabled ? 'SYS_WANT_DISABLE_PLUGIN' : 'SYS_WANT_ENABLE_PLUGIN', array($id)),
-            'dataHref' => $this->actionScript($id, $enabled ? 'disable' : 'enable')
+            'dataHref' => $this->toggleScript($id, $enabled)
         );
     }
 
@@ -689,5 +755,25 @@ class PluginsPresenter extends PagePresenter
         );
 
         return 'callPluginAction(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+    }
+
+    /**
+     * The JavaScript call that flips a plugin's state, for the onclick of the unconfirmed toggle.
+     * @param string $id ID of the plugin.
+     * @param bool $enabled Whether the plugin is enabled, so the call switches it the other way.
+     * @return string
+     * @throws Exception
+     */
+    private function toggleScript(string $id, bool $enabled): string
+    {
+        global $gCurrentSession;
+
+        $url = SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+            array('mode' => $enabled ? 'disable' : 'enable', 'plugin' => $id)
+        );
+        $refreshUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'list_refresh'));
+
+        return 'togglePlugin(this, \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $refreshUrl . '\')';
     }
 }
