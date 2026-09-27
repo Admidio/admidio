@@ -914,6 +914,7 @@ class ChangelogService {
 
             'crt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'crt_name' =>                  'SYS_NAME',
+            'crt_description' =>           'SYS_DESCRIPTION',
             'crt_col_fields' =>            'SYS_COLUMN_SELECTION',
             'crt_col_conditions' =>        'SYS_CONDITION',
             'crt_selection_role' =>        array('name' => 'SYS_ROLE_SELECTION', 'type' => 'ROLE'),

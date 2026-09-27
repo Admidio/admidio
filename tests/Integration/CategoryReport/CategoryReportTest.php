@@ -16,6 +16,7 @@ class CategoryReportTest extends DatabaseTestCase
         $configurations = $report->saveConfigArray(array(array(
             'id' => '',
             'name' => 'Column storage test',
+            'description' => 'Description storage test',
             'columns' => array(
                 array('field' => 'p2', 'condition' => 'Smith, John'),
                 array('field' => 'r1', 'condition' => ''),
@@ -47,6 +48,7 @@ class CategoryReportTest extends DatabaseTestCase
         $this->assertSame(array('p2', 'r1', 'p3'), array_column($columns, 'crc_field'));
         $this->assertSame(array('Smith, John', '', '{2020-01-01'), array_column($columns, 'crc_condition'));
         $this->assertSame($gCurrentOrgId, (int)$configuration['organization_id']);
+        $this->assertSame('Description storage test', $configuration['description']);
 
         $entity = new CategoryReportEntity($this->getDatabase(), $reportId);
         $this->assertContainsOnlyInstancesOf(CategoryReportColumn::class, $entity->getColumns());

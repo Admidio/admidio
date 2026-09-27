@@ -62,6 +62,7 @@ class CategoryReportRepository
                 $values['id'] = $categoryReport->getValue('crt_id');
                 $values['organization_id'] = $categoryReport->getValue('crt_org_id');
                 $values['name'] = SecurityUtils::encodeHTML($categoryReport->getValue('crt_name', 'database'));
+                $values['description'] = SecurityUtils::encodeHTML((string)$categoryReport->getValue('crt_description', 'database'));
                 $values['columns'] = $columns;
                 $values['col_fields'] = implode(',', $columnFields);
                 $values['col_conditions'] = implode(',', $columnConditions);
@@ -98,6 +99,7 @@ class CategoryReportRepository
                 $categoryReport = new CategoryReportEntity($gDb, (int)$values['id']);
                 $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
                 $categoryReport->setValue('crt_name', $values['name']);
+                $categoryReport->setValue('crt_description', self::normalizeDescription((string)($values['description'] ?? '')));
                 $categoryReport->setValue('crt_selection_role', $values['selection_role']);
                 $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
                 $categoryReport->setValue('crt_number_col', $values['number_col']);
@@ -171,6 +173,7 @@ class CategoryReportRepository
         if ($name === '') {
             throw new Exception('SYS_FIELD_EMPTY', array('SYS_DESIGNATION'));
         }
+        $description = self::normalizeDescription((string)($request['description'] ?? ''));
         $fields = $request['columns'] ?? array();
         $properties = $request['columnsRoleProp'] ?? array();
         $conditions = $request['conditions'] ?? array();
@@ -222,6 +225,7 @@ class CategoryReportRepository
         $report = new CategoryReportEntity($gDb, $action === 'edit' ? $sourceId : 0);
         $report->setValue('crt_org_id', $gCurrentOrgId);
         $report->setValue('crt_name', $name);
+        $report->setValue('crt_description', $description);
         $report->setValue('crt_selection_role', $normalizeSelection($roles));
         $report->setValue('crt_selection_cat', $normalizeSelection($categories));
         $report->setValue('crt_number_col', isset($request['number_col']) ? 1 : 0);
@@ -264,5 +268,23 @@ class CategoryReportRepository
             }
         }
         return null;
+    }
+
+    /**
+     * Normalize a plain-text report description and enforce its database length.
+     *
+     * @param string $description Submitted report description.
+     * @return string Normalized plain-text description.
+     * @throws Exception If the description exceeds 4000 characters.
+     */
+    private static function normalizeDescription(string $description): string
+    {
+        $description = trim(strip_tags($description));
+        $length = function_exists('mb_strlen') ? mb_strlen($description, 'UTF-8') : strlen($description);
+        if ($length > 4000) {
+            throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_DESCRIPTION'));
+        }
+
+        return $description;
     }
 }

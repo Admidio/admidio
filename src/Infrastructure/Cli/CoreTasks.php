@@ -1965,6 +1965,7 @@ final class CoreTasks
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $reportOptions = array(
             self::opt('name', 'Report name.', 'NAME'),
+            self::opt('description', 'Report description.', 'TEXT'),
             self::opt('role', 'Restrict report to role/group.', 'GROUP', false, true),
             self::opt('category', 'Restrict report to role category.', 'CATEGORY', false, true),
             self::opt('column', 'Report column code (for example p12, r4, l4, udummy).', 'COLUMN', false, true),
@@ -1976,15 +1977,18 @@ final class CoreTasks
             'category-report:add --name=NAME --column=COLUMN ... [options]', 'CATEGORY-REPORT', true, array(),
             array_replace($reportOptions, array(
                 0 => self::opt('name', 'Report name.', 'NAME', true),
-                3 => self::opt('column', 'Report column code.', 'COLUMN', true, true)
+                4 => self::opt('column', 'Report column code.', 'COLUMN', true, true)
             )), requiredRight: 'administrator');
         self::task('category-report:update', 'categoryReportUpdate', 'Update a category report.',
             'category-report:update REPORT [options]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report id/name.')), $reportOptions, requiredRight: 'administrator');
         self::task('category-report:copy', 'categoryReportCopy', 'Copy a category report.',
-            'category-report:copy REPORT [--name=NAME]', 'CATEGORY-REPORT', true,
+            'category-report:copy REPORT [--name=NAME] [--description=TEXT]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report id/name.')),
-            array(self::opt('name', 'Name of the copied report.', 'NAME')), requiredRight: 'administrator');
+            array(
+                self::opt('name', 'Name of the copied report.', 'NAME'),
+                self::opt('description', 'Description of the copied report.', 'TEXT')
+            ), requiredRight: 'administrator');
         self::task('category-report:delete', 'categoryReportDelete', 'Delete a category report.',
             'category-report:delete REPORT [--yes]', 'CATEGORY-REPORT', true,
             array(self::arg('config', 'Report id/name.')),
@@ -8125,6 +8129,7 @@ final class CoreTasks
                     ? null
                     : (int)$configuration['organization_id'],
                 'name' => html_entity_decode((string)$configuration['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'description' => html_entity_decode((string)$configuration['description'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
                 'columns' => $configuration['col_fields'],
                 'conditions' => $configuration['col_conditions'],
                 'role_selection' => $configuration['selection_role'],
@@ -8157,6 +8162,7 @@ final class CoreTasks
             'id' => (int)$row['id'],
             'organization_id' => $row['organization_id'] === null ? null : (int)$row['organization_id'],
             'name' => html_entity_decode((string)$row['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'description' => html_entity_decode((string)$row['description'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
             'columns' => $row['col_fields'],
             'conditions' => $row['col_conditions'],
             'role_selection' => $row['selection_role'],
@@ -8176,6 +8182,7 @@ final class CoreTasks
         $values = self::categoryReportFormValues($options, array(
             'id' => '',
             'name' => '',
+            'description' => '',
             'columns' => array(),
             'col_fields' => '',
             'col_conditions' => '',
@@ -8226,6 +8233,9 @@ final class CoreTasks
         $copy['name'] = CliApplication::optionExists($options, 'name')
             ? CliApplication::optionString($options, 'name')
             : $report->createName(html_entity_decode((string)$copy['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        if (CliApplication::optionExists($options, 'description')) {
+            $copy['description'] = CliApplication::optionString($options, 'description');
+        }
 
         $config[] = $copy;
         $report->saveConfigArray($config);
@@ -11637,6 +11647,11 @@ final class CoreTasks
                 ENT_QUOTES | ENT_HTML5,
                 'UTF-8'
             );
+            $values['description'] = html_entity_decode(
+                (string)($values['description'] ?? ''),
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            );
         }
         unset($values);
 
@@ -11676,6 +11691,9 @@ final class CoreTasks
     {
         if (CliApplication::optionExists($options, 'name')) {
             $values['name'] = self::requireTextOption($options, 'name');
+        }
+        if (CliApplication::optionExists($options, 'description')) {
+            $values['description'] = CliApplication::optionString($options, 'description');
         }
 
         if (CliApplication::optionExists($options, 'role')) {

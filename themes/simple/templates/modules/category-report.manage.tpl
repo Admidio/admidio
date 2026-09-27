@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th>{$l10n->get('SYS_REPORT')}</th>
+            <th>{$l10n->get('SYS_DESCRIPTION')}</th>
             <th class="text-end">{$l10n->get('SYS_NUMBER_OF_COLUMNS')}</th>
             <th class="text-center"><i class="bi bi-star-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DEFAULT_REPORT')}"></i></th>
             <th>&nbsp;</th>
@@ -10,7 +11,7 @@
     <tbody>
         {if count($reports) eq 0}
             <tr>
-                <td colspan="4" class="text-center">{$l10n->get('SYS_NO_ENTRIES')}</td>
+                <td colspan="5" class="text-center">{$l10n->get('SYS_NO_ENTRIES')}</td>
             </tr>
         {else}
         {foreach $reports as $report}
@@ -22,6 +23,7 @@
                         {$report.name}
                     {/if}
                 </td>
+                <td style="word-break: break-word;">{$report.description}</td>
                 <td class="text-end">{$report.columnCount}</td>
                 <td class="text-center">
                     {if $report.default}

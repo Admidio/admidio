@@ -146,6 +146,7 @@ CREATE TABLE %PREFIX%_category_report
     crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crt_org_id                  integer unsigned,
     crt_name                    varchar(100)        NOT NULL,
+    crt_description             varchar(4000),
     crt_selection_role          varchar(100),
     crt_selection_cat           varchar(100),
     crt_number_col              boolean             NOT NULL    DEFAULT false,

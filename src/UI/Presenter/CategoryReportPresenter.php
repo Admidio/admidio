@@ -100,6 +100,7 @@ class CategoryReportPresenter
         // getFilteredHeadline() (page_title / page_headline), because the export filename and the PDF
         // header need the filtered text too and neither of them reaches PagePresenter::show().
         $subHeadline = $config[$report->getConfiguration()]['name'];
+        $reportDescription = nl2br((string)$config[$report->getConfiguration()]['description']);
 
         $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
         $page->setTitle($gL10n->get('SYS_CATEGORY_REPORT'));
@@ -120,6 +121,9 @@ class CategoryReportPresenter
                 $page->setContentFullWidth();
                 $page->setPrintMode();
                 $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
+                if ($reportDescription !== '') {
+                    $page->addHtml('<p>' . $reportDescription . '</p>');
+                }
                 $smarty->assign('classTable', $classTable);
             } elseif ($getMode === 'pdf') {
                 if (ini_get('max_execution_time') < 600) {
@@ -130,6 +134,7 @@ class CategoryReportPresenter
 
                 // set subHeadline and class for table
                 $smarty->assign('subHeadline', $subHeadline);
+                $smarty->assign('reportDescription', $reportDescription);
                 $smarty->assign('classTable', $classTable);
             } elseif ($getMode === 'html') {
                 // create html page object
@@ -251,6 +256,9 @@ class CategoryReportPresenter
                 $form->addToHtmlPage();
 
                 $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
+                if ($reportDescription !== '') {
+                    $page->addHtml('<p>' . $reportDescription . '</p>');
+                }
                 if ($numMembers === 0) {
                     $page->addHtml('<div class="alert alert-info">' . $gL10n->get('SYS_NO_USER_FOUND') . '</div>');
                 }

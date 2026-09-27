@@ -22,7 +22,7 @@ class CategoryReportFormPresenter extends PagePresenter
         if ($action !== 'new' && $report === null) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
-        $report ??= array('id' => 0, 'name' => '', 'columns' => array(), 'selection_role' => '',
+        $report ??= array('id' => 0, 'name' => '', 'description' => '', 'columns' => array(), 'selection_role' => '',
             'selection_cat' => '', 'number_col' => 0, 'default_conf' => false);
         if ($action === 'copy') {
             $report['name'] = $repository->createName(html_entity_decode((string)$report['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
@@ -37,6 +37,9 @@ class CategoryReportFormPresenter extends PagePresenter
             $this);
         $form->addInput('name', $gL10n->get('SYS_DESIGNATION'), html_entity_decode((string)$report['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
             array('property' => FormPresenter::FIELD_REQUIRED));
+        $form->addMultilineTextInput('description', $gL10n->get('SYS_DESCRIPTION'),
+            html_entity_decode((string)$report['description'], ENT_QUOTES | ENT_HTML5, 'UTF-8'), 3,
+            array('maxLength' => 4000));
         $sql = 'SELECT rol_id, rol_name, cat_name FROM ' . TBL_CATEGORIES . ', ' . TBL_ROLES .
             ' WHERE cat_id = rol_cat_id AND (cat_org_id = ' . $gCurrentOrgId . ' OR cat_org_id IS NULL)';
         $form->addSelectBoxFromSql('selection_role', $gL10n->get('SYS_ROLE_SELECTION'), $gDb, $sql,

@@ -30,10 +30,19 @@ class CategoryReportAdministrationPresenter extends PagePresenter
         foreach ((new CategoryReportRepository())->getConfigArray() as $report) {
             $reportId = (int)$report['id'];
             $isEditable = (int)$report['organization_id'] === (int)$gCurrentOrgId;
+            $description = trim((string)preg_replace('/\s+/u', ' ', html_entity_decode(
+                (string)$report['description'], ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+            $descriptionLength = function_exists('mb_strlen') ? mb_strlen($description, 'UTF-8') : strlen($description);
+            if ($descriptionLength > 200) {
+                $description = (function_exists('mb_substr')
+                    ? mb_substr($description, 0, 199, 'UTF-8')
+                    : substr($description, 0, 199)) . '…';
+            }
             $templateReport = array(
                 'uuid' => (string)$reportId,
                 'id' => $reportId,
                 'name' => $report['name'],
+                'description' => SecurityUtils::encodeHTML($description),
                 'columnCount' => count($report['columns']),
                 'default' => (bool)$report['default_conf'],
                 'urlEdit' => $isEditable ? SecurityUtils::encodeUrl($baseUrl,

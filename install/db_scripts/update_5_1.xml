@@ -235,5 +235,6 @@
     <step id="1320">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_fields</step>
     <step id="1330">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_conditions</step>
     <step id="1340">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/category-report/category_report.php', '/category_report.php') WHERE men_name_intern = 'category-report' AND men_url LIKE '%/category-report/category_report.php'</step>
+    <step id="1350">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_description varchar(4000)</step>
     <step>stop</step>
 </update>

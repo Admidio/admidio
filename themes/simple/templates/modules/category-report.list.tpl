@@ -1,5 +1,8 @@
 {if isset($exportMode)}
     <h2 style="font-size:12pt;font-weight:bold;text-align:center;margin-top:0;margin-bottom:15px;">{$subHeadline}</h2>
+    {if $reportDescription !== ''}
+        <p style="font-size:10pt;text-align:left;margin-bottom:15px;">{$reportDescription nofilter}</p>
+    {/if}
 {/if}
 <table id="adm_lists_table" class="{$classTable}" {foreach $attributes as $attribute} {$attribute@key}="{$attribute}" {/foreach} {if !isset($exportMode)}style="max-width: 100%;"{/if}>
     <thead>

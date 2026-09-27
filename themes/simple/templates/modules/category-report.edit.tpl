@@ -2,6 +2,7 @@
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['name']}
+    {include 'sys-template-parts/form.multiline.tpl' data=$elements['description']}
     <div class="admidio-form-group admidio-form-custom-content row mb-3">
         <label class="col-sm-3 col-form-label">{$l10n->get('SYS_COLUMN_SELECTION')}</label>
         <div class="col-sm-9">
