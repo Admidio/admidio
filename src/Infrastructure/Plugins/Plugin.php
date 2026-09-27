@@ -123,8 +123,9 @@ final class Plugin
 
     /**
      * Requirements of the plugin: **admidio** and **php** version constraints, **extensions** as a
-     * list of PHP extension names and **plugins** as pluginId => version constraint.
-     * @var array{admidio: string, php: string, extensions: array<int,string>, plugins: array<string,string>}
+     * list of PHP extension names, **plugins** as pluginId => version constraint and **modules** as
+     * a list of module names that must be switched on.
+     * @var array{admidio: string, php: string, extensions: array<int,string>, plugins: array<string,string>, modules: array<int,string>}
      */
     public readonly array $requires;
 
@@ -147,7 +148,7 @@ final class Plugin
      * @param array<string,mixed> $manifest
      * @param array<string,string> $autoload
      * @param array<string,array<string,mixed>> $settings
-     * @param array{admidio: string, php: string, extensions: array<int,string>, plugins: array<string,string>} $requires
+     * @param array{admidio: string, php: string, extensions: array<int,string>, plugins: array<string,string>, modules: array<int,string>} $requires
      */
     private function __construct(
         string $id,
@@ -185,7 +186,7 @@ final class Plugin
     {
         $path = rtrim(str_replace('\\', '/', $directory), '/');
         $id = basename($path);
-        $empty = array('admidio' => '', 'php' => '', 'extensions' => array(), 'plugins' => array());
+        $empty = array('admidio' => '', 'php' => '', 'extensions' => array(), 'plugins' => array(), 'modules' => array());
 
         if (!self::isValidId($id)) {
             return new self($id, $path, array(), array(), array(), $empty,
@@ -771,7 +772,7 @@ final class Plugin
     /**
      * Read the requirements of the manifest and normalize them.
      * @param array<string,mixed> $manifest
-     * @return array{admidio: string, php: string, extensions: array<int,string>, plugins: array<string,string>}
+     * @return array{admidio: string, php: string, extensions: array<int,string>, plugins: array<string,string>, modules: array<int,string>}
      */
     private static function readRequires(array $manifest): array
     {
