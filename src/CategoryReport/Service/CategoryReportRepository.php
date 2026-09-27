@@ -234,19 +234,24 @@ class CategoryReportRepository
         $gDb->endTransaction();
         $this->arrConfiguration = array();
         return array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'),
-            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array('crt_id' => $id)));
+            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array('mode' => 'manage')));
     }
 
-    /** Delete a non-default report belonging to the current organization. */
+    /** Delete a report belonging to the current organization and update the default report if necessary. */
     public function deleteReport(int $id): void
     {
         global $gDb, $gSettingsManager;
         $row = $this->findReport($id);
-        if ($row === null || $row['default_conf'] || count($this->getConfigArray()) < 2) {
+        if ($row === null) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
         (new CategoryReportEntity($gDb, $id))->delete();
         $this->arrConfiguration = array();
+        if ($row['default_conf']) {
+            $remainingReports = $this->getConfigArray();
+            $gSettingsManager->set('category_report_default_configuration',
+                count($remainingReports) > 0 ? (int)$remainingReports[0]['id'] : 0);
+        }
     }
 
     /** @return array<string,mixed>|null */

@@ -4,6 +4,7 @@ use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\CategoryReport\Service\CategoryReportRepository;
+use Admidio\UI\Presenter\CategoryReportAdministrationPresenter;
 use Admidio\UI\Presenter\CategoryReportPresenter;
 use Admidio\UI\Presenter\CategoryReportFormPresenter;
 
@@ -19,12 +20,19 @@ try {
     }
 
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html',
-        'validValues' => array('html', 'print', 'xlsx', 'csv-oo', 'pdf', 'pdfl', 'new', 'edit', 'copy', 'report_save', 'report_delete')));
-    if (in_array($getMode, array('new', 'edit', 'copy', 'report_save', 'report_delete'), true) && !$gCurrentUser->isAdministrator()) {
+        'validValues' => array('html', 'print', 'xlsx', 'csv-oo', 'pdf', 'pdfl', 'manage', 'new', 'edit', 'copy', 'report_save', 'report_delete')));
+    if (in_array($getMode, array('manage', 'new', 'edit', 'copy', 'report_save', 'report_delete'), true) && !$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
     switch ($getMode) {
+        case 'manage':
+            require_once(__DIR__ . '/../system/login_valid.php');
+            $gNavigation->addUrl(CURRENT_URL, $gL10n->get('SYS_MANAGE_REPORTS'));
+            $page = new CategoryReportAdministrationPresenter();
+            $page->createList();
+            $page->show();
+            break;
         case 'new':
         case 'edit':
         case 'copy':

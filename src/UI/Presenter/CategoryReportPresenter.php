@@ -33,9 +33,9 @@ class CategoryReportPresenter
             }
             $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report', $gL10n->get('SYS_CATEGORY_REPORT'));
             $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php',
-                array('mode' => 'new'));
-            $page->addHtml('<a class="btn btn-primary" href="' . $url . '"><i class="bi bi-plus-circle-fill"></i> ' .
-                $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_REPORT'))) . '</a>');
+                array('mode' => 'manage'));
+            $page->addHtml('<a class="btn btn-primary" href="' . $url . '"><i class="bi bi-gear-fill"></i> ' .
+                $gL10n->get('SYS_MANAGE_REPORTS') . '</a>');
             $page->show();
             return;
         }
@@ -204,18 +204,12 @@ class CategoryReportPresenter
                 }
 
                 if ($gCurrentUser->isAdministrator()) {
-                    $baseUrl = ADMIDIO_URL . FOLDER_MODULES . '/category_report.php';
-                    $buttons = array(
-                        array('new', $gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_REPORT'))), 'bi-plus-circle-fill', 0),
-                        array('edit', $gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_REPORT'))), 'bi-pencil-square', $getCrtId),
-                        array('copy', $gL10n->get('SYS_COPY_VAR', array($gL10n->get('SYS_REPORT'))), 'bi-copy', $getCrtId)
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_category_report_manage',
+                        $gL10n->get('SYS_MANAGE_REPORTS'),
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array('mode' => 'manage')),
+                        'bi-gear-fill'
                     );
-                    $toolbar = '<div class="d-flex flex-wrap gap-2 mb-3" role="group">';
-                    foreach ($buttons as [$action, $label, $icon, $id]) {
-                        $url = SecurityUtils::encodeUrl($baseUrl, array('mode' => $action, 'crt_id' => $id));
-                        $toolbar .= '<a class="btn btn-primary" href="' . $url . '"><i class="bi ' . $icon . '"></i> ' . $label . '</a>';
-                    }
-                    $page->addHtml($toolbar . '</div>');
                 }
 
                 ChangelogService::displayHistoryButton($page, 'categoryreport', 'category_report');

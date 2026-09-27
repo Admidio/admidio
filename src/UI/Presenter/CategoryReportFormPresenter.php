@@ -53,10 +53,6 @@ class CategoryReportFormPresenter extends PagePresenter
         $form->addInput('source_id', '', $action === 'new' ? 0 : $reportId, array('property' => FormPresenter::FIELD_HIDDEN));
         $form->addButton('category_report_add_column', $gL10n->get('SYS_ADD_COLUMN'),
             array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
-        if ($action === 'edit' && !$report['default_conf'] && count($repository->getConfigArray()) > 1) {
-            $form->addButton('adm_button_delete_category_report', $gL10n->get('SYS_DELETE'),
-                array('icon' => 'bi-trash', 'class' => 'btn-outline-danger'));
-        }
         $form->addSubmitButton('adm_button_save_category_report', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
         $columns = array_values(array_filter($report['columns'],
@@ -64,18 +60,12 @@ class CategoryReportFormPresenter extends PagePresenter
         if ($action === 'new') {
             $columns[] = array('field' => '', 'condition' => '');
         }
-        $this->assignSmartyVariable('canDelete', $action === 'edit' && !$report['default_conf'] && count($repository->getConfigArray()) > 1);
         $this->assignSmartyVariable('reportFormDataJson', json_encode(array(
             'fields' => array_values($generator->headerSelection),
             'roleProperties' => array_values($generator->headerRolePropSelection),
             'columns' => $columns,
             'moveLabel' => $gL10n->get('SYS_MOVE_VAR', array($gL10n->get('SYS_COLUMN'))),
-            'deleteLabel' => $gL10n->get('SYS_DELETE'),
-            'deletePrompt' => $gL10n->get('SYS_DELETE_REPORT'),
-            'deleteUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php',
-                array('mode' => 'report_delete', 'crt_id' => $reportId)),
-            'deleteToken' => $gCurrentSession->getCsrfToken(),
-            'returnUrl' => ADMIDIO_URL . FOLDER_MODULES . '/category_report.php'
+            'deleteLabel' => $gL10n->get('SYS_DELETE')
         ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
         $this->assignSmartyVariable('conditionHelpUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/msg_window.php',
             array('message_id' => 'mylist_condition', 'inline' => 'true')));

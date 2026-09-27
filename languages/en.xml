@@ -1043,6 +1043,7 @@
   <string name="SYS_MALE">Male</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">New profile fields and their properties can be defined as well as changes to existing profile fields. The fields can be assigned to categories and provided with rights, which roles can see or edit which profile fields.</string>
+  <string name="SYS_MANAGE_REPORTS">Manage reports</string>
   <string name="SYS_MANUAL_APPROVAL">Manual approval</string>
   <string name="SYS_MANUAL_APPROVAL_DESC">New registrations must be approved manually by role members with the #VAR1_BOLD# right. Only then it is possible for the new member to log in to the system. If the setting is deactivated, new members can log on to the system directly after successful registration. (Default: Enabled)</string>
   <string name="SYS_MAP">Map</string>
@@ -1184,6 +1185,7 @@
   <string name="SYS_NUMBER">Number</string>
   <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
+  <string name="SYS_NUMBER_OF_COLUMNS">Number of columns</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is 0, all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is "All", all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
@@ -1470,6 +1472,7 @@
   <string name="SYS_ROW">Row</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
+  <string name="SYS_RUN_REPORT">Run report</string>
   <string name="SYS_SAME_WINDOW">Same window</string>
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>

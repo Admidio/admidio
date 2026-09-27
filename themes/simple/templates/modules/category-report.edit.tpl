@@ -28,9 +28,6 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['report_action']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['source_id']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
-    {if $canDelete}
-        {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_delete_category_report']}
-    {/if}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_category_report']}
 </form>
 <script>
@@ -99,14 +96,6 @@
     columns.forEach(column => addColumn(column.field, column.condition));
     $body.sortable({ handle: '.admidio-move-row', items: 'tr', update: renumber });
     $('#category_report_add_column').on('click', function () { addColumn(); });
-    $('#adm_button_delete_category_report').on('click', function () {
-        if (!window.confirm(data.deletePrompt)) { return; }
-        $.post(data.deleteUrl, { adm_csrf_token: data.deleteToken })
-            .done(function (response) {
-                const result = typeof response === 'string' ? JSON.parse(response) : response;
-                if (result.status === 'success') { window.location.href = data.returnUrl; }
-            });
-    });
 })();
 {/literal}
 </script>
