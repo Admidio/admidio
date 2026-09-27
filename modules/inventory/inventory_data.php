@@ -11,6 +11,7 @@
  */
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -291,6 +292,7 @@ try {
             }
 
             $content = $itemsData->getValue($infNameIntern, 'database');
+            $content = Language::translateIfTranslationStrId($content);
             $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
 
             // Process ITEMNAME column
