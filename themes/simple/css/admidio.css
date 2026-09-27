@@ -554,6 +554,10 @@ label {
     height: 95%;
 }
 
+.admidio-album-info {
+    background-color: var(--bs-tertiary);
+}
+
 .admidio-blog img, .admidio-card img {
     max-width: 100%;
     height: auto;
