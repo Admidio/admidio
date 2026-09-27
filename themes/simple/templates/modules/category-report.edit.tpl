@@ -3,14 +3,17 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['name']}
     {include 'sys-template-parts/form.multiline.tpl' data=$elements['description']}
-    <div class="admidio-form-group admidio-form-custom-content row mb-3">
+    <div class="admidio-form-group admidio-form-group-required admidio-form-custom-content row mb-3">
         <label class="col-sm-3 col-form-label">{$l10n->get('SYS_COLUMN_SELECTION')}</label>
         <div class="col-sm-9">
             <div class="table-responsive">
                 <table class="table table-condensed catreport-columns-table">
                     <thead><tr>
                         <th>{$l10n->get('SYS_ABR_NO')}</th>
-                        <th>{$l10n->get('SYS_CONTENT')}</th>
+                        <th>{$l10n->get('SYS_CONTENT')}
+                            {assign var="data" value=['helpTextId' => 'SYS_COLUMN_SELECTION_DESC']}
+                            {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
+                        </th>
                         <th>{$l10n->get('SYS_CONDITION')}
                             <a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg" data-href="{$conditionHelpUrl}"><i class="bi bi-info-circle-fill admidio-info-icon"></i></a>
                         </th>
@@ -19,7 +22,6 @@
                     <tbody id="category_report_columns"></tbody>
                 </table>
             </div>
-            <div class="form-text">{$l10n->get('SYS_COLUMN_SELECTION_DESC')}</div>
             {include 'sys-template-parts/form.button.tpl' data=$elements['category_report_add_column']}
         </div>
     </div>
