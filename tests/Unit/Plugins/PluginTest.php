@@ -287,17 +287,20 @@ final class PluginTest extends PluginTestCase
     }
 
     /**
-     * @testdox A plugin ID is a lowercase directory name with single hyphens
+     * @testdox A plugin ID is a lowercase directory name with single hyphens or underscores
      */
     public function testValidId(): void
     {
         $this->assertTrue(Plugin::isValidId('hello'));
         $this->assertTrue(Plugin::isValidId('who-is-online'));
+        $this->assertTrue(Plugin::isValidId('search_member'));
         $this->assertTrue(Plugin::isValidId('a1'));
         $this->assertFalse(Plugin::isValidId('Hello'));
-        $this->assertFalse(Plugin::isValidId('hello_world'));
         $this->assertFalse(Plugin::isValidId('-hello'));
+        $this->assertFalse(Plugin::isValidId('_hello'));
         $this->assertFalse(Plugin::isValidId('hello--world'));
+        $this->assertFalse(Plugin::isValidId('hello__world'));
+        $this->assertFalse(Plugin::isValidId('hello-_world'));
         $this->assertFalse(Plugin::isValidId('../hello'));
     }
 
