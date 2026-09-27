@@ -1946,4 +1946,8 @@
   <string name="SYS_SYSTEM_MAIL_CUSTOM_TEXT">Eigene E-Mail-Vorlage</string>
   <string name="DEM_CATEGORY_9_NAME">Admidio</string>
   <string name="DEM_CATEGORY_307_NAME">Audioausrüstung</string>
+  <string name="DEM_ROOM_1_NAME">Besprechungsraum</string>
+  <string name="DEM_ROOM_1_DESCRIPTION">In diesem Raum können Besprechungen stattfinden. Der Raum muss im Voraus reserviert werden. Ein Beamer ist vorhanden.</string>
+  <string name="DEM_ROOM_2_NAME">Veranstaltungsraum</string>
+  <string name="DEM_ROOM_2_DESCRIPTION">Der Veranstaltungsraum kann für Geburtstagsfeiern, Mitgliederversammlungen oder Feiern genutzt werden. Eine vorherige Reservierung ist erwünscht.</string>
 </resources>
