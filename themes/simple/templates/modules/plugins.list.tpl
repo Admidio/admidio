@@ -1,3 +1,6 @@
+{* The whole list content, so the state toggle can replace it after an AJAX enable/disable without
+   reloading the page. *}
+<div id="adm_plugins_list">
 {* The plugins that threw while they were loaded. Without this they would merely be absent. *}
 {if count($failures) > 0}
     <div class="alert alert-danger" id="adm_plugins_failures">
@@ -40,9 +43,10 @@
                             {* The switch shows the state the plugin is in and flips it when clicked. *}
                             <td class="text-center">
                                 {if $pluginEntry.toggle}
-                                    <a class="admidio-messagebox {$pluginEntry.toggle.class}" href="javascript:void(0);"
-                                       data-buttons="yes-no" data-message="{$pluginEntry.toggle.dataMessage}"
-                                       data-href="{$pluginEntry.toggle.dataHref}"
+                                    {* Enabling or disabling is not destructive, so it acts on click without a
+                                       confirmation dialog - the administrator switches several plugins in a row. *}
+                                    <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                       onclick="{$pluginEntry.toggle.dataHref}"
                                        data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip}"
                                        aria-label="{$pluginEntry.toggle.label}">
                                         <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
@@ -99,9 +103,8 @@
                     <div class="card admidio-accordion-field-group" id="adm_plugin_card_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
                         <div class="card-header">
                             {if $pluginEntry.toggle}
-                                <a class="admidio-messagebox {$pluginEntry.toggle.class}" href="javascript:void(0);"
-                                   data-buttons="yes-no" data-message="{$pluginEntry.toggle.dataMessage}"
-                                   data-href="{$pluginEntry.toggle.dataHref}"
+                                <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                   onclick="{$pluginEntry.toggle.dataHref}"
                                    aria-label="{$pluginEntry.toggle.label}">
                                     <i class="{$pluginEntry.toggle.icon}"></i></a>
                             {/if}
@@ -161,4 +164,5 @@
         </div>
     {/foreach}
     </div>
+</div>
 </div>
