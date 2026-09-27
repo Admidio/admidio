@@ -4,6 +4,7 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\CollapsibleHtml;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RolesService;
@@ -137,18 +138,12 @@ class GroupsRolesPresenter extends PagePresenter
             }
 
             if (!empty($role->getValue('rol_description'))) {
-                $roleDescription = strip_tags($role->getValue('rol_description'));
-
-                if (strlen($roleDescription) > 200) {
-                    // Read the first 200 chars of a text, then search for the last space and cut the text there. After that, add a "more" link
-                    $textPrev = substr($roleDescription, 0, 200);
-                    $maxPosPrev = strrpos($textPrev, ' ');
-                    $roleDescription = substr($textPrev, 0, $maxPosPrev) .
-                        ' <span class="collapse" id="viewdetails-' . $row['rol_uuid'] . '">' . substr($roleDescription, $maxPosPrev) . '.
-                                </span> <a class="admidio-icon-link" data-bs-toggle="collapse" data-bs-target="#viewdetails-' . $row['rol_uuid'] . '">»</a>';
-                }
-
-                $templateRow['information'][] = $roleDescription;
+                $templateRow['information'][] = CollapsibleHtml::render(
+                    $role->getValue('rol_description'),
+                    200,
+                    'viewdetails-' . $row['rol_uuid'],
+                    $gL10n->get('SYS_SHOW_MORE')
+                );
             }
 
             // Block with information about events and meeting-point

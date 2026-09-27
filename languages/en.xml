@@ -1104,6 +1104,8 @@
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
+  <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Move up #VAR1#</string>
   <string name="SYS_MOVE_VAR">Move #VAR1#</string>
@@ -1954,6 +1956,8 @@
   <string name="SYS_WEBLINK">Web link</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
+  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS">Characters in the description preview</string>
+  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a web link description. The text is shortened at the last space before this limit. Clicking a link displays the complete text. (Default: 200)</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>
