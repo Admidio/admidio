@@ -16,6 +16,8 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\StringUtils;
 use DateTime;
 use PDOException;
 use Ramsey\Uuid\Uuid;
@@ -45,6 +47,108 @@ final class UpdateStepsCode
     public static function setDatabase(Database $database): void
     {
         self::$db = $database;
+    }
+
+    /** Convert default texts to IDs once, after legacy updates have used their old names. */
+    public static function updateStep51TranslateDefaultEntries(): void
+    {
+        $db = self::$db;
+        $translations = array();
+        $language = new Language(Language::REFERENCE_LANGUAGE);
+        foreach (array_keys($language->getAvailableLanguages()) as $code) {
+            $translations[] = new Language($code);
+        }
+        $candidates = array();
+        // Only accept exact, unambiguous matches of the expected defaults.
+        $findId = static function (string $value, array $ids, string $column) use ($translations, &$candidates): ?string {
+            if (in_array($value, $ids, true)) {
+                return $value;
+            }
+            $matches = array();
+            foreach ($ids as $id) {
+                if (!isset($candidates[$column][$id])) {
+                    $variants = array();
+                    foreach ($translations as $language) {
+                        $text = $language->get($id);
+                        if ($text === '#' . $id . '#') {
+                            continue;
+                        }
+                        if ($column === 'txt_text') {
+                            $text = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', "\n", $text);
+                        }
+                        foreach (array($text, StringUtils::strStripTags(html_entity_decode($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')),
+                            str_replace(array('&rsquo;', '’'), "'", StringUtils::strStripTags(html_entity_decode($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')))) as $variant) {
+                            $variants[trim(str_replace("\r\n", "\n", $variant))] = true;
+                        }
+                    }
+                    $candidates[$column][$id] = $variants;
+                }
+                if (isset($candidates[$column][$id][str_replace("\r\n", "\n", $value)])) {
+                    $matches[$id] = true;
+                }
+            }
+            return count($matches) === 1 ? array_key_first($matches) : null;
+        };
+        $convert = static function (string $table, string $key, string $column, array $ids, string $where = '1 = 1', array $params = array()) use ($db, $findId): void {
+            $rows = $db->queryPrepared('SELECT ' . $key . ', ' . $column . ' FROM ' . $table . ' WHERE ' . $where, $params)->fetchAll();
+            foreach ($rows as $row) {
+                $value = (string) $row[$column];
+                $id = $findId($value, $ids, $column);
+                if ($id !== null && $id !== $value) {
+                    // Compare in PHP, not in the database's possibly case/accent-insensitive collation.
+                    $db->queryPrepared('UPDATE ' . $table . ' SET ' . $column . ' = ? WHERE ' . $key . ' = ?', array($id, $row[$key]));
+                }
+            }
+        };
+
+        $db->startTransaction();
+        try {
+            // The installer creates the disabled system account before any other user.
+            $systemUser = $db->queryPrepared('SELECT usr_id, usr_login_name, usr_valid, usr_usr_id_create FROM ' . TBL_USERS . ' ORDER BY usr_id')->fetch();
+            $systemId = null;
+            if ($systemUser && !$systemUser['usr_valid'] && empty($systemUser['usr_usr_id_create'])
+                && $findId((string) $systemUser['usr_login_name'], array('SYS_SYSTEM'), 'usr_login_name') === 'SYS_SYSTEM') {
+                $systemId = (int) $systemUser['usr_id'];
+                $convert(TBL_USERS, 'usr_id', 'usr_login_name', array('SYS_SYSTEM'), 'usr_id = ?', array($systemId));
+                $convert(TBL_USER_DATA, 'usd_id', 'usd_value', array('SYS_SYSTEM'),
+                    'usd_usr_id = ? AND usd_usf_id IN (SELECT usf_id FROM ' . TBL_USER_FIELDS . " WHERE usf_name_intern = 'LAST_NAME')", array($systemId));
+            }
+
+            $mails = Text::SYSTEM_MAIL_DEFAULTS;
+            foreach ($mails as $name => $id) {
+                $convert(TBL_TEXTS, 'txt_id', 'txt_text', array($id), 'txt_name = ?', array($name));
+            }
+
+            $convert(TBL_ROLES, 'rol_id', 'rol_name', array('SYS_ADMINISTRATOR', 'SYS_MEMBER', 'INS_BOARD'),
+                "rol_cat_id IN (SELECT cat_id FROM " . TBL_CATEGORIES . " WHERE cat_type = 'ROL' AND cat_name_intern = 'COMMON')");
+            $convert(TBL_ROLES, 'rol_id', 'rol_description', array('INS_DESCRIPTION_ADMINISTRATOR', 'INS_DESCRIPTION_MEMBER', 'INS_DESCRIPTION_BOARD'),
+                "rol_cat_id IN (SELECT cat_id FROM " . TBL_CATEGORIES . " WHERE cat_type = 'ROL' AND cat_name_intern = 'COMMON')");
+
+            // Additional organizations' default lists belong to their administrator. Personal lists are excluded.
+            $convert(TBL_LISTS, 'lst_id', 'lst_name', array('INS_ADDRESS_LIST', 'INS_PHONE_LIST', 'SYS_CONTACT_DETAILS', 'INS_MEMBERSHIP', 'SYS_PARTICIPANTS', 'SYS_CONTACTS'),
+                'lst_global = true');
+            if ($systemId !== null) {
+                $convert(TBL_ROOMS, 'room_id', 'room_name', array('INS_CONFERENCE_ROOM'), 'room_usr_id_create = ?', array($systemId));
+                $convert(TBL_ROOMS, 'room_id', 'room_description', array('INS_DESCRIPTION_CONFERENCE_ROOM'), 'room_usr_id_create = ?', array($systemId));
+            }
+            $convert(TBL_CATEGORY_REPORT, 'crt_id', 'crt_name', array('SYS_GENERAL_ROLE_ASSIGNMENT'));
+
+            $categories = array('COMMON' => 'SYS_COMMON', 'GROUPS' => 'INS_GROUPS', 'COURSES' => 'INS_COURSES',
+                'TEAMS' => 'INS_TEAMS', 'EVENTS' => 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 'INTERN' => 'INS_INTERN',
+                'IMPORTANT' => 'SYS_IMPORTANT', 'TRAINING' => 'INS_TRAINING', 'BASIC_DATA' => 'SYS_BASIC_DATA',
+                'SOCIAL_NETWORKS' => 'SYS_SOCIAL_NETWORKS', 'ADDIDIONAL_DATA' => 'INS_ADDIDIONAL_DATA');
+            foreach ($categories as $name => $id) {
+                $convert(TBL_CATEGORIES, 'cat_id', 'cat_name', array($id), 'cat_name_intern = ?', array($name));
+            }
+            $convert(TBL_USER_FIELDS, 'usf_id', 'usf_description', array('SYS_DATA_PROTECTION_PERMISSION_DESC'),
+                'usf_name_intern = ?', array('DATA_PROTECTION_PERMISSION'));
+            $convert(TBL_USER_FIELDS, 'usf_id', 'usf_description', array('SYS_SOCIAL_NETWORK_FIELD_URL_DESC'),
+                "usf_name_intern IN ('BLUESKY', 'FACEBOOK', 'INSTAGRAM', 'LINKEDIN', 'MASTODON', 'XING')");
+            $db->endTransaction();
+        } catch (\Throwable $exception) {
+            $db->rollback();
+            throw $exception;
+        }
     }
 
     /**
