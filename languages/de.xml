@@ -1940,6 +1940,6 @@
   <string name="SYS_SYSTEM_MAIL_USE_DEFAULT">Systemstandard verwenden</string>
   <string name="SYS_SYSTEM_MAIL_USE_DEFAULT_DESC">Wenn aktiviert, wird die aktuelle Systemvorlage verwendet und kann nicht bearbeitet werden. Deaktiviere den Schalter, um deinen eigenen Text zu bearbeiten. Aktiviere ihn erneut, um zum Systemstandard zurückzukehren. Dein eigener Text bleibt erhalten und wird beim erneuten Deaktivieren wiederhergestellt.</string>
   <string name="SYS_SYSTEM_MAIL_CUSTOM_TEXT">Eigene E-Mail-Vorlage</string>
-  <string name="DEM_CATEGORIES_32EDC214_CB7B_42F1_A4AF_7336A28ADA5E_NAME">Admidio</string>
-  <string name="DEM_CATEGORIES_DD6630AE_4362_40CB_9C5A_A948E0365582_NAME">Audioausrüstung</string>
+  <string name="DEM_CATEGORY_9_NAME">Admidio</string>
+  <string name="DEM_CATEGORY_307_NAME">Audioausrüstung</string>
 </resources>
