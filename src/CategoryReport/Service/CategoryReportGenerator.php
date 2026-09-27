@@ -1,13 +1,14 @@
 <?php
+namespace Admidio\CategoryReport\Service;
 
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
 use Admidio\Roles\ValueObject\ConditionParser;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Users\Entity\User;
+
 
 /**
  * @brief Class manages the data for the report of module CategoryReport
@@ -33,7 +34,7 @@ use Admidio\Users\Entity\User;
  *   ddummy ... Duration of membership
  *
  */
-class CategoryReport
+class CategoryReportGenerator
 {
     public array $headerData = array();          ///< Array mit allen Spaltenueberschriften
     public array $listData = array();          ///< Array mit den Daten für den Report
@@ -41,6 +42,7 @@ class CategoryReport
     public array $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
     public array $headerRolePropSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
     protected int $conf;                               ///< die gewaehlte Konfiguration
+    private CategoryReportRepository $repository;
     protected array $arrConfiguration = array();         ///< Array with the all configurations from the database
 
     /**
@@ -49,33 +51,8 @@ class CategoryReport
      */
     public function __construct()
     {
+        $this->repository = new CategoryReportRepository();
         $this->generate_headerSelection();
-    }
-
-    /**
-     * Method checks whether a configuration with the transferred name already exists.
-     * If this is the case, "- copy" is appended.
-     * @param string $name Name that should be checked.
-     * @return  string
-     * @throws Exception
-     */
-    function createName(string $name): string
-    {
-        global $gDb, $gL10n, $gCurrentOrgId;
-
-        $sql = ' SELECT crt_name
-                   FROM ' . TBL_CATEGORY_REPORT . '
-                  WHERE (  crt_org_id = ? -- $gCurrentOrgId
-                        OR crt_org_id IS NULL ) ';
-        $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
-
-        while ($row = $statement->fetch()) {
-            if ($row['crt_name'] === $name) {
-                $name .= ' - ' . $gL10n->get('SYS_CARBON_COPY');
-            }
-        }
-
-        return $name;
     }
 
     /**
@@ -637,7 +614,10 @@ class CategoryReport
         }
 
         $roleSelection = trim((string)($this->arrConfiguration[$this->conf]['selection_role'] ?? ''));
-        $selectedRoles = $roleSelection === '' ? array() : array_map('intval', explode(',', $roleSelection));
+        $selectedRoles = $roleSelection === '' ? array() : array_values(array_filter(
+            array_map('intval', explode(',', $roleSelection)),
+            static fn(int $roleId): bool => $roleId > 0
+        ));
         $needsMemberships = count($selectedRoles) > 0;
         $needsUser = $needsMemberships;
         $needsRoleNames = false;
@@ -652,7 +632,10 @@ class CategoryReport
             }
         }
         $categorySelection = trim((string)($this->arrConfiguration[$this->conf]['selection_cat'] ?? ''));
-        $selectedCategories = $categorySelection === '' ? array() : array_map('intval', explode(',', $categorySelection));
+        $selectedCategories = $categorySelection === '' ? array() : array_values(array_filter(
+            array_map('intval', explode(',', $categorySelection)),
+            static fn(int $categoryId): bool => $categoryId > 0
+        ));
         $categoryMatches = array();
 
         if (count($selectedCategories) > 0) {
@@ -905,7 +888,7 @@ class CategoryReport
         $k = 0;
         while ($row = $statement->fetch()) {
             // check if the category name must be translated
-            if (Admidio\Infrastructure\Language::isTranslationStringId($row['cat_name'])) {
+            if (Language::isTranslationStringId($row['cat_name'])) {
                 $row['cat_name'] = $gL10n->get($row['cat_name']);
             }
             $categories[$k]['cat_id'] = $row['cat_id'];
@@ -999,47 +982,10 @@ class CategoryReport
         );
     }
 
-    /**
-     * Funktion liest das Konfigurationsarray ein
-     * @return  array $config  das Konfigurationsarray
-     * @throws Exception
-     */
+    /** @return array<int,array<string,mixed>> */
     public function getConfigArray(): array
     {
-        global $gDb, $gSettingsManager, $gCurrentOrgId;
-
-        if (count($this->arrConfiguration) === 0) {
-            $sql = ' SELECT crt_id
-                       FROM ' . TBL_CATEGORY_REPORT . '
-                      WHERE ( crt_org_id = ? -- $gCurrentOrgId
-                         OR crt_org_id IS NULL ) ';
-            $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
-
-            while ($row = $statement->fetch()) {
-                $categoryReport = new CategoryReportEntity($gDb, (int)$row['crt_id']);
-                $columns = $categoryReport->getColumnDefinitions();
-                $columnFields = array_column($columns, 'field');
-                $columnConditions = array_column($columns, 'condition');
-
-                $values = array();
-                $values['id'] = $categoryReport->getValue('crt_id');
-                $values['organization_id'] = $categoryReport->getValue('crt_org_id');
-                $values['name'] = SecurityUtils::encodeHTML($categoryReport->getValue('crt_name', 'database'));
-                $values['columns'] = $columns;
-                $values['col_fields'] = implode(',', $columnFields);
-                $values['col_conditions'] = implode(',', $columnConditions);
-                $values['selection_role'] = $categoryReport->getValue('crt_selection_role', 'database');
-                $values['selection_cat'] = $categoryReport->getValue('crt_selection_cat', 'database');
-                $values['number_col'] = $categoryReport->getValue('crt_number_col');
-                $values['default_conf'] = false;
-                if ($gSettingsManager->getInt('category_report_default_configuration') === (int)$categoryReport->getValue('crt_id')) {
-                    $values['default_conf'] = true;
-                }
-                $this->arrConfiguration[] = $values;
-            }
-        }
-
-        return $this->arrConfiguration;
+        return $this->arrConfiguration = $this->repository->getConfigArray();
     }
 
     /**
@@ -1070,83 +1016,16 @@ class CategoryReport
     }
 
     /**
-     * Funktion speichert das Konfigurationsarray
-     * @param array $arrConfiguration
-     * @return  array das Konfigurationsarray
-     * @throws Exception
-     */
-    public function saveConfigArray(array $arrConfiguration): array
-    {
-        global $gDb, $gCurrentOrgId, $gSettingsManager;
-
-        $defaultConfiguration = 0;
-
-        $gDb->startTransaction();
-
-        foreach ($arrConfiguration as $values) {
-            if ($values['id'] === '' || $values['id'] > 0) {                  // id > 0 (=edit a configuration) or '' (=append a configuration)
-                $categoryReport = new CategoryReportEntity($gDb, (int)$values['id']);
-                $categoryReport->setValue('crt_org_id', $gCurrentOrgId);
-                $categoryReport->setValue('crt_name', $values['name']);
-                $categoryReport->setValue('crt_selection_role', $values['selection_role']);
-                $categoryReport->setValue('crt_selection_cat', $values['selection_cat']);
-                $categoryReport->setValue('crt_number_col', $values['number_col']);
-                $columns = $values['columns'] ?? array();
-                $serializedFields = implode(',', array_column($columns, 'field'));
-                $serializedConditions = implode(',', array_map(
-                    static fn(array $column): string => (string)($column['condition'] ?? ''),
-                    $columns
-                ));
-                $legacyFields = (string)($values['col_fields'] ?? $serializedFields);
-                $legacyConditions = (string)($values['col_conditions'] ?? $serializedConditions);
-                if (count($columns) === 0
-                    || $serializedFields !== $legacyFields
-                    || $serializedConditions !== $legacyConditions) {
-                    $columns = array();
-                    $fields = array_values(array_filter(
-                        explode(',', $legacyFields),
-                        static fn(string $field): bool => $field !== ''
-                    ));
-                    $conditions = explode(',', $legacyConditions);
-                    foreach ($fields as $index => $field) {
-                        $columns[] = array(
-                            'field' => $field,
-                            'condition' => $conditions[$index] ?? ''
-                        );
-                    }
-                }
-                $categoryReport->setColumns($columns);
-                $categoryReport->save();
-                $reportId = (int)$categoryReport->getValue('crt_id');
-
-                if ($values['default_conf'] === true || $defaultConfiguration === 0) {
-                    $defaultConfiguration = $reportId;
-                }
-                // set default configuration
-                $gSettingsManager->set('category_report_default_configuration', $defaultConfiguration);
-            } else {                                                            // delete
-                $values['id'] = $values['id'] * (-1);
-                $categoryReport = new CategoryReportEntity($gDb, (int)$values['id']);
-                $categoryReport->delete();
-            }
-        }
-
-        $gDb->endTransaction();
-
-        $this->arrConfiguration = array();
-
-        return $this->getConfigArray();
-    }
-
-    /**
      * set the internal active configuration to the crtId of the parameter
      */
-    public function setConfiguration($crtId)
+    public function setConfiguration(int $crtId): void
     {
         foreach ($this->arrConfiguration as $key => $values) {
-            if ($values['id'] == $crtId) {
+            if ((int)$values['id'] === $crtId) {
                 $this->conf = $key;
+                return;
             }
         }
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 }

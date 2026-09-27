@@ -334,6 +334,8 @@
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <string name="SYS_CATEGORY_REPORT">Category report</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
+  <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">The category selection can be used to restrict a report to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
+  <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CHANGE_DATE">Change date</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
@@ -506,6 +508,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
+  <string name="SYS_DEFAULT_REPORT">Default report</string>
+  <string name="SYS_DEFAULT_REPORT_DESC">Choose the report shown by default when opening the category report for this organization.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">One of the configurations given here can be made the default configuration for the category report of this organization. The selected configuration will be displayed directly when the report is called.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
@@ -526,6 +530,7 @@
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
+  <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
   <string name="SYS_DELETE_ENTRY">Delete entry</string>
   <string name="SYS_DELETE_FILE">Delete file</string>
@@ -1428,6 +1433,7 @@
   <string name="SYS_RIGHT_VIEW_PARTICIPANTS">Participants can view the list of participants</string>
   <string name="SYS_RIGHT_WEBLINKS">Manage web links</string>
   <string name="SYS_ROLE">Role</string>
+  <string name="SYS_REPORT">Report</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">On this page you can configure who can view the folder #VAR1_BOLD#, download files or upload files. The permissions are inherited to all subfolders, and existing permissions in subfolders are overwritten. Only roles with access to the parent folder are selectable. Administrators have all permissions for the folder.</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Role assignment for #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCIES_DESC">A member of a dependent role will become automatically a member of #VAR1#!\n\nWhen this dependency is set all existing members of the dependent role will become a member of #VAR1#. When a dependency is going to be deleted, memberships will remain the same!</string>
@@ -1501,6 +1507,7 @@
   <string name="SYS_SECURITY_CODE_INVALID">The entered authentication code is incorrect.</string>
   <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Select configuration</string>
+  <string name="SYS_SELECT_REPORT">Select report</string>
   <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SELECT_MEMBERS">Select members</string>

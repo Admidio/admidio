@@ -12,7 +12,7 @@ class CategoryReportTest extends DatabaseTestCase
     {
         global $gCurrentOrgId;
 
-        $report = new \CategoryReport();
+        $report = new \Admidio\CategoryReport\Service\CategoryReportRepository();
         $configurations = $report->saveConfigArray(array(array(
             'id' => '',
             'name' => 'Column storage test',
@@ -56,7 +56,7 @@ class CategoryReportTest extends DatabaseTestCase
         ));
         $entity->save();
 
-        $updated = (new \CategoryReport())->getConfigArray();
+        $updated = (new \Admidio\CategoryReport\Service\CategoryReportRepository())->getConfigArray();
         $updatedConfiguration = array_values(array_filter(
             $updated,
             static fn(array $values): bool => (int)$values['id'] === $reportId

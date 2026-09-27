@@ -330,6 +330,8 @@
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer:innen unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
   <string name="SYS_CATEGORY_REPORT">Kategoriereport</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Erzeugt eine Auflistung der Rollen- und Kategoriezugehörigkeiten eines Mitglieds.</string>
+  <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">Über die Kategorieauswahl kann ein Report auf die Mitglieder von Rollen der ausgewählten Kategorien eingeschränkt werden. Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer sein.</string>
+  <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">Die Rollenauswahl kann verwendet werden, um einen Report auf die Mitglieder der ausgewählten Rollen zu beschränken. Wenn keine Einschränkung gewünscht ist, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer gelassen werden.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CHANGE_DATE">Datum ändern</string>
   <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
@@ -501,6 +503,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird eine neue Benutzerin oder ein neuer Benutzer angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der neuen Benutzerin oder dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
+  <string name="SYS_DEFAULT_REPORT">Standardreport</string>
+  <string name="SYS_DEFAULT_REPORT_DESC">Wähle den Report, der beim Aufruf des Kategorienreports für diese Organisation angezeigt wird.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_COUNTRY">Standard-Land</string>
@@ -521,6 +525,7 @@
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_ALBUM">Album löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
+  <string name="SYS_DELETE_REPORT">Ausgewählten Report löschen?</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
   <string name="SYS_DELETE_ENTRY">Eintrag löschen</string>
   <string name="SYS_DELETE_FILE">Datei löschen</string>
@@ -1395,6 +1400,7 @@
   <string name="SYS_RIGHT_VIEW_PARTICIPANTS">Teilnehmende können die Liste der Teilnehmenden einsehen</string>
   <string name="SYS_RIGHT_WEBLINKS">Weblinks verwalten</string>
   <string name="SYS_ROLE">Rolle</string>
+  <string name="SYS_REPORT">Report</string>
   <string name="SYS_ROLE_ACCESS_PERMISSIONS_DESC">Auf dieser Seite kannst du einstellen, wer den Ordner #VAR1_BOLD# sehen, Dateien herunterladen oder Dateien hochladen darf. Die gesetzten Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen dir nur Rollen zur Verfügung, die auf den übergeordneten Ordner Zugriff haben. Administrierende besitzen alle Berechtigungen für den Ordner.</string>
   <string name="SYS_ROLE_ASSIGNMENT_FOR">Rollenzuordnung für #VAR1# #VAR2#</string>
   <string name="SYS_ROLE_DEPENDENCY_CIRCULAR">Diese Rollenabhängigkeit kann nicht gespeichert werden, da die andere Rolle bereits direkt oder indirekt von dieser Rolle abhängt.</string>
@@ -1468,6 +1474,7 @@
   <string name="SYS_SECURITY_CODE_INVALID">Der eingegebene Authentifizierungscode ist falsch.</string>
   <string name="SYS_SELECT_ALL">Alle auswählen</string>
   <string name="SYS_SELECT_CONFIGURATION">Konfiguration auswählen</string>
+  <string name="SYS_SELECT_REPORT">Report auswählen</string>
   <string name="SYS_SELECT_FILES">Dateien auswählen</string>
   <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
   <string name="SYS_SELECT_MEMBERS">Mitglieder auswählen</string>
