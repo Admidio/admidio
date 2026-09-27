@@ -1026,7 +1026,7 @@ class Entity
             'ann_headline', 'ann_description', 'dat_headline', 'dat_description', 'dat_location',
             'fot_title', 'fop_text', 'lnk_name', 'lnk_description', 'pho_name', 'pho_description',
             'msg_subject', 'msc_message', 'org_longname', 'rol_location', 'ind_value', 'usd_value',
-            'inf_name', 'inf_description', 'ifo_value', 'urt_name', 'urt_description',
+            'inf_name', 'inf_description', 'urt_name', 'urt_description',
         ), true);
     }
 
