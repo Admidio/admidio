@@ -347,9 +347,9 @@ class PreferencesPresenter extends PagePresenter
         );
          $formAnnouncements->addInput(
             'announcements_clamp_text_lines',
-            $gL10n->get('SYS_CLAMP_TEXT_LINES'),
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
             $formValues['announcements_clamp_text_lines'],
-            self::preferenceInputOptions('announcements_clamp_text_lines', array('helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_ANNOUNCEMENT'))))
+            self::preferenceInputOptions('announcements_clamp_text_lines', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(0))))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -1834,7 +1834,7 @@ class PreferencesPresenter extends PagePresenter
             'weblinks_preview_characters',
             $gL10n->get('SYS_PREVIEW_CHARACTERS'),
             $formValues['weblinks_preview_characters'],
-            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => 'SYS_PREVIEW_CHARACTERS_DESC'))
+            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(200))))
         );
         $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
         $formWeblinks->addSelectBox(

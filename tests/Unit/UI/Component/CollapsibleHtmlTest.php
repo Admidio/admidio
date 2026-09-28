@@ -67,6 +67,26 @@ class CollapsibleHtmlTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The collapse link can display the show-more text before the arrows
+     */
+    public function testDisplaysShowMoreTextInLink(): void
+    {
+        $html = CollapsibleHtml::render(
+            '<p>one two three four five</p>',
+            12,
+            'details-test',
+            'Show more',
+            true
+        );
+
+        $this->assertStringContainsString(
+            '<a class="admidio-more-less-button" href="#details-test"',
+            $html
+        );
+        $this->assertStringContainsString('>Show more »</a>', $html);
+    }
+
+    /**
      * @testdox The link follows inline tags but stays inside paragraphs and divs
      */
     public function testPositionsLinkAtCut(): void

@@ -10,6 +10,7 @@ use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\CollapsibleHtml;
 
 /**
  * @brief Class with methods to display the module pages of announcements.
@@ -170,21 +171,6 @@ class AnnouncementsPresenter extends PagePresenter
             $this->smarty->assign('showCategories', false);
         }
 
-        $this->addJavascript('
-            $(".clamp-text").each(function(){
-                var clampHeight = this.offsetHeight;
-                var fullHeight  = this.scrollHeight;
-
-                if (fullHeight < clampHeight + 1) {
-                    $(this).next(".clamp-button").hide();
-                } else {
-                    $(this).next(".clamp-button").show();
-                }
-            });',
-            true
-        );
-        $this->smarty->assign('clampLines', $gSettingsManager->getInt('announcements_clamp_text_lines'));
-        $this->smarty->assign('enableClampLines', ( $gSettingsManager->getInt('announcements_clamp_text_lines') > 0) ?? false);
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $announcementsService->count(), $gSettingsManager->getInt('announcements_per_page'), $offset, true, 'offset'));
@@ -297,7 +283,13 @@ class AnnouncementsPresenter extends PagePresenter
             $templateRow = array();
             $templateRow['uuid'] = $announcementData['ann_uuid'];
             $templateRow['title'] = $announcement->getValue('ann_headline');
-            $templateRow['description'] = $announcement->getValue('ann_description');
+            $templateRow['description'] = CollapsibleHtml::render(
+                (string)$announcement->getValue('ann_description'),
+                $gSettingsManager->getInt('announcements_clamp_text_lines'),
+                'viewdetails-announcement-' . $announcementData['ann_uuid'],
+                $gL10n->get('SYS_SHOW_MORE'),
+                true
+            );
 
             $templateRow['userCreatedUUID'] = $announcementData['create_uuid'];
             if ($gSettingsManager->getInt('system_show_create_edit') === 2) {
