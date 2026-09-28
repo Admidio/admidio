@@ -18,6 +18,16 @@ class CollapsibleHtmlTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox A limit of zero keeps all content visible
+     */
+    public function testKeepsAllContentForZeroLimit(): void
+    {
+        $html = '<p><em>Long content</em> that would otherwise be shortened.</p>';
+
+        $this->assertSame($html, CollapsibleHtml::render($html, 0, 'details-test', 'Show more'));
+    }
+
+    /**
      * @testdox Content is cut at the last space before the character limit
      */
     public function testCutsAtLastWordBoundary(): void

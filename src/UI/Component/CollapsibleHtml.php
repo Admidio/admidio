@@ -13,7 +13,7 @@ final class CollapsibleHtml
      * enclosing paragraph and div elements are closed afterwards.
      *
      * @param string $html HTML content that should be shortened.
-     * @param int $maxCharacters Maximum number of visible characters in the preview.
+     * @param int $maxCharacters Maximum number of visible characters in the preview. A value of 0 shows all content.
      * @param string $collapseId Unique HTML id for the collapsible full content.
      * @param string $showMoreText Text for the link title and accessible label.
      * @return string Original HTML or markup containing a shortened preview and the collapsible full content.
@@ -24,7 +24,7 @@ final class CollapsibleHtml
         string $collapseId,
         string $showMoreText
     ): string {
-        if ($html === '' || $maxCharacters < 1) {
+        if ($html === '' || $maxCharacters <= 0) {
             return $html;
         }
 

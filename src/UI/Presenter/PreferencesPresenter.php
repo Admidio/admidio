@@ -1832,9 +1832,9 @@ class PreferencesPresenter extends PagePresenter
         );
         $formWeblinks->addInput(
             'weblinks_preview_characters',
-            $gL10n->get('SYS_WEBLINKS_PREVIEW_CHARACTERS'),
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
             $formValues['weblinks_preview_characters'],
-            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => 'SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC'))
+            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => 'SYS_PREVIEW_CHARACTERS_DESC'))
         );
         $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
         $formWeblinks->addSelectBox(
