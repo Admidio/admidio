@@ -545,6 +545,54 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * Test that list preloading preserves the single-item data representation.
+     *
+     * @testdox A preloaded inventory list returns the same item, category, status and borrow values
+     */
+    public function testPreloadedItemDataMatchesSingleItemLoading(): void
+    {
+        $admin = $this->makeInventoryUser('invpreload', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $firstItemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Preloaded projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-05-01'
+            ));
+            $secondItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Preloaded ladder'));
+            $uuids = array($this->uuidOfItem($firstItemId), $this->uuidOfItem($secondItemId));
+
+            $singleItem = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $singleItem->readItemData($uuids[0]);
+            $expected = array(
+                'ITEMNAME' => $singleItem->getValue('ITEMNAME', 'database'),
+                'CATEGORY' => $singleItem->getValue('CATEGORY', 'database'),
+                'STATUS' => $singleItem->getValue('STATUS', 'database'),
+                'LAST_RECEIVER' => $singleItem->getValue('LAST_RECEIVER', 'database'),
+                'BORROW_DATE' => $singleItem->getValue('BORROW_DATE', 'database'),
+                'isBorrowed' => $singleItem->isBorrowed(),
+                'isRetired' => $singleItem->isRetired()
+            );
+
+            $preloadedItems = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $preloadedItems->preloadItemData($uuids);
+            $preloadedItems->readItemData($uuids[0]);
+
+            $this->assertSame($expected['ITEMNAME'], $preloadedItems->getValue('ITEMNAME', 'database'));
+            $this->assertSame($expected['CATEGORY'], $preloadedItems->getValue('CATEGORY', 'database'));
+            $this->assertSame($expected['STATUS'], $preloadedItems->getValue('STATUS', 'database'));
+            $this->assertSame($expected['LAST_RECEIVER'], $preloadedItems->getValue('LAST_RECEIVER', 'database'));
+            $this->assertSame($expected['BORROW_DATE'], $preloadedItems->getValue('BORROW_DATE', 'database'));
+            $this->assertSame($expected['isBorrowed'], $preloadedItems->isBorrowed());
+            $this->assertSame($expected['isRetired'], $preloadedItems->isRetired());
+
+            $preloadedItems->readItemData($uuids[1]);
+            $this->assertSame('Preloaded ladder', $preloadedItems->getValue('ITEMNAME', 'database'));
+        });
+    }
+
+    /**
      * ItemService and ItemsData must apply the same keeper permission. The service is used by
      * write endpoints while ItemsData also controls the actions shown in the list.
      *

@@ -268,9 +268,12 @@ try {
     // Create a user object for later use
     $user = new User($gDb, $gProfileFields);
 
+    $itemRows = $statement->fetchAll();
+    $itemsData->preloadItemData(array_column($itemRows, 'ini_uuid'));
+
     $data = array();
-    while ($row = $statement->fetch()) {
-        // for each row instantiate ItemsData for formatting (readItemData)
+    foreach ($itemRows as $row) {
+        // Activates the preloaded data without additional queries for this row.
         $itemsData->readItemData($row['ini_uuid']);
         // build row cells same as prepareData('html') for a single item
         $rowValues = array();
