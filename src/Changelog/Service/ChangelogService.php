@@ -250,7 +250,10 @@ class ChangelogService {
             if (array_key_exists($table, $tableLabels)) {
                 return Language::translateIfTranslationStrId($tableLabels[$table]);
             } else {
-                return '';
+                // A table without a registered label is displayed with the raw table name
+                // instead: the changelog is meant to work without registration, registration
+                // only refines the display.
+                return $table;
             }
         }
     }
