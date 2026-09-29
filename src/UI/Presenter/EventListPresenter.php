@@ -633,10 +633,16 @@ class EventListPresenter extends PagePresenter
 
                 if ($getView === 'detail') {
                     if (!$event->getValue('dat_all_day')) {
+                        $timeFormat = $gSettingsManager->getString('system_time');
+                        $dateFormat = $gSettingsManager->getString('system_date');
+
                         // Write start in an array
-                        $eventElements[] = array($gL10n->get('SYS_START'), '<strong>' . $event->getValue('dat_begin', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
-                        // Write the end in an array
-                        $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                        $eventElements[] = array($gL10n->get('SYS_START'), '<strong>' . $event->getValue('dat_begin', $timeFormat) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                        // Write the end in an array if not same day with same time
+                        if ($event->getValue('dat_begin', $dateFormat) !== $event->getValue('dat_end', $dateFormat)
+                            || $event->getValue('dat_begin', $timeFormat) !== $event->getValue('dat_end', $timeFormat)) {
+                            $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $timeFormat) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                        }
                     }
 
                     $eventElements[] = array($gL10n->get('SYS_CALENDAR'), '<strong>' . $event->getValue('cat_name') . '</strong>');

@@ -29,10 +29,11 @@ final class DateTimeUtils
         $dateObject = self::createDateFromFormat('Y-m-d', $date);
 
         if ($dateObject === null) {
-            $dateObject = self::createDateFromFormat(
-                $gSettingsManager->getString('system_date'),
-                $date
-            );
+            $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
+                ? $gSettingsManager->getString('system_date')
+                : 'd.m.Y';
+
+            $dateObject = self::createDateFromFormat($dateFormat, $date);
         }
 
         if ($dateObject !== null) {
@@ -73,11 +74,18 @@ final class DateTimeUtils
     {
         global $gSettingsManager;
 
+        $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
+            ? $gSettingsManager->getString('system_date')
+            : 'd.m.Y';
+        $timeFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_time'))
+            ? $gSettingsManager->getString('system_time')
+            : 'H:i';
+
         $formats = array(
             'Y-m-d H:i:s',
             'Y-m-d H:i',
             'Y-m-d\TH:i',
-            $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')
+            $dateFormat . ' ' . $timeFormat
         );
 
         foreach ($formats as $format) {

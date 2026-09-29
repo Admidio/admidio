@@ -219,13 +219,16 @@ class Event extends Entity
         $endDateTime = DateTimeUtils::parseDateTime($this->getValue('dat_end', 'Y-m-d H:i:s'));
 
         $beginDate = ($beginDateTime !== null)
-            ? DateTimeUtils::formatWithWeekday($beginDateTime, $weekdayFormat, $dateFormat, null, $asHtml) . ' '
-            : $dateBeginRaw . ' ';
+            ? DateTimeUtils::formatWithWeekday($beginDateTime, $weekdayFormat, $dateFormat, null, $asHtml)
+            : $dateBeginRaw;
 
         $endDate   = '';
 
+        $timeBeginRaw = $this->getValue('dat_begin', $timeFormat);
+        $timeEndRaw = $this->getValue('dat_end', $timeFormat);
+
         if ($this->getValue('dat_all_day') != 1) {
-            $beginDate .= $this->getValue('dat_begin', $timeFormat);
+            $beginDate .= ' ' . $timeBeginRaw;
         }
 
         if ($showPeriodEnd) {
@@ -234,10 +237,13 @@ class Event extends Entity
                 $endDate .= ($endDateTime !== null)
                     ? DateTimeUtils::formatWithWeekday($endDateTime, $weekdayFormat, $dateFormat, null, $asHtml)
                     : $dateEndRaw;
+                if ($this->getValue('dat_all_day') != 1) {
+                    $endDate .= ' ' . $timeEndRaw;
+                }
+            } elseif ($this->getValue('dat_all_day') != 1 && $timeBeginRaw !== $timeEndRaw) {
+                $endDate .= $timeEndRaw;
             }
-            if ($this->getValue('dat_all_day') != 1) {
-                $endDate .= ' ' . $this->getValue('dat_end', $timeFormat);
-            }
+
             if (trim($endDate) !== '') {
                 $endDate = ' - ' . trim($endDate);
             }
