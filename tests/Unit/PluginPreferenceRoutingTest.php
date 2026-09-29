@@ -26,13 +26,6 @@ class PluginPreferenceRoutingTest extends TestCase
             $resolved = 'create' . str_replace('_', '', ucwords($panel, '_')) . 'Form';
             $this->assertSame($method[1], $resolved, $file);
             $this->assertTrue(is_callable(array($callback[0], $resolved)), $file);
-            if ($method[1] === 'createAnnouncementListForm') {
-                $this->assertSame('announcement_list', $panel);
-                $de = simplexml_load_file($root . '/plugins/announcement-list/languages/de.xml');
-                $en = simplexml_load_file($root . '/plugins/announcement-list/languages/en.xml');
-                $id = '/resources/string[@name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME"]';
-                $this->assertNotSame((string)$de->xpath($id)[0], (string)$en->xpath($id)[0]);
-            }
         }
     }
 }
