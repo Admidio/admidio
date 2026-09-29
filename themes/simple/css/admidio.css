@@ -248,7 +248,14 @@ label *,
 .row > .col-sm-3.col-4,
 table thead th,
 table thead th *,
-table th {
+table th,
+.plgCalendarWeekday,
+.plgCalendarWeekday *,
+.plgCalendarWeekdaySaturday,
+.plgCalendarWeekdaySaturday *,
+.plgCalendarWeekdaySunday,
+.plgCalendarWeekdaySunday *,
+#adm_logout_link {
     -webkit-user-select: none;
     user-select: none;
 }
@@ -262,7 +269,10 @@ table th {
 .admidio-card h3,
 .admidio-plugin-content h3,
 table thead th,
-table th {
+table th,
+.plgCalendarWeekday,
+.plgCalendarWeekdaySaturday,
+.plgCalendarWeekdaySunday {
     cursor: default;
 }
 
