@@ -907,6 +907,97 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
+     * Format one inventory field for a list or an export.
+     *
+     * Both the server-side DataTable and the regular inventory presenter use this method so
+     * field types keep the same representation in every inventory list.
+     *
+     * @param ItemsData $itemsData Loaded item data
+     * @param ItemField $itemField Definition of the field to format
+     * @param string $mode Output mode (html, csv, pdf, xlsx or ods)
+     * @return string Formatted field value
+     * @throws Exception
+     */
+    public static function formatItemFieldValue(ItemsData $itemsData, ItemField $itemField, string $mode = 'html'): string
+    {
+        global $gDb, $gL10n;
+
+        $fieldName = $itemField->getValue('inf_name_intern');
+        $fieldType = $itemsData->getProperty($fieldName, 'inf_type');
+        $content = $itemsData->getValue($fieldName, 'database');
+
+        if ($fieldType === 'CHECKBOX') {
+            $content = ($content != 1) ? 0 : 1;
+            return in_array($mode, array('csv', 'pdf', 'xlsx', 'ods'), true)
+                ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
+                : $itemsData->getHtmlValue($fieldName, $content);
+        }
+
+        if (in_array($fieldType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'), true)) {
+            return $itemsData->getHtmlValue($fieldName, $content);
+        }
+
+        if ($fieldType === 'DROPDOWN_DATE_INTERVAL') {
+            $selectedOption = $content;
+            if (!isset($selectedOption) || !is_numeric($selectedOption)) {
+                return '';
+            }
+
+            $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+            $intervals = array();
+            foreach ($option->getAllOptions() as $optionValue) {
+                $intervals[$optionValue['id']] = trim(explode('|', $optionValue['value'])[1]);
+            }
+
+            $connectedField = new ItemField($gDb);
+            $connectedField->readDataByUuid($itemField->getValue('inf_inf_uuid_connected'));
+            $connectedFieldName = $connectedField->getValue('inf_name_intern');
+            $connectedValue = $itemsData->getValue($connectedFieldName, 'database');
+            if (empty($connectedValue)) {
+                return '';
+            }
+
+            try {
+                $comparisonDate = date_create($connectedValue);
+                $today = date_create();
+                $dateAdditionSplit = array();
+                preg_match('/^\s*(\d*)([wymd])\s*$/', $intervals[$selectedOption], $dateAdditionSplit);
+
+                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                    $units = array('w' => 'W', 'm' => 'M', 'y' => 'Y', 'd' => 'D');
+                    date_add($comparisonDate, new DateInterval('P' . $dateAdditionSplit[1] . ($units[$dateAdditionSplit[2]] ?? 'D')));
+                }
+
+                $daysRemaining = date_diff($today, $comparisonDate)->format('%R%a');
+                $content = ($daysRemaining === '1' || $daysRemaining === '-1')
+                    ? $daysRemaining . ' ' . $gL10n->get('SYS_DAY')
+                    : (($daysRemaining === '-0' ? '0' : $daysRemaining) . ' ' . $gL10n->get('SYS_DAYS'));
+            } catch (\Exception) {
+                return '';
+            }
+
+            if (in_array($mode, array('csv', 'xlsx', 'ods'), true)) {
+                $content .= ' [' . $itemsData->getHtmlValue($fieldName, $selectedOption) . ']';
+            }
+            return $content;
+        }
+
+        if ($fieldType === 'RADIO_BUTTON') {
+            return $mode === 'html'
+                ? $itemsData->getHtmlValue($fieldName, $content)
+                : $itemsData->getValue($fieldName, 'database');
+        }
+
+        if ($fieldType === 'CATEGORY') {
+            return $mode === 'database'
+                ? $itemsData->getValue($fieldName, 'database')
+                : $itemsData->getHtmlValue($fieldName, $content);
+        }
+
+        return (string) $content;
+    }
+
+    /**
      * Populate the inventory table with the data of the inventory items.
      * This method supports various output formats and fills the table based on the
      * provided display mode. The mode parameter allows selecting different table
@@ -988,8 +1079,7 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                $content = $this->itemsData->getValue($infNameIntern, 'database');
-                $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
+                $content = self::formatItemFieldValue($this->itemsData, $itemField, $mode);
 
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
@@ -1038,94 +1128,6 @@ class InventoryPresenter extends PagePresenter
                             }
                         }
                     }
-                }
-
-                // Format content based on the field type
-                if ($infType === 'CHECKBOX') {
-                    $content = ($content != 1) ? 0 : 1;
-                    $content = in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])
-                        ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
-                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
-                    $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
-                    $content = $this->itemsData->getValue($infNameIntern, 'database');
-                    if (isset($content) && is_numeric($content)) {
-                        $selectedOption = $content;
-                        $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-                        $selectOptions = $option->getAllOptions();
-
-                        // Calculate days remaining based on selected date field value and selected interval
-                        $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
-                        $connectedField = new ItemField($gDb);
-                        $connectedField->readDataByUuid($connectedFieldUuid);
-                        $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
-                        $filteredSelectOptions = array();
-
-                        foreach ($selectOptions as $option) {
-                            $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
-                        }
-
-                        if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
-                            try {
-                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
-                                $compDate2 = date_create();
-
-                                //Calculate future test date
-                                $dateAdditionSplit = array();
-                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
-
-                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
-                                    switch ($dateAdditionSplit[2]) {
-                                        case 'w':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
-                                            break;
-                                        case 'm':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
-                                            break;
-                                        case 'y':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
-                                            break;
-                                        case 'd':
-                                        default:
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
-                                            break;
-                                    }
-                                }
-
-                                //Compare last test date with future date and output days
-                                $dateDiff = date_diff($compDate2, $compDate1);
-                                $daysRemaining = $dateDiff->format('%R%a');
-
-                                // check if days remaining is only one day
-                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
-                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
-                                } elseif ($daysRemaining === '-0') {
-                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
-                                } else {
-                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
-                                }
-                            } catch (\Exception $e) {
-                                // in case of error set content to empty
-                                $content = '';
-                            }
-                        } else {
-                            $content = '';
-                        }
-
-                        // in export modes append the stored value for possible later import
-                        if (!empty($content) && in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                            $content .= " [" . $this->itemsData->getHtmlValue($infNameIntern, $selectedOption) . "]";
-                        }
-                    }
-                } elseif ($infType === 'RADIO_BUTTON') {
-                    $content = $mode === 'html'
-                        ? $this->itemsData->getHtmlValue($infNameIntern, $content)
-                        : $this->itemsData->getValue($infNameIntern, 'database');
-                } elseif ($infType === 'CATEGORY') {
-                    $content = $mode === 'database'
-                        ? $this->itemsData->getValue($infNameIntern, 'database')
-                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
                 }
 
                 $rowValues['data'][] = ($strikethrough && !in_array($mode, ['csv', 'ods', 'xlsx']))
