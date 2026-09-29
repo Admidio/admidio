@@ -143,7 +143,7 @@ class WeblinksPresenter extends PagePresenter
 
         $form = new FormPresenter('adm_weblinks_edit_form', 'modules/weblinks.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'save', 'link_uuid' => $uuid)), $this);
-        $form->addInput('lnk_name', $gL10n->get('SYS_LINK_NAME'), htmlentities((string)$link->getValue('lnk_name', 'database'), ENT_QUOTES),
+        $form->addInput('lnk_name', $gL10n->get('SYS_LINK_NAME'), $link->getValue('lnk_name'),
             array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED));
         $form->addInput('lnk_url', $gL10n->get('SYS_LINK_ADDRESS'), $link->getValue('lnk_url'),
             array('type' => 'url', 'maxLength' => 2000, 'property' => FormPresenter::FIELD_REQUIRED));

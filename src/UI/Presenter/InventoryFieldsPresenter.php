@@ -110,14 +110,14 @@ class InventoryFieldsPresenter extends PagePresenter
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
+                $itemField->getValue('inf_name'),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name', 'database'), ENT_QUOTES),
+                $itemField->getValue('inf_name'),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
