@@ -932,7 +932,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW">Einstellungen für die Profilansicht</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">Die hier ausgewählten Eigenschafsfelder werden in der Profilansicht des Mitglieds angezeigt, wenn die Option \"In der Profilansicht anzeigen\" akiviert ist. Standardmäßig wird nur der Gegenstandsname angezeigt. (Voreinstelluing: \"Letzter Empfänger\")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">In der Profilansicht anzeigen</string>
-  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">Wenn diese Option aktiviert ist, werden die durch ein Mitglied verwalteten und die von einem Mitglied ausgeliehenen Gegenstände in der Profilansicht des Mitglieds angezeigt. (Voreinstellung: ja)</string>
+  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">Wenn diese Option aktiviert ist, können nur Nutzer mit Berechtigung zum Anzeigen des Inventarmoduls die durch ein Mitglied verwalteten und die von einem Mitglied ausgeliehenen Gegenstände in dessen Profilansicht sehen. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Anzuzeigende Eigenschaftsfelder in der Profilansicht</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">Die Tabelle zeigt die von dir verwalteten Gegenstände:</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">Die Tabelle zeigt die an dich ausgeliehenen Gegenstände:</string>
