@@ -147,6 +147,27 @@ class SystemMailTemplateModeTest extends DatabaseTestCase
         $this->assertSame(0, $xpath->query('//div[@id="' . $name . '_custom_panel" and @hidden]')->length);
     }
 
+    public function testFormEscapesCustomMailTextTextareaBreakoutPayload(): void
+    {
+        if (!defined('THEME_URL')) {
+            define('THEME_URL', ADMIDIO_URL . '/themes/simple');
+        }
+        $name = 'SYSMAIL_PASSWORD_RESET';
+        $payload = '</textarea><script>alert(1)</script>';
+        $text = $this->template($name);
+        // Simulate a legacy value that predates Entity::setValue() input filtering.
+        $text->setValue('txt_text', Text::SYSTEM_MAIL_DEFAULTS[$name], false);
+        $text->setValue('txt_custom_text', $payload, false);
+        $text->save();
+
+        $html = $this->renderForm();
+        $this->assertStringContainsString('&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;', $html);
+        $dom = new \DOMDocument();
+        @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html);
+        $xpath = new \DOMXPath($dom);
+        $this->assertSame($payload, $xpath->query('//textarea[@id="' . $name . '"]')->item(0)->textContent);
+        $this->assertSame(0, $xpath->query('//script[contains(text(), "alert(1)")]')->length);
+    }
     public function testUpgradeCopiesExistingCustomTemplatesButNotDefaultIds(): void
     {
         $name = 'SYSMAIL_PASSWORD_RESET';
