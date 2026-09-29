@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -902,14 +903,7 @@ class InventoryPresenter extends PagePresenter
      */
     public static function isKeeperAuthorizedToEdit(?int $keeper = null): bool
     {
-        global $gSettingsManager, $gCurrentUser;
-        if (($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-            if (isset($keeper) && $keeper === $gCurrentUser->getValue('usr_id')) {
-                return true;
-            }
-        }
-
-        return false;
+        return InventoryAccessService::canEditAsKeeper($keeper);
     }
 
     /**

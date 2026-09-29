@@ -16,6 +16,7 @@ namespace Admidio\Tests\Integration\Inventory;
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -540,6 +541,42 @@ class InventoryTest extends DatabaseTestCase
             $this->assertNotContains($retiredItemId, $listedItemIds);
             $this->assertContains($activeItemId, $profileItemIds);
             $this->assertNotContains($retiredItemId, $profileItemIds);
+        });
+    }
+
+    /**
+     * ItemService and ItemsData must apply the same keeper permission. The service is used by
+     * write endpoints while ItemsData also controls the actions shown in the list.
+     *
+     * @testdox Keeper edit permission is consistent for inventory services and data objects
+     */
+    public function testKeeperEditPermissionIsConsistentAcrossInventoryLayers(): void
+    {
+        $fixture = $this->getFixture();
+        $admin = $this->makeInventoryUser('invkeeperadmin', true);
+        $keeperData = $fixture->createAndSaveUser('invkeeper', 'invkeeper@example.local');
+        $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
+
+        $itemUuid = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeper) {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Keeper managed item', 'KEEPER' => (string) $keeper->getValue('usr_id')));
+
+            return $this->uuidOfItem($itemId);
+        });
+
+        $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemUuid) {
+            $settings = $GLOBALS['gSettingsManager'];
+            $settings->set('inventory_allow_keeper_edit', '1');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemsData->readItemData($itemUuid);
+            $itemService = new ItemService($this->getDatabase(), $itemUuid);
+            $this->assertTrue($itemsData->isEditable());
+            $this->assertTrue($itemService->isEditable());
+
+            $settings->set('inventory_allow_keeper_edit', '0');
+            $this->assertFalse($itemsData->isEditable());
+            $this->assertFalse($itemService->isEditable());
         });
     }
 
