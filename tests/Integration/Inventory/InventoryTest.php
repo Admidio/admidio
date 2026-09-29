@@ -508,6 +508,42 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * The list and profile queries must agree on the meaning of the default filter: retired
+     * items are hidden. This protects the profile view from accidentally showing only retired
+     * items when it asks for items managed by a user.
+     *
+     * @testdox Inventory list queries exclude retired items by default
+     */
+    public function testItemListQueriesExcludeRetiredItemsByDefault(): void
+    {
+        $admin = $this->makeInventoryUser('invlistfilter', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($admin) {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $activeItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Available chair', 'KEEPER' => (string) $admin->getValue('usr_id')));
+
+            $retiredItemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $retiredItemId = $this->createItem($retiredItemsData, array('ITEMNAME' => 'Retired chair', 'KEEPER' => (string) $admin->getValue('usr_id')));
+            $retiredItemsData->retireItem();
+
+            $listedItems = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $listedItems->showRetiredItems(false);
+            $listedItems->readItems();
+            $listedItemIds = array_map(static fn (array $item): int => (int) $item['ini_id'], $listedItems->getItems());
+
+            $profileItems = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $profileItems->showRetiredItems(false);
+            $profileItems->readItemsByUser((int) $admin->getValue('usr_id'));
+            $profileItemIds = array_map(static fn (array $item): int => (int) $item['ini_id'], $profileItems->getItems());
+
+            $this->assertContains($activeItemId, $listedItemIds);
+            $this->assertNotContains($retiredItemId, $listedItemIds);
+            $this->assertContains($activeItemId, $profileItemIds);
+            $this->assertNotContains($retiredItemId, $profileItemIds);
+        });
+    }
+
+    /**
      * Test that deleting an item cleans up
      *
      * @testdox Deleting an item removes its values as well

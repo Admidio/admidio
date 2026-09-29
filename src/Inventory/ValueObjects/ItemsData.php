@@ -293,8 +293,8 @@ class ItemsData
         $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
-                WHERE ini_org_id IS NULL
-                OR ini_org_id = ?
+                WHERE (ini_org_id IS NULL
+                    OR ini_org_id = ?)
                 ' . $sqlWhereCondition . ';';
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
@@ -329,7 +329,7 @@ class ItemsData
                     break;
                 }
             }
-            $sqlStatusCondition .= 'AND ini_status = ' . $retiredId;
+            $sqlStatusCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
         $sqlImfIds = 'AND (';
@@ -951,12 +951,11 @@ class ItemsData
      */
     public function isBorrowed(): bool
     {
-        // get Values of LAST_RECEIVER, BORROW_DATE and RETURN_DATE for current item
-        $borrowData = new ItemBorrowData($this->mDb, $this);
-        $borrowData->readDataByColumns(array('inb_ini_id' => $this->mItemId));
-        $lastReceiver = $borrowData->getValue('inb_last_receiver');
-        $borrowDate = $borrowData->getValue('inb_borrow_date');
-        $returnDate = $borrowData->getValue('inb_return_date');
+        // The borrow fields are loaded together with the item data in readItemData(). Reusing
+        // them here avoids one additional database query per item while rendering inventory lists.
+        $lastReceiver = $this->getValue('LAST_RECEIVER', 'database');
+        $borrowDate = $this->getValue('BORROW_DATE', 'database');
+        $returnDate = $this->getValue('RETURN_DATE', 'database');
         // if last receiver is set and borrow date is set and return date is not set then item is borrowed
         if ($lastReceiver !== '' && $borrowDate !== '' && $returnDate === '') {
             return true;
