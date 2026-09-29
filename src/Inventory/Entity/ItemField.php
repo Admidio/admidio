@@ -164,8 +164,6 @@ class ItemField extends Entity
         if ($fieldNameIntern === 'inf_description') {
             if (!isset($this->dbColumns['inf_description'])) {
                 $value = '';
-            } elseif ($format === 'edit') {
-                $value = $this->dbColumns['inf_description'];
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['inf_description']), ENT_QUOTES, 'UTF-8');
             } else {
@@ -186,7 +184,7 @@ class ItemField extends Entity
             return '';
         }
 
-        if ($format !== 'database' && $format !== 'edit') {
+        if ($format !== 'database') {
             switch ($fieldNameIntern) {
                 case 'inf_name':
                     // if text is a translation-id then translate it

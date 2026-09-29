@@ -334,13 +334,13 @@ class GroupsRolesPresenter extends PagePresenter
         $form->addInput(
             'rol_name',
             $gL10n->get('SYS_NAME'),
-            htmlentities((string)$role->getValue('rol_name', 'database'), ENT_QUOTES),
+            $role->getValue('rol_name'),
             array('maxLength' => 100, 'property' => $fieldProperty)
         );
         $form->addMultilineTextInput(
             'rol_description',
             $gL10n->get('SYS_DESCRIPTION'),
-            $role->getValue('rol_description', 'edit'),
+            $role->getValue('rol_description'),
             3,
             array('property' => ($eventRole ? FormPresenter::FIELD_READONLY : FormPresenter::FIELD_DEFAULT), 'maxLength' => 4000)
         );

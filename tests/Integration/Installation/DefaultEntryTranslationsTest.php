@@ -114,15 +114,15 @@ class DefaultEntryTranslationsTest extends DatabaseTestCase
         $db = $this->getDatabase();
         $roomId = (int) $db->queryPrepared('SELECT room_id FROM ' . TBL_ROOMS)->fetchColumn();
         $room = new Room($db, $roomId);
-        $this->assertSame('INS_DESCRIPTION_CONFERENCE_ROOM', $room->getValue('room_description', 'edit'));
-        $room->setValue('room_description', '<p>' . $room->getValue('room_description') . '</p>');
+        $this->assertSame('INS_DESCRIPTION_CONFERENCE_ROOM', $room->getValue('room_description', 'database'));
+        $room->setValue('room_description', '<p>' . $GLOBALS['gL10n']->get('INS_DESCRIPTION_CONFERENCE_ROOM') . '</p>');
         $this->assertSame('INS_DESCRIPTION_CONFERENCE_ROOM', $room->getValue('room_description', 'database'));
         $room->setValue('room_description', '<p><strong>Our new description</strong></p>');
         $this->assertSame('<p><strong>Our new description</strong></p>', $room->getValue('room_description'));
         $fieldId = (int) $db->queryPrepared('SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_name_intern = ?', array('FACEBOOK'))->fetchColumn();
         $field = new ProfileField($db, $fieldId);
-        $this->assertSame('SYS_SOCIAL_NETWORK_FIELD_URL_DESC', $field->getValue('usf_description', 'edit'));
-        $field->setValue('usf_description', '<p>' . $field->getValue('usf_description') . '</p>');
+        $this->assertSame('SYS_SOCIAL_NETWORK_FIELD_URL_DESC', $field->getValue('usf_description', 'database'));
+        $field->setValue('usf_description', '<p>' . html_entity_decode($field->getValue('usf_description'), ENT_QUOTES, 'UTF-8') . '</p>');
         $this->assertSame('SYS_SOCIAL_NETWORK_FIELD_URL_DESC', $field->getValue('usf_description', 'database'));
     }
 

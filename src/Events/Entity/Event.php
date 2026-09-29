@@ -237,12 +237,10 @@ class Event extends Entity
         if ($columnName === 'dat_description') {
             if (!isset($this->dbColumns['dat_description'])) {
                 $value = '';
-            } elseif ($format === 'edit') {
-                $value = $this->dbColumns['dat_description'];
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
             } else {
-                $value = self::translateColumnValue($columnName, $this->dbColumns['dat_description']);
+                $value = $this->dbColumns['dat_description'];
             }
         } else {
             $value = parent::getValue($columnName, $format);

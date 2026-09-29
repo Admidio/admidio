@@ -1023,10 +1023,6 @@ class Entity
             'rol_name', 'rol_description', 'lst_name', 'crt_name',
             'room_name', 'room_description', 'txt_text',
             'cat_name', 'usf_name', 'usf_description',
-            'ann_headline', 'ann_description', 'dat_headline', 'dat_description', 'dat_location',
-            'fot_title', 'fop_text', 'lnk_name', 'lnk_description', 'pho_name', 'pho_description',
-            'msg_subject', 'msc_message', 'org_longname', 'rol_location', 'ind_value', 'usd_value',
-            'inf_name', 'inf_description', 'urt_name', 'urt_description',
         ), true);
     }
 
@@ -1105,7 +1101,7 @@ class Entity
                 case 'tinytext':
                 case 'mediumtext':
                 case 'longtext':
-                    if ($format !== 'database' && $format !== 'edit') {
+                    if ($format !== 'database') {
                         // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
                     } else {
@@ -1133,7 +1129,7 @@ class Entity
                 case 'date': // fallthrough
                 case 'time':
                     if (isset($columnValue) && $columnValue !== '') {
-                        if ($format === 'database' || $format === 'edit') {
+                        if ($format === 'database') {
                             // the value exactly as the database holds it, e.g. a date as Y-m-d, for a
                             // comparison or a re-insert - never run through DateTime::format().
                             $columnValue = $this->dbColumns[$columnName];
@@ -1164,10 +1160,9 @@ class Entity
             }
         }
 
-        if ($format !== 'database' && $format !== 'edit' && is_string($columnValue) && self::isTranslatableColumn($columnName)) {
-            $translatedValue = self::translateColumnValue($columnName, $columnValue);
-            $columnValue = $columnName === 'txt_text' && $translatedValue !== $columnValue
-                ? SecurityUtils::encodeHTML($translatedValue) : $translatedValue;
+        if ($format !== 'database' && is_string($columnValue) && self::isTranslatableColumn($columnName)
+            && Language::isTranslationStringId($columnValue)) {
+            $columnValue = SecurityUtils::encodeHTML(self::translateColumnValue($columnName, $columnValue));
         }
 
         return $columnValue;

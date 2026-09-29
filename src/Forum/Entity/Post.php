@@ -64,12 +64,10 @@ class Post extends Entity
         if ($columnName === 'fop_text') {
             if (!isset($this->dbColumns['fop_text'])) {
                 $value = '';
-            } elseif ($format === 'edit') {
-                $value = $this->dbColumns['fop_text'];
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['fop_text']));
             } else {
-                $value = self::translateColumnValue($columnName, $this->dbColumns['fop_text']);
+                $value = $this->dbColumns['fop_text'];
             }
 
             return $value;

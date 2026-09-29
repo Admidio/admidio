@@ -52,8 +52,6 @@ class Room extends Entity
         if ($columnName === 'room_description') {
             if (!isset($this->dbColumns['room_description'])) {
                 $value = '';
-            } elseif ($format === 'edit') {
-                $value = $this->dbColumns['room_description'];
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['room_description']));
             } else {

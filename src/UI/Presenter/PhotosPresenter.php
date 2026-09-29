@@ -271,7 +271,7 @@ class PhotosPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos.php', array(
                 'mode' => 'album_save', 'photo_uuid' => $photoUuid
             )), $this);
-        $form->addInput('pho_name', $gL10n->get('SYS_ALBUM'), htmlentities((string)$photoAlbum->getValue('pho_name', 'database'), ENT_QUOTES),
+        $form->addInput('pho_name', $gL10n->get('SYS_ALBUM'), $photoAlbum->getValue('pho_name'),
             array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 50));
         $form->addSelectBox('parent_album_uuid', $gL10n->get('SYS_PARENT_ALBUM'), $albumOptions, array(
             'property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $parentPhotoUuid,
@@ -285,7 +285,7 @@ class PhotosPresenter extends PagePresenter
         $form->addInput('pho_photographers', $gL10n->get('SYS_PHOTOS_BY'), $photoAlbum->getValue('pho_photographers'),
             array('maxLength' => 100));
         $form->addMultilineTextInput('pho_description', $gL10n->get('SYS_DESCRIPTION'),
-            $photoAlbum->getValue('pho_description', 'edit'), 6, array('maxLength' => 4000));
+            $photoAlbum->getValue('pho_description'), 6, array('maxLength' => 4000));
         $form->addCheckbox('pho_locked', $gL10n->get('SYS_LOCK_ALBUM'), (bool)$photoAlbum->getValue('pho_locked'),
             array('helpTextId' => 'SYS_LOCK_ALBUM_DESC'));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'),

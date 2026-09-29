@@ -392,7 +392,7 @@ class ProfileFieldsPresenter extends PagePresenter
         $form->addEditor(
             'usf_description',
             $gL10n->get('SYS_DESCRIPTION'),
-            $userField->getValue('usf_description', 'edit'),
+            $userField->getValue('usf_description'),
             array('toolbar' => 'AdmidioComments'));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 

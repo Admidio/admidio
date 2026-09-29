@@ -61,7 +61,7 @@ try {
     $form->addInput(
         'room_name',
         $gL10n->get('SYS_ROOM'),
-        htmlentities((string)$room->getValue('room_name', 'database'), ENT_QUOTES),
+        $room->getValue('room_name'),
         array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
     );
     $form->addInput(
@@ -76,7 +76,7 @@ try {
         (int)$room->getValue('room_overhang'),
         array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_ROOM_OVERHANG')
     );
-    $form->addEditor('room_description', '', $room->getValue('room_description', 'edit'));
+    $form->addEditor('room_description', '', $room->getValue('room_description'));
     $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
     $page->assignSmartyVariable('userCreatedName', $room->getNameOfCreatingUser());
