@@ -197,6 +197,7 @@ final class PluginStore
         $archive = self::downloadRelease($entry['release']);
 
         try {
+            self::verifyArchiveMatches($archive, $id, $entry['release']);
             return PluginPackage::install($archive);
         } finally {
             @unlink($archive);
@@ -250,6 +251,7 @@ final class PluginStore
         $archive = self::downloadRelease($release);
 
         try {
+            self::verifyArchiveMatches($archive, $id, $release);
             PluginPackage::install($archive, true);
         } finally {
             @unlink($archive);
@@ -282,7 +284,63 @@ final class PluginStore
             throw new Exception('SYS_PLUGIN_PACKAGE_NOT_EXTRACTED');
         }
 
+        self::verifyChecksum($file, $release);
+
         return $file;
+    }
+
+    /**
+     * Refuse a downloaded archive whose content does not match the checksum the catalogue promised.
+     *
+     * The catalogue can be reached over a compromised connection or a compromised mirror even when
+     * the directory itself is honest, so an archive is never trusted just because it came from the
+     * address the catalogue named. A release that states no sha256 is not checked: §6.4 of the
+     * catalogue format only requires the check when the key is present.
+     * @param string $file Absolute path of the downloaded archive.
+     * @param array<string,mixed> $release
+     * @return void
+     * @throws Exception
+     */
+    private static function verifyChecksum(string $file, array $release): void
+    {
+        $expected = strtolower(trim((string)($release['sha256'] ?? '')));
+        if ($expected === '') {
+            return;
+        }
+
+        $actual = hash_file('sha256', $file);
+        if ($actual === false || !hash_equals($expected, $actual)) {
+            @unlink($file);
+            throw new Exception('SYS_PLUGIN_STORE_CHECKSUM_MISMATCH');
+        }
+    }
+
+    /**
+     * Refuse a downloaded archive that does not hold the plugin (and version) the catalogue promised.
+     *
+     * PluginPackage::install() only checks that an archive is internally consistent - the directory
+     * name, the manifest and the ID it declares all agree with each other. It has no way to know
+     * which plugin the catalogue meant to offer. Without this check, a catalogue entry for plugin A
+     * whose archive actually contains plugin B would, on "update A" with replace=true, delete and
+     * replace the installed plugin B instead of updating A.
+     * @param string $archive Absolute path of the downloaded archive.
+     * @param string $id ID of the plugin the catalogue entry was read under.
+     * @param array<string,mixed> $release
+     * @return void
+     * @throws Exception
+     */
+    private static function verifyArchiveMatches(string $archive, string $id, array $release): void
+    {
+        $plugin = PluginPackage::describe($archive);
+
+        if ($plugin->id !== $id) {
+            throw new Exception('SYS_PLUGIN_STORE_ID_MISMATCH', array($id, $plugin->id));
+        }
+
+        $version = (string)($release['version'] ?? '');
+        if ($version !== '' && $plugin->version !== $version) {
+            throw new Exception('SYS_PLUGIN_STORE_VERSION_MISMATCH', array($id, $version, $plugin->version));
+        }
     }
 
     /**
