@@ -2,6 +2,8 @@
 
 namespace Admidio\Inventory\Service;
 
+use Admidio\UI\Presenter\InventoryPresenter;
+
 /**
  * Central authorization rules for inventory items.
  *
@@ -10,6 +12,28 @@ namespace Admidio\Inventory\Service;
  */
 class InventoryAccessService
 {
+    /**
+     * Whether the current visitor may view the inventory module.
+     *
+     * This is deliberately non-throwing so embedding contexts, such as the user profile, can
+     * hide their inventory section instead of failing the entire page.
+     */
+    public static function canViewModule(): bool
+    {
+        global $gSettingsManager, $gCurrentUser, $gValidLogin;
+
+        $level = $gSettingsManager->getInt('inventory_module_enabled');
+
+        return match ($level) {
+            1 => true,
+            2 => $gValidLogin,
+            3 => $gCurrentUser->isAdministratorInventory(),
+            4 => $gCurrentUser->isAdministratorInventory() || InventoryPresenter::isCurrentUserKeeper(),
+            5 => $gCurrentUser->isAdministratorInventory() || $gCurrentUser->isAllowedToViewInventory(),
+            default => false
+        };
+    }
+
     /**
      * Whether the current user may edit an item administered by the given keeper.
      *

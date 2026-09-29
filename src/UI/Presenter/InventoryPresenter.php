@@ -111,18 +111,13 @@ class InventoryPresenter extends PagePresenter
      */
     public static function checkModuleAccess(): void
     {
-        global $gSettingsManager, $gCurrentUser, $gValidLogin;
+        global $gSettingsManager;
 
-        $level = $gSettingsManager->getInt('inventory_module_enabled');
-
-        if ($level === 0) {
+        if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
         }
 
-        if (($level === 2 && !$gValidLogin)
-            || ($level === 3 && !$gCurrentUser->isAdministratorInventory())
-            || ($level === 4 && !self::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory())
-            || ($level === 5 && !$gCurrentUser->isAllowedToViewInventory() && !$gCurrentUser->isAdministratorInventory())) {
+        if (!InventoryAccessService::canViewModule()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
     }
@@ -1362,6 +1357,8 @@ class InventoryPresenter extends PagePresenter
         $strikethroughs = array();
         $actionsHeaderAdded = false;
 
+        $itemsData->preloadItemData(array_column($itemsData->getItems(), 'ini_uuid'));
+
         foreach ($itemsData->getItems() as $item) {
             $itemsData->readItemData($item['ini_uuid']);
             $rowValues = array();
@@ -1376,10 +1373,12 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 $content = $itemsData->getValue($infNameIntern, 'database');
-                $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
+                $isUserReference = ($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER')
+                    && $content !== ''
+                    && is_numeric($content);
 
                 // Process KEEPER and LAST_RECEIVER column
-                if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
+                if ($isUserReference) {
                     $found = $user->readDataById($content);
                     if (!$found) {
                         $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
@@ -1392,80 +1391,10 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                // Format the content based on the field type
-                if ($infType === 'CHECKBOX') {
-                    $content = ($content != 1) ? 0 : 1;
-                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
-                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
-                    if (isset($content) && is_numeric($content)) {
-                        try {
-                            // Load item data to get connected field value
-                            $this->itemsData->readItemData($item['ini_uuid']);
-                            $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-                            $selectOptions = $option->getAllOptions();
-
-                            $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
-                            $connectedField = new ItemField($gDb);
-                            $connectedField->readDataByUuid($connectedFieldUuid);
-                            $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
-                            $filteredSelectOptions = array();
-
-                            foreach ($selectOptions as $option) {
-                                $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
-                            }
-                            //use part after # as internal_name for last test date
-                            if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
-                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
-                                $compDate2 = date_create();
-
-                                //Calculate future test date
-                                $dateAdditionSplit = array();
-                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$content], $dateAdditionSplit);
-
-                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
-                                    switch ($dateAdditionSplit[2]) {
-                                        case 'w':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
-                                            break;
-                                        case 'm':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
-                                            break;
-                                        case 'y':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
-                                            break;
-                                        case 'd':
-                                        default:
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
-                                            break;
-                                    }
-                                }
-
-                                //Compare last test date with future date and output days
-                                $dateDiff = date_diff($compDate2, $compDate1);
-                                $daysRemaining = $dateDiff->format('%R%a');
-
-                                // check if days remaining is only one day
-                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
-                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
-                                } elseif ($daysRemaining === '-0') {
-                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
-                                } else {
-                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
-                                }
-                            } else {
-                                $content = '';
-                            }
-                        } catch (\Exception $e) {
-                            // in case of error set content to empty
-                            $content = '';
-                        }
-                    }
-                } elseif ($infType === 'RADIO_BUTTON') {
-                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif ($infType === 'CATEGORY') {
-                    $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                // User references are rendered as profile links. All other fields share the
+                // standard inventory list formatter.
+                if (!$isUserReference) {
+                    $content = self::formatItemFieldValue($itemsData, $itemField);
                 }
 
                 $rowValues['data'][] = ($strikethrough) ? '<s>' . $content . '</s>' : $content;

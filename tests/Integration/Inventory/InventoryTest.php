@@ -17,6 +17,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Service\ItemService;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -541,6 +542,35 @@ class InventoryTest extends DatabaseTestCase
             $this->assertNotContains($retiredItemId, $listedItemIds);
             $this->assertContains($activeItemId, $profileItemIds);
             $this->assertNotContains($retiredItemId, $profileItemIds);
+        });
+    }
+
+    /**
+     * Profile pages must use the same inventory access levels as the inventory module.
+     *
+     * @testdox Inventory module access is denied to ordinary members at restricted levels
+     */
+    public function testRestrictedInventoryModuleAccessIsDeniedToOrdinaryMembers(): void
+    {
+        $fixture = $this->getFixture();
+        $admin = $this->makeInventoryUser('invaccessadmin', true);
+        $memberData = $fixture->createAndSaveUser('invaccessmember', 'invaccessmember@example.local');
+        $member = $this->loadUserInOrganization($memberData['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($member, self::ORG_ID, true, function () {
+            $settings = $GLOBALS['gSettingsManager'];
+            foreach (array(3, 4, 5) as $level) {
+                $settings->set('inventory_module_enabled', (string) $level);
+                $this->assertFalse(InventoryAccessService::canViewModule(), 'access level ' . $level);
+            }
+        });
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $settings = $GLOBALS['gSettingsManager'];
+            foreach (array(3, 4, 5) as $level) {
+                $settings->set('inventory_module_enabled', (string) $level);
+                $this->assertTrue(InventoryAccessService::canViewModule(), 'access level ' . $level);
+            }
         });
     }
 
