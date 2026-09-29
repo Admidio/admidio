@@ -32,14 +32,14 @@ $databaseDateTimeEdit->updateDateTimeField(TBL_LOG_CHANGES, 'log_timestamp_creat
 
 if ($gDbType === 'pgsql') {
     $sql = 'UPDATE ' . TBL_ROLES . '
-               SET rol_name = dat_headline
+               SET rol_name = TO_CHAR(dat_begin, \'YYYY-MM-DD HH24:MI\') || \' \' || dat_headline
               FROM ' . TBL_EVENTS . '
              WHERE dat_rol_id = rol_id
                AND dat_rol_id IS NOT NULL ';
 } else {
     $sql = 'UPDATE ' . TBL_ROLES . '
           JOIN ' . TBL_EVENTS . ' ON dat_rol_id = rol_id
-           SET rol_name = dat_headline
+           SET rol_name = CONCAT(DATE_FORMAT(dat_begin, \'%Y-%m-%d %H:%i\'), \' \', dat_headline)
          WHERE dat_rol_id IS NOT NULL ';
 }
 $gDb->queryPrepared($sql);
