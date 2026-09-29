@@ -6,7 +6,6 @@ namespace Admidio\UI\Presenter;
 use Admidio\Categories\Service\CategoryService;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
@@ -994,7 +993,6 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 $content = $this->itemsData->getValue($infNameIntern, 'database');
-                $content = Language::translateIfTranslationStrId($content);
                 $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
 
                 // Process ITEMNAME column
@@ -1380,7 +1378,6 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 $content = $itemsData->getValue($infNameIntern, 'database');
-                $content = Language::translateIfTranslationStrId($content);
                 $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
 
                 // Process KEEPER and LAST_RECEIVER column

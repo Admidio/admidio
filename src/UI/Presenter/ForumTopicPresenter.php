@@ -199,9 +199,9 @@ class ForumTopicPresenter extends PagePresenter
             $templateRow = array();
             $templateRow['topic_uuid'] = $forumPost['fot_uuid'];
             $templateRow['post_uuid'] = $forumPost['fop_uuid'];
-            $templateRow['title'] = Language::translateIfTranslationStrId($forumPost['fot_title']);
+            $templateRow['title'] = $forumPost['fot_title'];
             $templateRow['views'] = $forumPost['fot_views'];
-            $templateRow['text'] = Language::translateIfTranslationStrId($forumPost['fop_text']);
+            $templateRow['text'] = $forumPost['fop_text'];
             $templateRow['userUUID'] = $forumPost['usr_uuid'];
             $templateRow['userName'] = $forumPost['firstname'] . ' ' . $forumPost['surname'];
             $templateRow['userProfilePhotoUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $forumPost['usr_uuid'], 'timestamp' => $forumPost['usr_timestamp_change']));

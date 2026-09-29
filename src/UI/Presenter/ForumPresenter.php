@@ -220,7 +220,7 @@ class ForumPresenter extends PagePresenter
         foreach ($data as $forumTopic) {
             $templateRow = array();
             $templateRow['uuid'] = $forumTopic['fot_uuid'];
-            $templateRow['title'] = Language::translateIfTranslationStrId($forumTopic['fot_title']);
+            $templateRow['title'] = $forumTopic['fot_title'];
             $templateRow['views'] = $forumTopic['fot_views'];
 
             $templateRow['repliesCount'] = $forumTopic['replies_count'];
@@ -255,15 +255,14 @@ class ForumPresenter extends PagePresenter
                 $templateRow['lastReplyUserNameWithLink'],
                 $templateRow['lastReplyTimestamp']));
 
-            $forumText = Language::translateIfTranslationStrId($forumTopic['fop_text']);
-            if (strlen($forumText) > 250) {
+            if (strlen($forumTopic['fop_text']) > 250) {
                 $templateRow['text'] = substr(
-                        substr(strip_tags($forumText), 0, 250),
+                        substr(strip_tags($forumTopic['fop_text']), 0, 250),
                         0,
-                        strrpos(substr(strip_tags($forumText), 0, 250), ' ')
+                        strrpos(substr(strip_tags($forumTopic['fop_text']), 0, 250), ' ')
                     ) . ' ...';
             } else {
-                $templateRow['text'] = $forumText;
+                $templateRow['text'] = $forumTopic['fop_text'];
             }
             $templateRow['userUUID'] = $forumTopic['usr_uuid'];
             if ($gSettingsManager->getInt('system_show_create_edit') === 2) {
@@ -299,7 +298,7 @@ class ForumPresenter extends PagePresenter
                             ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
                             array('mode' => 'topic_delete', 'topic_uuid' => $forumTopic['fot_uuid'])
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($templateRow['title'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($forumTopic['fot_title'])),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
                 );
