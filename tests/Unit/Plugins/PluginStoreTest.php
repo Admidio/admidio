@@ -658,6 +658,136 @@ final class PluginStoreTest extends PluginTestCase
     }
 
     /**
+     * @testdox An archive whose checksum does not match the catalogue is refused
+     */
+    public function testInstallRefusesChecksumMismatch(): void
+    {
+        $archive = $this->storePluginArchive('1.0.0');
+        $this->makePluginsDirectory();
+
+        $this->catalogue(array(
+            $this->entry('store-plugin', array(
+                array(
+                    'version' => '1.0.0',
+                    'requires' => array('admidio' => '>=5.1'),
+                    'download' => $archive,
+                    'sha256' => str_repeat('0', 64)
+                )
+            ))
+        ));
+
+        $this->expectExceptionMessage('SYS_PLUGIN_STORE_CHECKSUM_MISMATCH');
+
+        PluginStore::install('store-plugin');
+    }
+
+    /**
+     * @testdox An archive whose checksum matches the catalogue is accepted
+     */
+    public function testInstallAcceptsMatchingChecksum(): void
+    {
+        $archive = $this->storePluginArchive('1.0.0');
+        $plugins = $this->makePluginsDirectory();
+
+        $this->catalogue(array(
+            $this->entry('store-plugin', array(
+                array(
+                    'version' => '1.0.0',
+                    'requires' => array('admidio' => '>=5.1'),
+                    'download' => $archive,
+                    'sha256' => hash_file('sha256', $archive)
+                )
+            ))
+        ));
+
+        $this->assertSame('store-plugin', PluginStore::install('store-plugin'));
+        $this->assertFileExists($plugins . '/store-plugin/plugin.json');
+    }
+
+    /**
+     * @testdox An archive that does not contain the plugin the catalogue offered is refused
+     *
+     * The catalogue entry is read under one ID, but the downloaded archive actually names another
+     * plugin's directory - the situation a compromised or misconfigured download address produces.
+     */
+    public function testInstallRefusesArchiveForAnotherPlugin(): void
+    {
+        $archive = $this->pluginArchive('other-plugin', '1.0.0');
+        $this->makePluginsDirectory();
+
+        $this->catalogue(array(
+            $this->entry('store-plugin', array(
+                array('version' => '1.0.0', 'requires' => array('admidio' => '>=5.1'), 'download' => $archive)
+            ))
+        ));
+
+        $this->expectExceptionMessage('SYS_PLUGIN_STORE_ID_MISMATCH');
+
+        PluginStore::install('store-plugin');
+    }
+
+    /**
+     * @testdox An archive whose version does not match the catalogue release is refused
+     */
+    public function testInstallRefusesArchiveWithAnotherVersion(): void
+    {
+        $archive = $this->storePluginArchive('1.5.0');
+        $this->makePluginsDirectory();
+
+        $this->catalogue(array(
+            $this->entry('store-plugin', array(
+                array('version' => '2.0.0', 'requires' => array('admidio' => '>=5.1'), 'download' => $archive)
+            ))
+        ));
+
+        $this->expectExceptionMessage('SYS_PLUGIN_STORE_VERSION_MISMATCH');
+
+        PluginStore::install('store-plugin');
+    }
+
+    /**
+     * @testdox Updating a plugin is refused, and the installed plugin is left alone, when the
+     *          downloaded archive is really another plugin
+     *
+     * This is the scenario the ID check exists for: updateFiles() calls PluginPackage::install()
+     * with replace=true, which would otherwise delete and replace whatever plugin the archive
+     * actually names - even one that has nothing to do with the update that was asked for.
+     */
+    public function testUpdateFilesRefusesArchiveForAnotherPlugin(): void
+    {
+        $plugins = $this->makePluginsDirectory();
+
+        mkdir($plugins . '/hello', 0o700, true);
+        file_put_contents($plugins . '/hello/plugin.json', '{"name": "Hello", "version": "1.2.0"}');
+        file_put_contents($plugins . '/hello/plugin.php', "<?php\n");
+
+        mkdir($plugins . '/victim', 0o700, true);
+        file_put_contents($plugins . '/victim/plugin.json', '{"name": "Victim", "version": "1.0.0"}');
+        file_put_contents($plugins . '/victim/plugin.php', "<?php\n");
+        file_put_contents($plugins . '/victim/irreplaceable.php', "<?php\n");
+        PluginRegistry::reset();
+
+        // The catalogue offers an update for "hello", but the archive it points to is "victim".
+        $archive = $this->pluginArchive('victim', '2.0.0');
+
+        $this->catalogue(array(
+            $this->entry('hello', array(
+                array('version' => '9.9.9', 'requires' => array('admidio' => '>=5.1'), 'download' => $archive)
+            ))
+        ));
+
+        $this->expectExceptionMessage('SYS_PLUGIN_STORE_ID_MISMATCH');
+
+        try {
+            PluginStore::updateFiles('hello');
+        } finally {
+            PluginRegistry::setInstallations(array());
+            $this->assertFileExists($plugins . '/victim/irreplaceable.php', 'the other plugin must be untouched');
+            $this->assertSame('1.0.0', PluginRegistry::get('victim')?->version);
+        }
+    }
+
+    /**
      * @testdox One entry of the catalogue can be asked for by ID
      */
     public function testEntryIsFoundById(): void
@@ -791,6 +921,36 @@ final class PluginStoreTest extends PluginTestCase
         $url = new \ReflectionProperty(PluginStore::class, 'url');
         $url->setAccessible(true);
         $url->setValue(null, null);
+    }
+
+    /**
+     * A ZIP archive holding a plugin named "store-plugin", at the given version.
+     * @param string $version
+     * @return string Absolute path of the archive.
+     */
+    private function storePluginArchive(string $version): string
+    {
+        return $this->pluginArchive('store-plugin', $version);
+    }
+
+    /**
+     * A ZIP archive holding a minimal, valid plugin of the given ID and version.
+     * @param string $id
+     * @param string $version
+     * @return string Absolute path of the archive.
+     */
+    private function pluginArchive(string $id, string $version): string
+    {
+        $archive = $this->temporaryFile('admidio-store-archive-', '.zip');
+        $this->rubbish[] = $archive;
+
+        $zip = new \ZipArchive();
+        $this->assertTrue($zip->open($archive, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true);
+        $zip->addFromString($id . '/plugin.json', (string)json_encode(array('name' => ucfirst($id), 'version' => $version)));
+        $zip->addFromString($id . '/plugin.php', "<?php\n");
+        $zip->close();
+
+        return $archive;
     }
 
     /**
