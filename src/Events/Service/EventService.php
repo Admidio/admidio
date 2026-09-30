@@ -219,7 +219,7 @@ class EventService
      */
     public function exportICal(string $eventUUID = '', string $categoryUUID = '', string $dateFrom = '', string $dateTo = '', bool $inline = false): void
     {
-        global $gCurrentOrganization, $gSettingsManager;
+        global $gCurrentOrganization, $gSettingsManager, $gTimezone;
 
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
             throw new Exception('SYS_ICAL_DISABLED');
@@ -258,7 +258,8 @@ class EventService
         header('Cache-Control: private');
         header('Pragma: public');
 
-        echo $events->getICalContent();
+        $eventRecords = $events->getDataSet()['recordset'];
+        echo (new EventICalExportService($this->database, $gTimezone))->createCalendar($eventRecords);
     }
 
     /**
