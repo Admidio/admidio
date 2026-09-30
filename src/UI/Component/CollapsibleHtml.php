@@ -13,18 +13,20 @@ final class CollapsibleHtml
      * enclosing paragraph and div elements are closed afterwards.
      *
      * @param string $html HTML content that should be shortened.
-     * @param int $maxCharacters Maximum number of visible characters in the preview.
+     * @param int $maxCharacters Maximum number of visible characters in the preview. A value of 0 shows all content.
      * @param string $collapseId Unique HTML id for the collapsible full content.
      * @param string $showMoreText Text for the link title and accessible label.
+     * @param bool $showLinkText Whether the show-more text should be visible before the arrows.
      * @return string Original HTML or markup containing a shortened preview and the collapsible full content.
      */
     public static function render(
         string $html,
         int $maxCharacters,
         string $collapseId,
-        string $showMoreText
+        string $showMoreText,
+        bool $showLinkText = false
     ): string {
-        if ($html === '' || $maxCharacters < 1) {
+        if ($html === '' || $maxCharacters <= 0) {
             return $html;
         }
 
@@ -63,10 +65,13 @@ final class CollapsibleHtml
 
         $encodedId = htmlspecialchars($collapseId, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
         $encodedShowMoreText = htmlspecialchars($showMoreText, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
-        $showMoreLink = ' <a class="admidio-icon-link" href="#' . $encodedId
+        $linkClass = $showLinkText ? 'admidio-more-less-button' : 'admidio-icon-link';
+        $linkContent = $showLinkText ? $encodedShowMoreText . ' »' : '»';
+        $showMoreLink = ' <a class="' . $linkClass . '" href="#' . $encodedId
             . '" data-bs-toggle="collapse" aria-expanded="false" aria-controls="' . $encodedId
             . '" title="' . $encodedShowMoreText . '" aria-label="' . $encodedShowMoreText
-            . '" onclick="this.closest(\'.admidio-collapsible-html-preview\').classList.add(\'d-none\');">»</a>';
+            . '" onclick="this.closest(\'.admidio-collapsible-html-preview\').classList.add(\'d-none\');">'
+            . $linkContent . '</a>';
 
         $preview = preg_replace_callback(
             '/((?:\s*<\/(?:p|div)>)+\s*)$/i',

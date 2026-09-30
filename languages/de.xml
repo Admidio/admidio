@@ -1283,6 +1283,8 @@
   <string name="SYS_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Als Administrator:in kannst du Konfigurationen erstellen, auf die alle Benutzer:innen des Systems Zugriff haben. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen.</string>
   <string name="SYS_PREVIEW">Vorschau</string>
+  <string name="SYS_PREVIEW_CHARACTERS">Zeichen in der Beschreibungsvorschau</string>
+  <string name="SYS_PREVIEW_CHARACTERS_DESC">Anzahl der Zeichen, die in der Vorschau einer Beschreibung angezeigt werden. Der Text wird am letzten Leerzeichen vor dieser Anzahl gekürzt. Durch Anklicken des Erweiterungssymbols kann der vollständige Text angezeigt werden. Bei 0 wird immer die vollständige Beschreibung angezeigt. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_PREVIOUS_EVENTS">Vergangene #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Bisheriger Name</string>
   <string name="SYS_PREVIOUS_PHOTO">Vorheriges Foto</string>
@@ -1921,8 +1923,6 @@
   <string name="SYS_WEBLINK">Weblink</string>
   <string name="SYS_WEBLINKS">Weblinks</string>
   <string name="SYS_WEBLINKS_DESC">Links zu interessanten Webseiten können hier abgelegt und nach unterschiedlichen Kategorien gruppiert werden.</string>
-  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS">Zeichen in der Beschreibungsvorschau</string>
-  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC">Anzahl der Zeichen, die in der Vorschau einer Weblink-Beschreibung angezeigt werden. Der Text wird am letzten Leerzeichen vor dieser Anzahl gekürzt. Beim Klick auf einen Link kann der vollständige Text angezeigt werden. (Voreinstellung: 200)</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
   <string name="SYS_WEBSITE">Webseite</string>
   <string name="SYS_WEDNESDAY">Mittwoch</string>

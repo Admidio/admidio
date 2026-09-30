@@ -346,10 +346,10 @@ class PreferencesPresenter extends PagePresenter
             self::preferenceInputOptions('announcements_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10))))
         );
          $formAnnouncements->addInput(
-            'announcements_clamp_text_lines',
-            $gL10n->get('SYS_CLAMP_TEXT_LINES'),
-            $formValues['announcements_clamp_text_lines'],
-            self::preferenceInputOptions('announcements_clamp_text_lines', array('helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_ANNOUNCEMENT'))))
+            'announcements_preview_characters',
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
+            $formValues['announcements_preview_characters'],
+            self::preferenceInputOptions('announcements_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(0))))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -1808,7 +1808,7 @@ class PreferencesPresenter extends PagePresenter
 
         $formWeblinks = new FormPresenter(
             'adm_preferences_form_links',
-            'preferences/preferences.links.tpl',
+            'preferences/preferences.weblinks.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'links')),
             null,
             array('class' => 'form-preferences')
@@ -1832,9 +1832,9 @@ class PreferencesPresenter extends PagePresenter
         );
         $formWeblinks->addInput(
             'weblinks_preview_characters',
-            $gL10n->get('SYS_WEBLINKS_PREVIEW_CHARACTERS'),
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
             $formValues['weblinks_preview_characters'],
-            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => 'SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC'))
+            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(200))))
         );
         $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
         $formWeblinks->addSelectBox(
@@ -1866,7 +1866,7 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formWeblinks->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formWeblinks);
-        return $smarty->fetch('preferences/preferences.links.tpl');
+        return $smarty->fetch('preferences/preferences.weblinks.tpl');
     }
 
     /**
