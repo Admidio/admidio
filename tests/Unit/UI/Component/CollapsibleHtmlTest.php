@@ -18,6 +18,16 @@ class CollapsibleHtmlTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox A limit of zero keeps all content visible
+     */
+    public function testKeepsAllContentForZeroLimit(): void
+    {
+        $html = '<p><em>Long content</em> that would otherwise be shortened.</p>';
+
+        $this->assertSame($html, CollapsibleHtml::render($html, 0, 'details-test', 'Show more'));
+    }
+
+    /**
      * @testdox Content is cut at the last space before the character limit
      */
     public function testCutsAtLastWordBoundary(): void
@@ -54,6 +64,26 @@ class CollapsibleHtmlTest extends AdmidioTestCase
             '<div class="collapse" id="details-test"><p><strong>12345</strong> 67890 next</p></div>',
             $html
         );
+    }
+
+    /**
+     * @testdox The collapse link can display the show-more text before the arrows
+     */
+    public function testDisplaysShowMoreTextInLink(): void
+    {
+        $html = CollapsibleHtml::render(
+            '<p>one two three four five</p>',
+            12,
+            'details-test',
+            'Show more',
+            true
+        );
+
+        $this->assertStringContainsString(
+            '<a class="admidio-more-less-button" href="#details-test"',
+            $html
+        );
+        $this->assertStringContainsString('>Show more »</a>', $html);
     }
 
     /**

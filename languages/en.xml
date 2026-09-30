@@ -262,7 +262,6 @@
   <string name="SYS_ALLOW_USER_COMMENTS">Allow comments within participation</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Participants can comment on their participation. The comments can be viewed via the participant list</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
-  <string name="SYS_ANNOUNCEMENT">Announcement</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENTS">Announcements</string>
@@ -1304,6 +1303,8 @@
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="SYS_PREVIEW">Preview</string>
+  <string name="SYS_PREVIEW_CHARACTERS">Characters in the description preview</string>
+  <string name="SYS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a description. The text is shortened at the last space before this limit. Clicking the expand icon displays the complete text. A value of 0 always displays the complete description. (Default: #VAR1#)</string>
   <string name="SYS_PREVIOUS_EVENTS">Previous #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Previous name</string>
   <string name="SYS_PREVIOUS_PHOTO">Previous picture</string>
@@ -1967,8 +1968,6 @@
   <string name="SYS_WEBLINK">Web link</string>
   <string name="SYS_WEBLINKS">Web links</string>
   <string name="SYS_WEBLINKS_DESC">Create and organize by categories interesting hyperlinks.</string>
-  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS">Characters in the description preview</string>
-  <string name="SYS_WEBLINKS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a web link description. The text is shortened at the last space before this limit. Clicking a link displays the complete text. (Default: 200)</string>
   <string name="SYS_WEBMASTER">Webmaster</string>
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Wednesday</string>
