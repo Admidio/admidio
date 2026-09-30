@@ -1420,6 +1420,9 @@ class ItemsData
 
         global $gCurrentUser;
         $this->mDb->startTransaction();
+        // All records of one item save belong to one user action, even though an item and its
+        // individual data rows are persisted separately.
+        $previousChangeSet = LogChanges::startChangeSet();
         $inbId = 0; // used for item borrow data
         // safe item data
         foreach ($this->mItemData as $value) {
@@ -1473,11 +1476,20 @@ class ItemsData
         if ($this->mItemCreated) {
             $newItem = new Item($this->mDb, $this, $this->mItemId);
             $newItem->logPostponedCreation();
+
+            // The data values were saved before the item could be logged because the item name
+            // is stored in this table. Write their initial log entries now, after [Created].
+            foreach ($this->mItemData as $value) {
+                if ($value instanceof ItemData) {
+                    $value->logInitialValue();
+                }
+            }
         }
 
         $this->columnsValueChanged = false;
         $this->readItemData($this->mItemUUID);
         $this->mDb->endTransaction();
+        LogChanges::endChangeSet($previousChangeSet);
     }
 
     /**
