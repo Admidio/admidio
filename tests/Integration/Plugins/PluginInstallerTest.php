@@ -24,6 +24,7 @@ use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\Session\Entity\Session;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\FilesystemTestCase;
 use FilesystemIterator;
@@ -344,6 +345,78 @@ class PluginInstallerTest extends FilesystemTestCase
         $preferences = $this->preferences((int)$gCurrentOrgId, $plugin);
         $this->assertSame('0', $preferences[$plugin->getEnabledSettingName()]);
         $this->assertSame('Hello', $preferences['hello_greeting']);
+    }
+
+    /**
+     * Component::isVisible() decides a plugin's menu entry (and whether its pages may be opened)
+     * from the very preference enable()/disable() flip, but that preference is cached in the
+     * session of every active user - including this one, on its next request - exactly like every
+     * other organization-wide preference change. Without asking every session to reload, enabling
+     * or disabling a plugin would only reach the menu once something else invalidated that cache.
+     *
+     * @testdox Enabling a plugin flags the running sessions for reload
+     */
+    public function testEnableFlagsSessionsForReload(): void
+    {
+        [$session, $readReloadFlag] = $this->sessionFlaggedForReload();
+        $this->assertFalse($readReloadFlag());
+
+        $previousSession = $GLOBALS['gCurrentSession'] ?? null;
+        $GLOBALS['gCurrentSession'] = $session;
+
+        try {
+            PluginInstaller::enable($this->plugin());
+        } finally {
+            $GLOBALS['gCurrentSession'] = $previousSession;
+        }
+
+        $this->assertTrue($readReloadFlag());
+    }
+
+    /**
+     * @testdox Disabling a plugin flags the running sessions for reload
+     */
+    public function testDisableFlagsSessionsForReload(): void
+    {
+        $plugin = $this->plugin();
+        PluginInstaller::enable($plugin);
+
+        [$session, $readReloadFlag] = $this->sessionFlaggedForReload();
+        $this->assertFalse($readReloadFlag());
+
+        $previousSession = $GLOBALS['gCurrentSession'] ?? null;
+        $GLOBALS['gCurrentSession'] = $session;
+
+        try {
+            PluginInstaller::disable($plugin);
+        } finally {
+            $GLOBALS['gCurrentSession'] = $previousSession;
+        }
+
+        $this->assertTrue($readReloadFlag());
+    }
+
+    /**
+     * A real, saved session with its reload flag cleared, and a closure that reads it back.
+     * @return array{0: Session, 1: callable(): bool}
+     */
+    private function sessionFlaggedForReload(): array
+    {
+        $db = $this->getDatabase();
+
+        $session = new Session($db, COOKIE_PREFIX);
+        $session->save();
+        $sessionId = $session->getValue('ses_session_id');
+
+        $db->queryPrepared('UPDATE ' . TBL_SESSIONS . ' SET ses_reload = false WHERE ses_session_id = ?', array($sessionId));
+
+        $readReloadFlag = static function () use ($db, $sessionId): bool {
+            $sql = 'SELECT ses_reload FROM ' . TBL_SESSIONS . ' WHERE ses_session_id = ?';
+
+            return (bool)$db->queryPrepared($sql, array($sessionId))->fetch()['ses_reload'];
+        };
+
+        return array($session, $readReloadFlag);
     }
 
     /**

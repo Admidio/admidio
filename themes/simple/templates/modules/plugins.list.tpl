@@ -1,5 +1,6 @@
-{* The whole list content, so the state toggle can replace it after an AJAX enable/disable without
-   reloading the page. *}
+{* The whole list content, so the state toggle of a plugin without its own menu entry can replace
+   it after an AJAX enable/disable without reloading the page. A plugin with a menu entry reloads
+   the page outright instead, since the menu is not part of this fragment. *}
 <div id="adm_plugins_list">
 {* The plugins that threw while they were loaded. Without this they would merely be absent. *}
 {if count($failures) > 0}
