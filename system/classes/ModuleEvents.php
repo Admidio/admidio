@@ -134,11 +134,6 @@ use Admidio\Infrastructure\Utils\DateTimeUtils;
  */
 class ModuleEvents extends Modules
 {
-    public const MEMBER_APPROVAL_STATE_INVITED   = 0;
-    public const MEMBER_APPROVAL_STATE_TENTATIVE = 1;
-    public const MEMBER_APPROVAL_STATE_ATTEND    = 2;
-    public const MEMBER_APPROVAL_STATE_REFUSED   = 3;
-
     /**
      * @var array An array with all names of the calendars whose events should be shown
      */

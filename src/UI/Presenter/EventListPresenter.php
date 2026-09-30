@@ -434,24 +434,24 @@ class EventListPresenter extends PagePresenter
 
                     // If a user is invited to the event, then the approval state is not initialized and has value "null" in the data table
                     if ($row['member_date_role'] > 0 && $row['member_approval_state'] == null) {
-                        $row['member_approval_state'] = ModuleEvents::MEMBER_APPROVAL_STATE_INVITED;
+                        $row['member_approval_state'] = Participants::STATE_INVITED;
                     }
 
                     // set status of participation
                     switch ($row['member_approval_state']) {
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
+                        case Participants::STATE_INVITED:
                             $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
                             $iconParticipationStatus = '<i class="bi bi-person-plus-fill"></i>';
                             break;
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
+                        case Participants::STATE_ATTENDING:
                             $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                             $iconParticipationStatus = '<i class="bi bi-check-circle-fill admidio-event-approval-state-attend"></i>';
                             break;
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
+                        case Participants::STATE_TENTATIVE:
                             $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
                             $iconParticipationStatus = '<i class="bi bi-question-circle-fill admidio-event-approval-state-tentative"></i>';
                             break;
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
+                        case Participants::STATE_REFUSED:
                             $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
                             $iconParticipationStatus = '<i class="bi bi-x-circle-fill admidio-event-approval-state-cancel"></i>';
                             break;
@@ -505,13 +505,13 @@ class EventListPresenter extends PagePresenter
                                     // Check current user. If a user is a member of the event role, then get their current approval status and set the options
                                     if (array_key_exists($gCurrentUserId, $participantsArray)) {
                                         switch ($participantsArray[$gCurrentUserId]['approved']) {
-                                            case Participants::PARTICIPATION_MAYBE:
+                                            case Participants::STATE_TENTATIVE:
                                                 $disableStatusTentative = 'disabled';
                                                 break;
-                                            case Participants::PARTICIPATION_YES:
+                                            case Participants::STATE_ATTENDING:
                                                 $disableStatusAttend = 'disabled';
                                                 break;
-                                            case Participants::PARTICIPATION_NO:
+                                            case Participants::STATE_REFUSED:
                                                 $disableStatusAttend = 'disabled';
                                                 $disableStatusTentative = 'disabled';
                                                 break;
@@ -809,9 +809,9 @@ class EventListPresenter extends PagePresenter
                                 // Only show participants if user has the right to view the list, is leader or has permission to create/edit events
                                 if ($gCurrentUser->hasRightViewRole((int)$event->getValue('dat_rol_id')) || $row['mem_leader'] == 1 || $gCurrentUser->isAdministratorEvents()) {
                                     foreach ($participantsArray as $participant) {
-                                        if ($participant['approved'] === Participants::PARTICIPATION_YES) {
+                                        if ($participant['approved'] === Participants::STATE_ATTENDING) {
                                             $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'];
-                                        } elseif ($participant['approved'] === Participants::PARTICIPATION_MAYBE) {
+                                        } elseif ($participant['approved'] === Participants::STATE_TENTATIVE) {
                                             $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'] . ' (' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . ')';
                                         }
                                     }

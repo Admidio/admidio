@@ -198,9 +198,10 @@ class Membership extends Entity
      * @param int $roleId Assign the membership to this role
      * @param int $userId The user who should get a member of the role.
      * @param bool|null $leader If value **1** then the user will be a leader of the role and get more rights.
-     * @param int|null $approvalState Option for User to confirm and adjust the membership (**1** = User confirmed membership but maybe disagreed, **2** = user accepted membership
+     * @param int|null $approvalState Participation state used to confirm or adjust an event membership.
      * @return bool Return **true** if the assignment was successful.
      * @throws Exception
+     * @see \Admidio\Events\ValueObject\Participants
      */
     public function startMembership(int $roleId = 0, int $userId = 0, bool|null $leader = null, int|null $approvalState = null): bool
     {

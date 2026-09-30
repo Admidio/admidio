@@ -7072,14 +7072,14 @@ final class CoreTasks
                 (int)$event->getValue('dat_rol_id'),
                 (int)$user->getValue('usr_id'),
                 null,
-                Participants::PARTICIPATION_YES
+                Participants::STATE_ATTENDING
             );
         } elseif ($command === 'event:maybe') {
             $membership->startMembership(
                 (int)$event->getValue('dat_rol_id'),
                 (int)$user->getValue('usr_id'),
                 null,
-                Participants::PARTICIPATION_MAYBE
+                Participants::STATE_TENTATIVE
             );
         } else {
             if ($gSettingsManager->getBool('events_save_cancellations')) {
@@ -7087,7 +7087,7 @@ final class CoreTasks
                     (int)$event->getValue('dat_rol_id'),
                     (int)$user->getValue('usr_id'),
                     null,
-                    Participants::PARTICIPATION_NO
+                    Participants::STATE_REFUSED
                 );
             } else {
                 $membership->deleteMembership((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));

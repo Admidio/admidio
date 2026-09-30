@@ -751,7 +751,7 @@ class Role extends Entity
             }
 
             if ($this->type === self::ROLE_EVENT) {
-                $membership->setValue('mem_approved', Participants::PARTICIPATION_YES);
+                $membership->setValue('mem_approved', Participants::STATE_ATTENDING);
             }
             $membership->save();
         }

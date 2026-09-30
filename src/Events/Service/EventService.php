@@ -158,13 +158,13 @@ class EventService
             if ($participationPossible || $mode === 'participate_cancel') {
                 switch ($mode) {
                     case 'participate':
-                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
+                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_ATTENDING);
                         $outputMessage = $gL10n->get('SYS_ATTEND_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                         break;
 
                     case 'participate_cancel':
                         if ($gSettingsManager->getBool('events_save_cancellations')) {
-                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_NO);
+                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_REFUSED);
                         } else {
                             $member->deleteMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'));
                         }
@@ -173,7 +173,7 @@ class EventService
                         break;
 
                     case 'participate_maybe':
-                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
+                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_TENTATIVE);
                         $outputMessage = $gL10n->get('SYS_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                         break;
                 }
