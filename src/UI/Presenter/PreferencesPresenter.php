@@ -1808,7 +1808,7 @@ class PreferencesPresenter extends PagePresenter
 
         $formWeblinks = new FormPresenter(
             'adm_preferences_form_links',
-            'preferences/preferences.links.tpl',
+            'preferences/preferences.weblinks.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'links')),
             null,
             array('class' => 'form-preferences')
@@ -1866,7 +1866,7 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formWeblinks->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formWeblinks);
-        return $smarty->fetch('preferences/preferences.links.tpl');
+        return $smarty->fetch('preferences/preferences.weblinks.tpl');
     }
 
     /**
