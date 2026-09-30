@@ -346,10 +346,10 @@ class PreferencesPresenter extends PagePresenter
             self::preferenceInputOptions('announcements_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10))))
         );
          $formAnnouncements->addInput(
-            'announcements_clamp_text_lines',
+            'announcements_preview_characters',
             $gL10n->get('SYS_PREVIEW_CHARACTERS'),
-            $formValues['announcements_clamp_text_lines'],
-            self::preferenceInputOptions('announcements_clamp_text_lines', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(0))))
+            $formValues['announcements_preview_characters'],
+            self::preferenceInputOptions('announcements_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(0))))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';

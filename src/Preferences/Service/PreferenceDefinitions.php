@@ -265,7 +265,7 @@ final class PreferenceDefinitions
             'captcha_signature' => array('default' => 'Powered by Admidio.org', 'maxLength' => 60),
             'announcements_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'announcements_per_page' => array('default' => '10', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
-            'announcements_clamp_text_lines' => array('default' => '0', 'type' => 'int', 'minimum' => 0, 'maximum' => null),
+            'announcements_preview_characters' => array('default' => '0', 'type' => 'int', 'minimum' => 0, 'maximum' => null),
             'category_report_module_enabled' => array('default' => '1', 'type' => 'bool'),
             'category_report_default_configuration' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_CATEGORY_REPORT),
             'contacts_list_configuration' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_CONTACTS_LIST),

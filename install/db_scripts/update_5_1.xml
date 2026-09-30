@@ -220,5 +220,6 @@
     <step id="1270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
     <step id="1280">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/modules/links/links.php', '/modules/weblinks.php') WHERE men_name_intern = 'weblinks' AND men_url LIKE '%/modules/links/links.php%'</step>
     <step id="1290">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/modules/photos/photos.php', '/modules/photos.php') WHERE men_name_intern = 'photo' AND men_url LIKE '%/modules/photos/photos.php%'</step>
+    <step id="1300">UPDATE %PREFIX%_preferences SET prf_name = 'announcements_preview_characters' WHERE prf_name = 'announcements_clamp_text_lines'</step>
     <step>stop</step>
 </update>

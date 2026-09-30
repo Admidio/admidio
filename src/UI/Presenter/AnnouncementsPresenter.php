@@ -285,7 +285,7 @@ class AnnouncementsPresenter extends PagePresenter
             $templateRow['title'] = $announcement->getValue('ann_headline');
             $templateRow['description'] = CollapsibleHtml::render(
                 (string)$announcement->getValue('ann_description'),
-                $gSettingsManager->getInt('announcements_clamp_text_lines'),
+                $gSettingsManager->getInt('announcements_preview_characters'),
                 'viewdetails-announcement-' . $announcementData['ann_uuid'],
                 $gL10n->get('SYS_SHOW_MORE'),
                 true
