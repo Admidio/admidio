@@ -262,7 +262,6 @@
   <string name="SYS_ALLOW_USER_COMMENTS">Allow comments within participation</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Participants can comment on their participation. The comments can be viewed via the participant list</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
-  <string name="SYS_ANNOUNCEMENT">Announcement</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENTS">Announcements</string>
