@@ -1288,8 +1288,11 @@
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
   <string name="SYS_PLUGIN_ENABLED">Plugin successfully enabled.</string>
+  <string name="SYS_PLUGIN_INCOMPATIBLE">This plugin cannot be used: #VAR1#</string>
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE">Install from a file</string>
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE_DESC">Choose the ZIP file of a plugin. Admidio checks the file before it unpacks anything, and the plugin is only added, never switched on: you enable it afterwards in the plugin manager.</string>
+  <string name="SYS_PLUGIN_INVALID_ID">The plugin folder #VAR1# is not a valid plugin name. A plugin name may only contain lowercase letters, digits, hyphens and underscores.</string>
+  <string name="SYS_PLUGIN_INVALID_MANIFEST">This plugin is not compatible with the plugin system in Admidio 6.0 and later: The manifest #VAR1# is not a valid JSON object.</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">These plugins could not be loaded and are therefore inactive:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
@@ -1299,6 +1302,7 @@
   <string name="SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE">Admidio is not allowed to write into its own modules folder, so this option cannot be switched on. Pages of plugins keep their longer address and everything else keeps working.</string>
   <string name="SYS_PLUGIN_NOT_FOUND">The plugin was not found.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">The plugin #VAR1# is not installed.</string>
+  <string name="SYS_PLUGIN_NO_MANIFEST">This plugin is not compatible with the plugin system in Admidio 6.0 and later: The manifest #VAR1# is missing.</string>
   <string name="SYS_PLUGIN_ORPHANED">Plugins whose files are missing</string>
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">The plugin.json of this plugin cannot be read: #VAR1#</string>
   <string name="SYS_PLUGIN_PACKAGE_EMPTY">The file is an empty archive.</string>

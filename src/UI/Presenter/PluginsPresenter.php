@@ -21,9 +21,12 @@ use Admidio\UI\Component\DataTables;
  * plugins that are only left in the database because their files were deleted - grouped by the six
  * states of the PluginRegistry, and offers the operations of the PluginInstaller for each of them.
  *
- * A broken plugin is listed with the reason it is broken. That reason comes from the manifest reader
- * and from Plugin::checkRequirements(), which answer in English for a developer and not in a
- * translated message for a member, so it is shown as the diagnostic it is.
+ * A broken plugin is listed with the reason it is broken. A structural problem the manifest reader
+ * found - a missing manifest, a broken one, an invalid folder name - is shown as a translated
+ * message, keyed off Plugin::$errorCode; Plugin::$error itself stays an English diagnostic for the
+ * CLI and the log. An unmet version, PHP, extension or plugin-dependency requirement from
+ * Plugin::checkRequirements() is shown as the English diagnostic it is, because it names a version
+ * string or an extension name that is not worth translating around.
  *
  * **Code example**
  * ```
@@ -564,8 +567,11 @@ class PluginsPresenter extends PagePresenter
     /**
      * Why a plugin cannot be used, or why its pages are not published.
      *
-     * These are developer diagnostics in English, not translated messages, because they name a
-     * malformed manifest, an unmet version constraint or a directory that cannot be written.
+     * A structural manifest problem (Plugin::$error set) is shown translated, via
+     * translatePluginError(). An unmet version, PHP, extension or plugin-dependency requirement -
+     * which is all Plugin::checkRequirements() can still find once the manifest itself is sound -
+     * is shown as the English diagnostic it is; it names a version string or an extension name that
+     * is not worth translating around.
      * @param Plugin|null $plugin
      * @param string $state One of the PluginRegistry STATE_* constants.
      * @return array<int,string>
@@ -577,11 +583,15 @@ class PluginsPresenter extends PagePresenter
             return array();
         }
 
-        $diagnostics = array();
-        if ($plugin->error !== null) {
-            $diagnostics[] = $plugin->error;
-        }
-        $diagnostics = array_merge($diagnostics, $plugin->checkRequirements(PluginRegistry::getEnabledVersions()));
+        /*
+         * checkRequirements() leads with $plugin->error when the manifest itself is the problem,
+         * and in that case it never finds anything else: read() leaves requires empty for every
+         * manifest error. So a structural problem is translated once here instead of calling
+         * checkRequirements() at all, which would otherwise report the same problem twice.
+         */
+        $diagnostics = $plugin->error !== null
+            ? array($this->translatePluginError($plugin))
+            : $plugin->checkRequirements(PluginRegistry::getEnabledVersions());
 
         /*
          * The pages of an installed plugin may be blocked although the administrator allowed them.
@@ -596,6 +606,29 @@ class PluginsPresenter extends PagePresenter
         }
 
         return $diagnostics;
+    }
+
+    /**
+     * The translated message for a structural manifest problem (Plugin::$error set).
+     *
+     * Plugin::$errorCode names which of a small, stable set of structural problems it is; anything
+     * else - an invalid JSON manifest, a missing entry file, a missing version, an unsafe autoload
+     * mapping - shares one generic translated wrapper around the English detail, the same pattern
+     * SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST already uses for the equivalent problem in an uploaded
+     * archive.
+     * @param Plugin $plugin A plugin with $plugin->error !== null.
+     * @return string
+     */
+    private function translatePluginError(Plugin $plugin): string
+    {
+        global $gL10n;
+
+        return match ($plugin->errorCode) {
+            Plugin::ERROR_INVALID_ID => $gL10n->get('SYS_PLUGIN_INVALID_ID', array($plugin->id)),
+            Plugin::ERROR_NO_MANIFEST => $gL10n->get('SYS_PLUGIN_NO_MANIFEST', array(Plugin::MANIFEST_FILE)),
+            Plugin::ERROR_INVALID_MANIFEST => $gL10n->get('SYS_PLUGIN_INVALID_MANIFEST', array(Plugin::MANIFEST_FILE)),
+            default => $gL10n->get('SYS_PLUGIN_INCOMPATIBLE', array((string)$plugin->error)),
+        };
     }
 
     /**

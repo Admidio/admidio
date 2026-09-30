@@ -62,6 +62,16 @@ final class Plugin
     public const DIR_DB_SCRIPTS = 'db_scripts';
 
     /**
+     * Stable codes for $error, so the administration can show a translated message to an
+     * administrator instead of the raw (English) diagnostic. $error itself stays English: it is
+     * also read by the CLI and logged, where a developer, not a member, is the reader.
+     */
+    public const ERROR_INVALID_ID = 'invalid_id';
+    public const ERROR_NO_MANIFEST = 'no_manifest';
+    public const ERROR_INVALID_MANIFEST = 'invalid_manifest';
+    public const ERROR_BROKEN_MANIFEST = 'broken_manifest';
+
+    /**
      * The namespace prefix of the Admidio core. A plugin must not map it, otherwise it could
      * shadow a core class.
      */
@@ -141,9 +151,16 @@ final class Plugin
 
     /**
      * Why the plugin cannot be used, or **null** if the manifest is sound. This is an English
-     * diagnostic for the administrator, not a translated user message.
+     * diagnostic for a developer or the CLI, not a translated user message; the administration
+     * translates $errorCode into one instead of showing this text.
      */
     public readonly ?string $error;
+
+    /**
+     * Stable code for $error - one of the ERROR_* constants, or **null** to match $error. Lets the
+     * administration show a translated message without having to parse the English diagnostic.
+     */
+    public readonly ?string $errorCode;
 
     /**
      * @param array<string,mixed> $manifest
@@ -158,7 +175,8 @@ final class Plugin
         array $autoload,
         array $settings,
         array $requires,
-        ?string $error
+        ?string $error,
+        ?string $errorCode = null
     ) {
         $this->id = $id;
         $this->path = $path;
@@ -174,6 +192,7 @@ final class Plugin
         $this->requires = $requires;
         $this->preferences = self::readPreferences($manifest);
         $this->error = $error;
+        $this->errorCode = $errorCode;
     }
 
     /**
@@ -192,20 +211,20 @@ final class Plugin
         if (!self::isValidId($id)) {
             return new self($id, $path, array(), array(), array(), $empty,
                 'The plugin directory name "' . $id . '" must consist of lowercase letters, digits and single '
-                . 'hyphens or underscores as separators.');
+                . 'hyphens or underscores as separators.', self::ERROR_INVALID_ID);
         }
 
         $manifestFile = $path . '/' . self::MANIFEST_FILE;
         if (!is_file($manifestFile)) {
             return new self($id, $path, array(), array(), array(), $empty,
-                'The manifest ' . self::MANIFEST_FILE . ' is missing.');
+                'The manifest ' . self::MANIFEST_FILE . ' is missing.', self::ERROR_NO_MANIFEST);
         }
 
         $raw = (string)file_get_contents($manifestFile);
         $manifest = json_decode($raw, true);
         if (!is_array($manifest)) {
             return new self($id, $path, array(), array(), array(), $empty,
-                'The manifest ' . self::MANIFEST_FILE . ' is not a valid JSON object.');
+                'The manifest ' . self::MANIFEST_FILE . ' is not a valid JSON object.', self::ERROR_INVALID_MANIFEST);
         }
 
         /*
@@ -219,18 +238,21 @@ final class Plugin
 
         if (!is_file($path . '/' . self::ENTRY_FILE)) {
             return new self($id, $path, $manifest, array(), array(), $empty,
-                'The entry file ' . self::ENTRY_FILE . ' is missing.');
+                'The entry file ' . self::ENTRY_FILE . ' is missing.', self::ERROR_BROKEN_MANIFEST);
         }
 
         if (!isset($manifest['version']) || !is_string($manifest['version']) || $manifest['version'] === '') {
             return new self($id, $path, $manifest, array(), array(), $empty,
-                'The manifest does not declare a version.');
+                'The manifest does not declare a version.', self::ERROR_BROKEN_MANIFEST);
         }
 
         $error = null;
         $autoload = self::readAutoload($path, $manifest, $error);
 
-        return new self($id, $path, $manifest, $autoload, self::readSettings($manifest, $typed), self::readRequires($manifest), $error);
+        return new self(
+            $id, $path, $manifest, $autoload, self::readSettings($manifest, $typed), self::readRequires($manifest),
+            $error, $error !== null ? self::ERROR_BROKEN_MANIFEST : null
+        );
     }
 
     /**
