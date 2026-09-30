@@ -11,6 +11,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Documents\Service\DocumentsService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
+use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\Service\EventICalExportService;
 use Admidio\Events\Service\EventService;
@@ -7152,8 +7153,8 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $events = new \ModuleEvents();
-        $events->setParameter('dat_uuid', (string)$event->getValue('dat_uuid'));
+        $events = new EventRepository($gDb);
+        $events->setEventUuid((string)$event->getValue('dat_uuid'));
 
         $eventRecords = $events->getDataSet()['recordset'];
         $calendar = (new EventICalExportService($gDb, $gTimezone))->createCalendar($eventRecords);
@@ -7178,12 +7179,12 @@ final class CoreTasks
             throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
-        $events = new \ModuleEvents();
+        $events = new EventRepository($gDb);
         $events->setDateRange($dateFrom, $dateTo);
 
         if (CliApplication::optionExists($options, 'calendar')) {
             $category = self::resolveCategory(CliApplication::optionString($options, 'calendar'), 'EVT');
-            $events->setParameter('cat_uuid', (string)$category->getValue('cat_uuid'));
+            $events->setCategoryUuid((string)$category->getValue('cat_uuid'));
         }
 
         $eventRecords = $events->getDataSet()['recordset'];

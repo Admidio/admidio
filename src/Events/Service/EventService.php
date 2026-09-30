@@ -4,6 +4,7 @@ namespace Admidio\Events\Service;
 use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\EventRecurrence;
+use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
@@ -230,20 +231,20 @@ class EventService
             $dateTo = DATE_MAX;
         }
 
-        $events = new \ModuleEvents();
+        $events = new EventRepository($this->database);
         if ($eventUUID !== '') {
             $event = new Event($this->database);
             $event->readDataByUuid($eventUUID);
 
             $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database'));
-            $events->setParameter('dat_uuid', $eventUUID);
+            $events->setEventUuid($eventUUID);
         } else {
             $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
             $events->setDateRange($dateFrom, $dateTo);
 
             if ($categoryUUID !== '') {
                 $calendar = new Category($this->database);
-                $events->setParameter('cat_uuid', $categoryUUID);
+                $events->setCategoryUuid($categoryUUID);
                 $calendar->readDataByUuid($categoryUUID);
                 $filename .= '-' . FileSystemUtils::getSanitizedPathEntry($calendar->getValue('cat_name'));
             }
