@@ -329,10 +329,17 @@ class PluginsPresenter extends PagePresenter
      * Installing, updating and removing all change what the other rows may offer, so those still
      * reload the whole page rather than one row being patched. Enabling and disabling is different:
      * an administrator switches several plugins in a row, so it neither asks for confirmation - there
-     * is nothing destructive about it - nor reloads the page. The toggle flips its own icon and dims
+     * is nothing destructive about it - nor reloads the page: the toggle flips its own icon and dims
      * its row before the request even answers, so the click itself already looks like something
-     * happened; once the answer arrives it re-fetches the list content and replaces it, which still
-     * lets a plugin move to another group or change its actions, without the wait of a full reload.
+     * happened, and once the answer arrives it re-fetches the list content and replaces it, which
+     * still lets a plugin move to another group or change its actions.
+     *
+     * A plugin whose own pages get it a menu entry (Plugin::wantsMenuEntry()) is different again:
+     * enabling or disabling it can add, remove or change that entry, which nothing outside
+     * #adm_plugins_list would otherwise learn about, so its toggle is reloadTogglePlugin() instead -
+     * still dims the row for the same immediate feedback, but then does a genuine
+     * Post/Redirect/Get (redirectPost(), the same mechanism admidio-send-csrf-token elements use)
+     * rather than an AJAX call, so the server's response is a normal full-page navigation.
      * @return void
      * @throws Exception
      */
@@ -420,6 +427,22 @@ class PluginsPresenter extends PagePresenter
                     }
                 }).fail(revert);
             }
+
+            function reloadTogglePlugin(link, url, csrfToken) {
+                const $row = $(link).closest("tr, .card");
+
+                // A row already mid-flight ignores a second click; the page is about to navigate
+                // away anyway once the request lands.
+                if ($row.css("pointer-events") === "none") {
+                    return;
+                }
+
+                // No optimistic icon flip - the page is about to reload either way, so dimming the
+                // row is the only feedback that is worth giving here.
+                $row.css({ "opacity": 0.5, "pointer-events": "none" });
+
+                redirectPost(url, { "adm_csrf_token": csrfToken });
+            }
         ');
     }
 
@@ -469,6 +492,11 @@ class PluginsPresenter extends PagePresenter
      *
      * It shows the state the plugin is in, not the operation a click performs, so that the column
      * can be read at a glance like a row of switches.
+     *
+     * A plugin with its own pages gets a menu entry (Plugin::wantsMenuEntry()) that enabling or
+     * disabling it can add, remove or change, which nothing outside this page would otherwise learn
+     * about - so its switch does a real Post/Redirect/Get instead of the AJAX call every other
+     * switch uses: see toggleScript().
      * @param string $id ID of the plugin.
      * @param Plugin|null $plugin The plugin, or **null** for an orphan whose files are gone.
      * @param string $state One of the PluginRegistry STATE_* constants.
@@ -495,7 +523,7 @@ class PluginsPresenter extends PagePresenter
             'class' => $enabled ? 'text-success' : 'text-secondary',
             'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
             'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
-            'dataHref' => $this->toggleScript($id, $enabled)
+            'dataHref' => $this->toggleScript($id, $enabled, $plugin->wantsMenuEntry())
         );
     }
 
@@ -792,12 +820,19 @@ class PluginsPresenter extends PagePresenter
 
     /**
      * The JavaScript call that flips a plugin's state, for the onclick of the unconfirmed toggle.
+     *
+     * A plugin with a menu entry of its own (Plugin::wantsMenuEntry()) needs a real page reload to
+     * show a change to it - reloadTogglePlugin() dims the row for feedback and then does a genuine
+     * Post/Redirect/Get (redirectPost(), the same mechanism admidio-send-csrf-token elements use),
+     * so the server's redirect is a normal full-page navigation, not an AJAX response. Every other
+     * plugin keeps the AJAX call that only ever re-fetches the list fragment.
      * @param string $id ID of the plugin.
      * @param bool $enabled Whether the plugin is enabled, so the call switches it the other way.
+     * @param bool $reloadsPage Whether the plugin has a menu entry and therefore needs a real reload.
      * @return string
      * @throws Exception
      */
-    private function toggleScript(string $id, bool $enabled): string
+    private function toggleScript(string $id, bool $enabled, bool $reloadsPage): string
     {
         global $gCurrentSession;
 
@@ -805,8 +840,14 @@ class PluginsPresenter extends PagePresenter
             ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
             array('mode' => $enabled ? 'disable' : 'enable', 'plugin' => $id)
         );
+        $csrfToken = $gCurrentSession->getCsrfToken();
+
+        if ($reloadsPage) {
+            return 'reloadTogglePlugin(this, \'' . $url . '\', \'' . $csrfToken . '\')';
+        }
+
         $refreshUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php', array('mode' => 'list_refresh'));
 
-        return 'togglePlugin(this, \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $refreshUrl . '\')';
+        return 'togglePlugin(this, \'' . $url . '\', \'' . $csrfToken . '\', \'' . $refreshUrl . '\')';
     }
 }

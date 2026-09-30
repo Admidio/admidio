@@ -10,13 +10,17 @@
  *  Parameters:
  *
  *  mode     : list          - (default) Show the list of all plugins with their state
- *             list_refresh  - The list content alone, for the state toggle to re-fetch after it
- *                             enabled or disabled a plugin without reloading the page
+ *             list_refresh  - The list content alone, for the state toggle of a plugin without a
+ *                             menu entry to re-fetch after it enabled or disabled it via AJAX
  *             settings      - Show the settings of a plugin as the content of a dialog
  *             settings_save - Save the settings a plugin was given in that dialog
  *             install       - Install a plugin
- *             enable        - Enable a plugin for the current organization
- *             disable       - Disable a plugin for the current organization
+ *             enable        - Enable a plugin for the current organization. A plugin with a menu
+ *                             entry of its own (Plugin::wantsMenuEntry()) answers with a redirect
+ *                             back to the list instead of JSON, because PluginsPresenter renders
+ *                             its toggle as a real form submit, not the AJAX call every other
+ *                             plugin's toggle uses - the menu can only change on a real navigation.
+ *             disable       - Disable a plugin for the current organization. See 'enable'.
  *             update        - Run the update scripts of a plugin
  *             uninstall     - Uninstall a plugin
  *  plugin   : ID of the plugin, which is the name of its directory below plugins/
@@ -164,6 +168,16 @@ try {
                 throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
             PluginInstaller::enable($plugin);
+
+            if ($plugin->wantsMenuEntry()) {
+                // A plugin with its own pages may add, remove or change its menu entry, which
+                // nothing outside this page would otherwise learn about. PluginsPresenter renders
+                // this plugin's toggle as a real form submit rather than the AJAX call every other
+                // plugin's toggle uses, so this is a genuine Post/Redirect/Get: the browser
+                // navigates here natively, with no JavaScript reload logic involved at all.
+                admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php');
+            }
+
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_ENABLED')));
             break;
 
@@ -174,6 +188,12 @@ try {
                 throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($getPluginId));
             }
             PluginInstaller::disable($plugin);
+
+            if ($plugin->wantsMenuEntry()) {
+                // See 'enable': a real Post/Redirect/Get, not an AJAX response.
+                admRedirect(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php');
+            }
+
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_PLUGIN_DISABLED')));
             break;
 
