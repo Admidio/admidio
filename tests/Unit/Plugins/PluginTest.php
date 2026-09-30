@@ -21,6 +21,7 @@ final class PluginTest extends PluginTestCase
         $plugin = Plugin::read(self::fixturePath('hello'));
 
         $this->assertNull($plugin->error);
+        $this->assertNull($plugin->errorCode);
         $this->assertTrue($plugin->isValid());
         $this->assertSame('hello', $plugin->id);
         $this->assertSame('Hello', $plugin->name);
@@ -237,12 +238,13 @@ final class PluginTest extends PluginTestCase
      * @testdox Reading a broken plugin reports the problem instead of throwing
      * @dataProvider brokenPlugins
      */
-    public function testBrokenPluginIsReported(string $directory, string $expectedFragment): void
+    public function testBrokenPluginIsReported(string $directory, string $expectedFragment, string $expectedCode): void
     {
         $plugin = Plugin::read(self::fixturePath($directory));
 
         $this->assertFalse($plugin->isValid());
         $this->assertStringContainsString($expectedFragment, (string)$plugin->error);
+        $this->assertSame($expectedCode, $plugin->errorCode);
     }
 
     /**
@@ -251,11 +253,22 @@ final class PluginTest extends PluginTestCase
     public static function brokenPlugins(): array
     {
         return array(
-            'invalid JSON' => array('broken-json', 'not a valid JSON object'),
-            'no entry file' => array('no-entry', 'entry file plugin.php is missing'),
-            'autoload leaves the plugin' => array('escaping', 'is not a directory inside the plugin'),
-            'autoload claims the core namespace' => array('core-namespace', 'belongs to the Admidio core')
+            'invalid JSON' => array('broken-json', 'not a valid JSON object', Plugin::ERROR_INVALID_MANIFEST),
+            'no entry file' => array('no-entry', 'entry file plugin.php is missing', Plugin::ERROR_BROKEN_MANIFEST),
+            'autoload leaves the plugin' => array('escaping', 'is not a directory inside the plugin', Plugin::ERROR_BROKEN_MANIFEST),
+            'autoload claims the core namespace' => array('core-namespace', 'belongs to the Admidio core', Plugin::ERROR_BROKEN_MANIFEST)
         );
+    }
+
+    /**
+     * @testdox An invalid plugin folder name is reported with its own error code
+     */
+    public function testInvalidIdErrorCode(): void
+    {
+        $plugin = Plugin::read(self::fixturePath('Not_Valid'));
+
+        $this->assertFalse($plugin->isValid());
+        $this->assertSame(Plugin::ERROR_INVALID_ID, $plugin->errorCode);
     }
 
     /**
@@ -284,6 +297,7 @@ final class PluginTest extends PluginTestCase
 
         $this->assertFalse($plugin->isValid());
         $this->assertStringContainsString('manifest plugin.json is missing', (string)$plugin->error);
+        $this->assertSame(Plugin::ERROR_NO_MANIFEST, $plugin->errorCode);
     }
 
     /**
