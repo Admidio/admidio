@@ -874,6 +874,17 @@ tr.admidio-event-highlight {
     color: var(--bs-body-bg);
 }
 
+#plgCalendarTable td.plgCalendarToday a,
+#plgCalendarTable td.plgCalendarToday span {
+    color: var(--bs-body-bg);
+}
+
+#plgCalendarTable td.plgCalendarToday a:hover,
+#plgCalendarTable td.plgCalendarToday a:focus {
+    color: var(--bs-body-bg);
+    text-decoration: underline;
+}
+
 #plgCalendarTable td {
     text-align: center;
 }
