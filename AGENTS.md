@@ -1,7 +1,3 @@
----
-apply: always
----
-
 # Admidio Development Rules
 
 - Use PHP 8.2 compatible code.
