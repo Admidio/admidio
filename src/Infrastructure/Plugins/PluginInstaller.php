@@ -254,13 +254,25 @@ final class PluginInstaller
      */
     public static function enable(Plugin $plugin): void
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gCurrentSession;
 
         if (!PluginRegistry::isInstalled($plugin->id)) {
             self::install($plugin);
         }
 
         $gSettingsManager->set($plugin->getEnabledSettingName(), '1');
+
+        if (isset($gCurrentSession)) {
+            /*
+             * Component::isVisible() decides the menu entry of a plugin (and whether its pages may
+             * be opened) from this same preference, but $gSettingsManager is cached in the session
+             * of every active user - including this one, on its very next request - exactly like
+             * every other organization-wide preference change (PreferencesService::save() does the
+             * same). Without this, a freshly enabled plugin's menu entry only appears once something
+             * else happens to invalidate that cache, e.g. logging out and back in.
+             */
+            $gCurrentSession->reloadAllSessions();
+        }
     }
 
     /**
@@ -272,13 +284,19 @@ final class PluginInstaller
      */
     public static function disable(Plugin $plugin): void
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gCurrentSession;
 
         if (!PluginRegistry::isInstalled($plugin->id)) {
             throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($plugin->id));
         }
 
         $gSettingsManager->set($plugin->getEnabledSettingName(), '0');
+
+        if (isset($gCurrentSession)) {
+            // See enable(): the menu entry (and the block on opening the plugin's pages) is decided
+            // from this preference, and every active session's cached copy of it needs to catch up.
+            $gCurrentSession->reloadAllSessions();
+        }
     }
 
     /**
