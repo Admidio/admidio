@@ -1,4 +1,4 @@
-<table class="table" {foreach $attributes as $attribute} {$attribute@key}="{$attribute}" {/foreach}>
+<table class="table" style="width:100%;table-layout:fixed;" {foreach $attributes as $attribute} {$attribute@key}="{$attribute}" {/foreach}>
     <thead>
         <tr style="{$headersStyle}">
             {foreach $headers as $key => $header}

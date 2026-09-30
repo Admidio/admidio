@@ -143,4 +143,55 @@ class PdfExportTest extends TestCase
             rmdir($directory);
         }
     }
+
+    /**
+     * The inventory export can contain more columns than the generic list exports. Those columns
+     * must stay inside both A4 orientations instead of being allocated from their content width.
+     *
+     * @dataProvider inventoryOrientations
+     */
+    public function testWideInventoryExportUsesThePageWidth(string $orientation): void
+    {
+        $pdf = PdfUtils::createDocument($orientation, 'Inventory export');
+        $smarty = new Smarty();
+        $smarty->setTemplateDir(dirname(__DIR__, 2) . '/themes/simple/templates');
+        $directory = sys_get_temp_dir() . '/admidio-wide-inventory-pdf-' . bin2hex(random_bytes(8));
+        mkdir($directory);
+        $smarty->setCompileDir($directory);
+
+        try {
+            $headers = array('Item name', 'Category', 'Status', 'Keeper', 'Last receiver', 'Borrow date', 'Return date', 'Location');
+            $smarty->assign(array(
+                'attributes' => array('border' => '1', 'cellpadding' => '1'),
+                'column_align' => array_fill(0, count($headers), 'start'),
+                'headers' => $headers,
+                'headersStyle' => 'font-size:10pt;font-weight:bold;background-color:#C7C7C7;',
+                'rowsStyle' => 'font-size:10pt;',
+                'rows' => array(array('data' => array(
+                    'Portable PA Speaker', 'Audio Equipment', 'In use', 'Schmidt, Jennifer, 10117 Berlin',
+                    'Bauer, Dagmar, 12345 Muehlhausen', '2026-09-20', '2026-10-02', 'Storage room B'
+                )))
+            ));
+            $html = $smarty->fetch('modules/inventory.list.export.tpl');
+            $this->assertStringContainsString('width:100%;table-layout:fixed;', $html);
+            $pdf->writeTable($html);
+            $data = $pdf->getOutPDFString();
+
+            [, $objects] = (new Parser())->parse($data);
+            $content = serialize($objects);
+            foreach ($headers as $header) {
+                $this->assertStringContainsString('(' . $header . ')', $content);
+            }
+        } finally {
+            foreach (glob($directory . '/*') ?: array() as $compiledFile) {
+                unlink($compiledFile);
+            }
+            rmdir($directory);
+        }
+    }
+
+    public static function inventoryOrientations(): array
+    {
+        return array('portrait' => array('P'), 'landscape' => array('L'));
+    }
 }
