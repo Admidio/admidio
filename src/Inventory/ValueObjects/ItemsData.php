@@ -398,8 +398,8 @@ class ItemsData
         $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
-                WHERE ini_org_id IS NULL
-                OR ini_org_id = ?
+                WHERE (ini_org_id IS NULL
+                    OR ini_org_id = ?)
                 ' . $sqlWhereCondition . ';';
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
@@ -434,7 +434,7 @@ class ItemsData
                     break;
                 }
             }
-            $sqlStatusCondition .= 'AND ini_status = ' . $retiredId;
+            $sqlStatusCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
         $sqlImfIds = 'AND (';
