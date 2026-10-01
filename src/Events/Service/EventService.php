@@ -4,6 +4,7 @@ namespace Admidio\Events\Service;
 use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\EventRecurrence;
+use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
@@ -158,13 +159,13 @@ class EventService
             if ($participationPossible || $mode === 'participate_cancel') {
                 switch ($mode) {
                     case 'participate':
-                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_YES);
+                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_ATTENDING);
                         $outputMessage = $gL10n->get('SYS_ATTEND_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                         break;
 
                     case 'participate_cancel':
                         if ($gSettingsManager->getBool('events_save_cancellations')) {
-                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_NO);
+                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_REFUSED);
                         } else {
                             $member->deleteMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'));
                         }
@@ -173,7 +174,7 @@ class EventService
                         break;
 
                     case 'participate_maybe':
-                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::PARTICIPATION_MAYBE);
+                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_TENTATIVE);
                         $outputMessage = $gL10n->get('SYS_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
                         break;
                 }
@@ -219,7 +220,7 @@ class EventService
      */
     public function exportICal(string $eventUUID = '', string $categoryUUID = '', string $dateFrom = '', string $dateTo = '', bool $inline = false): void
     {
-        global $gCurrentOrganization, $gSettingsManager;
+        global $gCurrentOrganization, $gSettingsManager, $gTimezone;
 
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
             throw new Exception('SYS_ICAL_DISABLED');
@@ -230,20 +231,20 @@ class EventService
             $dateTo = DATE_MAX;
         }
 
-        $events = new \ModuleEvents();
+        $events = new EventRepository($this->database);
         if ($eventUUID !== '') {
             $event = new Event($this->database);
             $event->readDataByUuid($eventUUID);
 
             $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database'));
-            $events->setParameter('dat_uuid', $eventUUID);
+            $events->setEventUuid($eventUUID);
         } else {
             $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
             $events->setDateRange($dateFrom, $dateTo);
 
             if ($categoryUUID !== '') {
                 $calendar = new Category($this->database);
-                $events->setParameter('cat_uuid', $categoryUUID);
+                $events->setCategoryUuid($categoryUUID);
                 $calendar->readDataByUuid($categoryUUID);
                 $filename .= '-' . FileSystemUtils::getSanitizedPathEntry($calendar->getValue('cat_name'));
             }
@@ -258,7 +259,8 @@ class EventService
         header('Cache-Control: private');
         header('Pragma: public');
 
-        echo $events->getICalContent();
+        $eventRecords = $events->getDataSet()['recordset'];
+        echo (new EventICalExportService($this->database, $gTimezone))->createCalendar($eventRecords);
     }
 
     /**

@@ -11,7 +11,9 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Documents\Service\DocumentsService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
+use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
+use Admidio\Events\Service\EventICalExportService;
 use Admidio\Events\Service\EventService;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
@@ -7072,14 +7074,14 @@ final class CoreTasks
                 (int)$event->getValue('dat_rol_id'),
                 (int)$user->getValue('usr_id'),
                 null,
-                Participants::PARTICIPATION_YES
+                Participants::STATE_ATTENDING
             );
         } elseif ($command === 'event:maybe') {
             $membership->startMembership(
                 (int)$event->getValue('dat_rol_id'),
                 (int)$user->getValue('usr_id'),
                 null,
-                Participants::PARTICIPATION_MAYBE
+                Participants::STATE_TENTATIVE
             );
         } else {
             if ($gSettingsManager->getBool('events_save_cancellations')) {
@@ -7087,7 +7089,7 @@ final class CoreTasks
                     (int)$event->getValue('dat_rol_id'),
                     (int)$user->getValue('usr_id'),
                     null,
-                    Participants::PARTICIPATION_NO
+                    Participants::STATE_REFUSED
                 );
             } else {
                 $membership->deleteMembership((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
@@ -7140,7 +7142,7 @@ final class CoreTasks
 
     public static function eventExport(array $arguments, array $options): int
     {
-        global $gSettingsManager;
+        global $gDb, $gSettingsManager, $gTimezone;
 
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
             throw new Exception('SYS_ICAL_DISABLED');
@@ -7151,16 +7153,18 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $events = new \ModuleEvents();
-        $events->setParameter('dat_uuid', (string)$event->getValue('dat_uuid'));
+        $events = new EventRepository($gDb);
+        $events->setEventUuid((string)$event->getValue('dat_uuid'));
 
-        CliApplication::writeOutput((string)$events->getICalContent(), $options);
+        $eventRecords = $events->getDataSet()['recordset'];
+        $calendar = (new EventICalExportService($gDb, $gTimezone))->createCalendar($eventRecords);
+        CliApplication::writeOutput((string)$calendar, $options);
         return 0;
     }
 
     public static function eventExportCalendar(array $arguments, array $options): int
     {
-        global $gSettingsManager;
+        global $gDb, $gSettingsManager, $gTimezone;
 
         if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
             throw new Exception('SYS_ICAL_DISABLED');
@@ -7175,15 +7179,17 @@ final class CoreTasks
             throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
-        $events = new \ModuleEvents();
+        $events = new EventRepository($gDb);
         $events->setDateRange($dateFrom, $dateTo);
 
         if (CliApplication::optionExists($options, 'calendar')) {
             $category = self::resolveCategory(CliApplication::optionString($options, 'calendar'), 'EVT');
-            $events->setParameter('cat_uuid', (string)$category->getValue('cat_uuid'));
+            $events->setCategoryUuid((string)$category->getValue('cat_uuid'));
         }
 
-        CliApplication::writeOutput((string)$events->getICalContent(), $options);
+        $eventRecords = $events->getDataSet()['recordset'];
+        $calendar = (new EventICalExportService($gDb, $gTimezone))->createCalendar($eventRecords);
+        CliApplication::writeOutput((string)$calendar, $options);
         return 0;
     }
 
