@@ -164,7 +164,11 @@ CREATE TABLE %PREFIX%_category_report_columns
     crc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crc_crt_id                  integer unsigned    NOT NULL,
     crc_number                  smallint            NOT NULL,
-    crc_field                   varchar(255)        NOT NULL,
+    crc_field_type              varchar(50)         NOT NULL,
+    crc_usf_id                  integer unsigned,
+    crc_rol_id                  integer unsigned,
+    crc_cat_id                  integer unsigned,
+    crc_special_field           varchar(50),
     crc_condition               varchar(255),
     PRIMARY KEY (crc_id)
 )
@@ -1380,7 +1384,10 @@ ALTER TABLE %PREFIX%_category_report
     ADD CONSTRAINT %PREFIX%_fk_crt_org         FOREIGN KEY (crt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_category_report_columns
-    ADD CONSTRAINT %PREFIX%_fk_crc_crt         FOREIGN KEY (crc_crt_id)         REFERENCES %PREFIX%_category_report (crt_id)      ON DELETE CASCADE ON UPDATE RESTRICT;
+    ADD CONSTRAINT %PREFIX%_fk_crc_crt         FOREIGN KEY (crc_crt_id)         REFERENCES %PREFIX%_category_report (crt_id)      ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_usf         FOREIGN KEY (crc_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_rol         FOREIGN KEY (crc_rol_id)         REFERENCES %PREFIX%_roles (rol_id)                ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_cat         FOREIGN KEY (crc_cat_id)         REFERENCES %PREFIX%_categories (cat_id)           ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_events
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,

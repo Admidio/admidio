@@ -80,7 +80,7 @@ class CategoryReport extends Entity
         $definitions = array();
         foreach ($this->columns as $column) {
             $definitions[] = array(
-                'field' => (string)$column->getValue('crc_field', 'database'),
+                'field' => $column->getField(),
                 'condition' => (string)$column->getValue('crc_condition', 'database')
             );
         }
@@ -112,7 +112,7 @@ class CategoryReport extends Entity
             }
             $column->setValue('crc_crt_id', (int)$this->getValue('crt_id'));
             $column->setValue('crc_number', $number);
-            $column->setValue('crc_field', $definition['field']);
+            $column->setField($definition['field']);
             $column->setValue('crc_condition', $definition['condition'] ?? '');
             $this->columns[$number] = $column;
         }
