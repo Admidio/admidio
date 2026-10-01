@@ -14,8 +14,6 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\Inventory\Entity\ItemField;
-use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
 
@@ -268,9 +266,12 @@ try {
     // Create a user object for later use
     $user = new User($gDb, $gProfileFields);
 
+    $itemRows = $statement->fetchAll();
+    $itemsData->preloadItemData(array_column($itemRows, 'ini_uuid'));
+
     $data = array();
-    while ($row = $statement->fetch()) {
-        // for each row instantiate ItemsData for formatting (readItemData)
+    foreach ($itemRows as $row) {
+        // Activates the preloaded data without additional queries for this row.
         $itemsData->readItemData($row['ini_uuid']);
         // build row cells same as prepareData('html') for a single item
         $rowValues = array();
@@ -290,8 +291,7 @@ try {
                 continue;
             }
 
-            $content = $itemsData->getValue($infNameIntern, 'database');
-            $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
+            $content = InventoryPresenter::formatItemFieldValue($itemsData, $itemField);
 
             // Process ITEMNAME column
             if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
@@ -316,83 +316,6 @@ try {
                 }
             }
 
-            // Format content based on the field type
-            if ($infType === 'CHECKBOX') {
-                $content = ($content != 1) ? 0 : 1;
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
-                $content = $itemsData->getValue($infNameIntern, 'database');
-                if (isset($content) && is_numeric($content)) {
-                    $selectedOption = $content;
-                    $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-                    $selectOptions = $option->getAllOptions();
-
-                    // Calculate days remaining based on selected date field value and selected interval
-                    $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
-                    $connectedField = new ItemField($gDb);
-                    $connectedField->readDataByUuid($connectedFieldUuid);
-                    $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
-                    $filteredSelectOptions = array();
-
-                    foreach ($selectOptions as $option) {
-                        $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
-                    }
-
-                    if (!empty($itemsData->getValue($connectedFieldNameIntern, 'database'))) {
-                        try {
-                            $compDate1 = date_create($itemsData->getValue($connectedFieldNameIntern, 'database'));
-                            $compDate2 = date_create();
-
-                            //Calculate future test date
-                            $dateAdditionSplit = array();
-                            preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
-
-                            if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
-                                switch ($dateAdditionSplit[2]) {
-                                    case 'w':
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
-                                        break;
-                                    case 'm':
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
-                                        break;
-                                    case 'y':
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
-                                        break;
-                                    case 'd':
-                                    default:
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
-                                        break;
-                                }
-                            }
-
-                            //Compare last test date with future date and output days
-                            $dateDiff = date_diff($compDate2, $compDate1);
-                            $daysRemaining = $dateDiff->format('%R%a');
-
-                            // check if days remaining is only one day
-                            if ($daysRemaining === '1' || $daysRemaining === '-1') {
-                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
-                            } elseif ($daysRemaining === '-0') {
-                                $content = '0 ' . $gL10n->get('SYS_DAYS');
-                            } else {
-                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
-                            }
-                        } catch (\Exception $e) {
-                            // in case of error set content to empty
-                            $content = '';
-                        }
-                    } else {
-                        $content = '';
-                    }
-                }
-            } elseif ($infType === 'RADIO_BUTTON') {
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            } elseif ($infType === 'CATEGORY') {
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            }
-
             // If the item is retired then show the field value as struck-through
             if ($itemsData->isRetired()) {
                 $content = '<s>' . $content . '</s>';
@@ -406,7 +329,7 @@ try {
         // history button (displayHistoryButtonTable returns an array with url/icon/tooltip)
         $historyButton = ChangelogService::displayHistoryButtonTable('inventory_items,inventory_item_data,inventory_item_borrow_data', $gCurrentUser->isAdministratorInventory(), array('uuid' => $row['ini_uuid']));
         if (is_array($historyButton) && !empty($historyButton)) {
-            $actionsHtml .= '<a class="admidio-icon-link" href="' . $historyButton['url'] . '"><i class="' . $historyButton['icon'] . '" title="' . htmlspecialchars($historyButton['tooltip'], ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+            $actionsHtml .= '<a class="admidio-icon-link" href="' . $historyButton['url'] . '"><i class="' . $historyButton['icon'] . '" data-bs-toggle="tooltip" title="' . htmlspecialchars($historyButton['tooltip'], ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }
 
         $keeperDbId = (int)$itemsData->getValue('KEEPER', 'database');
@@ -415,7 +338,7 @@ try {
         if ($itemsData->isEditable()) {
             if (!$itemsData->isRetired()) {
                 // edit action
-                $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i></a>';
+                $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_EDIT'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
 
                 // borrow / return action (if borrowing not disabled)
                 if (!$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
@@ -432,11 +355,11 @@ try {
                 }
 
                 // copy action
-                $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'copy' => true)) . '"><i class="bi bi-file-earmark-plus" data-bs-toggle="tooltip"></i></a>';
+                $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'copy' => true)) . '"><i class="bi bi-file-earmark-plus" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_COPY'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
             } else {
                 // reinstate action for retired item
                 $dataMessage = ($isKeeperAuthorized) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
-                $actionsHtml .= '<a class="admidio-icon-link" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '" data-message="' . htmlspecialchars($dataMessage, ENT_QUOTES | ENT_HTML5) . '"><i class="bi bi-eye" data-bs-toggle="tooltip"></i></a>';
+                $actionsHtml .= '<a class="admidio-icon-link" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '" data-message="' . htmlspecialchars($dataMessage, ENT_QUOTES | ENT_HTML5) . '"><i class="bi bi-eye" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_REINSTATE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
             }
         }
 
@@ -444,11 +367,11 @@ try {
         if (!$gCurrentUser->isAdministratorInventory() && $isKeeperAuthorized) {
             if (!$itemsData->isRetired()) {
                 // keeper retire action (popup)
-                $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])) . '"><i class="bi bi-trash" data-bs-toggle="tooltip"></i></a>';
+                $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_DELETE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
             }
         } elseif ($gCurrentUser->isAdministratorInventory()) {
             // admin delete/retire action
-            $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip"></i></a>';
+            $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_DELETE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }
 
         $rowValues[] = $actionsHtml;

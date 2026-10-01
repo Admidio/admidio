@@ -15,6 +15,7 @@
  */
 
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Repository\EventRepository;
 use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -32,7 +33,7 @@ try {
     $previousUserOrganizationID = $gCurrentUser->getOrganization();
     try {
         $gCurrentUser->setOrganization((int)$organization->getValue('org_id'));
-        $events = new ModuleEvents();
+        $events = new EventRepository($gDb);
         $events->setDateRange();
         $eventsResult = $events->getDataSet(0, 50);
     } finally {

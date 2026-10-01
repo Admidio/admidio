@@ -1043,6 +1043,7 @@ CREATE TABLE %PREFIX%_texts
     txt_org_id                  integer unsigned    NOT NULL,
     txt_name                    varchar(100)        NOT NULL,
     txt_text                    text,
+    txt_custom_text             text,
     PRIMARY KEY (txt_id)
 )
 ENGINE = InnoDB

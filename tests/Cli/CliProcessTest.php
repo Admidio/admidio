@@ -36,6 +36,18 @@ class CliProcessTest extends DatabaseTestCase
         $this->assertStringContainsString('--config=FILE', $process->getOutput());
     }
 
+    /** Listing commands keep the public system flag on every supported database. */
+    public function testListingCommandsExposeSystemFlags(): void
+    {
+        foreach (array('group:list', 'category:list', 'inventory:fields') as $command) {
+            $rows = $this->adminCliJson(array($command));
+            $this->assertNotEmpty($rows, $command);
+            foreach ($rows as $row) {
+                $this->assertArrayHasKey('system', $row, $command);
+            }
+        }
+    }
+
     /**
      * Test that the configuration option decides which installation is addressed
      *

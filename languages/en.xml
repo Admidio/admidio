@@ -95,6 +95,9 @@
   <string name="SYS_SUPERIOR">Superior</string>
   <string name="SYS_SUPERIOR_FEMALE">Female superior</string>
   <string name="SYS_SUPERIOR_MALE">Male superior</string>
+  <string name="SYS_SYSTEM_MAIL_CUSTOM_TEXT">Custom mail template</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT">Use system default</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT_DESC">When enabled, the current system template is used and cannot be edited. Disable this switch to edit your own text. Enable it again to restore the system default. Your own text is retained and restored when you disable the switch again.</string>
   <string name="SYS_WIFE">Wife</string>
   <!--Phrases
   only in organization administration-->
@@ -944,7 +947,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW">Profile view settings</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">The selected item fields will be displayed in the member's profile view when the "Display in profile view" option is enabled. By default, only the item name is shown. (Default: "Last Receiver")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">Display in profile view</string>
-  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">When this option is enabled, the items managed by a member and those borrowed by a member are displayed in the member's profile view. (Default: yes)</string>
+  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">When this option is enabled, only users with permission to view the Inventory module can see the items managed by a member and those borrowed by a member in the member's profile view. (Default: yes)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Property fields to display in the profile view</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">The table shows the items managed by you:</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items borrrowed to you:</string>

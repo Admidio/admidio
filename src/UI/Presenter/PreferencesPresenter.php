@@ -1144,7 +1144,7 @@ class PreferencesPresenter extends PagePresenter
             // Each role is now added to this array
             $selectBoxEntries[] = array(
                 $rowViewRoles['rol_id'],
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ')',
                 $rowViewRoles['cat_name']
             );
         }
@@ -2971,33 +2971,29 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
         );
 
-        $text = new Text($gDb);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_APPROVED', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_LOGIN_INFORMATION', 'txt_org_id' => $gCurrentOrgId));
-        $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
-        $formSystemNotifications->addMultilineTextInput(
-            'SYSMAIL_LOGIN_INFORMATION',
-            $gL10n->get('SYS_SEND_LOGIN_INFORMATION'),
-            $text->getValue('txt_text'),
-            7,
-            array('helpTextId' => $htmlDesc)
-        );
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $gCurrentOrgId));
-        $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
-        $formSystemNotifications->addMultilineTextInput(
-            'SYSMAIL_PASSWORD_RESET',
-            $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
-            $text->getValue('txt_text'),
-            7,
-            array('helpTextId' => $htmlDesc)
-        );
+        $systemMailModes = array();
+        foreach (Text::SYSTEM_MAIL_DEFAULTS as $name => $defaultId) {
+            $text = new Text($gDb);
+            $text->readDataByColumns(array('txt_name' => $name, 'txt_org_id' => $gCurrentOrgId));
+            $useDefault = Language::isTranslationStringId($text->getValue('txt_text', 'database'));
+            $systemMailModes[$name] = $useDefault;
+            $label = Language::translateIfTranslationStrId($text->readableName());
+            $defaultText = new Text($gDb);
+            $defaultText->setValue('txt_text', $defaultId);
+            $savedCustom = $text->getSystemMailCustomText();
+            $customText = $savedCustom === null ? $defaultText->getValue('txt_text') : SecurityUtils::encodeHTML($savedCustom);
+            $formSystemNotifications->addCheckbox($name . '_USE_DEFAULT', $gL10n->get('SYS_SYSTEM_MAIL_USE_DEFAULT'), $useDefault,
+                array('helpTextId' => 'SYS_SYSTEM_MAIL_USE_DEFAULT_DESC', 'class' => 'admidio-system-mail-default'));
+            $options = array();
+            if ($name === 'SYSMAIL_LOGIN_INFORMATION' || $name === 'SYSMAIL_PASSWORD_RESET') {
+                $variable = $name === 'SYSMAIL_LOGIN_INFORMATION' ? 'ORG_VARIABLE_NEW_PASSWORD' : 'ORG_VARIABLE_ACTIVATION_LINK';
+                $options['helpTextId'] = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get($variable);
+            }
+            $formSystemNotifications->addMultilineTextInput($name, $label, $customText, 7, $options);
+            $formSystemNotifications->addMultilineTextInput($name . '_DEFAULT', $label, $defaultText->getValue('txt_text'), 7,
+                array_merge($options, array('property' => FormPresenter::FIELD_DISABLED)));
+        }
+        $this->getSmartyTemplate()->assign('systemMailModes', $systemMailModes);
         $formSystemNotifications->addSubmitButton(
             'adm_button_save_system_notification',
             $gL10n->get('SYS_SAVE'),
@@ -3092,6 +3088,14 @@ class PreferencesPresenter extends PagePresenter
             // === 2) Innerhalb eines Panels die Klick-Handler anmelden ===
             function initializePanelInteractions(panelId) {
                 var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+
+                // System-mail templates: bind after loading the preferences panel via AJAX.
+                panelContainer.off("change", ".admidio-system-mail-default")
+                    .on("change", ".admidio-system-mail-default", function() {
+                        const name = this.id.replace(/_USE_DEFAULT$/, "");
+                        this.form.querySelector("#" + name + "_standard_panel").hidden = !this.checked;
+                        this.form.querySelector("#" + name + "_custom_panel").hidden = this.checked;
+                    });
 
                 // Captcha-Refresh
                 panelContainer.off("click", "#adm_captcha_refresh").on("click", "#adm_captcha_refresh", function(event) {

@@ -21,10 +21,15 @@ use Admidio\Infrastructure\Database;
  */
 class Participants
 {
-    public const PARTICIPATION_UNKNOWN = 0;
-    public const PARTICIPATION_MAYBE   = 1;
-    public const PARTICIPATION_YES     = 2;
-    public const PARTICIPATION_NO      = 3;
+    /**
+     * Participation states for memberships in event roles.
+     * An invitation has no explicit approval and is stored as NULL in mem_approved. Consumers
+     * normalize that value to INVITED when they need an integer representation.
+     */
+    public const STATE_INVITED = 0;
+    public const STATE_TENTATIVE = 1;
+    public const STATE_ATTENDING = 2;
+    public const STATE_REFUSED = 3;
 
     /**
      * @var int Counter of participants of the date in current object.
@@ -224,7 +229,7 @@ class Participants
         foreach ($eventMember as $participant) {
             if ($participant['usrId'] === $userId) {
                 // is member of the event
-                if ($participant['approved'] != self::PARTICIPATION_NO) {
+                if ($participant['approved'] != self::STATE_REFUSED) {
                     return true;
                 }
             }

@@ -14,6 +14,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\CategoryReport\Entity\CategoryReport;
 use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Forum\Entity\Topic;
@@ -45,7 +46,6 @@ use Admidio\Users\Entity\UserRelationType;
 use Admidio\Weblinks\Entity\Weblink;
 use Admidio\UI\Presenter\PagePresenter;
 use DateTime;
-use ModuleEvents;
 
 /**
  * @brief Class with methods to help with the changelog.
@@ -677,19 +677,19 @@ class ChangelogService {
         );
 
         $memApprovedValues = array(
-            ModuleEvents::MEMBER_APPROVAL_STATE_INVITED => array(
+            Participants::STATE_INVITED => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_INVITED',
                 'icon' => 'calendar2-check-fill'
             ),
-            ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND => array(
+            Participants::STATE_ATTENDING => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_ATTEND',
                 'icon' => 'check-circle-fill'
             ),
-            ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE => array(
+            Participants::STATE_TENTATIVE => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_TENTATIVE',
                 'icon' => 'question-circle-fill'
             ),
-            ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED => array(
+            Participants::STATE_REFUSED => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_CANCELED',
                 'icon' => 'x-circle-fill'
             )
@@ -860,6 +860,7 @@ class ChangelogService {
             'lnk_sequence' =>             'SYS_ORDER',
 
             'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
+            'txt_custom_text' =>           array('name' => 'SYS_SYSTEM_MAIL_CUSTOM_TEXT', 'type' => 'TEXT_BIG'),
             'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
 
             'fol_name' =>                  'SYS_NAME',

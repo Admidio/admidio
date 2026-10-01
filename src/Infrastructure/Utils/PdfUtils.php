@@ -12,13 +12,17 @@ use Admidio\Infrastructure\PdfDocument;
  */
 class PdfUtils
 {
-    public static function createDocument(string $orientation, string $heading): PdfDocument
+    public static function createDocument(
+        string $orientation,
+        string $heading,
+        ?string $hyphenationLanguage = null
+    ): PdfDocument
     {
         // tc-lib-pdf-font discovers the bundled JSON font metrics through this path.
         if (!defined('K_PATH_FONTS')) {
             define('K_PATH_FONTS', dirname(__DIR__, 3) . '/libs/pdf-fonts/');
         }
 
-        return new PdfDocument($orientation, $heading);
+        return new PdfDocument($orientation, $heading, $hyphenationLanguage);
     }
 }
