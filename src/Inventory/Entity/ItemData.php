@@ -70,7 +70,11 @@ class ItemData extends Entity
      * @return bool returns **true** if no error occurred
      * @throws Exception
      */
-    protected function logItemfieldChange(?string $oldval = null, ?string $newval = null): bool
+    protected function logItemfieldChange(
+        ?string $oldval = null,
+        ?string $newval = null,
+        bool $logInitialValue = false
+    ): bool
     {
         if ($oldval === $newval) {
             // No change, nothing to log
@@ -92,6 +96,13 @@ class ItemData extends Entity
             return true;
         }
 
+        // The item itself cannot be logged until its name has been saved in this table. Initial
+        // values are therefore written by ItemsData after the item's creation entry, preserving
+        // the causal order of one newly created item in the changelog.
+        if ($this->mItemsData->isNewItem() && !$logInitialValue) {
+            return true;
+        }
+
         if (!self::$loggingEnabled) return false;
 
         $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
@@ -107,6 +118,29 @@ class ItemData extends Entity
         $logEntry->setLogModification($table, $id, $item->getValue('ini_uuid'), $item->readableName(), $field, $fieldName, $oldval, $newval);
         $logEntry->setLogLinkID($itemID);
         return $logEntry->save();
+    }
+
+    /**
+     * Log one initial item value after the item creation entry has been written.
+     *
+     * @return bool Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logInitialValue(): bool
+    {
+        $fieldNameIntern = $this->mItemsData->getPropertyById(
+            (int)$this->getValue('ind_inf_id'),
+            'inf_name_intern',
+            'database'
+        );
+        $value = $this->getValue('ind_value');
+
+        if ($value === null || $value === ''
+            || in_array($fieldNameIntern, array('CATEGORY', 'STATUS', 'ITEMNAME'), true)) {
+            return true;
+        }
+
+        return $this->logItemfieldChange(null, (string)$value, true);
     }
 
 

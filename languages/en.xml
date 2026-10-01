@@ -942,7 +942,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW">Profile view settings</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">The selected item fields will be displayed in the member's profile view when the "Display in profile view" option is enabled. By default, only the item name is shown. (Default: "Last Receiver")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">Display in profile view</string>
-  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">When this option is enabled, the items managed by a member and those borrowed by a member are displayed in the member's profile view. (Default: yes)</string>
+  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">When this option is enabled, only users with permission to view the Inventory module can see the items managed by a member and those borrowed by a member in the member's profile view. (Default: yes)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Property fields to display in the profile view</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">The table shows the items managed by you:</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items borrrowed to you:</string>
