@@ -946,6 +946,8 @@ class InventoryPresenter extends PagePresenter
         $strikethroughs = array();
         $actionsHeaderAdded = false;
 
+        $this->itemsData->preloadItemData(array_column($this->itemsData->getItems(), 'ini_uuid'));
+
         // Iterate over each item to fill the table rows
         foreach ($this->itemsData->getItems() as $item) {
             $this->itemsData->readItemData($item['ini_uuid']);
