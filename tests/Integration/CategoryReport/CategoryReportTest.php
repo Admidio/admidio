@@ -10,6 +10,14 @@ use Admidio\Tests\Support\DatabaseTestCase;
 
 class CategoryReportTest extends DatabaseTestCase
 {
+    protected function tearDown(): void
+    {
+        global $gSettingsManager;
+
+        parent::tearDown();
+        $gSettingsManager->resetAll();
+    }
+
     public function testDefaultReportAndRoleNamesAreTranslated(): void
     {
         global $gL10n;
@@ -73,7 +81,7 @@ class CategoryReportTest extends DatabaseTestCase
         $this->assertSame(array(0, 1, 0, 0), array_map('intval', array_column($columns, 'crc_rol_id')));
         $this->assertNull($columns[0]['crc_special_field']);
         $this->assertSame('uuid', $columns[2]['crc_special_field']);
-        $this->assertSame(array('Smith, John', '', '', '{2020-01-01'), array_column($columns, 'crc_condition'));
+        $this->assertSame(array('Smith, John', null, null, '{2020-01-01'), array_column($columns, 'crc_condition'));
         $this->assertSame($gCurrentOrgId, (int)$configuration['organization_id']);
         $this->assertSame('Description storage test', $configuration['description']);
 
