@@ -2,6 +2,7 @@
 namespace Admidio\CategoryReport\Service;
 
 use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Exception;
 
@@ -28,7 +29,12 @@ class CategoryReportRepository
         $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
 
         while ($row = $statement->fetch()) {
-            if ($row['crt_name'] === $name) {
+            $reportName = html_entity_decode(
+                Language::translateIfTranslationStrId((string)$row['crt_name']),
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            );
+            if ($reportName === $name) {
                 $name .= ' - ' . $gL10n->get('SYS_CARBON_COPY');
             }
         }
@@ -61,7 +67,9 @@ class CategoryReportRepository
                 $values = array();
                 $values['id'] = $categoryReport->getValue('crt_id');
                 $values['organization_id'] = $categoryReport->getValue('crt_org_id');
-                $values['name'] = SecurityUtils::encodeHTML($categoryReport->getValue('crt_name', 'database'));
+                $values['name'] = SecurityUtils::encodeHTML(Language::translateIfTranslationStrId(
+                    (string)$categoryReport->getValue('crt_name', 'database')
+                ));
                 $values['description'] = SecurityUtils::encodeHTML((string)$categoryReport->getValue('crt_description', 'database'));
                 $values['columns'] = $columns;
                 $values['col_fields'] = implode(',', $columnFields);

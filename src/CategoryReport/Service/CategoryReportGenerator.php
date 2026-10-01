@@ -911,6 +911,7 @@ class CategoryReportGenerator
             $statement = $gDb->queryPrepared($sql, array($data['cat_id']));
 
             while ($row = $statement->fetch()) {
+                $roleName = Language::translateIfTranslationStrId((string)$row['rol_name']);
                 $marker = '';
                 if ($row['rol_valid'] == 0) {
                     $marker = ' (*)';
@@ -918,37 +919,37 @@ class CategoryReportGenerator
 
                 $this->headerSelection[$i]['id'] = 'r' . $row['rol_id'];       //r wie role
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE') . ': ' . $roleName . $marker;
                 $i++;
 
                 $this->headerSelection[$i]['id'] = 'w' . $row['rol_id'];        //w wie without (Leader)
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_WITHOUT_LEADER') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_WITHOUT_LEADER') . ': ' . $roleName . $marker;
                 $i++;
 
                 $this->headerSelection[$i]['id'] = 'l' . $row['rol_id'];        //l wie leader
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_LEADER') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_LEADER') . ': ' . $roleName . $marker;
                 $i++;
 
                 $this->headerSelection[$i]['id'] = 'f' . $row['rol_id'];        //f wie former member
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_PAST') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_PAST') . ': ' . $roleName . $marker;
                 $i++;
 
                 $this->headerSelection[$i]['id'] = 'b' . $row['rol_id'];        //b wie begin of membership
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_START') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_START') . ': ' . $roleName . $marker;
                 $i++;
 
                 $this->headerSelection[$i]['id'] = 'e' . $row['rol_id'];        //e wie end of membership
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_END') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_END') . ': ' . $roleName . $marker;
                 $i++;
 
                 $this->headerSelection[$i]['id'] = 'd' . $row['rol_id'];        //d wie duration of membership
                 $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
-                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION') . ': ' . $row['rol_name'] . $marker;
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION') . ': ' . $roleName . $marker;
                 $i++;
 
             }

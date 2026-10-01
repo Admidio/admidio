@@ -4,10 +4,28 @@ namespace Admidio\Tests\Integration\CategoryReport;
 
 use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
 use Admidio\CategoryReport\Entity\CategoryReportColumn;
+use Admidio\CategoryReport\Service\CategoryReportGenerator;
+use Admidio\CategoryReport\Service\CategoryReportRepository;
 use Admidio\Tests\Support\DatabaseTestCase;
 
 class CategoryReportTest extends DatabaseTestCase
 {
+    public function testDefaultReportAndRoleNamesAreTranslated(): void
+    {
+        global $gL10n;
+
+        $configurations = (new CategoryReportRepository())->getConfigArray();
+        $defaultReport = array_values(array_filter(
+            $configurations,
+            static fn(array $values): bool => (bool)$values['default_conf']
+        ))[0];
+        $this->assertSame($gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'), $defaultReport['name']);
+
+        $roleLabel = $gL10n->get('SYS_ROLE') . ': ' . $gL10n->get('SYS_ADMINISTRATOR');
+        $headerLabels = array_column((new CategoryReportGenerator())->headerSelection, 'data');
+        $this->assertContains($roleLabel, $headerLabels);
+    }
+
     public function testColumnsAreStoredInTheirOwnOrderedRecords(): void
     {
         global $gCurrentOrgId;
