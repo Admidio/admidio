@@ -175,7 +175,7 @@ class SystemMailTemplateModeTest extends DatabaseTestCase
         $text->setValue('txt_text', 'Legacy custom template');
         $text->save();
         $xml = simplexml_load_file(ADMIDIO_PATH . '/install/db_scripts/update_5_1.xml');
-        $step = $xml->xpath('step[@id="1320"]');
+        $step = $xml->xpath('step[@id="1350"]');
         $this->getDatabase()->query(str_replace('%PREFIX%', TABLE_PREFIX, (string)$step[0]));
         $this->assertSame('Legacy custom template', $this->template($name)->getSystemMailCustomText());
         $this->assertNull($this->template('SYSMAIL_REGISTRATION_NEW')->getSystemMailCustomText());
