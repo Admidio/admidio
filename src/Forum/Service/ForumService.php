@@ -181,8 +181,8 @@ class ForumService
             foreach ($forumTopics as $topic) {
                 // add entry to RSS feed
                 $rss->addItem(
-                    \Admidio\Infrastructure\Language::translateIfTranslationStrId($topic['fot_title']),
-                    \Admidio\Infrastructure\Language::translateIfTranslationStrId($topic['fop_text']),
+                    $topic['fot_title'],
+                    $topic['fop_text'],
                     SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic', 'topic_uuid' => $topic['fot_uuid'],)),
                     $topic['firstname'] . ' ' . $topic['surname'],
                     DateTime::createFromFormat('Y-m-d H:i:s', $topic['fot_timestamp_create'])->format('r'),
