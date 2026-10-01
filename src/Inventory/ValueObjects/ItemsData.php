@@ -16,6 +16,7 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Categories\Entity\Category;
 use Admidio\Inventory\Entity\SelectOptions;
+use Admidio\Inventory\Service\InventoryAccessService;
 
 // PHP namespaces
 use DateTime;
@@ -74,6 +75,14 @@ class ItemsData
      */
     protected array $mItemData = array();
     /**
+     * @var array<string,array{item:array<string,mixed>,data:array<int,array<string,mixed>>}> Item data preloaded for a list view
+     */
+    private array $preloadedItems = array();
+    /** @var array<int,array<string,mixed>> Categories preloaded for a list view */
+    private array $preloadedCategories = array();
+    /** @var array<int,string> Status option values preloaded for a list view */
+    private array $preloadedStatusOptions = array();
+    /**
      * @var array<int,ItemData> Array with all changed item data objects for notification
      */
     protected array $mChangedItemData = array();
@@ -127,20 +136,9 @@ class ItemsData
      */
     public function isEditable(): bool
     {
-        global $gSettingsManager, $gCurrentUser;
-
         $keeper = $this->getValue('KEEPER', 'database');
-        // check if the user has admin rights
-        if ($gCurrentUser->isAdministratorInventory()) {
-            return true;
-        }
-        // if user has no amin rights, check if user is keeper of the item and if keepers are allowed to edit the item
-        elseif ($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) {
-            if ($keeper === $gCurrentUser->getValue('usr_id')) {
-                return true;
-            }
-        }
-        return false;
+
+        return InventoryAccessService::canEditItem(is_numeric($keeper) ? (int) $keeper : null);
     }
 
     /**
@@ -206,6 +204,11 @@ class ItemsData
         $this->mItemData = array();
 
         if ($itemUUID !== '') {
+            if (array_key_exists($itemUUID, $this->preloadedItems)) {
+                $this->readPreloadedItemData($itemUUID);
+                return;
+            }
+
             $item = new Item($this->mDb, $this);
             $item->readDataByUuid($itemUUID);
             $itemId = $item->getValue('ini_id');
@@ -255,6 +258,107 @@ class ItemsData
     }
 
     /**
+     * Preload the data required to render a set of inventory items.
+     *
+     * List views still call readItemData() for every row. Keeping that public API while loading
+     * the item, field and borrowing records in a fixed number of queries prevents a growing
+     * number of individual queries for DataTables pages and exports.
+     *
+     * @param array<int,string> $itemUUIDs UUIDs of the items to preload
+     * @return void
+     * @throws Exception
+     */
+    public function preloadItemData(array $itemUUIDs): void
+    {
+        $itemUUIDs = array_values(array_unique(array_filter($itemUUIDs, static fn ($uuid): bool => $uuid !== '')));
+        if (count($itemUUIDs) === 0) {
+            return;
+        }
+
+        $placeholders = implode(', ', array_fill(0, count($itemUUIDs), '?'));
+        $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
+                WHERE ini_uuid IN (' . $placeholders . ')
+                  AND (ini_org_id IS NULL OR ini_org_id = ?);';
+        $statement = $this->mDb->queryPrepared($sql, array_merge($itemUUIDs, array($this->organizationId)));
+
+        $itemIds = array();
+        while ($row = $statement->fetch()) {
+            $this->preloadedItems[$row['ini_uuid']] = array('item' => $row, 'data' => array());
+            $itemIds[] = (int) $row['ini_id'];
+        }
+
+        if (count($itemIds) === 0) {
+            return;
+        }
+
+        $itemPlaceholders = implode(', ', array_fill(0, count($itemIds), '?'));
+        $itemsById = array();
+        foreach ($this->preloadedItems as $uuid => $item) {
+            $itemsById[(int) $item['item']['ini_id']] = $uuid;
+        }
+
+        $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id
+                WHERE ind_ini_id IN (' . $itemPlaceholders . ');';
+        $statement = $this->mDb->queryPrepared($sql, $itemIds);
+        while ($row = $statement->fetch()) {
+            $this->preloadedItems[$itemsById[(int) $row['ind_ini_id']]]['data'][(int) $row['ind_inf_id']] = $row;
+        }
+
+        $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+                WHERE inb_ini_id IN (' . $itemPlaceholders . ');';
+        $statement = $this->mDb->queryPrepared($sql, $itemIds);
+        while ($row = $statement->fetch()) {
+            foreach ($this->mItemFields as $itemField) {
+                $fieldName = $itemField->getValue('inf_name_intern');
+                if (in_array($fieldName, $this->borrowFieldNames, true)) {
+                    $row['inf_id'] = $itemField->getValue('inf_id');
+                    $this->preloadedItems[$itemsById[(int) $row['inb_ini_id']]]['data'][(int) $row['inf_id']] = $row;
+                }
+            }
+        }
+
+        $categoryIds = array_values(array_unique(array_filter(array_map(static fn (array $item): int => (int) $item['item']['ini_cat_id'], $this->preloadedItems))));
+        if (count($categoryIds) > 0) {
+            $sql = 'SELECT cat_id, cat_uuid, cat_name FROM ' . TBL_CATEGORIES . '
+                    WHERE cat_id IN (' . implode(', ', array_fill(0, count($categoryIds), '?')) . ');';
+            $statement = $this->mDb->queryPrepared($sql, $categoryIds);
+            while ($row = $statement->fetch()) {
+                $this->preloadedCategories[(int) $row['cat_id']] = $row;
+            }
+        }
+
+        $options = new SelectOptions($this->mDb, $this->getProperty('STATUS', 'inf_id'));
+        foreach ($options->getAllOptions() as $option) {
+            $this->preloadedStatusOptions[(int) $option['id']] = $option['value'];
+        }
+    }
+
+    /**
+     * Activate one item previously loaded through preloadItemData().
+     *
+     * @param string $itemUUID UUID of the item to activate
+     * @return void
+     */
+    private function readPreloadedItemData(string $itemUUID): void
+    {
+        $preloadedItem = $this->preloadedItems[$itemUUID];
+        $this->mItemData = array();
+        $this->mItemId = (int) $preloadedItem['item']['ini_id'];
+        $this->mItemUUID = $itemUUID;
+
+        foreach ($preloadedItem['data'] as $fieldId => $row) {
+            if (array_key_exists('inb_id', $row)) {
+                $itemData = new ItemBorrowData($this->mDb, $this);
+            } else {
+                $itemData = new ItemData($this->mDb, $this);
+            }
+            $itemData->setArray($row);
+            $this->mItemData[$fieldId] = $itemData;
+        }
+    }
+
+    /**
      * Reads the items out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
      *
@@ -284,8 +388,8 @@ class ItemsData
         $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
-                WHERE ini_org_id IS NULL
-                OR ini_org_id = ?
+                WHERE (ini_org_id IS NULL
+                    OR ini_org_id = ?)
                 ' . $sqlWhereCondition . ';';
         $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
 
@@ -320,7 +424,7 @@ class ItemsData
                     break;
                 }
             }
-            $sqlStatusCondition .= 'AND ini_status = ' . $retiredId;
+            $sqlStatusCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
         $sqlImfIds = 'AND (';
@@ -700,6 +804,15 @@ class ItemsData
         if (array_key_exists($fieldNameIntern, $this->mItemFields)) {
             if ($fieldNameIntern === 'CATEGORY') {
                 // special case for category
+                if (array_key_exists($this->mItemUUID, $this->preloadedItems)) {
+                    $categoryId = (int) $this->preloadedItems[$this->mItemUUID]['item']['ini_cat_id'];
+                    if (array_key_exists($categoryId, $this->preloadedCategories)) {
+                        return $format === 'database'
+                            ? $this->preloadedCategories[$categoryId]['cat_uuid']
+                            : $this->preloadedCategories[$categoryId]['cat_name'];
+                    }
+                    return $value;
+                }
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $catID = $item->getValue('ini_cat_id');
                 if ($catID > 0) {
@@ -713,6 +826,16 @@ class ItemsData
                 }
             } elseif ($fieldNameIntern === 'STATUS') {
                 // special case for status
+                if (array_key_exists($this->mItemUUID, $this->preloadedItems)) {
+                    $statusId = (int) $this->preloadedItems[$this->mItemUUID]['item']['ini_status'];
+                    if ($format === 'database') {
+                        return $statusId;
+                    }
+                    if (array_key_exists($statusId, $this->preloadedStatusOptions)) {
+                        return Language::translateIfTranslationStrId($this->preloadedStatusOptions[$statusId]);
+                    }
+                    return $value;
+                }
                 $item = new Item($this->mDb, $this, $this->mItemId);
                 $statusId = $item->getValue('ini_status');
                 if ($statusId > 0) {
@@ -829,6 +952,10 @@ class ItemsData
      */
     public function getStatus(): int
     {
+        if (array_key_exists($this->mItemUUID, $this->preloadedItems)) {
+            return (int) $this->preloadedItems[$this->mItemUUID]['item']['ini_status'];
+        }
+
         $item = new Item($this->mDb, $this);
         $item->readDataByUuid($this->mItemUUID);
 
@@ -868,6 +995,10 @@ class ItemsData
      */
     public function isRetired(): bool
     {
+        if (array_key_exists($this->mItemUUID, $this->preloadedItems)) {
+            return ($this->preloadedStatusOptions[$this->getStatus()] ?? '') === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS';
+        }
+
         global $gDb;
         $optionId = $this->getStatus();
         $option = new SelectOptions($gDb, $this->getProperty('STATUS', 'inf_id'));
@@ -885,6 +1016,10 @@ class ItemsData
      */
     public function isInUse(): bool
     {
+        if (array_key_exists($this->mItemUUID, $this->preloadedItems)) {
+            return ($this->preloadedStatusOptions[$this->getStatus()] ?? '') === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS';
+        }
+
         global $gDb;
         $optionId = $this->getStatus();
         $option = new SelectOptions($gDb, $this->getProperty('STATUS', 'inf_id'));

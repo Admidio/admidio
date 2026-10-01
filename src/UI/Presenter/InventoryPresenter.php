@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -104,18 +105,13 @@ class InventoryPresenter extends PagePresenter
      */
     public static function checkModuleAccess(): void
     {
-        global $gSettingsManager, $gCurrentUser, $gValidLogin;
+        global $gSettingsManager;
 
-        $level = $gSettingsManager->getInt('inventory_module_enabled');
-
-        if ($level === 0) {
+        if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
         }
 
-        if (($level === 2 && !$gValidLogin)
-            || ($level === 3 && !$gCurrentUser->isAdministratorInventory())
-            || ($level === 4 && !self::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory())
-            || ($level === 5 && !$gCurrentUser->isAllowedToViewInventory() && !$gCurrentUser->isAdministratorInventory())) {
+        if (!InventoryAccessService::canViewModule()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
     }
@@ -896,14 +892,7 @@ class InventoryPresenter extends PagePresenter
      */
     public static function isKeeperAuthorizedToEdit(?int $keeper = null): bool
     {
-        global $gSettingsManager, $gCurrentUser;
-        if (($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-            if (isset($keeper) && $keeper === $gCurrentUser->getValue('usr_id')) {
-                return true;
-            }
-        }
-
-        return false;
+        return InventoryAccessService::canEditAsKeeper($keeper);
     }
 
     /**
@@ -945,6 +934,8 @@ class InventoryPresenter extends PagePresenter
         $rows = array();
         $strikethroughs = array();
         $actionsHeaderAdded = false;
+
+        $this->itemsData->preloadItemData(array_column($this->itemsData->getItems(), 'ini_uuid'));
 
         // Iterate over each item to fill the table rows
         foreach ($this->itemsData->getItems() as $item) {
@@ -988,15 +979,6 @@ class InventoryPresenter extends PagePresenter
 
                 $content = $this->itemsData->getValue($infNameIntern, 'database');
                 $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
-
-                // Process ITEMNAME column
-                if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
-                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
-                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
-                    } else {
-                        $content = SecurityUtils::encodeHTML($content);
-                    }
-                }
 
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
