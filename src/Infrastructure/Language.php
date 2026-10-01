@@ -690,4 +690,22 @@ class Language
 
         return $string;
     }
+
+    /** Return a name and matching translation IDs for lookups accepting localized names.
+     * @param string $text Displayed name to look up.
+     * @param array<string> $textIds IDs which are valid in the calling context.
+     * @return array<string>
+     */
+    public static function getTranslationCandidates(string $text, array $textIds): array
+    {
+        $candidates = array($text);
+        foreach ($textIds as $id) {
+            $translated = html_entity_decode(self::translateIfTranslationStrId($id), ENT_QUOTES, 'UTF-8');
+            if (StringUtils::strToUpper($translated) === StringUtils::strToUpper($text)) {
+                $candidates[] = $id;
+            }
+        }
+        return array_values(array_unique($candidates));
+    }
+
 }

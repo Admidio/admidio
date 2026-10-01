@@ -93,6 +93,9 @@
   <string name="SYS_SUPERIOR">Vorgesetzte/-r</string>
   <string name="SYS_SUPERIOR_FEMALE">Vorgesetzte</string>
   <string name="SYS_SUPERIOR_MALE">Vorgesetzter</string>
+  <string name="SYS_SYSTEM_MAIL_CUSTOM_TEXT">Eigene E-Mail-Vorlage</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT">Systemstandard verwenden</string>
+  <string name="SYS_SYSTEM_MAIL_USE_DEFAULT_DESC">Wenn aktiviert, wird die aktuelle Systemvorlage verwendet und kann nicht bearbeitet werden. Deaktiviere den Schalter, um deinen eigenen Text zu bearbeiten. Aktiviere ihn erneut, um zum Systemstandard zurückzukehren. Dein eigener Text bleibt erhalten und wird beim erneuten Deaktivieren wiederhergestellt.</string>
   <string name="SYS_WIFE">Ehefrau</string>
   <!--Phrases
   only in organization administration-->
