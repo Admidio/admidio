@@ -25,6 +25,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\UI\Component\DataTables;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Service\InventoryAccessService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -378,7 +379,7 @@ try {
         }
     }
 
-    if ($gSettingsManager->getInt('inventory_module_enabled') > 0 && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
+    if (InventoryAccessService::canViewModule() && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
         // ******************************************************************************
         // Block with inventory items
         // ******************************************************************************

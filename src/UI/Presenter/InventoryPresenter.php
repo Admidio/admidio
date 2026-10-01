@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -104,18 +105,13 @@ class InventoryPresenter extends PagePresenter
      */
     public static function checkModuleAccess(): void
     {
-        global $gSettingsManager, $gCurrentUser, $gValidLogin;
+        global $gSettingsManager;
 
-        $level = $gSettingsManager->getInt('inventory_module_enabled');
-
-        if ($level === 0) {
+        if ($gSettingsManager->getInt('inventory_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
         }
 
-        if (($level === 2 && !$gValidLogin)
-            || ($level === 3 && !$gCurrentUser->isAdministratorInventory())
-            || ($level === 4 && !self::isCurrentUserKeeper() && !$gCurrentUser->isAdministratorInventory())
-            || ($level === 5 && !$gCurrentUser->isAllowedToViewInventory() && !$gCurrentUser->isAdministratorInventory())) {
+        if (!InventoryAccessService::canViewModule()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
     }
@@ -896,14 +892,7 @@ class InventoryPresenter extends PagePresenter
      */
     public static function isKeeperAuthorizedToEdit(?int $keeper = null): bool
     {
-        global $gSettingsManager, $gCurrentUser;
-        if (($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-            if (isset($keeper) && $keeper === $gCurrentUser->getValue('usr_id')) {
-                return true;
-            }
-        }
-
-        return false;
+        return InventoryAccessService::canEditAsKeeper($keeper);
     }
 
     /**

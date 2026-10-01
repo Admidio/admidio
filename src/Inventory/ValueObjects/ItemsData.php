@@ -16,6 +16,7 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\ItemBorrowData;
 use Admidio\Categories\Entity\Category;
 use Admidio\Inventory\Entity\SelectOptions;
+use Admidio\Inventory\Service\InventoryAccessService;
 
 // PHP namespaces
 use DateTime;
@@ -135,20 +136,9 @@ class ItemsData
      */
     public function isEditable(): bool
     {
-        global $gSettingsManager, $gCurrentUser;
-
         $keeper = $this->getValue('KEEPER', 'database');
-        // check if the user has admin rights
-        if ($gCurrentUser->isAdministratorInventory()) {
-            return true;
-        }
-        // if user has no amin rights, check if user is keeper of the item and if keepers are allowed to edit the item
-        elseif ($gSettingsManager->getInt('inventory_module_enabled') !== 3 && $gSettingsManager->getBool('inventory_allow_keeper_edit')) {
-            if ($keeper === $gCurrentUser->getValue('usr_id')) {
-                return true;
-            }
-        }
-        return false;
+
+        return InventoryAccessService::canEditItem(is_numeric($keeper) ? (int) $keeper : null);
     }
 
     /**
