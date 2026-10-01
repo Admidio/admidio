@@ -1085,15 +1085,6 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                // Process ITEMNAME column
-                if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
-                    if ($mode === 'html' && (($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) && !$this->itemsData->isRetired())) {
-                        $content = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '">' . SecurityUtils::encodeHTML($content) . '</a>';
-                    } else {
-                        $content = SecurityUtils::encodeHTML($content);
-                    }
-                }
-
                 // Process KEEPER and LAST_RECEIVER column
                 if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
                     $found = $user->readDataById($content);
