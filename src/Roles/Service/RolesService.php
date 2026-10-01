@@ -2,6 +2,7 @@
 namespace Admidio\Roles\Service;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Roles\Entity\Role;
@@ -239,22 +240,22 @@ class RolesService
         $formValues = $groupsRolesEditForm->validate($_POST);
 
         if ($this->roleRessource->getValue('rol_name') !== $_POST['rol_name']) {
+            $nameCandidates = Language::getTranslationCandidates($_POST['rol_name'], array('SYS_ADMINISTRATOR', 'SYS_MEMBER', 'INS_BOARD'));
             // check if the role already exists
             $sql = 'SELECT COUNT(*) AS count
                       FROM ' . TBL_ROLES . '
                 INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
-                     WHERE rol_name   = ? -- $_POST[\'rol_name\']
+                     WHERE rol_name IN (' . implode(', ', array_fill(0, count($nameCandidates), '?')) . ')
                        AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
                        AND rol_id    <> ? -- $role->getValue(\'rol_id\')
                        AND (  cat_org_id = ? -- $gCurrentOrgId
                            OR cat_org_id IS NULL )';
-            $queryParams = array(
-                $_POST['rol_name'],
+            $queryParams = array_merge($nameCandidates, array(
                 (int)$_POST['rol_cat_id'],
                 $this->roleRessource->getValue('rol_id'),
                 $gCurrentOrgId
-            );
+            ));
             $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
             if ($pdoStatement->fetchColumn() > 0) {

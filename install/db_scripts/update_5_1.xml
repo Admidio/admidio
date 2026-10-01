@@ -220,5 +220,11 @@
     <step id="1270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
     <step id="1280">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/modules/links/links.php', '/modules/weblinks.php') WHERE men_name_intern = 'weblinks' AND men_url LIKE '%/modules/links/links.php%'</step>
     <step id="1290">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/modules/photos/photos.php', '/modules/photos.php') WHERE men_name_intern = 'photo' AND men_url LIKE '%/modules/photos/photos.php%'</step>
+    <step id="1300" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'announcements_clamp_text_lines' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'announcements_preview_characters'</step>
+    <step id="1310" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'announcements_clamp_text_lines' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'announcements_preview_characters'</step>
+    <step id="1320">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'announcements_clamp_text_lines'</step>
+    <step id="1330">UpdateStepsCode::updateStep51TranslateDefaultEntries</step>
+    <step id="1340">ALTER TABLE %PREFIX%_texts ADD COLUMN txt_custom_text text NULL</step>
+    <step id="1350">UPDATE %PREFIX%_texts SET txt_custom_text = txt_text WHERE txt_custom_text IS NULL AND txt_name IN ('SYSMAIL_REGISTRATION_CONFIRMATION', 'SYSMAIL_REGISTRATION_NEW', 'SYSMAIL_REGISTRATION_APPROVED', 'SYSMAIL_REGISTRATION_REFUSED', 'SYSMAIL_LOGIN_INFORMATION', 'SYSMAIL_PASSWORD_RESET') AND txt_text NOT IN ('SYS_SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR', 'SYS_SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_LOGIN_INFORMATION', 'SYS_SYSMAIL_PASSWORD_RESET')</step>
     <step>stop</step>
 </update>

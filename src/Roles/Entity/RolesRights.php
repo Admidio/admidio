@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Roles\Entity;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -162,7 +163,7 @@ class RolesRights extends Entity
             $rolesStatement = $this->db->queryPrepared($sql, $this->rolesIds);
 
             while ($rowRole = $rolesStatement->fetch()) {
-                $arrRolesNames[] = $rowRole['rol_name'];
+                $arrRolesNames[] = Language::translateIfTranslationStrId($rowRole['rol_name']);
             }
         }
 
