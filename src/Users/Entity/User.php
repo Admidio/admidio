@@ -1866,6 +1866,7 @@ class User extends Entity
         $returnValue = parent::readDataById($id);
 
         if ($id === 0) {
+            $this->initializeNewRecord();
             $this->setDefaultValues();
         }
 
@@ -1889,6 +1890,7 @@ class User extends Entity
         $returnValue = parent::readDataByUuid($uuid);
 
         if ($uuid === '') {
+            $this->initializeNewRecord();
             $this->setDefaultValues();
         }
 

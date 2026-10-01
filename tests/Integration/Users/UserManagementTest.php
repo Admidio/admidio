@@ -7,6 +7,7 @@
 
 namespace Admidio\Tests\Integration\Users;
 
+use Admidio\Users\Entity\User;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\AdmidioTestFixture;
 
@@ -125,8 +126,8 @@ class UserManagementTest extends DatabaseTestCase
 
     /**
      * Test that a user created through the Entity API is valid right away.
-     * User::clear() sets usr_valid to 1 ("new user should be valid (except registration)"),
-     * so only UserRegistration creates a user that still needs approval.
+     * User initializes usr_valid to 1 for new records, so only UserRegistration creates a user
+     * that still needs approval.
      *
      * @testdox Users created through the Entity API are valid immediately
      */
@@ -141,6 +142,26 @@ class UserManagementTest extends DatabaseTestCase
         $row = $result->fetch();
 
         $this->assertTrue((bool) $row['usr_valid']);
+    }
+
+    /**
+     * profile_new.php reads an empty UUID into a freshly constructed User when a contact is created.
+     * The read resets the entity, so it must also restore the defaults of a new user record.
+     *
+     * @testdox A user created after an empty UUID lookup is valid immediately
+     */
+    public function testNewUserValidityAfterEmptyUuidLookup(): void
+    {
+        $user = new User($this->getDatabase(), $GLOBALS['gProfileFields']);
+
+        $this->assertFalse($user->readDataByUuid(''));
+        $user->setValue('usr_login_name', 'validity-after-empty-uuid');
+        $user->save();
+
+        $sql = 'SELECT usr_valid FROM ' . TBL_USERS . ' WHERE usr_id = ?';
+        $result = $this->getDatabase()->queryPrepared($sql, [(int) $user->getValue('usr_id')]);
+
+        $this->assertTrue((bool) $result->fetchColumn());
     }
 
     /**
