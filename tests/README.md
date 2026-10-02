@@ -246,7 +246,7 @@ PostgreSQL needs the `pdo_pgsql` extension, MySQL and MariaDB need `pdo_mysql`.
 composer test:unit          # unit tests only
 composer test:integration   # integration tests
 composer test:cli           # command line tests
-composer test:all           # all three suites in one process
+composer test:all           # all three suites, each its own process
 composer test:coverage      # HTML coverage report in tests/reports/coverage (needs Xdebug)
 composer test:setup         # tests/bin/setup-test-env.php
 ```

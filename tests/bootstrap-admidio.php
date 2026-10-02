@@ -139,12 +139,20 @@ $GLOBALS['gPasswordHashAlgorithm'] = $gPasswordHashAlgorithm;
 $dbConfig = getTestDatabaseConfig();
 
 // Map engine name to PDO_ENGINE constant for DB_TYPE
-$engineMap = [
-    'mariadb' => \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL,
-    'mysql' => \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL,
-    'postgres' => \Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL,
-];
-define('DB_TYPE', $engineMap[$dbConfig['engine']] ?? \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL);
+// A bare `phpunit` run (composer test:coverage, or phpunit with no --testsuite) loads every
+// testsuite in one process. tests/Unit/Hooks's EntityHookTestCase then already defines DB_TYPE
+// for its SQLite-backed FakeDatabase before this file runs, guarded the same way; this guard
+// only avoids the redefinition warning; it does not and cannot correct DB_TYPE for the run,
+// because a defined constant cannot be redefined. composer test:all avoids this entirely by
+// giving each suite its own process.
+if (!defined('DB_TYPE')) {
+    $engineMap = [
+        'mariadb' => \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL,
+        'mysql' => \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL,
+        'postgres' => \Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL,
+    ];
+    define('DB_TYPE', $engineMap[$dbConfig['engine']] ?? \Admidio\Infrastructure\Database::PDO_ENGINE_MYSQL);
+}
 
 // system/bootstrap/constants.php defines this from the configuration file; Database::tableExists()
 // looks the schema up by it
