@@ -64,6 +64,15 @@ try {
         $plugin = PluginRegistry::get($getPluginId);
     }
 
+    /*
+     * The toggle of a plugin with its own menu entry is a real form submit, not an AJAX call (see
+     * 'enable'), so a failure has to be the normal HTML error page - JSON would reach the browser
+     * as the whole document and be shown as text.
+     */
+    if ($isAjax && in_array($getMode, array('enable', 'disable'), true) && $plugin !== null && $plugin->wantsMenuEntry()) {
+        $isAjax = false;
+    }
+
     switch ($getMode) {
         case 'list':
             // create an HTML page object

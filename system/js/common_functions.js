@@ -550,6 +550,9 @@ function messageBox(message, title, type, buttons, href) {
     if (typeof buttons === 'undefined') {
         $("#adm_modal_messagebox .modal-footer").hide();
     } else if (buttons === 'yes-no') {
+        // A message shown before this one without buttons has hidden the footer, and the buttons
+        // are in it, so the dialog would have nothing to confirm with.
+        $("#adm_modal_messagebox .modal-footer").show();
         $("#adm_messagebox_button_yes").attr('onClick', href);
     }
 

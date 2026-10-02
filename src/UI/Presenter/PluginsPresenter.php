@@ -345,6 +345,10 @@ class PluginsPresenter extends PagePresenter
      */
     private function addActionJavascript(): void
     {
+        global $gL10n;
+
+        $errorTitle = json_encode($gL10n->get('SYS_ERROR'), JSON_THROW_ON_ERROR);
+
         $this->addJavascript('
             function parsePluginResponse(data) {
                 let status = "error";
@@ -376,6 +380,20 @@ class PluginsPresenter extends PagePresenter
                     messageText.html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i> "
                         + message + "</div>");
                 }
+            }
+
+            /*
+             * The failure of an operation that runs without a dialog. #adm_status_message lives in
+             * the footer of the message modal, so writing into it only shows something while that
+             * modal is open - the state toggle deliberately opens none, and its failure would be
+             * silent. So it brings its own modal along.
+             */
+            function showPluginActionError(message) {
+                if (message.length === 0) {
+                    message = "Error: Undefined error occurred!";
+                }
+
+                messageBox(message, ' . $errorTitle . ', "error");
             }
 
             function callPluginAction(url, csrfToken) {
@@ -416,16 +434,24 @@ class PluginsPresenter extends PagePresenter
 
                 $.post(url, { "adm_csrf_token": csrfToken }, function(data) {
                     const result = parsePluginResponse(data);
-                    showPluginActionMessage(result.status, result.message);
 
                     if (result.status === "success") {
+                        showPluginActionMessage(result.status, result.message);
                         $.get(refreshUrl, function(html) {
                             $("#adm_plugins_list").replaceWith(html);
                         });
                     } else {
+                        // The plugin stayed as it was, so the optimistic flip has to be taken back
+                        // before the administrator is told why.
                         revert();
+                        showPluginActionError(result.message);
                     }
-                }).fail(revert);
+                }).fail(function(jqXHR) {
+                    revert();
+                    // A request that never produced an answer has no message of its own, so the
+                    // HTTP status is all there is to report.
+                    showPluginActionError(jqXHR.status === 0 ? "" : "HTTP " + jqXHR.status + " " + jqXHR.statusText);
+                });
             }
 
             function reloadTogglePlugin(link, url, csrfToken) {
