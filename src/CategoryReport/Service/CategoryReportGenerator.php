@@ -751,7 +751,7 @@ class CategoryReportGenerator
                     $this->listData[$member][$key] = '';
 
                     foreach ($memberShips as $rol_id) {
-                        $membership = $this->getCachedMembership($membershipCache, $rol_id, $member);
+                        $membership = $this->getCachedMembership($membershipCache, $rol_id, $member, $date);
                         if ($membership !== null) {
                             if (!array_key_exists($rol_id, $roleNames)) {
                                 $role->readDataById($rol_id);
@@ -765,21 +765,21 @@ class CategoryReportGenerator
 
                 } elseif ($data['type'] === 'b') {      // Membership begin
                     $this->listData[$member][$key] = '';
-                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member);
+                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member, $date);
                     if ($membership !== null) {
                         $this->listData[$member][$key] = $membership->getValue('mem_begin', 'Y-m-d');
                     }
 
                 } elseif ($data['type'] === 'e') {      // Membership end
                     $this->listData[$member][$key] = '';
-                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member);
+                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member, $date);
                     if ($membership !== null) {
                         $this->listData[$member][$key] = $membership->getValue('mem_end', 'Y-m-d');
                     }
 
                 } elseif ($data['type'] === 'd') {      // Membership duration
                     $this->listData[$member][$key] = '';
-                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member);
+                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member, $date);
                     if ($membership !== null) {
                         $duration = $membership->calculateDuration();
                         if (isset($duration['formatted'])) {
@@ -812,24 +812,30 @@ class CategoryReportGenerator
 
     /**
      * Returns a membership already loaded for this report row or loads it once.
-     * A missing or ambiguous membership is cached as null as well.
+     * A missing membership is cached as null as well.
      *
      * @param array<int,Membership|null> $cache Memberships for the current user, keyed by role ID.
      * @param int $roleId Role whose membership should be loaded.
      * @param int $userId User whose membership should be loaded.
-     * @return Membership|null The unique membership, if one exists.
+     * @param string $date Date on which the membership must be active.
+     * @return Membership|null The active membership, if one exists.
      * @throws Exception
      */
-    private function getCachedMembership(array &$cache, int $roleId, int $userId): ?Membership
+    private function getCachedMembership(array &$cache, int $roleId, int $userId, string $date): ?Membership
     {
         global $gDb;
 
         if (!array_key_exists($roleId, $cache)) {
-            $membership = new Membership($gDb);
-            $cache[$roleId] = $membership->readDataByColumns(array(
-                'mem_rol_id' => $roleId,
-                'mem_usr_id' => $userId
-            )) ? $membership : null;
+            $sql = 'SELECT mem_id
+                      FROM ' . TBL_MEMBERS . '
+                     WHERE mem_rol_id = ?
+                       AND mem_usr_id = ?
+                       AND mem_begin <= ?
+                       AND mem_end > ?
+                  ORDER BY mem_begin DESC, mem_id DESC
+                     LIMIT 1';
+            $membershipId = (int)$gDb->queryPrepared($sql, array($roleId, $userId, $date, $date))->fetchColumn();
+            $cache[$roleId] = $membershipId > 0 ? new Membership($gDb, $membershipId) : null;
         }
 
         return $cache[$roleId];

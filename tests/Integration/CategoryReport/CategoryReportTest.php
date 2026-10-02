@@ -6,6 +6,7 @@ use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
 use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\CategoryReport\Service\CategoryReportGenerator;
 use Admidio\CategoryReport\Service\CategoryReportRepository;
+use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 
 class CategoryReportTest extends DatabaseTestCase
@@ -112,5 +113,45 @@ class CategoryReportTest extends DatabaseTestCase
             'SELECT COUNT(*) FROM ' . TBL_CATEGORY_REPORT_COLUMNS . ' WHERE crc_crt_id = ?',
             array($reportId)
         )->fetchColumn());
+    }
+
+    public function testDurationIncludesCurrentRepeatedMembership(): void
+    {
+        global $gCurrentOrgId;
+
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $role = $fixture->createAndSaveRole('Repeated membership role', $gCurrentOrgId);
+        $user = $fixture->createAndSaveUser('category-report-repeat', 'category-report-repeat@example.local');
+        $fixture->assignUserToRolePeriod($user['usr_id'], $role['rol_id'], '2018-01-01', '2018-12-31');
+        $fixture->assignUserToRolePeriod($user['usr_id'], $role['rol_id'], '2020-01-01', DATE_MAX);
+
+        $repository = new CategoryReportRepository();
+        $configurations = $repository->saveConfigArray(array(array(
+            'id' => '',
+            'name' => 'Repeated membership duration test',
+            'description' => '',
+            'columns' => array(array('field' => 'ddummy', 'condition' => '')),
+            'col_fields' => 'ddummy',
+            'col_conditions' => '',
+            'selection_role' => '',
+            'selection_cat' => '',
+            'number_col' => 0,
+            'default_conf' => false
+        )));
+        $configuration = array_values(array_filter(
+            $configurations,
+            static fn(array $values): bool => $values['name'] === 'Repeated membership duration test'
+        ))[0];
+
+        $generator = new CategoryReportGenerator();
+        $generator->getConfigArray();
+        $generator->setConfiguration((int)$configuration['id']);
+        $generator->generate_listData();
+
+        $this->assertArrayHasKey($user['usr_id'], $generator->listData);
+        $this->assertStringStartsWith(
+            'Repeated membership role: ',
+            $generator->listData[$user['usr_id']][1]
+        );
     }
 }
