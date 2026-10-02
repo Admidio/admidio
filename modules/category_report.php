@@ -20,7 +20,7 @@ try {
     }
 
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html',
-        'validValues' => array('html', 'print', 'xlsx', 'csv-oo', 'pdf', 'pdfl', 'manage', 'new', 'edit', 'copy', 'report_save', 'report_delete')));
+        'validValues' => array('html', 'print', 'xlsx', 'ods', 'csv-oo', 'pdf', 'pdfl', 'manage', 'new', 'edit', 'copy', 'report_save', 'report_delete')));
     if (in_array($getMode, array('manage', 'new', 'edit', 'copy', 'report_save', 'report_delete'), true) && !$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }

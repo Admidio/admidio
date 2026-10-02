@@ -10,6 +10,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Admidio\Hooks\Hooks;
 use Admidio\CategoryReport\Service\CategoryReportGenerator;
@@ -23,7 +24,7 @@ class CategoryReportPresenter
         $report = new CategoryReportGenerator();
         $config = Hooks::applyFilters('category_report_config', $report->getConfigArray());
         $getCrtId = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
-        $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
+        $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
         $getFilter = admFuncVariableIsValid($_GET, 'filter', 'string');
         $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
 
@@ -49,6 +50,7 @@ class CategoryReportPresenter
 
         switch ($getMode) {
             case 'xlsx':
+            case 'ods':
                 $charset = 'utf-8';
                 break;
             case 'csv-oo':
@@ -161,13 +163,35 @@ class CategoryReportPresenter
                     $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
                     $page->addPageFunctionsMenuItem(
                         'menu_item_lists_xlsx',
-                        $gL10n->get('SYS_MICROSOFT_EXCEL') .' (*.xlsx)',
+                        $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
                         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
                             'crt_id' => $getCrtId,
                             'filter' => $getFilter,
                             'export_and_filter' => $getExportAndFilter,
                             'mode' => 'xlsx')),
                         'bi-file-earmark-excel',
+                        'menu_item_lists_export'
+                    );
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_lists_odf',
+                        $gL10n->get('SYS_ODF_SPREADSHEET'),
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                            'crt_id' => $getCrtId,
+                            'filter' => $getFilter,
+                            'export_and_filter' => $getExportAndFilter,
+                            'mode' => 'ods')),
+                        'bi-file-earmark-spreadsheet',
+                        'menu_item_lists_export'
+                    );
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_lists_csv',
+                        $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                            'crt_id' => $getCrtId,
+                            'filter' => $getFilter,
+                            'export_and_filter' => $getExportAndFilter,
+                            'mode' => 'csv-oo')),
+                        'bi-filetype-csv',
                         'menu_item_lists_export'
                     );
                     $page->addPageFunctionsMenuItem(
@@ -190,17 +214,6 @@ class CategoryReportPresenter
                             'export_and_filter' => $getExportAndFilter,
                             'mode' => 'pdfl')),
                         'bi-file-earmark-pdf',
-                        'menu_item_lists_export'
-                    );
-                    $page->addPageFunctionsMenuItem(
-                        'menu_item_lists_csv',
-                        $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_UTF8') . ')',
-                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
-                            'crt_id' => $getCrtId,
-                            'filter' => $getFilter,
-                            'export_and_filter' => $getExportAndFilter,
-                            'mode' => 'csv-oo')),
-                        'bi-filetype-csv',
                         'menu_item_lists_export'
                     );
                 } else {
@@ -302,7 +315,7 @@ class CategoryReportPresenter
                     $csvStr .= $valueQuotes . $gL10n->get('SYS_ABR_NO') . $valueQuotes;
                 }
                 $csvStr .= $separator . $valueQuotes . $columnHeader['data'] . $valueQuotes;
-            } elseif ($getMode === "xlsx") {
+            } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
                 // convert html characters to plain text
                 $columnValues[] = html_entity_decode($columnHeader['data'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             } elseif ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf') {
@@ -313,7 +326,7 @@ class CategoryReportPresenter
 
         if ($getMode === 'csv') {
             $csvStr .= "\n";
-        } elseif ($getMode === 'xlsx') {
+        } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
             $spreadsheet = new Spreadsheet();
             $activeSheet = $spreadsheet->getActiveSheet();
             $activeSheet->fromArray(array_values($columnValues));
@@ -333,7 +346,7 @@ class CategoryReportPresenter
             // Felder zu Datensatz
             $columnNumber = 1;
             foreach ($memberdata as $key => $content) {
-                if ($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf' || $getMode == 'xlsx') {
+                if (in_array($getMode, array('html', 'print', 'pdf', 'xlsx', 'ods'), true)) {
                     if ($columnNumber === 1) {
                         // die Laufende Nummer noch davorsetzen
                         $columnValues[] = $listRowNumber;
@@ -353,7 +366,7 @@ class CategoryReportPresenter
                 $fieldType = $profileFieldTypes[$usf_id] ?? '';
 
                 if ($usf_id !== 0
-                    && in_array($getMode, array('xlsx', 'csv', 'pdf'), true)
+                    && in_array($getMode, array('xlsx', 'ods', 'csv', 'pdf'), true)
                     && $content > 0
                     && in_array($fieldType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON'), true)) {
                     // show selected text of optionfield or combobox
@@ -373,7 +386,7 @@ class CategoryReportPresenter
                 }
 
                 if ($usf_id === 0 && $content === true) {       // alle Spalten außer Profilfelder
-                    if (in_array($getMode, array('xlsx', 'csv', 'pdf'), true)) {
+                    if (in_array($getMode, array('xlsx', 'ods', 'csv', 'pdf'), true)) {
                         $content = 'X';
                     } else {
                         $content = '<i class="bi bi-check-lg"></i>';
@@ -401,11 +414,11 @@ class CategoryReportPresenter
                             $htmlValue = $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content);
                             $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuid)) . '">' . $htmlValue . '</a>';
                         } else {
-                            // within print or Excel mode no links should be set
-                            if (($getMode === 'print' || $getMode === 'xlsx')
+                            // within print or spreadsheet mode no links should be set
+                            if (in_array($getMode, array('print', 'xlsx', 'ods'), true)
                                 && in_array($fieldType, array('EMAIL', 'PHONE', 'URL'), true)) {
                                 $columnValues[] = $content;
-                            } elseif ($getMode === 'xlsx'
+                            } elseif (in_array($getMode, array('xlsx', 'ods'), true)
                                 && in_array($fieldType, array('DROPDOWN', 'DROPDOWN_MULTISELECT', 'RADIO_BUTTON', 'CHECKBOX'), true)) {
                                 if ($fieldType === 'CHECKBOX') {
                                     $columnValues[] = ($content) ? 'X' : '';
@@ -436,7 +449,7 @@ class CategoryReportPresenter
             if ($getFilter == '' || ($getFilter != '' && (stristr(implode('', $columnValues), $getFilter) || stristr($tmp_csv, $getFilter)))) {
                 if ($getMode == 'csv') {
                     $csvStr .= $tmp_csv . "\n";
-                } elseif ($getMode === 'xlsx') {
+                } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
                     $currentRow = $listRowNumber + 1; // +1 for headerColumn offset
                     foreach ($columnValues as $currentCol => $cell) {
                         $currentCol += 1; // array starting with 0 but first column is 1 in spreadsheet
@@ -468,15 +481,20 @@ class CategoryReportPresenter
             // download CSV file
             header('Content-Type: text/comma-separated-values; charset=' . $charset);
             echo $csvStr;
-        } elseif ($getMode === 'xlsx') {
+        } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
             $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
+            self::formatSpreadsheet($spreadsheet, $columnCount + 1, true);
 
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=' . $charset);
+            if ($getMode === 'xlsx') {
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=' . $charset);
+                $writer = new Xlsx($spreadsheet);
+            } else {
+                header('Content-Type: application/vnd.oasis.opendocument.spreadsheet; charset=' . $charset);
+                $writer = new Ods($spreadsheet);
+            }
             header('Content-Disposition: attachment; filename="' . $filename . '"');
             header('Cache-Control: max-age=0');
 
-            self::formatSpreadsheet($spreadsheet, $columnCount + 1, true);
-            $writer = new Xlsx($spreadsheet);
             $writer->save('php://output');
         } elseif ($getMode === 'pdf') {
             // send the new PDF to the User
