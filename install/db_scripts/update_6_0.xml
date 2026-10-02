@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">CREATE TABLE %PREFIX%_category_report_columns (
+        crc_id          integer unsigned AUTO_INCREMENT,
+        crc_crt_id      integer unsigned NOT NULL,
+        crc_number      smallint NOT NULL,
+        crc_field_type  varchar(50) NOT NULL,
+        crc_usf_id      integer unsigned,
+        crc_rol_id      integer unsigned,
+        crc_cat_id      integer unsigned,
+        crc_special_field varchar(50),
+        crc_condition   varchar(255),
+        PRIMARY KEY (crc_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="20">CREATE UNIQUE INDEX %PREFIX%_idx_crc_report_number ON %PREFIX%_category_report_columns (crc_crt_id, crc_number)</step>
+    <step id="30">UpdateStepsCode::updateStep51MigrateCategoryReportColumns</step>
+    <step id="40">ALTER TABLE %PREFIX%_category_report_columns
+        ADD CONSTRAINT %PREFIX%_fk_crc_crt FOREIGN KEY (crc_crt_id) REFERENCES %PREFIX%_category_report (crt_id) ON DELETE CASCADE ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_crc_usf FOREIGN KEY (crc_usf_id) REFERENCES %PREFIX%_user_fields (usf_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_crc_rol FOREIGN KEY (crc_rol_id) REFERENCES %PREFIX%_roles (rol_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_crc_cat FOREIGN KEY (crc_cat_id) REFERENCES %PREFIX%_categories (cat_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
+    <step id="50">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_fields</step>
+    <step id="60">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_conditions</step>
+    <step id="70">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/category-report/category_report.php', '/category_report.php') WHERE men_name_intern = 'category-report' AND men_url LIKE '%/category-report/category_report.php%'</step>
+    <step id="80">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_description varchar(4000)</step>    <step>stop</step>
+</update>

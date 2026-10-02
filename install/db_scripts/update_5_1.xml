@@ -226,30 +226,4 @@
     <step id="1330">UpdateStepsCode::updateStep51TranslateDefaultEntries</step>
     <step id="1340">ALTER TABLE %PREFIX%_texts ADD COLUMN txt_custom_text text NULL</step>
     <step id="1350">UPDATE %PREFIX%_texts SET txt_custom_text = txt_text WHERE txt_custom_text IS NULL AND txt_name IN ('SYSMAIL_REGISTRATION_CONFIRMATION', 'SYSMAIL_REGISTRATION_NEW', 'SYSMAIL_REGISTRATION_APPROVED', 'SYSMAIL_REGISTRATION_REFUSED', 'SYSMAIL_LOGIN_INFORMATION', 'SYSMAIL_PASSWORD_RESET') AND txt_text NOT IN ('SYS_SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR', 'SYS_SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_LOGIN_INFORMATION', 'SYS_SYSMAIL_PASSWORD_RESET')</step>
-    <step id="1360">CREATE TABLE %PREFIX%_category_report_columns (
-        crc_id          integer unsigned AUTO_INCREMENT,
-        crc_crt_id      integer unsigned NOT NULL,
-        crc_number      smallint NOT NULL,
-        crc_field_type  varchar(50) NOT NULL,
-        crc_usf_id      integer unsigned,
-        crc_rol_id      integer unsigned,
-        crc_cat_id      integer unsigned,
-        crc_special_field varchar(50),
-        crc_condition   varchar(255),
-        PRIMARY KEY (crc_id)
-        )
-        ENGINE = InnoDB
-        DEFAULT CHARSET = utf8mb4
-        COLLATE = utf8mb4_unicode_ci</step>
-    <step id="1370">CREATE UNIQUE INDEX %PREFIX%_idx_crc_report_number ON %PREFIX%_category_report_columns (crc_crt_id, crc_number)</step>
-    <step id="1380">UpdateStepsCode::updateStep51MigrateCategoryReportColumns</step>
-    <step id="1390">ALTER TABLE %PREFIX%_category_report_columns
-        ADD CONSTRAINT %PREFIX%_fk_crc_crt FOREIGN KEY (crc_crt_id) REFERENCES %PREFIX%_category_report (crt_id) ON DELETE CASCADE ON UPDATE RESTRICT,
-        ADD CONSTRAINT %PREFIX%_fk_crc_usf FOREIGN KEY (crc_usf_id) REFERENCES %PREFIX%_user_fields (usf_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-        ADD CONSTRAINT %PREFIX%_fk_crc_rol FOREIGN KEY (crc_rol_id) REFERENCES %PREFIX%_roles (rol_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
-        ADD CONSTRAINT %PREFIX%_fk_crc_cat FOREIGN KEY (crc_cat_id) REFERENCES %PREFIX%_categories (cat_id) ON DELETE RESTRICT ON UPDATE RESTRICT</step>
-    <step id="1400">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_fields</step>
-    <step id="1410">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_conditions</step>
-    <step id="1420">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/category-report/category_report.php', '/category_report.php') WHERE men_name_intern = 'category-report' AND men_url LIKE '%/category-report/category_report.php%'</step>
-    <step id="1430">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_description varchar(4000)</step>    <step>stop</step>
 </update>
