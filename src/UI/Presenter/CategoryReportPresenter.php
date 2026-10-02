@@ -514,7 +514,24 @@ class CategoryReportPresenter
                 // TODO
             }
         } elseif ($getMode == 'html' && $getExportAndFilter) {
-            $page->addHtml('<div style="width:100%; height: 500px; overflow:auto; border:20px;">');
+            $page->addJavascript(
+                '
+                const categoryReportScrollContainer = document.getElementById("adm_category_report_scroll");
+                const resizeCategoryReportScrollContainer = function() {
+                    const minimumHeight = 320;
+                    const bottomSpacing = 16;
+                    const availableHeight = document.documentElement.clientHeight
+                        - categoryReportScrollContainer.getBoundingClientRect().top
+                        - bottomSpacing;
+
+                    categoryReportScrollContainer.style.height = Math.max(minimumHeight, availableHeight) + "px";
+                };
+
+                resizeCategoryReportScrollContainer();
+                $(window).on("resize", resizeCategoryReportScrollContainer);',
+                true
+            );
+            $page->addHtml('<div id="adm_category_report_scroll" class="admidio-category-report-scroll">');
             $smarty->assign('columnAlign', $data['column_align']);
             $smarty->assign('headers', $data['headers']);
             $smarty->assign('rows', $data['rows']);
@@ -522,7 +539,7 @@ class CategoryReportPresenter
             // Fetch the HTML table from our Smarty template
             $htmlTable = $smarty->fetch('modules/category-report.list.tpl');
             $page->addHtml($htmlTable);
-            $page->addHtml('</div><br/>');
+            $page->addHtml('</div>');
             $page->show();
         } elseif (($getMode == 'html' && !$getExportAndFilter) || $getMode == 'print') {
             if (isset($categoryReportTable)) {
