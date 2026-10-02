@@ -170,7 +170,17 @@ class ComponentUpdate extends Component
      */
     private function executeUpdateSql(string $sql, bool $showError): bool
     {
-        return !($this->db->queryPrepared(Database::prepareSqlAdmidioParameters($sql), array(), $showError) === false);
+        $result = !($this->db->queryPrepared(Database::prepareSqlAdmidioParameters($sql), array(), $showError) === false);
+
+        // A step that changes the schema invalidates the cached column metadata of the database
+        // object. Without this reset an entity that a later code step creates is still built from
+        // the structure the table had when the update started, so a column this update added is
+        // missing from its metadata while the selected row already contains it.
+        if (preg_match('/^\s*(ALTER|CREATE|DROP|RENAME|TRUNCATE)\s/i', $sql) === 1) {
+            $this->db->initializeTableColumnProperties();
+        }
+
+        return $result;
     }
 
     /**
