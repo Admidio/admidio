@@ -110,7 +110,7 @@ class InstallationResultTest extends DatabaseTestCase
         $this->assertCount(2, $users);
 
         // the system account records changes that nobody made by hand and cannot log in
-        $this->assertEquals('System', $users[0]['usr_login_name']);
+        $this->assertSame('SYS_SYSTEM', $users[0]['usr_login_name']);
         $this->assertFalse((bool) $users[0]['usr_valid']);
 
         // the administrator is the account the installation was given

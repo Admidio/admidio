@@ -196,14 +196,22 @@ try {
     $orderCondition = ' ORDER BY id DESC ';
     if (isset($_GET['order']) && is_array($_GET['order'])) {
         $orderParts = array();
+        $orderById = false;
         foreach ($_GET['order'] as $order) {
             $columnIndex = (int)($order['column'] ?? -1);
             if (array_key_exists($columnIndex, $orderColumns)) {
-                $orderParts[] = $orderColumns[$columnIndex]
-                    . (strtoupper($order['dir'] ?? '') === 'ASC' ? ' ASC' : ' DESC');
+                $direction = strtoupper($order['dir'] ?? '') === 'ASC' ? 'ASC' : 'DESC';
+                $orderById = $orderById || $orderColumns[$columnIndex] === 'id';
+                $orderParts[] = $orderColumns[$columnIndex] . ' ' . $direction;
             }
         }
         if (count($orderParts) > 0) {
+            // Timestamps have second precision. A copy can therefore create many records with
+            // the same timestamp; log_id keeps their display order deterministic and chronological.
+            // It must always be ascending: the creation entry is written before the item's data.
+            if (!$orderById) {
+                $orderParts[] = 'id ASC';
+            }
             $orderCondition = ' ORDER BY ' . implode(', ', $orderParts) . ' ';
         }
     }

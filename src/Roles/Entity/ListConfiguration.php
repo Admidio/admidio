@@ -5,10 +5,10 @@ namespace Admidio\Roles\Entity;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Roles\ValueObject\ConditionParser;
 use Admidio\Users\Entity\User;
 use DateTime;
-use ModuleEvents;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Ramsey\Uuid\Uuid;
@@ -263,22 +263,22 @@ class ListConfiguration extends Entity
         } elseif ($column->getValue('lsc_special_field') === 'mem_approved') {
             // Assign Integer to Language strings
             switch ((int)$content) {
-                case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
+                case Participants::STATE_INVITED:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_INVITED');
                     $htmlText = '<i class="bi bi-calendar2-check-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = '';
                     break;
-                case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
+                case Participants::STATE_ATTENDING:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                     $htmlText = '<i class="bi bi-check-circle-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-attend';
                     break;
-                case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
+                case Participants::STATE_TENTATIVE:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
                     $htmlText = '<i class="bi bi-question-circle-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-tentative';
                     break;
-                case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
+                case Participants::STATE_REFUSED:
                     $text = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
                     $htmlText = '<i class="bi bi-x-circle-fill admidio-icon-chain"></i>' . $text;
                     $buttonClass = 'admidio-event-approval-state-cancel';

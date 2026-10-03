@@ -215,7 +215,7 @@ class Weblink extends Entity
                 . $gL10n->get('SYS_LINK_ADDRESS') . ': ' . $this->getValue('lnk_url') . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/links/links.php?link_uuid=' . $this->getValue('lnk_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php?link_uuid=' . $this->getValue('lnk_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message

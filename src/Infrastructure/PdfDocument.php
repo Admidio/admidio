@@ -14,7 +14,7 @@ class PdfDocument extends Tcpdf
 {
     private string $heading;
 
-    public function __construct(string $orientation, string $heading)
+    public function __construct(string $orientation, string $heading, ?string $hyphenationLanguage = null)
     {
         $this->heading = $heading;
         parent::__construct(unit: 'mm');
@@ -22,6 +22,28 @@ class PdfDocument extends Tcpdf
         $this->setAuthor('Admidio');
         $this->setTitle($heading);
         $this->font->insert($this->pon, 'helvetica', '', 10);
+
+        // tc-lib-pdf ships no language patterns. The bundled TeX patterns add soft hyphens only
+        // at valid positions, so narrow PDF columns remain readable without cutting words.
+        $patternFiles = array(
+            'de' => 'hyph-de-1996.tex',
+            'en' => 'hyph-en-us.tex',
+            'fr' => 'hyph-fr.tex'
+        );
+        $language = strtolower((string)$hyphenationLanguage);
+        if (array_key_exists($language, $patternFiles)) {
+            $patternsFile = dirname(__DIR__, 2) . '/libs/pdf-hyphenation/' . $patternFiles[$language];
+            if (is_file($patternsFile)) {
+                // tc-lib-pdf accepts only explicitly trusted local paths. Retain its default
+                // paths and add the bundled pattern directory instead of widening the trust scope.
+                $this->file->setAllowedPaths(array_merge(
+                    $this->defaultFileAllowedPaths(),
+                    [dirname($patternsFile)]
+                ));
+                $this->setTexHyphenPatterns($this->loadTexHyphenPatterns($patternsFile));
+            }
+        }
+
         $this->enableDefaultPageContent();
         $this->addPage([
             'format' => 'A4',
