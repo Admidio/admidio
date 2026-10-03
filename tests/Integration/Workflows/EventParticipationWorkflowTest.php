@@ -265,7 +265,7 @@ class EventParticipationWorkflowTest extends DatabaseTestCase
 
             $membership = new Membership($this->getDatabase());
             $membership->readDataByColumns(array('mem_rol_id' => $event['rol_id'], 'mem_usr_id' => $memberB['usr_id']));
-            $membership->setValue('mem_approved', Participants::PARTICIPATION_NO);
+            $membership->setValue('mem_approved', Participants::STATE_REFUSED);
             $membership->save();
 
             $after = new Participants($this->getDatabase(), $event['rol_id']);
@@ -302,7 +302,7 @@ class EventParticipationWorkflowTest extends DatabaseTestCase
 
             $membership = new Membership($this->getDatabase());
             $membership->readDataByColumns(array('mem_rol_id' => $event['rol_id'], 'mem_usr_id' => $memberA['usr_id']));
-            $membership->setValue('mem_approved', Participants::PARTICIPATION_MAYBE);
+            $membership->setValue('mem_approved', Participants::STATE_TENTATIVE);
             $membership->save();
 
             return (new Participants($this->getDatabase(), $event['rol_id']))->getParticipantsArray();
@@ -310,7 +310,7 @@ class EventParticipationWorkflowTest extends DatabaseTestCase
 
         $this->assertArrayHasKey($memberA['usr_id'], $participants);
         $this->assertArrayHasKey($memberB['usr_id'], $participants);
-        $this->assertEquals(Participants::PARTICIPATION_MAYBE, $participants[$memberA['usr_id']]['approved']);
+        $this->assertEquals(Participants::STATE_TENTATIVE, $participants[$memberA['usr_id']]['approved']);
         $this->assertFalse($participants[$memberA['usr_id']]['leader']);
         $this->assertTrue($participants[$memberB['usr_id']]['leader']);
     }

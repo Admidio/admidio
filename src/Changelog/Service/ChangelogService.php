@@ -13,6 +13,7 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Categories\Entity\Category;
 use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
+use Admidio\Events\ValueObject\Participants;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Forum\Entity\Topic;
@@ -44,7 +45,6 @@ use Admidio\Users\Entity\UserRelationType;
 use Admidio\Weblinks\Entity\Weblink;
 use Admidio\UI\Presenter\PagePresenter;
 use DateTime;
-use ModuleEvents;
 
 /**
  * @brief Class with methods to help with the changelog.
@@ -674,19 +674,19 @@ class ChangelogService {
         );
 
         $memApprovedValues = array(
-            ModuleEvents::MEMBER_APPROVAL_STATE_INVITED => array(
+            Participants::STATE_INVITED => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_INVITED',
                 'icon' => 'calendar2-check-fill'
             ),
-            ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND => array(
+            Participants::STATE_ATTENDING => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_ATTEND',
                 'icon' => 'check-circle-fill'
             ),
-            ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE => array(
+            Participants::STATE_TENTATIVE => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_TENTATIVE',
                 'icon' => 'question-circle-fill'
             ),
-            ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED => array(
+            Participants::STATE_REFUSED => array(
                 'text' => 'SYS_EVENT_PARTICIPATION_CANCELED',
                 'icon' => 'x-circle-fill'
             )
@@ -857,6 +857,7 @@ class ChangelogService {
             'lnk_sequence' =>             'SYS_ORDER',
 
             'txt_text' =>                  array('name' => 'SYS_TEXT', 'type' => 'TEXT_BIG'),
+            'txt_custom_text' =>           array('name' => 'SYS_SYSTEM_MAIL_CUSTOM_TEXT', 'type' => 'TEXT_BIG'),
             'txt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
 
             'fol_name' =>                  'SYS_NAME',
@@ -1044,7 +1045,7 @@ class ChangelogService {
                 case 'inventory_item_borrow_data' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
                 case 'links' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/links/links_new.php', array('link_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
                 case 'lists' :
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/mylist.php', array('active_role' => 1, 'list_uuid' => $uuid)); break;
                 case 'list_columns':
@@ -1056,7 +1057,7 @@ class ChangelogService {
                 // case 'organizations': // There is currently no edit page for other organizations! One needs to log in to the other org!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 case 'photos':
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos/photos.php', array('photo_uuid' => $uuid)); break;
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/photos.php', array('photo_uuid' => $uuid)); break;
                 // case 'preferences': // There is just one preferences page, but no way to link to individual sections or preference items!
                 //     $url = SecurityUtils::encodeUrl(); break;
                 // case 'registrations':

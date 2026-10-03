@@ -3,6 +3,7 @@
 namespace Admidio\Infrastructure\Entity;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -1016,6 +1017,54 @@ class Entity
         return $nameOfLastEditingUser;
     }
 
+    private static function isTranslatableColumn(string $column): bool
+    {
+        return in_array($column, array(
+            'rol_name', 'rol_description', 'lst_name', 'crt_name',
+            'room_name', 'room_description', 'txt_text',
+            'cat_name', 'usf_name', 'usf_description',
+        ), true);
+    }
+
+    protected static function translateColumnValue(string $column, string $value): string
+    {
+        if (!Language::isTranslationStringId($value)) {
+            return $value;
+        }
+        $value = Language::translateIfTranslationStrId($value);
+        // Mail templates and their textareas use real line breaks, not HTML breaks.
+        if ($column === 'txt_text') {
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', "\r\n", $value);
+            $value = StringUtils::strStripTags(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        }
+        return $value;
+    }
+
+    /** Keep the ID when an edit form submits its unchanged, translated value. */
+    private static function preserveTranslationId(string $column, mixed $stored, mixed $submitted): mixed
+    {
+        if (!self::isTranslatableColumn($column) || !is_string($stored) || !is_string($submitted)
+            || !Language::isTranslationStringId($stored)) {
+            return $submitted;
+        }
+
+        $normalize = static function (string $value) use ($column): string {
+            $value = trim(str_replace(array("\r\n", "\r"), "\n", html_entity_decode($value, ENT_QUOTES, 'UTF-8')));
+            if (in_array($column, array('room_description', 'usf_description'), true)) {
+                // CKEditor wraps a plain paragraph and normalizes HTML line breaks on submission.
+                if (str_starts_with($value, '<p>') && str_ends_with($value, '</p>') && substr_count($value, '<p>') === 1) {
+                    $value = substr($value, 3, -4);
+                }
+                $value = preg_replace('/<br\s*\/?\s*>/', '<br>', $value);
+            }
+            return $value;
+        };
+        if ($normalize($submitted) === $normalize(self::translateColumnValue($column, $stored))) {
+            return $stored;
+        }
+        return $submitted;
+    }
+
     /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** then the manipulated value is returned.
@@ -1109,6 +1158,11 @@ class Entity
                     }
                     break;
             }
+        }
+
+        if ($format !== 'database' && is_string($columnValue) && self::isTranslatableColumn($columnName)
+            && Language::isTranslationStringId($columnValue)) {
+            $columnValue = SecurityUtils::encodeHTML(self::translateColumnValue($columnName, $columnValue));
         }
 
         return $columnValue;
@@ -1776,6 +1830,8 @@ class Entity
 
         // normalize string values
         $newValue = is_string($newValue) ? trim($newValue) : $newValue;
+
+        $newValue = self::preserveTranslationId($columnName, $this->dbColumns[$columnName], $newValue);
 
         // a filter may transform or reject the proposed value, the checks below then run on its result
         $newValue = $this->applyValueFilters($columnName, $newValue);

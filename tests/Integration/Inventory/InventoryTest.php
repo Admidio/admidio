@@ -16,6 +16,8 @@ namespace Admidio\Tests\Integration\Inventory;
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Service\ItemService;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -504,6 +506,155 @@ class InventoryTest extends DatabaseTestCase
                 'SYS_INVENTORY_FILTER_IN_USE_ITEMS',
                 $this->getDatabase()->queryPrepared($sql, [$reinstated->getStatus()])->fetchColumn()
             );
+        });
+    }
+
+    /**
+     * The list and profile queries must agree on the meaning of the default filter: retired
+     * items are hidden. This protects the profile view from accidentally showing only retired
+     * items when it asks for items managed by a user.
+     *
+     * @testdox Inventory list queries exclude retired items by default
+     */
+    public function testItemListQueriesExcludeRetiredItemsByDefault(): void
+    {
+        $admin = $this->makeInventoryUser('invlistfilter', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($admin) {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $activeItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Available chair', 'KEEPER' => (string) $admin->getValue('usr_id')));
+
+            $retiredItemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $retiredItemId = $this->createItem($retiredItemsData, array('ITEMNAME' => 'Retired chair', 'KEEPER' => (string) $admin->getValue('usr_id')));
+            $retiredItemsData->retireItem();
+
+            $listedItems = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $listedItems->showRetiredItems(false);
+            $listedItems->readItems();
+            $listedItemIds = array_map(static fn (array $item): int => (int) $item['ini_id'], $listedItems->getItems());
+
+            $profileItems = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $profileItems->showRetiredItems(false);
+            $profileItems->readItemsByUser((int) $admin->getValue('usr_id'));
+            $profileItemIds = array_map(static fn (array $item): int => (int) $item['ini_id'], $profileItems->getItems());
+
+            $this->assertContains($activeItemId, $listedItemIds);
+            $this->assertNotContains($retiredItemId, $listedItemIds);
+            $this->assertContains($activeItemId, $profileItemIds);
+            $this->assertNotContains($retiredItemId, $profileItemIds);
+        });
+    }
+
+    /**
+     * Profile pages must use the same inventory access levels as the inventory module.
+     *
+     * @testdox Inventory module access is denied to ordinary members at restricted levels
+     */
+    public function testRestrictedInventoryModuleAccessIsDeniedToOrdinaryMembers(): void
+    {
+        $fixture = $this->getFixture();
+        $admin = $this->makeInventoryUser('invaccessadmin', true);
+        $memberData = $fixture->createAndSaveUser('invaccessmember', 'invaccessmember@example.local');
+        $member = $this->loadUserInOrganization($memberData['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($member, self::ORG_ID, true, function () {
+            $settings = $GLOBALS['gSettingsManager'];
+            foreach (array(3, 4, 5) as $level) {
+                $settings->set('inventory_module_enabled', (string) $level);
+                $this->assertFalse(InventoryAccessService::canViewModule(), 'access level ' . $level);
+            }
+        });
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $settings = $GLOBALS['gSettingsManager'];
+            foreach (array(3, 4, 5) as $level) {
+                $settings->set('inventory_module_enabled', (string) $level);
+                $this->assertTrue(InventoryAccessService::canViewModule(), 'access level ' . $level);
+            }
+        });
+    }
+
+    /**
+     * Test that list preloading preserves the single-item data representation.
+     *
+     * @testdox A preloaded inventory list returns the same item, category, status and borrow values
+     */
+    public function testPreloadedItemDataMatchesSingleItemLoading(): void
+    {
+        $admin = $this->makeInventoryUser('invpreload', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $firstItemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Preloaded projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-05-01'
+            ));
+            $secondItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Preloaded ladder'));
+            $uuids = array($this->uuidOfItem($firstItemId), $this->uuidOfItem($secondItemId));
+
+            $singleItem = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $singleItem->readItemData($uuids[0]);
+            $expected = array(
+                'ITEMNAME' => $singleItem->getValue('ITEMNAME', 'database'),
+                'CATEGORY' => $singleItem->getValue('CATEGORY', 'database'),
+                'STATUS' => $singleItem->getValue('STATUS', 'database'),
+                'LAST_RECEIVER' => $singleItem->getValue('LAST_RECEIVER', 'database'),
+                'BORROW_DATE' => $singleItem->getValue('BORROW_DATE', 'database'),
+                'isBorrowed' => $singleItem->isBorrowed(),
+                'isRetired' => $singleItem->isRetired()
+            );
+
+            $preloadedItems = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $preloadedItems->preloadItemData($uuids);
+            $preloadedItems->readItemData($uuids[0]);
+
+            $this->assertSame($expected['ITEMNAME'], $preloadedItems->getValue('ITEMNAME', 'database'));
+            $this->assertSame($expected['CATEGORY'], $preloadedItems->getValue('CATEGORY', 'database'));
+            $this->assertSame($expected['STATUS'], $preloadedItems->getValue('STATUS', 'database'));
+            $this->assertSame($expected['LAST_RECEIVER'], $preloadedItems->getValue('LAST_RECEIVER', 'database'));
+            $this->assertSame($expected['BORROW_DATE'], $preloadedItems->getValue('BORROW_DATE', 'database'));
+            $this->assertSame($expected['isBorrowed'], $preloadedItems->isBorrowed());
+            $this->assertSame($expected['isRetired'], $preloadedItems->isRetired());
+
+            $preloadedItems->readItemData($uuids[1]);
+            $this->assertSame('Preloaded ladder', $preloadedItems->getValue('ITEMNAME', 'database'));
+        });
+    }
+
+    /**
+     * ItemService and ItemsData must apply the same keeper permission. The service is used by
+     * write endpoints while ItemsData also controls the actions shown in the list.
+     *
+     * @testdox Keeper edit permission is consistent for inventory services and data objects
+     */
+    public function testKeeperEditPermissionIsConsistentAcrossInventoryLayers(): void
+    {
+        $fixture = $this->getFixture();
+        $admin = $this->makeInventoryUser('invkeeperadmin', true);
+        $keeperData = $fixture->createAndSaveUser('invkeeper', 'invkeeper@example.local');
+        $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
+
+        $itemUuid = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeper) {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Keeper managed item', 'KEEPER' => (string) $keeper->getValue('usr_id')));
+
+            return $this->uuidOfItem($itemId);
+        });
+
+        $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemUuid) {
+            $settings = $GLOBALS['gSettingsManager'];
+            $settings->set('inventory_allow_keeper_edit', '1');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemsData->readItemData($itemUuid);
+            $itemService = new ItemService($this->getDatabase(), $itemUuid);
+            $this->assertTrue($itemsData->isEditable());
+            $this->assertTrue($itemService->isEditable());
+
+            $settings->set('inventory_allow_keeper_edit', '0');
+            $this->assertFalse($itemsData->isEditable());
+            $this->assertFalse($itemService->isEditable());
         });
     }
 
