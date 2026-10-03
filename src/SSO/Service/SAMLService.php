@@ -2048,9 +2048,9 @@ class SAMLService extends SSOService {
     {
         $sql = '
             DELETE FROM ' . TBL_SAML_LOGOUT_TRANSACTIONS . '
-            WHERE slt_expires_at < CURRENT_TIMESTAMP';
+            WHERE slt_expires_at < ?';
 
-        $this->db->queryPrepared($sql);
+        $this->db->queryPrepared($sql, array(DATETIME_NOW));
     }
 
 /*

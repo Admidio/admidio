@@ -54,9 +54,9 @@ class OIDCSessionParticipantService
                FROM ' . TBL_OIDC_SESSION_PARTICIPANTS . '
               WHERE osp_org_id = ?
                 AND osp_external_session_id = ?
-                AND osp_expires_at > CURRENT_TIMESTAMP
+                AND osp_expires_at > ?
               ORDER BY osp_id',
-            array($organizationId, $externalSessionId)
+            array($organizationId, $externalSessionId, DATETIME_NOW)
         );
 
         $participants = array();
@@ -109,7 +109,8 @@ class OIDCSessionParticipantService
     {
         $this->database->queryPrepared(
             'DELETE FROM ' . TBL_OIDC_SESSION_PARTICIPANTS . '
-              WHERE osp_expires_at < CURRENT_TIMESTAMP'
+              WHERE osp_expires_at < ?',
+            array(DATETIME_NOW)
         );
     }
 }
