@@ -782,13 +782,8 @@ class FormPresenter
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
-            global $gSettingsManager;
-
-            $weekdayFormat = $optionsAll['weekdayFormat'] ?? (
-                isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format')
-                    ? $gSettingsManager->getString('events_weekday_format')
-                    : 'short'
-            );
+            // the weekday prefix is only shown if the caller sets the option weekdayFormat
+            $weekdayFormat = $optionsAll['weekdayFormat'] ?? 'none';
 
             $datetime = DateTimeUtils::parseDateTime($value);
 
