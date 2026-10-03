@@ -168,6 +168,13 @@ class Weblink extends Entity
             $this->setValue('lnk_counter', 0);
         }
 
+        // Normalize the address so the same link is not stored twice, once with and once
+        // without the trailing slash.
+        $url = (string) $this->getValue('lnk_url');
+        if ($url !== '') {
+            $this->setValue('lnk_url', rtrim($url, '/'));
+        }
+
         if (!$this->saveChangesWithoutRights && !in_array((int) $this->getValue('lnk_cat_id'), $gCurrentUser->getAllEditableCategories('LNK'), true)) {
             throw new Exception('Weblink could not be saved because you are not allowed to edit weblinks of this category.');
         }

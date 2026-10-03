@@ -425,14 +425,16 @@ class Category extends Entity
                 $orgCondition = ' AND cat_org_id IS NULL ';
             }
 
-            // Determine the highest sequence number of the category when inserting
-            $sql = 'SELECT COUNT(*) AS count
+            // Determine the highest sequence number of the category when inserting. Counting the
+            // rows hands out a number that is already in use as soon as a category was deleted, so
+            // continue behind the largest sequence that is really there.
+            $sql = 'SELECT IFNULL(MAX(cat_sequence), 0) AS max_sequence
                       FROM '.TBL_CATEGORIES.'
                      WHERE cat_type = ? -- $this->getValue(\'cat_type\')
                            '.$orgCondition;
-            $countCategoriesStatement = $this->db->queryPrepared($sql, $queryParams);
+            $maxSequenceStatement = $this->db->queryPrepared($sql, $queryParams);
 
-            $this->setValue('cat_sequence', (int) $countCategoriesStatement->fetchColumn() + 1);
+            $this->setValue('cat_sequence', (int) $maxSequenceStatement->fetchColumn() + 1);
 
             if ((int) $this->getValue('cat_org_id') === 0) {
                 // a cross-organizational category is always at the beginning, so move categories of other organizations to the end
