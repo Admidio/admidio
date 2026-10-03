@@ -2,6 +2,7 @@
 
 namespace Admidio\Tests\Integration;
 
+use Admidio\CategoryReport\Service\CategoryReportOutput;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\Roles\ValueObject\ListData;
@@ -125,7 +126,10 @@ class PdfExportTest extends TestCase
             $smarty->setCompileDir($directory . '/compiled');
             $rows = array();
             for ($row = 1; $row <= 100; ++$row) {
-                $rows[] = array('id' => 'row' . $row, 'data' => array('Member ' . $row, '<i>Registered</i>'));
+                $registered = $template === 'category-report.list.tpl'
+                    ? CategoryReportOutput::html('<i>Registered</i>')
+                    : '<i>Registered</i>';
+                $rows[] = array('id' => 'row' . $row, 'data' => array('Member ' . $row, $registered));
             }
             $smarty->assign(array(
                 'classTable' => '',
