@@ -2,9 +2,11 @@
     In-App Media & Document Preview Modal (Prevents PWA Trapping)
     This template is included once in index.tpl. Every link with the attribute data-adm-file-preview
     and every link to documents-files.php?mode=download within user-written content (announcements,
-    events, forum ...) will be opened within this modal if the file type could be previewed. All other
-    files will be opened in a new window. The attribute data-file-name could be set to the full file name.
-    The file url must support the parameter view=1 to show the file inline.
+    events, forum ...) is handled by this modal. The file type is determined by the extension of the
+    attribute data-file-name or, if this attribute is not set, of the link text. Previewable files
+    (video, audio, image, pdf) are opened within this modal, all other files and links whose text has
+    no file extension are opened in a new window. The file url must support the parameter view=1 to
+    show the file inline.
 *}
 <div class="modal fade" id="adm_file_preview_modal" tabindex="-1" aria-labelledby="adm_file_preview_title" aria-hidden="true" data-label-new-window="{$l10n->get('SYS_NEW_WINDOW')}">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
