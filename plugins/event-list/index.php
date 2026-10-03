@@ -15,6 +15,11 @@ use EventList\classes\EventList;
  */
 try {
     require_once(__DIR__ . '/../../system/common.php');
+    // the plugin manager only loads the classes of plugins on the overview page, so load the main class
+    // if the plugin is called directly; getInstance() then registers the autoloader for all other classes
+    if (!class_exists(EventList::class, false)) {
+        require_once(__DIR__ . '/classes/EventList.php');
+    }
 
     $pluginEventList = EventList::getInstance();
     $pluginEventList->doRender(isset($page) ? $page : null);

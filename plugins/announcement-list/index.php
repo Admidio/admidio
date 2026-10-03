@@ -15,6 +15,11 @@ use AnnouncementList\classes\AnnouncementList;
  */
 try {
     require_once(__DIR__ . '/../../system/common.php');
+    // the plugin manager only loads the classes of plugins on the overview page, so load the main class
+    // if the plugin is called directly; getInstance() then registers the autoloader for all other classes
+    if (!class_exists(AnnouncementList::class, false)) {
+        require_once(__DIR__ . '/classes/AnnouncementList.php');
+    }
 
     $pluginAnnouncementList = AnnouncementList::getInstance();
     $pluginAnnouncementList->doRender(isset($page) ? $page : null);

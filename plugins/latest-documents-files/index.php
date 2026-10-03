@@ -14,6 +14,11 @@ use LatestDocumentsFiles\classes\LatestDocumentsFiles;
  */
 try {
     require_once(__DIR__ . '/../../system/common.php');
+    // the plugin manager only loads the classes of plugins on the overview page, so load the main class
+    // if the plugin is called directly; getInstance() then registers the autoloader for all other classes
+    if (!class_exists(LatestDocumentsFiles::class, false)) {
+        require_once(__DIR__ . '/classes/LatestDocumentsFiles.php');
+    }
 
     $pluginLatestDocumentsFiles = LatestDocumentsFiles::getInstance();
     $pluginLatestDocumentsFiles->doRender(isset($page) ? $page : null);
