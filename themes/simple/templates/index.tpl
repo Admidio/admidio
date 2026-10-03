@@ -226,6 +226,7 @@
     </div>
 
     {include 'system/messagebox.tpl'}
+    {include 'sys-template-parts/file-preview-modal.tpl'}
 
 
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">

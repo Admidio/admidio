@@ -1105,7 +1105,10 @@ class ChangelogService {
         // through this same encoding exactly once.
         $text = SecurityUtils::encodeHTML(StringUtils::strStripTags($text));
 
-        if ($url != '') {
+        if ($url != '' && $module === 'files') {
+            // open previewable files in the file preview modal
+            return '<a href="'.$url.'" data-adm-file-preview data-file-name="'.$text.'">'.$text.'</a>';
+        } elseif ($url != '') {
             return '<a href="'.$url.'">'.$text.'</a>';
         } else {
             return $text;

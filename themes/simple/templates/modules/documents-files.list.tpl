@@ -72,5 +72,3 @@
         </table>
     </div>
 {/if}
-
-{include file="sys-template-parts/file-preview-modal.tpl"}

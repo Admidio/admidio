@@ -14,8 +14,6 @@
                 <a href="{$urlAdmidio}/modules/documents-files.php">{$l10n->get('PLG_LATEST_DOCUMENTS_FILES_MORE_DOWNLOADS')}</a>
             </li>
         </ul>
-
-        {include file="sys-template-parts/file-preview-modal.tpl"}
     {else}
         {$message}
     {/if}

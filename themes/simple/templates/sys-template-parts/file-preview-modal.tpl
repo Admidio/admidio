@@ -1,8 +1,10 @@
 {*
     In-App Media & Document Preview Modal (Prevents PWA Trapping)
-    Every link with the attribute data-adm-file-preview that points to documents-files.php?mode=download
-    will be opened within this modal if the file type could be previewed. All other files will be
-    opened in a new window. The attribute data-file-name could be set to the full file name.
+    This template is included once in index.tpl. Every link with the attribute data-adm-file-preview
+    and every link to documents-files.php?mode=download within user-written content (announcements,
+    events, forum ...) will be opened within this modal if the file type could be previewed. All other
+    files will be opened in a new window. The attribute data-file-name could be set to the full file name.
+    The file url must support the parameter view=1 to show the file inline.
 *}
 <div class="modal fade" id="adm_file_preview_modal" tabindex="-1" aria-labelledby="adm_file_preview_title" aria-hidden="true" data-label-new-window="{$l10n->get('SYS_NEW_WINDOW')}">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -34,15 +36,8 @@
 {literal}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // initialize only once, even if the template was included several times
-    if (window.admFilePreviewInitialized) return;
-    window.admFilePreviewInitialized = true;
-
     const previewModalEl = document.getElementById('adm_file_preview_modal');
     if (!previewModalEl) return;
-
-    // move the modal to the body, otherwise it could be rendered below the backdrop if included within a card
-    document.body.appendChild(previewModalEl);
 
     const previewModal = new bootstrap.Modal(previewModalEl);
     const previewTitle = document.getElementById('adm_file_preview_filename');
@@ -79,9 +74,30 @@ document.addEventListener('DOMContentLoaded', function () {
         return element;
     };
 
-    // Intercept clicks on all file links that are marked for the preview (documents module, overview plugin ...)
+    // Find the clicked file link. Marked links (documents module, overview plugin, message attachments,
+    // changelog) are always handled. Unmarked links to the documents module are typically inserted by users
+    // within the editor. Ignore the action icons of the documents list and the links within this modal.
+    const getFileLink = function (target) {
+        const markedLink = target.closest('a[data-adm-file-preview]');
+        if (markedLink) {
+            return markedLink;
+        }
+
+        const documentLink = target.closest('a[href*="documents-files.php?mode=download"]');
+        if (documentLink && !documentLink.hasAttribute('download')
+            && !documentLink.matches('.admidio-icon-link, .dropdown-item')
+            && !documentLink.closest('#adm_file_preview_modal')) {
+            return documentLink;
+        }
+        return null;
+    };
+
+    // Intercept clicks on all file links that could be shown in the preview
     document.addEventListener('click', function (e) {
-        const link = e.target.closest('a[data-adm-file-preview][href*="mode=download"]');
+        // let the browser handle clicks that should open a new tab or window
+        if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+
+        const link = getFileLink(e.target);
         if (!link) return;
 
         const filename = (link.dataset.fileName || link.textContent).trim();
