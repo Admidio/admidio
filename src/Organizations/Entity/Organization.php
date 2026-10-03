@@ -159,24 +159,17 @@ class Organization extends Entity
      */
     public function createBasicData(int $userId)
     {
-        global $gL10n, $gProfileFields;
+        global $gProfileFields;
 
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM ' . TBL_USERS . '
-                 WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
-        $systemUserStatement = $this->db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
+                 WHERE usr_login_name = ? AND usr_valid = false';
+        $systemUserStatement = $this->db->queryPrepared($sql, array('SYS_SYSTEM'));
         $systemUserId = (int)$systemUserStatement->fetchColumn();
 
         // create all systemmail texts and write them into table adm_texts
-        $systemmailsTexts = array(
-            'SYSMAIL_REGISTRATION_CONFIRMATION' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'),
-            'SYSMAIL_REGISTRATION_NEW' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-            'SYSMAIL_REGISTRATION_APPROVED' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-            'SYSMAIL_REGISTRATION_REFUSED' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
-            'SYSMAIL_LOGIN_INFORMATION' => $gL10n->get('SYS_SYSMAIL_LOGIN_INFORMATION'),
-            'SYSMAIL_PASSWORD_RESET' => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
-        );
+        $systemmailsTexts = Text::SYSTEM_MAIL_DEFAULTS;
         $text = new Text($this->db);
 
         $orgId = (int)$this->getValue('org_id');
@@ -306,8 +299,8 @@ class Organization extends Entity
         $roleAdministrator = new Role($this->db);
         $roleAdministrator->saveChangesWithoutRights();
         $roleAdministrator->setValue('rol_cat_id', $categoryCommon, false);
-        $roleAdministrator->setValue('rol_name', $gL10n->get('SYS_ADMINISTRATOR'));
-        $roleAdministrator->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_ADMINISTRATOR'));
+        $roleAdministrator->setValue('rol_name', 'SYS_ADMINISTRATOR');
+        $roleAdministrator->setValue('rol_description', 'INS_DESCRIPTION_ADMINISTRATOR');
         $roleAdministrator->setValue('rol_assign_roles', 1);
         $roleAdministrator->setValue('rol_approve_users', 1);
         $roleAdministrator->setValue('rol_announcements', 1);
@@ -330,8 +323,8 @@ class Organization extends Entity
         $roleMember = new Role($this->db);
         $roleMember->saveChangesWithoutRights();
         $roleMember->setValue('rol_cat_id', $categoryCommon, false);
-        $roleMember->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
-        $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
+        $roleMember->setValue('rol_name', 'SYS_MEMBER');
+        $roleMember->setValue('rol_description', 'INS_DESCRIPTION_MEMBER');
         $roleMember->setValue('rol_mail_this_role', 2);
         $roleMember->setValue('rol_profile', 1);
         $roleMember->setValue('rol_default_registration', 1);
@@ -342,8 +335,8 @@ class Organization extends Entity
         $roleManagement = new Role($this->db);
         $roleManagement->saveChangesWithoutRights();
         $roleManagement->setValue('rol_cat_id', $categoryCommon, false);
-        $roleManagement->setValue('rol_name', $gL10n->get('INS_BOARD'));
-        $roleManagement->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
+        $roleManagement->setValue('rol_name', 'INS_BOARD');
+        $roleManagement->setValue('rol_description', 'INS_DESCRIPTION_BOARD');
         $roleManagement->setValue('rol_announcements', 1);
         $roleManagement->setValue('rol_events', 1);
         $roleManagement->setValue('rol_weblinks', 1);
@@ -377,7 +370,7 @@ class Organization extends Entity
 
         // create default list configurations
         $addressList = new ListConfiguration($this->db);
-        $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
+        $addressList->setValue('lst_name', 'INS_ADDRESS_LIST');
         $addressList->setValue('lst_org_id', $orgId);
         $addressList->setValue('lst_global', 1);
         $addressList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -389,7 +382,7 @@ class Organization extends Entity
         $addressList->save();
 
         $phoneList = new ListConfiguration($this->db);
-        $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
+        $phoneList->setValue('lst_name', 'INS_PHONE_LIST');
         $phoneList->setValue('lst_org_id', $orgId);
         $phoneList->setValue('lst_global', 1);
         $phoneList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -400,7 +393,7 @@ class Organization extends Entity
         $phoneList->save();
 
         $contactDetailsList = new ListConfiguration($this->db);
-        $contactDetailsList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $contactDetailsList->setValue('lst_name', 'SYS_CONTACT_DETAILS');
         $contactDetailsList->setValue('lst_org_id', $orgId);
         $contactDetailsList->setValue('lst_global', 1);
         $contactDetailsList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -415,7 +408,7 @@ class Organization extends Entity
         $contactDetailsList->save();
 
         $formerList = new ListConfiguration($this->db);
-        $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
+        $formerList->setValue('lst_name', 'INS_MEMBERSHIP');
         $formerList->setValue('lst_org_id', $orgId);
         $formerList->setValue('lst_global', 1);
         $formerList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -426,7 +419,7 @@ class Organization extends Entity
         $formerList->save();
 
         $participantList = new ListConfiguration($this->db);
-        $participantList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
+        $participantList->setValue('lst_name', 'SYS_PARTICIPANTS');
         $participantList->setValue('lst_org_id', $orgId);
         $participantList->setValue('lst_global', 1);
         $participantList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -437,7 +430,7 @@ class Organization extends Entity
         $participantList->save();
 
         $contactsList = new ListConfiguration($this->db);
-        $contactsList->setValue('lst_name', $gL10n->get('SYS_CONTACTS'));
+        $contactsList->setValue('lst_name', 'SYS_CONTACTS');
         $contactsList->setValue('lst_org_id', $orgId);
         $contactsList->setValue('lst_global', 1);
         $contactsList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -459,7 +452,7 @@ class Organization extends Entity
             'r' . $roleMember->getValue('rol_id');
         $categoryReport = new Entity($this->db, TBL_CATEGORY_REPORT, 'crt');
         $categoryReport->setValue('crt_org_id', $orgId);
-        $categoryReport->setValue('crt_name', $gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
+        $categoryReport->setValue('crt_name', 'SYS_GENERAL_ROLE_ASSIGNMENT');
         $categoryReport->setValue('crt_col_fields', $categoryReportColumns);
         $categoryReport->setValue('crt_number_col', 0);
         $categoryReport->save();

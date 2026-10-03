@@ -13,6 +13,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\CkeditorUploadAccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -22,6 +23,9 @@ try {
     require(__DIR__ . '/login_valid.php');
 
     $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
+    $csrfToken = admFuncVariableIsValid($_SERVER, 'HTTP_X_CSRF_TOKEN', 'string', array('requireValue' => true));
+    SecurityUtils::validateCsrfToken($csrfToken);
+    $folderName = CkeditorUploadAccess::authorizedFolder($getCKEditorID, $gCurrentUser, $gSettingsManager);
 
     if (isset($gDisableFileUpload) && $gDisableFileUpload === true) {
         throw new Exception('File upload disabled in global config file!');
@@ -39,34 +43,6 @@ try {
 
     if (!FileSystemUtils::allowedFileExtension($_FILES['upload']['name'])) {
         throw new Exception('SYS_FILE_EXTENSION_INVALID');
-    }
-
-    // if necessary create the module folders in adm_my_files
-    switch ($getCKEditorID) {
-        case 'ann_description':
-            $folderName = 'announcements';
-            break;
-        case 'dat_description':
-            $folderName = 'events';
-            break;
-        case 'fop_text':
-            $folderName = 'forum';
-            break;
-        case 'lnk_description':
-            $folderName = 'weblinks';
-            break;
-        case 'msg_body':
-            $folderName = 'mail';
-            break;
-        case 'room_description':
-            $folderName = 'rooms';
-            break;
-        case 'usf_description':
-            $folderName = 'user_fields';
-            break;
-        default:
-            $folderName = 'plugins';
-            break;
     }
 
     $imagesPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName . '/images';

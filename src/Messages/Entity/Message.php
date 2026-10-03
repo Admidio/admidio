@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Messages\Entity;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
@@ -526,7 +527,7 @@ class Message extends Entity
                     $this->msgRecipientsArray[] =
                         array('type'   => 'role',
                               'id'     => (int) $row['msr_rol_id'],
-                              'name'   => $row['rol_name'],
+                              'name'   => Language::translateIfTranslationStrId($row['rol_name']),
                               'mode'   => (int) $row['msr_role_mode'],
                               'msr_id' => (int) $row['msr_id']
                         );

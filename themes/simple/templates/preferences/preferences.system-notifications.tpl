@@ -28,12 +28,15 @@
             </div>
         </div>
     </div>
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_REGISTRATION_CONFIRMATION']}
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_REGISTRATION_NEW']}
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_REGISTRATION_APPROVED']}
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_REGISTRATION_REFUSED']}
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_LOGIN_INFORMATION']}
-    {include 'sys-template-parts/form.multiline.tpl' data=$elements['SYSMAIL_PASSWORD_RESET']}
+    {foreach $systemMailModes as $name => $useDefault}
+        {include 'sys-template-parts/form.checkbox.tpl' data=$elements[$name|cat:'_USE_DEFAULT']}
+        <div id="{$name}_standard_panel"{if !$useDefault} hidden{/if}>
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements[$name|cat:'_DEFAULT']}
+        </div>
+        <div id="{$name}_custom_panel"{if $useDefault} hidden{/if}>
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements[$name]}
+        </div>
+    {/foreach}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_system_notification']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>

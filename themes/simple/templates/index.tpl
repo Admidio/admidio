@@ -230,11 +230,11 @@
 
 
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
-        <a class="navbar-brand d-none d-md-block" href="{$urlAdmidio}/modules/overview.php">
-            <img style="max-height: {$logoFileMaxHeight}px;" src="{if ($logoFile)}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
+        <a class="navbar-brand d-flex align-items-center text-decoration-none" href="{$urlAdmidio}/modules/overview.php">
+            <img class="d-none d-md-block" style="max-height: {$logoFileMaxHeight}px;" src="{if ($logoFile)}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
+            <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
+            <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName}{if $admidioHeadline} - {$admidioHeadline}{/if}</span>
         </a>
-        <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
-        <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName}{if $admidioHeadline} - {$admidioHeadline}{/if}</span>
 
         {if $validLogin}
             <div class="ms-auto d-flex align-items-center">

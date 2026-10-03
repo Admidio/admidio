@@ -22,6 +22,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Language;
 use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -116,7 +117,7 @@ try {
             $hasRightViewFormerMembers = false;
         }
 
-        $htmlSubHeadline .= ', ' . $role['rol_name'];
+        $htmlSubHeadline .= ', ' . Language::translateIfTranslationStrId($role['rol_name']);
     }
 
     $htmlSubHeadline = substr($htmlSubHeadline, 2);
