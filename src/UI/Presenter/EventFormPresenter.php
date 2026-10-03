@@ -6,7 +6,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
-use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
@@ -443,7 +443,7 @@ class EventFormPresenter extends PagePresenter
 
         // if a map link should be shown in the event then show help text and a field where the user could choose the country
         if ($gSettingsManager->getBool('events_show_map_link')) {
-            $form->addInput('dat_location', $gL10n->get('SYS_VENUE'), (string)$event->getValue('dat_location'), ['maxLength' => 100, 'helpTextId' => 'SYS_VENUE_LINK']);
+            $form->addInput('dat_location', $gL10n->get('SYS_VENUE'), $event->getValue('dat_location'), ['maxLength' => 100, 'helpTextId' => 'SYS_VENUE_LINK']);
 
             if (!$event->getValue('dat_country') && $getEventUuid === '') {
                 $event->setValue('dat_country', $gSettingsManager->getString('default_country'));
@@ -455,16 +455,15 @@ class EventFormPresenter extends PagePresenter
 
         // if room selection is activated then show a select box with all rooms
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
-            if (DB_TYPE === Database::PDO_ENGINE_MYSQL) {
-                $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\')
+            $sql = 'SELECT room_id, room_name, room_capacity, room_overhang
                       FROM ' . TBL_ROOMS . '
                   ORDER BY room_name';
-            } else {
-                $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\'
-                      FROM ' . TBL_ROOMS . '
-                  ORDER BY room_name';
+            $rooms = array();
+            foreach ($gDb->queryPrepared($sql)->fetchAll() as $room) {
+                $rooms[$room['room_id']] = Language::translateIfTranslationStrId($room['room_name'])
+                    . ' (' . $room['room_capacity'] . '+' . ($room['room_overhang'] ?? '0') . ')';
             }
-            $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, ['defaultValue' => (int)$event->getValue('dat_room_id')]);
+            $form->addSelectBox('dat_room_id', $gL10n->get('SYS_ROOM'), $rooms, ['defaultValue' => (int)$event->getValue('dat_room_id')]);
         }
 
         $form->addCheckbox('dat_all_day', $gL10n->get('SYS_ALL_DAY'), (bool)$event->getValue('dat_all_day'));

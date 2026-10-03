@@ -159,13 +159,13 @@ class SSOClientPresenter extends PagePresenter
             // Each role is now added to this array
             $allRolesSet[] = array(
                 $rowViewRoles['rol_id'], // ID
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
                 $rowViewRoles['cat_name'] // Group
             );
             // Leader has the role ID with negative sign!
             $allRolesSet[] = array(
                 -$rowViewRoles['rol_id'], // ID
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
                 $rowViewRoles['cat_name'] // Group
             );
         }

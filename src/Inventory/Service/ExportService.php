@@ -115,7 +115,11 @@ class ExportService
 
         switch ($exportMode) {
             case 'pdf':
-                $pdf = PdfUtils::createDocument($orientation, $inventoryPage->getHeadline());
+                $pdf = PdfUtils::createDocument(
+                    $orientation,
+                    $inventoryPage->getHeadline(),
+                    $gL10n->getLanguageIsoCode()
+                );
 
                 $smarty = $inventoryPage->createSmartyObject();
 
@@ -146,6 +150,11 @@ class ExportService
 
                 $smarty->assign('attributes', array('border' => '1', 'cellpadding' => '1'));
                 $smarty->assign('column_align', $data['column_align']);
+                $smarty->assign('column_widths', $this->calculatePdfColumnWidths(
+                    $data['headers'],
+                    $data['rows'],
+                    $data['column_align']
+                ));
                 $smarty->assign('headers', $data['headers']);
                 $smarty->assign('headersStyle', 'font-size:10pt;font-weight:bold;background-color:#C7C7C7;');
                 $smarty->assign('rows', $data['rows']);
@@ -237,6 +246,70 @@ class ExportService
             'filename' => $filename,
             'contentType' => $contentType
         );
+    }
+
+    /**
+     * Calculate fixed, content-aware column widths for the PDF table.
+     *
+     * The PDF renderer needs fixed widths to keep wide exports inside the page. Giving every
+     * column the same width, however, makes short number and date columns unnecessarily wide.
+     * We therefore use the visible header and cell lengths as a bounded weight.
+     *
+     * @param array<int,string> $headers
+     * @param array<int,array<string,array<int,string>>> $rows
+     * @param array<int,string> $columnAlign
+     * @return array<int,float>
+     */
+    private function calculatePdfColumnWidths(array $headers, array $rows, array $columnAlign): array
+    {
+        $visibleLength = static function (string $value): int {
+            $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $value = preg_replace('/\s+/u', ' ', trim($value)) ?? '';
+
+            return mb_strlen($value);
+        };
+
+        $weights = array();
+        foreach ($headers as $index => $header) {
+            // Number columns are right-aligned and should remain compact even if their header is long.
+            $minimum = ($columnAlign[$index] ?? 'start') === 'end' ? 4.0 : 7.0;
+            // Long words such as the localized date headings cannot be wrapped by the PDF renderer.
+            $weights[$index] = max($minimum, min(17.0, 3.0 + $visibleLength($header) * 0.9));
+        }
+
+        foreach ($rows as $row) {
+            foreach ($row['data'] as $index => $cell) {
+                if (!isset($weights[$index])) {
+                    continue;
+                }
+
+                $minimum = ($columnAlign[$index] ?? 'start') === 'end' ? 4.0 : 7.0;
+                $weights[$index] = max(
+                    $weights[$index],
+                    max($minimum, min(17.0, 5.0 + $visibleLength($cell) * 0.3))
+                );
+            }
+        }
+
+        $total = array_sum($weights);
+        if ($total === 0.0) {
+            return array();
+        }
+
+        $widths = array();
+        $remainingWidth = 100.0;
+        $lastIndex = array_key_last($weights);
+        foreach ($weights as $index => $weight) {
+            if ($index === $lastIndex) {
+                $widths[$index] = round($remainingWidth, 2);
+                break;
+            }
+
+            $widths[$index] = round($weight / $total * 100, 2);
+            $remainingWidth -= $widths[$index];
+        }
+
+        return $widths;
     }
 
     /**

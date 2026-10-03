@@ -590,10 +590,10 @@ class Installation
      */
     private static function createSystemUser(Database $db): int
     {
-        global $gL10n, $gCurrentUser;
+        global $gCurrentUser;
 
         $gCurrentUser = new Entity($db, TBL_USERS, 'usr');
-        $gCurrentUser->setValue('usr_login_name', $gL10n->get('SYS_SYSTEM'));
+        $gCurrentUser->setValue('usr_login_name', 'SYS_SYSTEM');
         $gCurrentUser->setValue('usr_valid', '0');
         $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
         $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be filled
@@ -610,7 +610,6 @@ class Installation
      */
     private static function createDefaultProfileFields(Database $db, int $systemUserId): void
     {
-        global $gL10n;
 
         // create organization independent categories
         $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
@@ -646,7 +645,7 @@ class Installation
                      , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'RADIO_BUTTON\', \'GENDER\',     \'SYS_GENDER\',    NULL, false, false, 0, false, 11, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
                      , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'EMAIL\',        \'EMAIL\',      \'SYS_EMAIL\',     NULL, true, false, 2, true, 12, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
                      , (' . $categoryIdMasterData . ', \'' . Uuid::uuid4() . '\', \'URL\',          \'WEBSITE\',    \'SYS_WEBSITE\',   NULL, false, false, 0, false, 13, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (' . $categoryIdAddidionalData . ', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \'' . $gL10n->get('SYS_DATA_PROTECTION_PERMISSION_DESC') . '\', false, false, 2, false, 14, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')';
+                     , (' . $categoryIdAddidionalData . ', \'' . Uuid::uuid4() . '\', \'CHECKBOX\', \'DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION\', \'SYS_DATA_PROTECTION_PERMISSION_DESC\', false, false, 2, false, 14, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')';
         $db->query($sql); // TODO add more params
 
         // add gender options to database
@@ -660,12 +659,12 @@ class Installation
         // create profile fields of category social networks
         $sql = 'INSERT INTO ' . TBL_USER_FIELDS . '
                        (usf_cat_id, usf_uuid, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                VALUES (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'BLUESKY\',   \'SYS_BLUESKY\',   \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'bluesky\',   \'https://bsky.app/profile/#user_content#\',     false, 1, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'FACEBOOK\',  \'SYS_FACEBOOK\',  \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'facebook\',  \'https://www.facebook.com/#user_content#\',     false, 2, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'INSTAGRAM\', \'SYS_INSTAGRAM\', \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'instagram\', \'https://www.instagram.com/#user_content#\',    false, 3, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'LINKEDIN\',  \'SYS_LINKEDIN\',  \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'linkedin\',  \'https://www.linkedin.com/in/#user_content#\',  false, 4, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'MASTODON\',  \'SYS_MASTODON\',  \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', \'mastodon\',  \'https://mastodon.social/#user_content#\',      false, 5, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
-                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'XING\',      \'SYS_XING\',      \'' . $gL10n->get('SYS_SOCIAL_NETWORK_FIELD_URL_DESC') . '\', null,          \'https://www.xing.com/profile/#user_content#\', false, 6, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')';
+                VALUES (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'BLUESKY\',   \'SYS_BLUESKY\',   \'SYS_SOCIAL_NETWORK_FIELD_URL_DESC\', \'bluesky\',   \'https://bsky.app/profile/#user_content#\',     false, 1, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
+                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'FACEBOOK\',  \'SYS_FACEBOOK\',  \'SYS_SOCIAL_NETWORK_FIELD_URL_DESC\', \'facebook\',  \'https://www.facebook.com/#user_content#\',     false, 2, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
+                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'INSTAGRAM\', \'SYS_INSTAGRAM\', \'SYS_SOCIAL_NETWORK_FIELD_URL_DESC\', \'instagram\', \'https://www.instagram.com/#user_content#\',    false, 3, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
+                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'LINKEDIN\',  \'SYS_LINKEDIN\',  \'SYS_SOCIAL_NETWORK_FIELD_URL_DESC\', \'linkedin\',  \'https://www.linkedin.com/in/#user_content#\',  false, 4, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
+                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'MASTODON\',  \'SYS_MASTODON\',  \'SYS_SOCIAL_NETWORK_FIELD_URL_DESC\', \'mastodon\',  \'https://mastodon.social/#user_content#\',      false, 5, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')
+                     , (' . $categoryIdSocialNetworks . ', \'' . Uuid::uuid4() . '\', \'TEXT\', \'XING\',      \'SYS_XING\',      \'SYS_SOCIAL_NETWORK_FIELD_URL_DESC\', null,          \'https://www.xing.com/profile/#user_content#\', false, 6, ' . $systemUserId . ', \'' . DATETIME_NOW . '\')';
         $db->query($sql); // TODO add more params
     }
 
@@ -813,14 +812,13 @@ class Installation
      */
     private static function createDefaultRoom(Database $db, int $systemUserId): void
     {
-        global $gL10n;
 
         $sql = 'INSERT INTO ' . TBL_ROOMS . '
                        (room_uuid, room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-                VALUES (\'' . Uuid::uuid4() . '\', ?, ?, 15, ?, ?) -- $gL10n->get(\'INS_CONFERENCE_ROOM\'), $gL10n->get(\'INS_DESCRIPTION_CONFERENCE_ROOM\'), $systemUserId, DATETIME_NOW';
+                VALUES (\'' . Uuid::uuid4() . '\', ?, ?, 15, ?, ?) -- room name, room description, $systemUserId, DATETIME_NOW';
         $params = array(
-            $gL10n->get('INS_CONFERENCE_ROOM'),
-            $gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM'),
+            'INS_CONFERENCE_ROOM',
+            'INS_DESCRIPTION_CONFERENCE_ROOM',
             $systemUserId,
             DATETIME_NOW
         );
@@ -840,7 +838,7 @@ class Installation
      */
     private static function completeUserData(Database $db, InstallationConfig $config, int $administratorId, int $systemUserId): void
     {
-        global $gL10n, $gProfileFields, $gCurrentUser;
+        global $gProfileFields, $gCurrentUser;
 
         // first create a user object "current user" with administrator rights
         // because administrator is allowed to edit firstname and lastname
@@ -854,7 +852,7 @@ class Installation
         // now create a full user object for system user
         $systemUser = new User($db, $gProfileFields, $systemUserId);
         $systemUser->saveChangesWithoutRights();
-        $systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
+        $systemUser->setValue('LAST_NAME', 'SYS_SYSTEM');
         $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
 
         // now set current user to system user
@@ -882,9 +880,9 @@ class Installation
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CONTACTS\'), 1, \'' . Uuid::uuid4() . '\', false, 6, true, \'contacts\', \''.FOLDER_MODULES.'/contacts/contacts.php\', \'person-vcard-fill\', \'SYS_CONTACTS\', \'SYS_CONTACTS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, \'' . Uuid::uuid4() . '\', false, 7, true, \'documents-files\', \''.FOLDER_MODULES.'/documents-files.php\', \'file-earmark-arrow-down-fill\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'INVENTORY\'), 1, \'' . Uuid::uuid4() . '\', false, 8, true, \'inventory\', \''.FOLDER_MODULES.'/inventory.php\', \'box-seam-fill\', \'SYS_INVENTORY\', \'SYS_INVENTORY_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'photo\', \''.FOLDER_MODULES.'/photos/photos.php\', \'image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PHOTOS\'), 1, \'' . Uuid::uuid4() . '\', false, 9, true, \'photo\', \''.FOLDER_MODULES.'/photos.php\', \'image-fill\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'CATEGORY-REPORT\'), 1, \'' . Uuid::uuid4() . '\', false, 10, true, \'category-report\', \''.FOLDER_MODULES.'/category-report/category_report.php\', \'list-stars\', \'SYS_CATEGORY_REPORT\', \'SYS_CATEGORY_REPORT_DESC\')
-                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'weblinks\', \''.FOLDER_MODULES.'/links/links.php\', \'link-45deg\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
+                     , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'LINKS\'), 1, \'' . Uuid::uuid4() . '\', false, 11, true, \'weblinks\', \''.FOLDER_MODULES.'/weblinks.php\', \'link-45deg\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'FORUM\'), 1, \'' . Uuid::uuid4() . '\', false, 12, true, \'forum\', \''.FOLDER_MODULES.'/forum.php\', \'chat-dots-fill\', \'SYS_FORUM\', \'SYS_FORUM_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'PREFERENCES\'), 2, \'' . Uuid::uuid4() . '\', false, 1, true, \'orgprop\', \''.FOLDER_MODULES.'/preferences.php\', \'gear-fill\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
                      , ((SELECT com_id FROM '.TBL_COMPONENTS.' WHERE com_name_intern = \'REGISTRATION\'), 2, \'' . Uuid::uuid4() . '\', false, 2, true, \'registration\', \''.FOLDER_MODULES.'/registration.php\', \'card-checklist\', \'SYS_REGISTRATIONS\', \'SYS_MANAGE_NEW_REGISTRATIONS_DESC\')

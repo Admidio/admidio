@@ -3,6 +3,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Components\Entity\Component;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -331,7 +332,7 @@ class CategoriesPresenter extends PagePresenter
 
             $adminRoles = array();
             while ($roleName = $statementAdminRoles->fetchColumn()) {
-                $adminRoles[] = $roleName;
+                $adminRoles[] = Language::translateIfTranslationStrId($roleName);
             }
 
             $form->addInput(
@@ -475,7 +476,7 @@ class CategoriesPresenter extends PagePresenter
 
         $adminRoles = array();
         while ($roleName = $statementAdminRoles->fetchColumn()) {
-            $adminRoles[] = $roleName;
+            $adminRoles[] = Language::translateIfTranslationStrId($roleName);
         }
 
         $this->setHeadline($headline);

@@ -6,13 +6,13 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
+use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\DataTables;
-use ModuleEvents;
 
 /**
  * Presenter for event list, detail and print views.
@@ -66,13 +66,17 @@ class EventListPresenter extends PagePresenter
             $calendar->readDataByUuid($getCatUuid);
         }
 
-        $events = new ModuleEvents();
-        $events->setParameter('mode', $dateMode);
-        $events->setParameter('cat_id', $calendar->getValue('cat_id'));
-        $events->setParameter('dat_uuid', $getEventUuid);
-        $events->setParameter('show', $getShow);
-        $events->setParameter('view_mode', $outputMode);
+        $events = new EventRepository($gDb);
+        $events->setMode($dateMode);
+        $events->setCategoryId((int)$calendar->getValue('cat_id'));
+        $events->setEventUuid($getEventUuid);
+        $events->setParticipationFilter($getShow);
         $events->setDateRange($getDateFrom, $getDateTo);
+        $dateStart = $events->getDateStart();
+        $dateEnd = $events->getDateEnd();
+        $dateStartFormatted = $events->getDateStart($gSettingsManager->getString('system_date'));
+        $dateEndFormatted = $events->getDateEnd($gSettingsManager->getString('system_date'));
+        $headline = $this->getEventHeadline($events, $calendar, $outputMode);
 
         // Number of events each page for default view 'html' or 'compact' view
         if ($outputMode === 'html' && $getView === 'detail') {
@@ -86,17 +90,17 @@ class EventListPresenter extends PagePresenter
 
         if ($outputMode === 'html') {
             if ($getEventUuid !== '') {
-                $gNavigation->addUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')));
+                $gNavigation->addUrl(CURRENT_URL, $headline);
             } else {
                 // Navigation of the module starts here
-                $gNavigation->addStartUrl(CURRENT_URL, $events->getHeadline($gL10n->get('SYS_EVENTS')), 'bi-calendar-week-fill');
+                $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-calendar-week-fill');
             }
         }
 
         // create an HTML page object
         $page = $this;
         $page->setHtmlID('admidio-events');
-        $page->setHeadline($events->getHeadline($gL10n->get('SYS_EVENTS')));
+        $page->setHeadline($headline);
 
         // data array
         $data = array('headers' => array(), 'rows' => array(), 'column_align' => array(), 'column_width' => array());
@@ -121,11 +125,11 @@ class EventListPresenter extends PagePresenter
                 });
 
                 $("#mode").change(function() {
-                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('date_mode' => $dateMode, 'date_from' => $events->getParameter('dateStartFormatAdmidio'), 'date_to' => $events->getParameter('dateEndFormatAdmidio'), 'cat_uuid' => $getCatUuid)) . '&mode=" + $("#mode").val();
+                    self.location.href = "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('date_mode' => $dateMode, 'date_from' => $dateStartFormatted, 'date_to' => $dateEndFormatted, 'cat_uuid' => $getCatUuid)) . '&mode=" + $("#mode").val();
                 });
 
                 $("#menu_item_event_print_view").click(function() {
-                    window.open("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => $this->getPrintModeForView($getView), 'date_mode' => $dateMode, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getEventUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish'))) . '", "_blank");
+                    window.open("' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => $this->getPrintModeForView($getView), 'date_mode' => $dateMode, 'cat_uuid' => $getCatUuid, 'dat_uuid' => $getEventUuid, 'date_from' => $dateStart, 'date_to' => $dateEnd)) . '", "_blank");
                 });
 
                 $(".admidio-event-approval a").click(function() {
@@ -192,8 +196,8 @@ class EventListPresenter extends PagePresenter
                 }
                 $form->addSelectBox('mode', $gL10n->get('SYS_VIEW'), $selectBoxEntries, array('defaultValue' => $getMode, 'showContextDependentFirstEntry' => false));
                 $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CALENDAR'), $gDb, 'EVT', FormPresenter::SELECT_BOX_MODUS_FILTER, array('defaultValue' => $getCatUuid));
-                $form->addInput('date_from', $gL10n->get('SYS_START'), $events->getParameter('dateStartFormatEnglish'), array('type' => 'date', 'maxLength' => 10));
-                $form->addInput('date_to', $gL10n->get('SYS_END'), $events->getParameter('dateEndFormatEnglish'), array('type' => 'date', 'maxLength' => 10));
+                $form->addInput('date_from', $gL10n->get('SYS_START'), $dateStart, array('type' => 'date', 'maxLength' => 10));
+                $form->addInput('date_to', $gL10n->get('SYS_END'), $dateEnd, array('type' => 'date', 'maxLength' => 10));
                 $form->addInput('date_mode', '', $dateMode, array('property' => FormPresenter::FIELD_HIDDEN));
                 $form->addSubmitButton('adm_button_send', $gL10n->get('SYS_OK'));
                 $form->addToHtmlPage();
@@ -205,7 +209,7 @@ class EventListPresenter extends PagePresenter
             $page->setPrintMode();
 
             if ($getEventUuid === '') {
-                $page->addHtml('<h3>' . $gL10n->get('SYS_PERIOD_FROM_TO', array($events->getParameter('dateStartFormatAdmidio'), $events->getParameter('dateEndFormatAdmidio'))) . '</h3>');
+                $page->addHtml('<h3>' . $gL10n->get('SYS_PERIOD_FROM_TO', array($dateStartFormatted, $dateEndFormatted)) . '</h3>');
             }
         }
 
@@ -459,24 +463,24 @@ class EventListPresenter extends PagePresenter
 
                     // If a user is invited to the event, then the approval state is not initialized and has value "null" in the data table
                     if ($row['member_date_role'] > 0 && $row['member_approval_state'] == null) {
-                        $row['member_approval_state'] = ModuleEvents::MEMBER_APPROVAL_STATE_INVITED;
+                        $row['member_approval_state'] = Participants::STATE_INVITED;
                     }
 
                     // set status of participation
                     switch ($row['member_approval_state']) {
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_INVITED:
+                        case Participants::STATE_INVITED:
                             $buttonText = $gL10n->get('SYS_PARTICIPATE_QUESTION');
                             $iconParticipationStatus = '<i class="bi bi-person-plus-fill"></i>';
                             break;
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_ATTEND:
+                        case Participants::STATE_ATTENDING:
                             $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_ATTEND');
                             $iconParticipationStatus = '<i class="bi bi-check-circle-fill admidio-event-approval-state-attend"></i>';
                             break;
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_TENTATIVE:
+                        case Participants::STATE_TENTATIVE:
                             $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE');
                             $iconParticipationStatus = '<i class="bi bi-question-circle-fill admidio-event-approval-state-tentative"></i>';
                             break;
-                        case ModuleEvents::MEMBER_APPROVAL_STATE_REFUSED:
+                        case Participants::STATE_REFUSED:
                             $buttonText = $gL10n->get('SYS_EVENT_PARTICIPATION_CANCELED');
                             $iconParticipationStatus = '<i class="bi bi-x-circle-fill admidio-event-approval-state-cancel"></i>';
                             break;
@@ -530,13 +534,13 @@ class EventListPresenter extends PagePresenter
                                     // Check current user. If a user is a member of the event role, then get their current approval status and set the options
                                     if (array_key_exists($gCurrentUserId, $participantsArray)) {
                                         switch ($participantsArray[$gCurrentUserId]['approved']) {
-                                            case Participants::PARTICIPATION_MAYBE:
+                                            case Participants::STATE_TENTATIVE:
                                                 $disableStatusTentative = 'disabled';
                                                 break;
-                                            case Participants::PARTICIPATION_YES:
+                                            case Participants::STATE_ATTENDING:
                                                 $disableStatusAttend = 'disabled';
                                                 break;
-                                            case Participants::PARTICIPATION_NO:
+                                            case Participants::STATE_REFUSED:
                                                 $disableStatusAttend = 'disabled';
                                                 $disableStatusTentative = 'disabled';
                                                 break;
@@ -867,9 +871,9 @@ class EventListPresenter extends PagePresenter
                                 // Only show participants if user has the right to view the list, is leader or has permission to create/edit events
                                 if ($gCurrentUser->hasRightViewRole((int)$event->getValue('dat_rol_id')) || $row['mem_leader'] == 1 || $gCurrentUser->isAdministratorEvents()) {
                                     foreach ($participantsArray as $participant) {
-                                        if ($participant['approved'] === Participants::PARTICIPATION_YES) {
+                                        if ($participant['approved'] === Participants::STATE_ATTENDING) {
                                             $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'];
-                                        } elseif ($participant['approved'] === Participants::PARTICIPATION_MAYBE) {
+                                        } elseif ($participant['approved'] === Participants::STATE_TENTATIVE) {
                                             $columnValue[] = $participant['firstname'] . ' ' . $participant['surname'] . ' (' . $gL10n->get('SYS_EVENT_PARTICIPATION_TENTATIVE') . ')';
                                         }
                                     }
@@ -928,9 +932,34 @@ class EventListPresenter extends PagePresenter
 
         if ($getView === 'detail') {
             // If necessary, show links to navigate to the next and previous recordset of the query
-            $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => $getMode, 'date_mode' => $dateMode, 'cat_uuid' => $getCatUuid, 'date_from' => $events->getParameter('dateStartFormatEnglish'), 'date_to' => $events->getParameter('dateEndFormatEnglish')));
+            $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => $getMode, 'date_mode' => $dateMode, 'cat_uuid' => $getCatUuid, 'date_from' => $dateStart, 'date_to' => $dateEnd));
             $page->addHtml(admFuncGeneratePagination($baseUrl, $eventsResult['totalCount'], $eventsResult['limit'], $getStart));
         }
+    }
+
+    /**
+     * Return the headline for the selected event filters and output mode.
+     * @throws Exception
+     */
+    private function getEventHeadline(EventRepository $events, Category $category, string $outputMode): string
+    {
+        global $gL10n, $gCurrentOrganization;
+
+        $headline = $gL10n->get('SYS_EVENTS');
+        if ((int)$category->getValue('cat_id') > 0) {
+            $headline .= ' - ' . $category->getValue('cat_name');
+        }
+
+        if ($events->getMode() === 'old'
+        || ($events->getDateStart() < DATE_NOW && $events->getDateEnd() < DATE_NOW)) {
+            $headline = $gL10n->get('SYS_PREVIOUS_EVENTS', array('')) . $headline;
+        }
+
+        if ($outputMode === 'print') {
+            $headline = $gCurrentOrganization->getValue('org_longname') . ' - ' . $headline;
+        }
+
+        return $headline;
     }
 
     private function getModeForView(string $view): string

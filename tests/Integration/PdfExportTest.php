@@ -47,6 +47,53 @@ class PdfExportTest extends TestCase
         }
     }
 
+    public function testGermanHyphenationBreaksLongWordsInsidePdfCells(): void
+    {
+        $pdf = PdfUtils::createDocument('P', 'Hyphenation', 'de');
+        $pdf->writeTable(
+            '<table style="width:100%;table-layout:fixed;">'
+            . '<colgroup><col style="width:8%;" /><col style="width:92%;" /></colgroup>'
+            . '<tbody><tr><td style="word-break:break-word;overflow-wrap:break-word;">Verwendung</td><td></td></tr></tbody>'
+            . '</table>'
+        );
+
+        [, $objects] = (new Parser())->parse($pdf->getOutPDFString());
+        $content = serialize($objects);
+        $this->assertStringContainsString('(Verwen-)', $content);
+        $this->assertStringContainsString('(dung)', $content);
+    }
+
+    /**
+     * @dataProvider nonGermanHyphenationLanguages
+     */
+    public function testEnglishAndFrenchHyphenationBreakLongWordsInsidePdfCells(
+        string $language,
+        string $word,
+        string $firstLine
+    ): void
+    {
+        $pdf = PdfUtils::createDocument('P', 'Hyphenation', $language);
+        $pdf->writeTable(
+            '<table style="width:100%;table-layout:fixed;">'
+            . '<colgroup><col style="width:8%;" /><col style="width:92%;" /></colgroup>'
+            . '<tbody><tr><td style="word-break:break-word;overflow-wrap:break-word;">' . $word . '</td><td></td></tr></tbody>'
+            . '</table>'
+        );
+
+        [, $objects] = (new Parser())->parse($pdf->getOutPDFString());
+        $content = serialize($objects);
+        $this->assertStringContainsString('(' . $firstLine . ')', $content);
+        $this->assertStringNotContainsString('(' . $word . ')', $content);
+    }
+
+    public static function nonGermanHyphenationLanguages(): array
+    {
+        return array(
+            'English' => array('en', 'supercalifragilisticexpialidocious', 'supercalif'),
+            'French' => array('fr', 'anticonstitutionnellement', 'anticonsti')
+        );
+    }
+
     public static function exportTemplates(): array
     {
         $cases = array();
@@ -90,6 +137,7 @@ class PdfExportTest extends TestCase
                 'rowsStyle' => 'font-size:10pt;',
                 'columnAlign' => array('left', 'left'),
                 'column_align' => array('start', 'start'),
+                'column_widths' => array(50.0, 50.0),
                 'rows' => $rows,
             ));
             $pdf->writeTable($smarty->fetch('modules/' . $template));
@@ -142,5 +190,59 @@ class PdfExportTest extends TestCase
             }
             rmdir($directory);
         }
+    }
+
+    /**
+     * The inventory export can contain more columns than the generic list exports. Those columns
+     * must stay inside both A4 orientations instead of being allocated from their content width.
+     *
+     * @dataProvider inventoryOrientations
+     */
+    public function testWideInventoryExportUsesThePageWidth(string $orientation): void
+    {
+        $pdf = PdfUtils::createDocument($orientation, 'Inventory export');
+        $smarty = new Smarty();
+        $smarty->setTemplateDir(dirname(__DIR__, 2) . '/themes/simple/templates');
+        $directory = sys_get_temp_dir() . '/admidio-wide-inventory-pdf-' . bin2hex(random_bytes(8));
+        mkdir($directory);
+        $smarty->setCompileDir($directory);
+
+        try {
+            $headers = array('Item name', 'Category', 'Status', 'Keeper', 'Last receiver', 'Borrow date', 'Return date', 'Location');
+            $smarty->assign(array(
+                'attributes' => array('border' => '1', 'cellpadding' => '1'),
+                'column_align' => array_fill(0, count($headers), 'start'),
+                'column_widths' => array(12.0, 10.0, 9.0, 14.0, 15.0, 14.0, 15.0, 11.0),
+                'headers' => $headers,
+                'headersStyle' => 'font-size:10pt;font-weight:bold;background-color:#C7C7C7;',
+                'rowsStyle' => 'font-size:10pt;',
+                'rows' => array(array('data' => array(
+                    'Portable PA Speaker', 'Audio Equipment', 'In use', 'Schmidt, Jennifer, 10117 Berlin',
+                    'Bauer, Dagmar, 12345 Muehlhausen', '2026-09-20', '2026-10-02', 'Storage room B'
+                )))
+            ));
+            $html = $smarty->fetch('modules/inventory.list.export.tpl');
+            $this->assertStringContainsString('width:100%;table-layout:fixed;', $html);
+            $this->assertStringContainsString('<col style="width:15%;" />', $html);
+            $this->assertStringContainsString('<col style="width:9%;" />', $html);
+            $pdf->writeTable($html);
+            $data = $pdf->getOutPDFString();
+
+            [, $objects] = (new Parser())->parse($data);
+            $content = serialize($objects);
+            foreach ($headers as $header) {
+                $this->assertStringContainsString('(' . $header . ')', $content);
+            }
+        } finally {
+            foreach (glob($directory . '/*') ?: array() as $compiledFile) {
+                unlink($compiledFile);
+            }
+            rmdir($directory);
+        }
+    }
+
+    public static function inventoryOrientations(): array
+    {
+        return array('portrait' => array('P'), 'landscape' => array('L'));
     }
 }
