@@ -1552,6 +1552,17 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['events_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(10)))
         );
+        $selectBoxEntries = array(
+            'none' => $gL10n->get('SYS_DONT_SHOW'),
+            'short' => $gL10n->get('SYS_WEEKDAY_SHORT'),
+            'long' => $gL10n->get('SYS_WEEKDAY_LONG')
+        );
+        $formEvents->addSelectBox(
+            'events_weekday_format',
+            $gL10n->get('SYS_WEEKDAY_FORMAT'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['events_weekday_format'] ?? 'short', 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_WEEKDAY_FORMAT_DESC')
+        );
          $formEvents->addInput(
             'events_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES', array($gL10n->get('SYS_DESCRIPTION'))),
