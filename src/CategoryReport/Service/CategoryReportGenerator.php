@@ -660,7 +660,7 @@ class CategoryReportGenerator
                     AND mem_end > ?
                     AND rol_valid = true
                     AND (cat_org_id = ? OR cat_org_id IS NULL)
-               ORDER BY mem_usr_id, mem_rol_id',
+               ORDER BY mem_usr_id, cat_id',
                 array_merge($selectedCategories, array($date, $date, $gCurrentOrgId))
             );
             while ($row = $categoryStatement->fetch()) {
