@@ -40,8 +40,8 @@ class GroupsRolesPresenter extends PagePresenter
     /**
      * Show all roles of the organization in card view. The roles must be read before with the method readData.
      * The cards will show various functions like activate, deactivate, vcard export, edit or delete. Also, the
-     * role information e.g. description, start and end date, number of active and former members. A button with
-     * the link to the default list will be shown.
+     * role information e.g. description, start and end date, number of active and former members. The role name
+     * links to the default member list.
      * @param string $categoryUUID UUID of the category for which the roles should be shown.
      * @param int $roleType The type of roles that should be shown within this page.
      *                         0 - inactive roles
@@ -84,6 +84,10 @@ class GroupsRolesPresenter extends PagePresenter
             $templateRow['category'] = $role->getValue('cat_name');
             $templateRow['id'] = 'role_' . $role->getValue('rol_uuid');
             $templateRow['title'] = $role->getValue('rol_name');
+            $templateRow['url'] = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
+                array('role_list' => $row['rol_uuid'])
+            );
 
             // send mail to all role members
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getInt('mail_module_enabled') > 0) {
@@ -213,11 +217,6 @@ class GroupsRolesPresenter extends PagePresenter
             }
 
             $templateRow['information'][] = $html;
-
-            $templateRow['buttons'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])),
-                'name' => $gL10n->get('SYS_SHOW_MEMBER_LIST')
-            );
 
             $templateDataRoles[] = $templateRow;
         }
