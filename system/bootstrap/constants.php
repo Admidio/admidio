@@ -21,8 +21,8 @@ define('SCRIPT_START_TIME', microtime(true));
 // !!! Please do not edit these version numbers !!!
 const MIN_PHP_VERSION = '8.2.0';
 
-const ADMIDIO_VERSION_MAIN = 5;
-const ADMIDIO_VERSION_MINOR = 1;
+const ADMIDIO_VERSION_MAIN = 6;
+const ADMIDIO_VERSION_MINOR = 0;
 const ADMIDIO_VERSION_PATCH = 0;
 const ADMIDIO_VERSION_BETA = 1;
 
@@ -114,6 +114,7 @@ const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
 const TBL_AUTO_LOGIN = TABLE_PREFIX . '_auto_login';
 const TBL_CATEGORIES = TABLE_PREFIX . '_categories';
 const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
+const TBL_CATEGORY_REPORT_COLUMNS = TABLE_PREFIX . '_category_report_columns';
 const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
 const TBL_EVENT_RECURRENCES = TABLE_PREFIX . '_event_recurrences';

@@ -37,8 +37,8 @@ class TokenEntity extends Entity implements TokenInterface
     public function deleteExpiredTokens(): void {
         $sql = '
           DELETE FROM ' . $this->tableName . '
-          WHERE ' . $this->columnPrefix . '_expires_at < CURRENT_TIMESTAMP';
-        $this->db->queryPrepared($sql);
+          WHERE ' . $this->columnPrefix . '_expires_at < ?';
+        $this->db->queryPrepared($sql, array(DATETIME_NOW));
     }
           
 

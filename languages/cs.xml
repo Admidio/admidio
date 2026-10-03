@@ -1135,7 +1135,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Oznamovací role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Členové této role dostávají oznámení o nových nebo změněných záznamech v modulech a změnách v profilových údajích členů. Z důvodu ochrany osobních údajů lze ukládat pouze role, které mají právo role #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Číslo</string>
-  <string name="SYS_NUMBER_COL_DESC">Příslušné zaškrtávací políčko musí být aktivováno, pokud chcete na konci reportu zobrazit řádek s počtem členství.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Příslušné zaškrtávací políčko musí být aktivováno, pokud chcete na konci reportu zobrazit řádek s počtem členství.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Počet alb na stránku</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Počet záznamů na stránku</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Počet záznamů, které se zobrazují na jedné stránce. Pokud je záznamů více, přidá se na stránku stránkování. Pokud je hodnota 0, vypíší se všechny záznamy na jedné stránce a stránkování se deaktivuje. (Výchozí nastavení: #VAR1#)</string>

@@ -923,7 +923,7 @@
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Ilmoitus muutetuista profiilikentistä</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Ota tämä asetus käyttöön, jos haluat lähettää ilmoituksia käyttäjän profiilikenttien muutoksista. Tällä tavalla järjestelmänvalvojalla on mahdollisuus varmistaa oikea tietojen laatu. Muutosilmoitukset lähetetään seuraavaan sähköpostiosoitteeseen #VAR1# (oletus: ei).</string>
   <string name="SYS_NUMBER">Numero</string>
-  <string name="SYS_NUMBER_COL_DESC">Vastaava valintaruutu on aktivoitava, jos haluat näyttää raportin lopussa rivin, jossa näkyy jäsenmäärä. </string>
+  <string name="SYS_SUMMARY_ROW_DESC">Vastaava valintaruutu on aktivoitava, jos haluat näyttää raportin lopussa rivin, jossa näkyy jäsenmäärä. </string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Albumien määrä sivulla</string>
   <string name="SYS_ODF_SPREADSHEET">ODF -laskentataulukko (*.ods)</string>
   <string name="SYS_OFF">Pois</string>

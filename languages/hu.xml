@@ -1146,7 +1146,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Értesítési szerepkör</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">A szerepkör tagjai értesítést kapnak a modulokban történt új vagy módosított bejegyzésekről, valamint a tagok profiladatainak változásairól. Adatvédelmi okokból csak olyan szerepköröket lehet rögzíteni, amelyek rendelkeznek a #VAR1_BOLD# szerepkörjoggal.</string>
   <string name="SYS_NUMBER">Szám</string>
-  <string name="SYS_NUMBER_COL_DESC">Ha a jelentés végén meg szeretné jeleníteni a tagságok számát tartalmazó sort, akkor be kell jelölnie a megfelelő jelölőnégyzetet.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Ha a jelentés végén meg szeretné jeleníteni a tagságok számát tartalmazó sort, akkor be kell jelölnie a megfelelő jelölőnégyzetet.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Albumok száma oldalanként</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Elemek száma oldalonként</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Az egy oldalon megjelenített bejegyzések száma. Ha több bejegyzés van, az oldalra oldalszámozás kerül. Ha az érték 0, az oldalon az összes bejegyzés megjelenik, és az oldalszámozás ki van kapcsolva. (Alapértelmezett beállítás: #VAR1#)</string>

@@ -724,7 +724,7 @@
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Notifica per i campi del profilo modificati</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Abilita questa impostazione per inviare notifiche per qualsiasi modifica ai campi del profilo di un utente. In questo modo un amministratore ha la possibilità di assicurare una corretta qualità dei dati. Le notifiche di modifica saranno inviate al seguente indirizzo e-mail #VAR1# (predefinito: no).</string>
   <string name="SYS_NUMBER">Numero</string>
-  <string name="SYS_NUMBER_COL_DESC">La relativa casella di controllo deve essere attivata se si desidera visualizzare alla fine del rapporto una riga con il numero di membri.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">La relativa casella di controllo deve essere attivata se si desidera visualizzare alla fine del rapporto una riga con il numero di membri.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Numero di album per pagina</string>
   <string name="SYS_OFF">Off</string>
   <string name="SYS_OK">OK</string>
