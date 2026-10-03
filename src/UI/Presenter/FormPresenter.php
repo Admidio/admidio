@@ -825,7 +825,7 @@ class FormPresenter
             if (isset($optionsAll['weekdayFormat']) && $optionsAll['weekdayFormat'] !== 'none') {
                 $attributes['weekdayFormat'] = $optionsAll['weekdayFormat'];
                 $attributes['weekday'] = ($datetime !== null) ? DateTimeUtils::getLocalizedWeekday($datetime, $optionsAll['weekdayFormat']) : '';
-                $attributes['class'] = ($attributes['class'] ?? '') . ' admidio-date-with-weekday';
+                $optionsAll['class'] .= ' admidio-date-with-weekday';
             }
         } elseif ($optionsAll['type'] === 'time') {
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
