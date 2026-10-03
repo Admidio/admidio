@@ -117,7 +117,6 @@
 
 .admidio-module-headline {
     margin-top: 1rem;
-    cursor: default;
 }
 
 .admidio-headline-mobile-menu {
@@ -125,7 +124,6 @@
     font-size: 1.1rem;
     color: var(--bs-primary);
     letter-spacing: 2px;
-    cursor: default;
 }
 
 .admidio-headline-mobile-menu .btn,
@@ -183,7 +181,6 @@
     padding: 0.5rem 1rem;
     margin: 0;
     color: var(--bs-primary);
-    cursor: default;
 }
 
 /***********************************/
@@ -204,72 +201,32 @@
 }
 
 /***********************************/
-/* Navigation Chrome Text Selection */
+/* Navigation text selection */
 /***********************************/
 
+/* Prevent accidental text selection while tapping through the navigation on touch devices.
+   user-select: none also applies to all child elements, so no * selectors are necessary.
+   Only add navigation and UI elements here and no containers with input fields or content. */
 #adm_main_navbar,
-#adm_main_navbar *,
 .admidio-sidebar,
-.admidio-sidebar *,
-.admidio-headline-mobile-menu,
-.admidio-headline-mobile-menu *,
-.admidio-menu-header,
-.admidio-menu-list .nav-link,
 .admidio-breadcrumb,
-.admidio-breadcrumb *,
-.breadcrumb,
-.breadcrumb *,
 .admidio-content-header,
-.admidio-module-headline,
-.navbar-filter,
-.navbar-filter *,
-.nav-tabs,
-.nav-tabs *,
-.nav-pills,
-.nav-pills *,
+.navbar-filter .navbar-brand,
+.nav-tabs .nav-link,
 .pagination,
-.pagination *,
-.card-header,
-.card-header *,
-.card-title,
-.admidio-card h3,
-.admidio-card h3 *,
-.admidio-plugin-content h3,
-.admidio-plugin-content h3 *,
-label,
-label *,
-.form-label,
-.col-form-label,
-.form-check-label,
-.admidio-form-group > label,
-.admidio-plugin-content .admidio-form-group > div:first-child,
-.admidio-form-group.row > div:first-child:not(.col-sm-9):not(.col-sm-8):not(.col-8),
-.row > .col-sm-2.col-4,
-.row > .col-sm-3.col-4,
-table thead th,
-table thead th *,
-table th,
 .plgCalendarWeekday,
-.plgCalendarWeekday *,
 .plgCalendarWeekdaySaturday,
-.plgCalendarWeekdaySaturday *,
 .plgCalendarWeekdaySunday,
-.plgCalendarWeekdaySunday *,
 #adm_logout_link {
     -webkit-user-select: none;
     user-select: none;
 }
 
-.admidio-plugin-content .admidio-form-group > div:first-child,
-.admidio-form-group.row > div:first-child:not(.col-sm-9):not(.col-sm-8):not(.col-8),
-.row > .col-sm-2.col-4,
-.row > .col-sm-3.col-4,
-.card-header,
-.card-title,
-.admidio-card h3,
-.admidio-plugin-content h3,
-table thead th,
-table th,
+/* Text that could not be selected and is no link should not show the text cursor */
+.admidio-module-headline,
+.admidio-headline-mobile-menu,
+.admidio-menu-header,
+.breadcrumb-item.active,
 .plgCalendarWeekday,
 .plgCalendarWeekdaySaturday,
 .plgCalendarWeekdaySunday {
@@ -832,10 +789,6 @@ label {
 
 .breadcrumb-item {
     display: block;
-}
-
-.breadcrumb-item.active {
-    cursor: default;
 }
 
 .badge {
