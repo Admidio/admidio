@@ -641,7 +641,7 @@ class CategoryReportGenerator
         if (count($selectedCategories) > 0) {
             $placeholders = implode(', ', array_fill(0, count($selectedCategories), '?'));
             $categoryStatement = $gDb->queryPrepared(
-                'SELECT mem_usr_id, cat_id
+                'SELECT DISTINCT mem_usr_id, cat_id
                    FROM ' . TBL_MEMBERS . '
                   INNER JOIN ' . TBL_ROLES . ' ON mem_rol_id = rol_id
                   INNER JOIN ' . TBL_CATEGORIES . ' ON rol_cat_id = cat_id
@@ -649,10 +649,8 @@ class CategoryReportGenerator
                     AND mem_begin <= ?
                     AND mem_end > ?
                     AND rol_valid = true
-                    AND (cat_org_id = ? OR cat_org_id IS NULL)
-               GROUP BY mem_usr_id, cat_id
-                 HAVING COUNT(*) = 1',
-                array_merge($selectedCategories, array(DATE_NOW, DATE_NOW, $gCurrentOrgId))
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)',
+                array_merge($selectedCategories, array($date, $date, $gCurrentOrgId))
             );
             while ($row = $categoryStatement->fetch()) {
                 $categoryMatches[(int)$row['mem_usr_id']][(int)$row['cat_id']] = true;

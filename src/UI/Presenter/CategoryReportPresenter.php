@@ -14,6 +14,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Admidio\Hooks\Hooks;
 use Admidio\CategoryReport\Service\CategoryReportGenerator;
+use Admidio\CategoryReport\Service\CategoryReportOutput;
 
 /** Renders category reports in the browser and export formats. */
 class CategoryReportPresenter
@@ -42,8 +43,6 @@ class CategoryReportPresenter
         }
 
         // initialize some special mode parameters
-        $separator = '';
-        $valueQuotes = '';
         $charset = '';
         $classTable = '';
         $orientation = '';
@@ -54,8 +53,6 @@ class CategoryReportPresenter
                 $charset = 'utf-8';
                 break;
             case 'csv-oo':
-                $separator = ',';  // a CSV file should have a comma
-                $valueQuotes = '"';  // all values should be set with quotes
                 $getMode = 'csv';
                 $charset = 'utf-8';
                 break;
@@ -79,8 +76,7 @@ class CategoryReportPresenter
                 break;
         }
 
-        // CSV file as string
-        $csvStr = '';
+        $csvRows = array();
 
         // data array
         $data = array('headers' => array(), 'rows' => array(), 'column_align' => array());
@@ -89,7 +85,39 @@ class CategoryReportPresenter
         $report->setConfiguration($getCrtId);
         $report->generate_listData();
 
-        $numMembers = count($report->listData);
+        $profileFieldTypes = array();
+        $profileFieldNames = array();
+        $profileFieldOptions = array();
+        foreach ($report->headerData as $columnHeader) {
+            $profileFieldId = (int)$columnHeader['id'];
+            if ($profileFieldId > 0) {
+                $profileFieldTypes[$profileFieldId] = $gProfileFields->getPropertyById($profileFieldId, 'usf_type');
+                $profileFieldNames[$profileFieldId] = $gProfileFields->getPropertyById($profileFieldId, 'usf_name_intern');
+            }
+        }
+
+        $hasSummary = (int)$config[$report->getConfiguration()]['number_col'] === 1;
+        $outputRows = CategoryReportOutput::filterRows(
+            $report->listData,
+            $report->headerData,
+            $hasSummary,
+            $gL10n->get('SYS_TOTAL'),
+            $getMode === 'html' && !$getExportAndFilter ? '' : $getFilter,
+            static function (mixed $value, int $key) use ($report, $gProfileFields, $profileFieldNames): string {
+                $profileFieldId = (int)($report->headerData[$key]['id'] ?? 0);
+                if ($value === true) {
+                    return 'X';
+                }
+                if (is_array($value)) {
+                    $value = implode(', ', $value);
+                }
+                if ($profileFieldId > 0) {
+                    $value = $gProfileFields->getHtmlValue($profileFieldNames[$profileFieldId], $value);
+                }
+                return html_entity_decode(strip_tags((string)$value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            }
+        );
+        $numMembers = count($outputRows) - (int)$hasSummary;
 
         if ($numMembers === 0 && $getMode !== 'html') {
             throw new Exception('SYS_NO_USER_FOUND');
@@ -287,17 +315,9 @@ class CategoryReportPresenter
         $columnAlign = array('right');
         $columnValues = array($gL10n->get('SYS_ABR_NO'));
         $columnNumber = 1;
-        $profileFieldTypes = array();
-        $profileFieldNames = array();
-        $profileFieldOptions = array();
-
         foreach ($report->headerData as $columnHeader) {
             // bei Profilfeldern ist in 'id' die usf_id, ansonsten 0
             $usf_id = $columnHeader['id'];
-            if ($usf_id !== 0 && !isset($profileFieldTypes[$usf_id])) {
-                $profileFieldTypes[$usf_id] = $gProfileFields->getPropertyById($usf_id, 'usf_type');
-                $profileFieldNames[$usf_id] = $gProfileFields->getPropertyById($usf_id, 'usf_name_intern');
-            }
             $fieldType = $profileFieldTypes[$usf_id] ?? '';
 
             if ($fieldType == 'NUMBER' || $fieldType == 'DECIMAL_NUMBER') {
@@ -311,10 +331,9 @@ class CategoryReportPresenter
 
             if ($getMode == 'csv') {
                 if ($columnNumber === 1) {
-                    // in der ersten Spalte die laufende Nummer noch davorsetzen
-                    $csvStr .= $valueQuotes . $gL10n->get('SYS_ABR_NO') . $valueQuotes;
+                    $csvRows[] = array($gL10n->get('SYS_ABR_NO'));
                 }
-                $csvStr .= $separator . $valueQuotes . $columnHeader['data'] . $valueQuotes;
+                $csvRows[0][] = html_entity_decode((string)$columnHeader['data'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
                 // convert html characters to plain text
                 $columnValues[] = html_entity_decode($columnHeader['data'], ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -324,9 +343,7 @@ class CategoryReportPresenter
             $columnNumber++;
         }
 
-        if ($getMode === 'csv') {
-            $csvStr .= "\n";
-        } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
+        if (in_array($getMode, array('xlsx', 'ods'), true)) {
             $spreadsheet = new Spreadsheet();
             $activeSheet = $spreadsheet->getActiveSheet();
             $activeSheet->fromArray(array_values($columnValues));
@@ -335,12 +352,14 @@ class CategoryReportPresenter
             $data['column_align'] = $columnAlign;
         }
 
-        $listRowNumber = 1;
-
         // die Daten einlesen
-        foreach ($report->listData as $member => $memberdata) {
+        foreach ($outputRows as $outputRow) {
+            $member = $outputRow['member'];
+            $memberdata = $outputRow['data'];
+            $isSummary = $outputRow['summary'];
+            $rowNumber = $outputRow['number'];
             $columnValues = array();
-            $tmp_csv = '';
+            $csvValues = array($isSummary ? '' : $rowNumber);
             $userUuid = $report->userUuids[(int)$member] ?? '';
 
             // Felder zu Datensatz
@@ -349,12 +368,7 @@ class CategoryReportPresenter
                 if (in_array($getMode, array('html', 'print', 'pdf', 'xlsx', 'ods'), true)) {
                     if ($columnNumber === 1) {
                         // die Laufende Nummer noch davorsetzen
-                        $columnValues[] = $listRowNumber;
-                    }
-                } else {
-                    if ($columnNumber === 1) {
-                        // erste Spalte zeigt lfd. Nummer an
-                        $tmp_csv .= $valueQuotes . $listRowNumber . $valueQuotes;
+                        $columnValues[] = $isSummary ? '' : $rowNumber;
                     }
                 }
 
@@ -398,7 +412,7 @@ class CategoryReportPresenter
                     if ($usf_id !== 0 && $fieldType === 'CHECKBOX') {
                         $content = ($content) ? 'X' : '';
                     }
-                    $tmp_csv .= $separator . $valueQuotes . $content . $valueQuotes;
+                    $csvValues[] = (string)$content;
                 } // pdf should show only text and not much html content
                 elseif ($getMode === 'pdf') {
                     // special case for checkbox profile fields
@@ -446,23 +460,21 @@ class CategoryReportPresenter
                 $columnNumber++;
             }
 
-            if ($getFilter == '' || ($getFilter != '' && (stristr(implode('', $columnValues), $getFilter) || stristr($tmp_csv, $getFilter)))) {
-                if ($getMode == 'csv') {
-                    $csvStr .= $tmp_csv . "\n";
-                } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
-                    $currentRow = $listRowNumber + 1; // +1 for headerColumn offset
-                    foreach ($columnValues as $currentCol => $cell) {
-                        $currentCol += 1; // array starting with 0 but first column is 1 in spreadsheet
+            if ($getMode == 'csv') {
+                $csvRows[] = $csvValues;
+            } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
+                $currentRow = ($isSummary ? $numMembers + 1 : $rowNumber) + 1; // +1 for headerColumn offset
+                foreach ($columnValues as $currentCol => $cell) {
+                    $currentCol += 1; // array starting with 0 but first column is 1 in spreadsheet
 
-                        // convert html characters to plain text
-                        $cell = html_entity_decode($cell, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-                        $colLetter = Coordinate::stringFromColumnIndex($currentCol);
-                        $activeSheet->setCellValue($colLetter . $currentRow, $cell);
-                    }
-                } else {
-                    $data['rows'][] = array('id' => 'row-' . $listRowNumber, 'data' => $columnValues);
+                    // convert html characters to plain text
+                    $cell = html_entity_decode((string)$cell, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $colLetter = Coordinate::stringFromColumnIndex($currentCol);
+                    $activeSheet->setCellValue($colLetter . $currentRow, $cell);
                 }
-                $listRowNumber++;
+            } else {
+                $data['rows'][] = array('id' => $isSummary ? 'row-total' : 'row-' . $rowNumber,
+                    'data' => $columnValues);
             }
         }  // End-For (jeder gefundene User)
 
@@ -480,7 +492,7 @@ class CategoryReportPresenter
         if ($getMode === 'csv') {
             // download CSV file
             header('Content-Type: text/comma-separated-values; charset=' . $charset);
-            echo $csvStr;
+            echo CategoryReportOutput::createCsv($csvRows);
         } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
             $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
             self::formatSpreadsheet($spreadsheet, $columnCount + 1, true);

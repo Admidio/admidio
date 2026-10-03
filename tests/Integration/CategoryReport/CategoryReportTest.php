@@ -154,4 +154,62 @@ class CategoryReportTest extends DatabaseTestCase
             $generator->listData[$user['usr_id']][1]
         );
     }
+
+    public function testCategorySelectionIncludesMemberOfMultipleRolesInSameCategory(): void
+    {
+        global $gCurrentOrgId;
+
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $category = $fixture->createAndSaveCategory('Report category', 'ROL', $gCurrentOrgId);
+        $firstRole = $fixture->createAndSaveRoleInCategory('First report role', $category['cat_id']);
+        $secondRole = $fixture->createAndSaveRoleInCategory('Second report role', $category['cat_id']);
+        $user = $fixture->createAndSaveUser('category-report-two-roles', 'category-report-two-roles@example.local');
+        $fixture->assignUserToRolePeriod($user['usr_id'], $firstRole['rol_id'], '2020-01-01', DATE_MAX);
+        $fixture->assignUserToRolePeriod($user['usr_id'], $secondRole['rol_id'], '2020-01-01', DATE_MAX);
+
+        $generator = $this->createCategoryFilteredGenerator((int)$category['cat_id']);
+        $generator->generate_listData();
+
+        $this->assertArrayHasKey($user['usr_id'], $generator->listData);
+    }
+
+    public function testCategorySelectionUsesReportDate(): void
+    {
+        global $gCurrentOrgId;
+
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $category = $fixture->createAndSaveCategory('Historical report category', 'ROL', $gCurrentOrgId);
+        $role = $fixture->createAndSaveRoleInCategory('Historical report role', $category['cat_id']);
+        $user = $fixture->createAndSaveUser('category-report-history', 'category-report-history@example.local');
+        $fixture->assignUserToRolePeriod($user['usr_id'], $role['rol_id'], '2020-01-01', '2021-01-01');
+
+        $generator = $this->createCategoryFilteredGenerator((int)$category['cat_id']);
+        $generator->generate_listData('2020-06-01');
+
+        $this->assertArrayHasKey($user['usr_id'], $generator->listData);
+
+    }
+
+    private function createCategoryFilteredGenerator(int $categoryId): CategoryReportGenerator
+    {
+        $configurations = (new CategoryReportRepository())->saveConfigArray(array(array(
+            'id' => '',
+            'name' => 'Category selection test',
+            'description' => '',
+            'columns' => array(array('field' => 'uuuid', 'condition' => '')),
+            'selection_role' => '',
+            'selection_cat' => (string)$categoryId,
+            'number_col' => 0,
+            'default_conf' => false
+        )));
+        $configuration = array_values(array_filter(
+            $configurations,
+            static fn(array $values): bool => $values['name'] === 'Category selection test'
+        ))[0];
+
+        $generator = new CategoryReportGenerator();
+        $generator->getConfigArray();
+        $generator->setConfiguration((int)$configuration['id']);
+        return $generator;
+    }
 }
