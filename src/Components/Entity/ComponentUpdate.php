@@ -57,6 +57,24 @@ class ComponentUpdate extends Component
     }
 
     /**
+     * Get the folder of the plugin of this component. The column com_name_intern contains the folder name
+     * in uppercase letters, so the folder is searched case-insensitive within the plugins folder.
+     * @return string Returns the absolute path of the plugin folder.
+     */
+    private function getPluginFolder(): string
+    {
+        $pluginsPath = ADMIDIO_PATH . FOLDER_PLUGINS;
+        $componentName = (string)$this->getValue('com_name_intern');
+
+        foreach (scandir($pluginsPath) as $entry) {
+            if (strtoupper($entry) === $componentName && is_dir($pluginsPath . '/' . $entry)) {
+                return $pluginsPath . '/' . $entry;
+            }
+        }
+        return $pluginsPath . '/' . strtolower($componentName);
+    }
+
+    /**
      * Will open an XML file of a specific version that contains all the update steps that
      * must be passed to successfully update Admidio to this version
      * @param int $mainVersion Contains a string with the main version number e.g. 2 or 3 from 2.x or 3.x.
@@ -85,7 +103,7 @@ class ComponentUpdate extends Component
 
             throw new UnexpectedValueException($message);
         } elseif ($this->getValue('com_type') === 'PLUGIN') {
-            $updateFile = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->getValue('com_name_intern') . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
+            $updateFile = $this->getPluginFolder() . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if (is_file($updateFile)) {
                 try {
