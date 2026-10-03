@@ -5,6 +5,7 @@ use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 use InvalidArgumentException;
@@ -147,6 +148,7 @@ final class CliApplication
 
         CoreTasks::register();
         $this->loadModuleTasks();
+        $this->loadPlugins();
 
         $found = $this->findCommand($argv);
         if ($found['error'] !== null) {
@@ -747,6 +749,53 @@ final class CliApplication
                         );
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Load the plugins that are enabled for this organization, so that a plugin can register its
+     * own commands before the command line is parsed.
+     *
+     * A lightweight installation or help bootstrap deliberately has no database and therefore
+     * cannot know which plugins are installed; it keeps the core and module commands.
+     */
+    private function loadPlugins(): void
+    {
+        if (!isset($GLOBALS['gDb'])) {
+            return;
+        }
+
+        PluginLoader::loadEnabled();
+        $this->loadPluginTasks();
+    }
+
+    /**
+     * Load optional CLI registrations of enabled plugins.
+     *
+     * Plugin runtime is loaded first so its autoload mappings, settings and languages are available.
+     * The cli.php file itself only registers metadata and callbacks; command work runs later after
+     * actor and component authorization.
+     */
+    private function loadPluginTasks(): void
+    {
+        foreach (PluginLoader::getLoaded() as $plugin) {
+            $registrationFile = $plugin->path . '/cli.php';
+            if (!is_file($registrationFile)) {
+                continue;
+            }
+
+            CliTaskRegistry::setPluginContext($plugin->id);
+            try {
+                require_once $registrationFile;
+            } catch (Throwable $exception) {
+                self::writeWarning(
+                    'CLI_PLUGIN_REGISTRATION_FAILED',
+                    'The CLI commands of plugin "' . $plugin->id . '" were not registered: '
+                    . $exception->getMessage()
+                );
+            } finally {
+                CliTaskRegistry::setPluginContext(null);
             }
         }
     }
@@ -1866,7 +1915,13 @@ final class CliApplication
         }
 
         if (is_array($value)) {
-            self::writeRows(array($value), $format, $options);
+            /*
+             * A single record is read down the screen, not across it, so "text" means the
+             * field/value layout here where writeRows() takes it to mean a table. A record of two
+             * dozen fields squeezed into one table row is unreadable in every terminal, and
+             * plugin:show is the widest of them.
+             */
+            self::writeRows(array($value), $format === 'text' ? 'record' : $format, $options);
             return;
         }
 

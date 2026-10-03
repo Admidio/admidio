@@ -5,6 +5,8 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Preferences\Service\PreferenceDefinitions;
 
 /**
@@ -45,11 +47,34 @@ class Preferences extends Entity
         return array_merge(parent::getIgnoredLogColumns(), ['prf_name', 'prf_org_id']);
     }
     /**
-     * Mask sensitive values of certain preference in the ChangeLog
+     * Mask sensitive values of certain preference in the ChangeLog, and name the plugin that a
+     * preference belongs to, so that the history of a single plugin can be read on its own.
      */
     protected function adjustLogEntry(LogChanges $logEntry): void
     {
         parent::adjustLogEntry($logEntry);
+
+        $preferenceName = (string)$this->getValue('prf_name');
+
+        /*
+         * The settings of a plugin are ordinary preferences, so a change to one was always written
+         * to the changelog - with nothing to say which plugin it belonged to. Naming the plugin as
+         * the related object is what makes an entry readable: the changelog says which plugin a setting
+         * belongs to instead of showing a bare preference name.
+         */
+        $plugin = PluginRegistry::getOwnerOfSetting($preferenceName);
+        if ($plugin !== null) {
+            /*
+             * log_related_id holds the UUID of the related record, so it is the component that
+             * records the installed plugin - not the plugin directory, which is not a UUID. A
+             * plugin whose preferences change before it has a component record simply gets its
+             * name and no link.
+             */
+            $logEntry->setLogRelated(
+                PluginRegistry::getComponentUuid($plugin->id),
+                Language::translateIfTranslationStrId($plugin->name)
+            );
+        }
 
         if ($logEntry->getValue('log_field') !== 'prf_value') {
             return;
@@ -57,7 +82,6 @@ class Preferences extends Entity
 
         // Sensitivity is part of the canonical core preference definition. Unknown/plugin
         // preferences keep their existing changelog behavior because their contract is not owned here.
-        $preferenceName = (string)$this->getValue('prf_name');
         if (PreferenceDefinitions::exists($preferenceName)
             && PreferenceDefinitions::isSensitive($preferenceName)) {
             $logEntry->setValue('log_value_old', '********');

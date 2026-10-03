@@ -87,7 +87,7 @@
         ],
         "test:all": [
             "Composer\\Config::disableProcessTimeout",
-            "phpunit"
+            "php tests/bin/run-all-tests.php"
         ],
         "test:coverage": [
             "Composer\\Config::disableProcessTimeout",

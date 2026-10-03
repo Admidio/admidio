@@ -1,0 +1,7 @@
+{
+    "name": "Core namespace",
+    "version": "1.0.0",
+    "autoload": {
+        "Admidio\\Infrastructure\\": "src"
+    }
+}

@@ -1225,14 +1225,10 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio necesită #VAR1# sau o versiune superioară</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Selectați opțiunea</string>
-  <string name="SYS_PLUGIN_INSTALL">Instalați pluginul</string>
   <string name="SYS_PLUGIN_MANAGER">Manager de plugin</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Aici puteți gestiona pluginurile Admidio. Pluginurile sunt module suplimentare care pot fi instalate pentru a extinde funcționalitatea Admidio. Puteți instala, actualiza sau elimina pluginuri.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Nu a fost specificat niciun nume de plugin.</string>
-  <string name="SYS_PLUGIN_NO_INTERFACE">Pluginul nu are interfață.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Acest plugin nu este instalat</string>
   <string name="SYS_PLUGIN_PREFERENCES">Preferințe plugin</string>
-  <string name="SYS_PLUGIN_UNINSTALL">Dezinstalare plugin</string>
   <string name="SYS_PLUGIN_UPDATE">Actualizare plugin</string>
   <string name="SYS_PLUGIN_VERSION">Versiune plugin</string>
   <string name="SYS_PORT">Port</string>

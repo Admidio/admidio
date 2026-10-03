@@ -102,7 +102,7 @@ class ChangelogService {
      * @var array
      */
     public static array $noLogTables = [
-        'auto_login', 'components', 'id', 'log_changes',
+        'auto_login', 'id', 'log_changes',
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
         // SSO runtime bookkeeping: tokens and session/logout state are written and expired by the
         // OIDC/SAML flows themselves, never edited by a person, so they carry no audit value.
@@ -247,7 +247,10 @@ class ChangelogService {
             if (array_key_exists($table, $tableLabels)) {
                 return Language::translateIfTranslationStrId($tableLabels[$table]);
             } else {
-                return '';
+                // A table without a registered label is displayed with the raw table name
+                // instead: the changelog is meant to work without registration, registration
+                // only refines the display.
+                return $table;
             }
         }
     }
@@ -313,6 +316,7 @@ class ChangelogService {
 
             'preferences' => 'SYS_SETTINGS',
             'texts' => 'SYS_SETTINGS',
+            'components' => 'SYS_EXTENSIONS',
             'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
             'oidc_clients' => 'SYS_SSO_CLIENTS_OIDC',
             'oidc_consents' => 'SYS_SSO_OIDC_CONSENTS',
@@ -447,6 +451,12 @@ class ChangelogService {
                 'enabledBy' => array(),
                 'tables' => array('organizations', 'menu', 'preferences', 'texts', 'categories')
             ),
+            'plugins' => array(
+                'label' => 'SYS_EXTENSIONS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('components')
+            ),
             'other' => array(
                 'label' => 'SYS_ALL_OTHERS',
                 'section' => 'other',
@@ -557,6 +567,8 @@ class ChangelogService {
                 return new User($gDb, $gProfileFields);
             case 'announcements':
                 return new Announcement($gDb);
+            case 'components':
+                return new Component($gDb);
             case 'categories':
                 return new Category($gDb);
             case 'category_report' :

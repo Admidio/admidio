@@ -168,4 +168,29 @@ class CliTaskRegistryTest extends AdmidioTestCase
         // every command that can be run is described, so no command is undocumented
         $this->assertEquals(count(CliTaskRegistry::getAll()), count($documentation));
     }
+    /**
+     * @testdox Plugin CLI tasks keep the lowercase plugin component id
+     */
+    public function testPluginTaskKeepsPluginComponentId(): void
+    {
+        CliTaskRegistry::setPluginContext('fixture-plugin');
+        try {
+            if (CliTaskRegistry::get('fixture-plugin:noop') === null) {
+                CliTaskRegistry::register(
+                    'fixture-plugin:noop',
+                    'fixture-plugin',
+                    static fn (array $arguments, array $options): int => 0,
+                    'No-op plugin fixture command.',
+                    'fixture-plugin:noop'
+                );
+            }
+        } finally {
+            CliTaskRegistry::setPluginContext(null);
+        }
+
+        $task = CliTaskRegistry::get('fixture-plugin:noop');
+        $this->assertNotNull($task);
+        $this->assertSame('fixture-plugin', $task['component']);
+    }
+
 }

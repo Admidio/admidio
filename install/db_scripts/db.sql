@@ -162,6 +162,7 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE TABLE %PREFIX%_components
 (
     com_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    com_uuid                    varchar(36)         NOT NULL,
     com_type                    varchar(10)         NOT NULL,
     com_name                    varchar(255)        NOT NULL,
     com_name_intern             varchar(255)        NOT NULL,
@@ -170,12 +171,13 @@ CREATE TABLE %PREFIX%_components
     com_update_step             integer             NOT NULL    DEFAULT 0,
     com_update_completed        boolean             NOT NULL    DEFAULT true,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    com_overview_plugin         boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (com_id)
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid);
 
 /*==============================================================*/
 /* Table: adm_events                                            */
