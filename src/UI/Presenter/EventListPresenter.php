@@ -790,10 +790,10 @@ class EventListPresenter extends PagePresenter
                         $cssClass = 'admidio-event-highlight';
                     }
 
-                    $dateBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
-                    $timeBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_time'));
-                    $dateEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
-                    $timeEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_time'));
+                    $eventDateBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+                    $eventTimeBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_time'));
+                    $eventDateEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+                    $eventTimeEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_time'));
 
                     $columnValues = array();
 
@@ -804,7 +804,7 @@ class EventListPresenter extends PagePresenter
                     }
 
                     $dateTimeSortKey = $event->getValue('dat_begin', 'Y-m-d H:i:s');
-                    $isMultiDay = ($dateBegin !== $dateEnd);
+                    $isMultiDay = ($eventDateBegin !== $eventDateEnd);
                     $isAllDay = (bool)$event->getValue('dat_all_day');
 
                     if ($isMultiDay) {
@@ -813,13 +813,13 @@ class EventListPresenter extends PagePresenter
 
                         $formattedBeginPart = ($beginDateTime !== null)
                             ? DateTimeUtils::formatWithWeekday($beginDateTime, $weekdayFormat, null, null, true)
-                            : $dateBegin;
+                            : $eventDateBegin;
                         $formattedEndPart = ($endDateTime !== null)
                             ? DateTimeUtils::formatWithWeekday($endDateTime, $weekdayFormat, null, null, true)
-                            : $dateEnd;
+                            : $eventDateEnd;
 
-                        $beginPart = $formattedBeginPart . (!$isAllDay ? ' ' . $timeBegin : '');
-                        $endPart = $formattedEndPart . (!$isAllDay ? ' ' . $timeEnd : '');
+                        $beginPart = $formattedBeginPart . (!$isAllDay ? ' ' . $eventTimeBegin : '');
+                        $endPart = $formattedEndPart . (!$isAllDay ? ' ' . $eventTimeEnd : '');
                         $formattedDateHtml = '<div class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $beginPart . ' &ndash;</div><div class="text-nowrap"><i class="bi bi-arrow-return-right me-1 text-muted"></i>' . $endPart . '</div>';
                     } else {
                         $formattedDateHtml = '<span class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $event->getDateTimePeriod(true, $weekdayFormat, true) . '</span>';
