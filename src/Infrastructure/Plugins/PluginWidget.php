@@ -106,7 +106,7 @@ final class PluginWidget
      */
     public static function register(Plugin $plugin, callable $render, array $options = array()): void
     {
-        $name = str_replace('-', '_', $plugin->id);
+        $name = Plugin::getSettingKey($plugin->id);
 
         $declaration = array(
             'id' => $plugin->id,
