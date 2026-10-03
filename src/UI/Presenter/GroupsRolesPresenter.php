@@ -153,24 +153,37 @@ class GroupsRolesPresenter extends PagePresenter
             // Block with information about events and meeting-point
             if (!empty($role->getValue('rol_start_date')) || $role->getValue('rol_weekday') > 0
                 || !empty($role->getValue('rol_start_time')) || !empty($role->getValue('rol_location'))) {
-                $html = '<h6>' . $gL10n->get('SYS_APPOINTMENTS') . ' / ' . $gL10n->get('SYS_MEETINGS') . '</h6>';
+                $html = '';
                 if ($role->getValue('rol_start_date') !== '') {
-                    $html .= '<span class="d-block">' . $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))) . '</span>';
+                    $html .= '<span class="d-block"><i class="bi bi-calendar-event me-2" data-bs-toggle="tooltip" title="'
+                        . $gL10n->get('SYS_APPOINTMENT') . '" aria-label="' . $gL10n->get('SYS_APPOINTMENT') . '"></i>'
+                        . $gL10n->get('SYS_DATE_FROM_TO', array(
+                            $role->getValue('rol_start_date', $gSettingsManager->getString('system_date')),
+                            $role->getValue('rol_end_date', $gSettingsManager->getString('system_date'))
+                        )) . '</span>';
                 }
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
+                    $schedule = '';
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                        $schedule .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
-                        $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
+                        $schedule .= $gL10n->get('SYS_FROM_TO', array(
+                            $role->getValue('rol_start_time', $gSettingsManager->getString('system_time')),
+                            $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))
+                        ));
                     }
-                    $html = '<span class="d-block">' . $html . '</span>';
+                    $html .= '<span class="d-block"><i class="bi bi-clock me-2" data-bs-toggle="tooltip" title="'
+                        . $gL10n->get('SYS_TIME') . '" aria-label="' . $gL10n->get('SYS_TIME') . '"></i>'
+                        . $schedule . '</span>';
                 }
 
                 // Meeting point
                 if (!empty($role->getValue('rol_location'))) {
-                    $html .= '<span class="d-block">' . $gL10n->get('SYS_MEETING_POINT') . ' ' . $role->getValue('rol_location') . '</span>';
+                    $html .= '<span class="d-block"><i class="bi bi-geo-alt-fill me-2" data-bs-toggle="tooltip" title="'
+                        . $gL10n->get('SYS_MEETING_POINT') . '" aria-label="' . $gL10n->get('SYS_MEETING_POINT') . '"></i>'
+                        . $role->getValue('rol_location') . '</span>';
                 }
                 $templateRow['information'][] = $html;
             }
@@ -189,20 +202,37 @@ class GroupsRolesPresenter extends PagePresenter
                     $html .= ' - ' . Role::getCostPeriods($role->getValue('rol_cost_period'));
                 }
 
-                $templateRow['information'][] = '<h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span></li>';
+                $templateRow['information'][] = '<span class="d-block"><span class="admidio-contribution-icon me-2"'
+                    . ' data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CONTRIBUTION') . '"'
+                    . ' aria-label="' . $gL10n->get('SYS_CONTRIBUTION') . '">'
+                    . '<i class="bi bi-wallet2" aria-hidden="true"></i>'
+                    . '<i class="bi bi-currency-euro admidio-contribution-currency" aria-hidden="true"></i>'
+                    . '</span>' . $html . '</span>';
             }
 
-            // show count of members and leaders of this role
-            $html = '';
-
+            // show count of members, leaders and former members of this role
             if ($role->getValue('rol_max_members') > 0) {
-                $html .= '<span class="d-block">' . $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int)$row['num_members'], (int)$role->getValue('rol_max_members'))) . '</span>';
+                $memberCount = (int)$row['num_members'] . '/' . (int)$role->getValue('rol_max_members');
+                $memberTooltip = $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array(
+                    (int)$row['num_members'],
+                    (int)$role->getValue('rol_max_members')
+                ));
             } else {
-                $html .= '<span class="d-block">' . $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS') . '</span>';
+                $memberCount = (int)$row['num_members'];
+                $memberTooltip = $memberCount . ' ' . $gL10n->get('SYS_PARTICIPANTS');
             }
+            $templateRow['statistics'][] = array(
+                'count' => $memberCount,
+                'icon' => 'bi bi-person-fill',
+                'tooltip' => $memberTooltip
+            );
 
             if ($row['num_leader'] > 0) {
-                $html .= '<span class="d-block">' . $row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS') . '</span>';
+                $templateRow['statistics'][] = array(
+                    'count' => (int)$row['num_leader'],
+                    'icon' => 'bi bi-person-fill-gear',
+                    'tooltip' => (int)$row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS')
+                );
             }
 
             if ($gCurrentUser->hasRightViewFormerRolesMembers($row['rol_id']) && $roleType === $this::ROLE_TYPE_ACTIVE && $row['num_former'] > 0) {
@@ -213,10 +243,12 @@ class GroupsRolesPresenter extends PagePresenter
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '<span class="d-block">' . $row['num_former'] . ' ' . $textFormerMembers . '</span>';
+                $templateRow['statistics'][] = array(
+                    'count' => (int)$row['num_former'],
+                    'icon' => 'bi bi-person-fill-dash',
+                    'tooltip' => (int)$row['num_former'] . ' ' . $textFormerMembers
+                );
             }
-
-            $templateRow['information'][] = $html;
 
             $templateDataRoles[] = $templateRow;
         }

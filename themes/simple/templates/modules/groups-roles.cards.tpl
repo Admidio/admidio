@@ -6,19 +6,29 @@
                 <div class="card admidio-card">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title"><a href="{$role.url}">{$role.title}</a></h5>
-                        {if isset($role.information) && count($role.information) > 0}
-                            <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex align-items-center gap-3 text-body-secondary">
+                                {foreach $role.statistics as $statistic}
+                                    <span class="d-inline-flex align-items-center gap-1">
+                                        <i class="{$statistic.icon}" data-bs-toggle="tooltip"
+                                            title="{$statistic.tooltip}" aria-label="{$statistic.tooltip}"></i>
+                                        <span>{$statistic.count}</span>
+                                    </span>
+                                {/foreach}
+                            </li>
+                            {if isset($role.information) && count($role.information) > 0}
                                 {foreach $role.information as $informationItem}
                                     <li class="list-group-item">{$informationItem}</li>
                                 {/foreach}
-                            </ul>
-                        {/if}
+                            {/if}
+                        </ul>
                         {if isset($role.actions) && count($role.actions) > 0}
                             <div class="mt-auto pt-3 d-flex justify-content-end align-items-center">
                                 {foreach $role.actions as $actionItem}
                                     <a
-                                        {if isset($actionItem.dataHref)}class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                                            data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                        {if isset($actionItem.dataHref)}class="admidio-icon-link admidio-messagebox"
+                                            href="javascript:void(0);" data-buttons="yes-no"
+                                            data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
                                         {else}class="admidio-icon-link" href="{$actionItem.url}"{/if} aria-label="{$actionItem.tooltip}">
                                         <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
                                     </a>
