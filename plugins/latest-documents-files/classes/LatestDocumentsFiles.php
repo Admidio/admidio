@@ -90,6 +90,7 @@ class LatestDocumentsFiles extends PluginAbstract
                         'icon' => $file->getIcon(),
                         'fileName' => $fileName,
                         'fileExtension' => $file->getFileExtension(),
+                        'fullFileName' => $rowFile['fil_name'],
                         'tooltip' => $tooltip
                     );
 
