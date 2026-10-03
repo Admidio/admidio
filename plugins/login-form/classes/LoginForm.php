@@ -113,7 +113,7 @@ class LoginForm extends PluginAbstract
 
         $form = new FormPresenter(
             'adm_plugin_login_form',
-            ADMIDIO_PATH . FOLDER_PLUGINS . '/LoginForm/templates/plugin.login-form.edit.tpl',
+            self::getPluginPath() . '/templates/plugin.login-form.edit.tpl',
             ADMIDIO_URL . FOLDER_SYSTEM . '/login.php?mode=check',
             $formPage,
             array('type' => 'vertical', 'setFocus' => false, 'showRequiredFields' => false)
