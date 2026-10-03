@@ -270,6 +270,8 @@ function createTestDatabase(array $config): \Admidio\Infrastructure\Database
  */
 class TestLogger
 {
+    private int $queryCount = 0;
+
     /**
      * Log a debug message
      */
@@ -283,7 +285,19 @@ class TestLogger
      */
     public function info(string $message, array $context = []): void
     {
-        // Tests don't need logging output
+        if (preg_match('/^SQL: (SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|TRUNCATE)\b/i', $message) === 1) {
+            ++$this->queryCount;
+        }
+    }
+
+    public function resetQueryCount(): void
+    {
+        $this->queryCount = 0;
+    }
+
+    public function getQueryCount(): int
+    {
+        return $this->queryCount;
     }
 
     /**

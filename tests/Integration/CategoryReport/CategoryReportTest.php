@@ -190,6 +190,72 @@ class CategoryReportTest extends DatabaseTestCase
 
     }
 
+    public function testMemberDataIsLoadedInFixedNumberOfQueries(): void
+    {
+        global $gCurrentOrgId, $gLogger;
+
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $role = $fixture->createAndSaveRole('Batch report role', $gCurrentOrgId);
+        $firstUser = $fixture->createAndSaveUser(
+            'category-report-batch-1',
+            'category-report-batch-1@example.local'
+        );
+        $fixture->assignUserToRolePeriod($firstUser['usr_id'], $role['rol_id'], '2020-01-01', DATE_MAX);
+        $users = array($firstUser);
+
+        $configurations = (new CategoryReportRepository())->saveConfigArray(array(array(
+            'id' => '',
+            'name' => 'Batch query test',
+            'description' => '',
+            'columns' => array(
+                array('field' => 'p2', 'condition' => ''),
+                array('field' => 'ulogin_name', 'condition' => ''),
+                array('field' => 'adummy', 'condition' => ''),
+                array('field' => 'b' . $role['rol_id'], 'condition' => '')
+            ),
+            'selection_role' => (string)$role['rol_id'],
+            'selection_cat' => '',
+            'number_col' => 0,
+            'default_conf' => false
+        )));
+        $configuration = array_values(array_filter(
+            $configurations,
+            static fn(array $values): bool => $values['name'] === 'Batch query test'
+        ))[0];
+
+        $generator = new CategoryReportGenerator();
+        $generator->getConfigArray();
+        $generator->setConfiguration((int)$configuration['id']);
+        $gLogger->resetQueryCount();
+        $generator->generate_listData();
+        $singleMemberQueryCount = $gLogger->getQueryCount();
+
+        for ($index = 2; $index <= 25; ++$index) {
+            $login = 'category-report-batch-' . $index;
+            $user = $fixture->createAndSaveUser($login, $login . '@example.local');
+            $fixture->assignUserToRolePeriod($user['usr_id'], $role['rol_id'], '2020-01-01', DATE_MAX);
+            $users[] = $user;
+        }
+
+        $generator = new CategoryReportGenerator();
+        $generator->getConfigArray();
+        $generator->setConfiguration((int)$configuration['id']);
+        $gLogger->resetQueryCount();
+        $generator->generate_listData();
+        $multipleMembersQueryCount = $gLogger->getQueryCount();
+
+        $this->assertSame(5, $singleMemberQueryCount);
+        $this->assertSame($singleMemberQueryCount, $multipleMembersQueryCount);
+        foreach ($users as $index => $user) {
+            $this->assertArrayHasKey($user['usr_id'], $generator->listData);
+            $this->assertSame($user['usr_uuid'], $generator->userUuids[$user['usr_id']]);
+            $this->assertSame('', $generator->listData[$user['usr_id']][1]);
+            $this->assertSame('category-report-batch-' . ($index + 1), $generator->listData[$user['usr_id']][2]);
+            $this->assertSame('Batch report role', $generator->listData[$user['usr_id']][3]);
+            $this->assertSame('2020-01-01', $generator->listData[$user['usr_id']][4]);
+        }
+    }
+
     private function createCategoryFilteredGenerator(int $categoryId): CategoryReportGenerator
     {
         $configurations = (new CategoryReportRepository())->saveConfigArray(array(array(

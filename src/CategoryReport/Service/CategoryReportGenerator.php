@@ -1,13 +1,12 @@
 <?php
 namespace Admidio\CategoryReport\Service;
 
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\ValueObject\ConditionParser;
-use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\Users\Entity\User;
 
 
 /**
@@ -62,7 +61,7 @@ class CategoryReportGenerator
      */
     public function generate_listData(string $date = DATE_NOW)
     {
-        global $gDb, $gProfileFields, $gL10n, $gCurrentOrgId;
+        global $gDb, $gProfileFields, $gL10n, $gCurrentOrgId, $gSettingsManager;
 
         $workArray = array();
         $number_row_pos = -1;
@@ -621,16 +620,28 @@ class CategoryReportGenerator
         $needsMemberships = count($selectedRoles) > 0;
         $needsUser = $needsMemberships;
         $needsRoleNames = false;
+        $profileFieldIds = array();
+        $membershipRoleIds = array();
+        $needsAllMembershipDetails = false;
         foreach ($workArray as $column) {
             if ($column['type'] === 'p' || $column['type'] === 'u') {
                 $needsUser = true;
             }
+            if ($column['type'] === 'p') {
+                $profileFieldIds[] = (int)$column['id'];
+            }
             if ($column['type'] === 'a' || ($column['type'] === 'd' && $column['field'] === 'dummy')) {
                 $needsMemberships = true;
-                $needsUser = true;
                 $needsRoleNames = true;
             }
+            if ($column['type'] === 'd' && $column['field'] === 'dummy') {
+                $needsAllMembershipDetails = true;
+            } elseif (in_array($column['type'], array('b', 'e', 'd'), true)) {
+                $membershipRoleIds[] = (int)$column['id'];
+            }
         }
+        $profileFieldIds = array_values(array_unique($profileFieldIds));
+        $membershipRoleIds = array_values(array_unique($membershipRoleIds));
         $categorySelection = trim((string)($this->arrConfiguration[$this->conf]['selection_cat'] ?? ''));
         $selectedCategories = $categorySelection === '' ? array() : array_values(array_filter(
             array_map('intval', explode(',', $categorySelection)),
@@ -649,7 +660,8 @@ class CategoryReportGenerator
                     AND mem_begin <= ?
                     AND mem_end > ?
                     AND rol_valid = true
-                    AND (cat_org_id = ? OR cat_org_id IS NULL)',
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)
+               ORDER BY mem_usr_id, mem_rol_id',
                 array_merge($selectedCategories, array($date, $date, $gCurrentOrgId))
             );
             while ($row = $categoryStatement->fetch()) {
@@ -657,18 +669,105 @@ class CategoryReportGenerator
             }
         }
 
-        $user = $needsUser ? new User($gDb, $gProfileFields) : null;
-        $role = $needsRoleNames ? new Role($gDb) : null;
+        $memberIds = array_map('intval', array_keys($this->listData));
+        $userData = array();
+        $profileData = array();
+        $membershipsByUser = array();
         $roleNames = array();
+        $membershipCache = array();
+
+        if ($needsUser && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $userStatement = $gDb->queryPrepared(
+                'SELECT usr_id, usr_uuid, usr_login_name, usr_photo, usr_text,
+                        usr_last_login, usr_number_login
+                   FROM ' . TBL_USERS . '
+                  WHERE usr_id IN (' . $memberPlaceholders . ')',
+                $memberIds
+            );
+            while ($row = $userStatement->fetch()) {
+                $userData[(int)$row['usr_id']] = $row;
+            }
+        }
+
+        if (count($profileFieldIds) > 0 && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $fieldPlaceholders = implode(', ', array_fill(0, count($profileFieldIds), '?'));
+            $profileStatement = $gDb->queryPrepared(
+                'SELECT usd_usr_id, usd_usf_id, usd_value
+                   FROM ' . TBL_USER_DATA . '
+                  WHERE usd_usr_id IN (' . $memberPlaceholders . ')
+                    AND usd_usf_id IN (' . $fieldPlaceholders . ')',
+                array_merge($memberIds, $profileFieldIds)
+            );
+            while ($row = $profileStatement->fetch()) {
+                $profileData[(int)$row['usd_usr_id']][(int)$row['usd_usf_id']] = $row['usd_value'] ?? '';
+            }
+        }
+
+        if ($needsMemberships && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $membershipStatement = $gDb->queryPrepared(
+                'SELECT mem_usr_id, mem_rol_id, rol_name
+                   FROM ' . TBL_MEMBERS . '
+                  INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+                  INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                  WHERE mem_usr_id IN (' . $memberPlaceholders . ')
+                    AND mem_begin <= ?
+                    AND mem_end > ?
+                    AND rol_valid = true
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)',
+                array_merge($memberIds, array(DATE_NOW, DATE_NOW, $gCurrentOrgId))
+            );
+            while ($row = $membershipStatement->fetch()) {
+                $userId = (int)$row['mem_usr_id'];
+                $roleId = (int)$row['mem_rol_id'];
+                $membershipsByUser[$userId][$roleId] = true;
+                if ($needsRoleNames && !isset($roleNames[$roleId])) {
+                    $roleNames[$roleId] = SecurityUtils::encodeHTML(
+                        Language::translateIfTranslationStrId((string)$row['rol_name'])
+                    );
+                }
+            }
+        }
+
+        if (($needsAllMembershipDetails || count($membershipRoleIds) > 0) && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $queryParams = $memberIds;
+            $roleCondition = '';
+            if (!$needsAllMembershipDetails) {
+                $rolePlaceholders = implode(', ', array_fill(0, count($membershipRoleIds), '?'));
+                $roleCondition = ' AND mem_rol_id IN (' . $rolePlaceholders . ')';
+                $queryParams = array_merge($queryParams, $membershipRoleIds);
+            }
+            $queryParams[] = $date;
+            $queryParams[] = $date;
+            $membershipDetailStatement = $gDb->queryPrepared(
+                'SELECT ' . TBL_MEMBERS . '.*
+                   FROM ' . TBL_MEMBERS . '
+                  WHERE mem_usr_id IN (' . $memberPlaceholders . ')'
+                    . $roleCondition . '
+                    AND mem_begin <= ?
+                    AND mem_end > ?
+               ORDER BY mem_usr_id, mem_rol_id, mem_begin DESC, mem_id DESC',
+                $queryParams
+            );
+            while ($row = $membershipDetailStatement->fetch()) {
+                $userId = (int)$row['mem_usr_id'];
+                $roleId = (int)$row['mem_rol_id'];
+                if (!isset($membershipCache[$userId][$roleId])) {
+                    $membership = new Membership($gDb);
+                    $membership->setArray($row);
+                    $membershipCache[$userId][$roleId] = $membership;
+                }
+            }
+        }
 
         // go through all members
         foreach ($this->listData as $member => $dummy) {
-            if ($needsUser) {
-                $user->readDataById($member);
-            }
-            $memberShips = $needsMemberships ? $user->getRoleMemberships() : array();
+            $member = (int)$member;
+            $memberShips = array_map('intval', array_keys($membershipsByUser[$member] ?? array()));
             $memberRoleSet = count($selectedRoles) > 0 ? array_fill_keys($memberShips, true) : array();
-            $membershipCache = array();
             $number_row_count = 0;
 
             // Are there role and/or category restrictions?
@@ -700,12 +799,12 @@ class CategoryReportGenerator
             }
 
             if ($needsUser) {
-                $this->userUuids[(int)$member] = $user->getValue('usr_uuid');
+                $this->userUuids[$member] = (string)($userData[$member]['usr_uuid'] ?? '');
             }
 
             foreach ($workArray as $key => $data) {
                 if ($data['type'] == 'p') {
-                    $this->listData[$member][$key] = $user->getValue($data['profile_name'], 'database');
+                    $this->listData[$member][$key] = $profileData[$member][(int)$data['id']] ?? '';
 
                 } elseif ($data['type'] == 'u') {       // User profile fields (UUID, login, photo, text, ...)
                     $fieldId = null;
@@ -721,12 +820,29 @@ class CategoryReportGenerator
                     }
                     if (!empty($fieldId)) {
                         if ($data['field'] == 'last_login') {
-                            $logindate = $user->getValue($fieldId);
-                            $this->listData[$member][$key] = $logindate;
-                        } elseif ($data['field'] == 'photo') {
-                            $this->listData[$member][$key] = $user->getValue($fieldId, 'database') ?? '';
+                            $loginDate = (string)($userData[$member][$fieldId] ?? '');
+                            if ($loginDate !== '') {
+                                try {
+                                    $loginDate = (new \DateTime($loginDate))->format(
+                                        $gSettingsManager->getString('system_date') . ' ' .
+                                        $gSettingsManager->getString('system_time')
+                                    );
+                                } catch (\Throwable) {
+                                    // Keep an invalid legacy value unchanged, as Entity::getValue() does.
+                                }
+                            }
+                            $this->listData[$member][$key] = $loginDate;
                         } else {
-                            $this->listData[$member][$key] = $user->getValue($fieldId, 'database') ?? '';
+                            $value = $userData[$member][$fieldId] ?? '';
+                            if ($data['field'] === 'number_login' && $value !== '') {
+                                $value = (int)$value;
+                            } elseif ($data['field'] === 'photo' && is_resource($value)) {
+                                ob_start();
+                                fpassthru($value);
+                                $hexValue = ob_get_clean();
+                                $value = is_string($hexValue) ? (hex2bin($hexValue) ?: '') : '';
+                            }
+                            $this->listData[$member][$key] = $value;
                         }
                     } else {
                         $this->listData[$member][$key] = '';
@@ -735,11 +851,7 @@ class CategoryReportGenerator
                 } elseif ($data['type'] == 'a') {              // Sonderfall: Rollengesamtuebersicht erstellen
                     $this->listData[$member][$key] = '';
                     foreach ($memberShips as $rol_id) {
-                        if (!array_key_exists($rol_id, $roleNames)) {
-                            $role->readDataById($rol_id);
-                            $roleNames[$rol_id] = $role->getValue('rol_name');
-                        }
-                        $this->listData[$member][$key] .= $roleNames[$rol_id] . '; ';
+                        $this->listData[$member][$key] .= ($roleNames[$rol_id] ?? '') . '; ';
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
 
@@ -749,35 +861,31 @@ class CategoryReportGenerator
                     $this->listData[$member][$key] = '';
 
                     foreach ($memberShips as $rol_id) {
-                        $membership = $this->getCachedMembership($membershipCache, $rol_id, $member, $date);
+                        $membership = $membershipCache[$member][$rol_id] ?? null;
                         if ($membership !== null) {
-                            if (!array_key_exists($rol_id, $roleNames)) {
-                                $role->readDataById($rol_id);
-                                $roleNames[$rol_id] = $role->getValue('rol_name');
-                            }
                             $duration = $membership->calculateDuration();
-                            $this->listData[$member][$key] .= $roleNames[$rol_id] . ': ' . $duration['formatted'] . '; ';
+                            $this->listData[$member][$key] .= ($roleNames[$rol_id] ?? '') . ': ' . $duration['formatted'] . '; ';
                         }
                     }
                     $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
 
                 } elseif ($data['type'] === 'b') {      // Membership begin
                     $this->listData[$member][$key] = '';
-                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member, $date);
+                    $membership = $membershipCache[$member][$data['id']] ?? null;
                     if ($membership !== null) {
                         $this->listData[$member][$key] = $membership->getValue('mem_begin', 'Y-m-d');
                     }
 
                 } elseif ($data['type'] === 'e') {      // Membership end
                     $this->listData[$member][$key] = '';
-                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member, $date);
+                    $membership = $membershipCache[$member][$data['id']] ?? null;
                     if ($membership !== null) {
                         $this->listData[$member][$key] = $membership->getValue('mem_end', 'Y-m-d');
                     }
 
                 } elseif ($data['type'] === 'd') {      // Membership duration
                     $this->listData[$member][$key] = '';
-                    $membership = $this->getCachedMembership($membershipCache, $data['id'], $member, $date);
+                    $membership = $membershipCache[$member][$data['id']] ?? null;
                     if ($membership !== null) {
                         $duration = $membership->calculateDuration();
                         if (isset($duration['formatted'])) {
@@ -806,37 +914,6 @@ class CategoryReportGenerator
         if ($this->arrConfiguration[$this->conf]['number_col'] == 1) {
             $this->listData[] = $number_col;
         }
-    }
-
-    /**
-     * Returns a membership already loaded for this report row or loads it once.
-     * A missing membership is cached as null as well.
-     *
-     * @param array<int,Membership|null> $cache Memberships for the current user, keyed by role ID.
-     * @param int $roleId Role whose membership should be loaded.
-     * @param int $userId User whose membership should be loaded.
-     * @param string $date Date on which the membership must be active.
-     * @return Membership|null The active membership, if one exists.
-     * @throws Exception
-     */
-    private function getCachedMembership(array &$cache, int $roleId, int $userId, string $date): ?Membership
-    {
-        global $gDb;
-
-        if (!array_key_exists($roleId, $cache)) {
-            $sql = 'SELECT mem_id
-                      FROM ' . TBL_MEMBERS . '
-                     WHERE mem_rol_id = ?
-                       AND mem_usr_id = ?
-                       AND mem_begin <= ?
-                       AND mem_end > ?
-                  ORDER BY mem_begin DESC, mem_id DESC
-                     LIMIT 1';
-            $membershipId = (int)$gDb->queryPrepared($sql, array($roleId, $userId, $date, $date))->fetchColumn();
-            $cache[$roleId] = $membershipId > 0 ? new Membership($gDb, $membershipId) : null;
-        }
-
-        return $cache[$roleId];
     }
 
     /**
