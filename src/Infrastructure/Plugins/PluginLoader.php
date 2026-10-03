@@ -159,6 +159,10 @@ final class PluginLoader
      * at all. The same request through a generated stub below modules/ is checked by
      * PluginRegistry::resolvePage() in exactly the same way.
      *
+     * A directory without a plugin.json is not a plugin of this system but an old-style one, whose
+     * scripts run like modules. Those are not guarded: they stay reachable and look after their own
+     * rights, as they always did.
+     *
      * This can only protect a file that reaches the Admidio bootstrap. A file that does not - the
      * entry file, a class below src/ - never gets this far; it cannot do anything without the
      * bootstrap either, but it should carry the one-line guard that plugin.php of the example plugin
@@ -170,6 +174,16 @@ final class PluginLoader
     {
         $id = PluginRegistry::getScriptPluginId();
         if ($id === null) {
+            return;
+        }
+
+        /*
+         * A directory without a manifest is a plugin of the old kind: a set of module-style scripts
+         * that were always meant to be requested directly and that check their own rights. It is
+         * not a plugin of this system, so nothing here knows its pages or its state. A manifest that
+         * exists but is unusable is a different case and stays refused below.
+         */
+        if (!is_file(rtrim(PluginRegistry::getPluginsPath(), '/\\') . '/' . $id . '/' . Plugin::MANIFEST_FILE)) {
             return;
         }
 
