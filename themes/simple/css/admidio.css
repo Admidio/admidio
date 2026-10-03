@@ -879,6 +879,11 @@ tr.admidio-event-highlight {
     color: var(--bs-body-bg);
 }
 
+#plgCalendarTable td.plgCalendarToday a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
 #plgCalendarTable td.plgCalendarToday a:hover,
 #plgCalendarTable td.plgCalendarToday a:focus {
     color: var(--bs-body-bg);
