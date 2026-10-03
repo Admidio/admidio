@@ -90,6 +90,7 @@ final class FileSystemUtils
         'wma'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true),
         'm4a'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/mp4', 'viewable' => true),
         'm4v'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/x-m4v', 'viewable' => true),
+        'ogv'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/ogg', 'viewable' => true),
         'mkv'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/x-matroska', 'viewable' => true),
         'flac' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/flac', 'viewable' => true),
         'ogg'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/ogg', 'viewable' => true),

@@ -18,7 +18,7 @@
             {foreach $list as $row}
                 <tr id="row_{$row.uuid}">
                     <td><i class="{$row.icon}" data-bs-toggle="tooltip" title="{$row.title}"></i></td>
-                    <td style="word-break: break-word;"><a href="{$row.url}">{$row.name}</a>
+                    <td style="word-break: break-word;"><a href="{$row.url}"{if !$row.folder} data-adm-file-preview{/if}>{$row.name}</a>
                         {if strlen($row.description) > 0}
                             <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
                                 data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"

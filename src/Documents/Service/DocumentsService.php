@@ -127,9 +127,17 @@ class DocumentsService
             throw new Exception('SYS_FILE_NOT_EXIST');
         }
 
-        // Increment download counter
-        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
-        $file->save();
+        // Increment download counter only once per file and session, so a preview followed by a download
+        // or the repeated requests of a media player are not counted several times
+        $hasSession = session_status() === PHP_SESSION_ACTIVE;
+        if (!$hasSession || !in_array($fileUUID, $_SESSION['documents_files_counted'] ?? array(), true)) {
+            $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+            $file->save();
+
+            if ($hasSession) {
+                $_SESSION['documents_files_counted'][] = $fileUUID;
+            }
+        }
 
         return $file;
     }
