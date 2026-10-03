@@ -248,6 +248,40 @@ final class PluginLoaderTest extends PluginTestCase
     }
 
     /**
+     * @testdox A script of a directory without a manifest, an old-style plugin, may be requested directly
+     */
+    public function testDirectRequestOfOldStylePluginIsAllowed(): void
+    {
+        $root = sys_get_temp_dir() . '/adm_legacy_plugins_' . uniqid();
+        mkdir($root . '/oldstyle', 0777, true);
+        file_put_contents($root . '/oldstyle/list.php', '<?php');
+
+        try {
+            PluginRegistry::setPluginsPath($root);
+            $_SERVER['SCRIPT_FILENAME'] = $root . '/oldstyle/list.php';
+
+            PluginLoader::loadEnabled();
+
+            $this->assertFalse(PluginLoader::isLoaded('oldstyle'));
+        } finally {
+            unlink($root . '/oldstyle/list.php');
+            rmdir($root . '/oldstyle');
+            rmdir($root);
+        }
+    }
+
+    /**
+     * @testdox A script of a directory whose manifest is broken is still refused
+     */
+    public function testDirectRequestOfBrokenPluginIsRefused(): void
+    {
+        $_SERVER['SCRIPT_FILENAME'] = self::fixturePath('broken-json') . '/plugin.php';
+
+        $this->expectExceptionMessage('SYS_NO_RIGHTS');
+        PluginLoader::loadEnabled();
+    }
+
+    /**
      * @testdox A request outside the plugins directory is not affected
      */
     public function testRequestOutsideThePluginsDirectory(): void
