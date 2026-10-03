@@ -87,37 +87,4 @@
         {include file="sys-template-parts/parts/form.part.warning.tpl"}
         {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
     </div>
-    {if $data.type eq "datetime" || ($data.type eq "date" && $data.attributes.weekdayFormat && $data.attributes.weekdayFormat neq "none")}
-        <script>
-        if (!window.admidioDateWeekdayInitialized) {
-            window.admidioDateWeekdayInitialized = true;
-            function admidioUpdateDateWeekday($input) {
-                var val = $input.val();
-                var $span = $('#' + $input.attr('id') + '_weekday');
-                if (!$span.length) return;
-                if (!val) { $span.text(''); return; }
-                var parts = val.split('-');
-                if (parts.length === 3) {
-                    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-                    var fmt = $span.data('weekday-format') || 'short';
-                    var lang = document.documentElement.lang || 'default';
-                    var wd = d.toLocaleDateString(lang, { weekday: fmt });
-                    if (fmt === 'short') { wd = wd.replace(/\.$/, ''); }
-                    $span.text(wd);
-                }
-            }
-            $(document).on('change input', '.admidio-date-with-weekday', function() {
-                admidioUpdateDateWeekday($(this));
-            });
-            $(function() {
-                $('.admidio-date-with-weekday').each(function() {
-                    var $span = $('#' + $(this).attr('id') + '_weekday');
-                    if ($span.length && !$span.text()) {
-                        admidioUpdateDateWeekday($(this));
-                    }
-                });
-            });
-        }
-        </script>
-    {/if}
 {/if}
