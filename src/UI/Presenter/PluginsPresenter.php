@@ -679,6 +679,7 @@ class PluginsPresenter extends PagePresenter
 
         return match ($plugin->errorCode) {
             Plugin::ERROR_INVALID_ID => $gL10n->get('SYS_PLUGIN_INVALID_ID', array($plugin->id)),
+            Plugin::ERROR_ID_CONFLICT => $gL10n->get('SYS_PLUGIN_ID_CONFLICT', array($plugin->id)),
             Plugin::ERROR_NO_MANIFEST => $gL10n->get('SYS_PLUGIN_NO_MANIFEST', array(Plugin::MANIFEST_FILE)),
             Plugin::ERROR_INVALID_MANIFEST => $gL10n->get('SYS_PLUGIN_INVALID_MANIFEST', array(Plugin::MANIFEST_FILE)),
             default => $gL10n->get('SYS_PLUGIN_INCOMPATIBLE', array((string)$plugin->error)),

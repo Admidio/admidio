@@ -201,7 +201,7 @@ final class PluginInstaller
         } else {
             // The files are gone, so the only preference whose name is still known is the one that
             // Admidio owns itself.
-            PreferencesService::removePreferences(array('plugin_' . str_replace('-', '_', $id) . '_enabled'));
+            PreferencesService::removePreferences(array('plugin_' . Plugin::getSettingKey($id) . '_enabled'));
         }
 
         if ($componentId > 0) {

@@ -7,6 +7,7 @@
 
 namespace Admidio\Tests\Unit\Plugins;
 
+use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
 
@@ -75,6 +76,38 @@ final class PluginRegistryTest extends PluginTestCase
             array_keys($plugins)
         );
         $this->assertSame(0, $GLOBALS['helloPluginEntryFileRuns']);
+    }
+
+    /**
+     * @testdox Plugins whose preference names would be the same are all refused
+     */
+    public function testConflictingIdsAreRefused(): void
+    {
+        $root = sys_get_temp_dir() . '/adm_conflict_plugins_' . uniqid();
+        $dirs = array('Birthday-List', 'birthday_list', 'Other');
+        foreach ($dirs as $dir) {
+            mkdir($root . '/' . $dir, 0777, true);
+            file_put_contents($root . '/' . $dir . '/plugin.json', '{"name": "Test", "version": "1.0.0"}');
+            file_put_contents($root . '/' . $dir . '/plugin.php', '<?php');
+        }
+
+        try {
+            PluginRegistry::setPluginsPath($root);
+            $plugins = PluginRegistry::all();
+
+            $this->assertTrue($plugins['Other']->isValid());
+            foreach (array('Birthday-List', 'birthday_list') as $id) {
+                $this->assertFalse($plugins[$id]->isValid(), $id);
+                $this->assertSame(Plugin::ERROR_ID_CONFLICT, $plugins[$id]->errorCode, $id);
+            }
+        } finally {
+            foreach ($dirs as $dir) {
+                unlink($root . '/' . $dir . '/plugin.json');
+                unlink($root . '/' . $dir . '/plugin.php');
+                rmdir($root . '/' . $dir);
+            }
+            rmdir($root);
+        }
     }
 
     /**

@@ -131,8 +131,43 @@ final class PluginRegistry
         }
 
         ksort(self::$plugins);
+        self::refuseConflictingIds(self::$plugins);
 
         return self::$plugins;
+    }
+
+    /**
+     * Mark every plugin whose preference names are those of another plugin as broken.
+     *
+     * The directory name keeps its case, but the preferences derived from it do not (see
+     * Plugin::getSettingKey()), so BirthdayList and birthdaylist - or birthday-list and
+     * birthday_list - would read and write the same preferences. The decision does not depend on
+     * the order of the directories: none of the plugins in conflict is loaded, which is the safe
+     * outcome and tells the administrator what to remove.
+     * @param array<string,Plugin> $plugins
+     * @return void
+     */
+    private static function refuseConflictingIds(array &$plugins): void
+    {
+        $groups = array();
+        foreach ($plugins as $id => $plugin) {
+            if ($plugin->isValid()) {
+                $groups[Plugin::getSettingKey((string)$id)][] = (string)$id;
+            }
+        }
+
+        foreach ($groups as $ids) {
+            if (count($ids) < 2) {
+                continue;
+            }
+            foreach ($ids as $id) {
+                $others = implode(', ', array_diff($ids, array($id)));
+                $plugins[$id] = $plugins[$id]->withError(
+                    'The plugin name is too similar to ' . $others . ': they would share their preferences.',
+                    Plugin::ERROR_ID_CONFLICT
+                );
+            }
+        }
     }
 
     /**
@@ -312,7 +347,7 @@ final class PluginRegistry
             return array();
         }
 
-        $preferenceName = 'plugin_' . str_replace('-', '_', $id) . '_enabled';
+        $preferenceName = 'plugin_' . Plugin::getSettingKey($id) . '_enabled';
 
         $sql = 'SELECT org_longname
                   FROM ' . TBL_ORGANIZATIONS . '
