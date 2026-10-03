@@ -286,7 +286,7 @@ input[type="file"].btn-secondary:hover:not(:disabled):not([readonly])::file-sele
 .admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group),
 .admidio-tabbed-field-group .table-responsive, .admidio-accordion-field-group .table-responsive,
 .admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container,
-.table-responsive .dt-container {
+.admidio-events-table .dt-container {
     margin-bottom: 0;
 }
 
@@ -760,8 +760,8 @@ label {
     margin: 0 !important;
 }
 
-table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
-table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+#adm_events_table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+#adm_events_table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
     text-align: start !important;
 }
 
@@ -775,19 +775,16 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
     padding-inline-start: calc(56px + 0.25rem) !important;
 }
 
-div.table-responsive > div.dt-container > div.row,
-div.dt-container > div.row {
+.admidio-events-table div.dt-container > div.row {
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
 
-div.table-responsive > div.dt-container > div.row > div[class^=col-]:first-child,
-div.dt-container > div.row > div[class^=col-]:first-child {
+.admidio-events-table div.dt-container > div.row > div[class^=col-]:first-child {
     padding-left: 0 !important;
 }
 
-div.table-responsive > div.dt-container > div.row > div[class^=col-]:last-child,
-div.dt-container > div.row > div[class^=col-]:last-child {
+.admidio-events-table div.dt-container > div.row > div[class^=col-]:last-child {
     padding-right: 0 !important;
 }
 

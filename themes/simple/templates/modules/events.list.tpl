@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive admidio-events-table">
     <table id="adm_events_table" class="{$classTable}" style="max-width: 100%;">
         <thead>
             <tr>
