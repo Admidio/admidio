@@ -265,7 +265,7 @@ final class PluginTest extends PluginTestCase
      */
     public function testInvalidIdErrorCode(): void
     {
-        $plugin = Plugin::read(self::fixturePath('Not_Valid'));
+        $plugin = Plugin::read(self::fixturePath('Not Valid'));
 
         $this->assertFalse($plugin->isValid());
         $this->assertSame(Plugin::ERROR_INVALID_ID, $plugin->errorCode);
@@ -301,7 +301,17 @@ final class PluginTest extends PluginTestCase
     }
 
     /**
-     * @testdox A plugin ID is a lowercase directory name with single hyphens or underscores
+     * @testdox The preference names of a plugin ignore the case of its ID and treat hyphens as underscores
+     */
+    public function testSettingKey(): void
+    {
+        $this->assertSame('birthdaylist', Plugin::getSettingKey('BirthdayList'));
+        $this->assertSame('who_is_online', Plugin::getSettingKey('Who-Is-Online'));
+        $this->assertSame('search_member', Plugin::getSettingKey('search_member'));
+    }
+
+    /**
+     * @testdox A plugin ID is a directory name with single hyphens or underscores
      */
     public function testValidId(): void
     {
@@ -309,7 +319,8 @@ final class PluginTest extends PluginTestCase
         $this->assertTrue(Plugin::isValidId('who-is-online'));
         $this->assertTrue(Plugin::isValidId('search_member'));
         $this->assertTrue(Plugin::isValidId('a1'));
-        $this->assertFalse(Plugin::isValidId('Hello'));
+        $this->assertTrue(Plugin::isValidId('BirthdayList'));
+        $this->assertFalse(Plugin::isValidId('Birthday List'));
         $this->assertFalse(Plugin::isValidId('-hello'));
         $this->assertFalse(Plugin::isValidId('_hello'));
         $this->assertFalse(Plugin::isValidId('hello--world'));

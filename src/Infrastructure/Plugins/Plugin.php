@@ -67,6 +67,7 @@ final class Plugin
      * also read by the CLI and logged, where a developer, not a member, is the reader.
      */
     public const ERROR_INVALID_ID = 'invalid_id';
+    public const ERROR_ID_CONFLICT = 'id_conflict';
     public const ERROR_NO_MANIFEST = 'no_manifest';
     public const ERROR_INVALID_MANIFEST = 'invalid_manifest';
     public const ERROR_BROKEN_MANIFEST = 'broken_manifest';
@@ -210,7 +211,7 @@ final class Plugin
 
         if (!self::isValidId($id)) {
             return new self($id, $path, array(), array(), array(), $empty,
-                'The plugin directory name "' . $id . '" must consist of lowercase letters, digits and single '
+                'The plugin directory name "' . $id . '" must consist of letters, digits and single '
                 . 'hyphens or underscores as separators.', self::ERROR_INVALID_ID);
         }
 
@@ -258,12 +259,43 @@ final class Plugin
     /**
      * A plugin ID is the directory name and is used in preference names, URLs and the components
      * table, so it is restricted to a form that is safe everywhere.
+     *
+     * Upper case letters are allowed, because a plugin of Admidio 5 such as BirthdayList used
+     * them. The ID keeps its case in the directory, the URL and the components table; the names
+     * derived from it are not case sensitive, see getSettingKey().
      * @param string $id
      * @return bool
      */
     public static function isValidId(string $id): bool
     {
-        return (bool)preg_match('/^[a-z0-9]+(?:[-_][a-z0-9]+)*$/', $id);
+        return (bool)preg_match('/^[a-zA-Z0-9]+(?:[-_][a-zA-Z0-9]+)*$/', $id);
+    }
+
+    /**
+     * The form of a plugin ID that preference names are built from: lower case, with underscores
+     * instead of hyphens. Two IDs with the same key would share their preferences, which is why
+     * PluginRegistry refuses to load either of them.
+     * @param string $id
+     * @return string
+     */
+    public static function getSettingKey(string $id): string
+    {
+        return strtolower(str_replace('-', '_', $id));
+    }
+
+    /**
+     * The same plugin with an error. The properties are read-only, so a problem that is only found
+     * by comparing several plugins has to produce a new object.
+     * @param string $error English diagnostic.
+     * @param string $errorCode One of the ERROR_* constants.
+     * @return self
+     */
+    public function withError(string $error, string $errorCode): self
+    {
+        return new self(
+            $this->id, $this->path, $this->manifest, $this->autoload, $this->settings, $this->requires,
+            $error, $errorCode
+        );
     }
 
     /**
@@ -468,7 +500,7 @@ final class Plugin
      */
     public function getEnabledSettingName(): string
     {
-        return 'plugin_' . str_replace('-', '_', $this->id) . '_enabled';
+        return 'plugin_' . self::getSettingKey($this->id) . '_enabled';
     }
 
     /**
@@ -479,7 +511,7 @@ final class Plugin
      */
     public function getAccessSettingName(): string
     {
-        return str_replace('-', '_', $this->id) . '_plugin_enabled';
+        return self::getSettingKey($this->id) . '_plugin_enabled';
     }
 
     /**
