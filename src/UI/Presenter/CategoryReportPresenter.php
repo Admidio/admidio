@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PdfUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use Admidio\UI\Component\DataTables;
 use Admidio\Changelog\Service\ChangelogService;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -21,7 +22,7 @@ class CategoryReportPresenter
 {
     public function showReport(): void
     {
-        global $gSettingsManager, $gL10n, $gCurrentOrganization, $gNavigation, $gCurrentUser, $gProfileFields, $gLogger;
+        global $gSettingsManager, $gL10n, $gCurrentOrganization, $gNavigation, $gCurrentUser, $gProfileFields;
         $report = new CategoryReportGenerator();
         $config = Hooks::applyFilters('category_report_config', $report->getConfigArray());
         $getCrtId = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
@@ -129,8 +130,17 @@ class CategoryReportPresenter
         // Both are handed to the page below and read back filtered through getFilteredTitle() /
         // getFilteredHeadline() (page_title / page_headline), because the export filename and the PDF
         // header need the filtered text too and neither of them reaches PagePresenter::show().
-        $subHeadline = $config[$report->getConfiguration()]['name'];
-        $reportDescription = nl2br((string)$config[$report->getConfiguration()]['description']);
+        $subHeadline = html_entity_decode(
+            (string)$config[$report->getConfiguration()]['name'],
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        );
+        $reportDescription = html_entity_decode(
+            (string)$config[$report->getConfiguration()]['description'],
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8'
+        );
+        $reportDescriptionHtml = nl2br(SecurityUtils::encodeHTML($reportDescription));
 
         $page = PagePresenter::withHtmlIDAndHeadline('adm_category_report');
         $page->setTitle($gL10n->get('SYS_CATEGORY_REPORT'));
@@ -150,9 +160,9 @@ class CategoryReportPresenter
             if ($getMode === 'print') {
                 $page->setContentFullWidth();
                 $page->setPrintMode();
-                $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
+                $page->addHtml('<h5 class="admidio-content-subheader">' . SecurityUtils::encodeHTML($subHeadline) . '</h5>');
                 if ($reportDescription !== '') {
-                    $page->addHtml('<p>' . $reportDescription . '</p>');
+                    $page->addHtml('<p>' . $reportDescriptionHtml . '</p>');
                 }
                 $smarty->assign('classTable', $classTable);
             } elseif ($getMode === 'pdf') {
@@ -164,7 +174,7 @@ class CategoryReportPresenter
 
                 // set subHeadline and class for table
                 $smarty->assign('subHeadline', $subHeadline);
-                $smarty->assign('reportDescription', $reportDescription);
+                $smarty->assign('reportDescriptionHtml', $reportDescriptionHtml);
                 $smarty->assign('classTable', $classTable);
             } elseif ($getMode === 'html') {
                 // create html page object
@@ -296,9 +306,9 @@ class CategoryReportPresenter
                 $form->addCheckbox('export_and_filter', $gL10n->get('SYS_FILTER_TO_EXPORT'), $getExportAndFilter);
                 $form->addToHtmlPage();
 
-                $page->addHtml('<h5 class="admidio-content-subheader">' . $subHeadline . '</h5>');
+                $page->addHtml('<h5 class="admidio-content-subheader">' . SecurityUtils::encodeHTML($subHeadline) . '</h5>');
                 if ($reportDescription !== '') {
-                    $page->addHtml('<p>' . $reportDescription . '</p>');
+                    $page->addHtml('<p>' . $reportDescriptionHtml . '</p>');
                 }
                 if ($numMembers === 0) {
                     $page->addHtml('<div class="alert alert-info">' . $gL10n->get('SYS_NO_USER_FOUND') . '</div>');
@@ -346,7 +356,10 @@ class CategoryReportPresenter
         if (in_array($getMode, array('xlsx', 'ods'), true)) {
             $spreadsheet = new Spreadsheet();
             $activeSheet = $spreadsheet->getActiveSheet();
-            $activeSheet->fromArray(array_values($columnValues));
+            foreach (array_values($columnValues) as $columnIndex => $cell) {
+                $coordinate = Coordinate::stringFromColumnIndex($columnIndex + 1) . '1';
+                SpreadsheetUtils::setCellValue($activeSheet, $coordinate, (string)$cell);
+            }
         } else {
             $data['headers'] = $columnValues;
             $data['column_align'] = $columnAlign;
@@ -403,7 +416,9 @@ class CategoryReportPresenter
                     if (in_array($getMode, array('xlsx', 'ods', 'csv', 'pdf'), true)) {
                         $content = 'X';
                     } else {
-                        $content = '<i class="bi bi-check-lg"></i>';
+                        $columnValues[] = CategoryReportOutput::html('<i class="bi bi-check-lg"></i>');
+                        $columnNumber++;
+                        continue;
                     }
                 }
 
@@ -426,7 +441,12 @@ class CategoryReportPresenter
                             && ($usf_id === (int)$gProfileFields->getProperty('LAST_NAME', 'usf_id')
                                 || $usf_id === (int)$gProfileFields->getProperty('FIRST_NAME', 'usf_id'))) {
                             $htmlValue = $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content);
-                            $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $userUuid)) . '">' . $htmlValue . '</a>';
+                            $columnValues[] = CategoryReportOutput::html(
+                                '<a href="' . SecurityUtils::encodeHTML(SecurityUtils::encodeUrl(
+                                    ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                                    array('user_uuid' => $userUuid)
+                                )) . '">' . $htmlValue . '</a>'
+                            );
                         } else {
                             // within print or spreadsheet mode no links should be set
                             if (in_array($getMode, array('print', 'xlsx', 'ods'), true)
@@ -442,9 +462,14 @@ class CategoryReportPresenter
                             } else {
                                 // checkbox must set a sorting value
                                 if ($fieldType === 'CHECKBOX') {
-                                    $columnValues[] = array('value' => $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content), 'order' => $content);
+                                    $columnValues[] = CategoryReportOutput::html(
+                                        $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content),
+                                        (string)$content
+                                    );
                                 } else {
-                                    $columnValues[] = $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content, $userUuid);
+                                    $columnValues[] = CategoryReportOutput::html(
+                                        $gProfileFields->getHtmlValue($profileFieldNames[$usf_id], $content, $userUuid)
+                                    );
                                 }
                             }
                         }
@@ -453,7 +478,7 @@ class CategoryReportPresenter
                         if (strlen($content) > 0) {
                             $columnValues[] = $content;
                         } else {
-                            $columnValues[] = '&nbsp;';
+                            $columnValues[] = CategoryReportOutput::html('&nbsp;');
                         }
                     }
                 }
@@ -467,10 +492,8 @@ class CategoryReportPresenter
                 foreach ($columnValues as $currentCol => $cell) {
                     $currentCol += 1; // array starting with 0 but first column is 1 in spreadsheet
 
-                    // convert html characters to plain text
-                    $cell = html_entity_decode((string)$cell, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     $colLetter = Coordinate::stringFromColumnIndex($currentCol);
-                    $activeSheet->setCellValue($colLetter . $currentRow, $cell);
+                    SpreadsheetUtils::setCellValue($activeSheet, $colLetter . $currentRow, $cell);
                 }
             } else {
                 $data['rows'][] = array('id' => $isSummary ? 'row-total' : 'row-' . $rowNumber,
@@ -525,24 +548,8 @@ class CategoryReportPresenter
             // output the HTML content
             $pdf->writeTable($htmlTable);
 
-            $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-
-            // Save PDF to file
-            // Preserve the exact export path instead of the engine's sanitized filename.
-            FileSystemUtils::writeFile($file, $pdf->getOutPDFString());
-
-            // Redirect
             header('Content-Type: application/pdf');
-
-            readfile($file);
-            ignore_user_abort(true);
-
-            try {
-                FileSystemUtils::deleteFileIfExists($file);
-            } catch (\RuntimeException $exception) {
-                $gLogger->error('Could not delete file!', array('filePath' => $file));
-                // TODO
-            }
+            echo $pdf->getOutPDFString();
         } elseif ($getMode == 'html' && $getExportAndFilter) {
             $page->addJavascript(
                 '

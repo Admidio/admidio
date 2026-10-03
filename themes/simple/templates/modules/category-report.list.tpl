@@ -1,14 +1,14 @@
 {if isset($exportMode)}
-    <h2 style="font-size:12pt;font-weight:bold;text-align:center;margin-top:0;margin-bottom:15px;">{$subHeadline}</h2>
-    {if $reportDescription !== ''}
-        <p style="font-size:10pt;text-align:left;margin-bottom:15px;">{$reportDescription nofilter}</p>
+    <h2 style="font-size:12pt;font-weight:bold;text-align:center;margin-top:0;margin-bottom:15px;">{$subHeadline|escape}</h2>
+    {if $reportDescriptionHtml !== ''}
+        <p style="font-size:10pt;text-align:left;margin-bottom:15px;">{$reportDescriptionHtml nofilter}</p>
     {/if}
 {/if}
 <table id="adm_lists_table" class="{$classTable}" {foreach $attributes as $attribute} {$attribute@key}="{$attribute}" {/foreach} {if !isset($exportMode)}style="max-width: 100%;"{/if}>
     <thead>
         <tr {if isset($exportMode)}style="{$headersStyle}"{/if}>
             {foreach $headers as $key => $header}
-                <th style="{if isset($exportMode)}padding-left:3px;padding-right:3px;{/if}text-align:{$columnAlign[$key]};">{$header}</th>
+                <th style="{if isset($exportMode)}padding-left:3px;padding-right:3px;{/if}text-align:{$columnAlign[$key]|escape};">{$header|escape}</th>
             {/foreach}
         </tr>
     </thead>
@@ -21,7 +21,7 @@
     {foreach $rows as $row}
         <tr id="{$row.id}" {if isset($exportMode)}style="{$rowsStyle}"{/if}>
         {foreach $row.data as $key => $cell}
-            <td style="{if isset($exportMode)}padding-left:3px;padding-right:3px;{/if}text-align:{$columnAlign[$key]};"{if isset($cell.order)} data-order="{$cell.order}"{/if}>{if isset($cell.value)} {$cell.value} {else} {$cell} {/if}</td>
+            <td style="{if isset($exportMode)}padding-left:3px;padding-right:3px;{/if}text-align:{$columnAlign[$key]|escape};"{if isset($cell.order)} data-order="{$cell.order|escape}"{/if}>{if isset($cell.html) && $cell.html} {$cell.value nofilter} {else} {$cell|escape} {/if}</td>
         {/foreach}
         </tr>
     {/foreach}

@@ -6,10 +6,14 @@ use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
 use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\CategoryReport\Service\CategoryReportGenerator;
 use Admidio\CategoryReport\Service\CategoryReportRepository;
+use Admidio\Infrastructure\Exception;
+use Admidio\ProfileFields\Entity\ProfileField;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Tests\Support\AdmidioTestFixture;
-use Admidio\Tests\Support\DatabaseTestCase;
+use Admidio\Tests\Support\AdministratorTestCase;
+use Admidio\UI\Presenter\FormPresenter;
 
-class CategoryReportTest extends DatabaseTestCase
+class CategoryReportTest extends AdministratorTestCase
 {
     protected function tearDown(): void
     {
@@ -33,6 +37,80 @@ class CategoryReportTest extends DatabaseTestCase
         $roleLabel = $gL10n->get('SYS_ROLE') . ': ' . $gL10n->get('SYS_ADMINISTRATOR');
         $headerLabels = array_column((new CategoryReportGenerator())->headerSelection, 'data');
         $this->assertContains($roleLabel, $headerLabels);
+    }
+
+    public function testFieldAndRoleNamesRemainPlainTextUntilHtmlRendering(): void
+    {
+        global $gCurrentOrgId, $gProfileFields;
+
+        $previousProfileFields = $gProfileFields;
+        try {
+            $profileCategoryId = (int)$this->getDatabase()->queryPrepared(
+                'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_type = ? ORDER BY cat_id LIMIT 1',
+                array('USF')
+            )->fetchColumn();
+            $field = new ProfileField($this->getDatabase());
+            $field->setValue('usf_cat_id', $profileCategoryId);
+            $field->setValue('usf_type', 'TEXT');
+            $field->setValue('usf_name', 'Field & "Lead"');
+            $field->save();
+            $gProfileFields = new ProfileFields($this->getDatabase(), $gCurrentOrgId);
+
+            $fixture = new AdmidioTestFixture($this->getDatabase());
+            $role = $fixture->createAndSaveRole('Board & "Lead"', $gCurrentOrgId);
+            $user = $fixture->createAndSaveUser('category-report-html', 'category-report-html@example.local');
+            $fixture->assignUserToRolePeriod($user['usr_id'], $role['rol_id'], '2020-01-01', DATE_MAX);
+
+            $configurations = (new CategoryReportRepository())->saveConfigArray(array(array(
+                'id' => '',
+                'name' => 'HTML encoding test',
+                'description' => '',
+                'columns' => array(
+                    array('field' => 'p' . $field->getValue('usf_id'), 'condition' => ''),
+                    array('field' => 'adummy', 'condition' => '')
+                ),
+                'selection_role' => (string)$role['rol_id'],
+                'selection_cat' => '',
+                'number_col' => 0,
+                'default_conf' => false
+            )));
+            $configuration = array_values(array_filter(
+                $configurations,
+                static fn(array $values): bool => $values['name'] === 'HTML encoding test'
+            ))[0];
+
+            $generator = new CategoryReportGenerator();
+            $generator->getConfigArray();
+            $generator->setConfiguration((int)$configuration['id']);
+            $generator->generate_listData();
+
+            $this->assertSame('Field & "Lead"', $generator->headerData[1]['data']);
+            $this->assertSame('Board & "Lead"', $generator->listData[$user['usr_id']][2]);
+        } finally {
+            $gProfileFields = $previousProfileFields;
+        }
+    }
+
+    public function testForeignRoleSelectionIsRejected(): void
+    {
+        global $gCurrentOrgId;
+
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $organization = $fixture->createAndSaveOrganization('Foreign report org', 'forreport');
+        $category = $fixture->createAndSaveCategory('Foreign role category', 'ROL', $organization['org_id']);
+        $role = $fixture->createAndSaveRoleInCategory('Foreign report role', $category['cat_id']);
+
+        $this->assertSelectionIsRejected(array($role['rol_id']), array());
+    }
+
+    public function testForeignRoleCategorySelectionIsRejected(): void
+    {
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $organization = $fixture->createAndSaveOrganization('Foreign category org', 'forcat');
+        $category = $fixture->createAndSaveCategory('Foreign report category', 'ROL', $organization['org_id']);
+        $fixture->createAndSaveRoleInCategory('Foreign category role', $category['cat_id']);
+
+        $this->assertSelectionIsRejected(array(), array($category['cat_id']));
     }
 
     public function testColumnsAreStoredInTheirOwnOrderedRecords(): void
@@ -277,5 +355,52 @@ class CategoryReportTest extends DatabaseTestCase
         $generator->getConfigArray();
         $generator->setConfiguration((int)$configuration['id']);
         return $generator;
+    }
+
+    private function assertSelectionIsRejected(array $roles, array $categories): void
+    {
+        global $gCurrentSession, $gL10n;
+
+        $reportCount = (int)$this->getDatabase()->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_CATEGORY_REPORT
+        )->fetchColumn();
+        $form = new FormPresenter('category_report_security_test', 'modules/category-report.edit.tpl');
+        $previousSession = $gCurrentSession;
+        $gCurrentSession = new class ($form) {
+            public function __construct(private FormPresenter $form)
+            {
+            }
+
+            public function getFormObject(string $token): ?FormPresenter
+            {
+                return $token === $this->form->getCsrfToken() ? $this->form : null;
+            }
+        };
+        $request = array(
+            'adm_csrf_token' => $form->getCsrfToken(),
+            'report_action' => 'new',
+            'source_id' => 0,
+            'name' => 'Manipulated report',
+            'description' => '',
+            'columns' => array('uuuid'),
+            'columnsRoleProp' => array(''),
+            'conditions' => array(''),
+            'selection_role' => $roles,
+            'selection_cat' => $categories
+        );
+
+        try {
+            try {
+                (new CategoryReportRepository())->saveFromRequest($request);
+                $this->fail('A selection from another organization was accepted.');
+            } catch (Exception $exception) {
+                $this->assertSame($gL10n->get('SYS_INVALID_PAGE_VIEW'), $exception->getMessage());
+            }
+        } finally {
+            $gCurrentSession = $previousSession;
+        }
+        $this->assertSame($reportCount, (int)$this->getDatabase()->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_CATEGORY_REPORT
+        )->fetchColumn());
     }
 }

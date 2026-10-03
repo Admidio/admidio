@@ -1,6 +1,8 @@
 <?php
 namespace Admidio\CategoryReport\Service;
 
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
+
 /** Prepares report rows consistently for all presentation and export formats. */
 class CategoryReportOutput
 {
@@ -72,6 +74,10 @@ class CategoryReportOutput
 
         try {
             foreach ($rows as $row) {
+                $row = array_map(
+                    static fn(mixed $value): string => SpreadsheetUtils::neutralizeFormula((string)$value),
+                    $row
+                );
                 if (fputcsv($stream, $row, ',', '"', '') === false) {
                     throw new \RuntimeException('Unable to write CSV row.');
                 }
@@ -86,4 +92,20 @@ class CategoryReportOutput
             fclose($stream);
         }
     }
+
+    /**
+     * Mark generated, trusted HTML so the report template can distinguish it from text cells.
+     *
+     * @return array{value:string,html:true,order?:int|string}
+     */
+    public static function html(string|int $value, int|string|null $order = null): array
+    {
+        $cell = array('value' => (string)$value, 'html' => true);
+        if ($order !== null) {
+            $cell['order'] = $order;
+        }
+
+        return $cell;
+    }
+
 }

@@ -3,7 +3,11 @@
 namespace Admidio\Tests\Unit\CategoryReport;
 
 use Admidio\CategoryReport\Service\CategoryReportOutput;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use PHPUnit\Framework\TestCase;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Smarty\Smarty;
 
 class CategoryReportOutputTest extends TestCase
 {
@@ -28,6 +32,76 @@ class CategoryReportOutputTest extends TestCase
             static fn(array $row): array => array_map('strval', $row),
             $rows
         ), $parsed);
+    }
+
+    public function testCsvNeutralizesSpreadsheetFormulas(): void
+    {
+        $csv = CategoryReportOutput::createCsv(array(array(
+            '=HYPERLINK("https://example.org")',
+            '+SUM(1,2)',
+            '-cmd|calc',
+            '@SUM(1,2)',
+            '-5',
+            'ordinary'
+        )));
+        $stream = fopen('php://temp', 'w+');
+        fwrite($stream, $csv);
+        rewind($stream);
+        $row = fgetcsv($stream, escape: '');
+        fclose($stream);
+
+        $this->assertSame(array(
+            '\'=HYPERLINK("https://example.org")',
+            '\'+SUM(1,2)',
+            '\'-cmd|calc',
+            '\'@SUM(1,2)',
+            '-5',
+            'ordinary'
+        ), $row);
+    }
+
+    public function testReportTemplateEscapesTextAndRendersMarkedHtml(): void
+    {
+        $smarty = new Smarty();
+        $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
+        $smarty->setCompileDir(sys_get_temp_dir());
+        $smarty->assign(array(
+            'classTable' => '',
+            'attributes' => array(),
+            'columnAlign' => array('left', 'center'),
+            'headers' => array('Role <Admin> & "Lead"', 'Selected'),
+            'rows' => array(array(
+                'id' => 'row-1',
+                'data' => array(
+                    'Board <script>alert("x")</script> & Team',
+                    CategoryReportOutput::html('<i class="bi bi-check-lg"></i>')
+                )
+            ))
+        ));
+
+        $html = $smarty->fetch('modules/category-report.list.tpl');
+
+        $this->assertStringContainsString('Role &lt;Admin&gt; &amp; &quot;Lead&quot;', $html);
+        $this->assertStringContainsString(
+            'Board &lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; Team',
+            $html
+        );
+        $this->assertStringContainsString('<i class="bi bi-check-lg"></i>', $html);
+        $this->assertStringNotContainsString('<script>', $html);
+    }
+
+    public function testSpreadsheetFormulaTextIsWrittenExplicitlyAsText(): void
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $values = array('=1+1', '+SUM(1,2)', '-cmd|calc', '@SUM(1,2)');
+
+        foreach ($values as $index => $value) {
+            $coordinate = 'A' . ($index + 1);
+            SpreadsheetUtils::setCellValue($sheet, $coordinate, $value);
+            $this->assertSame($value, $sheet->getCell($coordinate)->getValue());
+            $this->assertSame(DataType::TYPE_STRING, $sheet->getCell($coordinate)->getDataType());
+        }
     }
 
     public function testFilteringPreservesOrderAndRecalculatesSummary(): void

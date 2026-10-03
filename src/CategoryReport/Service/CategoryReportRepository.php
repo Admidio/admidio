@@ -2,6 +2,7 @@
 namespace Admidio\CategoryReport\Service;
 
 use Admidio\CategoryReport\Entity\CategoryReport as CategoryReportEntity;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Exception;
@@ -216,7 +217,7 @@ class CategoryReportRepository
         if (!is_array($roles) || !is_array($categories)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
-        $normalizeSelection = static function (array $selection): string {
+        $normalizeSelection = static function (array $selection): array {
             $ids = array();
             foreach ($selection as $value) {
                 if ($value === '') {
@@ -227,15 +228,43 @@ class CategoryReportRepository
                 }
                 $ids[] = (int)$value;
             }
-            return implode(',', array_unique($ids));
+            return array_values(array_unique($ids));
         };
+        $roleIds = $normalizeSelection($roles);
+        $categoryIds = $normalizeSelection($categories);
+        $validateSelection = static function (array $ids, string $idColumn, string $join) use ($gDb, $gCurrentOrgId): void {
+            if ($ids === array()) {
+                return;
+            }
+
+            $statement = $gDb->queryPrepared(
+                'SELECT DISTINCT ' . $idColumn . '
+                   FROM ' . $join . '
+                  WHERE ' . $idColumn . ' IN (' . Database::getQmForValues($ids) . ')
+                    AND cat_type = \'ROL\'
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)',
+                array_merge($ids, array($gCurrentOrgId))
+            );
+            $validIds = array_map('intval', $statement->fetchAll(\PDO::FETCH_COLUMN));
+            sort($ids);
+            sort($validIds);
+            if ($ids !== $validIds) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+        };
+        $validateSelection(
+            $roleIds,
+            'rol_id',
+            TBL_ROLES . ' INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id'
+        );
+        $validateSelection($categoryIds, 'cat_id', TBL_CATEGORIES);
         $gDb->startTransaction();
         $report = new CategoryReportEntity($gDb, $action === 'edit' ? $sourceId : 0);
         $report->setValue('crt_org_id', $gCurrentOrgId);
         $report->setValue('crt_name', $name);
         $report->setValue('crt_description', $description);
-        $report->setValue('crt_selection_role', $normalizeSelection($roles));
-        $report->setValue('crt_selection_cat', $normalizeSelection($categories));
+        $report->setValue('crt_selection_role', implode(',', $roleIds));
+        $report->setValue('crt_selection_cat', implode(',', $categoryIds));
         $report->setValue('crt_number_col', isset($request['number_col']) ? 1 : 0);
         $report->setColumns($columns);
         $report->save();

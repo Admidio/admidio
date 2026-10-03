@@ -1,7 +1,6 @@
 <?php
 namespace Admidio\CategoryReport\Service;
 
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\ValueObject\ConditionParser;
 use Admidio\Roles\Entity\Membership;
@@ -724,9 +723,7 @@ class CategoryReportGenerator
                 $roleId = (int)$row['mem_rol_id'];
                 $membershipsByUser[$userId][$roleId] = true;
                 if ($needsRoleNames && !isset($roleNames[$roleId])) {
-                    $roleNames[$roleId] = SecurityUtils::encodeHTML(
-                        Language::translateIfTranslationStrId((string)$row['rol_name'])
-                    );
+                    $roleNames[$roleId] = Language::translateIfTranslationStrId((string)$row['rol_name']);
                 }
             }
         }
@@ -932,7 +929,9 @@ class CategoryReportGenerator
             if ($field->getValue('usf_hidden') == 0 || $gCurrentUser->isAdministratorUsers()) {
                 $this->headerSelection[$i]['id'] = 'p' . $field->getValue('usf_id');
                 $this->headerSelection[$i]['cat_name'] = $field->getValue('cat_name');
-                $this->headerSelection[$i]['data'] = addslashes($field->getValue('usf_name'));
+                $this->headerSelection[$i]['data'] = Language::translateIfTranslationStrId(
+                    (string)$field->getValue('usf_name', 'database')
+                );
                 $i++;
             }
         }
