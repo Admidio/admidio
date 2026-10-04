@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -410,7 +411,9 @@ class InventoryPresenter extends PagePresenter
                 'menu_item_inventory_reservations',
                 $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_list')),
-                'bi-calendar-check'
+                'bi-calendar-check',
+                '',
+                ReservationService::countPendingReservations($gDb)
             );
         } elseif (InventoryAccessService::canRequestReservation()) {
             $this->addPageFunctionsMenuItem(

@@ -20,6 +20,23 @@ class ReservationService
         $this->database = $database;
     }
 
+    /** Return the number of pending requests visible to reservation managers. */
+    public static function countPendingReservations(Database $database): int
+    {
+        global $gCurrentOrgId;
+
+        if (!InventoryAccessService::canManageReservations()) {
+            return 0;
+        }
+
+        return (int)$database->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
+             INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
+                   WHERE ini_org_id = ? AND ivr_status = ?',
+            array($gCurrentOrgId, Reservation::STATUS_REQUESTED)
+        )->fetchColumn();
+    }
+
     /**
      * Creates a request only when no confirmed reservation overlaps the requested period.
      */
