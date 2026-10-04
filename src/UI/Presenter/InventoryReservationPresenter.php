@@ -123,9 +123,9 @@ class InventoryReservationPresenter extends PagePresenter
             }
             if (count($actions) > 0) {
                 $buttonIcon = match ($row['ivr_status']) {
-                    Reservation::STATUS_APPROVED => 'bi-check-circle-fill',
-                    Reservation::STATUS_REQUESTED => 'bi-hourglass-split',
-                    default => 'bi-x-circle-fill'
+                    Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
+                    Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
+                    default => 'bi-x-circle-fill text-danger'
                 };
                 $html .= '<div class="btn-group admidio-inventory-reservation-action" role="group">'
                     . '<button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
