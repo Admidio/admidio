@@ -38,7 +38,7 @@ class InventoryItemPresenter extends PagePresenter
     /** Display a reservation request form for a selected inventory item or an administrator-selected item. */
     public function createReservationRequestForm(string $itemUUID = ''): void
     {
-        global $gCurrentSession, $gCurrentUser, $gCurrentOrgId, $gDb, $gL10n, $gSettingsManager, $gValidLogin;
+        global $gCurrentSession, $gCurrentOrgId, $gDb, $gL10n, $gSettingsManager, $gValidLogin;
 
         if (!InventoryAccessService::canRequestReservation()) {
             throw new Exception('SYS_NO_RIGHTS');
@@ -51,7 +51,7 @@ class InventoryItemPresenter extends PagePresenter
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
             $formUrlParameters['item_uuid'] = $itemUUID;
-        } elseif (!$gCurrentUser->isAdministratorInventory()) {
+        } elseif (!InventoryAccessService::canManageReservations()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 

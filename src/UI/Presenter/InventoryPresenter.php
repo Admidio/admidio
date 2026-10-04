@@ -415,15 +415,6 @@ class InventoryPresenter extends PagePresenter
         }
 
         if ($gCurrentUser->isAdministratorInventory()) {
-            if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
-                $this->addPageFunctionsMenuItem(
-                    'menu_item_inventory_reservation_request',
-                    $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
-                    'bi-calendar-plus'
-                );
-            }
-
             // show link to view inventory history
             ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
 
