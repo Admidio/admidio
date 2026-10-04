@@ -105,6 +105,8 @@ class UploadHandlerFile extends UploadHandler
             // remove XSS from filename before the name will be shown in the error message
             $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
             $file->error = $e->getMessage();
+            // the uploaded part was deleted, so the client must not continue a chunked upload after this size
+            $file->size = 0;
 
             return $file;
         }
