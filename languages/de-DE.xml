@@ -833,6 +833,9 @@
   <string name="SYS_INVENTORY_BORROW_DATE">Ausleihdatum</string>
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Das Ausleihdatum des Gegenstandes muss vor dem Rückgabedatum liegen!</string>
+  <string name="SYS_INVENTORY_BORROWINGS">Ausleihen</string>
+  <string name="SYS_INVENTORY_BORROWINGS_READY">Freigegebene Reservierungen zur Ausgabe</string>
+  <string name="SYS_INVENTORY_BORROWINGS_ACTIVE">Aktive Ausleihen</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Die Kategorie des Gegenstandes</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Verbundenes Feld</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Einstellungen für das Kopieren eines Gegenstandes:</string>
@@ -854,6 +857,8 @@
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Gegenstände importieren</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
   <string name="SYS_INVENTORY_ITEM_BORROW">Gegenstand ausleihen</string>
+  <string name="SYS_INVENTORY_START_BORROWING">Ausleihe starten</string>
+  <string name="SYS_INVENTORY_RECORD_RETURN">Rückgabe erfassen</string>
   <string name="SYS_INVENTORY_ITEM_BORROW_DATA">Ausleihdaten des Gegenstandes</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Gegenstand erfolgreich kopiert</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Gegenstand kopieren</string>
@@ -926,6 +931,7 @@
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Freigeben</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Ablehnen</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS">Status</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_PER_EVENT">Reservierungsstatus je Termin</string>
   <string name="SYS_INVENTORY_RESERVATION_ORIGIN">Herkunft</string>
   <string name="SYS_INVENTORY_RESERVATION_ORIGIN_MEMBER_REQUEST">Mitgliederanfrage</string>
   <string name="SYS_INVENTORY_RESERVATION_ORIGIN_GUEST_REQUEST">Gästeanfrage</string>
@@ -933,6 +939,8 @@
   <string name="SYS_INVENTORY_RESERVATION_STATUS_APPROVED">Freigegeben</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_REJECTED">Abgelehnt</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_CANCELLED">Storniert</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_BORROWED">Ausgeliehen</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_RETURNED">Zurückgegeben</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTER">Angefragt von</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTED_AT">Angefragt am</string>
   <string name="SYS_INVENTORY_RESERVATION_PERIOD_FROM">Reservieren von</string>
