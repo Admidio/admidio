@@ -106,22 +106,27 @@ class InventoryReservationPresenter extends PagePresenter
                 . SecurityUtils::encodeHTML($statusLabels[$row['ivr_status']] ?? $row['ivr_status']) . '</td><td>';
 
             $actions = array();
-            if ($row['ivr_status'] === Reservation::STATUS_REQUESTED) {
+            if ($isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE'));
-                $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
-                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
-            } elseif ($row['ivr_status'] === Reservation::STATUS_APPROVED) {
+                if ($row['ivr_status'] === Reservation::STATUS_REQUESTED) {
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
+                    $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
+                }
+            } elseif ($isManager && $row['ivr_status'] === Reservation::STATUS_APPROVED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_cancel', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL'));
             }
             if (!$isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED), true)) {
-                $actions = array();
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_withdraw', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_WITHDRAW'));
             }
             if (count($actions) > 0) {
-                $buttonIcon = $row['ivr_status'] === Reservation::STATUS_APPROVED ? 'bi-check-circle-fill' : 'bi-hourglass-split';
+                $buttonIcon = match ($row['ivr_status']) {
+                    Reservation::STATUS_APPROVED => 'bi-check-circle-fill',
+                    Reservation::STATUS_REQUESTED => 'bi-hourglass-split',
+                    default => 'bi-x-circle-fill'
+                };
                 $html .= '<div class="btn-group admidio-inventory-reservation-action" role="group">'
                     . '<button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
                     . '<i class="bi ' . $buttonIcon . '"></i>' . $statusLabels[$row['ivr_status']] . '</button><ul class="dropdown-menu">';
@@ -160,6 +165,13 @@ class InventoryReservationPresenter extends PagePresenter
             $("#reservation_filter_status").on("change", function() {
                 reservationTable.column(5).search("^" + $.fn.dataTable.util.escapeRegex(this.value) + "$", true, false).draw();
             });
+            function showReservationActionError(message) {
+                $("#adm_status_message").empty().append(
+                    $("<div>", {class: "alert alert-danger"})
+                        .append($("<i>", {class: "bi bi-exclamation-circle-fill"}))
+                        .append(document.createTextNode(message || "Error: Undefined error occurred!"))
+                );
+            }
             $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-action .dropdown-item", function(event) {
                 event.preventDefault();
 
@@ -179,17 +191,15 @@ class InventoryReservationPresenter extends PagePresenter
                         return;
                     }
 
-                    $("#adm_status_message").empty().append(
-                        $("<div>", {class: "alert alert-danger"})
-                            .append($("<i>", {class: "bi bi-exclamation-circle-fill"}))
-                            .append(document.createTextNode(response.message || "Error: Undefined error occurred!"))
-                    );
-                }).fail(function() {
-                    $("#adm_status_message").empty().append(
-                        $("<div>", {class: "alert alert-danger"})
-                            .append($("<i>", {class: "bi bi-exclamation-circle-fill"}))
-                            .append(document.createTextNode("Error: Undefined error occurred!"))
-                    );
+                    showReservationActionError(response.message);
+                }).fail(function(xhr) {
+                    var response;
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                    } catch (error) {
+                        response = {};
+                    }
+                    showReservationActionError(response.message);
                 });
             });
         ', true);
