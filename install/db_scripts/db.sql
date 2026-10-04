@@ -56,6 +56,7 @@ DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_reservations            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_oidc_access_tokens                CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_oidc_auth_codes                   CASCADE;
@@ -1264,6 +1265,36 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
 
 /*==============================================================*/
+/* Table: adm_inventory_reservations                            */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_reservations
+(
+    ivr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ivr_uuid                    varchar(36)         NOT NULL,
+    ivr_ini_id                  integer unsigned    NOT NULL,
+    ivr_dat_id                  integer unsigned    NULL        DEFAULT NULL,
+    ivr_usr_id                  integer unsigned    NULL        DEFAULT NULL,
+    ivr_guest_name              varchar(255)        NULL        DEFAULT NULL,
+    ivr_guest_email             varchar(255)        NULL        DEFAULT NULL,
+    ivr_comment                 text                NULL,
+    ivr_begin                   timestamp           NOT NULL,
+    ivr_end                     timestamp           NOT NULL,
+    ivr_status                  varchar(20)         NOT NULL    DEFAULT 'requested',
+    ivr_usr_id_create           integer unsigned    NULL,
+    ivr_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ivr_usr_id_change           integer unsigned    NULL,
+    ivr_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (ivr_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ivr_uuid ON %PREFIX%_inventory_reservations (ivr_uuid);
+CREATE INDEX %PREFIX%_idx_ivr_item_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_begin, ivr_end);
+CREATE INDEX %PREFIX%_idx_ivr_event ON %PREFIX%_inventory_reservations (ivr_dat_id);
+
+/*==============================================================*/
 /* Table: adm_inventory_items                                   */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_inventory_items
@@ -1550,6 +1581,13 @@ ALTER TABLE %PREFIX%_inventory_item_data
 
 ALTER TABLE %PREFIX%_inventory_item_borrow_data
     ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_inventory_reservations
+    ADD CONSTRAINT %PREFIX%_fk_ivr_ini          FOREIGN KEY (ivr_ini_id)          REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ivr_dat          FOREIGN KEY (ivr_dat_id)          REFERENCES %PREFIX%_events (dat_id)              ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ivr_usr          FOREIGN KEY (ivr_usr_id)          REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ivr_usr_create   FOREIGN KEY (ivr_usr_id_create)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ivr_usr_change   FOREIGN KEY (ivr_usr_id_change)   REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
