@@ -92,7 +92,8 @@ class InventoryReservationPresenter extends PagePresenter
         $html = '<div class="table-responsive"><table id="adm_inventory_reservations_table" class="table table-condensed table-hover" style="max-width: 100%;"><thead><tr><th>'
             . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER') . '</th><th>'
             . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_FROM') . '</th><th>'
-            . $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_TO') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN') . '</th><th></th></tr></thead><tbody>';
+            . $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_TO') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN') . '</th><th>'
+            . $gL10n->get('SYS_COMMENT') . '</th><th></th></tr></thead><tbody>';
         $user = new User($gDb, $gProfileFields);
         foreach ($rows as $row) {
             if ((int)$row['ivr_usr_id'] > 0 && $user->readDataById((int)$row['ivr_usr_id'])) {
@@ -114,12 +115,14 @@ class InventoryReservationPresenter extends PagePresenter
                 . SecurityUtils::encodeHTML($row['ivr_timestamp_create']) . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_begin'])
                 . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_end']) . '</td><td>' . $origin . '</td><td>';
 
-            $actions = array();
             if (trim((string)$row['ivr_comment']) !== '') {
                 $html .= '<a class="admidio-icon-link admidio-inventory-reservation-comment" href="javascript:void(0);" data-comment="'
                     . SecurityUtils::encodeHTML($row['ivr_comment']) . '"><i class="bi bi-chat-left-text-fill" data-bs-toggle="tooltip" title="'
                     . SecurityUtils::encodeHTML($gL10n->get('SYS_COMMENT')) . '"></i></a>';
             }
+            $html .= '</td><td>';
+
+            $actions = array();
             if ($isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE'));
@@ -156,10 +159,10 @@ class InventoryReservationPresenter extends PagePresenter
         $this->addHtml($html . '</tbody></table></div><div id="adm_inventory_reservations_alert" class="alert alert-danger form-alert mt-3" style="display: none;"></div>');
 
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
-        $dataTables->disableColumnsSort(array(7));
-        $dataTables->setColumnsNotHideResponsive(array(1, 7));
+        $dataTables->disableColumnsSort(array(7, 8));
+        $dataTables->setColumnsNotHideResponsive(array(1, 8));
         $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
-        $dataTables->createJavascript(max(count($rows), 11), 7);
+        $dataTables->createJavascript(max(count($rows), 11), 8);
         $this->addJavascript('
             var reservationTable = $("#adm_inventory_reservations_table").DataTable();
             var reservationActionErrorTimeout;
