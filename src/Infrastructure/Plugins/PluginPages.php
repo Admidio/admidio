@@ -301,6 +301,11 @@ final class PluginPages
             } elseif ($allowed && $plugin->hasPages() && PluginRegistry::isInstalled($id)) {
                 $report[$id] = (string)self::getObstacle($plugin);
             }
+
+            // The stored menu URL follows whichever form is live now, in both directions.
+            if ($plugin->isValid() && $plugin->hasPages() && PluginRegistry::isInstalled($id)) {
+                PluginInstaller::updateMenuEntries($plugin, PluginRegistry::getComponentId($id));
+            }
         }
 
         // A plugin whose files are gone leaves its stubs behind; they are removed here as well.

@@ -400,11 +400,11 @@ final class PluginInstaller
      * @return void
      * @throws Exception
      */
-    private static function updateMenuEntries(Plugin $plugin, int $componentId): void
+    public static function updateMenuEntries(Plugin $plugin, int $componentId): void
     {
         global $gDb;
 
-        if ($componentId === 0) {
+        if ($componentId === 0 || !isset($gDb)) {
             return;
         }
 
