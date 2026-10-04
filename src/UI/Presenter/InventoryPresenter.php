@@ -416,7 +416,7 @@ class InventoryPresenter extends PagePresenter
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data,inventory_reservations');
 
             // link to print overlay and exports
             $this->addPageFunctionsMenuItem(
