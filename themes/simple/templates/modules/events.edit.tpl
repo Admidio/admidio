@@ -5,6 +5,9 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {$eventSections = ['basic' => 'SYS_BASIC_DATA', 'participation' => 'SYS_EVENT_REGISTRATION']}
+    {if {array_key_exists array=$elements key='event_inventory_items'}}
+        {$eventSections['reservations'] = 'SYS_INVENTORY_RESERVATIONS'}
+    {/if}
     <div class="tabs-x tabs-above tab-bordered admidio-event-tabs" data-max-title-length="-1">
         <ul class="nav nav-tabs admidio-tabs d-none d-md-flex" role="tablist">
             {foreach $eventSections as $section => $label}
@@ -86,6 +89,13 @@
                                         {include 'sys-template-parts/form.input.tpl' data=$elements['event_deadline']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['event_right_list_view']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['event_right_send_mail']}
+                                    </div>
+                                </div>
+                            {elseif $section === 'reservations'}
+                                <div class="card admidio-tabbed-field-group">
+                                    <div class="card-header">{$l10n->get('SYS_INVENTORY_RESERVATIONS')}</div>
+                                    <div class="card-body">
+                                        {include 'sys-template-parts/form.select.tpl' data=$elements['event_inventory_items']}
                                     </div>
                                 </div>
                             {/if}
