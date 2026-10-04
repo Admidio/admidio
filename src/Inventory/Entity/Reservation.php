@@ -4,7 +4,6 @@ namespace Admidio\Inventory\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
-use DateTimeImmutable;
 
 /**
  * A time-bound request or confirmed reservation for an inventory item.
@@ -31,16 +30,27 @@ class Reservation extends Entity
 
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(), array('ivr_id', 'ivr_ini_id', 'ivr_dat_id', 'ivr_usr_id'));
+        return array_merge(
+            array_diff(parent::getIgnoredLogColumns(), array('ivr_usr_id', 'ivr_timestamp_create')),
+            array('ivr_id', 'ivr_ini_id', 'ivr_dat_id')
+        );
     }
 
-    /** Name the history entry after its item and reserved period instead of its numeric record id. */
+    /** Always persist the system request time, including for guest requests. */
+    public function save(bool $updateFingerPrint = true): bool
+    {
+        if ($this->isNewRecord() && (string)$this->getValue('ivr_timestamp_create') === '') {
+            $this->setValue('ivr_timestamp_create', DATETIME_NOW);
+        }
+
+        return parent::save($updateFingerPrint);
+    }
+
+    /** Name the history entry after its item instead of its numeric record id. */
     public function readableName(): string
     {
         $item = new Item($this->db, null, (int)$this->getValue('ivr_ini_id'));
-        $itemName = $item->readableName();
-        $begin = new DateTimeImmutable((string)$this->getValue('ivr_begin'));
 
-        return $this->filterReadableName($itemName . ' (' . $begin->format('Y-m-d H:i') . ')');
+        return $this->filterReadableName($item->readableName());
     }
 }
