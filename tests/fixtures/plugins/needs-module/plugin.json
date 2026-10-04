@@ -1,0 +1,8 @@
+{
+    "name": "Needs module",
+    "version": "1.0.0",
+    "requires": {
+        "admidio": ">=5.1",
+        "modules": ["documents-files"]
+    }
+}

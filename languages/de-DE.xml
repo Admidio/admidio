@@ -329,6 +329,8 @@
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">Die Sichtbarkeit der Profilfelder dieser Kategorie kann für andere Benutzer:innen unterbunden werden, allerdings bleiben die Profilfelder im eigenen Profil weiterhin sichtbar und können dort auch bearbeitet werden.</string>
   <string name="SYS_CATEGORY_REPORT">Kategoriereport</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Erzeugt eine Auflistung der Rollen- und Kategoriezugehörigkeiten eines Mitglieds.</string>
+  <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">Über die Kategorieauswahl kann ein Report auf die Mitglieder von Rollen der ausgewählten Kategorien eingeschränkt werden. Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer sein.</string>
+  <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">Die Rollenauswahl kann verwendet werden, um einen Report auf die Mitglieder der ausgewählten Rollen zu beschränken. Wenn keine Einschränkung gewünscht ist, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer gelassen werden.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CHANGE_DATE">Datum ändern</string>
   <string name="SYS_CHANGE_HISTORY">Änderungshistorie</string>
@@ -500,6 +502,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird eine neue Benutzerin oder ein neuer Benutzer angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der neuen Benutzerin oder dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
+  <string name="SYS_DEFAULT_REPORT">Standardreport</string>
+  <string name="SYS_DEFAULT_REPORT_DESC">Wähle den Report, der beim Aufruf des Kategorienreports für diese Organisation angezeigt wird.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_COUNTRY">Standard-Land</string>
@@ -520,6 +524,7 @@
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_ALBUM">Album löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
+  <string name="SYS_DELETE_REPORT">Ausgewählten Report löschen?</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
   <string name="SYS_DELETE_ENTRY">Eintrag löschen</string>
   <string name="SYS_DELETE_FILE">Datei löschen</string>
@@ -1029,6 +1034,7 @@
   <string name="SYS_MAKE_FORMER">Sie können diesen Kontakt zu einer/einem Ehemaligen machen. Dabei werden die Daten nicht gelöscht, sondern nur alle Rollenmitgliedschaften beendet. Das hat den Vorteil, dass Sie später immer sehen können, welche Daten und Rollen Sie diesem Kontakt zugewiesen hatten.</string>
   <string name="SYS_MAKE_FORMER_SELECTION">Sie können die ausgewählten Kontakte zu Ehemaligen machen. Dabei werden die Daten nicht gelöscht, sondern nur alle Rollenmitgliedschaften beendet. Das hat den Vorteil, dass Sie später immer sehen können, welche Daten und Rollen Sie diesen Kontakten zugewiesen hatten.</string>
   <string name="SYS_MALE">Männlich</string>
+  <string name="SYS_MANAGE_CATEGORY_REPORTS">Kategoriereporte verwalten</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besucher:innen, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
   <string name="SYS_MANUAL_APPROVAL">Manuelle Freigabe</string>
@@ -1168,8 +1174,8 @@
   <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rolle erhalten die Benachrichtigungen über neue oder geänderte Einträge in den Modulen und Änderungen in den Profildaten der Mitglieder. Aus Datenschutzgründen können nur Rollen hinterlegt werden, die das Rollenrecht #VAR1_BOLD# haben.</string>
   <string name="SYS_NUMBER">Zahl</string>
-  <string name="SYS_NUMBER_COL_DESC">Soll am Ende des Reports eine Zeile mit der Anzahl der Mitgliedschaften angezeigt werden, so ist der Haken zu setzen.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
+  <string name="SYS_NUMBER_OF_COLUMNS">Anzahl Spalten</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert 0 ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert \"Alle\" ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
@@ -1258,14 +1264,11 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
-  <string name="SYS_PLUGIN_INSTALL">Plugin installieren</string>
+  <string name="SYS_PLUGIN_ID_CONFLICT">Der Plugin-Ordner #VAR1# kann nicht verwendet werden: Ein anderer Plugin-Ordner hat einen Namen, der sich nur in Groß-/Kleinschreibung, Bindestrichen oder Unterstrichen unterscheidet, und beide würden sich ihre Einstellungen teilen. Entfernen Sie einen der beiden Ordner oder benennen Sie ihn um.</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Hier können Sie die Plugins von Admidio verwalten. Plugins sind zusätzliche Module, die installiert werden können, um die Funktionalität von Admidio zu erweitern. Sie können Plugins installieren, aktualisieren oder entfernen.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Kein Plugin-Name angegeben.</string>
-  <string name="SYS_PLUGIN_NO_INTERFACE">Das Plugin hat keine Schnittstelle.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin ist nicht installiert.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-Einstellungen</string>
-  <string name="SYS_PLUGIN_UNINSTALL">Plugin deinstallieren</string>
   <string name="SYS_PLUGIN_UPDATE">Plugin aktualisieren</string>
   <string name="SYS_PLUGIN_VERSION">Plugin-Version</string>
   <string name="SYS_PORT">Port</string>
@@ -1430,6 +1433,7 @@
   <string name="SYS_ROW">Zeile</string>
   <string name="SYS_RSS_DISABLED">Der Web-Feed ist deaktiviert.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
+  <string name="SYS_RUN_REPORT">Report ausführen</string>
   <string name="SYS_SAME_WINDOW">Gleiches Fenster</string>
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
@@ -1467,6 +1471,7 @@
   <string name="SYS_SECURITY_CODE_INVALID">Der eingegebene Authentifizierungscode ist falsch.</string>
   <string name="SYS_SELECT_ALL">Alle auswählen</string>
   <string name="SYS_SELECT_CONFIGURATION">Konfiguration auswählen</string>
+  <string name="SYS_SELECT_REPORT">Report auswählen</string>
   <string name="SYS_SELECT_FILES">Dateien auswählen</string>
   <string name="SYS_SELECT_FROM_LIST">Aus Liste auswählen</string>
   <string name="SYS_SELECT_MEMBERS">Mitglieder auswählen</string>
@@ -1707,6 +1712,8 @@
   <string name="SYS_SUBSCRIBE">Abonnieren</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Unterorganisationen</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Unterorganisationen können Profildaten von Kontakten gemeinsam nutzen. In einigen Modulen (Ankündigungen, Veranstaltungen) ist es möglich, Einträge aus der Hauptorganisation in den Unterorganisationen anzuzeigen. Die Verwaltung einer Unterorganisation ist völlig eigenständig und kann mit einem eigenen Rechtekonzept versehen werden. Weitere Informationen finden Sie im #VAR1#Admidio Wiki#VAR2#.</string>
+  <string name="SYS_SUMMARY_ROW">Summenzeile</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Zeigt am Ende des Reports eine Summenzeile mit der Anzahl der Mitgliedschaften je Spalte an.</string>
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Wechsel zur Kalenderverwaltung</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorie Verwaltung</string>
@@ -1761,6 +1768,7 @@
   <string name="SYS_TITLE">Titel</string>
   <string name="SYS_TO" description="E-Mail">An</string>
   <string name="SYS_TOPIC">Thema</string>
+  <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNIDIRECTIONAL">unidirektional</string>

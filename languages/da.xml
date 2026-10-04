@@ -1135,7 +1135,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Notifikationsrolle</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Medlemmer af denne rolle modtager meddelelser om nye eller ændrede poster i modulerne og ændringer i medlemmernes profildata. Af databeskyttelsesmæssige årsager kan der kun deponeres roller, som har rolleretten #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Nummer</string>
-  <string name="SYS_NUMBER_COL_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Det respektive afkrydsningsfelt skal aktiveres, hvis du vil have vist en linje med antallet af medlemskaber i slutningen af rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal albums pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster pr. side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster, der vises på en side. Hvis der er flere poster, tilføjes en paginering på siden. Hvis værdien er 0, vises alle poster på en side, og pagineringen deaktiveres. (Standardindstilling: #VAR1#)</string>
@@ -1225,14 +1225,10 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio kræver #VAR1# eller højere</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Vælg</string>
-  <string name="SYS_PLUGIN_INSTALL">Installer plugin</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Her kan du administrere Admidios plugins. Plugins er yderligere moduler, der kan installeres for at udvide funktionaliteten af Admidio. Du kan installere, opdatere eller fjerne plugins.</string>
-  <string name="SYS_PLUGIN_NAME_MISSING">Intet plugin-navn specificeret.</string>
-  <string name="SYS_PLUGIN_NO_INTERFACE">Plugin\'et har ingen grænseflade.</string>
   <string name="SYS_PLUGIN_NOT_INSTALLED">Plugin\'et er ikke installeret.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-præferencer</string>
-  <string name="SYS_PLUGIN_UNINSTALL">Afinstaller pluginet</string>
   <string name="SYS_PLUGIN_UPDATE">Opdaterings-plugin</string>
   <string name="SYS_PLUGIN_VERSION">Plugin-version</string>
   <string name="SYS_PORT">Port</string>

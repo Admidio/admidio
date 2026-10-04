@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Photos\Entity\Album;
 use Admidio\Announcements\Entity\Announcement;
 use Admidio\Categories\Entity\Category;
+use Admidio\CategoryReport\Entity\CategoryReport;
 use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\ValueObject\Participants;
@@ -102,7 +103,9 @@ class ChangelogService {
      * @var array
      */
     public static array $noLogTables = [
-        'auto_login', 'components', 'id', 'log_changes',
+        'auto_login', 'id', 'log_changes',
+        // Column changes are logged as one readable change of their category report.
+        'category_report_columns',
         'messages', 'messages_attachments', 'messages_content', 'messages_recipients',
         // SSO runtime bookkeeping: tokens and session/logout state are written and expired by the
         // OIDC/SAML flows themselves, never edited by a person, so they carry no audit value.
@@ -247,7 +250,10 @@ class ChangelogService {
             if (array_key_exists($table, $tableLabels)) {
                 return Language::translateIfTranslationStrId($tableLabels[$table]);
             } else {
-                return '';
+                // A table without a registered label is displayed with the raw table name
+                // instead: the changelog is meant to work without registration, registration
+                // only refines the display.
+                return $table;
             }
         }
     }
@@ -313,6 +319,7 @@ class ChangelogService {
 
             'preferences' => 'SYS_SETTINGS',
             'texts' => 'SYS_SETTINGS',
+            'components' => 'SYS_EXTENSIONS',
             'saml_clients' => 'SYS_SSO_CLIENTS_SAML',
             'oidc_clients' => 'SYS_SSO_CLIENTS_OIDC',
             'oidc_consents' => 'SYS_SSO_OIDC_CONSENTS',
@@ -447,6 +454,12 @@ class ChangelogService {
                 'enabledBy' => array(),
                 'tables' => array('organizations', 'menu', 'preferences', 'texts', 'categories')
             ),
+            'plugins' => array(
+                'label' => 'SYS_EXTENSIONS',
+                'section' => 'settings',
+                'enabledBy' => array(),
+                'tables' => array('components')
+            ),
             'other' => array(
                 'label' => 'SYS_ALL_OTHERS',
                 'section' => 'other',
@@ -557,10 +570,12 @@ class ChangelogService {
                 return new User($gDb, $gProfileFields);
             case 'announcements':
                 return new Announcement($gDb);
+            case 'components':
+                return new Component($gDb);
             case 'categories':
                 return new Category($gDb);
             case 'category_report' :
-                return  new Entity($gDb, TBL_CATEGORY_REPORT, 'crt');
+                return new CategoryReport($gDb);
             case 'events' :
                 return new Event($gDb);
             case 'files':
@@ -912,10 +927,12 @@ class ChangelogService {
 
             'crt_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'crt_name' =>                  'SYS_NAME',
+            'crt_description' =>           'SYS_DESCRIPTION',
             'crt_col_fields' =>            'SYS_COLUMN_SELECTION',
+            'crt_col_conditions' =>        'SYS_CONDITION',
             'crt_selection_role' =>        array('name' => 'SYS_ROLE_SELECTION', 'type' => 'ROLE'),
             'crt_selection_cat' =>         array('name' => 'SYS_CAT_SELECTION', 'type' => 'CATEGORY'),
-            'crt_number_col' =>            array('name' => $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_COLUMN') . ')', 'type' => 'BOOL'),
+            'crt_number_col' =>            array('name' => 'SYS_SUMMARY_ROW', 'type' => 'BOOL'),
 
             'lst_org_id' =>                array('name' => 'SYS_ORGANIZATION', 'type' => 'ORG'),
             'lst_usr_id' =>                array('name' => 'SYS_MEMBER', 'type' => 'USER'),
@@ -1040,7 +1057,7 @@ class ChangelogService {
                 case 'categories' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('mode' => 'edit', 'uuid' => $uuid)); break; // Note: the type is no longer needed (only recommended, but we don't have it in the changelog DB)
                 case 'category_report' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category-report/preferences.php'); break;
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/category_report.php'); break;
                 case 'events' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/events.php', array('mode' => 'edit', 'dat_uuid' => $uuid)); break;
                 case 'files' :

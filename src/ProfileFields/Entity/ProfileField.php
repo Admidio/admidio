@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\ProfileFields\Entity;
 
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\ProfileFields\Entity\SelectOptions;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Roles\Entity\ListColumns;
@@ -138,6 +139,13 @@ class ProfileField extends Entity
             new SelectOptions($this->db, $usfId),
             array('ufo_id'),
             'ufo_usf_id = ?',
+            array($usfId)
+        );
+
+        $this->deleteDependentRecords(
+            new CategoryReportColumn($this->db),
+            array('crc_id'),
+            'crc_usf_id = ?',
             array($usfId)
         );
 

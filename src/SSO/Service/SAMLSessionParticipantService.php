@@ -66,9 +66,9 @@ class SAMLSessionParticipantService
                FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
               WHERE ssp_org_id = ?
                 AND ssp_external_session_id = ?
-                AND ssp_expires_at > CURRENT_TIMESTAMP
+                AND ssp_expires_at > ?
               ORDER BY ssp_id',
-            array($organizationId, $externalSessionId)
+            array($organizationId, $externalSessionId, DATETIME_NOW)
         );
 
         $participants = array();
@@ -105,9 +105,9 @@ class SAMLSessionParticipantService
               WHERE ssp_org_id = ?
                 AND ssp_client_id = ?
                 AND ssp_session_index = ?
-                AND ssp_expires_at > CURRENT_TIMESTAMP
+                AND ssp_expires_at > ?
               ORDER BY ssp_id',
-            array($organizationId, $clientId, $sessionIndex)
+            array($organizationId, $clientId, $sessionIndex, DATETIME_NOW)
         );
 
         $participants = array();
@@ -131,7 +131,8 @@ class SAMLSessionParticipantService
     {
         $this->database->queryPrepared(
             'DELETE FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
-              WHERE ssp_expires_at < CURRENT_TIMESTAMP'
+              WHERE ssp_expires_at < ?',
+            array(DATETIME_NOW)
         );
     }
 }

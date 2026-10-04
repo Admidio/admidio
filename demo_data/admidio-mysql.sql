@@ -157,8 +157,8 @@ CREATE TABLE `%PREFIX%_category_report` (
 --
 
 INSERT INTO `%PREFIX%_category_report` (`crt_id`, `crt_org_id`, `crt_name`, `crt_col_fields`, `crt_selection_role`, `crt_selection_cat`, `crt_number_col`) VALUES
-(1, 1, 'General role assignment', 'p2,p1,p3,p5,r1', NULL, NULL, 0),
-(2, 2, 'General role assignment', 'p2,p1,p3,p5,r6', NULL, NULL, 0);
+(1, 1, 'General role assignment', 'p2,p1,p3,p5,r1,r2,r3', NULL, NULL, 0),
+(2, 2, 'General role assignment', 'p2,p1,p3,p5,r6,r7', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1069,7 +1069,7 @@ INSERT INTO `%PREFIX%_menu` (`men_id`, `men_men_id_parent`, `men_com_id`, `men_u
 (8, 1, 50, 'ebd216b3-26eb-48ec-a082-d1d9645bb051', 'groups-roles', 'SYS_GROUPS_ROLES', 'SYS_GROUPS_ROLES_DESC', 0, 5, 1, '/modules/groups-roles/groups_roles.php', 'people-fill'),
 (9, 1, 60, '168ad66e-e34d-4f14-8a65-a78dd7dbd058', 'contacts', 'SYS_CONTACTS', 'SYS_CONTACTS_DESC', 0, 7, 1, '/modules/contacts/contacts.php', 'person-vcard-fill'),
 (10, 1, 70, '187c7c07-4b2a-4f3f-925c-6f40c03e740b', 'documents-files', 'SYS_DOCUMENTS_FILES', 'SYS_DOCUMENTS_FILES_DESC', 0, 8, 1, '/modules/documents-files.php', 'file-earmark-arrow-down-fill'),
-(11, 1, 80, '21db7ac5-7aae-4616-bf88-5b29507d4a02', 'photo', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', 0, 10, 1, '/modules/photos.php', 'image-fill'),
+(11, 1, 80, '21db7ac5-7aae-4616-bf88-5b29507d4a02', 'photo', 'SYS_PHOTOS', 'SYS_PHOTOS_DESC', 0, 10, 1, '/modules/photos/photos.php', 'image-fill'),
 (12, 1, 90, 'a3ff5504-8f13-44c9-8e0a-d45b99e2239b', 'category-report', 'SYS_CATEGORY_REPORT', 'SYS_CATEGORY_REPORT_DESC', 0, 11, 1, '/modules/category-report/category_report.php', 'list-stars'),
 (13, 1, 100, '5b8b3e60-bc71-4375-bfc3-a9783a63bb72', 'weblinks', 'SYS_WEBLINKS', 'SYS_WEBLINKS_DESC', 0, 12, 1, '/modules/weblinks.php', 'link-45deg'),
 (14, 1, 110, 'a3bc93d4-5853-4b5a-bd7f-2cda06390a0e', 'forum', 'SYS_FORUM', 'SYS_FORUM_DESC', 0, 6, 1, '/modules/forum.php', 'chat-dots-fill'),

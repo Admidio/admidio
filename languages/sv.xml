@@ -988,7 +988,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Notifieringsroll</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Medlemmar med denna roll får notifieringar om nya eller ändrade poster i modulerna och ändringar i medlemmarnas profildata. Av dataskyddsskäl kan endast roller som har rollrättigheten #VAR1_BOLD# användas.</string>
   <string name="SYS_NUMBER">Nummer</string>
-  <string name="SYS_NUMBER_COL_DESC">Respektive kryssruta behöver aktiveras för att visa antal medlemmar i slutet av rapporten.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Respektive kryssruta behöver aktiveras för att visa antal medlemmar i slutet av rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antal album per sida</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Antal poster som visas på en sida. Om det finns fler poster visas navigeringsfunktioner för att växla mellan sidor. (Standard: #VAR1#)</string>

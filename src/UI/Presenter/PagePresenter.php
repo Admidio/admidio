@@ -435,7 +435,6 @@ class PagePresenter
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $smartyObject->registerPlugin('function', 'string_contains', 'Admidio\Infrastructure\Plugins\Smarty::stringContains');
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
-            $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Infrastructure\Plugins\Smarty::loadAdmidioPlugin');
             $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
             $smartyObject->registerPlugin('function', 'version_compare', 'Admidio\Infrastructure\Plugins\Smarty::versionCompare');
             return $smartyObject;

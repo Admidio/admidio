@@ -13,6 +13,7 @@
 /*==============================================================*/
 DROP TABLE IF EXISTS %PREFIX%_announcements                     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_auto_login                        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_category_report_columns           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_events                            CASCADE;
@@ -145,8 +146,7 @@ CREATE TABLE %PREFIX%_category_report
     crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crt_org_id                  integer unsigned,
     crt_name                    varchar(100)        NOT NULL,
-    crt_col_fields              varchar(255),
-    crt_col_conditions          varchar(255),
+    crt_description             varchar(4000),
     crt_selection_role          varchar(100),
     crt_selection_cat           varchar(100),
     crt_number_col              boolean             NOT NULL    DEFAULT false,
@@ -157,11 +157,34 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
+/* Table: adm_category_report_columns                           */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_category_report_columns
+(
+    crc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    crc_crt_id                  integer unsigned    NOT NULL,
+    crc_number                  smallint            NOT NULL,
+    crc_field_type              varchar(50)         NOT NULL,
+    crc_usf_id                  integer unsigned,
+    crc_rol_id                  integer unsigned,
+    crc_cat_id                  integer unsigned,
+    crc_special_field           varchar(50),
+    crc_condition               varchar(255),
+    PRIMARY KEY (crc_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_crc_report_number ON %PREFIX%_category_report_columns (crc_crt_id, crc_number);
+
+/*==============================================================*/
 /* Table: adm_components                                        */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_components
 (
     com_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    com_uuid                    varchar(36)         NOT NULL,
     com_type                    varchar(10)         NOT NULL,
     com_name                    varchar(255)        NOT NULL,
     com_name_intern             varchar(255)        NOT NULL,
@@ -170,12 +193,13 @@ CREATE TABLE %PREFIX%_components
     com_update_step             integer             NOT NULL    DEFAULT 0,
     com_update_completed        boolean             NOT NULL    DEFAULT true,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-    com_overview_plugin         boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (com_id)
 )
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid);
 
 /*==============================================================*/
 /* Table: adm_events                                            */
@@ -1360,6 +1384,12 @@ ALTER TABLE %PREFIX%_categories
 
 ALTER TABLE %PREFIX%_category_report
     ADD CONSTRAINT %PREFIX%_fk_crt_org         FOREIGN KEY (crt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_category_report_columns
+    ADD CONSTRAINT %PREFIX%_fk_crc_crt         FOREIGN KEY (crc_crt_id)         REFERENCES %PREFIX%_category_report (crt_id)      ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_usf         FOREIGN KEY (crc_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_rol         FOREIGN KEY (crc_rol_id)         REFERENCES %PREFIX%_roles (rol_id)                ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_cat         FOREIGN KEY (crc_cat_id)         REFERENCES %PREFIX%_categories (cat_id)           ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_events
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,

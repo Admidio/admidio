@@ -191,6 +191,34 @@ class ListConfigurationTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Column conditions are parsed before a list configuration is saved
+     */
+    public function testColumnConditionsAreValidatedBeforeSaving(): void
+    {
+        $admin = $this->makeUserAdministrator('listconditions');
+
+        $lstId = $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $list = new ListConfiguration($this->getDatabase());
+            $list->setValue('lst_name', 'Condition list');
+            $this->assertTrue($list->addColumn($this->profileField('BIRTHDAY'), 0, '', '{ 18j'));
+
+            try {
+                $list->addColumn($this->profileField('BIRTHDAY'), 0, '', '{ 6m');
+                $this->fail('An unsupported relative date suffix was accepted.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NOT_VALID_DATE_FORMAT', $exception->getTranslationId());
+            }
+
+            $this->assertSame(1, $list->countColumns());
+            $list->save();
+
+            return (int)$list->getValue('lst_id');
+        });
+
+        $this->assertSame('{ 18j', $this->storedColumns($lstId)[0]['lsc_filter']);
+    }
+
+    /**
      * Test that special columns are stored separately
      *
      * @testdox A special column is stored by name instead of by profile field
