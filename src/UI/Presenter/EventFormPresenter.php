@@ -513,7 +513,7 @@ class EventFormPresenter extends PagePresenter
                 . '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME'))
                 . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody></table></div>'
                 . '<button type="button" class="btn btn-secondary" onclick="addEventInventoryReservationRow();"><i class="bi bi-plus-circle"></i> '
-                . SecurityUtils::encodeHTML($gL10n->get('SYS_ADD')) . '</button>'
+                . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</button>'
             );
             $page->addJavascript('function addEventInventoryReservationRow() {
                 document.getElementById("event_inventory_reservations_rows").insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
