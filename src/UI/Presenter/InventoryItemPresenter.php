@@ -778,6 +778,11 @@ class InventoryItemPresenter extends PagePresenter
         }
 
         $lastReceiverValue = $items->getValue('LAST_RECEIVER');
+        $borrowDateValue = $items->getValue('BORROW_DATE');
+        $returnDateValue = $items->getValue('RETURN_DATE');
+        $dateFormat = $gSettingsManager->getString('inventory_field_date_time_format') === 'datetime'
+            ? $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')
+            : $gSettingsManager->getString('system_date');
         if ($reservationUuid !== '') {
             $reservation = new Reservation($gDb);
             if (!$reservation->readDataByUuid($reservationUuid)
@@ -794,6 +799,13 @@ class InventoryItemPresenter extends PagePresenter
             } elseif (!$returning) {
                 $lastReceiverValue = $reservation->getValue('ivr_guest_name');
             }
+
+            if (!$returning) {
+                $borrowDateValue = (new DateTime($reservation->getValue('ivr_begin')))->format($dateFormat);
+            }
+        }
+        if ($returning) {
+            $returnDateValue = (new DateTime('now'))->format($dateFormat);
         }
 
         // show form
@@ -1042,10 +1054,19 @@ class InventoryItemPresenter extends PagePresenter
                             break;
                         }
 
+                        $defaultValue = match ($infNameIntern) {
+                            'BORROW_DATE' => $borrowDateValue,
+                            'RETURN_DATE' => $returnDateValue,
+                            default => $items->getValue($infNameIntern)
+                        };
+                        if ($defaultValue === '' && $infNameIntern === 'BORROW_DATE') {
+                            $defaultValue = $defaultDate;
+                        }
+
                         $form->addInput(
                             'INF-' . $infNameIntern,
                             $items->getProperty($infNameIntern, 'inf_name'),
-                            ($items->getValue($infNameIntern) === '' && $infNameIntern === 'BORROW_DATE') ? $defaultDate : $items->getValue($infNameIntern),
+                            $defaultValue,
                             array(
                                 'type' => $fieldType,
                                 'maxLength' => isset($maxlength) ? $maxlength : null,
