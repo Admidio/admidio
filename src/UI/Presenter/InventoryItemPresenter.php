@@ -9,7 +9,9 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
+use Admidio\Events\Entity\Event;
 use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Users\Entity\User;
@@ -746,7 +748,7 @@ class InventoryItemPresenter extends PagePresenter
      * @return void
      * @throws Exception
      */
-    public function createEditBorrowForm(string $itemUUID): void
+    public function createEditBorrowForm(string $itemUUID, string $reservationUuid = ''): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
 
@@ -775,11 +777,34 @@ class InventoryItemPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
+        $lastReceiverValue = $items->getValue('LAST_RECEIVER');
+        if ($reservationUuid !== '') {
+            $reservation = new Reservation($gDb);
+            if (!$reservation->readDataByUuid($reservationUuid)
+                || (int)$reservation->getValue('ivr_ini_id') !== $items->getItemId()
+                || $reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+
+            if ((int)$reservation->getValue('ivr_dat_id') > 0) {
+                $event = new Event($gDb, (int)$reservation->getValue('ivr_dat_id'));
+                $lastReceiverValue = $event->getValue('dat_usr_id_create');
+            } elseif ((int)$reservation->getValue('ivr_usr_id') > 0) {
+                $lastReceiverValue = $reservation->getValue('ivr_usr_id');
+            } else {
+                $lastReceiverValue = $reservation->getValue('ivr_guest_name');
+            }
+        }
+
         // show form
         $form = new FormPresenter(
             'adm_item_edit_borrow_form',
             'modules/inventory.item.edit.borrow.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('item_uuid' => $itemUUID, 'mode' => 'item_save')),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
+                'item_uuid' => $itemUUID,
+                'mode' => 'item_save',
+                'reservation_uuid' => $reservationUuid
+            ))),
             $this
         );
 
@@ -954,7 +979,7 @@ class InventoryItemPresenter extends PagePresenter
                                 'property' => $fieldProperty,
                                 'helpTextId' => $helpId,
                                 'icon' => $items->getProperty($infNameIntern, 'inf_icon', 'database'),
-                                'defaultValue' => $items->getValue($infNameIntern),
+                                'defaultValue' => $lastReceiverValue,
                                 'multiselect' => false,
                                 // the select2 below is created with tags, so the receiver may be a
                                 // name that is not among the users of the organization
@@ -965,8 +990,8 @@ class InventoryItemPresenter extends PagePresenter
                         $this->addJavascript('
                             var selectIdLastReceiver = "#INF-' . $ivtLastReceiver . '";
         
-                            var defaultValue = "' . htmlspecialchars($items->getValue($infNameIntern)) . '";
-                            var defaultText = "' . htmlspecialchars($items->getValue($infNameIntern)) . '"; // Der Text für den Default-Wert
+                            var defaultValue = ' . json_encode((string)$lastReceiverValue) . ';
+                            var defaultText = ' . json_encode((string)$lastReceiverValue) . '; // Der Text für den Default-Wert
         
                             function isSelect2Empty(selectId) {
                                 // Hole den aktuellen Wert des Select2-Feldes
