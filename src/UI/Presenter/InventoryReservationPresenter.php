@@ -146,6 +146,7 @@ class InventoryReservationPresenter extends PagePresenter
         $dataTables->createJavascript(count($rows), 6);
         $this->addJavascript('
             var reservationTable = $("#adm_inventory_reservations_table").DataTable();
+            var reservationActionErrorTimeout;
             $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 if (settings.nTable.id !== "adm_inventory_reservations_table") {
                     return true;
@@ -168,10 +169,15 @@ class InventoryReservationPresenter extends PagePresenter
                 reservationTable.draw();
             });
             function showReservationActionError(message) {
-                $("#adm_inventory_reservations_alert").empty().append(
+                var errorAlert = $("#adm_inventory_reservations_alert");
+                errorAlert.empty().append(
                     $("<i>", {class: "bi bi-exclamation-circle-fill"}),
                     document.createTextNode(message || "' . $gL10n->get('SYS_ERROR') . '")
                 ).show();
+                clearTimeout(reservationActionErrorTimeout);
+                reservationActionErrorTimeout = setTimeout(function() {
+                    errorAlert.fadeOut();
+                }, 7000);
             }
             $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-action .dropdown-item", function(event) {
                 event.preventDefault();
