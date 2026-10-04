@@ -76,9 +76,11 @@ class InventoryItemPresenter extends PagePresenter
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
             $form->addSelectBox('reservation_item_uuid', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $availableItems, array('property' => FormPresenter::FIELD_REQUIRED));
         }
-        $defaultDateTime = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
-        $form->addInput('reservation_begin', $gL10n->get('SYS_START'), $defaultDateTime, array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
-        $form->addInput('reservation_end', $gL10n->get('SYS_END'), $defaultDateTime, array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
+        $reservationBegin = new DateTime('next hour');
+        $reservationBegin->setTime((int) $reservationBegin->format('H'), 0);
+        $reservationEnd = (clone $reservationBegin)->modify('+1 hour');
+        $form->addInput('reservation_begin', $gL10n->get('SYS_START'), $reservationBegin->format('Y-m-d H:i:s'), array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
+        $form->addInput('reservation_end', $gL10n->get('SYS_END'), $reservationEnd->format('Y-m-d H:i:s'), array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
         if (!$gValidLogin) {
             $form->addInput('guest_name', $gL10n->get('SYS_NAME'), '', array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
             $form->addInput('guest_email', $gL10n->get('SYS_EMAIL'), '', array('type' => 'email', 'maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
