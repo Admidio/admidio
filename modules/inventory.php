@@ -10,11 +10,14 @@ use Admidio\Inventory\Service\ExportService;
 use Admidio\Inventory\Service\ImportService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
+use Admidio\Inventory\Service\ReservationService;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\UI\Presenter\InventoryFieldsPresenter;
 use Admidio\UI\Presenter\InventoryImportPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
 use Admidio\UI\Presenter\InventoryPresenter;
+use Admidio\UI\Presenter\InventoryReservationPresenter;
 
 /**
  ***********************************************************************************************
@@ -39,7 +42,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'reservation_list', 'reservation_request', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -60,6 +63,7 @@ try {
     }
     $getBorrowed = admFuncVariableIsValid($_GET, 'item_borrowed', 'bool', array('defaultValue' => false));
     $getNewPicture = admFuncVariableIsValid($_GET, 'new_picture', 'bool', array('defaultValue' => false));
+    $getReservationUUID = admFuncVariableIsValid($_GET, 'reservation_uuid', 'uuid');
 
     // check if module is active
     InventoryPresenter::checkModuleAccess();
@@ -260,6 +264,72 @@ try {
             $item->setHeadline($headline);
             $item->createEditBorrowForm($getiniUUID);
             $item->show();
+            break;
+
+        case 'reservation_request':
+            $headline = $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+            $reservation = new InventoryItemPresenter('adm_inventory_reservation_request');
+            $reservation->setHeadline($headline);
+            $reservation->createReservationRequestForm($getiniUUID);
+            $reservation->show();
+            break;
+
+        case 'reservation_list':
+            $headline = $gL10n->get('SYS_INVENTORY_RESERVATIONS');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+            $reservations = new InventoryReservationPresenter();
+            $reservations->setHeadline($headline);
+            $reservations->createList();
+            $reservations->show();
+            break;
+
+        case 'reservation_request_save':
+            $reservationForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $values = $reservationForm->validate($_POST);
+            $reservationItemUUID = $getiniUUID !== '' ? $getiniUUID : ($values['reservation_item_uuid'] ?? '');
+            $item = new \Admidio\Inventory\Entity\Item($gDb);
+            if ($reservationItemUUID === '' || !$item->readDataByUuid($reservationItemUUID)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $begin = new DateTime($values['reservation_begin'] . ' ' . $values['reservation_begin_time']);
+            $end = new DateTime($values['reservation_end'] . ' ' . $values['reservation_end_time']);
+            $service = new ReservationService($gDb);
+            $service->request(
+                (int)$item->getValue('ini_id'),
+                $begin,
+                $end,
+                $values['guest_name'] ?? '',
+                $values['guest_email'] ?? '',
+                null,
+                $values['reservation_comment'] ?? ''
+            );
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'reservation_approve':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $reservation = new Reservation($gDb);
+            if (!$reservation->readDataByUuid($getReservationUUID)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            (new ReservationService($gDb))->approve($reservation);
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
+            break;
+
+        case 'reservation_reject':
+        case 'reservation_cancel':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $reservation = new Reservation($gDb);
+            if (!$reservation->readDataByUuid($getReservationUUID)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            (new ReservationService($gDb))->changeStatus(
+                $reservation,
+                $getMode === 'reservation_reject' ? Reservation::STATUS_REJECTED : Reservation::STATUS_CANCELLED
+            );
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
             break;
 
         case 'item_save':
@@ -581,5 +651,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    handleException($e, in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items')));
+    handleException($e, in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items')));
 }
