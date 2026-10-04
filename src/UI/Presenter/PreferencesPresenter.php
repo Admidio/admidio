@@ -1662,6 +1662,12 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_PER_PAGE_DESC')
         );
+        $formGroupsRoles->addInput(
+            'groups_roles_preview_characters',
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
+            $formValues['groups_roles_preview_characters'],
+            self::preferenceInputOptions('groups_roles_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(200))))
+        );
         // read all global lists
         $sqlData = array();
         $sqlData['query'] = 'SELECT lst_id, lst_name
