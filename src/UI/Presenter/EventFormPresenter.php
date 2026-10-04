@@ -511,9 +511,9 @@ class EventFormPresenter extends PagePresenter
                 $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
                 '<p class="form-text">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_EVENT_RESERVATIONS_DESC')) . '</p>'
                 . '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME'))
-                . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody></table></div>'
-                . '<button type="button" class="btn btn-secondary" onclick="addEventInventoryReservationRow();"><i class="bi bi-plus-circle"></i> '
-                . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</button>'
+                . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody><tfoot><tr><td colspan="2">'
+                . '<a class="icon-text-link" href="javascript:addEventInventoryReservationRow();"><i class="bi bi-plus-circle-fill"></i> '
+                . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</a></td></tr></tfoot></table></div>'
             );
             $page->addJavascript('window.addEventInventoryReservationRow = function() {
                 document.getElementById("event_inventory_reservations_rows").insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
