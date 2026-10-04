@@ -928,6 +928,9 @@
   <string name="SYS_INVENTORY_RESERVATION_STATUS_APPROVED">Freigegeben</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_REJECTED">Abgelehnt</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_CANCELLED">Storniert</string>
+  <string name="SYS_INVENTORY_RESERVATION_REQUESTER">Angefragt von</string>
+  <string name="SYS_INVENTORY_RESERVATION_REQUESTED_AT">Angefragt am</string>
+  <string name="SYS_INVENTORY_RESERVATION_WITHDRAW">Zurückziehen</string>
   <string name="SYS_INVENTORY_ITEMS_EDIT">Gegenstände ändern</string>
   <string name="SYS_INVENTORY_ITEMS_EDIT_DESC">Die Werte der Eigenschaftsfelder können hier geändert werden.\n\nDie dargestellten Werte werden für ALLE Gegenstände übernommen!</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Anzahl der Gegenstände pro Seite</string>

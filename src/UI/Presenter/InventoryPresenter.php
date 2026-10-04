@@ -405,7 +405,7 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
-        if (InventoryAccessService::canManageReservations()) {
+        if (InventoryAccessService::canManageReservations() || ($gValidLogin && InventoryAccessService::canRequestReservation())) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservations',
                 $gL10n->get('SYS_INVENTORY_RESERVATIONS'),

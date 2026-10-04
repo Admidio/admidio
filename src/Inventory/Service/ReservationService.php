@@ -100,6 +100,22 @@ class ReservationService
         $reservation->save();
     }
 
+    /** Allow the signed-in requester to withdraw an open or approved reservation. */
+    public function withdraw(Reservation $reservation): void
+    {
+        global $gCurrentUser, $gValidLogin;
+
+        if (!$gValidLogin || (int)$reservation->getValue('ivr_usr_id') !== (int)$gCurrentUser->getValue('usr_id')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if (!in_array($reservation->getValue('ivr_status'), array(Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED), true)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
+        $reservation->save();
+    }
+
     /**
      * Checks confirmed reservations and the existing active physical borrowing record.
      * The end is exclusive, so a return and a new reservation may meet at the same instant.
@@ -139,7 +155,7 @@ class ReservationService
      */
     public function syncEventReservations(int $eventId, array $itemIds, DateTimeInterface $begin, DateTimeInterface $end): void
     {
-        global $gSettingsManager;
+        global $gCurrentUser, $gSettingsManager, $gValidLogin;
 
         $this->assertValidPeriod($begin, $end);
         $itemIds = array_values(array_unique(array_map('intval', $itemIds)));
@@ -169,6 +185,7 @@ class ReservationService
             $reservation = new Reservation($this->database);
             $reservation->setValue('ivr_ini_id', $itemId);
             $reservation->setValue('ivr_dat_id', $eventId);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
             $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);

@@ -51,8 +51,6 @@ class InventoryItemPresenter extends PagePresenter
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
             $formUrlParameters['item_uuid'] = $itemUUID;
-        } elseif (!InventoryAccessService::canManageReservations()) {
-            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $form = new FormPresenter(

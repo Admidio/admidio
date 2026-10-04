@@ -42,7 +42,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'reservation_list', 'reservation_request', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'reservation_list', 'reservation_request', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'reservation_withdraw', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -329,6 +329,16 @@ try {
                 $reservation,
                 $getMode === 'reservation_reject' ? Reservation::STATUS_REJECTED : Reservation::STATUS_CANCELLED
             );
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
+            break;
+
+        case 'reservation_withdraw':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $reservation = new Reservation($gDb);
+            if (!$reservation->readDataByUuid($getReservationUUID)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            (new ReservationService($gDb))->withdraw($reservation);
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA')));
             break;
 
@@ -651,5 +661,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    handleException($e, in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items')));
+    handleException($e, in_array($getMode, array('field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_save', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'reservation_withdraw', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_upload', 'item_picture_save', 'item_picture_delete', 'import_read_file', 'import_items')));
 }
