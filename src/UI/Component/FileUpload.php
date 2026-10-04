@@ -142,6 +142,33 @@ class FileUpload
                         }
                     });
                 },
+                chunkdone: function(e, data) {
+                    // remember if the server rejected a chunk, so the remaining chunks will not be sent
+                    if (data.result && data.result.files && data.result.files.length > 0
+                        && typeof data.result.files[0].error !== "undefined") {
+                        data.files[0].uploadError = data.result.files[0];
+                    }
+                },
+                chunksend: function(e, data) {
+                    if (typeof data.files[0].uploadError !== "undefined") {
+                        return false;
+                    }
+                },
+                fail: function(e, data) {
+                    $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
+                    let fileName, fileError;
+                    if (typeof data.files[0].uploadError !== "undefined") {
+                        // name and error were already encoded by the server
+                        fileName = data.files[0].uploadError.name;
+                        fileError = data.files[0].uploadError.error;
+                    } else {
+                        fileName = $("<div/>").text(data.files[0].name).html();
+                        fileError = $("<div/>").text(data.errorThrown || data.textStatus).html();
+                    }
+                    $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
+                        + fileName + " - <strong>" + fileError + "</strong></div>").appendTo("#files");
+                    countErrorFiles++;
+                },
                 progressall: function(e, data) {
                     const progress = parseInt(data.loaded / data.total * 100, 10);
                     $("#progress .progress-bar").css(
