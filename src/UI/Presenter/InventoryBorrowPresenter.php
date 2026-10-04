@@ -21,22 +21,6 @@ class InventoryBorrowPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $viewForm = new FormPresenter(
-            'adm_inventory_borrow_view_form',
-            'sys-template-parts/form.filter.tpl',
-            '',
-            $this,
-            array('type' => 'navbar', 'setFocus' => false)
-        );
-        $viewForm->addSelectBox('inventory_view', $gL10n->get('SYS_VIEW'), array(
-            'overview' => $gL10n->get('SYS_OVERVIEW'),
-            'borrowing' => $gL10n->get('SYS_INVENTORY_BORROWINGS')
-        ), array('defaultValue' => 'borrowing', 'showContextDependentFirstEntry' => false));
-        $viewForm->addToHtmlPage();
-        $this->addJavascript('$("#inventory_view").on("change", function() {
-            window.location.href = ' . json_encode(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php')) . ';
-        });', true);
-
         $readyReservations = $gDb->queryPrepared(
             'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ind_value AS item_name
                FROM ' . TBL_INVENTORY_RESERVATIONS . '
