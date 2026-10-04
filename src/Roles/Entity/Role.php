@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Roles\Entity;
 
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\Categories\Entity\Category;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Events\ValueObject\Participants;
@@ -309,6 +310,13 @@ class Role extends Entity
             new RolesRightsData($this->db),
             array('rrd_id'),
             'rrd_rol_id = ?',
+            array($rolId)
+        );
+
+        $this->deleteDependentRecords(
+            new CategoryReportColumn($this->db),
+            array('crc_id'),
+            'crc_rol_id = ?',
             array($rolId)
         );
 

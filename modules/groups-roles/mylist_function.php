@@ -25,6 +25,7 @@ use Admidio\Roles\Entity\ListConfiguration;
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
+    header('Content-Type: application/json; charset=utf-8');
 
     // Initialize and check the parameters
     $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
@@ -89,28 +90,29 @@ try {
         $conditions = array_values($_POST['condition'] ?? []);
 
         $columnNumber = 1;
-        array_map(
-            function ($col, $sort = null, $cond = null) use ($list, $gProfileFields, &$columnNumber) {
-                // if column is empty, delete that position
-                if (empty($col)) {
-                    $list->deleteColumn($columnNumber, false);
-                    return null;
-                }
+        foreach ($columns as $index => $column) {
+            // if column is empty, delete that position
+            if (empty($column)) {
+                $list->deleteColumn($columnNumber, false);
+                continue;
+            }
 
-                // Add column (profile fields usr_/mem_ stay as-is, others map to usf_id)
-                if (StringUtils::strStartsWith($col, 'usr_') || StringUtils::strStartsWith($col, 'mem_')) {
-                    $list->addColumn($col, $columnNumber, $sort ?? '', $cond ?? '');
-                } else {
-                    $list->addColumn($gProfileFields->getProperty($col, 'usf_id'), $columnNumber, $sort ?? '', $cond ?? '');
-                }
+            // Add column (profile fields usr_/mem_ stay as-is, others map to usf_id)
+            $field = StringUtils::strStartsWith($column, 'usr_') || StringUtils::strStartsWith($column, 'mem_')
+                ? $column
+                : $gProfileFields->getProperty($column, 'usf_id');
+            $columnAdded = $list->addColumn(
+                $field,
+                $columnNumber,
+                (string)($sorts[$index] ?? ''),
+                (string)($conditions[$index] ?? '')
+            );
+            if (!$columnAdded) {
+                throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_COLUMN'));
+            }
 
-                $columnNumber++;
-                return null; // return value unused
-            },
-            $columns,
-            $sorts,
-            $conditions
-        );
+            ++$columnNumber;
+        }
 
         // Remove potentially deleted columns at the end
         $list->deleteColumn($columnNumber, true);

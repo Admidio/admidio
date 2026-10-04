@@ -221,7 +221,6 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Active and former</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Active groups and roles</string>
   <string name="SYS_ACTIVE_MEMBERS">Active Members</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Add further configuration</string>
   <string name="SYS_ADD_ATTACHMENT">Attach attachment</string>
   <string name="SYS_ADD_COLUMN">Add column</string>
   <string name="SYS_ADD_COLUMNS_DESC">Assign any number of columns corresponding to profile fields in the table below. In addition, you can specify the default sorting and add conditions under which the respective members are to be filtered.</string>
@@ -326,7 +325,6 @@
   <string name="SYS_CAPTION_SIZE_DESC">The size of the caption is proportional to the image size, calculated by the formula \"Image size / Devisor\". By increasing the devisor, the font size will be reduced. (Default: 40)</string>
   <string name="SYS_CARBON_COPY">Carbon copy (CC)</string>
   <string name="SYS_CAT_SELECTION">Category selection</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">The category selection can be used to restrict a configuration to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORIES">Categories</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Members of this role are administrators of the module and have access to everything. You can create, edit, delete data and edit categories and their rights. A role can be made an administrator by assigning it the right #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">All administrators of the module of the parent organization</string>
@@ -336,6 +334,8 @@
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <string name="SYS_CATEGORY_REPORT">Category report</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
+  <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">The category selection can be used to restrict a report to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
+  <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CHANGE_DATE">Change date</string>
   <string name="SYS_CHANGE_HISTORY">Change history</string>
@@ -399,8 +399,6 @@
   <string name="SYS_CONFIGURATION_DELETE">Would you like to delete selected list configuration?</string>
   <string name="SYS_CONFIGURATION_LIST">List configuration</string>
   <string name="SYS_CONFIGURATION_SAVE">Please select name for configuration set?</string>
-  <string name="SYS_CONFIGURATIONS">Configurations</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Any number of configurations can be created here for the category report. In the screen display, one of these configurations is used as the basis for the display in each case via "Select configuration".</string>
   <string name="SYS_CONFIGURE_LISTS">Configure lists</string>
   <string name="SYS_CONFIGURE_LISTS_DESC">Users can create their own lists with selected profile fields and then apply them to groups and roles. Only profile fields and groups or roles that the current user is allowed to see are available. This setting can be used to specify who can create such lists. (Default: All)</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
@@ -426,7 +424,6 @@
   <string name="SYS_COPIED_CLIPBOARD">Copied to clipboard...</string>
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
-  <string name="SYS_COPY_CONFIGURATION">Copy configuration</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
@@ -508,7 +505,8 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">One of the configurations given here can be made the default configuration for the category report of this organization. The selected configuration will be displayed directly when the report is called.</string>
+  <string name="SYS_DEFAULT_REPORT">Default report</string>
+  <string name="SYS_DEFAULT_REPORT_DESC">Choose the report shown by default when opening the category report for this organization.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Define a country for which this organization mainly operates. It will be preselected when new users are created or registered. It eases the data input and can be changed by the user.</string>
@@ -528,6 +526,7 @@
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
+  <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
   <string name="SYS_DELETE_ENTRY">Delete entry</string>
   <string name="SYS_DELETE_FILE">Delete file</string>
@@ -1038,6 +1037,7 @@
   <string name="SYS_MAKE_FORMER">You can make this contact to a former contact. This does not delete the data, but only terminates all role memberships. This has the advantage that you can always see later which data and roles you had assigned to this contact.</string>
   <string name="SYS_MAKE_FORMER_SELECTION">You can make the selected contacts to former contacts. This does not delete the data, but only terminates all role memberships. This has the advantage that you can always see later which data and roles you had assigned to these contacts.</string>
   <string name="SYS_MALE">Male</string>
+  <string name="SYS_MANAGE_CATEGORY_REPORTS">Manage category reports</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">New registrations of visitors can be listed, approved or refused here.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">New profile fields and their properties can be defined as well as changes to existing profile fields. The fields can be assigned to categories and provided with rights, which roles can see or edit which profile fields.</string>
   <string name="SYS_MANUAL_APPROVAL">Manual approval</string>
@@ -1181,8 +1181,8 @@
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Members of this role receive the notifications about new or changed entries in the modules and changes in the members' profile data. For data protection reasons only roles can be deposited, which have the role right #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Number of albums per page</string>
+  <string name="SYS_NUMBER_OF_COLUMNS">Number of columns</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is 0, all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Number of entries that are displayed on a page. If there are more entries, a pagination is added to the page. If the value is "All", all entries on a page are listed and the pagination is deactivated. (Default setting: #VAR1#)</string>
@@ -1451,7 +1451,6 @@
   <string name="SYS_ROLE_RIGHTS">Role Rights</string>
   <string name="SYS_ROLE_SELECT_RIGHT">You do not have permission to select role #VAR1#.\nPlease try to select another role.</string>
   <string name="SYS_ROLE_SELECTION">Role selection</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">The role selection can be used to restrict a configuration to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_ROLE_TYPES">Role types</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Role without leader</string>
   <string name="SYS_ROLES">Roles</string>
@@ -1470,6 +1469,7 @@
   <string name="SYS_ROW">Row</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
+  <string name="SYS_RUN_REPORT">Run report</string>
   <string name="SYS_SAME_WINDOW">Same window</string>
   <string name="SYS_SATURDAY">Saturday</string>
   <string name="SYS_SAVE">Save</string>
@@ -1507,6 +1507,7 @@
   <string name="SYS_SECURITY_CODE_INVALID">The entered authentication code is incorrect.</string>
   <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Select configuration</string>
+  <string name="SYS_SELECT_REPORT">Select report</string>
   <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SELECT_MEMBERS">Select members</string>
@@ -1563,7 +1564,6 @@
   <string name="SYS_SHOW_MAP_LINK">Display link to map</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">If location is set, Google Maps is used to display location and route from own location. (default: yes)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">If the address is stored in the profile, two links to Google Maps are displayed next to the address. The user\'s place of residence is linked and the route from his own place of residence to the place of residence of the user displayed is linked. When accessing the links, the following profile information will be transmitted to Google: street, postcode, city, and country. (Default: no)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Show member list</string>
   <string name="SYS_SHOW_MORE">Show more</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Display obsolete selection options</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">This setting allows you to specify whether obsolete selection options should be displayed in the profile field configuration. If this setting is set, obsolete select options can be restored.\nThis option is available only for profile fields of the drop-down list and option field types. (Default: yes)</string>
@@ -1832,6 +1832,8 @@
   <string name="SYS_SUBORDINATE_ORGANIZATIONS">Sub-organizations</string>
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share profile data of contacts. In some modules (announcements, events) it is possible to display entries from the main organization in the sub-organizations. The administration of a sub-organization is completely independent and can be provided with its own rights concept. You can find more information in the #VAR1#Admidio Wiki#VAR2#.</string>
   <string name="SYS_SUBSCRIBE">Subscribe</string>
+  <string name="SYS_SUMMARY_ROW">Summary row</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Displays a summary row at the end of the report with the number of memberships in each column.</string>
   <string name="SYS_SUNDAY">Sunday</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Switch to calendar management</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Switch to category administration</string>
@@ -1886,6 +1888,7 @@
   <string name="SYS_TITLE">Title</string>
   <string name="SYS_TO" description="E-Mail">To</string>
   <string name="SYS_TOPIC">Topic</string>
+  <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>

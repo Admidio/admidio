@@ -610,13 +610,13 @@ function formSubmit(event) {
         contentType: false,
         success: function(data) {
             try {
-                var returnData = JSON.parse(data);
+                var returnData = typeof data === "object" ? data : JSON.parse(data);
                 var returnStatus = returnData.status;
                 var returnMessage = returnData.message || "";
                 var forwardUrl = returnData.url || "";
                 var forwardPost = returnData.url_post || null;
             } catch (e) {
-                if (typeof $(".modal-body") !== "undefined") {
+                if ($(".modal-body").length > 0) {
                     $(".modal-body").html(data);
                 }
                 // no expected JSON response

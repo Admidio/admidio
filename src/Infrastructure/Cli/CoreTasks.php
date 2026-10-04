@@ -1958,42 +1958,46 @@ final class CoreTasks
 
     private static function registerCategoryReportTasks(): void
     {
-        self::readTask('category-report:list', 'categoryReportList', 'List category-report configurations.',
+        self::readTask('category-report:list', 'categoryReportList', 'List category reports.',
             'category-report:list [--format=FORMAT]', 'CATEGORY-REPORT', true, array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'md', 'dokuwiki'))));
-        self::readTask('category-report:show', 'categoryReportShow', 'Show a category-report configuration.',
-            'category-report:show CONFIG [--format=text|json|json-api]', 'CATEGORY-REPORT', true,
-            array(self::arg('config', 'Report config UUID/id.')),
+        self::readTask('category-report:show', 'categoryReportShow', 'Show a category report.',
+            'category-report:show REPORT [--format=text|json|json-api]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report id/name.')),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api'))));
         $reportOptions = array(
-            self::opt('name', 'Configuration name.', 'NAME'),
+            self::opt('name', 'Report name.', 'NAME'),
+            self::opt('description', 'Report description.', 'TEXT'),
             self::opt('role', 'Restrict report to role/group.', 'GROUP', false, true),
             self::opt('category', 'Restrict report to role category.', 'CATEGORY', false, true),
             self::opt('column', 'Report column code (for example p12, r4, l4, udummy).', 'COLUMN', false, true),
             self::opt('condition', 'Condition aligned with --column; repeat in column order.', 'CONDITION', false, true),
             self::opt('number-column', 'Show running row number.', 'BOOL'),
-            self::opt('default', 'Make this the default report configuration.', 'BOOL')
+            self::opt('default', 'Make this the default report.', 'BOOL')
         );
-        self::task('category-report:add', 'categoryReportAdd', 'Create a category-report configuration.',
+        self::task('category-report:add', 'categoryReportAdd', 'Create a category report.',
             'category-report:add --name=NAME --column=COLUMN ... [options]', 'CATEGORY-REPORT', true, array(),
             array_replace($reportOptions, array(
-                0 => self::opt('name', 'Configuration name.', 'NAME', true),
-                3 => self::opt('column', 'Report column code.', 'COLUMN', true, true)
+                0 => self::opt('name', 'Report name.', 'NAME', true),
+                4 => self::opt('column', 'Report column code.', 'COLUMN', true, true)
             )), requiredRight: 'administrator');
-        self::task('category-report:update', 'categoryReportUpdate', 'Update a category-report configuration.',
-            'category-report:update CONFIG [options]', 'CATEGORY-REPORT', true,
-            array(self::arg('config', 'Report config id/name.')), $reportOptions, requiredRight: 'administrator');
-        self::task('category-report:copy', 'categoryReportCopy', 'Copy a category-report configuration.',
-            'category-report:copy CONFIG [--name=NAME]', 'CATEGORY-REPORT', true,
-            array(self::arg('config', 'Report config id/name.')),
-            array(self::opt('name', 'Name of the copied configuration.', 'NAME')), requiredRight: 'administrator');
-        self::task('category-report:delete', 'categoryReportDelete', 'Delete a category-report configuration.',
-            'category-report:delete CONFIG [--yes]', 'CATEGORY-REPORT', true,
-            array(self::arg('config', 'Report config id/name.')),
+        self::task('category-report:update', 'categoryReportUpdate', 'Update a category report.',
+            'category-report:update REPORT [options]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report id/name.')), $reportOptions, requiredRight: 'administrator');
+        self::task('category-report:copy', 'categoryReportCopy', 'Copy a category report.',
+            'category-report:copy REPORT [--name=NAME] [--description=TEXT]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report id/name.')),
+            array(
+                self::opt('name', 'Name of the copied report.', 'NAME'),
+                self::opt('description', 'Description of the copied report.', 'TEXT')
+            ), requiredRight: 'administrator');
+        self::task('category-report:delete', 'categoryReportDelete', 'Delete a category report.',
+            'category-report:delete REPORT [--yes]', 'CATEGORY-REPORT', true,
+            array(self::arg('config', 'Report id/name.')),
             array(self::opt('yes', 'Confirm deletion.', '', false, false, true)), requiredRight: 'administrator');
-        self::readTask('category-report:run', 'categoryReportRun', 'Run a category-report configuration.',
-            'category-report:run CONFIG [--date=DATE] [--filter=TEXT] [--format=FORMAT]',
-            'CATEGORY-REPORT', true, array(self::arg('config', 'Report config id/name.')), array(
+        self::readTask('category-report:run', 'categoryReportRun', 'Run a category report.',
+            'category-report:run REPORT [--date=DATE] [--filter=TEXT] [--format=FORMAT]',
+            'CATEGORY-REPORT', true, array(self::arg('config', 'Report id/name.')), array(
                 self::opt('date', 'Reference date.', 'DATE'),
                 self::opt('filter', 'Only include rows containing text.', 'TEXT'),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
@@ -8120,24 +8124,30 @@ final class CoreTasks
 
     public static function categoryReportList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gSettingsManager;
+        global $gSettingsManager;
 
         $defaultId = $gSettingsManager->getInt('category_report_default_configuration');
-        $rows = $gDb->queryPrepared(
-            'SELECT crt_id AS id, crt_org_id AS organization_id, crt_name AS name,
-                    crt_col_fields AS columns, crt_col_conditions AS conditions,
-                    crt_selection_role AS role_selection, crt_selection_cat AS category_selection,
-                    crt_number_col AS number_column
-               FROM ' . TBL_CATEGORY_REPORT . '
-              WHERE crt_org_id = ? OR crt_org_id IS NULL
-           ORDER BY crt_name, crt_id',
-            array($gCurrentOrgId)
-        )->fetchAll();
-
-        foreach ($rows as &$row) {
-            $row['default'] = (int)$row['id'] === $defaultId;
+        $rows = array();
+        foreach ((new \Admidio\CategoryReport\Service\CategoryReportRepository())->getConfigArray() as $configuration) {
+            $rows[] = array(
+                'id' => (int)$configuration['id'],
+                'organization_id' => $configuration['organization_id'] === null
+                    ? null
+                    : (int)$configuration['organization_id'],
+                'name' => html_entity_decode((string)$configuration['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'description' => html_entity_decode((string)$configuration['description'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'columns' => $configuration['col_fields'],
+                'conditions' => $configuration['col_conditions'],
+                'role_selection' => $configuration['selection_role'],
+                'category_selection' => $configuration['selection_cat'],
+                'number_column' => (bool)$configuration['number_col'],
+                'default' => (int)$configuration['id'] === $defaultId
+            );
         }
-        unset($row);
+
+        usort($rows, static fn(array $left, array $right): int =>
+            array($left['name'], $left['id']) <=> array($right['name'], $right['id'])
+        );
 
         CliApplication::writeRows(
             $rows,
@@ -8149,48 +8159,22 @@ final class CoreTasks
 
     public static function categoryReportShow(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentOrgId, $gSettingsManager;
+        global $gSettingsManager;
 
         $selector = CliApplication::requireArgument($arguments, 0, 'config');
-        if (ctype_digit($selector)) {
-            $statement = $gDb->queryPrepared(
-                'SELECT *
-                   FROM ' . TBL_CATEGORY_REPORT . '
-                  WHERE crt_id = ?
-                    AND (crt_org_id = ? OR crt_org_id IS NULL)',
-                array((int)$selector, $gCurrentOrgId)
-            );
-        } else {
-            $names = Language::getTranslationCandidates($selector, array('SYS_GENERAL_ROLE_ASSIGNMENT'));
-            $statement = $gDb->queryPrepared(
-                'SELECT *
-                   FROM ' . TBL_CATEGORY_REPORT . '
-                  WHERE crt_name IN (' . implode(', ', array_fill(0, count($names), '?')) . ')
-                    AND (crt_org_id = ? OR crt_org_id IS NULL)',
-                array_merge($names, array($gCurrentOrgId))
-            );
-        }
-
-        $rows = $statement->fetchAll();
-        if (count($rows) !== 1) {
-            throw new InvalidArgumentException(
-                count($rows) === 0
-                    ? 'Unknown category-report configuration.'
-                    : 'Category-report configuration name is ambiguous; use the numeric id.'
-            );
-        }
-
-        $row = $rows[0];
+        $configurations = (new \Admidio\CategoryReport\Service\CategoryReportRepository())->getConfigArray();
+        $row = $configurations[self::categoryReportConfigIndex($configurations, $selector)];
         $data = array(
-            'id' => (int)$row['crt_id'],
-            'organization_id' => $row['crt_org_id'] === null ? null : (int)$row['crt_org_id'],
-            'name' => $row['crt_name'],
-            'columns' => $row['crt_col_fields'],
-            'conditions' => $row['crt_col_conditions'],
-            'role_selection' => $row['crt_selection_role'],
-            'category_selection' => $row['crt_selection_cat'],
-            'number_column' => (bool)$row['crt_number_col'],
-            'default' => (int)$row['crt_id'] === $gSettingsManager->getInt('category_report_default_configuration')
+            'id' => (int)$row['id'],
+            'organization_id' => $row['organization_id'] === null ? null : (int)$row['organization_id'],
+            'name' => html_entity_decode((string)$row['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'description' => html_entity_decode((string)$row['description'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+            'columns' => $row['col_fields'],
+            'conditions' => $row['col_conditions'],
+            'role_selection' => $row['selection_role'],
+            'category_selection' => $row['selection_cat'],
+            'number_column' => (bool)$row['number_col'],
+            'default' => (int)$row['id'] === $gSettingsManager->getInt('category_report_default_configuration')
         );
 
         CliApplication::writeValue($data, $options);
@@ -8199,11 +8183,13 @@ final class CoreTasks
 
     public static function categoryReportAdd(array $arguments, array $options): int
     {
-        $report = new \CategoryReport();
+        $report = new \Admidio\CategoryReport\Service\CategoryReportRepository();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $values = self::categoryReportFormValues($options, array(
             'id' => '',
             'name' => '',
+            'description' => '',
+            'columns' => array(),
             'col_fields' => '',
             'col_conditions' => '',
             'selection_role' => '',
@@ -8219,13 +8205,13 @@ final class CoreTasks
         $config[] = $values;
         $report->saveConfigArray($config);
 
-        CliApplication::writeSuccess('Category-report configuration created.', $options);
+        CliApplication::writeSuccess('Category report created.', $options);
         return 0;
     }
 
     public static function categoryReportUpdate(array $arguments, array $options): int
     {
-        $report = new \CategoryReport();
+        $report = new \Admidio\CategoryReport\Service\CategoryReportRepository();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $index = self::categoryReportConfigIndex(
             $config,
@@ -8234,13 +8220,13 @@ final class CoreTasks
         $config[$index] = self::categoryReportFormValues($options, $config[$index]);
         $report->saveConfigArray($config);
 
-        CliApplication::writeSuccess('Category-report configuration updated.', $options);
+        CliApplication::writeSuccess('Category report updated.', $options);
         return 0;
     }
 
     public static function categoryReportCopy(array $arguments, array $options): int
     {
-        $report = new \CategoryReport();
+        $report = new \Admidio\CategoryReport\Service\CategoryReportRepository();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $index = self::categoryReportConfigIndex(
             $config,
@@ -8253,17 +8239,20 @@ final class CoreTasks
         $copy['name'] = CliApplication::optionExists($options, 'name')
             ? CliApplication::optionString($options, 'name')
             : $report->createName(html_entity_decode((string)$copy['name'], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        if (CliApplication::optionExists($options, 'description')) {
+            $copy['description'] = CliApplication::optionString($options, 'description');
+        }
 
         $config[] = $copy;
         $report->saveConfigArray($config);
 
-        CliApplication::writeSuccess('Category-report configuration copied.', $options);
+        CliApplication::writeSuccess('Category report copied.', $options);
         return 0;
     }
 
     public static function categoryReportDelete(array $arguments, array $options): int
     {
-        $report = new \CategoryReport();
+        $report = new \Admidio\CategoryReport\Service\CategoryReportRepository();
         $config = self::categoryReportConfigForSave($report->getConfigArray());
         $index = self::categoryReportConfigIndex(
             $config,
@@ -8271,7 +8260,7 @@ final class CoreTasks
         );
 
         CliApplication::confirm(
-            'Delete category-report configuration "' . html_entity_decode(
+            'Delete category report "' . html_entity_decode(
                 (string)$config[$index]['name'],
                 ENT_QUOTES | ENT_HTML5,
                 'UTF-8'
@@ -8284,7 +8273,7 @@ final class CoreTasks
         $config[$index]['id'] = -1 * abs((int)$config[$index]['id']);
         $report->saveConfigArray($config);
 
-        CliApplication::writeSuccess('Category-report configuration deleted.', $options);
+        CliApplication::writeSuccess('Category report deleted.', $options);
         return 0;
     }
 
@@ -8296,7 +8285,7 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $report = new \CategoryReport();
+        $report = new \Admidio\CategoryReport\Service\CategoryReportGenerator();
         $config = $report->getConfigArray();
         $index = self::categoryReportConfigIndex(
             $config,
@@ -11652,7 +11641,7 @@ final class CoreTasks
     }
 
     /**
-     * CategoryReport::getConfigArray() HTML-encodes configuration names for the web UI.
+     * CategoryReportRepository::getConfigArray() HTML-encodes configuration names for the web UI.
      * Decode them before passing the array back to saveConfigArray(), just as a browser form
      * submission would do.
      *
@@ -11664,6 +11653,11 @@ final class CoreTasks
         foreach ($config as &$values) {
             $values['name'] = html_entity_decode(
                 (string)($values['name'] ?? ''),
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8'
+            );
+            $values['description'] = html_entity_decode(
+                (string)($values['description'] ?? ''),
                 ENT_QUOTES | ENT_HTML5,
                 'UTF-8'
             );
@@ -11689,8 +11683,8 @@ final class CoreTasks
         if (count($matches) !== 1) {
             throw new InvalidArgumentException(
                 count($matches) === 0
-                    ? 'Unknown category-report configuration.'
-                    : 'Category-report configuration name is ambiguous; use the numeric id.'
+                    ? 'Unknown category report.'
+                    : 'Category report name is ambiguous; use the numeric id.'
             );
         }
 
@@ -11706,6 +11700,9 @@ final class CoreTasks
     {
         if (CliApplication::optionExists($options, 'name')) {
             $values['name'] = self::requireTextOption($options, 'name');
+        }
+        if (CliApplication::optionExists($options, 'description')) {
+            $values['description'] = CliApplication::optionString($options, 'description');
         }
 
         if (CliApplication::optionExists($options, 'role')) {
@@ -11738,6 +11735,14 @@ final class CoreTasks
                     $condition = str_replace(array('<', '>'), array('{', '}'), $condition);
                     return trim(str_replace(array("\r", "\n"), ' ', $condition));
                 },
+                $conditions
+            );
+            $values['columns'] = array_map(
+                static fn(string $field, string $condition): array => array(
+                    'field' => $field,
+                    'condition' => $condition
+                ),
+                $columns,
                 $conditions
             );
             $values['col_conditions'] = implode(',', $conditions);

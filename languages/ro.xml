@@ -1135,7 +1135,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Rolul notificator</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Membrii acestui rol primesc notificări despre intrările noi sau modificate în module și modificările din datele profilului membrilor. Din motive de protecție a datelor, pot fi depuse numai roluri care au dreptul de rol #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Număr</string>
-  <string name="SYS_NUMBER_COL_DESC">Căsuța de selectare corespunzătoare trebuie activată dacă doriți să afișați la sfârșitul raportului o linie cu numărul de membri.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Căsuța de selectare corespunzătoare trebuie activată dacă doriți să afișați la sfârșitul raportului o linie cu numărul de membri.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Număr de albume pe pagină</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Număr de intrări pe pagină</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Numărul de intrări afișate pe o pagină. Dacă există mai multe intrări, se adaugă o paginare la pagină. Dacă valoarea este 0, toate intrările de pe o pagină sunt listate și paginarea este dezactivată. (Setare implicită: #VAR1#)</string>

@@ -5,6 +5,7 @@ use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 use InvalidArgumentException;
@@ -1723,10 +1724,10 @@ final class CliApplication
                 $stream = fopen('php://temp', 'w+');
                 // The default $escape is deprecated since PHP 8.4; '' is the documented
                 // successor and the only one that writes RFC 4180 compliant CSV.
-                fputcsv($stream, array_map(array(self::class, 'neutralizeFormula'), $headers), escape: '');
+                fputcsv($stream, array_map(array(SpreadsheetUtils::class, 'neutralizeFormula'), $headers), escape: '');
                 foreach ($rows as $row) {
                     fputcsv($stream, array_map(
-                        static fn (mixed $value): string => self::neutralizeFormula(self::normalizeCell($value)),
+                        static fn (mixed $value): string => SpreadsheetUtils::neutralizeFormula(self::normalizeCell($value)),
                         $row
                     ), escape: '');
                 }
@@ -2514,27 +2515,6 @@ final class CliApplication
         $padding = $width - self::displayWidth($value);
 
         return $padding > 0 ? $value . str_repeat(' ', $padding) : $value;
-    }
-
-    /**
-     * Prevent a spreadsheet from interpreting an exported cell as a formula.
-     *
-     * A CSV export is normally opened in a spreadsheet application, which treats a leading =, +, -
-     * or @ as the start of a formula. Admidio content such as a profile field or a role name is
-     * free text and must never be evaluated, so such a cell is prefixed with a single quote.
-     */
-    private static function neutralizeFormula(string $value): string
-    {
-        // A plain number such as -5 is data, not a formula, and must stay numeric in the export.
-        if ($value === '' || is_numeric($value)) {
-            return $value;
-        }
-
-        if (str_contains("=+-@\t\r", $value[0])) {
-            return "'" . $value;
-        }
-
-        return $value;
     }
 
     private static function normalizeCell(mixed $value): string

@@ -757,6 +757,13 @@ label {
     visibility: visible;
 }
 
+.admidio-category-report-scroll {
+    width: 100%;
+    min-height: 20rem;
+    margin-bottom: 1rem;
+    overflow: auto;
+}
+
 /***********************************/
 /* Various settings */
 /***********************************/

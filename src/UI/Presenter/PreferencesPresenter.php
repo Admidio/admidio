@@ -533,10 +533,10 @@ class PreferencesPresenter extends PagePresenter
         $sqlData['params'] = array($gCurrentOrgId);
         $formCategoryReport->addSelectBoxFromSql(
             'category_report_default_configuration',
-            $gL10n->get('SYS_DEFAULT_CONFIGURATION'),
+            $gL10n->get('SYS_DEFAULT_REPORT'),
             $gDb,
             $sqlData,
-            array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
+            array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_REPORT_DESC')
         );
 
         $formCategoryReport->addSubmitButton(

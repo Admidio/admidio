@@ -1125,7 +1125,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_NOTIFICATION_ROLE">Varslingsrolle</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Medlemmer av denne rollen mottar varsler om nye eller endrede oppføringer i modulene og endringer i medlemmenes profildata. Av databeskyttelseshensyn kan bare roller som har rollerettigheten #VAR1_BOLD# deponeres.</string>
   <string name="SYS_NUMBER">Nummer</string>
-  <string name="SYS_NUMBER_COL_DESC">Den aktuelle avmerkingsboksen må være aktivert hvis du vil vise en linje med antall medlemskap på slutten av rapporten.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Den aktuelle avmerkingsboksen må være aktivert hvis du vil vise en linje med antall medlemskap på slutten av rapporten.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Antall album per side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Antall oppføringer pr side</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Antall oppføringer som vises på en side. Hvis det er flere oppføringer, legges en paginering til siden. Hvis verdien er 0, listes alle oppføringer på en side opp, og pagineringen deaktiveres. (Standardinnstilling: #VAR1#)</string>

@@ -78,6 +78,7 @@ define('HOST', 'admidio.test');
 const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
 const TBL_AUTO_LOGIN = TABLE_PREFIX . '_auto_login';
 const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
+const TBL_CATEGORY_REPORT_COLUMNS = TABLE_PREFIX . '_category_report_columns';
 const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
 const TBL_FILES = TABLE_PREFIX . '_files';
@@ -269,6 +270,8 @@ function createTestDatabase(array $config): \Admidio\Infrastructure\Database
  */
 class TestLogger
 {
+    private int $queryCount = 0;
+
     /**
      * Log a debug message
      */
@@ -282,7 +285,19 @@ class TestLogger
      */
     public function info(string $message, array $context = []): void
     {
-        // Tests don't need logging output
+        if (preg_match('/^SQL: (SELECT|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|TRUNCATE)\b/i', $message) === 1) {
+            ++$this->queryCount;
+        }
+    }
+
+    public function resetQueryCount(): void
+    {
+        $this->queryCount = 0;
+    }
+
+    public function getQueryCount(): int
+    {
+        return $this->queryCount;
     }
 
     /**

@@ -129,11 +129,48 @@ class ConditionParser
     /**
      * @param string $columnType
      * @param string $sourceCondition
-     * @return bool Returns true if date search and false if age search
+     * @return bool Returns true if the date column contains an age search
      */
     private static function isDateSearch(string $columnType, string $sourceCondition): bool
     {
-        return $columnType === 'date' && (StringUtils::strContains($sourceCondition, 'J', false) || StringUtils::strContains($sourceCondition, 'Y', false));
+        return $columnType === 'date' && self::containsAgeCondition($sourceCondition);
+    }
+
+    /**
+     * Returns whether a condition contains one of the year suffixes supported for age searches.
+     */
+    public static function containsAgeCondition(string $sourceCondition): bool
+    {
+        return StringUtils::strContains($sourceCondition, 'J', false)
+            || StringUtils::strContains($sourceCondition, 'Y', false);
+    }
+
+    /**
+     * Validate a condition by parsing it with the supplied column type.
+     *
+     * @param string $sourceCondition The user condition string.
+     * @param string $columnType The type of the column. Valid types are **string**, **int**, **date** and **checkbox**.
+     * @param string $fieldName The field name used in validation errors.
+     * @param Database $db Database connection used to escape condition values.
+     * @throws Exception
+     */
+    public static function validateCondition(
+        string $sourceCondition,
+        string $columnType,
+        string $fieldName,
+        Database $db
+    ): void {
+        if (trim($sourceCondition) === '') {
+            return;
+        }
+
+        (new self())->makeSqlStatement(
+            $sourceCondition,
+            'condition_value',
+            $columnType,
+            $fieldName,
+            $db
+        );
     }
 
     /**

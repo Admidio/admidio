@@ -2,6 +2,7 @@
 
 namespace Admidio\InstallationUpdate\Service;
 
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\Infrastructure\Plugins\PluginManager;
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
@@ -35,6 +36,67 @@ const TBL_DATES = TABLE_PREFIX . '_dates';
  */
 final class UpdateStepsCode
 {
+    /**
+     * Move category report columns and their conditions to the normalized child table.
+     * @throws Exception
+     */
+    public static function updateStep51MigrateCategoryReportColumns(): void
+    {
+        $referenceIds = array();
+        foreach (array(
+            'crc_usf_id' => array(TBL_USER_FIELDS, 'usf_id'),
+            'crc_rol_id' => array(TBL_ROLES, 'rol_id'),
+            'crc_cat_id' => array(TBL_CATEGORIES, 'cat_id')
+        ) as $field => list($table, $idColumn)) {
+            $referenceIds[$field] = array();
+            $referenceStatement = self::$db->queryPrepared('SELECT ' . $idColumn . ' FROM ' . $table);
+            while ($reference = $referenceStatement->fetch()) {
+                $referenceIds[$field][(int)$reference[$idColumn]] = true;
+            }
+        }
+
+        $sql = 'SELECT crt_id, crt_col_fields, crt_col_conditions
+                  FROM ' . TBL_CATEGORY_REPORT;
+        $statement = self::$db->queryPrepared($sql);
+
+        while ($row = $statement->fetch()) {
+            $fields = array_values(array_filter(
+                explode(',', (string)$row['crt_col_fields']),
+                static fn(string $field): bool => $field !== ''
+            ));
+            $conditions = explode(',', (string)$row['crt_col_conditions']);
+            $number = 1;
+
+            foreach ($fields as $index => $field) {
+                $fieldValues = CategoryReportColumn::getFieldDatabaseValues($field);
+                if (($fieldValues['crc_usf_id'] !== null
+                        && !isset($referenceIds['crc_usf_id'][$fieldValues['crc_usf_id']]))
+                    || ($fieldValues['crc_rol_id'] !== null
+                        && !isset($referenceIds['crc_rol_id'][$fieldValues['crc_rol_id']]))
+                    || ($fieldValues['crc_cat_id'] !== null
+                        && !isset($referenceIds['crc_cat_id'][$fieldValues['crc_cat_id']]))) {
+                    continue;
+                }
+
+                $sql = 'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
+                               (crc_crt_id, crc_number, crc_field_type, crc_usf_id, crc_rol_id,
+                                crc_cat_id, crc_special_field, crc_condition)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+                self::$db->queryPrepared($sql, array(
+                    (int)$row['crt_id'],
+                    $number,
+                    $fieldValues['crc_field_type'],
+                    $fieldValues['crc_usf_id'],
+                    $fieldValues['crc_rol_id'],
+                    $fieldValues['crc_cat_id'],
+                    $fieldValues['crc_special_field'],
+                    $conditions[$index] ?? ''
+                ));
+                ++$number;
+            }
+        }
+    }
+
     /**
      * @var Database
      */
