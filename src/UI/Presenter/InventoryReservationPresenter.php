@@ -87,8 +87,8 @@ class InventoryReservationPresenter extends PagePresenter
 
         $html = '<div class="table-responsive"><table id="adm_inventory_reservations_table" class="table table-condensed table-hover" style="max-width: 100%;"><thead><tr><th>'
             . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER') . '</th><th>'
-            . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT') . '</th><th>' . $gL10n->get('SYS_START') . '</th><th>'
-            . $gL10n->get('SYS_END') . '</th><th></th></tr></thead><tbody>';
+            . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT') . '</th><th>' . $gL10n->get('SYS_FROM') . '</th><th>'
+            . $gL10n->get('SYS_DATE_TO') . '</th><th></th></tr></thead><tbody>';
         $user = new User($gDb, $gProfileFields);
         foreach ($rows as $row) {
             if ((int)$row['ivr_usr_id'] > 0 && $user->readDataById((int)$row['ivr_usr_id'])) {
