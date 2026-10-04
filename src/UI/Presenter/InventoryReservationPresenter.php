@@ -88,7 +88,7 @@ class InventoryReservationPresenter extends PagePresenter
         $html = '<div class="table-responsive"><table id="adm_inventory_reservations_table" class="table table-condensed table-hover" style="max-width: 100%;"><thead><tr><th>'
             . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER') . '</th><th>'
             . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT') . '</th><th>' . $gL10n->get('SYS_START') . '</th><th>'
-            . $gL10n->get('SYS_END') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS') . '</th><th></th></tr></thead><tbody>';
+            . $gL10n->get('SYS_END') . '</th><th></th></tr></thead><tbody>';
         $user = new User($gDb, $gProfileFields);
         foreach ($rows as $row) {
             if ((int)$row['ivr_usr_id'] > 0 && $user->readDataById((int)$row['ivr_usr_id'])) {
@@ -100,10 +100,9 @@ class InventoryReservationPresenter extends PagePresenter
                 }
             }
             $reservationRowId = 'adm_inventory_reservation_' . $row['ivr_uuid'];
-            $html .= '<tr id="' . $reservationRowId . '"><td>' . SecurityUtils::encodeHTML($row['item_name']) . '</td><td>' . $requester . '</td><td>'
+            $html .= '<tr id="' . $reservationRowId . '" data-reservation-status="' . SecurityUtils::encodeHTML($row['ivr_status']) . '"><td>' . SecurityUtils::encodeHTML($row['item_name']) . '</td><td>' . $requester . '</td><td>'
                 . SecurityUtils::encodeHTML($row['ivr_timestamp_create']) . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_begin'])
-                . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_end']) . '</td><td>'
-                . SecurityUtils::encodeHTML($statusLabels[$row['ivr_status']] ?? $row['ivr_status']) . '</td><td>';
+                . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_end']) . '</td><td>';
 
             $actions = array();
             if ($isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
@@ -142,19 +141,21 @@ class InventoryReservationPresenter extends PagePresenter
         $this->addHtml($html . '</tbody></table></div>');
 
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
-        $dataTables->disableColumnsSort(array(7));
-        $dataTables->createJavascript(count($rows), 7);
+        $dataTables->disableColumnsSort(array(5));
+        $dataTables->createJavascript(count($rows), 6);
         $this->addJavascript('
             var reservationTable = $("#adm_inventory_reservations_table").DataTable();
-            $.fn.dataTable.ext.search.push(function(settings, data) {
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 if (settings.nTable.id !== "adm_inventory_reservations_table") {
                     return true;
                 }
                 var selectedDate = $("#reservation_filter_date").val();
-                if (!selectedDate) {
-                    return true;
-                }
-                return data[3].substring(0, 10) <= selectedDate && selectedDate <= data[4].substring(0, 10);
+                var dateMatches = !selectedDate || (data[3].substring(0, 10) <= selectedDate && selectedDate <= data[4].substring(0, 10));
+                var selectedStatus = $("#reservation_filter_status").val();
+                var reservationRow = settings.aoData[dataIndex].nTr;
+                var statusMatches = !selectedStatus || reservationRow.getAttribute("data-reservation-status") === selectedStatus;
+
+                return dateMatches && statusMatches;
             });
             $("#reservation_filter_item").on("change", function() {
                 reservationTable.column(0).search("^" + $.fn.dataTable.util.escapeRegex(this.value) + "$", true, false).draw();
@@ -163,7 +164,7 @@ class InventoryReservationPresenter extends PagePresenter
                 reservationTable.draw();
             });
             $("#reservation_filter_status").on("change", function() {
-                reservationTable.column(5).search("^" + $.fn.dataTable.util.escapeRegex(this.value) + "$", true, false).draw();
+                reservationTable.draw();
             });
             function showReservationActionError(message) {
                 $("#adm_status_message").empty().append(
