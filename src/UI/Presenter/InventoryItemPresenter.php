@@ -802,6 +802,7 @@ class InventoryItemPresenter extends PagePresenter
 
             if (!$returning) {
                 $borrowDateValue = (new DateTime($reservation->getValue('ivr_begin')))->format($dateFormat);
+                $returnDateValue = '';
             }
         }
         if ($returning) {
@@ -930,6 +931,35 @@ class InventoryItemPresenter extends PagePresenter
                         if (pDateTime === "true") {
                             ivtBorrowDateFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
                             ivtReturnDateFieldTime.addEventListener("input", validateReceivedOnAndBackOn);
+                        }
+
+                        function addDateTimeClearButton(field, timeField) {
+                            if (field.disabled || timeField.disabled) {
+                                return;
+                            }
+
+                            var clearButton = $("<button>", {
+                                type: "button",
+                                class: "btn btn-outline-secondary",
+                                title: ' . json_encode($gL10n->get('SYS_EMPTY')) . ',
+                                "aria-label": ' . json_encode($gL10n->get('SYS_EMPTY')) . '
+                            }).append($("<i>", {class: "bi bi-x-lg"}));
+                            clearButton.on("click", function() {
+                                field.value = "";
+                                timeField.value = "";
+                                field.setCustomValidity("");
+                                field.dispatchEvent(new Event("input", {bubbles: true}));
+                                timeField.dispatchEvent(new Event("input", {bubbles: true}));
+                                window.checkItemBorrowState();
+                            });
+                            $(timeField).closest(".col-sm-2, .col-auto").after(
+                                $("<div>", {class: "col-auto"}).append(clearButton)
+                            );
+                        }
+
+                        if (pDateTime === "true") {
+                            addDateTimeClearButton(ivtBorrowDateField, ivtBorrowDateFieldTime);
+                            addDateTimeClearButton(ivtReturnDateField, ivtReturnDateFieldTime);
                         }
 
                         window.checkItemBorrowState();
