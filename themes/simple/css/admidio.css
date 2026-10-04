@@ -382,7 +382,7 @@ input[type=date], input[type=number] {
 }
 
 input[type=time] {
-    max-width: 100px;
+    max-width: 9em;
 }
 
 .form-switch .form-check-input:not(:checked) {
