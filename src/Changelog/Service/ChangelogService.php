@@ -20,6 +20,7 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\Reservation;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -299,6 +300,7 @@ class ChangelogService {
             'inventory_items' => 'SYS_INVENTORY_ITEMS',
             'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
             'inventory_item_borrow_data' => 'SYS_INVENTORY_ITEM_BORROW_DATA',
+            'inventory_reservations' => 'SYS_INVENTORY_RESERVATIONS',
 
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
@@ -415,7 +417,7 @@ class ChangelogService {
                 'label' => 'SYS_INVENTORY',
                 'section' => 'content_modules',
                 'enabledBy' => array('inventory_module_enabled'),
-                'tables' => array('inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data')
+                'tables' => array('inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations')
             ),
             'weblinks' => array(
                 'label' => 'SYS_WEBLINKS',
@@ -623,6 +625,8 @@ class ChangelogService {
             case 'inventory_item_borrow_data':
             case 'inventory_items':
                 return new Item($gDb);
+            case 'inventory_reservations':
+                return new Reservation($gDb);
             default:
                 return null;
         }
@@ -844,6 +848,12 @@ class ChangelogService {
             'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
             'inb_borrow_date' =>           array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATETIME'),
             'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATETIME'),
+            'ivr_guest_name' =>            'SYS_NAME',
+            'ivr_guest_email' =>           array('name' => 'SYS_EMAIL', 'type' => 'EMAIL'),
+            'ivr_comment' =>               'SYS_COMMENT',
+            'ivr_begin' =>                 array('name' => 'SYS_START', 'type' => 'DATETIME'),
+            'ivr_end' =>                   array('name' => 'SYS_END', 'type' => 'DATETIME'),
+            'ivr_status' =>                'SYS_INVENTORY_RESERVATION_STATUS',
             'ifo_value' =>                 'SYS_VALUE',
             'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
             'ifo_sequence' =>              'SYS_ORDER',
@@ -1044,6 +1054,8 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
                 case 'inventory_item_borrow_data' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
+                case 'inventory_reservations' :
+                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'reservation_list')); break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
                 case 'lists' :
@@ -1591,7 +1603,9 @@ class ChangelogService {
             $tablesPermitted[] = 'links';
         if ($user->isAdministratorInventory())
             $tablesPermitted = array_merge($tablesPermitted, ['inventory_fields', 'inventory_field_select_options',
-                'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data']);
+                'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations']);
+        elseif (\Admidio\Inventory\Service\InventoryAccessService::canManageReservations())
+            $tablesPermitted[] = 'inventory_reservations';
         if ($user->isAdministratorForum())
             $tablesPermitted = array_merge($tablesPermitted, ['forum_topics', 'forum_posts']);
 
