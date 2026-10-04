@@ -1613,8 +1613,6 @@ class ChangelogService {
         if ($user->isAdministratorInventory())
             $tablesPermitted = array_merge($tablesPermitted, ['inventory_fields', 'inventory_field_select_options',
                 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations']);
-        elseif (\Admidio\Inventory\Service\InventoryAccessService::canManageReservations())
-            $tablesPermitted[] = 'inventory_reservations';
         if ($user->isAdministratorForum())
             $tablesPermitted = array_merge($tablesPermitted, ['forum_topics', 'forum_posts']);
 

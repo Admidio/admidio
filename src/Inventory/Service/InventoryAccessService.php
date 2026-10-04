@@ -109,8 +109,19 @@ class InventoryAccessService
         }
 
         return $gCurrentUser->isAdministratorInventory()
-            || ($gSettingsManager->getBool('inventory_reservation_keepers_manage')
+            || ($gSettingsManager->getInt('inventory_module_enabled') !== 3
+                && $gSettingsManager->getBool('inventory_allow_keeper_edit')
+                && $gSettingsManager->getBool('inventory_reservation_keepers_manage')
                 && InventoryPresenter::isCurrentUserKeeper());
+    }
+
+    /** Whether the current user may manage reservations for one specific item. */
+    public static function canManageReservationItem(int $itemId): bool
+    {
+        global $gCurrentUser;
+
+        return $gCurrentUser->isAdministratorInventory()
+            || (self::canManageReservations() && InventoryPresenter::isCurrentUserKeeper($itemId));
     }
 
     /**

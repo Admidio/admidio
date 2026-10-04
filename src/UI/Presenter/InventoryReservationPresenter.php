@@ -14,7 +14,7 @@ class InventoryReservationPresenter extends PagePresenter
 {
     public function createList(): void
     {
-        global $gCurrentSession, $gCurrentOrgId, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gSettingsManager, $gValidLogin;
+        global $gCurrentSession, $gCurrentOrgId, $gCurrentUser, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gSettingsManager, $gValidLogin;
 
         $isManager = InventoryAccessService::canManageReservations();
         if (!$isManager && (!$gValidLogin || !InventoryAccessService::canRequestReservation())) {
@@ -29,23 +29,38 @@ class InventoryReservationPresenter extends PagePresenter
                 'bi-calendar-plus'
             );
         }
-        ChangelogService::displayHistoryButton($this, 'inventory_reservations', 'inventory_reservations', $isManager);
+        ChangelogService::displayHistoryButton($this, 'inventory_reservations', 'inventory_reservations', $gCurrentUser->isAdministratorInventory());
 
         $requesterCondition = $isManager ? '' : ' AND ivr_usr_id = ?';
-        $queryParameters = array($gCurrentOrgId);
+        $keeperJoin = '';
+        $keeperCondition = '';
+        $queryParameters = array();
+        if ($isManager && !$gCurrentUser->isAdministratorInventory()) {
+            $keeperJoin = '
+         INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ivr_ini_id
+         INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS keeper_field ON keeper_field.inf_id = keeper_data.ind_inf_id
+                AND keeper_field.inf_name_intern = \'KEEPER\'
+                AND (keeper_field.inf_org_id = ? OR keeper_field.inf_org_id IS NULL)';
+            $keeperCondition = ' AND keeper_data.ind_value = ?';
+            $queryParameters[] = $gCurrentOrgId;
+        }
+        $queryParameters[] = $gCurrentOrgId;
         if (!$isManager) {
+            $queryParameters[] = $gCurrentUserId;
+        } elseif (!$gCurrentUser->isAdministratorInventory()) {
             $queryParameters[] = $gCurrentUserId;
         }
 
         $statement = $gDb->queryPrepared(
-            'SELECT ivr_uuid, ivr_usr_id, ivr_guest_name, ivr_guest_email, ivr_timestamp_create, ivr_begin, ivr_end, ivr_status, ivr_comment,
+            'SELECT ivr_uuid, ivr_ini_id, ivr_usr_id, ivr_guest_name, ivr_guest_email, ivr_timestamp_create, ivr_begin, ivr_end, ivr_status, ivr_comment,
                     dat_uuid, dat_headline, ind_value AS item_name
                FROM ' . TBL_INVENTORY_RESERVATIONS . '
          INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ivr_ini_id
          INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
           LEFT JOIN ' . TBL_EVENTS . ' ON dat_id = ivr_dat_id
-              WHERE ini_org_id = ?' . $requesterCondition . '
+                    ' . $keeperJoin . '
+              WHERE ini_org_id = ?' . $requesterCondition . $keeperCondition . '
            ORDER BY ivr_timestamp_create DESC',
             $queryParameters
         );
@@ -142,14 +157,15 @@ class InventoryReservationPresenter extends PagePresenter
             $html .= '</td><td>';
 
             $actions = array();
-            if ($isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
+            $canManageReservation = $isManager && InventoryAccessService::canManageReservationItem((int)$row['ivr_ini_id']);
+            if ($canManageReservation && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE'));
                 if ($row['ivr_status'] === Reservation::STATUS_REQUESTED) {
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
                     $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
                 }
-            } elseif ($isManager && $row['ivr_status'] === Reservation::STATUS_APPROVED) {
+            } elseif ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_APPROVED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_cancel', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL'));
             }

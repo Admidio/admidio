@@ -23,6 +23,22 @@ class InventoryBorrowPresenter extends PagePresenter
 
         $canManageReservations = InventoryAccessService::canManageReservations();
         if ($canManageReservations) {
+            $readyKeeperJoin = '';
+            $readyReservationParameters = array();
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                $readyKeeperJoin = '
+         INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
+         INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS keeper_field ON keeper_field.inf_id = keeper_data.ind_inf_id
+                AND keeper_field.inf_name_intern = \'KEEPER\'
+                AND (keeper_field.inf_org_id = ? OR keeper_field.inf_org_id IS NULL)';
+                $readyReservationParameters[] = $gCurrentOrgId;
+            }
+            $readyReservationParameters[] = $gCurrentOrgId;
+            $readyReservationParameters[] = Reservation::STATUS_APPROVED;
+            $readyReservationParameters[] = DATETIME_NOW;
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                $readyReservationParameters[] = $gCurrentUserId;
+            }
             $readyReservations = $gDb->queryPrepared(
             'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ind_value AS item_name
                FROM ' . TBL_INVENTORY_RESERVATIONS . '
@@ -31,12 +47,14 @@ class InventoryBorrowPresenter extends PagePresenter
          INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
           LEFT JOIN ' . TBL_EVENTS . ' ON dat_id = ivr_dat_id
           LEFT JOIN ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' ON inb_ini_id = ini_id
+                    ' . $readyKeeperJoin . '
               WHERE ini_org_id = ?
                 AND ivr_status = ?
                 AND ivr_end >= ?
                 AND (inb_last_receiver IS NULL OR inb_last_receiver = \'\' OR inb_return_date IS NOT NULL)
+                ' . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : '') . '
            ORDER BY ivr_begin',
-                array($gCurrentOrgId, Reservation::STATUS_APPROVED, DATETIME_NOW)
+                $readyReservationParameters
             )->fetchAll();
 
             $readyHtml = '<div class="table-responsive"><table id="adm_inventory_borrow_ready_table" class="table table-condensed table-hover"><thead><tr><th>'

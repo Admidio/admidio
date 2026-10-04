@@ -23,17 +23,35 @@ class ReservationService
     /** Return the number of pending requests visible to reservation managers. */
     public static function countPendingReservations(Database $database): int
     {
-        global $gCurrentOrgId;
+        global $gCurrentOrgId, $gCurrentUser, $gCurrentUserId;
 
         if (!InventoryAccessService::canManageReservations()) {
             return 0;
         }
 
+        $keeperJoin = '';
+        $queryParameters = array();
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            $keeperJoin = '
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS keeper_field ON keeper_field.inf_id = keeper_data.ind_inf_id
+                    AND keeper_field.inf_name_intern = \'KEEPER\'
+                    AND (keeper_field.inf_org_id = ? OR keeper_field.inf_org_id IS NULL)';
+            $queryParameters[] = $gCurrentOrgId;
+        }
+        $queryParameters[] = $gCurrentOrgId;
+        $queryParameters[] = Reservation::STATUS_REQUESTED;
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            $queryParameters[] = $gCurrentUserId;
+        }
+
         return (int)$database->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
              INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
-                   WHERE ini_org_id = ? AND ivr_status = ?',
-            array($gCurrentOrgId, Reservation::STATUS_REQUESTED)
+                    ' . $keeperJoin . '
+                   WHERE ini_org_id = ? AND ivr_status = ?'
+                    . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : ''),
+            $queryParameters
         )->fetchColumn();
     }
 
@@ -89,7 +107,7 @@ class ReservationService
     /** Approve a pending request after an availability re-check. */
     public function approve(Reservation $reservation): void
     {
-        if (!InventoryAccessService::canManageReservations()) {
+        if (!InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         if (!$this->isAvailable(
@@ -109,7 +127,7 @@ class ReservationService
     /** Reject or cancel a reservation from the administrator queue. */
     public function changeStatus(Reservation $reservation, string $status): void
     {
-        if (!InventoryAccessService::canManageReservations()) {
+        if (!InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))) {
             throw new Exception('SYS_NO_RIGHTS');
         }
         if (!in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
@@ -123,7 +141,7 @@ class ReservationService
     /** Mark an approved reservation as physically handed over. */
     public function startBorrowing(Reservation $reservation): void
     {
-        if (!InventoryAccessService::canManageReservations()
+        if (!InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))
             || $reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
@@ -135,7 +153,7 @@ class ReservationService
     /** Mark a handed-over reservation as returned. */
     public function finishBorrowing(Reservation $reservation): void
     {
-        if (!InventoryAccessService::canManageReservations()
+        if (!InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))
             || $reservation->getValue('ivr_status') !== Reservation::STATUS_BORROWED) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
