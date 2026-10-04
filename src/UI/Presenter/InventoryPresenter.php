@@ -469,6 +469,12 @@ class InventoryPresenter extends PagePresenter
         $printBaseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'print_preview'));
 
         $this->addJavascript('
+            $("#inventory_view").on("change", function() {
+                if (this.value === "borrowing") {
+                    window.location.href = ' . json_encode(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list'))) . ';
+                }
+            });
+
             // only submit non-empty filter values
             $("#items_filter_category, #items_filter_keeper, #items_filter_last_receiver, #items_filter_status").on("change", function(){
                 var form = $("#adm_navbar_filter_form");
@@ -557,6 +563,13 @@ class InventoryPresenter extends PagePresenter
 
         // filter string (hidden)
         $form->addInput('items_filter_string', $gL10n->get('SYS_FILTER'), "", array('property' => FormPresenter::FIELD_HIDDEN));
+
+        if (InventoryAccessService::canManageReservations() && !$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
+            $form->addSelectBox('inventory_view', $gL10n->get('SYS_VIEW'), array(
+                'overview' => $gL10n->get('SYS_OVERVIEW'),
+                'borrowing' => $gL10n->get('SYS_INVENTORY_BORROWINGS')
+            ), array('defaultValue' => 'overview', 'showContextDependentFirstEntry' => false));
+        }
 
         // filter category
         $form->addSelectBoxForCategories(

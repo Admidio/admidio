@@ -837,6 +837,9 @@
   <string name="SYS_INVENTORY_BORROW_DATE">Ausleihdatum</string>
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Das Ausleihdatum des Gegenstandes muss vor dem Rückgabedatum liegen!</string>
+  <string name="SYS_INVENTORY_BORROWINGS">Ausleihen</string>
+  <string name="SYS_INVENTORY_BORROWINGS_READY">Freigegebene Reservierungen zur Ausgabe</string>
+  <string name="SYS_INVENTORY_BORROWINGS_ACTIVE">Aktive Ausleihen</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Die Kategorie des Gegenstandes</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Verbundenes Feld</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Einstellungen für das Kopieren eines Gegenstandes:</string>
@@ -858,6 +861,8 @@
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Gegenstände importieren</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
   <string name="SYS_INVENTORY_ITEM_BORROW">Gegenstand ausleihen</string>
+  <string name="SYS_INVENTORY_START_BORROWING">Ausleihe starten</string>
+  <string name="SYS_INVENTORY_RECORD_RETURN">Rückgabe erfassen</string>
   <string name="SYS_INVENTORY_ITEM_BORROW_DATA">Ausleihdaten des Gegenstandes</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Gegenstand erfolgreich kopiert</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Gegenstand kopieren</string>

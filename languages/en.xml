@@ -844,6 +844,9 @@
   <string name="SYS_INVENTORY_BORROW_DATE">Borrowing date</string>
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">The borrowing date of the item to the last recipient</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">The borrowing date of the item must be before the return date!</string>
+  <string name="SYS_INVENTORY_BORROWINGS">Borrowings</string>
+  <string name="SYS_INVENTORY_BORROWINGS_READY">Approved reservations ready for handover</string>
+  <string name="SYS_INVENTORY_BORROWINGS_ACTIVE">Active borrowings</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">The category of an item</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Connected field</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Settings for copying an item:</string>
@@ -865,6 +868,8 @@
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Import items</string>
   <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">The following columns of the import file are not assigned to any item fields in InventoryManager:</string>
   <string name="SYS_INVENTORY_ITEM_BORROW">Borrow the item</string>
+  <string name="SYS_INVENTORY_START_BORROWING">Start borrowing</string>
+  <string name="SYS_INVENTORY_RECORD_RETURN">Record return</string>
   <string name="SYS_INVENTORY_ITEM_BORROW_DATA">Item borrowing data</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Item successfully copied</string>
   <string name="SYS_INVENTORY_ITEM_COPY">Copy the item</string>

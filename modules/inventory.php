@@ -16,6 +16,7 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\UI\Presenter\InventoryFieldsPresenter;
 use Admidio\UI\Presenter\InventoryImportPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
+use Admidio\UI\Presenter\InventoryBorrowPresenter;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\UI\Presenter\InventoryReservationPresenter;
 
@@ -42,7 +43,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'reservation_list', 'reservation_request', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'reservation_withdraw', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'borrow_list', 'field_list', 'field_edit', 'field_save', 'field_delete', 'check_option_entry_status', 'delete_option_entry', 'sequence', 'item_edit', 'item_edit_borrow', 'item_save', 'reservation_list', 'reservation_request', 'reservation_request_save', 'reservation_approve', 'reservation_reject', 'reservation_cancel', 'reservation_withdraw', 'item_delete_explain_msg', 'item_delete_keeper_explain_msg', 'item_retire', 'item_reinstate', 'item_delete', 'item_picture_show', 'item_picture_show_modal', 'item_picture_choose', 'item_picture_upload', 'item_picture_review', 'item_picture_save', 'item_picture_delete', 'import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items', 'print_preview', 'print_xlsx', 'print_ods', 'print_csv-ms', 'print_csv-oo', 'print_pdf', 'print_pdfl')));
     $getinfUUID = admFuncVariableIsValid($_GET, 'uuid', 'uuid');
     $getOptionID = admFuncVariableIsValid($_GET, 'option_id', 'int', array('defaultValue' => 0));
     $getFieldName = admFuncVariableIsValid($_GET, 'field_name', 'string', array('defaultValue' => "", 'directOutput' => true));
@@ -262,8 +263,18 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $item = new InventoryItemPresenter('adm_item_edit_borrow');
             $item->setHeadline($headline);
-            $item->createEditBorrowForm($getiniUUID);
+            $item->createEditBorrowForm($getiniUUID, $getReservationUUID);
             $item->show();
+            break;
+
+        case 'borrow_list':
+            $headline = $gL10n->get('SYS_INVENTORY_BORROWINGS');
+            $gNavigation->addUrl(CURRENT_URL, $headline);
+            $borrowing = new InventoryBorrowPresenter();
+            $borrowing->setHeadline($headline);
+            $borrowing->setContentFullWidth();
+            $borrowing->createList();
+            $borrowing->show();
             break;
 
         case 'reservation_request':
