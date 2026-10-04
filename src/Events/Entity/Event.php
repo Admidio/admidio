@@ -178,6 +178,13 @@ class Event extends Entity
             $eventRole->delete(); // TODO Exception handling
         }
 
+        // Keep the reservation audit trail when an event disappears. The FK then clears the
+        // event reference, while the cancelled status ensures its former period is not blocked.
+        $this->db->queryPrepared(
+            'UPDATE ' . TBL_INVENTORY_RESERVATIONS . ' SET ivr_status = ? WHERE ivr_dat_id = ?',
+            array('cancelled', $datId)
+        );
+
         // now delete event
         parent::delete();
 
