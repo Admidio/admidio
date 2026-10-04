@@ -156,7 +156,7 @@ class InventoryReservationPresenter extends PagePresenter
         $this->addHtml($html . '</tbody></table></div><div id="adm_inventory_reservations_alert" class="alert alert-danger form-alert mt-3" style="display: none;"></div>');
 
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
-        $dataTables->disableColumnsSort(array(1, 2, 3, 4, 5, 6, 7));
+        $dataTables->disableColumnsSort(array(7));
         $dataTables->setColumnsNotHideResponsive(array(1, 7));
         $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
         $dataTables->createJavascript(max(count($rows), 11), 7);
