@@ -21,7 +21,7 @@ class ReservationService
     }
 
     /**
-     * Creates a request. Automatic approval still checks availability before persisting it.
+     * Creates a request only when no confirmed reservation overlaps the requested period.
      */
     public function request(
         int $itemId,
@@ -44,10 +44,10 @@ class ReservationService
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
-        if ($isAutomatic && !$this->isAvailable($itemId, $begin, $end)) {
+        if (!$this->isAvailable($itemId, $begin, $end)) {
             throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
         }
+        $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
         if (!$gValidLogin && ($guestName === '' || $guestEmail === '')) {
             throw new Exception('SYS_FIELD_EMPTY');
@@ -173,7 +173,7 @@ class ReservationService
                 throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
             }
 
-            if ($isAutomatic && !$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
+            if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
                 throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
             }
         }

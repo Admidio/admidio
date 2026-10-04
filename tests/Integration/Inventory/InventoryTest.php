@@ -844,6 +844,37 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox A manual request is rejected when its period is already confirmed
+     */
+    public function testManualReservationRequestRejectsConfirmedOverlappingPeriod(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationmanualconflict', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Confirmed manual reservation projector'));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 10:00:00'),
+                new DateTimeImmutable('2030-07-15 12:00:00')
+            );
+            $service->approve($reservation);
+
+            $this->expectException(Exception::class);
+            $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 11:00:00'),
+                new DateTimeImmutable('2030-07-15 13:00:00')
+            );
+        });
+    }
+
+    /**
      * @testdox Event reservations follow the configured manual approval workflow
      */
     public function testEventReservationIsRequestedWithManualApproval(): void
