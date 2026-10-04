@@ -14,7 +14,7 @@ class InventoryReservationPresenter extends PagePresenter
 {
     public function createList(): void
     {
-        global $gCurrentSession, $gCurrentOrgId, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gValidLogin;
+        global $gCurrentSession, $gCurrentOrgId, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gSettingsManager, $gValidLogin;
 
         $isManager = InventoryAccessService::canManageReservations();
         if (!$isManager && (!$gValidLogin || !InventoryAccessService::canRequestReservation())) {
@@ -81,7 +81,7 @@ class InventoryReservationPresenter extends PagePresenter
             'reservation_filter_status',
             $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS'),
             array('' => $gL10n->get('SYS_ALL')) + $statusLabels,
-            array('showContextDependentFirstEntry' => false)
+            array('defaultValue' => Reservation::STATUS_REQUESTED, 'showContextDependentFirstEntry' => false)
         );
         $filterForm->addToHtmlPage();
 
@@ -143,7 +143,8 @@ class InventoryReservationPresenter extends PagePresenter
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
         $dataTables->disableColumnsSort(array(6));
         $dataTables->setColumnsNotHideResponsive(array(1, 6));
-        $dataTables->createJavascript(count($rows), 6);
+        $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
+        $dataTables->createJavascript(max(count($rows), 11), 6);
         $this->addJavascript('
             var reservationTable = $("#adm_inventory_reservations_table").DataTable();
             var reservationActionErrorTimeout;
@@ -168,6 +169,7 @@ class InventoryReservationPresenter extends PagePresenter
             $("#reservation_filter_status").on("change", function() {
                 reservationTable.draw();
             });
+            reservationTable.draw();
             function showReservationActionError(message) {
                 var errorAlert = $("#adm_inventory_reservations_alert");
                 errorAlert.empty().append(
