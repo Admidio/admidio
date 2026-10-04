@@ -206,7 +206,7 @@ class GroupsRolesPresenter extends PagePresenter
                     . ' data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CONTRIBUTION') . '"'
                     . ' aria-label="' . $gL10n->get('SYS_CONTRIBUTION') . '">'
                     . '<i class="bi bi-wallet2" aria-hidden="true"></i>'
-                    . '<i class="bi bi-currency-euro admidio-contribution-currency" aria-hidden="true"></i>'
+                    . '<i class="bi bi-cash admidio-contribution-currency" aria-hidden="true"></i>'
                     . '</span>' . $html . '</span>';
             }
 
