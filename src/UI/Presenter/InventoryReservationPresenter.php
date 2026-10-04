@@ -100,10 +100,18 @@ class InventoryReservationPresenter extends PagePresenter
         foreach ($rows as $row) {
             if ((int)$row['ivr_usr_id'] > 0 && $user->readDataById((int)$row['ivr_usr_id'])) {
                 $requester = SecurityUtils::encodeHTML($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                $email = (string)$user->getValue('EMAIL');
+                if ($email !== '') {
+                    $mailLink = $gSettingsManager->getInt('mail_module_enabled') > 0
+                        ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $user->getValue('usr_uuid')))
+                        : 'mailto:' . $email;
+                    $requester .= '<br><small><a href="' . SecurityUtils::encodeHTML($mailLink) . '">' . SecurityUtils::encodeHTML($email) . '</a></small>';
+                }
             } else {
                 $requester = SecurityUtils::encodeHTML($row['ivr_guest_name']);
                 if ($row['ivr_guest_email'] !== '') {
-                    $requester .= '<br><small>' . SecurityUtils::encodeHTML($row['ivr_guest_email']) . '</small>';
+                    $email = (string)$row['ivr_guest_email'];
+                    $requester .= '<br><small><a href="mailto:' . SecurityUtils::encodeHTML($email) . '">' . SecurityUtils::encodeHTML($email) . '</a></small>';
                 }
             }
             if ($row['dat_uuid'] !== null) {
