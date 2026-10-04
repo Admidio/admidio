@@ -515,9 +515,9 @@ class EventFormPresenter extends PagePresenter
                 . '<button type="button" class="btn btn-secondary" onclick="addEventInventoryReservationRow();"><i class="bi bi-plus-circle"></i> '
                 . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</button>'
             );
-            $page->addJavascript('function addEventInventoryReservationRow() {
+            $page->addJavascript('window.addEventInventoryReservationRow = function() {
                 document.getElementById("event_inventory_reservations_rows").insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
-            }', true);
+            };', true);
         }
 
         if ($showRecurrenceFields) {
