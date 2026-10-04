@@ -201,6 +201,39 @@
 }
 
 /***********************************/
+/* Navigation text selection */
+/***********************************/
+
+/* Prevent accidental text selection while tapping through the navigation on touch devices.
+   user-select: none also applies to all child elements, so no * selectors are necessary.
+   Only add navigation and UI elements here and no containers with input fields or content. */
+#adm_main_navbar,
+.admidio-sidebar,
+.admidio-breadcrumb,
+.admidio-content-header,
+.navbar-filter .navbar-brand,
+.nav-tabs .nav-link,
+.pagination,
+.plgCalendarWeekday,
+.plgCalendarWeekdaySaturday,
+.plgCalendarWeekdaySunday,
+#adm_logout_link {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Text that could not be selected and is no link should not show the text cursor */
+.admidio-module-headline,
+.admidio-headline-mobile-menu,
+.admidio-menu-header,
+.breadcrumb-item.active,
+.plgCalendarWeekday,
+.plgCalendarWeekdaySaturday,
+.plgCalendarWeekdaySunday {
+    cursor: default;
+}
+
+/***********************************/
 /* Default tags */
 /***********************************/
 
