@@ -102,16 +102,25 @@ class InventoryReservationPresenter extends PagePresenter
                 $requester = SecurityUtils::encodeHTML($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
                 $email = (string)$user->getValue('EMAIL');
                 if ($email !== '') {
-                    $mailLink = $gSettingsManager->getInt('mail_module_enabled') > 0
-                        ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $user->getValue('usr_uuid')))
-                        : 'mailto:' . $email;
-                    $requester .= '<br><small><a href="' . SecurityUtils::encodeHTML($mailLink) . '">' . SecurityUtils::encodeHTML($email) . '</a></small>';
+                    $requester .= '<br><small>' . SecurityUtils::encodeHTML($email) . '</small>';
+                    if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
+                        $requester .= ' <a class="admidio-icon-link" href="'
+                            . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $user->getValue('usr_uuid')))
+                            . '"><i class="bi bi-envelope" data-bs-toggle="tooltip" title="'
+                            . SecurityUtils::encodeHTML($gL10n->get('SYS_SEND_EMAIL_TO', array($email))) . '"></i></a>';
+                    }
                 }
             } else {
                 $requester = SecurityUtils::encodeHTML($row['ivr_guest_name']);
                 if ($row['ivr_guest_email'] !== '') {
                     $email = (string)$row['ivr_guest_email'];
-                    $requester .= '<br><small><a href="mailto:' . SecurityUtils::encodeHTML($email) . '">' . SecurityUtils::encodeHTML($email) . '</a></small>';
+                    $requester .= '<br><small>' . SecurityUtils::encodeHTML($email) . '</small>';
+                    if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
+                        $requester .= ' <a class="admidio-icon-link" href="'
+                            . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('reservation_uuid' => $row['ivr_uuid']))
+                            . '"><i class="bi bi-envelope" data-bs-toggle="tooltip" title="'
+                            . SecurityUtils::encodeHTML($gL10n->get('SYS_SEND_EMAIL_TO', array($email))) . '"></i></a>';
+                    }
                 }
             }
             if ($row['dat_uuid'] !== null) {

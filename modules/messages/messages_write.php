@@ -29,6 +29,8 @@ use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Messages\Entity\Message;
 use Admidio\Messages\Entity\MessageContent;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -44,6 +46,7 @@ try {
     // Initialize and check the parameters
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => Message::MESSAGE_TYPE_EMAIL));
     $getUserUUID = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
+    $getReservationUUID = admFuncVariableIsValid($_GET, 'reservation_uuid', 'uuid');
     $getSubject = admFuncVariableIsValid($_GET, 'subject', 'string');
     $getMsgUUID = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
@@ -52,6 +55,22 @@ try {
     $getForward = admFuncVariableIsValid($_GET, 'forward', 'bool');
     $postUserUuidList = '';
     $postListUuid = '';
+    $reservationRecipient = '';
+    $reservationRecipientName = '';
+
+    if ($getReservationUUID !== '') {
+        if ($getMsgType !== Message::MESSAGE_TYPE_EMAIL || !InventoryAccessService::canManageReservations()) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation = new Reservation($gDb);
+        if (!$reservation->readDataByUuid($getReservationUUID) || $reservation->getValue('ivr_guest_email') === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservationRecipient = 'reservation:' . $getReservationUUID;
+        $reservationRecipientName = trim($reservation->getValue('ivr_guest_name') . ' <' . $reservation->getValue('ivr_guest_email') . '>');
+    }
 
     // Check form values
     if ($gValidLogin) {
@@ -452,6 +471,11 @@ try {
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
             $form->addInput('userUuidList', '', $postUserUuidList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('list_uuid', '', $postListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
+        }
+
+        if ($reservationRecipient !== '') {
+            $preloadData = $reservationRecipient;
+            $list = array(array($reservationRecipient, $reservationRecipientName, ''));
         }
 
         // no roles or users found then show message
