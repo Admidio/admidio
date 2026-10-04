@@ -14,10 +14,10 @@ class InventoryReservationPresenter extends PagePresenter
 {
     public function createList(): void
     {
-        global $gCurrentSession, $gCurrentOrgId, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gValidLogin;
+        global $gCurrentSession, $gCurrentOrgId, $gCurrentUserId, $gDb, $gL10n, $gProfileFields;
 
         $isManager = InventoryAccessService::canManageReservations();
-        if (!$isManager && (!$gValidLogin || !InventoryAccessService::canRequestReservation())) {
+        if (!$isManager && !InventoryAccessService::canRequestReservation()) {
             throw new \Admidio\Infrastructure\Exception('SYS_NO_RIGHTS');
         }
 

@@ -393,7 +393,7 @@ class InventoryPresenter extends PagePresenter
      */
     protected function createHeader(): void
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager, $gValidLogin;
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager;
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to create new item
@@ -405,7 +405,7 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
-        if (InventoryAccessService::canManageReservations() || ($gValidLogin && InventoryAccessService::canRequestReservation())) {
+        if (InventoryAccessService::canManageReservations() || InventoryAccessService::canRequestReservation()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservations',
                 $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
