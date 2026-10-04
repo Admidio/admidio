@@ -613,6 +613,23 @@ label {
     background-color: var(--bs-tertiary);
 }
 
+.admidio-contribution-icon {
+    position: relative;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    vertical-align: -0.125em;
+}
+
+.admidio-contribution-currency {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 0.55em;
+    transform: translate(-50%, -45%);
+}
+
 /***********************************/
 /* Tabs */
 /***********************************/

@@ -314,6 +314,7 @@ final class PreferenceDefinitions
             'groups_roles_export' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'groups_roles_edit_lists' => array('default' => '1', 'type' => 'enum', 'values' => array('1', '2', '3')),
             'groups_roles_members_per_page' => array('default' => '25', 'type' => 'enum', 'values' => array('10', '25', '50', '100', '-1')),
+            'groups_roles_preview_characters' => array('default' => '200', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
             'groups_roles_show_former_members' => array('default' => '2', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'mail_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'pm_module_enabled' => array('default' => '1', 'type' => 'bool'),
