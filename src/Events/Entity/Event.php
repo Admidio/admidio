@@ -6,6 +6,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
@@ -180,10 +181,15 @@ class Event extends Entity
 
         // Keep the reservation audit trail when an event disappears. The FK then clears the
         // event reference, while the cancelled status ensures its former period is not blocked.
-        $this->db->queryPrepared(
-            'UPDATE ' . TBL_INVENTORY_RESERVATIONS . ' SET ivr_status = ? WHERE ivr_dat_id = ?',
-            array('cancelled', $datId)
-        );
+        $reservationIds = $this->db->queryPrepared(
+            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
+            array($datId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED)
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        foreach ($reservationIds as $reservationId) {
+            $reservation = new Reservation($this->db, (int)$reservationId);
+            $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
+            $reservation->save();
+        }
 
         // now delete event
         parent::delete();

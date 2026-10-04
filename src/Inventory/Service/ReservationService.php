@@ -158,7 +158,9 @@ class ReservationService
         global $gCurrentUser, $gSettingsManager, $gValidLogin;
 
         $this->assertValidPeriod($begin, $end);
-        $itemIds = array_values(array_unique(array_map('intval', $itemIds)));
+        $itemIds = array_values(array_unique(array_filter(array_map('intval', $itemIds), static function (int $itemId): bool {
+            return $itemId > 0;
+        })));
         $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
         foreach ($itemIds as $itemId) {
@@ -176,12 +178,26 @@ class ReservationService
             }
         }
 
-        $this->database->queryPrepared(
-            'DELETE FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
-            array($eventId)
+        $existingReservations = array();
+        $statement = $this->database->queryPrepared(
+            'SELECT ivr_id, ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
+            array($eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED)
         );
+        while ($existingReservation = $statement->fetch()) {
+            $existingReservations[(int)$existingReservation['ivr_ini_id']] = (int)$existingReservation['ivr_id'];
+        }
 
         foreach ($itemIds as $itemId) {
+            if (isset($existingReservations[$itemId])) {
+                $reservation = new Reservation($this->database, $existingReservations[$itemId]);
+                $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+                $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+                $reservation->save();
+                unset($existingReservations[$itemId]);
+                continue;
+            }
+
             $reservation = new Reservation($this->database);
             $reservation->setValue('ivr_ini_id', $itemId);
             $reservation->setValue('ivr_dat_id', $eventId);
@@ -189,6 +205,12 @@ class ReservationService
             $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->save();
+        }
+
+        foreach ($existingReservations as $reservationId) {
+            $reservation = new Reservation($this->database, $reservationId);
+            $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
             $reservation->save();
         }
     }
