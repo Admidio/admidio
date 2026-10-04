@@ -138,7 +138,7 @@ class InventoryReservationPresenter extends PagePresenter
             }
             $html .= '</td></tr>';
         }
-        $this->addHtml($html . '</tbody></table></div>');
+        $this->addHtml($html . '</tbody></table></div><div id="adm_inventory_reservations_alert" class="alert alert-danger form-alert mt-3" style="display: none;"></div>');
 
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
         $dataTables->disableColumnsSort(array(6));
@@ -168,7 +168,10 @@ class InventoryReservationPresenter extends PagePresenter
                 reservationTable.draw();
             });
             function showReservationActionError(message) {
-                messageBox(message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                $("#adm_inventory_reservations_alert").empty().append(
+                    $("<i>", {class: "bi bi-exclamation-circle-fill"}),
+                    document.createTextNode(message || "' . $gL10n->get('SYS_ERROR') . '")
+                ).show();
             }
             $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-action .dropdown-item", function(event) {
                 event.preventDefault();
