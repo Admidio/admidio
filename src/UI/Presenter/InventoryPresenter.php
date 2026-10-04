@@ -567,6 +567,8 @@ class InventoryPresenter extends PagePresenter
             array('defaultValue' => $this->getFilterCategoryUUID)
         );
 
+        // Do not expose names in filter options to guests when anonymization is enabled.
+        if ($gValidLogin || !$gSettingsManager->getBool('inventory_anonymize_user_names_for_guests')) {
         // read all keeper
         if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $sql = 'SELECT DISTINCT ind_value,
@@ -678,6 +680,7 @@ class InventoryPresenter extends PagePresenter
                 'showContextDependentFirstEntry' => true
             )
         );
+        }
 
         // get the status options for the filter
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));

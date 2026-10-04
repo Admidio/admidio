@@ -277,6 +277,7 @@ final class PreferenceDefinitions
             'documents_files_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'documents_files_max_upload_size' => array('default' => '3', 'type' => 'int', 'minimum' => 0, 'maximum' => 999999999),
             'inventory_module_enabled' => array('default' => '2', 'type' => 'enum', 'values' => array('0', '1', '2', '3', '4', '5')),
+            'inventory_anonymize_user_names_for_guests' => array('default' => '1', 'type' => 'bool'),
             'inventory_visible_for' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_ROLES),
             'inventory_items_per_page' => array('default' => '25', 'type' => 'enum', 'values' => array('10', '25', '50', '100', '-1')),
             'inventory_field_history_days' => array('default' => '365', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999999999),

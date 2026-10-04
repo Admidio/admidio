@@ -1125,6 +1125,12 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
         );
+        $formInventory->addCheckbox(
+            'inventory_anonymize_user_names_for_guests',
+            $gL10n->get('SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS'),
+            (bool)$formValues['inventory_anonymize_user_names_for_guests'],
+            array('helpTextId' => 'SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC')
+        );
 
         // read all roles from db
         $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name

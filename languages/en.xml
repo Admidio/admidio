@@ -835,6 +835,8 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Editable fields by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">The inventory manager module can be completely disabled, made accessible only to logged-in users, restricted solely to module administrators, made accessible to module administrators and item keepers or made accessible to members of a selected role via this setting. If access is granted only to logged-in users, then the module is hidden from guests. If only module administrators have access, the module is visible only to users with the "manage inventory" permission. (Default: Enabled)</string>
+  <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS">Anonymize user names for guests</string>
+  <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC">When this option is enabled, the names of keepers and receivers are replaced with “Member” for guests in the inventory. (Default: yes)</string>
   <string name="SYS_INVENTORY_ADD_DATE">Append date</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>

@@ -37,10 +37,11 @@ try {
     $jsonArray = array('draw' => $getDraw);
     header('Content-Type: application/json');
 
-    global $gDb, $gCurrentOrgId, $gSettingsManager, $gProfileFields, $gCurrentUser, $gCurrentSession, $gL10n;
+    global $gDb, $gCurrentOrgId, $gSettingsManager, $gProfileFields, $gCurrentUser, $gCurrentSession, $gL10n, $gValidLogin;
 
     // Apply the same module access restriction as the inventory page before reading any items.
     InventoryPresenter::checkModuleAccess();
+    $anonymizeUserNames = !$gValidLogin && $gSettingsManager->getBool('inventory_anonymize_user_names_for_guests');
 
     // read item fields to construct column order mapping (same as prepareData())
     $itemsData = new Admidio\Inventory\ValueObjects\ItemsData($gDb, $gCurrentOrgId);
@@ -302,17 +303,21 @@ try {
                 }
             }
 
-            // Process KEEPER and LAST_RECEIVER column
-            if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
-                $found = $user->readDataById($content);
-                if (!$found) {
-                    $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                    $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
-                } else {
-                    $content = '<a href="' . SecurityUtils::encodeUrl(
-                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                            ['user_uuid' => $user->getValue('usr_uuid')]
-                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+            // Do not reveal names of keepers or borrowers to anonymous guests when configured.
+            if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '') {
+                if ($anonymizeUserNames && $content !== '-1') {
+                    $content = SecurityUtils::encodeHTML($gL10n->get('SYS_MEMBER'));
+                } elseif (is_numeric($content)) {
+                    $found = $user->readDataById($content);
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                    } else {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(
+                                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                                ['user_uuid' => $user->getValue('usr_uuid')]
+                            ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    }
                 }
             }
 

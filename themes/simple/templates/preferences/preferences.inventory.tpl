@@ -122,6 +122,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_module_enabled']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_anonymize_user_names_for_guests']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_visible_for']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_items_per_page']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['inventory_field_history_days']}
