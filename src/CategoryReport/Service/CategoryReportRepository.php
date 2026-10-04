@@ -207,7 +207,9 @@ class CategoryReportRepository
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
             $condition = str_replace(array('<', '>', "\r", "\n"), array('{', '}', ' ', ' '), (string)($conditions[$index] ?? ''));
-            $columns[] = array('field' => $field, 'condition' => trim($condition));
+            $condition = trim($condition);
+            $generator->validateColumnCondition($field, $condition);
+            $columns[] = array('field' => $field, 'condition' => $condition);
         }
         if ($columns === array()) {
             throw new Exception('SYS_FIELD_EMPTY', array('SYS_COLUMN'));

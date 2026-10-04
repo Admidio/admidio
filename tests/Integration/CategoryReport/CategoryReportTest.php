@@ -113,6 +113,35 @@ class CategoryReportTest extends AdministratorTestCase
         $this->assertSelectionIsRejected(array(), array($category['cat_id']));
     }
 
+    public function testYearConditionIsValidatedAndCanBeUsedAfterSaving(): void
+    {
+        $this->saveReportWithCondition('< 18j', 'Year condition report');
+
+        $configuration = array_values(array_filter(
+            (new CategoryReportRepository())->getConfigArray(),
+            static fn(array $values): bool => $values['name'] === 'Year condition report'
+        ))[0];
+        $this->assertSame('{ 18j', $configuration['columns'][0]['condition']);
+
+        $generator = new CategoryReportGenerator();
+        $generator->getConfigArray();
+        $generator->setConfiguration((int)$configuration['id']);
+        $generator->generate_listData();
+        $this->assertIsArray($generator->listData);
+    }
+
+    public function testUnsupportedDurationSuffixesAreRejectedWhenSaving(): void
+    {
+        foreach (array('< 6m', '< 30d', '< 2w') as $condition) {
+            try {
+                $this->saveReportWithCondition($condition, 'Invalid duration condition');
+                $this->fail('The unsupported duration condition "' . $condition . '" was accepted.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NOT_NUMERIC', $exception->getTranslationId());
+            }
+        }
+    }
+
     public function testColumnsAreStoredInTheirOwnOrderedRecords(): void
     {
         global $gCurrentOrgId;
@@ -402,5 +431,41 @@ class CategoryReportTest extends AdministratorTestCase
         $this->assertSame($reportCount, (int)$this->getDatabase()->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_CATEGORY_REPORT
         )->fetchColumn());
+    }
+
+    /** @return array<string,string> */
+    private function saveReportWithCondition(string $condition, string $name): array
+    {
+        global $gCurrentSession;
+
+        $form = new FormPresenter('category_report_condition_test', 'modules/category-report.edit.tpl');
+        $previousSession = $gCurrentSession;
+        $gCurrentSession = new class ($form) {
+            public function __construct(private FormPresenter $form)
+            {
+            }
+
+            public function getFormObject(string $token): ?FormPresenter
+            {
+                return $token === $this->form->getCsrfToken() ? $this->form : null;
+            }
+        };
+
+        try {
+            return (new CategoryReportRepository())->saveFromRequest(array(
+                'adm_csrf_token' => $form->getCsrfToken(),
+                'report_action' => 'new',
+                'source_id' => 0,
+                'name' => $name,
+                'description' => '',
+                'columns' => array('ddummy'),
+                'columnsRoleProp' => array(''),
+                'conditions' => array($condition),
+                'selection_role' => array(),
+                'selection_cat' => array()
+            ));
+        } finally {
+            $gCurrentSession = $previousSession;
+        }
     }
 }

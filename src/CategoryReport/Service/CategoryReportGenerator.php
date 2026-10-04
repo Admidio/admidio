@@ -501,9 +501,9 @@ class CategoryReportGenerator
                     //   d#     -> membership duration of role with ID # (in days, as of report date)
                     //   ddummy -> overall membership duration (as of report date)
 
-                    // If condition uses a unit suffix (d/w/m/y) we switch to DATE mode:
+                    // If the condition uses a year suffix supported by ConditionParser we switch to DATE mode:
                     // We then compare membership START DATE against a threshold date (reportDate - X).
-                    $useDateMode = (bool) preg_match('/^\s*([<>]=?|=|[{}]=?)\s*(\d+)\s*[dwmy]\s*$/i', (string) $rawCond);
+                    $useDateMode = ConditionParser::containsAgeCondition((string)$rawCond);
                     if ($colDef['field'] === 'dummy' || (int) $id === 0) {
                         if ($useDateMode) {
                             // ddummy as DATE: earliest membership start in org
@@ -518,9 +518,6 @@ class CategoryReportGenerator
                          AND m2.mem_usr_id = usr_id)';
                         } else {
                             // ddummy as INT: duration in days since earliest membership start in org
-                            if (preg_match('/^\s*([<>]=?|=|[{}]=?)\s*(\d+)\s*y\s*$/i', (string) $rawCond, $m)) {
-                                $rawCond = $m[1] . ' ' . ((int) $m[2] * 365);
-                            }
                             $typeHint = 'int';
                             $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
                         FROM ' . TBL_CATEGORIES . ' c2
@@ -543,9 +540,6 @@ class CategoryReportGenerator
                          AND m2.mem_end    > \'' . $date . '\')';
                         } else {
                             // d# as INT: duration in days since membership start (current membership as of report date)
-                            if (preg_match('/^\s*([<>]=?|=|[{}]=?)\s*(\d+)\s*y\s*$/i', (string) $rawCond, $m)) {
-                                $rawCond = $m[1] . ' ' . ((int) $m[2] * 365);
-                            }
                             $typeHint = 'int';
                             $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
                         FROM ' . TBL_MEMBERS . ' m2
@@ -1094,6 +1088,96 @@ class CategoryReportGenerator
             }
         }
         return $ret;
+    }
+
+    /**
+     * Validate a column condition with the same type and normalization used when generating a report.
+     *
+     * @throws Exception
+     */
+    public function validateColumnCondition(string $field, string $condition): void
+    {
+        global $gDb, $gL10n, $gProfileFields;
+
+        if (trim($condition) === '') {
+            return;
+        }
+
+        $selectionIndex = $this->isInHeaderSelection($field);
+        if ($selectionIndex === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $fieldName = (string)$this->headerSelection[$selectionIndex]['data'];
+        $type = substr($field, 0, 1);
+        $fieldIdentifier = substr($field, 1);
+        $typeHint = 'string';
+        $normalizedCondition = $condition;
+
+        if ($type === 'p') {
+            $profileFieldId = (int)$fieldIdentifier;
+            switch ($gProfileFields->getPropertyById($profileFieldId, 'usf_type')) {
+                case 'CHECKBOX':
+                    $checkboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                    $normalizedCondition = str_replace(
+                        array_map(array(StringUtils::class, 'strToLower'), $checkboxValues),
+                        array(1, 0, 1, 0),
+                        StringUtils::strToLower($normalizedCondition)
+                    );
+                    $typeHint = 'checkbox';
+                    break;
+
+                case 'DROPDOWN':
+                case 'RADIO_BUTTON':
+                    $options = $gProfileFields->getPropertyById($profileFieldId, 'ufo_usf_options', 'text');
+                    $option = array_search(
+                        StringUtils::strToLower($normalizedCondition),
+                        array_map(array(StringUtils::class, 'strToLower'), $options),
+                        true
+                    );
+                    if ($option === false) {
+                        throw new Exception('SYS_FIELD_INVALID_INPUT', array($fieldName));
+                    }
+                    $normalizedCondition = (string)$option;
+                    $typeHint = 'int';
+                    break;
+
+                case 'NUMBER':
+                case 'DECIMAL':
+                    $typeHint = 'int';
+                    break;
+
+                case 'DATE':
+                    $typeHint = 'date';
+                    break;
+            }
+        } elseif ($type === 'u') {
+            $typeHint = match ($fieldIdentifier) {
+                'last_login' => 'date',
+                'number_login' => 'int',
+                default => 'string'
+            };
+        } elseif (in_array($type, array('c', 'r', 'l', 'w', 'f'), true)) {
+            $normalizedCondition = str_replace(
+                array('yes', 'no', 'true', 'false'),
+                array(1, 0, 1, 0),
+                StringUtils::strToLower($normalizedCondition)
+            );
+            $typeHint = 'checkbox';
+        } elseif ($type === 'b' || $type === 'e') {
+            $typeHint = 'date';
+        } elseif ($type === 'd') {
+            $typeHint = ConditionParser::containsAgeCondition($normalizedCondition) ? 'date' : 'int';
+        } elseif ($type === 'n') {
+            throw new Exception('SYS_FIELD_INVALID_INPUT', array($fieldName));
+        }
+
+        ConditionParser::validateCondition(
+            $normalizedCondition,
+            $typeHint,
+            $fieldName,
+            $gDb
+        );
     }
 
     /**
