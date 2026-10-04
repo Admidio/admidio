@@ -393,7 +393,7 @@ class InventoryPresenter extends PagePresenter
      */
     protected function createHeader(): void
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager;
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager, $gValidLogin;
 
         if ($gCurrentUser->isAdministratorInventory()) {
             // show link to create new item
