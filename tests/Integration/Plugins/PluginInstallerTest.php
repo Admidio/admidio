@@ -697,6 +697,36 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that the menu entry follows the preference in both directions
+     *
+     * @testdox Switching the module pages preference off and on again moves the menu entry with it
+     */
+    public function testMenuEntryFollowsThePagePreference(): void
+    {
+        global $gSettingsManager;
+
+        $this->allowModulePages();
+        // the first request after the administrator changed the preference records it as applied
+        PluginPages::reconcile();
+        PluginInstaller::enable($this->plugin());
+        $this->assertSame(FOLDER_MODULES . '/' . self::PLUGIN_ID . '/index.php', $this->menuEntry()['men_url']);
+
+        $gSettingsManager->set(PluginPages::SETTING, '0');
+        PluginPages::reconcile();
+
+        $this->assertFalse(PluginPages::isPublished(self::PLUGIN_ID));
+        $this->assertSame(
+            FOLDER_PLUGINS . '/' . self::PLUGIN_ID . '/' . Plugin::DIR_PAGES . '/index.php',
+            $this->menuEntry()['men_url']
+        );
+
+        $gSettingsManager->set(PluginPages::SETTING, '1');
+        PluginPages::reconcile();
+
+        $this->assertSame(FOLDER_MODULES . '/' . self::PLUGIN_ID . '/index.php', $this->menuEntry()['men_url']);
+    }
+
+    /**
      * Publish the plugin under test as a release of a catalogue this test controls.
      *
      * The archive holds the plugin as it is now, at the given version and with one file that only
