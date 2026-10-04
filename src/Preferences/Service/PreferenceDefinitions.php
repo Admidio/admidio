@@ -227,7 +227,7 @@ final class PreferenceDefinitions
             'changelog_table_inventory_items' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_inventory_item_data' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_inventory_item_borrow_data' => array('default' => '0', 'type' => 'bool'),
-            'changelog_table_inventory_reservations' => array('default' => '1', 'type' => 'bool'),
+            'changelog_table_inventory_reservations' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_saml_clients' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_oidc_clients' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_oidc_consents' => array('default' => '0', 'type' => 'bool'),
