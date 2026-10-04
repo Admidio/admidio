@@ -333,8 +333,8 @@
   <string name="SYS_CATEGORY_EXISTS_IN_ORGA">Category name already exists in selected organization.</string>
   <string name="SYS_CATEGORY_PROFILE_FIELDS_VISIBILITY">The visibility of the profile fields in this category can be prevented for other users, but the profile fields remain visible in their own profile and can be edited there.</string>
   <string name="SYS_CATEGORY_REPORT">Category report</string>
-  <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
   <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">The category selection can be used to restrict a report to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
+  <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">If option activated, the profile fields of this category will appear and can be edited in the profile view of following organizations:#VAR1#\n\nPlease deactivate, if fields should only be shown in your organization.</string>
   <string name="SYS_CHANGE_DATE">Change date</string>
@@ -505,8 +505,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
-  <string name="SYS_DEFAULT_REPORT">Default report</string>
-  <string name="SYS_DEFAULT_REPORT_DESC">Choose the report shown by default when opening the category report for this organization.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Define a country for which this organization mainly operates. It will be preselected when new users are created or registered. It eases the data input and can be changed by the user.</string>
@@ -516,6 +514,8 @@
   <string name="SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION_DESC">One of the configurations given here can be set as standard configuration for the participant list on events of this organization. Participants of events are viewed with this configuration.</string>
   <string name="SYS_DEFAULT_LIST_DESC">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</string>
   <string name="SYS_DEFAULT_LIST_NOT_SET_UP">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</string>
+  <string name="SYS_DEFAULT_REPORT">Default report</string>
+  <string name="SYS_DEFAULT_REPORT_DESC">Choose the report shown by default when opening the category report for this organization.</string>
   <string name="SYS_DEFAULT_VALUE">Default value</string>
   <string name="SYS_DEFAULT_VALUE_DESC">You can set a default value for this profile field. This value will be preset directly for a new user in the field. To do this, enter the value in the field that you would also enter in the profile itself.\n\nFor the checkbox data type, you can enter 1 for activated and 0 for deactivated.</string>
   <string name="SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC">You can set a default value for this profile field. This value will be preset directly for a new user in the field. To do this, select the value in the field that you would also select in the profile itself.</string>
@@ -526,7 +526,6 @@
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
-  <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
   <string name="SYS_DELETE_ENTRY">Delete entry</string>
   <string name="SYS_DELETE_FILE">Delete file</string>
@@ -536,6 +535,7 @@
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">You can not delete role #VAR1_BOLD#. At least one role requires the #VAR2_BOLD# setting.</string>
   <string name="SYS_DELETE_ORGANIZATION">Do you really want to delete the organization #VAR1_BOLD#?\n\nAll data (announcements, documents, events, memberships, photos, roles and web links) of this organization will be irretrievably deleted.</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
+  <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
   <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
@@ -1507,12 +1507,12 @@
   <string name="SYS_SECURITY_CODE_INVALID">The entered authentication code is incorrect.</string>
   <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Select configuration</string>
-  <string name="SYS_SELECT_REPORT">Select report</string>
   <string name="SYS_SELECT_FILES">Select files</string>
   <string name="SYS_SELECT_FROM_LIST">Select from list</string>
   <string name="SYS_SELECT_MEMBERS">Select members</string>
   <string name="SYS_SELECT_PHOTO">Select photo</string>
   <string name="SYS_SELECT_PHOTOS">Select photos</string>
+  <string name="SYS_SELECT_REPORT">Select report</string>
   <string name="SYS_SELECTION">Selection</string>
   <string name="SYS_SEMICOLON">Semicolon (;)</string>
   <string name="SYS_SEND">Send</string>
