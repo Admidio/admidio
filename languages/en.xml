@@ -937,6 +937,9 @@
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Approve</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Reject</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS">Status</string>
+  <string name="SYS_INVENTORY_RESERVATION_ORIGIN">Origin</string>
+  <string name="SYS_INVENTORY_RESERVATION_ORIGIN_MEMBER_REQUEST">Member request</string>
+  <string name="SYS_INVENTORY_RESERVATION_ORIGIN_GUEST_REQUEST">Guest request</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_REQUESTED">Requested</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_APPROVED">Approved</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_REJECTED">Rejected</string>
