@@ -1152,6 +1152,19 @@ class InventoryPresenter extends PagePresenter
                     $rowValues['actions'][] = $historyButton;
                 }
 
+                if (!$this->itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
+                    $rowValues['actions'][] = array(
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid'])),
+                        'icon' => 'bi bi-calendar-plus',
+                        'tooltip' => $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST')
+                    );
+                    if (!$actionsHeaderAdded) {
+                        $actionsHeaderAdded = true;
+                        $preparedData['column_align'][] = 'end';
+                        $preparedData['headers'][] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
+                    }
+                }
+
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
                     if (!$this->itemsData->isRetired()) {
                         // Add edit action
