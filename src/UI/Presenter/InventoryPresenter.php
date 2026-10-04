@@ -415,20 +415,21 @@ class InventoryPresenter extends PagePresenter
                 '',
                 ReservationService::countPendingReservations($gDb)
             );
-            if (!$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
-                $this->addPageFunctionsMenuItem(
-                    'menu_item_inventory_borrowings',
-                    $gL10n->get('SYS_INVENTORY_BORROWINGS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list')),
-                    'bi-box-arrow-up-right'
-                );
-            }
         } elseif (InventoryAccessService::canRequestReservation()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservation_request',
                 $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
                 'bi-calendar-plus'
+            );
+        }
+
+        if (InventoryAccessService::canManageBorrowings() && !$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_borrowings',
+                $gL10n->get('SYS_INVENTORY_BORROWINGS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list')),
+                'bi-box-arrow-up-right'
             );
         }
 

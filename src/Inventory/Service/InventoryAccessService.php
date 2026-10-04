@@ -113,6 +113,21 @@ class InventoryAccessService
                 && InventoryPresenter::isCurrentUserKeeper());
     }
 
+    /**
+     * Whether the current user may process regular borrowings.
+     * Inventory administrators may process all items. Keepers retain the same scope as the
+     * established item borrowing action and may process only items assigned to them.
+     */
+    public static function canManageBorrowings(): bool
+    {
+        global $gCurrentUser, $gSettingsManager;
+
+        return $gCurrentUser->isAdministratorInventory()
+            || ($gSettingsManager->getInt('inventory_module_enabled') !== 3
+                && $gSettingsManager->getBool('inventory_allow_keeper_edit')
+                && InventoryPresenter::isCurrentUserKeeper());
+    }
+
     private static function isMemberOfConfiguredReservationRole(object $user): bool
     {
         global $gSettingsManager;
