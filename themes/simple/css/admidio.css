@@ -1095,15 +1095,23 @@ div.adm-changelog-details-table {
 /* Event table and card weekdays */
 /***********************************/
 .admidio-event-weekday {
-  display: inline-block;
-  text-align: right;
   white-space: nowrap;
 }
 
-.admidio-event-weekday-short {
+/* in the events table the weekday gets a fixed width so the dates are aligned below each other */
+#adm_events_table .admidio-event-weekday {
+  display: inline-block;
+  text-align: left;
+}
+
+#adm_events_table .admidio-event-weekday-short {
   min-width: 2.85em;
 }
 
-.admidio-event-weekday-long {
+#adm_events_table .admidio-event-weekday-long {
   min-width: 6.2em;
+}
+
+#adm_events_table td {
+  font-variant-numeric: tabular-nums;
 }
