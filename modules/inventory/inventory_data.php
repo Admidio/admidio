@@ -14,11 +14,11 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
 
 require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
