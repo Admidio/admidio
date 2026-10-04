@@ -18,8 +18,8 @@
         {if $formType neq "vertical" and $formType neq "navbar"}<div class="col-sm-9">{/if}
 
         {if $data.type == "datetime"}
-            {if $formType neq "vertical" and $formType neq "navbar"}<div class="row">{/if}
-            <div class="{if $formType neq "vertical" and $formType neq "navbar"}{if isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}col-sm-4 col-md-4 col-lg-3{else}col-sm-3{/if}{else}col-auto{/if}">
+            {if $formType neq "vertical" and $formType neq "navbar"}<div class="row gy-2">{/if}
+            <div class="col-auto">
                 {if isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}
                     <div class="input-group">
                         <span class="input-group-text admidio-input-weekday" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
@@ -37,7 +37,7 @@
                     >
                 {/if}
             </div>
-            <div class="{if $formType neq "vertical" and $formType neq "navbar"}col-sm-2{else}col-auto{/if}">
+            <div class="col-auto">
                 <input id="{$data.id}_time" name="{$data.id}_time" class="form-control focus-ring {$data.class}{if isset($data.attributes.timeValueAttributes.class)} {$data.attributes.timeValueAttributes.class}{/if}" type="time" value="{$data.attributes.timeValue}"
                     {foreach $data.attributes.timeValueAttributes as $itemvar}
                         {if $itemvar@key neq "class"}{$itemvar@key}="{$itemvar}"{/if}
