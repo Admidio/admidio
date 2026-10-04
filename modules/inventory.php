@@ -295,7 +295,7 @@ try {
             $begin = new DateTime($values['reservation_begin'] . ' ' . $values['reservation_begin_time']);
             $end = new DateTime($values['reservation_end'] . ' ' . $values['reservation_end_time']);
             $service = new ReservationService($gDb);
-            $service->request(
+            $reservation = $service->request(
                 (int)$item->getValue('ini_id'),
                 $begin,
                 $end,
@@ -305,7 +305,10 @@ try {
                 $values['reservation_comment'] ?? ''
             );
             $gNavigation->deleteLastUrl();
-            echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => $gNavigation->getUrl()));
+            $messageId = $reservation->getValue('ivr_status') === Reservation::STATUS_APPROVED
+                ? 'SYS_INVENTORY_RESERVATION_REQUEST_APPROVED'
+                : 'SYS_INVENTORY_RESERVATION_REQUEST_SUBMITTED';
+            echo json_encode(array('status' => 'success', 'message' => $gL10n->get($messageId), 'url' => $gNavigation->getUrl()));
             break;
 
         case 'reservation_approve':

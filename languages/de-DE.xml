@@ -911,6 +911,8 @@
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE">Reservierungen durch Verwalter verwalten</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE_DESC">Wenn diese Option aktiviert ist, können Verwalter von Gegenständen Reservierungsanfragen verwalten. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST">Reservierung anfragen</string>
+  <string name="SYS_INVENTORY_RESERVATION_REQUEST_APPROVED">Die Reservierung wurde genehmigt.</string>
+  <string name="SYS_INVENTORY_RESERVATION_REQUEST_SUBMITTED">Die Reservierung wurde zur Genehmigung eingereicht.</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVAL">Freigabe von Reservierungsanfragen</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVAL_DESC">Legt fest, ob Reservierungsanfragen automatisch freigegeben werden oder erst durch einen Administrator geprüft werden müssen. (Voreinstellung: manuell)</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVAL_AUTOMATIC">Automatische Freigabe</string>
