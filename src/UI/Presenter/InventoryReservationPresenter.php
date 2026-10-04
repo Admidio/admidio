@@ -57,26 +57,35 @@ class InventoryReservationPresenter extends PagePresenter
             Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED')
         );
         $itemOptions = array();
-        $html = '<div class="row g-3 mb-3"><div class="col-md-4"><label class="form-label" for="reservation_filter_item">'
-            . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</label><select class="form-select" id="reservation_filter_item"><option value="">'
-            . $gL10n->get('SYS_ALL') . '</option>';
         $rows = array();
         while ($row = $statement->fetch()) {
             $itemOptions[$row['item_name']] = $row['item_name'];
             $rows[] = $row;
         }
-        foreach ($itemOptions as $itemName) {
-            $html .= '<option value="' . SecurityUtils::encodeHTML($itemName) . '">' . SecurityUtils::encodeHTML($itemName) . '</option>';
-        }
-        $html .= '</select></div><div class="col-md-4"><label class="form-label" for="reservation_filter_date">'
-            . $gL10n->get('SYS_DATE') . '</label><input class="form-control" id="reservation_filter_date" type="date"></div>'
-            . '<div class="col-md-4"><label class="form-label" for="reservation_filter_status">'
-            . $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS') . '</label><select class="form-select" id="reservation_filter_status"><option value="">'
-            . $gL10n->get('SYS_ALL') . '</option>';
-        foreach ($statusLabels as $statusLabel) {
-            $html .= '<option value="' . SecurityUtils::encodeHTML($statusLabel) . '">' . SecurityUtils::encodeHTML($statusLabel) . '</option>';
-        }
-        $html .= '</select></div></div><div class="table-responsive"><table id="adm_inventory_reservations_table" class="table table-hover"><thead><tr><th>'
+
+        $filterForm = new FormPresenter(
+            'adm_inventory_reservations_filter_form',
+            'sys-template-parts/form.filter.tpl',
+            '',
+            $this,
+            array('type' => 'navbar', 'setFocus' => false)
+        );
+        $filterForm->addSelectBox(
+            'reservation_filter_item',
+            $gL10n->get('SYS_INVENTORY_ITEMNAME'),
+            array('' => $gL10n->get('SYS_ALL')) + $itemOptions,
+            array('showContextDependentFirstEntry' => false)
+        );
+        $filterForm->addInput('reservation_filter_date', $gL10n->get('SYS_DATE'), '', array('type' => 'date'));
+        $filterForm->addSelectBox(
+            'reservation_filter_status',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS'),
+            array('' => $gL10n->get('SYS_ALL')) + $statusLabels,
+            array('showContextDependentFirstEntry' => false)
+        );
+        $filterForm->addToHtmlPage();
+
+        $html = '<div class="table-responsive"><table id="adm_inventory_reservations_table" class="table table-condensed table-hover" style="max-width: 100%;"><thead><tr><th>'
             . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER') . '</th><th>'
             . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT') . '</th><th>' . $gL10n->get('SYS_START') . '</th><th>'
             . $gL10n->get('SYS_END') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS') . '</th><th></th></tr></thead><tbody>';
