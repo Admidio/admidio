@@ -99,26 +99,38 @@ class InventoryReservationPresenter extends PagePresenter
                     $requester .= '<br><small>' . SecurityUtils::encodeHTML($row['ivr_guest_email']) . '</small>';
                 }
             }
-            $html .= '<tr><td>' . SecurityUtils::encodeHTML($row['item_name']) . '</td><td>' . $requester . '</td><td>'
+            $reservationRowId = 'adm_inventory_reservation_' . $row['ivr_uuid'];
+            $html .= '<tr id="' . $reservationRowId . '"><td>' . SecurityUtils::encodeHTML($row['item_name']) . '</td><td>' . $requester . '</td><td>'
                 . SecurityUtils::encodeHTML($row['ivr_timestamp_create']) . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_begin'])
                 . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_end']) . '</td><td>'
                 . SecurityUtils::encodeHTML($statusLabels[$row['ivr_status']] ?? $row['ivr_status']) . '</td><td>';
+
+            $actions = array();
             if ($row['ivr_status'] === Reservation::STATUS_REQUESTED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']));
-                $html .= '<button class="btn btn-primary btn-sm" onclick="callUrl(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'window.location.reload()\'); return false;">'
-                    . $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE') . '</button>';
+                $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE'));
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
-                $html .= ' <button class="btn btn-secondary btn-sm" onclick="callUrl(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'window.location.reload()\'); return false;">'
-                    . $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT') . '</button>';
+                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
             } elseif ($row['ivr_status'] === Reservation::STATUS_APPROVED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_cancel', 'reservation_uuid' => $row['ivr_uuid']));
-                $html .= '<button class="btn btn-secondary btn-sm" onclick="callUrl(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'window.location.reload()\'); return false;">'
-                    . $gL10n->get('SYS_CANCEL') . '</button>';
+                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL'));
             }
             if (!$isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED), true)) {
+                $actions = array();
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_withdraw', 'reservation_uuid' => $row['ivr_uuid']));
-                $html .= '<button class="btn btn-secondary btn-sm" onclick="callUrl(\'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'window.location.reload()\'); return false;">'
-                    . $gL10n->get('SYS_INVENTORY_RESERVATION_WITHDRAW') . '</button>';
+                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_WITHDRAW'));
+            }
+            if (count($actions) > 0) {
+                $buttonIcon = $row['ivr_status'] === Reservation::STATUS_APPROVED ? 'bi-check-circle-fill' : 'bi-hourglass-split';
+                $html .= '<div class="btn-group admidio-inventory-reservation-action" role="group">'
+                    . '<button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+                    . '<i class="bi ' . $buttonIcon . '"></i>' . $statusLabels[$row['ivr_status']] . '</button><ul class="dropdown-menu">';
+                foreach ($actions as $action) {
+                    $html .= '<li><a class="icon-link dropdown-item" href="javascript:void(0)" data-url="'
+                        . $action['url'] . '" data-row-id="' . $reservationRowId . '">'
+                        . '<i class="bi ' . $action['icon'] . '"></i>' . $action['label'] . '</a></li>';
+                }
+                $html .= '</ul></div>';
             }
             $html .= '</td></tr>';
         }
@@ -147,6 +159,38 @@ class InventoryReservationPresenter extends PagePresenter
             });
             $("#reservation_filter_status").on("change", function() {
                 reservationTable.column(5).search("^" + $.fn.dataTable.util.escapeRegex(this.value) + "$", true, false).draw();
+            });
+            $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-action .dropdown-item", function(event) {
+                event.preventDefault();
+
+                var action = $(this);
+                $.post(action.data("url"), {
+                    adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '"
+                }, function(data) {
+                    var response;
+                    try {
+                        response = typeof data === "string" ? JSON.parse(data) : data;
+                    } catch (error) {
+                        response = {status: "error"};
+                    }
+
+                    if (response.status === "success") {
+                        window.location.reload();
+                        return;
+                    }
+
+                    $("#adm_status_message").empty().append(
+                        $("<div>", {class: "alert alert-danger"})
+                            .append($("<i>", {class: "bi bi-exclamation-circle-fill"}))
+                            .append(document.createTextNode(response.message || "Error: Undefined error occurred!"))
+                    );
+                }).fail(function() {
+                    $("#adm_status_message").empty().append(
+                        $("<div>", {class: "alert alert-danger"})
+                            .append($("<i>", {class: "bi bi-exclamation-circle-fill"}))
+                            .append(document.createTextNode("Error: Undefined error occurred!"))
+                    );
+                });
             });
         ', true);
     }
