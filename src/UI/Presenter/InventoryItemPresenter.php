@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Users\Entity\User;
 use DateTime;
@@ -34,6 +35,59 @@ use Ramsey\Uuid\Uuid;
  */
 class InventoryItemPresenter extends PagePresenter
 {
+    /** Display a reservation request form for a selected inventory item or an administrator-selected item. */
+    public function createReservationRequestForm(string $itemUUID = ''): void
+    {
+        global $gCurrentSession, $gCurrentUser, $gCurrentOrgId, $gDb, $gL10n, $gSettingsManager, $gValidLogin;
+
+        if (!InventoryAccessService::canRequestReservation()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $formUrlParameters = array('mode' => 'reservation_request_save');
+        if ($itemUUID !== '') {
+            $item = new Item($gDb);
+            if (!$item->readDataByUuid($itemUUID) || $item->isRetired()) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $formUrlParameters['item_uuid'] = $itemUUID;
+        } elseif (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $form = new FormPresenter(
+            'adm_inventory_reservation_request_form',
+            'modules/inventory.reservation.request.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', $formUrlParameters),
+            $this
+        );
+        if ($itemUUID !== '') {
+            $form->addInput('item_name', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $item->readableName(), array('property' => FormPresenter::FIELD_DISABLED));
+        } else {
+            $availableItems = $gDb->queryPrepared(
+                'SELECT ini_uuid, ind_value
+                   FROM ' . TBL_INVENTORY_ITEMS . '
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+             INNER JOIN ' . TBL_INVENTORY_FIELD_OPTIONS . ' ON ifo_id = ini_status
+                  WHERE ini_org_id = ? AND ifo_value <> ?
+               ORDER BY ind_value',
+                array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
+            )->fetchAll(\PDO::FETCH_KEY_PAIR);
+            $form->addSelectBox('reservation_item_uuid', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $availableItems, array('property' => FormPresenter::FIELD_REQUIRED));
+        }
+        $defaultDateTime = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
+        $form->addInput('reservation_begin', $gL10n->get('SYS_START'), $defaultDateTime, array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
+        $form->addInput('reservation_end', $gL10n->get('SYS_END'), $defaultDateTime, array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
+        if (!$gValidLogin) {
+            $form->addInput('guest_name', $gL10n->get('SYS_NAME'), '', array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
+            $form->addInput('guest_email', $gL10n->get('SYS_EMAIL'), '', array('type' => 'email', 'maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
+        }
+        $form->addInput('reservation_comment', $gL10n->get('SYS_COMMENT'), '', array('type' => 'text', 'maxLength' => 4000));
+        $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-send'));
+        $form->addToHtmlPage();
+        $gCurrentSession->addFormObject($form);
+    }
     /**
      * Create the data for the edit form of an item field.
      * @param string $itemUUID UUID of the item that should be edited.
