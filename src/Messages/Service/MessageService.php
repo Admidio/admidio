@@ -93,8 +93,8 @@ class MessageService
                     $reservationUuid = substr($recipient, strlen('reservation:'));
                     $reservation = new Reservation($this->db);
                     if (!Uuid::isValid($reservationUuid)
-                        || !InventoryAccessService::canManageReservations()
                         || !$reservation->readDataByUuid($reservationUuid)
+                        || !InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))
                         || $reservation->getValue('ivr_guest_email') === '') {
                         throw new Exception('SYS_INVALID_PAGE_VIEW');
                     }
