@@ -43,6 +43,7 @@ final class PreferenceDefinitions
     private const VALIDATOR_INVENTORY_ROLES = 'inventory_roles';
     private const VALIDATOR_INVENTORY_KEEPER_FIELDS = 'inventory_keeper_fields';
     private const VALIDATOR_INVENTORY_PROFILE_FIELDS = 'inventory_profile_fields';
+    private const VALIDATOR_INVENTORY_RESERVATION_ROLES = 'inventory_reservation_roles';
     private const VALIDATOR_SSO_KEY = 'sso_key';
     private const VALIDATOR_OIDC_SIGNING_KEY = 'oidc_signing_key';
 
@@ -67,6 +68,7 @@ final class PreferenceDefinitions
         self::VALIDATOR_INVENTORY_ROLES,
         self::VALIDATOR_INVENTORY_KEEPER_FIELDS,
         self::VALIDATOR_INVENTORY_PROFILE_FIELDS,
+        self::VALIDATOR_INVENTORY_RESERVATION_ROLES,
         self::VALIDATOR_SSO_KEY,
         self::VALIDATOR_OIDC_SIGNING_KEY,
     );
@@ -291,6 +293,11 @@ final class PreferenceDefinitions
             'inventory_decimal_places' => array('default' => '1', 'type' => 'int', 'minimum' => 0, 'maximum' => null, 'required' => true),
             'inventory_field_date_time_format' => array('default' => 'date', 'type' => 'enum', 'values' => array('date', 'datetime')),
             'inventory_items_disable_borrowing' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservations_enabled' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservation_keepers_manage' => array('default' => '1', 'type' => 'bool'),
+            'inventory_reservation_approval' => array('default' => 'manual', 'type' => 'enum', 'values' => array('automatic', 'manual')),
+            'inventory_reservation_requesters' => array('default' => 'members', 'type' => 'enum', 'values' => array('guests', 'members', 'roles')),
+            'inventory_reservation_requester_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_ROLES),
             'inventory_profile_view_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view' => array('default' => 'LAST_RECEIVER', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_PROFILE_FIELDS),
             'inventory_export_filename' => array('default' => 'SYS_INVENTORY', 'maxLength' => 50, 'required' => true),
@@ -934,6 +941,7 @@ final class PreferenceDefinitions
                 }
                 return $value;
             case self::VALIDATOR_INVENTORY_ROLES:
+            case self::VALIDATOR_INVENTORY_RESERVATION_ROLES:
                 $values = self::commaValues($value);
                 foreach ($values as $roleId) {
                     self::assertNumeric($roleId, $name);
@@ -944,7 +952,7 @@ final class PreferenceDefinitions
                         array((int)$roleId)
                     )->fetchColumn();
                     if ($count !== 1) {
-                        throw new InvalidArgumentException('Preference "inventory_visible_for" references unavailable role ' . $roleId . '.');
+                        throw new InvalidArgumentException('Preference "' . $name . '" references unavailable role ' . $roleId . '.');
                     }
                 }
                 return implode(',', $values);
