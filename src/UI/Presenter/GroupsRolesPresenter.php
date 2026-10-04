@@ -144,7 +144,7 @@ class GroupsRolesPresenter extends PagePresenter
             if (!empty($role->getValue('rol_description'))) {
                 $templateRow['information'][] = CollapsibleHtml::render(
                     $role->getValue('rol_description'),
-                    200,
+                    $gSettingsManager->getInt('groups_roles_preview_characters'),
                     'viewdetails-' . $row['rol_uuid'],
                     $gL10n->get('SYS_SHOW_MORE')
                 );
