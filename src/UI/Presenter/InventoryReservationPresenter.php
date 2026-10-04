@@ -141,7 +141,8 @@ class InventoryReservationPresenter extends PagePresenter
         $this->addHtml($html . '</tbody></table></div>');
 
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
-        $dataTables->disableColumnsSort(array(5));
+        $dataTables->disableColumnsSort(array(6));
+        $dataTables->setColumnsNotHideResponsive(array(1, 6));
         $dataTables->createJavascript(count($rows), 6);
         $this->addJavascript('
             var reservationTable = $("#adm_inventory_reservations_table").DataTable();
