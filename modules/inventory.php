@@ -280,6 +280,7 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $reservations = new InventoryReservationPresenter();
             $reservations->setHeadline($headline);
+            $reservations->setContentFullWidth();
             $reservations->createList();
             $reservations->show();
             break;

@@ -503,6 +503,12 @@ class EventFormPresenter extends PagePresenter
                 Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
                 Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED')
             );
+            $reservationStatusIcons = array(
+                Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
+                Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
+                Reservation::STATUS_REJECTED => 'bi-x-circle-fill text-danger',
+                Reservation::STATUS_CANCELLED => 'bi-x-circle-fill text-danger'
+            );
             $createReservationRow = static function (string $selectedItemId = '') use ($availableItems, $gL10n): string {
                 $options = '<option value="">- ' . SecurityUtils::encodeHTML($gL10n->get('SYS_PLEASE_CHOOSE')) . ' -</option>';
                 foreach ($availableItems as $itemId => $itemName) {
@@ -578,10 +584,12 @@ class EventFormPresenter extends PagePresenter
                     }
 
                     foreach ($eventReservations as $eventReservation) {
+                        $status = $eventReservation['ivr_status'];
                         $statusRows .= '<tr><td>' . SecurityUtils::encodeHTML($statusEvent->getValue('dat_headline')) . '<br><small>'
                             . SecurityUtils::encodeHTML($statusEvent->getDateTimePeriod()) . '</small></td><td>'
                             . SecurityUtils::encodeHTML($eventReservation['ind_value']) . '</td><td>'
-                            . SecurityUtils::encodeHTML($reservationStatusLabels[$eventReservation['ivr_status']] ?? $eventReservation['ivr_status']) . '</td></tr>';
+                            . '<i class="bi ' . ($reservationStatusIcons[$status] ?? 'bi-question-circle-fill text-secondary') . ' me-1"></i>'
+                            . SecurityUtils::encodeHTML($reservationStatusLabels[$status] ?? $status) . '</td></tr>';
                     }
                 }
 
