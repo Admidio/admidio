@@ -19,8 +19,8 @@
 
         {if $data.type == "datetime"}
             {if $formType neq "vertical" and $formType neq "navbar"}<div class="row">{/if}
-            <div class="{if $formType neq "vertical" and $formType neq "navbar"}{if $data.attributes.weekdayFormat && $data.attributes.weekdayFormat neq "none"}col-sm-4 col-md-4 col-lg-3{else}col-sm-3{/if}{else}col-auto{/if}">
-                {if $data.attributes.weekdayFormat && $data.attributes.weekdayFormat neq "none"}
+            <div class="{if $formType neq "vertical" and $formType neq "navbar"}{if isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}col-sm-4 col-md-4 col-lg-3{else}col-sm-3{/if}{else}col-auto{/if}">
+                {if isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}
                     <div class="input-group">
                         <span class="input-group-text admidio-input-weekday" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
                         <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}{if isset($data.attributes.dateValueAttributes.class)} {$data.attributes.dateValueAttributes.class}{/if}" type="date" value="{$data.attributes.dateValue}"
@@ -46,7 +46,7 @@
             </div>
             {if $formType neq "vertical" and $formType neq "navbar"}</div>{/if}
         {else}
-            {if $data.type == "date" && $data.attributes.weekdayFormat && $data.attributes.weekdayFormat neq "none"}
+            {if $data.type == "date" && isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}
                 <div class="input-group">
                     <span class="input-group-text admidio-input-weekday" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
                     <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="date" value="{$data.value}"
