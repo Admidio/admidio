@@ -81,6 +81,7 @@ class ReservationService
         $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
         $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
         $reservation->save();
+        $this->refreshMenuBadge();
 
         return $reservation;
     }
@@ -102,6 +103,7 @@ class ReservationService
 
         $reservation->setValue('ivr_status', Reservation::STATUS_APPROVED);
         $reservation->save();
+        $this->refreshMenuBadge();
     }
 
     /** Reject or cancel a reservation from the administrator queue. */
@@ -115,6 +117,7 @@ class ReservationService
         }
         $reservation->setValue('ivr_status', $status);
         $reservation->save();
+        $this->refreshMenuBadge();
     }
 
     /** Allow the signed-in requester to withdraw an open or approved reservation. */
@@ -131,6 +134,7 @@ class ReservationService
 
         $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
         $reservation->save();
+        $this->refreshMenuBadge();
     }
 
     /**
@@ -230,6 +234,7 @@ class ReservationService
             $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
             $reservation->save();
         }
+        $this->refreshMenuBadge();
     }
 
     private function isAvailableForEvent(int $itemId, DateTimeInterface $begin, DateTimeInterface $end, int $eventId): bool
@@ -256,6 +261,16 @@ class ReservationService
     {
         if ($begin >= $end) {
             throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+    }
+
+    /** Ensure the session-cached main menu reloads its pending reservation badge. */
+    private function refreshMenuBadge(): void
+    {
+        global $gMenu;
+
+        if (isset($gMenu)) {
+            $gMenu->initialize();
         }
     }
 }
