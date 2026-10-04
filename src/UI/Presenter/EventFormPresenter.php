@@ -9,6 +9,7 @@ use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -474,11 +475,16 @@ class EventFormPresenter extends PagePresenter
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
             && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
             $selectedItems = array();
+            $selectedItemStatuses = array();
             if ((int)$event->getValue('dat_id') > 0) {
-                $selectedItems = $gDb->queryPrepared(
-                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
+                $eventReservations = $gDb->queryPrepared(
+                    'SELECT ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
                     array((int)$event->getValue('dat_id'), 'requested', 'approved')
-                )->fetchAll(\PDO::FETCH_COLUMN);
+                );
+                while ($eventReservation = $eventReservations->fetch()) {
+                    $selectedItems[] = (int)$eventReservation['ivr_ini_id'];
+                    $selectedItemStatuses[(int)$eventReservation['ivr_ini_id']] = $eventReservation['ivr_status'];
+                }
             }
             $availableItems = $gDb->queryPrepared(
                 'SELECT ini_id, ind_value
@@ -492,26 +498,33 @@ class EventFormPresenter extends PagePresenter
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
             $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems, array('defaultValue' => $selectedItems, 'multiselect' => true));
 
-            $createReservationRow = static function (string $selectedItemId = '') use ($availableItems, $gL10n): string {
+            $reservationStatusLabels = array(
+                Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
+                Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
+                Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
+                Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED')
+            );
+            $createReservationRow = static function (string $selectedItemId = '', string $status = Reservation::STATUS_REQUESTED) use ($availableItems, $gL10n, $reservationStatusLabels): string {
                 $options = '<option value="">- ' . SecurityUtils::encodeHTML($gL10n->get('SYS_PLEASE_CHOOSE')) . ' -</option>';
                 foreach ($availableItems as $itemId => $itemName) {
                     $options .= '<option value="' . (int)$itemId . '"' . ((string)$itemId === $selectedItemId ? ' selected' : '') . '>'
                         . SecurityUtils::encodeHTML($itemName) . '</option>';
                 }
-                return '<tr><td><select class="form-select" name="event_inventory_items[]">' . $options . '</select></td><td class="text-end">'
+                return '<tr><td><select class="form-select" name="event_inventory_items[]">' . $options . '</select></td><td>'
+                    . SecurityUtils::encodeHTML($reservationStatusLabels[$status] ?? $status) . '</td><td class="text-end">'
                     . '<button type="button" class="btn btn-link text-danger p-0" onclick="this.closest(\'tr\').remove();" title="'
                     . SecurityUtils::encodeHTML($gL10n->get('SYS_DELETE')) . '"><i class="bi bi-trash"></i></button></td></tr>';
             };
             $reservationRows = '';
             foreach ($selectedItems as $selectedItemId) {
-                $reservationRows .= $createReservationRow((string)$selectedItemId);
+                $reservationRows .= $createReservationRow((string)$selectedItemId, $selectedItemStatuses[$selectedItemId]);
             }
             $form->addCustomContent(
                 'event_inventory_items_table',
                 $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
                 '<p class="form-text">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_EVENT_RESERVATIONS_DESC')) . '</p>'
                 . '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME'))
-                . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody><tfoot><tr><td colspan="2">'
+                . '</th><th>' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_STATUS')) . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody><tfoot><tr><td colspan="3">'
                 . '<a class="icon-text-link" href="javascript:addEventInventoryReservationRow();"><i class="bi bi-plus-circle-fill"></i> '
                 . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</a></td></tr></tfoot></table></div>'
             );
