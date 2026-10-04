@@ -1285,6 +1285,79 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['inventory_field_date_time_format'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_DATETIME_FORMAT_DESC')
         );
 
+        // reservation settings
+        $formInventory->addSeparator(
+            'inventory_separator_reservations',
+            $gL10n->get('SYS_INVENTORY_RESERVATIONS')
+        );
+        $formInventory->addCheckbox(
+            'inventory_reservations_enabled',
+            $gL10n->get('SYS_INVENTORY_RESERVATIONS_ENABLED'),
+            (bool)$formValues['inventory_reservations_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_RESERVATIONS_ENABLED_DESC')
+        );
+        $formInventory->addCheckbox(
+            'inventory_reservation_keepers_manage',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE'),
+            (bool)$formValues['inventory_reservation_keepers_manage'],
+            array('helpTextId' => 'SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE_DESC')
+        );
+        $formInventory->addSelectBox(
+            'inventory_reservation_approval',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVAL'),
+            array(
+                'automatic' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVAL_AUTOMATIC'),
+                'manual' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVAL_MANUAL')
+            ),
+            array(
+                'defaultValue' => $formValues['inventory_reservation_approval'],
+                'showContextDependentFirstEntry' => false,
+                'helpTextId' => 'SYS_INVENTORY_RESERVATION_APPROVAL_DESC'
+            )
+        );
+        $formInventory->addSelectBox(
+            'inventory_reservation_requesters',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTERS'),
+            array(
+                'guests' => $gL10n->get('SYS_ALL'),
+                'members' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
+                'roles' => $gL10n->get('SYS_ROLES')
+            ),
+            array(
+                'defaultValue' => $formValues['inventory_reservation_requesters'],
+                'showContextDependentFirstEntry' => false,
+                'helpTextId' => 'SYS_INVENTORY_RESERVATION_REQUESTERS_DESC'
+            )
+        );
+
+        $reservationRoleEntries = array();
+        $reservationRolesStatement = $gDb->queryPrepared(
+            'SELECT rol_id, rol_name, cat_name
+               FROM ' . TBL_ROLES . '
+         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+              WHERE rol_valid = true AND rol_system = false
+                AND cat_name_intern <> \'EVENTS\' AND cat_org_id = ?
+           ORDER BY cat_sequence, rol_name',
+            array($gCurrentOrgId)
+        );
+        while ($reservationRole = $reservationRolesStatement->fetch()) {
+            $reservationRoleEntries[] = array(
+                $reservationRole['rol_id'],
+                $reservationRole['rol_name'],
+                $reservationRole['cat_name']
+            );
+        }
+        $formInventory->addSelectBox(
+            'inventory_reservation_requester_roles',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER_ROLES'),
+            $reservationRoleEntries,
+            array(
+                'defaultValue' => explode(',', $formValues['inventory_reservation_requester_roles']),
+                'multiselect' => true,
+                'helpTextId' => 'SYS_INVENTORY_RESERVATION_REQUESTER_ROLES_DESC'
+            )
+        );
+
         // profile view settings
         $formInventory->addSeparator(
             'inventory_separator_profile_view_settings',
