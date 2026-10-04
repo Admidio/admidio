@@ -858,7 +858,9 @@ class ChangelogService {
                 'requested' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
                 'approved' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
                 'rejected' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
-                'cancelled' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED')
+                'cancelled' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED'),
+                'borrowed' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_BORROWED'),
+                'returned' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
             )),
             'ivr_timestamp_create' =>      array('name' => 'SYS_INVENTORY_RESERVATION_REQUESTED_AT', 'type' => 'DATETIME'),
             'ifo_value' =>                 'SYS_VALUE',

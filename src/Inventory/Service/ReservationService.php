@@ -120,6 +120,30 @@ class ReservationService
         $this->refreshMenuBadge();
     }
 
+    /** Mark an approved reservation as physically handed over. */
+    public function startBorrowing(Reservation $reservation): void
+    {
+        if (!InventoryAccessService::canManageReservations()
+            || $reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation->setValue('ivr_status', Reservation::STATUS_BORROWED);
+        $reservation->save();
+    }
+
+    /** Mark a handed-over reservation as returned. */
+    public function finishBorrowing(Reservation $reservation): void
+    {
+        if (!InventoryAccessService::canManageReservations()
+            || $reservation->getValue('ivr_status') !== Reservation::STATUS_BORROWED) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation->setValue('ivr_status', Reservation::STATUS_RETURNED);
+        $reservation->save();
+    }
+
     /** Allow the signed-in requester to withdraw an open or approved reservation. */
     public function withdraw(Reservation $reservation): void
     {
@@ -201,17 +225,20 @@ class ReservationService
 
         $existingReservations = array();
         $statement = $this->database->queryPrepared(
-            'SELECT ivr_id, ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
-            array($eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED)
+            'SELECT ivr_id, ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+            array($eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED)
         );
         while ($existingReservation = $statement->fetch()) {
-            $existingReservations[(int)$existingReservation['ivr_ini_id']] = (int)$existingReservation['ivr_id'];
+            $existingReservations[(int)$existingReservation['ivr_ini_id']] = array(
+                'id' => (int)$existingReservation['ivr_id'],
+                'status' => (string)$existingReservation['ivr_status']
+            );
         }
 
         foreach ($itemIds as $itemId) {
             if (isset($existingReservations[$itemId])) {
-                $reservation = new Reservation($this->database, $existingReservations[$itemId]);
+                $reservation = new Reservation($this->database, $existingReservations[$itemId]['id']);
                 $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
                 $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
                 $reservation->save();
@@ -229,8 +256,11 @@ class ReservationService
             $reservation->save();
         }
 
-        foreach ($existingReservations as $reservationId) {
-            $reservation = new Reservation($this->database, $reservationId);
+        foreach ($existingReservations as $existingReservation) {
+            if ($existingReservation['status'] === Reservation::STATUS_BORROWED) {
+                continue;
+            }
+            $reservation = new Reservation($this->database, $existingReservation['id']);
             $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
             $reservation->save();
         }
@@ -246,7 +276,11 @@ class ReservationService
             array($itemId)
         )->fetchColumn();
         if ($activeBorrowing > 0) {
-            return false;
+            return (int)$this->database->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                  WHERE ivr_ini_id = ? AND ivr_dat_id = ? AND ivr_status = ?',
+                array($itemId, $eventId, Reservation::STATUS_BORROWED)
+            )->fetchColumn() > 0;
         }
 
         return (int)$this->database->queryPrepared(

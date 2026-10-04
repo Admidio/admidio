@@ -263,7 +263,7 @@ try {
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $item = new InventoryItemPresenter('adm_item_edit_borrow');
             $item->setHeadline($headline);
-            $item->createEditBorrowForm($getiniUUID, $getReservationUUID);
+            $item->createEditBorrowForm($getiniUUID, $getReservationUUID, $getBorrowed);
             $item->show();
             break;
 
@@ -377,6 +377,22 @@ try {
             } else {
                 $itemService = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
                 $itemService->save();
+            }
+
+            if ($getReservationUUID !== '') {
+                $reservation = new Reservation($gDb);
+                $item = new \Admidio\Inventory\Entity\Item($gDb);
+                if (!$reservation->readDataByUuid($getReservationUUID)
+                    || !$item->readDataByUuid($getiniUUID)
+                    || (int)$reservation->getValue('ivr_ini_id') !== (int)$item->getValue('ini_id')) {
+                    throw new Exception('SYS_INVALID_PAGE_VIEW');
+                }
+                $reservationService = new ReservationService($gDb);
+                if ($getBorrowed) {
+                    $reservationService->finishBorrowing($reservation);
+                } else {
+                    $reservationService->startBorrowing($reservation);
+                }
             }
 
             $gNavigation->deleteLastUrl();

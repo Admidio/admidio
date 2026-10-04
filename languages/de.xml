@@ -943,6 +943,8 @@
   <string name="SYS_INVENTORY_RESERVATION_STATUS_APPROVED">Freigegeben</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_REJECTED">Abgelehnt</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS_CANCELLED">Storniert</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_BORROWED">Ausgeliehen</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_RETURNED">Zurückgegeben</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTER">Angefragt von</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTED_AT">Angefragt am</string>
   <string name="SYS_INVENTORY_RESERVATION_PERIOD_FROM">Reservieren von</string>

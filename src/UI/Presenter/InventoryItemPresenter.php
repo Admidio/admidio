@@ -748,7 +748,7 @@ class InventoryItemPresenter extends PagePresenter
      * @return void
      * @throws Exception
      */
-    public function createEditBorrowForm(string $itemUUID, string $reservationUuid = ''): void
+    public function createEditBorrowForm(string $itemUUID, string $reservationUuid = '', bool $returning = false): void
     {
         global $gCurrentSession, $gSettingsManager, $gCurrentUser, $gL10n, $gCurrentOrgId, $gDb;
 
@@ -782,16 +782,16 @@ class InventoryItemPresenter extends PagePresenter
             $reservation = new Reservation($gDb);
             if (!$reservation->readDataByUuid($reservationUuid)
                 || (int)$reservation->getValue('ivr_ini_id') !== $items->getItemId()
-                || $reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED) {
+                || $reservation->getValue('ivr_status') !== ($returning ? Reservation::STATUS_BORROWED : Reservation::STATUS_APPROVED)) {
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
 
-            if ((int)$reservation->getValue('ivr_dat_id') > 0) {
+            if (!$returning && (int)$reservation->getValue('ivr_dat_id') > 0) {
                 $event = new Event($gDb, (int)$reservation->getValue('ivr_dat_id'));
                 $lastReceiverValue = $event->getValue('dat_usr_id_create');
-            } elseif ((int)$reservation->getValue('ivr_usr_id') > 0) {
+            } elseif (!$returning && (int)$reservation->getValue('ivr_usr_id') > 0) {
                 $lastReceiverValue = $reservation->getValue('ivr_usr_id');
-            } else {
+            } elseif (!$returning) {
                 $lastReceiverValue = $reservation->getValue('ivr_guest_name');
             }
         }
@@ -803,7 +803,8 @@ class InventoryItemPresenter extends PagePresenter
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
                 'item_uuid' => $itemUUID,
                 'mode' => 'item_save',
-                'reservation_uuid' => $reservationUuid
+                'reservation_uuid' => $reservationUuid,
+                'item_borrowed' => $returning ? 1 : null
             ))),
             $this
         );

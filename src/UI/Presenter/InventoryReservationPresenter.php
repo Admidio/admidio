@@ -54,7 +54,9 @@ class InventoryReservationPresenter extends PagePresenter
             Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
             Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
             Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
-            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED')
+            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED'),
+            Reservation::STATUS_BORROWED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_BORROWED'),
+            Reservation::STATUS_RETURNED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
         );
         $reservationOrigins = array(
             'member' => $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN_MEMBER_REQUEST'),
@@ -138,12 +140,14 @@ class InventoryReservationPresenter extends PagePresenter
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_withdraw', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_WITHDRAW'));
             }
-            if (count($actions) > 0) {
-                $buttonIcon = match ($row['ivr_status']) {
+            $buttonIcon = match ($row['ivr_status']) {
                     Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
                     Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
+                    Reservation::STATUS_BORROWED => 'bi-box-arrow-up-right text-primary',
+                    Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success',
                     default => 'bi-x-circle-fill text-danger'
                 };
+            if (count($actions) > 0) {
                 $html .= '<div class="btn-group admidio-inventory-reservation-action" role="group">'
                     . '<button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
                     . '<i class="bi ' . $buttonIcon . '"></i>' . $statusLabels[$row['ivr_status']] . '</button><ul class="dropdown-menu">';
@@ -153,6 +157,9 @@ class InventoryReservationPresenter extends PagePresenter
                         . '<i class="bi ' . $action['icon'] . '"></i>' . $action['label'] . '</a></li>';
                 }
                 $html .= '</ul></div>';
+            } else {
+                $html .= '<span class="admidio-inventory-reservation-action"><i class="bi ' . $buttonIcon . '"></i>'
+                    . $statusLabels[$row['ivr_status']] . '</span>';
             }
             $html .= '</td></tr>';
         }

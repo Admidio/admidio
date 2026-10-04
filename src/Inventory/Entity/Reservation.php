@@ -17,6 +17,8 @@ class Reservation extends Entity
     public const STATUS_APPROVED = 'approved';
     public const STATUS_REJECTED = 'rejected';
     public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_BORROWED = 'borrowed';
+    public const STATUS_RETURNED = 'returned';
 
     public function __construct(Database $database, int $reservationId = 0)
     {

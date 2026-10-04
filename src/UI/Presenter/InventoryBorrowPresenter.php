@@ -71,11 +71,12 @@ class InventoryBorrowPresenter extends PagePresenter
             . '</div><div class="card-body">' . $readyHtml . '</tbody></table></div></div></div>');
 
         $activeBorrowings = $gDb->queryPrepared(
-            'SELECT ini_uuid, ind_value AS item_name, inb_last_receiver, inb_borrow_date
+            'SELECT ini_uuid, ind_value AS item_name, inb_last_receiver, inb_borrow_date, ivr_uuid
                FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
          INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = inb_ini_id
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
          INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+          LEFT JOIN ' . TBL_INVENTORY_RESERVATIONS . ' ON ivr_ini_id = ini_id AND ivr_status = \'borrowed\'
               WHERE ini_org_id = ?
                 AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
                 AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL
@@ -95,11 +96,12 @@ class InventoryBorrowPresenter extends PagePresenter
             $activeHtml .= '<tr><td>' . SecurityUtils::encodeHTML($borrowing['item_name']) . '</td><td>'
                 . SecurityUtils::encodeHTML($receiver) . '</td><td>'
                 . SecurityUtils::encodeHTML($borrowing['inb_borrow_date']) . '</td><td><a class="btn btn-primary" href="'
-                . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
                     'mode' => 'item_edit_borrow',
                     'item_uuid' => $borrowing['ini_uuid'],
-                    'item_borrowed' => 1
-                )) . '"><i class="bi bi-box-arrow-in-down-left"></i> '
+                    'item_borrowed' => 1,
+                    'reservation_uuid' => $borrowing['ivr_uuid']
+                ))) . '"><i class="bi bi-box-arrow-in-down-left"></i> '
                 . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RECORD_RETURN')) . '</a></td></tr>';
         }
         $this->addHtml('<div class="card admidio-field-group"><div class="card-header">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_BORROWINGS_ACTIVE'))

@@ -478,8 +478,8 @@ class EventFormPresenter extends PagePresenter
             $selectedItems = array();
             if ((int)$event->getValue('dat_id') > 0) {
                 $eventReservations = $gDb->queryPrepared(
-                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
-                    array((int)$event->getValue('dat_id'), 'requested', 'approved')
+                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+                    array((int)$event->getValue('dat_id'), 'requested', 'approved', 'borrowed')
                 );
                 while ($eventReservation = $eventReservations->fetch()) {
                     $selectedItems[] = (int)$eventReservation['ivr_ini_id'];
@@ -501,13 +501,17 @@ class EventFormPresenter extends PagePresenter
                 Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
                 Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
                 Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
-                Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED')
+                Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED'),
+                Reservation::STATUS_BORROWED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_BORROWED'),
+                Reservation::STATUS_RETURNED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
             );
             $reservationStatusIcons = array(
                 Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
                 Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
                 Reservation::STATUS_REJECTED => 'bi-x-circle-fill text-danger',
-                Reservation::STATUS_CANCELLED => 'bi-x-circle-fill text-danger'
+                Reservation::STATUS_CANCELLED => 'bi-x-circle-fill text-danger',
+                Reservation::STATUS_BORROWED => 'bi-box-arrow-up-right text-primary',
+                Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success'
             );
             $createReservationRow = static function (string $selectedItemId = '') use ($availableItems, $gL10n): string {
                 $options = '<option value="">- ' . SecurityUtils::encodeHTML($gL10n->get('SYS_PLEASE_CHOOSE')) . ' -</option>';
