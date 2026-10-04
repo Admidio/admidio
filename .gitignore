@@ -36,7 +36,24 @@ php-cs-fixer
 # Project-specific IDE settings are local for each developer
 /.vscode/
 
+# Local configuration and cache of the regression test suite
+/.env.test
+/.phpunit.cache/
+
+# Some special OS files that should not commited
+/*.phar
+.DS_Store
+php-cs-fixer
+
+# Project-specific IDE settings are local for each developer
+/.vscode/
+CLAUDE.md
+.claudeignore
+
 # For custom configuration
 /.php_cs
 /.idea
 custom_*.*
+
+# Version 5.0 doesn't support tests
+/tests
