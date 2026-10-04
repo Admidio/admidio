@@ -405,12 +405,19 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
-        if (InventoryAccessService::canManageReservations() || InventoryAccessService::canRequestReservation()) {
+        if (InventoryAccessService::canManageReservations()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservations',
                 $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_list')),
                 'bi-calendar-check'
+            );
+        } elseif (InventoryAccessService::canRequestReservation()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservation_request',
+                $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
+                'bi-calendar-plus'
             );
         }
 
