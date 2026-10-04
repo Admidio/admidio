@@ -98,6 +98,14 @@
                                         {include 'sys-template-parts/form.custom-content.tpl' data=$elements['event_inventory_items_table']}
                                     </div>
                                 </div>
+                                {if {array_key_exists array=$elements key='event_inventory_reservation_statuses'}}
+                                    <div class="card admidio-tabbed-field-group">
+                                        <div class="card-header">{$l10n->get('SYS_INVENTORY_RESERVATION_STATUS_PER_EVENT')}</div>
+                                        <div class="card-body">
+                                            {include 'sys-template-parts/form.custom-content.tpl' data=$elements['event_inventory_reservation_statuses']}
+                                        </div>
+                                    </div>
+                                {/if}
                             {/if}
                         </div>
                     </div>

@@ -930,6 +930,7 @@
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Freigeben</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Ablehnen</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS">Status</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_PER_EVENT">Reservierungsstatus je Termin</string>
   <string name="SYS_INVENTORY_RESERVATION_ORIGIN">Herkunft</string>
   <string name="SYS_INVENTORY_RESERVATION_ORIGIN_MEMBER_REQUEST">Mitgliederanfrage</string>
   <string name="SYS_INVENTORY_RESERVATION_ORIGIN_GUEST_REQUEST">Gästeanfrage</string>
