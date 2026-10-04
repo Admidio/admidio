@@ -168,11 +168,7 @@ class InventoryReservationPresenter extends PagePresenter
                 reservationTable.draw();
             });
             function showReservationActionError(message) {
-                $("#adm_status_message").empty().append(
-                    $("<div>", {class: "alert alert-danger"})
-                        .append($("<i>", {class: "bi bi-exclamation-circle-fill"}))
-                        .append(document.createTextNode(message || "Error: Undefined error occurred!"))
-                );
+                messageBox(message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
             }
             $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-action .dropdown-item", function(event) {
                 event.preventDefault();
