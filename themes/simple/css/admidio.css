@@ -848,6 +848,15 @@ tr.admidio-event-highlight {
     color: var(--bs-danger);
 }
 
+.admidio-inventory-reservation-action {
+    width: 165px;
+}
+
+.admidio-inventory-reservation-action > .dropdown-toggle {
+    width: 100%;
+    white-space: nowrap;
+}
+
 .card-img, .card-img-top {
     height: 200px !important;
     object-fit: cover !important;
