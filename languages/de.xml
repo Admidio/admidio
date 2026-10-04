@@ -909,6 +909,9 @@
   <string name="SYS_INVENTORY_RESERVATIONS">Reservierungen</string>
   <string name="SYS_INVENTORY_RESERVATIONS_ENABLED">Reservierungsanfragen aktivieren</string>
   <string name="SYS_INVENTORY_RESERVATIONS_ENABLED_DESC">Wenn diese Option aktiviert ist, können Reservierungsanfragen für Gegenstände gestellt werden. (Voreinstellung: nein)</string>
+  <string name="SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED">Reservierungen bei Veranstaltungen ermöglichen</string>
+  <string name="SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED_DESC">Wenn diese Option aktiviert ist, können bei Veranstaltungen Gegenstände reserviert werden. Die Reservierungsanfrage verwendet den Zeitraum der Veranstaltung und die eingestellte Freigabeart. (Voreinstellung: ja)</string>
+  <string name="SYS_INVENTORY_EVENT_RESERVATIONS_DESC">Füge die Gegenstände hinzu, die für diese Veranstaltung benötigt werden. Für jeden Eintrag wird eine Reservierungsanfrage für den Zeitraum der Veranstaltung erstellt. Entfernte Einträge werden storniert und bleiben in der Historie erhalten.</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE">Reservierungen durch Verwalter verwalten</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE_DESC">Wenn diese Option aktiviert ist, können Verwalter von Gegenständen Reservierungsanfragen verwalten. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST">Reservierung anfragen</string>

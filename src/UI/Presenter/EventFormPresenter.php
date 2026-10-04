@@ -471,12 +471,13 @@ class EventFormPresenter extends PagePresenter
         $form->addInput('event_to', $gL10n->get('SYS_END'), $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
         $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CALENDAR'), $gDb, 'EVT', FormPresenter::SELECT_BOX_MODUS_EDIT, ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid')]);
 
-        if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
             $selectedItems = array();
             if ((int)$event->getValue('dat_id') > 0) {
                 $selectedItems = $gDb->queryPrepared(
-                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
-                    array((int)$event->getValue('dat_id'))
+                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
+                    array((int)$event->getValue('dat_id'), 'requested', 'approved')
                 )->fetchAll(\PDO::FETCH_COLUMN);
             }
             $availableItems = $gDb->queryPrepared(
@@ -490,6 +491,33 @@ class EventFormPresenter extends PagePresenter
                 array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
             $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems, array('defaultValue' => $selectedItems, 'multiselect' => true));
+
+            $createReservationRow = static function (string $selectedItemId = '') use ($availableItems, $gL10n): string {
+                $options = '<option value="">- ' . SecurityUtils::encodeHTML($gL10n->get('SYS_PLEASE_CHOOSE')) . ' -</option>';
+                foreach ($availableItems as $itemId => $itemName) {
+                    $options .= '<option value="' . (int)$itemId . '"' . ((string)$itemId === $selectedItemId ? ' selected' : '') . '>'
+                        . SecurityUtils::encodeHTML($itemName) . '</option>';
+                }
+                return '<tr><td><select class="form-select" name="event_inventory_items[]">' . $options . '</select></td><td class="text-end">'
+                    . '<button type="button" class="btn btn-link text-danger p-0" onclick="this.closest(\'tr\').remove();" title="'
+                    . SecurityUtils::encodeHTML($gL10n->get('SYS_DELETE')) . '"><i class="bi bi-trash"></i></button></td></tr>';
+            };
+            $reservationRows = '';
+            foreach ($selectedItems as $selectedItemId) {
+                $reservationRows .= $createReservationRow((string)$selectedItemId);
+            }
+            $form->addCustomContent(
+                'event_inventory_items_table',
+                $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
+                '<p class="form-text">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_EVENT_RESERVATIONS_DESC')) . '</p>'
+                . '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME'))
+                . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody></table></div>'
+                . '<button type="button" class="btn btn-secondary" onclick="addEventInventoryReservationRow();"><i class="bi bi-plus-circle"></i> '
+                . SecurityUtils::encodeHTML($gL10n->get('SYS_ADD')) . '</button>'
+            );
+            $page->addJavascript('function addEventInventoryReservationRow() {
+                document.getElementById("event_inventory_reservations_rows").insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
+            }', true);
         }
 
         if ($showRecurrenceFields) {

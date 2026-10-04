@@ -296,6 +296,7 @@ final class PreferenceDefinitions
             'inventory_field_date_time_format' => array('default' => 'date', 'type' => 'enum', 'values' => array('date', 'datetime')),
             'inventory_items_disable_borrowing' => array('default' => '0', 'type' => 'bool'),
             'inventory_reservations_enabled' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservations_events_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_reservation_keepers_manage' => array('default' => '1', 'type' => 'bool'),
             'inventory_reservation_approval' => array('default' => 'manual', 'type' => 'enum', 'values' => array('automatic', 'manual')),
             'inventory_reservation_requesters' => array('default' => 'members', 'type' => 'enum', 'values' => array('guests', 'members', 'roles')),

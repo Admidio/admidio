@@ -345,7 +345,8 @@ class EventSaveService
         if (!is_array($reservationItemIds)) {
             $reservationItemIds = array($reservationItemIds);
         }
-        if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
             $reservationService->syncEventReservations((int)$event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
         }
 
@@ -372,7 +373,8 @@ class EventSaveService
                 $generatedEvent->save();
 
                 $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
-                if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
+                if ($gSettingsManager->getBool('inventory_reservations_enabled')
+                    && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
                     $reservationService->syncEventReservations(
                         (int)$generatedEvent->getValue('dat_id'),
                         $reservationItemIds,
@@ -830,7 +832,8 @@ class EventSaveService
         if (!is_array($reservationItemIds)) {
             $reservationItemIds = array($reservationItemIds);
         }
-        if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
             $reservationService->syncEventReservations(
                 (int)$masterEvent->getValue('dat_id'),
                 $reservationItemIds,
@@ -867,7 +870,8 @@ class EventSaveService
             $generatedEvent->save();
 
             $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
-            if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
+            if ($gSettingsManager->getBool('inventory_reservations_enabled')
+                && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
                 $reservationService->syncEventReservations(
                     (int)$generatedEvent->getValue('dat_id'),
                     $reservationItemIds,

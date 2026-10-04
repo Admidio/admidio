@@ -1303,6 +1303,12 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'SYS_INVENTORY_RESERVATIONS_ENABLED_DESC')
         );
         $formInventory->addCheckbox(
+            'inventory_reservations_events_enabled',
+            $gL10n->get('SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED'),
+            (bool)$formValues['inventory_reservations_events_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED_DESC')
+        );
+        $formInventory->addCheckbox(
             'inventory_reservation_keepers_manage',
             $gL10n->get('SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE'),
             (bool)$formValues['inventory_reservation_keepers_manage'],

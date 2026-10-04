@@ -95,7 +95,7 @@
                                 <div class="card admidio-tabbed-field-group">
                                     <div class="card-header">{$l10n->get('SYS_INVENTORY_RESERVATIONS')}</div>
                                     <div class="card-body">
-                                        {include 'sys-template-parts/form.select.tpl' data=$elements['event_inventory_items']}
+                                        {include 'sys-template-parts/form.custom-content.tpl' data=$elements['event_inventory_items_table']}
                                     </div>
                                 </div>
                             {/if}

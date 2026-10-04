@@ -916,6 +916,9 @@
   <string name="SYS_INVENTORY_RESERVATIONS">Reservations</string>
   <string name="SYS_INVENTORY_RESERVATIONS_ENABLED">Enable reservation requests</string>
   <string name="SYS_INVENTORY_RESERVATIONS_ENABLED_DESC">When this option is enabled, reservation requests can be submitted for inventory items. (Default: no)</string>
+  <string name="SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED">Allow reservations for events</string>
+  <string name="SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED_DESC">When this option is enabled, inventory items can be reserved for events. The reservation request uses the event period and the configured approval workflow. (Default: yes)</string>
+  <string name="SYS_INVENTORY_EVENT_RESERVATIONS_DESC">Add the inventory items needed for this event. A reservation request is created for each entry for the event period. Removed entries are cancelled and remain in the change history.</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE">Allow item keepers to manage reservations</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE_DESC">When this option is enabled, item keepers can manage reservation requests. (Default: yes)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST">Request reservation</string>
