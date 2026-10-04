@@ -169,7 +169,9 @@ class InventoryReservationPresenter extends PagePresenter
             $("#reservation_filter_status").on("change", function() {
                 reservationTable.draw();
             });
-            reservationTable.draw();
+            $("#adm_inventory_reservations_table").one("init.dt", function() {
+                reservationTable.draw();
+            });
             function showReservationActionError(message) {
                 var errorAlert = $("#adm_inventory_reservations_alert");
                 errorAlert.empty().append(
