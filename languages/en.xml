@@ -931,6 +931,10 @@
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Approve</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Reject</string>
   <string name="SYS_INVENTORY_RESERVATION_STATUS">Status</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_REQUESTED">Requested</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_APPROVED">Approved</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_REJECTED">Rejected</string>
+  <string name="SYS_INVENTORY_RESERVATION_STATUS_CANCELLED">Cancelled</string>
   <string name="SYS_INVENTORY_ITEMS_EDIT">Change items</string>
   <string name="SYS_INVENTORY_ITEMS_EDIT_DESC">The values of the item fields can be changed here.\n\nThe displayed values will be applied to ALL items!</string>
   <string name="SYS_INVENTORY_ITEMS_PER_PAGE">Number of items per page</string>
