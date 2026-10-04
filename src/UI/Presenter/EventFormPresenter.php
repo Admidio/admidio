@@ -471,6 +471,27 @@ class EventFormPresenter extends PagePresenter
         $form->addInput('event_to', $gL10n->get('SYS_END'), $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
         $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CALENDAR'), $gDb, 'EVT', FormPresenter::SELECT_BOX_MODUS_EDIT, ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid')]);
 
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')) {
+            $selectedItems = array();
+            if ((int)$event->getValue('dat_id') > 0) {
+                $selectedItems = $gDb->queryPrepared(
+                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                    array((int)$event->getValue('dat_id'))
+                )->fetchAll(\PDO::FETCH_COLUMN);
+            }
+            $availableItems = $gDb->queryPrepared(
+                'SELECT ini_id, ind_value
+                   FROM ' . TBL_INVENTORY_ITEMS . '
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+             INNER JOIN ' . TBL_INVENTORY_FIELD_OPTIONS . ' ON ifo_id = ini_status
+                  WHERE ini_org_id = ? AND ifo_value <> ?
+               ORDER BY ind_value',
+                array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
+            )->fetchAll(\PDO::FETCH_KEY_PAIR);
+            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems, array('defaultValue' => $selectedItems, 'multiselect' => true));
+        }
+
         if ($showRecurrenceFields) {
             $form->addSelectBox('event_recurrence_frequency', $gL10n->get('SYS_REPEAT'), ['none' => 'SYS_NO_RECURRENCE', EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY', EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY', EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY', EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'], ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC']);
             $form->addInput('event_recurrence_interval', $gL10n->get('SYS_INTERVAL'), (string)$recurrenceInterval, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_INTERVAL_DESC']);
