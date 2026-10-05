@@ -109,7 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const isVideo = videoExts.includes(ext);
         const isAudio = audioExts.includes(ext);
         const isImage = imageExts.includes(ext);
-        const isPdf = (ext === 'pdf');
+        // browsers without an own pdf viewer (e.g. Chrome on Android) can't show a pdf within the iframe
+        const isPdf = (ext === 'pdf' && navigator.pdfViewerEnabled !== false);
 
         if (!(isVideo || isAudio || isImage || isPdf)) {
             // Ensure non-previewable files (archives, office docs) open in a separate window so the main PWA stays open
