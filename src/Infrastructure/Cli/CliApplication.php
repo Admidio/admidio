@@ -5,6 +5,8 @@ use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginLoader;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Users\Entity\User;
 use InvalidArgumentException;
@@ -147,6 +149,7 @@ final class CliApplication
 
         CoreTasks::register();
         $this->loadModuleTasks();
+        $this->loadPlugins();
 
         $found = $this->findCommand($argv);
         if ($found['error'] !== null) {
@@ -747,6 +750,53 @@ final class CliApplication
                         );
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Load the plugins that are enabled for this organization, so that a plugin can register its
+     * own commands before the command line is parsed.
+     *
+     * A lightweight installation or help bootstrap deliberately has no database and therefore
+     * cannot know which plugins are installed; it keeps the core and module commands.
+     */
+    private function loadPlugins(): void
+    {
+        if (!isset($GLOBALS['gDb'])) {
+            return;
+        }
+
+        PluginLoader::loadEnabled();
+        $this->loadPluginTasks();
+    }
+
+    /**
+     * Load optional CLI registrations of enabled plugins.
+     *
+     * Plugin runtime is loaded first so its autoload mappings, settings and languages are available.
+     * The cli.php file itself only registers metadata and callbacks; command work runs later after
+     * actor and component authorization.
+     */
+    private function loadPluginTasks(): void
+    {
+        foreach (PluginLoader::getLoaded() as $plugin) {
+            $registrationFile = $plugin->path . '/cli.php';
+            if (!is_file($registrationFile)) {
+                continue;
+            }
+
+            CliTaskRegistry::setPluginContext($plugin->id);
+            try {
+                require_once $registrationFile;
+            } catch (Throwable $exception) {
+                self::writeWarning(
+                    'CLI_PLUGIN_REGISTRATION_FAILED',
+                    'The CLI commands of plugin "' . $plugin->id . '" were not registered: '
+                    . $exception->getMessage()
+                );
+            } finally {
+                CliTaskRegistry::setPluginContext(null);
             }
         }
     }
@@ -1723,10 +1773,10 @@ final class CliApplication
                 $stream = fopen('php://temp', 'w+');
                 // The default $escape is deprecated since PHP 8.4; '' is the documented
                 // successor and the only one that writes RFC 4180 compliant CSV.
-                fputcsv($stream, array_map(array(self::class, 'neutralizeFormula'), $headers), escape: '');
+                fputcsv($stream, array_map(array(SpreadsheetUtils::class, 'neutralizeFormula'), $headers), escape: '');
                 foreach ($rows as $row) {
                     fputcsv($stream, array_map(
-                        static fn (mixed $value): string => self::neutralizeFormula(self::normalizeCell($value)),
+                        static fn (mixed $value): string => SpreadsheetUtils::neutralizeFormula(self::normalizeCell($value)),
                         $row
                     ), escape: '');
                 }
@@ -1866,7 +1916,13 @@ final class CliApplication
         }
 
         if (is_array($value)) {
-            self::writeRows(array($value), $format, $options);
+            /*
+             * A single record is read down the screen, not across it, so "text" means the
+             * field/value layout here where writeRows() takes it to mean a table. A record of two
+             * dozen fields squeezed into one table row is unreadable in every terminal, and
+             * plugin:show is the widest of them.
+             */
+            self::writeRows(array($value), $format === 'text' ? 'record' : $format, $options);
             return;
         }
 
@@ -2514,27 +2570,6 @@ final class CliApplication
         $padding = $width - self::displayWidth($value);
 
         return $padding > 0 ? $value . str_repeat(' ', $padding) : $value;
-    }
-
-    /**
-     * Prevent a spreadsheet from interpreting an exported cell as a formula.
-     *
-     * A CSV export is normally opened in a spreadsheet application, which treats a leading =, +, -
-     * or @ as the start of a formula. Admidio content such as a profile field or a role name is
-     * free text and must never be evaluated, so such a cell is prefixed with a single quote.
-     */
-    private static function neutralizeFormula(string $value): string
-    {
-        // A plain number such as -5 is data, not a formula, and must stay numeric in the export.
-        if ($value === '' || is_numeric($value)) {
-            return $value;
-        }
-
-        if (str_contains("=+-@\t\r", $value[0])) {
-            return "'" . $value;
-        }
-
-        return $value;
     }
 
     private static function normalizeCell(mixed $value): string

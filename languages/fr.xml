@@ -988,7 +988,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Rôle de notification</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Les membres de ce rôle reçoivent des notifications concernant les entrées nouvelles ou modifiées dans les modules et les changements dans les données de profil des membres. Pour des raisons de protection des données, seuls les rôles ayant le droit de rôle #VAR1_BOLD# peuvent être définis.</string>
   <string name="SYS_NUMBER">Nombre</string>
-  <string name="SYS_NUMBER_COL_DESC">La case à cocher correspondante doit être activée si vous voulez afficher à la fin du rapport une ligne avec le nombre d\'adhésions.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">La case à cocher correspondante doit être activée si vous voulez afficher à la fin du rapport une ligne avec le nombre d\'adhésions.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Nombre d\'albums par page</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Nombre d\'entrées affichées sur une page. S\'il y a plus d\'entrées, des éléments de navigation sont affichés pour faire défiler les pages. (Par défaut : #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Nombre d\'entrées affichées sur une page. S\'il y a plus d\'entrées, des éléments de navigation sont affichés pour faire défiler les pages. Si la valeur est "Tous", toutes les entrées seront listées sur une seule page et la pagination sera désactivée. (Par défaut : #VAR1#)</string>

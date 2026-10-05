@@ -6,8 +6,6 @@
     <step id="30">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
         VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
     <step id="40">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_plugins', 'plugins') WHERE men_url LIKE '%/adm_plugins%'</step>
-    <step id="50">ALTER TABLE %PREFIX%_components ADD COLUMN com_overview_plugin boolean not null default false</step>
-    <step id="60">UpdateStepsCode::updateStep51InstallOverviewPlugins</step>
     <step id="70">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
     <step id="80" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
     <step id="90" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(100)</step>
@@ -109,7 +107,6 @@
     <step id="750">UPDATE %PREFIX%_menu SET men_url = '/modules/events.php' WHERE men_name_intern = 'events'</step>
     <step id="760" database="pgsql">SELECT setval(pg_get_serial_sequence('%PREFIX%_user_relation_types', 'urt_id'), COALESCE(MAX(urt_id), 1), MAX(urt_id) IS NOT NULL) FROM %PREFIX%_user_relation_types</step>
     <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_value = '' AND prf_name IN ('groups_roles_default_configuration', 'events_list_configuration', 'contacts_list_configuration')</step>
-    <step id="780">UpdateStepsCode::updateStep51SeedPluginPreferences</step>
     <step id="790">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_time timestamp NULL</step>
     <step id="800">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_methods varchar(255) NULL</step>
     <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_external_session_id varchar(64) NULL</step>
@@ -226,29 +223,14 @@
     <step id="1330">UpdateStepsCode::updateStep51TranslateDefaultEntries</step>
     <step id="1340">ALTER TABLE %PREFIX%_texts ADD COLUMN txt_custom_text text NULL</step>
     <step id="1350">UPDATE %PREFIX%_texts SET txt_custom_text = txt_text WHERE txt_custom_text IS NULL AND txt_name IN ('SYSMAIL_REGISTRATION_CONFIRMATION', 'SYSMAIL_REGISTRATION_NEW', 'SYSMAIL_REGISTRATION_APPROVED', 'SYSMAIL_REGISTRATION_REFUSED', 'SYSMAIL_LOGIN_INFORMATION', 'SYSMAIL_PASSWORD_RESET') AND txt_text NOT IN ('SYS_SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR', 'SYS_SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_LOGIN_INFORMATION', 'SYS_SYSMAIL_PASSWORD_RESET')</step>
-    <step id="1360">CREATE TABLE %PREFIX%_inventory_reservations (
-        ivr_id integer unsigned NOT NULL AUTO_INCREMENT,
-        ivr_uuid varchar(36) NOT NULL,
-        ivr_ini_id integer unsigned NOT NULL,
-        ivr_dat_id integer unsigned NULL DEFAULT NULL,
-        ivr_usr_id integer unsigned NULL DEFAULT NULL,
-        ivr_guest_name varchar(255) NULL DEFAULT NULL,
-        ivr_guest_email varchar(255) NULL DEFAULT NULL,
-        ivr_comment text NULL,
-        ivr_begin timestamp NOT NULL,
-        ivr_end timestamp NOT NULL,
-        ivr_status varchar(20) NOT NULL DEFAULT 'requested',
-        ivr_usr_id_create integer unsigned NULL,
-        ivr_timestamp_create timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        ivr_usr_id_change integer unsigned NULL,
-        ivr_timestamp_change timestamp NULL DEFAULT NULL,
-        PRIMARY KEY (ivr_id)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci</step>
-    <step id="1370">CREATE UNIQUE INDEX %PREFIX%_idx_ivr_uuid ON %PREFIX%_inventory_reservations (ivr_uuid)</step>
-    <step id="1380">CREATE INDEX %PREFIX%_idx_ivr_item_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_begin, ivr_end)</step>
-    <step id="1390">CREATE INDEX %PREFIX%_idx_ivr_event ON %PREFIX%_inventory_reservations (ivr_dat_id)</step>
-    <step id="1400">ALTER TABLE %PREFIX%_inventory_reservations ADD CONSTRAINT %PREFIX%_fk_ivr_ini FOREIGN KEY (ivr_ini_id) REFERENCES %PREFIX%_inventory_items (ini_id) ON DELETE RESTRICT ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_dat FOREIGN KEY (ivr_dat_id) REFERENCES %PREFIX%_events (dat_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr FOREIGN KEY (ivr_usr_id) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr_create FOREIGN KEY (ivr_usr_id_create) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr_change FOREIGN KEY (ivr_usr_id_change) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
-    <step id="1410" database="mysql">UPDATE %PREFIX%_preferences reservation INNER JOIN %PREFIX%_preferences inventory ON inventory.prf_org_id = reservation.prf_org_id AND inventory.prf_name = 'changelog_table_inventory_items' SET reservation.prf_value = inventory.prf_value WHERE reservation.prf_name = 'changelog_table_inventory_reservations'</step>
-    <step id="1420" database="pgsql">UPDATE %PREFIX%_preferences reservation SET prf_value = inventory.prf_value FROM %PREFIX%_preferences inventory WHERE inventory.prf_org_id = reservation.prf_org_id AND inventory.prf_name = 'changelog_table_inventory_items' AND reservation.prf_name = 'changelog_table_inventory_reservations'</step>
+    <step id="1360">UPDATE %PREFIX%_components SET com_name_intern = LOWER(com_name_intern) WHERE com_type = 'PLUGIN'</step>
+    <!--
+        com_uuid has to exist before ConvertBuiltInPlugins runs: it may install a plugin that was
+        never installed before, which creates a Component row and therefore needs the column.
+    -->
+    <step id="1370">ALTER TABLE %PREFIX%_components ADD COLUMN com_uuid varchar(36)</step>
+    <step id="1380">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <step id="1390">UpdateStepsCode::updateStep51AddComponentUuid</step>
+    <step id="1400">CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid)</step>
     <step>stop</step>
 </update>

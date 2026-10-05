@@ -550,6 +550,9 @@ function messageBox(message, title, type, buttons, href) {
     if (typeof buttons === 'undefined') {
         $("#adm_modal_messagebox .modal-footer").hide();
     } else if (buttons === 'yes-no') {
+        // A message shown before this one without buttons has hidden the footer, and the buttons
+        // are in it, so the dialog would have nothing to confirm with.
+        $("#adm_modal_messagebox .modal-footer").show();
         $("#adm_messagebox_button_yes").attr('onClick', href);
     }
 
@@ -610,13 +613,13 @@ function formSubmit(event) {
         contentType: false,
         success: function(data) {
             try {
-                var returnData = JSON.parse(data);
+                var returnData = typeof data === "object" ? data : JSON.parse(data);
                 var returnStatus = returnData.status;
                 var returnMessage = returnData.message || "";
                 var forwardUrl = returnData.url || "";
                 var forwardPost = returnData.url_post || null;
             } catch (e) {
-                if (typeof $(".modal-body") !== "undefined") {
+                if ($(".modal-body").length > 0) {
                     $(".modal-body").html(data);
                 }
                 // no expected JSON response

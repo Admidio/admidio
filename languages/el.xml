@@ -920,7 +920,7 @@
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Ειδοποίηση για αλλαγμένα πεδία προφίλ</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Ενεργοποιήστε αυτήν τη ρύθμιση για αποστολή ειδοποιήσεων για τυχόν αλλαγές στα πεδία προφίλ ενός χρήστη. Με αυτόν τον τρόπο ένας διαχειριστής έχει τη δυνατότητα να διασφαλίσει τη σωστή ποιότητα των δεδομένων. Οι ειδοποιήσεις αλλαγής θα αποστέλλονται στην ακόλουθη διεύθυνση ηλεκτρονικού ταχυδρομείου #VAR1#. (default: no)</string>
   <string name="SYS_NUMBER">Αριθμός</string>
-  <string name="SYS_NUMBER_COL_DESC">Το αντίστοιχο πλαίσιο ελέγχου πρέπει να ενεργοποιηθεί εάν θέλετε να εμφανιστεί στο τέλος της αναφοράς μια γραμμή με τον αριθμό των συνδρομών.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Το αντίστοιχο πλαίσιο ελέγχου πρέπει να ενεργοποιηθεί εάν θέλετε να εμφανιστεί στο τέλος της αναφοράς μια γραμμή με τον αριθμό των συνδρομών.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Αριθμός άλμπουμ ανά σελίδα</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>

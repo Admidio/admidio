@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Categories\Entity;
 
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
@@ -133,6 +134,13 @@ class Category extends Entity
         // delete all roles assignments that have the right to view this category
         $categoryViewRoles = new RolesRights($this->db, 'category_view', $catId);
         $categoryViewRoles->delete();
+
+        $this->deleteDependentRecords(
+            new CategoryReportColumn($this->db),
+            array('crc_id'),
+            'crc_cat_id = ?',
+            array($catId)
+        );
 
         // now delete category
         $return = parent::delete();
