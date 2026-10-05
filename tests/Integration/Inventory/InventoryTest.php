@@ -790,7 +790,8 @@ class InventoryTest extends DatabaseTestCase
                 'reject' => static fn () => $service->changeStatus($foreignReservation, Reservation::STATUS_REJECTED),
                 'cancel' => static fn () => $service->changeStatus($foreignReservation, Reservation::STATUS_CANCELLED),
                 'start borrowing' => static fn () => $service->startBorrowing($foreignReservation),
-                'finish borrowing' => static fn () => $service->finishBorrowing($foreignReservation)
+                'finish borrowing' => static fn () => $service->finishBorrowing($foreignReservation),
+                'withdraw' => static fn () => $service->withdraw($foreignReservation)
             );
             foreach ($actions as $actionName => $action) {
                 try {
