@@ -53,7 +53,7 @@ class InventoryReservationPresenter extends PagePresenter
 
         $statement = $gDb->queryPrepared(
             'SELECT ivr_uuid, ivr_ini_id, ivr_usr_id, ivr_guest_name, ivr_guest_email, ivr_timestamp_create, ivr_begin, ivr_end, ivr_status, ivr_comment,
-                    dat_uuid, dat_headline, ind_value AS item_name
+                    dat_uuid, dat_headline, ' . TBL_INVENTORY_ITEM_DATA . '.ind_value AS item_name
                FROM ' . TBL_INVENTORY_RESERVATIONS . '
          INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ivr_ini_id
