@@ -783,13 +783,22 @@ class InventoryTest extends DatabaseTestCase
             $this->assertTrue(InventoryAccessService::canManageReservationItem($itemIds['own']));
             $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['foreign']));
 
-            try {
-                (new ReservationService($this->getDatabase()))->approve(
-                    new Reservation($this->getDatabase(), $itemIds['foreignReservation'])
-                );
-                $this->fail('A keeper must not approve a reservation for another keeper\'s item.');
-            } catch (Exception $exception) {
-                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            $service = new ReservationService($this->getDatabase());
+            $foreignReservation = new Reservation($this->getDatabase(), $itemIds['foreignReservation']);
+            $actions = array(
+                'approve' => static fn () => $service->approve($foreignReservation),
+                'reject' => static fn () => $service->changeStatus($foreignReservation, Reservation::STATUS_REJECTED),
+                'cancel' => static fn () => $service->changeStatus($foreignReservation, Reservation::STATUS_CANCELLED),
+                'start borrowing' => static fn () => $service->startBorrowing($foreignReservation),
+                'finish borrowing' => static fn () => $service->finishBorrowing($foreignReservation)
+            );
+            foreach ($actions as $actionName => $action) {
+                try {
+                    $action();
+                    $this->fail('A keeper must not ' . $actionName . ' a reservation for another keeper\'s item.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+                }
             }
 
             $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '0');
