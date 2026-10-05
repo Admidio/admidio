@@ -10,6 +10,7 @@ use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Service\ReservationService;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
@@ -346,7 +347,8 @@ class EventSaveService
             $reservationItemIds = array($reservationItemIds);
         }
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
             $reservationService->syncEventReservations((int)$event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
         }
 
@@ -374,7 +376,8 @@ class EventSaveService
 
                 $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
                 if ($gSettingsManager->getBool('inventory_reservations_enabled')
-                    && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+                    && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+                    && InventoryAccessService::canRequestReservation()) {
                     $reservationService->syncEventReservations(
                         (int)$generatedEvent->getValue('dat_id'),
                         $reservationItemIds,
@@ -833,7 +836,8 @@ class EventSaveService
             $reservationItemIds = array($reservationItemIds);
         }
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
             $reservationService->syncEventReservations(
                 (int)$masterEvent->getValue('dat_id'),
                 $reservationItemIds,
@@ -871,7 +875,8 @@ class EventSaveService
 
             $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
             if ($gSettingsManager->getBool('inventory_reservations_enabled')
-                && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+                && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+                && InventoryAccessService::canRequestReservation()) {
                 $reservationService->syncEventReservations(
                     (int)$generatedEvent->getValue('dat_id'),
                     $reservationItemIds,

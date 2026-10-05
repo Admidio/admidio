@@ -753,20 +753,32 @@ class InventoryTest extends DatabaseTestCase
         $keeperData = $fixture->createAndSaveUser('invreservationkeeper', 'invreservationkeeper@example.local');
         $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
 
-        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeper) {
+        $itemIds = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeper) {
             $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
-            $this->createItem($itemsData, array(
-                'ITEMNAME' => 'Reservation keeper item',
-                'KEEPER' => (string)$keeper->getValue('usr_id')
-            ));
+            return array(
+                'own' => $this->createItem($itemsData, array(
+                    'ITEMNAME' => 'Reservation keeper item',
+                    'KEEPER' => (string)$keeper->getValue('usr_id')
+                )),
+                'foreign' => $this->createItem($itemsData, array(
+                    'ITEMNAME' => 'Reservation administrator item'
+                ))
+            );
         });
 
-        $this->withCurrentUser($keeper, self::ORG_ID, true, function () {
+        $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemIds) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
             $this->assertTrue(InventoryAccessService::canManageReservations());
+            $this->assertTrue(InventoryAccessService::canManageReservationItem($itemIds['own']));
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['foreign']));
 
             $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '0');
             $this->assertFalse(InventoryAccessService::canManageReservations());
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '0');
+            $this->assertFalse(InventoryAccessService::canManageReservations());
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['own']));
         });
     }
 

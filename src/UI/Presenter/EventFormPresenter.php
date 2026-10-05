@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -474,7 +475,8 @@ class EventFormPresenter extends PagePresenter
         $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CALENDAR'), $gDb, 'EVT', FormPresenter::SELECT_BOX_MODUS_EDIT, ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid')]);
 
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && $gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
             $selectedItems = array();
             if ((int)$event->getValue('dat_id') > 0) {
                 $eventReservations = $gDb->queryPrepared(
