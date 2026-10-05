@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PdfUtils;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use Admidio\UI\Presenter\InventoryPresenter;
 
 // PHP namespaces
@@ -200,7 +201,14 @@ class ExportService
                     ->setDescription($gL10n->get('PLG_INVENTORY_MANAGER_CREATED_WITH'));
 
                 $sheet = $spreadsheet->getActiveSheet();
-                $sheet->fromArray(array_keys($data['export_headers']), null, 'A1');
+                foreach (array_keys($data['export_headers']) as $columnIndex => $header) {
+                    SpreadsheetUtils::setCellValue(
+                        $sheet,
+                        Coordinate::stringFromColumnIndex($columnIndex + 1) . '1',
+                        $header,
+                        $exportMode === 'csv'
+                    );
+                }
 
                 $startRow = 2;
                 foreach ($data['rows'] as $rowIndex => $row) {
@@ -214,7 +222,12 @@ class ExportService
                         }
 
                         $colLetter = Coordinate::stringFromColumnIndex($currentCol);
-                        $sheet->setCellValue($colLetter . $currentRow, $cell);
+                        SpreadsheetUtils::setCellValue(
+                            $sheet,
+                            $colLetter . $currentRow,
+                            $cell,
+                            $exportMode === 'csv'
+                        );
                         if ($hasIndent) {
                             $sheet->getStyle($colLetter . $currentRow)->getFont()->setItalic(true);
                         }

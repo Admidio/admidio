@@ -97,6 +97,15 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
         $this->assertIsString($itemUuid);
         $this->assertNotSame('', $itemUuid);
 
+        $formulaItemName = '=Imported regression item ' . $suffix;
+        $db->queryPrepared(
+            'UPDATE ' . TBL_INVENTORY_ITEM_DATA . '
+                SET ind_value = ?
+              WHERE ind_ini_id = (SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_uuid = ?)
+                AND ind_inf_id = ?',
+            array($formulaItemName, $itemUuid, $fieldIds['ITEMNAME'])
+        );
+
         $export = (new ExportService())->createExportFile('csv-oo');
         $this->registerCleanupPath($export['path']);
 
@@ -112,6 +121,6 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
                 $exportRows
             )
         );
-        $this->assertStringContainsString($itemName, $flattened);
+        $this->assertStringContainsString("'" . $formulaItemName, $flattened);
     }
 }

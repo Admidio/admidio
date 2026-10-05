@@ -246,6 +246,33 @@ class ListExportTest extends DatabaseTestCase
         $this->assertStringContainsString('Test', $content);
     }
 
+    /** @testdox CSV list exports neutralize spreadsheet formulas */
+    public function testCsvListExportNeutralizesSpreadsheetFormulas(): void
+    {
+        $listData = new ListData();
+        $listData->setDataByArray(array(array(
+            '=1+1',
+            '+SUM(1,2)',
+            '-cmd|calc',
+            '@SUM(1,2)',
+            '-5'
+        )));
+        $export = $this->remember($listData->createExportFile('formula-values', 'csv'));
+
+        $stream = fopen($export['path'], 'rb');
+        $this->assertNotFalse($stream);
+        $row = fgetcsv($stream, escape: '');
+        fclose($stream);
+
+        $this->assertSame(array(
+            "'=1+1",
+            "'+SUM(1,2)",
+            "'-cmd|calc",
+            "'@SUM(1,2)",
+            '-5'
+        ), $row);
+    }
+
     /**
      * Test the xlsx file
      *

@@ -5,6 +5,7 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['groups_roles_module_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_members_per_page']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['groups_roles_preview_characters']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_default_configuration']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_show_former_members']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['groups_roles_export']}

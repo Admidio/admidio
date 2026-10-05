@@ -4,6 +4,7 @@ namespace Admidio\Roles\ValueObject;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PdfUtils;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use Admidio\Roles\Entity\ListConfiguration;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -284,7 +285,23 @@ class ListData
         }
 
         $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->getActiveSheet()->fromArray($this->prepareOutputFormat($format));
+        $activeSheet = $this->spreadsheet->getActiveSheet();
+        $outputData = $this->prepareOutputFormat($format);
+        $effectiveFormat = in_array($format, array('xlsx', 'ods', 'pdf'), true) ? $format : 'csv';
+        if ($effectiveFormat === 'pdf') {
+            $activeSheet->fromArray($outputData);
+        } else {
+            foreach (array_values($outputData) as $rowIndex => $row) {
+                foreach (array_values($row) as $columnIndex => $value) {
+                    SpreadsheetUtils::setCellValue(
+                        $activeSheet,
+                        Coordinate::stringFromColumnIndex($columnIndex + 1) . ($rowIndex + 1),
+                        $value,
+                        $effectiveFormat === 'csv'
+                    );
+                }
+            }
+        }
 
         switch ($format) {
             case 'xlsx':

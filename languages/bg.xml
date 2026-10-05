@@ -923,7 +923,7 @@
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES">Известие за променени полета на профила</string>
   <string name="SYS_NOTIFICATION_PROFILE_CHANGES_DESC">Активирайте тази настройка, за да изпращате известия за всякакви промени в полетата на потребителския профил. По този начин администраторът има възможност да осигури правилното качество на данните. Известията за промяна ще бъдат изпращани на следния имейл адрес #VAR1# (По подразбиране: Не).</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_COL_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">The respective checkbox has to be activated if you want to display at the end of the report a line with the number of memberships.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Брой албуми на страница</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>

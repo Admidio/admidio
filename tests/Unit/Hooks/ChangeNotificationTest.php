@@ -260,6 +260,14 @@ class ChangeNotificationTest extends EntityHookTestCase
         $GLOBALS['gCurrentUser'] = null;
     }
 
+    protected function tearDown(): void
+    {
+        // the fake database must not leak into later unit tests, which treat a set gDb as a real one
+        unset($GLOBALS['gDb']);
+
+        parent::tearDown();
+    }
+
     private function newDatabase(): FakeDatabase
     {
         $db = new FakeDatabase();

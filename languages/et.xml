@@ -959,7 +959,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Teavitamise roll</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Teavitused uute kirjete või profiilimuudatuste kohta saadetakse kõigile selle rolli liikmetele.</string>
   <string name="SYS_NUMBER">Number</string>
-  <string name="SYS_NUMBER_COL_DESC">Vastav märkeruut peab olema aktiveeritud, kui soovid aruande lõpus kuvada rida liikmete arvuga.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Vastav märkeruut peab olema aktiveeritud, kui soovid aruande lõpus kuvada rida liikmete arvuga.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Albumite arv lehel</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Leheküljel kuvatavate kirjete arv. Kui kirjeid on rohkem, kuvatakse lehtede vahel liikumiseks navigeerimiselemendid. (Vaikimisi: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Leheküljel kuvatavate kirjete arv. Kui kirjeid on rohkem, kuvatakse lehtede vahel liikumiseks navigeerimiselemendid. (Vaikimisi: #VAR1#)</string>

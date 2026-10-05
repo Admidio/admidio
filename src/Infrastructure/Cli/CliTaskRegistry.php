@@ -81,11 +81,20 @@ final class CliTaskRegistry
     private static array $coreNamespaces = array();
 
     /**
-     * Directory name of the module whose cli.php is currently being loaded, or null outside of that.
+     * Directory name of the module or plugin whose registrations are currently being loaded, or
+     * null outside of that.
      *
      * @var string|null
      */
     private static ?string $moduleContext = null;
+
+    /**
+     * Whether the current context is a module or a plugin. Both own the command namespace named
+     * after their directory; the kind only appears in the error message.
+     *
+     * @var string
+     */
+    private static string $moduleContextKind = 'Module';
 
     /**
      * Announce which module's cli.php is being loaded, so its registrations can be restricted to
@@ -94,6 +103,17 @@ final class CliTaskRegistry
     public static function setModuleContext(?string $module): void
     {
         self::$moduleContext = $module;
+        self::$moduleContextKind = 'Module';
+    }
+
+    /**
+     * Announce which plugin's entry file is being loaded. A plugin owns the command namespace named
+     * after its directory, exactly like a module.
+     */
+    public static function setPluginContext(?string $plugin): void
+    {
+        self::$moduleContext = $plugin;
+        self::$moduleContextKind = 'Plugin';
     }
 
     /**
@@ -139,11 +159,11 @@ final class CliTaskRegistry
     }
 
     /**
-     * Register a module-specific command.
+     * Register a module- or plugin-specific command.
      *
-     * A module provides modules/<module>/cli.php, which is loaded on every CLI invocation. It may
-     * only register commands of its own namespace, which is the name of its directory or the
-     * singular form of it, and not one that Admidio core already uses. An acting user is always
+     * A module provides modules/<module>/cli.php and a plugin provides plugins/<plugin>/cli.php.
+     * Each may only register commands of its own namespace, derived from its directory name, and not
+     * one that Admidio core already uses. An acting user is always
      * required, and before the callback runs the component is checked through
      * Component::isAdministrable(), or through Component::isVisible() when the command declares
      * ACCESS_VISIBLE.
@@ -188,16 +208,16 @@ final class CliTaskRegistry
         bool $supportsDryRun = false
     ): void {
         if (!str_contains($taskName, ':')) {
-            throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
+            throw new InvalidArgumentException('Extension CLI task names must use the form extension:task.');
         }
 
         if ($componentName === '') {
-            throw new InvalidArgumentException('A module CLI task must specify an Admidio component.');
+            throw new InvalidArgumentException('An extension CLI task must specify an Admidio component.');
         }
 
         self::registerTask(
             $taskName,
-            strtoupper($componentName),
+            $componentName,
             $componentAccess,
             null,
             null,
@@ -313,7 +333,7 @@ final class CliTaskRegistry
         }
 
         if (!$core && !str_contains($taskName, ':')) {
-            throw new InvalidArgumentException('Module CLI task names must use the form module:task.');
+            throw new InvalidArgumentException('Extension CLI task names must use the form extension:task.');
         }
 
         if (!in_array($componentAccess, array(self::ACCESS_ADMINISTRABLE, self::ACCESS_VISIBLE), true)) {
@@ -342,10 +362,12 @@ final class CliTaskRegistry
                 if ($singular !== self::$moduleContext) {
                     $ownNamespaces[] = $singular;
                 }
+                // A plugin directory may use hyphens, which a command namespace cannot.
+                $ownNamespaces[] = str_replace('-', '', self::$moduleContext);
 
                 if (!in_array($namespace, $ownNamespaces, true)) {
                     throw new InvalidArgumentException(
-                        'Module "' . self::$moduleContext . '" may only register commands of the "'
+                        self::$moduleContextKind . ' "' . self::$moduleContext . '" may only register commands of the "'
                         . implode(':" or "', $ownNamespaces) . ':" namespace, but tried to register "'
                         . $taskName . '".'
                     );
@@ -386,12 +408,15 @@ final class CliTaskRegistry
             }
         }
 
-        // A module registering through modules/<module>/cli.php must show up in getAll().
+        // An extension registering through its cli.php must show up in getAll().
         self::$sortedTasks = null;
 
         self::$tasks[$taskName] = array(
             'name' => $taskName,
-            'component' => $componentName === null ? null : strtoupper($componentName),
+            'component' => $componentName === null ? null : (
+                self::$moduleContext !== null && self::$moduleContextKind === 'Plugin'
+                    ? $componentName : strtoupper($componentName)
+            ),
             'componentAccess' => $componentAccess,
             'aliasOf' => $aliasOf,
             'requiredRight' => $requiredRight,

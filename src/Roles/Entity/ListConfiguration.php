@@ -141,6 +141,11 @@ class ListConfiguration extends Entity
             $sort = '';
         }
 
+        if ($filter !== '') {
+            [$condition, $columnType, $fieldName] = $this->getConditionValidationData($field, $filter);
+            ConditionParser::validateCondition($condition, $columnType, $fieldName, $this->db);
+        }
+
         // If column doesn't exist create an object
         if (!array_key_exists($number, $this->columns)) {
             $this->columns[$number] = new ListColumns($this->db);
@@ -859,54 +864,10 @@ class ListConfiguration extends Entity
             if ($optionsAll['useConditions'] && (string)$listColumn->getValue('lsc_filter') !== '') {
                 $value = $listColumn->getValue('lsc_filter', 'database');
 
-                // custom profile field
-                if ($lscUsfId > 0) {
-                    switch ($userFieldType) {
-                        case 'CHECKBOX':
-                            $type = 'checkbox';
-
-                            // 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
-                            $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
-                            $arrCheckboxKeys = array(1, 0, 1, 0);
-                            $value = str_replace(array_map(array(StringUtils::class, 'strToLower'), $arrCheckboxValues), $arrCheckboxKeys, StringUtils::strToLower($value));
-                            break;
-
-                        case 'DROPDOWN': // fallthrough
-                        case 'RADIO_BUTTON':
-                            $type = 'int';
-
-                            // replace all field values with their internal numbers
-                            $arrOptions = $gProfileFields->getPropertyById($lscUsfId, 'ufo_usf_options', 'text');
-                            $value = array_search(StringUtils::strToLower($value), array_map(array(StringUtils::class, 'strToLower'), $arrOptions), true);
-                            break;
-
-                        case 'NUMBER': // fallthrough
-                        case 'DECIMAL':
-                            $type = 'int';
-                            break;
-
-                        case 'DATE':
-                            $type = 'date';
-                            break;
-
-                        default:
-                            $type = 'string';
-                    }
-                } else {
-                    switch ($listColumn->getValue('lsc_special_field')) {
-                        case 'mem_begin': // fallthrough
-                        case 'mem_end':
-                            $type = 'date';
-                            break;
-
-                        case 'usr_photo':
-                            $type = '';
-                            break;
-
-                        default:
-                            $type = 'string';
-                    }
-                }
+                $field = $lscUsfId > 0
+                    ? $lscUsfId
+                    : (string)$listColumn->getValue('lsc_special_field');
+                [$value, $type, $fieldName] = $this->getConditionValidationData($field, (string)$value);
 
                 $parser = new ConditionParser();
 
@@ -924,7 +885,7 @@ class ListConfiguration extends Entity
                 } else {
                     $columnName = $dbColumnName;
                 }
-                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $gProfileFields->getPropertyById($lscUsfId, 'usf_name'), $this->db); // TODO Exception handling
+                $sqlWhere .= $parser->makeSqlStatement($value, $columnName, $type, $fieldName, $this->db);
             }
         }
 
@@ -1225,6 +1186,73 @@ class ListConfiguration extends Entity
         // now restore columns with new numbers
         $this->columns = array();
         $this->readColumns();
+    }
+
+    /**
+     * Determine the parser type and normalize a condition exactly as it is normalized during SQL generation.
+     *
+     * @param int|string $field Profile field ID or special field name.
+     * @param string $condition User condition.
+     * @return array{0:string,1:string,2:string} Normalized condition, parser type and field name.
+     */
+    private function getConditionValidationData(int|string $field, string $condition): array
+    {
+        global $gL10n, $gProfileFields;
+
+        if (is_numeric($field)) {
+            $profileFieldId = (int)$field;
+            $fieldName = (string)$gProfileFields->getPropertyById($profileFieldId, 'usf_name');
+
+            switch ($gProfileFields->getPropertyById($profileFieldId, 'usf_type')) {
+                case 'CHECKBOX':
+                    $checkboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                    $condition = str_replace(
+                        array_map(array(StringUtils::class, 'strToLower'), $checkboxValues),
+                        array(1, 0, 1, 0),
+                        StringUtils::strToLower($condition)
+                    );
+                    $type = 'checkbox';
+                    break;
+
+                case 'DROPDOWN':
+                case 'RADIO_BUTTON':
+                    $options = $gProfileFields->getPropertyById($profileFieldId, 'ufo_usf_options', 'text');
+                    $option = array_search(
+                        StringUtils::strToLower($condition),
+                        array_map(array(StringUtils::class, 'strToLower'), $options),
+                        true
+                    );
+                    if ($option === false) {
+                        throw new Exception('SYS_FIELD_INVALID_INPUT', array($fieldName));
+                    }
+                    $condition = (string)$option;
+                    $type = 'int';
+                    break;
+
+                case 'NUMBER':
+                case 'DECIMAL':
+                    $type = 'int';
+                    break;
+
+                case 'DATE':
+                    $type = 'date';
+                    break;
+
+                default:
+                    $type = 'string';
+            }
+        } else {
+            $fieldName = $gL10n->get('SYS_CONDITION');
+            if (in_array($field, array('mem_begin', 'mem_end'), true)) {
+                $type = 'date';
+            } elseif ($field === 'usr_photo') {
+                $type = '';
+            } else {
+                $type = 'string';
+            }
+        }
+
+        return array($condition, $type, $fieldName);
     }
 
     /**

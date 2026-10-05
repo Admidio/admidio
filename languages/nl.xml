@@ -943,7 +943,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Notificatierol</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Notificaties over nieuwe berichten of profielwijzigingen worden verzonden naar alle leden van deze rol.</string>
   <string name="SYS_NUMBER">Aantal</string>
-  <string name="SYS_NUMBER_COL_DESC">Het betreffende selectievakje moet worden geactiveerd als u aan het einde van het rapport een regel met het aantal lidmaatschappen wilt weergeven.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Het betreffende selectievakje moet worden geactiveerd als u aan het einde van het rapport een regel met het aantal lidmaatschappen wilt weergeven.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Aantal albums per pagina</string>
   <string name="SYS_NUMBER_RECIPIENTS">Aantal ontvangers</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Het aantal in dit veld geeft het maximale aantal ontvangers in een e-mail aan. Dit aantal kan door providers worden beperkt. Als een e-mail naar meer ontvangers moet worden verzonden dan het hier ingestelde aantal, worden meerdere e-mails gegenereerd. Ook het aantal te versturen e-mails binnen een termijn kan door providers worden beperkt. (Standaard: 50)</string>

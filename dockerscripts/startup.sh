@@ -133,12 +133,22 @@ if [ -f "${ADMIDIO_CONFIG}" ]; then
     # // for an update of the Admidio database to a new version of Admidio.
     # // For a more comfortable and easy update you can set this preference = 0.
     # $gLoginForUpdate = 1;
-    sed -i "s/^\$gLoginForUpdate.*/\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE:-1};/g" "${ADMIDIO_CONFIG}"
+    # the option is not part of the config template anymore, so add it if it was set
+    if grep -q '^\$gLoginForUpdate' "${ADMIDIO_CONFIG}"; then
+        sed -i "s/^\$gLoginForUpdate.*/\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE:-1};/g" "${ADMIDIO_CONFIG}"
+    elif [ "${ADMIDIO_LOGIN_FOR_UPDATE}" != "" ]; then
+        echo "\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE};" >> "${ADMIDIO_CONFIG}"
+    fi
 
     # // Set the preferred password hashing algorithm.
     # // Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
     # $gPasswordHashAlgorithm = 'DEFAULT';
-    sed -i "s/^\$gPasswordHashAlgorithm.*/\$gPasswordHashAlgorithm = '${ADMIDIO_PASSWORD_HASH_ALGORITHM:-DEFAULT}';/g" "${ADMIDIO_CONFIG}"
+    # the option is not part of the config template anymore, so add it if it was set
+    if grep -q '^\$gPasswordHashAlgorithm' "${ADMIDIO_CONFIG}"; then
+        sed -i "s/^\$gPasswordHashAlgorithm.*/\$gPasswordHashAlgorithm = '${ADMIDIO_PASSWORD_HASH_ALGORITHM:-DEFAULT}';/g" "${ADMIDIO_CONFIG}"
+    elif [ "${ADMIDIO_PASSWORD_HASH_ALGORITHM}" != "" ]; then
+        echo "\$gPasswordHashAlgorithm = '${ADMIDIO_PASSWORD_HASH_ALGORITHM}';" >> "${ADMIDIO_CONFIG}"
+    fi
 else
     echo "[WARNING] admidio config.php file does not exist."
 fi
