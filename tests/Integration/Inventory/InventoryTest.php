@@ -754,8 +754,11 @@ class InventoryTest extends DatabaseTestCase
         $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
 
         $itemIds = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeper) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
             $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
-            return array(
+            $itemIds = array(
                 'own' => $this->createItem($itemsData, array(
                     'ITEMNAME' => 'Reservation keeper item',
                     'KEEPER' => (string)$keeper->getValue('usr_id')
@@ -764,6 +767,14 @@ class InventoryTest extends DatabaseTestCase
                     'ITEMNAME' => 'Reservation administrator item'
                 ))
             );
+            $reservation = (new ReservationService($this->getDatabase()))->request(
+                $itemIds['foreign'],
+                new DateTimeImmutable('2030-05-01 10:00:00'),
+                new DateTimeImmutable('2030-05-01 12:00:00')
+            );
+            $itemIds['foreignReservation'] = (int)$reservation->getValue('ivr_id');
+
+            return $itemIds;
         });
 
         $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemIds) {
@@ -771,6 +782,15 @@ class InventoryTest extends DatabaseTestCase
             $this->assertTrue(InventoryAccessService::canManageReservations());
             $this->assertTrue(InventoryAccessService::canManageReservationItem($itemIds['own']));
             $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['foreign']));
+
+            try {
+                (new ReservationService($this->getDatabase()))->approve(
+                    new Reservation($this->getDatabase(), $itemIds['foreignReservation'])
+                );
+                $this->fail('A keeper must not approve a reservation for another keeper\'s item.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            }
 
             $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '0');
             $this->assertFalse(InventoryAccessService::canManageReservations());
