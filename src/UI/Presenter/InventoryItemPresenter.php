@@ -777,6 +777,13 @@ class InventoryItemPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
+        // A borrow form changes the item state. Do not merely disable its inputs for a forged
+        // direct URL: reject callers who are not entitled to process this specific item.
+        if (!$items->isEditable()
+            || ($reservationUuid !== '' && !InventoryAccessService::canManageReservationItem($items->getItemId()))) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $lastReceiverValue = $items->getValue('LAST_RECEIVER');
         $borrowDateValue = $items->getValue('BORROW_DATE');
         $returnDateValue = $items->getValue('RETURN_DATE');
