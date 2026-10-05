@@ -957,4 +957,74 @@ class InventoryTest extends DatabaseTestCase
             ));
         });
     }
+
+    /**
+     * @testdox Moving an event keeps its approval and rejects conflicting periods
+     */
+    public function testMovingApprovedEventReservationRejectsConflictsWithoutChangingExistingReservation(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationmove', true);
+        $category = $this->getFixture()->createAndSaveCategory('Moving reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Moving event reservation projector'));
+            $service = new ReservationService($this->getDatabase());
+
+            $firstEvent = new Event($this->getDatabase());
+            $firstEvent->setValue('dat_cat_id', $category['cat_id']);
+            $firstEvent->setValue('dat_headline', 'First reservation event');
+            $firstEvent->setValue('dat_begin', '2030-09-01 10:00:00');
+            $firstEvent->setValue('dat_end', '2030-09-01 12:00:00');
+            $firstEvent->save();
+            $service->syncEventReservations(
+                (int)$firstEvent->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-09-01 10:00:00'),
+                new DateTimeImmutable('2030-09-01 12:00:00')
+            );
+
+            $secondEvent = new Event($this->getDatabase());
+            $secondEvent->setValue('dat_cat_id', $category['cat_id']);
+            $secondEvent->setValue('dat_headline', 'Second reservation event');
+            $secondEvent->setValue('dat_begin', '2030-09-01 13:00:00');
+            $secondEvent->setValue('dat_end', '2030-09-01 15:00:00');
+            $secondEvent->save();
+            $service->syncEventReservations(
+                (int)$secondEvent->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-09-01 13:00:00'),
+                new DateTimeImmutable('2030-09-01 15:00:00')
+            );
+
+            $secondReservation = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_id, ivr_status, ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$secondEvent->getValue('dat_id'))
+            )->fetch();
+            $this->assertSame(Reservation::STATUS_APPROVED, $secondReservation['ivr_status']);
+
+            try {
+                $service->syncEventReservations(
+                    (int)$secondEvent->getValue('dat_id'),
+                    array($itemId),
+                    new DateTimeImmutable('2030-09-01 11:00:00'),
+                    new DateTimeImmutable('2030-09-01 14:00:00')
+                );
+                $this->fail('Moving an event reservation into another approved reservation must fail.');
+            } catch (\Admidio\Infrastructure\Exception $exception) {
+                $this->assertSame('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE', $exception->getMessage());
+            }
+
+            $unchangedReservation = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status, ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_id = ?',
+                array((int)$secondReservation['ivr_id'])
+            )->fetch();
+            $this->assertSame(Reservation::STATUS_APPROVED, $unchangedReservation['ivr_status']);
+            $this->assertSame('2030-09-01 13:00:00', $unchangedReservation['ivr_begin']);
+            $this->assertSame('2030-09-01 15:00:00', $unchangedReservation['ivr_end']);
+        });
+    }
 }
