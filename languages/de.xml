@@ -70,8 +70,8 @@
   <string name="SYS_BROTHER">Bruder</string>
   <string name="SYS_CHILD">Kind</string>
   <string name="SYS_COHABITANT">Partner/-in</string>
-  <string name="SYS_COHABITANT_FEMALE">Partner/-in</string>
-  <string name="SYS_COHABITANT_MALE">Partner/-in</string>
+  <string name="SYS_COHABITANT_FEMALE">Partnerin</string>
+  <string name="SYS_COHABITANT_MALE">Partner</string>
   <string name="SYS_COMPANION">Freund/-in</string>
   <string name="SYS_DAUGHTER">Tochter</string>
   <string name="SYS_FATHER">Vater</string>
@@ -99,7 +99,7 @@
   <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback-Theme</string>
   <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">Das Theme, das als Fallback verwendet wird, wenn das ausgewählte Theme eine gewünschte Vorlage nicht enthält. Wenn ein Fallback-Theme ausgewählt wird, muss das Haupt-Theme nur die Vorlagen enthalten, die es wirklich außer Kraft setzen will. Alle anderen Vorlagen können aus dem Fallback-Theme übernommen werden, das in den meisten Fällen das Standard-Theme \'simple\' sein kann. (Standard: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatischer Logout nach</string>
-  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Dieser Wert gibt an, nach wievielen Minuten ein:e inaktive:r Benutzer:in automatisch ausgeloggt wird. Inaktiv ist ein:e Benutzer:in solange er/sie keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls die Benutzerin oder der Benutzer #VAR1_BOLD# ausgewählt hat. (Voreinstellung: 20 Minuten)</string>
+  <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Dieser Wert gibt an, nach wie vielen Minuten ein:e inaktive:r Benutzer:in automatisch ausgeloggt wird. Inaktiv ist ein:e Benutzer:in solange er/sie keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls die Benutzerin oder der Benutzer #VAR1_BOLD# ausgewählt hat. (Voreinstellung: 20 Minuten)</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Nach Aktivierung wird Benutzerinnen und Benutzern mit veraltetem Browser geraten ein Browserupdate durchzuführen. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen deiner Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit der Webseiten besser dargestellt werden können. Hierzu wird das Service von https://browser-update.org/ verwendet.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
@@ -466,7 +466,7 @@
   <string name="SYS_DEBUG_OUTPUT">Debug-Ausgabe</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird eine neue Benutzerin oder ein neuer Benutzer angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der neuen Benutzerin oder dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird eine neue Benutzerin oder ein neuer Benutzer angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der neuen Benutzerin oder dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zuzuordnen, so werden ihm alle Rollenzuordnungen angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
@@ -756,7 +756,7 @@
   <string name="SYS_IDENTIFY_USERS">Existierende Kontakte werden anhand von Vornamen und Nachnamen erkannt.</string>
   <string name="SYS_IMPORT">Importieren</string>
   <string name="SYS_IMPORT_CONTACTS">Kontakte importieren</string>
-  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administatorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einer Administratorin oder einem Administrator importiert werden. Es müssen dabei die Regeln der Organisation eingehalten werden (z.B. die Passwortlänge und Passwortstärke). Benutzer:innen mit bereits vorhandenen Zugangsdaten behalten diese. Es werden keine Zugangsdaten durch den Import überschrieben.</string>
   <string name="SYS_IMPORT_MODE">Import Modus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Kontakte wurden angelegt.\n#VAR2# Kontakte wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.\n\n#VAR4#</string>
