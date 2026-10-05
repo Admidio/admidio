@@ -1027,4 +1027,56 @@ class InventoryTest extends DatabaseTestCase
             $this->assertSame('2030-09-01 15:00:00', $unchangedReservation['ivr_end']);
         });
     }
+
+    /**
+     * @testdox Removing an event item cancels open reservations but retains a handed-over item
+     */
+    public function testRemovingEventItemsCancelsOnlyReservationsThatAreNotBorrowed(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationremove', true);
+        $category = $this->getFixture()->createAndSaveCategory('Removing reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $borrowedItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Handed over event projector'));
+            $openItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Open event microphone'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event removing equipment');
+            $event->setValue('dat_begin', '2030-10-01 10:00:00');
+            $event->setValue('dat_end', '2030-10-01 12:00:00');
+            $event->save();
+
+            $service = new ReservationService($this->getDatabase());
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($borrowedItemId, $openItemId),
+                new DateTimeImmutable('2030-10-01 10:00:00'),
+                new DateTimeImmutable('2030-10-01 12:00:00')
+            );
+
+            $borrowedReservation = new Reservation($this->getDatabase(), (int)$this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_ini_id = ?',
+                array((int)$event->getValue('dat_id'), $borrowedItemId)
+            )->fetchColumn());
+            $service->startBorrowing($borrowedReservation);
+
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array(),
+                new DateTimeImmutable('2030-10-01 10:00:00'),
+                new DateTimeImmutable('2030-10-01 12:00:00')
+            );
+
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchAll(\PDO::FETCH_KEY_PAIR);
+            $this->assertSame(Reservation::STATUS_BORROWED, $statuses[$borrowedItemId]);
+            $this->assertSame(Reservation::STATUS_CANCELLED, $statuses[$openItemId]);
+        });
+    }
 }
