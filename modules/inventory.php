@@ -11,6 +11,7 @@ use Admidio\Inventory\Service\ImportService;
 use Admidio\Inventory\Service\ItemFieldService;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\Service\ReservationService;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Entity\Reservation;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\UI\Presenter\InventoryFieldsPresenter;
@@ -369,6 +370,23 @@ try {
                 $message = $gL10n->get('SYS_INVENTORY_ITEM_CREATED');
             }
 
+            $reservation = null;
+            if ($getReservationUUID !== '') {
+                $reservation = new Reservation($gDb);
+                $item = new \Admidio\Inventory\Entity\Item($gDb);
+                if (!$reservation->readDataByUuid($getReservationUUID)
+                    || !$item->readDataByUuid($getiniUUID)
+                    || (int)$reservation->getValue('ivr_ini_id') !== (int)$item->getValue('ini_id')) {
+                    throw new Exception('SYS_INVALID_PAGE_VIEW');
+                }
+
+                $expectedReservationStatus = $getBorrowed ? Reservation::STATUS_BORROWED : Reservation::STATUS_APPROVED;
+                if (!InventoryAccessService::canManageReservationItem((int)$item->getValue('ini_id'))
+                    || $reservation->getValue('ivr_status') !== $expectedReservationStatus) {
+                    throw new Exception('SYS_NO_RIGHTS');
+                }
+            }
+
             if (count($getItemUUIDs) > 0) {
                 foreach ($getItemUUIDs as $itemUuid) {
                     $itemService = new ItemService($gDb, $itemUuid, $postCopyField, $postCopyNumber, $postImported);
@@ -379,14 +397,7 @@ try {
                 $itemService->save();
             }
 
-            if ($getReservationUUID !== '') {
-                $reservation = new Reservation($gDb);
-                $item = new \Admidio\Inventory\Entity\Item($gDb);
-                if (!$reservation->readDataByUuid($getReservationUUID)
-                    || !$item->readDataByUuid($getiniUUID)
-                    || (int)$reservation->getValue('ivr_ini_id') !== (int)$item->getValue('ini_id')) {
-                    throw new Exception('SYS_INVALID_PAGE_VIEW');
-                }
+            if ($reservation instanceof Reservation) {
                 $reservationService = new ReservationService($gDb);
                 if ($getBorrowed) {
                     $reservationService->finishBorrowing($reservation);
