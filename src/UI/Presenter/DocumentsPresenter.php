@@ -543,6 +543,12 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('folder_uuid' => $row['uuid']));
                 $templateRow['icon'] = 'bi bi-folder-fill';
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
+                $templateRow['actions'][] = array(
+                    'url' => $templateRow['url'],
+                    'icon' => 'bi bi-link-45deg',
+                    'tooltip' => $gL10n->get('SYS_COPY_LINK'),
+                    'class' => 'admidio-copy-link'
+                );
 
                 if ($this->folder->hasUploadRight()) {
                     if ($gCurrentUser->isAdministratorDocumentsFiles()) {
@@ -585,6 +591,12 @@ class DocumentsPresenter extends PagePresenter
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'download', 'file_uuid' => $row['uuid'])),
                     'icon' => 'bi bi-download',
                     'tooltip' => $gL10n->get('SYS_DOWNLOAD_FILE')
+                );
+                $templateRow['actions'][] = array(
+                    'url' => $templateRow['url'],
+                    'icon' => 'bi bi-link-45deg',
+                    'tooltip' => $gL10n->get('SYS_COPY_LINK'),
+                    'class' => 'admidio-copy-link'
                 );
 
                 if ($this->folder->hasUploadRight()) {

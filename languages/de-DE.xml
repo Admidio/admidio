@@ -423,6 +423,7 @@
   <string name="SYS_COPY_CLIPBOARD">In Zwischenablage kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
+  <string name="SYS_COPY_LINK">Link kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
