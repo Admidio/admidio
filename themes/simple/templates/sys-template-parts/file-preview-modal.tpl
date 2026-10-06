@@ -27,7 +27,7 @@
                 <a id="adm_file_preview_download_btn" href="#" download class="btn btn-outline-primary col-12 col-lg-auto">
                     <i class="bi bi-download me-1"></i> {$l10n->get('SYS_DOWNLOAD_FILE')}
                 </a>
-                <button id="adm_file_preview_share_btn" type="button" class="btn btn-outline-secondary col-12 col-lg-auto"
+                <button id="adm_file_preview_share_btn" type="button" class="btn btn-outline-primary col-12 col-lg-auto"
                     data-label-share-link="{$l10n->get('SYS_SHARE_LINK')}" data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}"
                     data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
                     <i class="bi bi-link-45deg me-1"></i> <span>{$l10n->get('SYS_COPY_LINK')}</span>
