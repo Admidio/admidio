@@ -23,11 +23,16 @@
                     <!-- Populated dynamically with <video>, <audio>, <img>, or <iframe> -->
                 </div>
             </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <a id="adm_file_preview_download_btn" href="#" download class="btn btn-outline-primary">
+            <div class="modal-footer">
+                <a id="adm_file_preview_download_btn" href="#" download class="btn btn-outline-primary col-12 col-lg-auto">
                     <i class="bi bi-download me-1"></i> {$l10n->get('SYS_DOWNLOAD_FILE')}
                 </a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button id="adm_file_preview_share_btn" type="button" class="btn btn-outline-secondary col-12 col-lg-auto"
+                    data-label-share-link="{$l10n->get('SYS_SHARE_LINK')}" data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}"
+                    data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
+                    <i class="bi bi-link-45deg me-1"></i> <span>{$l10n->get('SYS_COPY_LINK')}</span>
+                </button>
+                <button type="button" class="btn btn-secondary col-12 col-lg-auto ms-lg-auto" data-bs-dismiss="modal">
                     <i class="bi bi-x-lg me-1"></i> {$l10n->get('SYS_CLOSE')}
                 </button>
             </div>
@@ -46,6 +51,35 @@ document.addEventListener('DOMContentLoaded', function () {
     const previewIcon = document.getElementById('adm_file_preview_icon');
     const previewBody = document.getElementById('adm_file_preview_body');
     const previewDownloadBtn = document.getElementById('adm_file_preview_download_btn');
+    const previewShareBtn = document.getElementById('adm_file_preview_share_btn');
+    const previewShareIcon = previewShareBtn.querySelector('i');
+    const previewShareText = previewShareBtn.querySelector('span');
+    let previewShareUrl = '';
+
+    // share the link with the share dialog of the system, or copy it if the browser can't share links.
+    // If the browser still uses an older cached common_functions.js without these functions, the button
+    // is hidden, so the preview itself still works.
+    if (typeof shareOrCopyLink !== 'function' || typeof canShareLink !== 'function') {
+        previewShareBtn.classList.add('d-none');
+    } else {
+        const shareIconClass = canShareLink() ? 'bi bi-share me-1' : 'bi bi-link-45deg me-1';
+        const shareText = canShareLink() ? previewShareBtn.dataset.labelShareLink : previewShareBtn.dataset.labelCopyLink;
+        previewShareIcon.className = shareIconClass;
+        previewShareText.textContent = shareText;
+        previewShareBtn.addEventListener('click', function () {
+            shareOrCopyLink(previewShareUrl, previewTitle.textContent, previewShareBtn.dataset.labelCopyLink).then(function (result) {
+                if (result === 'copied') {
+                    previewShareIcon.className = 'bi bi-clipboard-check me-1';
+                    previewShareText.textContent = previewShareBtn.dataset.labelCopied;
+                    setTimeout(function () {
+                        previewShareIcon.className = shareIconClass;
+                        previewShareText.textContent = shareText;
+                    }, 2000);
+                }
+            });
+        });
+    }
+
     const newWindowLabel = (previewModalEl.dataset && previewModalEl.dataset.labelNewWindow)
         ? previewModalEl.dataset.labelNewWindow
         : 'New window';
@@ -134,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         previewTitle.textContent = filename;
         previewDownloadBtn.href = downloadUrl;
+        previewShareUrl = viewUrl;
         previewDownloadBtn.setAttribute('download', filename);
         previewBody.replaceChildren();
 
