@@ -547,7 +547,7 @@ class DocumentsPresenter extends PagePresenter
                     'url' => $templateRow['url'],
                     'icon' => 'bi bi-link-45deg',
                     'tooltip' => $gL10n->get('SYS_COPY_LINK'),
-                    'class' => 'admidio-copy-link'
+                    'class' => 'admidio-share-link'
                 );
 
                 if ($this->folder->hasUploadRight()) {
@@ -596,7 +596,7 @@ class DocumentsPresenter extends PagePresenter
                     'url' => $templateRow['url'],
                     'icon' => 'bi bi-link-45deg',
                     'tooltip' => $gL10n->get('SYS_COPY_LINK'),
-                    'class' => 'admidio-copy-link'
+                    'class' => 'admidio-share-link'
                 );
 
                 if ($this->folder->hasUploadRight()) {

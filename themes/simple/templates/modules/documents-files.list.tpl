@@ -4,7 +4,8 @@
 
 
     <table id="adm_documents_files_table" class="table table-hover" width="100%" style="width: 100%;"
-        data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}" data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
+        data-label-share-link="{$l10n->get('SYS_SHARE_LINK')}" data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}"
+        data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
         <thead>
             <tr>
                 <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
@@ -76,80 +77,73 @@
 
 {literal}
 <script>
-// Copy the link of a file or folder to the clipboard, so it can be sent to other people.
-// The clipboard API is only available in secure contexts (https), otherwise the older
-// execCommand is used and if this also fails the link is shown in a prompt.
-document.addEventListener('DOMContentLoaded', function () {
-    const table = document.getElementById('adm_documents_files_table');
-    if (!table) return;
+// Share the link of a file or folder with the share dialog of the system. If the browser can't share
+// links, the action copies the link to the clipboard and shows the icon and text of copying.
+document.addEventListener("DOMContentLoaded", function () {
+    const table = document.getElementById("adm_documents_files_table");
+    // without the functions of common_functions.js, e.g. an older cached version, the action stays a normal link
+    if (!table || typeof shareOrCopyLink !== "function" || typeof canShareLink !== "function") return;
 
+    const shareLinkLabel = table.dataset.labelShareLink;
     const copyLinkLabel = table.dataset.labelCopyLink;
     const copiedLabel = table.dataset.labelCopied;
 
-    const copyWithExecCommand = function (text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.setAttribute('readonly', '');
-        textarea.style.cssText = 'position: fixed; top: 0; left: 0; opacity: 0;';
-        document.body.appendChild(textarea);
-        textarea.select();
-        let copied = false;
-        try {
-            copied = document.execCommand('copy');
-        } catch (error) {
-            copied = false;
+    // a tooltip is only shown if the element had a title, so the tooltip is created again with the new title
+    const setTooltip = function (icon, title, options) {
+        const tooltip = bootstrap.Tooltip.getInstance(icon);
+        if (tooltip) {
+            tooltip.dispose();
         }
-        textarea.remove();
-        return copied;
+        icon.setAttribute("title", title);
+        return new bootstrap.Tooltip(icon, options || {});
     };
 
-    const copyText = function (text) {
-        if (navigator.clipboard && window.isSecureContext) {
-            return navigator.clipboard.writeText(text).then(function () {
-                return true;
-            }, function () {
-                return copyWithExecCommand(text);
-            });
-        }
-        return Promise.resolve(copyWithExecCommand(text));
-    };
+    if (canShareLink()) {
+        table.querySelectorAll("a.admidio-share-link").forEach(function (link) {
+            const icon = link.querySelector("i");
+            icon.className = "bi bi-share";
+            if (link.classList.contains("dropdown-item")) {
+                icon.setAttribute("title", shareLinkLabel);
+                link.lastChild.nodeValue = " " + shareLinkLabel;
+            } else {
+                setTooltip(icon, shareLinkLabel);
+            }
+        });
+    }
 
     // show a check icon and the tooltip "copied" at the icon of the link, within the dropdown of small
     // screens at the icon that opens the dropdown, because the dropdown is closed after the click
     const showCopied = function (link) {
-        const dropdown = link.closest('.dropdown');
-        const icon = dropdown ? dropdown.querySelector('[data-bs-toggle="dropdown"] i') : link.querySelector('i');
+        const dropdown = link.closest(".dropdown");
+        const icon = dropdown ? dropdown.querySelector("[data-bs-toggle=\"dropdown\"] i") : link.querySelector("i");
         if (!icon) return;
 
-        // a tooltip is only shown if the element had a title, so create a new one for the message
         const iconClass = icon.className;
-        const existingTooltip = bootstrap.Tooltip.getInstance(icon);
-        if (existingTooltip) {
-            existingTooltip.dispose();
-        }
-        icon.className = 'bi bi-clipboard-check';
-        const copiedTooltip = new bootstrap.Tooltip(icon, {title: copiedLabel, trigger: 'manual'});
+        const title = icon.getAttribute("title") || icon.getAttribute("data-bs-original-title") || "";
+        icon.className = "bi bi-clipboard-check";
+        const copiedTooltip = setTooltip(icon, copiedLabel, {trigger: "manual"});
         copiedTooltip.show();
 
         setTimeout(function () {
             copiedTooltip.dispose();
             icon.className = iconClass;
-            if (existingTooltip) {
+            icon.setAttribute("title", title);
+            if (title !== "") {
                 new bootstrap.Tooltip(icon);
             }
         }, 2000);
     };
 
-    table.addEventListener('click', function (e) {
-        const link = e.target.closest('a.admidio-copy-link');
+    table.addEventListener("click", function (e) {
+        const link = e.target.closest("a.admidio-share-link");
         if (!link) return;
         e.preventDefault();
 
-        copyText(link.href).then(function (copied) {
-            if (copied) {
+        const nameLink = link.closest("tr").querySelector("td:nth-child(2) a");
+        const name = nameLink ? nameLink.textContent.trim() : document.title;
+        shareOrCopyLink(link.href, name, copyLinkLabel).then(function (result) {
+            if (result === "copied") {
                 showCopied(link);
-            } else {
-                window.prompt(copyLinkLabel, link.href);
             }
         });
     });
