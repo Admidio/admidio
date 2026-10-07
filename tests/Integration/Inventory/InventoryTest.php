@@ -1352,7 +1352,7 @@ class InventoryTest extends DatabaseTestCase
                 );
                 $this->fail('Event reservation requests must respect the event reservation setting.');
             } catch (Exception $exception) {
-                $this->assertSame('SYS_NO_RIGHTS', $exception->getMessage());
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
             } finally {
                 $GLOBALS['gCurrentSession'] = $previousSession;
                 $_POST = $previousPost;
