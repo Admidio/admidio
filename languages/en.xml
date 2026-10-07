@@ -940,7 +940,9 @@
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED">Enable reservation email notifications</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED_DESC">If enabled, reservation managers and requesters can receive emails about reservation requests and status changes. The general system notification setting must also be enabled. (Default: no)</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE">Reservation notification roles</string>
-  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Members of these roles receive emails about new and cancelled reservations. Members require the right &quot;View all member lists&quot;.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Members of these roles receive reservation notification emails. Members require the right &quot;View all member lists&quot;.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MANAGER_STATUSES">Notify responsible persons for these actions</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MANAGER_STATUSES_DESC">Select the reservation status changes for which members of the notification roles receive an email. (Default: all actions)</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER">Notify requester by email</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC">If enabled, requesters receive emails about automatic approval and later status changes. (Default: yes)</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservation for #VAR1#: #VAR2#</string>

@@ -24,7 +24,7 @@ class ReservationNotificationService
     {
         $this->notifyAfterCommit(
             $reservation,
-            true,
+            $this->shouldNotifyManagers((string)$reservation->getValue('ivr_status')),
             (string)$reservation->getValue('ivr_status') === Reservation::STATUS_APPROVED
         );
     }
@@ -35,12 +35,27 @@ class ReservationNotificationService
         $status = (string)$reservation->getValue('ivr_status');
         $this->notifyAfterCommit(
             $reservation,
-            $status === Reservation::STATUS_CANCELLED,
+            $this->shouldNotifyManagers($status),
             in_array($status, array(
                 Reservation::STATUS_APPROVED,
                 Reservation::STATUS_REJECTED,
                 Reservation::STATUS_CANCELLED
             ), true)
+        );
+    }
+
+    private function shouldNotifyManagers(string $status): bool
+    {
+        global $gSettingsManager;
+
+        $statuses = $gSettingsManager->has('inventory_reservation_notification_manager_statuses', true)
+            ? $gSettingsManager->getString('inventory_reservation_notification_manager_statuses')
+            : 'requested,approved,rejected,cancelled,borrowed,returned';
+
+        return in_array(
+            $status,
+            array_filter(explode(',', $statuses)),
+            true
         );
     }
 

@@ -785,6 +785,13 @@ class InventoryTest extends DatabaseTestCase
                     $firstRole['rol_uuid'] . ',' . $secondRole['rol_uuid']
                 )
             );
+            $this->assertSame(
+                'requested,approved,rejected,cancelled,borrowed,returned',
+                PreferenceDefinitions::normalize(
+                    'inventory_reservation_notification_manager_statuses',
+                    'requested,approved,rejected,cancelled,borrowed,returned'
+                )
+            );
         });
     }
 

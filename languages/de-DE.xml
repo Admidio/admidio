@@ -935,7 +935,9 @@
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED">E-Mail-Benachrichtigungen für Reservierungen aktivieren</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED_DESC">Wenn diese Option aktiviert ist, können Reservierungsverantwortliche und Antragstellende E-Mails über Anfragen und Statusänderungen erhalten. Die allgemeinen Systembenachrichtigungen müssen ebenfalls aktiviert sein. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE">Benachrichtigungsrollen für Reservierungen</string>
-  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rollen erhalten E-Mails über neue und stornierte Reservierungen. Mitglieder benötigen das Recht „Alle Mitgliederlisten einsehen“.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rollen erhalten E-Mails über Reservierungen. Mitglieder benötigen das Recht „Alle Mitgliederlisten einsehen“.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MANAGER_STATUSES">Verantwortliche bei diesen Aktionen benachrichtigen</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MANAGER_STATUSES_DESC">Wähle die Statusänderungen aus, bei denen Mitglieder der Benachrichtigungsrollen eine E-Mail erhalten. (Voreinstellung: alle Aktionen)</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER">Antragstellende per E-Mail benachrichtigen</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC">Wenn diese Option aktiviert ist, erhalten Antragstellende E-Mails über automatische Freigaben und spätere Statusänderungen. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservierung für #VAR1#: #VAR2#</string>

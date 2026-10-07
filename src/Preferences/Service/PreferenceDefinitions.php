@@ -2,6 +2,7 @@
 namespace Admidio\Preferences\Service;
 
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\SSO\Service\OIDCService;
 use InvalidArgumentException;
@@ -45,6 +46,7 @@ final class PreferenceDefinitions
     private const VALIDATOR_INVENTORY_PROFILE_FIELDS = 'inventory_profile_fields';
     private const VALIDATOR_INVENTORY_RESERVATION_ROLES = 'inventory_reservation_roles';
     private const VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES = 'inventory_reservation_notification_roles';
+    private const VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES = 'inventory_reservation_notification_statuses';
     private const VALIDATOR_SSO_KEY = 'sso_key';
     private const VALIDATOR_OIDC_SIGNING_KEY = 'oidc_signing_key';
 
@@ -71,6 +73,7 @@ final class PreferenceDefinitions
         self::VALIDATOR_INVENTORY_PROFILE_FIELDS,
         self::VALIDATOR_INVENTORY_RESERVATION_ROLES,
         self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES,
+        self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES,
         self::VALIDATOR_SSO_KEY,
         self::VALIDATOR_OIDC_SIGNING_KEY,
     );
@@ -307,6 +310,7 @@ final class PreferenceDefinitions
             'inventory_reservation_requester_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_ROLES),
             'inventory_reservation_notifications_enabled' => array('default' => '0', 'type' => 'bool'),
             'inventory_reservation_notification_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES),
+            'inventory_reservation_notification_manager_statuses' => array('default' => 'requested,approved,rejected,cancelled,borrowed,returned', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES),
             'inventory_reservation_notify_requester' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view' => array('default' => 'LAST_RECEIVER', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_PROFILE_FIELDS),
@@ -963,6 +967,22 @@ final class PreferenceDefinitions
                     )->fetchColumn();
                     if ($count !== 1) {
                         throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable role.');
+                    }
+                }
+                return implode(',', $values);
+            case self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES:
+                $values = self::commaValues($value);
+                $allowedStatuses = array(
+                    Reservation::STATUS_REQUESTED,
+                    Reservation::STATUS_APPROVED,
+                    Reservation::STATUS_REJECTED,
+                    Reservation::STATUS_CANCELLED,
+                    Reservation::STATUS_BORROWED,
+                    Reservation::STATUS_RETURNED
+                );
+                foreach ($values as $status) {
+                    if (!in_array($status, $allowedStatuses, true)) {
+                        throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable reservation status.');
                     }
                 }
                 return implode(',', $values);
