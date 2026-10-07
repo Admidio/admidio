@@ -767,6 +767,45 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Disabled reservations cannot be managed through the service
+     */
+    public function testDisabledReservationsCannotBeManagedThroughTheService(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationdisabledservice', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Disabled reservation projector'));
+            $reservation = (new ReservationService($this->getDatabase()))->request(
+                $itemId,
+                new DateTimeImmutable('2031-01-01 10:00:00'),
+                new DateTimeImmutable('2031-01-01 12:00:00')
+            );
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '0');
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($itemId));
+            $this->expectException(Exception::class);
+            (new ReservationService($this->getDatabase()))->approve($reservation);
+        });
+    }
+
+    /**
+     * @testdox Reservation entities reject invalid periods before saving
+     */
+    public function testReservationEntityRejectsInvalidPeriod(): void
+    {
+        $reservation = new Reservation($this->getDatabase());
+        $reservation->setValue('ivr_ini_id', 1);
+        $reservation->setValue('ivr_begin', '2031-01-01 12:00:00');
+        $reservation->setValue('ivr_end', '2031-01-01 10:00:00');
+
+        $this->expectException(Exception::class);
+        $reservation->save();
+    }
+
+    /**
      * @testdox Reservation services reject inventory items from another organization
      */
     public function testReservationServicesRejectItemsFromAnotherOrganization(): void
