@@ -737,7 +737,7 @@
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">Folderen #VAR1# eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Mappenavnet mangler!</string>
-  <string name="SYS_FOLDER_NAME_INVALID">Det valgte mappenavn #VAR1_BOLD# indeholder ugyldige tegn. Tjek venligst mappenavnet.\n\nFølgende specialtegn er ikke tilladt: ? * ~ ; : \" | < > / \</string>
+  <string name="SYS_FOLDER_NAME_INVALID">Det valgte mappenavn #VAR1_BOLD# indeholder ugyldige tegn. Tjek venligst mappenavnet.\n\nFølgende specialtegn er ikke tilladt: ? * ~ ; : \" | &lt; > / \</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Der er ikke nogen dokumenter eller filer tilgængelige for gæster.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du har ikke ret til at se den valgte folder.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes.\n\nVenligst snak med en #VAR2#administrator#VAR3# for at få hjælp til at undersøge skrive rettigheder på forældre folderen.</string>
@@ -1214,7 +1214,7 @@
   <string name="SYS_OVERHANG">Overbooking</string>
   <string name="SYS_OVERVIEW">Oversigt</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Oversigt over udvidelser</string>
-  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække & Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
+  <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Oversigtsudvidelserne på oversigtssiden kan ændres her. Rækkefølgen af udvidelserne kan ændres ved at trække &amp; Drop (store skærme) eller ved at klikke på bevægelsesknapperne (små skærme).\n\n Den nye sekvens træder først i kraft efter at have gemt indstillingerne!</string>
   <string name="SYS_PAGE_NEXT">Næste</string>
   <string name="SYS_PAGE_PREVIOUS">Forrige</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# og #VAR2#</string>
