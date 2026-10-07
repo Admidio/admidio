@@ -120,6 +120,10 @@ class InventoryAccessService
     {
         global $gCurrentUser;
 
+        if (!self::canManageReservations()) {
+            return false;
+        }
+
         return $gCurrentUser->isAdministratorInventory()
             || (self::canManageReservations() && InventoryPresenter::isCurrentUserKeeper($itemId));
     }

@@ -44,6 +44,11 @@ class Reservation extends Entity
         if ($this->isNewRecord() && (string)$this->getValue('ivr_timestamp_create') === '') {
             $this->setValue('ivr_timestamp_create', DATETIME_NOW);
         }
+        if ((string)$this->getValue('ivr_begin') !== ''
+            && (string)$this->getValue('ivr_end') !== ''
+            && new \DateTimeImmutable((string)$this->getValue('ivr_begin')) >= new \DateTimeImmutable((string)$this->getValue('ivr_end'))) {
+            throw new \Admidio\Infrastructure\Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
 
         return parent::save($updateFingerPrint);
     }

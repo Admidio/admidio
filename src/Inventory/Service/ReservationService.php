@@ -77,34 +77,37 @@ class ReservationService
             $this->assertEventInCurrentOrganization($eventId);
         }
 
-        $item = $this->getItemInCurrentOrganization($itemId);
-        if ($item->isRetired()) {
-            throw new Exception('SYS_INVALID_PAGE_VIEW');
-        }
+        return $this->withinReservationTransaction(function () use ($itemId, $begin, $end, $guestName, $guestEmail, $eventId, $comment, $gCurrentUser, $gSettingsManager, $gValidLogin): Reservation {
+            $item = $this->getItemInCurrentOrganization($itemId);
+            if ($item->isRetired()) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $this->lockItemForReservation($itemId);
 
-        if (!$this->isAvailable($itemId, $begin, $end)) {
-            throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
-        }
-        $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
+            if (!$this->isAvailable($itemId, $begin, $end)) {
+                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+            }
+            $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
-        if (!$gValidLogin && ($guestName === '' || $guestEmail === '')) {
-            throw new Exception('SYS_FIELD_EMPTY');
-        }
+            if (!$gValidLogin && ($guestName === '' || $guestEmail === '')) {
+                throw new Exception('SYS_FIELD_EMPTY');
+            }
 
-        $reservation = new Reservation($this->database);
-        $reservation->setValue('ivr_ini_id', $itemId);
-        $reservation->setValue('ivr_dat_id', $eventId);
-        $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
-        $reservation->setValue('ivr_guest_name', $gValidLogin ? null : $guestName);
-        $reservation->setValue('ivr_guest_email', $gValidLogin ? null : $guestEmail);
-        $reservation->setValue('ivr_comment', $comment);
-        $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
-        $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
-        $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
-        $reservation->save();
-        $this->refreshMenuBadge();
+            $reservation = new Reservation($this->database);
+            $reservation->setValue('ivr_ini_id', $itemId);
+            $reservation->setValue('ivr_dat_id', $eventId);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_guest_name', $gValidLogin ? null : $guestName);
+            $reservation->setValue('ivr_guest_email', $gValidLogin ? null : $guestEmail);
+            $reservation->setValue('ivr_comment', $comment);
+            $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->save();
+            $this->refreshMenuBadge();
 
-        return $reservation;
+            return $reservation;
+        });
     }
 
     /** Approve a pending request after an availability re-check. */
@@ -115,16 +118,19 @@ class ReservationService
         if (!InventoryAccessService::canManageReservationItem($itemId)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-        if (!$this->isAvailable(
-            (int)$reservation->getValue('ivr_ini_id'),
-            new \DateTimeImmutable((string)$reservation->getValue('ivr_begin')),
-            new \DateTimeImmutable((string)$reservation->getValue('ivr_end')),
-            (int)$reservation->getValue('ivr_id')
-        )) {
-            throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
-        }
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            if (!$this->isAvailable(
+                $itemId,
+                new \DateTimeImmutable((string)$reservation->getValue('ivr_begin')),
+                new \DateTimeImmutable((string)$reservation->getValue('ivr_end')),
+                (int)$reservation->getValue('ivr_id')
+            )) {
+                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+            }
 
-        $this->transition($reservation, Reservation::STATUS_APPROVED);
+            $this->transition($reservation, Reservation::STATUS_APPROVED);
+        });
         $this->refreshMenuBadge();
     }
 
@@ -239,6 +245,7 @@ class ReservationService
             if ($item->isRetired()) {
                 throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
             }
+            $this->lockItemForReservation($itemId);
 
             if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
                 throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
@@ -317,6 +324,37 @@ class ReservationService
     {
         if ($begin >= $end) {
             throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+    }
+
+    /** Serialize reservation changes for one inventory item. */
+    private function lockItemForReservation(int $itemId): void
+    {
+        $this->database->queryPrepared(
+            'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
+            array($itemId)
+        );
+    }
+
+    /** Run a reservation mutation in a transaction without disturbing an enclosing event save. */
+    private function withinReservationTransaction(callable $callback): mixed
+    {
+        $ownsTransaction = !$this->database->isInTransaction();
+        if ($ownsTransaction) {
+            $this->database->startTransaction();
+        }
+
+        try {
+            $result = $callback();
+            if ($ownsTransaction) {
+                $this->database->endTransaction();
+            }
+            return $result;
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->database->rollback();
+            }
+            throw $exception;
         }
     }
 
