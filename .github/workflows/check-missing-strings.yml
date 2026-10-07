@@ -7,16 +7,20 @@ on:
     paths:
       - '**.php'
       - '**.tpl'
-      - '**/languages/en.xml'
+      - '**/languages/*.xml'
       - .github/scripts/check_missing_strings.py
+      - .github/scripts/check_untranslated_strings.py
+      - .github/workflows/check-missing-strings.yml
   pull_request:
     branches:
       - master
     paths:
       - '**.php'
       - '**.tpl'
-      - '**/languages/en.xml'
+      - '**/languages/*.xml'
       - .github/scripts/check_missing_strings.py
+      - .github/scripts/check_untranslated_strings.py
+      - .github/workflows/check-missing-strings.yml
   workflow_dispatch:
 
 permissions:
@@ -44,3 +48,15 @@ jobs:
           while read -r key location; do
             echo "::warning file=${location%:*},line=${location##*:}::Missing translation key in languages/en.xml: $key"
           done < missing_keys.txt
+
+          if [ -s missing_keys.txt ]; then
+            echo "## Texts missing in languages/en.xml" >> $GITHUB_STEP_SUMMARY
+            echo "These text ids are used in the code, but the user will only see the id instead of a text." >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat missing_keys.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: List untranslated texts of all languages
+        run: |
+          python .github/scripts/check_untranslated_strings.py --exclude .github,dockerscripts,hooks,libs,vendor,tests --summary $GITHUB_STEP_SUMMARY --notice de,de-DE
