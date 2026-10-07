@@ -310,7 +310,7 @@ final class PreferenceDefinitions
             'inventory_reservation_requester_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_ROLES),
             'inventory_reservation_notifications_enabled' => array('default' => '0', 'type' => 'bool'),
             'inventory_reservation_notification_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES),
-            'inventory_reservation_notification_manager_statuses' => array('default' => 'requested,approved,rejected,cancelled,borrowed,returned', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES),
+            'inventory_reservation_manager_statuses' => array('default' => 'requested,approved,rejected,cancelled,borrowed,returned', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES),
             'inventory_reservation_notify_requester' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view' => array('default' => 'LAST_RECEIVER', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_PROFILE_FIELDS),

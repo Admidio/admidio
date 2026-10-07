@@ -1449,7 +1449,7 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => explode(',', $formValues['inventory_reservation_notification_roles']), 'multiselect' => true, 'helpTextId' => array('SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
         );
         $formInventory->addSelectBox(
-            'inventory_reservation_notification_manager_statuses',
+            'inventory_reservation_manager_statuses',
             $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFICATION_MANAGER_STATUSES'),
             array(
                 'requested' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
@@ -1460,7 +1460,7 @@ class PreferencesPresenter extends PagePresenter
                 'returned' => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
             ),
             array(
-                'defaultValue' => explode(',', $formValues['inventory_reservation_notification_manager_statuses']),
+                'defaultValue' => explode(',', $formValues['inventory_reservation_manager_statuses']),
                 'multiselect' => true,
                 'helpTextId' => 'SYS_INVENTORY_RESERVATION_NOTIFICATION_MANAGER_STATUSES_DESC'
             )

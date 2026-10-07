@@ -48,13 +48,9 @@ class ReservationNotificationService
     {
         global $gSettingsManager;
 
-        $statuses = $gSettingsManager->has('inventory_reservation_notification_manager_statuses', true)
-            ? $gSettingsManager->getString('inventory_reservation_notification_manager_statuses')
-            : 'requested,approved,rejected,cancelled,borrowed,returned';
-
         return in_array(
             $status,
-            array_filter(explode(',', $statuses)),
+            array_filter(explode(',', $gSettingsManager->getString('inventory_reservation_manager_statuses'))),
             true
         );
     }

@@ -788,7 +788,7 @@ class InventoryTest extends DatabaseTestCase
             $this->assertSame(
                 'requested,approved,rejected,cancelled,borrowed,returned',
                 PreferenceDefinitions::normalize(
-                    'inventory_reservation_notification_manager_statuses',
+                    'inventory_reservation_manager_statuses',
                     'requested,approved,rejected,cancelled,borrowed,returned'
                 )
             );
