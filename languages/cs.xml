@@ -63,7 +63,6 @@
   <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Některé složky doplňků třetích stran se nepodařilo přesunout do nové složky doplňků #VAR1_BOLD#.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio, přesuňte složky doplňků třetích stran ručně a poté odstraňte starou složku adm_plugins.</string>
   <string name="INS_WARNING_BETA_VERSION">Toto je beta verze Admidio.\n\nPoužívání může být riskantní kvůli možné nestabilitě a ztrátě dat. Používejte prosím pouze jako testovací prostředí!</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Některé složky starých doplňků Admidio se nepodařilo odstranit ze staré složky doplňků #VAR1_BOLD#.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio, odstraňte staré složky doplňků ručně a poté smažte i samotnou starou složku adm_plugins.</string>
-  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">Starou složku doplňků #VAR1_BOLD# se nepodařilo odstranit.\nZkontrolujte prosím složku #VAR2_BOLD# ve vaší instalaci Admidio a odstraňte starou složku adm_plugins ručně.</string>
   <string name="INS_WELCOME_TEXT">Tento asistent vám pomůže nastavit správu členů Admidio. Budou vyžádána všechna potřebná data, aby mohl být systém plně nastaven a vy se mohli přihlásit jako administrátor.\n\nPokud máte dotazy nebo problémy s instalací, podívejte se prosím na #VAR1#naše pokyny k instalaci#VAR2# nebo nás kontaktujte na #VAR3#našem fóru podpory#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Již jste aktualizovali adresáře Admidio na novou verzi. Nyní musí být databáze aktualizována z aktuální verze #VAR2# na verzi #VAR1#, aby Admidio mohlo běžet s novou verzí.\n\nPokud máte dotazy nebo problémy s aktualizací, podívejte se prosím na #VAR3#naše pokyny k aktualizaci#VAR4# nebo kontaktujte #VAR5#naše fórum podpory#VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Vítejte u instalace Admidio</string>
@@ -77,6 +76,7 @@
   <string name="SYS_COHABITANT_MALE">Partnerka</string>
   <string name="SYS_COMPANION">Společník/ice</string>
   <string name="SYS_DAUGHTER">Dcera</string>
+  <string name="SYS_EVENT_REGISTRATION">Registrace</string>
   <string name="SYS_FATHER">Otec</string>
   <string name="SYS_GIRLFRIEND">Přítelkyně</string>
   <string name="SYS_HUSBAND">Manžel</string>
@@ -93,7 +93,8 @@
   <string name="SYS_SUPERIOR_FEMALE">Nadřízená</string>
   <string name="SYS_SUPERIOR_MALE">Nadřízený</string>
   <string name="SYS_WIFE">Manželka</string>
-  <!--Phrases only in organization administration-->
+  <!--Phrases
+  only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Přístup k modulu</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Modul lze zakázat nebo povolit pouze pro přihlášené uživatele. Pokud je modul přístupný pouze přihlášeným uživatelům, bude pro odhlášené uživatele skryt a webový kanál bude pro obě skupiny uživatelů zcela zakázán. (výchozí: aktivní)</string>
   <string name="ORG_ACCESS_TO_PLUGIN">Přístup k doplňkům</string>
@@ -120,7 +121,6 @@
   <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">S čárami na Captcha je pro skripty a roboty obtížnější ji vyřešit. Čím více čar bude nakresleno, tím těžší bude její vyřešení. Bohužel to platí i pro lidi. (výchozí: 5)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Náhled Captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Náhled Captcha bere v úvahu pouze možnosti, které již byly uloženy.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Po aktivaci se novým uživatelům zobrazí obrázek s kódem captcha nebo jednoduchým výpočtem. Pro uložení právě upravovaného záznamu je nutné vyplnit správný kód nebo výsledek. Captcha je součástí anti-spamového řešení v Admidio. (výchozí: ano)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Popisek Captcha</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Vyplňte preferovaný popisek pro captcha. Bude použit výchozí typ písma aktuálního vzhledu.</string>
   <string name="ORG_CAPTCHA_SIGNS">Povolené znaky</string>
@@ -156,8 +156,6 @@
   <string name="ORG_FIELD_URL_DESC">Zadaná URL později v profilu odkazuje na obsah, který uživatel do tohoto pole zadal. Volitelně lze v URL definovat i zástupný symbol #user_content#. To je obsah, který uživatel do pole zadal.\n\nPříklad:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\n Odkaz v profilu: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Tato stránka se zobrazí po přihlášení uživatele. Cesta musí být uvedena jako relativní k hlavní složce Admidio.\n(např.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Tato stránka je výchozí stránkou Admidio pro hosty. Cesta musí být uvedena jako relativní k hlavní složce Admidio.\n(např.: modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Nepodařilo se najít platný vzhled.</string>
-  <string name="ORG_INVALID_THEME_FALLBACK">Zvolený záložní vzhled není platný.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Použití JavaScriptového editoru</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">V mnoha modulech Admidio se používá plnohodnotný JavaScriptový editor. Události, oznámení atd. tak může uživatel pohodlně upravovat. V případě, že byl editor aktivován, zobrazuje se jednoduché víceřádkové textové pole.</string>
   <string name="ORG_LAST_UPDATE_STEP">Poslední krok aktualizace</string>
@@ -177,6 +175,8 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Střední</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Žádná</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Velmi vysoká</string>
+  <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Cesta pro výpočet využití disku</string>
+  <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Cesta ke složce pro výpočet využití disku. Tato hodnota se používá v systémových informacích k výpočtu místa obsazeného instalací Admidio. Cestu lze definovat jako absolutní nebo jako relativní vzhledem k hlavnímu adresáři Admidio. Pokud zůstane pole prázdné, vypočítá se využití disku pro kořenový adresář serveru. (výchozí: prázdné)</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profilová pole</string>
   <string name="ORG_REFUSE_REGISTRATION">Oznámení o odmítnutí registrace</string>
@@ -200,7 +200,8 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Zkrácený název organizace</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL webu organizace</string>
   <string name="ORG_VARIABLE_USERNAME">Uživatelské jméno z příslušného kontextu e-mailu</string>
-  <!--System-Phrases for use in every module-->
+  <!--System-Phrases
+  for use in every module-->
   <string name="SYS_64BIT">64bit</string>
   <string name="SYS_A_TO_Z">A až Z</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Č.</string>
@@ -211,7 +212,6 @@
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktivní a bývalí</string>
   <string name="SYS_ACTIVE_GROUPS_ROLES">Aktivní skupiny a role</string>
   <string name="SYS_ACTIVE_MEMBERS">Aktivní členové</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Přidat další konfiguraci</string>
   <string name="SYS_ADD_ATTACHMENT">Připojit přílohu</string>
   <string name="SYS_ADD_COLUMN">Přidat sloupec</string>
   <string name="SYS_ADD_COLUMNS_DESC">V níže uvedené tabulce přiřaďte libovolný počet sloupců odpovídajících profilovým polím. Kromě toho můžete určit výchozí řazení a přidat podmínky, podle kterých mají být příslušní členové filtrováni.</string>
@@ -223,7 +223,6 @@
   <string name="SYS_ADD_TO_DATABASE">Přidat do databáze</string>
   <string name="SYS_ADDITIONAL_COLUMNS">Další sloupec</string>
   <string name="SYS_ADDITIONAL_CSS_FILE">Další CSS soubor</string>
-  <string name="SYS_ADDITIONAL_CSS_FILE_DESC">Cesta k souboru .css s dalšími definicemi stylů. Tento soubor se načte jako poslední, i po souboru admidio.css daného tématu. (výchozí: prázdné)</string>
   <string name="SYS_ADDITIONAL_FILES">Tento seznam má poskytnout přehled souborů a složek, které ještě nebyly importovány do databáze. Mohou být do databáze přidány. Přístupová práva budou zkopírována z vybrané složky</string>
   <string name="SYS_ADDRESS">Adresa</string>
   <string name="SYS_ADMIDIO">Admidio</string>
@@ -239,7 +238,6 @@
   <string name="SYS_ALBUM_CHANGED_TITLE">Fotoalbum bylo změněno #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Album neobsahuje žádné fotky.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">Nové fotoalbum bylo vytvořeno v #VAR1#</string>
-  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Složka nebyla nalezena. V případě, že byla složka smazána pomocí FTP nebo je nedostupná, smažte ji prosím v Admidio.\nHosté bez oprávnění ke správě fotografií nemohou vybrané album zobrazit.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Album je momentálně uzamčeno a z tohoto důvodu se nebude zobrazovat návštěvníkům ani členům.</string>
   <string name="SYS_ALL">Vše</string>
   <string name="SYS_ALL_CONTACTS">Všechny kontakty</string>
@@ -254,7 +252,6 @@
   <string name="SYS_ALLOW_USER_COMMENTS">Povolit komentáře v rámci účasti</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Účastníci mohou svou účast komentovat. Komentáře lze zobrazit prostřednictvím seznamu účastníků.</string>
   <string name="SYS_ALSO_VISITORS">Také návštěvníci</string>
-  <string name="SYS_ANNOUNCEMENT">Oznámení</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Oznámení bylo změněno v #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Nové oznámení bylo vytvořeno v #VAR1#</string>
   <string name="SYS_ANNOUNCEMENTS">Oznámení</string>
@@ -315,7 +312,6 @@
   <string name="SYS_CAPTION_SIZE_DESC">Velikost titulku je proporcionální k velikosti obrázku, vypočtená podle vzorce \\"Velikost obrázku / Dělitel\\". Zvýšením dělitele se velikost písma sníží. (Výchozí: 40)</string>
   <string name="SYS_CARBON_COPY">Kopie (CC)</string>
   <string name="SYS_CAT_SELECTION">Výběr kategorie</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Výběr kategorie lze použít k omezení konfigurace na členy rolí vybraných kategorií. Pokud není vyžadováno žádné omezení, musí zůstat obě pole (výběr role i výběr kategorie) prázdná.</string>
   <string name="SYS_CATEGORIES">Kategorie</string>
   <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Členové této role jsou administrátory modulu a mají přístup ke všemu. Mohou vytvářet, upravovat, mazat data a upravovat kategorie a jejich práva. Roli lze učinit administrátorskou přiřazením práva #VAR1_BOLD#.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Všichni administrátoři modulu nadřazené organizace</string>
@@ -346,6 +342,15 @@
   <string name="SYS_CLOCK">hodin</string>
   <string name="SYS_CODING">Kódování</string>
   <string name="SYS_COLOR_BACKGROUND">Barva pozadí</string>
+  <string name="SYS_COLOR_BACKGROUND_DESC">Barva pozadí použitá na všech stránkách Admidio.</string>
+  <string name="SYS_COLOR_PRIMARY">Primární barva</string>
+  <string name="SYS_COLOR_PRIMARY_DESC">Hlavní barva použitá v Admidio. Tuto barvu bude používat záhlaví stránek, nadpisy, odkazy a tlačítka.</string>
+  <string name="SYS_COLOR_SECONDARY">Sekundární barva</string>
+  <string name="SYS_COLOR_SECONDARY_DESC">Sekundární barva použitá v Admidio. Tuto barvu používá pozadí bočního panelu, bublinová nápověda nebo informační upozornění.</string>
+  <string name="SYS_COLOR_TERTIARY">Terciární barva</string>
+  <string name="SYS_COLOR_TERTIARY_DESC">Terciární barva použitá v Admidio. Tuto barvu používá pozadí oblastí, jako je přehled skupin a rolí, nastavení nebo navigační cesta.</string>
+  <string name="SYS_COLOR_TEXT">Barva textu</string>
+  <string name="SYS_COLOR_TEXT_DESC">Barva textu používaná v celém systému Admidio.</string>
   <string name="SYS_COLUMN">Sloupec</string>
   <string name="SYS_COLUMN_POS">Sloupec #VAR1#</string>
   <string name="SYS_COLUMN_SELECTION">Výběr sloupců</string>
@@ -363,8 +368,6 @@
   <string name="SYS_CONFIGURATION_DELETE">Chcete smazat vybranou konfiguraci seznamu?</string>
   <string name="SYS_CONFIGURATION_LIST">Konfigurace seznamu</string>
   <string name="SYS_CONFIGURATION_SAVE">Vyberte prosím název pro sadu konfigurace.</string>
-  <string name="SYS_CONFIGURATIONS">Konfigurace</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Zde lze vytvořit libovolný počet konfigurací pro report kategorie. Při zobrazení na obrazovce se v každém případě použije jedna z těchto konfigurací jako základ pro zobrazení prostřednictvím \\"Vybrat konfiguraci\\".</string>
   <string name="SYS_CONFIGURE_LISTS">Konfigurovar seznamy</string>
   <string name="SYS_CONFIGURE_LISTS_DESC">Uživatelé si mohou vytvářet vlastní seznamy s vybranými profilovými poli a ty pak aplikovat na skupiny a role. K dispozici jsou pouze profilová pole a skupiny nebo role, které smí aktuální uživatel vidět. Tímto nastavením lze určit, kdo může takové seznamy vytvářet. (Výchozí: Všichni)</string>
   <string name="SYS_CONFIRM_PASSWORD">Potvrdit heslo</string>
@@ -390,7 +393,6 @@
   <string name="SYS_COPIED_CLIPBOARD">Zkopírováno do schránky ...</string>
   <string name="SYS_COPY">Kopírovar</string>
   <string name="SYS_COPY_CLIPBOARD">Kopírovat do schránky</string>
-  <string name="SYS_COPY_CONFIGURATION">Kopírovat konfiguraci</string>
   <string name="SYS_COPY_ENTRY">Kopírovat záznam</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Vámi vyžádaná kopie zprávy</string>
   <string name="SYS_COPY_VAR">Kopírovat #VAR1#</string>
@@ -470,7 +472,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Výchozí přiřazení registrace</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Pokud je vytvořen nový uživatel nebo přijata nová registrace, je mu automaticky přiřazena tato role. Pokud má tvůrce právo přiřazovat role, zobrazí se všechna mapování rolí a lze je odpovídajícím způsobem změnit.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Výchozí konfigurace</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Jednu ze zde uvedených konfigurací lze nastavit jako výchozí konfiguraci pro report kategorií této organizace. Vybraná konfigurace se zobrazí přímo při vyvolání reportu.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Jednu ze zde uvedených konfigurací lze nastavit jako výchozí konfiguraci pro seznamy této organizace. Seznamy členů rolí, které nemají uloženou žádnou konfiguraci seznamu, se zobrazí s touto konfigurací.</string>
   <string name="SYS_DEFAULT_COUNTRY">Výchozí země</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Definujte zemi, pro kterou tato organizace hlavně působí. Bude přednastavena při vytváření nebo registraci nových uživatelů. Usnadňuje zadávání dat a uživatel ji může změnit.</string>
@@ -532,7 +533,7 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Kategorii #VAR1_BOLD# se nepodařilo smazat kvůli #VAR2# závislým záznamům.</string>
   <string name="SYS_DONT_SHOW">Nezobrazovat</string>
   <string name="SYS_DOWNLOAD_ALBUM">Stáhnout album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Atáhnout zálohu databáze</string>
+  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Stáhnout zálohu databáze</string>
   <string name="SYS_DOWNLOAD_FILE">Stáhnout soubor</string>
   <string name="SYS_DOWNLOAD_ICAL">Stáhnout iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Stáhnout fotku</string>
@@ -582,7 +583,6 @@
   <string name="SYS_EDIT_VAR">Upravit #VAR1#</string>
   <string name="SYS_EDIT_WEBLINK">Upravit webový odkaz</string>
   <string name="SYS_EDIT_WEBLINKS">Upravit webové odkazy</string>
-  <string name="SYS_EDITED_BY">Naposledy upravil</string>
   <string name="SYS_EMAIL">E-mail</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-mail administrátora</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profilová data uživatele #VAR1# #VAR2# (přihlášení: #VAR3#) byla změněna uživatelem #VAR4#.</string>
@@ -633,7 +633,6 @@
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">Členství vybraných uživatelů v #VAR1_BOLD# byla úspěšně ukončena!</string>
   <string name="SYS_ENTRY">Záznam</string>
   <string name="SYS_ERROR">Chyba</string>
-  <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Seznam #VAR1_BOLD# je v této organizaci uložen jako výchozí konfigurace pro modul #VAR2# a nelze jej smazat. V nastavení modulu nastavte jinou výchozí konfiguraci a poté se pokuste tuto konfiguraci smazat.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">CHYBA 404 - STRÁNKA NENALEZENA!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID chybí</string>
   <string name="SYS_EVENT">Událost</string>
@@ -662,7 +661,6 @@
   <string name="SYS_EXTENSIONS_AVAILABLE">Rozšíření k dispozici</string>
   <string name="SYS_FACEBOOK">Facebook</string>
   <string name="SYS_FAVICON_FILE">Soubor Favicon</string>
-  <string name="SYS_FAVICON_FILE_DESC">Cesta k souboru favicon pro vaši instalaci. Cesta by měla být relativní k hlavnímu adresáři vaší instalace. Pokud zůstane prázdná, použije se výchozí favicon tématu. (výchozí: prázdné)</string>
   <string name="SYS_FEMALE">Žena</string>
   <string name="SYS_FIELD">Pole</string>
   <string name="SYS_FIELD_EMPTY">Pole #VAR1_BOLD# je prázdné.</string>
@@ -697,7 +695,6 @@
   <string name="SYS_FOLDER">Složka</string>
   <string name="SYS_FOLDER_EXISTS">Složka #VAR1# již existuje!\n\nVyberte prosím jiný název složky.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Název složky chybí!</string>
-  <string name="SYS_FOLDER_NAME_INVALID">Vybraný název složky #VAR1_BOLD# obsahuje neplatné znaky. Zkontrolujte prosím název složky.\n\nNásledující speciální znaky nejsou povoleny: ? * ~ ; : \\" | &lt; &gt; / \</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Pro návštěvníky nejsou k dispozici žádné dokumenty ani soubory.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Nemáte oprávnění k zobrazení vybrané složky.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Složku #VAR1_BOLD# nelze vytvořit.\n\nPožádejte prosím #VAR2#administrátora#VAR3# o pomoc s kontrolou práv pro zápis do nadřazené složky.</string>
@@ -743,10 +740,7 @@
   <string name="SYS_GROUPS_ROLES_DESC">Přehled a správa všech skupin a rolí organizace. Lze zobrazit a exportovat různé seznamy členů a vytvářet vlastní seznamy.</string>
   <string name="SYS_HALF_YEARLY">Pololetně</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP hlavička již byla odeslána!</string>
-  <string name="SYS_HEADER_CONTENT_MODULES">Obsahové moduly (dokumenty, události, oznámení atd.)</string>
-  <string name="SYS_HEADER_PREFERENCES">Obecné předvolby</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Profilová data uživatele a role</string>
-  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Nastavení pro uživatele a skupiny/role</string>
   <string name="SYS_HEADLINE">Nadpis</string>
   <string name="SYS_HIDDEN">Skryté</string>
   <string name="SYS_HIGHLIGHT_EVENT">Zvýraznit událost</string>
@@ -898,7 +892,6 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW">Nastavení zobrazení v profilu</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">Vybraná pole položek se zobrazí v náhledu profilu člena, pokud je povolena možnost „Zobrazit v náhledu profilu“. Ve výchozím nastavení se zobrazuje pouze název položky. (Výchozí: „Poslední příjemce“)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">Zobrazit v náhledu profilu</string>
-  <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">Pokud je tato možnost povolena, položky spravované členem a položky vypůjčené členem se zobrazí v náhledu profilu daného člena. (Výchozí: ano)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Pole vlastností pro zobrazení v náhledu profilu</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">Tabulka zobrazuje položky, které spravujete:</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">Tabulka zobrazuje položky, které máte vypůjčené:</string>
@@ -961,12 +954,8 @@
   <string name="SYS_LOCK_ALBUM_DESC">Uzamčená alba nemohou prohlížet návštěvníci ani členové, např. album můžete uzamknout po dobu nahrávání všech obrázků.</string>
   <string name="SYS_LOCKED">Uzamčeno</string>
   <string name="SYS_LOG">Protokol</string>
-  <string name="SYS_LOG_ALLOW_DELETION">Povolit smazání historie změn</string>
-  <string name="SYS_LOG_ALLOW_DELETION_DESC">Povolit tlačítko na stránce protokolu změn pro smazání části nebo celé historie změn.</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">Některé nebo všechny záznamy v protokolu změn byly skryty kvůli nedostatečným oprávněním uživatele k přístupu.</string>
-  <string name="SYS_LOGGED_TABLES">Protokolované tabulky</string>
-  <string name="SYS_LOGGED_TABLES_DESC">Vyberte všechny typy objektů pro protokol změn. U těchto objektů budou v historii změn protokolovány všechny jednotlivé úpravy se starou a novou hodnotou, stejně jako čas úpravy a uživatel. Pokud je typ objektu odškrtnut, stávající záznamy protokolu se nesmažou. To lze provést na stránce protokolu změn.</string>
   <string name="SYS_LOGIN">Přihlásit se</string>
+  <string name="SYS_LOGIN_CANCEL">Zrušit</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">V poslední době jste se pokusili přihlásit příliš mnohokrát pomocí nesprávného hesla.\nZ bezpečnostních důvodů byl váš účet na 15 minut zablokován.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Zvolené uživatelské jméno již existuje.\n\nVyberte prosím jiné jméno.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Váš účet ještě nebyl aktivován.\n\nBudete informováni, jakmile bude přístup možný.</string>
@@ -1135,7 +1124,6 @@
   <string name="SYS_NOTIFICATION_ROLE">Oznamovací role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Členové této role dostávají oznámení o nových nebo změněných záznamech v modulech a změnách v profilových údajích členů. Z důvodu ochrany osobních údajů lze ukládat pouze role, které mají právo role #VAR1_BOLD#.</string>
   <string name="SYS_NUMBER">Číslo</string>
-  <string name="SYS_SUMMARY_ROW_DESC">Příslušné zaškrtávací políčko musí být aktivováno, pokud chcete na konci reportu zobrazit řádek s počtem členství.</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Počet alb na stránku</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Počet záznamů na stránku</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Počet záznamů, které se zobrazují na jedné stránce. Pokud je záznamů více, přidá se na stránku stránkování. Pokud je hodnota 0, vypíší se všechny záznamy na jedné stránce a stránkování se deaktivuje. (Výchozí nastavení: #VAR1#)</string>
@@ -1227,7 +1215,6 @@
   <string name="SYS_PLEASE_CHOOSE">Vyberte možnost</string>
   <string name="SYS_PLUGIN_MANAGER">Správce rozšíření</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Zde můžete spravovat doplňky systému Admidio. Doplňky jsou přídavné moduly, které lze nainstalovat pro rozšíření funkcí systému. Doplňky můžete instalovat, aktualizovat nebo odebírat.</string>
-  <string name="SYS_PLUGIN_NOT_INSTALLED">Doplněk není nainstalován.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Předvolby doplňku</string>
   <string name="SYS_PLUGIN_UPDATE">Aktualizovat doplněk</string>
   <string name="SYS_PLUGIN_VERSION">Verze doplňku</string>
@@ -1246,7 +1233,6 @@
   <string name="SYS_PREVIOUS_PHOTO">Předchozí obrázek</string>
   <string name="SYS_PREVIOUS_VALUE">Předchozí hodnota</string>
   <string name="SYS_PRINT_PREVIEW">Náhled tisku</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Soukromou zprávu se nepodařilo odeslat uživateli #VAR1_BOLD#.\n\nDošlo k následující chybě:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Soukromá zpráva byla odeslána uživateli #VAR1_BOLD#.</string>
   <string name="SYS_PRIVATE_MESSAGES">Soukromé zprávy</string>
   <string name="SYS_PRNG">Generátor pseudonáhodných čísel</string>
@@ -1290,12 +1276,11 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Úspěšně jste potvrdili svou registraci. Nyní se můžete přihlásit pomocí svého uživatelského jména a hesla.</string>
   <string name="SYS_REGISTRATIONS">Registrace</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulární výraz</string>
-  <string name="SYS_REGULAR_EXPRESSION_DESC">>Lze uložit libovolný regulární výraz, který bude aplikován na obsah zadaný uživatelem v tomto profilovém poli. Obsah musí odpovídat podmínkám regulárního výrazu, aby mohla být zadaná hodnota do pole uložena. Regulární výraz se kontroluje nad rámec obecných podmínek datového typu.</string>
+  <string name="SYS_REGULAR_EXPRESSION_DESC">Lze uložit libovolný regulární výraz, který bude aplikován na obsah zadaný uživatelem v tomto profilovém poli. Obsah musí odpovídat podmínkám regulárního výrazu, aby mohla být zadaná hodnota do pole uložena. Regulární výraz se kontroluje nad rámec obecných podmínek datového typu.</string>
   <string name="SYS_RELATED_TO">Související položka</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Konfigurace vztahů</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Konfigurace vztahů</string>
   <string name="SYS_RELATIONSHIP_TYPE_DELETE">Chcete odstranit tento typ vztahu #VAR1_BOLD#? Varování: Tím smažete všechny existující vztahy tohoto typu.</string>
-  <string name="SYS_RELATIONSHIP_TYPE_DESC">Asymetrický vztah se používá např. pro rodiče / dítě, zatímco symetrické vztahy lze použít např. pro sourozence. Ty jsou vždy obousměrné, nicméně jednosměrné vztahy označují pouze jeden směr.</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Je-li nastaveno, může uživatel upravovat profil jiného uživatele, se kterým je ve vztahu. U asymetrického vztahu se právo přiřazuje zvlášť pro každý vztah, u symetrického vztahu mohou oba uživatelé upravovat profil toho druhého a v případě jednosměrného vztahu může druhý profil upravovat pouze uživatel, u kterého je vztah uložen.</string>
   <string name="SYS_RELOAD">Znovu načíst</string>
   <string name="SYS_REMEMBER_ME">Zůstat přihlášen</string>
@@ -1353,7 +1338,6 @@
   <string name="SYS_ROLE_RIGHTS">Práva role</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Nemáte oprávnění vybrat roli #VAR1#.\nZkuste prosím vybrat jinou roli.</string>
   <string name="SYS_ROLE_SELECTION">Výber role</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Výběr role lze použít k omezení konfigurace na členy vybraných rolí. Pokud není vyžadováno žádné omezení, musí zůstat obě pole (výběr role i výběr kategorie) prázdná.</string>
   <string name="SYS_ROLE_TYPES">Typy rolí</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Role bez vedoucího</string>
   <string name="SYS_ROLES">Role</string>
@@ -1423,7 +1407,6 @@
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Pokud je tato možnost nastavena, lze posílat e-maily jednotlivým bývalým členům i všem bývalým členům role. (Výchozí: Aktivováno)</string>
   <string name="SYS_SEND_EMAIL_TO">Odeslat email uživateli #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Posílat e-maily na všechny e-mailové adresy uživatele</string>
-  <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Pokud je toto nastavení aktivováno, e-maily budou zasílány na všechny e-mailové adresy uživatele uložené v profilu. Pokud je deaktivováno, budou e-maily zasílány pouze na adresu z profilového pole s interním názvem EMAIL. (Výchozí: povoleno)</string>
   <string name="SYS_SEND_GREETING_CARD">Poslat blahopřání</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Odeslat přihlašovací údaje</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Váš e-mail bude odeslán všem členům vybrané role. Další role a příjemci jsou k dispozici pouze pro přihlášené uživatele.</string>
@@ -1439,7 +1422,6 @@
   <string name="SYS_SENDER">Odesílatel</string>
   <string name="SYS_SENDER_EMAIL">E-mail odesílatele</string>
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">E-mailová adresa odesílatele pro zasílání systémových oznámení a e-mailů rolím a uživatelům. E-mailová adresa by měla obsahovat doménu webu, na kterém je Admidio nainstalováno.</string>
-  <string name="SYS_SENDER_MODE_DESC">Určete, jakým způsobem se ověřuje odesílatel e-mailu. Mnoho poskytovatelů nepovoluje, aby odesílatel e-mailu používal e-mailovou adresu z jiné domény. V takovém případě by měla být vybrána jedna ze dvou možností se systémovým e-mailem. Odpovídající e-mailovou adresu a jméno lze uložit v následujících dvou nastaveních. (Výchozí: #VAR1#)</string>
   <string name="SYS_SENDER_NAME">Jméno odesílatele</string>
   <string name="SYS_SENDER_NAME_DESC">Jméno u e-mailové adresy odesílatele. Toto pole musí být vyplněno, pokud pole pro e-mailovou adresu odesílatele není prázdné.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Odesílatel nebyl přihlášen. Informace o odesílateli proto mohou být nesprávné.</string>
@@ -1465,7 +1447,6 @@
   <string name="SYS_SHOW_MAP_LINK">Zobrazit odkaz na mapu</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Pokud je poloha nastavena, Google Maps se použijí k zobrazení polohy a trasy z vlastní polohy. (výchozí: ano)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Je-li adresa uložena v profilu, zobrazí se vedle ní dva odkazy na Google Maps. Jeden odkazuje na místo bydliště uživatele a druhý na trasu z vlastního bydliště k bydlišti zobrazeného uživatele. Při přístupu k odkazům budou společnosti Google předány následující informace o profilu: ulice, PSČ, město a země. (Výchozí: ne)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Zobrazit seznam členů</string>
   <string name="SYS_SHOW_MORE">Zobrazit více</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Zobrazit zastaralé možnosti výběru</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Toto nastavení umožňuje určit, zda se mají v konfiguraci profilových polí zobrazovat zastaralé možnosti výběru. Pokud je toto nastavení aktivováno, lze zastaralé možnosti výběru obnovit.\nTato volba je k dispozici pouze pro profilová pole typu rozbalovací seznam a přepínač. (Výchozí: ano)</string>
@@ -1502,141 +1483,73 @@
   <string name="SYS_SMTP_PORT">SMTP port</string>
   <string name="SYS_SMTP_PORT_DESC">Určení portu, který má být použit pro navázání SMTP spojení. (Výchozí: 587)</string>
   <string name="SYS_SMTP_SECURE">SMTP šifrování</string>
-  <string name="SYS_SMTP_SECURE_DESC">Zde si můžete vybrat, zda a jak má být SMTP spojení šifrováno. (Výchozí: TLS)</string>
-  <string name="SYS_SMTP_SECURE_NO">ne</string>
-  <string name="SYS_SMTP_SECURE_SSL">SSL</string>
-  <string name="SYS_SMTP_SECURE_TLS">TLS</string>
   <string name="SYS_SMTP_USER">SMTP uživatelké jméno</string>
   <string name="SYS_SMTP_USER_DESC">Uživatelské jméno použité při SMTP autentizaci.</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Chcete nastavit odkaz na svůj profil v této sociální síti? Je vyžadováno vaše přihlašovací jméno. Přihlaste se ke svému účtu v sociální síti a přejděte na svůj profil. Nyní zkopírujte URL do tohoto pole a uložte zde svůj profil. Návštěvníci vašeho profilu si nyní budou moci otevřít váš profil přímo.</string>
   <string name="SYS_SOCIAL_NETWORKS">Sociální sítě</string>
   <string name="SYS_SSO">Single-Sign-On</string>
-  <string name="SYS_SSO_ACS_URL">ACS URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">Adresa URL služby Assertion Consumer Servicer (ACS) je hlavním vstupním bodem klienta. Po úspěšném přihlášení do Admidio bude uživatel přesměrován na tuto adresu URL a přihlášen u klienta.</string>
   <string name="SYS_SSO_ATTRIBUTE">Název SSO atributu</string>
   <string name="SYS_SSO_ATTRIBUTES">Zahrnuté uživatelské atributy</string>
   <string name="SYS_SSO_ATTRIBUTES_ALLOTHER">Zahrnout všechna zbývající pole s interním názvem pole Admidio</string>
   <string name="SYS_SSO_ATTRIBUTES_DESC">Vyberte všechna uživatelská pole, která mají být po úspěšném přihlášení předána poskytovateli služeb. Pro každé pole lze uvést mapování na název SSO atributu. Pokud zůstane sloupec SSO prázdný, použije se místo něj název pole Admidio.</string>
   <string name="SYS_SSO_ATTRIBUTES_NOOTHER">Nezahrnovat standardní nároky kromě těch, které jsou zde uvedeny.</string>
   <string name="SYS_SSO_AUTO_SETUP">Automatické nastavení z metadat</string>
-  <string name="SYS_SSO_CERT_COMMON_NAME">Common name</string>
-  <string name="SYS_SSO_CERT_ORGANIZATION_UNIT">Organizační jednotka</string>
   <string name="SYS_SSO_CERT_STATE">Stát nebo provincie</string>
   <string name="SYS_SSO_CERTIFICATE_FAILURE">Generování certifikátu selhalo: #VAR1#</string>
   <string name="SYS_SSO_CERTIFICATE_SETTINGS">Nastavení certifikátu</string>
   <string name="SYS_SSO_CLIENT_ADD_OIDC">Nový OIDC klient</string>
   <string name="SYS_SSO_CLIENT_ADD_SAML">Nový SAML 2.0 klient</string>
-  <string name="SYS_SSO_CLIENT_ADMIN">Administrace Single-Sign-On klientů (SAML 2.0, OIDC)</string>
-  <string name="SYS_SSO_CLIENT_ADMIN_DESC">Admidio lze použít jako \"poskytovatele identity\" (ID Provider) pro jednotné přihlášení pomocí protokolů SAML 2.0 nebo OIDC. To znamená, že jiné webové aplikace (\"klienti\") mohou používat uživatelské účty Admidio pro autentizaci a autorizaci. Každý klient musí být registrován zde a klient musí být také nastaven pro SSO s Admidio. Pokud se uživatel chce přihlásit ke klientské aplikaci, je místo přihlašovací obrazovky klienta přesměrován do Admidio. Pokud je uživatel již v Admidio přihlášen, je vrácen zpět klientovi a je mu udělen přístup. V opačném případě se uživatel může přihlásit do Admidio a poté je přesměrován zpět do klientské aplikace.</string>
   <string name="SYS_SSO_CLIENT_DELETE">Smazat SSO klienta</string>
   <string name="SYS_SSO_CLIENT_ID">ID klienta</string>
-  <string name="SYS_SSO_CLIENT_ID_DESC">Jedinečný identifikátor klienta, obvykle poskytovaný klientskou aplikací. Zpravidla se jedná o unikátní URL nebo náhodně vygenerovaný řetězec. Je důležité, aby se hodnota zde přesně shodovala s hodnotou v konfiguraci klienta, jinak nebude propojení fungovat.</string>
   <string name="SYS_SSO_CLIENT_NAME">Název klienta</string>
-  <string name="SYS_SSO_CLIENT_NAME_DESC">Čitelný název klienta. Jedná se o čistě popisný atribut a nepoužívá se k identifikaci klienta systémem.</string>
   <string name="SYS_SSO_CLIENT_OIDC">OIDC klient</string>
   <string name="SYS_SSO_CLIENT_SAML">SAML 2.0 klient</string>
   <string name="SYS_SSO_CLIENT_SCOPES">Povolené rozsahy</string>
-  <string name="SYS_SSO_CLIENT_SCOPES_DESC">Rozsahy jsou skupiny informací o uživateli, které může klient vyžadovat. Standard OIDC definuje určité předdefinované rozsahy (nepovinné). Povinný je pouze rozsah, který bude přidán automaticky. Výběr dalších rozsahů umožňuje Admidio sdílet příslušná profilová data s klientem.</string>
   <string name="SYS_SSO_CLIENT_SECRET">Tajný klíč klienta</string>
-  <string name="SYS_SSO_CLIENT_SECRET_DESC">Tajná fráze pro autentizaci klienta. Obvykle náhodný řetězec, který se vymění jednou při nastavení. Při vytvoření se tajný klíč zobrazí pouze jednou a měl by být zkopírován do klienta. Poté je v databázi uložen jako hash, takže jej nelze zpětně získat. Lze pouze vygenerovat nový klíč a ten znovu zkopírovat do konfigurace klienta.</string>
-  <string name="SYS_SSO_CLIENT_SECRET_HIDDE">Z bezpečnostních důvodů se tajný klíč klienta zobrazuje pouze při vytvoření.</string>
-  <string name="SYS_SSO_CLIENT_SECRET_RECREATE">Znovu vygenerovat</string>
-  <string name="SYS_SSO_CLIENTS_OIDC">Klienti OpenID Connect (OIDC)</string>
   <string name="SYS_SSO_CLIENTS_SAML">SAML 2.0 klienti</string>
-  <string name="SYS_SSO_EDIT_OIDC_CLIENT">Upravit OIDC klienta (Service Provider)</string>
   <string name="SYS_SSO_EDIT_SAML_CLIENT">Upravit SAML klienta (Service Provider)</string>
   <string name="SYS_SSO_ENCRYPT_ASSERTIONS">Šifrovat tvrzení zasílaná klientovi (SP)</string>
   <string name="SYS_SSO_ENCRYPTION_KEY">Klíč pro šifrování</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Heslo pro export klíče</string>
-  <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Exportovaný soukromý klíč a certifikát mohou a měly by být z bezpečnostních důvodů zašifrovány heslem. Toto heslo je vyžadováno pro otevření nebo import staženého souboru. Bez tohoto hesla nelze klíč ze souboru obnovit. Použití prázdného hesla je možné, ale důrazně se nedoporučuje!</string>
   <string name="SYS_SSO_INVALID_CLIENT">Neplatný klient</string>
   <string name="SYS_SSO_KEY">SSO Klíč</string>
-  <string name="SYS_SSO_KEY_ACTIVE">Klíč aktivní</string>
-  <string name="SYS_SSO_KEY_ACTIVE_DESC">Určuje, zda je klíč aktuálně aktivní a lze jej použít pro podepisování nebo šifrování.</string>
   <string name="SYS_SSO_KEY_ADD">Nový klíč</string>
-  <string name="SYS_SSO_KEY_ADMIN">Správa kryptografických klíčů SSO</string>
   <string name="SYS_SSO_KEY_ALGORITHM">Kryptografický algoritmus</string>
-  <string name="SYS_SSO_KEY_ALGORITHM_DESC">Základní kryptografický algoritmus klíče.</string>
-  <string name="SYS_SSO_KEY_CERTIFICATE">x509 certifikát</string>
   <string name="SYS_SSO_KEY_DELETE">Smazat klíč</string>
   <string name="SYS_SSO_KEY_EDIT">Upravit klíč</string>
   <string name="SYS_SSO_KEY_EXPIRES">Datum expirace</string>
   <string name="SYS_SSO_KEY_EXPORT">Exportovat soukromý klíč</string>
   <string name="SYS_SSO_KEY_EXPORT_FAILURE">Export klíče selhal: #VAR1#</string>
   <string name="SYS_SSO_KEY_IN_USE">Tento klíč je aktuálně používán jako konfigurovaný klíč pro podepisování nebo šifrování.</string>
-  <string name="SYS_SSO_KEY_NAME_DESC">Čitelný popis klíče, slouží pouze pro vizuální rozlišení.</string>
-  <string name="SYS_SSO_KEY_NOT_FOUND">Klíč nebyl v databázi nalezen nebo je záznam v databázi neúplný.</string>
   <string name="SYS_SSO_KEY_PRIVATE">Soukromý klíč</string>
   <string name="SYS_SSO_KEY_PRIVATE_NOT_SHOWN">Z bezpečnostních důvodů je soukromý klíč skryt. Klíč však můžete exportovat do souboru.</string>
   <string name="SYS_SSO_KEY_PUBLIC">Veřejný klíč</string>
   <string name="SYS_SSO_KEY_SETTING">Nastavení kryptografického klíče</string>
   <string name="SYS_SSO_KEYS">SSO klíče</string>
   <string name="SYS_SSO_LOAD_METADATA">Načíst metadata klienta</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Přihlášení proběhlo úspěšně, ale váš uživatelský účet nemá oprávnění k přístupu k poskytovateli služeb (#VAR1#). Zkuste se prosím přihlásit pod jiným účtem níže nebo se vraťte k poskytovateli služeb.</string>
   <string name="SYS_SSO_METADATA_URL">URL metadat (volitelné)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Někteří klienti nabízejí soubor metadat se všemi požadovanými nastaveními. Automatické načtení této URL metadat funguje pouze v případě, že je URL dostupná pro server Admidio.</string>
-  <string name="SYS_SSO_NAME_PROPERTIES">Název a vlastnosti klienta (Service Provider)</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nejsou nakonfigurovány žádné kryptografické klíče pro podepisování nebo šifrování zpráv SAML nebo OIDC!</string>
-  <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">Nejsou nakonfigurováni žádní OIDC klienti (Service Providers)!</string>
-  <string name="SYS_SSO_NO_SAML_CLIENTS_FOUND">Nejsou nakonfigurováni žádní SAML klienti (Service Providers)!</string>
-  <string name="SYS_SSO_OIDC">Single-Sign-On s OpenId Connect (OIDC)</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES">Nároky ve vlastním rozsahu a přepsání polí</string>
-  <string name="SYS_SSO_OIDC_ATTRIBUTES_DESC">Vyberte všechna uživatelská pole, která mají být zahrnuta do rozsahu „custom“. Dále je zde možné mapování standardních nároků, např. můžete mapovat mobilní telefon na nárok „phone“ nebo použít vlastní profilové pole pro nárok „profile“.</string>
-  <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Koncový bod autentizace</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC nárok</string>
   <string name="SYS_SSO_OIDC_DISCOVERY_URL">URL pro objevování</string>
-  <string name="SYS_SSO_OIDC_ENABLED">Povolit Single-Sign-On přes OpenId Connect (OIDC)</string>
-  <string name="SYS_SSO_OIDC_ENABLED_DESC">Toto nastavení změní Admidio na poskytovatele identity (IdP) pro jednotné přihlášení, což umožní ostatním webovým aplikacím autentizovat uživatele proti seznamu uživatelů Admidio.</string>
-  <string name="SYS_SSO_OIDC_ISSUER_URL">Vydavatel</string>
-  <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Jedinečný identifikátor pro OIDC této instance Admidio. Obvykle se jedná o základní URL vaší instalace Admidio. Klient musí být nastaven se stejným ID entity, jinak přihlášení nebude fungovat.</string>
-  <string name="SYS_SSO_OIDC_JWKS_ENDPOINT">Koncový bod JWKS</string>
-  <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Koncový bod odhlášení</string>
   <string name="SYS_SSO_OIDC_ROLE">Název OIDC role</string>
-  <string name="SYS_SSO_OIDC_TOKEN_ENDPOINT">Koncový bod tokenu</string>
-  <string name="SYS_SSO_OIDC_USERINFO_ENDPOINT">Koncový bod Userinfo</string>
   <string name="SYS_SSO_REDIRECT_URI">URI přesměrování</string>
-  <string name="SYS_SSO_REDIRECT_URI_DESC">URI přesměrování, na které je prohlížeč přesměrován po úspěšném přihlášení.</string>
-  <string name="SYS_SSO_REQUIRE_AUTHN_SIGNED">Vyžadovat, aby všechny přijaté požadavky byly podepsány klientem (SP)</string>
   <string name="SYS_SSO_ROLE">Název SSO role</string>
   <string name="SYS_SSO_ROLES">Omezit přístup k rolím</string>
   <string name="SYS_SSO_ROLES_ALLOTHER">Zahrnout všechny zbývající role s nezměněným názvem role Admidio</string>
-  <string name="SYS_SSO_ROLES_DESC">Ke klientovi se prostřednictvím jednotného přihlášení smí přihlásit pouze vybrané role. Pokud zůstane prázdné, mohou se přihlásit všichni platní uživatelé Admidio.</string>
   <string name="SYS_SSO_ROLESMAP">Zahrnuté skupiny/role</string>
-  <string name="SYS_SSO_ROLESMAP_DESC">Vyberte všechny role, které mají být předány klientu SSO po úspěšném přihlášení. Protože mnoho klientů používá předaný název role doslovně, můžete zde mapovat názvy rolí Admidio na názvy rolí požadované na straně klienta / poskytovatele služeb. Pokud zůstane cílový název role prázdný, použije se původní název role Admidio.</string>
   <string name="SYS_SSO_SAML">Single-Sign-On s SAML 2.0</string>
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW">Povolená časová odchylka</string>
-  <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">SAML a platnost přihlášení závisí také na synchronizovaných hodinách. Protože některé systémy mohou mít mírný časový rozdíl, toto nastavení umožňuje povolit určité odchylky v čase.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Životnost SAML tvrzení zasílaných klientovi</string>
-  <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Po úspěšné autentizaci je klientovi zasláno „tvrzení“. Tato konfigurace určuje, jak dlouho (v sekundách) má být toto tvrzení klientem považováno za platné.</string>
-  <string name="SYS_SSO_SAML_ENABLED">Povolit Single-Sign-On přes SAML 2.0</string>
-  <string name="SYS_SSO_SAML_ENABLED_DESC">Toto nastavení změní Admidio na poskytovatele identity (IdP) SAML 2.0 pro jednotné přihlášení, což umožní ostatním webovým aplikacím autentizovat uživatele proti seznamu uživatelů Admidio.</string>
-  <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">Zpráva SAML vyžaduje šifrování, ale klient (SP) nemá nakonfigurovaný žádný certifikát.</string>
-  <string name="SYS_SSO_SAML_ENTITY_ID">SAML Entity Id</string>
-  <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Jedinečný identifikátor pro SAML této instance Admidio. Obvykle URL vaší instalace. Klient musí mít nastaveno přesně stejné ID entity, jinak přihlášení nebude fungovat.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">URL metadat</string>
   <string name="SYS_SSO_SAML_ROLE">Název SAML role</string>
-  <string name="SYS_SSO_SAML_SIGNATURE_FAILED">Validace podpisu zprávy SAML selhala.</string>
-  <string name="SYS_SSO_SAML_SIGNATURE_KEY_MISSING">Zpráva SAML vyžaduje validaci podpisu, ale klient (SP) nemá nakonfigurovaný žádný certifikát.</string>
   <string name="SYS_SSO_SAML_SIGNATURE_MISSING">Zprávě SAML chybí kryptografický podpis.</string>
-  <string name="SYS_SSO_SAML_SLO_ENDPOINT">Koncový bod SLO</string>
-  <string name="SYS_SSO_SAML_SSO_ENDPOINT">Koncový bod SSO</string>
-  <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Vyžadovat podpisy u všech přijatých požadavků</string>
-  <string name="SYS_SSO_SIGN_ASSERTIONS">Podepisovat tvrzení zasílaná klientovi (SP)</string>
-  <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Podpis a šifrování</string>
   <string name="SYS_SSO_SIGNING_KEY">Klíč pro podpisy</string>
-  <string name="SYS_SSO_SLO_URL">URL pro Single Log-Out (volitelné)</string>
-  <string name="SYS_SSO_SLO_URL_DESC">SLO URL je koncový bod klienta pro informování klienta o odhlášení uživatele z Admidio. Z bezpečnostních důvodů budou o odhlášení informovány všechny klientské aplikace s touto adresou URL a měly by uživatele také odhlásit. Ne všechny aplikace SAML tuto adresu poskytují.</string>
   <string name="SYS_SSO_STATIC_SETTINGS">IdP metadata pro nastavení klienta</string>
   <string name="SYS_SSO_USERDATA_ACCESS">Uživatelská data a oprávnění k přístupu</string>
-  <string name="SYS_SSO_USERID_FIELD">Pole pro ID uživatele</string>
-  <string name="SYS_SSO_USERID_FIELD_DESC">Vyberte pole Admidio, které má uživatele jednoznačně identifikovat v klientském systému (Service Provider). Některé systémy očekávají přihlašovací jméno (řetězec), některé pracují s číselnými ID atd. Nahlédněte prosím do manuálu klientské aplikace.</string>
   <string name="SYS_SSO_USERID_FIELDS">Pole ID uživatele</string>
   <string name="SYS_SSO_USERID_ID">ID uživatele (číselné)</string>
   <string name="SYS_SSO_USERID_LOGIN">Přihlašovací jméno</string>
-  <string name="SYS_SSO_USERID_UUID">UUID uživatele (náhodný 32místný řetězec)</string>
-  <string name="SYS_SSO_VALIDATE_SIGNATURES">Validovat podpisy u všech přijatých požadavků</string>
-  <string name="SYS_SSO_X509_CERTIFICATE">x509 klientský certifikát</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Zprávy SAML jsou kryptograficky podepisovány, aby se zabránilo bezpečnostním útokům. Tento certifikát poskytuje klient a musí být zadán/zkopírován přesně tak, jak jej klient poskytl. Jinak komunikace selže a SSO přihlášení nebude možné.</string>
   <string name="SYS_START" description="Start of a date">Začátek</string>
   <string name="SYS_STATUS_CODE_INVALID">Neplatný stavový kód!</string>
   <string name="SYS_STILL_X_CHARACTERS">zbývá #VAR1# znaků</string>
@@ -1759,7 +1672,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Zobrazují se pouze role jiných organizací, které jsou viditelné pro všechny registrované uživatele. Pokud jste členem dané organizace, budou se vám zobrazovat i ty role, které smíte vidět v rámci svých oprávnění v této organizaci.</string>
   <string name="SYS_VIEWS">Zobrazení</string>
   <string name="SYS_VIEWS_VAR">#VAR1# zobrazení</string>
-  <string name="SYS_VISIBILITY">Viditelnost</string>
   <string name="SYS_VISIBLE">Viditelné</string>
   <string name="SYS_VISIBLE_FOR">Viditelné pro</string>
   <string name="SYS_VISITORS">Hosté</string>
