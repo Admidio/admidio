@@ -538,8 +538,17 @@ class EventFormPresenter extends PagePresenter
                 . '<a class="icon-text-link" href="javascript:addEventInventoryReservationRow();"><i class="bi bi-plus-circle-fill"></i> '
                 . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</a></td></tr></tfoot></table></div>'
             );
-            $page->addJavascript('window.addEventInventoryReservationRow = function() {
-                document.getElementById("event_inventory_reservations_rows").insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
+            $page->addJavascript('window.addEventInventoryReservationRow = function(itemId) {
+                const rows = document.getElementById("event_inventory_reservations_rows");
+                if (itemId && Array.from(rows.querySelectorAll("select[name=\\\"event_inventory_items[]\\\"]")).some(function(select) {
+                    return select.value === String(itemId);
+                })) {
+                    return;
+                }
+                rows.insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
+                if (itemId) {
+                    rows.lastElementChild.querySelector("select").value = String(itemId);
+                }
             };', true);
 
             if ((int)$event->getValue('dat_id') > 0) {
@@ -568,7 +577,7 @@ class EventFormPresenter extends PagePresenter
 
                 $reservationStatuses = array();
                 $reservationStatusStatement = $gDb->queryPrepared(
-                    'SELECT ivr_dat_id, ind_value, ivr_status
+                    'SELECT ivr_dat_id, ivr_ini_id, ind_value, ivr_status
                        FROM ' . TBL_INVENTORY_RESERVATIONS . '
                  INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ivr_ini_id
                  INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
@@ -591,11 +600,18 @@ class EventFormPresenter extends PagePresenter
 
                     foreach ($eventReservations as $eventReservation) {
                         $status = $eventReservation['ivr_status'];
+                        $canRequestAgain = $eventId === (int)$event->getValue('dat_id')
+                            && in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true);
                         $statusRows .= '<tr><td>' . SecurityUtils::encodeHTML($statusEvent->getValue('dat_headline')) . '<br><small>'
                             . SecurityUtils::encodeHTML($statusEvent->getDateTimePeriod()) . '</small></td><td>'
                             . SecurityUtils::encodeHTML($eventReservation['ind_value']) . '</td><td>'
                             . '<i class="bi ' . ($reservationStatusIcons[$status] ?? 'bi-question-circle-fill text-secondary') . ' me-1"></i>'
-                            . SecurityUtils::encodeHTML($reservationStatusLabels[$status] ?? $status) . '</td></tr>';
+                            . SecurityUtils::encodeHTML($reservationStatusLabels[$status] ?? $status) . '</td><td class="text-end">'
+                            . ($canRequestAgain
+                                ? '<button type="button" class="btn btn-sm btn-outline-primary" onclick="addEventInventoryReservationRow(' . (int)$eventReservation['ivr_ini_id'] . ');">'
+                                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST_AGAIN')) . '</button>'
+                                : '')
+                            . '</td></tr>';
                     }
                 }
 
@@ -605,7 +621,7 @@ class EventFormPresenter extends PagePresenter
                     '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>'
                     . SecurityUtils::encodeHTML($gL10n->get('SYS_EVENT')) . '</th><th>'
                     . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME')) . '</th><th>'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_STATUS')) . '</th></tr></thead><tbody>'
+                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_STATUS')) . '</th><th></th></tr></thead><tbody>'
                     . $statusRows . '</tbody></table></div>'
                 );
             }

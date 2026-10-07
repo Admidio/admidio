@@ -925,6 +925,7 @@
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE">Reservierungen durch Verwalter verwalten</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE_DESC">Wenn diese Option aktiviert ist, können Verwalter von Gegenständen deren Reservierungsanfragen verwalten. Voraussetzung ist, dass Verwalter Gegenstände bearbeiten dürfen. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST">Reservierung anfragen</string>
+  <string name="SYS_INVENTORY_RESERVATION_REQUEST_AGAIN">Erneut anfragen</string>
   <string name="SYS_INVENTORY_ADD_ITEM">Gegenstand hinzufügen</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST_APPROVED">Die Reservierung wurde genehmigt.</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST_SUBMITTED">Die Reservierung wurde zur Genehmigung eingereicht.</string>

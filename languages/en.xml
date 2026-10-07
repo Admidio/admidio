@@ -926,6 +926,7 @@
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE">Allow item keepers to manage reservations</string>
   <string name="SYS_INVENTORY_RESERVATION_KEEPERS_MANAGE_DESC">When this option is enabled, item keepers can manage reservation requests for their items. Keepers must also be allowed to edit items. (Default: yes)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST">Request reservation</string>
+  <string name="SYS_INVENTORY_RESERVATION_REQUEST_AGAIN">Request again</string>
   <string name="SYS_INVENTORY_ADD_ITEM">Add item</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST_APPROVED">The reservation has been approved.</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUEST_SUBMITTED">The reservation has been submitted for approval.</string>

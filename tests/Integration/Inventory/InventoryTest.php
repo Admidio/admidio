@@ -1279,6 +1279,56 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox A rejected event reservation can be requested again
+     */
+    public function testRejectedEventReservationCanBeRequestedAgain(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationagain', true);
+        $category = $this->getFixture()->createAndSaveCategory('Repeated reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Repeated event reservation projector'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with repeated equipment request');
+            $event->setValue('dat_begin', '2030-08-15 10:00:00');
+            $event->setValue('dat_end', '2030-08-15 12:00:00');
+            $event->save();
+
+            $service = new ReservationService($this->getDatabase());
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-08-15 10:00:00'),
+                new DateTimeImmutable('2030-08-15 12:00:00')
+            );
+
+            $reservationId = (int)$this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchColumn();
+            $service->changeStatus(new Reservation($this->getDatabase(), $reservationId), Reservation::STATUS_REJECTED);
+
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-08-15 10:00:00'),
+                new DateTimeImmutable('2030-08-15 12:00:00')
+            );
+
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? ORDER BY ivr_id',
+                array((int)$event->getValue('dat_id'))
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $this->assertSame(array(Reservation::STATUS_REJECTED, Reservation::STATUS_REQUESTED), $statuses);
+        });
+    }
+
+    /**
      * @testdox Moving an event keeps its approval and rejects conflicting periods
      */
     public function testMovingApprovedEventReservationRejectsConflictsWithoutChangingExistingReservation(): void
