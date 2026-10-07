@@ -111,6 +111,29 @@ class InventoryTest extends DatabaseTestCase
         return (string) $this->getDatabase()->queryPrepared($sql, [$itemId])->fetchColumn();
     }
 
+    /** Create a minimal inventory item assigned to another organization. */
+    private function createForeignOrganizationItem(int $organizationId): int
+    {
+        $categoryId = (int)$this->getDatabase()->queryPrepared(
+            "SELECT cat_id FROM " . TBL_CATEGORIES . " WHERE cat_type = 'IVT' AND cat_org_id = ?",
+            [self::ORG_ID]
+        )->fetchColumn();
+        $statusId = (int)$this->getDatabase()->queryPrepared(
+            "SELECT ifo_id FROM " . TBL_INVENTORY_FIELD_OPTIONS . "\n"
+            . " INNER JOIN " . TBL_INVENTORY_FIELDS . " ON inf_id = ifo_inf_id\n"
+            . " WHERE inf_org_id = ? AND inf_name_intern = 'STATUS' ORDER BY ifo_sequence",
+            [self::ORG_ID]
+        )->fetchColumn();
+
+        $item = new Item($this->getDatabase());
+        $item->setValue('ini_org_id', $organizationId);
+        $item->setValue('ini_cat_id', $categoryId);
+        $item->setValue('ini_status', $statusId);
+        $item->save();
+
+        return (int)$item->getValue('ini_id');
+    }
+
     /**
      * Test that the installation delivers the item fields
      *
@@ -744,6 +767,77 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Reservation services reject inventory items from another organization
+     */
+    public function testReservationServicesRejectItemsFromAnotherOrganization(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationforeignitem', true);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Inventory Organization', 'foreigninventory');
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($organization) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $foreignItemId = $this->createForeignOrganizationItem((int)$organization['org_id']);
+            $service = new ReservationService($this->getDatabase());
+
+            try {
+                $service->isAvailable(
+                    $foreignItemId,
+                    new DateTimeImmutable('2030-04-01 10:00:00'),
+                    new DateTimeImmutable('2030-04-01 12:00:00')
+                );
+                $this->fail('Availability must not be readable for an item from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
+            try {
+                $service->request(
+                    $foreignItemId,
+                    new DateTimeImmutable('2030-04-01 10:00:00'),
+                    new DateTimeImmutable('2030-04-01 12:00:00')
+                );
+                $this->fail('A reservation request must not accept an item from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+        });
+    }
+
+    /**
+     * @testdox Event synchronization rejects inventory items from another organization
+     */
+    public function testEventReservationSynchronizationRejectsItemsFromAnotherOrganization(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationforeignitem', true);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Event Inventory Organization', 'foreigneventinventory');
+        $category = $this->getFixture()->createAndSaveCategory('Foreign inventory event', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($organization, $category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $foreignItemId = $this->createForeignOrganizationItem((int)$organization['org_id']);
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with foreign inventory item');
+            $event->setValue('dat_begin', '2030-04-02 10:00:00');
+            $event->setValue('dat_end', '2030-04-02 12:00:00');
+            $event->save();
+
+            try {
+                (new ReservationService($this->getDatabase()))->syncEventReservations(
+                    (int)$event->getValue('dat_id'),
+                    [$foreignItemId],
+                    new DateTimeImmutable('2030-04-02 10:00:00'),
+                    new DateTimeImmutable('2030-04-02 12:00:00')
+                );
+                $this->fail('Event synchronization must not accept an item from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+        });
+    }
+
+    /**
      * @testdox Item keepers may manage reservations when the organization permits it
      */
     public function testKeeperMayManageReservationsWhenEnabled(): void
@@ -913,6 +1007,113 @@ class InventoryTest extends DatabaseTestCase
                 new DateTimeImmutable('2030-07-15 11:00:00'),
                 new DateTimeImmutable('2030-07-15 13:00:00')
             );
+        });
+    }
+
+    /**
+     * @testdox Reservations allow only the defined lifecycle transitions
+     */
+    public function testReservationLifecycleAllowsValidTransitions(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationtransitions', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Lifecycle projector'));
+            $service = new ReservationService($this->getDatabase());
+            $request = static fn (string $begin) => $service->request(
+                $itemId,
+                new DateTimeImmutable($begin),
+                new DateTimeImmutable($begin . ' +1 hour')
+            );
+
+            $approved = $request('2030-11-01 10:00:00');
+            $service->approve($approved);
+            $this->assertSame(Reservation::STATUS_APPROVED, $approved->getValue('ivr_status'));
+
+            $rejected = $request('2030-11-02 10:00:00');
+            $service->changeStatus($rejected, Reservation::STATUS_REJECTED);
+            $this->assertSame(Reservation::STATUS_REJECTED, $rejected->getValue('ivr_status'));
+
+            $cancelledRequest = $request('2030-11-03 10:00:00');
+            $service->withdraw($cancelledRequest);
+            $this->assertSame(Reservation::STATUS_CANCELLED, $cancelledRequest->getValue('ivr_status'));
+
+            $borrowed = $request('2030-11-04 10:00:00');
+            $service->approve($borrowed);
+            $service->startBorrowing($borrowed);
+            $this->assertSame(Reservation::STATUS_BORROWED, $borrowed->getValue('ivr_status'));
+            $service->finishBorrowing($borrowed);
+            $this->assertSame(Reservation::STATUS_RETURNED, $borrowed->getValue('ivr_status'));
+
+            $cancelledApproved = $request('2030-11-05 10:00:00');
+            $service->approve($cancelledApproved);
+            $service->changeStatus($cancelledApproved, Reservation::STATUS_CANCELLED);
+            $this->assertSame(Reservation::STATUS_CANCELLED, $cancelledApproved->getValue('ivr_status'));
+        });
+    }
+
+    /**
+     * @testdox Completed reservations cannot be changed through invalid lifecycle transitions
+     */
+    public function testReservationLifecycleRejectsInvalidTransitions(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationinvalidtransitions', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Invalid lifecycle projector'));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-12-01 10:00:00'),
+                new DateTimeImmutable('2030-12-01 12:00:00')
+            );
+
+            foreach (array(
+                static fn () => $service->startBorrowing($reservation),
+                static fn () => $service->finishBorrowing($reservation)
+            ) as $transition) {
+                try {
+                    $transition();
+                    $this->fail('A requested reservation must reject invalid lifecycle transitions.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                }
+            }
+
+            $service->approve($reservation);
+            try {
+                $service->changeStatus($reservation, Reservation::STATUS_REJECTED);
+                $this->fail('An approved reservation must not be rejected.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
+            $service->startBorrowing($reservation);
+            try {
+                $service->changeStatus($reservation, Reservation::STATUS_CANCELLED);
+                $this->fail('A handed-over reservation must not be cancelled.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
+            $service->finishBorrowing($reservation);
+            foreach (array(
+                static fn () => $service->approve($reservation),
+                static fn () => $service->changeStatus($reservation, Reservation::STATUS_CANCELLED)
+            ) as $transition) {
+                try {
+                    $transition();
+                    $this->fail('A returned reservation must not be changed again.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                }
+            }
         });
     }
 
