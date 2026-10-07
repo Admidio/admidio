@@ -602,13 +602,19 @@ class EventFormPresenter extends PagePresenter
                         $status = $eventReservation['ivr_status'];
                         $canRequestAgain = $eventId === (int)$event->getValue('dat_id')
                             && in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true);
+                        $requestAgainUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array(
+                            'mode' => 'reservation_request_again',
+                            'dat_uuid' => $getEventUuid,
+                            'reservation_item_id' => (int)$eventReservation['ivr_ini_id']
+                        ));
                         $statusRows .= '<tr><td>' . SecurityUtils::encodeHTML($statusEvent->getValue('dat_headline')) . '<br><small>'
                             . SecurityUtils::encodeHTML($statusEvent->getDateTimePeriod()) . '</small></td><td>'
-                            . SecurityUtils::encodeHTML($eventReservation['ind_value']) . '</td><td>'
+                            . SecurityUtils::encodeHTML($eventReservation['ind_value']) . '</td><td class="event-inventory-reservation-status">'
                             . '<i class="bi ' . ($reservationStatusIcons[$status] ?? 'bi-question-circle-fill text-secondary') . ' me-1"></i>'
                             . SecurityUtils::encodeHTML($reservationStatusLabels[$status] ?? $status) . '</td><td class="text-end">'
                             . ($canRequestAgain
-                                ? '<button type="button" class="btn btn-sm btn-outline-primary" onclick="addEventInventoryReservationRow(' . (int)$eventReservation['ivr_ini_id'] . ');">'
+                                ? '<button type="button" class="btn btn-sm btn-outline-primary event-inventory-reservation-request-again" data-url="'
+                                    . SecurityUtils::encodeHTML($requestAgainUrl) . '">'
                                     . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST_AGAIN')) . '</button>'
                                 : '')
                             . '</td></tr>';
@@ -624,6 +630,40 @@ class EventFormPresenter extends PagePresenter
                     . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_STATUS')) . '</th><th></th></tr></thead><tbody>'
                     . $statusRows . '</tbody></table></div>'
                 );
+                $page->addJavascript('$(document).on("click", ".event-inventory-reservation-request-again", function() {
+                    var button = $(this);
+                    button.prop("disabled", true);
+                    $.post(button.data("url"), {adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '"}, function(data) {
+                        var response;
+                        try {
+                            response = typeof data === "string" ? JSON.parse(data) : data;
+                        } catch (error) {
+                            response = {status: "error"};
+                        }
+                        if (response.status !== "success") {
+                            button.prop("disabled", false);
+                            messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                            return;
+                        }
+                        var iconClass = response.reservation_status === "approved"
+                            ? "bi-check-circle-fill text-success me-1"
+                            : "bi-hourglass-split text-secondary me-1";
+                        button.closest("tr").find(".event-inventory-reservation-status").empty().append(
+                            $("<i>", {class: "bi " + iconClass}),
+                            document.createTextNode(response.reservation_status_label)
+                        );
+                        button.remove();
+                    }).fail(function(xhr) {
+                        button.prop("disabled", false);
+                        var response;
+                        try {
+                            response = JSON.parse(xhr.responseText);
+                        } catch (error) {
+                            response = {};
+                        }
+                        messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                    });
+                });', true);
             }
         }
 

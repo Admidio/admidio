@@ -14,6 +14,7 @@
 namespace Admidio\Tests\Integration\Inventory;
 
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Service\EventService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemField;
@@ -23,6 +24,7 @@ use Admidio\Inventory\Service\ReservationService;
 use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\Session\Entity\Session;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
@@ -1313,12 +1315,22 @@ class InventoryTest extends DatabaseTestCase
             )->fetchColumn();
             $service->changeStatus(new Reservation($this->getDatabase(), $reservationId), Reservation::STATUS_REJECTED);
 
-            $service->syncEventReservations(
-                (int)$event->getValue('dat_id'),
-                array($itemId),
-                new DateTimeImmutable('2030-08-15 10:00:00'),
-                new DateTimeImmutable('2030-08-15 12:00:00')
-            );
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $previousPost = $_POST;
+            $session = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $GLOBALS['gCurrentSession'] = $session;
+            $_POST = array('adm_csrf_token' => $session->getCsrfToken());
+            try {
+                $response = (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $itemId
+                );
+                $this->assertSame('success', $response['status']);
+                $this->assertSame(Reservation::STATUS_REQUESTED, $response['reservation_status']);
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+                $_POST = $previousPost;
+            }
 
             $statuses = $this->getDatabase()->queryPrepared(
                 'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? ORDER BY ivr_id',
