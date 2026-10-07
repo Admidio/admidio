@@ -337,7 +337,9 @@ class EventSaveService
         $gDb->startTransaction();
         if ($event->save()) {
             // Notification an email for new or changed entries to all members of the notification role
-            $event->sendNotification();
+            $gDb->registerAfterCommit(static function () use ($event): void {
+                $event->sendNotification();
+            });
         }
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);
@@ -827,7 +829,9 @@ class EventSaveService
 
         $this->setMasterEventValues($masterEvent, $formValues, $recurrenceBeginDateTime, $recurrenceEndDateTime, $recurrenceId);
         if ($masterEvent->save()) {
-            $masterEvent->sendNotification();
+            $gDb->registerAfterCommit(static function () use ($masterEvent): void {
+                $masterEvent->sendNotification();
+            });
         }
         $this->saveEventParticipation($masterEvent, $formValues, $eventParticipationRoles, $user);
         $reservationService = new ReservationService($gDb);
