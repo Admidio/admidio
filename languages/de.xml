@@ -942,8 +942,8 @@
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rollen erhalten E-Mails über neue und stornierte Reservierungen. Mitglieder benötigen das Recht „Alle Mitgliederlisten einsehen“.</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER">Antragstellende per E-Mail benachrichtigen</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC">Wenn diese Option aktiviert ist, erhalten Antragstellende E-Mails über automatische Freigaben und spätere Statusänderungen. (Voreinstellung: ja)</string>
-  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservierung für %1$s: %2$s</string>
-  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE">Reservierungsstatus: %1$s<br /><br />Gegenstand: %2$s<br />Reservieren von: %3$s<br />Reservieren bis: %4$s<br />Angefragt von: %5$s</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservierung für #VAR1#: #VAR2#</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE">Reservierungsstatus: #VAR1#&lt;br /&gt;&lt;br /&gt;Gegenstand: #VAR2#&lt;br /&gt;Reservieren von: #VAR3#&lt;br /&gt;Reservieren bis: #VAR4#&lt;br /&gt;Angefragt von: #VAR5#</string>
   <string name="SYS_INVENTORY_RESERVATION_NOT_AVAILABLE">Der Gegenstand ist im gewählten Zeitraum nicht verfügbar.</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Freigeben</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Ablehnen</string>

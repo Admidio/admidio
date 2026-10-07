@@ -943,8 +943,8 @@
   <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Members of these roles receive emails about new and cancelled reservations. Members require the right &quot;View all member lists&quot;.</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER">Notify requester by email</string>
   <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC">If enabled, requesters receive emails about automatic approval and later status changes. (Default: yes)</string>
-  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservation for %1$s: %2$s</string>
-  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE">Reservation status: %1$s<br /><br />Item: %2$s<br />Reserve from: %3$s<br />Reserve until: %4$s<br />Requested by: %5$s</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservation for #VAR1#: #VAR2#</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE">Reservation status: #VAR1#&lt;br /&gt;&lt;br /&gt;Item: #VAR2#&lt;br /&gt;Reserve from: #VAR3#&lt;br /&gt;Reserve until: #VAR4#&lt;br /&gt;Requested by: #VAR5#</string>
   <string name="SYS_INVENTORY_RESERVATION_NOT_AVAILABLE">The item is not available for the selected period.</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Approve</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Reject</string>
