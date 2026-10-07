@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
 use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\ReservationNotificationService;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
@@ -189,6 +190,7 @@ class Event extends Entity
             $reservation = new Reservation($this->db, (int)$reservationId);
             $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
             $reservation->save();
+            (new ReservationNotificationService($this->db))->notifyStatusChanged($reservation);
         }
 
         // now delete event

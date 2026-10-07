@@ -104,6 +104,7 @@ class ReservationService
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
             $reservation->save();
+            (new ReservationNotificationService($this->database))->notifyCreated($reservation);
             $this->refreshMenuBadge();
 
             return $reservation;
@@ -283,6 +284,7 @@ class ReservationService
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
             $reservation->save();
+            (new ReservationNotificationService($this->database))->notifyCreated($reservation);
         }
 
         foreach ($existingReservations as $existingReservation) {
@@ -290,8 +292,7 @@ class ReservationService
                 continue;
             }
             $reservation = new Reservation($this->database, $existingReservation['id']);
-            $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
-            $reservation->save();
+            $this->transition($reservation, Reservation::STATUS_CANCELLED);
         }
         $this->refreshMenuBadge();
     }
@@ -422,6 +423,7 @@ class ReservationService
 
         $reservation->setValue('ivr_status', $targetStatus);
         $reservation->save();
+        (new ReservationNotificationService($this->database))->notifyStatusChanged($reservation);
     }
 
     /** Ensure the session-cached main menu reloads its pending reservation badge. */
