@@ -172,6 +172,7 @@
   <string name="ORG_LAST_UPDATE_STEP">Letzter Update-Schritt</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisch anmelden</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Benutzer:innen können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll. Bei einem weiteren Besuch der Homepage sind diese Benutzer:innen dann automatisch angemeldet. Dies kann allerdings auch dazu führen, dass Benutzer:innen diese Option unbedacht einsetzen und so evtl. fremde Personen Zugriff auf die Daten bekommen. (Voreinstellung: ja)</string>
+  <string name="ORG_NONE">Keine</string>
   <string name="ORG_NOT_SAVED_SETTINGS_CONTINUE">Möchtest du fortfahren?</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Aktiviert, aber nur für Administratoren sichtbar</string>
@@ -727,6 +728,7 @@
   <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
   <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
+  <string name="SYS_FILE_NOT_CREATED">Die Datei #VAR1_BOLD# konnte nicht erstellt werden.</string>
   <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
