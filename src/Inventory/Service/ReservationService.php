@@ -326,9 +326,17 @@ class ReservationService
     {
         global $gCurrentOrgId;
 
+        $organizationId = $this->database->queryPrepared(
+            'SELECT ini_org_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
+            array($itemId)
+        )->fetchColumn();
+        if ($organizationId === false
+            || ((int)$organizationId > 0 && (int)$organizationId !== (int)$gCurrentOrgId)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
         $item = new Item($this->database, null, $itemId);
-        if (!$item->readDataById($itemId)
-            || ((int)$item->getValue('ini_org_id') > 0 && (int)$item->getValue('ini_org_id') !== (int)$gCurrentOrgId)) {
+        if (!$item->readDataById($itemId)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 

@@ -873,6 +873,8 @@ class InventoryTest extends DatabaseTestCase
 
         $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemIds) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '1');
             $this->assertTrue(InventoryAccessService::canManageReservations());
             $this->assertTrue(InventoryAccessService::canManageReservationItem($itemIds['own']));
             $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['foreign']));
@@ -1216,7 +1218,7 @@ class InventoryTest extends DatabaseTestCase
                 );
                 $this->fail('Moving an event reservation into another approved reservation must fail.');
             } catch (\Admidio\Infrastructure\Exception $exception) {
-                $this->assertSame('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE', $exception->getMessage());
+                $this->assertSame('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE', $exception->getTranslationId());
             }
 
             $unchangedReservation = $this->getDatabase()->queryPrepared(
