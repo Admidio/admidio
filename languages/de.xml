@@ -1165,6 +1165,7 @@
   <string name="SYS_NO_PICTURE_SELECTED">Es wurde keine Bilddatei ausgewählt.</string>
   <string name="SYS_NO_QUOTATION">Kein Anführungszeichen</string>
   <string name="SYS_NO_RECURRENCE">Keine Wiederholung</string>
+  <string name="SYS_NO_RELATIONSHIP_TYPES">Es wurden noch keine Beziehungstypen angelegt. Bitte lege zuerst in den Beziehungskonfigurationen einen Beziehungstyp an.</string>
   <string name="SYS_NO_RIGHTS">Du hast kein Recht, diese Aktion auszuführen.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
   <string name="SYS_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>

@@ -1151,6 +1151,7 @@
   <string name="SYS_NO_PICTURE_SELECTED">No picture file selected.</string>
   <string name="SYS_NO_QUOTATION">No quotation</string>
   <string name="SYS_NO_RECURRENCE">No recurrence</string>
+  <string name="SYS_NO_RELATIONSHIP_TYPES">No relationship types have been created yet. Please create a relationship type in the relationship configurations first.</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">You do not have the right to view the list of the selected roles.</string>
   <string name="SYS_NO_ROLE_GIVEN">No role has been specified.</string>
