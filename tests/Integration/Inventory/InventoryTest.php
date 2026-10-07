@@ -838,6 +838,55 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Reservation requests reject events from another organization
+     */
+    public function testReservationRequestRejectsEventFromAnotherOrganization(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationforeignevent', true);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Reservation Event Organization', 'foreignreservationevent');
+        $category = $this->getFixture()->createAndSaveCategory('Foreign reservation event', 'EVT', (int)$organization['org_id']);
+        $foreignRole = $this->getFixture()->createAndSaveRoleWithRights(
+            'Foreign reservation event administrators',
+            (int)$organization['org_id'],
+            array('rol_administrator' => 1, 'rol_events' => 1)
+        );
+        $foreignUserData = $this->getFixture()->createAndSaveUser('foreignreservationevent', 'foreignreservationevent@example.local');
+        $this->getFixture()->assignUserToRole($foreignUserData['usr_id'], $foreignRole['rol_id']);
+        $foreignAdmin = $this->loadUserInOrganization($foreignUserData['usr_id'], (int)$organization['org_id']);
+
+        $foreignEventId = $this->withCurrentUser($foreignAdmin, (int)$organization['org_id'], true, function () use ($category) {
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Foreign reservation event');
+            $event->setValue('dat_begin', '2030-04-03 10:00:00');
+            $event->setValue('dat_end', '2030-04-03 12:00:00');
+            $event->save();
+
+            return (int)$event->getValue('dat_id');
+        });
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($foreignEventId) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Local reservation item'));
+
+            try {
+                (new ReservationService($this->getDatabase()))->request(
+                    $itemId,
+                    new DateTimeImmutable('2030-04-03 10:00:00'),
+                    new DateTimeImmutable('2030-04-03 12:00:00'),
+                    '',
+                    '',
+                    $foreignEventId
+                );
+                $this->fail('A reservation request must not accept an event from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+        });
+    }
+
+    /**
      * @testdox Item keepers may manage reservations when the organization permits it
      */
     public function testKeeperMayManageReservationsWhenEnabled(): void

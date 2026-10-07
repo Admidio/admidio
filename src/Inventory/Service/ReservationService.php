@@ -73,6 +73,9 @@ class ReservationService
             throw new Exception('SYS_NO_RIGHTS');
         }
         $this->assertValidPeriod($begin, $end);
+        if ($eventId !== null) {
+            $this->assertEventInCurrentOrganization($eventId);
+        }
 
         $item = $this->getItemInCurrentOrganization($itemId);
         if ($item->isRetired()) {
