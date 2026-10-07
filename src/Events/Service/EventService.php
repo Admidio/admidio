@@ -124,7 +124,7 @@ class EventService
 
         // if current user is allowed to participate or user could edit this event then update user inputs
         if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
-            $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+            $member->readDataByRoleAndUser((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
             $member->setValue('mem_comment', $formValues['dat_comment']);
 
             if ($member->isNewRecord()) {
