@@ -211,9 +211,14 @@ class EventService
      */
     public function requestReservationAgain(string $eventUUID, int $itemId): array
     {
-        global $gL10n;
+        global $gL10n, $gSettingsManager;
 
         SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')
+            || !$gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $event = new Event($this->database);
         if ($eventUUID === '' || !$event->readDataByUuid($eventUUID) || !$event->isEditable()) {

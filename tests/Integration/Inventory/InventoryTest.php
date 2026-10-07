@@ -1248,6 +1248,7 @@ class InventoryTest extends DatabaseTestCase
 
         $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
 
             $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
@@ -1337,6 +1338,25 @@ class InventoryTest extends DatabaseTestCase
                 array((int)$event->getValue('dat_id'))
             )->fetchAll(\PDO::FETCH_COLUMN);
             $this->assertSame(array(Reservation::STATUS_REJECTED, Reservation::STATUS_REQUESTED), $statuses);
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '0');
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $previousPost = $_POST;
+            $session = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $GLOBALS['gCurrentSession'] = $session;
+            $_POST = array('adm_csrf_token' => $session->getCsrfToken());
+            try {
+                (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $itemId
+                );
+                $this->fail('Event reservation requests must respect the event reservation setting.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getMessage());
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+                $_POST = $previousPost;
+            }
         });
     }
 
