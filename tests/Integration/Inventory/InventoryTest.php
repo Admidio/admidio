@@ -842,7 +842,7 @@ class InventoryTest extends DatabaseTestCase
     public function testReservationServicesRejectItemsFromAnotherOrganization(): void
     {
         $admin = $this->makeInventoryUser('invreservationforeignitem', true);
-        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Inventory Organization', 'foreigninventory');
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Inventory Organization', 'FRGITEM01');
 
         $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($organization) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
@@ -880,7 +880,7 @@ class InventoryTest extends DatabaseTestCase
     public function testEventReservationSynchronizationRejectsItemsFromAnotherOrganization(): void
     {
         $admin = $this->makeInventoryUser('inveventreservationforeignitem', true);
-        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Event Inventory Organization', 'foreigneventinventory');
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Event Inventory Organization', 'FRGEVT01');
         $category = $this->getFixture()->createAndSaveCategory('Foreign inventory event', 'EVT', self::ORG_ID);
 
         $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($organization, $category) {
@@ -913,7 +913,7 @@ class InventoryTest extends DatabaseTestCase
     public function testReservationRequestRejectsEventFromAnotherOrganization(): void
     {
         $admin = $this->makeInventoryUser('invreservationforeignevent', true);
-        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Reservation Event Organization', 'foreignreservationevent');
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Reservation Event Organization', 'FRGRES01');
         $category = $this->getFixture()->createAndSaveCategory('Foreign reservation event', 'EVT', (int)$organization['org_id']);
         $foreignRole = $this->getFixture()->createAndSaveRoleWithRights(
             'Foreign reservation event administrators',
