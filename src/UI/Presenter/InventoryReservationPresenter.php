@@ -158,13 +158,11 @@ class InventoryReservationPresenter extends PagePresenter
 
             $actions = array();
             $canManageReservation = $isManager && InventoryAccessService::canManageReservationItem((int)$row['ivr_ini_id']);
-            if ($canManageReservation && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
+            if ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_REQUESTED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE'));
-                if ($row['ivr_status'] === Reservation::STATUS_REQUESTED) {
-                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
-                    $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
-                }
+                $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
+                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
             } elseif ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_APPROVED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_cancel', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL'));
