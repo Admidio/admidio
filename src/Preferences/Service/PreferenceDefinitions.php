@@ -303,6 +303,9 @@ final class PreferenceDefinitions
             'inventory_reservation_approval' => array('default' => 'manual', 'type' => 'enum', 'values' => array('automatic', 'manual')),
             'inventory_reservation_requesters' => array('default' => 'members', 'type' => 'enum', 'values' => array('guests', 'members', 'roles')),
             'inventory_reservation_requester_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_ROLES),
+            'inventory_reservation_notifications_enabled' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservation_notification_role' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_NOTIFICATION_ROLE),
+            'inventory_reservation_notify_requester' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view' => array('default' => 'LAST_RECEIVER', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_PROFILE_FIELDS),
             'inventory_export_filename' => array('default' => 'SYS_INVENTORY', 'maxLength' => 50, 'required' => true),
@@ -943,7 +946,7 @@ final class PreferenceDefinitions
                     array($value, $gCurrentOrgId)
                 )->fetchColumn();
                 if ($count !== 1) {
-                    throw new InvalidArgumentException('Preference "system_notifications_role" references an unavailable role.');
+                    throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable role.');
                 }
                 return $value;
             case self::VALIDATOR_INVENTORY_ROLES:

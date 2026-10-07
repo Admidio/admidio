@@ -936,6 +936,14 @@
   <string name="SYS_INVENTORY_RESERVATION_REQUESTERS_DESC">Legt fest, ob alle Besucher, nur angemeldete Benutzer oder Benutzer bestimmter Rollen Reservierungsanfragen stellen dürfen. (Voreinstellung: nur angemeldete Benutzer)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTER_ROLES">Rollen mit Anfragerecht</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTER_ROLES_DESC">Wähle die Rollen aus, deren Mitglieder Reservierungsanfragen stellen dürfen. Diese Einstellung wird nur verwendet, wenn bei „Wer darf Reservierungen anfragen?“ die Option „Rollen“ gewählt wurde.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED">E-Mail-Benachrichtigungen für Reservierungen aktivieren</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED_DESC">Wenn diese Option aktiviert ist, können Reservierungsverantwortliche und Antragstellende E-Mails über Anfragen und Statusänderungen erhalten. Die allgemeinen Systembenachrichtigungen müssen ebenfalls aktiviert sein. (Voreinstellung: nein)</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE">Benachrichtigungsrolle für Reservierungen</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rolle erhalten E-Mails über neue und stornierte Reservierungen. Mitglieder benötigen das Recht „Alle Mitgliederlisten einsehen“.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER">Antragstellende per E-Mail benachrichtigen</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC">Wenn diese Option aktiviert ist, erhalten Antragstellende E-Mails über automatische Freigaben und spätere Statusänderungen. (Voreinstellung: ja)</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservierung für %1$s: %2$s</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE">Reservierungsstatus: %1$s<br /><br />Gegenstand: %2$s<br />Reservieren von: %3$s<br />Reservieren bis: %4$s<br />Angefragt von: %5$s</string>
   <string name="SYS_INVENTORY_RESERVATION_NOT_AVAILABLE">Der Gegenstand ist im gewählten Zeitraum nicht verfügbar.</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Freigeben</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Ablehnen</string>

@@ -26,9 +26,14 @@
             direct ? $("#inventory_profile_view_group").hide() : $("#inventory_profile_view_group").slideUp("slow");
         }
         if(!$("#inventory_reservations_enabled").is(":checked")) {
-            direct ? $("#inventory_reservations_events_enabled_group, #inventory_reservation_keepers_manage_group, #inventory_reservation_approval_group, #inventory_reservation_requesters_group, #inventory_reservation_requester_roles_group").hide() : $("#inventory_reservations_events_enabled_group, #inventory_reservation_keepers_manage_group, #inventory_reservation_approval_group, #inventory_reservation_requesters_group, #inventory_reservation_requester_roles_group").slideUp("slow");
-        } else if ($("#inventory_reservation_requesters").val() !== "roles") {
-            direct ? $("#inventory_reservation_requester_roles_group").hide() : $("#inventory_reservation_requester_roles_group").slideUp("slow");
+            direct ? $("#inventory_reservations_events_enabled_group, #inventory_reservation_keepers_manage_group, #inventory_reservation_approval_group, #inventory_reservation_requesters_group, #inventory_reservation_requester_roles_group, #inventory_reservation_notifications_enabled_group, #inventory_reservation_notification_role_group, #inventory_reservation_notify_requester_group").hide() : $("#inventory_reservations_events_enabled_group, #inventory_reservation_keepers_manage_group, #inventory_reservation_approval_group, #inventory_reservation_requesters_group, #inventory_reservation_requester_roles_group, #inventory_reservation_notifications_enabled_group, #inventory_reservation_notification_role_group, #inventory_reservation_notify_requester_group").slideUp("slow");
+        } else {
+            if (!$("#inventory_reservation_notifications_enabled").is(":checked")) {
+                direct ? $("#inventory_reservation_notification_role_group, #inventory_reservation_notify_requester_group").hide() : $("#inventory_reservation_notification_role_group, #inventory_reservation_notify_requester_group").slideUp("slow");
+            }
+            if ($("#inventory_reservation_requesters").val() !== "roles") {
+                direct ? $("#inventory_reservation_requester_roles_group").hide() : $("#inventory_reservation_requester_roles_group").slideUp("slow");
+            }
         }
     }
     /* Function to handle the visibility of fields based on the corresponding option */
@@ -85,11 +90,15 @@
             }
         });
         $("#inventory_reservations_enabled").on("change", function() {
-            $("#inventory_reservations_events_enabled_group, #inventory_reservation_keepers_manage_group, #inventory_reservation_approval_group, #inventory_reservation_requesters_group").toggle(this.checked);
+            $("#inventory_reservations_events_enabled_group, #inventory_reservation_keepers_manage_group, #inventory_reservation_approval_group, #inventory_reservation_requesters_group, #inventory_reservation_notifications_enabled_group").toggle(this.checked);
             $("#inventory_reservation_requester_roles_group").toggle(this.checked && $("#inventory_reservation_requesters").val() === "roles");
+            $("#inventory_reservation_notification_role_group, #inventory_reservation_notify_requester_group").toggle(this.checked && $("#inventory_reservation_notifications_enabled").is(":checked"));
         });
         $("#inventory_reservation_requesters").on("change", function() {
             $("#inventory_reservation_requester_roles_group").toggle($("#inventory_reservations_enabled").is(":checked") && this.value === "roles");
+        });
+        $("#inventory_reservation_notifications_enabled").on("change", function() {
+            $("#inventory_reservation_notification_role_group, #inventory_reservation_notify_requester_group").toggle($("#inventory_reservations_enabled").is(":checked") && this.checked);
         });
 
         // wait for the form to be fully visible
@@ -147,6 +156,9 @@
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_reservation_approval']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_reservation_requesters']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_reservation_requester_roles']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_reservation_notifications_enabled']}
+    {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_reservation_notification_role']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_reservation_notify_requester']}
     {include 'sys-template-parts/form.separator.tpl' data=$elements['inventory_separator_profile_view_settings']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['inventory_profile_view_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['inventory_profile_view']}

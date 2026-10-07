@@ -937,6 +937,14 @@
   <string name="SYS_INVENTORY_RESERVATION_REQUESTERS_DESC">Defines whether all visitors, only logged-in users, or users in selected roles may submit reservation requests. (Default: logged-in users)</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTER_ROLES">Roles allowed to request reservations</string>
   <string name="SYS_INVENTORY_RESERVATION_REQUESTER_ROLES_DESC">Select the roles whose members may submit reservation requests. This setting is used only when “Roles” is selected under “Who may request reservations?”.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED">Enable reservation email notifications</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED_DESC">If enabled, reservation managers and requesters can receive emails about reservation requests and status changes. The general system notification setting must also be enabled. (Default: no)</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE">Reservation notification role</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC">Members of this role receive emails about new and cancelled reservations. Members require the right &quot;View all member lists&quot;.</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER">Notify requester by email</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC">If enabled, requesters receive emails about automatic approval and later status changes. (Default: yes)</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT">Reservation for %1$s: %2$s</string>
+  <string name="SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE">Reservation status: %1$s<br /><br />Item: %2$s<br />Reserve from: %3$s<br />Reserve until: %4$s<br />Requested by: %5$s</string>
   <string name="SYS_INVENTORY_RESERVATION_NOT_AVAILABLE">The item is not available for the selected period.</string>
   <string name="SYS_INVENTORY_RESERVATION_APPROVE">Approve</string>
   <string name="SYS_INVENTORY_RESERVATION_REJECT">Reject</string>

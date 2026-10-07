@@ -1426,6 +1426,34 @@ class PreferencesPresenter extends PagePresenter
                 'helpTextId' => 'SYS_INVENTORY_RESERVATION_REQUESTER_ROLES_DESC'
             )
         );
+        $formInventory->addCheckbox(
+            'inventory_reservation_notifications_enabled',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED'),
+            (bool)$formValues['inventory_reservation_notifications_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_RESERVATION_NOTIFICATIONS_ENABLED_DESC')
+        );
+
+        $notificationRoleSqlData = array();
+        $notificationRoleSqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
+               FROM ' . TBL_ROLES . '
+         INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+              WHERE rol_valid = true AND rol_system = false AND rol_all_lists_view = true
+                AND cat_org_id = ? AND cat_name_intern <> \'EVENTS\'
+           ORDER BY cat_name, rol_name';
+        $notificationRoleSqlData['params'] = array($gCurrentOrgId);
+        $formInventory->addSelectBoxFromSql(
+            'inventory_reservation_notification_role',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE'),
+            $gDb,
+            $notificationRoleSqlData,
+            array('defaultValue' => $formValues['inventory_reservation_notification_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
+        );
+        $formInventory->addCheckbox(
+            'inventory_reservation_notify_requester',
+            $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER'),
+            (bool)$formValues['inventory_reservation_notify_requester'],
+            array('helpTextId' => 'SYS_INVENTORY_RESERVATION_NOTIFY_REQUESTER_DESC')
+        );
 
         // profile view settings
         $formInventory->addSeparator(
