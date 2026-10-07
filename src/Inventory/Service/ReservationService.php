@@ -121,6 +121,7 @@ class ReservationService
         }
         $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
             $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
             if (!$this->isAvailable(
                 $itemId,
                 new \DateTimeImmutable((string)$reservation->getValue('ivr_begin')),
@@ -146,7 +147,11 @@ class ReservationService
         if (!in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
-        $this->transition($reservation, $status);
+        $this->withinReservationTransaction(function () use ($reservation, $itemId, $status): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->transition($reservation, $status);
+        });
         $this->refreshMenuBadge();
     }
 
@@ -159,7 +164,11 @@ class ReservationService
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $this->transition($reservation, Reservation::STATUS_BORROWED);
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->transition($reservation, Reservation::STATUS_BORROWED);
+        });
     }
 
     /** Mark a handed-over reservation as returned. */
@@ -171,7 +180,11 @@ class ReservationService
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $this->transition($reservation, Reservation::STATUS_RETURNED);
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->transition($reservation, Reservation::STATUS_RETURNED);
+        });
     }
 
     /** Allow the signed-in requester to withdraw an open or approved reservation. */
@@ -184,7 +197,12 @@ class ReservationService
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $this->transition($reservation, Reservation::STATUS_CANCELLED);
+        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->transition($reservation, Reservation::STATUS_CANCELLED);
+        });
         $this->refreshMenuBadge();
     }
 
@@ -235,6 +253,7 @@ class ReservationService
         $itemIds = array_values(array_unique(array_filter(array_map('intval', $itemIds), static function (int $itemId): bool {
             return $itemId > 0;
         })));
+        sort($itemIds, SORT_NUMERIC);
         $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
         foreach ($itemIds as $itemId) {
@@ -335,6 +354,15 @@ class ReservationService
             'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
             array($itemId)
         );
+    }
+
+    /** Reload a reservation after acquiring its item lock to avoid acting on stale lifecycle state. */
+    private function refreshReservation(Reservation $reservation): void
+    {
+        $reservationId = (int)$reservation->getValue('ivr_id');
+        if ($reservationId <= 0 || !$reservation->readDataById($reservationId)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
     }
 
     /** Run a reservation mutation in a transaction without disturbing an enclosing event save. */
