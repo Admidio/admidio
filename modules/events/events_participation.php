@@ -66,7 +66,7 @@ try {
     $user->readDataByUuid($getUserUuid);
 
     $member = new Membership($gDb);
-    $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+    $member->readDataByRoleAndUser((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
 
     // Write header with charset utf8
     header('Content-type: text/html; charset=utf-8');
