@@ -22,6 +22,7 @@ use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Service\ReservationService;
 use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
@@ -763,6 +764,27 @@ class InventoryTest extends DatabaseTestCase
             $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'roles');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_requester_roles', '');
             $this->assertTrue(InventoryAccessService::canRequestReservation());
+        });
+    }
+
+    /**
+     * @testdox Reservation notification roles accept multiple roles from the current organization
+     */
+    public function testReservationNotificationRolesAcceptMultipleRoles(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationnotificationroles', true);
+        $fixture = $this->getFixture();
+        $firstRole = $fixture->createAndSaveRoleWithRights('Reservation notifications one', self::ORG_ID, array('rol_all_lists_view' => 1));
+        $secondRole = $fixture->createAndSaveRoleWithRights('Reservation notifications two', self::ORG_ID, array('rol_all_lists_view' => 1));
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($firstRole, $secondRole) {
+            $this->assertSame(
+                $firstRole['rol_uuid'] . ',' . $secondRole['rol_uuid'],
+                PreferenceDefinitions::normalize(
+                    'inventory_reservation_notification_roles',
+                    $firstRole['rol_uuid'] . ',' . $secondRole['rol_uuid']
+                )
+            );
         });
     }
 

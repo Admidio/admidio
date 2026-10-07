@@ -67,13 +67,17 @@ class ReservationNotificationService
     {
         global $gSettingsManager;
 
-        $roleUuid = $gSettingsManager->getString('inventory_reservation_notification_role');
-        if ($roleUuid === '') {
+        $roleUuids = array_filter(explode(',', $gSettingsManager->getString('inventory_reservation_notification_roles')));
+        if ($roleUuids === array()) {
             return;
         }
 
         $email = $this->createEmail($reservation);
-        if ($email->addRecipientsByRole($roleUuid) > 0) {
+        $recipientCount = 0;
+        foreach ($roleUuids as $roleUuid) {
+            $recipientCount += $email->addRecipientsByRole($roleUuid);
+        }
+        if ($recipientCount > 0) {
             $email->sendEmail();
         }
     }

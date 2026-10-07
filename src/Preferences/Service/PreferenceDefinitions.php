@@ -44,6 +44,7 @@ final class PreferenceDefinitions
     private const VALIDATOR_INVENTORY_KEEPER_FIELDS = 'inventory_keeper_fields';
     private const VALIDATOR_INVENTORY_PROFILE_FIELDS = 'inventory_profile_fields';
     private const VALIDATOR_INVENTORY_RESERVATION_ROLES = 'inventory_reservation_roles';
+    private const VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES = 'inventory_reservation_notification_roles';
     private const VALIDATOR_SSO_KEY = 'sso_key';
     private const VALIDATOR_OIDC_SIGNING_KEY = 'oidc_signing_key';
 
@@ -69,6 +70,7 @@ final class PreferenceDefinitions
         self::VALIDATOR_INVENTORY_KEEPER_FIELDS,
         self::VALIDATOR_INVENTORY_PROFILE_FIELDS,
         self::VALIDATOR_INVENTORY_RESERVATION_ROLES,
+        self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES,
         self::VALIDATOR_SSO_KEY,
         self::VALIDATOR_OIDC_SIGNING_KEY,
     );
@@ -304,7 +306,7 @@ final class PreferenceDefinitions
             'inventory_reservation_requesters' => array('default' => 'members', 'type' => 'enum', 'values' => array('guests', 'members', 'roles')),
             'inventory_reservation_requester_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_ROLES),
             'inventory_reservation_notifications_enabled' => array('default' => '0', 'type' => 'bool'),
-            'inventory_reservation_notification_role' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_NOTIFICATION_ROLE),
+            'inventory_reservation_notification_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES),
             'inventory_reservation_notify_requester' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view' => array('default' => 'LAST_RECEIVER', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_PROFILE_FIELDS),
@@ -949,6 +951,21 @@ final class PreferenceDefinitions
                     throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable role.');
                 }
                 return $value;
+            case self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES:
+                $values = self::commaValues($value);
+                foreach ($values as $roleUuid) {
+                    $count = (int)$gDb->queryPrepared(
+                        'SELECT COUNT(*) FROM ' . TBL_ROLES . '
+                     INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                          WHERE rol_uuid = ? AND rol_valid = true AND rol_system = false
+                            AND rol_all_lists_view = true AND cat_org_id = ? AND cat_name_intern <> \'EVENTS\'',
+                        array($roleUuid, $gCurrentOrgId)
+                    )->fetchColumn();
+                    if ($count !== 1) {
+                        throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable role.');
+                    }
+                }
+                return implode(',', $values);
             case self::VALIDATOR_INVENTORY_ROLES:
             case self::VALIDATOR_INVENTORY_RESERVATION_ROLES:
                 $values = self::commaValues($value);

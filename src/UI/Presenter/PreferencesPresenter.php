@@ -1442,11 +1442,11 @@ class PreferencesPresenter extends PagePresenter
            ORDER BY cat_name, rol_name';
         $notificationRoleSqlData['params'] = array($gCurrentOrgId);
         $formInventory->addSelectBoxFromSql(
-            'inventory_reservation_notification_role',
+            'inventory_reservation_notification_roles',
             $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE'),
             $gDb,
             $notificationRoleSqlData,
-            array('defaultValue' => $formValues['inventory_reservation_notification_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
+            array('defaultValue' => explode(',', $formValues['inventory_reservation_notification_roles']), 'multiselect' => true, 'helpTextId' => array('SYS_INVENTORY_RESERVATION_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
         );
         $formInventory->addCheckbox(
             'inventory_reservation_notify_requester',
