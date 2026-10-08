@@ -1339,6 +1339,16 @@ class InventoryTest extends DatabaseTestCase
             )->fetchAll(\PDO::FETCH_COLUMN);
             $this->assertSame(array(Reservation::STATUS_REJECTED, Reservation::STATUS_REQUESTED), $statuses);
 
+            try {
+                (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $itemId
+                );
+                $this->fail('Only the latest rejected or cancelled reservation may be requested again.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
             $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '0');
             $previousSession = $GLOBALS['gCurrentSession'];
             $previousPost = $_POST;

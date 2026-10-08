@@ -1,4 +1,4 @@
 <table id="adm_event_inventory_reservation_statuses" class="table table-hover" style="width: 100%;">
     <thead><tr><th>{$l10n->get('SYS_EVENT')}</th><th>{$l10n->get('SYS_INVENTORY_ITEMNAME')}</th><th>{$l10n->get('SYS_INVENTORY_RESERVATION_STATUS')}</th><th></th></tr></thead>
-    <tbody>{foreach $eventInventoryReservationStatusRows as $row}<tr><td>{$row.eventName|escape:'htmlall':'UTF-8'}<br><small>{$row.period|escape:'htmlall':'UTF-8'}</small></td><td>{if isset($row.itemName)}{$row.itemName|escape:'htmlall':'UTF-8'}{else}-{/if}</td><td class="event-inventory-reservation-status">{if isset($row.statusLabel)}<i class="bi {$row.statusIcon} me-1"></i>{$row.statusLabel|escape:'htmlall':'UTF-8'}{else}-{/if}</td><td class="text-end">{if $row.canRequestAgain|default:false}<button type="button" class="btn btn-sm btn-outline-primary event-inventory-reservation-request-again" data-url="{$row.requestAgainUrl|escape:'htmlall':'UTF-8'}" data-item-id="{$row.itemId}">{$l10n->get('SYS_INVENTORY_RESERVATION_REQUEST_AGAIN')}</button>{/if}</td></tr>{/foreach}</tbody>
+    <tbody></tbody>
 </table>

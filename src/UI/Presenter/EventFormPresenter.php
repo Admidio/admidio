@@ -6,11 +6,9 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\UI\Component\DataTables;
 use Admidio\Roles\Entity\Membership;
@@ -501,22 +499,6 @@ class EventFormPresenter extends PagePresenter
             // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
             $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems,
                 array('defaultValue' => $selectedItems, 'multiselect' => true));
-            $reservationStatusLabels = array(
-                Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
-                Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
-                Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
-                Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED'),
-                Reservation::STATUS_BORROWED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_BORROWED'),
-                Reservation::STATUS_RETURNED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
-            );
-            $reservationStatusIcons = array(
-                Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
-                Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
-                Reservation::STATUS_REJECTED => 'bi-x-circle-fill text-danger',
-                Reservation::STATUS_CANCELLED => 'bi-x-circle-fill text-danger',
-                Reservation::STATUS_BORROWED => 'bi-box-arrow-up-right text-primary',
-                Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success'
-            );
             $reservationItems = array();
             foreach ($availableItems as $itemId => $itemName) {
                 $reservationItems[] = array('id' => (int)$itemId, 'name' => $itemName);
@@ -535,77 +517,15 @@ class EventFormPresenter extends PagePresenter
             ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
 
             if ((int)$event->getValue('dat_id') > 0) {
-                $statusEvents = array((int)$event->getValue('dat_id') => $event);
-                if ($recurrence !== null && $getRecurrenceScope === 'series') {
-                    $statusEvents = array();
-                    $eventStatement = $gDb->queryPrepared(
-                        'SELECT dat_id
-                           FROM ' . TBL_EVENTS . '
-                          WHERE dat_evr_id = ?
-                             OR dat_id = ?
-                       ORDER BY dat_begin',
-                        array(
-                            (int)$recurrence->getValue('evr_id'),
-                            (int)$recurrence->getValue('evr_dat_id_master')
-                        )
-                    );
-                    while ($eventRow = $eventStatement->fetch()) {
-                        $eventId = (int)$eventRow['dat_id'];
-                        $statusEvents[$eventId] = $eventId === (int)$event->getValue('dat_id') ? $event : new Event($gDb, $eventId);
-                    }
-                    if (count($statusEvents) === 0) {
-                        $statusEvents[(int)$event->getValue('dat_id')] = $event;
-                    }
-                }
-
-                $reservationStatuses = array();
-                $reservationStatusStatement = $gDb->queryPrepared(
-                    'SELECT ivr_dat_id, ivr_ini_id, ind_value, ivr_status
-                       FROM ' . TBL_INVENTORY_RESERVATIONS . '
-                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ivr_ini_id
-                 INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
-                      WHERE ivr_dat_id IN (' . Database::getQmForValues(array_keys($statusEvents)) . ')
-                   ORDER BY ivr_dat_id, ind_value, ivr_timestamp_create',
-                    array_keys($statusEvents)
-                );
-                while ($reservationStatus = $reservationStatusStatement->fetch()) {
-                    $reservationStatuses[(int)$reservationStatus['ivr_dat_id']][] = $reservationStatus;
-                }
-
-                $statusRows = array();
-                $statusRowCount = 0;
-                foreach ($statusEvents as $eventId => $statusEvent) {
-                    $eventReservations = $reservationStatuses[$eventId] ?? array();
-                    if (count($eventReservations) === 0) {
-                        ++$statusRowCount;
-                        $statusRows[] = array('eventName' => $statusEvent->getValue('dat_headline'), 'period' => $statusEvent->getDateTimePeriod());
-                        continue;
-                    }
-
-                    foreach ($eventReservations as $eventReservation) {
-                        ++$statusRowCount;
-                        $status = $eventReservation['ivr_status'];
-                        $canRequestAgain = $eventId === (int)$event->getValue('dat_id')
-                            && in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true);
-                        $requestAgainUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array(
-                            'mode' => 'reservation_request_again',
-                            'dat_uuid' => $getEventUuid,
-                            'reservation_item_id' => (int)$eventReservation['ivr_ini_id']
-                        ));
-                        $statusRows[] = array(
-                            'eventName' => $statusEvent->getValue('dat_headline'), 'period' => $statusEvent->getDateTimePeriod(),
-                            'itemName' => $eventReservation['ind_value'], 'statusIcon' => $reservationStatusIcons[$status] ?? 'bi-question-circle-fill text-secondary',
-                            'statusLabel' => $reservationStatusLabels[$status] ?? $status, 'canRequestAgain' => $canRequestAgain,
-                            'requestAgainUrl' => $requestAgainUrl, 'itemId' => (int)$eventReservation['ivr_ini_id']
-                        );
-                    }
-                }
-
-                $page->assignSmartyVariable('eventInventoryReservationStatusRows', $statusRows);
+                $page->assignSmartyVariable('eventInventoryReservationStatusTable', true);
                 $reservationStatusTable = new DataTables($page, 'adm_event_inventory_reservation_statuses');
+                $reservationStatusTable->setServerSideProcessing(SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/events_reservation_status_data.php',
+                    array('dat_uuid' => $getEventUuid, 'recurrence_scope' => $getRecurrenceScope)
+                ));
                 $reservationStatusTable->disableColumnsSort(array(4));
                 $reservationStatusTable->setColumnsNotHideResponsive(array(2, 4));
-                $reservationStatusTable->createJavascript($statusRowCount, 4);
+                $reservationStatusTable->createJavascript(0, 4);
                 $page->addJavascript('$(document).on("shown.bs.tab shown.bs.collapse", "#adm_event_reservations_tab, #adm_event_reservations_collapse", function() {
                     var table = $("#adm_event_inventory_reservation_statuses").DataTable();
                     table.columns.adjust().responsive.recalc();
@@ -625,15 +545,9 @@ class EventFormPresenter extends PagePresenter
                             messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
                             return;
                         }
-                        var iconClass = response.reservation_status === "approved"
-                            ? "bi-check-circle-fill text-success me-1"
-                            : "bi-hourglass-split text-secondary me-1";
-                        button.closest("tr").find(".event-inventory-reservation-status").empty().append(
-                            $("<i>", {class: "bi " + iconClass}),
-                            document.createTextNode(response.reservation_status_label)
-                        );
+                        var statusTable = $("#adm_event_inventory_reservation_statuses").DataTable();
+                        statusTable.ajax.reload(null, false);
                         $(document).trigger("eventInventoryReservationRequestedAgain", [button.data("itemId")]);
-                        button.remove();
                     }).fail(function(xhr) {
                         button.prop("disabled", false);
                         var response;

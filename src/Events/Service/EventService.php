@@ -225,28 +225,15 @@ class EventService
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $closedReservationExists = (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_dat_id = ? AND ivr_ini_id = ? AND ivr_status IN (?, ?)',
-            array(
-                (int)$event->getValue('dat_id'),
-                $itemId,
-                Reservation::STATUS_REJECTED,
-                Reservation::STATUS_CANCELLED
-            )
+        $latestStatus = $this->database->queryPrepared(
+            'SELECT ivr_status
+               FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_ini_id = ?
+           ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC
+              LIMIT 1',
+            array((int)$event->getValue('dat_id'), $itemId)
         )->fetchColumn();
-        $activeReservationExists = (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_dat_id = ? AND ivr_ini_id = ? AND ivr_status IN (?, ?, ?)',
-            array(
-                (int)$event->getValue('dat_id'),
-                $itemId,
-                Reservation::STATUS_REQUESTED,
-                Reservation::STATUS_APPROVED,
-                Reservation::STATUS_BORROWED
-            )
-        )->fetchColumn();
-        if ($closedReservationExists === 0 || $activeReservationExists > 0) {
+        if (!in_array($latestStatus, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 

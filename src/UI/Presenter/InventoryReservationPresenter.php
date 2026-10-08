@@ -175,6 +175,9 @@ class InventoryReservationPresenter extends PagePresenter
         $dataTables->createJavascript(max(count($rows), 11), 8);
         $this->addJavascript('
             var reservationTable = $("#adm_inventory_reservations_table").DataTable();
+            $("#adm_inventory_reservations_table").on("draw.dt", function() {
+                reservationTable.responsive.recalc();
+            });
             var reservationActionErrorTimeout;
             $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 if (settings.nTable.id !== "adm_inventory_reservations_table") {

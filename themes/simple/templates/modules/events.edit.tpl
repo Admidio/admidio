@@ -98,7 +98,7 @@
                                         {include 'modules/events.edit.inventory-reservations.tpl'}
                                     </div>
                                 </div>
-                                {if isset($eventInventoryReservationStatusRows)}
+                                {if $eventInventoryReservationStatusTable|default:false}
                                     <div class="card admidio-tabbed-field-group">
                                         <div class="card-header">{$l10n->get('SYS_INVENTORY_RESERVATION_STATUS_PER_EVENT')}</div>
                                         <div class="card-body">
