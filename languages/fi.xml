@@ -178,7 +178,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Korkea</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Alhainen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Keskimmäinen</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ei mitään</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Erittäin korkea</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Levytilan käytön laskentapolku</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Polku kansioon, josta levytilan käyttö lasketaan. Tätä käytetään järjestelmätiedoissa Admidio-asennuksen levytilan käytön laskemiseen. Polku voidaan määrittää absoluuttisena polkuna tai suhteellisena polkuna Admidio-pääkansioon. Jos polkua ei määritetä, levytilan käyttö lasketaan palvelimen juurikansiosta. (oletus: tyhjä)</string>

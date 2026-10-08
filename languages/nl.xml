@@ -214,7 +214,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofdorganisatie. Hoofdorganisaties kunnen bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de geselecteerde (onderliggende) organisatie.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Wachtwoord sterkte</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kunt u aangeven hoe veilig en ingewikkeld wachtwoorden op zijn minst moeten zijn.\nDe waarde tussen haakjes geeft aan hoeveel pogingen gemiddeld vereist zijn totdat het wachtwoord is bepaald.\n\nGeen: riskant wachtwoord. (&lt;10^3)\nLaag: bescherming tegen beperkte online aanvallen. (&lt;10^6)\nMidden: bescherming tegen onbeperkte online aanvallen.(&lt;10^8)\nHoog: matige beveiliging tegen offline hash-aanvallen. (&lt;10^10)\nZeer hoog: sterke bescherming tegen offline hash-aanvallen. (&gt;=10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Geen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Laag</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Midden</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoog</string>

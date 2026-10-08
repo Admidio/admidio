@@ -175,7 +175,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Wysoka</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niska</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Średnia</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Brak</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Bardzo wysoka</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Ścieżka do obliczania użycia dysku</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Ścieżka do folderu, dla którego obliczane jest użycie dysku. Jest używana w informacjach systemowych do obliczania wykorzystania miejsca przez instalację Admidio. Ścieżkę można podać jako bezwzględną lub względną względem głównego katalogu Admidio. Jeśli pole pozostanie puste, użycie dysku będzie obliczane dla katalogu głównego serwera. (domyślnie: puste)</string>
