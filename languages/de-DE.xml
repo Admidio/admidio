@@ -171,7 +171,6 @@
   <string name="ORG_LAST_UPDATE_STEP">Letzter Update-Schritt</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisch anmelden</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Benutzer:innen können beim Anmelden festlegen, ob die Anmeldung auf dem Rechner gespeichert werden soll. Bei einem weiteren Besuch der Homepage sind diese Benutzer:innen dann automatisch angemeldet. Dies kann allerdings auch dazu führen, dass Benutzer:innen diese Option unbedacht einsetzen und so evtl. fremde Personen Zugriff auf die Daten bekommen. (Voreinstellung: ja)</string>
-  <string name="ORG_NONE">Keine</string>
   <string name="ORG_NOT_SAVED_SETTINGS_CONTINUE">Möchten Sie fortfahren?</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</string>
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Aktiviert, aber nur für Administratoren sichtbar</string>
@@ -184,7 +183,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoch</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Sehr hoch</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Pfad zur Berechnung der Speicherplatzbelegung</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Pfad zu dem Ordner, für den die Speicherplatzbelegung berechnet wird. Diese Angabe wird in den Systeminformationen verwenden Siet, um die Speicherplatzbelegung der Admidio-Installation zu berechnen. Der Pfad kann absolut oder relativ zum Admidio-Hauptverzeichnis angegeben werden. Bleibt das Feld leer, wird die Speicherplatzbelegung für das Stammverzeichnis des Servers berechnet. (Standard: leer)</string>
@@ -1173,7 +1171,7 @@
   <string name="SYS_NO_USER_FOUND">Es wurde kein:e Benutzer:in gefunden, der den gewählten Kriterien entspricht.</string>
   <string name="SYS_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Benutzer:innen besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
   <string name="SYS_NOBODY">Niemand</string>
-  <string name="SYS_NONE">Keiner</string>
+  <string name="SYS_NONE">Keine</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
   <string name="SYS_NOT_INSTALLED">Nicht installiert</string>
