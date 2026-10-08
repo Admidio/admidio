@@ -434,6 +434,7 @@
   <string name="SYS_COPY_CLIPBOARD">In Zwischenablage kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
+  <string name="SYS_COPY_LINK">Link kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Deine angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
@@ -1615,6 +1616,7 @@
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
+  <string name="SYS_SHARE_LINK">Link teilen</string>
   <string name="SYS_SHOW_ALL">Alle anzeigen</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional alle Kontakte anzeigen</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den Kontakten der aktuellen Organisation optional auch Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive und inaktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>

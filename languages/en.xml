@@ -425,6 +425,7 @@
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
+  <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individual recipient</string>
@@ -1598,6 +1599,7 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
+  <string name="SYS_SHARE_LINK">Share link</string>
   <string name="SYS_SHOW_ALL">Show all</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>
