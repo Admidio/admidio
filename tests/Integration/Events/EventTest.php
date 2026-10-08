@@ -296,4 +296,48 @@ class EventTest extends DatabaseTestCase
         $this->expectException(Exception::class);
         $this->createEvent($readerUser, $org['org_id'], $category['cat_id'], 'Nope', '2030-01-01 10:00:00', '2030-01-01 11:00:00');
     }
+
+    /**
+     * Test that getDateTimePeriod formats single-day events with identical start and end time without duplicate time
+     *
+     * @testdox getDateTimePeriod only displays start time when start and end time are identical on the same day
+     */
+    public function testDateTimePeriodWithEqualStartAndEndTime(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Event Org', 'evtorg');
+        // the period is formatted with the date and time format of the organization preferences
+        $fixture->seedDefaultPreferences($org['org_id']);
+        $category = $fixture->createAndSaveCategory('Calendar', 'EVT', $org['org_id']);
+        [$adminUser] = $this->makeEventAdmin($fixture, $org['org_id'], 'evtadmin');
+
+        $this->withCurrentUser($adminUser, $org['org_id'], true, function () use ($adminUser, $org, $category) {
+            $eventId = $this->createEvent(
+                $adminUser,
+                $org['org_id'],
+                $category['cat_id'],
+                'Single Time Event',
+                '2030-05-01 18:00:00',
+                '2030-05-01 18:00:00'
+            );
+
+            $event = new Event($this->getDatabase(), $eventId);
+            $period = $event->getDateTimePeriod(true, 'none');
+            $this->assertSame('01.05.2030 18:00', $period);
+
+            $eventIdDiffTime = $this->createEvent(
+                $adminUser,
+                $org['org_id'],
+                $category['cat_id'],
+                'Range Event',
+                '2030-05-01 18:00:00',
+                '2030-05-01 20:00:00'
+            );
+
+            $eventDiff = new Event($this->getDatabase(), $eventIdDiffTime);
+            $periodDiff = $eventDiff->getDateTimePeriod(true, 'none');
+            $this->assertSame('01.05.2030 18:00 - 20:00', $periodDiff);
+        });
+    }
 }
+

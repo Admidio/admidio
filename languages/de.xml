@@ -2044,6 +2044,10 @@
   <string name="SYS_WEBSITE">Webseite</string>
   <string name="SYS_WEDNESDAY">Mittwoch</string>
   <string name="SYS_WEEKDAY">Wochentag</string>
+  <string name="SYS_WEEKDAY_FORMAT">Anzeige Wochentag</string>
+  <string name="SYS_WEEKDAY_FORMAT_DESC">Legt fest, ob und in welchem Format der Wochentag bei Terminen angezeigt werden soll.</string>
+  <string name="SYS_WEEKDAY_LONG">Ausgeschrieben (z. B. Dienstag)</string>
+  <string name="SYS_WEEKDAY_SHORT">Abgekürzt (z. B. Di)</string>
   <string name="SYS_WEEKDAYS">Wochentage</string>
   <string name="SYS_WEEKLY">Wöchentlich</string>
   <string name="SYS_WIDTH">Breite</string>
