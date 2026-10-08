@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\InstallationUpdate\Service\CoreUpdateHandover;
 use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
@@ -33,6 +34,9 @@ use Admidio\UI\Presenter\InstallationPresenter;
 const THEME_URL = 'layout';
 
 try {
+    // set once the database update has begun, so that a failure is recorded for the core update
+    $databaseUpdateStarted = false;
+
     /**
      * Shows an error dialog with an error message to the user.
      * @param string $message Message that should be shown to the user.
@@ -57,70 +61,6 @@ try {
             ($reloadPage) ? 'bi-arrow-clockwise' : 'bi-house-door-fill',
             ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . FOLDER_MODULES . '/overview.php'
         );
-    }
-
-    /**
-     * Loads and validates the authorization created by the normal settings page for an automatic
-     * core update. The random credential is independent of the normal Admidio session and therefore
-     * survives the source-file replacement without requiring another administrator login.
-     *
-     * @param string $updateId
-     * @return array{file:string,data:array<string,mixed>}
-     */
-    function readAuthorizedCoreUpdate(string $updateId): array
-    {
-        if (!preg_match('/^[a-f0-9]{32}$/', $updateId)) {
-            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        $stateFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/core-update/' . $updateId . '/state.json';
-        if (!is_file($stateFile)) {
-            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        $state = json_decode((string) file_get_contents($stateFile), true);
-        if (!is_array($state)
-            || ($state['updateId'] ?? '') !== $updateId
-            || !isset($state['cookieName'], $state['authorizationHash'], $state['expiresAt'])) {
-            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        $authorizationToken = $_COOKIE[(string) $state['cookieName']] ?? '';
-        if (!is_string($authorizationToken)
-            || $authorizationToken === ''
-            || !hash_equals((string) $state['authorizationHash'], hash('sha256', $authorizationToken))
-            || (int) $state['expiresAt'] < time()) {
-            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        return array('file' => $stateFile, 'data' => $state);
-    }
-
-    /**
-     * @param string $stateFile
-     * @param array<string,mixed> $state
-     */
-    function writeCoreUpdateState(string $stateFile, array $state): void
-    {
-        $temporaryFile = $stateFile . '.new';
-        $json = json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-
-        if (file_put_contents($temporaryFile, $json, LOCK_EX) === false) {
-            @unlink($temporaryFile);
-            throw new RuntimeException('Could not persist the core update state.');
-        }
-
-        @copy($stateFile, $stateFile . '.previous');
-        if (!@rename($temporaryFile, $stateFile)) {
-            if (is_file($stateFile) && !@unlink($stateFile)) {
-                @unlink($temporaryFile);
-                throw new RuntimeException('Could not persist the core update state.');
-            }
-            if (!@rename($temporaryFile, $stateFile)) {
-                @unlink($temporaryFile);
-                throw new RuntimeException('Could not persist the core update state.');
-            }
-        }
     }
 
     $rootPath = dirname(__DIR__);
@@ -153,11 +93,24 @@ try {
 
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'update', 'result')));
     $getCoreUpdate = admFuncVariableIsValid($_GET, 'core_update', 'string', array('defaultValue' => ''));
-    $coreUpdate = null;
 
+    /*
+     * An automatic core update hands over to this script once it has installed the files. The update
+     * that owns the maintenance mode is looked at in every case, also without the parameter, so that
+     * no migration starts while that update is still copying files.
+     */
+    $coreUpdate = CoreUpdateHandover::fromMaintenance();
     if ($getCoreUpdate !== '') {
-        $coreUpdate = readAuthorizedCoreUpdate($getCoreUpdate);
-        $gLoginForUpdate = false;
+        if ($coreUpdate !== null && $coreUpdate->getUpdateId() !== $getCoreUpdate) {
+            throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
+        }
+        $coreUpdate ??= CoreUpdateHandover::load($getCoreUpdate);
+
+        // The administrator who started the update is known by the updater cookie. Anybody else
+        // proves who they are with the normal login of this page.
+        if ($coreUpdate->isAuthorized($_COOKIE[$coreUpdate->getCookieName()] ?? '')) {
+            $gLoginForUpdate = false;
+        }
     }
 
     // connect to database
@@ -166,7 +119,7 @@ try {
     // Start a separate, clean PHP session for automatic core updates. This prevents the new
     // database updater from depending on serialized objects created by the previous source version.
     $updateSessionPrefix = COOKIE_PREFIX;
-    if (is_array($coreUpdate)) {
+    if ($getCoreUpdate !== '') {
         $updateSessionPrefix .= '_CORE_UPDATE_' . substr($getCoreUpdate, 0, 12);
     }
 
@@ -175,17 +128,14 @@ try {
         Session::start(
             $updateSessionPrefix,
             0,
-            is_array($coreUpdate) ? rtrim(ADMIDIO_URL_PATH, '/') . '/install/' : ''
+            $getCoreUpdate !== '' ? rtrim(ADMIDIO_URL_PATH, '/') . '/install/' : ''
         );
     } catch (RuntimeException $exception) {
         // TODO
     }
 
     // create a session object
-    if (is_array($coreUpdate)) {
-        // Session::__construct currently checks the normal session cookie first. The automatic
-        // updater must use the newly started installation-only session instead.
-        unset($_COOKIE[COOKIE_PREFIX . '_SESSION_ID']);
+    if ($getCoreUpdate !== '') {
         $gCurrentSession = new Session($gDb, $updateSessionPrefix);
         $_SESSION['gCurrentSession'] = $gCurrentSession;
     } elseif (array_key_exists('gCurrentSession', $_SESSION)) {
@@ -240,6 +190,11 @@ try {
     }
     $gL10n = new Language($gSettingsManager->getString('system_language'), true);
     $gChangeNotification = new ChangeNotification();
+
+    // The files of the core update that owns the maintenance mode are still a mix of two releases.
+    if ($coreUpdate !== null && !$coreUpdate->isMigrationAllowed()) {
+        throw new \Admidio\Infrastructure\Exception('SYS_CORE_UPDATE_IN_PROGRESS');
+    }
 
     // check if adm_my_files has "write" privileges and check some subfolders of adm_my_files
     Installation::checkFolderPermissions();
@@ -317,12 +272,9 @@ try {
             $page->setUpdateModus();
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
-            // create form with login and update button
+            // The update request must name the core update as well, or nothing would finish it.
             $updateParameters = array('mode' => 'update');
-            if (is_array($coreUpdate)) {
-                $coreUpdate['data']['state'] = 'database_update_pending';
-                $coreUpdate['data']['lastError'] = '';
-                writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+            if ($getCoreUpdate !== '') {
                 $updateParameters['core_update'] = $getCoreUpdate;
             }
 
@@ -330,7 +282,7 @@ try {
             $form = new FormPresenter(
                 'adm_update_login_form',
                 'update.tpl',
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'update')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', $updateParameters),
                 $page
             );
             if (!isset($gLoginForUpdate) || $gLoginForUpdate) {
@@ -364,14 +316,13 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
-            if (is_array($coreUpdate)) {
-                $coreUpdate['data']['state'] = 'database_update_completed';
-                $coreUpdate['data']['lastError'] = '';
-                writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
-                admRedirect(
-                    ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?update_id='
-                    . rawurlencode($getCoreUpdate) . '&action=finish'
-                );
+            // There is nothing to migrate, so this request finishes the core update.
+            if ($coreUpdate !== null) {
+                $coreUpdate->complete();
+                if ($getCoreUpdate !== '') {
+                    admRedirect($coreUpdate->getResultUrl());
+                    // => EXIT
+                }
             }
 
             $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
@@ -412,21 +363,25 @@ try {
         }
 
         // start the update
-        if (is_array($coreUpdate)) {
-            $coreUpdate['data']['state'] = 'database_update_started';
-            $coreUpdate['data']['lastError'] = '';
-            writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+        if ($coreUpdate !== null) {
+            $coreUpdate->markDatabaseRunning();
         }
+        $databaseUpdateStarted = true;
 
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion);
+        $databaseUpdateStarted = false;
 
-        if (is_array($coreUpdate)) {
-            $coreUpdate['data']['state'] = 'database_update_completed';
-            $coreUpdate['data']['lastError'] = '';
-            writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
-            $resultUrl = ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?update_id='
-                . rawurlencode($getCoreUpdate) . '&action=finish';
+        /*
+         * The migration has succeeded, so the core update is finished here and maintenance mode goes
+         * off in this request - whether or not the browser that started it is still waiting.
+         */
+        if ($coreUpdate !== null) {
+            $coreUpdate->complete();
+        }
+
+        if ($getCoreUpdate !== '') {
+            $resultUrl = $coreUpdate->getResultUrl();
         } else {
             $resultUrl = SecurityUtils::encodeUrl(
                 ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php',
@@ -503,9 +458,13 @@ try {
         $page->show();
     }
 } catch (Throwable $e) {
-    if (isset($coreUpdate) && is_array($coreUpdate)) {
-        $coreUpdate['data']['lastError'] = $e->getMessage();
-        writeCoreUpdateState($coreUpdate['file'], $coreUpdate['data']);
+    // A failed migration leaves the maintenance mode on: the files are new, the database is not.
+    if ($databaseUpdateStarted && $coreUpdate !== null) {
+        try {
+            $coreUpdate->markDatabaseFailed($e->getMessage());
+        } catch (Throwable) {
+            // The error of the migration is the one to report.
+        }
     }
 
     if ($getMode === 'update') {

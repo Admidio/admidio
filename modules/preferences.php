@@ -16,7 +16,7 @@
  *            test_email     - send test email
  *            backup         - create backup of Admidio database
  *            update_check   - Check for a new version of Admidio
- *            update_prepare - Download an update and start the isolated core updater
+ *            update_start   - Download an update and start the isolated core updater
  * panel    : The name of the preferences panel that should be shown or saved.
  ***********************************************************************************************
  */
@@ -38,7 +38,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check', 'changelog_purge')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check', 'update_start', 'changelog_purge')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
 
@@ -137,7 +137,7 @@ try {
             echo $preferences->showUpdateInfo();
             break;
 
-        case 'update_prepare':
+        case 'update_start':
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
             $updateGitMaster = admFuncVariableIsValid($_POST, 'git_master', 'bool', array('defaultValue' => false));
 
@@ -149,5 +149,6 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    handleException($e, in_array($getMode, array('save', 'update_check')));
+    // The update check and the update start are called by JavaScript, which expects JSON.
+    handleException($e, in_array($getMode, array('save', 'update_check', 'update_start')));
 }

@@ -749,7 +749,7 @@ class CoreUpdatePreparationService
     {
         $temporaryFile = tempnam(sys_get_temp_dir(), 'admidio-update-');
         if ($temporaryFile === false) {
-            throw new Exception('SYS_CORE_UPDATE_DOWNLOAD_FAILED');
+            throw new Exception('SYS_CORE_UPDATE_DOWNLOAD_FAILED', array(''));
         }
 
         try {
@@ -934,7 +934,6 @@ class CoreUpdatePreparationService
             'filesInstalling' => 'SYS_CORE_UPDATE_FILES_INSTALLING',
             'databaseStart' => 'SYS_CORE_UPDATE_DATABASE_START',
             'databaseContinue' => 'SYS_CORE_UPDATE_DATABASE_CONTINUE',
-            'databaseCompleted' => 'SYS_CORE_UPDATE_DATABASE_COMPLETED',
             'alreadyCompleted' => 'SYS_CORE_UPDATE_ALREADY_COMPLETED',
             'filesystemRolledBack' => 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK',
             'previousFilesRestored' => 'SYS_CORE_UPDATE_PREVIOUS_FILES_RESTORED',

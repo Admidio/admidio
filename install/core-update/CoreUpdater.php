@@ -175,21 +175,13 @@ class CoreUpdater
                 );
             }
 
-            if ($state === 'database_update_pending' || $state === 'database_update_started') {
+            // install/update.php owns these states: it runs the migration and records the result.
+            if ($state === 'database_running' || $state === 'database_failed') {
                 return array(
                     'status' => 'redirect',
                     'message' => $this->getText('databaseContinue'),
                     'url' => $this->getDatabaseUpdateUrl(),
                     'progress' => 95
-                );
-            }
-
-            if ($state === 'database_update_completed') {
-                return array(
-                    'status' => 'redirect',
-                    'message' => $this->getText('databaseCompleted'),
-                    'url' => $this->getSelfUrl('finish'),
-                    'progress' => 99
                 );
             }
 
@@ -224,7 +216,7 @@ class CoreUpdater
 
             if (in_array($currentState, array('ready', 'installing'), true)) {
                 $this->state['state'] = 'rollback_required';
-            } elseif (!in_array($currentState, array('files_installed', 'database_update_completed', 'completed'), true)) {
+            } elseif (!in_array($currentState, array('files_installed', 'database_running', 'database_failed', 'completed'), true)) {
                 $this->state['state'] = 'failed';
             }
 
@@ -248,6 +240,10 @@ class CoreUpdater
             $this->state = $this->readState();
             if (!in_array((string) $this->state['state'], array('installing', 'rollback_required', 'failed'), true)) {
                 throw new RuntimeException('Rollback is not possible in the current update state.');
+            }
+            // The database may already be ahead of the old files, so they must not come back.
+            if (!empty($this->state['databaseStarted'])) {
+                throw new RuntimeException('Rollback is not possible after the database update has started.');
             }
 
             $entries = $this->readJournal();
@@ -320,8 +316,8 @@ class CoreUpdater
 
         try {
             $this->state = $this->readState();
-            if ((string) $this->state['state'] !== 'database_update_completed'
-                && (string) $this->state['state'] !== 'completed') {
+            // install/update.php sets this state and switches maintenance mode off itself.
+            if ((string) $this->state['state'] !== 'completed') {
                 throw new RuntimeException('The database update has not completed.');
             }
 
@@ -1143,11 +1139,8 @@ class CoreUpdater
         if ($state === 'ready') {
             return 30;
         }
-        if (in_array($state, array('files_installed', 'database_update_pending', 'database_update_started'), true)) {
+        if (in_array($state, array('files_installed', 'database_running', 'database_failed'), true)) {
             return 95;
-        }
-        if ($state === 'database_update_completed') {
-            return 99;
         }
         if ($state === 'completed') {
             return 100;

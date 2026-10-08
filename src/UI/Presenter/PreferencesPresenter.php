@@ -3281,11 +3281,37 @@ class PreferencesPresenter extends PagePresenter
                             git_master: updateGitMaster
                         }
                     ).done(function(htmlVersion) {
-                         versionInfoContainer.html(htmlVersion);
+                        // A failure is answered with JSON, a success with the HTML to show.
+                        var error = coreUpdateError(htmlVersion);
+                        versionInfoContainer.html(error === null ? htmlVersion : "<div class=\"alert alert-danger\">" + error + "</div>");
                     }).fail(function(response) {
-                        versionInfoContainer.html(response.responseText);
+                        versionInfoContainer.html("<div class=\"alert alert-danger\">" + coreUpdateFailure(response) + "</div>");
                     });
                 });
+
+                /*
+                 * The message of a JSON error answer, or null if the answer is not one. handleException()
+                 * answers these requests with {status: "error", message: ...}; the page must show the
+                 * message, never the raw answer.
+                 */
+                function coreUpdateError(response) {
+                    var result = response;
+                    if (typeof response === "string") {
+                        try {
+                            result = JSON.parse(response);
+                        } catch (e) {
+                            return null;
+                        }
+                    }
+                    return (result !== null && typeof result === "object" && result.status === "error")
+                        ? String(result.message) : null;
+                }
+
+                // The text for a request that failed on the HTTP level.
+                function coreUpdateFailure(response) {
+                    var error = coreUpdateError(response.responseText);
+                    return error !== null ? error : "HTTP " + response.status + " " + response.statusText;
+                }
 
                 // Prepare and start the isolated core updater
                 panelContainer.off("click", "#adm_start_core_update").on("click", "#adm_start_core_update", function(event) {
@@ -3296,24 +3322,30 @@ class PreferencesPresenter extends PagePresenter
                     button.find("i").attr("class", "spinner-border spinner-border-sm");
 
                     $.post(
-                        "' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_prepare",
+                        "' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_start",
                         {
                             adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '",
                             git_master: updateGitMaster
                         }
                     ).done(function(response) {
-                        var result = typeof response === "string" ? JSON.parse(response) : response;
-                        if (result.status === "success") {
-                            window.location.href = result.url;
-                        } else {
-                            button.prop("disabled", false);
-                            button.find("i").attr("class", "bi bi-arrow-repeat");
-                            alert(result.message);
+                        var result = null;
+                        try {
+                            result = typeof response === "string" ? JSON.parse(response) : response;
+                        } catch (e) {
+                            result = null;
                         }
+                        if (result !== null && result.status === "success") {
+                            window.location.href = result.url;
+                            return;
+                        }
+                        button.prop("disabled", false);
+                        button.find("i").attr("class", "bi bi-arrow-repeat");
+                        var message = coreUpdateError(result);
+                        messageBox(message !== null ? message : ' . json_encode($gL10n->get('SYS_CORE_UPDATE_REQUEST_FAILED')) . ', ' . json_encode($gL10n->get('SYS_ERROR')) . ', "error");
                     }).fail(function(response) {
                         button.prop("disabled", false);
                         button.find("i").attr("class", "bi bi-arrow-repeat");
-                        alert(response.responseText);
+                        messageBox(coreUpdateFailure(response), ' . json_encode($gL10n->get('SYS_ERROR')) . ', "error");
                     });
                 });
 
