@@ -306,6 +306,8 @@ class EventTest extends DatabaseTestCase
     {
         $fixture = $this->getFixture();
         $org = $fixture->createAndSaveOrganization('Event Org', 'evtorg');
+        // the period is formatted with the date and time format of the organization preferences
+        $fixture->seedDefaultPreferences($org['org_id']);
         $category = $fixture->createAndSaveCategory('Calendar', 'EVT', $org['org_id']);
         [$adminUser] = $this->makeEventAdmin($fixture, $org['org_id'], 'evtadmin');
 
