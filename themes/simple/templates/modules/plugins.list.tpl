@@ -13,6 +13,7 @@
         </ul>
     </div>
 {/if}
+{include 'sys-template-parts/plugins.crashed.tpl'}
 
 <!-- for big screens: Table -->
 <div class="d-none d-md-block">
