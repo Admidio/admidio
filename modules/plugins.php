@@ -23,12 +23,15 @@
  *             disable       - Disable a plugin for the current organization. See 'enable'.
  *             update        - Run the update scripts of a plugin
  *             uninstall     - Uninstall a plugin
+ *             retry         - Load a plugin again that is kept out after a crash, and return to
+ *                             the page the administrator came from
  *  plugin   : ID of the plugin, which is the name of its directory below plugins/
  *  data     : uninstall - also run db_scripts/uninstall.sql and destroy the data of the plugin
  ***********************************************************************************************
  */
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginCrashGuard;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginPanel;
@@ -43,9 +46,9 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'list_refresh', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
-    // Everything but the list, the list refresh and the settings dialog answers with JSON.
-    $isAjax = !in_array($getMode, array('list', 'list_refresh', 'add', 'settings'), true);
+        'validValues' => array('list', 'list_refresh', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove', 'retry')));
+    // Everything but the list, the list refresh, the settings dialog and the retry answers with JSON.
+    $isAjax = !in_array($getMode, array('list', 'list_refresh', 'add', 'settings', 'retry'), true);
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
@@ -236,6 +239,22 @@ try {
                 'status' => 'success',
                 'message' => $gL10n->get($filesDeleted ? 'SYS_PLUGIN_REMOVED' : 'SYS_PLUGIN_REMOVED_FILES_KEPT')
             ));
+            break;
+
+        case 'retry':
+            // The notice that offers this is a plain form post, so the answer is a page, not JSON.
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            // The plugins of this request were loaded before the entry is removed, so this request
+            // cannot crash on it; the page it returns to is the one that tries the plugin again.
+            PluginCrashGuard::remove($getPluginId);
+
+            try {
+                $returnUrl = $gNavigation->getUrl();
+            } catch (Exception) {
+                $returnUrl = ADMIDIO_URL . FOLDER_MODULES . '/plugins.php';
+            }
+            admRedirect($returnUrl);
             break;
     }
 } catch (Throwable $e) {

@@ -3,6 +3,7 @@
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 
 /**
  * Knows which plugins exist and in which state they are.
@@ -395,22 +396,75 @@ final class PluginRegistry
 
     /**
      * Every plugin that should be loaded in this request: installed, enabled for the current
-     * organization, not waiting for an update and with satisfied requirements. Plugin dependencies
-     * are resolved first, so that a plugin is only loaded after the plugins it needs.
+     * organization, not waiting for an update, with satisfied requirements and not kept out after a
+     * crash (see getExcluded()). Plugin dependencies are resolved first, so that a plugin is only
+     * loaded after the plugins it needs.
      * @return array<int,Plugin>
      * @throws Exception
      */
     public static function getLoadable(): array
     {
+        $excluded = self::getExcluded();
+
         $candidates = array();
         foreach (self::all() as $id => $plugin) {
-            if ($plugin->isValid() && self::isEnabled($id)
+            if ($plugin->isValid() && !isset($excluded[$id]) && self::isEnabled($id)
                 && !version_compare(self::getInstalledVersion($id), $plugin->version, '<')) {
                 $candidates[$id] = $plugin;
             }
         }
 
         return self::sortByDependencies($candidates);
+    }
+
+    /**
+     * The plugins that are kept out of every request because they crashed, as pluginId => ID of the
+     * plugin that crashed. That is the crashed plugins themselves and every plugin that requires one
+     * of them, directly or through another plugin, because it would fail without it.
+     *
+     * Whether a plugin is enabled stays untouched: it is the decision of an organization, and the
+     * crash is a passing state of the installation (see PluginCrashGuard).
+     * @return array<string,string>
+     */
+    public static function getExcluded(): array
+    {
+        $excluded = array();
+        foreach (array_keys(PluginCrashGuard::getActive()) as $id) {
+            $excluded[$id] = $id;
+        }
+
+        do {
+            $added = false;
+            foreach (self::all() as $id => $plugin) {
+                if (isset($excluded[$id]) || !$plugin->isValid()) {
+                    continue;
+                }
+                foreach (array_keys($plugin->requires['plugins']) as $requiredId) {
+                    if (isset($excluded[$requiredId])) {
+                        $excluded[$id] = $excluded[$requiredId];
+                        $added = true;
+                        break;
+                    }
+                }
+            }
+        } while ($added);
+
+        return $excluded;
+    }
+
+    /**
+     * Refuse a page of a plugin that is kept out after a crash. Its classes and hooks are not
+     * loaded, so the page could only fail, and the visitor is better told why.
+     * @param Plugin $plugin
+     * @return void
+     * @throws Exception
+     */
+    public static function requireNotExcluded(Plugin $plugin): void
+    {
+        if (isset(self::getExcluded()[$plugin->id])) {
+            PluginLoader::registerLanguages($plugin);
+            throw new Exception('SYS_PLUGIN_CRASHED_PAGE', array(Language::translateIfTranslationStrId($plugin->name)));
+        }
     }
 
     /**
@@ -447,6 +501,7 @@ final class PluginRegistry
     public static function resolvePage(string $id, string $page): string
     {
         $plugin = self::requireEnabled($id);
+        self::requireNotExcluded($plugin);
         $page = basename($page);
         $directory = $plugin->getDirectory(Plugin::DIR_PAGES);
 
