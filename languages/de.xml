@@ -262,6 +262,11 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Veranstaltung, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
+  <string name="SYS_ALIGN_CENTER">Zentriert</string>
+  <string name="SYS_ALIGN_JUSTIFY">Blocksatz</string>
+  <string name="SYS_ALIGN_LEFT">Linksbündig</string>
+  <string name="SYS_ALIGN_RIGHT">Rechtsbündig</string>
+  <string name="SYS_ALIGNMENT">Ausrichtung</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
@@ -311,6 +316,8 @@
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
+  <string name="SYS_BOLD">Fett</string>
+  <string name="SYS_BULLETED_LIST">Aufzählung</string>
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Abbrechen</string>
@@ -514,6 +521,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird eine neue Benutzerin oder ein neuer Benutzer angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der neuen Benutzerin oder dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zuzuordnen, so werden ihm alle Rollenzuordnungen angezeigt und er kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
+  <string name="SYS_DEFAULT_COLOR">Standardfarbe</string>
   <string name="SYS_DEFAULT_REPORT">Standardreport</string>
   <string name="SYS_DEFAULT_REPORT_DESC">Wähle den Report, der beim Aufruf des Kategorienreports für diese Organisation angezeigt wird.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
@@ -534,6 +542,9 @@
   <string name="SYS_DEFAULT_VIEW_DESC">Es kann ein Anzeigemodus für die Veranstaltungen vorausgewählt werden. Im Modus #VAR1_BOLD# werden alle Informationen zu einer Veranstaltung in einem Kasten angezeigt. Im Anzeigemodus #VAR2_BOLD# werden die wichtigsten Veranstaltungsinformationen in einer kompakten Liste angezeigt. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">Ein Anzeigemodus für die Forenthemen kann vorgewählt werden. Im Modus #VAR1_BOLD# wird jedes Thema in einer Karte mit einer Vorschau des Thementextes dargestellt. Im Modus #VAR2_BOLD# werden die Themen in einer Liste dargestellt, um die Informationen in einer kompakten Liste zu zeigen. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DELETE">Löschen</string>
+  <string name="SYS_DELETE_COLUMN">Spalte löschen</string>
+  <string name="SYS_DELETE_ROW">Zeile löschen</string>
+  <string name="SYS_DELETE_TABLE">Tabelle löschen</string>
   <string name="SYS_DELETE_ALBUM">Album löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
   <string name="SYS_DELETE_REPORT">Ausgewählten Report löschen?</string>
@@ -759,6 +770,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an eine:n #VAR2#Administrator:in#VAR3#, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</string>
   <string name="SYS_FONT">Schriftart</string>
+  <string name="SYS_FONT_SIZE">Schriftgröße</string>
   <string name="SYS_FORM_USE_FOR_EDIT">Wenn diese Checkbox aktiviert ist, wird der entsprechende Feldwert zum Bearbeiten der Auswahl verwendet.</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>
@@ -824,6 +836,14 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Kontakts ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
+  <string name="SYS_INSERT_IMAGE">Bild einfügen</string>
+  <string name="SYS_INSERT_COLUMN_LEFT">Spalte links einfügen</string>
+  <string name="SYS_INSERT_COLUMN_RIGHT">Spalte rechts einfügen</string>
+  <string name="SYS_INSERT_ROW_ABOVE">Zeile oberhalb einfügen</string>
+  <string name="SYS_INSERT_ROW_BELOW">Zeile unterhalb einfügen</string>
+  <string name="SYS_INSERT_TABLE">Tabelle einfügen (2 × 2)</string>
+  <string name="SYS_INSERT_VIDEO">Video einfügen</string>
+  <string name="SYS_INSERT_LINK">Link einfügen</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Installieren</string>
   <string name="SYS_INSTALL_APP">App installieren</string>
@@ -978,11 +998,13 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">Benutzerdefinierte Felder</string>
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
+  <string name="SYS_ITALIC">Kursiv</string>
   <string name="SYS_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>
   <string name="SYS_LANGUAGE">Sprache</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio wird in der Sprache angezeigt, die im Browser für Webseiten eingestellt ist. Wenn die dort hinterlegte Sprache nicht verfügbar ist, wird die hier eingestellte Sprache verwendet.\nIst deine Sprache nicht vorhanden oder möchtest du weitere Texte übersetzen oder bestehende Übersetzungen verbessern? Dann wirf einen Blick auf die #VAR1#Admidio-Wiki-Seite#VAR2#, um herauszufinden, wie du bei der Übersetzung helfen kannst.</string>
+  <string name="SYS_LARGE">Groß</string>
   <string name="SYS_LAST_EDITED_AT">Zuletzt bearbeitet am #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
   <string name="SYS_LAST_LOGIN">Letzter Login</string>
@@ -1148,6 +1170,7 @@
   <string name="SYS_NEXT">Weiter</string>
   <string name="SYS_NEXT_PHOTO">Nächstes Bild</string>
   <string name="SYS_NO">Nein</string>
+  <string name="SYS_NORMAL">Normal</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Keine zusätzlichen Berechtigungen gesetzt</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">Keine zusätzlichen Rechte</string>
   <string name="SYS_NO_DATA_FOUND">Es wurden keine Daten gefunden.</string>
@@ -1223,6 +1246,7 @@
   <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
+  <string name="SYS_ORDERED_LIST">Nummerierte Liste</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organisationszugehörigkeit</string>
   <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation mit der Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
@@ -1472,6 +1496,7 @@
   <string name="SYS_REMOVE_CONTACT_SELECTION">Kontaktauswahl löschen</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten der ausgewählten Kontakte gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Willst du die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
+  <string name="SYS_REMOVE_FORMATTING">Formatierung entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
@@ -1538,6 +1563,7 @@
   <string name="SYS_ROTATE_PHOTO_LEFT">Foto gegen den Uhrzeigersinn drehen</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Foto im Uhrzeigersinn drehen</string>
   <string name="SYS_ROW">Zeile</string>
+  <string name="SYS_RESIZE_IMAGE">Bildgröße ändern</string>
   <string name="SYS_RSS_DISABLED">Der Web-Feed ist deaktiviert.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web-Feed für #VAR1#</string>
   <string name="SYS_RUN_REPORT">Report ausführen</string>
@@ -1658,6 +1684,7 @@
   <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
   <string name="SYS_SINCE_VAR">seit #VAR1#</string>
   <string name="SYS_SIZE">Größe</string>
+  <string name="SYS_SMALL">Klein</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
@@ -1967,6 +1994,7 @@
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
+  <string name="SYS_UNDERLINE">Unterstrichen</string>
   <string name="SYS_UNIDIRECTIONAL">unidirektional</string>
   <string name="SYS_UNIQUE_ID">Eindeutige Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
@@ -2013,6 +2041,7 @@
   <string name="SYS_VARIOUS_ROLES">Verschiedene Rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="SYS_VCARD">vCard</string>
+  <string name="SYS_VERY_LARGE">Sehr groß</string>
   <string name="SYS_VENUE">Veranstaltungsort</string>
   <string name="SYS_VENUE_LINK">Wenn genügend Informationen (Stadt, Straße, Treffpunkt) über den Veranstaltungsort eingegeben werden, kann ein Link oder eine Route über Google Maps erstellt werden.</string>
   <string name="SYS_VERSION">Version</string>
@@ -2026,6 +2055,8 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Es werden dir hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldeten Benutzer:innen sichtbar sind. Falls du auch Mitglied dieser Organisation bist, werden dir zusätzlich die Rollen angezeigt, die du mit deinen Rechten innerhalb der jeweiligen Organisation sehen darfst.</string>
   <string name="SYS_VIEWS">Aufrufe</string>
   <string name="SYS_VIEWS_VAR">#VAR1# Aufrufe</string>
+  <string name="SYS_VIDEO_URL">YouTube- oder Vimeo-URL</string>
+  <string name="SYS_VIDEO_URL_INVALID">Bitte gib eine gültige YouTube- oder Vimeo-URL ein.</string>
   <string name="SYS_VISIBILITY">Sichtbarkeit</string>
   <string name="SYS_VISIBLE">Sichtbar</string>
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>

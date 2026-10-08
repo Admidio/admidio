@@ -491,9 +491,9 @@ class FormPresenter
     }
 
     /**
-     * Add a new CKEditor element to the form.
-     * @param string $id ID of the password field. This will also be the name of the password field.
-     * @param string $label The label of the password field.
+     * Add a rich text editor element to the form.
+     * @param string $id ID of the editor field. This will also be the name of the editor field.
+     * @param string $label The label of the editor field.
      * @param string $value A value for the editor field. The editor will contain this value when created.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
@@ -514,7 +514,7 @@ class FormPresenter
      */
     public function addEditor(string $id, string $label, string $value, array $options = array()): void
     {
-        global $gSettingsManager, $gL10n, $gCurrentSession;
+        global $gSettingsManager;
 
         $flagLabelVertical = $this->type;
 
@@ -527,6 +527,8 @@ class FormPresenter
             'value' => $value
         ), $options));
 
+        $optionsAll['quillEnabled'] = $gSettingsManager->getBool('system_js_editor_enabled');
+
         $attributes = array();
 
         if ($optionsAll['labelVertical']) {
@@ -538,40 +540,14 @@ class FormPresenter
             $this->flagRequiredFields = true;
         }
 
-        if ($optionsAll['toolbar'] === 'AdmidioComments') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "link", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "undo", "redo"],';
-        } elseif ($optionsAll['toolbar'] === 'AdmidioNoMedia') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "link", "blockQuote", "insertTable", "|", "undo", "redo"],';
-        } else {
-            $toolbarJS = '';
-        }
-
-        $javascriptCode = '
-        let editor;
-        ClassicEditor
-        .create( document.querySelector( "#' . $id . '" ), {
-            ' . $toolbarJS . '
-            language: "' . $gL10n->getLanguageLibs() . '",
-            simpleUpload: {
-                uploadUrl: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php',
-                    array('id' => $id)) . '",
-                headers: { "X-CSRF-TOKEN": "' . $gCurrentSession->getCsrfToken() . '" }
-            }
-        } )
-        .then( newEditor => {
-            editor = newEditor;
-        })
-        .catch( error => {
-            console.error( error );
-        } );';
-
-        if ($gSettingsManager->getBool('system_js_editor_enabled')) {
-            // if a htmlPage object was set then add code to the page, otherwise to the current string
+        if ($optionsAll['quillEnabled']) {
             if (isset($this->htmlPage)) {
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill-editor.css');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js');
             }
-            $this->addJavascriptCode($javascriptCode, true);
+            $this->addJavascriptCode(QuillEditor::initializationCode($id, $optionsAll['toolbar']), true);
         }
 
         $this->type = $flagLabelVertical;
@@ -2434,6 +2410,15 @@ class FormPresenter
                             $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
                             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
                             $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+                            $config->set('HTML.SafeIframe', true);
+                            $config->set('URI.SafeIframeRegexp', '%\\Ahttps://(?:(?:www\\.)?youtube(?:-nocookie)?\\.com/embed/[A-Za-z0-9_-]{11}|player\\.vimeo\\.com/video/[0-9]+)\\z%');
+                            $config->set('HTML.DefinitionID', 'admidio-quill-video');
+                            $config->set('HTML.DefinitionRev', 1);
+                            // A cached definition is already configured and needs no further changes.
+                            $definition = $config->maybeGetRawHTMLDefinition();
+                            if ($definition !== null) {
+                                $definition->addAttribute('iframe', 'allowfullscreen', 'Bool#allowfullscreen');
+                            }
 
                             $filter = new HTMLPurifier($config);
                             $validFieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);

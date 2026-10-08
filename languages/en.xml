@@ -258,6 +258,11 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
+  <string name="SYS_ALIGN_CENTER">Center</string>
+  <string name="SYS_ALIGN_JUSTIFY">Justify</string>
+  <string name="SYS_ALIGN_LEFT">Left</string>
+  <string name="SYS_ALIGN_RIGHT">Right</string>
+  <string name="SYS_ALIGNMENT">Alignment</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Allow comments within participation</string>
@@ -306,6 +311,8 @@
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_BLUESKY">Bluesky</string>
+  <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BULLETED_LIST">Bulleted list</string>
   <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANCEL">Cancel</string>
@@ -505,6 +512,7 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
+  <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Define a country for which this organization mainly operates. It will be preselected when new users are created or registered. It eases the data input and can be changed by the user.</string>
@@ -524,6 +532,9 @@
   <string name="SYS_DEFAULT_VIEW_DESC">A display mode of the events can be preselected. In #VAR1_BOLD# mode, all the information about an event is displayed in a box. In the #VAR2_BOLD# display mode, the most important event information is shown in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">A display mode of the forum topics can be preselected. Within mode #VAR1_BOLD#, each topic is presented in a card with a preview of the topic text. Within mode #VAR2_BOLD#, the topics are presented in a list to show the information in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DELETE">Delete</string>
+  <string name="SYS_DELETE_COLUMN">Delete column</string>
+  <string name="SYS_DELETE_ROW">Delete row</string>
+  <string name="SYS_DELETE_TABLE">Delete table</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
@@ -748,6 +759,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
+  <string name="SYS_FONT_SIZE">Font size</string>
   <string name="SYS_FORM_USE_FOR_EDIT">If this checkbox is activated, the corresponding field value will be used for editing the selection.</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
@@ -813,6 +825,14 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
+  <string name="SYS_INSERT_IMAGE">Insert image</string>
+  <string name="SYS_INSERT_COLUMN_LEFT">Insert column to the left</string>
+  <string name="SYS_INSERT_COLUMN_RIGHT">Insert column to the right</string>
+  <string name="SYS_INSERT_ROW_ABOVE">Insert row above</string>
+  <string name="SYS_INSERT_ROW_BELOW">Insert row below</string>
+  <string name="SYS_INSERT_TABLE">Insert table (2 × 2)</string>
+  <string name="SYS_INSERT_VIDEO">Insert video</string>
+  <string name="SYS_INSERT_LINK">Insert link</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Install</string>
   <string name="SYS_INSTALL_APP">Install app</string>
@@ -967,11 +987,13 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
+  <string name="SYS_ITALIC">Italic</string>
   <string name="SYS_KEEP_ORIGINAL">Save original files additionally</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio is displayed in the language set in the browser for websites. If the language stored there is not available, the language set here will be used.\nIs your language missing or would you like to translate more texts or improve existing translations? Then take a look at the #VAR1#Admidio wiki page#VAR2# to find out how you can help with the translation.</string>
+  <string name="SYS_LARGE">Large</string>
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN">Last login</string>
@@ -1134,6 +1156,7 @@
   <string name="SYS_NEXT">Next</string>
   <string name="SYS_NEXT_PHOTO">Next picture</string>
   <string name="SYS_NO">No</string>
+  <string name="SYS_NORMAL">Normal</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
@@ -1209,6 +1232,7 @@
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
+  <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
@@ -1456,6 +1480,7 @@
   <string name="SYS_REMOVE_CONTACT_SELECTION">Remove contact selection</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">By choosing #VAR1_BOLD#, all selected contacts will be deleted and could not be viewed or restored anymore.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
+  <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPEATS">Repeats</string>
@@ -1521,6 +1546,7 @@
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotate photo left</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotate photo right</string>
   <string name="SYS_ROW">Row</string>
+  <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_RUN_REPORT">Run report</string>
@@ -1640,6 +1666,7 @@
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SIZE">Size</string>
+  <string name="SYS_SMALL">Small</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
@@ -1946,6 +1973,7 @@
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
@@ -1992,6 +2020,7 @@
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="SYS_VCARD">vCard</string>
+  <string name="SYS_VERY_LARGE">Very large</string>
   <string name="SYS_VENUE">Venue</string>
   <string name="SYS_VENUE_LINK">If enough information (city, street, location) about the venue is entered, a link or route can be created via Google Maps.</string>
   <string name="SYS_VERSION">Version</string>
@@ -2005,6 +2034,8 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="SYS_VIEWS">Views</string>
   <string name="SYS_VIEWS_VAR">#VAR1# views</string>
+  <string name="SYS_VIDEO_URL">YouTube or Vimeo URL</string>
+  <string name="SYS_VIDEO_URL_INVALID">Please enter a valid YouTube or Vimeo URL.</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISITORS">Guests</string>
