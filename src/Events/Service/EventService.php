@@ -107,6 +107,11 @@ class EventService
             $formValues = $eventsParticipationEditForm->validate($_POST);
         }
 
+        // Hidden form fields can be changed by the client. Enforce the event's guest policy here.
+        $additionalGuests = (int)$event->getValue('dat_additional_guests') === 1
+            ? max(0, (int)$formValues['additional_guests'])
+            : 0;
+
         $user = new User($this->database, $gProfileFields);
         if ($userUUID === '') {
             $userUUID = $gCurrentUser->getValue('usr_uuid');
@@ -135,8 +140,8 @@ class EventService
             if ($event->getValue('dat_max_members') > 0) {
                 $totalMembers = $participants->getCount();
 
-                if ($totalMembers + ((int)$formValues['additional_guests'] - (int)$member->getValue('mem_count_guests')) < (int)$event->getValue('dat_max_members')) {
-                    $member->setValue('mem_count_guests', $formValues['additional_guests']);
+                if ($totalMembers + ($additionalGuests - (int)$member->getValue('mem_count_guests')) < (int)$event->getValue('dat_max_members')) {
+                    $member->setValue('mem_count_guests', $additionalGuests);
                 } else {
                     $participationPossible = false;
                 }
@@ -151,7 +156,7 @@ class EventService
                     $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . (int)$event->getValue('dat_max_members');
                 }
             } else {
-                $member->setValue('mem_count_guests', $formValues['additional_guests']);
+                $member->setValue('mem_count_guests', $additionalGuests);
             }
 
             $member->save();
