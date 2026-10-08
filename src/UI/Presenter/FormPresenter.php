@@ -554,6 +554,7 @@ class FormPresenter
         if ($optionsAll['quillEnabled']) {
             if (isset($this->htmlPage)) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill_editor.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill_editor.js');
             }
@@ -566,10 +567,35 @@ class FormPresenter
                     'bold' => $gL10n->get('SYS_BOLD'),
                     'italic' => $gL10n->get('SYS_ITALIC'),
                     'underline' => $gL10n->get('SYS_UNDERLINE'),
+                    'fontSize' => $gL10n->get('SYS_FONT_SIZE'),
+                    'fontColor' => $gL10n->get('SYS_COLOR_TEXT'),
+                    'sizeSmall' => $gL10n->get('SYS_SMALL'),
+                    'sizeNormal' => $gL10n->get('SYS_NORMAL'),
+                    'sizeLarge' => $gL10n->get('SYS_LARGE'),
+                    'sizeHuge' => $gL10n->get('SYS_VERY_LARGE'),
+                    'defaultColor' => $gL10n->get('SYS_DEFAULT_COLOR'),
+                    'alignment' => $gL10n->get('SYS_ALIGNMENT'),
+                    'alignLeft' => $gL10n->get('SYS_ALIGN_LEFT'),
+                    'alignCenter' => $gL10n->get('SYS_ALIGN_CENTER'),
+                    'alignRight' => $gL10n->get('SYS_ALIGN_RIGHT'),
+                    'alignJustify' => $gL10n->get('SYS_ALIGN_JUSTIFY'),
                     'ordered' => $gL10n->get('SYS_ORDERED_LIST'),
                     'bullet' => $gL10n->get('SYS_BULLETED_LIST'),
                     'link' => $gL10n->get('SYS_INSERT_LINK'),
                     'image' => $gL10n->get('SYS_INSERT_IMAGE'),
+                    'video' => $gL10n->get('SYS_INSERT_VIDEO'),
+                    'videoUrl' => $gL10n->get('SYS_VIDEO_URL'),
+                    'invalidVideoUrl' => $gL10n->get('SYS_VIDEO_URL_INVALID'),
+                    'table' => $gL10n->get('SYS_TABLE'),
+                    'insertTable' => $gL10n->get('SYS_INSERT_TABLE'),
+                    'insertRowAbove' => $gL10n->get('SYS_INSERT_ROW_ABOVE'),
+                    'insertRowBelow' => $gL10n->get('SYS_INSERT_ROW_BELOW'),
+                    'insertColumnLeft' => $gL10n->get('SYS_INSERT_COLUMN_LEFT'),
+                    'insertColumnRight' => $gL10n->get('SYS_INSERT_COLUMN_RIGHT'),
+                    'deleteRow' => $gL10n->get('SYS_DELETE_ROW'),
+                    'deleteColumn' => $gL10n->get('SYS_DELETE_COLUMN'),
+                    'deleteTable' => $gL10n->get('SYS_DELETE_TABLE'),
+                    'resizeImage' => $gL10n->get('SYS_RESIZE_IMAGE'),
                     'clean' => $gL10n->get('SYS_REMOVE_FORMATTING')
                 )
             );
@@ -2462,6 +2488,17 @@ class FormPresenter
                             $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
                             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
                             $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+                            if ($element['engine'] === 'quill') {
+                                $config->set('HTML.SafeIframe', true);
+                                $config->set('URI.SafeIframeRegexp', '%\\Ahttps://(?:(?:www\\.)?youtube(?:-nocookie)?\\.com/embed/[A-Za-z0-9_-]{11}|player\\.vimeo\\.com/video/[0-9]+)\\z%');
+                                $config->set('HTML.DefinitionID', 'admidio-quill-video');
+                                $config->set('HTML.DefinitionRev', 1);
+                                // A cached definition is already configured and needs no further changes.
+                                $definition = $config->maybeGetRawHTMLDefinition();
+                                if ($definition !== null) {
+                                    $definition->addAttribute('iframe', 'allowfullscreen', 'Bool#allowfullscreen');
+                                }
+                            }
 
                             $filter = new HTMLPurifier($config);
                             $validFieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);

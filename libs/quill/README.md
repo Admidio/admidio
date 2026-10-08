@@ -8,3 +8,7 @@ https://registry.npmjs.org/quill/-/quill-2.0.3.tgz
 - `quill.js.LICENSE.txt` contains the bundle's license notice.
 
 Admidio serves these files locally for the announcement editor.
+The announcement editor enables Quill's built-in table module and uses Quill's
+image width and height formats for resizing. No extra Quill plugins are needed.
+Videos from YouTube and Vimeo use Quill's built-in video format. Admidio preserves
+the iframe when saving and restricts its URL to those two video providers.
