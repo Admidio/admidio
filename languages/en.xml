@@ -446,6 +446,7 @@
   <string name="SYS_CORE_UPDATE_CONFIRM_RESTORE">Do you really want to restore the previous files? The update will be cancelled.</string>
   <string name="SYS_CORE_UPDATE_CURRENT_STATE">Current state</string>
   <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">The files are installed. Continue with the database update.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_NEWER">The database already has version #VAR1#. Version #VAR2# is older and cannot be installed.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_START">All files are installed. The database update starts now.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">The update package could not be downloaded. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">The download address of the update is invalid or not allowed.</string>
@@ -458,6 +459,7 @@
   <string name="SYS_CORE_UPDATE_IN_PROGRESS">An automatic update of Admidio is in progress and is still installing files. The database can only be updated afterwards. Please wait until the update has finished.</string>
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">The update information of the Admidio server could not be read.</string>
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installed version</string>
+  <string name="SYS_CORE_UPDATE_KEYS_INVALID">The keys that sign Admidio updates could not be verified. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Log in</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Too many failed logins. The login of the updater is blocked for 15 minutes.</string>
   <string name="SYS_CORE_UPDATE_LOGIN_DESC">Log in as an administrator of this Admidio installation to continue the update.</string>
@@ -468,12 +470,14 @@
   <string name="SYS_CORE_UPDATE_MAINTENANCE_MESSAGE">Admidio is being updated. Please try again in a few minutes.</string>
   <string name="SYS_CORE_UPDATE_MANIFEST_INVALID">The file list of the update package is invalid. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_MASTER_WARNING">You are about to install the development version of Admidio. It may be broken, and an older stable release cannot be installed afterwards.</string>
+  <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatic updates are not available for this installation. Download the new version from the Admidio website and install it manually.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">The update could not be found. Start it again from the Admidio settings.</string>
   <string name="SYS_CORE_UPDATE_NOTHING_TO_RESUME">No update is in progress. Start an update from the Admidio settings (System information).</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Open Admidio</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_EXTRACTED">The update package has been extracted.</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_INVALID">The update package is invalid or damaged. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_PASSWORD">Password</string>
+  <string name="SYS_CORE_UPDATE_PHP_TOO_OLD">Version #VAR1# needs at least PHP #VAR2#, but the server runs PHP #VAR3#.</string>
   <string name="SYS_CORE_UPDATE_PREFLIGHT_SUCCESS">All requirements for the update are met.</string>
   <string name="SYS_CORE_UPDATE_PREVIOUS_FILES_RESTORED">The previous files have been restored.</string>
   <string name="SYS_CORE_UPDATE_PROGRESS">Progress</string>
@@ -486,12 +490,14 @@
   <string name="SYS_CORE_UPDATE_RESTORE_PREVIOUS">Restore previous files</string>
   <string name="SYS_CORE_UPDATE_SECURITY_CODE">Security code (only if two-factor authentication is set up)</string>
   <string name="SYS_CORE_UPDATE_SIGNATURE_INVALID">The signature of the update could not be verified. The update was not installed.</string>
+  <string name="SYS_CORE_UPDATE_SOURCE_TOO_OLD">Version #VAR1# needs at least Admidio #VAR2#, but #VAR3# is installed. Update to #VAR2# first.</string>
   <string name="SYS_CORE_UPDATE_START">Update Admidio</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Start or continue update</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio has been updated to version #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_TARGET">New version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio update</string>
   <string name="SYS_CORE_UPDATE_UPDATER_MISSING">The update package does not contain the updater. The update was not installed.</string>
+  <string name="SYS_CORE_UPDATE_VERSION_OLDER">Version #VAR1# is older than the installed version #VAR2# and cannot be installed.</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individual recipient</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individual recipients</string>
   <string name="SYS_COUNTER">Counter</string>

@@ -53,6 +53,31 @@ final class ConfigTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The root key and the channels are the official ones unless debug mode replaces them
+     */
+    public function testRootKeyAndChannels(): void
+    {
+        $production = Config::fromValues('/srv/admidio', array(
+            'gCoreUpdateServerUrl' => 'http://localhost:8080/updates/',
+            'gCoreUpdateRootKeyFile' => 'keys/test-root.pem'
+        ));
+        $this->assertSame('/srv/admidio/install/core-update/root-key.pem', $production->getRootKeyFile('/srv/admidio/install/core-update'));
+        $this->assertSame(Config::CHANNEL_BASE_URL, $production->getChannelBaseUrl());
+
+        $development = Config::fromValues('/srv/admidio', array(
+            'gDebug' => true,
+            'gCoreUpdateServerUrl' => 'http://localhost:8080/updates/',
+            'gCoreUpdateRootKeyFile' => 'keys/test-root.pem'
+        ));
+        $this->assertSame('/srv/admidio/keys/test-root.pem', $development->getRootKeyFile('/srv/admidio/install/core-update'),
+            'a relative path is resolved from the installation');
+        $this->assertSame('http://localhost:8080/updates', $development->getChannelBaseUrl());
+
+        $absolute = Config::fromValues('/srv/admidio', array('gDebug' => true, 'gCoreUpdateRootKeyFile' => 'D:\\keys\\root.pem'));
+        $this->assertSame('D:\\keys\\root.pem', $absolute->getRootKeyFile('/srv/admidio/install/core-update'));
+    }
+
+    /**
      * @testdox The cookie prefix is the one constants.php derives
      *
      * init_globals.php always sets $gDebug before constants.php asks isset($gDebug), so every

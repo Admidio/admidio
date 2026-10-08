@@ -26,6 +26,14 @@ therefore use only PHP built-ins and remain usable while `src/`, `vendor/`, `sys
   Shell access is the proof of authority.
 - The texts are the `SYS_CORE_UPDATE_*` keys of the language files. A release carries them
   in `texts/<language>.json`; a development tree reads them from `languages/`.
+- Trust: `root-key.pem` (shipped with the updater) signs `release-keys.json`, which names
+  the keys of the channels and the revoked ones; the highest sequence number seen wins
+  (`KeyStatement`). A channel key signs `<channel>/release.json` (`Descriptor`), which names
+  the SHA-256 of the package and of `install/update-manifest.json` (`Manifest`), which names
+  the SHA-256 of every file. Downloads are HTTPS only with redirects checked hop by hop
+  (`HttpClient`); packages are read entry by entry with path, link, collision and size checks
+  (`ZipReader`). With `$gDebug`, `$gCoreUpdateRootKeyFile` and `$gCoreUpdateServerUrl` point
+  to test keys and a test server.
 
 ## Signed release contract
 

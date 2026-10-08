@@ -441,6 +441,7 @@
   <string name="SYS_CORE_UPDATE_CONFIRM_RESTORE">Möchtest du wirklich die vorherigen Dateien wiederherstellen? Das Update wird abgebrochen.</string>
   <string name="SYS_CORE_UPDATE_CURRENT_STATE">Aktueller Status</string>
   <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">Die Dateien sind installiert. Setze das Datenbank-Update fort.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_NEWER">Die Datenbank hat bereits die Version #VAR1#. Version #VAR2# ist älter und kann nicht installiert werden.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_START">Alle Dateien sind installiert. Das Datenbank-Update startet jetzt.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">Das Update-Paket konnte nicht heruntergeladen werden. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">Die Download-Adresse des Updates ist ungültig oder nicht erlaubt.</string>
@@ -453,6 +454,7 @@
   <string name="SYS_CORE_UPDATE_IN_PROGRESS">Ein automatisches Update von Admidio läuft und installiert noch Dateien. Die Datenbank kann erst danach aktualisiert werden. Bitte warte, bis das Update abgeschlossen ist.</string>
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">Die Update-Informationen des Admidio-Servers konnten nicht gelesen werden.</string>
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installierte Version</string>
+  <string name="SYS_CORE_UPDATE_KEYS_INVALID">Die Schlüssel, mit denen Admidio-Updates signiert werden, konnten nicht geprüft werden. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Anmelden</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Zu viele fehlgeschlagene Anmeldungen. Die Anmeldung beim Updater ist für 15 Minuten gesperrt.</string>
   <string name="SYS_CORE_UPDATE_LOGIN_DESC">Melde dich als Administrator dieser Admidio-Installation an, um das Update fortzusetzen.</string>
@@ -463,12 +465,14 @@
   <string name="SYS_CORE_UPDATE_MAINTENANCE_MESSAGE">Admidio wird gerade aktualisiert. Bitte versuche es in ein paar Minuten erneut.</string>
   <string name="SYS_CORE_UPDATE_MANIFEST_INVALID">Die Dateiliste des Update-Pakets ist ungültig. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_MASTER_WARNING">Du bist dabei, die Entwicklungsversion von Admidio zu installieren. Sie kann fehlerhaft sein, und eine ältere stabile Version kann danach nicht mehr installiert werden.</string>
+  <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatische Updates sind für diese Installation nicht verfügbar. Lade die neue Version von der Admidio-Webseite herunter und installiere sie manuell.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">Das Update wurde nicht gefunden. Starte es erneut über die Admidio-Einstellungen.</string>
   <string name="SYS_CORE_UPDATE_NOTHING_TO_RESUME">Es läuft kein Update. Starte ein Update über die Admidio-Einstellungen (Systeminformationen).</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Admidio öffnen</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_EXTRACTED">Das Update-Paket wurde entpackt.</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_INVALID">Das Update-Paket ist ungültig oder beschädigt. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_PASSWORD">Passwort</string>
+  <string name="SYS_CORE_UPDATE_PHP_TOO_OLD">Version #VAR1# benötigt mindestens PHP #VAR2#, der Server verwendet PHP #VAR3#.</string>
   <string name="SYS_CORE_UPDATE_PREFLIGHT_SUCCESS">Alle Voraussetzungen für das Update sind erfüllt.</string>
   <string name="SYS_CORE_UPDATE_PREVIOUS_FILES_RESTORED">Die vorherigen Dateien wurden wiederhergestellt.</string>
   <string name="SYS_CORE_UPDATE_PROGRESS">Fortschritt</string>
@@ -481,12 +485,14 @@
   <string name="SYS_CORE_UPDATE_RESTORE_PREVIOUS">Vorherige Dateien wiederherstellen</string>
   <string name="SYS_CORE_UPDATE_SECURITY_CODE">Sicherheitscode (nur wenn die Zwei-Faktor-Authentifizierung eingerichtet ist)</string>
   <string name="SYS_CORE_UPDATE_SIGNATURE_INVALID">Die Signatur des Updates konnte nicht geprüft werden. Das Update wurde nicht installiert.</string>
+  <string name="SYS_CORE_UPDATE_SOURCE_TOO_OLD">Version #VAR1# benötigt mindestens Admidio #VAR2#, installiert ist #VAR3#. Aktualisiere zuerst auf #VAR2#.</string>
   <string name="SYS_CORE_UPDATE_START">Admidio aktualisieren</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Update starten oder fortsetzen</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio wurde auf Version #VAR1# aktualisiert.</string>
   <string name="SYS_CORE_UPDATE_TARGET">Neue Version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio-Update</string>
   <string name="SYS_CORE_UPDATE_UPDATER_MISSING">Das Update-Paket enthält den Updater nicht. Das Update wurde nicht installiert.</string>
+  <string name="SYS_CORE_UPDATE_VERSION_OLDER">Version #VAR1# ist älter als die installierte Version #VAR2# und kann nicht installiert werden.</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfangende</string>
   <string name="SYS_COUNTER">Zähler</string>

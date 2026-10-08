@@ -22,6 +22,12 @@ namespace AdmidioCoreUpdater;
 final class Config
 {
     /**
+     * Where the channels are published. Placeholder until the final URLs are decided (concept,
+     * open question Q2).
+     */
+    public const CHANNEL_BASE_URL = 'https://www.admidio.org/updates';
+
+    /**
      * @param string $rootPath Absolute path of the Admidio installation, with forward slashes.
      * @param string $dbType **mysql** or **pgsql**.
      * @param string $dbHost
@@ -103,6 +109,34 @@ final class Config
             $debug ? (string)($values['gCoreUpdateRootKeyFile'] ?? '') : '',
             (string)($values['gTimezone'] ?? 'Europe/Berlin')
         );
+    }
+
+    /**
+     * The file with the public root key that signs release-keys.json: the one the updater ships
+     * with, or in debug mode the test key of $gCoreUpdateRootKeyFile. A relative path is resolved
+     * from the installation directory.
+     * @param string $updaterPath Directory of the updater.
+     * @return string
+     */
+    public function getRootKeyFile(string $updaterPath): string
+    {
+        if ($this->rootKeyFile === '') {
+            return $updaterPath . '/root-key.pem';
+        }
+
+        return preg_match('#^(/|[A-Za-z]:[/\\\\])#', $this->rootKeyFile) === 1
+            ? $this->rootKeyFile
+            : $this->rootPath . '/' . $this->rootKeyFile;
+    }
+
+    /**
+     * The URL below which the channels publish release-keys.json and &lt;channel&gt;/release.json:
+     * the official one, or in debug mode the test endpoint of $gCoreUpdateServerUrl.
+     * @return string Without a trailing slash.
+     */
+    public function getChannelBaseUrl(): string
+    {
+        return rtrim($this->serverUrl !== '' ? $this->serverUrl : self::CHANNEL_BASE_URL, '/');
     }
 
     /**
