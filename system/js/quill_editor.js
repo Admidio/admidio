@@ -11,15 +11,16 @@ function admidioInitQuill(id, options) {
 
     let quill;
     try {
+        const mediaEnabled = options.toolbar !== 'AdmidioComments' && options.toolbar !== 'AdmidioNoMedia';
         // Quill's default video exporter turns embeds into links. Keep the iframe
-        // so an announcement can be saved and edited again with its video intact.
+        // so content can be saved and edited again with its video intact.
         const Video = Quill.import('formats/video');
-        class AnnouncementVideo extends Video {
+        class EditorVideo extends Video {
             html() {
                 return this.domNode.outerHTML;
             }
         }
-        Quill.register('formats/video', AnnouncementVideo, true);
+        Quill.register('formats/video', EditorVideo, true);
         Quill.register(Quill.import('attributors/style/size'), true);
         Quill.register(Quill.import('attributors/style/align'), true);
 
@@ -36,7 +37,7 @@ function admidioInitQuill(id, options) {
                         '#0066cc', '#9933ff', '#ffffff', '#888888', '#5c0000', '#b26b00',
                         '#006100', '#002966', '#3d1466'] }],
                     [{ align: [] }],
-                    ['link', 'image', 'video'],
+                    mediaEnabled ? ['link', 'image', 'video'] : ['link'],
                     ['clean']
                 ]
             }
@@ -86,44 +87,46 @@ function admidioInitQuill(id, options) {
             lastRange = range;
         }
     });
-    const tableActions = [
-        'insertTable', 'insertRowAbove', 'insertRowBelow', 'insertColumnLeft',
-        'insertColumnRight', 'deleteRow', 'deleteColumn', 'deleteTable'
-    ];
-    const tableSelect = document.createElement('select');
-    tableSelect.className = 'admidio-quill-table-action';
-    tableSelect.setAttribute('aria-label', options.labels.table);
-    tableSelect.setAttribute('title', options.labels.table);
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = options.labels.table;
-    tableSelect.appendChild(placeholder);
-    tableActions.forEach(function (action) {
-        const option = document.createElement('option');
-        option.value = action;
-        option.textContent = options.labels[action];
-        tableSelect.appendChild(option);
-    });
-    const tableGroup = document.createElement('span');
-    tableGroup.className = 'ql-formats';
-    tableGroup.appendChild(tableSelect);
-    toolbar.container.insertBefore(tableGroup, toolbar.container.lastElementChild);
-    tableSelect.addEventListener('change', function () {
-        const action = tableSelect.value;
-        tableSelect.value = '';
-        if (!action || !lastRange) {
-            return;
-        }
-        quill.setSelection(lastRange.index, lastRange.length, 'silent');
-        if (action === 'insertTable') {
-            table.insertTable(2, 2);
-        } else if (table.getTable()[0]) {
-            table[action]();
-        }
-        changed = true;
-        syncValue();
-        quill.focus();
-    });
+    if (options.toolbar !== 'AdmidioComments') {
+        const tableActions = [
+            'insertTable', 'insertRowAbove', 'insertRowBelow', 'insertColumnLeft',
+            'insertColumnRight', 'deleteRow', 'deleteColumn', 'deleteTable'
+        ];
+        const tableSelect = document.createElement('select');
+        tableSelect.className = 'admidio-quill-table-action';
+        tableSelect.setAttribute('aria-label', options.labels.table);
+        tableSelect.setAttribute('title', options.labels.table);
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = options.labels.table;
+        tableSelect.appendChild(placeholder);
+        tableActions.forEach(function (action) {
+            const option = document.createElement('option');
+            option.value = action;
+            option.textContent = options.labels[action];
+            tableSelect.appendChild(option);
+        });
+        const tableGroup = document.createElement('span');
+        tableGroup.className = 'ql-formats';
+        tableGroup.appendChild(tableSelect);
+        toolbar.container.insertBefore(tableGroup, toolbar.container.lastElementChild);
+        tableSelect.addEventListener('change', function () {
+            const action = tableSelect.value;
+            tableSelect.value = '';
+            if (!action || !lastRange) {
+                return;
+            }
+            quill.setSelection(lastRange.index, lastRange.length, 'silent');
+            if (action === 'insertTable') {
+                table.insertTable(2, 2);
+            } else if (table.getTable()[0]) {
+                table[action]();
+            }
+            changed = true;
+            syncValue();
+            quill.focus();
+        });
+    }
 
     // Quill stores image width and height as formats, so changing them through its API
     // survives HTML serialization and a subsequent edit.

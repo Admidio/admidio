@@ -3,7 +3,7 @@
 namespace Admidio\Tests\Integration\Security;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\CkeditorUploadAccess;
+use Admidio\Infrastructure\Utils\EditorUploadAccess;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Tests\Support\AdmidioTestFixture;
@@ -12,14 +12,14 @@ use Admidio\Tests\Support\PermissionContext;
 use Admidio\Users\Entity\User;
 use Admidio\Preferences\ValueObject\SettingsManager;
 
-class CkeditorUploadAccessTest extends DatabaseTestCase
+class EditorUploadAccessTest extends DatabaseTestCase
 {
     use PermissionContext;
 
     private function assertUploadDenied(string $editorId, User $user, SettingsManager $settings): void
     {
         try {
-            CkeditorUploadAccess::authorizedFolder($editorId, $user, $settings);
+            EditorUploadAccess::authorizedFolder($editorId, $user, $settings);
             $this->fail('The upload should be denied for ' . $editorId);
         } catch (Exception $exception) {
             $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
@@ -56,7 +56,7 @@ class CkeditorUploadAccessTest extends DatabaseTestCase
         $fixture->assignUserToRole($member['usr_id'], $editorRole['rol_id']);
         $editorUser = $this->loadUserInOrganization($member['usr_id'], $org['org_id']);
 
-        $this->assertSame('weblinks', CkeditorUploadAccess::authorizedFolder('lnk_description', $editorUser, $settings));
+        $this->assertSame('weblinks', EditorUploadAccess::authorizedFolder('lnk_description', $editorUser, $settings));
         $this->assertUploadDenied('ann_description', $editorUser, $settings);
         $settings->set('weblinks_module_enabled', '0');
         $this->assertUploadDenied('lnk_description', $editorUser, $settings);
@@ -74,10 +74,10 @@ class CkeditorUploadAccessTest extends DatabaseTestCase
         $adminUser = $this->loadUserInOrganization($admin['usr_id'], $org['org_id']);
 
         foreach ($editors as $editorId => [, , $folder]) {
-            $this->assertSame($folder, CkeditorUploadAccess::authorizedFolder($editorId, $adminUser, $settings));
+            $this->assertSame($folder, EditorUploadAccess::authorizedFolder($editorId, $adminUser, $settings));
         }
-        $this->assertSame('rooms', CkeditorUploadAccess::authorizedFolder('room_description', $adminUser, $settings));
-        $this->assertSame('user_fields', CkeditorUploadAccess::authorizedFolder('usf_description', $adminUser, $settings));
+        $this->assertSame('rooms', EditorUploadAccess::authorizedFolder('room_description', $adminUser, $settings));
+        $this->assertSame('user_fields', EditorUploadAccess::authorizedFolder('usf_description', $adminUser, $settings));
         $this->assertUploadDenied('room_description', $editorUser, $settings);
         $this->assertUploadDenied('usf_description', $editorUser, $settings);
 
@@ -98,14 +98,14 @@ class CkeditorUploadAccessTest extends DatabaseTestCase
         $settings->set('mail_html_registered_users', '1');
         $settings->set('pm_module_enabled', '1');
         $settings->set('mail_module_enabled', '0');
-        $this->assertSame('mail', CkeditorUploadAccess::authorizedFolder('msg_body', $user, $settings));
+        $this->assertSame('mail', EditorUploadAccess::authorizedFolder('msg_body', $user, $settings));
 
         $settings->set('pm_module_enabled', '0');
         $this->assertUploadDenied('msg_body', $user, $settings);
         $settings->set('mail_html_registered_users', '0');
         $this->assertUploadDenied('msg_body', $user, $settings);
 
-        foreach (array('ecard_message', 'inf_description', 'plugin_CKEditor', 'unknown') as $editorId) {
+        foreach (array('ecard_message', 'inf_description', 'plugin_editor', 'unknown') as $editorId) {
             $this->assertUploadDenied($editorId, $user, $settings);
         }
     }

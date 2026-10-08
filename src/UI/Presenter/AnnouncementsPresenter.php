@@ -250,7 +250,7 @@ class AnnouncementsPresenter extends PagePresenter
             'ann_description',
             $gL10n->get('SYS_TEXT'),
             $announcement->getValue('ann_description'),
-            array('property' => FormPresenter::FIELD_REQUIRED, 'engine' => 'quill')
+            array('property' => FormPresenter::FIELD_REQUIRED)
         );
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 

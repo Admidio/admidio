@@ -103,16 +103,16 @@ final class StringUtils
 
     /**
      * removes html, php code and blancs at beginning and end
-     * of string or all elements of array without ckeditor variables !!!
+     * of string or all elements of array, except fields containing rich text.
      * @param array<string,string|array<mixed,string>> $srcArray
      * @return array<string,string|array<mixed,string>>
      */
     public static function strStripSpecialTags(array $srcArray): array
     {
-        // "ecard_message" => ckeditor-variable
+        // Rich-text fields must retain their HTML markup.
         $specialKeys = array(
             'ecard_message', 'ann_description', 'dat_description', 'fop_text', 'lnk_description',
-            'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password'
+            'msg_body', 'room_description', 'usf_description', 'mail_smtp_password'
         );
 
         foreach ($srcArray as $key => $value) {

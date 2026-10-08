@@ -333,7 +333,7 @@ class FormSubmissionTest extends DatabaseTestCase
             try {
                 for ($attempt = 0; $attempt < 2; ++$attempt) {
                     $form = new FormPresenter('adm_quill_video_form', 'modules/announcements.edit.tpl');
-                    $form->addEditor('ann_description', 'Description', '', array('engine' => 'quill'));
+                    $form->addEditor('ann_description', 'Description', '');
                     $values = $form->validate(array(
                         'adm_csrf_token' => $form->getCsrfToken(),
                         'ann_description' => $description

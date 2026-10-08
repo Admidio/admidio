@@ -1,7 +1,7 @@
 <?php
 /**
  ***********************************************************************************************
- * Handle image uploads from CKEditor
+ * Handle image uploads from Quill
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -13,7 +13,7 @@
  ***********************************************************************************************
  */
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\CkeditorUploadAccess;
+use Admidio\Infrastructure\Utils\EditorUploadAccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -22,10 +22,10 @@ try {
     require_once(__DIR__ . '/common.php');
     require(__DIR__ . '/login_valid.php');
 
-    $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
+    $editorId = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
     $csrfToken = admFuncVariableIsValid($_SERVER, 'HTTP_X_CSRF_TOKEN', 'string', array('requireValue' => true));
     SecurityUtils::validateCsrfToken($csrfToken);
-    $folderName = CkeditorUploadAccess::authorizedFolder($getCKEditorID, $gCurrentUser, $gSettingsManager);
+    $folderName = EditorUploadAccess::authorizedFolder($editorId, $gCurrentUser, $gSettingsManager);
 
     if (isset($gDisableFileUpload) && $gDisableFileUpload === true) {
         throw new Exception('File upload disabled in global config file!');

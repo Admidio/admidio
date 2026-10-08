@@ -9,7 +9,7 @@ use Admidio\Users\Entity\User;
 /**
  * Authorize image uploads for the editor field that requested them.
  */
-final class CkeditorUploadAccess
+final class EditorUploadAccess
 {
     /**
      * @return string Name of the module's image folder.
