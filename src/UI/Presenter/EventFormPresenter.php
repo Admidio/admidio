@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\UI\Component\DataTables;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -497,8 +498,9 @@ class EventFormPresenter extends PagePresenter
                ORDER BY ind_value',
                 array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
-            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems, array('defaultValue' => $selectedItems, 'multiselect' => true));
-
+            // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
+            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems,
+                array('defaultValue' => $selectedItems, 'multiselect' => true));
             $reservationStatusLabels = array(
                 Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
                 Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
@@ -515,41 +517,22 @@ class EventFormPresenter extends PagePresenter
                 Reservation::STATUS_BORROWED => 'bi-box-arrow-up-right text-primary',
                 Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success'
             );
-            $createReservationRow = static function (string $selectedItemId = '') use ($availableItems, $gL10n): string {
-                $options = '<option value="">- ' . SecurityUtils::encodeHTML($gL10n->get('SYS_PLEASE_CHOOSE')) . ' -</option>';
-                foreach ($availableItems as $itemId => $itemName) {
-                    $options .= '<option value="' . (int)$itemId . '"' . ((string)$itemId === $selectedItemId ? ' selected' : '') . '>'
-                        . SecurityUtils::encodeHTML($itemName) . '</option>';
-                }
-                return '<tr><td><select class="form-select" name="event_inventory_items[]">' . $options . '</select></td><td class="text-end">'
-                    . '<button type="button" class="btn btn-link text-danger p-0" onclick="this.closest(\'tr\').remove();" title="'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_DELETE')) . '"><i class="bi bi-trash"></i></button></td></tr>';
-            };
-            $reservationRows = '';
-            foreach ($selectedItems as $selectedItemId) {
-                $reservationRows .= $createReservationRow((string)$selectedItemId);
+            $reservationItems = array();
+            foreach ($availableItems as $itemId => $itemName) {
+                $reservationItems[] = array('id' => (int)$itemId, 'name' => $itemName);
             }
-            $form->addCustomContent(
-                'event_inventory_items_table',
-                $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
-                '<p class="form-text">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_EVENT_RESERVATIONS_DESC')) . '</p>'
-                . '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME'))
-                . '</th><th></th></tr></thead><tbody id="event_inventory_reservations_rows">' . $reservationRows . '</tbody><tfoot><tr><td colspan="2">'
-                . '<a class="icon-text-link" href="javascript:addEventInventoryReservationRow();"><i class="bi bi-plus-circle-fill"></i> '
-                . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ADD_ITEM')) . '</a></td></tr></tfoot></table></div>'
-            );
-            $page->addJavascript('window.addEventInventoryReservationRow = function(itemId) {
-                const rows = document.getElementById("event_inventory_reservations_rows");
-                if (itemId && Array.from(rows.querySelectorAll("select[name=\\\"event_inventory_items[]\\\"]")).some(function(select) {
-                    return select.value === String(itemId);
-                })) {
-                    return;
-                }
-                rows.insertAdjacentHTML("beforeend", ' . json_encode($createReservationRow()) . ');
-                if (itemId) {
-                    rows.lastElementChild.querySelector("select").value = String(itemId);
-                }
-            };', true);
+            $form->addButton('event_inventory_reservation_add', $gL10n->get('SYS_INVENTORY_ADD_ITEM'),
+                array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
+            $page->assignSmartyVariable('eventInventoryReservationsEnabled', true);
+            $page->assignSmartyVariable('eventInventoryReservationItems', $reservationItems);
+            $page->assignSmartyVariable('eventInventoryReservationRows', array_map(
+                static fn(int $itemId): array => array('itemId' => $itemId), $selectedItems
+            ));
+            $page->assignSmartyVariable('eventInventoryReservationDataJson', json_encode(array(
+                'items' => $reservationItems,
+                'deleteLabel' => $gL10n->get('SYS_DELETE'),
+                'pleaseChoose' => $gL10n->get('SYS_PLEASE_CHOOSE')
+            ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
 
             if ((int)$event->getValue('dat_id') > 0) {
                 $statusEvents = array((int)$event->getValue('dat_id') => $event);
@@ -589,16 +572,18 @@ class EventFormPresenter extends PagePresenter
                     $reservationStatuses[(int)$reservationStatus['ivr_dat_id']][] = $reservationStatus;
                 }
 
-                $statusRows = '';
+                $statusRows = array();
+                $statusRowCount = 0;
                 foreach ($statusEvents as $eventId => $statusEvent) {
                     $eventReservations = $reservationStatuses[$eventId] ?? array();
                     if (count($eventReservations) === 0) {
-                        $statusRows .= '<tr><td>' . SecurityUtils::encodeHTML($statusEvent->getValue('dat_headline')) . '<br><small>'
-                            . SecurityUtils::encodeHTML($statusEvent->getDateTimePeriod()) . '</small></td><td>-</td><td>-</td></tr>';
+                        ++$statusRowCount;
+                        $statusRows[] = array('eventName' => $statusEvent->getValue('dat_headline'), 'period' => $statusEvent->getDateTimePeriod());
                         continue;
                     }
 
                     foreach ($eventReservations as $eventReservation) {
+                        ++$statusRowCount;
                         $status = $eventReservation['ivr_status'];
                         $canRequestAgain = $eventId === (int)$event->getValue('dat_id')
                             && in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true);
@@ -607,29 +592,24 @@ class EventFormPresenter extends PagePresenter
                             'dat_uuid' => $getEventUuid,
                             'reservation_item_id' => (int)$eventReservation['ivr_ini_id']
                         ));
-                        $statusRows .= '<tr><td>' . SecurityUtils::encodeHTML($statusEvent->getValue('dat_headline')) . '<br><small>'
-                            . SecurityUtils::encodeHTML($statusEvent->getDateTimePeriod()) . '</small></td><td>'
-                            . SecurityUtils::encodeHTML($eventReservation['ind_value']) . '</td><td class="event-inventory-reservation-status">'
-                            . '<i class="bi ' . ($reservationStatusIcons[$status] ?? 'bi-question-circle-fill text-secondary') . ' me-1"></i>'
-                            . SecurityUtils::encodeHTML($reservationStatusLabels[$status] ?? $status) . '</td><td class="text-end">'
-                            . ($canRequestAgain
-                                ? '<button type="button" class="btn btn-sm btn-outline-primary event-inventory-reservation-request-again" data-url="'
-                                    . SecurityUtils::encodeHTML($requestAgainUrl) . '">'
-                                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST_AGAIN')) . '</button>'
-                                : '')
-                            . '</td></tr>';
+                        $statusRows[] = array(
+                            'eventName' => $statusEvent->getValue('dat_headline'), 'period' => $statusEvent->getDateTimePeriod(),
+                            'itemName' => $eventReservation['ind_value'], 'statusIcon' => $reservationStatusIcons[$status] ?? 'bi-question-circle-fill text-secondary',
+                            'statusLabel' => $reservationStatusLabels[$status] ?? $status, 'canRequestAgain' => $canRequestAgain,
+                            'requestAgainUrl' => $requestAgainUrl, 'itemId' => (int)$eventReservation['ivr_ini_id']
+                        );
                     }
                 }
 
-                $form->addCustomContent(
-                    'event_inventory_reservation_statuses',
-                    $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS'),
-                    '<div class="table-responsive"><table class="table table-hover"><thead><tr><th>'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_EVENT')) . '</th><th>'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_ITEMNAME')) . '</th><th>'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_STATUS')) . '</th><th></th></tr></thead><tbody>'
-                    . $statusRows . '</tbody></table></div>'
-                );
+                $page->assignSmartyVariable('eventInventoryReservationStatusRows', $statusRows);
+                $reservationStatusTable = new DataTables($page, 'adm_event_inventory_reservation_statuses');
+                $reservationStatusTable->disableColumnsSort(array(4));
+                $reservationStatusTable->setColumnsNotHideResponsive(array(2, 4));
+                $reservationStatusTable->createJavascript($statusRowCount, 4);
+                $page->addJavascript('$(document).on("shown.bs.tab shown.bs.collapse", "#adm_event_reservations_tab, #adm_event_reservations_collapse", function() {
+                    var table = $("#adm_event_inventory_reservation_statuses").DataTable();
+                    table.columns.adjust().responsive.recalc();
+                });', true);
                 $page->addJavascript('$(document).on("click", ".event-inventory-reservation-request-again", function() {
                     var button = $(this);
                     button.prop("disabled", true);
@@ -652,6 +632,7 @@ class EventFormPresenter extends PagePresenter
                             $("<i>", {class: "bi " + iconClass}),
                             document.createTextNode(response.reservation_status_label)
                         );
+                        $(document).trigger("eventInventoryReservationRequestedAgain", [button.data("itemId")]);
                         button.remove();
                     }).fail(function(xhr) {
                         button.prop("disabled", false);

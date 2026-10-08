@@ -57,22 +57,14 @@ class InventoryBorrowPresenter extends PagePresenter
                 $readyReservationParameters
             )->fetchAll();
 
-            $readyHtml = '<div class="table-responsive"><table id="adm_inventory_borrow_ready_table" class="table table-condensed table-hover"><thead><tr><th>'
-            . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_PERIOD') . '</th><th>'
-            . $gL10n->get('SYS_EVENT') . '</th><th class="text-end"></th></tr></thead><tbody>';
-            foreach ($readyReservations as $reservation) {
-            $readyHtml .= '<tr><td>' . SecurityUtils::encodeHTML($reservation['item_name']) . '</td><td>'
-                . SecurityUtils::encodeHTML($reservation['ivr_begin']) . ' - ' . SecurityUtils::encodeHTML($reservation['ivr_end']) . '</td><td>'
-                . SecurityUtils::encodeHTML($reservation['dat_headline'] ?? '') . '</td><td class="text-end text-nowrap"><a class="btn btn-primary" href="'
-                . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+            foreach ($readyReservations as &$reservation) {
+                $reservation['borrowUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
                     'mode' => 'item_edit_borrow',
                     'item_uuid' => $reservation['ini_uuid'],
                     'reservation_uuid' => $reservation['ivr_uuid']
-                )) . '"><i class="bi bi-box-arrow-up-right"></i> '
-                . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_START_BORROWING')) . '</a></td></tr>';
+                ));
             }
-            $this->addHtml('<div class="card admidio-field-group"><div class="card-header">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_BORROWINGS_READY'))
-                . '</div><div class="card-body">' . $readyHtml . '</tbody></table></div></div></div>');
+            unset($reservation);
         }
 
         $keeperRestriction = '';
@@ -106,28 +98,25 @@ class InventoryBorrowPresenter extends PagePresenter
             $activeBorrowingParameters
         )->fetchAll();
 
-        $activeHtml = '<div class="table-responsive"><table id="adm_inventory_borrow_active_table" class="table table-condensed table-hover"><thead><tr><th>'
-            . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_INVENTORY_LAST_RECEIVER') . '</th><th>'
-            . $gL10n->get('SYS_INVENTORY_BORROW_DATE') . '</th><th class="text-end"></th></tr></thead><tbody>';
         $user = new User($gDb, $gProfileFields);
-        foreach ($activeBorrowings as $borrowing) {
+        foreach ($activeBorrowings as &$borrowing) {
             $receiver = (string)$borrowing['inb_last_receiver'];
             if (is_numeric($receiver) && $user->readDataById((int)$receiver)) {
                 $receiver = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
             }
-            $activeHtml .= '<tr><td>' . SecurityUtils::encodeHTML($borrowing['item_name']) . '</td><td>'
-                . SecurityUtils::encodeHTML($receiver) . '</td><td>'
-                . SecurityUtils::encodeHTML($borrowing['inb_borrow_date']) . '</td><td class="text-end text-nowrap"><a class="btn btn-primary" href="'
-                . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
+            $borrowing['receiver'] = $receiver;
+            $borrowing['returnUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
                     'mode' => 'item_edit_borrow',
                     'item_uuid' => $borrowing['ini_uuid'],
                     'item_borrowed' => 1,
                     'reservation_uuid' => $borrowing['ivr_uuid']
-                ))) . '"><i class="bi bi-box-arrow-in-down-left"></i> '
-                . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RECORD_RETURN')) . '</a></td></tr>';
+                )));
         }
-        $this->addHtml('<div class="card admidio-field-group"><div class="card-header">' . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_BORROWINGS_ACTIVE'))
-            . '</div><div class="card-body">' . $activeHtml . '</tbody></table></div></div></div>');
+        unset($borrowing);
+        $this->assignSmartyVariable('readyReservations', $readyReservations ?? array());
+        $this->assignSmartyVariable('activeBorrowings', $activeBorrowings);
+        $this->assignSmartyVariable('canManageReservations', $canManageReservations);
+        $this->addHtmlByTemplate('modules/inventory.borrow.list.tpl');
 
         if ($canManageReservations) {
             $readyTable = new DataTables($this, 'adm_inventory_borrow_ready_table');

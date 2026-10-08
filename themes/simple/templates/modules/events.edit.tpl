@@ -5,7 +5,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {$eventSections = ['basic' => 'SYS_BASIC_DATA', 'participation' => 'SYS_EVENT_REGISTRATION']}
-    {if {array_key_exists array=$elements key='event_inventory_items'}}
+    {if $eventInventoryReservationsEnabled|default:false}
         {$eventSections['reservations'] = 'SYS_INVENTORY_RESERVATIONS'}
     {/if}
     <div class="tabs-x tabs-above tab-bordered admidio-event-tabs" data-max-title-length="-1">
@@ -95,14 +95,14 @@
                                 <div class="card admidio-tabbed-field-group">
                                     <div class="card-header">{$l10n->get('SYS_INVENTORY_RESERVATIONS')}</div>
                                     <div class="card-body">
-                                        {include 'sys-template-parts/form.custom-content.tpl' data=$elements['event_inventory_items_table']}
+                                        {include 'modules/events.edit.inventory-reservations.tpl'}
                                     </div>
                                 </div>
-                                {if {array_key_exists array=$elements key='event_inventory_reservation_statuses'}}
+                                {if isset($eventInventoryReservationStatusRows)}
                                     <div class="card admidio-tabbed-field-group">
                                         <div class="card-header">{$l10n->get('SYS_INVENTORY_RESERVATION_STATUS_PER_EVENT')}</div>
                                         <div class="card-body">
-                                            {include 'sys-template-parts/form.custom-content.tpl' data=$elements['event_inventory_reservation_statuses']}
+                                            {include 'modules/events.edit.inventory-reservation-statuses.tpl'}
                                         </div>
                                     </div>
                                 {/if}
@@ -117,3 +117,35 @@
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save']}
     {include file="sys-template-parts/system.info-create-edit.tpl"}
 </form>
+{if {array_key_exists array=$elements key='event_inventory_reservation_add'}}
+<script>
+{literal}
+(function () {
+    const reservationData = {/literal}{$eventInventoryReservationDataJson nofilter}{literal};
+    const $rows = $('#event_inventory_reservations_rows');
+
+    function addReservationRow(itemId = '') {
+        if (itemId && $rows.find('select[name="event_inventory_items[]"]').filter(function () {
+            return this.value === String(itemId);
+        }).length > 0) {
+            return;
+        }
+
+        const $select = $('<select>', {class: 'form-select', name: 'event_inventory_items[]'});
+        $select.append($('<option>').val('').text('- ' + reservationData.pleaseChoose + ' -'));
+        reservationData.items.forEach(function (item) {
+            $select.append($('<option>').val(item.id).text(item.name));
+        });
+        $select.val(itemId ? String(itemId) : '');
+        const $remove = $('<button>', {type: 'button', class: 'btn btn-link text-danger p-0 event-inventory-reservation-remove', title: reservationData.deleteLabel})
+            .append($('<i>', {class: 'bi bi-trash'}));
+        $rows.append($('<tr>').append($('<td>').append($select), $('<td>', {class: 'text-end'}).append($remove)));
+    }
+
+    $('#event_inventory_reservation_add').on('click', function () { addReservationRow(); });
+    $rows.on('click', '.event-inventory-reservation-remove', function () { $(this).closest('tr').remove(); });
+    $(document).on('eventInventoryReservationRequestedAgain', function (event, itemId) { addReservationRow(itemId); });
+})();
+{/literal}
+</script>
+{/if}

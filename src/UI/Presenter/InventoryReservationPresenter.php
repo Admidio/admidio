@@ -106,55 +106,40 @@ class InventoryReservationPresenter extends PagePresenter
         );
         $filterForm->addToHtmlPage();
 
-        $html = '<div class="table-responsive"><table id="adm_inventory_reservations_table" class="table table-condensed table-hover" style="max-width: 100%;"><thead><tr><th>'
-            . $gL10n->get('SYS_INVENTORY_ITEMNAME') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER') . '</th><th>'
-            . $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_FROM') . '</th><th>'
-            . $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_TO') . '</th><th>' . $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN') . '</th><th>'
-            . $gL10n->get('SYS_COMMENT') . '</th><th></th></tr></thead><tbody>';
+        $templateData = array('headers' => array(
+            $gL10n->get('SYS_INVENTORY_ITEMNAME'), $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER'),
+            $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT'), $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_FROM'),
+            $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_TO'), $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN'),
+            $gL10n->get('SYS_COMMENT'), ''
+        ), 'rows' => array());
         $user = new User($gDb, $gProfileFields);
         foreach ($rows as $row) {
             if ((int)$row['ivr_usr_id'] > 0 && $user->readDataById((int)$row['ivr_usr_id'])) {
-                $requester = SecurityUtils::encodeHTML($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'));
+                $requester = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
                 $email = (string)$user->getValue('EMAIL');
                 if ($email !== '') {
-                    $requester .= '<br><small>' . SecurityUtils::encodeHTML($email) . '</small>';
                     if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
-                        $requester .= ' <a class="admidio-icon-link" href="'
-                            . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $user->getValue('usr_uuid')))
-                            . '"><i class="bi bi-envelope" data-bs-toggle="tooltip" title="'
-                            . SecurityUtils::encodeHTML($gL10n->get('SYS_SEND_EMAIL_TO', array($email))) . '"></i></a>';
+                        $mailUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $user->getValue('usr_uuid')));
                     }
                 }
             } else {
-                $requester = SecurityUtils::encodeHTML($row['ivr_guest_name']);
+                $requester = $row['ivr_guest_name'];
                 if ($row['ivr_guest_email'] !== '') {
                     $email = (string)$row['ivr_guest_email'];
-                    $requester .= '<br><small>' . SecurityUtils::encodeHTML($email) . '</small>';
                     if ($gSettingsManager->getInt('mail_module_enabled') > 0) {
-                        $requester .= ' <a class="admidio-icon-link" href="'
-                            . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('reservation_uuid' => $row['ivr_uuid']))
-                            . '"><i class="bi bi-envelope" data-bs-toggle="tooltip" title="'
-                            . SecurityUtils::encodeHTML($gL10n->get('SYS_SEND_EMAIL_TO', array($email))) . '"></i></a>';
+                        $mailUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('reservation_uuid' => $row['ivr_uuid']));
                     }
                 }
             }
             if ($row['dat_uuid'] !== null) {
-                $origin = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'cards', 'dat_uuid' => $row['dat_uuid'])) . '">'
-                    . SecurityUtils::encodeHTML($row['dat_headline']) . '</a>';
+                $origin = $row['dat_headline'];
+                $originUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'cards', 'dat_uuid' => $row['dat_uuid']));
             } else {
-                $origin = SecurityUtils::encodeHTML($reservationOrigins[(int)$row['ivr_usr_id'] > 0 ? 'member' : 'guest']);
+                $origin = $reservationOrigins[(int)$row['ivr_usr_id'] > 0 ? 'member' : 'guest'];
             }
             $reservationRowId = 'adm_inventory_reservation_' . $row['ivr_uuid'];
-            $html .= '<tr id="' . $reservationRowId . '" data-reservation-status="' . SecurityUtils::encodeHTML($row['ivr_status']) . '"><td>' . SecurityUtils::encodeHTML($row['item_name']) . '</td><td>' . $requester . '</td><td>'
-                . SecurityUtils::encodeHTML($row['ivr_timestamp_create']) . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_begin'])
-                . '</td><td>' . SecurityUtils::encodeHTML($row['ivr_end']) . '</td><td>' . $origin . '</td><td>';
-
-            if (trim((string)$row['ivr_comment']) !== '') {
-                $html .= '<a class="admidio-icon-link admidio-inventory-reservation-comment" href="javascript:void(0);" data-comment="'
-                    . SecurityUtils::encodeHTML($row['ivr_comment']) . '"><i class="bi bi-chat-left-text-fill" data-bs-toggle="tooltip" title="'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_COMMENT')) . '"></i></a>';
-            }
-            $html .= '</td><td>';
+            $mailUrl ??= '';
+            $originUrl ??= '';
 
             $actions = array();
             $canManageReservation = $isManager && InventoryAccessService::canManageReservationItem((int)$row['ivr_ini_id']);
@@ -178,23 +163,10 @@ class InventoryReservationPresenter extends PagePresenter
                     Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success',
                     default => 'bi-x-circle-fill text-danger'
                 };
-            if (count($actions) > 0) {
-                $html .= '<div class="btn-group admidio-inventory-reservation-action" role="group">'
-                    . '<button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
-                    . '<i class="bi ' . $buttonIcon . '"></i>' . $statusLabels[$row['ivr_status']] . '</button><ul class="dropdown-menu">';
-                foreach ($actions as $action) {
-                    $html .= '<li><a class="icon-link dropdown-item" href="javascript:void(0)" data-url="'
-                        . $action['url'] . '" data-row-id="' . $reservationRowId . '">'
-                        . '<i class="bi ' . $action['icon'] . '"></i>' . $action['label'] . '</a></li>';
-                }
-                $html .= '</ul></div>';
-            } else {
-                $html .= '<span class="admidio-inventory-reservation-action"><i class="bi ' . $buttonIcon . '"></i>'
-                    . $statusLabels[$row['ivr_status']] . '</span>';
-            }
-            $html .= '</td></tr>';
+            $templateData['rows'][] = array('id' => $reservationRowId, 'status' => $row['ivr_status'], 'itemName' => $row['item_name'], 'requester' => $requester, 'email' => $email ?? '', 'mailUrl' => $mailUrl, 'timestamp' => $row['ivr_timestamp_create'], 'begin' => $row['ivr_begin'], 'end' => $row['ivr_end'], 'origin' => $origin, 'originUrl' => $originUrl, 'comment' => $row['ivr_comment'], 'actions' => $actions, 'statusIcon' => $buttonIcon, 'statusLabel' => $statusLabels[$row['ivr_status']]);
         }
-        $this->addHtml($html . '</tbody></table></div><div id="adm_inventory_reservations_alert" class="alert alert-danger form-alert mt-3" style="display: none;"></div>');
+        $this->assignSmartyVariable('reservationList', $templateData);
+        $this->addHtmlByTemplate('modules/inventory.reservations.list.tpl');
 
         $dataTables = new DataTables($this, 'adm_inventory_reservations_table');
         $dataTables->disableColumnsSort(array(7, 8));
@@ -239,6 +211,21 @@ class InventoryReservationPresenter extends PagePresenter
                     errorAlert.fadeOut();
                 }, 7000);
             }
+            function reloadReservationTable() {
+                $.get(window.location.href, function(html) {
+                    var rows = $(html).find("#adm_inventory_reservations_table tbody tr").toArray();
+                    reservationTable.clear().rows.add(rows).draw(false);
+                    reservationTable.columns.adjust().responsive.recalc();
+                }).fail(function(xhr) {
+                    var response;
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                    } catch (error) {
+                        response = {};
+                    }
+                    showReservationActionError(response.message);
+                });
+            }
             $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-comment", function(event) {
                 event.preventDefault();
                 messageBox("", "' . $gL10n->get('SYS_COMMENT') . '");
@@ -261,7 +248,7 @@ class InventoryReservationPresenter extends PagePresenter
                     }
 
                     if (response.status === "success") {
-                        window.location.reload();
+                        reloadReservationTable();
                         return;
                     }
 
