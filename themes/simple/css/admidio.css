@@ -44,6 +44,13 @@
     color: var(--admidio-header-font-color);
     font-size: inherit;
     font-weight: inherit;
+    /* the name of the organization may shrink, otherwise the header is wider than small screens */
+    min-width: 0;
+}
+
+#adm_headline_organization {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #adm_main_navbar .navbar-brand:hover,
