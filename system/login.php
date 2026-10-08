@@ -15,6 +15,7 @@
  *
  * **********************************************************************************************
  */
+use Admidio\Session\Service\LoginService;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -32,12 +33,12 @@ try {
 
         // create an HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('adm_login', $headline);
-        $loginModule = new ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();
     } elseif ($getMode === 'check') {
         // check the data of the login dialog
-        $loginModule = new ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->checkLogin();
 
         // check if browser can set cookies and throw error if not
