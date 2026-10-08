@@ -306,6 +306,8 @@
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_BLUESKY">Bluesky</string>
+  <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BULLETED_LIST">Bulleted list</string>
   <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANCEL">Cancel</string>
@@ -813,6 +815,8 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
+  <string name="SYS_INSERT_IMAGE">Insert image</string>
+  <string name="SYS_INSERT_LINK">Insert link</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Install</string>
   <string name="SYS_INSTALL_APP">Install app</string>
@@ -967,6 +971,7 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
+  <string name="SYS_ITALIC">Italic</string>
   <string name="SYS_KEEP_ORIGINAL">Save original files additionally</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
@@ -1209,6 +1214,7 @@
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
+  <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
@@ -1456,6 +1462,7 @@
   <string name="SYS_REMOVE_CONTACT_SELECTION">Remove contact selection</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">By choosing #VAR1_BOLD#, all selected contacts will be deleted and could not be viewed or restored anymore.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
+  <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPEATS">Repeats</string>
@@ -1946,6 +1953,7 @@
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>

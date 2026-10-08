@@ -491,9 +491,9 @@ class FormPresenter
     }
 
     /**
-     * Add a new CKEditor element to the form.
-     * @param string $id ID of the password field. This will also be the name of the password field.
-     * @param string $label The label of the password field.
+     * Add a rich text editor element to the form.
+     * @param string $id ID of the editor field. This will also be the name of the editor field.
+     * @param string $label The label of the editor field.
      * @param string $value A value for the editor field. The editor will contain this value when created.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
@@ -501,6 +501,7 @@ class FormPresenter
      *                          + **self::FIELD_REQUIRED** : The field will be marked as a mandatory field where the user must insert a value.
      *                        - **toolbar** : Optional set a predefined toolbar for the editor. Possible values are
      *                          **AdmidioDefault**, **AdmidioComments** and **AdmidioNoMedia**
+     *                        - **engine** : Use **quill** instead of CKEditor for this field.
      *                        - **labelVertical** : If set to **true** (default) then the label will be display above the control and the control get a width of 100%.
      *                          Otherwise, the label will be displayed in front of the control.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
@@ -523,9 +524,13 @@ class FormPresenter
             'id' => $id,
             'label' => $label,
             'toolbar' => 'AdmidioDefault',
+            'engine' => 'ckeditor',
             'labelVertical' => true,
             'value' => $value
         ), $options));
+
+        $optionsAll['quillEnabled'] = $optionsAll['engine'] === 'quill'
+            && $gSettingsManager->getBool('system_js_editor_enabled');
 
         $attributes = array();
 
@@ -546,26 +551,49 @@ class FormPresenter
             $toolbarJS = '';
         }
 
-        $javascriptCode = '
-        let editor;
-        ClassicEditor
-        .create( document.querySelector( "#' . $id . '" ), {
-            ' . $toolbarJS . '
-            language: "' . $gL10n->getLanguageLibs() . '",
-            simpleUpload: {
-                uploadUrl: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php',
-                    array('id' => $id)) . '",
-                headers: { "X-CSRF-TOKEN": "' . $gCurrentSession->getCsrfToken() . '" }
+        if ($optionsAll['quillEnabled']) {
+            if (isset($this->htmlPage)) {
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill_editor.js');
             }
-        } )
-        .then( newEditor => {
-            editor = newEditor;
-        })
-        .catch( error => {
-            console.error( error );
-        } );';
 
-        if ($gSettingsManager->getBool('system_js_editor_enabled')) {
+            $quillOptions = array(
+                'uploadUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php', array('id' => $id)),
+                'csrfToken' => $gCurrentSession->getCsrfToken(),
+                'uploadError' => $gL10n->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL'),
+                'labels' => array(
+                    'bold' => $gL10n->get('SYS_BOLD'),
+                    'italic' => $gL10n->get('SYS_ITALIC'),
+                    'underline' => $gL10n->get('SYS_UNDERLINE'),
+                    'ordered' => $gL10n->get('SYS_ORDERED_LIST'),
+                    'bullet' => $gL10n->get('SYS_BULLETED_LIST'),
+                    'link' => $gL10n->get('SYS_INSERT_LINK'),
+                    'image' => $gL10n->get('SYS_INSERT_IMAGE'),
+                    'clean' => $gL10n->get('SYS_REMOVE_FORMATTING')
+                )
+            );
+            $this->addJavascriptCode('admidioInitQuill(' . json_encode($id, JSON_HEX_TAG | JSON_HEX_AMP)
+                . ', ' . json_encode($quillOptions, JSON_HEX_TAG | JSON_HEX_AMP) . ');', true);
+        } elseif ($gSettingsManager->getBool('system_js_editor_enabled')) {
+            $javascriptCode = '
+            let editor;
+            ClassicEditor
+            .create( document.querySelector( "#' . $id . '" ), {
+                ' . $toolbarJS . '
+                language: "' . $gL10n->getLanguageLibs() . '",
+                simpleUpload: {
+                    uploadUrl: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php',
+                        array('id' => $id)) . '",
+                    headers: { "X-CSRF-TOKEN": "' . $gCurrentSession->getCsrfToken() . '" }
+                }
+            } )
+            .then( newEditor => {
+                editor = newEditor;
+            })
+            .catch( error => {
+                console.error( error );
+            } );';
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if (isset($this->htmlPage)) {
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');

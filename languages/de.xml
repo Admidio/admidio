@@ -311,6 +311,8 @@
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
+  <string name="SYS_BOLD">Fett</string>
+  <string name="SYS_BULLETED_LIST">Aufzählung</string>
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Abbrechen</string>
@@ -824,6 +826,8 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Gib bitte den Vor- und Nachnamen des neuen Kontakts ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
+  <string name="SYS_INSERT_IMAGE">Bild einfügen</string>
+  <string name="SYS_INSERT_LINK">Link einfügen</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Installieren</string>
   <string name="SYS_INSTALL_APP">App installieren</string>
@@ -978,6 +982,7 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">Benutzerdefinierte Felder</string>
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
+  <string name="SYS_ITALIC">Kursiv</string>
   <string name="SYS_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>
@@ -1223,6 +1228,7 @@
   <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
+  <string name="SYS_ORDERED_LIST">Nummerierte Liste</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organisationszugehörigkeit</string>
   <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation mit der Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
@@ -1472,6 +1478,7 @@
   <string name="SYS_REMOVE_CONTACT_SELECTION">Kontaktauswahl löschen</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten der ausgewählten Kontakte gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Willst du die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
+  <string name="SYS_REMOVE_FORMATTING">Formatierung entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
@@ -1967,6 +1974,7 @@
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
+  <string name="SYS_UNDERLINE">Unterstrichen</string>
   <string name="SYS_UNIDIRECTIONAL">unidirektional</string>
   <string name="SYS_UNIQUE_ID">Eindeutige Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
