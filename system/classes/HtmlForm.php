@@ -432,14 +432,14 @@ class HtmlForm
             if (!$this->quillAssetsAdded) {
                 if ($this->htmlPage instanceof HtmlPage) {
                     $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
-                    $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill_editor.css');
+                    $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill-editor.css');
                     $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
-                    $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill_editor.js');
+                    $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js');
                 } else {
                     $this->htmlString .= '<link rel="stylesheet" href="' . ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css">';
-                    $this->htmlString .= '<link rel="stylesheet" href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill_editor.css">';
+                    $this->htmlString .= '<link rel="stylesheet" href="' . ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill-editor.css">';
                     $this->htmlString .= '<script src="' . ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js"></script>';
-                    $this->htmlString .= '<script src="' . ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill_editor.js"></script>';
+                    $this->htmlString .= '<script src="' . ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js"></script>';
                 }
                 $this->quillAssetsAdded = true;
             }

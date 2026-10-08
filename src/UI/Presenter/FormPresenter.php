@@ -543,9 +543,9 @@ class FormPresenter
         if ($optionsAll['quillEnabled']) {
             if (isset($this->htmlPage)) {
                 $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
-                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill_editor.css');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill-editor.css');
                 $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill_editor.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js');
             }
             $this->addJavascriptCode(QuillEditor::initializationCode($id, $optionsAll['toolbar']), true);
         }
