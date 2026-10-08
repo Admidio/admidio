@@ -2,8 +2,8 @@
 /**
  * The handover of an automatic core update to install/update.php: when the migration may run,
  * who may run it without logging in again, what the state records and when maintenance mode goes
- * off. The workspace is a temporary directory; the maintenance file is the real one of the test
- * installation, because that is the file the bootstrap reads.
+ * off. The updates are kept in a temporary installation directory; the maintenance file is the real
+ * one of the test installation, because that is the file the bootstrap reads.
  */
 
 namespace Admidio\Tests\Unit\InstallationUpdate;
@@ -17,9 +17,10 @@ use Psr\Log\NullLogger;
 final class CoreUpdateHandoverTest extends AdmidioTestCase
 {
     private const UPDATE_ID = '0123456789abcdef0123456789abcdef';
-    private const CREDENTIAL = 'the-credential-of-the-administrator';
+    private const SECRET = 'a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90';
+    private const CREDENTIAL = self::UPDATE_ID . '.' . self::SECRET;
 
-    private string $workspaceRoot = '';
+    private string $rootPath = '';
 
     public static function setUpBeforeClass(): void
     {
@@ -45,29 +46,37 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
             }
         };
 
-        $this->workspaceRoot = sys_get_temp_dir() . '/adm_core_update_' . uniqid();
-        mkdir($this->workspaceRoot . '/' . self::UPDATE_ID, 0777, true);
-        CoreUpdateHandover::setWorkspaceRoot($this->workspaceRoot);
+        $this->rootPath = sys_get_temp_dir() . '/adm_core_update_' . uniqid();
+        mkdir($this->rootPath . '/adm_my_files/core-update/' . self::UPDATE_ID, 0777, true);
+        CoreUpdateHandover::setRootPath($this->rootPath);
     }
 
     protected function tearDown(): void
     {
-        CoreUpdateHandover::setWorkspaceRoot(null);
+        CoreUpdateHandover::setRootPath(null);
         unset($GLOBALS['gL10n']);
 
-        if ($this->workspaceRoot !== '') {
+        if ($this->rootPath !== '') {
             MaintenanceMode::disable();
             $entries = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($this->workspaceRoot, \FilesystemIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator($this->rootPath, \FilesystemIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::CHILD_FIRST
             );
             foreach ($entries as $entry) {
                 $entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
             }
-            rmdir($this->workspaceRoot);
+            rmdir($this->rootPath);
         }
 
         parent::tearDown();
+    }
+
+    /**
+     * The workspace of the test update.
+     */
+    private function workspace(): string
+    {
+        return $this->rootPath . '/adm_my_files/core-update/' . self::UPDATE_ID;
     }
 
     /**
@@ -75,12 +84,14 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
      */
     private function writeState(string $state, array $fields = array()): void
     {
-        file_put_contents($this->workspaceRoot . '/' . self::UPDATE_ID . '/state.json', json_encode(array_merge(array(
+        file_put_contents($this->workspace() . '/state.json', json_encode(array_merge(array(
+            'schemaVersion' => 1,
             'updateId' => self::UPDATE_ID,
             'state' => $state,
-            'cookieName' => 'ADMIDIO_CORE_UPDATE_0123456789ab',
-            'authorizationHash' => hash('sha256', self::CREDENTIAL),
-            'expiresAt' => time() + 3600,
+            'credentials' => array(
+                array('hash' => hash('sha256', self::SECRET), 'createdAt' => time(), 'expiresAt' => time() + 3600)
+            ),
+            'csrfToken' => str_repeat('c', 64),
             'targetVersion' => '5.1.0',
             'lastError' => ''
         ), $fields)));
@@ -91,7 +102,7 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
      */
     private function readState(): array
     {
-        return json_decode((string)file_get_contents($this->workspaceRoot . '/' . self::UPDATE_ID . '/state.json'), true);
+        return json_decode((string)file_get_contents($this->workspace() . '/state.json'), true);
     }
 
     private function enableMaintenance(string $owner): void
@@ -219,13 +230,15 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
         $this->writeState('files_installed');
         $handover = CoreUpdateHandover::load(self::UPDATE_ID);
 
-        $this->assertSame('ADMIDIO_CORE_UPDATE_0123456789ab', $handover->getCookieName());
         $this->assertTrue($handover->isAuthorized(self::CREDENTIAL));
-        $this->assertFalse($handover->isAuthorized('something-else'));
+        $this->assertFalse($handover->isAuthorized(self::UPDATE_ID . '.' . str_repeat('0', 64)), 'another secret');
+        $this->assertFalse($handover->isAuthorized('ffffffffffffffffffffffffffffffff.' . self::SECRET), 'another update');
         $this->assertFalse($handover->isAuthorized(''));
         $this->assertFalse($handover->isAuthorized(array(self::CREDENTIAL)), 'a cookie array');
 
-        $this->writeState('files_installed', array('expiresAt' => time() - 1));
+        $this->writeState('files_installed', array('credentials' => array(
+            array('hash' => hash('sha256', self::SECRET), 'createdAt' => time() - 90000, 'expiresAt' => time() - 1)
+        )));
         $this->assertFalse(CoreUpdateHandover::load(self::UPDATE_ID)->isAuthorized(self::CREDENTIAL), 'expired');
     }
 
@@ -242,9 +255,9 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
         $this->assertSame('database_running', $state['state']);
         $this->assertTrue($state['databaseStarted']);
         $this->assertSame('5.1.0', $state['targetVersion'], 'the other fields stay');
-        $this->assertFileExists($this->workspaceRoot . '/' . self::UPDATE_ID . '/state.json.previous');
+        $this->assertFileExists($this->workspace() . '/state.json.previous');
         $this->assertSame('files_installed',
-            json_decode((string)file_get_contents($this->workspaceRoot . '/' . self::UPDATE_ID . '/state.json.previous'), true)['state']);
+            json_decode((string)file_get_contents($this->workspace() . '/state.json.previous'), true)['state']);
     }
 
     /**
@@ -314,14 +327,14 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox The result page of the updater is named by the update
+     * @testdox The result page of the updater is the one of the update the cookie names
      */
     public function testResultUrl(): void
     {
         $this->writeState('completed');
 
         $this->assertSame(
-            ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?update_id=' . self::UPDATE_ID . '&action=finish',
+            ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?action=finish',
             CoreUpdateHandover::load(self::UPDATE_ID)->getResultUrl()
         );
     }

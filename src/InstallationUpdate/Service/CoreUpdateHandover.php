@@ -4,8 +4,13 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
-use RuntimeException;
+use AdmidioCoreUpdater\Credentials;
+use AdmidioCoreUpdater\StateStore;
+use AdmidioCoreUpdater\UpdaterException;
 use Throwable;
+
+// The state of an update and the updater cookie have one implementation, the updater's own.
+require_once ADMIDIO_PATH . '/install/core-update/lib/bootstrap.php';
 
 /**
  * The side of an automatic core update that install/update.php sees.
@@ -27,6 +32,9 @@ use Throwable;
  * - The updater cookie lets the administrator who started the update continue without another
  *   login. Without it, the normal administrator login of install/update.php is the proof of
  *   identity.
+ *
+ * The state and the cookie belong to the updater, so they are read and written with its classes
+ * (StateStore, Credentials), which this file loads directly from install/core-update/lib/.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -57,17 +65,21 @@ final class CoreUpdateHandover
     public const MAINTENANCE_OWNER_PREFIX = 'core-update:';
 
     /**
-     * Overrides the directory of the update workspaces. Only used by tests.
+     * Overrides the installation directory in which the updates are kept. Only used by tests.
      */
-    private static ?string $workspaceRoot = null;
+    private static ?string $rootPath = null;
 
     /**
+     * @param StateStore $store
      * @param string $updateId
-     * @param array<string,mixed> $state The decoded state.json, or an empty array if it could not
+     * @param array<string,mixed> $state The state of the update, or an empty array if it could not
      *                                   be read.
      */
-    private function __construct(private readonly string $updateId, private array $state)
-    {
+    private function __construct(
+        private readonly StateStore $store,
+        private readonly string $updateId,
+        private array $state
+    ) {
     }
 
     /**
@@ -78,12 +90,13 @@ final class CoreUpdateHandover
      */
     public static function load(string $updateId): self
     {
-        $state = self::isValidId($updateId) ? self::readState($updateId) : null;
-        if ($state === null) {
+        $store = self::createStore();
+
+        try {
+            return new self($store, $updateId, $store->read($updateId));
+        } catch (UpdaterException) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
-
-        return new self($updateId, $state);
     }
 
     /**
@@ -108,21 +121,18 @@ final class CoreUpdateHandover
         }
 
         $updateId = substr($owner, strlen(self::MAINTENANCE_OWNER_PREFIX));
-        if (!self::isValidId($updateId)) {
+        if (!StateStore::isValidId($updateId)) {
             return null;
         }
 
-        return new self($updateId, self::readState($updateId) ?? array());
-    }
+        $store = self::createStore();
+        try {
+            $state = $store->read($updateId);
+        } catch (UpdaterException) {
+            $state = array();
+        }
 
-    /**
-     * Whether a string has the form of an update ID: 32 lower case hex characters.
-     * @param string $updateId
-     * @return bool
-     */
-    public static function isValidId(string $updateId): bool
-    {
-        return preg_match('/^[a-f0-9]{32}$/', $updateId) === 1;
+        return new self($store, $updateId, $state);
     }
 
     public function getUpdateId(): string
@@ -149,26 +159,22 @@ final class CoreUpdateHandover
     }
 
     /**
-     * The name of the cookie that carries the credential of the administrator who started the
-     * update.
+     * The name of the updater cookie, which carries the credential of an administrator.
      * @return string
      */
     public function getCookieName(): string
     {
-        return (string)($this->state['cookieName'] ?? '');
+        return Credentials::getCookieName(COOKIE_PREFIX);
     }
 
     /**
-     * Whether a credential is the one of this update and has not expired. Only its hash is on disk.
+     * Whether a cookie value is a credential of this update that has not expired.
      * @param mixed $credential The value of the updater cookie.
      * @return bool
      */
     public function isAuthorized(mixed $credential): bool
     {
-        return is_string($credential) && $credential !== ''
-            && isset($this->state['authorizationHash'], $this->state['expiresAt'])
-            && hash_equals((string)$this->state['authorizationHash'], hash('sha256', $credential))
-            && (int)$this->state['expiresAt'] >= time();
+        return $this->state !== array() && Credentials::isValid($this->state, $credential, time());
     }
 
     /**
@@ -217,90 +223,35 @@ final class CoreUpdateHandover
      */
     public function getResultUrl(): string
     {
-        return ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?update_id='
-            . rawurlencode($this->updateId) . '&action=finish';
+        return ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?action=finish';
     }
 
     /**
-     * Read the workspaces from another directory. Pass **null** to restore the regular one. Only
-     * tests use this.
-     * @param string|null $directory
+     * Keep the updates in another installation directory. Pass **null** to restore the regular
+     * one. Only tests use this.
+     * @param string|null $rootPath
      * @return void
      */
-    public static function setWorkspaceRoot(?string $directory): void
+    public static function setRootPath(?string $rootPath): void
     {
-        self::$workspaceRoot = $directory;
+        self::$rootPath = $rootPath;
     }
 
     /**
-     * Absolute path of the directory that holds the workspaces of the core updates.
-     * @return string
+     * @return StateStore
      */
-    private static function getWorkspaceRoot(): string
+    private static function createStore(): StateStore
     {
-        return self::$workspaceRoot ?? ADMIDIO_PATH . FOLDER_TEMP_DATA . '/core-update';
+        return new StateStore(self::$rootPath ?? ADMIDIO_PATH);
     }
 
     /**
-     * The decoded state of an update, or **null** if it does not exist or cannot be read.
-     * @param string $updateId
-     * @return array<string,mixed>|null
-     */
-    private static function readState(string $updateId): ?array
-    {
-        $file = self::getWorkspaceRoot() . '/' . $updateId . '/state.json';
-        if (!is_file($file)) {
-            return null;
-        }
-
-        $state = json_decode((string)file_get_contents($file), true);
-        if (!is_array($state) || ($state['updateId'] ?? '') !== $updateId) {
-            return null;
-        }
-
-        return $state;
-    }
-
-    /**
-     * Change fields of the state.
-     *
-     * The updater may be answering a request of its own at the same moment, so the state is read
-     * again and written under the lock the updater uses. It is written to a temporary file and
-     * renamed, and the version before is kept as state.json.previous, the way the updater does it.
+     * Change fields of the state, under the lock of the updater.
      * @param array<string,mixed> $changes
      * @return void
      */
     private function update(array $changes): void
     {
-        $lock = @fopen(self::getWorkspaceRoot() . '/update.lock', 'c+');
-        if ($lock === false || !flock($lock, LOCK_EX)) {
-            throw new RuntimeException('The core update state could not be locked.');
-        }
-
-        try {
-            $file = self::getWorkspaceRoot() . '/' . $this->updateId . '/state.json';
-            $state = self::readState($this->updateId);
-            if ($state === null) {
-                throw new RuntimeException('The core update state could not be read.');
-            }
-
-            $this->state = array_merge($state, $changes);
-
-            $temporaryFile = $file . '.new';
-            $json = json_encode($this->state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-            if (file_put_contents($temporaryFile, $json, LOCK_EX) !== strlen($json)) {
-                @unlink($temporaryFile);
-                throw new RuntimeException('The core update state could not be written.');
-            }
-
-            @copy($file, $file . '.previous');
-            if (!rename($temporaryFile, $file)) {
-                @unlink($temporaryFile);
-                throw new RuntimeException('The core update state could not be written.');
-            }
-        } finally {
-            flock($lock, LOCK_UN);
-            fclose($lock);
-        }
+        $this->state = $this->store->update($this->updateId, static fn(array $state): array => array_merge($state, $changes));
     }
 }

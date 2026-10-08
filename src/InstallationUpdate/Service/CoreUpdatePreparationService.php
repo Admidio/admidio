@@ -2,14 +2,22 @@
 namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Exception;
+use AdmidioCoreUpdater\Config;
+use AdmidioCoreUpdater\Credentials;
+use AdmidioCoreUpdater\StateStore;
+use AdmidioCoreUpdater\UpdaterException;
 use ZipArchive;
+
+// The state of an update and the updater cookie have one implementation, the updater's own.
+require_once ADMIDIO_PATH . '/install/core-update/lib/bootstrap.php';
 
 /**
  * Prepares an automatic core update while the normal Admidio application is still intact.
  *
  * The destructive update is deliberately not performed by this class. It downloads and verifies
  * the package, installs the self-contained updater below install/core-update and creates the
- * protected workspace and authorization cookie used by that updater.
+ * update - its workspace and state - and the updater cookie of the administrator, both through
+ * the classes of the updater.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -18,10 +26,8 @@ use ZipArchive;
 class CoreUpdatePreparationService
 {
     private const GIT_MASTER_PACKAGE_URL = 'https://github.com/Admidio/admidio/archive/refs/heads/master.zip';
-    private const WORKSPACE_SUBDIRECTORY = '/core-update';
     private const UPDATER_DIRECTORY = '/install/core-update';
     private const PUBLIC_KEY_FILE = '/install/core-update/public-key.pem';
-    private const AUTHORIZATION_LIFETIME = 86400;
     private const MAX_DOWNLOAD_SIZE = 536870912;
 
     /**
@@ -85,19 +91,12 @@ class CoreUpdatePreparationService
      */
     public function prepareUpdate(bool $gitMaster): string
     {
-        global $gCurrentUserId, $gL10n;
+        global $gCurrentUserId;
 
         if (!extension_loaded('curl')
             || !extension_loaded('zip')
             || (!$gitMaster && !extension_loaded('openssl'))) {
             throw new Exception('SYS_CORE_UPDATE_REQUIRED_EXTENSIONS');
-        }
-
-        $this->removeExpiredActiveUpdate();
-
-        $activeFile = $this->getWorkspaceRoot() . '/active.json';
-        if (is_file($activeFile)) {
-            throw new Exception('SYS_CORE_UPDATE_ALREADY_RUNNING');
         }
 
         $updateInformation = $this->getUpdateInformation($gitMaster);
@@ -108,16 +107,20 @@ class CoreUpdatePreparationService
             throw new Exception('SYS_CORE_UPDATE_RELEASE_NOT_CONFIGURED');
         }
 
-        $updateId = bin2hex(random_bytes(16));
-        $authorizationToken = bin2hex(random_bytes(32));
-        $csrfToken = bin2hex(random_bytes(32));
-        $workspace = $this->getWorkspaceRoot() . '/' . $updateId;
-
-        $this->createDirectory($workspace);
-        $this->writeJsonFile($activeFile, array(
-            'updateId' => $updateId,
-            'expiresAt' => time() + self::AUTHORIZATION_LIFETIME
-        ));
+        $store = new StateStore(ADMIDIO_PATH);
+        try {
+            // Refused while another update is unfinished; an abandoned one is cleared first.
+            $updateId = (string)$store->create(array(
+                'state' => 'downloading',
+                'channel' => $gitMaster ? 'master' : 'stable',
+                'installedVersion' => ADMIDIO_VERSION_TEXT,
+                'targetVersion' => $gitMaster ? 'Git master' : (string) $updateInformation['availableVersion'],
+                'administratorUserId' => (int) $gCurrentUserId
+            ))['updateId'];
+        } catch (UpdaterException $exception) {
+            throw new Exception($exception->getMessage(), $exception->getParams());
+        }
+        $workspace = $store->getWorkspace($updateId);
 
         try {
             $packageFile = $workspace . '/package.zip';
@@ -180,49 +183,31 @@ class CoreUpdatePreparationService
 
             $this->installUpdater($packageFile, $archiveRoot, $manifest);
 
-            $cookieName = COOKIE_PREFIX . '_CORE_UPDATE_' . substr($updateId, 0, 12);
-            $state = array(
-                'schema' => 2,
-                'updateId' => $updateId,
-                'source' => $gitMaster ? 'master' : 'release',
-                'sourceVersion' => ADMIDIO_VERSION_TEXT,
-                'targetVersion' => $gitMaster ? 'Git master' : (string) $updateInformation['availableVersion'],
-                'packageUrl' => $gitMaster ? self::GIT_MASTER_PACKAGE_URL : (string) $updateInformation['packageUrl'],
-                'packageSha256' => $this->calculateFileHash($packageFile),
-                'manifestSha256' => $manifestSha256,
-                'archiveRoot' => $archiveRoot,
-                'state' => 'prepared',
-                'currentOperation' => 0,
-                'totalOperations' => 0,
-                'createdAt' => time(),
-                'expiresAt' => time() + self::AUTHORIZATION_LIFETIME,
-                'administratorUserId' => (int) $gCurrentUserId,
-                'cookieName' => $cookieName,
-                'authorizationHash' => hash('sha256', $authorizationToken),
-                'csrfToken' => $csrfToken,
-                'baseUrl' => ADMIDIO_URL,
-                'languageCode' => $gL10n->getLanguage(),
-                'translations' => $this->getUpdaterTranslations(),
-                'lastError' => ''
-            );
-            $this->writeJsonFile($workspace . '/state.json', $state);
+            $cookieValue = '';
+            $packageSha256 = $this->calculateFileHash($packageFile);
+            $store->update($updateId, static function (array $state) use (
+                $gitMaster, $updateInformation, $packageSha256, $manifestSha256, $archiveRoot, &$cookieValue
+            ): array {
+                $state = array_merge($state, array(
+                    'state' => 'prepared',
+                    'packageUrl' => $gitMaster ? self::GIT_MASTER_PACKAGE_URL : (string) $updateInformation['packageUrl'],
+                    'packageSha256' => $packageSha256,
+                    'manifestSha256' => $manifestSha256,
+                    'archiveRoot' => $archiveRoot,
+                    'currentOperation' => 0,
+                    'totalOperations' => 0
+                ));
+                $cookieValue = Credentials::issue($state, time());
 
-            $cookiePath = rtrim(ADMIDIO_URL_PATH, '/') . '/install/';
-            if ($cookiePath === '') {
-                $cookiePath = '/';
-            }
-            setcookie($cookieName, $authorizationToken, array(
-                'expires' => $state['expiresAt'],
-                'path' => $cookiePath,
-                'secure' => HTTPS,
-                'httponly' => true,
-                'samesite' => 'Strict'
-            ));
+                return $state;
+            });
 
-            return ADMIDIO_URL . self::UPDATER_DIRECTORY . '/index.php?update_id=' . rawurlencode($updateId);
+            Credentials::sendCookie(Config::load(ADMIDIO_PATH), $cookieValue);
+
+            return ADMIDIO_URL . self::UPDATER_DIRECTORY . '/index.php';
         } catch (\Throwable $exception) {
-            $this->deleteDirectory($workspace);
-            @unlink($activeFile);
+            StateStore::deleteDirectory($workspace);
+            $store->clearActive($updateId);
             throw $exception;
         }
     }
@@ -902,59 +887,6 @@ class CoreUpdatePreparationService
         return $value;
     }
 
-
-    /**
-     * Resolve the small set of updater UI strings while the normal Admidio language service is
-     * available. The isolated updater stores these texts in state.json and therefore remains
-     * independent of language files that are replaced during the update.
-     *
-     * @return array<string,string>
-     */
-    private function getUpdaterTranslations(): array
-    {
-        global $gL10n;
-
-        $keys = array(
-            'title' => 'SYS_CORE_UPDATE_TITLE',
-            'installedVersion' => 'SYS_CORE_UPDATE_INSTALLED_VERSION',
-            'target' => 'SYS_CORE_UPDATE_TARGET',
-            'currentState' => 'SYS_CORE_UPDATE_CURRENT_STATE',
-            'ready' => 'SYS_CORE_UPDATE_READY',
-            'startResume' => 'SYS_CORE_UPDATE_START_RESUME',
-            'restorePrevious' => 'SYS_CORE_UPDATE_RESTORE_PREVIOUS',
-            'masterWarning' => 'SYS_CORE_UPDATE_MASTER_WARNING',
-            'requestFailed' => 'SYS_CORE_UPDATE_REQUEST_FAILED',
-            'confirmRestore' => 'SYS_CORE_UPDATE_CONFIRM_RESTORE',
-            'progressLabel' => 'SYS_CORE_UPDATE_PROGRESS',
-            'openAdmidio' => 'SYS_CORE_UPDATE_OPEN_ADMIDIO',
-            'packageExtracted' => 'SYS_CORE_UPDATE_PACKAGE_EXTRACTED',
-            'preflightSuccessful' => 'SYS_CORE_UPDATE_PREFLIGHT_SUCCESS',
-            'maintenanceActive' => 'SYS_CORE_UPDATE_MAINTENANCE_ACTIVE',
-            'filesInstalledDatabaseStart' => 'SYS_CORE_UPDATE_FILES_INSTALLED_DB_START',
-            'filesInstalling' => 'SYS_CORE_UPDATE_FILES_INSTALLING',
-            'databaseStart' => 'SYS_CORE_UPDATE_DATABASE_START',
-            'databaseContinue' => 'SYS_CORE_UPDATE_DATABASE_CONTINUE',
-            'alreadyCompleted' => 'SYS_CORE_UPDATE_ALREADY_COMPLETED',
-            'filesystemRolledBack' => 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK',
-            'previousFilesRestored' => 'SYS_CORE_UPDATE_PREVIOUS_FILES_RESTORED',
-            'updateSuccessful' => 'SYS_CORE_UPDATE_SUCCESSFUL',
-            'maintenanceMessage' => 'SYS_CORE_UPDATE_MAINTENANCE_MESSAGE'
-        );
-
-        $translations = array();
-        foreach ($keys as $name => $languageKey) {
-            $translations[$name] = $gL10n->get($languageKey);
-        }
-
-        return $translations;
-    }
-
-
-    private function getWorkspaceRoot(): string
-    {
-        return ADMIDIO_PATH . FOLDER_TEMP_DATA . self::WORKSPACE_SUBDIRECTORY;
-    }
-
     /**
      * @param string $directory
      * @throws Exception
@@ -963,39 +895,6 @@ class CoreUpdatePreparationService
     {
         if (!is_dir($directory) && !@mkdir($directory, 0770, true) && !is_dir($directory)) {
             throw new Exception('SYS_CORE_UPDATE_FILES_NOT_WRITABLE');
-        }
-    }
-
-    /**
-     * @param string $file
-     * @param array<string,mixed> $data
-     * @throws Exception
-     */
-    private function writeJsonFile(string $file, array $data): void
-    {
-        $this->createDirectory(dirname($file));
-        $temporaryFile = $file . '.tmp';
-        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-
-        if (file_put_contents($temporaryFile, $json, LOCK_EX) === false || !@rename($temporaryFile, $file)) {
-            @unlink($temporaryFile);
-            throw new Exception('SYS_CORE_UPDATE_FILES_NOT_WRITABLE');
-        }
-    }
-
-    private function removeExpiredActiveUpdate(): void
-    {
-        $activeFile = $this->getWorkspaceRoot() . '/active.json';
-        if (!is_file($activeFile)) {
-            return;
-        }
-
-        $active = json_decode((string) file_get_contents($activeFile), true);
-        if (!is_array($active) || (int) ($active['expiresAt'] ?? 0) < time()) {
-            if (isset($active['updateId']) && preg_match('/^[a-f0-9]{32}$/', (string) $active['updateId'])) {
-                $this->deleteDirectory($this->getWorkspaceRoot() . '/' . $active['updateId']);
-            }
-            @unlink($activeFile);
         }
     }
 

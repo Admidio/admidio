@@ -5,6 +5,28 @@ package before any normal Admidio core file is replaced. `index.php` and `CoreUp
 therefore use only PHP built-ins and remain usable while `src/`, `vendor/`, `system/`,
 `modules/`, themes, and the normal installer are updated in place.
 
+## Structure and access
+
+- `lib/` holds the classes of the updater (namespace `AdmidioCoreUpdater`), loaded by
+  `lib/bootstrap.php` without an autoloader. They read `adm_my_files/config.php`, connect
+  with plain PDO and need nothing else. `install/update.php` and the Admidio settings page
+  load the same classes, so the state of an update and the updater cookie have one
+  implementation.
+- Every update has a workspace `adm_my_files/core-update/<update id>/` with `state.json`
+  (versioned by `schemaVersion`, written atomically, the version before kept as
+  `state.json.previous`). `active.json` names the unfinished update; `update.lock` serialises
+  the requests.
+- Only an administrator gets in: with the updater cookie `<cookie prefix>_CORE_UPDATE`,
+  which the settings page hands over when it starts an update, or with the updater's own
+  login (password, security code when two-factor authentication is set up, membership in a
+  role with administrator rights). Five failed logins within 15 minutes block the login for
+  15 minutes; every attempt is written to `adm_my_files/core-update/login.log`. A cookie
+  expires one day after its last request and is revoked when the update is over.
+- `cli.php` is the command line entry point (`php install/core-update/cli.php status`).
+  Shell access is the proof of authority.
+- The texts are the `SYS_CORE_UPDATE_*` keys of the language files. A release carries them
+  in `texts/<language>.json`; a development tree reads them from `languages/`.
+
 ## Signed release contract
 
 The regular `https://www.admidio.org/update.txt` stays small. Automatic release

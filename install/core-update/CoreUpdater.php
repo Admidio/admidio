@@ -2,15 +2,51 @@
 /**
  * Self-contained Admidio core updater.
  *
- * This file deliberately has no dependency on the normal Admidio autoloader or source tree.
+ * This file deliberately has no dependency on the normal Admidio autoloader or source tree. The
+ * state, the lock, the workspace and the texts come from the classes in lib/; who may run it is
+ * decided by index.php before this class is used.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
+use AdmidioCoreUpdater\Config;
+use AdmidioCoreUpdater\Credentials;
+use AdmidioCoreUpdater\StateStore;
+use AdmidioCoreUpdater\Texts;
+
 class CoreUpdater
 {
-    private const WORKSPACE_RELATIVE_PATH = '/adm_my_files/temp/core-update';
+    /**
+     * The texts of the updater by the names this class uses.
+     */
+    private const TEXT_KEYS = array(
+        'title' => 'SYS_CORE_UPDATE_TITLE',
+        'installedVersion' => 'SYS_CORE_UPDATE_INSTALLED_VERSION',
+        'target' => 'SYS_CORE_UPDATE_TARGET',
+        'currentState' => 'SYS_CORE_UPDATE_CURRENT_STATE',
+        'ready' => 'SYS_CORE_UPDATE_READY',
+        'startResume' => 'SYS_CORE_UPDATE_START_RESUME',
+        'restorePrevious' => 'SYS_CORE_UPDATE_RESTORE_PREVIOUS',
+        'masterWarning' => 'SYS_CORE_UPDATE_MASTER_WARNING',
+        'requestFailed' => 'SYS_CORE_UPDATE_REQUEST_FAILED',
+        'confirmRestore' => 'SYS_CORE_UPDATE_CONFIRM_RESTORE',
+        'progressLabel' => 'SYS_CORE_UPDATE_PROGRESS',
+        'openAdmidio' => 'SYS_CORE_UPDATE_OPEN_ADMIDIO',
+        'packageExtracted' => 'SYS_CORE_UPDATE_PACKAGE_EXTRACTED',
+        'preflightSuccessful' => 'SYS_CORE_UPDATE_PREFLIGHT_SUCCESS',
+        'maintenanceActive' => 'SYS_CORE_UPDATE_MAINTENANCE_ACTIVE',
+        'filesInstalledDatabaseStart' => 'SYS_CORE_UPDATE_FILES_INSTALLED_DB_START',
+        'filesInstalling' => 'SYS_CORE_UPDATE_FILES_INSTALLING',
+        'databaseStart' => 'SYS_CORE_UPDATE_DATABASE_START',
+        'databaseContinue' => 'SYS_CORE_UPDATE_DATABASE_CONTINUE',
+        'alreadyCompleted' => 'SYS_CORE_UPDATE_ALREADY_COMPLETED',
+        'filesystemRolledBack' => 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK',
+        'previousFilesRestored' => 'SYS_CORE_UPDATE_PREVIOUS_FILES_RESTORED',
+        'updateSuccessful' => 'SYS_CORE_UPDATE_SUCCESSFUL',
+        'maintenanceMessage' => 'SYS_CORE_UPDATE_MAINTENANCE_MESSAGE'
+    );
+
     private const INSTALLER_RELATIVE_PATH = 'install/core-update/';
     private const FILES_PER_REQUEST = 40;
     private const MAX_UNCOMPRESSED_SIZE = 1073741824;
@@ -18,87 +54,37 @@ class CoreUpdater
     private string $rootPath;
     private string $updateId;
     private string $workspace;
-    private string $stateFile;
-    /** @var resource|null */
-    private $lockHandle = null;
     /** @var array<string,mixed> */
     private array $state = array();
     /** @var array<string,mixed>|null */
     private ?array $manifest = null;
 
-    public function __construct(string $rootPath, string $updateId)
-    {
-        if (!preg_match('/^[a-f0-9]{32}$/', $updateId)) {
-            throw new RuntimeException('Invalid update identifier.');
-        }
-
-        $realRootPath = realpath($rootPath);
+    public function __construct(
+        private readonly Config $config,
+        private readonly StateStore $store,
+        private readonly Texts $texts,
+        string $updateId
+    ) {
+        $realRootPath = realpath($config->rootPath);
         if ($realRootPath === false) {
             throw new RuntimeException('The Admidio installation path could not be determined.');
         }
 
         $this->rootPath = rtrim(str_replace('\\', '/', $realRootPath), '/');
         $this->updateId = $updateId;
-        $this->workspace = $this->rootPath . self::WORKSPACE_RELATIVE_PATH . '/' . $updateId;
-        $this->stateFile = $this->workspace . '/state.json';
+        $this->workspace = $store->getWorkspace($updateId);
         $this->state = $this->readState();
     }
 
-    public function authorize(): void
-    {
-        $cookieName = (string) ($this->state['cookieName'] ?? '');
-        $authorizationToken = $cookieName !== '' ? ($_COOKIE[$cookieName] ?? '') : '';
-
-        if ($cookieName === ''
-            || !is_string($authorizationToken)
-            || $authorizationToken === ''
-            || !hash_equals((string) ($this->state['authorizationHash'] ?? ''), hash('sha256', $authorizationToken))
-            || (int) ($this->state['expiresAt'] ?? 0) < time()) {
-            throw new RuntimeException('The core update authorization is invalid or has expired. Start the update again from the Admidio settings.');
-        }
-    }
-
-    public function validateCsrfToken(string $csrfToken): void
-    {
-        if ($csrfToken === ''
-            || !hash_equals((string) ($this->state['csrfToken'] ?? ''), $csrfToken)) {
-            throw new RuntimeException('The core update request could not be verified.');
-        }
-    }
-
-    public function getCsrfToken(): string
-    {
-        return (string) $this->state['csrfToken'];
-    }
-
-
     /**
-     * Returns a translated updater text that was resolved by the normal Admidio language service
-     * before the self-contained updater was started.
+     * Returns a text of the updater by the name this class uses for it.
      *
      * @param string $name
      * @param array<int,string> $params
      */
     public function getText(string $name, array $params = array()): string
     {
-        $translations = $this->state['translations'] ?? array();
-        $text = is_array($translations) && isset($translations[$name])
-            ? (string) $translations[$name]
-            : $name;
-
-        foreach ($params as $index => $param) {
-            $text = str_replace('#VAR' . ($index + 1) . '#', $param, $text);
-        }
-
-        return $text;
-    }
-
-    public function getLanguageCode(): string
-    {
-        $languageCode = (string) ($this->state['languageCode'] ?? 'en');
-        return preg_match('/^[a-zA-Z]{2,3}(?:-[a-zA-Z]{2,3})?$/', $languageCode) === 1
-            ? $languageCode
-            : 'en';
+        return $this->texts->get(self::TEXT_KEYS[$name] ?? $name, $params);
     }
 
     /**
@@ -108,8 +94,8 @@ class CoreUpdater
     {
         return array(
             'state' => (string) ($this->state['state'] ?? 'unknown'),
-            'source' => (string) ($this->state['source'] ?? ''),
-            'sourceVersion' => (string) ($this->state['sourceVersion'] ?? ''),
+            'channel' => (string) ($this->state['channel'] ?? ''),
+            'installedVersion' => (string) ($this->state['installedVersion'] ?? ''),
             'targetVersion' => (string) ($this->state['targetVersion'] ?? ''),
             'currentOperation' => (int) ($this->state['currentOperation'] ?? 0),
             'totalOperations' => (int) ($this->state['totalOperations'] ?? 0),
@@ -281,7 +267,10 @@ class CoreUpdater
             $this->disableMaintenanceMode();
             $this->state['state'] = 'rolled_back';
             $this->state['lastError'] = $this->getText('filesystemRolledBack');
+            // The update is over, so nobody may continue it.
+            Credentials::revokeAll($this->state);
             $this->writeState();
+            Credentials::clearCookie($this->config);
 
             $this->deleteDirectory($this->workspace . '/extracted');
             $this->deleteDirectory($this->workspace . '/backup');
@@ -293,7 +282,7 @@ class CoreUpdater
             @unlink($this->workspace . '/update-manifest.json');
             @unlink($this->workspace . '/update-manifest.json.sig');
             @unlink($this->workspace . '/trusted-public-key.pem');
-            @unlink($this->rootPath . self::WORKSPACE_RELATIVE_PATH . '/active.json');
+            $this->store->clearActive($this->updateId);
 
             return array(
                 'status' => 'rolled_back',
@@ -324,7 +313,10 @@ class CoreUpdater
             $this->disableMaintenanceMode();
             $this->state['state'] = 'completed';
             $this->state['lastError'] = '';
+            // The update is over, so nobody may continue it.
+            Credentials::revokeAll($this->state);
             $this->writeState();
+            Credentials::clearCookie($this->config);
 
             $this->deleteDirectory($this->workspace . '/extracted');
             $this->deleteDirectory($this->workspace . '/backup');
@@ -336,25 +328,13 @@ class CoreUpdater
             @unlink($this->workspace . '/update-manifest.json');
             @unlink($this->workspace . '/update-manifest.json.sig');
             @unlink($this->workspace . '/trusted-public-key.pem');
-            @unlink($this->rootPath . self::WORKSPACE_RELATIVE_PATH . '/active.json');
-
-            $cookieName = (string) ($this->state['cookieName'] ?? '');
-            if ($cookieName !== '') {
-                $cookiePath = $this->getCookiePath();
-                setcookie($cookieName, '', array(
-                    'expires' => time() - 3600,
-                    'path' => $cookiePath,
-                    'secure' => $this->isHttps(),
-                    'httponly' => true,
-                    'samesite' => 'Strict'
-                ));
-            }
+            $this->store->clearActive($this->updateId);
 
             return array(
                 'status' => 'completed',
                 'message' => $this->getText('updateSuccessful', array((string) $this->state['targetVersion'])),
                 'progress' => 100,
-                'url' => rtrim((string) $this->state['baseUrl'], '/') . '/modules/overview.php'
+                'url' => $this->config->baseUrl . '/modules/overview.php'
             );
         } finally {
             $this->releaseLock();
@@ -497,7 +477,7 @@ class CoreUpdater
             $this->validateRelativePath($relativePath);
 
             if ($this->isPreservedPath($relativePath)
-                || (($this->state['source'] ?? '') === 'master' && !$this->shouldInstallMasterPath($relativePath))) {
+                || (($this->state['channel'] ?? '') === 'master' && !$this->shouldInstallMasterPath($relativePath))) {
                 continue;
             }
 
@@ -712,7 +692,7 @@ class CoreUpdater
      */
     private function loadManifest(): array
     {
-        if (($this->state['source'] ?? '') !== 'release') {
+        if (($this->state['channel'] ?? '') !== 'stable') {
             return array();
         }
 
@@ -784,7 +764,7 @@ class CoreUpdater
 
     private function verifyInstalledRelease(): void
     {
-        if (($this->state['source'] ?? '') !== 'release') {
+        if (($this->state['channel'] ?? '') !== 'stable') {
             return;
         }
 
@@ -832,7 +812,7 @@ class CoreUpdater
 
     private function checkMasterDependencies(string $extractedDirectory): void
     {
-        if (($this->state['source'] ?? '') !== 'master') {
+        if (($this->state['channel'] ?? '') !== 'master') {
             if (!is_file($extractedDirectory . '/vendor/autoload.php')) {
                 throw new RuntimeException('The signed release package does not contain its Composer dependencies.');
             }
@@ -1011,7 +991,7 @@ class CoreUpdater
             rtrim(self::INSTALLER_RELATIVE_PATH, '/')
         );
 
-        if (($this->state['source'] ?? '') === 'release') {
+        if (($this->state['channel'] ?? '') === 'stable') {
             $manifest = $this->loadManifest();
             foreach ($manifest['preservePaths'] as $preservePath) {
                 $preservePaths[] = trim(str_replace('\\', '/', (string) $preservePath), '/');
@@ -1111,13 +1091,13 @@ class CoreUpdater
 
     private function getDatabaseUpdateUrl(): string
     {
-        return rtrim((string) $this->state['baseUrl'], '/')
+        return $this->config->baseUrl
             . '/install/update.php?core_update=' . rawurlencode($this->updateId);
     }
 
     private function getSelfUrl(string $action = ''): string
     {
-        $url = rtrim((string) $this->state['baseUrl'], '/')
+        $url = $this->config->baseUrl
             . '/install/core-update/index.php?update_id=' . rawurlencode($this->updateId);
 
         if ($action !== '') {
@@ -1180,23 +1160,12 @@ class CoreUpdater
      */
     private function readState(): array
     {
-        $state = $this->readJsonFile($this->stateFile);
-        if (!is_array($state)) {
-            $state = $this->readJsonFile($this->stateFile . '.previous');
-        }
-
-        if (!is_array($state)
-            || ($state['schema'] ?? null) !== 2
-            || ($state['updateId'] ?? '') !== $this->updateId) {
-            throw new RuntimeException('The core update state is missing or invalid.');
-        }
-
-        return $state;
+        return $this->store->read($this->updateId);
     }
 
     private function writeState(): void
     {
-        $this->writeJsonFile($this->stateFile, $this->state, true);
+        $this->store->write($this->state);
     }
 
     /**
@@ -1442,39 +1411,11 @@ class CoreUpdater
 
     private function acquireLock(): void
     {
-        $lockFile = $this->rootPath . self::WORKSPACE_RELATIVE_PATH . '/update.lock';
-        $this->createDirectory(dirname($lockFile));
-        $this->lockHandle = fopen($lockFile, 'c+');
-
-        if (!is_resource($this->lockHandle) || !flock($this->lockHandle, LOCK_EX | LOCK_NB)) {
-            if (is_resource($this->lockHandle)) {
-                fclose($this->lockHandle);
-            }
-            $this->lockHandle = null;
-            throw new RuntimeException('Another core update request is currently running.');
-        }
+        $this->store->acquire(false);
     }
 
     private function releaseLock(): void
     {
-        if (is_resource($this->lockHandle)) {
-            flock($this->lockHandle, LOCK_UN);
-            fclose($this->lockHandle);
-        }
-        $this->lockHandle = null;
-    }
-
-    private function getCookiePath(): string
-    {
-        $basePath = (string) parse_url((string) $this->state['baseUrl'], PHP_URL_PATH);
-        $path = rtrim($basePath, '/') . '/install/';
-        return $path === '' ? '/' : $path;
-    }
-
-    private function isHttps(): bool
-    {
-        return (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off')
-            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
-                && strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+        $this->store->release();
     }
 }
