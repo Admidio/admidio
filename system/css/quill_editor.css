@@ -3,6 +3,34 @@
     color: #212529;
 }
 
+.ql-toolbar.ql-snow {
+    background-color: #fff;
+}
+
+.ql-toolbar.ql-snow :is(button.ql-active, .ql-picker-label.ql-active, .ql-picker-item.ql-selected) {
+    color: var(--bs-link-color);
+}
+
+.ql-toolbar.ql-snow :is(button.ql-active, .ql-picker-label.ql-active, .ql-picker-item.ql-selected) :is(.ql-fill, .ql-stroke.ql-fill) {
+    fill: var(--bs-link-color);
+}
+
+.ql-toolbar.ql-snow :is(button.ql-active, .ql-picker-label.ql-active, .ql-picker-item.ql-selected) :is(.ql-stroke, .ql-stroke-miter) {
+    stroke: var(--bs-link-color);
+}
+
+.ql-toolbar.ql-snow :is(button:hover, button:focus, .ql-picker-label:hover, .ql-picker-label:focus, .ql-picker-item:hover, .admidio-quill-table-action:hover) {
+    color: var(--bs-link-hover-color);
+}
+
+.ql-toolbar.ql-snow :is(button:hover, button:focus, .ql-picker-label:hover, .ql-picker-label:focus, .ql-picker-item:hover) :is(.ql-fill, .ql-stroke.ql-fill) {
+    fill: var(--bs-link-hover-color);
+}
+
+.ql-toolbar.ql-snow :is(button:hover, button:focus, .ql-picker-label:hover, .ql-picker-label:focus, .ql-picker-item:hover) :is(.ql-stroke, .ql-stroke-miter) {
+    stroke: var(--bs-link-hover-color);
+}
+
 .ql-toolbar .admidio-quill-table-action {
     height: 28px;
     max-width: 190px;
