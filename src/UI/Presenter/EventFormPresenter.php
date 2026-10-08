@@ -466,9 +466,7 @@ class EventFormPresenter extends PagePresenter
             $form->addSelectBox('dat_room_id', $gL10n->get('SYS_ROOM'), $rooms, ['defaultValue' => (int)$event->getValue('dat_room_id')]);
         }
 
-        $weekdayFormat = $gSettingsManager->has('events_weekday_format')
-            ? $gSettingsManager->getString('events_weekday_format')
-            : 'short';
+        $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
 
         $form->addCheckbox('dat_all_day', $gL10n->get('SYS_ALL_DAY'), (bool)$event->getValue('dat_all_day'));
         $form->addInput('event_from', $gL10n->get('SYS_START'), $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED, 'weekdayFormat' => $weekdayFormat]);

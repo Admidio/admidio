@@ -221,6 +221,10 @@ class EventListPresenter extends PagePresenter
                 $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
             }
         } else {
+            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            // the weekday is shown in its own column, so the column width fits to the weekday names of every language
+            $showWeekdayColumn = ($weekdayFormat !== 'none');
+
             // Output table header for compact view
             if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
                 $page->setContentFullWidth();
@@ -230,7 +234,13 @@ class EventListPresenter extends PagePresenter
                 $columnHeading = array();
                 $columnAlign = array();
 
-                $periodClass = ($outputMode === 'html') ? 'd-none d-lg-table-cell' : '';
+                // period and weekday are only shown as columns on desktop screens, on smaller screens they are shown
+                // below the title. The DataTables class "desktop" lets the responsive extension know that the columns
+                // are hidden, so it can collapse other columns if the table is still too wide.
+                $periodClass = '';
+                if ($outputMode === 'html') {
+                    $periodClass = 'desktop';
+                }
 
                 switch ($getView) {
                     case 'compact':
@@ -259,32 +269,49 @@ class EventListPresenter extends PagePresenter
                         break;
                 }
 
+                $columnOffset = 0;
+                if ($showWeekdayColumn) {
+                    array_splice($columnHeading, 1, 0, array($gL10n->get('SYS_WEEKDAY')));
+                    array_splice($columnAlign, 1, 0, array('left'));
+                    array_splice($columnClass, 1, 0, array(trim('text-nowrap ' . $periodClass)));
+                    array_splice($data['column_width'], 1, 0, array('1%'));
+                    $columnOffset = 1;
+                }
+
                 if ($outputMode === 'html') {
                     $columnHeading[] = '&nbsp;';
                     $columnAlign[] = 'right';
                     $columnClass[] = 'text-nowrap';
                     $data['column_width'][] = '1%';
-                    $compactTable->disableColumnsSort(array(1, count($columnHeading)));
+                    $columnsWithoutSort = array(1, count($columnHeading));
+                    if ($showWeekdayColumn) {
+                        $columnsWithoutSort[] = 2;
+                    }
+                    $compactTable->disableColumnsSort($columnsWithoutSort);
 
                     // Responsive priorities:
-                    // Priority 1: Status / Collapse column (Column 1) and Title (Column 3)
+                    // Priority 1: Status / Collapse column (Column 1) and Title
                     // These must NEVER be hidden on mobile so rows can be expanded and status is visible.
-                    $compactTable->setColumnsNotHideResponsive(array(1, 3), 1);
+                    $compactTable->setColumnsNotHideResponsive(array(1, 3 + $columnOffset), 1);
 
                     // Priority 2: Actions (Last Column)
                     $compactTable->setColumnsNotHideResponsive(array(count($columnHeading)), 2);
 
                     if ($getView === 'compact') {
-                        $compactTable->setColumnsNotHideResponsive(array(5), 3); // Ort (Veranstaltungsort)
-                        $compactTable->setColumnsNotHideResponsive(array(4), 4); // Teilnehmende
-                        $compactTable->setColumnsNotHideResponsive(array(6), 5); // Kalender
-                        $compactTable->setColumnsNotHideResponsive(array(2), 6); // Zeitraum (on mobile, date is already shown in title column)
+                        $compactTable->setColumnsNotHideResponsive(array(5 + $columnOffset), 3); // Ort (Veranstaltungsort)
+                        $compactTable->setColumnsNotHideResponsive(array(4 + $columnOffset), 4); // Teilnehmende
+                        $compactTable->setColumnsNotHideResponsive(array(6 + $columnOffset), 5); // Kalender
+                        $priority = 6;
                     } else {
                         $priority = 3;
-                        for ($col = 4; $col < count($columnHeading); $col++) {
+                        for ($col = 4 + $columnOffset; $col < count($columnHeading); $col++) {
                             $compactTable->setColumnsNotHideResponsive(array($col), $priority++);
                         }
-                        $compactTable->setColumnsNotHideResponsive(array(2), $priority);
+                    }
+                    // Zeitraum and Wochentag (on mobile, date and weekday are already shown in title column)
+                    $compactTable->setColumnsNotHideResponsive(array(2 + $columnOffset), $priority);
+                    if ($showWeekdayColumn) {
+                        $compactTable->setColumnsNotHideResponsive(array(2), $priority + 1);
                     }
                 }
 
@@ -302,10 +329,6 @@ class EventListPresenter extends PagePresenter
                     $recurrenceEventUuidsById[(int)$row['dat_evr_id']][] = $row['dat_uuid'];
                 }
             }
-
-            $weekdayFormat = (isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format'))
-                ? $gSettingsManager->getString('events_weekday_format')
-                : 'short';
 
             foreach ($eventsResult['recordset'] as $row) {
                 // write of current event data to an event object
@@ -699,7 +722,7 @@ class EventListPresenter extends PagePresenter
                     $page->addHtml('
                     <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="evt_' . $eventUUID . '">
                         <div class="card-header">
-                            <i class="bi bi-calendar-week-fill me-1"></i>' . $formattedBeginDate . $outputEndDate . ' ' . $dateHeadline . $recurrenceBadge);
+                            <i class="bi bi-calendar-week-fill"></i>' . $formattedBeginDate . $outputEndDate . ' ' . $dateHeadline . $recurrenceBadge);
 
                     if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                         $page->addHtml('
@@ -805,38 +828,34 @@ class EventListPresenter extends PagePresenter
 
                     $dateTimeSortKey = $event->getValue('dat_begin', 'Y-m-d H:i:s');
                     $isMultiDay = ($eventDateBegin !== $eventDateEnd);
-                    $isAllDay = (bool)$event->getValue('dat_all_day');
 
-                    if ($isMultiDay) {
-                        $beginDateTime = DateTimeUtils::parseDateTime($event->getValue('dat_begin', 'Y-m-d H:i:s'));
-                        $endDateTime = DateTimeUtils::parseDateTime($event->getValue('dat_end', 'Y-m-d H:i:s'));
+                    if ($showWeekdayColumn) {
+                        $weekdayBegin = DateTimeUtils::getLocalizedWeekday($beginDateTime, $weekdayFormat);
+                        $weekdayEnd = DateTimeUtils::getLocalizedWeekday($endDateTime, $weekdayFormat);
 
-                        $formattedBeginPart = ($beginDateTime !== null)
-                            ? DateTimeUtils::formatWithWeekday($beginDateTime, $weekdayFormat, null, null, true)
-                            : $eventDateBegin;
-                        $formattedEndPart = ($endDateTime !== null)
-                            ? DateTimeUtils::formatWithWeekday($endDateTime, $weekdayFormat, null, null, true)
-                            : $eventDateEnd;
-
-                        $beginPart = $formattedBeginPart . (!$isAllDay ? ' ' . $eventTimeBegin : '');
-                        $endPart = $formattedEndPart . (!$isAllDay ? ' ' . $eventTimeEnd : '');
-                        $formattedDateHtml = '<div class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $beginPart . ' &ndash;</div><div class="text-nowrap"><i class="bi bi-arrow-return-right me-1 text-muted"></i>' . $endPart . '</div>';
-                    } else {
-                        $formattedDateHtml = '<span class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $event->getDateTimePeriod(true, $weekdayFormat, true) . '</span>';
+                        if (!$isMultiDay) {
+                            $columnValues[] = $weekdayBegin;
+                        } elseif ($outputMode === 'html') {
+                            // two lines like the period of events over several days
+                            $columnValues[] = '<div>' . $weekdayBegin . '</div><div>' . $weekdayEnd . '</div>';
+                        } else {
+                            $columnValues[] = $weekdayBegin . ' &ndash; ' . $weekdayEnd;
+                        }
                     }
 
                     if ($outputMode === 'html') {
-                        $columnValues[] = '<span class="d-none">' . $dateTimeSortKey . '</span>' . $formattedDateHtml;
+                        $columnValues[] = '<span class="d-none">' . $dateTimeSortKey . '</span>' . $this->getTablePeriodHtml($event, 'none');
 
                         $eventTitleHtml = '<span class="d-none">' . $dateTimeSortKey . '</span>';
                         $eventTitleHtml .= '<a class="admidio-event-title fw-bold" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'cards', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>' . $recurrenceBadge;
-                        $eventTitleHtml .= '<div class="text-muted small mt-1 d-lg-none">' . $formattedDateHtml . '</div>';
+                        // on small screens the period and weekday columns are hidden, so the period with weekday is shown below the title
+                        $eventTitleHtml .= '<div class="text-muted small mt-1 admidio-event-period-small">' . $this->getTablePeriodHtml($event, $weekdayFormat) . '</div>';
                         if ($outputDeadline !== '') {
                             $eventTitleHtml .= '<div class="small text-danger mt-1 text-nowrap"><i class="bi bi-hourglass-split me-1"></i>' . $gL10n->get('SYS_DEADLINE') . ': ' . $outputDeadline . '</div>';
                         }
                         $columnValues[] = $eventTitleHtml;
                     } else {
-                        $columnValues[] = $event->getDateTimePeriod(true, $weekdayFormat);
+                        $columnValues[] = $event->getDateTimePeriod(true, 'none');
                         $columnValues[] = $dateHeadline . ($recurrenceBadge !== '' ? ' ' . $this->getEventRecurrenceHint($event) : '');
                     }
 
@@ -960,6 +979,37 @@ class EventListPresenter extends PagePresenter
         }
 
         return $headline;
+    }
+
+    /**
+     * Returns the period of the event for the events table. Events over several days get two lines,
+     * one for the begin and one for the end.
+     * @param Event $event The event whose period should be returned.
+     * @param string $weekdayFormat Format of the weekday that is shown in front of the date: 'none', 'short' or 'long'.
+     * @return string Returns the HTML of the period.
+     * @throws Exception
+     */
+    private function getTablePeriodHtml(Event $event, string $weekdayFormat): string
+    {
+        global $gSettingsManager;
+
+        $dateFormat = $gSettingsManager->getString('system_date');
+        $timeFormat = $gSettingsManager->getString('system_time');
+
+        if ($event->getValue('dat_begin', $dateFormat) === $event->getValue('dat_end', $dateFormat)) {
+            return '<span class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $event->getDateTimePeriod(true, $weekdayFormat) . '</span>';
+        }
+
+        $beginPart = DateTimeUtils::formatWithWeekday(DateTimeUtils::parseDateTime($event->getValue('dat_begin', 'Y-m-d H:i:s')), $weekdayFormat, $dateFormat);
+        $endPart = DateTimeUtils::formatWithWeekday(DateTimeUtils::parseDateTime($event->getValue('dat_end', 'Y-m-d H:i:s')), $weekdayFormat, $dateFormat);
+
+        if (!$event->getValue('dat_all_day')) {
+            $beginPart .= ' ' . $event->getValue('dat_begin', $timeFormat);
+            $endPart .= ' ' . $event->getValue('dat_end', $timeFormat);
+        }
+
+        return '<div class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $beginPart . ' &ndash;</div>'
+            . '<div class="text-nowrap"><i class="bi bi-arrow-return-right me-1 text-muted"></i>' . $endPart . '</div>';
     }
 
     private function getModeForView(string $view): string

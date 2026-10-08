@@ -29,11 +29,10 @@ final class DateTimeUtils
         $dateObject = self::createDateFromFormat('Y-m-d', $date);
 
         if ($dateObject === null) {
-            $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
-                ? $gSettingsManager->getString('system_date')
-                : 'd.m.Y';
-
-            $dateObject = self::createDateFromFormat($dateFormat, $date);
+            $dateObject = self::createDateFromFormat(
+                $gSettingsManager->getString('system_date'),
+                $date
+            );
         }
 
         if ($dateObject !== null) {
@@ -74,18 +73,11 @@ final class DateTimeUtils
     {
         global $gSettingsManager;
 
-        $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
-            ? $gSettingsManager->getString('system_date')
-            : 'd.m.Y';
-        $timeFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_time'))
-            ? $gSettingsManager->getString('system_time')
-            : 'H:i';
-
         $formats = array(
             'Y-m-d H:i:s',
             'Y-m-d H:i',
             'Y-m-d\TH:i',
-            $dateFormat . ' ' . $timeFormat
+            $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')
         );
 
         foreach ($formats as $format) {
@@ -196,9 +188,7 @@ final class DateTimeUtils
         global $gSettingsManager;
 
         if ($dateFormat === null) {
-            $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
-                ? $gSettingsManager->getString('system_date')
-                : 'd.m.Y';
+            $dateFormat = $gSettingsManager->getString('system_date');
         }
 
         if (is_string($date)) {
@@ -213,9 +203,7 @@ final class DateTimeUtils
         $formattedDate = $dateTime->format($dateFormat);
 
         if ($weekdayFormat === null) {
-            $weekdayFormat = (isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format'))
-                ? $gSettingsManager->getString('events_weekday_format')
-                : 'short';
+            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
         }
 
         if ($weekdayFormat === 'none') {

@@ -1155,20 +1155,13 @@ div.adm-changelog-details-table {
   white-space: nowrap;
 }
 
-/* in the events table the weekday gets a fixed width so the dates are aligned below each other */
-#adm_events_table .admidio-event-weekday {
-  display: inline-block;
-  text-align: left;
-}
-
-#adm_events_table .admidio-event-weekday-short {
-  min-width: 2.85em;
-}
-
-#adm_events_table .admidio-event-weekday-long {
-  min-width: 6.2em;
-}
-
 #adm_events_table td {
   font-variant-numeric: tabular-nums;
+}
+
+/* same width as the breakpoint "desktop" of the DataTables responsive extension that shows the period columns */
+@media (min-width: 1025px) {
+  #adm_events_table .admidio-event-period-small {
+    display: none;
+  }
 }

@@ -199,18 +199,12 @@ class Event extends Entity
         global $gSettingsManager;
 
         if ($weekdayFormat === null) {
-            $weekdayFormat = (isset($gSettingsManager) && $gSettingsManager->has('events_weekday_format'))
-                ? $gSettingsManager->getString('events_weekday_format')
-                : 'short';
+            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
         }
 
-        $dateFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_date'))
-            ? $gSettingsManager->getString('system_date')
-            : 'd.m.Y';
+        $dateFormat = $gSettingsManager->getString('system_date');
 
-        $timeFormat = (isset($gSettingsManager) && $gSettingsManager->has('system_time'))
-            ? $gSettingsManager->getString('system_time')
-            : 'H:i';
+        $timeFormat = $gSettingsManager->getString('system_time');
 
         $dateBeginRaw = $this->getValue('dat_begin', $dateFormat);
         $dateEndRaw = $this->getValue('dat_end', $dateFormat);
