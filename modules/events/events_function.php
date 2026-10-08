@@ -335,7 +335,7 @@ try {
                 // user doesn't want to participate as leader -> remove his participation as leader from the event,
                 // don't remove the participation itself!
                 $member = new Membership($gDb);
-                $member->readDataByColumns(array('mem_rol_id' => (int)$role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+                $member->readDataByRoleAndUser((int)$role->getValue('rol_id'), (int)$user->getValue('usr_id'));
                 $member->setValue('mem_leader', 0);
                 $member->save();
             }
@@ -432,7 +432,7 @@ try {
 
         // if current user is allowed to participate or user could edit this event then update user inputs
         if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
-            $member->readDataByColumns(array('mem_rol_id' => (int)$event->getValue('dat_rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+            $member->readDataByRoleAndUser((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
             $member->setValue('mem_comment', $formValues['dat_comment']); // Comments will be saved in any case. Maybe it is a documentation afterward by a leader or admin
 
             if ($member->isNewRecord()) {
