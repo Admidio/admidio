@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -393,12 +394,9 @@ class InventoryPresenter extends PagePresenter
      */
     protected function createHeader(): void
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields;
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager, $gValidLogin;
 
         if ($gCurrentUser->isAdministratorInventory()) {
-            // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
-
             // show link to create new item
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_create_item',
@@ -408,7 +406,37 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
+        if (InventoryAccessService::canManageReservations()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservations',
+                $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_list')),
+                'bi-calendar-check',
+                '',
+                ReservationService::countPendingReservations($gDb)
+            );
+        } elseif (InventoryAccessService::canRequestReservation()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservation_request',
+                $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
+                'bi-calendar-plus'
+            );
+        }
+
+        if (InventoryAccessService::canManageBorrowings() && !$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_borrowings',
+                $gL10n->get('SYS_INVENTORY_BORROWINGS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list')),
+                'bi-box-arrow-up-right'
+            );
+        }
+
         if ($gCurrentUser->isAdministratorInventory()) {
+            // show link to view inventory history
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data,inventory_reservations');
+
             // link to print overlay and exports
             $this->addPageFunctionsMenuItem(
                 'menu_item_lists_print_view',
@@ -549,6 +577,8 @@ class InventoryPresenter extends PagePresenter
             array('defaultValue' => $this->getFilterCategoryUUID)
         );
 
+        // Do not expose names in filter options to guests when anonymization is enabled.
+        if ($gValidLogin || !$gSettingsManager->getBool('inventory_anonymize_user_names_for_guests')) {
         // read all keeper
         if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $sql = 'SELECT DISTINCT ind_value,
@@ -660,6 +690,7 @@ class InventoryPresenter extends PagePresenter
                 'showContextDependentFirstEntry' => true
             )
         );
+        }
 
         // get the status options for the filter
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
@@ -1132,6 +1163,19 @@ class InventoryPresenter extends PagePresenter
 
                 if (!empty($historyButton)) {
                     $rowValues['actions'][] = $historyButton;
+                }
+
+                if (!$this->itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
+                    $rowValues['actions'][] = array(
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid'])),
+                        'icon' => 'bi bi-calendar-plus',
+                        'tooltip' => $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST')
+                    );
+                    if (!$actionsHeaderAdded) {
+                        $actionsHeaderAdded = true;
+                        $preparedData['column_align'][] = 'end';
+                        $preparedData['headers'][] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
+                    }
                 }
 
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {

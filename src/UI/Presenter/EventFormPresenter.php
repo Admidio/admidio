@@ -9,6 +9,8 @@ use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\UI\Component\DataTables;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -470,6 +472,95 @@ class EventFormPresenter extends PagePresenter
         $form->addInput('event_from', $gL10n->get('SYS_START'), $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
         $form->addInput('event_to', $gL10n->get('SYS_END'), $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
         $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CALENDAR'), $gDb, 'EVT', FormPresenter::SELECT_BOX_MODUS_EDIT, ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid')]);
+
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
+            $selectedItems = array();
+            if ((int)$event->getValue('dat_id') > 0) {
+                $eventReservations = $gDb->queryPrepared(
+                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+                    array((int)$event->getValue('dat_id'), 'requested', 'approved', 'borrowed')
+                );
+                while ($eventReservation = $eventReservations->fetch()) {
+                    $selectedItems[] = (int)$eventReservation['ivr_ini_id'];
+                }
+            }
+            $availableItems = $gDb->queryPrepared(
+                'SELECT ini_id, ind_value
+                   FROM ' . TBL_INVENTORY_ITEMS . '
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+             INNER JOIN ' . TBL_INVENTORY_FIELD_OPTIONS . ' ON ifo_id = ini_status
+                  WHERE ini_org_id = ? AND ifo_value <> ?
+               ORDER BY ind_value',
+                array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
+            )->fetchAll(\PDO::FETCH_KEY_PAIR);
+            // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
+            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems,
+                array('defaultValue' => $selectedItems, 'multiselect' => true));
+            $reservationItems = array();
+            foreach ($availableItems as $itemId => $itemName) {
+                $reservationItems[] = array('id' => (int)$itemId, 'name' => $itemName);
+            }
+            $form->addButton('event_inventory_reservation_add', $gL10n->get('SYS_INVENTORY_ADD_ITEM'),
+                array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
+            $page->assignSmartyVariable('eventInventoryReservationsEnabled', true);
+            $page->assignSmartyVariable('eventInventoryReservationItems', $reservationItems);
+            $page->assignSmartyVariable('eventInventoryReservationRows', array_map(
+                static fn(int $itemId): array => array('itemId' => $itemId), $selectedItems
+            ));
+            $page->assignSmartyVariable('eventInventoryReservationDataJson', json_encode(array(
+                'items' => $reservationItems,
+                'deleteLabel' => $gL10n->get('SYS_DELETE'),
+                'pleaseChoose' => $gL10n->get('SYS_PLEASE_CHOOSE')
+            ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
+
+            if ((int)$event->getValue('dat_id') > 0) {
+                $page->assignSmartyVariable('eventInventoryReservationStatusTable', true);
+                $reservationStatusTable = new DataTables($page, 'adm_event_inventory_reservation_statuses');
+                $reservationStatusTable->setServerSideProcessing(SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/events_reservation_status_data.php',
+                    array('dat_uuid' => $getEventUuid, 'recurrence_scope' => $getRecurrenceScope)
+                ));
+                $reservationStatusTable->disableColumnsSort(array(4));
+                $reservationStatusTable->setColumnsNotHideResponsive(array(2, 4));
+                $reservationStatusTable->createJavascript(0, 4);
+                $page->addJavascript('$(document).on("shown.bs.tab shown.bs.collapse", "#adm_event_reservations_tab, #adm_event_reservations_collapse", function() {
+                    var table = $("#adm_event_inventory_reservation_statuses").DataTable();
+                    table.columns.adjust().responsive.recalc();
+                });', true);
+                $page->addJavascript('$(document).on("click", ".event-inventory-reservation-request-again", function() {
+                    var button = $(this);
+                    button.prop("disabled", true);
+                    $.post(button.data("url"), {adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '"}, function(data) {
+                        var response;
+                        try {
+                            response = typeof data === "string" ? JSON.parse(data) : data;
+                        } catch (error) {
+                            response = {status: "error"};
+                        }
+                        if (response.status !== "success") {
+                            button.prop("disabled", false);
+                            messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                            return;
+                        }
+                        var statusTable = $("#adm_event_inventory_reservation_statuses").DataTable();
+                        statusTable.ajax.reload(null, false);
+                        $(document).trigger("eventInventoryReservationRequestedAgain", [button.data("itemId")]);
+                    }).fail(function(xhr) {
+                        button.prop("disabled", false);
+                        var response;
+                        try {
+                            response = JSON.parse(xhr.responseText);
+                        } catch (error) {
+                            response = {};
+                        }
+                        messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                    });
+                });', true);
+            }
+        }
 
         if ($showRecurrenceFields) {
             $form->addSelectBox('event_recurrence_frequency', $gL10n->get('SYS_REPEAT'), ['none' => 'SYS_NO_RECURRENCE', EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY', EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY', EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY', EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'], ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC']);

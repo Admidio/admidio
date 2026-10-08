@@ -55,7 +55,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again')));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
@@ -67,6 +67,7 @@ try {
     $getRecurrenceScope = admFuncVariableIsValid($_GET, 'recurrence_scope', 'string', array('defaultValue' => 'this', 'validValues' => array('this', 'series')));
     $getRecurrenceAction = admFuncVariableIsValid($_GET, 'recurrence_action', 'string', array('defaultValue' => 'edit', 'validValues' => array('edit', 'delete')));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', $gValidLogin ? array('defaultValue' => $gCurrentUser->getValue('usr_uuid')) : array());
+    $getReservationItemId = admFuncVariableIsValid($_GET, 'reservation_item_id', 'int');
 
     // check if module is active
     if ($gSettingsManager->getInt('events_module_enabled') === 0) {
@@ -175,12 +176,18 @@ try {
             $eventService = new EventService($gDb);
             echo json_encode($eventService->changeParticipation($getEventUuid, $getMode, $getUserUuid));
             break;
+
+        case 'reservation_request_again':
+            require(__DIR__ . '/../system/login_valid.php');
+            $eventService = new EventService($gDb);
+            echo json_encode($eventService->requestReservationAgain($getEventUuid, $getReservationItemId));
+            break;
     }
 } catch (Throwable $e) {
     if (in_array($getMode, array('participation_form', 'recurrence_scope_form'), true)) {
         $gMessage->showInModalWindow();
         handleException($e);
     } else {
-        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe'), true));
+        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again'), true));
     }
 }

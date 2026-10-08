@@ -8,6 +8,8 @@ use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Messages\Entity\Message;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Users\Entity\User;
@@ -84,9 +86,24 @@ class MessageService
 
         if ($messageType === Message::MESSAGE_TYPE_EMAIL) {
             $email = new Email();
+            $externalRecipientNames = array();
 
             foreach ($recipients as $recipient) {
-                if (str_contains($recipient, ':')) {
+                if (str_starts_with($recipient, 'reservation:')) {
+                    $reservationUuid = substr($recipient, strlen('reservation:'));
+                    $reservation = new Reservation($this->db);
+                    if (!Uuid::isValid($reservationUuid)
+                        || !$reservation->readDataByUuid($reservationUuid)
+                        || !InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))
+                        || $reservation->getValue('ivr_guest_email') === '') {
+                        throw new Exception('SYS_INVALID_PAGE_VIEW');
+                    }
+
+                    $guestName = (string)$reservation->getValue('ivr_guest_name');
+                    $guestEmail = (string)$reservation->getValue('ivr_guest_email');
+                    $email->addRecipient($guestEmail, $guestName);
+                    $externalRecipientNames[] = trim($guestName . ' <' . $guestEmail . '>');
+                } elseif (str_contains($recipient, ':')) {
                     $moduleMessages = new \ModuleMessages();
                     $group = $moduleMessages->msgGroupSplit($recipient);
 
@@ -205,6 +222,8 @@ class MessageService
                 $listName = $showList->getValue('lst_name');
                 $receiverName = $gL10n->get('SYS_LIST')
                     . ($listName === '' ? '' : ' - ' . $listName);
+            } elseif (count($externalRecipientNames) > 0) {
+                $receiverName = implode('; ', $externalRecipientNames);
             } elseif ($gSettingsManager->getBool('mail_into_to')) {
                 $receiverName = $message->getRecipientsNamesString();
             } else {

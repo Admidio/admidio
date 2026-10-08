@@ -11,6 +11,8 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Users\Entity\User;
 use DateInterval;
@@ -205,6 +207,60 @@ class EventService
         $eventSaveService = new EventSaveService($this->database);
 
         return $eventSaveService->saveEvent($eventUUID, $copy, $recurrenceScope);
+    }
+
+    /**
+     * Create a new request for a rejected or cancelled event reservation.
+     * @return array<string,string>
+     * @throws Exception
+     */
+    public function requestReservationAgain(string $eventUUID, int $itemId): array
+    {
+        global $gL10n, $gSettingsManager;
+
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')
+            || !$gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $event = new Event($this->database);
+        if ($eventUUID === '' || !$event->readDataByUuid($eventUUID) || !$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $latestStatus = $this->database->queryPrepared(
+            'SELECT ivr_status
+               FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_ini_id = ?
+           ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC
+              LIMIT 1',
+            array((int)$event->getValue('dat_id'), $itemId)
+        )->fetchColumn();
+        if (!in_array($latestStatus, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation = (new ReservationService($this->database))->request(
+            $itemId,
+            new DateTime((string)$event->getValue('dat_begin')),
+            new DateTime((string)$event->getValue('dat_end')),
+            '',
+            '',
+            (int)$event->getValue('dat_id')
+        );
+
+        $status = (string)$reservation->getValue('ivr_status');
+        $statusLabel = $status === Reservation::STATUS_APPROVED
+            ? $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED')
+            : $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED');
+
+        return array(
+            'status' => 'success',
+            'reservation_status' => $status,
+            'reservation_status_label' => $statusLabel
+        );
     }
 
     /**
