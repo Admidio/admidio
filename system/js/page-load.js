@@ -30,7 +30,8 @@ function initializeEvents() {
     });
 
     // function to call a url with a CSRF token and handle the response
-    $(".admidio-send-csrf-token").click(function() {
+    // delegated so that buttons added later (e.g. inside a modal) work as well
+    $(document).on("click", ".admidio-send-csrf-token", function() {
         redirectPost($(this).data("url"), {adm_csrf_token: $(this).data("csrf-token")});
     });
 }
