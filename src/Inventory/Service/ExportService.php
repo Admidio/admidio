@@ -170,10 +170,9 @@ class ExportService
                 $spreadsheet->getProperties()
                     ->setCreator($gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'))
                     ->setTitle($filename)
-                    ->setSubject($gL10n->get('PLG_INVENTORY_MANAGER_ITEMLIST'))
+                    ->setSubject($gL10n->get('SYS_INVENTORY_ITEMS'))
                     ->setCompany($gCurrentOrganization->getValue('org_longname'))
-                    ->setKeywords($gL10n->get('PLG_INVENTORY_MANAGER_NAME_OF_PLUGIN') . ', ' . $gL10n->get('PLG_INVENTORY_MANAGER_ITEM'))
-                    ->setDescription($gL10n->get('PLG_INVENTORY_MANAGER_CREATED_WITH'));
+                    ->setKeywords($gL10n->get('SYS_INVENTORY') . ', ' . $gL10n->get('SYS_INVENTORY_ITEMS'));
 
                 $sheet = $spreadsheet->getActiveSheet();
                 $sheet->fromArray(array_keys($data['export_headers']), NULL, 'A1');
