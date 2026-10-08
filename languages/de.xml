@@ -1300,6 +1300,11 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">Das Archiv konnte nicht nach #VAR1# geschrieben werden.</string>
   <string name="SYS_PLUGIN_BROKEN">Inkompatible Plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">Dieses Plugin ist Bestandteil von Admidio und kann nicht entfernt werden. Deaktiviere es, wenn du es nicht verwenden möchtest.</string>
+  <string name="SYS_PLUGIN_CRASHED">Das Plugin #VAR1_BOLD# wurde vorübergehend deaktiviert, weil es abgestürzt ist: #VAR2#</string>
+  <string name="SYS_PLUGIN_CRASHED_DEPENDANTS">Diese Plugins benötigen es und werden deshalb ebenfalls nicht geladen: #VAR1#</string>
+  <string name="SYS_PLUGIN_CRASHED_INFO">Das Plugin bleibt aktiviert, wird aber erst wieder geladen, wenn du es erneut versuchst. Eine neue Version des Plugins oder von Admidio wird automatisch wieder versucht.</string>
+  <string name="SYS_PLUGIN_CRASHED_PAGE">Das Plugin #VAR1# ist vorübergehend deaktiviert, weil es abgestürzt ist. Bitte informiere einen Administrator.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Erneut versuchen</string>
   <string name="SYS_PLUGIN_DISABLE">Plugin deaktivieren</string>
   <string name="SYS_PLUGIN_DISABLED">Das Plugin wurde erfolgreich deaktiviert.</string>
   <string name="SYS_PLUGIN_ENABLE">Plugin aktivieren</string>

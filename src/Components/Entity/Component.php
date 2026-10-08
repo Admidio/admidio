@@ -481,7 +481,9 @@ class Component extends Entity
                  * instantiates a plugin.
                  */
                 $plugin = PluginRegistry::get($componentName);
-                if ($plugin !== null && PluginRegistry::isEnabled($componentName)) {
+                // A plugin that is kept out after a crash has nothing behind its menu entry.
+                if ($plugin !== null && PluginRegistry::isEnabled($componentName)
+                    && !isset(PluginRegistry::getExcluded()[$componentName])) {
                     /*
                      * A plugin that follows the Admidio convention expresses who may see it in an
                      * access preference of its own, and one that declares none is visible as soon

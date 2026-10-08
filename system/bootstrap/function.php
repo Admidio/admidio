@@ -10,6 +10,7 @@
  */
 
 use Admidio\Hooks\Hooks;
+use Admidio\Infrastructure\Plugins\PluginCrashGuard;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -40,6 +41,9 @@ function handleException(Throwable $e, bool $jsonResponse = false, bool $inlineR
     if ($gDb instanceof Database) {
         $gDb->rollback();
     }
+
+    // A PHP Error that a plugin caused keeps the plugin out of the following requests.
+    PluginCrashGuard::handleThrowable($e);
 
     // The request ends here. A listener may report the exception, but it must not be able to replace
     // it with one of its own, so this is a doActionCatchErrors() site.
