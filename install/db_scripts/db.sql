@@ -1030,7 +1030,7 @@ CREATE TABLE %PREFIX%_sessions
     ses_authentication_methods  varchar(255)        NULL,
     ses_external_session_id     varchar(64)         NULL,
     ses_ip_address              varchar(39)         NOT NULL,
-    ses_binary                  blob,
+    ses_binary                  mediumblob,
     ses_reload                  boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (ses_id)
 )
@@ -1135,7 +1135,7 @@ CREATE TABLE %PREFIX%_users
     usr_login_name              varchar(254),
     usr_password                varchar(255),
     usr_tfa_secret              varchar(255),
-    usr_photo                   blob,
+    usr_photo                   mediumblob,
     usr_text                    text,
     usr_pw_reset_id             varchar(50),
     usr_pw_reset_timestamp      timestamp           NULL        DEFAULT NULL,

@@ -1390,7 +1390,10 @@
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>
   <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du solltest selbst auf dem Foto zu sehen sein. Das Foto darf eine maximale Auflösung von #VAR1# MegaPixeln haben. Die Fotodatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">Du solltest selbst auf dem Foto zu sehen sein.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_SCALING">Das Foto wird auf maximal #VAR1# Pixel an der längeren Seite verkleinert. Das Seitenverhältnis bleibt erhalten.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Erlaubte Dateitypen sind JPG und PNG.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_FILESIZE">Die Datei darf nicht größer als #VAR1# MB sein.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_PWA_ENABLED">Progressive Web App (PWA) aktivieren</string>
   <string name="SYS_PWA_ENABLED_DESC">Ermöglicht es Benutzerinnen und Benutzern, Admidio als eigenständige Web-App auf dem Smartphone, Tablet oder Desktop zu installieren. Der App-Name richtet sich nach dem Namen der Organisation. Eigene App-Icons können im Ordner adm_my_files/ als app_icon.png oder app_icon_512.png abgelegt werden. Andernfalls wird ein unter „Design“ konfiguriertes PNG-Favicon oder das Standard-Logo als Fallback verwendet.</string>
