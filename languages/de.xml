@@ -6,7 +6,7 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Ein Update der Datenbank darf nur von einem Administrator durchgeführt werden. Gib hier bitte die Zugangsdaten eines Administrators ein.</string>
   <string name="INS_BOARD">Vorstand</string>
   <string name="INS_CONFERENCE_ROOM">Besprechungsraum</string>
-  <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</string>
+  <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# befindet sich nicht im Admidio-Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</string>
   <string name="INS_CONTINUE_INSTALLATION">Installation fortsetzen</string>
   <string name="INS_COURSES">Kurse</string>
   <string name="INS_CREATE_ADMINISTRATOR">Administrator anlegen</string>
@@ -17,8 +17,8 @@
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Gib in diesem Formular Name, E-Mail und die Zugangsdaten eines Administrators an. Mit diesen Daten kannst du dich nach der Installation bei Admidio anmelden.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Daten der Organisation</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Die Datei #VAR1_BOLD# konnte nicht im Verzeichnis #VAR2_BOLD# gefunden werden.</string>
-  <string name="INS_DATABASE_HOST_INFO">Gib an dieser Stelle den Namen des Datenbankservers an. Dies kann eine URL sein oder aber auch localhost, wenn die Datenbank auf demselben Rechner läuft, wie die Webseite.</string>
-  <string name="INS_DATABASE_LOGIN">Datenbank Zugangsdaten</string>
+  <string name="INS_DATABASE_HOST_INFO">Gib an dieser Stelle den Namen des Datenbankservers an. Dies kann eine URL oder localhost sein, wenn die Datenbank auf demselben Rechner wie die Webseite läuft.</string>
+  <string name="INS_DATABASE_LOGIN">Datenbank-Zugangsdaten</string>
   <string name="INS_DATABASE_LOGIN_DESC">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchtest.</string>
   <string name="INS_DATABASE_PORT_INFO">Wird dieses Feld nicht ausgefüllt, so wird der Standardport der Datenbank (MariaDB/MySQL: 3306, PostgreSQL: 5432) verwendet. Nutzt du oder dein Webhoster einen speziellen Port, so kann dieser hier eingetragen werden.</string>
   <string name="INS_DATABASE_PORT_INVALID">Der angegebene Port ist nicht gültig. Für einen gültigen Port wähle zwischen 1 und 65535 oder lass den Port für den Standardport leer.</string>
@@ -30,11 +30,11 @@
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier können Besprechungen stattfinden.</string>
   <string name="INS_DESCRIPTION_MEMBER">Alle Mitglieder der Organisation</string>
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE">Konfigurationsdatei herunterladen</string>
-  <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Bitte gib dem Ordner Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder lade die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Verzeichnis #VAR3_BOLD#.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</string>
+  <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Die Konfigurationsdatei #VAR1_BOLD# konnte nicht im Ordner #VAR2_BOLD# abgelegt werden. Bitte gib dem Ordner Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder lade die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio-Verzeichnis #VAR3_BOLD#.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Zugangsdaten zur Datenbank eingeben</string>
   <string name="INS_ERROR_OPEN_FILE">Die Datei #VAR1_BOLD# konnte nicht geöffnet werden.</string>
   <string name="INS_GROUPS">Gruppen</string>
-  <string name="INS_HOST_INVALID">Hostname ist nicht gültig. Gib einen gültigen Hostnamen oder IP-Adresse ein.</string>
+  <string name="INS_HOST_INVALID">Der Hostname ist ungültig. Gib einen gültigen Hostnamen oder eine gültige IP-Adresse ein.</string>
   <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Einige Plugins von Drittanbietern wurden in den neuen Plugin-Ordner #VAR1_BOLD# verschoben. Bitte überprüfe nach dem Update die Funktionalität dieser Plugins.</string>
   <string name="INS_INSTALL_ADMIDIO">Admidio installieren</string>
   <string name="INS_INSTALLATION">Installation</string>
@@ -64,13 +64,13 @@
   <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Einige Plugin-Ordner von Drittanbietern konnten nicht in den neuen Plugin-Ordner #VAR1_BOLD# verschoben werden. Bitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation, verschiebe die Plugin-Ordner von Drittanbietern manuell und lösche anschließend den alten Ordner „adm_plugins“.</string>
   <string name="INS_WARNING_BETA_VERSION">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Einige alte Admidio-Plugin-Ordner konnten nicht aus dem alten Plugin-Ordner #VAR1_BOLD# gelöscht werden. Bitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation und lösche die alten Plugin-Ordner manuell. Lösche anschließend den alten Ordner adm_plugins.</string>
-  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">Der alte Plugin-Ordner #VAR1_BOLD# konnte nicht gelöscht werden.\nBitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation und lösche den alten Ordner „adm_plugins” manuell.</string>
+  <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">Der alte Plugin-Ordner #VAR1_BOLD# konnte nicht gelöscht werden.\nBitte überprüfe den Ordner #VAR2_BOLD# in deiner Admidio-Installation und lösche den alten Ordner „adm_plugins“ manuell.</string>
   <string name="INS_WARNING_SSO_OIDC_MUTABLE_SUBJECT">Diese OpenID-Connect-Clients identifizieren Benutzer anhand eines Werts, der sich ändern oder einer anderen Person zugewiesen werden kann: #VAR1_BOLD#.\nÖffne jeden Client und lege als Benutzerkennung die Benutzer-UUID fest. Die Anwendung erkennt die Person danach als neues Konto, daher müssen die bestehenden Konten dort neu verknüpft werden.</string>
   <string name="INS_WELCOME_TEXT">Dieser Assistent hilft dir, die Mitgliederverwaltung Admidio einzurichten. Es werden nun alle notwendigen Daten abgefragt, damit das System vollständig eingerichtet werden kann und du dich als Administrator anmelden kannst.\n\nHast du Fragen oder Probleme mit der Installation, schau dir bitte #VAR1#unsere Installationsanleitung#VAR2# an oder wende dich an #VAR3#unser Supportforum#VAR4#.</string>
   <string name="INS_WELCOME_TEXT_UPDATE">Du hast bereits die Verzeichnisse von Admidio mit einer neuen Version aktualisiert. Nun muss noch die Datenbank von der aktuellen Version #VAR2# auf die Version #VAR1# aktualisiert werden, damit Admidio mit der neuen Version laufen kann.\n\nHast du Fragen oder Probleme mit dem Update, schau dir bitte #VAR3#unsere Update-Anleitung#VAR4# an oder wende dich an #VAR5#unser Supportforum#VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Willkommen zur Installation von Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Willkommen zur Aktualisierung von Admidio</string>
-  <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MariaDB- oder MySQL-Version #VAR2# voraus. Du solltest versuchen die MariaDB- oder MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, welche kompatibel zu deiner Datenbank ist.</string>
+  <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# setzt mindestens die MariaDB- oder MySQL-Version #VAR2# voraus. Du solltest versuchen, die MariaDB- oder MySQL-Datenbank zu aktualisieren oder eine #VAR3#ältere Admidio-Version#VAR4# nutzen, die mit deiner Datenbank kompatibel ist.</string>
   <string name="SYS_BOYFRIEND">Freund</string>
   <string name="SYS_BROTHER">Bruder</string>
   <string name="SYS_CHILD">Kind</string>
@@ -118,26 +118,26 @@
   <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Hintergrundbild</string>
   <string name="ORG_CAPTCHA_BACKGROUND_IMAGE_DESC">Es kann ein Hintergrundbild ausgewählt werden, welches als Grundlage für das Captcha-Bild dient. Die Farben der Zeichen sollten dann so darauf abgestimmt werden, dass das Captcha weiterhin lesbar ist. (Voreinstellung: kein Bild)</string>
   <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Zeichenfarbe</string>
-  <string name="ORG_CAPTCHA_COLOR_DESC">Die Hintergrundfarbe sollte sich von der Zeichenfarbe absetzen. Sind Linienfarbe und Zeichenfarbe identisch ist es für Skripte und Bots schwieriger das Captcha zu lösen. Die einzelnen Farben müssen als #VAR1#hexadezimaler Wert#VAR2# angegeben werden.</string>
+  <string name="ORG_CAPTCHA_COLOR_DESC">Die Hintergrundfarbe sollte sich von der Zeichenfarbe absetzen. Sind Linienfarbe und Zeichenfarbe identisch, ist es für Skripte und Bots schwieriger, das Captcha zu lösen. Die einzelnen Farben müssen als #VAR1#hexadezimale Werte#VAR2# angegeben werden.</string>
   <string name="ORG_CAPTCHA_DISTORTION">Verzerrung</string>
   <string name="ORG_CAPTCHA_DISTORTION_DESC">Dieser Wert gibt an, wie stark die Zeichen verzerrt werden sollen. 0 bedeutet keine Verzerrung, 3 ist bereits eine so starke Verzerrung, dass einzelne Zeichen nicht mehr erkannt werden können. (Voreinstellung: 0.75)</string>
   <string name="ORG_CAPTCHA_FONT">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Voreinstellung: AHGBold.ttf)</string>
   <string name="ORG_CAPTCHA_LINE_COLOR">Linienfarbe</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS">Anzahl Linien</string>
-  <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Die Linien auf dem Captcha sollen es Skripten/Bots erschweren diese zu lösen. Je mehr Linien gezeichnet werden, desto schwieriger ist es dieses zu lösen. Leider gilt dies aber auch für Menschen. (Voreinstellung: 5)</string>
+  <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">Die Linien auf dem Captcha sollen es Skripten und Bots erschweren, es zu lösen. Je mehr Linien gezeichnet werden, desto schwieriger ist es, das Captcha zu lösen. Leider gilt dies aber auch für Menschen. (Voreinstellung: 5)</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha-Vorschau</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Die Captcha-Vorschau berücksichtigt nur die bereits gespeicherten Einstellungen.</string>
   <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Der Code muss korrekt eingegeben oder die Aufgabe gelöst werden. Dies soll sicherstellen, dass das Formular nicht für Spam missbraucht werden kann. (Voreinstellung: ja)</string>
-  <string name="ORG_CAPTCHA_SIGNATURE">Captcha Untertitel</string>
+  <string name="ORG_CAPTCHA_SIGNATURE">Captcha-Untertitel</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
   <string name="ORG_CAPTCHA_SIGNS">Zulässige Zeichen</string>
-  <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenden Captcha-Zeichen angegeben werden. Zeichen, welche leicht verwechselt werden können, wie z.B. l oder I sollten dabei vermieden werden.</string>
-  <string name="ORG_CAPTCHA_TYPE">Captcha Art</string>
+  <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier können die zu verwendenden Captcha-Zeichen angegeben werden. Zeichen, die leicht verwechselt werden können, wie z. B. l oder I, sollten dabei vermieden werden.</string>
+  <string name="ORG_CAPTCHA_TYPE">Captcha-Art</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Rechenaufgabe</string>
   <string name="ORG_CAPTCHA_TYPE_PIC">Zufällige Zeichen</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kann die Art des Captchas gewählt werden. Das Captcha wird als Bild angezeigt und kann aus zufälligen Zeichen, aus einer kleinen Rechenaufgabe oder aus 2 Wörtern bestehen. Mit den weiteren Einstellungen kann das Bild angepasst werden. (Voreinstellung: Zufällige Zeichen)</string>
   <string name="ORG_CAPTCHA_TYPE_WORDS">Wörter (englisch)</string>
-  <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite in Pixel des Captcha-Bildes. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Voreinstellung: 215)</string>
+  <string name="ORG_CAPTCHA_WIDTH_DESC">Angabe der Breite des Captcha-Bildes in Pixeln. Die Höhe wird proportional zur Breite errechnet. Über diese Einstellung wird auch die Größe der Zeichen bestimmt. (Voreinstellung: 215)</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Profilfeld anlegen</string>
   <string name="ORG_CURRENCY">Währung</string>
   <string name="ORG_CURRENCY_DESC">Kennzeichen der Währung, die benutzt wird. Dieses Zeichen wird hinter allen Beträgen angezeigt.</string>
@@ -154,7 +154,7 @@
   <string name="ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS_DESC">Wenn diese Option aktiviert ist, können Organisationen innerhalb dieser Eltern-Kind-Beziehung beim Anlegen von Kontakten oder beim Zuweisen von Anmeldungen bestehende Kontakte wiederverwenden. Unterorganisationen erben diese Einstellung von ihrer übergeordneten Organisation und können sie nicht selbst festlegen. Bei der Suche nach ähnlichen Kontakten werden nur Kontakte berücksichtigt, die Mitglieder von Organisationen innerhalb dieser Beziehung sind oder waren. Organisationen ohne Beziehung teilen keine Mitglieder. Der Filter „Alle Organisationen“ in der Kontaktliste ist nur verfügbar, wenn diese Einstellung und „Alle Kontakte anzeigen“ aktiviert sind.</string>
   <string name="ORG_FIELD_DESCRIPTION">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden in den Profilen angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</string>
   <string name="ORG_FIELD_DISABLED">Feld nur für Mitglieder mit dem Recht #VAR1_BOLD# editierbar</string>
-  <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von dem Mitglied im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Mitgliedern bearbeitet werden, die das Rollenrecht besitzen alle Mitglieder zu bearbeiten. Leitende einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
+  <string name="ORG_FIELD_DISABLED_DESC">Ein gesperrtes Feld kann von dem Mitglied im eigenen Profil nicht mehr bearbeitet werden. Es kann nur noch von Mitgliedern bearbeitet werden, die das Rollenrecht besitzen, alle Mitglieder zu bearbeiten. Leitende einer Rolle mit dem Recht, Profile der Rollenmitglieder zu bearbeiten, können dieses Feld ebenfalls bearbeiten.</string>
   <string name="ORG_FIELD_EXIST">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</string>
   <string name="ORG_FIELD_HIDDEN">Feld nur für berechtigte Mitglieder (eigenes Profil &amp; Rollenrecht) sichtbar</string>
   <string name="ORG_FIELD_HIDDEN_DESC">Ein Feld ist normalerweise für alle Mitglieder sichtbar, die das Profil sehen dürfen. Ist diese Einstellung nicht gesetzt, dann können nur Mitglieder das Feld sehen, die das Profil auch bearbeiten dürfen.</string>
@@ -162,13 +162,13 @@
   <string name="ORG_FIELD_NOT_HIDDEN">Feld für alle Mitglieder sichtbar</string>
   <string name="ORG_FIELD_NOT_REGISTRATION">Feld wird bei der Registrierung nicht angezeigt</string>
   <string name="ORG_FIELD_REGISTRATION">Feld wird bei der Registrierung angezeigt</string>
-  <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später den Inhalt dieses Profilfelds. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dieser steht für den Inhalt des Felds.\n\nBeispiel:\nUrl: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
+  <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später den Inhalt dieses Profilfelds. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dieser steht für den Inhalt des Felds.\n\nBeispiel:\nURL: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite werden Personen nach der Anmeldung geleitet. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: modules/index.php)</string>
-  <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio auf die Gäste geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: modules/overview.php)</string>
+  <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio, auf die Gäste geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: modules/overview.php)</string>
   <string name="ORG_INVALID_THEME">Es wurde kein gültiges Theme ausgewählt.</string>
   <string name="ORG_INVALID_THEME_FALLBACK">Das gewählte Fallback-Theme ist nicht gültig.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Javascript-Editor benutzen</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Ein umfangreicher Javascript-Editor wird an vielen Stellen im Programm genutzt, um Beschreibungen z.B. für Ankündigungen oder Veranstaltungen komfortabler einzugeben. Wird der Editor deaktiviert, so wird ein einfaches mehrzeiliges Textfeld dargestellt.</string>
+  <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Ein umfangreicher Javascript-Editor wird an vielen Stellen im Programm genutzt, um Beschreibungen z. B. für Ankündigungen oder Veranstaltungen komfortabler einzugeben. Wird der Editor deaktiviert, so wird ein einfaches mehrzeiliges Textfeld dargestellt.</string>
   <string name="ORG_LAST_UPDATE_STEP">Letzter Update-Schritt</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisch anmelden</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Bei der Anmeldung kannst du festlegen, ob sie auf diesem Gerät gespeichert werden soll. Beim nächsten Besuch der Homepage bist du dann automatisch angemeldet. Wenn du diese Option unbedacht nutzt, können fremde Personen Zugriff auf deine Daten bekommen. (Voreinstellung: ja)</string>
@@ -177,10 +177,10 @@
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Aktiviert, aber nur für Administratoren sichtbar</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">Nur für Modul-Administratoren</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Nur für angemeldete Personen</string>
-  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</string>
-  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwort Sicherheit</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wieviele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nSehr hoch: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
+  <string name="ORG_ORGANIZATION_PROPERTIES_DESC">Allgemeine Admidio-Einstellungen sowie Einstellungen zu den einzelnen Modulen können hier festgelegt werden.</string>
+  <string name="ORG_ORGANIZATION_SUCCESSFULLY_ADDED">Die Organisation #VAR1_BOLD# wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, musst du auf der entsprechenden Seite noch die neue Organisation in die config.php eintragen.</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH">Passwortsicherheit</string>
+  <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Hier kannst du festlegen, wie sicher und komplex Passwörter mindestens sein müssen.\nDer Wert in Klammern gibt an, wie viele Versuche durchschnittlich nötig sind, bis das Passwort ermittelt wurde.\n\nKeine: riskantes Passwort. (&lt;10^3)\nNiedrig: Schutz gegen gedrosselte Online-Angriffe. (&lt;10^6)\nMittel: Schutz gegen ungedrosselte Online-Angriffe. (&lt;10^8)\nHoch: Mäßiger Schutz gegen Offline-Hashing-Angriffe. (&lt;10^10)\nSehr hoch: Starker Schutz gegen Offline-Hashing-Angriffe. (&gt;=10^10)</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoch</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
@@ -203,7 +203,7 @@
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
   <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
-  <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">Systememailadresse der Organisation</string>
+  <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System-E-Mail-Adresse der Organisation</string>
   <string name="ORG_VARIABLE_FIRST_NAME">Vorname der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
   <string name="ORG_VARIABLE_LAST_NAME">Nachname der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Name der Organisation</string>
@@ -213,12 +213,12 @@
   <string name="ORG_VARIABLE_USERNAME">Anmeldename der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
   <!--System-Phrases
   for use in every module-->
-  <string name="SYS_64BIT">64bit</string>
+  <string name="SYS_64BIT">64 Bit</string>
   <string name="SYS_A_TO_Z">A bis Z</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Konto aktiviert</string>
   <string name="SYS_ACTIVATE_ROLE">Rolle aktivieren</string>
-  <string name="SYS_ACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rollen wieder aktivieren?</string>
+  <string name="SYS_ACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# wieder aktivierst, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchtest du die Rolle wieder aktivieren?</string>
   <string name="SYS_ACTIVE_CONTACTS">Aktive Kontakte</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS">Aktive und ehemalige Mitglieder</string>
   <string name="SYS_ACTIVE_FORMER_MEMBERS_SHORT">Aktive und ehemalige</string>
@@ -253,7 +253,7 @@
   <string name="SYS_ALBUM_CHANGED_TITLE">Ein Fotoalbum wurde geändert auf #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Dieses Album enthält leider noch keine Fotos.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">Ein neues Fotoalbum wurde angelegt auf #VAR1#</string>
-  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nGäste der Webseite ohne Fotoverwaltungsrecht wird dieses Album nicht mehr angezeigt.</string>
+  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen, ihn wiederherzustellen, dann lösche bitte den Ordner über die Oberfläche.\nGästen der Webseite ohne Fotoverwaltungsrecht wird dieses Album nicht mehr angezeigt.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist gesperrt und wird Gästen und Mitgliedern nicht angezeigt.</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_CONTACTS">Alle Kontakte</string>
@@ -264,7 +264,7 @@
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Teilnehmende können anonyme Gäste anmelden</string>
-  <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.</string>
+  <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z. B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
   <string name="SYS_ALSO_VISITORS">auch Gäste</string>
@@ -327,12 +327,12 @@
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bestätigungscode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
   <string name="SYS_CAPTION_SIZE">Größe des Bildtextes</string>
-  <string name="SYS_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße, nach der Formel \"Bildgröße/Devisor\" berechnet. Durch Erhöhung des Devisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
+  <string name="SYS_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße nach der Formel \"Bildgröße/Divisor\" berechnet. Durch Erhöhung des Divisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
   <string name="SYS_CARBON_COPY">Kopie</string>
   <string name="SYS_CAT_SELECTION">Kategorieauswahl</string>
   <string name="SYS_CAT_SELECTION_CONF_DESC">Über die Kategorieauswahl kann eine Konfiguration auf die Mitglieder von Rollen der ausgewählten Kategorien eingeschränkt werden. Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer sein.</string>
   <string name="SYS_CATEGORIES">Kategorien</string>
-  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechten bearbeiten. Eine Rolle kann zur Administratorrolle gemacht werden, in dem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
+  <string name="SYS_CATEGORIES_ADMINISTRATORS_DESC">Mitglieder dieser Rollen sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechten bearbeiten. Eine Rolle kann zur Administratorrolle gemacht werden, indem ihr das Recht #VAR1_BOLD# zugeordnet wird.</string>
   <string name="SYS_CATEGORIES_ALL_MODULE_ADMINISTRATORS_MOTHER_ORGA">Alle Administratoren des Moduls der Elternorganisation</string>
   <string name="SYS_CATEGORIES_EDIT_DESC">Mitglieder dieser Rollen können neue Einträge in dieser Kategorie erstellen und ihre eigenen Einträge bearbeiten oder löschen.</string>
   <string name="SYS_CATEGORY">Kategorie</string>
@@ -412,7 +412,7 @@
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRM_REGISTRATION">Registrierung bestätigen</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
-  <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von #VAR1# prüfen ob ein Update vorliegt.</string>
+  <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio-Updateserver hergestellt werden! Bitte prüfe deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt noch einmal. Alternativ kannst du auch manuell auf der Webseite von #VAR1# prüfen, ob ein Update vorliegt.</string>
   <string name="SYS_CONTACT_DETAILS">Kontaktdaten</string>
   <string name="SYS_CONTACT_NO_VALID_LOGIN">Dieser Kontakt besitzt noch keine Anmeldung.\nMöchtest du die Daten dieser Registrierung zuordnen?</string>
   <string name="SYS_CONTACT_NOT_FOUND_CREATE_NEW">Kann der neue Kontakt keinem existierenden Kontakt mit einem ähnlichen Namen zugeordnet werden, so kannst du einen neuen Kontakt anlegen und diesem die entsprechenden Rollen zuweisen.</string>
@@ -435,7 +435,7 @@
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
   <string name="SYS_COPY_LINK">Link kopieren</string>
-  <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Deine angeforderte Kopie der Nachricht</string>
+  <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist deine angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfangende</string>
@@ -490,10 +490,10 @@
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich.</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell.</string>
   <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
-  <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nBitte prüfe die Zugangsdaten in der Datei config.php im Order adm_my_files. Sollte die Datei noch von einer anderen Installation stammen, so entferne die config.php bitte aus dem Ordner, da über den Installationsassistenten eine neue Datei erzeugt wird. Danach kann die Installation fortgesetzt werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
+  <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nBitte prüfe die Zugangsdaten in der Datei config.php im Ordner adm_my_files. Sollte die Datei noch von einer anderen Installation stammen, so entferne die config.php bitte aus dem Ordner, da über den Installationsassistenten eine neue Datei erzeugt wird. Danach kann die Installation fortgesetzt werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Datenbank-Version</string>
   <string name="SYS_DATABASE_VERSION_AFTER_UPDATE">Datenbankversion nach Update</string>
-  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Scripte #VAR2#.\n\nFühre bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
+  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">Die Datenbankversion #VAR1# ist niedriger als die Version der Admidio-Skripte #VAR2#.\n\nFühre bitte #VAR3#das Datenbankupdate#VAR4# auf die Version durch.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_DATE">Datum</string>
   <string name="SYS_DATE_END_BEFORE_BEGIN">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</string>
@@ -506,7 +506,7 @@
   <string name="SYS_DAYS_FIELD_HISTORY">Standardzeitraum in der Änderungshistorie (Tage)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Zeitraum in Tagen, für den Änderungen an Profilfeldern in der Änderungshistorie angezeigt werden. Dies ist der Standardfilter, der später beliebig geändert werden kann. Bei großen Datenbanken schränkt dies die Datenmenge beim normalen Aufruf der Änderungshistorie ein. (Voreinstellung: 365)</string>
   <string name="SYS_DEACTIVATE_ROLE">Rolle deaktivieren</string>
-  <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# deaktivierst, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellung und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
+  <string name="SYS_DEACTIVATE_ROLE_DESC">Wenn du die Rolle #VAR1_BOLD# deaktivierst, kann die Rolle nicht mehr genutzt und Objekten zugeordnet werden. Ebenso sind sämtliche Rechte dieser Rolle nicht mehr wirksam. Die Rolle mit ihren Einstellungen und allen Mitgliedszuordnungen bleibt allerdings bestehen und kann zu einem späteren Zeitpunkt wieder aktiviert werden.</string>
   <string name="SYS_DEADLINE">Anmeldeschluss</string>
   <string name="SYS_DEADLINE_AFTER_START">Der Anmeldeschluss liegt nach dem Beginn der Veranstaltung.</string>
   <string name="SYS_DEADLINE_ATTENTION">Deine Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder die Veranstaltung in der Vergangenheit liegt. Bitte wende dich an die Veranstaltungsleitung oder einen Administrator!</string>
@@ -520,7 +520,7 @@
   <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_COUNTRY">Standard-Land</string>
-  <string name="SYS_DEFAULT_COUNTRY_DESC">Angabe eines Landes, in dessen Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Profile vorausgewählt. Die Auswahl erleichtert die Eingabe und kann später beliebig geändert werden.</string>
+  <string name="SYS_DEFAULT_COUNTRY_DESC">Angabe eines Landes, in dessen Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z. B. bei der Registrierung oder beim Anlegen neuer Profile vorausgewählt. Die Auswahl erleichtert die Eingabe und kann später beliebig geändert werden.</string>
   <string name="SYS_DEFAULT_ENCODING_UTF8">Standardkodierung (UTF-8)</string>
   <string name="SYS_DEFAULT_LIST">Standardliste</string>
   <string name="SYS_DEFAULT_LIST_CONFIGURATION_PARTICIPATION">Standardkonfiguration der Liste aller Teilnehmenden</string>
@@ -543,7 +543,7 @@
   <string name="SYS_DELETE_FILE">Datei löschen</string>
   <string name="SYS_DELETE_FOLDER">Ordner löschen</string>
   <string name="SYS_DELETE_LAST_CATEGORY">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</string>
-  <string name="SYS_DELETE_MESSAGE">Soll Nachricht #VAR1_BOLD# nun entfernt werden.</string>
+  <string name="SYS_DELETE_MESSAGE">Soll die Nachricht #VAR1_BOLD# nun entfernt werden?</string>
   <string name="SYS_DELETE_NO_DEFAULT_ROLE">Du kannst die Rolle #VAR1_BOLD# nicht löschen. Es muss mindestens eine Rolle die Einstellung #VAR2_BOLD# besitzen.</string>
   <string name="SYS_DELETE_ORGANIZATION">Willst du die Organisation #VAR1_BOLD# wirklich löschen?\n\nAlle Daten (Ankündigungen, Dokumente, Veranstaltungen, Mitgliedschaften, Fotos, Rollen und Weblinks) dieser Organisation werden unwiederbringlich gelöscht.</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Profilbild löschen</string>
@@ -556,7 +556,7 @@
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
   <string name="SYS_DELETED_USER_OR_ROLE">Gelöschte Person oder Rolle</string>
   <string name="SYS_DELIVERY_CONFIRMATION">Lesebestätigung anfordern</string>
-  <string name="SYS_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfangenden ab, ob eine Lesebestätigung versendet wird. Der Empfangende kann dies auf seinen Wunsch unterdrücken.</string>
+  <string name="SYS_DELIVERY_CONFIRMATION_DESC">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit, eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfangenden ab, ob eine Lesebestätigung versendet wird. Der Empfangende kann dies auf seinen Wunsch unterdrücken.</string>
   <string name="SYS_DEPENDENCIES">Abhängigkeiten</string>
   <string name="SYS_DEPENDENT">Abhängig</string>
   <string name="SYS_DESCRIPTION">Beschreibung</string>
@@ -564,13 +564,13 @@
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DETAILED">Detailliert</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
-  <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnis Trenner</string>
+  <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnistrenner</string>
   <string name="SYS_DISABLE">Deaktiviert</string>
   <string name="SYS_DISABLED">Deaktiviert</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
-  <string name="SYS_DISPLAY_REDIRECT">Anzeige Weiterleitung</string>
-  <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
+  <string name="SYS_DISPLAY_REDIRECT">Anzeige der Weiterleitung</string>
+  <string name="SYS_DISPLAY_REDIRECT_DESC">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidio-Seiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt, wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Voreinstellung: 10 Sekunden)</string>
   <string name="SYS_DIVERSE">Divers</string>
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DO_NOT_SHOW_AGAIN">Nicht mehr anzeigen</string>
@@ -592,7 +592,7 @@
   <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Dropdown-Listenfeld (Mehrfachauswahl)</string>
   <string name="SYS_DUPLICATE">Duplizieren</string>
   <string name="SYS_ECARD_FROM">Eine Grußkarte von</string>
-  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">Der angegebene Wert bestimmen die maximale Größe in Pixel, die die längere Seite des Bildes in der Grußkarte haben darf. (Voreinstellung: #VAR1# Pixel)</string>
+  <string name="SYS_ECARD_MAX_PHOTO_SIZE_DESC">Der angegebene Wert bestimmt die maximale Größe in Pixel, die die längere Seite des Bildes in der Grußkarte haben darf. (Voreinstellung: #VAR1# Pixel)</string>
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Deine Grußkarte wurde leider nicht erfolgreich versendet!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Deine Grußkarte wurde erfolgreich versendet.</string>
   <string name="SYS_EDIT">Bearbeiten</string>
@@ -644,8 +644,8 @@
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Diese E-Mail wurde über die Webseite #VAR1# der Organisation #VAR2# mit den dort hinterlegten E-Mail-Einstellungen versendet.</string>
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
   <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
-  <string name="SYS_EMAIL_NOT_SEND_TO_RECIPIENTS">#VAR1#\n\nEs war nicht möglich, eine E-Mail zu senden an:\n#VAR2#</string>
-  <string name="SYS_EMAIL_PARAMETERS_DESC">Du kannst im E-Mail-Text folgende Platzhalter benutzen um den Empfänger der E-Mail direkt anzusprechen. #VAR1# für den Vornamen, #VAR2# für den Nachnamen, #VAR3# für Vor- und Nachname, sowie #VAR4# für die E-Mail-Adresse.</string>
+  <string name="SYS_EMAIL_NOT_SEND_TO_RECIPIENTS">#VAR1#\n\nEine E-Mail konnte nicht an folgende Empfänger gesendet werden:\n#VAR2#</string>
+  <string name="SYS_EMAIL_PARAMETERS_DESC">Du kannst im E-Mail-Text folgende Platzhalter benutzen, um den Empfänger der E-Mail direkt anzusprechen. #VAR1# für den Vornamen, #VAR2# für den Nachnamen, #VAR3# für Vor- und Nachnamen sowie #VAR4# für die E-Mail-Adresse.</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
   <string name="SYS_EMAIL_TEMPLATE">E-Mail-Vorlage</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kann eine HTML-Vorlagendatei aus dem Ordner #VAR1_BOLD# ausgewählt werden. Beim Versand einer E-Mail wird der Inhalt dieser Datei in die E-Mail kopiert und folgende Variablen ersetzt: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Weitere Informationen zu der Nutzung von E-Mail-Vorlagen findest du in der #VAR2#Dokumentation#VAR3#.</string>
@@ -658,8 +658,8 @@
   <string name="SYS_ENABLE_CHANGELOG">Änderungshistorie aktivieren</string>
   <string name="SYS_ENABLE_CHANGELOG_DESC">Das Änderungsprotokoll erfasst alle Änderungen (einschließlich des alten und des neuen Werts) an den ausgewählten Objekten, die den Datenbanktabellen entsprechen. Es kann nur von Administratoren oder Personen mit Bearbeitungsrechten für das jeweilige Modul eingesehen werden. Alle Personen können Änderungen an ihren eigenen Profildaten einsehen. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Download aktivieren</string>
-  <string name="SYS_ENABLE_DOWNLOAD_DESC">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-Datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
-  <string name="SYS_ENABLE_EVENT_REGISTRATION">Hier kann ausgewählt werden, ob eine Anmeldung zu der angegebenen Veranstaltung möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmende von der Veranstaltung entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmende beenden möchte, so kann man die derzeitige Anzahl aller Teilnehmenden als Teilnahmebegrenzung eintragen.</string>
+  <string name="SYS_ENABLE_DOWNLOAD_DESC">Erlaubt es, einzelne Fotos sowie komplette Alben als ZIP-Datei herunterzuladen. Dabei wird sowohl bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option #VAR1_BOLD# aktiviert, dann werden nur die Originalfotos heruntergeladen.</string>
+  <string name="SYS_ENABLE_EVENT_REGISTRATION">Hier kann ausgewählt werden, ob eine Anmeldung zu der angegebenen Veranstaltung möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmenden von der Veranstaltung entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmende beenden möchte, so kann man die derzeitige Anzahl aller Teilnehmenden als Teilnahmebegrenzung eintragen.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Grußkarten aktivieren</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">Grußkarten können über diese Einstellung aktiviert oder deaktiviert werden. Falls der Server keinen E-Mailversand unterstützt, sollte das Modul deaktiviert werden. Dieses Modul ist generell nur für angemeldete Personen verfügbar. (Voreinstellung: ja)</string>
   <string name="SYS_ENABLE_GROUPS_ROLES">Gruppen &amp; Rollen aktivieren</string>
@@ -689,7 +689,7 @@
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Seite nicht gefunden!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID fehlt</string>
   <string name="SYS_EVENT">Veranstaltung</string>
-  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Du hast bei den Teilnehmenden Rollen zugeordnet, welche bei der gewählten Kategorie nicht das Recht haben die Veranstaltungen zu sehen. Bitte wähle bei den Teilnehmenden eine der folgenden Rollen: #VAR1_BOLD#.</string>
+  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Du hast bei den Teilnehmenden Rollen zugeordnet, die bei der gewählten Kategorie nicht das Recht haben, die Veranstaltungen zu sehen. Bitte wähle bei den Teilnehmenden eine der folgenden Rollen: #VAR1_BOLD#.</string>
   <string name="SYS_EVENT_CHANGED_TITLE">Eine Veranstaltung wurde geändert auf #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">Eine neue Veranstaltung wurde angelegt auf #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Teilnehmende können sich bis zu diesem Datum an der Veranstaltung anmelden. Leitende und Personen mit dem Recht, Veranstaltungen zu bearbeiten, können weiterhin Teilnehmende zuordnen. Wenn kein Datum angegeben wird, gilt das Startdatum der Veranstaltung als Anmeldeschluss.</string>
@@ -727,7 +727,7 @@
   <string name="SYS_FILE_CREATED_TITLE">Eine neue Datei wurde hochgeladen auf #VAR1#</string>
   <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
-  <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
+  <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner, in dem z. B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
   <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
@@ -740,7 +740,7 @@
   <string name="SYS_FILES_UPLOAD_DESC">Wähle bitte alle Dateien aus, die du in den Ordner #VAR1_BOLD# hochladen möchtest.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
-  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Scripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
+  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Skripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
   <string name="SYS_FILTER">Filter</string>
   <string name="SYS_FILTER_TO_EXPORT">Filter zum Exportieren</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Erste Zeile beinhaltet die Spaltenbezeichnungen</string>
@@ -751,7 +751,7 @@
   <string name="SYS_FOLDER_NAME_EMPTY">Es wurde kein Ordnername angegeben!</string>
   <string name="SYS_FOLDER_NAME_INVALID">Der ausgewählte Ordnername #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Ordnernamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt; / \</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Es stehen keine Dokumente oder Dateien für Gäste zur Verfügung.</string>
-  <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte den gewählten Ordner zu sehen.</string>
+  <string name="SYS_FOLDER_NO_RIGHTS">Du besitzt keine Rechte, den gewählten Ordner zu sehen.</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht angelegt werden.\n\nWende dich bitte an einen #VAR2#Administrator#VAR3#, damit er die Schreibrechte des übergeordneten Ordners prüft.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Der Ordner (ID #VAR1#) konnte nicht gefunden werden.</string>
@@ -808,12 +808,12 @@
   <string name="SYS_HTML_TABLE">HTML-Tabelle</string>
   <string name="SYS_ICAL_DISABLED">Die iCal-Funktion ist deaktiviert.</string>
   <string name="SYS_ICON">Icon</string>
-  <string name="SYS_ICON_FONT_DESC">Hier kannst du ein Icon der Webschriftart „Bootstrap Icons“ hinzufügen. Gehe zu #VAR1#https://icons.getbootstrap.com#VAR2# und wähle ein Icon aus der Sammlung. Gebe einfach den Namen des Icons in dieses Textfeld ein.</string>
+  <string name="SYS_ICON_FONT_DESC">Hier kannst du ein Icon der Webschriftart „Bootstrap Icons“ hinzufügen. Gehe zu #VAR1#https://icons.getbootstrap.com#VAR2# und wähle ein Icon aus der Sammlung. Gib einfach den Namen des Icons in dieses Textfeld ein.</string>
   <string name="SYS_IDENTIFY_USERS">Existierende Kontakte werden anhand von Vornamen und Nachnamen erkannt.</string>
   <string name="SYS_IMPORT">Importieren</string>
   <string name="SYS_IMPORT_CONTACTS">Kontakte importieren</string>
-  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einem Administrator importiert werden. Dabei müssen die Regeln der Organisation eingehalten werden (z.B. Passwortlänge und Passwortstärke). Bereits vorhandene Zugangsdaten bleiben erhalten und werden durch den Import nicht überschrieben.</string>
-  <string name="SYS_IMPORT_MODE">Import Modus</string>
+  <string name="SYS_IMPORT_LOGIN_DATA_DESC">Zugangsdaten können nur von einem Administrator importiert werden. Dabei müssen die Regeln der Organisation eingehalten werden (z. B. Passwortlänge und Passwortstärke). Bereits vorhandene Zugangsdaten bleiben erhalten und werden durch den Import nicht überschrieben.</string>
+  <string name="SYS_IMPORT_MODE">Importmodus</string>
   <string name="SYS_IMPORT_SHEET_NOT_EXISTS">Das Arbeitsblatt #VAR1# existiert in der importierten Datei nicht!</string>
   <string name="SYS_IMPORT_SUCCESSFUL">Der Import ist erfolgreich verlaufen.\n\n#VAR1# neue Kontakte wurden angelegt.\n#VAR2# Kontakte wurden bearbeitet.\n#VAR3# Rollenmitgliedschaften wurden zugeordnet.\n\n#VAR4#</string>
   <string name="SYS_IMPORT_UNUSED_HEAD">Die folgenden Spalten der Importdatei sind keinen Profilfeldern zugeordnet:</string>
@@ -829,12 +829,12 @@
   <string name="SYS_INSTALL_APP">App installieren</string>
   <string name="SYS_INSTALL_AS_APP">Als App installieren</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL">Installation erfolgreich</string>
-  <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten eines Administrienden anmelden.</string>
+  <string name="SYS_INSTALLATION_SUCCESSFUL_DESC">Die Admidio-Datenbank ist nun installiert und fertig eingerichtet. Die Konfigurationsdatei mit den Zugangsdaten zur Datenbank wurde erstellt und hinterlegt. Du kannst jetzt mit Admidio arbeiten und dich mit den Daten einer administrierenden Person anmelden.</string>
   <string name="SYS_INSTALLATION_SUCCESSFUL_SHORT_DESC">Die Installation und Einrichtung der Datenbank wurde erfolgreich durchgeführt.</string>
   <string name="SYS_INSTALLED">Installiert</string>
   <string name="SYS_INSTALLED_VERSION">Installierte Version</string>
   <string name="SYS_INTERNAL_NAME">Interner Name</string>
-  <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
+  <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z. B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
   <string name="SYS_INTERVAL">Intervall</string>
   <string name="SYS_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
   <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, werden bei gesetzter Einstellung alle Empfänger im TO-Feld der E-Mail aufgelistet. So sind die Namen und E-Mail-Adressen für alle Empfänger sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
@@ -844,19 +844,19 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT">Editierberechtigung für den Verwalter</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_DESC">Wenn diese Option aktiviert ist, können die ausgewählten Eigenschaftsfelder von den Verwaltern der Gegenstände geändert werden. Andernfalls sind diese Felder schreibgeschützt und können nur von Modul-Administratoren geändert werden. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Editierbare Eigenschaftsfelder durch den Verwalter</string>
-  <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Die hier ausgewählten Eigenschaftsfelder können von den Verwaltern der Gegenstände bearbeitet werden, wenn die Option \"Editierberechtigung für den Verwalter\" akiviert ist. Alle anderen Felder sind schreibgeschützt und können nur von Modul-Administratoren geändert werden. (Voreinstellung: \"Letzter Empfänger\", \"Ausleihdatum\", \"Rückgabedatum\")</string>
+  <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Die hier ausgewählten Eigenschaftsfelder können von den Verwaltern der Gegenstände bearbeitet werden, wenn die Option \"Editierberechtigung für den Verwalter\" aktiviert ist. Alle anderen Felder sind schreibgeschützt und können nur von Modul-Administratoren geändert werden. (Voreinstellung: \"Letzter Empfänger\", \"Ausleihdatum\", \"Rückgabedatum\")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Die Inventarverwaltung kann über diese Einstellung komplett deaktiviert, nur für angemeldete Personen, nur für Modul-Administratoren, für Modul-Administratoren und Gegenstandsverwalter oder für Modul-Administratoren und Mitglieder der ausgewählten Rollen freigegeben werden. Haben nur angemeldete Personen Zugriff, so wird das Modul für Gäste ausgeblendet. Wenn nur Modul-Administratoren Zugriff haben, ist das Modul nur für Personen mit der Berechtigung \"Inventar verwalten\" sichtbar. (Voreinstellung: Aktiviert)</string>
   <string name="SYS_INVENTORY_ADD_DATE">Datum anfügen</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Wenn diese Option aktiviert ist, wird an den Dateinamen der Exportdatei das aktuelle Datum im Format JJJJ-MM-TT vorangestellt. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Negative Zahlen erlauben</string>
-  <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Wenn diese Option aktiviert ist, können in Feldern des Types \"Zahl\" oder \"Dezimalzahl\" auch negative Zahlen eingetragen werden. Andernfalls sind nur positive Zahlen erlaubt. (Voreinstellung: ja)</string>
+  <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Wenn diese Option aktiviert ist, können in Feldern des Typs \"Zahl\" oder \"Dezimalzahl\" auch negative Zahlen eingetragen werden. Andernfalls sind nur positive Zahlen erlaubt. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_BORROW_DATE">Ausleihdatum</string>
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">Das Verleihdatum des Gegenstandes an den letzten Empfänger</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">Das Ausleihdatum des Gegenstandes muss vor dem Rückgabedatum liegen!</string>
   <string name="SYS_INVENTORY_CATEGORY_DESC">Die Kategorie des Gegenstandes</string>
   <string name="SYS_INVENTORY_CONNECTED_FIELD">Verbundenes Feld</string>
   <string name="SYS_INVENTORY_COPY_PREFERENCES">Einstellungen für das Kopieren eines Gegenstandes:</string>
-  <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">In dieser Tabelle kannst du die Einträge für die Datumsintervalle eingeben. Für jeden weiteren Eintrag im Dropdown-Listenfeld kann hier eine Tabellenzeile hinzugefügt werden. Der Listeneintrag wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn du den Text in einer Zeile änderst, sehen alle betroffenen Personen sofort den neuen Text. Das Datumsintervall muss in derselben Zeile nach dem Titel durch das Symbol | getrennt geschrieben werden. z. B. Jährlich | 1y Wenn keine Einheit angegeben ist, werden Tage angenommen. Mögliche Einheiten: d: Tage, w: Wochen, m: Monate, y: Jahre</string>
+  <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">In dieser Tabelle kannst du die Einträge für die Datumsintervalle eingeben. Für jeden weiteren Eintrag im Dropdown-Listenfeld kann hier eine Tabellenzeile hinzugefügt werden. Später wird nicht der Text des Listeneintrags gespeichert, sondern die ausgewählte Position in der Liste. Wenn du den Text in einer Zeile änderst, sehen alle betroffenen Personen sofort den neuen Text. Das Datumsintervall muss in derselben Zeile nach dem Titel durch das Symbol | getrennt geschrieben werden. Beispiel: Jährlich | 1y. Wenn keine Einheit angegeben ist, werden Tage angenommen. Mögliche Einheiten: d: Tage, w: Wochen, m: Monate, y: Jahre</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Datumsdarstellung</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Auswahl des Datumsformats, das für die Anzeige von Datums- und Zeitangaben in der Inventarverwaltung verwendet werden soll. (Voreinstellung: Datum (TT.MM.JJJJ))</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Anzahl Dezimalstellen</string>
@@ -872,7 +872,7 @@
   <string name="SYS_INVENTORY_IMPORT_ASSIGN_FIELDS_DESC">In der linken Spalte der nachfolgenden Tabelle werden alle Eigenschaftsfelder angezeigt. In der rechten Spalte werden in einer Auswahlliste die Spalten aus der zu importierenden Datei angezeigt. Alle Spalten aus der Datei, die du importieren möchtest, solltest du nun einem Eigenschaftsfeld zuordnen.</string>
   <string name="SYS_INVENTORY_IMPORT_DESC">Hier kannst du Gegenstände aus einer vorherigen Exportdatei oder einer eigenen Datei importieren.</string>
   <string name="SYS_INVENTORY_IMPORT_ITEMS">Gegenstände importieren</string>
-  <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
+  <string name="SYS_INVENTORY_IMPORT_UNUSED_HEAD">Den folgenden Spalten der Importdatei sind keine Felder in der Inventarverwaltung zugeordnet:</string>
   <string name="SYS_INVENTORY_ITEM_BORROW">Gegenstand ausleihen</string>
   <string name="SYS_INVENTORY_ITEM_BORROW_DATA">Ausleihdaten des Gegenstandes</string>
   <string name="SYS_INVENTORY_ITEM_COPIED">Gegenstand erfolgreich kopiert</string>
@@ -894,7 +894,7 @@
   <string name="SYS_INVENTORY_ITEM_PICTURE_ENABLED">Gegenstandsbilder aktivieren</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_ENABLED_DESC">Wenn diese Option aktiviert ist, können Gegenstandsbilder hochgeladen und angezeigt werden. Andernfalls können keine Gegenstandsbilder hochgeladen werden und vorhandene Gegenstandsbilder werden nicht angezeigt. (Standard: Ja)</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_NEW">Neues Gegenstandsbild</string>
-  <string name="SYS_INVENTORY_ITEM_PICTURE_RESTRICTIONS">Das Bild darf eine maximale Auflösung von #VAR1# MegaPixeln haben. Die Bilddatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
+  <string name="SYS_INVENTORY_ITEM_PICTURE_RESTRICTIONS">Das Bild darf eine maximale Auflösung von #VAR1# Megapixeln haben. Die Bilddatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_REVIEW">Neues Gegenstandsbild überprüfen</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_SAVED">Gegenstandsbild erfolgreich gespeichert</string>
   <string name="SYS_INVENTORY_ITEM_PICTURE_UPLOAD">Gegenstandsbild hochladen</string>
@@ -951,7 +951,7 @@
   <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS">Für Modul-Administratoren und Gegenstandsverwalter</string>
   <string name="SYS_INVENTORY_ONLY_FOR_ADMINS_AND_ROLES">Für Modul-Administratoren und Rollenmitglieder</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW">Einstellungen für die Profilansicht</string>
-  <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">Die hier ausgewählten Eigenschafsfelder werden in der Profilansicht des Mitglieds angezeigt, wenn die Option \"In der Profilansicht anzeigen\" akiviert ist. Standardmäßig wird nur der Gegenstandsname angezeigt. (Voreinstelluing: \"Letzter Empfänger\")</string>
+  <string name="SYS_INVENTORY_PROFILE_VIEW_DESC">Die hier ausgewählten Eigenschaftsfelder werden in der Profilansicht des Mitglieds angezeigt, wenn die Option \"In der Profilansicht anzeigen\" aktiviert ist. Standardmäßig wird nur der Gegenstandsname angezeigt. (Voreinstellung: \"Letzter Empfänger\")</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED">In der Profilansicht anzeigen</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_ENABLED_DESC">Wenn diese Option aktiviert ist, können nur Nutzer mit Berechtigung zum Anzeigen des Inventarmoduls die durch ein Mitglied verwalteten und die von einem Mitglied ausgeliehenen Gegenstände in dessen Profilansicht sehen. (Voreinstellung: ja)</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Anzuzeigende Eigenschaftsfelder in der Profilansicht</string>
@@ -979,7 +979,7 @@
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
-  <string name="SYS_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
+  <string name="SYS_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos heruntergeladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>
   <string name="SYS_LANGUAGE">Sprache</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio wird in der Sprache angezeigt, die im Browser für Webseiten eingestellt ist. Wenn die dort hinterlegte Sprache nicht verfügbar ist, wird die hier eingestellte Sprache verwendet.\nIst deine Sprache nicht vorhanden oder möchtest du weitere Texte übersetzen oder bestehende Übersetzungen verbessern? Dann wirf einen Blick auf die #VAR1#Admidio-Wiki-Seite#VAR2#, um herauszufinden, wie du bei der Übersetzung helfen kannst.</string>
@@ -1045,7 +1045,7 @@
   <string name="SYS_MAIL_BULK">Gebündelt</string>
   <string name="SYS_MAIL_DISPATCH">E-Mailversand</string>
   <string name="SYS_MAIL_SENDING_MODE">Versandmodus</string>
-  <string name="SYS_MAIL_SENDING_MODE_DESC">Im Modus \'Gebündelt\' werden E-Mails an mehrere Empfänger zusammengefasst. Eine E-Mail erhält dann eine konfigurierte Anzahl an Empfänger im TO oder BCC Feld. Dies ist sinnvoll, wenn der Hoster den Versand von vielen E-Mails nicht erlaubt. Im Modus \'Einzeln\' erhält jeder Empfänger eine separate E-Mail. In diesem Modus können dem E-Mail-Text verschiedene Platzhalter mit den Empfängerdaten hinzugefügt werden.</string>
+  <string name="SYS_MAIL_SENDING_MODE_DESC">Im Modus \'Gebündelt\' werden E-Mails an mehrere Empfänger zusammengefasst. Eine E-Mail erhält dann eine konfigurierte Anzahl an Empfängern im TO- oder BCC-Feld. Dies ist sinnvoll, wenn der Hoster den Versand von vielen E-Mails nicht erlaubt. Im Modus \'Einzeln\' erhält jeder Empfänger eine separate E-Mail. In diesem Modus können dem E-Mail-Text verschiedene Platzhalter mit den Empfängerdaten hinzugefügt werden.</string>
   <string name="SYS_MAIL_SINGLE">Einzeln</string>
   <string name="SYS_MAINTAIN_CATEGORIES_DESC">Hier können Kategorien angelegt und bearbeitet werden.</string>
   <string name="SYS_MAINTAIN_USER_RELATION_TYPES_DESC">Es können Beziehungstypen (Elternteil - Kind) definiert werden. Zu jeder definierten Beziehung wird der Typ (asymmetrisch, symmetrisch oder unidirektional) hinterlegt, sowie die Profilbearbeitungsrechte innerhalb der Beziehung festgelegt.</string>
@@ -1054,9 +1054,9 @@
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANAGE_CATEGORY_REPORTS">Kategoriereporte verwalten</string>
   <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Gäste, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
-  <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
+  <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert sowie vorhandene Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, die festlegen, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
   <string name="SYS_MANUAL_APPROVAL">Manuelle Freigabe</string>
-  <string name="SYS_MANUAL_APPROVAL_DESC">Neue Registrierungen müssen manuell von Rollenmitgliedern mit dem Recht #VAR1_BOLD# freigegeben werden. Erst danach ist es für das neue Mitglied möglich sich am System anzumelden. Wird die Einstellung deaktiviert, so können sich neue Mitglieder nach erfolgreicher Registrierung direkt am System anmelden. (Voreinstellung: ja)</string>
+  <string name="SYS_MANUAL_APPROVAL_DESC">Neue Registrierungen müssen manuell von Rollenmitgliedern mit dem Recht #VAR1_BOLD# freigegeben werden. Erst danach ist es für das neue Mitglied möglich, sich am System anzumelden. Wird die Einstellung deaktiviert, so können sich neue Mitglieder nach erfolgreicher Registrierung direkt am System anmelden. (Voreinstellung: ja)</string>
   <string name="SYS_MAP">Karte</string>
   <string name="SYS_MAP_LINK_HOME_DESC">Zeigt den Wohnort bei Google-Maps an. Es werden die Straße, PLZ, Wohnort und Land an Google übertragen.</string>
   <string name="SYS_MAP_LINK_ROUTE_DESC">Zeigt bei Google Maps eine Route vom eigenen Wohnort zum Wohnort der ausgewählten Person an. Straße, PLZ, Wohnort und Land werden an Google übertragen.</string>
@@ -1065,12 +1065,12 @@
   <string name="SYS_MAX_PARTICIPANTS">Max. Teilnehmende</string>
   <string name="SYS_MAX_PARTICIPANTS_OF_ROLE">#VAR1# von max. #VAR2# Teilnehmenden</string>
   <string name="SYS_MAX_PATH_LENGTH">Max Pfadlänge</string>
-  <string name="SYS_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Breite bzw. Höhe haben darf. Die Fotos werden beim Hochladen auf diese Größe skaliert. Bei einem Modalen-Fenster oder Popup-Fenster wird das Fenster automatisch in die Größe des Foto angepasst. (Voreinstellung: #VAR1# x #VAR2# Pixel)</string>
+  <string name="SYS_MAX_PHOTO_SIZE_DESC">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Breite bzw. Höhe haben darf. Die Fotos werden beim Hochladen auf diese Größe skaliert. Bei einem modalen Fenster oder Popup-Fenster wird das Fenster automatisch an die Größe des Fotos angepasst. (Voreinstellung: #VAR1# x #VAR2# Pixel)</string>
   <string name="SYS_MAX_PHOTO_SIZE_HEIGHT">Maximale Bildhöhe</string>
   <string name="SYS_MAX_PHOTO_SIZE_WIDTH">Maximale Bildbreite</string>
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbeitbare Bildgröße</string>
   <string name="SYS_MAX_RECEIVER">Maximale Anzahl Empfänger für E-Mails</string>
-  <string name="SYS_MAX_RECEIVER_DESC">Dieser Wert gibt an, wie viele Empfänger man für ein E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
+  <string name="SYS_MAX_RECEIVER_DESC">Dieser Wert gibt an, wie viele Empfänger man für eine E-Mail auswählen kann. Eine Rolle wird als ein einzelner Empfänger verstanden.</string>
   <string name="SYS_MAXIMUM_FILE_SIZE">Maximale Dateigröße</string>
   <string name="SYS_MAXIMUM_FILE_SIZE_DESC">Dateien dürfen nur hochgeladen werden, wenn sie kleiner als der hier angegebene Wert sind. Steht hier 0, ist der Upload deaktiviert. (Voreinstellung: 3MB)</string>
   <string name="SYS_MAYBE_PARTICIPATE">Mit Vorbehalt teilnehmen</string>
@@ -1120,7 +1120,7 @@
   <string name="SYS_MOVE_FILE">Datei verschieben</string>
   <string name="SYS_MOVE_FILE_DESC">Wähle einen Ordner, in den du die Datei #VAR1_BOLD# verschieben möchtest. Die Rollenberechtigungen für die Anzeige der Datei werden aus dem Zielordner übernommen.</string>
   <string name="SYS_MOVE_FOLDER">Ordner verschieben</string>
-  <string name="SYS_MOVE_FOLDER_DESC">Wähle einen Ordner, in den du den Ordner #VAR1_BOLD# verschieben möchten. Die Rollenberechtigungen zum Anzeigen und Hochladen von Dateien aus dem Zielordner werden auf diesen Ordner und alle Unterordner angewendet.</string>
+  <string name="SYS_MOVE_FOLDER_DESC">Wähle einen Ordner, in den du den Ordner #VAR1_BOLD# verschieben möchtest. Die Rollenberechtigungen zum Anzeigen und Hochladen von Dateien aus dem Zielordner werden auf diesen Ordner und alle Unterordner angewendet.</string>
   <string name="SYS_MOVE_LEFT">#VAR1# nach links verschieben</string>
   <string name="SYS_MOVE_RIGHT">#VAR1# nach rechts verschieben</string>
   <string name="SYS_MOVE_TO">Verschieben nach</string>
@@ -1134,11 +1134,11 @@
   <string name="SYS_NAME">Name</string>
   <string name="SYS_NAME_ABBREVIATION">Name (Abkürzung)</string>
   <string name="SYS_NEVER">Nie</string>
-  <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta Version ist verfügbar!</string>
-  <string name="SYS_NEW_BOTH_AVAILABLE">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</string>
+  <string name="SYS_NEW_BETA_AVAILABLE">Eine neue Beta-Version ist verfügbar!</string>
+  <string name="SYS_NEW_BOTH_AVAILABLE">Eine neue stabile Version und eine neue Beta-Version sind verfügbar!</string>
   <string name="SYS_NEW_MESSAGE_RECEIVED">Neue Nachricht erhalten</string>
   <string name="SYS_NEW_NAME">Neuer Name</string>
-  <string name="SYS_NEW_ORGANIZATION_DESC">Gib in dieses Formular die Abkürzung, den offiziellen Namen und die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Bei der E-Mail-Adresse sollte es sich um eine allgemeine Adresse der Organisation handeln. Sie wird u.a. als Absenderadresse für automatische Systembenachrichtigungen verwendet. Es wird dann eine neue Organisation mit ihren Stammdaten hinzugefügt. Du wirst dort zum Administrator und kannst die weitere Einrichtung vornehmen.</string>
+  <string name="SYS_NEW_ORGANIZATION_DESC">Gib in dieses Formular die Abkürzung, den offiziellen Namen und die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Bei der E-Mail-Adresse sollte es sich um eine allgemeine Adresse der Organisation handeln. Sie wird u. a. als Absenderadresse für automatische Systembenachrichtigungen verwendet. Es wird dann eine neue Organisation mit ihren Stammdaten hinzugefügt. Du wirst dort zum Administrator und kannst die weitere Einrichtung vornehmen.</string>
   <string name="SYS_NEW_PASSWORD">Neues Passwort</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Neues Profilfoto</string>
   <string name="SYS_NEW_ROLE">Neue Rolle</string>
@@ -1165,10 +1165,10 @@
   <string name="SYS_NO_QUOTATION">Kein Anführungszeichen</string>
   <string name="SYS_NO_RECURRENCE">Keine Wiederholung</string>
   <string name="SYS_NO_RIGHTS">Du hast kein Recht, diese Aktion auszuführen.</string>
-  <string name="SYS_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
+  <string name="SYS_NO_RIGHTS_VIEW_LIST">Du besitzt keine Rechte, Listen der hinterlegten Rollen anzuschauen.</string>
   <string name="SYS_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>
   <string name="SYS_NO_ROLES_AND_USERS">Es sind keine Rollen oder Personen freigegeben, an die du Nachrichten schicken kannst.</string>
-  <string name="SYS_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</string>
+  <string name="SYS_NO_ROLES_VISIBLE">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte, bestimmte Rollen zu sehen.</string>
   <string name="SYS_NO_TEMPLATE">Keine Vorlage</string>
   <string name="SYS_NO_USER_FOUND">Es wurde keine Person gefunden, die den gewählten Kriterien entspricht.</string>
   <string name="SYS_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Personen besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
@@ -1199,8 +1199,8 @@
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Anzahl Alben pro Seite</string>
   <string name="SYS_NUMBER_OF_COLUMNS">Anzahl Spalten</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Anzahl Einträge pro Seite</string>
-  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert 0 ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
-  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert \"Alle\" ist, werden alle Einträge auf einer Seite aufgelistet und Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert 0 ist, werden alle Einträge auf einer Seite aufgelistet und die Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
+  <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC">Anzahl der Einträge, die auf einer Seite angezeigt werden. Sind mehr Einträge vorhanden, wird der Seite eine Funktion zum Blättern hinzugefügt. Wenn der Wert \"Alle\" ist, werden alle Einträge auf einer Seite aufgelistet und die Funktion zum Blättern ist deaktiviert. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_NUMBER_OF_LOGINS">Anzahl Logins</string>
   <string name="SYS_NUMBER_OF_OCCURRENCES">Anzahl der Termine</string>
   <string name="SYS_NUMBER_OF_OCCURRENCES_DESC">Maximale Anzahl der zu erstellenden Termine, wenn die Wiederholung nach einer bestimmten Anzahl endet.</string>
@@ -1224,7 +1224,7 @@
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organisationszugehörigkeit</string>
-  <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation mit der Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
+  <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation sowie die Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio darf Anfragen nur an öffentliche HTTPS-Adressen senden. Diese URL kann nicht verwendet werden.</string>
   <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
@@ -1237,14 +1237,14 @@
   <string name="SYS_PARENT_ALBUM">Elternalbum</string>
   <string name="SYS_PARENT_ALBUM_DESC">Ein Album kann einem anderen Album untergeordnet sein. Wähle dazu in der Auswahlliste das Elternalbum zum aktuellen Album aus. Willst du das Album auf der obersten Ebene anzeigen, dann wähle #VAR1_BOLD# aus.</string>
   <string name="SYS_PARENT_ORGANIZATION">Übergeordnete Organisation</string>
-  <string name="SYS_PARENT_ORGANIZATION_DESC">Definiere hier die übergeordnete Organisation. Übergeordnete Organisationen können z.B. Veranstaltungen und Ankündigungen erstellen, die dann in der ausgewählten (untergeordneten) Organisation angezeigt werden.</string>
+  <string name="SYS_PARENT_ORGANIZATION_DESC">Definiere hier die übergeordnete Organisation. Übergeordnete Organisationen können z. B. Veranstaltungen und Ankündigungen erstellen, die dann in der ausgewählten (untergeordneten) Organisation angezeigt werden.</string>
   <string name="SYS_PART_OF_SERIES">Teil einer Serie</string>
   <string name="SYS_PARTICIPANTS">Teilnehmende</string>
   <string name="SYS_PARTICIPANTS_LIMIT">Begrenzung der Teilnehmenden</string>
   <string name="SYS_PARTICIPATE">Teilnehmen</string>
   <string name="SYS_PARTICIPATE_AT_EVENT">An der Veranstaltung als Organisator teilnehmen</string>
-  <string name="SYS_PARTICIPATE_AT_EVENT_DESC">Du wirst Organisator der Veranstaltung und erhältst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren ernennen.</string>
-  <string name="SYS_PARTICIPATE_NO_RIGHTS">Du besitzt nicht das Recht dich für diese Veranstaltung anzumelden.</string>
+  <string name="SYS_PARTICIPATE_AT_EVENT_DESC">Du wirst Organisator der Veranstaltung und erhältst das Recht, weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren ernennen.</string>
+  <string name="SYS_PARTICIPATE_NO_RIGHTS">Du besitzt nicht das Recht, dich für diese Veranstaltung anzumelden.</string>
   <string name="SYS_PARTICIPATE_QUESTION">Teilnehmen?</string>
   <string name="SYS_PARTICIPATION_INFORMATION">Informationen der Teilnehmenden</string>
   <string name="SYS_PARTICIPATION_STATUS">Status der teilnehmenden Person</string>
@@ -1261,7 +1261,7 @@
   <string name="SYS_PASSWORD_RESET_SAVED">Das neue Passwort wurde nun übernommen!</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">Das eingegebene Passwort stimmt nicht mit der Wiederholung überein.</string>
   <string name="SYS_PATH">Pfad</string>
-  <string name="SYS_PATH_SEPARATOR">Pfad Trenner</string>
+  <string name="SYS_PATH_SEPARATOR">Pfadtrenner</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PERIOD">Zeitraum</string>
   <string name="SYS_PERIOD_FROM_TO">Zeitraum vom #VAR1# bis #VAR2#</string>
@@ -1272,7 +1272,7 @@
   <string name="SYS_PHOTO_ALBUMS">Fotoalben</string>
   <string name="SYS_PHOTO_FILE_TO_LARGE">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von #VAR1# B.</string>
   <string name="SYS_PHOTO_FILE_UPLOADED">Das Bild #VAR1_BOLD# wurde hochgeladen.</string>
-  <string name="SYS_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</string>
+  <string name="SYS_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG- oder PNG-Format hochgeladen und angezeigt werden.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von #VAR1# Megapixeln.</string>
   <string name="SYS_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
@@ -1375,10 +1375,10 @@
   <string name="SYS_PREVIOUS_PHOTO">Vorheriges Foto</string>
   <string name="SYS_PREVIOUS_VALUE">Vorheriger Wert</string>
   <string name="SYS_PRINT_PREVIEW">Druckvorschau</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Die Private Nachricht konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
-  <string name="SYS_PRIVATE_MESSAGE_SEND">Die Private Nachricht wurde an #VAR1_BOLD# versendet.</string>
+  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Die private Nachricht konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
+  <string name="SYS_PRIVATE_MESSAGE_SEND">Die private Nachricht wurde an #VAR1_BOLD# versendet.</string>
   <string name="SYS_PRIVATE_MESSAGES">Private Nachrichten</string>
-  <string name="SYS_PRNG">Pseudo-Zufallszahlen Generator</string>
+  <string name="SYS_PRNG">Pseudozufallszahlengenerator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
   <string name="SYS_PROCESS_CANCELED">Der Vorgang wurde abgebrochen.</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Bei der Verarbeitung der Daten ist folgendes Problem aufgetreten.</string>
@@ -1389,7 +1389,7 @@
   <string name="SYS_PROFILE_FROM">Profil von #VAR1# #VAR2#</string>
   <string name="SYS_PROFILE_INFORMATION">Profilinformationen</string>
   <string name="SYS_PROFILE_PHOTO">Profilfoto</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du solltest selbst auf dem Foto zu sehen sein. Das Foto darf eine maximale Auflösung von #VAR1# MegaPixeln haben. Die Fotodatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
+  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du solltest selbst auf dem Foto zu sehen sein. Das Foto darf eine maximale Auflösung von #VAR1# Megapixeln haben. Die Fotodatei darf nicht größer als #VAR1# MB sein und muss im Format JPG oder PNG vorliegen.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
   <string name="SYS_PWA_ENABLED">Progressive Web App (PWA) aktivieren</string>
   <string name="SYS_PWA_ENABLED_DESC">Admidio kann als eigenständige Web-App auf dem Smartphone, Tablet oder Desktop installiert werden. Der App-Name richtet sich nach dem Namen der Organisation. Eigene App-Icons können im Ordner adm_my_files/ als app_icon.png oder app_icon_512.png abgelegt werden. Andernfalls wird ein unter „Design“ konfiguriertes PNG-Favicon oder das Standard-Logo als Fallback verwendet.</string>
@@ -1460,7 +1460,7 @@
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Beziehungskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Beziehungskonfigurationen</string>
   <string name="SYS_RELATIONSHIP_TYPE_DELETE">Willst du den Beziehungstyp #VAR1_BOLD# löschen? Achtung: Dies löscht alle existierenden Beziehungen dieses Typs.</string>
-  <string name="SYS_RELATIONSHIP_TYPE_DESC">Eine asymmetrisch Beziehung wird z.B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z.B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
+  <string name="SYS_RELATIONSHIP_TYPE_DESC">Eine asymmetrische Beziehung wird z. B. für Elternteil/Kind verwendet, während symmetrische Beziehungen z. B. für Geschwister verwendet werden können. Diese sind immer zweiseitig, hingegen zeigen unidirektionale Beziehungen nur in eine Richtung.</string>
   <string name="SYS_RELATIONSHIP_TYPE_EDIT_USER_DESC">Ist diese Einstellung gesetzt, darf eine Person das Profil einer anderen Person bearbeiten, zu der diese Beziehung besteht. Bei einer asymmetrischen Beziehung wird das Recht separat je Beziehungsrichtung vergeben. Bei einer symmetrischen Beziehung dürfen beide Personen das jeweils andere Profil bearbeiten. Bei einer unidirektionalen Beziehung darf nur die Person mit der hinterlegten Beziehung das andere Profil bearbeiten.</string>
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
@@ -1470,7 +1470,7 @@
   <string name="SYS_REMOVE_CONTACT_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten dieses Kontakts gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION">Kontaktauswahl löschen</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten der ausgewählten Kontakte gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
-  <string name="SYS_REMOVE_EVENT_REGISTRATION">Willst du die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
+  <string name="SYS_REMOVE_EVENT_REGISTRATION">Willst du die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmendenn gelöscht.</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
@@ -1488,7 +1488,7 @@
   <string name="SYS_RIGHT_ASSIGN_ROLES_DESC">Mitglieder dieser Rolle haben Zugriff auf die Rollenverwaltung und können neue Rollen erstellen, verwalten und anderen Personen Rollen zuordnen.</string>
   <string name="SYS_RIGHT_DATES">Veranstaltungen verwalten</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Dokumente und Dateien verwalten</string>
-  <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen mit dieser Berechtigung können im Modul für Dokumente und Dateien die Rechte vergeben, welche Rollen bestimme Ordner sehen oder Dateien hochladen dürfen.</string>
+  <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen mit dieser Berechtigung können im Modul für Dokumente und Dateien die Rechte vergeben, welche Rollen bestimmte Ordner sehen oder Dateien hochladen dürfen.</string>
   <string name="SYS_RIGHT_EDIT_USER">Profildaten aller Kontakte bearbeiten</string>
   <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen mit dieser Berechtigung können die Daten anderer Kontakte bearbeiten (mit Ausnahme von Passwörtern). Darüber hinaus können sie Kontakte hinzufügen oder löschen.</string>
   <string name="SYS_RIGHT_FORUM">Forum verwalten</string>
@@ -1496,7 +1496,7 @@
   <string name="SYS_RIGHT_INVENTORY">Inventar verwalten</string>
   <string name="SYS_RIGHT_INVENTORY_DESC">Rollen mit dieser Berechtigung können im Modul Inventarverwaltung das Inventar verwalten.</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Teilnehmende können E-Mails an alle Teilnehmenden senden</string>
-  <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat über das Nachrichtenmodul E-Mails an diese Rolle zu versenden. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
+  <string name="SYS_RIGHT_MAIL_THIS_ROLE_DESC">Diese Einstellung steuert, wer das Recht hat, über das Nachrichtenmodul E-Mails an diese Rolle zu versenden. Das Rollenrecht #VAR1_BOLD# steht allerdings noch über dieser Einstellung.</string>
   <string name="SYS_RIGHT_MAIL_TO_ALL">E-Mails an alle Rollen schreiben</string>
   <string name="SYS_RIGHT_PHOTOS">Fotos hochladen und bearbeiten</string>
   <string name="SYS_RIGHT_PROFILE">Eigenes Profil bearbeiten</string>
@@ -1525,12 +1525,12 @@
   <string name="SYS_ROLE_WITHOUT_LEADER">Rollen ohne Leitung</string>
   <string name="SYS_ROLES">Rollen</string>
   <string name="SYS_ROLES_CONFIRMATION_OF_PARTICIPATION">Rollen - Teilnahmebestätigung</string>
-  <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Mitglieder dieser Rolle sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechte bearbeiten.</string>
+  <string name="SYS_ROLES_MODULE_ADMINISTRATORS_DESC">Mitglieder dieser Rolle sind Administratoren des Moduls und haben auf alles Zugriff. Sie können Daten anlegen, bearbeiten, löschen und Kategorien mit ihren Rechten bearbeiten.</string>
   <string name="SYS_ROOM">Raum</string>
   <string name="SYS_ROOM_COULD_NOT_BE_DELETED">Der Raum kann nicht gelöscht werden, da er noch mindestens einer Veranstaltung zugeordnet ist.</string>
   <string name="SYS_ROOM_INFORMATION">Rauminformationen</string>
   <string name="SYS_ROOM_MANAGEMENT">Raumverwaltung</string>
-  <string name="SYS_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer der oben angegebenen Sitzplätze zu vergeben, wie z.B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
+  <string name="SYS_ROOM_OVERHANG">Sind noch zusätzliche Plätze außer den oben angegebenen Sitzplätzen zu vergeben, wie z. B. durch zusätzliche Stühle oder mögliche Stehplätze, so kann ihre Anzahl hier im Überhang angegeben werden.</string>
   <string name="SYS_ROOM_RESERVED">Der gewählte Raum ist zu dieser Zeit bereits reserviert.</string>
   <string name="SYS_ROOM_SELECTABLE">Räume zuordnen</string>
   <string name="SYS_ROOM_SELECTABLE_DESC">Es wird eine Auswahlbox für die verfügbaren Räume angezeigt, damit der Ersteller einer Veranstaltung einen Raum auswählen kann (Standardantwort: nein).</string>
@@ -1544,7 +1544,7 @@
   <string name="SYS_SATURDAY">Samstag</string>
   <string name="SYS_SAVE">Speichern</string>
   <string name="SYS_SAVE_ALL_CANCELLATIONS">Absagen zu Veranstaltungen speichern</string>
-  <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Absagen von Teilnehmenden zu Veranstaltungen können gespeichert werden. Die Absagen werden dann in der Liste der Teilnehmenden ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Liste der Teilnehmenden auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Voreinstellung : Ja)</string>
+  <string name="SYS_SAVE_ALL_CANCELLATIONS_DESC">Absagen von Teilnehmenden zu Veranstaltungen können gespeichert werden. Die Absagen werden dann in der Liste der Teilnehmenden ebenfalls angezeigt. Wird diese Option deaktiviert, dann werden Absagen nicht gespeichert und können in der Liste der Teilnehmenden auch nicht eingesehen werden. Diese Option gilt ab dem Zeitpunkt der Einstellung und kann rückwirkend nicht mehr angewendet werden! (Voreinstellung: ja)</string>
   <string name="SYS_SAVE_ATTACHMENTS">Anhänge speichern</string>
   <string name="SYS_SAVE_ATTACHMENTS_DESC">E-Mail-Anhänge werden auf dem Webspace gespeichert und können nach dem Versand weiterhin in der gespeicherten E-Mail aufgerufen werden. (Voreinstellung: ja)</string>
   <string name="SYS_SAVE_CHANGES">Änderungen speichern</string>
@@ -1589,7 +1589,7 @@
   <string name="SYS_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="SYS_SEND_EMAIL">E-Mail senden</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
-  <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder, sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: ja)</string>
+  <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: ja)</string>
   <string name="SYS_SEND_EMAIL_TO">Sende eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">E-Mails an alle E-Mail-Adressen im Profil senden</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: nein)</string>
@@ -1633,7 +1633,7 @@
   <string name="SYS_SHOW_LIST">Liste anzeigen</string>
   <string name="SYS_SHOW_MAP">Auf Karte zeigen</string>
   <string name="SYS_SHOW_MAP_LINK">Kartenlink anzeigen</string>
-  <string name="SYS_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht, einen Link zu Google Maps zu erstellen, der den Ort anzeigt, sowie einen Routenlink vom eigenen Wohnort aus. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Ist eine Adresse im Profil hinterlegt, werden daneben zwei Links zu Google Maps angezeigt. Ein Link führt zum Wohnort der betreffenden Person, der andere zeigt die Route vom eigenen Wohnort dorthin. Beim Aufruf der Links werden folgende Informationen der Profile an Google übertragen: Straße, Postleitzahl, Ort und Land. (Voreinstellung: nein)</string>
   <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
   <string name="SYS_SHOW_MORE">Mehr anzeigen</string>
@@ -1650,35 +1650,35 @@
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Ist die betreffende Person Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ROUTE">Route anzeigen</string>
   <string name="SYS_SHOW_WATERMARK">Zeige Wasserzeichen</string>
-  <string name="SYS_SHOW_WATERMARK_DESC">Der eingegebene Text wird in allen angezeigten Fotos angezeigt, ab einer Größe von 200 Pixel der längeren Seite. Wenn der Fotograf im Album hinterlegt wurde, wird anstelle dieses Textes der Name des Fotografen mit Copyright angezeigt. Wenn kein Bildtext angezeigt werden soll, kann dieses Feld leer gelassen werden (Standard: #VAR1#).</string>
+  <string name="SYS_SHOW_WATERMARK_DESC">Der eingegebene Text wird in allen angezeigten Fotos angezeigt, deren längere Seite mindestens 200 Pixel misst. Wenn der Fotograf im Album hinterlegt wurde, wird anstelle dieses Textes der Name des Fotografen mit Copyright angezeigt. Wenn kein Bildtext angezeigt werden soll, kann dieses Feld leer gelassen werden (Standard: #VAR1#).</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Ähnliche Kontakte gefunden</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Es wurden Kontakte mit einem ähnlichen Namen wie #VAR1_BOLD# gefunden.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Zu der Registrierung von #VAR1_BOLD# mit der E-Mail-Adresse #VAR2_BOLD# wurden Kontakte mit einem ähnlichen Namen gefunden. Bitte prüfe die Registrierung und ordne diese einem gefundenen Kontakt zu oder lege einen neuen Kontakt an.</string>
-  <string name="SYS_SINCE_TO">seit #VAR1# bis #VAR2#</string>
+  <string name="SYS_SINCE_TO">von #VAR1# bis #VAR2#</string>
   <string name="SYS_SINCE_VAR">seit #VAR1#</string>
   <string name="SYS_SIZE">Größe</string>
   <string name="SYS_SMTP">SMTP</string>
-  <string name="SYS_SMTP_AUTH">SMTP Authentifizierung</string>
+  <string name="SYS_SMTP_AUTH">SMTP-Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
   <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden. (Voreinstellung: Ja)</string>
   <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
   <string name="SYS_SMTP_AUTH_PLAIN">Plain</string>
   <string name="SYS_SMTP_AUTH_TYPE">SMTP-Authentifizierungstyp</string>
   <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Gib hier die Authentifizierungsmethode ein, die dein SMTP-Server unterstützt. Wenn du dir nicht sicher bist, welche Methode unterstützt wird, wähle #VAR1_BOLD#. Admidio wird dann nacheinander die verschiedenen Authentifizierungsmethoden ausprobieren, bis eine Anmeldung erfolgreich war. (Voreinstellung: automatisch)</string>
-  <string name="SYS_SMTP_HOST">SMTP Host</string>
+  <string name="SYS_SMTP_HOST">SMTP-Host</string>
   <string name="SYS_SMTP_HOST_DESC">Adresse des zu verwendenden SMTP-Servers.</string>
-  <string name="SYS_SMTP_PASSWORD">SMTP Passwort</string>
+  <string name="SYS_SMTP_PASSWORD">SMTP-Passwort</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Das Passwort, das bei der SMTP-Authentifizierung verwendet wird.</string>
-  <string name="SYS_SMTP_PORT">SMTP Port</string>
-  <string name="SYS_SMTP_PORT_DESC">Angabe des Ports über den die SMTP-Verbindung aufgebaut werden soll. (Voreinstellung: 587)</string>
-  <string name="SYS_SMTP_SECURE">SMTP Verschlüsselung</string>
+  <string name="SYS_SMTP_PORT">SMTP-Port</string>
+  <string name="SYS_SMTP_PORT_DESC">Angabe des Ports, über den die SMTP-Verbindung aufgebaut werden soll. (Voreinstellung: 587)</string>
+  <string name="SYS_SMTP_SECURE">SMTP-Verschlüsselung</string>
   <string name="SYS_SMTP_SECURE_DESC">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_SMTP_SECURE_NO">Keine Verschlüsselung</string>
   <string name="SYS_SMTP_SECURE_SSL">SMTPS / implizites TLS</string>
   <string name="SYS_SMTP_SECURE_TLS">STARTTLS</string>
-  <string name="SYS_SMTP_USER">SMTP Anmeldename</string>
+  <string name="SYS_SMTP_USER">SMTP-Anmeldename</string>
   <string name="SYS_SMTP_USER_DESC">Der Anmeldename, der bei der SMTP-Authentifizierung verwendet wird.</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Möchtest du einen Link zu deinem Profil in diesem sozialen Netzwerk setzen? Dein Anmeldename ist erforderlich. Melde dich bei deinem Konto des sozialen Netzwerks an und gehe zu deinem Profil. Kopiere nun die URL in dieses Feld und speicher dein Profil hier. Besucher deines Profils können direkt dein Profil des sozialen Netzwerks öffnen.</string>
+  <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Möchtest du einen Link zu deinem Profil in diesem sozialen Netzwerk setzen? Dein Anmeldename ist erforderlich. Melde dich bei deinem Konto des sozialen Netzwerks an und gehe zu deinem Profil. Kopiere nun die URL in dieses Feld und speichere dein Profil hier. Besucher deines Profils können direkt dein Profil des sozialen Netzwerks öffnen.</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
   <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
@@ -1728,7 +1728,7 @@
   <string name="SYS_SSO_ENCRYPTION_KEY">Schlüssel für Verschlüsselung</string>
   <string name="SYS_SSO_EXPLANATION">Als Identity Provider ermöglicht es Admidio, dass sich Personen mit ihrem Admidio-Konto bei anderen Webanwendungen anmelden. Unterstützt werden die Protokolle SAML 2.0 und OpenID Connect (OIDC).</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Passwort für den Schlüsselexport</string>
-  <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Schütze den exportierten privaten Schlüssel mit einem Passwort. Dieses Passwort wird benötigt, um die Datei später wieder zu importieren. Ein leeres Passwort lässt den Export ungeschützt und wird dringend abgeraten.</string>
+  <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Schütze den exportierten privaten Schlüssel mit einem Passwort. Dieses Passwort wird benötigt, um die Datei später wieder zu importieren. Bei einem leeren Passwort bleibt der Export ungeschützt. Davon wird dringend abgeraten.</string>
   <string name="SYS_SSO_INVALID_CLIENT">Ungültiger Client</string>
   <string name="SYS_SSO_KEY">SSO-Schlüssel</string>
   <string name="SYS_SSO_KEY_ACTIVE">Aktiv</string>
@@ -1813,7 +1813,7 @@
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
   <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Die registrierte OIDC-Abmelde-URI ist ungültig. Verwende eine absolute HTTPS-URI ohne Zugangsdaten oder Fragment; HTTP ist nur für Loopback-Hosts zulässig.</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Weiterleitungs-URIs nach Abmeldung</string>
-  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Wohin Admidio nach der Abmeldung zurückleiten darf, eine URL pro Zeile. Jede URL muss exakt mit der von der Anwendung gesendeten URL übereinstimmen, es sei denn, sie enthält ein "*", das für einen beliebigen Teil des Pfads oder der Query-Parameter steht, z.B. https://example.org/logout*. Protokoll, Hostname und Port müssen immer ohne "*" angegeben werden. Ohne Eintrag leitet Admidio nach der Abmeldung nirgendwohin weiter.</string>
+  <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Wohin Admidio nach der Abmeldung zurückleiten darf, eine URL pro Zeile. Jede URL muss exakt mit der von der Anwendung gesendeten URL übereinstimmen, es sei denn, sie enthält ein "*", das für einen beliebigen Teil des Pfads oder der Query-Parameter steht, z. B. https://example.org/logout*. Protokoll, Hostname und Port müssen immer ohne "*" angegeben werden. Ohne Eintrag leitet Admidio nach der Abmeldung nirgendwohin weiter.</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Gültigkeit des Aktualisierungstokens</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">Gültigkeitsdauer von Refresh-Tokens in Sekunden. Standard: 2592000 (30 Tage).</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Angeforderte Berechtigungen</string>
@@ -1911,7 +1911,7 @@
   <string name="SYS_SUMMARY_ROW_DESC">Zeigt am Ende des Reports eine Summenzeile mit der Anzahl der Mitgliedschaften je Spalte an.</string>
   <string name="SYS_SUNDAY">Sonntag</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Wechsel zur Kalenderverwaltung</string>
-  <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorie Verwaltung</string>
+  <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Wechsel zur Kategorieverwaltung</string>
   <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Wechsel zur Profilfeld-Konfiguration</string>
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Wechsel zur Beziehungskonfiguration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Wechsel zur Raumverwaltung</string>
@@ -1933,12 +1933,12 @@
   <string name="SYS_TABLE">Tabelle</string>
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Lege die Vorlage fest, die bei der Erstellung der E-Card vorausgewählt wird. (Standard: Postkarte)</string>
-  <string name="SYS_TEMPLATE_FOLDER_OPEN">Template Ordner konnte nicht geöffnet/gelesen werden.</string>
+  <string name="SYS_TEMPLATE_FOLDER_OPEN">Template-Ordner konnte nicht geöffnet/gelesen werden.</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor du diese Funktion aufrufst, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse der angemeldeten Person auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
   <string name="SYS_TFA">Zwei-Faktor-Authentifizierung</string>
-  <string name="SYS_TFA_ENABLE">Zwei-Faktoren-Authentifizierung (2FA) aktivieren</string>
+  <string name="SYS_TFA_ENABLE">Zwei-Faktor-Authentifizierung (2FA) aktivieren</string>
   <string name="SYS_TFA_ENABLE_DESC">Aktiviere die Zwei-Faktor-Authentifizierung (2FA) für alle Benutzerkonten, um einen zusätzlichen Überprüfungsschritt zu verlangen, der die Kontosicherheit erhöht und vor unberechtigtem Zugriff schützt.</string>
   <string name="SYS_TFA_NOT_SETUP_FOR_USER">Administratoren dürfen keine Zwei-Faktor-Authentifizierung (2FA) für andere Personen einrichten. Jede Person muss die 2FA für das eigene Konto einrichten.</string>
   <string name="SYS_TFA_RESET">Zwei-Faktor-Authentifizierung zurücksetzen</string>
@@ -1947,7 +1947,7 @@
   <string name="SYS_TFA_SETUP">Zwei-Faktor-Authentifizierung einrichten</string>
   <string name="SYS_TFA_SETUP_INSTRUCTIONS">Gehe folgendermaßen vor, um die Zwei-Faktor-Authentifizierung (2FA) einzurichten:</string>
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_1">QR-Code scannen: Verwende eine Authentifizierungs-App (z. B. Google Authenticator, Authy), um den angezeigten QR-Code zu scannen.</string>
-  <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_2">Code eingeben: Öffne die Authentifizierungs-App, suche den für unseren Dienst generierten Authentifizierungscode und gebe ihn in das Eingabefeld ein.</string>
+  <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_2">Code eingeben: Öffne die Authentifizierungs-App, suche den für unseren Dienst generierten Authentifizierungscode und gib ihn in das Eingabefeld ein.</string>
   <string name="SYS_TFA_SETUP_INSTRUCTIONS_STEP_3">Bestätigen: Sende den Code, um die Einrichtung abzuschließen.</string>
   <string name="SYS_TFA_SETUP_SUCCESSFUL">Zwei-Faktor-Authentifizierung erfolgreich eingerichtet.</string>
   <string name="SYS_TFA_TOTP_CODE_MISSING">Du hast die Zwei-Faktor-Authentifizierung für dein Konto aktiviert. Bitte gib den Authentifizierungscode aus deiner Authenticator-App ein.</string>
@@ -1987,8 +1987,8 @@
   <string name="SYS_USER_ID_NOT_FOUND">Zu der übergebenen ID wurde kein Konto gefunden!</string>
   <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese Person ist noch kein Mitglied der Organisation #VAR1#.</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten. Möchtest du die neuen Zugangsdaten, sowie die entsprechenden Rollen dieser Person zuordnen?</string>
-  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1# und hat auch noch keine Zugangsdaten. Möchtest du die Zugangsdaten, sowie die entsprechenden Rollen dieser Person zuordnen?</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten. Möchtest du die neuen Zugangsdaten sowie die entsprechenden Rollen dieser Person zuordnen?</string>
+  <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1# und hat auch noch keine Zugangsdaten. Möchtest du die Zugangsdaten sowie die entsprechenden Rollen dieser Person zuordnen?</string>
   <string name="SYS_USER_RELATION">Beziehung</string>
   <string name="SYS_USER_RELATION_TYPE">Beziehungstyp</string>
   <string name="SYS_USER_RELATIONS">Beziehungen</string>
@@ -2008,7 +2008,7 @@
   <string name="SYS_VALID_TO" description="Date valid to">Gültig bis</string>
   <string name="SYS_VALUE">Wert</string>
   <string name="SYS_VALUE_LIST">Werteliste</string>
-  <string name="SYS_VALUE_LIST_DESC">In dieser Tabelle kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Für jede Zeile kann hier ein Eintrag des Dropdown-Listenfelds oder des Optionsfelds eingegeben werden.\nDas Profil wird später nicht als Text gespeichert, sondern die ausgewählte Position aus der Liste. Wenn du den Text in einer Zeile änderst, sehen alle Personen, denen der Wert bereits zugeordnet ist, den neuen Text sofort in ihrem Profil.\nEin Wert eines Optionsfeldes kann als Symbol anstelle eines Textes angezeigt werden. Das Symbol muss in der Web-Schriftart „Bootstrap Icons“ dargestellt werden. Gehe zu #VAR1#https://icons.getbootstrap.com#VAR2# und wähle ein Icon aus der Sammlung. Ein Tooltip für das Icon (z.B. gender-female|Dies ist ein weibliches Icon) kann optional über eine vertikale Trennlinie gesetzt werden.</string>
+  <string name="SYS_VALUE_LIST_DESC">In dieser Tabelle kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Für jede Zeile kann hier ein Eintrag des Dropdown-Listenfelds oder des Optionsfelds eingegeben werden.\nSpäter wird nicht der Text im Profil gespeichert, sondern die ausgewählte Position in der Liste. Wenn du den Text in einer Zeile änderst, sehen alle Personen, denen der Wert bereits zugeordnet ist, den neuen Text sofort in ihrem Profil.\nEin Wert eines Optionsfeldes kann als Symbol anstelle eines Textes angezeigt werden. Das Symbol muss in der Web-Schriftart „Bootstrap Icons“ dargestellt werden. Gehe zu #VAR1#https://icons.getbootstrap.com#VAR2# und wähle ein Icon aus der Sammlung. Ein Tooltip für das Icon (z. B. gender-female|Dies ist ein weibliches Icon) kann optional über eine vertikale Trennlinie gesetzt werden.</string>
   <string name="SYS_VARIOUS_ROLES">Verschiedene Rollen</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Verschiedene Beziehungen</string>
   <string name="SYS_VCARD">vCard</string>
@@ -2035,8 +2035,8 @@
   <string name="SYS_WANT_DISABLE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# deaktivieren? Seine Einstellungen und Daten bleiben erhalten.</string>
   <string name="SYS_WANT_ENABLE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# aktivieren?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Möchtest du das Plugin #VAR1_BOLD# installieren?\n\nEs wird heruntergeladen und hinzugefügt, aber nicht aktiviert. Aktiviere es anschließend in der Plugin-Verwaltung.</string>
-  <string name="SYS_WANT_REMOVE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# entfernen?\n\nDies gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktiviere das Plugin stattdessen, wenn du es nur nicht mehr verwenden möchtest.</string>
-  <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Möchtest du das Plugin #VAR1_BOLD# entfernen?\n\nEs ist in diesen Organisationen noch aktiviert: #VAR2_BOLD#.\n\nDas Entfernen gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktiviere das Plugin stattdessen, wenn du es nur nicht mehr verwenden möchtest.</string>
+  <string name="SYS_WANT_REMOVE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# entfernen?\n\nDies gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktiviere das Plugin stattdessen, wenn du es nicht mehr verwenden möchtest.</string>
+  <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Möchtest du das Plugin #VAR1_BOLD# entfernen?\n\nEs ist in diesen Organisationen noch aktiviert: #VAR2_BOLD#.\n\nDas Entfernen gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktiviere das Plugin stattdessen, wenn du es nicht mehr verwenden möchtest.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# aktualisieren?</string>
   <string name="SYS_WARNING">Warnung</string>
   <string name="SYS_WEBLINK">Weblink</string>
