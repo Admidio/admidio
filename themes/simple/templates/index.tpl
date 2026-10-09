@@ -55,6 +55,10 @@
     <script type="text/javascript">
         var gRootPath  = "{$urlAdmidio}";
         var gThemePath = "{$urlTheme}";
+        // translated texts for the functions of common_functions.js
+        var gTranslations = {
+            requestFailed: "{$l10n->get('SYS_REQUEST_FAILED')|escape:'javascript'}"
+        };
 
         {if $pwaEnabled}
         // Register Service Worker for PWA support
