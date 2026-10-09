@@ -28,6 +28,9 @@ use Admidio\Session\Entity\Session;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
+use Admidio\UI\Presenter\EventFormPresenter;
+use Admidio\UI\Presenter\InventoryItemPresenter;
+use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
 use DateTimeImmutable;
 
@@ -1366,6 +1369,142 @@ class InventoryTest extends DatabaseTestCase
             } finally {
                 $GLOBALS['gCurrentSession'] = $previousSession;
                 $_POST = $previousPost;
+            }
+        });
+    }
+
+    /**
+     * @testdox The event reservation status data contains only the current retry action and honors DataTables paging and sorting
+     */
+    public function testEventReservationStatusDataHonorsLatestReservationAndDataTablesParameters(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationstatus', true);
+        $category = $this->getFixture()->createAndSaveCategory('Reservation status events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $rejectedItemId = $this->createItem($itemsData, array('ITEMNAME' => 'A rejected event item'));
+            $requestedItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Z requested event item'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event reservation status');
+            $event->setValue('dat_begin', '2030-08-20 10:00:00');
+            $event->setValue('dat_end', '2030-08-20 12:00:00');
+            $event->save();
+
+            $reservationService = new ReservationService($this->getDatabase());
+            $reservationService->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($rejectedItemId, $requestedItemId),
+                new DateTimeImmutable('2030-08-20 10:00:00'),
+                new DateTimeImmutable('2030-08-20 12:00:00')
+            );
+            $rejectedReservationId = (int)$this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_ini_id = ?',
+                array((int)$event->getValue('dat_id'), $rejectedItemId)
+            )->fetchColumn();
+            $reservationService->changeStatus(new Reservation($this->getDatabase(), $rejectedReservationId), Reservation::STATUS_REJECTED);
+
+            $presenter = new EventFormPresenter();
+            $data = $presenter->getReservationStatusData(
+                (string)$event->getValue('dat_uuid'),
+                'this',
+                7,
+                0,
+                1,
+                '',
+                1,
+                'asc'
+            );
+
+            $this->assertSame(7, $data['draw']);
+            $this->assertSame(2, $data['recordsTotal']);
+            $this->assertSame(2, $data['recordsFiltered']);
+            $this->assertCount(1, $data['data']);
+            $this->assertStringContainsString('A rejected event item', $data['data'][0][1]);
+            $this->assertStringContainsString('event-inventory-reservation-request-again', $data['data'][0][3]);
+
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $previousPost = $_POST;
+            $session = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $GLOBALS['gCurrentSession'] = $session;
+            $_POST = array('adm_csrf_token' => $session->getCsrfToken());
+            try {
+                $response = (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $rejectedItemId
+                );
+                $this->assertSame('success', $response['status']);
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+                $_POST = $previousPost;
+            }
+
+            $dataAfterRequestAgain = $presenter->getReservationStatusData(
+                (string)$event->getValue('dat_uuid'),
+                'this',
+                8,
+                0,
+                25,
+                '',
+                -1,
+                'desc'
+            );
+            $this->assertSame(3, $dataAfterRequestAgain['recordsTotal']);
+            foreach ($dataAfterRequestAgain['data'] as $row) {
+                $this->assertSame('', $row[3]);
+            }
+
+            $filteredData = $presenter->getReservationStatusData(
+                (string)$event->getValue('dat_uuid'),
+                'this',
+                9,
+                0,
+                25,
+                'requested',
+                -1,
+                'desc'
+            );
+
+            $this->assertSame(3, $filteredData['recordsTotal']);
+            $this->assertSame(2, $filteredData['recordsFiltered']);
+            $this->assertStringContainsString('A rejected event item', implode(' ', array_column($filteredData['data'], 1)));
+            $this->assertStringContainsString('Z requested event item', implode(' ', array_column($filteredData['data'], 1)));
+        });
+    }
+
+    /**
+     * @testdox Event reservation status data requires the right to edit the event
+     */
+    public function testEventReservationStatusDataRequiresEventEditPermission(): void
+    {
+        $eventAdmin = $this->makeInventoryUser('inveventreservationstatusadmin', true);
+        $inventoryAdmin = $this->makeInventoryUser('inveventreservationstatusinventory', false);
+        $category = $this->getFixture()->createAndSaveCategory('Reservation status access events', 'EVT', self::ORG_ID);
+
+        $eventUuid = $this->withCurrentUser($eventAdmin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Protected event reservation status');
+            $event->setValue('dat_begin', '2030-08-21 10:00:00');
+            $event->setValue('dat_end', '2030-08-21 12:00:00');
+            $event->save();
+
+            return (string)$event->getValue('dat_uuid');
+        });
+
+        $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($eventUuid) {
+            try {
+                (new EventFormPresenter())->getReservationStatusData($eventUuid, 'this', 1, 0, 25, '', -1, 'desc');
+                $this->fail('An inventory administrator must not read reservation data for an event they cannot edit.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
             }
         });
     }
