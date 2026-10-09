@@ -181,7 +181,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">High</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Low</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middle</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">None</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Very high</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Path for calculating disk usage</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">The path to the folder for calculating the disk usage. This is used in the system information to calculate the disk usage of the Admidio installation. The path can be defined as an absolute path or as a relative path to the Admidio main directory. If the path is left blank, the disk usage will be calculated for the server\'s root directory. (default: empty)</string>
@@ -425,6 +424,7 @@
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
+  <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individual recipient</string>
@@ -716,6 +716,7 @@
   <string name="SYS_FILE_EXIST">File #VAR1# already exists!\n\nPlease select different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">File type is not allowed on this server.</string>
   <string name="SYS_FILE_NAME_RULES">The file should be named in such a way that you can infer the content from the name. The file name has an influence on the display order. In a folder where, for example, meeting minutes are stored, the file names should always begin with the date (yyyy-mm-dd).</string>
+  <string name="SYS_FILE_NOT_CREATED">File #VAR1_BOLD# could not be created.</string>
   <string name="SYS_FILE_NOT_EXIST">Selected file does not exist on the server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">The file is physically not available anymore on the server. It should be deleted from the database.</string>
   <string name="SYS_FILE_RENAME_ERROR">An error occurred while file #VAR1# was renamed.</string>
@@ -1149,6 +1150,7 @@
   <string name="SYS_NO_PICTURE_SELECTED">No picture file selected.</string>
   <string name="SYS_NO_QUOTATION">No quotation</string>
   <string name="SYS_NO_RECURRENCE">No recurrence</string>
+  <string name="SYS_NO_RELATIONSHIP_TYPES">No relationship types have been created yet. Please create a relationship type in the relationship configurations first.</string>
   <string name="SYS_NO_RIGHTS">You do not have the required permission to perform this action.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">You do not have the right to view the list of the selected roles.</string>
   <string name="SYS_NO_ROLE_GIVEN">No role has been specified.</string>
@@ -1598,6 +1600,7 @@
   <string name="SYS_SERVER_NO_UPLOAD">Server settings do not allow files uploads.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
   <string name="SYS_SETTINGS">Preferences</string>
+  <string name="SYS_SHARE_LINK">Share link</string>
   <string name="SYS_SHOW_ALL">Show all</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional show all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (default: yes)</string>

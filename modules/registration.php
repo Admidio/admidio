@@ -21,6 +21,7 @@
  *             send_login    - Registration does not need to be assigned, simply send login data
  ***********************************************************************************************
  */
+use Admidio\UI\Presenter\ContactsPresenter;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -82,7 +83,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new ModuleContacts('adm_registration_assign', $headline);
+        $page = new ContactsPresenter('adm_registration_assign', $headline);
         $registrationUser = new User($gDb, $gProfileFields);
         $registrationUser->readDataByUuid($getUserUUID);
         $page->createContentAssignUser($registrationUser, true);

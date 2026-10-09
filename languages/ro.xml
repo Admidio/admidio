@@ -178,7 +178,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Înalt</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Scăzut</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mediu</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Inexistent</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Foarte înalt</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Calea de calcul a spațiului utilizat pe disc</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Calea către folderul utilizat pentru calcularea spațiului ocupat pe disc. Aceasta este utilizată în informațiile de sistem pentru a calcula spațiul ocupat pe disc de instalarea Admidio. Calea poate fi definită ca o cale absolută sau ca o cale relativă față de directorul principal Admidio. Dacă câmpul este lăsat necompletat, spațiul ocupat pe disc va fi calculat pentru directorul rădăcină al serverului. (implicit: gol)</string>

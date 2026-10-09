@@ -525,6 +525,87 @@ function moveTableRow(element, updateSequenceUrl, csrfToken) {
 }
 
 /**
+ * Copies the text to the clipboard. The clipboard API is only available in secure contexts (https),
+ * otherwise the older execCommand is used.
+ * @param {string} text The text that should be copied to the clipboard.
+ * @returns {Promise<boolean>} Resolves with true if the text was copied.
+ */
+function copyToClipboard(text) {
+    const copyWithExecCommand = function () {
+        // within an open modal the textarea must be part of the modal, otherwise the focus trap of the
+        // modal doesn't allow to select its text
+        const activeElement = document.activeElement;
+        const container = (activeElement && activeElement.closest(".modal")) || document.body;
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.cssText = "position: fixed; top: 0; left: 0; opacity: 0;";
+        container.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        let copied = false;
+        try {
+            copied = document.execCommand("copy");
+        } catch (error) {
+            copied = false;
+        }
+        textarea.remove();
+        if (activeElement && typeof activeElement.focus === "function") {
+            activeElement.focus();
+        }
+        return copied;
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).then(function () {
+            return true;
+        }, copyWithExecCommand);
+    }
+    return Promise.resolve(copyWithExecCommand());
+}
+
+/**
+ * Checks if the browser can share a link with the share dialog of the system (Web Share API).
+ * @returns {boolean} Returns true if the share dialog is available.
+ */
+function canShareLink() {
+    return typeof navigator.share === "function";
+}
+
+/**
+ * Shares a link with the share dialog of the system. If the browser can't share links, the link is
+ * copied to the clipboard, and if this also fails, the link is shown in a prompt to copy it manually.
+ * @param {string} url         The link that should be shared.
+ * @param {string} title       The title of the shared link, e.g. the name of the file.
+ * @param {string} promptLabel The text of the prompt that shows the link.
+ * @returns {Promise<string>} Resolves with "shared", "cancelled", "copied" or "prompt".
+ */
+function shareOrCopyLink(url, title, promptLabel) {
+    const copyLink = function () {
+        return copyToClipboard(url).then(function (copied) {
+            if (copied) {
+                return "copied";
+            }
+            window.prompt(promptLabel, url);
+            return "prompt";
+        });
+    };
+
+    if (canShareLink()) {
+        return navigator.share({title: title, url: url}).then(function () {
+            return "shared";
+        }, function (error) {
+            // the user closed the share dialog
+            if (error && error.name === "AbortError") {
+                return "cancelled";
+            }
+            return copyLink();
+        });
+    }
+    return copyLink();
+}
+
+/**
  * The function will show a modal window in bootstrap style with a message.
  * @param {string} message Text of the message that should be shown.
  * @param {string} title   Optional a title for the modal. If not set the default "notice" will be shown.

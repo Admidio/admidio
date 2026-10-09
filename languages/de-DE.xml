@@ -183,7 +183,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hoch</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Niedrig</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Keine</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Sehr hoch</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Pfad zur Berechnung der Speicherplatzbelegung</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Pfad zu dem Ordner, für den die Speicherplatzbelegung berechnet wird. Diese Angabe wird in den Systeminformationen verwenden Siet, um die Speicherplatzbelegung der Admidio-Installation zu berechnen. Der Pfad kann absolut oder relativ zum Admidio-Hauptverzeichnis angegeben werden. Bleibt das Feld leer, wird die Speicherplatzbelegung für das Stammverzeichnis des Servers berechnet. (Standard: leer)</string>
@@ -432,6 +431,7 @@
   <string name="SYS_COPY_CLIPBOARD">In Zwischenablage kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
+  <string name="SYS_COPY_LINK">Link kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
@@ -725,6 +725,7 @@
   <string name="SYS_FILE_EXIST">Die Datei #VAR1# existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
   <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
+  <string name="SYS_FILE_NOT_CREATED">Die Datei #VAR1_BOLD# konnte nicht erstellt werden.</string>
   <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
@@ -1161,6 +1162,7 @@
   <string name="SYS_NO_PICTURE_SELECTED">Es wurde keine Bilddatei ausgewählt.</string>
   <string name="SYS_NO_QUOTATION">Kein Anführungszeichen</string>
   <string name="SYS_NO_RECURRENCE">Keine Wiederholung</string>
+  <string name="SYS_NO_RELATIONSHIP_TYPES">Es wurden noch keine Beziehungstypen angelegt. Bitte legen Sie zuerst in den Beziehungskonfigurationen einen Beziehungstyp an.</string>
   <string name="SYS_NO_RIGHTS">Sie haben kein Recht, diese Aktion auszuführen.</string>
   <string name="SYS_NO_RIGHTS_VIEW_LIST">Sie besitzen keine Rechte Listen der hinterlegten Rollen anzuschauen.</string>
   <string name="SYS_NO_ROLE_GIVEN">Es wurde keine Rolle angegeben.</string>
@@ -1170,7 +1172,7 @@
   <string name="SYS_NO_USER_FOUND">Es wurde kein:e Benutzer:in gefunden, der den gewählten Kriterien entspricht.</string>
   <string name="SYS_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Benutzer:innen besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
   <string name="SYS_NOBODY">Niemand</string>
-  <string name="SYS_NONE">Keiner</string>
+  <string name="SYS_NONE">Keine</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
   <string name="SYS_NOT_INSTALLED">Nicht installiert</string>
@@ -1612,6 +1614,7 @@
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ordnerberechtigungen setzen</string>
   <string name="SYS_SETTINGS">Einstellungen</string>
+  <string name="SYS_SHARE_LINK">Link teilen</string>
   <string name="SYS_SHOW_ALL">Alle anzeigen</string>
   <string name="SYS_SHOW_ALL_CONTACTS">Optional alle Kontakte anzeigen</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den Kontakten der aktuellen Organisation optional auch Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive und inaktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>

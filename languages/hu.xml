@@ -178,7 +178,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Erős</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Alacsony</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Közepes</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Semelyik</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Nagyon erős</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">A lemezhasználat kiszámításának útvonala</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">A lemezhasználat kiszámításához használt mappa elérési útvonala. Ezt a rendszerinformációkban használják az Admidio telepítés lemezhasználatának kiszámításához. Az elérési útvonal megadható abszolút útvonalként vagy az Admidio főkönyvtárához viszonyított relatív útvonalként. Ha az elérési útvonalat üresen hagyják, a lemezhasználatot a szerver gyökérkönyvtárára vonatkozóan számítják ki. (alapértelmezett: üres)</string>

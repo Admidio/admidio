@@ -26,7 +26,7 @@ use DateTime;
  *
  * // read membership data and then stop membership
  * $membership = new Membership($gDb);
- * $membership->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+ * $membership->readDataByRoleAndUser($roleId, $userId);
  * $membership->stopMembership();
  * ```
  * @copyright The Admidio Team
@@ -60,6 +60,36 @@ class Membership extends Entity
     }
 
     /**
+     * Reads the membership of a user in a role. A user could have several membership periods in a role,
+     * e.g. if the leader flag was changed or the user was removed and assigned again. Then the period that
+     * is valid today is read, otherwise the period with the latest end date. If the user has no membership
+     * in the role, then role and user are set in the object, so a new membership could be saved.
+     * @param int $roleId ID of the role whose membership should be read.
+     * @param int $userId ID of the user whose membership should be read.
+     * @return bool Returns **true** if a membership of the user in the role was found.
+     * @throws Exception
+     */
+    public function readDataByRoleAndUser(int $roleId, int $userId): bool
+    {
+        $sql = 'SELECT mem_id
+                  FROM ' . TBL_MEMBERS . '
+                 WHERE mem_rol_id = ? -- $roleId
+                   AND mem_usr_id = ? -- $userId
+              ORDER BY CASE WHEN mem_begin <= ? AND mem_end >= ? THEN 0 ELSE 1 END, mem_end DESC, mem_begin DESC';
+        $memId = $this->db->queryPrepared($sql, array($roleId, $userId, DATE_NOW, DATE_NOW))->fetchColumn();
+
+        if ($memId !== false) {
+            return $this->readDataById((int)$memId);
+        }
+
+        $this->clear();
+        $this->setValue('mem_rol_id', $roleId);
+        $this->setValue('mem_usr_id', $userId);
+
+        return false;
+    }
+
+    /**
      * Deletes a membership for the assigned role and user. In opposite to removeMembership
      * this method will delete the entry, and you can't see any history assignment.
      * If the user is the current user, then initiate a refresh of his role cache.
@@ -74,7 +104,7 @@ class Membership extends Entity
 
         // if role and user are set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
-            $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+            $this->readDataByRoleAndUser($roleId, $userId);
         }
 
         if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
@@ -209,7 +239,7 @@ class Membership extends Entity
 
         // if role and user are set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
-            $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+            $this->readDataByRoleAndUser($roleId, $userId);
         }
 
         if ($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
@@ -265,7 +295,7 @@ class Membership extends Entity
 
         // if role and user are set, then search for this membership and load data into class
         if ($roleId > 0 && $userId > 0) {
-            $this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+            $this->readDataByRoleAndUser($roleId, $userId);
         }
 
         if (!$this->newRecord && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0) {
