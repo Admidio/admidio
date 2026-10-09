@@ -253,7 +253,7 @@
   <string name="SYS_ALBUM_CHANGED_TITLE">Ein Fotoalbum wurde geändert auf #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Dieses Album enthält leider noch keine Fotos.</string>
   <string name="SYS_ALBUM_CREATED_TITLE">Ein neues Fotoalbum wurde angelegt auf #VAR1#</string>
-  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchenden der Webseite ohne Fotoverwaltungsrecht wird dieses Album nicht mehr angezeigt.</string>
+  <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nGäste der Webseite ohne Fotoverwaltungsrecht wird dieses Album nicht mehr angezeigt.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist gesperrt und wird Gästen und Mitgliedern nicht angezeigt.</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_CONTACTS">Alle Kontakte</string>
@@ -267,7 +267,7 @@
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z.B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
-  <string name="SYS_ALSO_VISITORS">auch Besuchende</string>
+  <string name="SYS_ALSO_VISITORS">auch Gäste</string>
   <string name="SYS_ANNOUNCEMENT">Ankündigung</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
@@ -1053,7 +1053,7 @@
   <string name="SYS_MAKE_FORMER_SELECTION">Du kannst die ausgewählten Kontakte zu Ehemaligen machen. Dabei werden die Daten nicht gelöscht, sondern nur alle Rollenmitgliedschaften beendet. Das hat den Vorteil, dass du später immer sehen kannst, welche Daten und Rollen du diesen Kontakten zugewiesen hattest.</string>
   <string name="SYS_MALE">Männlich</string>
   <string name="SYS_MANAGE_CATEGORY_REPORTS">Kategoriereporte verwalten</string>
-  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Besuchende, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
+  <string name="SYS_MANAGE_NEW_REGISTRATIONS_DESC">Gäste, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</string>
   <string name="SYS_MANAGE_PROFILE_FIELDS_DESC">Neue Profilfelder und deren Eigenschaften können definiert, sowie von vorhandenen Profilfelder verändert werden. Die Felder können Kategorien zugeordnet und mit Rechten versehen werden, welche Rollen welche Profilfelder sehen oder bearbeiten können.</string>
   <string name="SYS_MANUAL_APPROVAL">Manuelle Freigabe</string>
   <string name="SYS_MANUAL_APPROVAL_DESC">Neue Registrierungen müssen manuell von Rollenmitgliedern mit dem Recht #VAR1_BOLD# freigegeben werden. Erst danach ist es für das neue Mitglied möglich sich am System anzumelden. Wird die Einstellung deaktiviert, so können sich neue Mitglieder nach erfolgreicher Registrierung direkt am System anmelden. (Voreinstellung: ja)</string>
@@ -2028,7 +2028,7 @@
   <string name="SYS_VISIBILITY">Sichtbarkeit</string>
   <string name="SYS_VISIBLE">Sichtbar</string>
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
-  <string name="SYS_VISITORS">Besuchende</string>
+  <string name="SYS_VISITORS">Gäste</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Möchtest du die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_DELETE_ENTRY">Möchtest du den Eintrag #VAR1_BOLD# löschen?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
