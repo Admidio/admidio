@@ -114,6 +114,9 @@ class InventoryReservationPresenter extends PagePresenter
         ), 'rows' => array());
         $user = new User($gDb, $gProfileFields);
         foreach ($rows as $row) {
+            $email = '';
+            $mailUrl = '';
+            $originUrl = '';
             if ((int)$row['ivr_usr_id'] > 0 && $user->readDataById((int)$row['ivr_usr_id'])) {
                 $requester = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
                 $email = (string)$user->getValue('EMAIL');
@@ -138,8 +141,6 @@ class InventoryReservationPresenter extends PagePresenter
                 $origin = $reservationOrigins[(int)$row['ivr_usr_id'] > 0 ? 'member' : 'guest'];
             }
             $reservationRowId = 'adm_inventory_reservation_' . $row['ivr_uuid'];
-            $mailUrl ??= '';
-            $originUrl ??= '';
 
             $actions = array();
             $canManageReservation = $isManager && InventoryAccessService::canManageReservationItem((int)$row['ivr_ini_id']);
@@ -163,7 +164,7 @@ class InventoryReservationPresenter extends PagePresenter
                     Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success',
                     default => 'bi-x-circle-fill text-danger'
                 };
-            $templateData['rows'][] = array('id' => $reservationRowId, 'status' => $row['ivr_status'], 'itemName' => $row['item_name'], 'requester' => $requester, 'email' => $email ?? '', 'mailUrl' => $mailUrl, 'timestamp' => $row['ivr_timestamp_create'], 'begin' => $row['ivr_begin'], 'end' => $row['ivr_end'], 'origin' => $origin, 'originUrl' => $originUrl, 'comment' => $row['ivr_comment'], 'actions' => $actions, 'statusIcon' => $buttonIcon, 'statusLabel' => $statusLabels[$row['ivr_status']]);
+            $templateData['rows'][] = array('id' => $reservationRowId, 'status' => $row['ivr_status'], 'itemName' => $row['item_name'], 'requester' => $requester, 'email' => $email, 'mailUrl' => $mailUrl, 'timestamp' => $row['ivr_timestamp_create'], 'begin' => $row['ivr_begin'], 'end' => $row['ivr_end'], 'origin' => $origin, 'originUrl' => $originUrl, 'comment' => $row['ivr_comment'], 'actions' => $actions, 'statusIcon' => $buttonIcon, 'statusLabel' => $statusLabels[$row['ivr_status']]);
         }
         $this->assignSmartyVariable('reservationList', $templateData);
         $this->addHtmlByTemplate('modules/inventory.reservations.list.tpl');
