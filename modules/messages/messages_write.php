@@ -71,7 +71,8 @@ try {
         }
 
         $reservationRecipient = 'reservation:' . $getReservationUUID;
-        $reservationRecipientName = trim($reservation->getValue('ivr_guest_name') . ' <' . $reservation->getValue('ivr_guest_email') . '>');
+        $reservationRecipientName = $gL10n->get('SYS_VISITORS') . ': '
+            . trim($reservation->getValue('ivr_guest_name') . ' <' . $reservation->getValue('ivr_guest_email') . '>');
     }
 
     // Check form values
