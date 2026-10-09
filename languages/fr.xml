@@ -214,7 +214,6 @@
   <string name="ORG_PARENT_ORGANIZATION_DESC">Définissez ici l\'organisation mère. Les organisations parentes peuvent créer des événements et des annonces, par exemple, qui seront affichés dans l\'organisation sélectionnée (enfant).</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Force du mot de passe</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Ici, vous pouvez spécifier à quel point les mots de passe doivent être sûrs et complexes.\n\nLa valeur entre parenthèses indique combien de tentatives sont nécessaires en moyenne jusqu\'à ce que le mot de passe soit déterminé.\n\nNon : mot de passe risqué (&lt;10^3)\nFaible : protection contre les attaques en ligne restreintes. (&lt;10^6)\nMoyen : protection contre les attaques en ligne sans restriction. (&lt;10^8)\nÉlevé  : Protection modérée contre le hachage hors ligne. (&lt;10 ^10)\nTrès élevé : Forte protection contre le hachage hors ligne. (&gt;= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Aucun</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Faible</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Moyen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Élevé</string>

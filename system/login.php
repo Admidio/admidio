@@ -15,6 +15,7 @@
  *
  * **********************************************************************************************
  */
+use Admidio\Session\Service\LoginService;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -39,12 +40,12 @@ try {
                 <i class="bi bi-info-circle-fill"></i>' . $gL10n->get('SYS_LOGIN_TO_VIEW_PAGE') . '</div>');
         }
 
-        $loginModule = new ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();
     } elseif ($getMode === 'check') {
         // check the data of the login dialog
-        $loginModule = new ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->checkLogin();
 
         // check if browser can set cookies and throw error if not

@@ -30,7 +30,7 @@ class MessageService
      * Send already validated message data.
      *
      * Recipient values use the same representation as the current messages module:
-     * user UUIDs or role values understood by ModuleMessages::msgGroupSplit().
+     * user UUIDs or role values understood by MessageService::splitRoleRecipient().
      *
      * @param array<int,string> $recipients
      * @param array<int,array{path:string,name:string,type?:string}> $attachments
@@ -87,8 +87,7 @@ class MessageService
 
             foreach ($recipients as $recipient) {
                 if (str_contains($recipient, ':')) {
-                    $moduleMessages = new \ModuleMessages();
-                    $group = $moduleMessages->msgGroupSplit($recipient);
+                    $group = self::splitRoleRecipient($recipient);
 
                     $sql = 'SELECT rol_mail_this_role, rol_id, rol_name
                               FROM ' . TBL_ROLES . '
@@ -308,5 +307,124 @@ class MessageService
         }
 
         return $message;
+    }
+
+    /**
+     * Return the role name with the selected membership status.
+     * @param string $roleIdsString A role recipient such as "groupID: UUID+2".
+     * @throws Exception
+     */
+    public function getRoleRecipientName(string $roleIdsString): string
+    {
+        global $gL10n, $gCurrentOrgId;
+
+        $groupInfo = self::splitRoleRecipient($roleIdsString);
+
+        $sql = 'SELECT rol_name
+                  FROM ' . TBL_ROLES . '
+            INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = rol_cat_id
+                 WHERE rol_uuid = ? -- $groupInfo[\'uuid\']
+                   AND (  cat_org_id = ? -- $gCurrentOrgId
+                       OR cat_org_id IS NULL)';
+        $statement = $this->db->queryPrepared($sql, array($groupInfo['uuid'], $gCurrentOrgId));
+        $roleName = $statement->fetchColumn();
+
+        return match ($groupInfo['status']) {
+            Email::EMAIL_ONLY_FORMER_MEMBERS => $roleName . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')',
+            Email::EMAIL_ALL_MEMBERS => $roleName . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')',
+            default => $roleName,
+        };
+    }
+
+    /**
+     * Split a role recipient into its UUID and membership selection.
+     * @param string $groupString A role recipient such as "groupID: 93ce816e-7cfd-45e1-b025-a3644828c47c+2".
+     * @return array{uuid:string,status:int,role_mode:string|int}
+     */
+    public static function splitRoleRecipient(string $groupString): array
+    {
+        $groupSplit = explode(':', $groupString);
+        $groupIdAndStatus = explode('+', trim($groupSplit[1]));
+
+        if (count($groupIdAndStatus) === 1) {
+            $status = Email::EMAIL_ONLY_ACTIVE_MEMBERS;
+            $groupIdAndStatus[] = 0;
+        } elseif ($groupIdAndStatus[1] === '1') {
+            $status = Email::EMAIL_ONLY_FORMER_MEMBERS;
+        } elseif ($groupIdAndStatus[1] === '2') {
+            $status = Email::EMAIL_ALL_MEMBERS;
+        } else {
+            $status = Email::EMAIL_ONLY_ACTIVE_MEMBERS;
+        }
+
+        return array(
+            'uuid'      => $groupIdAndStatus[0],
+            'status'    => $status,
+            'role_mode' => $groupIdAndStatus[1]
+        );
+    }
+
+    /**
+     * Return the email messages sent by a user.
+     * @throws Exception
+     */
+    public function getUserEmails(int $userId): \PDOStatement
+    {
+        $sql = 'SELECT msg_id
+                  FROM ' . TBL_MESSAGES . '
+                 WHERE msg_type = \'EMAIL\'
+                   AND msg_usr_id_sender = ? -- $userId
+              ORDER BY msg_id DESC';
+
+        return $this->db->queryPrepared($sql, array($userId));
+    }
+
+    /**
+     * Return private messages for a user.
+     * @throws Exception
+     */
+    public function getUserUnreadMessages(int $userId): \PDOStatement
+    {
+        $sql = 'SELECT msg_id
+                  FROM ' . TBL_MESSAGES . '
+                 INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
+                 WHERE msg_type = \'PM\'
+                   AND msr_usr_id = ? -- $userId
+                   AND msg_read = 1
+              ORDER BY msg_id DESC';
+
+        return $this->db->queryPrepared($sql, array($userId));
+    }
+
+    /**
+     * Return private messages involving a user.
+     * @throws Exception
+     */
+    public function getUserMessages(int $userId): \PDOStatement
+    {
+        $sql = 'SELECT msg_id
+                  FROM ' . TBL_MESSAGES . '
+                 INNER JOIN ' . TBL_MESSAGES_RECIPIENTS . ' ON msr_msg_id = msg_id
+                 WHERE msg_type = \'PM\'
+                   AND ( (msr_usr_id = ? AND msg_read <> 1) -- $userId
+                       OR (msg_usr_id_sender  = ? AND msg_read < 2)) -- $userId
+              ORDER BY msg_id DESC';
+
+        return $this->db->queryPrepared($sql, array($userId, $userId));
+    }
+
+    /**
+     * Return the message ID of the Admidio chat.
+     * @throws Exception
+     */
+    public function getChatId(): int
+    {
+        $sql = 'SELECT msg_id
+                  FROM ' . TBL_MESSAGES . '
+                 WHERE msg_type = \'CHAT\'';
+        $statement = $this->db->queryPrepared($sql);
+
+        return (int) $statement->fetchColumn();
     }
 }

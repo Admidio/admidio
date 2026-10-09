@@ -173,7 +173,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Vysoká</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Nízká</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Střední</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Žádná</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Velmi vysoká</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Cesta pro výpočet využití disku</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Cesta ke složce pro výpočet využití disku. Tato hodnota se používá v systémových informacích k výpočtu místa obsazeného instalací Admidio. Cestu lze definovat jako absolutní nebo jako relativní vzhledem k hlavnímu adresáři Admidio. Pokud zůstane pole prázdné, vypočítá se využití disku pro kořenový adresář serveru. (výchozí: prázdné)</string>

@@ -12,13 +12,18 @@
 
 namespace Admidio\Tests\Integration\Workflows;
 
+use Admidio\Application\Navigation;
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Service\EventService;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
+use Admidio\Roles\Entity\RolesRights;
+use Admidio\Session\Entity\Session;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Users\Entity\User;
 
 class EventParticipationWorkflowTest extends DatabaseTestCase
@@ -112,6 +117,84 @@ class EventParticipationWorkflowTest extends DatabaseTestCase
     {
         $role = new Role($this->getDatabase(), $rolId);
         $role->startMembership($usrId, $leader);
+    }
+
+    /**
+     * @testdox A submitted guest count only applies when the event allows additional guests
+     */
+    public function testGuestCountRespectsEventSetting(): void
+    {
+        $fixture = $this->getFixture();
+        $alice = $fixture->createAndSaveUser('guestAlice', 'guest-alice@example.local');
+        $bob = $fixture->createAndSaveUser('guestBob', 'guest-bob@example.local');
+        $eligibleRole = $fixture->createAndSaveRole('Eligible participants', self::ORG_ID);
+        $fixture->assignUserToRole($alice['usr_id'], $eligibleRole['rol_id']);
+        $fixture->assignUserToRole($bob['usr_id'], $eligibleRole['rol_id']);
+
+        $event = $this->asAdministrator(function () use ($eligibleRole) {
+            $event = $this->createEventWithParticipation('Guest policy', '2030-07-01', 4);
+            (new RolesRights($this->getDatabase(), 'event_participation', $event['dat_id']))
+                ->addRoles([$eligibleRole['rol_id']]);
+
+            return $event;
+        });
+
+        $previousSession = $GLOBALS['gCurrentSession'] ?? null;
+        $previousNavigation = $GLOBALS['gNavigation'] ?? null;
+        $previousPost = $_POST;
+        $sessionCookieName = COOKIE_PREFIX . '_SESSION_ID';
+        $previousSessionCookie = $_COOKIE[$sessionCookieName] ?? null;
+
+        try {
+            $_COOKIE[$sessionCookieName] = 'event-guest-policy-test';
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase());
+            $GLOBALS['gNavigation'] = new Navigation();
+            $GLOBALS['gNavigation']->addUrl('https://example.org/events.php', 'Events');
+
+            $participate = function (array $person, int $guests, bool $allowGuests = false) use ($event): void {
+                $form = new FormPresenter('participation', 'modules/events.participation.edit.tpl');
+                $form->addMultilineTextInput('dat_comment', 'Comment', '', 6);
+                $form->addInput('additional_guests', 'Guests', '0', [
+                    'type' => 'number',
+                    'property' => $allowGuests ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_HIDDEN
+                ]);
+                $GLOBALS['gCurrentSession']->addFormObject($form);
+                $_POST = ['adm_csrf_token' => $form->getCsrfToken(), 'dat_comment' => '', 'additional_guests' => (string)$guests];
+
+                $user = $this->loadUserInOrganization($person['usr_id'], self::ORG_ID);
+                $this->withCurrentUser($user, self::ORG_ID, true, function () use ($event, $person): void {
+                    (new EventService($this->getDatabase()))->changeParticipation(
+                        (new Event($this->getDatabase(), $event['dat_id']))->getValue('dat_uuid'),
+                        'participate',
+                        $person['usr_uuid']
+                    );
+                });
+            };
+
+            $participate($alice, 2);
+            $this->assertSame(1, (new Participants($this->getDatabase(), $event['rol_id']))->getCount());
+
+            $participate($bob, 0);
+            $this->assertSame(2, (new Participants($this->getDatabase(), $event['rol_id']))->getCount());
+
+            $this->asAdministrator(function () use ($event): void {
+                $entity = new Event($this->getDatabase(), $event['dat_id']);
+                $entity->setValue('dat_additional_guests', 1);
+                $entity->save();
+            });
+
+            $participate($alice, 1, true);
+            $this->assertSame(3, (new Participants($this->getDatabase(), $event['rol_id']))->getCount());
+        } finally {
+            $GLOBALS['gCurrentSession'] = $previousSession;
+            $GLOBALS['gNavigation'] = $previousNavigation;
+            $_POST = $previousPost;
+            if ($previousSessionCookie === null) {
+                unset($_COOKIE[$sessionCookieName]);
+            } else {
+                $_COOKIE[$sessionCookieName] = $previousSessionCookie;
+            }
+        }
     }
 
     /**

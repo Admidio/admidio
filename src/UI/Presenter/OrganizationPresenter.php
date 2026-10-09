@@ -100,7 +100,7 @@ class OrganizationPresenter extends PagePresenter
                     $sqlData,
                     array(
                         'defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'),
-                        'firstEntry' => array('', $gL10n->get('ORG_NONE')),
+                        'firstEntry' => array('', $gL10n->get('SYS_NONE')),
                         'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC'
                     )
                 );
