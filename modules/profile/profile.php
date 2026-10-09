@@ -110,18 +110,34 @@ try {
 
         function formSubmitEvent(rolesAreaId = "") {
             $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
-                var memberUuid = $(this).attr("data-admidio");
-                var formAlert  = $("#adm_membership_period_form_" + memberUuid + " .form-alert");
+                var form = $(this);
+                var submitButton = form.find("button[type=submit]");
+                var memberUuid = submitButton.attr("data-admidio");
+                var formAlert  = form.find(".form-alert");
 
                 event.preventDefault(); // avoid to execute the actual submit of the form.
                 formAlert.hide();
 
+                // show that the data is saved, a slow server could otherwise look like nothing happens
+                submitButton.prop("disabled", true);
+                submitButton.prepend("<span class=\"spinner-border spinner-border-sm me-1\" role=\"status\" aria-hidden=\"true\"></span>");
+
                 $.post({
-                    url: $(this).attr("action"),
-                    data: $(this).serialize(),
+                    url: form.attr("action"),
+                    data: form.serialize(),
                     success: function(data)
                     {
-                        if (data === "success") {
+                        // errors are returned as JSON with status and message
+                        var returnData = data;
+                        if (typeof data === "string" && data.charAt(0) === "{") {
+                            try {
+                                returnData = JSON.parse(data);
+                            } catch (exception) {
+                                returnData = data;
+                            }
+                        }
+
+                        if (data === "success" || returnData.status === "success") {
                             formAlert.attr("class", "alert alert-success form-alert");
                             formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                             formAlert.fadeIn("slow");
@@ -132,17 +148,37 @@ try {
                             membershipPeriod.animate({opacity: 1.0}, 5000);
                             membershipPeriod.fadeOut("slow");
 
+                            // the reloaded sections bind this event to their new forms
                             profileJS.reloadRoleMemberships();
                             profileJS.reloadFormerRoleMemberships();
                             profileJS.reloadFutureRoleMemberships();
-                            formSubmitEvent();
                         } else {
+                            var message = data;
+                            if (typeof returnData === "object" && returnData.message) {
+                                message = returnData.message;
+                            }
                             formAlert.attr("class", "alert alert-danger form-alert");
                             formAlert.fadeIn();
-                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
+                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + message);
                         }
+                    },
+                    error: function(jqXHR)
+                    {
+                        // the request failed or the server didn\'t answer, e.g. because of a timeout
+                        var message = "' . $gL10n->get('SYS_REQUEST_FAILED') . '";
+                        if (jqXHR.status > 0) {
+                            message += " (HTTP " + jqXHR.status + ")";
+                        }
+                        formAlert.attr("class", "alert alert-danger form-alert");
+                        formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + message);
+                        formAlert.fadeIn();
+                    },
+                    complete: function()
+                    {
+                        submitButton.prop("disabled", false);
+                        submitButton.find(".spinner-border").remove();
                     }
-                 });
+                });
                 return false;
             });
         }
