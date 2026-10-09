@@ -308,11 +308,12 @@ try {
             $begin = new DateTime($values['reservation_begin'] . ' ' . $values['reservation_begin_time']);
             $end = new DateTime($values['reservation_end'] . ' ' . $values['reservation_end_time']);
             $service = new ReservationService($gDb);
+            $guestName = trim(($values['guest_first_name'] ?? '') . ' ' . ($values['guest_last_name'] ?? ''));
             $reservation = $service->request(
                 (int)$item->getValue('ini_id'),
                 $begin,
                 $end,
-                $values['guest_name'] ?? '',
+                $guestName,
                 $values['guest_email'] ?? '',
                 null,
                 $values['reservation_comment'] ?? ''

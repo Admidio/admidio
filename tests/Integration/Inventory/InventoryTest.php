@@ -793,6 +793,38 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Guest reservation requests require separate first and last name fields
+     */
+    public function testGuestReservationRequestFormContainsSeparateNameFields(): void
+    {
+        $guestData = $this->getFixture()->createAndSaveUser('invreservationguest', 'invreservationguest@example.local');
+        $guest = $this->loadUserInOrganization($guestData['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($guest, self::ORG_ID, false, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'guests');
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+            try {
+                (new InventoryItemPresenter())->createReservationRequestForm();
+                $form = $GLOBALS['gCurrentSession']->getFormObject($GLOBALS['gCurrentSession']->getCsrfToken());
+
+                $this->assertTrue($form->hasElement('guest_first_name'));
+                $this->assertTrue($form->hasElement('guest_last_name'));
+                $this->assertTrue($form->hasElement('guest_email'));
+                $this->assertFalse($form->hasElement('guest_name'));
+                $guestElementIds = array_values(array_filter(
+                    array_keys($form->getElements()),
+                    static fn (string $id): bool => str_starts_with($id, 'guest_')
+                ));
+                $this->assertSame(array('guest_last_name', 'guest_first_name', 'guest_email'), $guestElementIds);
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
+        });
+    }
+
+    /**
      * @testdox Reservation notification roles accept multiple roles from the current organization
      */
     public function testReservationNotificationRolesAcceptMultipleRoles(): void

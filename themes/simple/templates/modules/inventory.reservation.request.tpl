@@ -10,8 +10,9 @@
     {/if}
     {include 'sys-template-parts/form.input.tpl' data=$elements['reservation_begin']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['reservation_end']}
-    {if isset($elements['guest_name'])}
-        {include 'sys-template-parts/form.input.tpl' data=$elements['guest_name']}
+    {if isset($elements['guest_first_name'])}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['guest_last_name']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['guest_first_name']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['guest_email']}
     {/if}
     {include 'sys-template-parts/form.input.tpl' data=$elements['reservation_comment']}
