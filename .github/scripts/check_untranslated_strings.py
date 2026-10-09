@@ -63,4 +63,7 @@ with open(args.summary, 'a') as summary:
             print(', '.join(missing), file=summary)
             print('\n</details>', file=summary)
             if language in notice_languages:
-                print(f'::notice file={file_path}::{len(missing)} texts are not translated: {", ".join(missing)}')
+                if len(missing) == 1:
+                    print(f'::notice file={file_path}::1 text is not translated: {missing[0]}')
+                else:
+                    print(f'::notice file={file_path}::{len(missing)} texts are not translated: {", ".join(missing)}')
