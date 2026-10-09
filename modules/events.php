@@ -55,7 +55,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data')));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
@@ -182,12 +182,40 @@ try {
             $eventService = new EventService($gDb);
             echo json_encode($eventService->requestReservationAgain($getEventUuid, $getReservationItemId));
             break;
+
+        case 'reservation_status_data':
+            require(__DIR__ . '/../system/login_valid.php');
+            $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid', array('requireValue' => true));
+            $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
+            $getDataStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
+            $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+            $getSearch = isset($_GET['search']) && is_array($_GET['search'])
+                ? admFuncVariableIsValid($_GET['search'], 'value', 'string')
+                : '';
+            $getOrderColumn = -1;
+            $getOrderDirection = 'desc';
+            if (isset($_GET['order'][0]) && is_array($_GET['order'][0])) {
+                $getOrderColumn = admFuncVariableIsValid($_GET['order'][0], 'column', 'int', array('defaultValue' => -1));
+                $getOrderDirection = admFuncVariableIsValid($_GET['order'][0], 'dir', 'string', array('defaultValue' => 'desc', 'validValues' => array('asc', 'desc')));
+            }
+            header('Content-Type: application/json');
+            echo json_encode($eventFormPresenter->getReservationStatusData(
+                $getEventUuid,
+                $getRecurrenceScope,
+                $getDraw,
+                $getDataStart,
+                $getLength,
+                $getSearch,
+                $getOrderColumn,
+                $getOrderDirection
+            ));
+            break;
     }
 } catch (Throwable $e) {
     if (in_array($getMode, array('participation_form', 'recurrence_scope_form'), true)) {
         $gMessage->showInModalWindow();
         handleException($e);
     } else {
-        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again'), true));
+        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data'), true));
     }
 }
