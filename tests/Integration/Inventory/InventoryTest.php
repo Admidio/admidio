@@ -773,6 +773,26 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Reservation requesters receive an action column without inventory bulk selection
+     */
+    public function testReservationRequesterInventoryListContainsActionColumnWithoutSelection(): void
+    {
+        $memberData = $this->getFixture()->createAndSaveUser('invreservationrequester', 'invreservationrequester@example.local');
+        $member = $this->loadUserInOrganization($memberData['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($member, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+
+            $this->assertTrue(InventoryAccessService::canRequestReservation());
+            $tableDefinition = (new InventoryPresenter(false))->prepareTableDefinition();
+
+            $this->assertStringNotContainsString('<input type="checkbox"', implode('', $tableDefinition['headers']));
+            $this->assertSame('<span style="display:block; min-width:40px;">&nbsp;</span>', end($tableDefinition['headers']));
+        });
+    }
+
+    /**
      * @testdox Reservation notification roles accept multiple roles from the current organization
      */
     public function testReservationNotificationRolesAcceptMultipleRoles(): void

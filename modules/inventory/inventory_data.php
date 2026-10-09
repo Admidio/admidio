@@ -46,12 +46,16 @@ try {
     // read item fields to construct column order mapping (same as prepareData())
     $itemsData = new Admidio\Inventory\ValueObjects\ItemsData($gDb, $gCurrentOrgId);
     $itemFields = $itemsData->getItemFields();
+    $canUseBulkActions = $gCurrentUser->isAdministratorInventory()
+        || InventoryPresenter::isKeeperAuthorizedToEdit((int)$gCurrentUser->getValue('usr_id'));
+    $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
 
     // build headerColumns array to map DataTables column index to internal field names
     $headerColumns = array();
     $colIndex = 0;
-    // first column is checkbox in HTML mode
-    $headerColumns[$colIndex++] = 'select';
+    if ($canUseBulkActions) {
+        $headerColumns[$colIndex++] = 'select';
+    }
     // photo column if enabled
     if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
         $headerColumns[$colIndex++] = 'photo';
@@ -63,8 +67,9 @@ try {
         }
         $headerColumns[$colIndex++] = $infNameIntern;
     }
-    // actions column
-    $headerColumns[$colIndex++] = 'actions';
+    if ($hasActionsColumn) {
+        $headerColumns[$colIndex++] = 'actions';
+    }
 
     // prepare DB-specific aggregator (GROUP_CONCAT or string_agg)
     if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
@@ -277,7 +282,9 @@ try {
         // build row cells same as prepareData('html') for a single item
         $rowValues = array();
         // selection checkbox
-        $rowValues[] = ($itemsData->isEditable()) ? '<input type="checkbox" />' : '';
+        if ($canUseBulkActions) {
+            $rowValues[] = ($itemsData->isEditable()) ? '<input type="checkbox" />' : '';
+        }
         // photo
         if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
             $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $row['ini_uuid']));
@@ -387,7 +394,9 @@ try {
             $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_DELETE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }
 
-        $rowValues[] = $actionsHtml;
+        if ($hasActionsColumn) {
+            $rowValues[] = $actionsHtml;
+        }
 
         // Build associative row including DT_RowId so DataTables will keep the TR id
         // and client-side scripts can restore selection across paging.
