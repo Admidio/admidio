@@ -82,6 +82,8 @@
             "!adm_plugins/who-is-online",
             "demo",
             "demo_data",
+            "plugins",
+            "tests",
             "!vendor/*",
             "vendor/maennchen/zipstream-php/test",
             "vendor/markbaker/complex/examples",
