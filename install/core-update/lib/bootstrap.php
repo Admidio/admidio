@@ -21,3 +21,4 @@ require_once __DIR__ . '/common.php';
 require_once __DIR__ . '/login.php';
 require_once __DIR__ . '/download.php';
 require_once __DIR__ . '/phase-a.php';
+require_once __DIR__ . '/phase-b.php';

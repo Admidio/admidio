@@ -625,6 +625,20 @@ function removeAbandonedUpdate(string $rootPath, int $now): bool
 // Files
 // ------------------------------------------------------------------------------------------------
 
+/**
+ * Give a request of the browser enough time for one piece of work of $seconds and return the
+ * time at which it should stop. The command line has no limit to extend, and set_time_limit()
+ * would introduce one there.
+ */
+function startTimeBudget(int $seconds): float
+{
+    if ((int)ini_get('max_execution_time') > 0) {
+        @set_time_limit($seconds + 60);
+    }
+
+    return microtime(true) + $seconds;
+}
+
 function ensureDirectory(string $directory): void
 {
     if (!is_dir($directory) && !@mkdir($directory, 0775, true) && !is_dir($directory)) {

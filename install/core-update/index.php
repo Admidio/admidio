@@ -23,7 +23,6 @@ use AdmidioCoreUpdater as U;
 use AdmidioCoreUpdater\UpdaterException;
 
 require_once __DIR__ . '/lib/bootstrap.php';
-require_once __DIR__ . '/CoreUpdater.php';
 
 U\sendSecurityHeaders();
 
@@ -69,6 +68,20 @@ try {
             exit;
         }
 
+        if (($_GET['action'] ?? '') === 'finish' && U\activeUpdateId($rootPath) === null) {
+            // The result page of an update that another browser finished: nothing to start.
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_ALREADY_COMPLETED')) . '</p>',
+                '<a class="button" href="' . U\h($config['baseUrl'] . '/modules/overview.php') . '">'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
+                null,
+                'success',
+                $texts['language']
+            );
+            exit;
+        }
+
         $updateId = U\activeUpdateId($rootPath)
             ?? U\createUpdate($rootPath, array('installedVersion' => U\filesVersion($rootPath)))['updateId'];
     }
@@ -84,50 +97,22 @@ try {
         throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
     }
 
-    // Phase A: from the choice of the channel to the prepared package.
-    if (in_array((string)$state['state'], U\PHASE_A_STATES, true)) {
-        $context = array(
-            'config' => $config,
-            'pdo' => $pdo,
-            'texts' => $texts,
-            'updaterPath' => __DIR__,
-            // Plain HTTP is only allowed below the test server of debug mode, which only then is set.
-            'http' => array('plainHttpBase' => $config['serverUrl']),
-            'chunkSize' => U\CHUNK_SIZE
-        );
+    $context = array(
+        'config' => $config,
+        'pdo' => $pdo,
+        'texts' => $texts,
+        'updaterPath' => __DIR__,
+        // Plain HTTP is only allowed below the test server of debug mode, which only then is set.
+        'http' => array('plainHttpBase' => $config['serverUrl']),
+        'chunkSize' => U\CHUNK_SIZE
+    );
+
+    // Phase A: from the choice of the channel to the prepared package; phase B from there on.
+    if ($state['state'] !== 'prepared' && in_array((string)$state['state'], U\PHASE_A_STATES, true)) {
         coreUpdateHandlePhaseA($context, $state, $isPost, $postedAction);
-        exit;
+    } else {
+        coreUpdateHandlePhaseB($context, $state, $isPost, $postedAction);
     }
-
-    $updater = new CoreUpdater($config, $texts, $updateId);
-
-    if ($isPost) {
-        if ($postedAction === 'run') {
-            U\jsonResponse($updater->runNextStep());
-        } elseif ($postedAction === 'rollback') {
-            U\jsonResponse($updater->rollback());
-        } else {
-            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
-        }
-        exit;
-    }
-
-    if (($_GET['action'] ?? '') === 'finish') {
-        $result = $updater->finishUpdate();
-        U\showPage(
-            U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
-            '<p>' . U\h((string)$result['message']) . '</p>',
-            '<a class="button" href="' . U\h((string)$result['url']) . '">'
-                . U\h(U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
-            100,
-            'success',
-            $texts['language'],
-            U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
-        );
-        exit;
-    }
-
-    coreUpdateShowStatus($updater, $texts, (string)$state['csrfToken']);
 } catch (Throwable $exception) {
     // Before the administrator is known, an error says nothing about the installation.
     $message = $exception instanceof UpdaterException ? $exception->getText($texts) : 'The update could not be continued.';
@@ -241,150 +226,6 @@ function coreUpdateHandleLogin(array $config, ?PDO $pdo, array $texts, bool $sub
         null,
         '',
         $texts['language']
-    );
-}
-
-/**
- * The status page of the update, with the buttons that drive it.
- * @param array{language: string, texts: array<string,string>} $texts
- */
-function coreUpdateShowStatus(CoreUpdater $updater, array $texts, string $csrfToken): void
-{
-    $status = $updater->getStatus();
-    $warning = '';
-
-    if ($status['channel'] === 'master') {
-        $warning = '<div class="warning">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_MASTER_WARNING')) . '</div>';
-    }
-
-    $details = $warning
-        . '<dl>'
-        . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>'
-        . U\h((string)$status['installedVersion']) . '</dd>'
-        . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>'
-        . U\h((string)$status['targetVersion']) . '</dd>'
-        . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CURRENT_STATE')) . '</dt><dd id="state">'
-        . U\h((string)$status['state']) . '</dd>'
-        . '</dl>'
-        . '<div id="message" class="message">'
-        . U\h($status['lastError'] !== '' ? (string)$status['lastError'] : U\text($texts, 'SYS_CORE_UPDATE_READY'))
-        . '</div>';
-
-    $buttons = '<button class="button" id="continue-button" type="button">'
-        . U\h(U\text($texts, 'SYS_CORE_UPDATE_START_RESUME')) . '</button>'
-        . '<button class="button secondary" id="rollback-button" type="button"'
-        . ($status['state'] === 'rollback_required' ? '' : ' hidden')
-        . '>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_PREVIOUS')) . '</button>';
-
-    $script = '<script>
-        const endpoint = "index.php";
-        const csrfToken = ' . U\js($csrfToken) . ';
-        const requestFailedText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
-        const confirmRestoreText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_CONFIRM_RESTORE')) . ';
-        const continueButton = document.getElementById("continue-button");
-        const rollbackButton = document.getElementById("rollback-button");
-        const message = document.getElementById("message");
-        const state = document.getElementById("state");
-        const progress = document.getElementById("progress-bar");
-
-        async function postAction(action) {
-            const body = new URLSearchParams();
-            body.set("action", action);
-            body.set("csrf_token", csrfToken);
-
-            const response = await fetch(endpoint, {
-                method: "POST",
-                credentials: "same-origin",
-                headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
-                body: body.toString()
-            });
-            let result;
-            try {
-                result = await response.json();
-            } catch (error) {
-                throw new Error(requestFailedText);
-            }
-
-            if (!response.ok || result.status === "error") {
-                throw new Error(result.message || requestFailedText);
-            }
-            return result;
-        }
-
-        function updateDisplay(result) {
-            message.textContent = result.message || "";
-            progress.style.width = (result.progress || 0) + "%";
-            progress.parentElement.setAttribute("aria-valuenow", result.progress || 0);
-            if (result.state) {
-                state.textContent = result.state;
-            }
-        }
-
-        async function continueUpdate() {
-            continueButton.disabled = true;
-            rollbackButton.disabled = true;
-
-            try {
-                while (true) {
-                    const result = await postAction("run");
-                    updateDisplay(result);
-
-                    if (result.status === "redirect") {
-                        window.location.href = result.url;
-                        return;
-                    }
-                    if (result.status === "rollback_required") {
-                        rollbackButton.hidden = false;
-                        return;
-                    }
-                    if (result.status === "completed") {
-                        window.location.reload();
-                        return;
-                    }
-                    await new Promise(resolve => setTimeout(resolve, 150));
-                }
-            } catch (error) {
-                message.textContent = error.message;
-                message.classList.add("error");
-                rollbackButton.hidden = false;
-            } finally {
-                continueButton.disabled = false;
-                rollbackButton.disabled = false;
-            }
-        }
-
-        async function rollbackUpdate() {
-            if (!window.confirm(confirmRestoreText)) {
-                return;
-            }
-
-            continueButton.disabled = true;
-            rollbackButton.disabled = true;
-            try {
-                const result = await postAction("rollback");
-                updateDisplay(result);
-                rollbackButton.hidden = true;
-            } catch (error) {
-                message.textContent = error.message;
-                message.classList.add("error");
-            } finally {
-                continueButton.disabled = false;
-                rollbackButton.disabled = false;
-            }
-        }
-
-        continueButton.addEventListener("click", continueUpdate);
-        rollbackButton.addEventListener("click", rollbackUpdate);
-    </script>';
-
-    U\showPage(
-        U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
-        $details,
-        $buttons . $script,
-        (int)$status['progress'],
-        $status['state'] === 'rollback_required' ? 'error' : '',
-        $texts['language'],
-        U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
     );
 }
 
@@ -535,18 +376,6 @@ function coreUpdateShowPhaseA(array $state, array $config, array $texts): void
             );
             break;
 
-        case 'prepared':
-            U\showPage(
-                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
-                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_PREPARED', array((string)$state['targetVersion']))) . '</p>',
-                $cancel,
-                100,
-                'success',
-                $texts['language'],
-                U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
-            );
-            break;
-
         default:
             // downloading, downloaded: the page drives the download until the package is prepared.
             $script = '<script>
@@ -617,4 +446,224 @@ function coreUpdateChannelName(string $channel, array $texts): string
         'master' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_MASTER'),
         default => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_STABLE')
     };
+}
+
+/**
+ * Phase B: the requests of its forms and of the loop that drives it, and its pages.
+ * @param array<string,mixed> $context See install/core-update/lib/phase-a.php.
+ * @param array<string,mixed> $state
+ */
+function coreUpdateHandlePhaseB(array $context, array $state, bool $isPost, string $action): void
+{
+    $updateId = (string)$state['updateId'];
+    $config = $context['config'];
+    $texts = $context['texts'];
+
+    if ($isPost) {
+        match ($action) {
+            'run' => U\jsonResponse(U\phaseBRun($context, $updateId)),
+            'rollback' => U\jsonResponse(U\phaseBResult($context, U\phaseBRollback($context, $updateId))),
+            'confirm' => (static function () use ($context, $updateId): void {
+                U\phaseBConfirm($context, $updateId);
+                header('Location: index.php', true, 303);
+            })(),
+            'cancel' => (static function () use ($context, $updateId, $config, $texts): void {
+                U\phaseBCancel($context, $updateId);
+                U\showPage(
+                    U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                    '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CANCELLED')) . '</p>',
+                    '<a class="button" href="' . U\h($config['baseUrl'] . '/modules/overview.php') . '">'
+                        . U\h(U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
+                    null,
+                    '',
+                    $texts['language']
+                );
+            })(),
+            default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
+        };
+
+        return;
+    }
+
+    coreUpdateShowPhaseB($context, $state);
+}
+
+/**
+ * The page of phase B for the state the update is in.
+ * @param array<string,mixed> $context
+ * @param array<string,mixed> $state
+ */
+function coreUpdateShowPhaseB(array $context, array $state): void
+{
+    $config = $context['config'];
+    $texts = $context['texts'];
+    $csrf = '<input type="hidden" name="csrf_token" value="' . U\h((string)$state['csrfToken']) . '">';
+    $openAdmidio = '<a class="button" href="' . U\h($config['baseUrl'] . '/modules/overview.php') . '">'
+        . U\h(U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>';
+    $show = static fn(string $content, string $actions, ?int $progress, string $class = '') => U\showPage(
+        U\text($texts, 'SYS_CORE_UPDATE_TITLE'), $content, $actions, $progress, $class, $texts['language'],
+        U\text($texts, 'SYS_CORE_UPDATE_PROGRESS'));
+
+    switch ($state['state']) {
+        case 'review':
+            $plan = (array)($state['plan'] ?? array());
+            $checks = (array)($state['planChecks'] ?? array());
+            $list = '';
+            foreach (array('create' => 'SYS_CORE_UPDATE_PLAN_CREATE', 'replace' => 'SYS_CORE_UPDATE_PLAN_REPLACE',
+                'delete' => 'SYS_CORE_UPDATE_PLAN_DELETE', 'unchanged' => 'SYS_CORE_UPDATE_PLAN_UNCHANGED') as $key => $text) {
+                $list .= '<li>' . U\h(U\text($texts, $text, array((string)($plan[$key] ?? 0)))) . '</li>';
+            }
+            $removed = array_column(array_filter(U\readPlan(U\workspace($config['rootPath'], (string)$state['updateId'])),
+                static fn(array $operation): bool => $operation['action'] === 'delete'), 'path');
+            $checkList = '';
+            foreach ($checks as $check) {
+                $checkList .= '<li class="check-' . U\h($check['status']) . '">' . U\h(U\text($texts, $check['text'], $check['params'])) . '</li>';
+            }
+
+            $actions = '';
+            if (!U\checksHaveErrors($checks)) {
+                $actions .= '<form method="post" action="index.php" class="inline">' . $csrf . '<input type="hidden" name="action" value="confirm">'
+                    . '<button class="button" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALL')) . '</button></form>';
+            }
+            $actions .= coreUpdateCancelForm($csrf, $texts);
+
+            $show(
+                '<dl><dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>' . U\h((string)$state['installedVersion']) . '</dd>'
+                    . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>' . U\h((string)($state['targetVersionText'] ?? $state['targetVersion'])) . '</dd></dl>'
+                    . '<ul>' . $list . '</ul>'
+                    . ($removed !== array() ? '<details><summary>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_PLAN_DELETED_FILES')) . '</summary><ul>'
+                        . implode('', array_map(static fn(string $path): string => '<li>' . U\h($path) . '</li>', $removed)) . '</ul></details>' : '')
+                    . '<h2>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECKS')) . '</h2><ul class="checks">' . $checkList . '</ul>'
+                    . '<div class="warning">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_DESC')) . '</div>',
+                $actions,
+                30,
+                U\checksHaveErrors($checks) ? 'error' : ''
+            );
+            break;
+
+        case 'rollback_required':
+            $show(
+                '<div class="message error">' . U\h((string)$state['lastError']) . '</div>'
+                    . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_ROLLBACK_REQUIRED')) . '</p>'
+                    . '<div id="message" class="message" hidden></div>',
+                '<button class="button" id="continue-button" type="button">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CONTINUE')) . '</button>'
+                    . (empty($state['databaseStarted']) ? '<button class="button secondary" id="rollback-button" type="button">'
+                        . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_PREVIOUS')) . '</button>' : '')
+                    . coreUpdateRunScript($state, $texts, false),
+                U\phaseBProgress($state),
+                ''
+            );
+            break;
+
+        case 'files_installed':
+        case 'database_running':
+        case 'database_failed':
+            $show(
+                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_CONTINUE')) . '</p>'
+                    . ((string)($state['lastError'] ?? '') !== '' ? '<div class="message error">' . U\h((string)$state['lastError']) . '</div>' : ''),
+                '<a class="button" href="' . U\h(U\databaseUpdateUrl($config, (string)$state['updateId'])) . '">'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_CONTINUE')) . '</a>',
+                95
+            );
+            break;
+
+        case 'completed':
+            U\phaseBFinish($context, (string)$state['updateId']);
+            $show('<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)$state['targetVersion']))) . '</p>', $openAdmidio, 100, 'success');
+            break;
+
+        case 'rolled_back':
+            $show('<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK')) . '</p>', $openAdmidio, null, 'success');
+            break;
+
+        default:
+            // prepared, extracting, planning, ready, installing, verifying, rolling_back: the page
+            // drives the update to the next point where the administrator decides.
+            $before = in_array($state['state'], array('prepared', 'extracting', 'planning'), true);
+            $show(
+                '<div id="message" class="message">' . U\h(U\phaseBResult($context, $state)['message']) . '</div>',
+                '<button class="button" id="continue-button" type="button" hidden>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CONTINUE')) . '</button>'
+                    . ($before ? coreUpdateCancelForm($csrf, $texts) : '')
+                    . coreUpdateRunScript($state, $texts, true),
+                U\phaseBProgress($state)
+            );
+    }
+}
+
+/**
+ * @param array{language: string, texts: array<string,string>} $texts
+ */
+function coreUpdateCancelForm(string $csrf, array $texts): string
+{
+    return '<form method="post" action="index.php" class="inline">' . $csrf . '<input type="hidden" name="action" value="cancel">'
+        . '<button class="button secondary" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CANCEL')) . '</button></form>';
+}
+
+/**
+ * The script that sends one request after the other until the update reaches a point where the
+ * administrator decides, and then reloads the page or follows the redirect.
+ * @param array<string,mixed> $state
+ * @param array{language: string, texts: array<string,string>} $texts
+ */
+function coreUpdateRunScript(array $state, array $texts, bool $start): string
+{
+    return '<script>
+        const csrfToken = ' . U\js((string)$state['csrfToken']) . ';
+        const requestFailedText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
+        const confirmRestoreText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_CONFIRM_RESTORE')) . ';
+        const message = document.getElementById("message");
+        const progress = document.getElementById("progress-bar");
+        const continueButton = document.getElementById("continue-button");
+        const rollbackButton = document.getElementById("rollback-button");
+
+        async function post(action) {
+            const body = new URLSearchParams({action: action, csrf_token: csrfToken});
+            try {
+                const response = await fetch("index.php", {method: "POST", credentials: "same-origin", body: body});
+                return await response.json();
+            } catch (error) {
+                return {status: "error", message: requestFailedText};
+            }
+        }
+
+        async function drive(action) {
+            continueButton.hidden = true;
+            if (rollbackButton) {
+                rollbackButton.disabled = true;
+            }
+            message.hidden = false;
+            message.classList.remove("error");
+            let result = await post(action);
+            while (true) {
+                message.textContent = result.message || message.textContent;
+                if (progress) {
+                    progress.style.width = (result.progress || 0) + "%";
+                }
+                if (result.status === "redirect") {
+                    window.location.href = result.url;
+                    return;
+                }
+                if (result.status === "review" || result.status === "rolled_back" || result.state === "rollback_required") {
+                    window.location.reload();
+                    return;
+                }
+                if (result.status !== "success") {
+                    message.classList.add("error");
+                    continueButton.hidden = result.status === "failed";
+                    return;
+                }
+                result = await post("run");
+            }
+        }
+
+        continueButton.addEventListener("click", () => drive("run"));
+        if (rollbackButton) {
+            rollbackButton.addEventListener("click", () => {
+                if (window.confirm(confirmRestoreText)) {
+                    drive("rollback");
+                }
+            });
+        }
+        ' . ($start ? 'drive("run");' : '') . '
+    </script>';
 }

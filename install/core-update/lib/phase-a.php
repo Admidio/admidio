@@ -260,12 +260,7 @@ function downloadPart(array $ctx, array $state): array
         throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The download is larger than update.txt says.'));
     }
 
-    // A web request gets enough time for its part; the command line has no limit to extend, and
-    // set_time_limit() would introduce one there.
-    if ((int)ini_get('max_execution_time') > 0) {
-        @set_time_limit(TIME_BUDGET + 60);
-    }
-    $deadline = microtime(true) + TIME_BUDGET;
+    $deadline = startTimeBudget(TIME_BUDGET);
 
     while ($offset < $size && microtime(true) < $deadline) {
         $response = httpGetRange($release['packageUrl'], $offset, min($ctx['chunkSize'], $size - $offset), $size, $ctx['http']);

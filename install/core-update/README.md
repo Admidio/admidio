@@ -9,13 +9,13 @@ working while `src/`, `vendor/`, `system/`, `modules/` and the themes are replac
 ```text
 index.php          the pages and requests of the browser
 cli.php            php install/core-update/cli.php status
-CoreUpdater.php    phase B: extraction, file installation, rollback (being reworked)
 release-key.pem    the public key that signs update.txt (shipped with every release)
 lib/bootstrap.php  loads the files below
 lib/common.php     configuration, texts, state and lock of an update, cookie, versions, pages
 lib/login.php      the updater's own login (fallback during maintenance mode)
 lib/download.php   HTTPS, signature of update.txt, release information, manifest, ZIP reading
 lib/phase-a.php    phase A and the checks P1-P9
+lib/phase-b.php    phase B: extraction, plan, installation, verification, rollback
 ```
 
 Everything in `lib/` is plain functions in the namespace `AdmidioCoreUpdater`. It reads
@@ -83,6 +83,25 @@ in state `prepared`; phase B continues there.
 A failed check or a network error can be fixed and tried again. A failed verification ends the
 update and removes its workspace.
 
+## Phase B
+
+Phase B runs in the updater of the new release. It unpacks the package into the workspace and
+checks every file against the manifest (`extracting`), then compares the installation with the
+release (`planning`): a file that is already right gets no operation, files in the managed
+directories that the release does not have are removed, root files only if the installed manifest
+lists them. The administrator sees the plan and the checks D1-D3 (`review`) and starts the
+installation. Then the browser gets the updater cookie, maintenance mode goes on, `system/bootstrap/`
+is installed first (so that even a release without maintenance mode shows the maintenance page),
+and every replaced or removed file is copied to `backup/` in the workspace before the operation;
+`journal.jsonl` records each operation before and after it (`installing`). Every installed file is
+hashed again and OPcache is reset (`verifying`); at `files_installed` `install/update.php` takes
+over and updates the database.
+
+Every request does at most 8 seconds or 200 files of work. Up to `review` nothing is changed and
+cancelling removes the workspace. From `installing` on an error stops in `rollback_required`: the
+update continues where it stopped, or the journal is undone (`rolling_back`), which is possible
+until the database update starts.
+
 ## Development
 
 With `$gDebug = true` two settings in `config.php` point the updater to a test server:
@@ -97,6 +116,7 @@ Plain HTTP is only accepted below `$gCoreUpdateServerUrl`. Both settings are ign
 
 Because phase A replaces `install/core-update/` with the updater of the release it installs, a
 test release must be built from the current working tree, or it overwrites newer code there.
+Phase B replaces every file: test it on a separate installation, never on a development tree.
 
 ## Building a release
 
