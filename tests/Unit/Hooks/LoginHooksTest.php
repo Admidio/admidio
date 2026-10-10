@@ -3,7 +3,7 @@
  * The login hooks. Two things are checked here:
  *
  * 1. the control flow around them, through a stand-in that carries the try/catch of
- *    ModuleLogin::checkLogin() verbatim - the real one needs a session, a form, a database and a user;
+ *    LoginService::checkLogin() verbatim - the real one needs a session, a form, a database and a user;
  * 2. that no login hook is ever handed the password. That one is checked against the real source
  *    file, because it is the property that matters and a stand-in could not prove it.
  */
@@ -16,7 +16,7 @@ use LogicException;
 use RuntimeException;
 use Throwable;
 
-/** The head of ModuleLogin::checkLogin(), with the lookup replaced by something the test controls. */
+/** The head of LoginService::checkLogin(), with the lookup replaced by something the test controls. */
 class ProbeLogin
 {
     /** @var callable what authenticate() does */
@@ -144,7 +144,7 @@ class LoginHooksTest extends AdmidioTestCase
 
     public function testThePasswordNeverLeavesTheLoginModule(): void
     {
-        $source = file_get_contents(dirname(__DIR__, 3) . '/system/classes/ModuleLogin.php');
+        $source = file_get_contents(dirname(__DIR__, 3) . '/src/Session/Service/LoginService.php');
         $dispatches = array();
         foreach (explode("\n", $source) as $line) {
             if (str_contains($line, 'Hooks::doAction')) {

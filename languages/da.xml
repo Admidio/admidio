@@ -181,7 +181,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Høj</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Lav</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middel</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ingen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Meget høj</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Sti til beregning af diskforbrug</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Stien til mappen til beregning af diskforbruget. Denne bruges i systemoplysningerne til at beregne diskforbruget for Admidio-installationen. Stien kan defineres som en absolut sti eller som en relativ sti til Admidio-hovedmappen. Hvis stien efterlades tom, beregnes diskforbruget for serverens rodmappe. (standard: tom)</string>

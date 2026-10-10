@@ -2402,7 +2402,7 @@ class PreferencesPresenter extends PagePresenter
             self::preferenceInputOptions('logout_minutes', array('helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME'))))
         );
         $selectBoxEntries = array(
-            0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
+            0 => $gL10n->get('SYS_NONE'),
             1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
             2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
             3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
