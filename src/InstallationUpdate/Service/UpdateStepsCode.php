@@ -44,6 +44,19 @@ final class UpdateStepsCode
     }
 
     /**
+     * Add the column crt_col_conditions where step 1920 never ran. db.sql did not get the column,
+     * and a fresh installation marks all update steps as done, so these installations lack it, while
+     * the update to 6.0 migrates it. MySQL has no ADD COLUMN IF NOT EXISTS.
+     * @throws Exception
+     */
+    public static function updateStep50AddCategoryReportConditions(): void
+    {
+        if (!in_array('crt_col_conditions', self::$db->getTableColumns(TBL_CATEGORY_REPORT), true)) {
+            self::$db->queryPrepared('ALTER TABLE ' . TBL_CATEGORY_REPORT . ' ADD COLUMN crt_col_conditions varchar(255)');
+        }
+    }
+
+    /**
      * This method updates wrongly assigned select options for the inventory status field.
      * In previous new Admidio 5.0 installations and additional added organizations, the options were wrongly assigned
      * to the organization id instead of the field id. Therefore, we check whether options exist whose assigned id
