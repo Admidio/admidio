@@ -993,7 +993,22 @@ class ChangelogService {
         return self::$fieldTranslationsCache;
     }
 
+    /**
+     * Check if the file with the given UUID still exists in the database and in the file system.
+     * @param string $uuid The UUID of the file
+     * @return bool Returns **true** if the file exists
+     */
+    private static function fileExists(string $uuid): bool
+    {
+        global $gDb;
 
+        try {
+            $file = new File($gDb);
+            return $file->readDataByUuid($uuid) && is_file($file->getFullFilePath());
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
 
     /**
      * Create an HTML link to the admidio page corresponding to the given module (DB table without prefix). Optional object ID
@@ -1123,7 +1138,10 @@ class ChangelogService {
         // through this same encoding exactly once.
         $text = SecurityUtils::encodeHTML(StringUtils::strStripTags($text));
 
-        if ($url != '') {
+        if ($url != '' && $module === 'files' && self::fileExists($uuid)) {
+            // open previewable files in the file preview modal
+            return '<a href="'.$url.'" data-adm-file-preview data-file-name="'.$text.'">'.$text.'</a>';
+        } elseif ($url != '') {
             return '<a href="'.$url.'">'.$text.'</a>';
         } else {
             return $text;
