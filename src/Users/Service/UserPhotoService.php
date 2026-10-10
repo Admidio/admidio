@@ -19,6 +19,11 @@ use RuntimeException;
 class UserPhotoService
 {
     /**
+     * Maximum size in pixels of the longer side of a stored profile photo.
+     */
+    public const PROFILE_PHOTO_MAX_SIZE = 700;
+
+    /**
      * Validate, scale and store a profile photo from an existing local file.
      *
      * @throws Exception
@@ -46,7 +51,7 @@ class UserPhotoService
 
         $userImage = new Image($sourcePath);
         $userImage->setImageType('jpeg');
-        $userImage->scale(130, 170);
+        $userImage->scale(self::PROFILE_PHOTO_MAX_SIZE, self::PROFILE_PHOTO_MAX_SIZE);
 
         $temporaryFile = '';
 

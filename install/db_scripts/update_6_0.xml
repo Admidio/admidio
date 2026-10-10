@@ -25,5 +25,8 @@
     <step id="50">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_fields</step>
     <step id="60">ALTER TABLE %PREFIX%_category_report DROP COLUMN crt_col_conditions</step>
     <step id="70">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/category-report/category_report.php', '/category_report.php') WHERE men_name_intern = 'category-report' AND men_url LIKE '%/category-report/category_report.php%'</step>
-    <step id="80">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_description varchar(4000)</step>    <step>stop</step>
+    <step id="80">ALTER TABLE %PREFIX%_category_report ADD COLUMN crt_description varchar(4000)</step>
+    <step id="90" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_photo mediumblob</step>
+    <step id="100" database="mysql">ALTER TABLE %PREFIX%_sessions MODIFY COLUMN ses_binary mediumblob</step>
+    <step>stop</step>
 </update>

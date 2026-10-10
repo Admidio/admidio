@@ -1110,7 +1110,8 @@ class Entity
                     }
                     break;
 
-                case 'blob':
+                case 'blob': // fallthrough
+                case 'mediumblob':
                     // For blobs, we return the raw data as is
                     break;
 
@@ -1944,7 +1945,8 @@ class Entity
                         break;
 
                     // Byte/Blob
-                    case 'blob':
+                    case 'blob': // fallthrough
+                    case 'mediumblob':
                         // For blobs, we accept the raw data as is
                         break;
 
