@@ -8,6 +8,8 @@ use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 /**
  * @brief Class will handle some ECard functions
@@ -90,6 +92,25 @@ class ECard
     }
 
     /**
+     * Keep text formatting and safe links in a message supplied by the e-card editor.
+     */
+    public static function sanitizeMessage(string $message): string
+    {
+        static $purifier = null;
+        if ($purifier === null) {
+            $config = HTMLPurifier_Config::createDefault();
+            $config->set('HTML.Allowed', 'p[style],br,strong,em,b,i,u,s,ol,ul,li,blockquote,span[style],a[href|title|target]');
+            $config->set('CSS.AllowedProperties', array('color', 'font-family', 'font-size', 'text-align'));
+            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+            $config->set('URI.AllowedSchemes', array('http' => true, 'https' => true, 'mailto' => true, 'tel' => true));
+            $config->set('Cache.DefinitionImpl', null);
+            $purifier = new HTMLPurifier($config);
+        }
+
+        return $purifier->purify($message);
+    }
+
+    /**
      * This method replaces all placeholders contained in the template with the corresponding information.
      * The following placeholders are replaced:
      *  Admidio path:           <%g_root_path%>
@@ -121,6 +142,7 @@ class ECard
         }
 
         // If the message is not available, it will be replaced for the preview
+        $ecardMessage = self::sanitizeMessage($ecardMessage);
         if (trim($ecardMessage) === '') {
             $ecardMessage = '< '.$this->yourMessageString.' >';
         }
