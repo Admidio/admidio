@@ -53,7 +53,7 @@ try {
     $relationsStatement = $gDb->queryPrepared($sql);
 
     if ((int)$relationsStatement->fetchColumn() === 0) {
-        throw new Exception('REL_NO_RELATION_TYPES_FOUND');
+        throw new Exception('SYS_NO_RELATIONSHIP_TYPES');
     }
 
     $headline = $gL10n->get('SYS_CREATE_RELATIONSHIP');

@@ -648,7 +648,7 @@ class EventSaveService
                 // user doesn't want to participate as leader -> remove his participation as leader from the event,
                 // don't remove the participation itself!
                 $member = new Membership($gDb);
-                $member->readDataByColumns(array('mem_rol_id' => (int)$role->getValue('rol_id'), 'mem_usr_id' => $user->getValue('usr_id')));
+                $member->readDataByRoleAndUser((int)$role->getValue('rol_id'), (int)$user->getValue('usr_id'));
                 $member->setValue('mem_leader', 0);
                 $member->save();
             }

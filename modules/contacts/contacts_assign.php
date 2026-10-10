@@ -8,6 +8,7 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  ***********************************************************************************************
  */
+use Admidio\UI\Presenter\ContactsPresenter;
 use Admidio\Infrastructure\Exception;
 use Admidio\Users\Entity\User;
 
@@ -28,7 +29,7 @@ try {
     $formValues = $contactsNewForm->validate($_POST);
 
     // create an HTML page object
-    $page = new ModuleContacts('adm_contacts_assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
+    $page = new ContactsPresenter('adm_contacts_assign', $gL10n->get('SYS_ASSIGN_REGISTRATION'));
     $newUser = new User($gDb, $gProfileFields);
     $newUser->setValue('LAST_NAME', $postLastname);
     $newUser->setValue('FIRST_NAME', $postFirstname);

@@ -12,7 +12,7 @@
                 data-class="{$actionItem.popupClass|default:'modal-lg'}" data-href="{$actionItem.dataHref}"
                     {elseif isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
                 data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
-                    {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
+                    {else} class="admidio-icon-link{if isset($actionItem.class)} {$actionItem.class}{/if}" href="{$actionItem.url}"{/if}>
                 <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
         {/foreach}
     </div>
@@ -26,7 +26,7 @@
                         data-class="{$actionItem.popupClass|default:'modal-lg'}" data-href="{$actionItem.dataHref}"
                             {elseif isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
                         data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
-                            {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
+                            {else} class="dropdown-item{if isset($actionItem.class)} {$actionItem.class}{/if}" href="{$actionItem.url}"{/if}>
                         <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
                 </li>
             {/foreach}
