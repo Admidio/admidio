@@ -1,11 +1,11 @@
 <?php
 /**
- * Loads the classes of the standalone core updater.
+ * Loads the functions of the core updater.
  *
  * The updater replaces src/ and vendor/, so it cannot use the Admidio autoloader or any Admidio
- * class: it only depends on adm_my_files/config.php, the database and PHP itself. Its classes are
- * therefore loaded here explicitly. install/update.php and the settings page of Admidio load this
- * file as well, so that the state of an update and the updater cookie have one implementation.
+ * class: it only depends on adm_my_files/config.php, the database and PHP itself. install/update.php
+ * loads this file as well, so that the state of an update and the updater cookie have one
+ * implementation.
  *
  * Everything below must stay compatible with the lowest PHP version of any supported source
  * release (8.2 for all 5.x), because an old installation runs the updater it is given.
@@ -17,23 +17,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/UpdaterException.php';
-require_once __DIR__ . '/Config.php';
-require_once __DIR__ . '/Db.php';
-require_once __DIR__ . '/Texts.php';
-require_once __DIR__ . '/StateStore.php';
-require_once __DIR__ . '/Credentials.php';
-require_once __DIR__ . '/Csrf.php';
-require_once __DIR__ . '/Throttle.php';
-require_once __DIR__ . '/Login.php';
-require_once __DIR__ . '/Page.php';
-require_once __DIR__ . '/Paths.php';
-require_once __DIR__ . '/Signature.php';
-require_once __DIR__ . '/KeyStatement.php';
-require_once __DIR__ . '/Version.php';
-require_once __DIR__ . '/Descriptor.php';
-require_once __DIR__ . '/Manifest.php';
-require_once __DIR__ . '/HttpClient.php';
-require_once __DIR__ . '/ZipReader.php';
-require_once __DIR__ . '/Preflight.php';
-require_once __DIR__ . '/PhaseA.php';
+require_once __DIR__ . '/common.php';
+require_once __DIR__ . '/login.php';
+require_once __DIR__ . '/download.php';
+require_once __DIR__ . '/phase-a.php';

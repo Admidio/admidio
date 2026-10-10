@@ -1,13 +1,13 @@
 <?php
 /**
- * The checks of the updater login that need no database: the password formats Admidio stores and
- * the codes of an authenticator app.
+ * The checks of the updater login that need no database: the password formats Admidio stores, the
+ * codes of an authenticator app and the brake on failed logins.
  */
 
 namespace Admidio\Tests\Unit\CoreUpdater;
 
 use Admidio\Tests\Support\AdmidioTestCase;
-use AdmidioCoreUpdater\Login;
+use AdmidioCoreUpdater as U;
 
 final class LoginTest extends AdmidioTestCase
 {
@@ -37,8 +37,8 @@ final class LoginTest extends AdmidioTestCase
         }
 
         foreach ($hashes as $format => $hash) {
-            $this->assertSame(Login::PASSWORD_VALID, Login::verifyPassword('correct horse', $hash), $format);
-            $this->assertSame(Login::PASSWORD_INVALID, Login::verifyPassword('wrong horse', $hash), $format);
+            $this->assertSame('valid', U\verifyPassword('correct horse', $hash), $format);
+            $this->assertSame('invalid', U\verifyPassword('wrong horse', $hash), $format);
         }
     }
 
@@ -50,9 +50,9 @@ final class LoginTest extends AdmidioTestCase
      */
     public function testMd5IsOutdated(): void
     {
-        $this->assertSame(Login::PASSWORD_OUTDATED, Login::verifyPassword('correct horse', md5('correct horse')));
-        $this->assertSame(Login::PASSWORD_OUTDATED, Login::verifyPassword('correct horse', strtoupper(md5('correct horse'))));
-        $this->assertSame(Login::PASSWORD_INVALID, Login::verifyPassword('wrong horse', md5('correct horse')));
+        $this->assertSame('outdated', U\verifyPassword('correct horse', md5('correct horse')));
+        $this->assertSame('outdated', U\verifyPassword('correct horse', strtoupper(md5('correct horse'))));
+        $this->assertSame('invalid', U\verifyPassword('wrong horse', md5('correct horse')));
     }
 
     /**
@@ -60,9 +60,9 @@ final class LoginTest extends AdmidioTestCase
      */
     public function testUnknownFormat(): void
     {
-        $this->assertSame(Login::PASSWORD_INVALID, Login::verifyPassword('', ''));
-        $this->assertSame(Login::PASSWORD_INVALID, Login::verifyPassword('secret', 'secret'));
-        $this->assertSame(Login::PASSWORD_INVALID, Login::verifyPassword('x', '$P$portablephpass'));
+        $this->assertSame('invalid', U\verifyPassword('', ''));
+        $this->assertSame('invalid', U\verifyPassword('secret', 'secret'));
+        $this->assertSame('invalid', U\verifyPassword('x', '$P$portablephpass'));
     }
 
     /**
@@ -87,11 +87,11 @@ final class LoginTest extends AdmidioTestCase
      */
     public function testRfc6238(int $time, string $code): void
     {
-        $key = Login::decodeBase32(self::RFC_SECRET);
+        $key = U\decodeBase32(self::RFC_SECRET);
 
         $this->assertSame('12345678901234567890', $key);
-        $this->assertSame($code, Login::totpCode($key, intdiv($time, 30), 8));
-        $this->assertTrue(Login::verifyTotp(self::RFC_SECRET, substr($code, -6), $time), 'the 6 digits Admidio uses');
+        $this->assertSame($code, U\totpCode($key, intdiv($time, 30), 8));
+        $this->assertTrue(U\verifyTotp(self::RFC_SECRET, substr($code, -6), $time), 'the 6 digits Admidio uses');
     }
 
     /**
@@ -99,14 +99,14 @@ final class LoginTest extends AdmidioTestCase
      */
     public function testTotpWindow(): void
     {
-        $key = Login::decodeBase32(self::RFC_SECRET);
+        $key = U\decodeBase32(self::RFC_SECRET);
         $now = 1111111111;
         $counter = intdiv($now, 30);
 
-        $this->assertTrue(Login::verifyTotp(self::RFC_SECRET, Login::totpCode($key, $counter - 1, 6), $now));
-        $this->assertTrue(Login::verifyTotp(self::RFC_SECRET, Login::totpCode($key, $counter + 1, 6), $now));
-        $this->assertFalse(Login::verifyTotp(self::RFC_SECRET, Login::totpCode($key, $counter - 2, 6), $now));
-        $this->assertFalse(Login::verifyTotp(self::RFC_SECRET, Login::totpCode($key, $counter + 2, 6), $now));
+        $this->assertTrue(U\verifyTotp(self::RFC_SECRET, U\totpCode($key, $counter - 1, 6), $now));
+        $this->assertTrue(U\verifyTotp(self::RFC_SECRET, U\totpCode($key, $counter + 1, 6), $now));
+        $this->assertFalse(U\verifyTotp(self::RFC_SECRET, U\totpCode($key, $counter - 2, 6), $now));
+        $this->assertFalse(U\verifyTotp(self::RFC_SECRET, U\totpCode($key, $counter + 2, 6), $now));
     }
 
     /**
@@ -114,14 +114,14 @@ final class LoginTest extends AdmidioTestCase
      */
     public function testTotpInput(): void
     {
-        $this->assertTrue(Login::verifyTotp('', '', 0), 'not set up');
-        $this->assertTrue(Login::verifyTotp('', 'anything', 0), 'not set up');
+        $this->assertTrue(U\verifyTotp('', '', 0), 'not set up');
+        $this->assertTrue(U\verifyTotp('', 'anything', 0), 'not set up');
 
-        $this->assertFalse(Login::verifyTotp(self::RFC_SECRET, '', 59));
-        $this->assertFalse(Login::verifyTotp(self::RFC_SECRET, '28708', 59), 'too short');
-        $this->assertFalse(Login::verifyTotp(self::RFC_SECRET, 'abcdef', 59));
-        $this->assertTrue(Login::verifyTotp(self::RFC_SECRET, '287 082', 59), 'spaces as an app shows them');
-        $this->assertFalse(Login::verifyTotp('not base32!', '287082', 59), 'a broken secret matches nothing');
+        $this->assertFalse(U\verifyTotp(self::RFC_SECRET, '', 59));
+        $this->assertFalse(U\verifyTotp(self::RFC_SECRET, '28708', 59), 'too short');
+        $this->assertFalse(U\verifyTotp(self::RFC_SECRET, 'abcdef', 59));
+        $this->assertTrue(U\verifyTotp(self::RFC_SECRET, '287 082', 59), 'spaces as an app shows them');
+        $this->assertFalse(U\verifyTotp('not base32!', '287082', 59), 'a broken secret matches nothing');
     }
 
     /**
@@ -129,9 +129,50 @@ final class LoginTest extends AdmidioTestCase
      */
     public function testBase32(): void
     {
-        $this->assertSame('foobar', Login::decodeBase32('MZXW6YTBOI======'));
-        $this->assertSame('foobar', Login::decodeBase32('mzxw6ytboi'));
-        $this->assertSame('', Login::decodeBase32('MZXW1'), '1 is no base32 character');
-        $this->assertSame('', Login::decodeBase32(''));
+        $this->assertSame('foobar', U\decodeBase32('MZXW6YTBOI======'));
+        $this->assertSame('foobar', U\decodeBase32('mzxw6ytboi'));
+        $this->assertSame('', U\decodeBase32('MZXW1'), '1 is no base32 character');
+        $this->assertSame('', U\decodeBase32(''));
+    }
+
+    /**
+     * @testdox Five failed logins within 15 minutes block the login for 15 minutes
+     */
+    public function testThrottle(): void
+    {
+        $file = sys_get_temp_dir() . '/adm_updater_throttle_' . uniqid() . '.json';
+        $now = 1791500000;
+
+        try {
+            for ($attempt = 1; $attempt < U\MAX_LOGIN_FAILURES; $attempt++) {
+                U\recordLoginFailure($file, $now + $attempt);
+                $this->assertSame(0, U\loginBlockedUntil($file, $now + $attempt), 'failure ' . $attempt);
+            }
+
+            U\recordLoginFailure($file, $now + 100);
+            $this->assertSame($now + 100 + U\LOGIN_BLOCK, U\loginBlockedUntil($file, $now + 101));
+            $this->assertSame(0, U\loginBlockedUntil($file, $now + 100 + U\LOGIN_BLOCK), 'the block ends');
+        } finally {
+            @unlink($file);
+        }
+    }
+
+    /**
+     * @testdox Failures older than 15 minutes do not count
+     */
+    public function testThrottleWindow(): void
+    {
+        $file = sys_get_temp_dir() . '/adm_updater_throttle_' . uniqid() . '.json';
+        $now = 1791500000;
+
+        try {
+            for ($attempt = 0; $attempt < U\MAX_LOGIN_FAILURES - 1; $attempt++) {
+                U\recordLoginFailure($file, $now);
+            }
+            U\recordLoginFailure($file, $now + U\LOGIN_WINDOW);
+            $this->assertSame(0, U\loginBlockedUntil($file, $now + U\LOGIN_WINDOW), 'the first four are too old');
+        } finally {
+            @unlink($file);
+        }
     }
 }

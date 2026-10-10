@@ -481,7 +481,6 @@
   <string name="SYS_CORE_UPDATE_IN_PROGRESS">Ein automatisches Update von Admidio läuft und installiert noch Dateien. Die Datenbank kann erst danach aktualisiert werden. Bitte warte, bis das Update abgeschlossen ist.</string>
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">Die Update-Informationen des Admidio-Servers konnten nicht gelesen werden.</string>
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installierte Version</string>
-  <string name="SYS_CORE_UPDATE_KEYS_INVALID">Die Schlüssel, mit denen Admidio-Updates signiert werden, konnten nicht geprüft werden. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Anmelden</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Zu viele fehlgeschlagene Anmeldungen. Die Anmeldung beim Updater ist für 15 Minuten gesperrt.</string>
   <string name="SYS_CORE_UPDATE_LOGIN_DESC">Admidio ist im Wartungsmodus, während das Update seine Dateien installiert. Melde dich als Administrator an, um das Update fortzusetzen.</string>

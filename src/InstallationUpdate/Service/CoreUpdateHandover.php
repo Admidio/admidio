@@ -4,13 +4,12 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
-use AdmidioCoreUpdater\Credentials;
-use AdmidioCoreUpdater\StateStore;
+use AdmidioCoreUpdater as Updater;
 use AdmidioCoreUpdater\UpdaterException;
 use Throwable;
 
 // The state of an update and the updater cookie have one implementation, the updater's own.
-require_once ADMIDIO_PATH . '/install/core-update/lib/bootstrap.php';
+require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
 
 /**
  * The side of an automatic core update that install/update.php sees.
@@ -33,8 +32,8 @@ require_once ADMIDIO_PATH . '/install/core-update/lib/bootstrap.php';
  *   login. Without it, the normal administrator login of install/update.php is the proof of
  *   identity.
  *
- * The state and the cookie belong to the updater, so they are read and written with its classes
- * (StateStore, Credentials), which this file loads directly from install/core-update/lib/.
+ * The state and the cookie belong to the updater, so they are read and written with its functions,
+ * which this file loads directly from install/core-update/lib/common.php.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -67,16 +66,16 @@ final class CoreUpdateHandover
     /**
      * Overrides the installation directory in which the updates are kept. Only used by tests.
      */
-    private static ?string $rootPath = null;
+    private static ?string $testRootPath = null;
 
     /**
-     * @param StateStore $store
+     * @param string $rootPath
      * @param string $updateId
      * @param array<string,mixed> $state The state of the update, or an empty array if it could not
      *                                   be read.
      */
     private function __construct(
-        private readonly StateStore $store,
+        private readonly string $rootPath,
         private readonly string $updateId,
         private array $state
     ) {
@@ -90,10 +89,10 @@ final class CoreUpdateHandover
      */
     public static function load(string $updateId): self
     {
-        $store = self::createStore();
+        $rootPath = self::getRootPath();
 
         try {
-            return new self($store, $updateId, $store->read($updateId));
+            return new self($rootPath, $updateId, Updater\readState($rootPath, $updateId));
         } catch (UpdaterException) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
@@ -121,18 +120,18 @@ final class CoreUpdateHandover
         }
 
         $updateId = substr($owner, strlen(self::MAINTENANCE_OWNER_PREFIX));
-        if (!StateStore::isValidId($updateId)) {
+        if (!Updater\isValidUpdateId($updateId)) {
             return null;
         }
 
-        $store = self::createStore();
+        $rootPath = self::getRootPath();
         try {
-            $state = $store->read($updateId);
+            $state = Updater\readState($rootPath, $updateId);
         } catch (UpdaterException) {
             $state = array();
         }
 
-        return new self($store, $updateId, $state);
+        return new self($rootPath, $updateId, $state);
     }
 
     public function getUpdateId(): string
@@ -164,7 +163,7 @@ final class CoreUpdateHandover
      */
     public function getCookieName(): string
     {
-        return Credentials::getCookieName(COOKIE_PREFIX);
+        return Updater\cookieName(COOKIE_PREFIX);
     }
 
     /**
@@ -174,7 +173,7 @@ final class CoreUpdateHandover
      */
     public function isAuthorized(mixed $credential): bool
     {
-        return $this->state !== array() && Credentials::isValid($this->state, $credential, time());
+        return $this->state !== array() && Updater\isValidCredential($this->state, $credential, time());
     }
 
     /**
@@ -234,15 +233,15 @@ final class CoreUpdateHandover
      */
     public static function setRootPath(?string $rootPath): void
     {
-        self::$rootPath = $rootPath;
+        self::$testRootPath = $rootPath;
     }
 
     /**
-     * @return StateStore
+     * @return string
      */
-    private static function createStore(): StateStore
+    private static function getRootPath(): string
     {
-        return new StateStore(self::$rootPath ?? ADMIDIO_PATH);
+        return self::$testRootPath ?? ADMIDIO_PATH;
     }
 
     /**
@@ -252,6 +251,6 @@ final class CoreUpdateHandover
      */
     private function update(array $changes): void
     {
-        $this->state = $this->store->update($this->updateId, static fn(array $state): array => array_merge($state, $changes));
+        $this->state = Updater\updateState($this->rootPath, $this->updateId, static fn(array $state): array => array_merge($state, $changes));
     }
 }

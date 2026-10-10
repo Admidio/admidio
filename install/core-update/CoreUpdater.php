@@ -3,17 +3,23 @@
  * Self-contained Admidio core updater.
  *
  * This file deliberately has no dependency on the normal Admidio autoloader or source tree. The
- * state, the lock, the workspace and the texts come from the classes in lib/; who may run it is
+ * state, the lock, the workspace and the texts come from the functions in lib/; who may run it is
  * decided by index.php before this class is used.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-use AdmidioCoreUpdater\Config;
-use AdmidioCoreUpdater\Credentials;
-use AdmidioCoreUpdater\StateStore;
-use AdmidioCoreUpdater\Texts;
+use function AdmidioCoreUpdater\acquireLock;
+use function AdmidioCoreUpdater\clearActiveUpdate;
+use function AdmidioCoreUpdater\clearCredentialCookie;
+use function AdmidioCoreUpdater\readManifest;
+use function AdmidioCoreUpdater\readState;
+use function AdmidioCoreUpdater\releaseLock;
+use function AdmidioCoreUpdater\revokeCredentials;
+use function AdmidioCoreUpdater\text;
+use function AdmidioCoreUpdater\workspace;
+use function AdmidioCoreUpdater\writeState;
 
 class CoreUpdater
 {
@@ -59,20 +65,23 @@ class CoreUpdater
     /** @var array<string,mixed>|null */
     private ?array $manifest = null;
 
+    /**
+     * @param array<string,mixed> $config See AdmidioCoreUpdater\configFromValues().
+     * @param array{language: string, texts: array<string,string>} $texts
+     */
     public function __construct(
-        private readonly Config $config,
-        private readonly StateStore $store,
-        private readonly Texts $texts,
+        private readonly array $config,
+        private readonly array $texts,
         string $updateId
     ) {
-        $realRootPath = realpath($config->rootPath);
+        $realRootPath = realpath($config['rootPath']);
         if ($realRootPath === false) {
             throw new RuntimeException('The Admidio installation path could not be determined.');
         }
 
         $this->rootPath = rtrim(str_replace('\\', '/', $realRootPath), '/');
         $this->updateId = $updateId;
-        $this->workspace = $store->getWorkspace($updateId);
+        $this->workspace = workspace($config['rootPath'], $updateId);
         $this->state = $this->readState();
     }
 
@@ -84,7 +93,7 @@ class CoreUpdater
      */
     public function getText(string $name, array $params = array()): string
     {
-        return $this->texts->get(self::TEXT_KEYS[$name] ?? $name, $params);
+        return text($this->texts, self::TEXT_KEYS[$name] ?? $name, $params);
     }
 
     /**
@@ -268,21 +277,20 @@ class CoreUpdater
             $this->state['state'] = 'rolled_back';
             $this->state['lastError'] = $this->getText('filesystemRolledBack');
             // The update is over, so nobody may continue it.
-            Credentials::revokeAll($this->state);
+            revokeCredentials($this->state);
             $this->writeState();
-            Credentials::clearCookie($this->config);
+            clearCredentialCookie($this->config);
 
             $this->deleteDirectory($this->workspace . '/extracted');
             $this->deleteDirectory($this->workspace . '/backup');
             @unlink($this->workspace . '/package.zip');
             @unlink($this->workspace . '/operations.json');
             @unlink($this->workspace . '/journal.jsonl');
-            @unlink($this->workspace . '/release.json');
-            @unlink($this->workspace . '/release.json.sig');
             @unlink($this->workspace . '/update-manifest.json');
-            @unlink($this->workspace . '/update-manifest.json.sig');
-            @unlink($this->workspace . '/trusted-public-key.pem');
-            $this->store->clearActive($this->updateId);
+            @unlink($this->workspace . '/update.txt');
+            @unlink($this->workspace . '/update.txt.sig');
+            @unlink($this->workspace . '/release-key.pem');
+            clearActiveUpdate($this->config['rootPath'], $this->updateId);
 
             return array(
                 'status' => 'rolled_back',
@@ -314,27 +322,26 @@ class CoreUpdater
             $this->state['state'] = 'completed';
             $this->state['lastError'] = '';
             // The update is over, so nobody may continue it.
-            Credentials::revokeAll($this->state);
+            revokeCredentials($this->state);
             $this->writeState();
-            Credentials::clearCookie($this->config);
+            clearCredentialCookie($this->config);
 
             $this->deleteDirectory($this->workspace . '/extracted');
             $this->deleteDirectory($this->workspace . '/backup');
             @unlink($this->workspace . '/package.zip');
             @unlink($this->workspace . '/operations.json');
             @unlink($this->workspace . '/journal.jsonl');
-            @unlink($this->workspace . '/release.json');
-            @unlink($this->workspace . '/release.json.sig');
             @unlink($this->workspace . '/update-manifest.json');
-            @unlink($this->workspace . '/update-manifest.json.sig');
-            @unlink($this->workspace . '/trusted-public-key.pem');
-            $this->store->clearActive($this->updateId);
+            @unlink($this->workspace . '/update.txt');
+            @unlink($this->workspace . '/update.txt.sig');
+            @unlink($this->workspace . '/release-key.pem');
+            clearActiveUpdate($this->config['rootPath'], $this->updateId);
 
             return array(
                 'status' => 'completed',
                 'message' => $this->getText('updateSuccessful', array((string) $this->state['targetVersion'])),
                 'progress' => 100,
-                'url' => $this->config->baseUrl . '/modules/overview.php'
+                'url' => $this->config['baseUrl'] . '/modules/overview.php'
             );
         } finally {
             $this->releaseLock();
@@ -692,7 +699,7 @@ class CoreUpdater
      */
     private function loadManifest(): array
     {
-        if (($this->state['channel'] ?? '') !== 'stable') {
+        if (!$this->hasManifest()) {
             return array();
         }
 
@@ -700,71 +707,28 @@ class CoreUpdater
             return $this->manifest;
         }
 
-        $manifestFile = $this->workspace . '/update-manifest.json';
-        $signatureFile = $this->workspace . '/update-manifest.json.sig';
-        $publicKeyFile = $this->workspace . '/trusted-public-key.pem';
-
-        $manifestContents = file_get_contents($manifestFile);
-        $signatureContents = file_get_contents($signatureFile);
-        $publicKey = file_get_contents($publicKeyFile);
-
-        if ($manifestContents === false
-            || $signatureContents === false
-            || $publicKey === false
-            || trim($publicKey) === ''
-            || !isset($this->state['manifestSha256'])
-            || !hash_equals(strtolower((string) $this->state['manifestSha256']), hash('sha256', $manifestContents))) {
-            throw new RuntimeException('The signed update manifest is missing or invalid.');
-        }
-
-        $signature = base64_decode(trim($signatureContents), true);
-        if ($signature === false
-            || openssl_verify($manifestContents, $signature, $publicKey, OPENSSL_ALGO_SHA256) !== 1) {
-            throw new RuntimeException('The update manifest signature could not be verified.');
-        }
-
-        $manifest = json_decode($manifestContents, true);
-        if (!is_array($manifest)
-            || ($manifest['schema'] ?? null) !== 1
-            || ($manifest['version'] ?? '') !== ($this->state['targetVersion'] ?? '')
-            || !isset($manifest['files'], $manifest['managedDirectories'], $manifest['preservePaths'], $manifest['manageRootFiles'])
-            || !is_array($manifest['files'])
-            || !is_array($manifest['managedDirectories'])
-            || !is_array($manifest['preservePaths'])
-            || !is_bool($manifest['manageRootFiles'])) {
-            throw new RuntimeException('The signed update manifest is missing or invalid.');
-        }
-
-        $caseInsensitivePaths = array();
-        foreach ($manifest['files'] as $path => $hash) {
-            $path = (string) $path;
-            $this->validateRelativePath($path);
-            if (!preg_match('/^[a-f0-9]{64}$/i', (string) $hash)) {
-                throw new RuntimeException('The signed update manifest contains an invalid file checksum.');
-            }
-
-            $caseKey = strtolower($path);
-            if (isset($caseInsensitivePaths[$caseKey])) {
-                throw new RuntimeException('The signed update manifest contains colliding file names.');
-            }
-            $caseInsensitivePaths[$caseKey] = true;
-        }
-
-        foreach (array_merge($manifest['managedDirectories'], $manifest['preservePaths']) as $path) {
-            if (!is_string($path)) {
-                throw new RuntimeException('The signed update manifest contains an invalid path.');
-            }
-            $this->validateRelativePath($path);
-        }
+        // Phase A verified the package against the signed update.txt and copied its manifest here.
+        $manifest = readManifest((string) @file_get_contents($this->workspace . '/update-manifest.json'),
+            (string) ($this->state['targetVersion'] ?? ''));
+        $manifest['manageRootFiles'] = $manifest['managedRootFiles'] !== array();
 
         $this->manifest = $manifest;
         return $manifest;
     }
 
+    /**
+     * Whether the release has a manifest: every release of admidio.org does, a source archive of
+     * GitHub does not.
+     */
+    private function hasManifest(): bool
+    {
+        return in_array($this->state['channel'] ?? '', array('stable', 'beta'), true);
+    }
+
 
     private function verifyInstalledRelease(): void
     {
-        if (($this->state['channel'] ?? '') !== 'stable') {
+        if (!$this->hasManifest()) {
             return;
         }
 
@@ -991,7 +955,7 @@ class CoreUpdater
             rtrim(self::INSTALLER_RELATIVE_PATH, '/')
         );
 
-        if (($this->state['channel'] ?? '') === 'stable') {
+        if ($this->hasManifest()) {
             $manifest = $this->loadManifest();
             foreach ($manifest['preservePaths'] as $preservePath) {
                 $preservePaths[] = trim(str_replace('\\', '/', (string) $preservePath), '/');
@@ -1091,13 +1055,13 @@ class CoreUpdater
 
     private function getDatabaseUpdateUrl(): string
     {
-        return $this->config->baseUrl
+        return $this->config['baseUrl']
             . '/install/update.php?core_update=' . rawurlencode($this->updateId);
     }
 
     private function getSelfUrl(string $action = ''): string
     {
-        $url = $this->config->baseUrl
+        $url = $this->config['baseUrl']
             . '/install/core-update/index.php?update_id=' . rawurlencode($this->updateId);
 
         if ($action !== '') {
@@ -1160,12 +1124,12 @@ class CoreUpdater
      */
     private function readState(): array
     {
-        return $this->store->read($this->updateId);
+        return readState($this->config['rootPath'], $this->updateId);
     }
 
     private function writeState(): void
     {
-        $this->store->write($this->state);
+        writeState($this->config['rootPath'], $this->state);
     }
 
     /**
@@ -1411,11 +1375,11 @@ class CoreUpdater
 
     private function acquireLock(): void
     {
-        $this->store->acquire(false);
+        acquireLock($this->config['rootPath'], false);
     }
 
     private function releaseLock(): void
     {
-        $this->store->release();
+        releaseLock();
     }
 }

@@ -19,101 +19,93 @@
 
 declare(strict_types=1);
 
-use AdmidioCoreUpdater\Config;
-use AdmidioCoreUpdater\Credentials;
-use AdmidioCoreUpdater\Csrf;
-use AdmidioCoreUpdater\Db;
-use AdmidioCoreUpdater\HttpClient;
-use AdmidioCoreUpdater\Login;
-use AdmidioCoreUpdater\Page;
-use AdmidioCoreUpdater\PhaseA;
-use AdmidioCoreUpdater\Preflight;
-use AdmidioCoreUpdater\StateStore;
-use AdmidioCoreUpdater\Texts;
-use AdmidioCoreUpdater\Throttle;
+use AdmidioCoreUpdater as U;
 use AdmidioCoreUpdater\UpdaterException;
-use AdmidioCoreUpdater\Version;
 
 require_once __DIR__ . '/lib/bootstrap.php';
 require_once __DIR__ . '/CoreUpdater.php';
 
-Page::sendSecurityHeaders();
+U\sendSecurityHeaders();
 
 $isPost = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
 $postedAction = isset($_POST['action']) && is_string($_POST['action']) ? $_POST['action'] : '';
 $texts = null;
 
 try {
-    $config = Config::load(dirname(__DIR__, 2));
-    if (in_array($config->timezone, timezone_identifiers_list(), true)) {
-        date_default_timezone_set($config->timezone);
+    $config = U\loadConfig(dirname(__DIR__, 2));
+    if (in_array($config['timezone'], timezone_identifiers_list(), true)) {
+        date_default_timezone_set($config['timezone']);
     }
 
-    $db = null;
+    $pdo = null;
     try {
-        $db = Db::connect($config);
-        $texts = Texts::load(__DIR__, $config->rootPath, Texts::getInstallationLanguage($db));
+        $pdo = U\connectDatabase($config);
+        $texts = U\loadTexts(__DIR__, $config['rootPath'], U\installationLanguage($pdo, $config['tablePrefix']));
     } catch (UpdaterException) {
         // The login needs the database, the update itself does not. Without it the texts are English.
-        $texts = Texts::load(__DIR__, $config->rootPath, 'en');
+        $texts = U\loadTexts(__DIR__, $config['rootPath'], 'en');
     }
 
-    $store = new StateStore($config->rootPath);
-    $cookieName = Credentials::getCookieName($config->getCookiePrefix());
-    $updateId = coreUpdateAuthenticate($store, $_COOKIE[$cookieName] ?? null, $config);
+    $rootPath = $config['rootPath'];
+    $updateId = coreUpdateAuthenticate($config, $_COOKIE[U\cookieName(U\cookiePrefix($config))] ?? null);
 
-    if ($updateId === null && $store->isAdmidioIntact()) {
+    if ($updateId === null && U\isAdmidioIntact($rootPath)) {
         // The Admidio login decides. common.php has to be included here, at the top level, so that
-        // its globals are globals. Config::load() has read config.php in a scope of its own, so the
+        // its globals are globals. loadConfig() has read config.php in a scope of its own, so the
         // require_once of common.php would skip it: it is included here first.
-        include $config->rootPath . '/adm_my_files/config.php';
-        require_once $config->rootPath . '/system/common.php';
+        include $rootPath . '/adm_my_files/config.php';
+        require_once $rootPath . '/system/common.php';
 
         if (!$gValidLogin || !$gCurrentUser->isAdministrator()) {
-            Page::show(
-                $texts->get('SYS_CORE_UPDATE_TITLE'),
-                '<p>' . Page::escape($texts->get('SYS_CORE_UPDATE_ADMIDIO_LOGIN')) . '</p>',
-                '<a class="button" href="' . Page::escape($config->baseUrl . '/system/login.php') . '">'
-                    . Page::escape($texts->get('SYS_CORE_UPDATE_LOGIN')) . '</a>',
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_ADMIDIO_LOGIN')) . '</p>',
+                '<a class="button" href="' . U\h($config['baseUrl'] . '/system/login.php') . '">'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_LOGIN')) . '</a>',
                 null,
                 '',
-                $texts->getLanguage()
+                $texts['language']
             );
             exit;
         }
 
-        $updateId = $store->getActiveId()
-            ?? $store->create(array('installedVersion' => Version::ofFiles($config->rootPath)))['updateId'];
+        $updateId = U\activeUpdateId($rootPath)
+            ?? U\createUpdate($rootPath, array('installedVersion' => U\filesVersion($rootPath)))['updateId'];
     }
 
     if ($updateId === null) {
         // Maintenance mode is on and this browser has no updater cookie.
-        coreUpdateHandleLogin($config, $store, $db, $texts, $isPost && $postedAction === 'login');
+        coreUpdateHandleLogin($config, $pdo, $texts, $isPost && $postedAction === 'login');
         exit;
     }
 
-    $state = $store->read($updateId);
-    if ($isPost) {
-        if (!Csrf::isValid($state, $_POST['csrf_token'] ?? null)) {
-            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
-        }
+    $state = U\readState($rootPath, $updateId);
+    if ($isPost && !U\isValidCsrfToken($state, $_POST['csrf_token'] ?? null)) {
+        throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
     }
 
     // Phase A: from the choice of the channel to the prepared package.
-    if (in_array((string)$state['state'], PhaseA::STATES, true)) {
-        // Plain HTTP is only allowed below the test server of debug mode, which Config only sets then.
-        $phaseA = new PhaseA($config, $store, new HttpClient($config->serverUrl), $db, $texts, __DIR__);
-        coreUpdateHandlePhaseA($phaseA, $state, $config, $texts, $isPost, $postedAction);
+    if (in_array((string)$state['state'], U\PHASE_A_STATES, true)) {
+        $context = array(
+            'config' => $config,
+            'pdo' => $pdo,
+            'texts' => $texts,
+            'updaterPath' => __DIR__,
+            // Plain HTTP is only allowed below the test server of debug mode, which only then is set.
+            'http' => array('plainHttpBase' => $config['serverUrl']),
+            'chunkSize' => U\CHUNK_SIZE
+        );
+        coreUpdateHandlePhaseA($context, $state, $isPost, $postedAction);
         exit;
     }
 
-    $updater = new CoreUpdater($config, $store, $texts, $updateId);
+    $updater = new CoreUpdater($config, $texts, $updateId);
 
     if ($isPost) {
         if ($postedAction === 'run') {
-            Page::json($updater->runNextStep());
+            U\jsonResponse($updater->runNextStep());
         } elseif ($postedAction === 'rollback') {
-            Page::json($updater->rollback());
+            U\jsonResponse($updater->rollback());
         } else {
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
         }
@@ -122,15 +114,15 @@ try {
 
     if (($_GET['action'] ?? '') === 'finish') {
         $result = $updater->finishUpdate();
-        Page::show(
-            $texts->get('SYS_CORE_UPDATE_TITLE'),
-            '<p>' . Page::escape((string)$result['message']) . '</p>',
-            '<a class="button" href="' . Page::escape((string)$result['url']) . '">'
-                . Page::escape($texts->get('SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
+        U\showPage(
+            U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+            '<p>' . U\h((string)$result['message']) . '</p>',
+            '<a class="button" href="' . U\h((string)$result['url']) . '">'
+                . U\h(U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
             100,
             'success',
-            $texts->getLanguage(),
-            $texts->get('SYS_CORE_UPDATE_PROGRESS')
+            $texts['language'],
+            U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
         );
         exit;
     }
@@ -144,39 +136,36 @@ try {
     }
 
     if ($isPost && $postedAction !== 'login') {
-        Page::json(array('status' => 'error', 'message' => $message), 500);
+        U\jsonResponse(array('status' => 'error', 'message' => $message), 500);
         exit;
     }
 
     http_response_code(500);
-    Page::show(
-        $texts !== null ? $texts->get('SYS_CORE_UPDATE_TITLE') : 'Admidio update',
-        '<p>' . Page::escape($message) . '</p>',
+    U\showPage(
+        $texts !== null ? U\text($texts, 'SYS_CORE_UPDATE_TITLE') : 'Admidio update',
+        '<p>' . U\h($message) . '</p>',
         '',
         null,
         'error',
-        $texts !== null ? $texts->getLanguage() : 'en'
+        $texts !== null ? $texts['language'] : 'en'
     );
 }
 
 /**
  * The update the updater cookie belongs to, or **null** if the request carries no valid credential.
  * A valid credential is kept alive for another day, in the state and in the browser.
- * @param StateStore $store
- * @param mixed $cookieValue
- * @param Config $config
- * @return string|null
+ * @param array<string,mixed> $config
  */
-function coreUpdateAuthenticate(StateStore $store, mixed $cookieValue, Config $config): ?string
+function coreUpdateAuthenticate(array $config, mixed $cookieValue): ?string
 {
-    $parsed = Credentials::parse($cookieValue);
-    if ($parsed === null || !$store->exists($parsed[0])) {
+    $parsed = U\parseCredential($cookieValue);
+    if ($parsed === null || !U\updateExists($config['rootPath'], $parsed[0])) {
         return null;
     }
 
     $valid = false;
-    $store->update($parsed[0], static function (array $state) use ($cookieValue, &$valid): array {
-        $valid = Credentials::refresh($state, $cookieValue, time());
+    U\updateState($config['rootPath'], $parsed[0], static function (array $state) use ($cookieValue, &$valid): array {
+        $valid = U\refreshCredential($state, $cookieValue, time());
 
         return $state;
     });
@@ -185,7 +174,7 @@ function coreUpdateAuthenticate(StateStore $store, mixed $cookieValue, Config $c
         return null;
     }
 
-    Credentials::sendCookie($config, (string)$cookieValue);
+    U\sendCredentialCookie($config, (string)$cookieValue);
 
     return $parsed[0];
 }
@@ -196,33 +185,27 @@ function coreUpdateAuthenticate(StateStore $store, mixed $cookieValue, Config $c
  * It is only needed while maintenance mode is on and Admidio cannot be used: to continue the
  * update from another device, or after the updater cookie was lost. A successful login gives this
  * browser a credential for the unfinished update.
- * @param Config $config
- * @param StateStore $store
- * @param Db|null $db
- * @param Texts $texts
- * @param bool $submitted
- * @return void
+ * @param array<string,mixed> $config
+ * @param array{language: string, texts: array<string,string>} $texts
  */
-function coreUpdateHandleLogin(Config $config, StateStore $store, ?Db $db, Texts $texts, bool $submitted): void
+function coreUpdateHandleLogin(array $config, ?PDO $pdo, array $texts, bool $submitted): void
 {
-    $loginCookie = $_COOKIE[Csrf::getLoginCookieName($config)] ?? null;
+    $loginCookie = $_COOKIE[U\cookiePrefix($config) . '_CORE_UPDATE_LOGIN'] ?? null;
     $error = '';
 
     if ($submitted) {
         try {
-            if (!Csrf::isValidLogin($loginCookie, $_POST['csrf_token'] ?? null)) {
+            if (!U\isValidLoginCsrfToken($loginCookie, $_POST['csrf_token'] ?? null)) {
                 throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
             }
-            if ($db === null) {
+            if ($pdo === null) {
                 throw new UpdaterException('The database of the installation could not be reached.');
             }
 
-            $login = new Login(
-                $db,
-                new Throttle($store->getDirectory() . '/login-throttle.json'),
-                $store->getDirectory() . '/login.log'
-            );
-            $login->authenticate(
+            U\authenticateAdministrator(
+                $pdo,
+                $config['tablePrefix'],
+                U\updatesDirectory($config['rootPath']),
                 (string)($_POST['login_name'] ?? ''),
                 (string)($_POST['password'] ?? ''),
                 (string)($_POST['totp_code'] ?? ''),
@@ -230,18 +213,18 @@ function coreUpdateHandleLogin(Config $config, StateStore $store, ?Db $db, Texts
                 time()
             );
 
-            $updateId = $store->getActiveId();
+            $updateId = U\activeUpdateId($config['rootPath']);
             if ($updateId === null) {
                 throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
             }
 
             $cookieValue = '';
-            $store->update($updateId, static function (array $state) use (&$cookieValue): array {
-                $cookieValue = Credentials::issue($state, time());
+            U\updateState($config['rootPath'], $updateId, static function (array $state) use (&$cookieValue): array {
+                $cookieValue = U\issueCredential($state, time());
 
                 return $state;
             });
-            Credentials::sendCookie($config, $cookieValue);
+            U\sendCredentialCookie($config, $cookieValue);
 
             // Post/Redirect/Get, so that a reload does not send the password again.
             header('Location: index.php', true, 303);
@@ -251,56 +234,53 @@ function coreUpdateHandleLogin(Config $config, StateStore $store, ?Db $db, Texts
         }
     }
 
-    Page::show(
-        $texts->get('SYS_CORE_UPDATE_TITLE'),
-        Page::loginForm($texts, Csrf::getLoginToken($config, $loginCookie), $error),
+    U\showPage(
+        U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+        U\loginForm($texts, U\loginCsrfToken($config, $loginCookie), $error),
         '',
         null,
         '',
-        $texts->getLanguage()
+        $texts['language']
     );
 }
 
 /**
  * The status page of the update, with the buttons that drive it.
- * @param CoreUpdater $updater
- * @param Texts $texts
- * @param string $csrfToken
- * @return void
+ * @param array{language: string, texts: array<string,string>} $texts
  */
-function coreUpdateShowStatus(CoreUpdater $updater, Texts $texts, string $csrfToken): void
+function coreUpdateShowStatus(CoreUpdater $updater, array $texts, string $csrfToken): void
 {
     $status = $updater->getStatus();
     $warning = '';
 
     if ($status['channel'] === 'master') {
-        $warning = '<div class="warning">' . Page::escape($texts->get('SYS_CORE_UPDATE_MASTER_WARNING')) . '</div>';
+        $warning = '<div class="warning">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_MASTER_WARNING')) . '</div>';
     }
 
     $details = $warning
         . '<dl>'
-        . '<dt>' . Page::escape($texts->get('SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>'
-        . Page::escape((string)$status['installedVersion']) . '</dd>'
-        . '<dt>' . Page::escape($texts->get('SYS_CORE_UPDATE_TARGET')) . '</dt><dd>'
-        . Page::escape((string)$status['targetVersion']) . '</dd>'
-        . '<dt>' . Page::escape($texts->get('SYS_CORE_UPDATE_CURRENT_STATE')) . '</dt><dd id="state">'
-        . Page::escape((string)$status['state']) . '</dd>'
+        . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>'
+        . U\h((string)$status['installedVersion']) . '</dd>'
+        . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>'
+        . U\h((string)$status['targetVersion']) . '</dd>'
+        . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CURRENT_STATE')) . '</dt><dd id="state">'
+        . U\h((string)$status['state']) . '</dd>'
         . '</dl>'
         . '<div id="message" class="message">'
-        . Page::escape($status['lastError'] !== '' ? (string)$status['lastError'] : $texts->get('SYS_CORE_UPDATE_READY'))
+        . U\h($status['lastError'] !== '' ? (string)$status['lastError'] : U\text($texts, 'SYS_CORE_UPDATE_READY'))
         . '</div>';
 
     $buttons = '<button class="button" id="continue-button" type="button">'
-        . Page::escape($texts->get('SYS_CORE_UPDATE_START_RESUME')) . '</button>'
+        . U\h(U\text($texts, 'SYS_CORE_UPDATE_START_RESUME')) . '</button>'
         . '<button class="button secondary" id="rollback-button" type="button"'
         . ($status['state'] === 'rollback_required' ? '' : ' hidden')
-        . '>' . Page::escape($texts->get('SYS_CORE_UPDATE_RESTORE_PREVIOUS')) . '</button>';
+        . '>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_PREVIOUS')) . '</button>';
 
     $script = '<script>
         const endpoint = "index.php";
-        const csrfToken = ' . Page::js($csrfToken) . ';
-        const requestFailedText = ' . Page::js($texts->get('SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
-        const confirmRestoreText = ' . Page::js($texts->get('SYS_CORE_UPDATE_CONFIRM_RESTORE')) . ';
+        const csrfToken = ' . U\js($csrfToken) . ';
+        const requestFailedText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
+        const confirmRestoreText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_CONFIRM_RESTORE')) . ';
         const continueButton = document.getElementById("continue-button");
         const rollbackButton = document.getElementById("rollback-button");
         const message = document.getElementById("message");
@@ -397,14 +377,14 @@ function coreUpdateShowStatus(CoreUpdater $updater, Texts $texts, string $csrfTo
         rollbackButton.addEventListener("click", rollbackUpdate);
     </script>';
 
-    Page::show(
-        $texts->get('SYS_CORE_UPDATE_TITLE'),
+    U\showPage(
+        U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
         $details,
         $buttons . $script,
         (int)$status['progress'],
         $status['state'] === 'rollback_required' ? 'error' : '',
-        $texts->getLanguage(),
-        $texts->get('SYS_CORE_UPDATE_PROGRESS')
+        $texts['language'],
+        U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
     );
 }
 
@@ -413,42 +393,39 @@ function coreUpdateShowStatus(CoreUpdater $updater, Texts $texts, string $csrfTo
  *
  * The forms are plain form posts answered with a redirect, so that a reload does not send them
  * again; the download is driven by the page's script, one bounded request after the other.
- * @param PhaseA $phaseA
+ * @param array<string,mixed> $context See install/core-update/lib/phase-a.php.
  * @param array<string,mixed> $state
- * @param Config $config
- * @param Texts $texts
- * @param bool $isPost
- * @param string $action
- * @return void
  */
-function coreUpdateHandlePhaseA(PhaseA $phaseA, array $state, Config $config, Texts $texts, bool $isPost, string $action): void
+function coreUpdateHandlePhaseA(array $context, array $state, bool $isPost, string $action): void
 {
     $updateId = (string)$state['updateId'];
+    $config = $context['config'];
+    $texts = $context['texts'];
 
     if ($isPost) {
         if ($action === 'run') {
-            Page::json($phaseA->run($updateId));
+            U\jsonResponse(U\phaseARun($context, $updateId));
 
             return;
         }
         if ($action === 'cancel') {
-            $phaseA->cancel($updateId);
-            Page::show(
-                $texts->get('SYS_CORE_UPDATE_TITLE'),
-                '<p>' . Page::escape($texts->get('SYS_CORE_UPDATE_CANCELLED')) . '</p>',
-                '<a class="button" href="' . Page::escape($config->baseUrl . '/modules/overview.php') . '">'
-                    . Page::escape($texts->get('SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
+            U\phaseACancel($context, $updateId);
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CANCELLED')) . '</p>',
+                '<a class="button" href="' . U\h($config['baseUrl'] . '/modules/overview.php') . '">'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO')) . '</a>',
                 null,
                 '',
-                $texts->getLanguage()
+                $texts['language']
             );
 
             return;
         }
 
         match ($action) {
-            'check' => $phaseA->check($updateId, (string)($_POST['channel'] ?? 'stable')),
-            'confirm' => $phaseA->confirm($updateId),
+            'check' => U\phaseACheck($context, $updateId, (string)($_POST['channel'] ?? 'stable')),
+            'confirm' => U\phaseAConfirm($context, $updateId),
             default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
         };
         header('Location: index.php', true, 303);
@@ -458,8 +435,8 @@ function coreUpdateHandlePhaseA(PhaseA $phaseA, array $state, Config $config, Te
 
     // With one channel there is nothing to choose, so the updater checks as soon as it is opened.
     // After a failed check the administrator sees the error and starts the next one.
-    if ($state['state'] === 'new' && count(PhaseA::getChannels($config)) === 1 && (string)($state['lastError'] ?? '') === '') {
-        $state = $phaseA->check($updateId, 'stable');
+    if ($state['state'] === 'new' && count(U\availableChannels($config)) === 1 && (string)($state['lastError'] ?? '') === '') {
+        $state = U\phaseACheck($context, $updateId, 'stable');
     }
 
     coreUpdateShowPhaseA($state, $config, $texts);
@@ -468,47 +445,46 @@ function coreUpdateHandlePhaseA(PhaseA $phaseA, array $state, Config $config, Te
 /**
  * The page of phase A for the state the update is in.
  * @param array<string,mixed> $state
- * @param Config $config
- * @param Texts $texts
- * @return void
+ * @param array<string,mixed> $config
+ * @param array{language: string, texts: array<string,string>} $texts
  */
-function coreUpdateShowPhaseA(array $state, Config $config, Texts $texts): void
+function coreUpdateShowPhaseA(array $state, array $config, array $texts): void
 {
-    $csrf = '<input type="hidden" name="csrf_token" value="' . Page::escape((string)$state['csrfToken']) . '">';
+    $csrf = '<input type="hidden" name="csrf_token" value="' . U\h((string)$state['csrfToken']) . '">';
     $error = (string)($state['lastError'] ?? '') !== ''
-        ? '<div class="message error">' . Page::escape((string)$state['lastError']) . '</div>' : '';
+        ? '<div class="message error">' . U\h((string)$state['lastError']) . '</div>' : '';
     $cancel = '<form method="post" action="index.php" class="inline">' . $csrf
         . '<input type="hidden" name="action" value="cancel">'
-        . '<button class="button secondary" type="submit">' . Page::escape($texts->get('SYS_CORE_UPDATE_CANCEL')) . '</button></form>';
-    $versions = '<dl><dt>' . Page::escape($texts->get('SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>'
-        . Page::escape((string)($state['installedVersion'] ?? '')) . '</dd>';
+        . '<button class="button secondary" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CANCEL')) . '</button></form>';
+    $versions = '<dl><dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>'
+        . U\h((string)($state['installedVersion'] ?? '')) . '</dd>';
 
     switch ($state['state']) {
         case 'new':
         case 'checking':
-            $channels = PhaseA::getChannels($config);
+            $channels = U\availableChannels($config);
             $choice = '';
             foreach ($channels as $channel) {
-                $choice .= '<label class="choice"><input type="radio" name="channel" value="' . Page::escape($channel) . '"'
+                $choice .= '<label class="choice"><input type="radio" name="channel" value="' . U\h($channel) . '"'
                     . ($channel === ($state['channel'] ?? 'stable') ? ' checked' : '') . '> '
-                    . Page::escape(coreUpdateChannelName($channel, $texts)) . '</label>';
+                    . U\h(coreUpdateChannelName($channel, $texts)) . '</label>';
             }
             if (count($channels) > 1) {
-                $choice = '<fieldset><legend>' . Page::escape($texts->get('SYS_CORE_UPDATE_CHANNEL')) . '</legend>' . $choice . '</fieldset>';
+                $choice = '<fieldset><legend>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHANNEL')) . '</legend>' . $choice . '</fieldset>';
             } else {
                 $choice = '<input type="hidden" name="channel" value="stable">';
             }
 
-            Page::show(
-                $texts->get('SYS_CORE_UPDATE_TITLE'),
-                $error . '<p>' . Page::escape($texts->get('SYS_CORE_UPDATE_START_DESC')) . '</p>' . $versions . '</dl>',
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                $error . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_START_DESC')) . '</p>' . $versions . '</dl>',
                 '<form method="post" action="index.php" class="inline">' . $csrf . '<input type="hidden" name="action" value="check">'
                     . $choice . '<button class="button" type="submit">'
-                    . Page::escape($texts->get(count($channels) > 1 ? 'SYS_CORE_UPDATE_CONTINUE' : 'SYS_CORE_UPDATE_CHECK_AGAIN')) . '</button></form>'
+                    . U\h(U\text($texts, count($channels) > 1 ? 'SYS_CORE_UPDATE_CONTINUE' : 'SYS_CORE_UPDATE_CHECK_AGAIN')) . '</button></form>'
                     . $cancel,
                 null,
                 '',
-                $texts->getLanguage()
+                $texts['language']
             );
             break;
 
@@ -516,66 +492,66 @@ function coreUpdateShowPhaseA(array $state, Config $config, Texts $texts): void
             $checks = (array)($state['checks'] ?? array());
             $list = '';
             foreach ($checks as $check) {
-                $list .= '<li class="check-' . Page::escape($check['status']) . '">' . Page::escape($texts->get($check['text'], $check['params'])) . '</li>';
+                $list .= '<li class="check-' . U\h($check['status']) . '">' . U\h(U\text($texts, $check['text'], $check['params'])) . '</li>';
             }
 
             $actions = '';
-            if (!Preflight::hasErrors($checks)) {
+            if (!U\checksHaveErrors($checks)) {
                 $actions .= '<form method="post" action="index.php" class="inline">' . $csrf . '<input type="hidden" name="action" value="confirm">'
-                    . '<button class="button" type="submit">' . Page::escape($texts->get('SYS_CORE_UPDATE_DOWNLOAD')) . '</button></form>';
+                    . '<button class="button" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DOWNLOAD')) . '</button></form>';
             }
             $actions .= '<form method="post" action="index.php" class="inline">' . $csrf . '<input type="hidden" name="action" value="check">'
-                . '<input type="hidden" name="channel" value="' . Page::escape((string)$state['channel']) . '">'
-                . '<button class="button secondary" type="submit">' . Page::escape($texts->get('SYS_CORE_UPDATE_CHECK_AGAIN')) . '</button></form>'
+                . '<input type="hidden" name="channel" value="' . U\h((string)$state['channel']) . '">'
+                . '<button class="button secondary" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECK_AGAIN')) . '</button></form>'
                 . $cancel;
 
             // P10: if the browser can read the probe file, adm_my_files is reachable from outside.
-            $probeUrl = $config->baseUrl . '/adm_my_files/core-update/' . $state['updateId'] . '/probe.txt';
+            $probeUrl = $config['baseUrl'] . '/adm_my_files/core-update/' . $state['updateId'] . '/probe.txt';
             $script = '<script>
-                fetch(' . Page::js($probeUrl) . ', {cache: "no-store", credentials: "omit"})
+                fetch(' . U\js($probeUrl) . ', {cache: "no-store", credentials: "omit"})
                     .then(response => response.ok ? response.text() : "")
                     .then(text => {
-                        if (text.trim() === ' . Page::js((string)($state['probeToken'] ?? '')) . ') {
+                        if (text.trim() === ' . U\js((string)($state['probeToken'] ?? '')) . ') {
                             document.getElementById("reachable").hidden = false;
                         }
                     })
                     .catch(() => {});
             </script>';
 
-            Page::show(
-                $texts->get('SYS_CORE_UPDATE_TITLE'),
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
                 $error . $versions
-                    . '<dt>' . Page::escape($texts->get('SYS_CORE_UPDATE_TARGET')) . '</dt><dd>'
-                    . Page::escape((string)($state['targetVersionText'] ?? $state['targetVersion'])) . '</dd>'
-                    . '<dt>' . Page::escape($texts->get('SYS_CORE_UPDATE_CHANNEL')) . '</dt><dd>'
-                    . Page::escape(coreUpdateChannelName((string)$state['channel'], $texts)) . '</dd></dl>'
-                    . ($state['channel'] === 'master' ? '<div class="warning">' . Page::escape($texts->get('SYS_CORE_UPDATE_MASTER_WARNING')) . '</div>' : '')
-                    . '<h2>' . Page::escape($texts->get('SYS_CORE_UPDATE_CHECKS')) . '</h2><ul class="checks">' . $list . '</ul>'
-                    . '<div id="reachable" class="warning" hidden>' . Page::escape($texts->get('SYS_CORE_UPDATE_CHECK_REACHABLE')) . '</div>',
+                    . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>'
+                    . U\h((string)($state['targetVersionText'] ?? $state['targetVersion'])) . '</dd>'
+                    . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHANNEL')) . '</dt><dd>'
+                    . U\h(coreUpdateChannelName((string)$state['channel'], $texts)) . '</dd></dl>'
+                    . ($state['channel'] === 'master' ? '<div class="warning">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_MASTER_WARNING')) . '</div>' : '')
+                    . '<h2>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECKS')) . '</h2><ul class="checks">' . $list . '</ul>'
+                    . '<div id="reachable" class="warning" hidden>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECK_REACHABLE')) . '</div>',
                 $actions . $script,
                 null,
-                Preflight::hasErrors($checks) ? 'error' : '',
-                $texts->getLanguage()
+                U\checksHaveErrors($checks) ? 'error' : '',
+                $texts['language']
             );
             break;
 
         case 'prepared':
-            Page::show(
-                $texts->get('SYS_CORE_UPDATE_TITLE'),
-                '<p>' . Page::escape($texts->get('SYS_CORE_UPDATE_PREPARED', array((string)$state['targetVersion']))) . '</p>',
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_PREPARED', array((string)$state['targetVersion']))) . '</p>',
                 $cancel,
                 100,
                 'success',
-                $texts->getLanguage(),
-                $texts->get('SYS_CORE_UPDATE_PROGRESS')
+                $texts['language'],
+                U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
             );
             break;
 
         default:
             // downloading, downloaded: the page drives the download until the package is prepared.
             $script = '<script>
-                const csrfToken = ' . Page::js((string)$state['csrfToken']) . ';
-                const requestFailedText = ' . Page::js($texts->get('SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
+                const csrfToken = ' . U\js((string)$state['csrfToken']) . ';
+                const requestFailedText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
                 const message = document.getElementById("message");
                 const progress = document.getElementById("progress-bar");
                 const retry = document.getElementById("retry-button");
@@ -617,30 +593,28 @@ function coreUpdateShowPhaseA(array $state, Config $config, Texts $texts): void
                 download();
             </script>';
 
-            Page::show(
-                $texts->get('SYS_CORE_UPDATE_TITLE'),
-                '<div id="message" class="message">' . Page::escape($texts->get('SYS_CORE_UPDATE_DOWNLOADING', array((string)$state['targetVersion']))) . '</div>',
-                '<button class="button" id="retry-button" type="button" hidden>' . Page::escape($texts->get('SYS_CORE_UPDATE_START_RESUME')) . '</button>'
+            U\showPage(
+                U\text($texts, 'SYS_CORE_UPDATE_TITLE'),
+                '<div id="message" class="message">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DOWNLOADING', array((string)$state['targetVersion']))) . '</div>',
+                '<button class="button" id="retry-button" type="button" hidden>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_START_RESUME')) . '</button>'
                     . $cancel . $script,
-                PhaseA::progress($state),
+                U\phaseAProgress($state),
                 '',
-                $texts->getLanguage(),
-                $texts->get('SYS_CORE_UPDATE_PROGRESS')
+                $texts['language'],
+                U\text($texts, 'SYS_CORE_UPDATE_PROGRESS')
             );
     }
 }
 
 /**
  * The name of a channel for the administrator.
- * @param string $channel
- * @param Texts $texts
- * @return string
+ * @param array{language: string, texts: array<string,string>} $texts
  */
-function coreUpdateChannelName(string $channel, Texts $texts): string
+function coreUpdateChannelName(string $channel, array $texts): string
 {
     return match ($channel) {
-        'beta' => $texts->get('SYS_CORE_UPDATE_CHANNEL_BETA'),
-        'master' => $texts->get('SYS_CORE_UPDATE_CHANNEL_MASTER'),
-        default => $texts->get('SYS_CORE_UPDATE_CHANNEL_STABLE')
+        'beta' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_BETA'),
+        'master' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_MASTER'),
+        default => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_STABLE')
     };
 }

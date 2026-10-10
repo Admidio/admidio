@@ -1,6 +1,6 @@
 <?php
 /**
- * The login of the standalone updater against a real Admidio database: who counts as an
+ * The login of the updater against a real Admidio database: who counts as an
  * administrator, and what the login refuses. The updater reads with plain PDO; it is handed the
  * connection of the test, so that it sees the rows of the test transaction.
  */
@@ -9,10 +9,7 @@ namespace Admidio\Tests\Integration\CoreUpdater;
 
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
-use AdmidioCoreUpdater\Db;
-use AdmidioCoreUpdater\Login;
-use AdmidioCoreUpdater\StateStore;
-use AdmidioCoreUpdater\Throttle;
+use AdmidioCoreUpdater as U;
 use AdmidioCoreUpdater\UpdaterException;
 use PDO;
 
@@ -21,7 +18,7 @@ final class UpdaterLoginTest extends DatabaseTestCase
     private const PASSWORD = 'Updater-Test-Password-1';
 
     private string $directory = '';
-    private Login $login;
+    private PDO $pdo;
 
     public static function setUpBeforeClass(): void
     {
@@ -40,17 +37,12 @@ final class UpdaterLoginTest extends DatabaseTestCase
         // The updater opens a PDO connection of its own; here it gets the one of the test transaction.
         $pdo = (new \ReflectionProperty($this->getDatabase(), 'pdo'))->getValue($this->getDatabase());
         $this->assertInstanceOf(PDO::class, $pdo);
-
-        $this->login = new Login(
-            new Db($pdo, TABLE_PREFIX),
-            new Throttle($this->directory . '/login-throttle.json'),
-            $this->directory . '/login.log'
-        );
+        $this->pdo = $pdo;
     }
 
     protected function tearDown(): void
     {
-        StateStore::deleteDirectory($this->directory);
+        U\deleteDirectory($this->directory);
 
         parent::tearDown();
     }
@@ -86,12 +78,20 @@ final class UpdaterLoginTest extends DatabaseTestCase
     }
 
     /**
+     * Log in with the updater's own login.
+     */
+    private function authenticate(string $loginName, string $password, string $totpCode, int $now): int
+    {
+        return U\authenticateAdministrator($this->pdo, TABLE_PREFIX, $this->directory, $loginName, $password, $totpCode, '127.0.0.1', $now);
+    }
+
+    /**
      * Assert that a login is refused with the generic message.
      */
     private function assertRefused(string $loginName, string $password, string $reason): void
     {
         try {
-            $this->login->authenticate($loginName, $password, '', '127.0.0.1', time());
+            $this->authenticate($loginName, $password, '', time());
             $this->fail('accepted: ' . $reason);
         } catch (UpdaterException $exception) {
             $this->assertSame('SYS_CORE_UPDATE_LOGIN_FAILED', $exception->getMessage(), $reason);
@@ -105,7 +105,7 @@ final class UpdaterLoginTest extends DatabaseTestCase
     {
         $userId = $this->createUser('updater_admin', true);
 
-        $this->assertSame($userId, $this->login->authenticate('Updater_Admin', self::PASSWORD, '', '127.0.0.1', time()));
+        $this->assertSame($userId, $this->authenticate('Updater_Admin', self::PASSWORD, '', time()));
         $this->assertStringContainsString("Updater_Admin\tsuccess, user " . $userId, (string)file_get_contents($this->directory . '/login.log'));
     }
 
@@ -154,7 +154,7 @@ final class UpdaterLoginTest extends DatabaseTestCase
             'UPDATE ' . TBL_USERS . ' SET usr_date_invalid = ? WHERE usr_id = ?',
             array(date('Y-m-d H:i:s', time() - 3600), $userId)
         );
-        $this->assertSame($userId, $this->login->authenticate('updater_locked', self::PASSWORD, '', '127.0.0.1', time()),
+        $this->assertSame($userId, $this->authenticate('updater_locked', self::PASSWORD, '', time()),
             'the lock of an hour ago is over');
     }
 
@@ -170,8 +170,8 @@ final class UpdaterLoginTest extends DatabaseTestCase
         $this->assertRefused('updater_tfa', self::PASSWORD, 'no security code');
 
         $now = time();
-        $code = Login::totpCode(Login::decodeBase32($secret), intdiv($now, 30), 6);
-        $this->assertSame($userId, $this->login->authenticate('updater_tfa', self::PASSWORD, $code, '127.0.0.1', $now));
+        $code = U\totpCode(U\decodeBase32($secret), intdiv($now, 30), 6);
+        $this->assertSame($userId, $this->authenticate('updater_tfa', self::PASSWORD, $code, $now));
     }
 
     /**
@@ -182,20 +182,20 @@ final class UpdaterLoginTest extends DatabaseTestCase
         $userId = $this->createUser('updater_throttled', true);
         $now = time();
 
-        for ($attempt = 0; $attempt < Throttle::MAX_FAILURES; $attempt++) {
+        for ($attempt = 0; $attempt < U\MAX_LOGIN_FAILURES; $attempt++) {
             try {
-                $this->login->authenticate('updater_throttled', 'wrong', '', '127.0.0.1', $now);
+                $this->authenticate('updater_throttled', 'wrong', '', $now);
             } catch (UpdaterException) {
             }
         }
 
         try {
-            $this->login->authenticate('updater_throttled', self::PASSWORD, '', '127.0.0.1', $now);
+            $this->authenticate('updater_throttled', self::PASSWORD, '', $now);
             $this->fail('the correct password was accepted during the block');
         } catch (UpdaterException $exception) {
             $this->assertSame('SYS_CORE_UPDATE_LOGIN_BLOCKED', $exception->getMessage());
         }
 
-        $this->assertSame($userId, $this->login->authenticate('updater_throttled', self::PASSWORD, '', '127.0.0.1', $now + Throttle::BLOCK));
+        $this->assertSame($userId, $this->authenticate('updater_throttled', self::PASSWORD, '', $now + U\LOGIN_BLOCK));
     }
 }

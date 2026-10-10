@@ -1,22 +1,15 @@
 <?php
 /**
- * The checks before an update is downloaded, one by one.
+ * The checks before an update is downloaded (install/core-update/lib/phase-a.php), one by one.
  */
 
 namespace Admidio\Tests\Unit\CoreUpdater;
 
 use Admidio\Tests\Support\AdmidioTestCase;
-use AdmidioCoreUpdater\Descriptor;
-use AdmidioCoreUpdater\KeyStatement;
-use AdmidioCoreUpdater\Preflight;
-use AdmidioCoreUpdater\Signature;
-use AdmidioCoreUpdater\StateStore;
+use AdmidioCoreUpdater as U;
 
 final class PreflightTest extends AdmidioTestCase
 {
-    private static KeyStatement $keys;
-    private static \OpenSSLAsymmetricKey $releaseKey;
-
     private string $root = '';
 
     public static function setUpBeforeClass(): void
@@ -24,13 +17,6 @@ final class PreflightTest extends AdmidioTestCase
         parent::setUpBeforeClass();
 
         require_once dirname(__DIR__, 3) . '/install/core-update/lib/bootstrap.php';
-
-        $root = openssl_pkey_new(array('private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA));
-        self::$releaseKey = openssl_pkey_new(array('private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA));
-        $statement = json_encode(array('schema' => 1, 'sequence' => 1, 'revoked' => array(), 'keys' => array(
-            array('id' => 'release', 'channels' => array('stable'), 'publicKey' => openssl_pkey_get_details(self::$releaseKey)['key'])
-        )));
-        self::$keys = KeyStatement::fromSigned($statement, Signature::sign($statement, $root), openssl_pkey_get_details($root)['key']);
     }
 
     protected function setUp(): void
@@ -45,20 +31,22 @@ final class PreflightTest extends AdmidioTestCase
 
     protected function tearDown(): void
     {
-        StateStore::deleteDirectory($this->root);
+        U\deleteDirectory($this->root);
 
         parent::tearDown();
     }
 
-    private static function descriptor(string $version = '5.1.0', string $minimumPhp = '8.2', int $packageSize = 1000): Descriptor
+    /**
+     * A release as releaseFromUpdateInfo() reads it.
+     * @return array<string,mixed>
+     */
+    private static function release(string $version = '5.1.0', string $minimumPhp = '8.2', int $packageSize = 1000): array
     {
-        $json = json_encode(array(
-            'schema' => 1, 'channel' => 'stable', 'version' => $version, 'packageUrl' => 'https://example.org/p.zip',
-            'packageSha256' => str_repeat('a', 64), 'packageSize' => $packageSize, 'manifestSha256' => str_repeat('b', 64),
-            'minimumSourceVersion' => '5.0.0', 'minimumPhpVersion' => $minimumPhp
-        ));
-
-        return Descriptor::fromSigned($json, Signature::sign($json, self::$releaseKey), self::$keys, 'stable');
+        return array(
+            'channel' => 'stable', 'version' => $version, 'versionText' => $version, 'packageUrl' => 'https://example.org/p.zip',
+            'packageSha256' => str_repeat('a', 64), 'packageSize' => $packageSize, 'minimumSourceVersion' => '5.0.0',
+            'minimumPhpVersion' => $minimumPhp
+        );
     }
 
     /**
@@ -82,9 +70,9 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testReadyInstallation(): void
     {
-        $results = (new Preflight($this->root))->run(self::descriptor(), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release(), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
 
-        $this->assertFalse(Preflight::hasErrors($results), json_encode($results));
+        $this->assertFalse(U\checksHaveErrors($results), json_encode($results));
         $this->assertSame(array('P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P9'), array_column($results, 'check'),
             'P8 only appears with open_basedir, P7 is the state store, P10 the browser');
         $this->assertSame('SYS_CORE_UPDATE_CHECK_VERSION', self::result($results, 'P3')['text']);
@@ -96,7 +84,7 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testReinstall(): void
     {
-        $results = (new Preflight($this->root))->run(self::descriptor('5.0.14'), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release('5.0.14'), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
 
         $this->assertSame('SYS_CORE_UPDATE_CHECK_REINSTALL', self::result($results, 'P3')['text']);
     }
@@ -106,9 +94,9 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testPhpTooOld(): void
     {
-        $results = (new Preflight($this->root))->run(self::descriptor('5.1.0', '99.0'), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release('5.1.0', '99.0'), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
 
-        $this->assertSame(Preflight::ERROR, self::result($results, 'P1')['status']);
+        $this->assertSame('error', self::result($results, 'P1')['status']);
     }
 
     /**
@@ -116,10 +104,10 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testVersionRule(): void
     {
-        $results = (new Preflight($this->root))->run(self::descriptor('5.0.13'), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release('5.0.13'), '5.0.14', '5.0.14', 'mysql', 10 ** 10);
         $this->assertSame('SYS_CORE_UPDATE_VERSION_OLDER', self::result($results, 'P3')['text']);
 
-        $results = (new Preflight($this->root))->run(self::descriptor('5.1.0'), '5.0.14', '6.0.0', 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release('5.1.0'), '5.0.14', '6.0.0', 'mysql', 10 ** 10);
         $this->assertSame('SYS_CORE_UPDATE_DATABASE_NEWER', self::result($results, 'P3')['text']);
     }
 
@@ -128,11 +116,11 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testPendingDatabaseUpdate(): void
     {
-        $results = (new Preflight($this->root))->run(self::descriptor(), '5.0.14', '5.0.12', 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release(), '5.0.14', '5.0.12', 'mysql', 10 ** 10);
         $this->assertSame('SYS_CORE_UPDATE_CHECK_DATABASE_PENDING', self::result($results, 'P4')['text']);
         $this->assertSame(array('5.0.12', '5.0.14'), self::result($results, 'P4')['params']);
 
-        $results = (new Preflight($this->root))->run(self::descriptor(), '5.0.14', null, 'mysql', 10 ** 10);
+        $results = U\preflightChecks($this->root, self::release(), '5.0.14', null, 'mysql', 10 ** 10);
         $this->assertSame('SYS_CORE_UPDATE_CHECK_DATABASE_UNKNOWN', self::result($results, 'P4')['text']);
     }
 
@@ -141,15 +129,15 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testSpace(): void
     {
-        $descriptor = self::descriptor('5.1.0', '8.2', 100 * 1048576);
+        $release = self::release('5.1.0', '8.2', 100 * 1048576);
 
-        $results = (new Preflight($this->root))->run($descriptor, '5.0.14', '5.0.14', 'mysql', 200 * 1048576);
+        $results = U\preflightChecks($this->root, $release, '5.0.14', '5.0.14', 'mysql', 200 * 1048576);
         $this->assertSame('SYS_CORE_UPDATE_CHECK_SPACE_MISSING', self::result($results, 'P6')['text']);
         $this->assertSame(array('840', '200'), self::result($results, 'P6')['params'], '(100 + 2 * 300) * 1.2 MB needed');
 
-        $results = (new Preflight($this->root))->run($descriptor, '5.0.14', '5.0.14', 'mysql', -1);
-        $this->assertSame(Preflight::WARNING, self::result($results, 'P6')['status']);
-        $this->assertFalse(Preflight::hasErrors(array(self::result($results, 'P6'))));
+        $results = U\preflightChecks($this->root, $release, '5.0.14', '5.0.14', 'mysql', -1);
+        $this->assertSame('warning', self::result($results, 'P6')['status']);
+        $this->assertFalse(U\checksHaveErrors(array(self::result($results, 'P6'))));
     }
 
     /**
@@ -157,7 +145,23 @@ final class PreflightTest extends AdmidioTestCase
      */
     public function testWriteProbe(): void
     {
-        $this->assertTrue(Preflight::canCreateAndRename($this->root . '/src'));
-        $this->assertFalse(Preflight::canCreateAndRename($this->root . '/index.php/inside-a-file'));
+        $this->assertTrue(U\canCreateAndRename($this->root . '/src'));
+        $this->assertFalse(U\canCreateAndRename($this->root . '/index.php/inside-a-file'));
+    }
+
+    /**
+     * @testdox The manifest makes the requirements exact: its PHP version, its extensions and its size
+     */
+    public function testManifestChecks(): void
+    {
+        $manifest = array('version' => '5.1.0', 'requirements' => array('php' => '>=8.2', 'extensions' => array('json')), 'totalSize' => 1048576);
+        $this->assertFalse(U\checksHaveErrors(U\manifestChecks($manifest, 10 ** 10)));
+
+        $results = U\manifestChecks(array_merge($manifest, array('requirements' => array('php' => '>=99.0', 'extensions' => array('json', 'no_such_extension')))), 10 ** 10);
+        $this->assertSame('SYS_CORE_UPDATE_PHP_TOO_OLD', self::result($results, 'P1')['text']);
+        $this->assertSame(array('no_such_extension'), self::result($results, 'P2')['params']);
+
+        $results = U\manifestChecks($manifest, 1048576);
+        $this->assertSame('SYS_CORE_UPDATE_CHECK_SPACE_MISSING', self::result($results, 'P6')['text'], 'two copies and a margin');
     }
 }

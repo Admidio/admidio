@@ -1,21 +1,14 @@
 <?php
 /**
  * Phase A from the choice of the channel to the prepared package, against PHP's built-in web server
- * on localhost. The keys, the release information and the package are made by the test; the
- * installation is a temporary directory with an old updater in it.
+ * on localhost (install/core-update/lib/phase-a.php). The key, update.txt and the package are made
+ * by the test; the installation is a temporary directory with an old updater in it.
  */
 
 namespace Admidio\Tests\Unit\CoreUpdater;
 
 use Admidio\Tests\Support\AdmidioTestCase;
-use AdmidioCoreUpdater\Config;
-use AdmidioCoreUpdater\Db;
-use AdmidioCoreUpdater\HttpClient;
-use AdmidioCoreUpdater\PhaseA;
-use AdmidioCoreUpdater\Preflight;
-use AdmidioCoreUpdater\Signature;
-use AdmidioCoreUpdater\StateStore;
-use AdmidioCoreUpdater\Texts;
+use AdmidioCoreUpdater as U;
 use AdmidioCoreUpdater\UpdaterException;
 use PDO;
 use ZipArchive;
@@ -40,7 +33,7 @@ final class PhaseATest extends AdmidioTestCase
 
         require_once dirname(__DIR__, 3) . '/install/core-update/lib/bootstrap.php';
 
-        foreach (array('root', 'release', 'stranger') as $name) {
+        foreach (array('release', 'stranger') as $name) {
             $key = openssl_pkey_new(array('private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA));
             self::$private[$name] = $key;
             self::$public[$name] = openssl_pkey_get_details($key)['key'];
@@ -81,7 +74,7 @@ final class PhaseATest extends AdmidioTestCase
             proc_terminate(self::$server);
             proc_close(self::$server);
         }
-        StateStore::deleteDirectory(self::$serverDirectory);
+        U\deleteDirectory(self::$serverDirectory);
 
         parent::tearDownAfterClass();
     }
@@ -95,14 +88,14 @@ final class PhaseATest extends AdmidioTestCase
         foreach (array('adm_my_files', 'install/core-update/lib', 'system/bootstrap', 'src') as $directory) {
             mkdir($this->root . '/' . $directory, 0777, true);
         }
-        file_put_contents($this->root . '/root-key.pem', self::$public['root']);
+        file_put_contents($this->root . '/release-key.pem', self::$public['release']);
         file_put_contents($this->root . '/adm_my_files/config.php', '<?php
             $gDbType = "mysql";
             $g_adm_db = "club";
             $g_root_path = "http://127.0.0.1";
             $gDebug = true;
             $gCoreUpdateServerUrl = ' . var_export(self::$baseUrl, true) . ';
-            $gCoreUpdateRootKeyFile = "root-key.pem";');
+            $gCoreUpdatePublicKeyFile = "release-key.pem";');
         file_put_contents($this->root . '/system/bootstrap/constants.php', "<?php\nconst ADMIDIO_VERSION_MAIN = 5;\n"
             . "const ADMIDIO_VERSION_MINOR = 0;\nconst ADMIDIO_VERSION_PATCH = 14;\nconst ADMIDIO_VERSION_BETA = 0;\n");
         file_put_contents($this->root . '/index.php', 'OLD INDEX');
@@ -111,25 +104,26 @@ final class PhaseATest extends AdmidioTestCase
         file_put_contents($this->root . '/install/core-update/obsolete.php', 'OLD FILE');
 
         foreach (glob(self::$serverDirectory . '/files/*') ?: array() as $entry) {
-            is_dir($entry) ? StateStore::deleteDirectory($entry) : unlink($entry);
+            is_dir($entry) ? U\deleteDirectory($entry) : unlink($entry);
         }
         @unlink(self::$serverDirectory . '/requests.log');
     }
 
     protected function tearDown(): void
     {
-        StateStore::deleteDirectory($this->root);
+        U\releaseLock();
+        U\deleteDirectory($this->root);
 
         parent::tearDown();
     }
 
     /**
-     * Build a package of version 5.1.0 with its signed manifest.
+     * Build a package of version 5.1.0 with its manifest.
      * @param array<string,string> $files path => content, added to the standard files
      * @param array<int,string> $unlisted paths the manifest leaves out
      * @return string The bytes of the ZIP.
      */
-    private function buildPackage(array $files = array(), array $unlisted = array(), string $manifestSigner = 'release'): string
+    private function buildPackage(array $files = array(), array $unlisted = array(), string $manifestVersion = '5.1.0'): string
     {
         $files = array_merge(array(
             'index.php' => 'NEW INDEX',
@@ -145,7 +139,7 @@ final class PhaseATest extends AdmidioTestCase
             }
         }
         $manifest = json_encode(array(
-            'version' => '5.1.0',
+            'version' => $manifestVersion,
             'managedDirectories' => array('src', 'install'),
             'managedRootFiles' => array('index.php'),
             'preservePaths' => array('adm_my_files', 'install/core-update'),
@@ -163,7 +157,6 @@ final class PhaseATest extends AdmidioTestCase
             $zip->setCompressionName('admidio-5.1.0/' . $path, ZipArchive::CM_STORE);
         }
         $zip->addFromString('admidio-5.1.0/install/update-manifest.json', $manifest);
-        $zip->addFromString('admidio-5.1.0/install/update-manifest.json.sig', Signature::sign($manifest, self::$private[$manifestSigner]));
         $zip->close();
 
         $bytes = (string)file_get_contents($file);
@@ -173,69 +166,68 @@ final class PhaseATest extends AdmidioTestCase
     }
 
     /**
-     * Publish a package with its release information and the key statement on the test server.
-     * @param string $package
-     * @param array<string,mixed> $changes Changes of the descriptor.
+     * Publish a package with update.txt and its signature on the test server.
+     * @param array<string,string> $changes Lines of update.txt to replace.
      */
-    private function publish(string $package, array $changes = array(), string $descriptorSigner = 'release'): void
+    private function publish(string $package, array $changes = array(), string $signer = 'release'): void
     {
         $files = self::$serverDirectory . '/files';
         file_put_contents($files . '/admidio-5.1.0.zip', $package);
 
-        $zip = new ZipArchive();
-        $zip->open($files . '/admidio-5.1.0.zip');
-        $manifest = (string)$zip->getFromName('admidio-5.1.0/install/update-manifest.json');
-        $zip->close();
-
-        $keys = json_encode(array('schema' => 1, 'sequence' => 7, 'revoked' => array(),
-            'keys' => array(array('id' => 'release-test', 'channels' => array('stable'), 'publicKey' => self::$public['release']))));
-        file_put_contents($files . '/release-keys.json', $keys);
-        file_put_contents($files . '/release-keys.json.sig', Signature::sign($keys, self::$private['root']));
-
-        $descriptor = json_encode(array_merge(array(
-            'schema' => 1,
-            'channel' => 'stable',
-            'version' => '5.1.0',
-            'packageUrl' => self::$baseUrl . 'admidio-5.1.0.zip',
-            'packageSha256' => hash('sha256', $package),
-            'packageSize' => strlen($package),
-            'manifestSha256' => hash('sha256', $manifest),
-            'minimumSourceVersion' => '5.0.0',
-            'minimumPhpVersion' => '8.2'
-        ), $changes));
-        @mkdir($files . '/stable');
-        file_put_contents($files . '/stable/release.json', $descriptor);
-        file_put_contents($files . '/stable/release.json.sig', Signature::sign($descriptor, self::$private[$descriptorSigner]));
+        $lines = array_merge(array(
+            'Version' => '5.1.0',
+            'Package-URL' => self::$baseUrl . 'admidio-5.1.0.zip',
+            'Package-SHA256' => hash('sha256', $package),
+            'Package-Size' => (string)strlen($package),
+            'Minimum-Source-Version' => '5.0.0',
+            'Minimum-PHP-Version' => '8.2',
+            'Beta-Version' => '',
+            'Beta-Release' => ''
+        ), $changes);
+        $text = '';
+        foreach ($lines as $name => $value) {
+            $text .= $name . '=' . $value . "\n";
+        }
+        file_put_contents($files . '/update.txt', $text);
+        file_put_contents($files . '/update.txt.sig', U\signData($text, self::$private[$signer]));
     }
 
     /**
-     * Phase A of the test installation, with a database of version 5.0.14 and 100 KB download parts.
+     * The context of phase A for the test installation, with a database of the given version and
+     * 100 KB download parts.
+     * @return array<string,mixed>
      */
-    private function phaseA(string $databaseVersion = '5.0.14'): PhaseA
+    private function context(string $databaseVersion = '5.0.14'): array
     {
         $pdo = new PDO('sqlite::memory:', null, null, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC));
         $pdo->exec('CREATE TABLE adm_components (com_type TEXT, com_name_intern TEXT, com_version TEXT, com_beta INTEGER)');
         $pdo->exec("INSERT INTO adm_components VALUES ('SYSTEM', 'CORE', '" . $databaseVersion . "', 0)");
 
-        $config = Config::load($this->root);
+        $config = U\loadConfig($this->root);
 
-        return new PhaseA($config, new StateStore($this->root), new HttpClient($config->serverUrl), new Db($pdo, 'adm'),
-            new Texts('en', array()), $this->root . '/install/core-update', 100000);
+        return array(
+            'config' => $config,
+            'pdo' => $pdo,
+            'texts' => array('language' => 'en', 'texts' => array()),
+            'updaterPath' => $this->root . '/install/core-update',
+            'http' => array('plainHttpBase' => $config['serverUrl']),
+            'chunkSize' => 100000
+        );
     }
 
-    private function store(): StateStore
+    private function createUpdate(): string
     {
-        return new StateStore($this->root);
+        return U\createUpdate($this->root)['updateId'];
     }
 
     /**
      * Run the download and the verification until the update is prepared or stops.
      * @return array<string,mixed> The last answer.
      */
-    private function runToTheEnd(PhaseA $phaseA, string $updateId): array
+    private function runToTheEnd(array $context, string $updateId): array
     {
         for ($request = 0; $request < 20; $request++) {
-            $result = $phaseA->run($updateId);
+            $result = U\phaseARun($context, $updateId);
             if ($result['status'] !== 'success') {
                 return $result;
             }
@@ -250,27 +242,25 @@ final class PhaseATest extends AdmidioTestCase
     public function testPhaseA(): void
     {
         $this->publish($this->buildPackage());
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
+        $context = $this->context();
+        $updateId = $this->createUpdate();
 
-        $state = $phaseA->check($updateId, 'stable');
+        $state = U\phaseACheck($context, $updateId, 'stable');
         $this->assertSame('checked', $state['state'], (string)$state['lastError']);
         $this->assertSame('5.0.14', $state['installedVersion']);
         $this->assertSame('5.1.0', $state['targetVersion']);
         $this->assertSame('update', $state['versionRule']);
-        $this->assertFalse(Preflight::hasErrors($state['checks']), json_encode($state['checks']));
-        $workspace = $this->store()->getWorkspace($updateId);
-        foreach (array('root-key.pem', 'release-keys.json', 'release-keys.json.sig', 'release.json', 'release.json.sig') as $file) {
+        $this->assertFalse(U\checksHaveErrors($state['checks']), json_encode($state['checks']));
+        $workspace = U\workspace($this->root, $updateId);
+        foreach (array('release-key.pem', 'update.txt', 'update.txt.sig', 'probe.txt') as $file) {
             $this->assertFileExists($workspace . '/' . $file, 'kept in the workspace: ' . $file);
         }
-        $this->assertSame(7, json_decode((string)file_get_contents($this->root . '/adm_my_files/core-update/keys-seen.json'), true)['sequence'],
-            'the newest key statement is remembered');
 
-        $this->assertSame('downloading', $phaseA->confirm($updateId)['state']);
-        $result = $this->runToTheEnd($phaseA, $updateId);
+        $this->assertSame('downloading', U\phaseAConfirm($context, $updateId)['state']);
+        $result = $this->runToTheEnd($context, $updateId);
 
         $this->assertSame('prepared', $result['status'], $result['message']);
-        $this->assertSame('prepared', $this->store()->read($updateId)['state']);
+        $this->assertSame('prepared', U\readState($this->root, $updateId)['state']);
         $this->assertSame('NEW UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
         $this->assertSame('NEW BOOTSTRAP', file_get_contents($this->root . '/install/core-update/lib/bootstrap.php'));
         $this->assertFileDoesNotExist($this->root . '/install/core-update/obsolete.php', 'a file the new updater does not have is removed');
@@ -291,15 +281,15 @@ final class PhaseATest extends AdmidioTestCase
     {
         $package = $this->buildPackage();
         $this->publish($package);
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
-        $phaseA->check($updateId, 'stable');
-        $phaseA->confirm($updateId);
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+        U\phaseACheck($context, $updateId, 'stable');
+        U\phaseAConfirm($context, $updateId);
 
         // The first request got 150000 bytes before it ended.
-        file_put_contents($this->store()->getWorkspace($updateId) . '/package.zip', substr($package, 0, 150000));
+        file_put_contents(U\workspace($this->root, $updateId) . '/package.zip', substr($package, 0, 150000));
 
-        $this->assertSame('prepared', $this->runToTheEnd($phaseA, $updateId)['status']);
+        $this->assertSame('prepared', $this->runToTheEnd($context, $updateId)['status']);
         $log = (string)file_get_contents(self::$serverDirectory . '/requests.log');
         $this->assertStringContainsString('/admidio-5.1.0.zip bytes=150000-249999', $log);
         $this->assertStringNotContainsString('/admidio-5.1.0.zip bytes=0-', $log);
@@ -311,27 +301,13 @@ final class PhaseATest extends AdmidioTestCase
     public function testServerWithoutRanges(): void
     {
         $package = $this->buildPackage();
-        $this->publish($package, array('packageUrl' => self::$baseUrl . 'norange/admidio-5.1.0.zip'));
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
-        $phaseA->check($updateId, 'stable');
-        $phaseA->confirm($updateId);
+        $this->publish($package, array('Package-URL' => self::$baseUrl . 'norange/admidio-5.1.0.zip'));
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+        U\phaseACheck($context, $updateId, 'stable');
+        U\phaseAConfirm($context, $updateId);
 
-        $this->assertSame('prepared', $this->runToTheEnd($phaseA, $updateId)['status']);
-    }
-
-    /**
-     * @testdox When a mirror fails, the next one is used
-     */
-    public function testMirrorFallback(): void
-    {
-        $this->publish($this->buildPackage(), array('packageUrl' => array(self::$baseUrl . 'gone/admidio-5.1.0.zip', self::$baseUrl . 'admidio-5.1.0.zip')));
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
-        $phaseA->check($updateId, 'stable');
-        $phaseA->confirm($updateId);
-
-        $this->assertSame('prepared', $this->runToTheEnd($phaseA, $updateId)['status']);
+        $this->assertSame('prepared', $this->runToTheEnd($context, $updateId)['status']);
     }
 
     /**
@@ -340,15 +316,15 @@ final class PhaseATest extends AdmidioTestCase
     public function testFailedCheck(): void
     {
         $this->publish($this->buildPackage(), array(), 'stranger');
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
+        $context = $this->context();
+        $updateId = $this->createUpdate();
 
-        $state = $phaseA->check($updateId, 'stable');
+        $state = U\phaseACheck($context, $updateId, 'stable');
         $this->assertSame('new', $state['state']);
         $this->assertSame('SYS_CORE_UPDATE_SIGNATURE_INVALID', $state['lastError']);
 
         $this->publish($this->buildPackage());
-        $this->assertSame('checked', $phaseA->check($updateId, 'stable')['state'], 'after the server was fixed');
+        $this->assertSame('checked', U\phaseACheck($context, $updateId, 'stable')['state'], 'after the server was fixed');
     }
 
     /**
@@ -357,15 +333,15 @@ final class PhaseATest extends AdmidioTestCase
     public function testBlockingChecks(): void
     {
         $this->publish($this->buildPackage());
-        $updateId = $this->store()->create()['updateId'];
+        $updateId = $this->createUpdate();
 
-        $phaseA = $this->phaseA('5.0.13');
-        $state = $phaseA->check($updateId, 'stable');
-        $this->assertTrue(Preflight::hasErrors($state['checks']));
+        $context = $this->context('5.0.13');
+        $state = U\phaseACheck($context, $updateId, 'stable');
+        $this->assertTrue(U\checksHaveErrors($state['checks']));
         $this->assertContains('SYS_CORE_UPDATE_CHECK_DATABASE_PENDING', array_column($state['checks'], 'text'));
 
         try {
-            $phaseA->confirm($updateId);
+            U\phaseAConfirm($context, $updateId);
             $this->fail('the download was started despite an error');
         } catch (UpdaterException $exception) {
             $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage());
@@ -379,11 +355,11 @@ final class PhaseATest extends AdmidioTestCase
     {
         return array(
             'package changed' => array(static function (self $test): void {
-                $test->publish($test->buildPackage(), array('packageSha256' => str_repeat('0', 64)));
+                $test->publish($test->buildPackage(), array('Package-SHA256' => str_repeat('0', 64)));
             }, 'SYS_CORE_UPDATE_PACKAGE_INVALID'),
-            'manifest by a stranger' => array(static function (self $test): void {
-                $test->publish($test->buildPackage(array(), array(), 'stranger'));
-            }, 'SYS_CORE_UPDATE_SIGNATURE_INVALID'),
+            'manifest of another version' => array(static function (self $test): void {
+                $test->publish($test->buildPackage(array(), array(), '5.0.99'));
+            }, 'SYS_CORE_UPDATE_MANIFEST_INVALID'),
             'updater file not in the manifest' => array(static function (self $test): void {
                 $test->publish($test->buildPackage(array('install/core-update/lib/Extra.php' => 'EXTRA'), array('install/core-update/lib/Extra.php')));
             }, 'SYS_CORE_UPDATE_MANIFEST_INVALID'),
@@ -418,17 +394,17 @@ final class PhaseATest extends AdmidioTestCase
     public function testFailedVerification(callable $tamper, string $key): void
     {
         $tamper($this);
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
-        $this->assertSame('checked', $phaseA->check($updateId, 'stable')['state']);
-        $phaseA->confirm($updateId);
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+        $this->assertSame('checked', U\phaseACheck($context, $updateId, 'stable')['state']);
+        U\phaseAConfirm($context, $updateId);
 
-        $result = $this->runToTheEnd($phaseA, $updateId);
+        $result = $this->runToTheEnd($context, $updateId);
 
         $this->assertSame('failed', $result['status']);
         $this->assertSame($key, $result['message']);
-        $this->assertDirectoryDoesNotExist($this->store()->getWorkspace($updateId), 'the workspace is removed');
-        $this->assertNull($this->store()->getActiveId());
+        $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId), 'the workspace is removed');
+        $this->assertNull(U\activeUpdateId($this->root));
         $this->assertSame('OLD UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
         $this->assertFileExists($this->root . '/install/core-update/obsolete.php');
         $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json');
@@ -440,14 +416,14 @@ final class PhaseATest extends AdmidioTestCase
     public function testCancel(): void
     {
         $this->publish($this->buildPackage());
-        $phaseA = $this->phaseA();
-        $updateId = $this->store()->create()['updateId'];
-        $phaseA->check($updateId, 'stable');
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+        U\phaseACheck($context, $updateId, 'stable');
 
-        $phaseA->cancel($updateId);
+        U\phaseACancel($context, $updateId);
 
-        $this->assertDirectoryDoesNotExist($this->store()->getWorkspace($updateId));
-        $this->assertNull($this->store()->getActiveId());
+        $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId));
+        $this->assertNull(U\activeUpdateId($this->root));
     }
 
     /**
@@ -455,11 +431,62 @@ final class PhaseATest extends AdmidioTestCase
      */
     public function testChannels(): void
     {
-        $this->assertSame(array('stable'), PhaseA::getChannels(Config::fromValues($this->root, array())));
-        $this->assertSame(array('stable', 'beta', 'master'), PhaseA::getChannels(Config::fromValues($this->root, array('gDebug' => true))));
+        $this->assertSame(array('stable'), U\availableChannels(U\configFromValues($this->root, array())));
+        $this->assertSame(array('stable', 'beta'), U\availableChannels(U\configFromValues($this->root, array('gDebug' => true))));
 
-        $updateId = $this->store()->create()['updateId'];
+        $updateId = $this->createUpdate();
         $this->expectExceptionMessage('SYS_CORE_UPDATE_REQUEST_INVALID');
-        $this->phaseA()->check($updateId, 'pr:1234');
+        U\phaseACheck($this->context(), $updateId, 'pr:1234');
+    }
+
+    /**
+     * @testdox The beta channel installs the release of the Beta lines of update.txt
+     */
+    public function testBetaChannel(): void
+    {
+        $package = $this->buildPackage(array(), array(), '5.2.0-beta.1');
+        $this->publish($package, array(
+            'Package-URL' => '',
+            'Beta-Version' => '5.2.0',
+            'Beta-Release' => '1',
+            'Beta-Package-URL' => self::$baseUrl . 'admidio-5.1.0.zip',
+            'Beta-Package-SHA256' => hash('sha256', $package),
+            'Beta-Package-Size' => (string)strlen($package),
+            'Beta-Minimum-Source-Version' => '5.0.0',
+            'Beta-Minimum-PHP-Version' => '8.2'
+        ));
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+
+        $this->assertSame('SYS_CORE_UPDATE_NOT_AVAILABLE', U\phaseACheck($context, $updateId, 'stable')['lastError'], 'no stable package');
+
+        $state = U\phaseACheck($context, $updateId, 'beta');
+        $this->assertSame('checked', $state['state'], (string)$state['lastError']);
+        $this->assertSame('5.2.0-beta.1', $state['targetVersion']);
+        U\phaseAConfirm($context, $updateId);
+        $this->assertSame('prepared', $this->runToTheEnd($context, $updateId)['status']);
+    }
+
+    /**
+     * @testdox A changed update.txt in the workspace ends the update
+     *
+     * The download relies on what was verified at the check; the signature is checked again with
+     * every request.
+     */
+    public function testChangedWorkspace(): void
+    {
+        $this->publish($this->buildPackage());
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+        U\phaseACheck($context, $updateId, 'stable');
+        U\phaseAConfirm($context, $updateId);
+
+        $file = U\workspace($this->root, $updateId) . '/update.txt';
+        file_put_contents($file, str_replace('Minimum-PHP-Version=8.2', 'Minimum-PHP-Version=8.1', (string)file_get_contents($file)));
+
+        $result = U\phaseARun($context, $updateId);
+        $this->assertSame('failed', $result['status']);
+        $this->assertSame('SYS_CORE_UPDATE_SIGNATURE_INVALID', $result['message']);
+        $this->assertNull(U\activeUpdateId($this->root));
     }
 }

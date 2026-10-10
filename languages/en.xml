@@ -486,7 +486,6 @@
   <string name="SYS_CORE_UPDATE_IN_PROGRESS">An automatic update of Admidio is in progress and is still installing files. The database can only be updated afterwards. Please wait until the update has finished.</string>
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">The update information of the Admidio server could not be read.</string>
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installed version</string>
-  <string name="SYS_CORE_UPDATE_KEYS_INVALID">The keys that sign Admidio updates could not be verified. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Log in</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Too many failed logins. The login of the updater is blocked for 15 minutes.</string>
   <string name="SYS_CORE_UPDATE_LOGIN_DESC">Admidio is in maintenance mode while the update installs its files. Log in as an administrator to continue the update.</string>

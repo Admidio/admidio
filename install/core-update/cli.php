@@ -23,9 +23,10 @@
 
 declare(strict_types=1);
 
-use AdmidioCoreUpdater\Config;
-use AdmidioCoreUpdater\StateStore;
 use AdmidioCoreUpdater\UpdaterException;
+use function AdmidioCoreUpdater\activeUpdateId;
+use function AdmidioCoreUpdater\loadConfig;
+use function AdmidioCoreUpdater\readState;
 
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
@@ -77,18 +78,17 @@ $_SERVER['HTTP_HOST'] = $host;
 $_SERVER['SERVER_NAME'] = $host;
 
 try {
-    $config = Config::load(dirname(__DIR__, 2));
-    if (in_array($config->timezone, timezone_identifiers_list(), true)) {
-        date_default_timezone_set($config->timezone);
+    $config = loadConfig(dirname(__DIR__, 2));
+    if (in_array($config['timezone'], timezone_identifiers_list(), true)) {
+        date_default_timezone_set($config['timezone']);
     }
-    $store = new StateStore($config->rootPath);
 
     if ($command !== 'status') {
         fwrite(STDERR, 'Unknown command: ' . $command . PHP_EOL);
         exit(EXIT_USAGE);
     }
 
-    exit(showStatus($store, $format));
+    exit(showStatus($config['rootPath'], $format));
 } catch (UpdaterException $exception) {
     fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
     exit(EXIT_ERROR);
@@ -96,17 +96,15 @@ try {
 
 /**
  * Print the unfinished update, if there is one.
- * @param StateStore $store
- * @param string $format
  * @return int The exit code.
  */
-function showStatus(StateStore $store, string $format): int
+function showStatus(string $rootPath, string $format): int
 {
-    $updateId = $store->getActiveId();
+    $updateId = activeUpdateId($rootPath);
     $data = array('active' => $updateId !== null);
 
     if ($updateId !== null) {
-        $state = $store->read($updateId);
+        $state = readState($rootPath, $updateId);
         $data += array(
             'updateId' => $updateId,
             'state' => (string)($state['state'] ?? ''),

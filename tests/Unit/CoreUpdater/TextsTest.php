@@ -1,13 +1,12 @@
 <?php
 /**
- * The texts of the standalone updater and where they come from.
+ * The texts of the updater and where they come from.
  */
 
 namespace Admidio\Tests\Unit\CoreUpdater;
 
 use Admidio\Tests\Support\AdmidioTestCase;
-use AdmidioCoreUpdater\StateStore;
-use AdmidioCoreUpdater\Texts;
+use AdmidioCoreUpdater as U;
 
 final class TextsTest extends AdmidioTestCase
 {
@@ -31,7 +30,7 @@ final class TextsTest extends AdmidioTestCase
 
     protected function tearDown(): void
     {
-        StateStore::deleteDirectory($this->directory);
+        U\deleteDirectory($this->directory);
 
         parent::tearDown();
     }
@@ -63,7 +62,7 @@ final class TextsTest extends AdmidioTestCase
         $this->assertSame(array(
             'SYS_CORE_UPDATE_TITLE' => 'Admidio\'s update',
             'SYS_CORE_UPDATE_READY' => "Line one\nline two with a \"quote\" & more"
-        ), Texts::readLanguageFile($this->directory . '/root/languages/en.xml'));
+        ), U\readLanguageFile($this->directory . '/root/languages/en.xml'));
     }
 
     /**
@@ -79,12 +78,12 @@ final class TextsTest extends AdmidioTestCase
         $this->writeLanguageFile('de', array('SYS_CORE_UPDATE_TITLE' => 'Aktualisierung', 'SYS_CORE_UPDATE_READY' => 'Bereit'));
         $this->writeLanguageFile('de-DE', array('SYS_CORE_UPDATE_TITLE' => 'Aktualisierung (Sie)'));
 
-        $texts = Texts::load($this->directory . '/updater', $this->directory . '/root', 'de-DE');
+        $texts = U\loadTexts($this->directory . '/updater', $this->directory . '/root', 'de-DE');
 
-        $this->assertSame('de-DE', $texts->getLanguage());
-        $this->assertSame('Aktualisierung (Sie)', $texts->get('SYS_CORE_UPDATE_TITLE'));
-        $this->assertSame('Bereit', $texts->get('SYS_CORE_UPDATE_READY'));
-        $this->assertSame('Start', $texts->get('SYS_CORE_UPDATE_START'));
+        $this->assertSame('de-DE', $texts['language']);
+        $this->assertSame('Aktualisierung (Sie)', U\text($texts, 'SYS_CORE_UPDATE_TITLE'));
+        $this->assertSame('Bereit', U\text($texts, 'SYS_CORE_UPDATE_READY'));
+        $this->assertSame('Start', U\text($texts, 'SYS_CORE_UPDATE_START'));
     }
 
     /**
@@ -99,10 +98,10 @@ final class TextsTest extends AdmidioTestCase
         file_put_contents($this->directory . '/updater/texts/en.json',
             json_encode(array('SYS_CORE_UPDATE_TITLE' => 'From the updater', 'SYS_CORE_UPDATE_START' => 'Start')));
 
-        $texts = Texts::load($this->directory . '/updater', $this->directory . '/root', 'en');
+        $texts = U\loadTexts($this->directory . '/updater', $this->directory . '/root', 'en');
 
-        $this->assertSame('From the updater', $texts->get('SYS_CORE_UPDATE_TITLE'));
-        $this->assertSame('Start', $texts->get('SYS_CORE_UPDATE_START'));
+        $this->assertSame('From the updater', U\text($texts, 'SYS_CORE_UPDATE_TITLE'));
+        $this->assertSame('Start', U\text($texts, 'SYS_CORE_UPDATE_START'));
     }
 
     /**
@@ -112,24 +111,24 @@ final class TextsTest extends AdmidioTestCase
     {
         $this->writeLanguageFile('en', array('SYS_CORE_UPDATE_TITLE' => 'Update'));
 
-        $texts = Texts::load($this->directory . '/updater', $this->directory . '/root', '../../etc/passwd');
+        $texts = U\loadTexts($this->directory . '/updater', $this->directory . '/root', '../../etc/passwd');
 
-        $this->assertSame('en', $texts->getLanguage());
-        $this->assertSame('Update', $texts->get('SYS_CORE_UPDATE_TITLE'));
+        $this->assertSame('en', $texts['language']);
+        $this->assertSame('Update', U\text($texts, 'SYS_CORE_UPDATE_TITLE'));
     }
 
     /**
      * @testdox Placeholders are filled, and a missing text shows its key
      */
-    public function testGet(): void
+    public function testText(): void
     {
-        $texts = new Texts('en', array('SYS_CORE_UPDATE_SUCCESSFUL' => 'Updated from #VAR1# to #VAR2#.'));
+        $texts = array('language' => 'en', 'texts' => array('SYS_CORE_UPDATE_SUCCESSFUL' => 'Updated from #VAR1# to #VAR2#.'));
 
-        $this->assertSame('Updated from 5.0.14 to 5.1.0.', $texts->get('SYS_CORE_UPDATE_SUCCESSFUL', array('5.0.14', '5.1.0')));
-        $this->assertSame('SYS_CORE_UPDATE_UNKNOWN', $texts->get('SYS_CORE_UPDATE_UNKNOWN'));
-        $this->assertTrue(Texts::isKey('SYS_CORE_UPDATE_LOGIN_FAILED'));
-        $this->assertFalse(Texts::isKey('SYS_SAVE'));
-        $this->assertFalse(Texts::isKey('The database could not be reached.'));
+        $this->assertSame('Updated from 5.0.14 to 5.1.0.', U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array('5.0.14', '5.1.0')));
+        $this->assertSame('SYS_CORE_UPDATE_UNKNOWN', U\text($texts, 'SYS_CORE_UPDATE_UNKNOWN'));
+        $this->assertTrue(U\isTextKey('SYS_CORE_UPDATE_LOGIN_FAILED'));
+        $this->assertFalse(U\isTextKey('SYS_SAVE'));
+        $this->assertFalse(U\isTextKey('The database could not be reached.'));
     }
 
     /**
@@ -153,7 +152,7 @@ final class TextsTest extends AdmidioTestCase
         $this->assertNotEmpty($used);
 
         foreach (array('en', 'de', 'de-DE') as $language) {
-            $defined = array_keys(Texts::readLanguageFile($root . '/languages/' . $language . '.xml'));
+            $defined = array_keys(U\readLanguageFile($root . '/languages/' . $language . '.xml'));
             $this->assertSame(array(), array_values(array_diff($used, $defined)), 'missing in ' . $language . '.xml');
         }
     }
