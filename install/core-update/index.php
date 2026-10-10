@@ -464,7 +464,7 @@ function coreUpdateHandlePhaseB(array $context, array $state, bool $isPost, stri
             'run' => U\jsonResponse(U\phaseBRun($context, $updateId)),
             'rollback' => U\jsonResponse(U\phaseBResult($context, U\phaseBRollback($context, $updateId))),
             'confirm' => (static function () use ($context, $updateId): void {
-                U\phaseBConfirm($context, $updateId);
+                U\phaseBConfirm($context, $updateId, (string)($_POST['backup'] ?? ''));
                 header('Location: index.php', true, 303);
             })(),
             'cancel' => (static function () use ($context, $updateId, $config, $texts): void {
@@ -513,26 +513,45 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                 'delete' => 'SYS_CORE_UPDATE_PLAN_DELETE', 'unchanged' => 'SYS_CORE_UPDATE_PLAN_UNCHANGED') as $key => $text) {
                 $list .= '<li>' . U\h(U\text($texts, $text, array((string)($plan[$key] ?? 0)))) . '</li>';
             }
-            $removed = array_column(array_filter(U\readPlan(U\workspace($config['rootPath'], (string)$state['updateId'])),
-                static fn(array $operation): bool => $operation['action'] === 'delete'), 'path');
+            $operations = U\readPlan(U\workspace($config['rootPath'], (string)$state['updateId']));
+            $paths = static fn(callable $filter): array => array_column(array_filter($operations, $filter), 'path');
+            $fileList = static fn(string $title, array $files): string => $files === array() ? ''
+                : '<details><summary>' . U\h(U\text($texts, $title)) . ' (' . count($files) . ')</summary><ul>'
+                    . implode('', array_map(static fn(string $path): string => '<li>' . U\h($path) . '</li>', $files)) . '</ul></details>';
+            $files = $fileList('SYS_CORE_UPDATE_PLAN_DELETED_FILES', $paths(static fn(array $operation): bool => $operation['action'] === 'delete'))
+                . $fileList('SYS_CORE_UPDATE_PLAN_MODIFIED_FILES', $paths(static fn(array $operation): bool => ($operation['keep'] ?? '') === 'modified'))
+                . $fileList('SYS_CORE_UPDATE_PLAN_UNKNOWN_FILES', $paths(static fn(array $operation): bool => ($operation['keep'] ?? '') === 'unknown'));
+            $kept = (int)($plan['kept'] ?? 0) === 0 ? ''
+                : '<div class="message">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_DESC', array((string)$plan['kept'])))
+                    . (empty($plan['inventory']) ? ' ' . U\h(U\text($texts, 'SYS_CORE_UPDATE_NO_INVENTORY')) : '') . '</div>';
             $checkList = '';
             foreach ($checks as $check) {
                 $checkList .= '<li class="check-' . U\h($check['status']) . '">' . U\h(U\text($texts, $check['text'], $check['params'])) . '</li>';
             }
 
+            // The backup of the database: by the updater where it can, or confirmed by the administrator.
+            $canDump = (string)($state['dumpMethod'] ?? '') !== '';
+            $backup = '<fieldset><legend>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP')) . '</legend>'
+                . ($canDump ? '<label class="choice"><input type="radio" name="backup" value="dump" required checked> '
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP_DATABASE')) . '</label>'
+                    : '<p class="warning">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP_NOT_POSSIBLE')) . '</p>')
+                . '<label class="choice"><input type="radio" name="backup" value="own" required> '
+                . U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP_OWN')) . '</label></fieldset>';
+
             $actions = '';
             if (!U\checksHaveErrors($checks)) {
-                $actions .= '<form method="post" action="index.php" class="inline">' . $csrf . '<input type="hidden" name="action" value="confirm">'
+                $actions .= '<form method="post" action="index.php">' . $csrf . '<input type="hidden" name="action" value="confirm">' . $backup
                     . '<button class="button" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALL')) . '</button></form>';
             }
             $actions .= coreUpdateCancelForm($csrf, $texts);
 
             $show(
-                '<dl><dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>' . U\h((string)$state['installedVersion']) . '</dd>'
+                ((string)($state['lastError'] ?? '') !== '' ? '<div class="message error">' . U\h((string)$state['lastError']) . '</div>' : '')
+                    . '<dl><dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>' . U\h((string)$state['installedVersion']) . '</dd>'
                     . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>' . U\h((string)($state['targetVersionText'] ?? $state['targetVersion'])) . '</dd></dl>'
                     . '<ul>' . $list . '</ul>'
-                    . ($removed !== array() ? '<details><summary>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_PLAN_DELETED_FILES')) . '</summary><ul>'
-                        . implode('', array_map(static fn(string $path): string => '<li>' . U\h($path) . '</li>', $removed)) . '</ul></details>' : '')
+                    . '<div class="message">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_BACKUP')) . '</div>'
+                    . $kept . $files
                     . '<h2>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECKS')) . '</h2><ul class="checks">' . $checkList . '</ul>'
                     . '<div class="warning">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_DESC')) . '</div>',
                 $actions,
@@ -555,9 +574,23 @@ function coreUpdateShowPhaseB(array $context, array $state): void
             );
             break;
 
+        case 'database_failed':
+            // The files are those of the new release and cannot come back; maintenance mode stays on.
+            $show(
+                '<div class="message error">' . U\h((string)($state['lastError'] ?? '')) . '</div>'
+                    . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_FAILED')) . '</p>'
+                    . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS')) . '</p>'
+                    . ((string)($state['dumpFile'] ?? '') !== '' ? '<div class="message">'
+                        . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</div>' : ''),
+                '<a class="button" href="' . U\h(U\databaseUpdateUrl($config, (string)$state['updateId'])) . '">'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY')) . '</a>',
+                95,
+                ''
+            );
+            break;
+
         case 'files_installed':
         case 'database_running':
-        case 'database_failed':
             $show(
                 '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_CONTINUE')) . '</p>'
                     . ((string)($state['lastError'] ?? '') !== '' ? '<div class="message error">' . U\h((string)$state['lastError']) . '</div>' : ''),
@@ -569,7 +602,17 @@ function coreUpdateShowPhaseB(array $context, array $state): void
 
         case 'completed':
             U\phaseBFinish($context, (string)$state['updateId']);
-            $show('<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)$state['targetVersion']))) . '</p>', $openAdmidio, 100, 'success');
+            U\resetAdmidioSession($config, $context['pdo']);
+            $show(
+                '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)$state['targetVersion']))) . '</p>'
+                    . ((string)($state['dumpFile'] ?? '') !== '' ? '<div class="message">'
+                        . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</div>' : '')
+                    . ((string)($state['keptArchive'] ?? '') !== '' ? '<div class="message">'
+                        . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/core-update/' . $state['keptArchive']))) . '</div>' : ''),
+                $openAdmidio,
+                100,
+                'success'
+            );
             break;
 
         case 'rolled_back':

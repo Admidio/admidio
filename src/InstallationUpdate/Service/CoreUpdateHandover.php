@@ -184,6 +184,7 @@ final class CoreUpdateHandover
     public function markDatabaseRunning(): void
     {
         $this->update(array('state' => self::STATE_DATABASE_RUNNING, 'databaseStarted' => true, 'lastError' => ''));
+        Updater\updateLog($this->rootPath, $this->updateId, 'state database_running');
     }
 
     /**
@@ -195,6 +196,7 @@ final class CoreUpdateHandover
     public function markDatabaseFailed(string $error): void
     {
         $this->update(array('state' => self::STATE_DATABASE_FAILED, 'lastError' => $error));
+        Updater\updateLog($this->rootPath, $this->updateId, 'state database_failed: ' . $error);
     }
 
     /**
@@ -209,6 +211,7 @@ final class CoreUpdateHandover
         }
 
         $this->update(array('state' => self::STATE_COMPLETED, 'lastError' => ''));
+        Updater\updateLog($this->rootPath, $this->updateId, 'state completed: database updated');
 
         $maintenance = MaintenanceMode::getState();
         if ($maintenance !== null && ($maintenance['owner'] ?? '') === self::MAINTENANCE_OWNER_PREFIX . $this->updateId) {

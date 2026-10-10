@@ -437,6 +437,11 @@
   <string name="SYS_CORE_UPDATE_ADMIDIO_LOGIN">Melden Sie sich als Administrator bei Admidio an, um das Update zu starten oder fortzusetzen.</string>
   <string name="SYS_CORE_UPDATE_ALREADY_COMPLETED">Das Update wurde bereits abgeschlossen.</string>
   <string name="SYS_CORE_UPDATE_ALREADY_RUNNING">Ein anderes Update von Admidio läuft bereits. Warten Sie, bis es abgeschlossen ist, oder setzen Sie es im Updater fort.</string>
+  <string name="SYS_CORE_UPDATE_ARCHIVING">Die geänderten und unbekannten Dateien werden im Archiv gespeichert ...</string>
+  <string name="SYS_CORE_UPDATE_BACKUP">Sicherung der Datenbank</string>
+  <string name="SYS_CORE_UPDATE_BACKUP_DATABASE">Datenbank vor dem Update sichern (empfohlen)</string>
+  <string name="SYS_CORE_UPDATE_BACKUP_NOT_POSSIBLE">Das Update kann diese Datenbank nicht sichern: Für PostgreSQL braucht es das Programm pg_dump, das auf diesem Server nicht verfügbar ist. Erstellen Sie eine eigene Sicherung der Datenbank, bevor Sie fortfahren.</string>
+  <string name="SYS_CORE_UPDATE_BACKUP_OWN">Ich habe eine eigene aktuelle Sicherung der Datenbank</string>
   <string name="SYS_CORE_UPDATE_CANCEL">Update abbrechen</string>
   <string name="SYS_CORE_UPDATE_CANCELLED">Das Update wurde abgebrochen. Es wurde nichts verändert.</string>
   <string name="SYS_CORE_UPDATE_CHANNEL">Kanal</string>
@@ -466,11 +471,17 @@
   <string name="SYS_CORE_UPDATE_CONFIRM_RESTORE">Möchten Sie wirklich die vorherigen Dateien wiederherstellen? Das Update wird abgebrochen.</string>
   <string name="SYS_CORE_UPDATE_CONTINUE">Weiter</string>
   <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">Die Dateien sind installiert. Setzen Sie das Datenbank-Update fort.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_FAILED">Die Aktualisierung der Datenbank ist fehlgeschlagen. Die Dateien der neuen Version sind installiert, die bisherigen Dateien können nicht mehr wiederhergestellt werden. Admidio bleibt im Wartungsmodus.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS">Beheben Sie die Ursache, zum Beispiel mit Hilfe des Admidio-Forums, und wiederholen Sie die Aktualisierung der Datenbank. Sie setzt mit dem Schritt fort, der fehlgeschlagen ist. Hilft das nicht, stellen Sie die Sicherung der Datenbank wieder her und installieren Sie die bisherige Version manuell.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_NEWER">Die Datenbank hat bereits die Version #VAR1#. Version #VAR2# ist älter und kann nicht installiert werden.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_RETRY">Aktualisierung der Datenbank wiederholen</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD">Herunterladen und vorbereiten</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">Das Update-Paket konnte nicht heruntergeladen werden. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">Die Download-Adresse des Updates ist ungültig oder nicht erlaubt.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOADING">Version #VAR1# wird heruntergeladen ...</string>
+  <string name="SYS_CORE_UPDATE_DUMP_FAILED">Die Sicherung der Datenbank ist fehlgeschlagen. Es wurde nichts geändert. #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_DUMP_FILE">Die Sicherung der Datenbank liegt in #VAR1#.</string>
+  <string name="SYS_CORE_UPDATE_DUMPING">Die Datenbank wird gesichert ...</string>
   <string name="SYS_CORE_UPDATE_EXTRACTING">Das Update-Paket wird entpackt ...</string>
   <string name="SYS_CORE_UPDATE_FILE_FAILED">Die Datei #VAR1# konnte nicht installiert werden. Prüfen Sie die Dateirechte auf dem Server.</string>
   <string name="SYS_CORE_UPDATE_FILES_INSTALLED_DB_START">Alle Dateien sind installiert und geprüft. Weiter mit dem Datenbank-Update.</string>
@@ -481,6 +492,8 @@
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">Die Update-Informationen des Admidio-Servers konnten nicht gelesen werden.</string>
   <string name="SYS_CORE_UPDATE_INSTALL">Update installieren</string>
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installierte Version</string>
+  <string name="SYS_CORE_UPDATE_KEPT_ARCHIVE">Die geänderten und unbekannten Dateien der bisherigen Version sind in #VAR1# aufbewahrt.</string>
+  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# dieser Dateien wurden geändert oder gehören nicht zur installierten Version. Sie werden dauerhaft in einem ZIP-Archiv in adm_my_files/core-update/kept aufbewahrt.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Anmelden</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Zu viele fehlgeschlagene Anmeldungen. Die Anmeldung beim Updater ist für 15 Minuten gesperrt.</string>
   <string name="SYS_CORE_UPDATE_LOGIN_DESC">Admidio ist im Wartungsmodus, während das Update seine Dateien installiert. Melden Sie sich als Administrator an, um das Update fortzusetzen.</string>
@@ -492,6 +505,7 @@
   <string name="SYS_CORE_UPDATE_MAINTENANCE_OTHER">Admidio ist bereits wegen einer anderen Aufgabe im Wartungsmodus. Warten Sie, bis sie abgeschlossen ist, und versuchen Sie es dann erneut.</string>
   <string name="SYS_CORE_UPDATE_MANIFEST_INVALID">Die Dateiliste des Update-Pakets ist ungültig. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_MASTER_WARNING">Sie sind dabei, die Entwicklungsversion von Admidio zu installieren. Sie kann fehlerhaft sein, und eine ältere stabile Version kann danach nicht mehr installiert werden.</string>
+  <string name="SYS_CORE_UPDATE_NO_INVENTORY">Die installierte Version hat keine Liste ihrer Originaldateien, daher wird jede Datei aufbewahrt, die ersetzt oder entfernt wird.</string>
   <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatische Updates sind für diese Installation nicht verfügbar. Laden Sie die neue Version von der Admidio-Webseite herunter und installieren Sie sie manuell.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">Das Update wurde nicht gefunden. Starten Sie es erneut über die Admidio-Einstellungen.</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Admidio öffnen</string>
@@ -501,8 +515,10 @@
   <string name="SYS_CORE_UPDATE_PLAN_CREATE">#VAR1# neue Dateien</string>
   <string name="SYS_CORE_UPDATE_PLAN_DELETE">#VAR1# Dateien werden entfernt</string>
   <string name="SYS_CORE_UPDATE_PLAN_DELETED_FILES">Dateien, die entfernt werden</string>
+  <string name="SYS_CORE_UPDATE_PLAN_MODIFIED_FILES">Geänderte Dateien, die aufbewahrt werden</string>
   <string name="SYS_CORE_UPDATE_PLAN_REPLACE">#VAR1# Dateien werden ersetzt</string>
   <string name="SYS_CORE_UPDATE_PLAN_UNCHANGED">#VAR1# Dateien sind bereits aktuell</string>
+  <string name="SYS_CORE_UPDATE_PLAN_UNKNOWN_FILES">Unbekannte Dateien, die aufbewahrt werden</string>
   <string name="SYS_CORE_UPDATE_PLANNING">Die Dateien dieser Installation werden mit der neuen Version verglichen ...</string>
   <string name="SYS_CORE_UPDATE_PREPARED">Version #VAR1# wurde heruntergeladen und geprüft.</string>
   <string name="SYS_CORE_UPDATE_PROGRESS">Fortschritt</string>
@@ -511,6 +527,7 @@
   <string name="SYS_CORE_UPDATE_REQUEST_RUNNING">Eine andere Anfrage des Updaters läuft gerade. Warten Sie einen Moment und versuchen Sie es erneut.</string>
   <string name="SYS_CORE_UPDATE_REQUIRED_EXTENSIONS">Das automatische Update benötigt die PHP-Erweiterungen curl, zip und openssl.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_PREVIOUS">Vorherige Dateien wiederherstellen</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_BACKUP">Bevor eine Datei ersetzt oder entfernt wird, wird eine Kopie davon in adm_my_files/core-update gespeichert. Bis die Datenbank aktualisiert wird, kann das Update alle bisherigen Dateien wiederherstellen.</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DESC">Während die Dateien ersetzt werden, ist Admidio im Wartungsmodus und Besucher sehen eine Wartungsseite. Danach wird die Datenbank aktualisiert, was nicht rückgängig gemacht werden kann.</string>
   <string name="SYS_CORE_UPDATE_ROLLBACK_REQUIRED">Die Installation der Dateien wurde unterbrochen. Admidio bleibt im Wartungsmodus. Setzen Sie das Update fort oder stellen Sie die bisherigen Dateien wieder her.</string>
   <string name="SYS_CORE_UPDATE_ROLLING_BACK">Die bisherigen Dateien werden wiederhergestellt ...</string>

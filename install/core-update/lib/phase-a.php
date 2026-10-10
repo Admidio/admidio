@@ -118,6 +118,8 @@ function phaseACheck(array $ctx, string $updateId, string $channel): array
         }
 
         writeState($root, $state);
+        updateLog($root, $updateId, 'check of channel ' . $channel . ': ' . ($state['state'] === 'checked'
+            ? $state['installedVersion'] . ' -> ' . $state['targetVersion'] : 'failed: ' . (isset($exception) ? errorDetail($exception) : '')));
 
         return $state;
     }, false);
@@ -167,6 +169,7 @@ function phaseARun(array $ctx, string $updateId): array
                 default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
             };
         } catch (VerificationFailure $failure) {
+            updateLog($root, $updateId, 'verification failed in ' . $state['state'] . ': ' . errorDetail($failure->getPrevious()));
             abortUpdate($ctx, $updateId);
 
             return array('status' => 'failed', 'message' => describeError($ctx, $failure->getPrevious()), 'progress' => 0, 'state' => 'failed');
@@ -174,6 +177,7 @@ function phaseARun(array $ctx, string $updateId): array
             // The download can be continued, the requirement fixed; the update stays where it is.
             $state['lastError'] = describeError($ctx, $exception);
             writeState($root, $state);
+            updateLog($root, $updateId, 'error in ' . $state['state'] . ': ' . errorDetail($exception));
 
             return array('status' => 'error', 'message' => $state['lastError'], 'progress' => phaseAProgress($state), 'state' => $state['state']);
         }
@@ -181,6 +185,9 @@ function phaseARun(array $ctx, string $updateId): array
         $state['lastError'] = '';
         writeState($root, $state);
         $prepared = $state['state'] === 'prepared';
+        if ($prepared) {
+            updateLog($root, $updateId, 'state prepared: package verified, updater of ' . $state['targetVersion'] . ' installed');
+        }
 
         return array(
             'status' => $prepared ? 'prepared' : 'success',
@@ -409,9 +416,27 @@ function installUpdater(array $package, array $manifest, string $staging, string
  */
 function abortUpdate(array $ctx, string $updateId): void
 {
+    try {
+        updateLog($ctx['config']['rootPath'], $updateId, 'update ended, workspace removed');
+        keepUpdateLog($ctx['config']['rootPath'], readState($ctx['config']['rootPath'], $updateId));
+    } catch (UpdaterException) {
+        // Without a readable state there is nothing to name the log by.
+    }
     deleteDirectory(workspace($ctx['config']['rootPath'], $updateId));
     clearActiveUpdate($ctx['config']['rootPath'], $updateId);
     clearCredentialCookie($ctx['config']);
+}
+
+/**
+ * What went wrong, in English, for update.log: the detail of an updater error, or else its message.
+ */
+function errorDetail(?Throwable $exception): string
+{
+    if ($exception instanceof UpdaterException && $exception->getDetail() !== '') {
+        return $exception->getMessage() . ' (' . $exception->getDetail() . ')';
+    }
+
+    return $exception !== null ? $exception->getMessage() : '';
 }
 
 /**

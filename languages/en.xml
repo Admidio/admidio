@@ -444,6 +444,11 @@
   <string name="SYS_CORE_UPDATE_ADMIDIO_LOGIN">Log in to Admidio as an administrator to start or continue the update.</string>
   <string name="SYS_CORE_UPDATE_ALREADY_COMPLETED">The update has already been completed.</string>
   <string name="SYS_CORE_UPDATE_ALREADY_RUNNING">Another update of Admidio is already in progress. Wait until it has finished, or continue it in the updater.</string>
+  <string name="SYS_CORE_UPDATE_ARCHIVING">Saving the changed and unknown files in the archive ...</string>
+  <string name="SYS_CORE_UPDATE_BACKUP">Backup of the database</string>
+  <string name="SYS_CORE_UPDATE_BACKUP_DATABASE">Back up the database before the update (recommended)</string>
+  <string name="SYS_CORE_UPDATE_BACKUP_NOT_POSSIBLE">The updater cannot back up this database: for PostgreSQL it needs the program pg_dump, which is not available on this server. Make your own backup of the database before you continue.</string>
+  <string name="SYS_CORE_UPDATE_BACKUP_OWN">I have my own current backup of the database</string>
   <string name="SYS_CORE_UPDATE_CANCEL">Cancel update</string>
   <string name="SYS_CORE_UPDATE_CANCELLED">The update was cancelled. Nothing was changed.</string>
   <string name="SYS_CORE_UPDATE_CHANNEL">Channel</string>
@@ -473,11 +478,17 @@
   <string name="SYS_CORE_UPDATE_CONFIRM_RESTORE">Do you really want to restore the previous files? The update will be cancelled.</string>
   <string name="SYS_CORE_UPDATE_CONTINUE">Continue</string>
   <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">The files are installed. Continue with the database update.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_FAILED">The update of the database failed. The files of the new version are installed and the previous files cannot be restored any more. Admidio stays in maintenance mode.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS">Fix the cause, for example with the help of the Admidio forum, and retry the database update. It continues with the step that failed. If that does not help, restore the backup of the database and install the previous version manually.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_NEWER">The database already has version #VAR1#. Version #VAR2# is older and cannot be installed.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_RETRY">Retry the database update</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD">Download and prepare</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">The update package could not be downloaded. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">The download address of the update is invalid or not allowed.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOADING">Downloading version #VAR1# ...</string>
+  <string name="SYS_CORE_UPDATE_DUMP_FAILED">The backup of the database failed. Nothing was changed. #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_DUMP_FILE">The backup of the database is in #VAR1#.</string>
+  <string name="SYS_CORE_UPDATE_DUMPING">Backing up the database ...</string>
   <string name="SYS_CORE_UPDATE_EXTRACTING">Unpacking the update package ...</string>
   <string name="SYS_CORE_UPDATE_FILE_FAILED">The file #VAR1# could not be installed. Check the file permissions on the server.</string>
   <string name="SYS_CORE_UPDATE_FILES_INSTALLED_DB_START">All files are installed and verified. Continue with the database update.</string>
@@ -488,6 +499,8 @@
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">The update information of the Admidio server could not be read.</string>
   <string name="SYS_CORE_UPDATE_INSTALL">Install update</string>
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installed version</string>
+  <string name="SYS_CORE_UPDATE_KEPT_ARCHIVE">The changed and unknown files of the previous version are kept in #VAR1#.</string>
+  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# of these files were changed or do not belong to the installed version. They are kept permanently in a ZIP archive in adm_my_files/core-update/kept.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Log in</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Too many failed logins. The login of the updater is blocked for 15 minutes.</string>
   <string name="SYS_CORE_UPDATE_LOGIN_DESC">Admidio is in maintenance mode while the update installs its files. Log in as an administrator to continue the update.</string>
@@ -499,6 +512,7 @@
   <string name="SYS_CORE_UPDATE_MAINTENANCE_OTHER">Admidio is already in maintenance mode for another task. Wait until it has finished and try again.</string>
   <string name="SYS_CORE_UPDATE_MANIFEST_INVALID">The file list of the update package is invalid. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_MASTER_WARNING">You are about to install the development version of Admidio. It may be broken, and an older stable release cannot be installed afterwards.</string>
+  <string name="SYS_CORE_UPDATE_NO_INVENTORY">The installed version has no list of its original files, so every file that is replaced or removed is kept.</string>
   <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatic updates are not available for this installation. Download the new version from the Admidio website and install it manually.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">The update could not be found. Start it again from the Admidio settings.</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Open Admidio</string>
@@ -508,8 +522,10 @@
   <string name="SYS_CORE_UPDATE_PLAN_CREATE">#VAR1# new files</string>
   <string name="SYS_CORE_UPDATE_PLAN_DELETE">#VAR1# files are removed</string>
   <string name="SYS_CORE_UPDATE_PLAN_DELETED_FILES">Files that are removed</string>
+  <string name="SYS_CORE_UPDATE_PLAN_MODIFIED_FILES">Changed files that are kept</string>
   <string name="SYS_CORE_UPDATE_PLAN_REPLACE">#VAR1# files are replaced</string>
   <string name="SYS_CORE_UPDATE_PLAN_UNCHANGED">#VAR1# files are already up to date</string>
+  <string name="SYS_CORE_UPDATE_PLAN_UNKNOWN_FILES">Unknown files that are kept</string>
   <string name="SYS_CORE_UPDATE_PLANNING">Comparing the files of this installation with the new version ...</string>
   <string name="SYS_CORE_UPDATE_PREPARED">Version #VAR1# has been downloaded and verified.</string>
   <string name="SYS_CORE_UPDATE_PROGRESS">Progress</string>
@@ -518,6 +534,7 @@
   <string name="SYS_CORE_UPDATE_REQUEST_RUNNING">Another request of the updater is running. Wait a moment and try again.</string>
   <string name="SYS_CORE_UPDATE_REQUIRED_EXTENSIONS">The automatic update needs the PHP extensions curl, zip and openssl.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_PREVIOUS">Restore previous files</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_BACKUP">Before a file is replaced or removed, a copy of it is saved in adm_my_files/core-update. Until the database update starts, the update can restore all previous files.</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DESC">While the files are replaced, Admidio is in maintenance mode and visitors see a maintenance page. Afterwards the database is updated, which cannot be undone.</string>
   <string name="SYS_CORE_UPDATE_ROLLBACK_REQUIRED">The installation of the files was interrupted. Admidio stays in maintenance mode. Continue the update, or restore the previous files.</string>
   <string name="SYS_CORE_UPDATE_ROLLING_BACK">Restoring the previous files ...</string>

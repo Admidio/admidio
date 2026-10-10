@@ -558,6 +558,33 @@ function activeUpdateId(string $rootPath): ?string
 }
 
 /**
+ * Add a line to update.log in the workspace of an update: its states, errors and decisions. The
+ * English detail of an error belongs here, the administrator sees the translated message.
+ */
+function updateLog(string $rootPath, string $updateId, string $message): void
+{
+    if (updateExists($rootPath, $updateId)) {
+        @file_put_contents(workspace($rootPath, $updateId) . '/update.log',
+            date('Y-m-d H:i:s') . ' ' . preg_replace('/[\x00-\x09\x0b-\x1f\x7f]/', '?', $message) . "\n", FILE_APPEND | LOCK_EX);
+    }
+}
+
+/**
+ * Keep update.log of an update that is over in adm_my_files/logs, where Admidio keeps its logs,
+ * because the workspace is removed.
+ * @param array<string,mixed> $state
+ */
+function keepUpdateLog(string $rootPath, array $state): void
+{
+    $log = workspace($rootPath, (string)$state['updateId']) . '/update.log';
+    if (is_file($log)) {
+        ensureDirectory($rootPath . '/adm_my_files/logs');
+        @copy($log, $rootPath . '/adm_my_files/logs/core-update_' . date('Y-m-d_His') . '_' . ($state['installedVersion'] ?? '')
+            . '_to_' . (($state['targetVersion'] ?? '') !== '' ? $state['targetVersion'] : 'none') . '.log');
+    }
+}
+
+/**
  * Whether Admidio itself is still intact: no update is unfinished, or it has not started to change
  * files. Then the Admidio login decides who may use the updater; from maintenance mode on only the
  * updater cookie or the updater's own login can.
@@ -817,6 +844,45 @@ function sendCookie(array $config, string $name, string $value, int $expires, st
         'httponly' => true,
         'samesite' => $sameSite
     ));
+}
+
+/**
+ * Empty the Admidio session of this browser: its objects belong to the old release and do not fit
+ * the classes of the new one. The session itself stays, so the administrator stays logged in:
+ * Admidio finds the user through the session ID in adm_sessions and builds all objects anew. The
+ * updater has no autoloader, so the old objects are not instantiated while the session is read.
+ *
+ * The administrator worked in the updater all the time, which Admidio did not see, so the session
+ * gets the current time as its last activity: otherwise an update that took longer than the
+ * automatic logout of Admidio would end in a logout.
+ * @param array<string,mixed> $config
+ */
+function resetAdmidioSession(array $config, ?PDO $pdo): void
+{
+    $name = cookiePrefix($config) . '_SESSION_ID';
+    $id = $_COOKIE[$name] ?? null;
+    if (!is_string($id) || preg_match('/^[A-Za-z0-9,-]{1,128}$/', $id) !== 1
+        || session_status() !== PHP_SESSION_NONE || headers_sent()) {
+        return;
+    }
+
+    session_name($name);
+    session_id($id);
+    if (@session_start(array('use_cookies' => 0, 'use_only_cookies' => 0, 'use_strict_mode' => 0))) {
+        $_SESSION = array();
+        session_write_close();
+    }
+
+    if ($pdo !== null) {
+        try {
+            // Admidio writes and compares this time in the time zone of the installation.
+            $now = new \DateTimeImmutable('now', new \DateTimeZone($config['timezone']));
+            $pdo->prepare('UPDATE ' . $config['tablePrefix'] . '_sessions SET ses_timestamp = ? WHERE ses_session_id = ?')
+                ->execute(array($now->format('Y-m-d H:i:s'), $id));
+        } catch (Throwable) {
+            // Then Admidio asks for the login once more.
+        }
+    }
 }
 
 /** @param array<string,mixed> $config */

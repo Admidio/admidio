@@ -156,8 +156,8 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('review', $this->runToDecision($context, $updateId)['status']);
 
         $state = U\readState($this->root, $updateId);
-        $this->assertSame(array('create' => 1, 'replace' => 2, 'delete' => 2, 'unchanged' => 1), $state['plan'],
-            'the manifest of the release, which is installed as well, is not counted');
+        $this->assertSame(array('create' => 1, 'replace' => 2, 'delete' => 2, 'kept' => 4, 'unchanged' => 1, 'inventory' => false), $state['plan'],
+            'the manifest of the release, which is installed as well, is not counted; without an inventory every replaced or removed file is kept');
         $this->assertFalse(U\checksHaveErrors($state['planChecks']));
 
         $plan = U\readPlan(U\workspace($this->root, $updateId));
@@ -175,7 +175,7 @@ final class PhaseBTest extends AdmidioTestCase
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
 
-        U\phaseBConfirm($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
         $this->assertCount(1, U\readState($this->root, $updateId)['credentials'], 'the browser gets the updater cookie');
         $result = $this->runToDecision($context, $updateId);
 
@@ -199,6 +199,12 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame(array('install/core-update/index.php', 'install/update.php'), $maintenance['allowedScripts']);
         $this->assertSame(array('schema', 'owner', 'startedAt', 'retryAfter', 'title', 'message', 'allowedScripts'), array_keys($maintenance),
             'the format of MaintenanceMode::enable()');
+
+        $log = (string)file_get_contents(U\workspace($this->root, $updateId) . '/update.log');
+        foreach (array('state extracting', 'state review {"create":1', 'confirmed by the administrator, database backup: own', 'state installing',
+            'state archiving', 'state verifying', 'state files_installed') as $line) {
+            $this->assertStringContainsString($line, $log);
+        }
     }
 
     /**
@@ -208,7 +214,7 @@ final class PhaseBTest extends AdmidioTestCase
     {
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
-        U\phaseBConfirm($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
         $this->runToDecision($context, $updateId);
 
         U\phaseBRollback($context, $updateId);
@@ -234,7 +240,7 @@ final class PhaseBTest extends AdmidioTestCase
     {
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
-        U\phaseBConfirm($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
         $this->runToDecision($context, $updateId);
         U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'database_failed', 'databaseStarted' => true)));
 
@@ -249,7 +255,7 @@ final class PhaseBTest extends AdmidioTestCase
     {
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
-        U\phaseBConfirm($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
         U\phaseBRun($context, $updateId); // maintenance on
         $workspace = U\workspace($this->root, $updateId);
 
@@ -290,7 +296,7 @@ final class PhaseBTest extends AdmidioTestCase
     {
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
-        U\phaseBConfirm($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
         U\phaseBRun($context, $updateId); // maintenance on
         $extracted = U\workspace($this->root, $updateId) . '/extracted/index.php';
         file_put_contents($extracted, 'BROKEN');
@@ -320,7 +326,7 @@ final class PhaseBTest extends AdmidioTestCase
         });
 
         try {
-            U\phaseBConfirm($context, $updateId);
+            U\phaseBConfirm($context, $updateId, 'own');
             $this->fail('a plan with an error was confirmed');
         } catch (UpdaterException $exception) {
             $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage());
@@ -339,7 +345,7 @@ final class PhaseBTest extends AdmidioTestCase
     {
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
-        U\phaseBConfirm($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
         $this->runToDecision($context, $updateId);
         U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'completed')));
 
@@ -347,5 +353,73 @@ final class PhaseBTest extends AdmidioTestCase
 
         $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId));
         $this->assertNull(U\activeUpdateId($this->root));
+        $logs = glob($this->root . '/adm_my_files/logs/core-update_*_5.0.14_to_5.1.0.log');
+        $this->assertCount(1, $logs, 'update.log is kept with the logs of Admidio');
+        $this->assertStringContainsString('completed, workspace removed', (string)file_get_contents($logs[0]));
+    }
+
+    /**
+     * @testdox With an inventory only changed and unknown files go into the kept-files archive
+     */
+    public function testKeptFilesArchive(): void
+    {
+        // The manifest of the installed 5.0.14: index.php and Gone.php are original, bootstrap.php
+        // was changed afterwards, Unknown.php was never part of the release.
+        $this->write(array('install/update-manifest.json' => json_encode(array('version' => '5.0.14', 'files' => array(
+            'index.php' => hash('sha256', 'OLD INDEX'),
+            'system/bootstrap/bootstrap.php' => hash('sha256', 'ORIGINAL BOOTSTRAP'),
+            'src/Old/Gone.php' => hash('sha256', 'REMOVED BY THE RELEASE'),
+            'src/Same.php' => hash('sha256', 'SAME')
+        )))));
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+
+        $state = U\readState($this->root, $updateId);
+        $this->assertSame(2, $state['plan']['kept']);
+        $this->assertTrue($state['plan']['inventory']);
+        $keep = array_column(U\readPlan(U\workspace($this->root, $updateId)), 'keep', 'path');
+        $this->assertSame(array('system/bootstrap/bootstrap.php' => 'modified', 'src/Unknown.php' => 'unknown'), $keep);
+
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->assertSame('redirect', $this->runToDecision($context, $updateId)['status']);
+
+        $archive = U\updatesDirectory($this->root) . '/' . U\readState($this->root, $updateId)['keptArchive'];
+        $this->assertMatchesRegularExpression('#/kept/\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_to_5\.1\.0_[a-f0-9]{6}\.zip$#', $archive);
+        $zip = new ZipArchive();
+        $zip->open($archive);
+        $this->assertSame('OLD BOOTSTRAP', $zip->getFromName('system/bootstrap/bootstrap.php'), 'the file as it was before the update');
+        $this->assertSame('UNKNOWN', $zip->getFromName('src/Unknown.php'));
+        $this->assertFalse($zip->getFromName('index.php'), 'an original file is not kept');
+        $meta = json_decode((string)$zip->getFromName('meta.json'), true);
+        $zip->close();
+        $this->assertSame('5.0.14', $meta['installedVersion']);
+        $this->assertContains(array('path' => 'src/Unknown.php', 'reason' => 'unknown', 'action' => 'removed'), $meta['files']);
+
+        U\phaseBRollback($context, $updateId);
+        $this->runToDecision($context, $updateId);
+        $this->assertFileDoesNotExist($archive, 'after a rollback the files are back, the archive is not needed');
+    }
+
+    /**
+     * @testdox A backup by the updater can only be chosen where the database can be backed up
+     */
+    public function testBackupChoice(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        $this->assertSame('', U\readState($this->root, $updateId)['dumpMethod'], 'no mysqldump-php in the test installation');
+
+        foreach (array('dump', '', 'later') as $choice) {
+            try {
+                U\phaseBConfirm($context, $updateId, $choice);
+                $this->fail('accepted: ' . $choice);
+            } catch (UpdaterException $exception) {
+                $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage(), $choice);
+            }
+        }
+
+        $this->assertSame('own', U\phaseBConfirm($context, $updateId, 'own')['backup']);
+        U\phaseBRun($context, $updateId);
+        $this->assertSame('installing', U\readState($this->root, $updateId)['state'], 'without a backup by the updater no dumping state');
     }
 }

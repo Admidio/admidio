@@ -8,9 +8,12 @@
  * planning     - every file of the installation is compared with the new release: what is created,
  *                replaced and removed; checks D1-D3
  * review       - the administrator sees the plan and starts the installation
- * ready        - the plan is confirmed
- * installing   - maintenance mode on; system/bootstrap/ first, then the rest; every replaced or
+ * ready        - the plan is confirmed, with the choice of the database backup
+ * dumping      - maintenance mode on; the database is backed up into adm_my_files/core-update/dumps/
+ * installing   - system/bootstrap/ first, then the rest; every replaced or
  *                removed file is copied to the workspace first and every step is journaled
+ * archiving    - the replaced and removed files that were changed or unknown go into the kept-files
+ *                archive in adm_my_files/core-update/kept/, which is never removed automatically
  * verifying    - every installed file is hashed again; then OPcache is reset
  * files_installed - install/update.php takes over and updates the database (phase C)
  *
@@ -31,8 +34,8 @@ namespace AdmidioCoreUpdater;
 
 use Throwable;
 
-const PHASE_B_STATES = array('prepared', 'extracting', 'planning', 'review', 'ready', 'installing', 'verifying',
-    'rollback_required', 'rolling_back');
+const PHASE_B_STATES = array('prepared', 'extracting', 'planning', 'review', 'ready', 'dumping', 'installing', 'archiving',
+    'verifying', 'rollback_required', 'rolling_back');
 
 /** The states in which install/update.php has the update. */
 const PHASE_C_STATES = array('files_installed', 'database_running', 'database_failed');
@@ -66,7 +69,9 @@ function phaseBRun(array $ctx, string $updateId): array
                 'extracting' => extractPart($ctx, $state),
                 'planning' => planPart($ctx, $state),
                 'ready' => enterMaintenance($ctx, $state),
+                'dumping' => dumpPart($ctx, $state),
                 'installing' => installPart($ctx, $state),
+                'archiving' => archivePart($ctx, $state),
                 'verifying' => verifyPart($ctx, $state),
                 'rolling_back' => rollbackPart($ctx, $state),
                 // Continue where the error stopped the update.
@@ -75,25 +80,42 @@ function phaseBRun(array $ctx, string $updateId): array
             };
         } catch (VerificationFailure $failure) {
             // Only extracting and planning verify, before anything was changed.
+            updateLog($root, $updateId, 'verification failed in ' . $before . ': ' . errorDetail($failure->getPrevious()));
             abortUpdate($ctx, $updateId);
 
             return array('status' => 'failed', 'message' => describeError($ctx, $failure->getPrevious()), 'progress' => 0, 'state' => 'failed');
         } catch (Throwable $exception) {
             $state['lastError'] = describeError($ctx, $exception instanceof UpdaterException
                 ? $exception : UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', (string)$exception));
-            if (in_array($before, array('installing', 'verifying'), true) || ($before === 'ready' && isMaintenanceOwner($root, $updateId))) {
+            updateLog($root, $updateId, 'error in ' . $before . ': ' . errorDetail($exception));
+            if ($before === 'dumping') {
+                // No file was changed yet: back to the review, without maintenance mode.
+                deleteDirectory(workspace($root, $updateId) . '/dump');
+                leaveMaintenance($root, $updateId);
+                $state = array_merge($state, array('state' => 'review', 'cursor' => 0, 'cursorTotal' => 0,
+                    'lastError' => text($ctx['texts'], 'SYS_CORE_UPDATE_DUMP_FAILED', array($state['lastError']))));
+            } elseif (in_array($before, array('installing', 'archiving', 'verifying'), true) || ($before === 'ready' && isMaintenanceOwner($root, $updateId))) {
                 // Files may have changed: only continuing or restoring is left. A failed rollback
                 // or a failed check before maintenance mode is simply repeated.
                 $state['failedIn'] = $before === 'ready' ? 'ready' : $before;
                 $state['state'] = 'rollback_required';
             }
             writeState($root, $state);
+            if ($state['state'] !== $before) {
+                updateLog($root, $updateId, 'state ' . $state['state']);
+            }
 
             return array('status' => 'error', 'message' => $state['lastError'], 'progress' => phaseBProgress($state), 'state' => $state['state']);
         }
 
         $state['lastError'] = '';
         writeState($root, $state);
+        if ($state['state'] !== $before) {
+            updateLog($root, $updateId, 'state ' . $state['state']
+                . ($state['state'] === 'review' ? ' ' . json_encode($state['plan']) : '')
+                . (($state['dumpFile'] ?? '') !== '' && $before === 'dumping' ? ' ' . $state['dumpFile'] : '')
+                . (($state['keptArchive'] ?? '') !== '' && $before === 'archiving' ? ' ' . $state['keptArchive'] : ''));
+        }
 
         return phaseBResult($ctx, $state);
     }, false);
@@ -124,8 +146,14 @@ function phaseBResult(array $ctx, array $state): array
         case 'ready':
             $result['message'] = text($texts, 'SYS_CORE_UPDATE_MAINTENANCE_ACTIVE');
             break;
+        case 'dumping':
+            $result['message'] = text($texts, 'SYS_CORE_UPDATE_DUMPING');
+            break;
         case 'installing':
             $result['message'] = text($texts, 'SYS_CORE_UPDATE_FILES_INSTALLING');
+            break;
+        case 'archiving':
+            $result['message'] = text($texts, 'SYS_CORE_UPDATE_ARCHIVING');
             break;
         case 'verifying':
             $result['message'] = text($texts, 'SYS_CORE_UPDATE_VERIFYING');
@@ -160,7 +188,9 @@ function phaseBProgress(array $state): int
         'extracting' => $part(0, 15),
         'planning' => $part(15, 30),
         'review', 'ready' => 30,
-        'installing' => $part(30, 85),
+        'dumping' => $part(30, 40),
+        'installing' => $part(40, 80),
+        'archiving' => $part(80, 85),
         'verifying' => $part(85, 95),
         'rollback_required' => 30,
         'rolling_back' => 100 - $part(0, 100),
@@ -171,24 +201,27 @@ function phaseBProgress(array $state): int
 }
 
 /**
- * Start the installation after the administrator saw the plan. The browser gets the updater
- * cookie here, because from maintenance mode on the Admidio login cannot be used.
+ * Start the installation after the administrator saw the plan and chose the backup of the
+ * database: "dump" lets the updater back it up, "own" confirms an own backup. The browser gets the
+ * updater cookie here, because from maintenance mode on the Admidio login cannot be used.
  * @param array<string,mixed> $ctx
  * @return array<string,mixed>
  */
-function phaseBConfirm(array $ctx, string $updateId): array
+function phaseBConfirm(array $ctx, string $updateId, string $backup): array
 {
     $root = $ctx['config']['rootPath'];
 
-    return withLock($root, static function () use ($ctx, $root, $updateId): array {
+    return withLock($root, static function () use ($ctx, $root, $updateId, $backup): array {
         $state = readState($root, $updateId);
-        if ($state['state'] !== 'review' || checksHaveErrors((array)($state['planChecks'] ?? array()))) {
+        if ($state['state'] !== 'review' || checksHaveErrors((array)($state['planChecks'] ?? array()))
+            || !in_array($backup, array('dump', 'own'), true) || ($backup === 'dump' && ($state['dumpMethod'] ?? '') === '')) {
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
         }
 
         $cookie = issueCredential($state, time());
-        $state = array_merge($state, array('state' => 'ready', 'lastError' => ''));
+        $state = array_merge($state, array('state' => 'ready', 'backup' => $backup, 'lastError' => ''));
         writeState($root, $state);
+        updateLog($root, $updateId, 'confirmed by the administrator, database backup: ' . $backup);
         sendCredentialCookie($ctx['config'], $cookie);
 
         return $state;
@@ -221,12 +254,15 @@ function phaseBRollback(array $ctx, string $updateId): array
 
     return withLock($root, static function () use ($root, $updateId): array {
         $state = readState($root, $updateId);
-        if (!in_array($state['state'], array('installing', 'verifying', 'rollback_required', 'files_installed'), true) || !empty($state['databaseStarted'])) {
+        $before = (string)$state['state'];
+        if (!in_array($state['state'], array('installing', 'archiving', 'verifying', 'rollback_required', 'files_installed'), true)
+            || !empty($state['databaseStarted'])) {
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
         }
 
         $state = array_merge($state, array('state' => 'rolling_back', 'cursor' => 0, 'cursorTotal' => 0, 'lastError' => ''));
         writeState($root, $state);
+        updateLog($root, $updateId, 'restoring the previous files was requested in ' . $before);
 
         return $state;
     }, false);
@@ -247,6 +283,8 @@ function phaseBFinish(array $ctx, string $updateId): void
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
         }
 
+        updateLog($root, $updateId, 'completed, workspace removed');
+        keepUpdateLog($root, $state);
         clearActiveUpdate($root, $updateId);
         deleteDirectory(workspace($root, $updateId));
         clearCredentialCookie($ctx['config']);
@@ -408,16 +446,22 @@ function planPart(array $ctx, array $state): array
     $files = releaseFiles($manifest);
     $deadline = startTimeBudget(TIME_BUDGET);
 
+    $inventory = installedInventory($root);
     $operations = array();
     $cursor = (int)$state['cursor'];
     for ($done = 0; $cursor < count($files) && $done < 4 * FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
         $path = $files[$cursor];
         $target = $root . '/' . $path;
-        if (is_file($target) && !is_link($target) && hash_equals($manifest['files'][$path], (string)hash_file('sha256', $target))) {
+        $current = is_file($target) && !is_link($target) ? (string)hash_file('sha256', $target) : '';
+        if (hash_equals($manifest['files'][$path], $current)) {
             continue;
         }
-        $operations[] = array('action' => file_exists($target) || is_link($target) ? 'replace' : 'create', 'path' => $path,
+        $operation = array('action' => file_exists($target) || is_link($target) ? 'replace' : 'create', 'path' => $path,
             'hash' => $manifest['files'][$path]);
+        if ($current !== '' && ($keep = keepReason($inventory, $path, $current)) !== null) {
+            $operation['keep'] = $keep;
+        }
+        $operations[] = $operation;
     }
     appendPlan($workspace, $operations);
     $state['cursor'] = $cursor;
@@ -427,8 +471,16 @@ function planPart(array $ctx, array $state): array
     }
 
     // The files the release does not have, and the release's own manifest as the last file.
-    appendPlan($workspace, array_map(static fn(string $path): array => array('action' => 'delete', 'path' => $path, 'hash' => ''),
-        obsoleteFiles($root, $manifest)));
+    $removals = array();
+    foreach (obsoleteFiles($root, $manifest) as $path) {
+        $removal = array('action' => 'delete', 'path' => $path, 'hash' => '');
+        $current = is_file($root . '/' . $path) && !is_link($root . '/' . $path) ? (string)hash_file('sha256', $root . '/' . $path) : '';
+        if ($current !== '' && ($keep = keepReason($inventory, $path, $current)) !== null) {
+            $removal['keep'] = $keep;
+        }
+        $removals[] = $removal;
+    }
+    appendPlan($workspace, $removals);
     $manifestHash = (string)hash_file('sha256', $workspace . '/update-manifest.json');
     $installedManifest = $root . '/' . INSTALLED_MANIFEST;
     if (!is_file($installedManifest) || !hash_equals($manifestHash, (string)hash_file('sha256', $installedManifest))) {
@@ -440,20 +492,49 @@ function planPart(array $ctx, array $state): array
     writeJsonFile($workspace . '/plan.json', $plan);
     @unlink($workspace . '/plan.jsonl');
 
-    $counts = array('create' => 0, 'replace' => 0, 'delete' => 0);
+    $counts = array('create' => 0, 'replace' => 0, 'delete' => 0, 'kept' => 0);
     foreach ($plan as $operation) {
         if ($operation['path'] !== INSTALLED_MANIFEST) {
             $counts[$operation['action']]++;
+            $counts['kept'] += isset($operation['keep']) ? 1 : 0;
         }
     }
 
     return array_merge($state, array(
         'state' => 'review',
-        'plan' => $counts + array('unchanged' => count($files) - $counts['create'] - $counts['replace']),
+        'plan' => $counts + array('unchanged' => count($files) - $counts['create'] - $counts['replace'], 'inventory' => $inventory !== null),
         'planChecks' => planChecks($root, $workspace, $plan),
+        'dumpMethod' => dumpMethod($ctx, $workspace),
         'cursor' => 0,
         'cursorTotal' => 0
     ));
+}
+
+/**
+ * The SHA-256 of every file of the installed release, from its manifest, or null for a release
+ * without one (before the core updater) or a development tree.
+ * @return array<string,string>|null
+ */
+function installedInventory(string $root): ?array
+{
+    $manifest = is_file($root . '/' . INSTALLED_MANIFEST) ? json_decode((string)file_get_contents($root . '/' . INSTALLED_MANIFEST), true) : null;
+
+    return is_array($manifest['files'] ?? null) ? $manifest['files'] : null;
+}
+
+/**
+ * Why a file that is replaced or removed goes into the kept-files archive: "modified" when it
+ * differs from the original file of the installed release, "unknown" when that release does not
+ * have it or has no inventory; null for an original file, which the release can always bring back.
+ * @param array<string,string>|null $inventory
+ */
+function keepReason(?array $inventory, string $path, string $currentHash): ?string
+{
+    return match (true) {
+        $inventory === null, !isset($inventory[$path]) => 'unknown',
+        !hash_equals((string)$inventory[$path], $currentHash) => 'modified',
+        default => null
+    };
 }
 
 /**
@@ -651,8 +732,132 @@ function enterMaintenance(array $ctx, array $state): array
     ));
     @unlink(workspace($root, $state['updateId']) . '/journal.jsonl');
 
+    if (($state['backup'] ?? '') === 'dump') {
+        return array_merge($state, array('state' => 'dumping', 'databaseStarted' => false, 'cursor' => 0, 'cursorTotal' => 0));
+    }
+
     return array_merge($state, array('state' => 'installing', 'databaseStarted' => false, 'cursor' => 0,
         'cursorTotal' => count(readPlan(workspace($root, $state['updateId'])))));
+}
+
+// ------------------------------------------------------------------------------------------------
+// Database backup
+// ------------------------------------------------------------------------------------------------
+
+/**
+ * How this installation's database can be backed up: "mysqldump" (mysqldump-php, from the verified
+ * package or else from the installed release), "pg_dump" (the PostgreSQL program, if PHP may run
+ * it) or "" when it cannot.
+ * @param array<string,mixed> $ctx
+ */
+function dumpMethod(array $ctx, string $workspace): string
+{
+    if ($ctx['config']['dbType'] === 'mysql') {
+        return mysqldumpLibrary($ctx['config']['rootPath'], $workspace) !== '' ? 'mysqldump' : '';
+    }
+
+    $disabled = array_map('trim', explode(',', (string)ini_get('disable_functions')));
+    if (!function_exists('exec') || in_array('exec', $disabled, true)) {
+        return '';
+    }
+    @exec('pg_dump --version 2>&1', $output, $status);
+
+    return $status === 0 ? 'pg_dump' : '';
+}
+
+/** The file of mysqldump-php: from the verified package, or else from the installed release. */
+function mysqldumpLibrary(string $root, string $workspace): string
+{
+    foreach (array($workspace . '/extracted', $root) as $base) {
+        $file = $base . '/vendor/ifsnop/mysqldump-php/src/Ifsnop/Mysqldump/Mysqldump.php';
+        if (is_file($file)) {
+            return $file;
+        }
+    }
+
+    return '';
+}
+
+/**
+ * Back up the next tables of the installation, one file per table, and pack them into one ZIP in
+ * adm_my_files/core-update/dumps/ at the end. PostgreSQL is backed up by pg_dump in one go.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
+ */
+function dumpPart(array $ctx, array $state): array
+{
+    $config = $ctx['config'];
+    $root = $config['rootPath'];
+    $workspace = workspace($root, $state['updateId']);
+    $directory = $workspace . '/dump';
+    ensureDirectory($directory);
+    // A single large table is one piece of work, which may take longer than the usual budget, so
+    // the time limit is generous; new tables are only started within the usual budget.
+    startTimeBudget(300);
+    $deadline = microtime(true) + TIME_BUDGET;
+
+    if (($state['dumpMethod'] ?? '') === 'pg_dump') {
+        $file = $directory . '/' . $config['dbName'] . '.sql.gz';
+        putenv('PGPASSWORD=' . $config['dbPassword']);
+        exec('pg_dump --host=' . escapeshellarg($config['dbHost']) . ($config['dbPort'] !== null ? ' --port=' . (int)$config['dbPort'] : '')
+            . ' --username=' . escapeshellarg($config['dbUser']) . ' --dbname=' . escapeshellarg($config['dbName'])
+            . ' --clean --if-exists --no-owner --compress=6 --table=' . escapeshellarg($config['tablePrefix'] . '_*')
+            . ' --file=' . escapeshellarg($file) . ' 2>&1', $output, $status);
+        putenv('PGPASSWORD');
+        if ($status !== 0) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', 'pg_dump failed: ' . implode(' ', $output), array());
+        }
+    } else {
+        if (!isset($state['dumpTables'])) {
+            $statement = $ctx['pdo']->prepare('SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()
+                AND table_type = ? AND table_name LIKE ? ORDER BY table_name');
+            $statement->execute(array('BASE TABLE', str_replace('_', '\\_', $config['tablePrefix']) . '\\_%'));
+            $state['dumpTables'] = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        }
+
+        require_once mysqldumpLibrary($root, $workspace);
+        $dsn = 'mysql:host=' . $config['dbHost'] . ($config['dbPort'] !== null ? ';port=' . $config['dbPort'] : '') . ';dbname=' . $config['dbName'];
+        $cursor = (int)$state['cursor'];
+        do {
+            $table = $state['dumpTables'][$cursor] ?? null;
+            if ($table === null) {
+                break;
+            }
+            $dump = new \Ifsnop\Mysqldump\Mysqldump($dsn, $config['dbUser'], $config['dbPassword'], array(
+                'include-tables' => array($table),
+                'compress' => \Ifsnop\Mysqldump\Mysqldump::GZIP,
+                'add-drop-table' => true,
+                'default-character-set' => \Ifsnop\Mysqldump\Mysqldump::UTF8MB4
+            ));
+            $dump->start(sprintf('%s/%03d_%s.sql.gz', $directory, $cursor + 1, $table));
+            $cursor++;
+        } while (microtime(true) < $deadline);
+        $state['cursor'] = $cursor;
+        $state['cursorTotal'] = count($state['dumpTables']);
+        if ($cursor < count($state['dumpTables'])) {
+            return $state;
+        }
+    }
+
+    // One ZIP for the whole backup; the table files are compressed already.
+    ensureDirectory(updatesDirectory($root) . '/dumps');
+    $state['dumpFile'] = 'dumps/dump-' . date('Y-m-d_His') . '_' . $state['installedVersion'] . '_' . bin2hex(random_bytes(3)) . '.zip';
+    $zip = new \ZipArchive();
+    if ($zip->open(updatesDirectory($root) . '/' . $state['dumpFile'], \ZipArchive::CREATE) !== true) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be created.');
+    }
+    foreach (glob($directory . '/*.sql.gz') ?: array() as $file) {
+        $zip->addFile($file, basename($file));
+        $zip->setCompressionName(basename($file), \ZipArchive::CM_STORE);
+    }
+    if (!$zip->close()) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be written.');
+    }
+    deleteDirectory($directory);
+    unset($state['dumpTables']);
+
+    return array_merge($state, array('state' => 'installing', 'cursor' => 0, 'cursorTotal' => count(readPlan($workspace))));
 }
 
 function leaveMaintenance(string $root, string $updateId): void
@@ -699,6 +904,63 @@ function installPart(array $ctx, array $state): array
     }
 
     removeEmptiedDirectories($root, $plan);
+
+    return array_merge($state, array('state' => 'archiving', 'cursor' => 0, 'cursorTotal' => 0));
+}
+
+/**
+ * Put the next kept files into the kept-files archive, from the rollback copy. The archive is a ZIP,
+ * so a kept PHP file (perhaps malware) cannot be run, and its random name cannot be guessed.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
+ */
+function archivePart(array $ctx, array $state): array
+{
+    $root = $ctx['config']['rootPath'];
+    $workspace = workspace($root, $state['updateId']);
+    $kept = array_values(array_filter(readPlan($workspace), static fn(array $operation): bool => isset($operation['keep'])));
+    $deadline = startTimeBudget(TIME_BUDGET);
+
+    if ($kept !== array()) {
+        if (($state['keptArchive'] ?? '') === '') {
+            $state['keptArchive'] = 'kept/' . date('Y-m-d_His') . '_' . $state['installedVersion'] . '_to_' . $state['targetVersion']
+                . '_' . bin2hex(random_bytes(3)) . '.zip';
+            ensureDirectory(updatesDirectory($root) . '/kept');
+        }
+        $file = updatesDirectory($root) . '/' . $state['keptArchive'];
+        $zip = new \ZipArchive();
+        if ($zip->open($file, \ZipArchive::CREATE) !== true) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $file . ' cannot be created.');
+        }
+
+        $cursor = (int)$state['cursor'];
+        for ($done = 0; $cursor < count($kept) && $done < FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
+            $backup = $workspace . '/backup/' . $kept[$cursor]['path'];
+            if (is_file($backup)) {
+                $zip->addFile($backup, $kept[$cursor]['path']);
+            }
+        }
+        if ($cursor >= count($kept)) {
+            $zip->addFromString('meta.json', json_encode(array(
+                'updateId' => $state['updateId'],
+                'installedVersion' => $state['installedVersion'],
+                'targetVersion' => $state['targetVersion'],
+                'channel' => $state['channel'],
+                'date' => date('c'),
+                'files' => array_map(static fn(array $operation): array => array('path' => $operation['path'], 'reason' => $operation['keep'],
+                    'action' => $operation['action'] === 'delete' ? 'removed' : 'replaced'), $kept)
+            ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        }
+        if (!$zip->close()) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $file . ' cannot be written.');
+        }
+        $state['cursor'] = $cursor;
+        $state['cursorTotal'] = count($kept);
+        if ($cursor < count($kept)) {
+            return $state;
+        }
+    }
 
     return array_merge($state, array('state' => 'verifying', 'cursor' => 0, 'cursorTotal' => count(releaseFiles(workspaceManifest($workspace, $state)))));
 }
@@ -866,8 +1128,15 @@ function rollbackPart(array $ctx, array $state): array
     if (function_exists('opcache_reset')) {
         @opcache_reset();
     }
+    // The files are back where they were, so the archive of them is not needed.
+    if (($state['keptArchive'] ?? '') !== '') {
+        @unlink(updatesDirectory($root) . '/' . $state['keptArchive']);
+        $state['keptArchive'] = '';
+    }
     leaveMaintenance($root, $state['updateId']);
     revokeCredentials($state);
+    updateLog($root, $state['updateId'], 'previous files restored, maintenance mode off');
+    keepUpdateLog($root, $state);
     clearActiveUpdate($root, $state['updateId']);
     clearCredentialCookie($ctx['config']);
     foreach (array('extracted', 'backup') as $directory) {

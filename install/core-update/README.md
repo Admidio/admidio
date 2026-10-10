@@ -89,18 +89,32 @@ Phase B runs in the updater of the new release. It unpacks the package into the 
 checks every file against the manifest (`extracting`), then compares the installation with the
 release (`planning`): a file that is already right gets no operation, files in the managed
 directories that the release does not have are removed, root files only if the installed manifest
-lists them. The administrator sees the plan and the checks D1-D3 (`review`) and starts the
-installation. Then the browser gets the updater cookie, maintenance mode goes on, `system/bootstrap/`
-is installed first (so that even a release without maintenance mode shows the maintenance page),
-and every replaced or removed file is copied to `backup/` in the workspace before the operation;
-`journal.jsonl` records each operation before and after it (`installing`). Every installed file is
-hashed again and OPcache is reset (`verifying`); at `files_installed` `install/update.php` takes
-over and updates the database.
+lists them. A file that is replaced or removed and differs from the original file of the installed
+release, or that the release does not know (every such file when the installed release has no
+manifest), is marked to be kept.
+
+The administrator sees the plan, the files that are removed or kept and the checks D1-D3 (`review`),
+chooses a backup of the database by the updater or confirms an own backup, and starts the
+installation. Then the browser gets the updater cookie and maintenance mode goes on. The database is
+backed up table by table with mysqldump-php from the package (PostgreSQL with `pg_dump`, if PHP may
+run it) into `adm_my_files/core-update/dumps/` (`dumping`); if that fails, maintenance mode goes off
+again and nothing is changed. `system/bootstrap/` is installed first, so that even a release without
+maintenance mode shows the maintenance page; every replaced or removed file is copied to `backup/`
+in the workspace before the operation, and `journal.jsonl` records each operation before and after
+it (`installing`). The kept files go from that copy into a ZIP in `adm_my_files/core-update/kept/`,
+which is never removed automatically (`archiving`). Every installed file is hashed again and OPcache
+is reset (`verifying`); at `files_installed` `install/update.php` takes over and updates the
+database. Its result page removes the workspace and empties the Admidio session of the browser, so
+that Admidio builds its objects with the new classes while the administrator stays logged in.
 
 Every request does at most 8 seconds or 200 files of work. Up to `review` nothing is changed and
 cancelling removes the workspace. From `installing` on an error stops in `rollback_required`: the
 update continues where it stopped, or the journal is undone (`rolling_back`), which is possible
-until the database update starts.
+until the database update starts. If the database update fails (`database_failed`), the page names
+the error and the backup and offers to retry the database update.
+
+Every update writes `update.log` in its workspace (states, errors with their English detail,
+decisions); when the update is over it is copied to `adm_my_files/logs/core-update_<date>_<from>_to_<to>.log`.
 
 ## Development
 
