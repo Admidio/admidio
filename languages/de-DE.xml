@@ -1026,6 +1026,7 @@
   <string name="SYS_LOGIN_NOT_ACTIVATED">Ihre Anmeldung wurde noch nicht freigeschaltet.\n\nSie werden benachrichtigt, sobald Ihre Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGIN_TO">Anmelden bei #VAR1_BOLD#</string>
+  <string name="SYS_LOGIN_TO_VIEW_PAGE">Bitte melden Sie sich an, um diese Seite zu sehen. Danach werden Sie automatisch weitergeleitet.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Zugangsdaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administriende der Organisation #VAR1_BOLD# freigeschaltet.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Zugangsdaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Anmeldename und/oder das Passwort ist falsch.</string>

@@ -1014,6 +1014,7 @@
   <string name="SYS_LOGIN_NOT_ACTIVATED">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_TO">Sign in to #VAR1_BOLD#</string>
+  <string name="SYS_LOGIN_TO_VIEW_PAGE">Please log in to view this page. You will then be forwarded to it.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Your login data were correct but the update process is only activated for administrators of the organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login data were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
