@@ -28,7 +28,7 @@ final class HttpClientTest extends AdmidioTestCase
      */
     private function client(array $responses, string $plainHttpBase = ''): HttpClient
     {
-        return new HttpClient($plainHttpBase, function (string $url, int $maxBytes, $file) use ($responses): array {
+        return new HttpClient($plainHttpBase, function (string $url, int $maxBytes, $file, array $headers = array()) use ($responses): array {
             $this->requested[] = $url;
             [$status, $value] = $responses[$url] ?? array(404, '');
             $redirect = $status >= 300 && $status < 400;

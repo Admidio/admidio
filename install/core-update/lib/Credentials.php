@@ -128,6 +128,10 @@ final class Credentials
      */
     public static function sendCookie(Config $config, string $value): void
     {
+        // The command line has no browser to send a cookie to.
+        if (headers_sent()) {
+            return;
+        }
         setcookie(self::getCookieName($config->getCookiePrefix()), $value, self::cookieOptions($config, time() + self::LIFETIME));
     }
 
@@ -138,6 +142,9 @@ final class Credentials
      */
     public static function clearCookie(Config $config): void
     {
+        if (headers_sent()) {
+            return;
+        }
         setcookie(self::getCookieName($config->getCookiePrefix()), '', self::cookieOptions($config, time() - 3600));
     }
 

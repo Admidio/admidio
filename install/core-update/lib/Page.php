@@ -141,6 +141,16 @@ final class Page
         .button.secondary { background: #6c757d; }
         .button:disabled { opacity: .65; cursor: wait; }
         [hidden] { display: none !important; }
+        form.inline { display: inline; }
+        fieldset { border: 0; margin: 0 0 1rem; padding: 0; }
+        legend { font-weight: 700; margin-bottom: .3rem; }
+        label.choice { display: block; font-weight: 400; margin: 0 0 .3rem; }
+        ul.checks { list-style: none; padding: 0; }
+        ul.checks li { padding: .3rem 0 .3rem 1.6rem; position: relative; }
+        ul.checks li::before { position: absolute; left: 0; font-weight: 700; }
+        .check-ok::before { content: "\2713"; color: #198754; }
+        .check-warning::before { content: "!"; color: #b58100; }
+        .check-error::before { content: "\2717"; color: #dc3545; }
         @media (prefers-color-scheme: dark) {
             body { background: #181a1b; color: #e8e6e3; }
             main { background: #242729; }

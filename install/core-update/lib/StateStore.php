@@ -34,7 +34,7 @@ final class StateStore
      * has not changed anything, so its workspace may be removed.
      */
     public const STATES_BEFORE_CHANGES = array(
-        'new', 'checking', 'downloading', 'prepared', 'extracting', 'planning', 'review', 'ready'
+        'new', 'checking', 'checked', 'downloading', 'downloaded', 'prepared', 'extracting', 'planning', 'review', 'ready'
     );
 
     /**
@@ -290,6 +290,27 @@ final class StateStore
         } catch (UpdaterException) {
             // An unreadable state is not finished: it blocks a new update until somebody looks at it.
             return $updateId;
+        }
+    }
+
+    /**
+     * Whether Admidio itself is still intact: no update is unfinished, or the unfinished one has not
+     * started to change files. Then the Admidio login decides who may use the updater; from the
+     * maintenance mode on, Admidio cannot be used, and only the updater cookie or the updater's own
+     * login can. An update whose state cannot be read counts as having started.
+     * @return bool
+     */
+    public function isAdmidioIntact(): bool
+    {
+        $updateId = $this->getActiveId();
+        if ($updateId === null) {
+            return true;
+        }
+
+        try {
+            return in_array((string)$this->read($updateId)['state'], self::STATES_BEFORE_CHANGES, true);
+        } catch (UpdaterException) {
+            return false;
         }
     }
 

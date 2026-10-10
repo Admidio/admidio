@@ -9,19 +9,22 @@ therefore use only PHP built-ins and remain usable while `src/`, `vendor/`, `sys
 
 - `lib/` holds the classes of the updater (namespace `AdmidioCoreUpdater`), loaded by
   `lib/bootstrap.php` without an autoloader. They read `adm_my_files/config.php`, connect
-  with plain PDO and need nothing else. `install/update.php` and the Admidio settings page
-  load the same classes, so the state of an update and the updater cookie have one
-  implementation.
+  with plain PDO and need nothing else. `install/update.php` loads the same classes, so the
+  state of an update and the updater cookie have one implementation.
 - Every update has a workspace `adm_my_files/core-update/<update id>/` with `state.json`
   (versioned by `schemaVersion`, written atomically, the version before kept as
   `state.json.previous`). `active.json` names the unfinished update; `update.lock` serialises
   the requests.
-- Only an administrator gets in: with the updater cookie `<cookie prefix>_CORE_UPDATE`,
-  which the settings page hands over when it starts an update, or with the updater's own
-  login (password, security code when two-factor authentication is set up, membership in a
-  role with administrator rights). Five failed logins within 15 minutes block the login for
-  15 minutes; every attempt is written to `adm_my_files/core-update/login.log`. A cookie
-  expires one day after its last request and is revoked when the update is over.
+- Only an administrator gets in. As long as no Admidio file has been changed (states up to
+  `ready`), that is the Admidio login: `index.php` includes `system/common.php` of the
+  installed release, whatever 5.x release it is, and the settings page simply links to
+  `install/core-update/`. From maintenance mode on Admidio cannot be used: the browser that
+  started the installation carries the updater cookie `<cookie prefix>_CORE_UPDATE`, and the
+  updater's own login (password, security code when two-factor authentication is set up,
+  membership in a role with administrator rights) is the fallback for another device or a
+  lost cookie. Five failed logins within 15 minutes block it for 15 minutes; every attempt is
+  written to `adm_my_files/core-update/login.log`. A cookie expires one day after its last
+  request and is revoked when the update is over.
 - `cli.php` is the command line entry point (`php install/core-update/cli.php status`).
   Shell access is the proof of authority.
 - The texts are the `SYS_CORE_UPDATE_*` keys of the language files. A release carries them
@@ -35,85 +38,50 @@ therefore use only PHP built-ins and remain usable while `src/`, `vendor/`, `sys
   (`ZipReader`). With `$gDebug`, `$gCoreUpdateRootKeyFile` and `$gCoreUpdateServerUrl` point
   to test keys and a test server.
 
-## Signed release contract
+## Release information and phase A
 
-The regular `https://www.admidio.org/update.txt` stays small. Automatic release
-installation is offered when it additionally contains:
+Every channel publishes, below the channel base URL (`Config::CHANNEL_BASE_URL`, final URLs
+still open):
 
 ```text
-Package-URL=https://.../admidio-5.1.0.zip
-Release-URL=https://.../admidio-5.1.0.release.json
+release-keys.json(.sig)          signed by the root key
+<channel>/release.json(.sig)     signed by a key of the channel
 ```
 
-`Release-URL.sig` is fetched automatically. The release descriptor contains only
-small release metadata and hashes, for example:
+`release.json` names the release:
 
 ```json
 {
   "schema": 1,
+  "channel": "stable",
   "version": "5.1.0",
-  "packageSha256": "<sha256 of the complete ZIP>",
+  "versionText": "5.1.0",
+  "packageUrl": ["https://.../admidio-5.1.0.zip", "https://mirror/.../admidio-5.1.0.zip"],
+  "packageSha256": "<sha256 of the ZIP>",
   "packageSize": 12345678,
-  "manifestSha256": "<sha256 of install/update-manifest.json>"
+  "manifestSha256": "<sha256 of install/update-manifest.json>",
+  "minimumSourceVersion": "5.0.0",
+  "minimumPhpVersion": "8.2",
+  "releasedAt": "2026-10-08T12:00:00Z"
 }
 ```
 
-Both `release.json` and the internal manifest are signed with RSA-SHA256. Their
-signatures are stored as base64 text in adjacent `.sig` files. The exact JSON file
-bytes are signed; there is no second canonicalization step.
+The package contains `install/update-manifest.json(.sig)` with `version`, `managedDirectories`,
+`managedRootFiles`, `preservePaths`, `requirements` (`php`, `extensions`), `totalSize` and
+`files` (path => SHA-256). Signatures are base64 RSA-SHA256 over the exact file bytes.
 
-The trusted project public key must be shipped as:
+Phase A (`PhaseA`) runs in the installed updater: channel choice, key statement, descriptor,
+version rule and the checks P1-P10 (`Preflight`), then the confirmation, the download in range
+requests of a few seconds each, the verification of package and manifest, and the copy of the
+updater of the new release over this one. It ends in state `prepared`; phase B continues there.
 
-```text
-install/core-update/public-key.pem
-```
-
-The full file inventory is not downloaded during an update check. It is contained
-inside the release ZIP as:
-
-```text
-install/update-manifest.json
-install/update-manifest.json.sig
-```
-
-A simplified manifest looks like:
-
-```json
-{
-  "schema": 1,
-  "version": "5.1.0",
-  "manageRootFiles": true,
-  "managedDirectories": [
-    "install",
-    "languages",
-    "libs",
-    "modules",
-    "src",
-    "system",
-    "vendor",
-    "themes/simple"
-  ],
-  "preservePaths": [
-    "adm_my_files",
-    "install/core-update"
-  ],
-  "files": {
-    "index.php": "<sha256>",
-    "src/Infrastructure/Database.php": "<sha256>"
-  }
-}
-```
-
-The manifest is authoritative inside `managedDirectories`. Files found there that
-are not part of the authenticated target release are backed up and removed. This
-also removes obsolete core files and prevents an unexpected file in a core-owned
-directory from silently surviving a successful release update.
-
-Paths intended for local data or customization are explicitly preserved. The
-self-contained updater itself is preserved while it is running and was already
-installed from the authenticated target package by the preparation step.
+Because phase A replaces `install/core-update/` with the updater of the release it installs, a
+test release must be built from the current working tree, or it overwrites newer code there.
 
 ## Building an updater-compatible release
+
+> This describes the release builder of the first implementation; it is replaced in step 8 of
+> the concept and does not produce the formats above yet.
 
 Install production Composer dependencies first:
 
@@ -146,17 +114,3 @@ build/admidio-<version>.release.json.sig
 
 The ZIP includes production `vendor/` dependencies, the signed internal file
 manifest, and the self-contained updater.
-
-## Git master
-
-The development checkbox downloads GitHub's `master.zip`. That archive is not
-treated as a signed release:
-
-- no unexpected or obsolete files are deleted;
-- `adm_my_files`, local customization files, and the running updater are preserved;
-- the update is refused if `composer.lock` changed while the archive has no bundled
-  `vendor/autoload.php`;
-- the warning is shown before the package is prepared and again in the isolated updater.
-
-A CI-built master installation archive containing `vendor/` is preferable if master
-updates are intended for more than development systems.

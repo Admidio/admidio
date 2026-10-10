@@ -172,6 +172,34 @@ final class StateStoreTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The Admidio login applies until an update starts to change files
+     *
+     * Before maintenance mode the updater runs inside Admidio and uses its login; from then on only
+     * the updater cookie and the updater's own login can.
+     */
+    public function testAdmidioIsIntactUntilFilesChange(): void
+    {
+        $this->assertTrue($this->store->isAdmidioIntact(), 'no update');
+
+        $state = $this->store->create();
+        foreach (StateStore::STATES_BEFORE_CHANGES as $before) {
+            $this->store->update($state['updateId'], static fn(array $s): array => array_merge($s, array('state' => $before)));
+            $this->assertTrue($this->store->isAdmidioIntact(), $before);
+        }
+
+        foreach (array('dumping', 'installing', 'verifying', 'files_installed', 'database_running', 'database_failed', 'rollback_required') as $after) {
+            $this->store->update($state['updateId'], static fn(array $s): array => array_merge($s, array('state' => $after)));
+            $this->assertFalse($this->store->isAdmidioIntact(), $after);
+        }
+
+        file_put_contents($this->store->getWorkspace($state['updateId']) . '/state.json', 'broken');
+        $this->assertFalse($this->store->isAdmidioIntact(), 'an unreadable state counts as started');
+
+        $this->store->write(array_merge($state, array('state' => 'completed')));
+        $this->assertTrue($this->store->isAdmidioIntact(), 'a finished update');
+    }
+
+    /**
      * @testdox A request that does not want to wait is refused while another one holds the lock
      */
     public function testLockConflict(): void

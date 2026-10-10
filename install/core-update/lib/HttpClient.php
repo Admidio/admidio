@@ -12,7 +12,8 @@ namespace AdmidioCoreUpdater;
  * whichever mirror delivers it, and the updater never takes an unsigned URL from downloaded data.
  *
  * Every download has a size limit, counted on the bytes that actually arrive, and a connection is
- * given up when it stalls.
+ * given up when it stalls. A large file is fetched in parts with HTTP range requests, so that no
+ * single request runs longer than the server allows (getRange()).
  *
  * The one exception to HTTPS is a local test server: with $gDebug, URLs below the configured
  * $gCoreUpdateServerUrl may use plain HTTP.
@@ -32,8 +33,9 @@ final class HttpClient
     private const LOW_SPEED_TIME = 60;
 
     /**
-     * The network access: fn(string $url, int $maxBytes, resource|null $file): array{status: int,
-     * location: string, body: string}. With a file, the body is written to it instead of returned.
+     * The network access: fn(string $url, int $maxBytes, resource|null $file, array $headers):
+     * array{status: int, location: string, body: string}. With a file, the body is written to it
+     * instead of returned; $headers are additional request headers.
      * @var callable
      */
     private $transport;
@@ -57,7 +59,32 @@ final class HttpClient
      */
     public function get(string $url, int $maxBytes): string
     {
-        return $this->request($url, $maxBytes, null);
+        return $this->request($url, $maxBytes, null)['body'];
+    }
+
+    /**
+     * Fetch a part of a file with a range request.
+     *
+     * A server that supports ranges answers with status 206 and exactly that part. One that does
+     * not answers with 200 and the whole file, which is then limited to $maxTotal bytes; the caller
+     * decides what to do with it.
+     * @param string $url
+     * @param int $offset The first byte.
+     * @param int $length The number of bytes.
+     * @param int $maxTotal The size limit of the whole file, for a server that ignores the range.
+     * @return array{status: int, body: string}
+     * @throws UpdaterException
+     */
+    public function getRange(string $url, int $offset, int $length, int $maxTotal): array
+    {
+        $response = $this->request($url, max($length, $maxTotal), null,
+            array('Range: bytes=' . $offset . '-' . ($offset + $length - 1)));
+
+        if ($response['status'] === 206 && strlen($response['body']) > $length) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_DOWNLOAD_FAILED', 'The server sent more than the requested range.', array(''));
+        }
+
+        return $response;
     }
 
     /**
@@ -135,9 +162,10 @@ final class HttpClient
      * @param string $url
      * @param int $maxBytes
      * @param resource|null $file
-     * @return string The body, or an empty string when it was written to the file.
+     * @param array<int,string> $headers Additional request headers, sent on every hop.
+     * @return array{status: int, body: string} The body is empty when it was written to the file.
      */
-    private function request(string $url, int $maxBytes, $file): string
+    private function request(string $url, int $maxBytes, $file, array $headers = array()): array
     {
         for ($hop = 0; $hop <= self::MAX_REDIRECTS; $hop++) {
             $this->assertAllowed($url);
@@ -146,7 +174,7 @@ final class HttpClient
                 ftruncate($file, 0);
                 rewind($file);
             }
-            $response = ($this->transport)($url, $maxBytes, $file);
+            $response = ($this->transport)($url, $maxBytes, $file, $headers);
             $status = (int)$response['status'];
 
             if ($status >= 300 && $status < 400 && $response['location'] !== '') {
@@ -157,7 +185,7 @@ final class HttpClient
                 throw UpdaterException::withDetail('SYS_CORE_UPDATE_DOWNLOAD_FAILED', 'HTTP status ' . $status . ' for ' . $url, array('HTTP ' . $status));
             }
 
-            return (string)$response['body'];
+            return array('status' => $status, 'body' => (string)$response['body']);
         }
 
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_DOWNLOAD_FAILED', 'More than ' . self::MAX_REDIRECTS . ' redirects.', array(''));
@@ -168,9 +196,10 @@ final class HttpClient
      * @param string $url
      * @param int $maxBytes
      * @param resource|null $file
+     * @param array<int,string> $headers
      * @return array{status: int, location: string, body: string}
      */
-    private static function curlTransport(string $url, int $maxBytes, $file): array
+    private static function curlTransport(string $url, int $maxBytes, $file, array $headers = array()): array
     {
         if (!extension_loaded('curl')) {
             throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUIRED_EXTENSIONS', 'ext-curl is not loaded.');
@@ -191,6 +220,7 @@ final class HttpClient
             CURLOPT_LOW_SPEED_LIMIT => self::LOW_SPEED_LIMIT,
             CURLOPT_LOW_SPEED_TIME => self::LOW_SPEED_TIME,
             CURLOPT_USERAGENT => 'Admidio core updater',
+            CURLOPT_HTTPHEADER => $headers,
             CURLOPT_HEADERFUNCTION => static function ($curl, string $header) use (&$location): int {
                 if (stripos($header, 'Location:') === 0) {
                     $location = trim(substr($header, strlen('Location:')));

@@ -14,7 +14,6 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\KeyService;
-use Admidio\InstallationUpdate\Service\CoreUpdatePreparationService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -178,49 +177,69 @@ class PreferencesService
     }
 
     /**
-     * Checks for an Admidio update and returns the HTML fragment shown on the system information panel.
-     *
-     * @param bool $gitMaster If true, offer the current Git master branch instead of a signed release.
-     * @return string
+     * check availability of update information and render it for the preferences UI.
+     * @return string Returns the HTML of the update check
      * @throws Exception
      */
-    public function showUpdateInfo(bool $gitMaster = false): string
+    function showUpdateInfo(): string
     {
         global $gL10n;
+        $html = '';
 
-        $updateService = new CoreUpdatePreparationService();
-        $information = $updateService->getUpdateInformation($gitMaster);
+        $updateInformation = $this->getUpdateInformation();
+        $stableVersion = $updateInformation['stableVersion'];
+        $betaVersion = $updateInformation['betaVersion'];
+        $betaRelease = $updateInformation['betaRelease'];
+        $versionUpdate = $updateInformation['versionUpdate'];
 
-        $html = '<p>' . $gL10n->get('SYS_INSTALLED') . ':&nbsp;'
-            . htmlspecialchars((string) $information['installedVersion']) . '</p>'
-            . '<p>' . $gL10n->get('SYS_AVAILABLE') . ':&nbsp;'
-            . htmlspecialchars((string) $information['availableVersion']) . '</p>';
+        /*
+         * A version that the update server doesn't provide is displayed as "n/a". The values are
+         * read from a file on the Admidio server and are encoded here, so that the HTML below
+         * cannot be manipulated through that file.
+         */
+        $stableVersionText = SecurityUtils::encodeHTML(($stableVersion === '') ? 'n/a' : $stableVersion);
+        $betaVersionText = SecurityUtils::encodeHTML(($betaVersion === '') ? 'n/a' : $betaVersion);
+        $betaReleaseText = SecurityUtils::encodeHTML($betaRelease);
 
-        if ($gitMaster) {
-            $html .= '<div class="alert alert-warning alert-small" role="alert">'
-                . '<i class="bi bi-exclamation-triangle-fill"></i>'
-                . $gL10n->get('SYS_CORE_UPDATE_MASTER_WARNING')
-                . '</div>';
+        // $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
+        if ($versionUpdate === 1) {
+            $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
+        } elseif ($versionUpdate === 2) {
+            $versionsText = $gL10n->get('SYS_NEW_BETA_AVAILABLE');
+        } elseif ($versionUpdate === 3) {
+            $versionsText = $gL10n->get('SYS_NEW_BOTH_AVAILABLE');
+        } elseif ($versionUpdate === 99) {
+            $admidioLink = '<a href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">Admidio</a>';
+            $versionsText = $gL10n->get('SYS_CONNECTION_ERROR', array($admidioLink));
+        } else {
+            $versionsTextBeta = '';
+            if (ADMIDIO_VERSION_BETA > 0) {
+                $versionsTextBeta = 'Beta ';
+            }
+
+            $versionsText = $gL10n->get('SYS_USING_CURRENT_VERSION', array($versionsTextBeta));
         }
 
-        if (!$information['updateAvailable']) {
-            $html .= '<strong>' . $gL10n->get('SYS_USING_CURRENT_VERSION', array('')) . '</strong>';
-            return $html;
+        $html .= '
+        <p>' . $gL10n->get('SYS_INSTALLED') . ':&nbsp;' . ADMIDIO_VERSION_TEXT . '</p>
+        <p>' . $gL10n->get('SYS_AVAILABLE') . ':&nbsp;
+            <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
+            '<i class="bi bi-link"></i>' . $stableVersionText . '
+            </a>
+            <br />
+            ' . $gL10n->get('SYS_AVAILABLE_BETA') . ': &nbsp;';
+
+        if ($versionUpdate !== 99 && $betaVersion !== '') {
+            $html .= '
+                <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'intern/adm_program/modules/announcements/announcements.php?cat_uuid=e2be424d-dd72-4c01-99ad-f8f91ec8830f" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
+                '<i class="bi bi-link"></i>' . $betaVersionText . ' Beta ' . $betaReleaseText . '
+                </a>';
+        } else {
+            $html .= $betaVersionText;
         }
-
-        if (!$information['automaticUpdateAvailable']) {
-            $html .= '<div class="alert alert-warning alert-small" role="alert">'
-                . $gL10n->get('SYS_CORE_UPDATE_RELEASE_NOT_CONFIGURED')
-                . '</div>'
-                . '<a class="btn btn-secondary" href="' . ADMIDIO_HOMEPAGE . 'download.php" target="_blank">'
-                . '<i class="bi bi-download"></i>' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '</a>';
-            return $html;
-        }
-
-        $html .= '<strong>' . $gL10n->get('SYS_NEW_VERSION_AVAILABLE') . '</strong><br />'
-            . '<button type="button" class="btn btn-primary mt-2" id="adm_start_core_update">'
-            . '<i class="bi bi-arrow-repeat"></i>' . $gL10n->get('SYS_CORE_UPDATE_START') . '</button>';
-
+        $html .= '
+        </p>
+        <strong>' . $versionsText . '</strong>';
         return $html;
     }
 

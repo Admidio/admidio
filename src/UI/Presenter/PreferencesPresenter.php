@@ -2775,6 +2775,9 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('databaseType', DB_TYPE);
         $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
         $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
+        // The updater itself finds out which version it may install, from the signed release
+        // information, so it can be opened at any time.
+        $this->assignSmartyVariable('coreUpdateUrl', ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php');
 
         // Admidio System Information
         $this->assignSmartyVariable('operatingSystemName', SystemInfoUtils::getOS());
@@ -3272,14 +3275,10 @@ class PreferencesPresenter extends PagePresenter
                 panelContainer.off("click", "#adm_link_check_update").on("click", "#adm_link_check_update", function(event) {
                     event.preventDefault();
                     var versionInfoContainer = panelContainer.find("#adm_version_content");
-                    var updateGitMaster = panelContainer.find("#adm_update_git_master").is(":checked") ? 1 : 0;
                     versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
                     $.post(
                         "' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check",
-                        {
-                            adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '",
-                            git_master: updateGitMaster
-                        }
+                        { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }
                     ).done(function(htmlVersion) {
                         // A failure is answered with JSON, a success with the HTML to show.
                         var error = coreUpdateError(htmlVersion);
@@ -3312,42 +3311,6 @@ class PreferencesPresenter extends PagePresenter
                     var error = coreUpdateError(response.responseText);
                     return error !== null ? error : "HTTP " + response.status + " " + response.statusText;
                 }
-
-                // Prepare and start the isolated core updater
-                panelContainer.off("click", "#adm_start_core_update").on("click", "#adm_start_core_update", function(event) {
-                    event.preventDefault();
-                    var button = $(this);
-                    var updateGitMaster = panelContainer.find("#adm_update_git_master").is(":checked") ? 1 : 0;
-                    button.prop("disabled", true);
-                    button.find("i").attr("class", "spinner-border spinner-border-sm");
-
-                    $.post(
-                        "' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_start",
-                        {
-                            adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '",
-                            git_master: updateGitMaster
-                        }
-                    ).done(function(response) {
-                        var result = null;
-                        try {
-                            result = typeof response === "string" ? JSON.parse(response) : response;
-                        } catch (e) {
-                            result = null;
-                        }
-                        if (result !== null && result.status === "success") {
-                            window.location.href = result.url;
-                            return;
-                        }
-                        button.prop("disabled", false);
-                        button.find("i").attr("class", "bi bi-arrow-repeat");
-                        var message = coreUpdateError(result);
-                        messageBox(message !== null ? message : ' . json_encode($gL10n->get('SYS_CORE_UPDATE_REQUEST_FAILED')) . ', ' . json_encode($gL10n->get('SYS_ERROR')) . ', "error");
-                    }).fail(function(response) {
-                        button.prop("disabled", false);
-                        button.find("i").attr("class", "bi bi-arrow-repeat");
-                        messageBox(coreUpdateFailure(response), ' . json_encode($gL10n->get('SYS_ERROR')) . ', "error");
-                    });
-                });
 
                 // The purge deletes with the retention period that is stored in the preferences and
                 // not with the one that is currently shown in the form. As long as the two differ,

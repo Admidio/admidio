@@ -35,3 +35,5 @@ require_once __DIR__ . '/Descriptor.php';
 require_once __DIR__ . '/Manifest.php';
 require_once __DIR__ . '/HttpClient.php';
 require_once __DIR__ . '/ZipReader.php';
+require_once __DIR__ . '/Preflight.php';
+require_once __DIR__ . '/PhaseA.php';
