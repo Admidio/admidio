@@ -11,6 +11,7 @@
 
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Infrastructure\Plugins\PluginWidget;
+use Admidio\UI\Presenter\PluginsPresenter;
 
 try {
     // if the config file doesn't exist, then show the installation dialog
@@ -32,6 +33,8 @@ try {
 
     // A plugin contributes a widget to the overview through the overview_widgets filter.
     $page->assignSmartyVariable('overviewWidgets', PluginWidget::collect($page));
+    // The start page tells the administrators about a plugin that is kept out after a crash.
+    $page->assignSmartyVariable('crashedPlugins', PluginsPresenter::getCrashNotices());
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();

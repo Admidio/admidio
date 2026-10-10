@@ -1286,6 +1286,11 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED">The plugin #VAR1_BOLD# was disabled temporarily because it crashed: #VAR2#</string>
+  <string name="SYS_PLUGIN_CRASHED_DEPENDANTS">These plugins require it and are not loaded either: #VAR1#</string>
+  <string name="SYS_PLUGIN_CRASHED_INFO">The plugin stays enabled, but it is not loaded until you try it again. A new version of the plugin or of Admidio is tried automatically.</string>
+  <string name="SYS_PLUGIN_CRASHED_PAGE">The plugin #VAR1# is disabled temporarily because it crashed. Please inform an administrator.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Try again</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
