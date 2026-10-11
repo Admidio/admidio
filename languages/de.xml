@@ -1478,6 +1478,7 @@
   <string name="SYS_REPLACE">Ersetzen</string>
   <string name="SYS_REPLIES_VAR">#VAR1# Antworten</string>
   <string name="SYS_REPLY_TO">Antwort an</string>
+  <string name="SYS_REQUEST_FAILED">Die Anfrage konnte nicht abgeschlossen werden. Bitte prüfe deine Internetverbindung und versuche es erneut.</string>
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du bist bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Das Bild konnte nicht verarbeitet werden, weil die Auflösung größer als #VAR1# Megapixel ist.</string>
