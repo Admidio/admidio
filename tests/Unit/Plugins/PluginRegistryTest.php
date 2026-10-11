@@ -7,6 +7,7 @@
 
 namespace Admidio\Tests\Unit\Plugins;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
@@ -157,10 +158,14 @@ final class PluginRegistryTest extends PluginTestCase
      */
     public function testUpdateState(): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.1.0')));
+        unset($GLOBALS['gCurrentUser']);
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.1.0')));
 
         $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState('hello'));
         $this->assertSame(array(), PluginRegistry::getLoadable(), 'a plugin waiting for its update must not be loaded');
+
+        $this->expectException(Exception::class);
+        PluginRegistry::requireEnabled('hello');
     }
 
     /**

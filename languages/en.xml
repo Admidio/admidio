@@ -1341,6 +1341,8 @@
   <string name="SYS_PLUGIN_STORE_UNAVAILABLE">The list of plugins published for Admidio could not be read. Uploading a plugin from a file still works.</string>
   <string name="SYS_PLUGIN_STORE_VERSION_MISMATCH">The catalogue announced version #VAR2# of the plugin #VAR1#, but the downloaded archive contains version #VAR3#. The download was refused.</string>
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
+  <string name="SYS_PLUGIN_UPDATE_REQUIRED">The plugin #VAR1_BOLD# must be updated before it can be used. #VAR2#Open Plugin Manager#VAR3#.</string>
+  <string name="SYS_PLUGIN_UPDATE_REQUIRED_NO_ACCESS">The plugin #VAR1_BOLD# must be updated before it can be used. Please contact an administrator.</string>
   <string name="SYS_PLUGIN_UPDATED">Plugin successfully updated.</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
