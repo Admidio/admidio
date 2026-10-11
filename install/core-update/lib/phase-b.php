@@ -19,7 +19,9 @@
  *
  * Up to review nothing is changed, and cancelling removes the workspace. From installing on, an
  * error stops in rollback_required: the administrator continues the update or restores the old
- * files (rolling_back), which is possible until the database update starts.
+ * files (rolling_back), which is possible until the database update starts. If the database update
+ * fails, the previous version can be restored as a whole: first the database from the backup
+ * (restoring_database), then the files.
  *
  * Every function gets the context of phase A (see phase-a.php).
  *
@@ -32,10 +34,11 @@ declare(strict_types=1);
 
 namespace AdmidioCoreUpdater;
 
+use PDO;
 use Throwable;
 
 const PHASE_B_STATES = array('prepared', 'extracting', 'planning', 'review', 'ready', 'dumping', 'installing', 'archiving',
-    'verifying', 'rollback_required', 'rolling_back');
+    'verifying', 'rollback_required', 'rolling_back', 'restoring_database');
 
 /** The states in which install/update.php has the update. */
 const PHASE_C_STATES = array('files_installed', 'database_running', 'database_failed');
@@ -74,6 +77,7 @@ function phaseBRun(array $ctx, string $updateId): array
                 'archiving' => archivePart($ctx, $state),
                 'verifying' => verifyPart($ctx, $state),
                 'rolling_back' => rollbackPart($ctx, $state),
+                'restoring_database' => restoreDatabasePart($ctx, $state),
                 // Continue where the error stopped the update.
                 'rollback_required' => array_merge($state, array('state' => (string)($state['failedIn'] ?? 'installing'))),
                 default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
@@ -158,12 +162,15 @@ function phaseBResult(array $ctx, array $state): array
         case 'verifying':
             $result['message'] = text($texts, 'SYS_CORE_UPDATE_VERIFYING');
             break;
+        case 'restoring_database':
+            $result['message'] = text($texts, 'SYS_CORE_UPDATE_RESTORING_DATABASE');
+            break;
         case 'rolling_back':
             $result['message'] = text($texts, 'SYS_CORE_UPDATE_ROLLING_BACK');
             break;
         case 'rolled_back':
             $result['status'] = 'rolled_back';
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK');
+            $result['message'] = rolledBackMessage($ctx, $state);
             break;
         case 'files_installed':
             $result['status'] = 'redirect';
@@ -194,6 +201,7 @@ function phaseBProgress(array $state): int
         'verifying' => $part(85, 95),
         'rollback_required' => 30,
         'rolling_back' => 100 - $part(0, 100),
+        'restoring_database' => 100,
         'files_installed', 'database_running', 'database_failed' => 95,
         'completed' => 100,
         default => 0
@@ -263,6 +271,77 @@ function phaseBRollback(array $ctx, string $updateId): array
         $state = array_merge($state, array('state' => 'rolling_back', 'cursor' => 0, 'cursorTotal' => 0, 'lastError' => ''));
         writeState($root, $state);
         updateLog($root, $updateId, 'restoring the previous files was requested in ' . $before);
+
+        return $state;
+    }, false);
+}
+
+/**
+ * What the administrator is told when the update was undone.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ */
+function rolledBackMessage(array $ctx, array $state): string
+{
+    return !empty($state['restoredVersion'])
+        ? text($ctx['texts'], 'SYS_CORE_UPDATE_VERSION_RESTORED', array((string)$state['installedVersion']))
+        : text($ctx['texts'], 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK');
+}
+
+/**
+ * How the database of a failed update can be restored by the updater: "mysql" (the table files of
+ * the backup, run with PDO), "psql" (the backup of pg_dump, run by psql, if PHP may run it), or ""
+ * when there is no backup of the updater or it cannot be run.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ */
+function restoreMethod(array $ctx, array $state): string
+{
+    $file = updatesDirectory($ctx['config']['rootPath']) . '/' . ($state['dumpFile'] ?? '');
+    if (($state['dumpFile'] ?? '') === '' || !is_file($file)) {
+        return '';
+    }
+    if ($ctx['config']['dbType'] === 'mysql') {
+        return 'mysql';
+    }
+
+    $disabled = array_map('trim', explode(',', (string)ini_get('disable_functions')));
+    if (!function_exists('exec') || in_array('exec', $disabled, true)) {
+        return '';
+    }
+    @exec('psql --version 2>&1', $output, $status);
+
+    return $status === 0 ? 'psql' : '';
+}
+
+/**
+ * Restore the previous version after a failed database update: the database from the backup of
+ * the updater, then the files from the rollback copy. Without a backup that the updater can run,
+ * only the files are restored, and only after the administrator confirmed that the database was
+ * restored from an own backup: the old files on a half-migrated database would not work.
+ * @param array<string,mixed> $ctx
+ * @return array<string,mixed>
+ */
+function phaseBRestore(array $ctx, string $updateId, bool $ownDatabaseRestored): array
+{
+    $root = $ctx['config']['rootPath'];
+
+    return withLock($root, static function () use ($ctx, $root, $updateId, $ownDatabaseRestored): array {
+        $state = readState($root, $updateId);
+        if ($state['state'] !== 'database_failed') {
+            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
+        }
+
+        $method = restoreMethod($ctx, $state);
+        if ($method === '' && !$ownDatabaseRestored) {
+            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
+        }
+
+        $state = array_merge($state, array('state' => $method !== '' ? 'restoring_database' : 'rolling_back', 'restoredVersion' => true,
+            'restoreMethod' => $method, 'cursor' => 0, 'cursorTotal' => 0, 'lastError' => ''));
+        writeState($root, $state);
+        updateLog($root, $updateId, 'restoring the previous version was requested: '
+            . ($method !== '' ? 'database from ' . $state['dumpFile'] : 'database restored by the administrator') . ', then the files');
 
         return $state;
     }, false);
@@ -816,7 +895,9 @@ function dumpPart(array $ctx, array $state): array
             $state['dumpTables'] = $statement->fetchAll(\PDO::FETCH_COLUMN);
         }
 
-        require_once mysqldumpLibrary($root, $workspace);
+        if (!class_exists(\Ifsnop\Mysqldump\Mysqldump::class, false)) {
+            require_once mysqldumpLibrary($root, $workspace);
+        }
         $dsn = 'mysql:host=' . $config['dbHost'] . ($config['dbPort'] !== null ? ';port=' . $config['dbPort'] : '') . ';dbname=' . $config['dbName'];
         $cursor = (int)$state['cursor'];
         do {
@@ -1089,6 +1170,7 @@ function verifyPart(array $ctx, array $state): array
     if (function_exists('opcache_reset')) {
         @opcache_reset();
     }
+    saveMigrationPaths($root, $workspace, $manifest);
 
     return array_merge($state, array('state' => 'files_installed', 'cursor' => 0, 'cursorTotal' => 0));
 }
@@ -1128,6 +1210,9 @@ function rollbackPart(array $ctx, array $state): array
     if (function_exists('opcache_reset')) {
         @opcache_reset();
     }
+    if (!empty($state['restoredVersion'])) {
+        restoreMigrationPaths($root, $workspace);
+    }
     // The files are back where they were, so the archive of them is not needed.
     if (($state['keptArchive'] ?? '') !== '') {
         @unlink(updatesDirectory($root) . '/' . $state['keptArchive']);
@@ -1145,6 +1230,188 @@ function rollbackPart(array $ctx, array $state): array
     @unlink($workspace . '/package.zip');
 
     return array_merge($state, array('state' => 'rolled_back', 'cursor' => 0, 'cursorTotal' => 0));
+}
+
+/**
+ * Restore the next tables of the database from the backup of the updater, and at the end remove the
+ * tables that the new version created. Then the files are restored (rolling_back). Maintenance mode
+ * is on since before the backup, so nothing that was entered since is lost.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
+ */
+function restoreDatabasePart(array $ctx, array $state): array
+{
+    $config = $ctx['config'];
+    $root = $config['rootPath'];
+    $pdo = $ctx['pdo'] ?? null;
+    if (!$pdo instanceof PDO) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', 'The database cannot be reached.');
+    }
+    // A single large table is one piece of work, so the time limit is generous.
+    startTimeBudget(300);
+    $deadline = microtime(true) + TIME_BUDGET;
+
+    $zip = new \ZipArchive();
+    if ($zip->open(updatesDirectory($root) . '/' . $state['dumpFile'], \ZipArchive::RDONLY) !== true) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $state['dumpFile'] . ' cannot be opened.');
+    }
+
+    try {
+        $names = array();
+        for ($index = 0; $index < $zip->numFiles; $index++) {
+            $names[] = (string)$zip->getNameIndex($index);
+        }
+        sort($names, SORT_STRING);
+        $tables = array();
+
+        if (($state['restoreMethod'] ?? '') === 'psql') {
+            $file = workspace($root, $state['updateId']) . '/restore.sql';
+            $sql = (string)gzdecode((string)$zip->getFromName($names[0]));
+            writeFile($file, $sql);
+            preg_match_all('/^CREATE TABLE (?:\w+\.)?"?(' . preg_quote($config['tablePrefix'], '/') . '_\w+)"?/m', $sql, $matches);
+            $tables = $matches[1];
+            putenv('PGPASSWORD=' . $config['dbPassword']);
+            exec('psql --host=' . escapeshellarg($config['dbHost']) . ($config['dbPort'] !== null ? ' --port=' . (int)$config['dbPort'] : '')
+                . ' --username=' . escapeshellarg($config['dbUser']) . ' --dbname=' . escapeshellarg($config['dbName'])
+                . ' --set=ON_ERROR_STOP=1 --quiet --file=' . escapeshellarg($file) . ' 2>&1', $output, $status);
+            putenv('PGPASSWORD');
+            @unlink($file);
+            if ($status !== 0) {
+                throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', 'psql failed: ' . implode(' ', $output));
+            }
+            $state['cursor'] = $state['cursorTotal'] = 1;
+        } else {
+            $cursor = (int)$state['cursor'];
+            do {
+                $name = $names[$cursor] ?? null;
+                if ($name === null) {
+                    break;
+                }
+                runSqlScript($pdo, (string)gzdecode((string)$zip->getFromName($name)));
+                $cursor++;
+            } while (microtime(true) < $deadline);
+            $state['cursor'] = $cursor;
+            $state['cursorTotal'] = count($names);
+            if ($cursor < count($names)) {
+                return $state;
+            }
+            $tables = array_map(static fn(string $name): string => (string)preg_replace('/^\d+_|\.sql\.gz$/', '', $name), $names);
+        }
+    } finally {
+        $zip->close();
+    }
+
+    dropTablesExcept($pdo, $config, $tables);
+    updateLog($root, $state['updateId'], 'database restored from ' . $state['dumpFile'] . ' (' . count($tables) . ' tables)');
+
+    return array_merge($state, array('state' => 'rolling_back', 'cursor' => 0, 'cursorTotal' => 0));
+}
+
+/**
+ * Run a script of SQL statements, as a table file of the backup is, and report an error of any of
+ * them. Several statements in one query need emulated prepares.
+ */
+function runSqlScript(PDO $pdo, string $sql): void
+{
+    $emulated = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+    try {
+        $statement = $pdo->query($sql);
+        while ($statement !== false && $statement->nextRowset()) {
+            // every result is read, so that the error of a later statement is reported
+        }
+    } finally {
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $emulated);
+    }
+}
+
+/**
+ * Remove the tables of the installation that the backup does not have: those the new version
+ * created before its database update failed.
+ * @param array<string,mixed> $config
+ * @param array<int,string> $keep
+ */
+function dropTablesExcept(PDO $pdo, array $config, array $keep): void
+{
+    $mysql = $config['dbType'] === 'mysql';
+    $statement = $pdo->prepare('SELECT table_name FROM information_schema.tables WHERE table_schema = ' . ($mysql ? 'DATABASE()' : 'current_schema()')
+        . ' AND table_type = ? AND table_name LIKE ?');
+    $statement->execute(array('BASE TABLE', str_replace('_', '\\_', $config['tablePrefix']) . '\\_%'));
+    $obsolete = array_diff($statement->fetchAll(PDO::FETCH_COLUMN), $keep);
+
+    if ($mysql) {
+        $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
+    }
+    foreach ($obsolete as $table) {
+        if (preg_match('/^\w+$/', (string)$table) === 1) {
+            $pdo->exec('DROP TABLE ' . $table . ($mysql ? '' : ' CASCADE'));
+        }
+    }
+    if ($mysql) {
+        $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
+    }
+}
+
+/**
+ * Copy the paths that the database update of the release moves or removes (migrationPaths of its
+ * manifest, for 6.0 adm_plugins) into the workspace, before install/update.php runs: restoring the
+ * previous version needs them, and the journal only knows what the updater changed.
+ * @param array<string,mixed> $manifest
+ */
+function saveMigrationPaths(string $root, string $workspace, array $manifest): void
+{
+    deleteDirectory($workspace . '/migration');
+    $saved = array();
+    foreach ($manifest['migrationPaths'] as $path) {
+        if (file_exists($root . '/' . $path) && !is_link($root . '/' . $path)) {
+            copyPath($root . '/' . $path, $workspace . '/migration/' . $path);
+            $saved[] = $path;
+        }
+    }
+    writeJsonFile($workspace . '/migration.json', $saved);
+}
+
+/**
+ * Put back the paths that saveMigrationPaths() kept, as they were before the database update.
+ */
+function restoreMigrationPaths(string $root, string $workspace): void
+{
+    $saved = json_decode((string)@file_get_contents($workspace . '/migration.json'), true);
+    foreach (is_array($saved) ? $saved : array() as $path) {
+        if (!is_string($path) || !isSafeRelativePath($path)) {
+            continue;
+        }
+        if (is_dir($root . '/' . $path) && !is_link($root . '/' . $path)) {
+            deleteDirectory($root . '/' . $path);
+        } else {
+            @unlink($root . '/' . $path);
+        }
+        copyPath($workspace . '/migration/' . $path, $root . '/' . $path);
+    }
+}
+
+/** Copy a file or a directory with its content. */
+function copyPath(string $source, string $target): void
+{
+    if (is_file($source)) {
+        ensureDirectory(dirname($target));
+        if (!@copy($source, $target)) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $target . ' cannot be written.');
+        }
+
+        return;
+    }
+    ensureDirectory($target);
+    foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($source, \FilesystemIterator::SKIP_DOTS),
+        \RecursiveIteratorIterator::SELF_FIRST) as $entry) {
+        $destination = $target . '/' . substr(str_replace('\\', '/', $entry->getPathname()), strlen(str_replace('\\', '/', $source)) + 1);
+        if ($entry->isDir()) {
+            ensureDirectory($destination);
+        } elseif (!@copy($entry->getPathname(), $destination)) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $destination . ' cannot be written.');
+        }
+    }
 }
 
 /**

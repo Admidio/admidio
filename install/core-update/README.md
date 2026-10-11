@@ -65,8 +65,8 @@ Beta-Minimum-PHP-Version=...
 `update.txt`, made with the release key; its public part is `release-key.pem`. That one
 signature is the whole chain of trust: it names the SHA-256 of the package, and the package
 contains `install/update-manifest.json` with `version`, `managedDirectories`,
-`managedRootFiles`, `preservePaths`, `requirements` (`php`, `extensions`), `totalSize` and
-`files` (path => SHA-256). The package may come from any mirror.
+`managedRootFiles`, `preservePaths`, `migrationPaths` (optional), `requirements` (`php`,
+`extensions`), `totalSize` and `files` (path => SHA-256). The package may come from any mirror.
 
 Every installation can install the stable release. The beta channel is only offered with
 `$gDebug`. Downloads are HTTPS only, redirects are checked hop by hop, and packages are read
@@ -111,7 +111,13 @@ Every request does at most 8 seconds or 200 files of work. Up to `review` nothin
 cancelling removes the workspace. From `installing` on an error stops in `rollback_required`: the
 update continues where it stopped, or the journal is undone (`rolling_back`), which is possible
 until the database update starts. If the database update fails (`database_failed`), the page names
-the error and the backup and offers to retry the database update.
+the error and the backup and offers to retry the database update, or to restore the previous version
+as a whole: the database from the backup of the updater (`restoring_database`; MySQL/MariaDB with
+PDO table by table, PostgreSQL with `psql`), the tables the new version created are removed, then the
+files from the journal. Without such a backup the administrator restores the database first and
+confirms it. Paths that the database update of a release moves or removes itself (6.0 moves
+`adm_plugins`) are named in `migrationPaths` of its manifest; the updater copies them before
+`install/update.php` runs and puts them back with the previous version.
 
 Every update writes `update.log` in its workspace (states, errors with their English detail,
 decisions); when the update is over it is copied to `adm_my_files/logs/core-update_<date>_<from>_to_<to>.log`.

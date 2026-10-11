@@ -278,6 +278,19 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The HTML error page of a failed update step is recorded as text
+     */
+    public function testDatabaseFailedAsText(): void
+    {
+        $this->writeState('database_running', array('databaseStarted' => true));
+
+        CoreUpdateHandover::load(self::UPDATE_ID)->markDatabaseFailed("<div>\n  <p><strong>S C R I P T - E R R O R</strong></p>\n"
+            . "  <p>Unknown column &#039;crt_col_conditions&#039;</p>\n</div>");
+
+        $this->assertSame("S C R I P T - E R R O R Unknown column 'crt_col_conditions'", $this->readState()['lastError']);
+    }
+
+    /**
      * @testdox A finished migration completes the update and switches its maintenance mode off
      */
     public function testCompleteSwitchesMaintenanceOff(): void

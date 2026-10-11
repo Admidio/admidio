@@ -195,6 +195,9 @@ final class CoreUpdateHandover
      */
     public function markDatabaseFailed(string $error): void
     {
+        // The error of a failed update step is the HTML page of Database::showError(); the updater
+        // and the log show it as text.
+        $error = trim((string)preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($error), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
         $this->update(array('state' => self::STATE_DATABASE_FAILED, 'lastError' => $error));
         Updater\updateLog($this->rootPath, $this->updateId, 'state database_failed: ' . $error);
     }

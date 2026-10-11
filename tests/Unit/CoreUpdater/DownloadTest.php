@@ -415,6 +415,7 @@ final class DownloadTest extends AdmidioTestCase
             'root file in a directory' => array('managedRootFiles' => array('src/index.php')),
             'unsafe managed directory' => array('managedDirectories' => array('../../')),
             'unsafe preserved path' => array('preservePaths' => array('/')),
+            'unsafe migration path' => array('migrationPaths' => array('../adm_plugins')),
             'no requirements' => array('requirements' => 'php 8.2'),
             'negative size' => array('totalSize' => -1)
         ) as $case => $change) {

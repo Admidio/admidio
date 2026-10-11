@@ -467,6 +467,10 @@ function coreUpdateHandlePhaseB(array $context, array $state, bool $isPost, stri
                 U\phaseBConfirm($context, $updateId, (string)($_POST['backup'] ?? ''));
                 header('Location: index.php', true, 303);
             })(),
+            'restore' => (static function () use ($context, $updateId): void {
+                U\phaseBRestore($context, $updateId, !empty($_POST['own_database_restored']));
+                header('Location: index.php', true, 303);
+            })(),
             'cancel' => (static function () use ($context, $updateId, $config, $texts): void {
                 U\phaseBCancel($context, $updateId);
                 U\showPage(
@@ -575,15 +579,27 @@ function coreUpdateShowPhaseB(array $context, array $state): void
             break;
 
         case 'database_failed':
-            // The files are those of the new release and cannot come back; maintenance mode stays on.
+            // Maintenance mode stays on. The update can be retried, or the previous version comes
+            // back as a whole: the database from the backup, then the files.
+            $previous = (string)$state['installedVersion'];
+            $canRestore = U\restoreMethod($context, $state) !== '';
+            $restore = '<form method="post" action="index.php" class="inline" onsubmit="return window.confirm('
+                . U\h(U\js(U\text($texts, 'SYS_CORE_UPDATE_CONFIRM_RESTORE_VERSION', array($previous)))) . ')">'
+                . $csrf . '<input type="hidden" name="action" value="restore">'
+                . ($canRestore ? '' : '<label class="choice"><input type="checkbox" name="own_database_restored" value="1" required> '
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_OWN_CONFIRM')) . '</label>')
+                . '<button class="button secondary" type="submit">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_VERSION', array($previous)))
+                . '</button></form>';
             $show(
                 '<div class="message error">' . U\h((string)($state['lastError'] ?? '')) . '</div>'
                     . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_FAILED')) . '</p>'
-                    . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS')) . '</p>'
+                    . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS', array($previous))) . '</p>'
+                    . '<div class="message">' . U\h(U\text($texts, $canRestore ? 'SYS_CORE_UPDATE_RESTORE_VERSION_DESC'
+                        : 'SYS_CORE_UPDATE_RESTORE_OWN_DESC', array($previous))) . '</div>'
                     . ((string)($state['dumpFile'] ?? '') !== '' ? '<div class="message">'
                         . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</div>' : ''),
                 '<a class="button" href="' . U\h(U\databaseUpdateUrl($config, (string)$state['updateId'])) . '">'
-                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY')) . '</a>',
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY')) . '</a>' . $restore,
                 95,
                 ''
             );
@@ -616,7 +632,7 @@ function coreUpdateShowPhaseB(array $context, array $state): void
             break;
 
         case 'rolled_back':
-            $show('<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK')) . '</p>', $openAdmidio, null, 'success');
+            $show('<p>' . U\h(U\rolledBackMessage($context, $state)) . '</p>', $openAdmidio, null, 'success');
             break;
 
         default:

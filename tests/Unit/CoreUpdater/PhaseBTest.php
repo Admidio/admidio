@@ -43,7 +43,8 @@ final class PhaseBTest extends AdmidioTestCase
             'src/Unknown.php' => 'UNKNOWN',
             'install/core-update/index.php' => 'NEW UPDATER',
             'custom_logo.png' => 'MY LOGO',
-            'my-notes.txt' => 'MY NOTES'
+            'my-notes.txt' => 'MY NOTES',
+            'old_plugins/birthday/index.php' => 'OLD PLUGIN'
         ));
         mkdir($this->root . '/src/Empty', 0777, true);
     }
@@ -93,6 +94,7 @@ final class PhaseBTest extends AdmidioTestCase
             'managedDirectories' => array('src', 'system', 'install'),
             'managedRootFiles' => array('index.php'),
             'preservePaths' => array('adm_my_files', 'install/core-update', 'custom_logo.png'),
+            'migrationPaths' => array('old_plugins'),
             'requirements' => array('php' => '>=8.2', 'extensions' => array()),
             'totalSize' => 100,
             'files' => array_map(static fn(string $content): string => hash('sha256', $content), $files)
@@ -421,5 +423,41 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('own', U\phaseBConfirm($context, $updateId, 'own')['backup']);
         U\phaseBRun($context, $updateId);
         $this->assertSame('installing', U\readState($this->root, $updateId)['state'], 'without a backup by the updater no dumping state');
+    }
+
+    /**
+     * @testdox After a failed database update the files come back once the administrator restored the database
+     *
+     * Without a backup of the updater the database cannot be restored by it, and the old files on a
+     * half-migrated database would not work, so the administrator confirms an own restore first.
+     */
+    public function testRestoreWithOwnBackup(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->runToDecision($context, $updateId);
+        // The database update of the release moved what its manifest names in migrationPaths.
+        U\deleteDirectory($this->root . '/old_plugins');
+        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'database_failed', 'databaseStarted' => true)));
+
+        $this->assertSame('', U\restoreMethod($context, U\readState($this->root, $updateId)));
+        try {
+            U\phaseBRestore($context, $updateId, false);
+            $this->fail('the files were restored without a restored database');
+        } catch (UpdaterException $exception) {
+            $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage());
+        }
+
+        $this->assertSame('rolling_back', U\phaseBRestore($context, $updateId, true)['state']);
+        $result = $this->runToDecision($context, $updateId);
+
+        $this->assertSame('rolled_back', $result['status']);
+        $this->assertSame('SYS_CORE_UPDATE_VERSION_RESTORED', $result['message']);
+        $this->assertSame('OLD INDEX', $this->read('index.php'));
+        $this->assertSame('REMOVED BY THE RELEASE', $this->read('src/Old/Gone.php'));
+        $this->assertSame('OLD PLUGIN', $this->read('old_plugins/birthday/index.php'), 'what the database update moved comes back');
+        $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json');
+        $this->assertNull(U\activeUpdateId($this->root));
     }
 }

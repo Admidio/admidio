@@ -471,10 +471,11 @@
   <string name="SYS_CORE_UPDATE_CHECK_WRITABLE">Alle Dateien von Admidio können ersetzt werden.</string>
   <string name="SYS_CORE_UPDATE_CHECKS">Voraussetzungen</string>
   <string name="SYS_CORE_UPDATE_CONFIRM_RESTORE">Möchtest du wirklich die vorherigen Dateien wiederherstellen? Das Update wird abgebrochen.</string>
+  <string name="SYS_CORE_UPDATE_CONFIRM_RESTORE_VERSION">Möchtest du die Version #VAR1# wirklich wiederherstellen? Alles, was das Update geändert hat, wird rückgängig gemacht.</string>
   <string name="SYS_CORE_UPDATE_CONTINUE">Weiter</string>
   <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">Die Dateien sind installiert. Setze das Datenbank-Update fort.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED">Die Aktualisierung der Datenbank ist fehlgeschlagen. Die Dateien der neuen Version sind installiert, die bisherigen Dateien können nicht mehr wiederhergestellt werden. Admidio bleibt im Wartungsmodus.</string>
-  <string name="SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS">Behebe die Ursache, zum Beispiel mit Hilfe des Admidio-Forums, und wiederhole die Aktualisierung der Datenbank. Sie setzt mit dem Schritt fort, der fehlgeschlagen ist. Hilft das nicht, stelle die Sicherung der Datenbank wieder her und installiere die bisherige Version manuell.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_FAILED_OPTIONS">Behebe die Ursache, zum Beispiel mit Hilfe des Admidio-Forums, und wiederhole die Aktualisierung der Datenbank: Sie setzt mit dem Schritt fort, der fehlgeschlagen ist. Oder stelle die Version #VAR1# wieder her und installiere das Update erneut, sobald eine korrigierte Version verfügbar ist.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_NEWER">Die Datenbank hat bereits die Version #VAR1#. Version #VAR2# ist älter und kann nicht installiert werden.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_RETRY">Aktualisierung der Datenbank wiederholen</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD">Herunterladen und vorbereiten</string>
@@ -528,7 +529,12 @@
   <string name="SYS_CORE_UPDATE_REQUEST_INVALID">Die Anfrage konnte nicht geprüft werden. Lade die Seite neu und versuche es erneut.</string>
   <string name="SYS_CORE_UPDATE_REQUEST_RUNNING">Eine andere Anfrage des Updaters läuft gerade. Warte einen Moment und versuche es erneut.</string>
   <string name="SYS_CORE_UPDATE_REQUIRED_EXTENSIONS">Das automatische Update benötigt die PHP-Erweiterungen curl, zip und openssl.</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_OWN_CONFIRM">Ich habe die Datenbank aus meiner eigenen Sicherung wiederhergestellt</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_OWN_DESC">Das Update hat keine Sicherung der Datenbank, die es wiederherstellen kann. Um die Version #VAR1# wiederherzustellen, stelle zuerst die Datenbank aus deiner eigenen Sicherung wieder her; danach stellt das Update die Dateien wieder her.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_PREVIOUS">Vorherige Dateien wiederherstellen</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_VERSION">Version #VAR1# wiederherstellen</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_VERSION_DESC">Beim Wiederherstellen der Version #VAR1# wird die Datenbank aus der Sicherung vor dem Update und danach die bisherigen Dateien zurückgeholt. Admidio läuft dann wie vor dem Update.</string>
+  <string name="SYS_CORE_UPDATE_RESTORING_DATABASE">Die Datenbank wird wiederhergestellt ...</string>
   <string name="SYS_CORE_UPDATE_REVIEW_BACKUP">Bevor eine Datei ersetzt oder entfernt wird, wird eine Kopie davon in adm_my_files/core-update gespeichert. Bis die Datenbank aktualisiert wird, kann das Update alle bisherigen Dateien wiederherstellen.</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DESC">Während die Dateien ersetzt werden, ist Admidio im Wartungsmodus und Besucher sehen eine Wartungsseite. Danach wird die Datenbank aktualisiert, was nicht rückgängig gemacht werden kann.</string>
   <string name="SYS_CORE_UPDATE_ROLLBACK_REQUIRED">Die Installation der Dateien wurde unterbrochen. Admidio bleibt im Wartungsmodus. Setze das Update fort oder stelle die bisherigen Dateien wieder her.</string>
@@ -546,6 +552,7 @@
   <string name="SYS_CORE_UPDATE_VERIFY_FAILED">Die installierte Datei #VAR1# entspricht nicht der neuen Version.</string>
   <string name="SYS_CORE_UPDATE_VERIFYING">Die installierten Dateien werden geprüft ...</string>
   <string name="SYS_CORE_UPDATE_VERSION_OLDER">Version #VAR1# ist älter als die installierte Version #VAR2# und kann nicht installiert werden.</string>
+  <string name="SYS_CORE_UPDATE_VERSION_RESTORED">Die Version #VAR1# wurde mit ihrer Datenbank und ihren Dateien wiederhergestellt.</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuelle empfangende Person</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle Empfangende</string>
   <string name="SYS_COUNTER">Zähler</string>
