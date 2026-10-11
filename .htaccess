@@ -1,0 +1,19 @@
+# Pass Authorization headers to CGI/FastCGI handlers, e.g. for OIDC bearer tokens.
+# Requires Apache 2.4.13+ and AllowOverride AuthConfig.
+CGIPassAuth On
+
+# Disable directory listings
+Options -Indexes
+
+# Deny access to potentially sensitive files, logs and backups
+<FilesMatch "(?i)(^\.ht(?:access|passwd)$|^\.env(?:$|[.-])|^composer\.(?:json|lock)$|\.(?:bak|old|orig|save|swp|sql|log)(?:\.[^.]+)?$)">
+    Require all denied
+</FilesMatch>
+
+# Add extra security headers.
+# Especially important is keeping URLs private (Referrer-Policy) and preventing clickjacking (SAMEORIGIN)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
