@@ -111,10 +111,10 @@
                             {/if}
                             {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
                             <div class="dropdown float-end d-flex">
-                                <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{$l10n->get('SYS_MORE')}">
                                     <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                                 {if count($pluginEntry.actions) > 0}
-                                    <ul class="dropdown-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
+                                    <ul class="dropdown-menu dropdown-menu-end adm-plugin-actions-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
                                         {foreach $pluginEntry.actions as $actionItem}
                                             <li>
                                                 <a {if isset($actionItem.popup)} class="dropdown-item openPopup" href="javascript:void(0);"
