@@ -29,6 +29,7 @@ use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
 use Admidio\UI\Presenter\EventFormPresenter;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
@@ -804,11 +805,26 @@ class InventoryTest extends DatabaseTestCase
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'guests');
             $previousSession = $GLOBALS['gCurrentSession'];
-            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $session = new class {
+                public ?FormPresenter $form = null;
+
+                public function getCsrfToken(): string
+                {
+                    return 'test-csrf-token';
+                }
+
+                public function addFormObject(FormPresenter $form): bool
+                {
+                    $this->form = $form;
+                    return true;
+                }
+            };
+            $GLOBALS['gCurrentSession'] = $session;
             try {
                 (new InventoryItemPresenter())->createReservationRequestForm();
-                $form = $GLOBALS['gCurrentSession']->getFormObject($GLOBALS['gCurrentSession']->getCsrfToken());
+                $form = $session->form;
 
+                $this->assertNotNull($form);
                 $this->assertTrue($form->hasElement('guest_first_name'));
                 $this->assertTrue($form->hasElement('guest_last_name'));
                 $this->assertTrue($form->hasElement('guest_email'));
@@ -1461,71 +1477,70 @@ class InventoryTest extends DatabaseTestCase
             )->fetchColumn();
             $reservationService->changeStatus(new Reservation($this->getDatabase(), $rejectedReservationId), Reservation::STATUS_REJECTED);
 
-            $presenter = new EventFormPresenter();
-            $data = $presenter->getReservationStatusData(
-                (string)$event->getValue('dat_uuid'),
-                'this',
-                7,
-                0,
-                1,
-                '',
-                1,
-                'asc'
-            );
-
-            $this->assertSame(7, $data['draw']);
-            $this->assertSame(2, $data['recordsTotal']);
-            $this->assertSame(2, $data['recordsFiltered']);
-            $this->assertCount(1, $data['data']);
-            $this->assertStringContainsString('A rejected event item', $data['data'][0][1]);
-            $this->assertStringContainsString('event-inventory-reservation-request-again', $data['data'][0][3]);
-
             $previousSession = $GLOBALS['gCurrentSession'];
             $previousPost = $_POST;
             $session = new Session($this->getDatabase(), COOKIE_PREFIX);
             $GLOBALS['gCurrentSession'] = $session;
-            $_POST = array('adm_csrf_token' => $session->getCsrfToken());
             try {
+                $presenter = new EventFormPresenter();
+                $data = $presenter->getReservationStatusData(
+                    (string)$event->getValue('dat_uuid'),
+                    'this',
+                    7,
+                    0,
+                    1,
+                    '',
+                    1,
+                    'asc'
+                );
+
+                $this->assertSame(7, $data['draw']);
+                $this->assertSame(2, $data['recordsTotal']);
+                $this->assertSame(2, $data['recordsFiltered']);
+                $this->assertCount(1, $data['data']);
+                $this->assertStringContainsString('A rejected event item', $data['data'][0][1]);
+                $this->assertStringContainsString('event-inventory-reservation-request-again', $data['data'][0][3]);
+
+                $_POST = array('adm_csrf_token' => $session->getCsrfToken());
                 $response = (new EventService($this->getDatabase()))->requestReservationAgain(
                     (string)$event->getValue('dat_uuid'),
                     $rejectedItemId
                 );
                 $this->assertSame('success', $response['status']);
+                $dataAfterRequestAgain = $presenter->getReservationStatusData(
+                    (string)$event->getValue('dat_uuid'),
+                    'this',
+                    8,
+                    0,
+                    25,
+                    '',
+                    -1,
+                    'desc'
+                );
+                $this->assertSame(3, $dataAfterRequestAgain['recordsTotal']);
+                foreach ($dataAfterRequestAgain['data'] as $row) {
+                    $this->assertSame('', $row[3]);
+                }
+
+                $filteredData = $presenter->getReservationStatusData(
+                    (string)$event->getValue('dat_uuid'),
+                    'this',
+                    9,
+                    0,
+                    25,
+                    'requested',
+                    -1,
+                    'desc'
+                );
+
+                $this->assertSame(3, $filteredData['recordsTotal']);
+                $this->assertSame(2, $filteredData['recordsFiltered']);
+                $this->assertStringContainsString('A rejected event item', implode(' ', array_column($filteredData['data'], 1)));
+                $this->assertStringContainsString('Z requested event item', implode(' ', array_column($filteredData['data'], 1)));
             } finally {
                 $GLOBALS['gCurrentSession'] = $previousSession;
                 $_POST = $previousPost;
             }
-
-            $dataAfterRequestAgain = $presenter->getReservationStatusData(
-                (string)$event->getValue('dat_uuid'),
-                'this',
-                8,
-                0,
-                25,
-                '',
-                -1,
-                'desc'
-            );
-            $this->assertSame(3, $dataAfterRequestAgain['recordsTotal']);
-            foreach ($dataAfterRequestAgain['data'] as $row) {
-                $this->assertSame('', $row[3]);
-            }
-
-            $filteredData = $presenter->getReservationStatusData(
-                (string)$event->getValue('dat_uuid'),
-                'this',
-                9,
-                0,
-                25,
-                'requested',
-                -1,
-                'desc'
-            );
-
-            $this->assertSame(3, $filteredData['recordsTotal']);
-            $this->assertSame(2, $filteredData['recordsFiltered']);
-            $this->assertStringContainsString('A rejected event item', implode(' ', array_column($filteredData['data'], 1)));
-            $this->assertStringContainsString('Z requested event item', implode(' ', array_column($filteredData['data'], 1)));
         });
     }
 
@@ -1552,11 +1567,15 @@ class InventoryTest extends DatabaseTestCase
         });
 
         $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($eventUuid) {
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
             try {
                 (new EventFormPresenter())->getReservationStatusData($eventUuid, 'this', 1, 0, 25, '', -1, 'desc');
                 $this->fail('An inventory administrator must not read reservation data for an event they cannot edit.');
             } catch (Exception $exception) {
                 $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
             }
         });
     }
