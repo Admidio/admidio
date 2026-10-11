@@ -272,6 +272,18 @@ try {
             $page->setUpdateModus();
             $page->assignSmartyVariable('installedDbVersion', $installedDbVersion);
 
+            // After a failed database update of a core update this page retries it, and the updater
+            // can restore the previous version instead.
+            $coreUpdateFailed = $coreUpdate !== null && $coreUpdate->isDatabaseFailed();
+            $page->assignSmartyVariable('coreUpdateFailed', $coreUpdateFailed);
+            $page->assignSmartyVariable('coreUpdateFailedText', $coreUpdateFailed ? $gL10n->get(
+                $coreUpdate->hasDatabaseBackup() ? 'SYS_CORE_UPDATE_DATABASE_FAILED' : 'SYS_CORE_UPDATE_DATABASE_FAILED_OWN',
+                array(ADMIDIO_VERSION_TEXT, $coreUpdate->getPreviousVersion())
+            ) : '');
+            $page->assignSmartyVariable('coreUpdateRestoreUrl', $coreUpdateFailed ? $coreUpdate->getUpdaterUrl() : '');
+            $page->assignSmartyVariable('coreUpdateRestoreText', $coreUpdateFailed
+                ? $gL10n->get('SYS_CORE_UPDATE_RESTORE_VERSION', array($coreUpdate->getPreviousVersion())) : '');
+
             // The update request must name the core update as well, or nothing would finish it.
             $updateParameters = array('mode' => 'update');
             if ($getCoreUpdate !== '') {
@@ -307,7 +319,7 @@ try {
             }
             $form->addSubmitButton(
                 'adm_next_page',
-                $gL10n->get('INS_UPDATE_DATABASE'),
+                $gL10n->get($coreUpdateFailed ? 'SYS_CORE_UPDATE_DATABASE_RETRY' : 'INS_UPDATE_DATABASE'),
                 array('icon' => 'bi-arrow-repeat')
             );
             $page->assignSmartyVariable('settings', $gSettingsManager);
@@ -462,6 +474,12 @@ try {
     if ($databaseUpdateStarted && $coreUpdate !== null) {
         try {
             $coreUpdate->markDatabaseFailed($e->getMessage());
+            if ($getMode === 'update') {
+                // The updater shows what failed and offers to retry the update or to restore the
+                // previous version, which no page of Admidio can do while maintenance mode is on.
+                echo json_encode(array('status' => 'success', 'url' => $coreUpdate->getUpdaterUrl()));
+                exit();
+            }
         } catch (Throwable) {
             // The error of the migration is the one to report.
         }

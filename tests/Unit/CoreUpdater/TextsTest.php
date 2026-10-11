@@ -147,7 +147,11 @@ final class TextsTest extends AdmidioTestCase
                 $used = array_merge($used, $matches[0]);
             }
         }
-        $used = array_unique($used);
+        // The names of the steps are put together from SYS_CORE_UPDATE_STEP_ and the step.
+        foreach (array_merge(array_keys(U\UPDATE_STEPS), array('restore')) as $step) {
+            $used[] = 'SYS_CORE_UPDATE_STEP_' . strtoupper($step);
+        }
+        $used = array_unique(array_filter($used, static fn(string $key): bool => !str_ends_with($key, '_')));
         sort($used);
         $this->assertNotEmpty($used);
 

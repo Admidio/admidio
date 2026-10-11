@@ -1037,75 +1037,184 @@ function js(mixed $value): string
 }
 
 /**
- * Send a whole page: plain HTML with inline CSS, because the updater must not depend on the theme
- * or the libraries of the release it replaces.
- * @param string $title Plain text.
- * @param string $content HTML.
- * @param string $actions HTML.
- * @param int|null $progress Percentage of the progress bar, or null for none.
- * @param string $messageClass "error", "success" or "".
+ * The steps of an update as the sidebar of its pages shows them, with the states of each.
  */
-function showPage(string $title, string $content, string $actions = '', ?int $progress = null, string $messageClass = '',
-    string $languageCode = 'en', string $progressLabel = 'Update progress'): void
-{
-    $progressBar = $progress === null ? '' : '
-    <div class="progress" role="progressbar" aria-label="' . h($progressLabel) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' . $progress . '">
-        <div id="progress-bar" class="progress-bar" style="width:' . $progress . '%"></div>
-    </div>';
+const UPDATE_STEPS = array(
+    'check' => array('new', 'checking', 'checked'),
+    'download' => array('downloading', 'downloaded'),
+    'prepare' => array('prepared', 'extracting', 'planning'),
+    'review' => array('review'),
+    'backup' => array('ready', 'dumping'),
+    'install' => array('installing', 'archiving', 'verifying', 'rollback_required'),
+    'database' => array('files_installed', 'database_running', 'database_failed'),
+    'finish' => array('completed')
+);
 
-    echo '<!doctype html>
-<html lang="' . h($languageCode) . '">
+/**
+ * How far an update is, step by step: each step of UPDATE_STEPS is "done", "current", "failed",
+ * "skipped" or "pending". An update that is being undone shows where it stopped and ends with
+ * the step "restore".
+ * @param array<string,mixed> $state
+ * @return array<string,string>
+ */
+function updateSteps(array $state): array
+{
+    $current = (string)$state['state'];
+    $restoring = in_array($current, array('rolling_back', 'restoring_database', 'rolled_back'), true);
+    if ($restoring) {
+        // Version restored after the database update, or files restored before it.
+        $current = !empty($state['restoredVersion']) ? 'database_failed' : 'rollback_required';
+    }
+
+    $steps = array();
+    $reached = false;
+    foreach (UPDATE_STEPS as $step => $states) {
+        if (in_array($current, $states, true)) {
+            $failed = in_array($current, array('rollback_required', 'database_failed'), true)
+                || ($current === 'checked' && checksHaveErrors((array)($state['checks'] ?? array())));
+            $steps[$step] = $current === 'completed' ? 'done' : ($failed ? 'failed' : 'current');
+            $reached = true;
+        } else {
+            $steps[$step] = !$reached ? 'done' : ($restoring ? 'skipped' : 'pending');
+        }
+    }
+    if (($state['backup'] ?? '') === 'own' && $steps['backup'] === 'done') {
+        $steps['backup'] = 'skipped';
+    }
+    if ($restoring) {
+        $steps['restore'] = $state['state'] === 'rolled_back' ? 'done' : 'current';
+    }
+
+    return $steps;
+}
+
+/** The icon of a step for each status of updateSteps(). */
+const STEP_ICONS = array(
+    'done' => 'bi-check-circle-fill text-success',
+    'current' => 'bi-arrow-right-circle-fill text-primary',
+    'failed' => 'bi-x-circle-fill text-danger',
+    'skipped' => 'bi-dash-circle text-muted',
+    'pending' => 'bi-circle text-muted'
+);
+
+/**
+ * The sidebar with the steps of an update, and the script function **showStep(state)** that
+ * moves it on while a page drives the update. It returns false when the update starts or stops
+ * being undone, which changes the steps, so that the page loads again.
+ * @param array<string,string> $steps See updateSteps().
+ * @param array{language: string, texts: array<string,string>} $texts
+ */
+function stepsSidebar(array $steps, array $texts): string
+{
+    $items = '';
+    foreach ($steps as $step => $status) {
+        $items .= '<li class="core-update-step-' . h($status) . '" data-step="' . h($step) . '"' . ($status === 'current' ? ' aria-current="step"' : '') . '>'
+            . '<i class="bi ' . h(STEP_ICONS[$status]) . '" aria-hidden="true"></i>'
+            . '<span>' . h(text($texts, 'SYS_CORE_UPDATE_STEP_' . strtoupper($step))) . '</span></li>';
+    }
+
+    $stepOfState = array();
+    foreach (UPDATE_STEPS as $step => $states) {
+        $stepOfState += array_fill_keys($states, $step);
+    }
+
+    return '<nav aria-label="' . h(text($texts, 'SYS_CORE_UPDATE_STEPS')) . '"><ol class="core-update-steps">' . $items . '</ol></nav>
+    <script>
+        function showStep(state) {
+            const stepOfState = ' . js($stepOfState) . ';
+            const icons = ' . js(STEP_ICONS) . ';
+            const restoring = ["rolling_back", "restoring_database", "rolled_back"].includes(state);
+            if (restoring !== (document.querySelector("[data-step=restore]") !== null)) {
+                return false;
+            }
+            if (restoring || stepOfState[state] === undefined) {
+                return true;
+            }
+            let reached = false;
+            document.querySelectorAll("[data-step]").forEach(item => {
+                const current = item.dataset.step === stepOfState[state];
+                const status = current ? (state === "completed" ? "done" : "current") : (reached ? "pending" : "done");
+                reached = reached || current;
+                if (!item.classList.contains("core-update-step-skipped")) {
+                    item.className = "core-update-step-" + status;
+                    item.querySelector("i").className = "bi " + icons[status];
+                }
+                item.toggleAttribute("aria-current", status === "current");
+            });
+            return true;
+        }
+    </script>';
+}
+
+/**
+ * Send a whole page in the layout of Admidio's installation. The style sheets, the logo and the
+ * icons are those of the installation, linked relative to the updater, because the updater must
+ * not run Admidio's code. The inline rules keep the page usable while such a file is replaced.
+ * @param string $title Plain text: the headline in the header.
+ * @param string $content HTML.
+ * @param array{actions?: string, progress?: int|null, progressLabel?: string, language?: string, steps?: string} $options
+ *        **actions** are the buttons below the content, **progress** the percentage of a progress
+ *        bar, **steps** the sidebar of stepsSidebar().
+ */
+function showPage(string $title, string $content, array $options = array()): void
+{
+    $progress = $options['progress'] ?? null;
+    $steps = (string)($options['steps'] ?? '');
+    $progressBar = $progress === null ? '' : '
+            <div class="progress mb-4" role="progressbar" aria-label="' . h((string)($options['progressLabel'] ?? 'Progress')) . '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' . $progress . '">
+                <div id="progress-bar" class="progress-bar" style="width:' . $progress . '%"></div>
+            </div>';
+    $main = $progressBar . $content
+        . (($options['actions'] ?? '') !== '' ? '<div class="core-update-actions">' . $options['actions'] . '</div>' : '');
+
+    echo '<!DOCTYPE html>
+<html lang="' . h((string)($options['language'] ?? 'en')) . '">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title>' . h($title) . '</title>
+    <title>Admidio - ' . h($title) . '</title>
+    <link rel="icon" type="image/x-icon" href="../../system/logo/favicon.ico">
     <style>
-        :root { color-scheme: light dark; }
-        body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f5f7; color: #20252a; }
-        main { max-width: 760px; margin: 5vh auto; padding: 2rem; background: #fff; border-radius: .5rem; box-shadow: 0 .25rem 1rem rgba(0,0,0,.12); }
-        h1 { margin-top: 0; }
-        dl { display: grid; grid-template-columns: 12rem 1fr; gap: .4rem 1rem; }
-        dt { font-weight: 700; }
-        dd { margin: 0; overflow-wrap: anywhere; }
-        label { display: block; margin: 0 0 1rem; font-weight: 700; }
-        input[type=text], input[type=password] { display: block; box-sizing: border-box; width: 100%; max-width: 24rem; margin-top: .3rem;
-            padding: .5rem; font-size: 1rem; border: 1px solid #adb5bd; border-radius: .3rem; }
-        .progress { height: 1rem; background: #dfe4e8; border-radius: .5rem; overflow: hidden; margin: 1.5rem 0; }
-        .progress-bar { height: 100%; background: #2176bd; transition: width .2s ease; }
-        .message, .warning { margin: 1rem 0; padding: 1rem; border-radius: .3rem; background: #e8f2fb; }
-        .warning { background: #fff3cd; color: #5f4b00; }
-        .error { background: #f8d7da; color: #721c24; }
-        .success { background: #d1e7dd; color: #0f5132; }
-        .button { display: inline-block; margin: .5rem .5rem 0 0; border: 0; border-radius: .3rem; padding: .7rem 1rem; background: #2176bd;
-            color: #fff; text-decoration: none; cursor: pointer; font-size: 1rem; }
-        .button.secondary { background: #6c757d; }
-        .button:disabled { opacity: .65; cursor: wait; }
-        [hidden] { display: none !important; }
-        form.inline { display: inline; }
-        fieldset { border: 0; margin: 0 0 1rem; padding: 0; }
-        legend { font-weight: 700; margin-bottom: .3rem; }
-        label.choice { display: block; font-weight: 400; margin: 0 0 .3rem; }
-        ul.checks { list-style: none; padding: 0; }
-        ul.checks li { padding: .3rem 0 .3rem 1.6rem; position: relative; }
-        ul.checks li::before { position: absolute; left: 0; font-weight: 700; }
-        .check-ok::before { content: "\2713"; color: #198754; }
-        .check-warning::before { content: "!"; color: #b58100; }
-        .check-error::before { content: "\2717"; color: #dc3545; }
-        @media (prefers-color-scheme: dark) {
-            body { background: #181a1b; color: #e8e6e3; }
-            main { background: #242729; }
-            .progress { background: #3b4044; }
-            input[type=text], input[type=password] { background: #181a1b; color: #e8e6e3; }
-        }
+        body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #263340; }
+        #adm_installation_header { background: #349aaa; color: #fff; padding: 1rem; }
+        .admidio-container { max-width: 750px; margin: 0 auto; padding: 1rem; }
+        .alert { padding: 1rem; margin-bottom: 1rem; border-radius: .375rem; background: #e2f0f2; }
+        .alert-danger { background: #f8d7da; } .alert-warning { background: #fff3cd; } .alert-success { background: #d1e7dd; }
+        .btn { display: inline-block; padding: .4rem .8rem; border: 0; border-radius: .375rem; background: #6c757d; color: #fff; font-size: 1rem; text-decoration: none; }
+        .btn-primary { background: #349aaa; }
+        .progress { height: 1rem; background: #e9ecef; } .progress-bar { height: 100%; background: #349aaa; }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../install/templates/installation.css">
+    <style>
+        .admidio-container.core-update-wide { max-width: 1040px; }
+        .core-update-steps { list-style: none; margin: 0; padding: 1rem; background: #f3f5f7; border-radius: .375rem; }
+        .core-update-steps li { display: flex; gap: .6rem; padding: .3rem 0; }
+        .core-update-steps .core-update-step-current { font-weight: bold; }
+        .core-update-steps .core-update-step-failed { font-weight: bold; color: #b02a37; }
+        .core-update-steps .core-update-step-pending, .core-update-steps .core-update-step-skipped { color: #6c757d; }
+        .core-update-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: flex-end; margin: 1.5rem 0; }
+        .core-update-actions form { margin: 0; }
+        .core-update-error { max-height: 24rem; overflow: auto; white-space: pre-wrap; font-size: .85rem; background: #f3f5f7; padding: 1rem; border-radius: .375rem; }
+        dl.core-update-versions { display: grid; grid-template-columns: max-content 1fr; gap: .3rem 1.5rem; }
+        dl.core-update-versions dd { margin: 0; }
     </style>
 </head>
-<body>
-<main>
-    <h1>' . h($title) . '</h1>' . $progressBar . '
-    <div' . ($messageClass !== '' ? ' class="' . h($messageClass) . '"' : '') . '>' . $content . '</div>
-    <div>' . $actions . '</div>
-</main>
+<body id="adm_core_update" class="admidio">
+    <div id="adm_installation_header" class="admidio-area">
+        <div class="admidio-container container' . ($steps !== '' ? ' core-update-wide' : '') . '">
+            <img id="adm_logo" src="../../system/logo/admidio_writing_white_150.png" alt="Admidio">
+            <span id="adm_installation_headline" class="align-middle">' . h($title) . '</span>
+        </div>
+    </div>
+    <div id="adm_installation_body" class="admidio-area">
+        <div class="admidio-container container' . ($steps !== '' ? ' core-update-wide' : '') . '">
+            ' . ($steps !== '' ? '<div class="row"><div class="col-md-4 col-lg-3 mb-4">' . $steps . '</div><div class="col-md-8 col-lg-9">' . $main . '</div></div>' : $main) . '
+            <div id="adm_imprint">Powered by <a href="https://www.admidio.org">Admidio</a> &copy; Admidio Team</div>
+        </div>
+    </div>
 </body>
 </html>';
 }

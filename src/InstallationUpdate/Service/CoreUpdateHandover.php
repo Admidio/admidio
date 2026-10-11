@@ -196,8 +196,10 @@ final class CoreUpdateHandover
     public function markDatabaseFailed(string $error): void
     {
         // The error of a failed update step is the HTML page of Database::showError(); the updater
-        // and the log show it as text.
-        $error = trim((string)preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($error), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+        // and the log show it as text, line by line.
+        $error = (string)preg_replace('/<(br|\/p|\/div|\/li|\/tr|\/h\d)\b[^>]*>/i', "\n", $error);
+        $error = html_entity_decode(strip_tags($error), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $error = trim((string)preg_replace(array('/[^\S\n]+/', '/ ?\n ?/', '/\n{2,}/'), array(' ', "\n", "\n"), $error));
         $this->update(array('state' => self::STATE_DATABASE_FAILED, 'lastError' => $error));
         Updater\updateLog($this->rootPath, $this->updateId, 'state database_failed: ' . $error);
     }
@@ -220,6 +222,43 @@ final class CoreUpdateHandover
         if ($maintenance !== null && ($maintenance['owner'] ?? '') === self::MAINTENANCE_OWNER_PREFIX . $this->updateId) {
             MaintenanceMode::disable(self::MAINTENANCE_OWNER_PREFIX . $this->updateId);
         }
+    }
+
+    /**
+     * Whether the database update of this core update failed: the updater offers to retry it or
+     * to restore the previous version.
+     * @return bool
+     */
+    public function isDatabaseFailed(): bool
+    {
+        return $this->getState() === self::STATE_DATABASE_FAILED;
+    }
+
+    /**
+     * The version that was installed before the update, which the updater can restore.
+     * @return string
+     */
+    public function getPreviousVersion(): string
+    {
+        return (string)($this->state['installedVersion'] ?? '');
+    }
+
+    /**
+     * Whether the updater backed up the database before the update, so that it can restore it.
+     * @return bool
+     */
+    public function hasDatabaseBackup(): bool
+    {
+        return (string)($this->state['dumpFile'] ?? '') !== '';
+    }
+
+    /**
+     * Address of the updater page, which shows a failed database update and its choices.
+     * @return string
+     */
+    public function getUpdaterUrl(): string
+    {
+        return ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php';
     }
 
     /**

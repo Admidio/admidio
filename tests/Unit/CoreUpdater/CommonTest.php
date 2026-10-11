@@ -571,4 +571,54 @@ final class CommonTest extends AdmidioTestCase
         $this->expectException(UpdaterException::class);
         U\filesVersion($this->rootPath . '/nothing');
     }
+
+    /**
+     * @testdox The sidebar follows the update from step to step
+     */
+    public function testUpdateSteps(): void
+    {
+        $this->assertSame(array('check' => 'current', 'download' => 'pending', 'prepare' => 'pending', 'review' => 'pending',
+            'backup' => 'pending', 'install' => 'pending', 'database' => 'pending', 'finish' => 'pending'),
+            U\updateSteps(array('state' => 'new')));
+
+        $installing = U\updateSteps(array('state' => 'archiving', 'backup' => 'dump'));
+        $this->assertSame(array('done', 'done', 'done', 'done', 'done', 'current', 'pending', 'pending'), array_values($installing));
+
+        $this->assertSame('skipped', U\updateSteps(array('state' => 'installing', 'backup' => 'own'))['backup'],
+            'the administrator made the backup');
+        $this->assertSame('failed', U\updateSteps(array('state' => 'checked', 'checks' => array(
+            array('status' => 'error', 'text' => 'SYS_CORE_UPDATE_CHECK_SPACE_MISSING', 'params' => array())
+        )))['check']);
+        $this->assertSame(array_fill_keys(array_keys(U\UPDATE_STEPS), 'done'), U\updateSteps(array('state' => 'completed')));
+    }
+
+    /**
+     * @testdox An update that is undone shows where it stopped and the restore
+     */
+    public function testUpdateStepsWhenUndone(): void
+    {
+        $this->assertSame('failed', U\updateSteps(array('state' => 'database_failed'))['database']);
+
+        $restoring = U\updateSteps(array('state' => 'restoring_database', 'restoredVersion' => true, 'backup' => 'dump'));
+        $this->assertSame(array('done', 'done', 'done', 'done', 'done', 'done', 'failed', 'skipped', 'current'), array_values($restoring));
+        $this->assertSame('restore', array_key_last($restoring));
+
+        $filesRestored = U\updateSteps(array('state' => 'rolled_back', 'backup' => 'dump'));
+        $this->assertSame(array('failed', 'skipped', 'skipped', 'done'),
+            array_values(array_intersect_key($filesRestored, array_flip(array('install', 'database', 'finish', 'restore')))));
+    }
+
+    /**
+     * @testdox The sidebar names each step and marks the current one
+     */
+    public function testStepsSidebar(): void
+    {
+        $texts = array('language' => 'en', 'texts' => array('SYS_CORE_UPDATE_STEP_DOWNLOAD' => 'Download <update>'));
+
+        $html = U\stepsSidebar(U\updateSteps(array('state' => 'downloading')), $texts);
+
+        $this->assertStringContainsString('data-step="download" aria-current="step"><i class="bi bi-arrow-right-circle-fill text-primary"', $html);
+        $this->assertStringContainsString('<span>Download &lt;update&gt;</span>', $html);
+        $this->assertStringContainsString('"downloading":"download"', $html, 'the script knows the step of each state');
+    }
 }

@@ -1,4 +1,15 @@
 
+{if $coreUpdateFailed}
+{* the database update of an automatic core update failed: retry it here, or restore in the updater *}
+<h3>{$l10n->get('SYS_CORE_UPDATE_DATABASE_FAILED_TITLE')}</h3>
+
+<div class="alert alert-warning" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    {$coreUpdateFailedText}
+</div>
+
+<p>{$l10n->get('SYS_CORE_UPDATE_DATABASE_RETRY_DESC')}</p>
+{else}
 <h3>{$l10n->get('INS_WELCOME_TO_UPDATE')}</h3>
 
 <p>{$l10n->get(
@@ -22,6 +33,7 @@
         {$l10n->get('INS_WARNING_BETA_VERSION')}
     </div>
 {/if}
+{/if}
 
 <form {foreach $attributes as $attribute}
 {$attribute@key}="{$attribute}"
@@ -37,4 +49,7 @@
     {/if}
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_next_page']}
+    {if $coreUpdateFailed}
+        <a class="btn btn-secondary" href="{$coreUpdateRestoreUrl}"><i class="bi bi-arrow-counterclockwise"></i>{$coreUpdateRestoreText}</a>
+    {/if}
 </form>

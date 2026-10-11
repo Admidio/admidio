@@ -231,17 +231,17 @@ function changeThrottle(string $throttleFile, callable $change): void
  */
 function loginForm(array $texts, string $csrfToken, string $error = ''): string
 {
-    return ($error !== '' ? '<div class="message error">' . h($error) . '</div>' : '')
+    $input = static fn(string $id, string $label, string $attributes): string => '<div class="mb-3"><label class="form-label" for="' . $id . '">'
+        . h(text($texts, $label)) . '</label><input class="form-control form-control-small" id="' . $id . '" name="' . $id . '" ' . $attributes . '></div>';
+
+    return ($error !== '' ? '<div class="alert alert-danger" role="alert"><i class="bi bi-exclamation-circle-fill"></i>' . h($error) . '</div>' : '')
         . '<p>' . h(text($texts, 'SYS_CORE_UPDATE_LOGIN_DESC')) . '</p>'
         . '<form method="post" action="index.php" autocomplete="off">'
         . '<input type="hidden" name="action" value="login">'
         . '<input type="hidden" name="csrf_token" value="' . h($csrfToken) . '">'
-        . '<label>' . h(text($texts, 'SYS_CORE_UPDATE_LOGIN_NAME'))
-        . '<input type="text" name="login_name" required maxlength="254" autocomplete="username"></label>'
-        . '<label>' . h(text($texts, 'SYS_CORE_UPDATE_PASSWORD'))
-        . '<input type="password" name="password" required autocomplete="current-password"></label>'
-        . '<label>' . h(text($texts, 'SYS_CORE_UPDATE_SECURITY_CODE'))
-        . '<input type="text" name="totp_code" inputmode="numeric" maxlength="6" autocomplete="one-time-code"></label>'
-        . '<button class="button" type="submit">' . h(text($texts, 'SYS_CORE_UPDATE_LOGIN')) . '</button>'
+        . $input('login_name', 'SYS_CORE_UPDATE_LOGIN_NAME', 'type="text" required maxlength="254" autocomplete="username"')
+        . $input('password', 'SYS_CORE_UPDATE_PASSWORD', 'type="password" required autocomplete="current-password"')
+        . $input('totp_code', 'SYS_CORE_UPDATE_SECURITY_CODE', 'type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code"')
+        . '<button class="btn btn-primary" type="submit"><i class="bi bi-box-arrow-in-right"></i>' . h(text($texts, 'SYS_CORE_UPDATE_LOGIN')) . '</button>'
         . '</form>';
 }

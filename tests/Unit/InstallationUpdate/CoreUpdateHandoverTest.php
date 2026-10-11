@@ -278,16 +278,38 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox The HTML error page of a failed update step is recorded as text
+     * @testdox After a failed database update install/update.php knows what the updater can restore
+     */
+    public function testDatabaseFailedRecovery(): void
+    {
+        $this->writeState('database_running', array('databaseStarted' => true, 'installedVersion' => '5.0.17'));
+        $this->assertFalse(CoreUpdateHandover::load(self::UPDATE_ID)->isDatabaseFailed());
+
+        CoreUpdateHandover::load(self::UPDATE_ID)->markDatabaseFailed('Unknown column');
+        $handover = CoreUpdateHandover::load(self::UPDATE_ID);
+
+        $this->assertTrue($handover->isDatabaseFailed());
+        $this->assertSame('5.0.17', $handover->getPreviousVersion());
+        $this->assertFalse($handover->hasDatabaseBackup());
+        $this->assertSame(ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php', $handover->getUpdaterUrl());
+
+        $this->writeState('database_failed', array('databaseStarted' => true, 'dumpFile' => 'dumps/dump.zip'));
+        $this->assertTrue(CoreUpdateHandover::load(self::UPDATE_ID)->hasDatabaseBackup());
+    }
+
+    /**
+     * @testdox The HTML error page of a failed update step is recorded as text, line by line
      */
     public function testDatabaseFailedAsText(): void
     {
         $this->writeState('database_running', array('databaseStarted' => true));
 
-        CoreUpdateHandover::load(self::UPDATE_ID)->markDatabaseFailed("<div>\n  <p><strong>S C R I P T - E R R O R</strong></p>\n"
-            . "  <p>Unknown column &#039;crt_col_conditions&#039;</p>\n</div>");
+        CoreUpdateHandover::load(self::UPDATE_ID)->markDatabaseFailed("<div style=\"font-family: monospace;\">\n  <p><strong>S Q L - E R R O R</strong></p>\n"
+            . "  <p>Unknown column &#039;crt_col_conditions&#039;</p>\n  <p><strong>CODE:</strong> 42S22</p>\n"
+            . "  <strong>B A C K T R A C E</strong><br />\n  <b>#0</b> Database.php:1  <br /><b>#1</b> Update.php:2<br /></div>");
 
-        $this->assertSame("S C R I P T - E R R O R Unknown column 'crt_col_conditions'", $this->readState()['lastError']);
+        $this->assertSame("S Q L - E R R O R\nUnknown column 'crt_col_conditions'\nCODE: 42S22\nB A C K T R A C E\n#0 Database.php:1\n#1 Update.php:2",
+            $this->readState()['lastError']);
     }
 
     /**

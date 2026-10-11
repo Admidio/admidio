@@ -232,7 +232,10 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertFileDoesNotExist($this->root . '/install/update-manifest.json');
         $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json');
         $this->assertNull(U\activeUpdateId($this->root));
-        $this->assertSame(array(), U\readState($this->root, $updateId)['credentials'], 'nobody can continue the update');
+        $this->assertCount(1, U\readState($this->root, $updateId)['credentials'], 'the browser still sees the result');
+
+        U\phaseBRolledBack($context, $updateId);
+        $this->assertSame(array(), U\readState($this->root, $updateId)['credentials'], 'then nobody can continue the update');
     }
 
     /**

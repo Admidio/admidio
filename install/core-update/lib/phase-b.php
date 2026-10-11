@@ -348,6 +348,26 @@ function phaseBRestore(array $ctx, string $updateId, bool $ownDatabaseRestored):
 }
 
 /**
+ * End an undone update after the administrator has seen its result: nobody can continue it any
+ * more, and the next visit of the updater starts a new one.
+ * @param array<string,mixed> $ctx
+ */
+function phaseBRolledBack(array $ctx, string $updateId): void
+{
+    $root = $ctx['config']['rootPath'];
+
+    withLock($root, static function () use ($ctx, $root, $updateId): void {
+        $state = readState($root, $updateId);
+        if ($state['state'] !== 'rolled_back') {
+            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
+        }
+        revokeCredentials($state);
+        writeState($root, $state);
+        clearCredentialCookie($ctx['config']);
+    });
+}
+
+/**
  * Clean up after install/update.php has completed the update: the workspace with the rollback
  * copy and the package is removed, nobody can continue the update any more.
  * @param array<string,mixed> $ctx
@@ -1219,11 +1239,10 @@ function rollbackPart(array $ctx, array $state): array
         $state['keptArchive'] = '';
     }
     leaveMaintenance($root, $state['updateId']);
-    revokeCredentials($state);
     updateLog($root, $state['updateId'], 'previous files restored, maintenance mode off');
     keepUpdateLog($root, $state);
+    // The browser keeps its cookie until it has seen the result (phaseBRolledBack()).
     clearActiveUpdate($root, $state['updateId']);
-    clearCredentialCookie($ctx['config']);
     foreach (array('extracted', 'backup') as $directory) {
         deleteDirectory($workspace . '/' . $directory);
     }
