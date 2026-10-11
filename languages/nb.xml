@@ -169,7 +169,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Høy</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Lav</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Middels</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ingen</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Svært høy</string>
   <string name="ORG_PIXEL">Piksel</string>
   <string name="ORG_PROFILE_FIELDS">Profilfelt</string>

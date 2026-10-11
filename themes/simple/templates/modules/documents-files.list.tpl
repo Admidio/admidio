@@ -3,7 +3,9 @@
 {/if}
 
 
-    <table id="adm_documents_files_table" class="table table-hover" width="100%" style="width: 100%;">
+    <table id="adm_documents_files_table" class="table table-hover" width="100%" style="width: 100%;"
+        data-label-share-link="{$l10n->get('SYS_SHARE_LINK')}" data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}"
+        data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
         <thead>
             <tr>
                 <th><i class="bi bi-folder-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_FOLDER')} / {$l10n->get('SYS_FILE_TYPE')}"></i></th>
@@ -72,3 +74,79 @@
         </table>
     </div>
 {/if}
+
+{literal}
+<script>
+// Share the link of a file or folder with the share dialog of the system. If the browser can't share
+// links, the action copies the link to the clipboard and shows the icon and text of copying.
+document.addEventListener("DOMContentLoaded", function () {
+    const table = document.getElementById("adm_documents_files_table");
+    // without the functions of common_functions.js, e.g. an older cached version, the action stays a normal link
+    if (!table || typeof shareOrCopyLink !== "function" || typeof canShareLink !== "function") return;
+
+    const shareLinkLabel = table.dataset.labelShareLink;
+    const copyLinkLabel = table.dataset.labelCopyLink;
+    const copiedLabel = table.dataset.labelCopied;
+
+    // a tooltip is only shown if the element had a title, so the tooltip is created again with the new title
+    const setTooltip = function (icon, title, options) {
+        const tooltip = bootstrap.Tooltip.getInstance(icon);
+        if (tooltip) {
+            tooltip.dispose();
+        }
+        icon.setAttribute("title", title);
+        return new bootstrap.Tooltip(icon, options || {});
+    };
+
+    if (canShareLink()) {
+        table.querySelectorAll("a.admidio-share-link").forEach(function (link) {
+            const icon = link.querySelector("i");
+            icon.className = "bi bi-share";
+            if (link.classList.contains("dropdown-item")) {
+                icon.setAttribute("title", shareLinkLabel);
+                link.lastChild.nodeValue = " " + shareLinkLabel;
+            } else {
+                setTooltip(icon, shareLinkLabel);
+            }
+        });
+    }
+
+    // show a check icon and the tooltip "copied" at the icon of the link, within the dropdown of small
+    // screens at the icon that opens the dropdown, because the dropdown is closed after the click
+    const showCopied = function (link) {
+        const dropdown = link.closest(".dropdown");
+        const icon = dropdown ? dropdown.querySelector("[data-bs-toggle=\"dropdown\"] i") : link.querySelector("i");
+        if (!icon) return;
+
+        const iconClass = icon.className;
+        const title = icon.getAttribute("title") || icon.getAttribute("data-bs-original-title") || "";
+        icon.className = "bi bi-clipboard-check";
+        const copiedTooltip = setTooltip(icon, copiedLabel, {trigger: "manual"});
+        copiedTooltip.show();
+
+        setTimeout(function () {
+            copiedTooltip.dispose();
+            icon.className = iconClass;
+            icon.setAttribute("title", title);
+            if (title !== "") {
+                new bootstrap.Tooltip(icon);
+            }
+        }, 2000);
+    };
+
+    table.addEventListener("click", function (e) {
+        const link = e.target.closest("a.admidio-share-link");
+        if (!link) return;
+        e.preventDefault();
+
+        const nameLink = link.closest("tr").querySelector("td:nth-child(2) a");
+        const name = nameLink ? nameLink.textContent.trim() : document.title;
+        shareOrCopyLink(link.href, name, copyLinkLabel).then(function (result) {
+            if (result === "copied") {
+                showCopied(link);
+            }
+        });
+    });
+});
+</script>
+{/literal}

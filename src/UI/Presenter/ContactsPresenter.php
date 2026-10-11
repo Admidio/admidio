@@ -1,7 +1,8 @@
 <?php
+namespace Admidio\UI\Presenter;
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 /**
@@ -13,15 +14,15 @@ use Admidio\Users\Entity\User;
  * **Code example**
  * ```
  * // generate html output with available registrations
- * $page = new ModuleContacts('adm_contacts', $headline);
- * $page->createContentAssignUser();
+ * $page = new ContactsPresenter('adm_contacts', $headline);
+ * $page->createContentAssignUser($user);
  * $page->show();
  * ```
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleContacts extends PagePresenter
+class ContactsPresenter extends PagePresenter
 {
     /**
      * Constructor that initialize the class member parameters

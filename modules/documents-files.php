@@ -244,7 +244,16 @@ try {
             $getView = admFuncVariableIsValid($_GET, 'view', 'bool', array('defaultValue' => false));
 
             $documentsService = new DocumentsService($gDb);
-            $documentsService->downloadFile($getFileUUID, $getView);
+            try {
+                $documentsService->downloadFile($getFileUUID, $getView);
+            } catch (Exception $e) {
+                // A visitor who isn't logged in should see the login page, like for the link of a folder.
+                // After the login the file will be shown if the user has the right to see it.
+                if (!$gValidLogin && $e->getMessage() === $gL10n->get('SYS_FOLDER_NO_RIGHTS')) {
+                    throw new Exception('LOGIN');
+                }
+                throw $e;
+            }
             break;
     }
 } catch (Throwable $e) {

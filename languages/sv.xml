@@ -214,7 +214,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">Definiera föräldraorganisation här. Moderorganisationen kan till exempelskapa evenemang och meddelanden som visas i utpekade (dotter)organisationer.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Lösenordsstyrka</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Här kan du ange hur säkra och komplexa lösenord måste vara åtminstone. \nVärdet inom parentes anger hur många försök som krävs i genomsnitt tills lösenordet bestäms. \n\nNej: riskabelt lösenord (&lt;10^3)\nLåg : Skydd mot angripna onlineattacker. (&lt;10^6)\nMitt: skydd mot obegränsade onlineangrepp. (&lt;10^8)\nHögt: Måttligt skydd mot hash offline. (&lt;10^10)\nMycket högt: Starkt skydd mot hash offline. (&gt;=10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Inget</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Låg</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mellan</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Hög</string>

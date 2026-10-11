@@ -1,4 +1,6 @@
 <?php
+namespace Admidio\Session\Service;
+
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -11,21 +13,18 @@ use Admidio\Users\Entity\User;
 /**
  * Class with methods to display the login module and handle the input.
  *
- * This class adds some functions that are used in the contacts module to keep the
- * code easy to read and short
+ * This class handles the login form and interactive authentication.
  *
  * **Code example**
  * ```
- * // generate html output with available registrations
- * $page = new ModuleContacts('adm_contacts', $headline);
- * $page->createContentAssignUser();
- * $page->show();
+ * // Render the login form.
+ * (new LoginService())->addHtmlLogin($page);
  * ```
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class ModuleLogin
+class LoginService
 {
     /**
      * Constructor that initialize the class member parameters

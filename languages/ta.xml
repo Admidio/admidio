@@ -169,7 +169,6 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">உயர்ந்த</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">குறைந்த</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">நடுப்பகுதி</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">ஏதுமில்லை</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">மிக அதிகம்</string>
   <string name="ORG_PIXEL">பிக்சல்</string>
   <string name="ORG_PROFILE_FIELDS">சுயவிவர புலங்கள்</string>

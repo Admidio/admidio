@@ -214,7 +214,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">Siin määratlege peaorganisatsioon. Peaorganisatsioonid saavad luua näiteks sündmusi ja teadaandeid, mida kuvatakse valitud (alam)organisatsioonis.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Salasõna tugevus</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Siin saate määrata, kui turvalised ja keerulised paroolid peavad vähemalt olema.\nVäärtus sulgudes näitab, mitu katset on keskmiselt vaja parooli määramiseni.\n\n Ei: riskantne parool (&lt;10^3)\n Madal: kaitse pidurdatud võrgurünnakute eest. (&lt;10^6)\n Keskmine: kaitse piiramatute võrgurünnakute eest.(&lt;10^8)\n Kõrge: mõõdukas kaitse võrguühenduseta räsimise eest. (&lt;10 ^10)\n Väga kõrge: tugev kaitse võrguühenduseta räsimise eest. (&gt;= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Mitte ühtegi</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Madal</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Keskmine</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Kõrge</string>

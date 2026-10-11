@@ -212,7 +212,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">Определите здесь родительскую организацию. Родительские организации могут создавать события и анонсы, которые будут отображаться в выбранной (дочерней) организации.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Надежность пароля</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Здесь вы можете указать, насколько безопасными и сложными должны быть пароли.\nЗначение в скобках указывает, сколько попыток в среднем требуется, пока пароль не будет определен.\n\n Нет: рискованный пароль (&lt;10^3)\n Низкий: защита от атак через Интернет с дросселированием. (&lt;10^6)\n Средний: защита от неограниченных онлайн-атак.(&lt;10^8)\n Высокий: Умеренная защита от автономного хеширования. (&lt;10^10)\n Очень высокий: Сильная защита от автономного хеширования. (&gt;= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Нет</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Низкий</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Средний</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Высокий</string>

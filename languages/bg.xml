@@ -214,7 +214,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">Определете родителската организация тук. Родителските организации могат да създават събития и съобщения, например, които ще се показват в избрана (дъщерна) организация.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Сила на паролата</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Тук можете да посочите поне колко безопасни и сложни трябва да бъдат паролите.\nСтойността в скоби показва средно колко опита са необходими, докато се налучка паролата.\n\n Не: рискова парола(&lt;10^3)\n Ниска: Защита срещу блокирани онлайн атаки. (&lt;10^6)\n Средна: защита срещу неограничени онлайн атаки. (&lt;10^8)\n Висока: Умерена защита срещу офлайн налучкване. (&lt;10 ^10)\n Много висока: Силна защита срещу офлайн налучкване. (>= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Не</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Ниска</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Средна</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Висока</string>

@@ -200,6 +200,8 @@ class OIDCService extends SSOService {
     }
 
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
+        global $gL10n;
+
         $this->normalizeLogoutUriFormValues($formValues);
 
         if (array_key_exists('ocl_userid_field', $formValues)) {
@@ -237,7 +239,7 @@ class OIDCService extends SSOService {
         $newClientSecret = (string) ($formValues['new_ocl_client_secret'] ?? '');
         // new clients require a secret
         if ($client->isNewRecord() && $newClientSecret === '') {
-            throw new \Exception('SYS_SSO_CLIENT_SECRET_REQUIRED');
+            throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_SSO_CLIENT_SECRET')));
         }
 
         if ($newClientSecret !== '') {

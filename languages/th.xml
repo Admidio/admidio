@@ -212,7 +212,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">กำหนดองค์กรหลักที่นี่ องค์กรหลัก สามารถ สร้างกิจกรรมและ ประกาศ ต่างๆ ได้ เช่น ซึ่งจะแสดงใน องค์กร (ย่อย) ที่เลือก</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">ความแรงของรหัสผ่าน</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">ที่นี่คุณสามารถระบุได้ว่ารหัสผ่านที่ปลอดภัยและซับซ้อนต้องมีอย่างน้อยเพียงใด\n ค่าในวงเล็บจะระบุจำนวนครั้งโดยเฉลี่ยที่ต้องใช้จนกว่าจะ กำหนดรหัสผ่าน\n\n ไม่: รหัสผ่านที่มีความเสี่ยง (&lt;10^3)\n ต่ำ: ป้องกันการโจมตีออนไลน์ที่ถูกควบคุมปริมาณ (&lt;10^6)\n กลาง: ป้องกันการโจมตีออนไลน์ที่ไม่จำกัด (&lt;10^8)\n สูง: ป้องกันแฮชออฟไลน์ปานกลาง (&lt;10 ^ 10)\n สูงมาก: การป้องกันที่แข็งแกร่งต่อการแฮชออฟไลน์ (&gt;= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">ไม่มี</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">ต่ำ</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">กลาง</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">สูง</string>

@@ -212,7 +212,6 @@
   <string name="ORG_PARENT_ORGANIZATION_DESC">Визначте тут батьківську організацію. Батьківські організації можуть створювати події та анонси, які відображатимуться у вибраній (дочірній) організації.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Надійність пароля</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Здесь вы можете указать, насколько безопасными и сложными должны быть пароли.\nЗначение в скобках указывает, сколько попыток в среднем требуется, пока пароль не будет определен.\n\n Нет: рискованный пароль (&lt;10^3)\n Низкий: защита от атак через Интернет с дросселированием. (&lt;10^6)\n Средний: защита от неограниченных онлайн-атак.(&lt;10^8)\n Высокий: Умеренная защита от автономного хеширования. (&lt;10^10)\n Очень высокий: Сильная защита от автономного хеширования. (&gt;= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Ні</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Низький</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Середній</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Високий</string>

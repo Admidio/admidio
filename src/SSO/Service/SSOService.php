@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\SSO\Service;
 
+use Admidio\Session\Service\LoginService;
 use Admidio\SSO\Entity\SSOClient;
 
 use Exception;
@@ -281,7 +282,7 @@ abstract class SSOService {
         $cancelUrl = CURRENT_URL . (str_contains(CURRENT_URL, '?') ? '&' : '?') . 'sso_cancel=1';
         $cancelPostData = !empty($_POST) ? $_POST : null;
 
-        $loginModule = new \ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->addHtmlLogin($page, '', 'modules/sso.login.tpl', $cancelUrl, $cancelPostData);
 
         $page->show();

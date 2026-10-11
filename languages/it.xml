@@ -213,7 +213,6 @@
   <string name="SYS_PARENT_ORGANIZATION_DESC">Definisci l\'organizzazione madre qui. Le organizzazioni madre sono in grado di creare eventi e annunci, per esempio, che saranno visualizzati nelle organizzazioni (figlie) selezionate.</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH">Sicurezza della password</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_DESC">Qui è possibile specificare quanto devono essere sicure e complesse le password.\n Il valore tra parentesi indica quanti tentativi sono richiesti in media fino a quando la password è determinata.\n No: password rischiosa (&lt;10^3)\n Basso: protezione contro attacchi online \"throttled\". (&lt;10^6)\n Medio: protezione contro gli attacchi online senza restrizioni.(&lt;10^8)\n Alto: Protezione moderata contro l\'hashing offline. (&lt;10^10)\n Molto alto: Forte protezione contro l\'hashing offline. (= 10^10)</string>
-  <string name="ORG_PASSWORD_MIN_STRENGTH_NO">Nessuno</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_LOW">Basso</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Medio</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_HIGH">Alto</string>
