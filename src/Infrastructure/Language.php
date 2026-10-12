@@ -4,6 +4,7 @@ namespace Admidio\Infrastructure;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Reads language specific texts that are identified with text ids out of language xml files
@@ -98,13 +99,22 @@ class Language
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Exclude SimpleXMLElement objects while retaining the legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
-        return array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0" . self::class . "\0" . $name,
+            array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**

@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
@@ -138,12 +139,23 @@ class Entity
     }
 
     /**
-     * A wakeup add the current database object to this class
+     * Preserve the properties of this entity and its subclasses in session data.
+     * @return array<string,mixed>
      */
-    public function __wakeup()
+    public function __serialize(): array
+    {
+        return (array)$this;
+    }
+
+    /**
+     * Restore legacy session properties and attach the current database object.
+     * @param array<string,mixed> $data
+     */
+    public function __unserialize(array $data): void
     {
         global $gDb;
 
+        SerializationUtils::restoreProperties($this, $data);
         if ($gDb instanceof Database) {
             $this->db = $gDb;
         }

@@ -111,7 +111,7 @@ class HtmlForm
      * @throws \Smarty\Exception
      * @deprecated 5.0.0:5.1.0 Class "HtmlForm" is deprecated, use class "Form" instead.
      */
-    public function __construct(string $id, string $action = '', HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $action = '', ?HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -1684,7 +1684,7 @@ class HtmlForm
      *                         is set as default and need not set with this parameter.
      */
 
-    public function openGroupBox(string $id, string $headline = null, string $class = '')
+    public function openGroupBox(string $id, ?string $headline = null, string $class = '')
     {
         $this->htmlString .= '<div id="' . $id . '" class="card admidio-field-group ' . $class . '">';
         // add headline to groupbox
