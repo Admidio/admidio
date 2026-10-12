@@ -230,8 +230,11 @@ function coreUpdateHandlePhaseA(array $context, array $state, bool $isPost, stri
             return;
         }
 
+        // The branch, the tag or the pull request of a developer channel has a field of its own.
+        $channel = (string)($_POST['channel'] ?? 'stable');
+        $ref = is_array($_POST['ref'] ?? null) && is_string($_POST['ref'][$channel] ?? null) ? $_POST['ref'][$channel] : '';
         match ($action) {
-            'check' => U\phaseACheck($context, $updateId, (string)($_POST['channel'] ?? 'stable')),
+            'check' => U\phaseACheck($context, $updateId, $channel, $ref),
             'confirm' => U\phaseAConfirm($context, $updateId),
             default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
         };
@@ -268,9 +271,20 @@ function coreUpdateShowPhaseA(array $state, array $config, array $texts): void
             $channels = U\availableChannels($config);
             $choice = '';
             foreach ($channels as $channel) {
-                $choice .= '<div class="form-check"><input class="form-check-input" type="radio" name="channel" id="channel_' . U\h($channel)
+                $field = match ($channel) {
+                    'branch' => array('v5.0', 'SYS_CORE_UPDATE_REF_BRANCH'),
+                    'tag' => array('v5.0.17', 'SYS_CORE_UPDATE_REF_TAG'),
+                    'pr' => array('1234', 'SYS_CORE_UPDATE_REF_PR'),
+                    default => null
+                };
+                $choice .= '<div class="form-check mb-1"><input class="form-check-input" type="radio" name="channel" id="channel_' . U\h($channel)
                     . '" value="' . U\h($channel) . '" form="check-form"' . ($channel === ($state['channel'] ?? 'stable') ? ' checked' : '') . '>'
-                    . '<label class="form-check-label" for="channel_' . U\h($channel) . '">' . U\h(coreUpdateChannelName($channel, $texts)) . '</label></div>';
+                    . '<label class="form-check-label fw-normal" for="channel_' . U\h($channel) . '">' . U\h(coreUpdateChannelName($channel, $texts)) . '</label>'
+                    . ($field === null ? '' : '<input class="form-control form-control-sm form-control-small mt-1" type="text" name="ref[' . U\h($channel) . ']"'
+                        . ' form="check-form" maxlength="200" placeholder="' . U\h($field[0]) . '" aria-label="' . U\h(U\text($texts, $field[1])) . '"'
+                        . ' value="' . U\h($channel === ($state['channel'] ?? '') ? (string)($state['ref'] ?? '') : '') . '"'
+                        . ' onfocus="document.getElementById(\'channel_' . U\h($channel) . '\').checked = true">')
+                    . '</div>';
             }
             $choice = count($channels) > 1
                 ? '<fieldset class="mb-3"><legend class="fs-6 fw-bold">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHANNEL')) . '</legend>' . $choice . '</fieldset>'
@@ -290,12 +304,15 @@ function coreUpdateShowPhaseA(array $state, array $config, array $texts): void
         case 'checked':
             $checks = (array)($state['checks'] ?? array());
             $actions = '';
+            $developer = U\isDeveloperChannel((string)$state['channel']);
             if (!U\checksHaveErrors($checks)) {
+                // The source archive of a developer channel has been downloaded by the check.
                 $actions .= '<form method="post" action="index.php">' . $csrf . '<input type="hidden" name="action" value="confirm">'
-                    . coreUpdateButton('bi-cloud-download', U\text($texts, 'SYS_CORE_UPDATE_DOWNLOAD')) . '</form>';
+                    . coreUpdateButton($developer ? 'bi-box-arrow-in-down' : 'bi-cloud-download', U\text($texts, $developer ? 'SYS_CORE_UPDATE_CONTINUE' : 'SYS_CORE_UPDATE_DOWNLOAD')) . '</form>';
             }
             $actions .= '<form method="post" action="index.php">' . $csrf . '<input type="hidden" name="action" value="check">'
                 . '<input type="hidden" name="channel" value="' . U\h((string)$state['channel']) . '">'
+                . '<input type="hidden" name="ref[' . U\h((string)$state['channel']) . ']" value="' . U\h((string)($state['ref'] ?? '')) . '">'
                 . coreUpdateButton('bi-arrow-repeat', U\text($texts, 'SYS_CORE_UPDATE_CHECK_AGAIN'), U\checksHaveErrors($checks)) . '</form>'
                 . coreUpdateCancelForm($csrf, $texts);
 
@@ -319,7 +336,10 @@ function coreUpdateShowPhaseA(array $state, array $config, array $texts): void
                     . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>'
                     . U\h((string)($state['targetVersionText'] ?? $state['targetVersion'])) . '</dd>'
                     . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHANNEL')) . '</dt><dd>'
-                    . U\h(coreUpdateChannelName((string)$state['channel'], $texts)) . '</dd></dl>'
+                    . U\h(coreUpdateChannelName((string)$state['channel'], $texts) . (($state['ref'] ?? '') !== '' ? ': ' . $state['ref'] : '')) . '</dd>'
+                    . (($state['commit'] ?? '') !== '' ? '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_COMMIT')) . '</dt><dd><code>'
+                        . U\h((string)$state['commit']) . '</code></dd>' : '')
+                    . '</dl>'
                     . ($state['channel'] === 'master' ? coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_MASTER_WARNING'))) : '')
                     . '<h4 class="mt-4">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECKS')) . '</h4>' . coreUpdateCheckList($checks, $texts)
                     . '<div id="reachable" hidden>' . coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECK_REACHABLE'))) . '</div>',
@@ -394,6 +414,9 @@ function coreUpdateChannelName(string $channel, array $texts): string
     return match ($channel) {
         'beta' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_BETA'),
         'master' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_MASTER'),
+        'branch' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_BRANCH'),
+        'tag' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_TAG'),
+        'pr' => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_PR'),
         default => U\text($texts, 'SYS_CORE_UPDATE_CHANNEL_STABLE')
     };
 }
@@ -586,14 +609,19 @@ function coreUpdateShowPhaseB(array $context, array $state): void
             coreUpdatePage(
                 $texts,
                 $state,
-                coreUpdateAlert('success', U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)$state['targetVersion']))))
+                (!empty($state['databaseManual'])
+                    ? coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_FILES_ONLY', array((string)$state['targetVersionText']))))
+                    : coreUpdateAlert('success', U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)($state['targetVersionText'] ?? $state['targetVersion']))))))
+                    . (!empty($state['composerChanged']) ? coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_COMPOSER_REQUIRED'))) : '')
                     . ((string)($state['dumpFile'] ?? '') !== ''
                         ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</p>' : '')
                     . implode('', array_map(static fn(array $note): string => coreUpdateAlert($note['type'] === 'info' ? 'info' : 'warning',
                         nl2br(U\h((string)$note['text']))), (array)($state['databaseNotes'] ?? array())))
                     . ((string)($state['keptArchive'] ?? '') !== ''
                         ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/core-update/' . $state['keptArchive']))) . '</p>' : ''),
-                coreUpdateOpenAdmidio($config, $texts)
+                !empty($state['databaseManual'])
+                    ? coreUpdateLink($config['baseUrl'] . '/install/update.php', 'bi-database', U\text($texts, 'SYS_CORE_UPDATE_DATABASE_MANUAL'))
+                    : coreUpdateOpenAdmidio($config, $texts)
             );
             break;
 

@@ -209,6 +209,86 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The source archive of a developer channel adds and replaces files, removes nothing and leaves no inventory
+     */
+    public function testDeveloperPackage(): void
+    {
+        [$context, $updateId, $workspace] = $this->preparedDeveloper(array());
+
+        $this->assertSame('review', $this->runToDecision($context, $updateId)['status']);
+        $plan = U\readPlan($workspace);
+        $this->assertSame(array('composer.json', 'index.php', 'src/New/Fresh.php', 'install/update-manifest.json'), array_column($plan, 'path'));
+        $this->assertSame('delete', $plan[3]['action'], 'the inventory of the installed release goes');
+
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
+        $this->assertSame('files_installed', U\readState($this->root, $updateId)['state']);
+        $this->assertSame('DEV INDEX', $this->read('index.php'));
+        $this->assertSame('NEW FILE', $this->read('src/New/Fresh.php'));
+        $this->assertSame('REMOVED BY THE RELEASE', $this->read('src/Old/Gone.php'), 'nothing is removed');
+        $this->assertSame('UNKNOWN', $this->read('src/Unknown.php'));
+        $this->assertFileDoesNotExist($this->root . '/tests/DevTest.php', 'only what a release would contain is installed');
+        $this->assertFileDoesNotExist($this->root . '/install/update-manifest.json');
+        $this->assertNull(U\installedInventory($this->root), 'the next update keeps every file it replaces');
+        $this->assertMatchesRegularExpression('#^kept/[0-9_-]+_5\.0\.14_to_5\.1\.0-feature-x-ababab[a-f0-9]_[a-f0-9]{6}\.zip$#',
+            (string)U\readState($this->root, $updateId)['keptArchive']);
+    }
+
+    /**
+     * @testdox A version without the updater ends with its files, and its database is updated by hand
+     */
+    public function testDeveloperPackageWithoutUpdater(): void
+    {
+        [$context, $updateId] = $this->preparedDeveloper(array('withoutUpdater' => true));
+        $this->runToDecision($context, $updateId);
+
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
+
+        $state = U\readState($this->root, $updateId);
+        $this->assertSame('completed', $state['state']);
+        $this->assertTrue($state['databaseManual']);
+        $this->assertSame('DEV INDEX', $this->read('index.php'));
+        $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json', 'nobody else would switch it off');
+        $this->assertSame('skipped', U\updateSteps($state)['database']);
+    }
+
+    /**
+     * The workspace of a developer channel as phase A leaves it: a source archive of the branch
+     * feature/x and the manifest the updater made for it. The installed release has an inventory,
+     * which no longer fits after a developer install, and index.php was changed locally.
+     * @param array<string,mixed> $fields More fields of the state.
+     * @return array{0: array<string,mixed>, 1: string, 2: string} context, update ID and workspace
+     */
+    private function preparedDeveloper(array $fields): array
+    {
+        $this->write(array('install/update-manifest.json' => json_encode(array('version' => '5.0.14', 'files' => array(
+            'index.php' => hash('sha256', 'ORIGINAL INDEX'), 'src/Same.php' => hash('sha256', 'SAME'), 'src/Old/Gone.php' => hash('sha256', 'REMOVED BY THE RELEASE'))))));
+
+        $state = U\createUpdate($this->root, array('installedVersion' => '5.0.14'));
+        $updateId = $state['updateId'];
+        $workspace = U\workspace($this->root, $updateId);
+        $zip = new ZipArchive();
+        $zip->open($workspace . '/package.zip', ZipArchive::CREATE);
+        foreach (array('index.php' => 'DEV INDEX', 'src/Same.php' => 'SAME', 'src/New/Fresh.php' => 'NEW FILE', 'install/core-update/index.php' => 'NEW UPDATER',
+            'tests/DevTest.php' => 'A TEST', 'composer.json' => '{"archive": {"exclude": ["tests/*"]}}') as $path => $content) {
+            $zip->addFromString('admidio-feature-x/' . $path, $content);
+        }
+        $zip->setArchiveComment(str_repeat('ab', 20));
+        $zip->close();
+        $package = U\openPackage($workspace . '/package.zip', U\MAX_EXTRACTED_SIZE);
+        file_put_contents($workspace . '/update-manifest.json', json_encode(U\developerManifest($package, '5.1.0')));
+        $package['zip']->close();
+        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'prepared', 'channel' => 'branch',
+            'ref' => 'feature/x', 'commit' => str_repeat('ab', 20), 'packageSha256' => hash_file('sha256', $workspace . '/package.zip'),
+            'targetVersion' => '5.1.0', 'targetVersionText' => '5.1.0 (feature/x ababab)') + $fields));
+        $context = array('config' => U\loadConfig($this->root), 'pdo' => null, 'texts' => array('language' => 'en', 'texts' => array()),
+            'updaterPath' => $this->root . '/install/core-update', 'http' => array(), 'chunkSize' => U\CHUNK_SIZE);
+
+        return array($context, $updateId, $workspace);
+    }
+
+    /**
      * @testdox Restoring brings back every file and switches maintenance mode off
      */
     public function testRollback(): void

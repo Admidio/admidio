@@ -95,7 +95,8 @@ final class PhaseATest extends AdmidioTestCase
             $g_root_path = "http://127.0.0.1";
             $gDebug = true;
             $gCoreUpdateServerUrl = ' . var_export(self::$baseUrl, true) . ';
-            $gCoreUpdatePublicKeyFile = "release-key.pem";');
+            $gCoreUpdatePublicKeyFile = "release-key.pem";
+            $gCoreUpdateArchiveUrl = ' . var_export(self::$baseUrl . 'archive/', true) . ';');
         file_put_contents($this->root . '/system/bootstrap/constants.php', "<?php\nconst ADMIDIO_VERSION_MAIN = 5;\n"
             . "const ADMIDIO_VERSION_MINOR = 0;\nconst ADMIDIO_VERSION_PATCH = 14;\nconst ADMIDIO_VERSION_BETA = 0;\n");
         file_put_contents($this->root . '/index.php', 'OLD INDEX');
@@ -432,11 +433,205 @@ final class PhaseATest extends AdmidioTestCase
     public function testChannels(): void
     {
         $this->assertSame(array('stable'), U\availableChannels(U\configFromValues($this->root, array())));
-        $this->assertSame(array('stable', 'beta'), U\availableChannels(U\configFromValues($this->root, array('gDebug' => true))));
+        $this->assertSame(array('stable', 'beta', 'master', 'branch', 'tag', 'pr'),
+            U\availableChannels(U\configFromValues($this->root, array('gDebug' => true))));
 
         $updateId = $this->createUpdate();
         $this->expectExceptionMessage('SYS_CORE_UPDATE_REQUEST_INVALID');
         U\phaseACheck($this->context(), $updateId, 'pr:1234');
+    }
+
+    /**
+     * Publish a source archive as GitHub makes it: one top directory, no vendor/, no manifest, and
+     * the commit in the ZIP comment.
+     * @param array<string,string> $files path => content, added to the standard files
+     * @return string The SHA-256 of the archive.
+     */
+    private function publishSourceArchive(string $path, array $files = array(), string $version = '5.1.0', string $comment = ''): string
+    {
+        [$main, $minor, $patch] = array_map('intval', explode('.', $version));
+        $files = array_merge(array(
+            'index.php' => 'DEV INDEX',
+            'system/bootstrap/constants.php' => "<?php\nconst ADMIDIO_VERSION_MAIN = " . $main . ";\nconst ADMIDIO_VERSION_MINOR = " . $minor
+                . ";\nconst ADMIDIO_VERSION_PATCH = " . $patch . ";\nconst ADMIDIO_VERSION_BETA = 0;\n",
+            'composer.json' => '{"require": {"php": "^8.2", "ext-zip": "*", "ext-json": "*"},'
+                . ' "archive": {"exclude": ["tests/*", ".github", "plugins/*", "!plugins/birthday"]}}',
+            'languages/en.xml' => '<?xml version="1.0" encoding="UTF-8"?><resources><string name="SYS_CORE_UPDATE_TITLE">Admidio\'s update</string>'
+                . '<string name="SYS_SAVE">Save</string></resources>',
+            'plugins/birthday/index.php' => 'OFFICIAL PLUGIN',
+            'plugins/my-own/index.php' => 'NOT A PART OF THE RELEASE',
+            'composer.lock' => '{"packages": []}',
+            'install/core-update/index.php' => 'DEV UPDATER',
+            'install/core-update/lib/bootstrap.php' => 'DEV BOOTSTRAP',
+            'src/Dev.php' => 'DEV FILE',
+            'tests/DevTest.php' => 'A TEST',
+            '.github/workflows/ci.yml' => 'CI'
+        ), $files);
+
+        $file = self::$serverDirectory . '/files/archive/' . $path;
+        @mkdir(dirname($file), 0777, true);
+        $zip = new ZipArchive();
+        $zip->open($file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        foreach ($files as $name => $content) {
+            $zip->addFromString('admidio-dev/' . $name, $content);
+        }
+        $zip->setArchiveComment($comment === '' ? str_repeat('3f5711fa', 5) : $comment);
+        $zip->close();
+
+        return (string)hash_file('sha256', $file);
+    }
+
+    /**
+     * @testdox A developer channel installs the confirmed source archive with a manifest of its own
+     */
+    public function testDeveloperChannel(): void
+    {
+        $sha256 = $this->publishSourceArchive('refs/heads/feature/new-login.zip');
+        file_put_contents($this->root . '/composer.lock', '{"packages": ["old"]}');
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+
+        $state = U\phaseACheck($context, $updateId, 'branch', 'feature/new-login');
+        $this->assertSame('checked', $state['state'], (string)$state['lastError']);
+        $this->assertSame('5.1.0', $state['targetVersion']);
+        $this->assertSame('5.1.0 (feature/new-login 3f5711f)', $state['targetVersionText']);
+        $this->assertSame(str_repeat('3f5711fa', 5), $state['commit']);
+        $this->assertSame($sha256, $state['packageSha256'], 'the archive the administrator confirms');
+        $this->assertFalse(U\checksHaveErrors($state['checks']), json_encode($state['checks']));
+        $this->assertContains('SYS_CORE_UPDATE_CHECK_DEVELOPER', array_column($state['checks'], 'text'));
+        $this->assertContains('SYS_CORE_UPDATE_CHECK_COMPOSER', array_column($state['checks'], 'text'));
+        $this->assertTrue($state['composerChanged']);
+
+        $this->assertSame('downloaded', U\phaseAConfirm($context, $updateId)['state'], 'the archive is already there');
+        $result = $this->runToTheEnd($context, $updateId);
+
+        $this->assertSame('prepared', $result['status'], $result['message']);
+        $this->assertSame('DEV UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
+        $this->assertSame('OLD INDEX', file_get_contents($this->root . '/index.php'));
+        $manifest = json_decode((string)file_get_contents(U\workspace($this->root, $updateId) . '/update-manifest.json'), true);
+        $this->assertTrue($manifest['developer']);
+        $this->assertSame('5.1.0', $manifest['version']);
+        $this->assertSame(hash('sha256', 'DEV FILE'), $manifest['files']['src/Dev.php']);
+        $this->assertArrayHasKey('index.php', $manifest['files']);
+        $this->assertArrayNotHasKey('tests/DevTest.php', $manifest['files'], 'what a release would contain: archive.exclude of composer.json');
+        $this->assertArrayNotHasKey('.github/workflows/ci.yml', $manifest['files']);
+        $this->assertArrayHasKey('plugins/birthday/index.php', $manifest['files'], 'the official plugins of the new version');
+        $this->assertArrayNotHasKey('plugins/my-own/index.php', $manifest['files']);
+        $this->assertSame(array('install', 'languages', 'plugins/birthday', 'src', 'system'), $manifest['managedDirectories']);
+        $this->assertNotContains('vendor', $manifest['managedDirectories']);
+        $this->assertSame(array('SYS_CORE_UPDATE_TITLE' => 'Admidio\'s update'),
+            json_decode((string)file_get_contents($this->root . '/install/core-update/texts/en.json'), true),
+            'the texts of the new updater, which the installed language files lack');
+        $this->assertSame(array('php' => '>=8.2', 'extensions' => array('zip', 'json')), $manifest['requirements']);
+        $this->assertStringContainsString('/archive/refs/heads/feature/new-login.zip',
+            (string)file_get_contents(self::$serverDirectory . '/requests.log'));
+    }
+
+    /**
+     * @testdox A source archive that changed after the confirmation is not installed
+     */
+    public function testDeveloperArchiveChanged(): void
+    {
+        $this->publishSourceArchive('refs/pull/1234/head.zip');
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+        $this->assertSame('checked', U\phaseACheck($context, $updateId, 'pr', '1234')['state']);
+        U\phaseAConfirm($context, $updateId);
+
+        file_put_contents(U\workspace($this->root, $updateId) . '/package.zip', 'A NEWER PUSH', FILE_APPEND);
+        $result = $this->runToTheEnd($context, $updateId);
+
+        $this->assertSame('failed', $result['status']);
+        $this->assertSame('SYS_CORE_UPDATE_PACKAGE_INVALID', $result['message']);
+        $this->assertSame('OLD UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
+    }
+
+    /**
+     * @testdox A developer may install an older version after a warning
+     */
+    public function testDeveloperChecks(): void
+    {
+        $this->publishSourceArchive('refs/tags/v5.0.10.zip', array(), '5.0.10');
+        file_put_contents($this->root . '/composer.lock', '{"packages": []}');
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+
+        $state = U\phaseACheck($context, $updateId, 'tag', 'v5.0.10');
+        $this->assertFalse(U\checksHaveErrors($state['checks']), json_encode($state['checks']));
+        $this->assertContains('SYS_CORE_UPDATE_CHECK_OLDER_DEVELOPER', array_column($state['checks'], 'text'));
+        $this->assertNotContains('SYS_CORE_UPDATE_CHECK_COMPOSER', array_column($state['checks'], 'text'), 'the same composer.lock is installed');
+
+        $state = U\phaseACheck($context, $updateId, 'branch', '../../etc');
+        $this->assertSame('new', $state['state']);
+        $this->assertSame('SYS_CORE_UPDATE_REF_INVALID', $state['lastError']);
+    }
+
+    /**
+     * @testdox A source archive without the updater is installed by the installed updater, which stays
+     */
+    public function testDeveloperWithoutUpdater(): void
+    {
+        $this->publishSourceArchive('refs/heads/master.zip');
+        $file = self::$serverDirectory . '/files/archive/refs/heads/master.zip';
+        $zip = new ZipArchive();
+        $zip->open($file);
+        $zip->deleteName('admidio-dev/install/core-update/index.php');
+        $zip->close();
+        $context = $this->context();
+        $updateId = $this->createUpdate();
+
+        $state = U\phaseACheck($context, $updateId, 'master');
+        $this->assertFalse(U\checksHaveErrors($state['checks']), json_encode($state['checks']));
+        $this->assertContains('SYS_CORE_UPDATE_CHECK_WITHOUT_UPDATER', array_column($state['checks'], 'text'));
+        $this->assertTrue($state['withoutUpdater']);
+
+        U\phaseAConfirm($context, $updateId);
+        $this->assertSame('prepared', $this->runToTheEnd($context, $updateId)['status']);
+        $this->assertSame('OLD UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
+        $this->assertFileExists($this->root . '/install/core-update/obsolete.php');
+        $this->assertDirectoryDoesNotExist($this->root . '/install/core-update/texts', 'the texts of the installed updater stay');
+    }
+
+    /**
+     * @return array<string,array{0: string, 1: string, 2: string}>
+     */
+    public static function sourceArchives(): array
+    {
+        return array(
+            'master' => array('master', '', 'refs/heads/master.zip'),
+            'branch' => array('branch', 'v5.0', 'refs/heads/v5.0.zip'),
+            'branch with a slash' => array('branch', 'feature/new-login', 'refs/heads/feature/new-login.zip'),
+            'tag' => array('tag', 'v5.0.17', 'refs/tags/v5.0.17.zip'),
+            'pull request' => array('pr', '2243', 'refs/pull/2243/head.zip')
+        );
+    }
+
+    /**
+     * @testdox The address of a source archive is built by the updater: $_dataName
+     * @dataProvider sourceArchives
+     */
+    public function testSourceArchiveUrl(string $channel, string $ref, string $path): void
+    {
+        $this->assertSame('https://github.com/Admidio/admidio/archive/' . $path,
+            U\sourceArchiveUrl(U\configFromValues($this->root, array('gDebug' => true)), $channel, $ref));
+    }
+
+    /**
+     * @testdox Names that are no plain branch, tag or pull request are refused
+     */
+    public function testInvalidReferences(): void
+    {
+        $config = U\configFromValues($this->root, array('gDebug' => true));
+        foreach (array(array('branch', ''), array('branch', '../master'), array('branch', 'a b'), array('branch', '/master'),
+            array('branch', 'master.lock'), array('tag', 'v1?x=1'), array('pr', '0'), array('pr', '12a'), array('master', 'other'),
+            array('stable', '')) as [$channel, $ref]) {
+            try {
+                U\sourceArchiveUrl($config, $channel, $ref);
+                $this->fail('accepted: ' . $channel . ' ' . $ref);
+            } catch (UpdaterException $exception) {
+                $this->assertSame('SYS_CORE_UPDATE_REF_INVALID', $exception->getMessage());
+            }
+        }
     }
 
     /**

@@ -322,7 +322,8 @@ function checkCompatibility(array $release, string $installedVersion, string $ph
  * Read and check the manifest of a package: version, managedDirectories, managedRootFiles,
  * preservePaths, migrationPaths (optional: the paths the database update of the release moves or
  * removes), requirements (php, extensions), totalSize and files (path => SHA-256), every path
- * safe and no two names that differ only in case.
+ * safe and no two names that differ only in case. developer (optional) marks the manifest that the
+ * updater made for a source archive.
  * @return array{version: string, managedDirectories: array<int,string>, managedRootFiles: array<int,string>,
  *               preservePaths: array<int,string>, requirements: array{php: string, extensions: array<int,string>},
  *               totalSize: int, files: array<string,string>}
@@ -348,6 +349,7 @@ function readManifest(string $json, string $expectedVersion): array
         !$isPathList($data['migrationPaths'] ?? array()) => 'migrationPaths',
         !is_array($requirements) || !is_string($requirements['php'] ?? null) || !is_array($requirements['extensions'] ?? null) => 'requirements',
         !is_int($data['totalSize'] ?? null) || $data['totalSize'] < 0 => 'totalSize',
+        !is_bool($data['developer'] ?? false) => 'developer',
         !is_array($data['files'] ?? null) || $data['files'] === array() => 'files',
         default => ''
     };
@@ -370,6 +372,7 @@ function readManifest(string $json, string $expectedVersion): array
 
     $data['requirements'] = array('php' => $requirements['php'], 'extensions' => array_values(array_filter($requirements['extensions'], 'is_string')));
     $data['migrationPaths'] = $data['migrationPaths'] ?? array();
+    $data['developer'] = $data['developer'] ?? false;
 
     return $data;
 }

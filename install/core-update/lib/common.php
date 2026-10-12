@@ -42,6 +42,9 @@ const CREDENTIAL_LIFETIME = 86400;
 /** Where the releases are announced. */
 const UPDATE_INFO_URL = 'https://www.admidio.org/update.txt';
 
+/** Where the source archives of the developer channels come from. */
+const SOURCE_ARCHIVE_URL = 'https://github.com/Admidio/admidio/archive/';
+
 /**
  * An error the updater reports to the administrator.
  *
@@ -126,13 +129,13 @@ function loadConfig(string $rootPath): array
 /**
  * The configuration from the variables of a config.php, with the defaults of init_globals.php.
  *
- * The two settings that change where updates come from and which key checks them are development
- * aids and are ignored unless $gDebug is set, so that a production installation cannot be pointed
+ * The settings that change where updates come from and which key checks them are development aids
+ * and are ignored unless $gDebug is set, so that a production installation cannot be pointed
  * elsewhere by a single line.
  * @param array<string,mixed> $values
  * @return array{rootPath: string, dbType: string, dbHost: string, dbPort: int|null, dbName: string, dbUser: string,
  *               dbPassword: string, tablePrefix: string, baseUrl: string, debug: bool, serverUrl: string,
- *               publicKeyFile: string, timezone: string}
+ *               publicKeyFile: string, archiveUrl: string, timezone: string}
  */
 function configFromValues(string $rootPath, array $values): array
 {
@@ -152,6 +155,7 @@ function configFromValues(string $rootPath, array $values): array
         'debug' => $debug,
         'serverUrl' => $debug ? (string)($values['gCoreUpdateServerUrl'] ?? '') : '',
         'publicKeyFile' => $debug ? (string)($values['gCoreUpdatePublicKeyFile'] ?? '') : '',
+        'archiveUrl' => $debug ? (string)($values['gCoreUpdateArchiveUrl'] ?? '') : '',
         'timezone' => (string)($values['gTimezone'] ?? 'Europe/Berlin')
     );
 }
@@ -290,9 +294,18 @@ function loadTexts(string $updaterPath, string $rootPath, string $language): arr
  */
 function readLanguageFile(string $file): array
 {
+    return languageFileTexts((string)file_get_contents($file));
+}
+
+/**
+ * The updater texts of the content of an Admidio language file, see readLanguageFile().
+ * @return array<string,string>
+ */
+function languageFileTexts(string $content): array
+{
     $previous = libxml_use_internal_errors(true);
     try {
-        $xml = simplexml_load_string((string)file_get_contents($file), 'SimpleXMLElement', LIBXML_NONET);
+        $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NONET);
     } finally {
         libxml_use_internal_errors($previous);
     }
@@ -998,11 +1011,23 @@ function filesVersion(string $rootPath): string
         }
     }
 
-    $constants = (string)@file_get_contents($rootPath . '/system/bootstrap/constants.php');
+    $version = versionFromConstants((string)@file_get_contents($rootPath . '/system/bootstrap/constants.php'));
+    if ($version === null) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_NOT_AVAILABLE', 'The installed version cannot be read from system/bootstrap/constants.php.');
+    }
+
+    return $version;
+}
+
+/**
+ * The version that the PHP code of system/bootstrap/constants.php defines, or null.
+ */
+function versionFromConstants(string $constants): ?string
+{
     $parts = array();
     foreach (array('MAIN', 'MINOR', 'PATCH', 'BETA') as $part) {
         if (preg_match('/const\s+ADMIDIO_VERSION_' . $part . '\s*=\s*(\d+)\s*;/', $constants, $matches) !== 1) {
-            throw UpdaterException::withDetail('SYS_CORE_UPDATE_NOT_AVAILABLE', 'The installed version cannot be read from system/bootstrap/constants.php.');
+            return null;
         }
         $parts[] = (int)$matches[1];
     }
@@ -1120,6 +1145,9 @@ function updateSteps(array $state): array
     }
     if (($state['backup'] ?? '') === 'own' && $steps['backup'] === 'done') {
         $steps['backup'] = 'skipped';
+    }
+    if (!empty($state['databaseManual'])) {
+        $steps['database'] = 'skipped';
     }
     if ($restoring) {
         $steps['restore'] = $state['state'] === 'rolled_back' ? 'done' : 'current';

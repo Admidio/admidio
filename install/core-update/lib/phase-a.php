@@ -4,7 +4,8 @@
  * the new release in place. Nothing outside install/core-update/ and the workspace is changed.
  *
  * new         - the administrator chooses the channel (only with $gDebug, else it is stable)
- * checking    - update.txt, its signature, the version rule and the checks P1-P9 before the download
+ * checking    - update.txt, its signature, the version rule and the checks P1-P9 before the download;
+ *               a developer channel downloads its source archive here already
  * checked     - the administrator sees the offered version and the results and confirms
  * downloading - the package arrives in parts, a few seconds per request
  * downloaded  - size and SHA-256 match update.txt
@@ -32,6 +33,16 @@ use Throwable;
 
 const PHASE_A_STATES = array('new', 'checking', 'checked', 'downloading', 'downloaded', 'prepared');
 
+/**
+ * The channels of a release package with a signed update.txt, and the developer channels: GitHub
+ * source archives of master, of a branch, a tag or a pull request, unsigned and only with $gDebug.
+ */
+const RELEASE_CHANNELS = array('stable', 'beta');
+const DEVELOPER_CHANNELS = array('master', 'branch', 'tag', 'pr');
+
+/** The largest source archive a developer channel downloads, in one request. */
+const MAX_ARCHIVE_SIZE = 157286400;
+
 /** Bytes per range request, and seconds of downloading per request of the browser. */
 const CHUNK_SIZE = 4194304;
 const TIME_BUDGET = 8;
@@ -53,13 +64,63 @@ final class VerificationFailure extends RuntimeException
 }
 
 /**
- * The channels this installation may choose from: stable, and beta with $gDebug.
+ * The channels this installation may choose from: stable, and with $gDebug also beta and the
+ * developer channels.
  * @param array<string,mixed> $config
  * @return array<int,string>
  */
 function availableChannels(array $config): array
 {
-    return $config['debug'] ? array('stable', 'beta') : array('stable');
+    return $config['debug'] ? array_merge(RELEASE_CHANNELS, DEVELOPER_CHANNELS) : array('stable');
+}
+
+function isDeveloperChannel(string $channel): bool
+{
+    return in_array($channel, DEVELOPER_CHANNELS, true);
+}
+
+/**
+ * The address of the source archive of a developer channel. The updater builds it itself from the
+ * name the administrator entered: a branch or tag name of plain characters, or the number of a pull
+ * request (forks included). master needs no name.
+ * @param array<string,mixed> $config
+ */
+function sourceArchiveUrl(array $config, string $channel, string $ref): string
+{
+    $valid = match ($channel) {
+        'master' => $ref === '',
+        'branch', 'tag' => strlen($ref) <= 200 && !str_contains($ref, '..') && !str_ends_with($ref, '.lock') && !str_ends_with($ref, '.')
+            && preg_match('#^[A-Za-z0-9][A-Za-z0-9._-]*(?:/[A-Za-z0-9][A-Za-z0-9._-]*)*$#', $ref) === 1,
+        'pr' => preg_match('/^[1-9][0-9]{0,6}$/', $ref) === 1,
+        default => false
+    };
+    if (!$valid) {
+        throw new UpdaterException('SYS_CORE_UPDATE_REF_INVALID');
+    }
+
+    $base = rtrim($config['archiveUrl'] !== '' ? $config['archiveUrl'] : SOURCE_ARCHIVE_URL, '/') . '/';
+    $name = implode('/', array_map('rawurlencode', explode('/', $ref)));
+
+    return $base . match ($channel) {
+        'master' => 'refs/heads/master.zip',
+        'branch' => 'refs/heads/' . $name . '.zip',
+        'tag' => 'refs/tags/' . $name . '.zip',
+        default => 'refs/pull/' . $ref . '/head.zip'
+    };
+}
+
+/**
+ * How a developer package is named: the channel and its branch, tag or pull request, for the page
+ * and for the name of the kept-files archive.
+ * @param array<string,mixed> $state
+ */
+function developerSource(array $state): string
+{
+    return match ((string)$state['channel']) {
+        'master' => 'master',
+        'pr' => 'pr' . $state['ref'],
+        default => (string)$state['ref']
+    };
 }
 
 /**
@@ -67,13 +128,14 @@ function availableChannels(array $config): array
  * server cannot be reached, the signature does not match - takes the update back to the choice of
  * the channel, with the error to show.
  * @param array<string,mixed> $ctx
+ * @param string $ref The branch, the tag or the number of the pull request of a developer channel.
  * @return array<string,mixed> The new state.
  */
-function phaseACheck(array $ctx, string $updateId, string $channel): array
+function phaseACheck(array $ctx, string $updateId, string $channel, string $ref = ''): array
 {
     $root = $ctx['config']['rootPath'];
 
-    return withLock($root, static function () use ($ctx, $root, $updateId, $channel): array {
+    return withLock($root, static function () use ($ctx, $root, $updateId, $channel, $ref): array {
         $state = readState($root, $updateId);
         if (!in_array($state['state'], array('new', 'checking', 'checked'), true) || !in_array($channel, availableChannels($ctx['config']), true)) {
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
@@ -81,52 +143,285 @@ function phaseACheck(array $ctx, string $updateId, string $channel): array
 
         $state['state'] = 'checking';
         $state['channel'] = $channel;
+        $state['ref'] = $channel === 'master' ? '' : trim($ref);
         writeState($root, $state);
 
         try {
-            $info = fetchUpdateInfo($ctx['config'], $ctx['updaterPath'], $ctx['http']);
-            $release = releaseFromUpdateInfo(parseUpdateInfo($info['text']), $channel);
-
             $installedVersion = filesVersion($root);
             $databaseVersion = $ctx['pdo'] !== null ? databaseVersion($ctx['pdo'], $ctx['config']['tablePrefix']) : null;
             $freeSpace = @disk_free_space(updatesDirectory($root));
-            $checks = preflightChecks($root, $release, $installedVersion, $databaseVersion, $ctx['config']['dbType'], $freeSpace === false ? -1 : (int)$freeSpace);
+            $freeSpace = $freeSpace === false ? -1 : (int)$freeSpace;
 
-            // From here on the update relies only on what is in its workspace.
-            $workspace = workspace($root, $updateId);
-            writeFile($workspace . '/release-key.pem', $info['key']);
-            writeFile($workspace . '/update.txt', $info['text']);
-            writeFile($workspace . '/update.txt.sig', $info['signature']);
+            $state = isDeveloperChannel($channel)
+                ? developerCheck($ctx, $state, $installedVersion, $databaseVersion, $freeSpace)
+                : releaseCheck($ctx, $state, $installedVersion, $databaseVersion, $freeSpace);
+
             $probeToken = bin2hex(random_bytes(16));
-            writeFile($workspace . '/probe.txt', $probeToken);
-
+            writeFile(workspace($root, $updateId) . '/probe.txt', $probeToken);
             $state = array_merge($state, array(
                 'state' => 'checked',
                 'installedVersion' => $installedVersion,
                 'databaseVersion' => $databaseVersion,
-                'targetVersion' => $release['version'],
-                'targetVersionText' => $release['versionText'],
-                'versionRule' => version_compare($release['version'], $installedVersion) === 0 ? 'reinstall' : 'update',
-                'packageSize' => $release['packageSize'],
-                'packageSha256' => $release['packageSha256'],
-                'checks' => $checks,
                 'probeToken' => $probeToken,
                 'lastError' => ''
             ));
         } catch (UpdaterException $exception) {
+            @unlink(workspace($root, $updateId) . '/package.zip');
             $state = array_merge($state, array('state' => 'new', 'lastError' => describeError($ctx, $exception)));
         }
 
         writeState($root, $state);
-        updateLog($root, $updateId, 'check of channel ' . $channel . ': ' . ($state['state'] === 'checked'
-            ? $state['installedVersion'] . ' -> ' . $state['targetVersion'] : 'failed: ' . (isset($exception) ? errorDetail($exception) : '')));
+        updateLog($root, $updateId, 'check of channel ' . $channel . ($state['ref'] !== '' ? ' ' . $state['ref'] : '') . ': '
+            . ($state['state'] === 'checked' ? $state['installedVersion'] . ' -> ' . $state['targetVersionText']
+                : 'failed: ' . (isset($exception) ? errorDetail($exception) : '')));
 
         return $state;
     }, false);
 }
 
 /**
- * Start the download after the administrator confirmed the checked update.
+ * The check of a release channel: update.txt and its signature, then the checks P1-P9.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
+ */
+function releaseCheck(array $ctx, array $state, string $installedVersion, ?string $databaseVersion, int $freeSpace): array
+{
+    $root = $ctx['config']['rootPath'];
+    $info = fetchUpdateInfo($ctx['config'], $ctx['updaterPath'], $ctx['http']);
+    $release = releaseFromUpdateInfo(parseUpdateInfo($info['text']), (string)$state['channel']);
+    $checks = preflightChecks($root, $release, $installedVersion, $databaseVersion, $ctx['config']['dbType'], $freeSpace);
+
+    // From here on the update relies only on what is in its workspace.
+    $workspace = workspace($root, $state['updateId']);
+    writeFile($workspace . '/release-key.pem', $info['key']);
+    writeFile($workspace . '/update.txt', $info['text']);
+    writeFile($workspace . '/update.txt.sig', $info['signature']);
+
+    return array_merge($state, array(
+        'targetVersion' => $release['version'],
+        'targetVersionText' => $release['versionText'],
+        'versionRule' => version_compare($release['version'], $installedVersion) === 0 ? 'reinstall' : 'update',
+        'packageSize' => $release['packageSize'],
+        'packageSha256' => $release['packageSha256'],
+        'checks' => $checks
+    ));
+}
+
+/**
+ * The check of a developer channel. Only the source archive itself names its version and commit,
+ * so it is downloaded now, in one request, and the administrator confirms exactly this file: a
+ * later push to the branch is not installed by surprise.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
+ */
+function developerCheck(array $ctx, array $state, string $installedVersion, ?string $databaseVersion, int $freeSpace): array
+{
+    $root = $ctx['config']['rootPath'];
+    $file = workspace($root, $state['updateId']) . '/package.zip';
+    $url = sourceArchiveUrl($ctx['config'], (string)$state['channel'], (string)$state['ref']);
+    writeFile($file, httpGet($url, MAX_ARCHIVE_SIZE, $ctx['http']));
+    $source = readSourceArchive($file);
+
+    $release = array('version' => $source['version'], 'minimumSourceVersion' => '0.0.0', 'minimumPhpVersion' => $source['minimumPhpVersion'],
+        'packageSize' => (int)filesize($file));
+    $checks = preflightChecks($root, $release, $installedVersion, $databaseVersion, $ctx['config']['dbType'], $freeSpace, true);
+    $installedLock = is_file($root . '/composer.lock') ? (string)hash_file('sha256', $root . '/composer.lock') : '';
+    $composerChanged = $source['composerLock'] !== '' && !hash_equals($installedLock, $source['composerLock']);
+    $checks[] = array('check' => 'G1', 'status' => 'warning', 'text' => 'SYS_CORE_UPDATE_CHECK_DEVELOPER', 'params' => array($url));
+    if (!$source['hasUpdater']) {
+        // A version from before the core updater, or a branch without it: the installed updater
+        // installs its files and stays, and the database is updated by hand.
+        $checks[] = array('check' => 'G3', 'status' => 'warning', 'text' => 'SYS_CORE_UPDATE_CHECK_WITHOUT_UPDATER', 'params' => array());
+    }
+    if ($composerChanged) {
+        $checks[] = array('check' => 'G2', 'status' => 'warning', 'text' => 'SYS_CORE_UPDATE_CHECK_COMPOSER', 'params' => array());
+    }
+
+    $state = array_merge($state, array('commit' => $source['commit']));
+
+    return array_merge($state, array(
+        'targetVersion' => $source['version'],
+        'targetVersionText' => $source['version'] . ' (' . developerSource($state) . ($source['commit'] !== '' ? ' ' . substr($source['commit'], 0, 7) : '') . ')',
+        'versionRule' => 'developer',
+        'withoutUpdater' => !$source['hasUpdater'],
+        'packageSize' => $release['packageSize'],
+        'packageSha256' => (string)hash_file('sha256', $file),
+        'composerChanged' => $composerChanged,
+        'checks' => $checks
+    ));
+}
+
+/**
+ * What a source archive tells about itself: the version of its constants, the commit GitHub writes
+ * into the ZIP comment, the PHP version of its composer.json, the SHA-256 of its composer.lock and
+ * whether it contains the updater, which runs phase B.
+ * @return array{version: string, commit: string, minimumPhpVersion: string, composerLock: string, hasUpdater: bool}
+ */
+function readSourceArchive(string $file): array
+{
+    $package = openPackage($file, MAX_EXTRACTED_SIZE);
+    try {
+        $read = static function (string $path) use ($package): string {
+            $index = packageFind($package, $path);
+
+            return $index === null ? '' : packageRead($package, $index, MAX_MANIFEST_SIZE);
+        };
+
+        $version = versionFromConstants($read('system/bootstrap/constants.php'));
+        if ($version === null) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The source archive names no version in system/bootstrap/constants.php.');
+        }
+        $composer = json_decode($read('composer.json'), true);
+        $php = is_string($composer['require']['php'] ?? null) && preg_match('/(\d+\.\d+(?:\.\d+)?)/', $composer['require']['php'], $matches) === 1
+            ? $matches[1] : '0';
+        $lock = $read('composer.lock');
+        $comment = trim((string)$package['zip']->getArchiveComment());
+
+        return array(
+            'version' => $version,
+            'commit' => preg_match('/^[0-9a-f]{40}$/', $comment) === 1 ? $comment : '',
+            'minimumPhpVersion' => $php,
+            'composerLock' => $lock !== '' ? hash('sha256', $lock) : '',
+            'hasUpdater' => packageFind($package, 'install/core-update/index.php') !== null
+                && packageFind($package, 'install/core-update/lib/bootstrap.php') !== null
+        );
+    } finally {
+        $package['zip']->close();
+    }
+}
+
+/**
+ * The manifest of a source archive, which has none of its own. It lists what a release made from
+ * the archive would contain - the files that the archive.exclude rule of its composer.json leaves
+ * in, the rule of the release builder - except vendor/, which a source archive does not have. The
+ * hashes are those of the archive: the integrity of the copy, not the authenticity of the code.
+ * "developer" tells phase B that nothing is removed.
+ * @param array{zip: \ZipArchive, entries: array<int,string>} $package
+ * @return array<string,mixed>
+ */
+function developerManifest(array $package, string $version): array
+{
+    $composerIndex = packageFind($package, 'composer.json');
+    $composer = $composerIndex === null ? null : json_decode(packageRead($package, $composerIndex, MAX_MANIFEST_SIZE), true);
+    $patterns = array_values(array_filter((array)($composer['archive']['exclude'] ?? array()), 'is_string'));
+
+    $files = array();
+    $totalSize = 0;
+    foreach ($package['entries'] as $index => $path) {
+        if (str_starts_with($path, 'vendor/') || $path === 'install/update-manifest.json' || isArchiveExcluded($path, $patterns)) {
+            continue;
+        }
+
+        $hash = hash_init('sha256');
+        packageCopy($package, $index, MAX_EXTRACTED_SIZE, static function (string $chunk) use ($hash, &$totalSize): void {
+            hash_update($hash, $chunk);
+            $totalSize += strlen($chunk);
+        });
+        $files[$path] = hash_final($hash);
+    }
+    ksort($files, SORT_STRING);
+    [$directories, $rootFiles] = managedPaths(array_keys($files));
+
+    $require = is_array($composer['require'] ?? null) ? $composer['require'] : array();
+    $php = is_string($require['php'] ?? null) && preg_match('/(\d+\.\d+(?:\.\d+)?)/', $require['php'], $matches) === 1 ? $matches[1] : '0';
+    $extensions = array_values(array_map(static fn(string $name): string => substr($name, 4),
+        array_filter(array_keys($require), static fn(mixed $name): bool => is_string($name) && str_starts_with($name, 'ext-'))));
+
+    return array(
+        'version' => $version,
+        'developer' => true,
+        'managedDirectories' => $directories,
+        'managedRootFiles' => $rootFiles,
+        'preservePaths' => array(),
+        'migrationPaths' => array(),
+        'requirements' => array('php' => '>=' . $php, 'extensions' => $extensions),
+        'totalSize' => $totalSize,
+        'files' => $files
+    );
+}
+
+/**
+ * Whether the archive.exclude rule of composer.json leaves a path out of a release: the last
+ * matching pattern decides, "!" includes again, a pattern without a slash matches a name at any
+ * depth unless it starts with "/", and a pattern matches the path or one of its parent directories.
+ * The release builder uses this as well.
+ * @param array<int,string> $patterns
+ */
+function isArchiveExcluded(string $path, array $patterns): bool
+{
+    $excluded = false;
+    $parts = explode('/', $path);
+    foreach ($patterns as $pattern) {
+        $negated = str_starts_with($pattern, '!');
+        $pattern = $negated ? substr($pattern, 1) : $pattern;
+        $anchored = str_starts_with($pattern, '/') || str_contains(trim($pattern, '/'), '/');
+        $pattern = trim($pattern, '/');
+        $matches = false;
+        for ($depth = 1; $depth <= count($parts) && !$matches; $depth++) {
+            $prefix = implode('/', array_slice($parts, 0, $depth));
+            $matches = fnmatch($pattern, $prefix, FNM_PATHNAME)
+                || (!$anchored && fnmatch($pattern, $parts[$depth - 1]));
+        }
+        if ($matches) {
+            $excluded = !$negated;
+        }
+    }
+
+    return $excluded;
+}
+
+/**
+ * The managed directories and root files of a release, from the paths of its files: every top
+ * directory except adm_my_files, but in themes/ and plugins/ only the official theme and plugins,
+ * so that others there are left alone. The release builder uses this as well.
+ * @param array<int,string> $paths
+ * @return array{0: array<int,string>, 1: array<int,string>} directories and root files
+ */
+function managedPaths(array $paths): array
+{
+    $directories = array();
+    $rootFiles = array();
+    foreach ($paths as $path) {
+        $parts = explode('/', $path);
+        if (count($parts) === 1) {
+            $rootFiles[] = $path;
+        } elseif ($parts[0] === 'themes' || $parts[0] === 'plugins') {
+            if (count($parts) > 2) {
+                $directories[$parts[0] . '/' . $parts[1]] = true;
+            }
+        } elseif ($parts[0] !== 'adm_my_files') {
+            $directories[$parts[0]] = true;
+        }
+    }
+
+    return array(array_keys($directories), $rootFiles);
+}
+
+/**
+ * The texts of the updater in a source archive, language => JSON, as the release builder writes
+ * them to install/core-update/texts/: until phase B has installed the language files of the new
+ * version, the installed ones lack its texts.
+ * @param array{zip: \ZipArchive, entries: array<int,string>} $package
+ * @return array<string,string>
+ */
+function developerTexts(array $package): array
+{
+    $texts = array();
+    foreach ($package['entries'] as $index => $path) {
+        if (preg_match('#^languages/([a-z]{2,3}(?:-[A-Za-z]{2,4})?)\.xml$#', $path, $matches) === 1) {
+            $texts[$matches[1]] = json_encode(languageFileTexts(packageRead($package, $index, MAX_MANIFEST_SIZE)),
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        }
+    }
+
+    return $texts;
+}
+
+/**
+ * Start the download after the administrator confirmed the checked update. The source archive of a
+ * developer channel is already there.
  * @param array<string,mixed> $ctx
  * @return array<string,mixed>
  */
@@ -140,8 +435,12 @@ function phaseAConfirm(array $ctx, string $updateId): array
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
         }
 
-        @unlink(workspace($root, $updateId) . '/package.zip');
-        $state = array_merge($state, array('state' => 'downloading', 'downloadedBytes' => 0, 'lastError' => ''));
+        if (isDeveloperChannel((string)$state['channel'])) {
+            $state = array_merge($state, array('state' => 'downloaded', 'downloadedBytes' => $state['packageSize'], 'lastError' => ''));
+        } else {
+            @unlink(workspace($root, $updateId) . '/package.zip');
+            $state = array_merge($state, array('state' => 'downloading', 'downloadedBytes' => 0, 'lastError' => ''));
+        }
         writeState($root, $state);
 
         return $state;
@@ -247,6 +546,16 @@ function workspaceRelease(string $workspace, array $state): array
 }
 
 /**
+ * The SHA-256 the package in the workspace must have: the one of the signed update.txt, or for a
+ * developer channel the one of the source archive the administrator confirmed.
+ * @param array<string,mixed> $state
+ */
+function confirmedPackageHash(string $workspace, array $state): string
+{
+    return isDeveloperChannel((string)$state['channel']) ? (string)$state['packageSha256'] : workspaceRelease($workspace, $state)['packageSha256'];
+}
+
+/**
  * Download the next parts of the package, as many as fit into the time budget. The file is the
  * truth about what arrived, should a request have ended halfway. A server that ignores the range
  * sends the whole file at once.
@@ -311,7 +620,9 @@ function verifyAndInstallUpdater(array $ctx, array $state): array
 {
     $root = $ctx['config']['rootPath'];
     $workspace = workspace($root, $state['updateId']);
-    $release = workspaceRelease($workspace, $state);
+    if (!hash_equals(confirmedPackageHash($workspace, $state), (string)@hash_file('sha256', $workspace . '/package.zip'))) {
+        throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The package in the workspace has changed.'));
+    }
 
     try {
         $package = openPackage($workspace . '/package.zip', MAX_EXTRACTED_SIZE);
@@ -320,13 +631,18 @@ function verifyAndInstallUpdater(array $ctx, array $state): array
     }
 
     try {
-        $index = packageFind($package, 'install/update-manifest.json');
         try {
-            if ($index === null) {
-                throw UpdaterException::withDetail('SYS_CORE_UPDATE_MANIFEST_INVALID', 'The package contains no manifest.');
+            if (isDeveloperChannel((string)$state['channel'])) {
+                $manifest = developerManifest($package, (string)$state['targetVersion']);
+                $manifestJson = json_encode($manifest, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
+            } else {
+                $index = packageFind($package, 'install/update-manifest.json');
+                if ($index === null) {
+                    throw UpdaterException::withDetail('SYS_CORE_UPDATE_MANIFEST_INVALID', 'The package contains no manifest.');
+                }
+                $manifestJson = packageRead($package, $index, MAX_MANIFEST_SIZE);
+                $manifest = readManifest($manifestJson, workspaceRelease($workspace, $state)['version']);
             }
-            $manifestJson = packageRead($package, $index, MAX_MANIFEST_SIZE);
-            $manifest = readManifest($manifestJson, $release['version']);
         } catch (UpdaterException $exception) {
             throw new VerificationFailure($exception);
         }
@@ -341,7 +657,16 @@ function verifyAndInstallUpdater(array $ctx, array $state): array
         }
 
         writeFile($workspace . '/update-manifest.json', $manifestJson);
-        installUpdater($package, $manifest, $workspace . '/updater', $root);
+        // A source archive without the updater leaves the installed one, and its texts, in place.
+        if (empty($state['withoutUpdater'])) {
+            installUpdater($package, $manifest, $workspace . '/updater', $root);
+        }
+        if ($manifest['developer'] && empty($state['withoutUpdater'])) {
+            ensureDirectory($root . '/install/core-update/texts');
+            foreach (developerTexts($package) as $language => $json) {
+                writeFile($root . '/install/core-update/texts/' . $language . '.json', $json);
+            }
+        }
     } finally {
         $package['zip']->close();
     }
@@ -467,7 +792,8 @@ function describeError(array $ctx, ?Throwable $exception): string
  * @param array<string,mixed> $release
  * @return array<int,array{check: string, status: string, text: string, params: array<int,string>}>
  */
-function preflightChecks(string $root, array $release, string $installedVersion, ?string $databaseVersion, string $databaseType, int $freeSpace): array
+function preflightChecks(string $root, array $release, string $installedVersion, ?string $databaseVersion, string $databaseType, int $freeSpace,
+    bool $developer = false): array
 {
     $checks = array();
     $add = static function (string $check, string $status, string $text, array $params = array()) use (&$checks): void {
@@ -485,13 +811,21 @@ function preflightChecks(string $root, array $release, string $installedVersion,
         ? $add('P2', 'error', 'SYS_CORE_UPDATE_CHECK_EXTENSIONS_MISSING', array(implode(', ', $missing)))
         : $add('P2', 'ok', 'SYS_CORE_UPDATE_CHECK_EXTENSIONS');
 
-    // P3: the version rule and the oldest version the release can be installed on
+    // P3: the version rule and the oldest version the release can be installed on. A developer,
+    // who knows what is being tested, may install an older version after a warning.
     try {
         checkCompatibility($release, $installedVersion, PHP_VERSION);
         $rule = checkVersionRule($release['version'], $installedVersion, $databaseVersion);
         $add('P3', 'ok', $rule === 'reinstall' ? 'SYS_CORE_UPDATE_CHECK_REINSTALL' : 'SYS_CORE_UPDATE_CHECK_VERSION', array($installedVersion, $release['version']));
     } catch (UpdaterException $exception) {
-        $add('P3', 'error', $exception->getMessage(), $exception->getParams());
+        $warning = !$developer ? '' : match ($exception->getMessage()) {
+            'SYS_CORE_UPDATE_VERSION_OLDER' => 'SYS_CORE_UPDATE_CHECK_OLDER_DEVELOPER',
+            'SYS_CORE_UPDATE_DATABASE_NEWER' => 'SYS_CORE_UPDATE_CHECK_DATABASE_NEWER_DEVELOPER',
+            default => ''
+        };
+        $warning !== ''
+            ? $add('P3', 'warning', $warning, $exception->getParams())
+            : $add('P3', 'error', $exception->getMessage(), $exception->getParams());
     }
 
     // P4: no database update is waiting - the database has the version of the files

@@ -173,7 +173,8 @@ function phaseBResult(array $ctx, array $state): array
             $result['message'] = rolledBackMessage($ctx, $state);
             break;
         case 'files_installed':
-            // The page of the database update takes over.
+        case 'completed':
+            // The page of the database update, or of the result, takes over.
             $result['status'] = 'reload';
             break;
     }
@@ -446,8 +447,7 @@ function releaseFiles(array $manifest): array
 function startExtraction(array $ctx, array $state): array
 {
     $workspace = workspace($ctx['config']['rootPath'], $state['updateId']);
-    $release = workspaceRelease($workspace, $state);
-    if (!hash_equals($release['packageSha256'], (string)hash_file('sha256', $workspace . '/package.zip'))) {
+    if (!hash_equals(confirmedPackageHash($workspace, $state), (string)hash_file('sha256', $workspace . '/package.zip'))) {
         throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The package in the workspace has changed.'));
     }
 
@@ -481,7 +481,8 @@ function extractPart(array $ctx, array $state): array
         $cursor = (int)$state['cursor'];
         for ($done = 0; $cursor < count($indexes) && $done < FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
             $path = $package['entries'][$indexes[$cursor]];
-            if ($path === INSTALLED_MANIFEST || isPreserved($path, $manifest)) {
+            // A source archive also has what no installation needs: tests, the files of GitHub.
+            if ($path === INSTALLED_MANIFEST || isPreserved($path, $manifest) || ($manifest['developer'] && !isset($manifest['files'][$path]))) {
                 continue;
             }
             if (!isset($manifest['files'][$path])) {
@@ -562,9 +563,11 @@ function planPart(array $ctx, array $state): array
         return $state;
     }
 
-    // The files the release does not have, and the release's own manifest as the last file.
+    // The files the release does not have, and the release's own manifest as the last file. A
+    // source archive removes nothing, and the manifest of the installed release no longer
+    // describes the files, so it goes: the next update keeps every file it replaces.
     $removals = array();
-    foreach (obsoleteFiles($root, $manifest) as $path) {
+    foreach ($manifest['developer'] ? array() : obsoleteFiles($root, $manifest) as $path) {
         $removal = array('action' => 'delete', 'path' => $path, 'hash' => '');
         $current = is_file($root . '/' . $path) && !is_link($root . '/' . $path) ? (string)hash_file('sha256', $root . '/' . $path) : '';
         if ($current !== '' && ($keep = keepReason($inventory, $path, $current)) !== null) {
@@ -575,7 +578,11 @@ function planPart(array $ctx, array $state): array
     appendPlan($workspace, $removals);
     $manifestHash = (string)hash_file('sha256', $workspace . '/update-manifest.json');
     $installedManifest = $root . '/' . INSTALLED_MANIFEST;
-    if (!is_file($installedManifest) || !hash_equals($manifestHash, (string)hash_file('sha256', $installedManifest))) {
+    if ($manifest['developer']) {
+        if (is_file($installedManifest)) {
+            appendPlan($workspace, array(array('action' => 'delete', 'path' => INSTALLED_MANIFEST, 'hash' => '')));
+        }
+    } elseif (!is_file($installedManifest) || !hash_equals($manifestHash, (string)hash_file('sha256', $installedManifest))) {
         appendPlan($workspace, array(array('action' => is_file($installedManifest) ? 'replace' : 'create', 'path' => INSTALLED_MANIFEST,
             'hash' => $manifestHash, 'source' => 'update-manifest.json')));
     }
@@ -1019,6 +1026,8 @@ function archivePart(array $ctx, array $state): array
     if ($kept !== array()) {
         if (($state['keptArchive'] ?? '') === '') {
             $state['keptArchive'] = 'kept/' . date('Y-m-d_His') . '_' . $state['installedVersion'] . '_to_' . $state['targetVersion']
+                . (isDeveloperChannel((string)$state['channel']) ? '-' . preg_replace('/[^A-Za-z0-9.-]+/', '-', developerSource($state))
+                    . (($state['commit'] ?? '') !== '' ? '-' . substr((string)$state['commit'], 0, 7) : '') : '')
                 . '_' . bin2hex(random_bytes(3)) . '.zip';
             ensureDirectory(updatesDirectory($root) . '/kept');
         }
@@ -1176,7 +1185,7 @@ function verifyPart(array $ctx, array $state): array
             throw UpdaterException::withDetail('SYS_CORE_UPDATE_VERIFY_FAILED', $operation['path'] . ' still exists.', array($operation['path']));
         }
     }
-    if (!hash_equals((string)hash_file('sha256', $workspace . '/update-manifest.json'), (string)@hash_file('sha256', $root . '/' . INSTALLED_MANIFEST))) {
+    if (!$manifest['developer'] && !hash_equals((string)hash_file('sha256', $workspace . '/update-manifest.json'), (string)@hash_file('sha256', $root . '/' . INSTALLED_MANIFEST))) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_VERIFY_FAILED', INSTALLED_MANIFEST . ' is not the one of the release.', array(INSTALLED_MANIFEST));
     }
 
@@ -1184,6 +1193,14 @@ function verifyPart(array $ctx, array $state): array
         @opcache_reset();
     }
     saveMigrationPaths($root, $workspace, $manifest);
+
+    // A version without the updater cannot take over the database update: the update ends with
+    // its files, and the administrator runs install/update.php.
+    if (!empty($state['withoutUpdater'])) {
+        leaveMaintenance($root, (string)$state['updateId']);
+
+        return array_merge($state, array('state' => 'completed', 'databaseManual' => true, 'cursor' => 0, 'cursorTotal' => 0));
+    }
 
     return array_merge($state, array('state' => 'files_installed', 'cursor' => 0, 'cursorTotal' => 0));
 }
