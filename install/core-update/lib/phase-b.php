@@ -56,7 +56,7 @@ const INSTALLED_MANIFEST = 'install/update-manifest.json';
 /**
  * Do the next bounded piece of work of phase B.
  * @param array<string,mixed> $ctx
- * @return array{status: string, message: string, progress: int, state: string, url?: string}
+ * @return array{status: string, message: string, progress: int, state: string}
  */
 function phaseBRun(array $ctx, string $updateId): array
 {
@@ -129,7 +129,7 @@ function phaseBRun(array $ctx, string $updateId): array
  * The answer to the page for the state an update has reached.
  * @param array<string,mixed> $ctx
  * @param array<string,mixed> $state
- * @return array{status: string, message: string, progress: int, state: string, url?: string}
+ * @return array{status: string, message: string, progress: int, state: string}
  */
 function phaseBResult(array $ctx, array $state): array
 {
@@ -173,9 +173,8 @@ function phaseBResult(array $ctx, array $state): array
             $result['message'] = rolledBackMessage($ctx, $state);
             break;
         case 'files_installed':
-            $result['status'] = 'redirect';
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_FILES_INSTALLED_DB_START');
-            $result['url'] = databaseUpdateUrl($ctx['config'], (string)$state['updateId']);
+            // The page of the database update takes over.
+            $result['status'] = 'reload';
             break;
     }
 
@@ -388,12 +387,6 @@ function phaseBFinish(array $ctx, string $updateId): void
         deleteDirectory(workspace($root, $updateId));
         clearCredentialCookie($ctx['config']);
     });
-}
-
-/** @param array<string,mixed> $config */
-function databaseUpdateUrl(array $config, string $updateId): string
-{
-    return $config['baseUrl'] . '/install/update.php?core_update=' . rawurlencode($updateId);
 }
 
 // ------------------------------------------------------------------------------------------------

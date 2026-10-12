@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
 use Admidio\InstallationUpdate\Service\CoreUpdateHandover;
 use Admidio\Tests\Support\AdmidioTestCase;
+use AdmidioCoreUpdater as Updater;
 use Psr\Log\NullLogger;
 
 final class CoreUpdateHandoverTest extends AdmidioTestCase
@@ -278,23 +279,50 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox After a failed database update install/update.php knows what the updater can restore
+     * @testdox The updater page proves itself with the CSRF token of the update
      */
-    public function testDatabaseFailedRecovery(): void
+    public function testCsrfToken(): void
     {
-        $this->writeState('database_running', array('databaseStarted' => true, 'installedVersion' => '5.0.17'));
-        $this->assertFalse(CoreUpdateHandover::load(self::UPDATE_ID)->isDatabaseFailed());
-
-        CoreUpdateHandover::load(self::UPDATE_ID)->markDatabaseFailed('Unknown column');
+        $this->writeState('files_installed', array('csrfToken' => 'token-of-the-update'));
         $handover = CoreUpdateHandover::load(self::UPDATE_ID);
 
-        $this->assertTrue($handover->isDatabaseFailed());
-        $this->assertSame('5.0.17', $handover->getPreviousVersion());
-        $this->assertFalse($handover->hasDatabaseBackup());
-        $this->assertSame(ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php', $handover->getUpdaterUrl());
+        $this->assertTrue($handover->isValidCsrfToken('token-of-the-update'));
+        $this->assertFalse($handover->isValidCsrfToken('another-token'));
+        $this->assertFalse($handover->isValidCsrfToken(''));
+        $this->assertFalse($handover->isValidCsrfToken(array('token-of-the-update')));
+    }
 
-        $this->writeState('database_failed', array('databaseStarted' => true, 'dumpFile' => 'dumps/dump.zip'));
-        $this->assertTrue(CoreUpdateHandover::load(self::UPDATE_ID)->hasDatabaseBackup());
+    /**
+     * @testdox Only one request runs the database update of an update at a time
+     */
+    public function testDatabaseLock(): void
+    {
+        $this->writeState('files_installed');
+        $this->assertFalse(Updater\isDatabaseUpdateRunning($this->rootPath, self::UPDATE_ID));
+
+        $first = CoreUpdateHandover::load(self::UPDATE_ID);
+        $this->assertTrue($first->lockDatabaseUpdate());
+        $this->assertTrue($first->lockDatabaseUpdate(), 'the request keeps its lock');
+        $this->assertTrue(Updater\isDatabaseUpdateRunning($this->rootPath, self::UPDATE_ID));
+        $this->assertFalse(CoreUpdateHandover::load(self::UPDATE_ID)->lockDatabaseUpdate(), 'a second request is refused');
+
+        unset($first);
+        $this->assertFalse(Updater\isDatabaseUpdateRunning($this->rootPath, self::UPDATE_ID), 'the lock ends with the request');
+        $this->assertTrue(CoreUpdateHandover::load(self::UPDATE_ID)->lockDatabaseUpdate());
+    }
+
+    /**
+     * @testdox The notes of the database update are kept for the result page of the updater
+     */
+    public function testCompleteKeepsNotes(): void
+    {
+        $this->writeState('database_running', array('databaseStarted' => true));
+        $notes = array(array('type' => 'warning', 'text' => 'The old plugin folder adm_plugins could not be deleted.'));
+
+        CoreUpdateHandover::load(self::UPDATE_ID)->complete($notes);
+
+        $this->assertSame('completed', $this->readState()['state']);
+        $this->assertSame($notes, $this->readState()['databaseNotes']);
     }
 
     /**
@@ -359,19 +387,6 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
 
         $this->assertSame('installing', $this->readState()['state']);
         $this->assertTrue(MaintenanceMode::isEnabled());
-    }
-
-    /**
-     * @testdox The result page of the updater is the one of the update the cookie names
-     */
-    public function testResultUrl(): void
-    {
-        $this->writeState('completed');
-
-        $this->assertSame(
-            ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?action=finish',
-            CoreUpdateHandover::load(self::UPDATE_ID)->getResultUrl()
-        );
     }
 
     /**

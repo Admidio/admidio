@@ -170,7 +170,7 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox The confirmed update installs and verifies the files in maintenance mode and hands over to install/update.php
+     * @testdox The confirmed update installs and verifies the files in maintenance mode, ready for the database update
      */
     public function testInstall(): void
     {
@@ -181,8 +181,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertCount(1, U\readState($this->root, $updateId)['credentials'], 'the browser gets the updater cookie');
         $result = $this->runToDecision($context, $updateId);
 
-        $this->assertSame('redirect', $result['status'], $result['message']);
-        $this->assertSame('https://club.example.org/install/update.php?core_update=' . $updateId, $result['url']);
+        $this->assertSame('reload', $result['status'], $result['message']);
         $this->assertSame('files_installed', U\readState($this->root, $updateId)['state']);
         $this->assertSame('NEW INDEX', $this->read('index.php'));
         $this->assertSame('NEW BOOTSTRAP', $this->read('system/bootstrap/bootstrap.php'));
@@ -274,7 +273,7 @@ final class PhaseBTest extends AdmidioTestCase
 
         $result = $this->runToDecision($context, $updateId);
 
-        $this->assertSame('redirect', $result['status'], $result['message']);
+        $this->assertSame('reload', $result['status'], $result['message']);
         $this->assertSame('NEW BOOTSTRAP', $this->read('system/bootstrap/bootstrap.php'));
     }
 
@@ -313,7 +312,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertFileExists($this->root . '/adm_my_files/maintenance.json', 'maintenance mode stays on');
 
         file_put_contents($extracted, 'NEW INDEX');
-        $this->assertSame('redirect', $this->runToDecision($context, $updateId)['status'], 'continued after the cause was fixed');
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status'], 'continued after the cause was fixed');
         $this->assertSame('NEW INDEX', $this->read('index.php'));
     }
 
@@ -386,7 +385,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame(array('system/bootstrap/bootstrap.php' => 'modified', 'src/Unknown.php' => 'unknown'), $keep);
 
         U\phaseBConfirm($context, $updateId, 'own');
-        $this->assertSame('redirect', $this->runToDecision($context, $updateId)['status']);
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
 
         $archive = U\updatesDirectory($this->root) . '/' . U\readState($this->root, $updateId)['keptArchive'];
         $this->assertMatchesRegularExpression('#/kept/\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_to_5\.1\.0_[a-f0-9]{6}\.zip$#', $archive);

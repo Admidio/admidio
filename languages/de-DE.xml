@@ -435,7 +435,6 @@
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
   <string name="SYS_COPY_VAR">#VAR1# kopieren</string>
   <string name="SYS_CORE_UPDATE_ADMIDIO_LOGIN">Melden Sie sich als Administrator bei Admidio an, um das Update zu starten oder fortzusetzen.</string>
-  <string name="SYS_CORE_UPDATE_ALREADY_COMPLETED">Das Update wurde bereits abgeschlossen.</string>
   <string name="SYS_CORE_UPDATE_ALREADY_RUNNING">Ein anderes Update von Admidio läuft bereits. Warten Sie, bis es abgeschlossen ist, oder setzen Sie es im Updater fort.</string>
   <string name="SYS_CORE_UPDATE_ARCHIVING">Die geänderten und unbekannten Dateien werden im Archiv gespeichert ...</string>
   <string name="SYS_CORE_UPDATE_BACKUP">Sicherung der Datenbank</string>
@@ -472,13 +471,16 @@
   <string name="SYS_CORE_UPDATE_CONTINUE">Weiter</string>
   <string name="SYS_CORE_UPDATE_CONTINUE_DESC">Setzen Sie das Update fort, sobald die Ursache des Fehlers behoben ist, zum Beispiel die Dateirechte auf dem Server. Es macht bei der Datei weiter, bei der es unterbrochen wurde.</string>
   <string name="SYS_CORE_UPDATE_CONTINUE_UPDATE">Update fortsetzen</string>
-  <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">Die Dateien sind installiert. Setzen Sie das Datenbank-Update fort.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED">Die Aktualisierung der Datenbank auf Version #VAR1# konnte nicht abgeschlossen werden. Das automatische Update hat eine vollständige Sicherung der bisher installierten Version #VAR2# aufbewahrt, mit ihrer Datenbank und allen ihren Dateien. Bis Sie die Aktualisierung der Datenbank erfolgreich wiederholen oder die Version #VAR2# wiederherstellen, bleibt Admidio im Wartungsmodus.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED_OWN">Die Aktualisierung der Datenbank auf Version #VAR1# konnte nicht abgeschlossen werden. Das automatische Update hat alle Dateien der bisher installierten Version #VAR2# aufbewahrt; ihre Datenbank kann aus Ihrer eigenen Sicherung wiederhergestellt werden. Bis Sie die Aktualisierung der Datenbank erfolgreich wiederholen oder die Version #VAR2# wiederherstellen, bleibt Admidio im Wartungsmodus.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED_TITLE">Die Aktualisierung der Datenbank konnte nicht abgeschlossen werden</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_INTERRUPTED">Die Aktualisierung der Datenbank wurde gestartet, hat sich aber nicht zurückgemeldet. Sie läuft möglicherweise noch oder wurde abgebrochen, zum Beispiel durch ein Zeitlimit des Webservers. Warten Sie einige Minuten und laden Sie diese Seite neu. Hat sich nichts geändert, wiederholen Sie die Aktualisierung der Datenbank: Sie macht mit dem Schritt weiter, den sie erreicht hatte.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_NEWER">Die Datenbank hat bereits die Version #VAR1#. Version #VAR2# ist älter und kann nicht installiert werden.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_RETRY">Aktualisierung der Datenbank wiederholen</string>
   <string name="SYS_CORE_UPDATE_DATABASE_RETRY_DESC">Wiederholen Sie die Aktualisierung der Datenbank, sobald die Ursache des Fehlers behoben ist, zum Beispiel mit Hilfe des Admidio-Forums. Sie macht mit dem Schritt weiter, der fehlgeschlagen ist.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_RUNNING">Die Datenbank wird bereits aktualisiert. Warten Sie, bis diese Aktualisierung abgeschlossen ist.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_TITLE">Aktualisierung der Datenbank</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_UPDATING">Die Datenbank wird auf die Version #VAR1# aktualisiert. Das kann einige Minuten dauern. Bitte lassen Sie diese Seite geöffnet.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD">Herunterladen und vorbereiten</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">Das Update-Paket konnte nicht heruntergeladen werden. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">Die Download-Adresse des Updates ist ungültig oder nicht erlaubt.</string>
@@ -489,7 +491,6 @@
   <string name="SYS_CORE_UPDATE_ERROR_DETAILS">Fehlerdetails für einen Fehlerbericht</string>
   <string name="SYS_CORE_UPDATE_EXTRACTING">Das Update-Paket wird entpackt ...</string>
   <string name="SYS_CORE_UPDATE_FILE_FAILED">Die Datei #VAR1# konnte nicht installiert werden. Prüfen Sie die Dateirechte auf dem Server.</string>
-  <string name="SYS_CORE_UPDATE_FILES_INSTALLED_DB_START">Alle Dateien sind installiert und geprüft. Weiter mit dem Datenbank-Update.</string>
   <string name="SYS_CORE_UPDATE_FILES_INSTALLING">Die Dateien der neuen Version werden installiert ...</string>
   <string name="SYS_CORE_UPDATE_FILES_NOT_WRITABLE">Admidio kann seine eigenen Dateien oder adm_my_files nicht schreiben. Prüfen Sie die Dateiberechtigungen auf dem Server.</string>
   <string name="SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK">Die Dateien wurden auf die vorherige Version zurückgesetzt. Die Datenbank wurde nicht verändert.</string>
@@ -539,8 +540,9 @@
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION">Version #VAR1# wiederherstellen</string>
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION_DESC">Empfohlen. Stellt zuerst die Datenbank aus der Sicherung vor dem Update und dann die Dateien der Version #VAR1# wieder her. Admidio funktioniert danach genau wie vor dem Update, und Sie können das Update später erneut installieren, zum Beispiel sobald eine korrigierte Version verfügbar ist.</string>
   <string name="SYS_CORE_UPDATE_RESTORING_DATABASE">Die Datenbank wird wiederhergestellt ...</string>
-  <string name="SYS_CORE_UPDATE_REVIEW_BACKUP">Bevor eine Datei ersetzt oder entfernt wird, wird eine Kopie davon in adm_my_files/core-update gespeichert. Bis die Datenbank aktualisiert wird, kann das Update alle bisherigen Dateien wiederherstellen.</string>
-  <string name="SYS_CORE_UPDATE_REVIEW_DESC">Während die Dateien ersetzt werden, ist Admidio im Wartungsmodus und Besucher sehen eine Wartungsseite. Danach wird die Datenbank aktualisiert, was nicht rückgängig gemacht werden kann.</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_DESC">Die Version #VAR1# wird durch die Version #VAR2# ersetzt. Während des Updates ist Admidio im Wartungsmodus und Besucher sehen eine Wartungsseite. Das Update bewahrt zuerst eine Kopie jeder Datei auf, die es ersetzt oder entfernt, damit die bisherige Version wiederhergestellt werden kann, falls etwas schiefgeht.</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_DETAILS">Details der Änderungen</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_TITLE">Bereit für das Update auf Version #VAR1#</string>
   <string name="SYS_CORE_UPDATE_ROLLBACK_REQUIRED">Es ist nichts verloren: Das Update hat alle bisherigen Dateien aufbewahrt, und die Datenbank wurde noch nicht verändert. Bis Sie das Update fortsetzen oder die Version #VAR1# wiederherstellen, bleibt Admidio im Wartungsmodus.</string>
   <string name="SYS_CORE_UPDATE_ROLLING_BACK">Die bisherigen Dateien werden wiederhergestellt ...</string>
   <string name="SYS_CORE_UPDATE_SECURITY_CODE">Sicherheitscode (nur wenn die Zwei-Faktor-Authentifizierung eingerichtet ist)</string>

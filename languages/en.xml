@@ -442,7 +442,6 @@
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_CORE_UPDATE_ADMIDIO_LOGIN">Log in to Admidio as an administrator to start or continue the update.</string>
-  <string name="SYS_CORE_UPDATE_ALREADY_COMPLETED">The update has already been completed.</string>
   <string name="SYS_CORE_UPDATE_ALREADY_RUNNING">Another update of Admidio is already in progress. Wait until it has finished, or continue it in the updater.</string>
   <string name="SYS_CORE_UPDATE_ARCHIVING">Saving the changed and unknown files in the archive ...</string>
   <string name="SYS_CORE_UPDATE_BACKUP">Backup of the database</string>
@@ -479,13 +478,16 @@
   <string name="SYS_CORE_UPDATE_CONTINUE">Continue</string>
   <string name="SYS_CORE_UPDATE_CONTINUE_DESC">Continue the update once the cause of the error has been fixed, for example the file permissions on the server. It continues with the file at which it stopped.</string>
   <string name="SYS_CORE_UPDATE_CONTINUE_UPDATE">Continue the update</string>
-  <string name="SYS_CORE_UPDATE_DATABASE_CONTINUE">The files are installed. Continue with the database update.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED">The database update to version #VAR1# could not be finished. The automatic update has kept a complete backup of the previously installed version #VAR2#, with its database and all its files. Until you retry the database update successfully or restore version #VAR2#, Admidio stays in maintenance mode.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED_OWN">The database update to version #VAR1# could not be finished. The automatic update has kept all files of the previously installed version #VAR2#; its database can be restored from your own backup. Until you retry the database update successfully or restore version #VAR2#, Admidio stays in maintenance mode.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_FAILED_TITLE">The database update could not be finished</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_INTERRUPTED">The database update was started but has not reported back. It may still be running, or it was interrupted, for example by a time limit of the web server. Wait a few minutes and reload this page. If nothing has changed, retry the database update: it continues with the step it had reached.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_NEWER">The database already has version #VAR1#. Version #VAR2# is older and cannot be installed.</string>
   <string name="SYS_CORE_UPDATE_DATABASE_RETRY">Retry the database update</string>
   <string name="SYS_CORE_UPDATE_DATABASE_RETRY_DESC">Retry the database update once the cause of the error has been fixed, for example with help from the Admidio forum. It continues with the step that failed.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_RUNNING">The database is already being updated. Wait until this update has finished.</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_TITLE">Updating the database</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_UPDATING">The database is being updated to version #VAR1#. This can take several minutes. Please keep this page open.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD">Download and prepare</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">The update package could not be downloaded. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">The download address of the update is invalid or not allowed.</string>
@@ -496,7 +498,6 @@
   <string name="SYS_CORE_UPDATE_ERROR_DETAILS">Error details for a bug report</string>
   <string name="SYS_CORE_UPDATE_EXTRACTING">Unpacking the update package ...</string>
   <string name="SYS_CORE_UPDATE_FILE_FAILED">The file #VAR1# could not be installed. Check the file permissions on the server.</string>
-  <string name="SYS_CORE_UPDATE_FILES_INSTALLED_DB_START">All files are installed and verified. Continue with the database update.</string>
   <string name="SYS_CORE_UPDATE_FILES_INSTALLING">Installing the files of the new version ...</string>
   <string name="SYS_CORE_UPDATE_FILES_NOT_WRITABLE">Admidio cannot write to its own files or to adm_my_files. Check the file permissions on the server.</string>
   <string name="SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK">The files have been restored to the previous version. The database was not changed.</string>
@@ -546,8 +547,9 @@
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION">Restore version #VAR1#</string>
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION_DESC">Recommended. Brings back the database from the backup made before the update, and then the files of version #VAR1#. Admidio then works exactly as before the update, and you can install the update again later, for example once a corrected version is available.</string>
   <string name="SYS_CORE_UPDATE_RESTORING_DATABASE">Restoring the database ...</string>
-  <string name="SYS_CORE_UPDATE_REVIEW_BACKUP">Before a file is replaced or removed, a copy of it is saved in adm_my_files/core-update. Until the database update starts, the update can restore all previous files.</string>
-  <string name="SYS_CORE_UPDATE_REVIEW_DESC">While the files are replaced, Admidio is in maintenance mode and visitors see a maintenance page. Afterwards the database is updated, which cannot be undone.</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_DESC">Version #VAR1# is replaced by version #VAR2#. During the update Admidio is in maintenance mode and visitors see a maintenance page. The update first keeps a copy of every file it replaces or removes, so that the previous version can be restored if anything goes wrong.</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_DETAILS">Details of the changes</string>
+  <string name="SYS_CORE_UPDATE_REVIEW_TITLE">Ready to update to version #VAR1#</string>
   <string name="SYS_CORE_UPDATE_ROLLBACK_REQUIRED">Nothing has been lost: the update has kept all previous files, and the database has not been changed yet. Until you continue the update or restore version #VAR1#, Admidio stays in maintenance mode.</string>
   <string name="SYS_CORE_UPDATE_ROLLING_BACK">Restoring the previous files ...</string>
   <string name="SYS_CORE_UPDATE_SECURITY_CODE">Security code (only if two-factor authentication is set up)</string>

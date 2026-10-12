@@ -439,6 +439,46 @@ function withLock(string $rootPath, callable $function, bool $wait = true): mixe
 }
 
 /**
+ * The lock that the database update of an update holds while it runs, in install/update.php. It
+ * keeps a second migration from starting next to it, for example when a proxy cut off the answer
+ * of the first one and the page retried. The lock ends with the request, also when it dies.
+ * @return resource|null The open lock, or null if another request holds it.
+ */
+function lockDatabaseUpdate(string $rootPath, string $updateId)
+{
+    $handle = @fopen(workspace($rootPath, $updateId) . '/database.lock', 'c');
+    if ($handle === false) {
+        throw new UpdaterException('SYS_CORE_UPDATE_FILES_NOT_WRITABLE');
+    }
+    if (!flock($handle, LOCK_EX | LOCK_NB)) {
+        fclose($handle);
+
+        return null;
+    }
+
+    return $handle;
+}
+
+/**
+ * Whether the database update of an update is running right now.
+ */
+function isDatabaseUpdateRunning(string $rootPath, string $updateId): bool
+{
+    if (!is_file(workspace($rootPath, $updateId) . '/database.lock')) {
+        return false;
+    }
+
+    $handle = lockDatabaseUpdate($rootPath, $updateId);
+    if ($handle === null) {
+        return true;
+    }
+    flock($handle, LOCK_UN);
+    fclose($handle);
+
+    return false;
+}
+
+/**
  * Start a new update and make it the active one. Only one update can be unfinished.
  * @param array<string,mixed> $fields
  * @return array<string,mixed> The state of the new update.

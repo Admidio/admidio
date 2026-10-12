@@ -65,17 +65,6 @@ try {
             exit;
         }
 
-        if (($_GET['action'] ?? '') === 'finish' && U\activeUpdateId($rootPath) === null) {
-            // The result page of an update that another browser finished: nothing to start.
-            coreUpdatePage(
-                $texts,
-                null,
-                coreUpdateAlert('success', U\h(U\text($texts, 'SYS_CORE_UPDATE_ALREADY_COMPLETED'))),
-                coreUpdateOpenAdmidio($config, $texts)
-            );
-            exit;
-        }
-
         $updateId = U\activeUpdateId($rootPath)
             ?? U\createUpdate($rootPath, array('installedVersion' => U\filesVersion($rootPath)))['updateId'];
     }
@@ -432,6 +421,8 @@ function coreUpdateHandlePhaseB(array $context, array $state, bool $isPost, stri
                 U\phaseBRestore($context, $updateId, !empty($_POST['own_database_restored']));
                 header('Location: index.php', true, 303);
             })(),
+            'database_status' => U\jsonResponse(array('state' => (string)$state['state'],
+                'running' => U\isDatabaseUpdateRunning($config['rootPath'], $updateId))),
             'cancel' => (static function () use ($context, $updateId, $config, $texts): void {
                 U\phaseBCancel($context, $updateId);
                 coreUpdatePage($texts, null, coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_CANCELLED'))),
@@ -461,31 +452,37 @@ function coreUpdateShowPhaseB(array $context, array $state): void
 
     switch ($state['state']) {
         case 'review':
+            // The decision comes first; what changes in detail is folded away.
             $plan = (array)($state['plan'] ?? array());
             $checks = (array)($state['planChecks'] ?? array());
-            $list = '';
+            $problems = array_filter($checks, static fn(array $check): bool => $check['status'] !== 'ok');
+            $target = (string)($state['targetVersionText'] ?? $state['targetVersion']);
+
+            $counts = '';
             foreach (array('create' => 'SYS_CORE_UPDATE_PLAN_CREATE', 'replace' => 'SYS_CORE_UPDATE_PLAN_REPLACE',
                 'delete' => 'SYS_CORE_UPDATE_PLAN_DELETE', 'unchanged' => 'SYS_CORE_UPDATE_PLAN_UNCHANGED') as $key => $text) {
-                $list .= '<li>' . U\h(U\text($texts, $text, array((string)($plan[$key] ?? 0)))) . '</li>';
+                $counts .= '<li>' . U\h(U\text($texts, $text, array((string)($plan[$key] ?? 0)))) . '</li>';
             }
             $operations = U\readPlan(U\workspace($config['rootPath'], (string)$state['updateId']));
             $paths = static fn(callable $filter): array => array_column(array_filter($operations, $filter), 'path');
             $fileList = static fn(string $title, array $files): string => $files === array() ? ''
                 : '<details class="mb-2"><summary>' . U\h(U\text($texts, $title)) . ' (' . count($files) . ')</summary><ul>'
                     . implode('', array_map(static fn(string $path): string => '<li>' . U\h($path) . '</li>', $files)) . '</ul></details>';
-            $files = $fileList('SYS_CORE_UPDATE_PLAN_DELETED_FILES', $paths(static fn(array $operation): bool => $operation['action'] === 'delete'))
+            $details = '<details class="mb-4"><summary>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_DETAILS')) . '</summary>'
+                . '<ul class="mt-2">' . $counts . '</ul>'
+                . ((int)($plan['kept'] ?? 0) === 0 ? '' : '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_DESC', array((string)$plan['kept'])))
+                    . (empty($plan['inventory']) ? ' ' . U\h(U\text($texts, 'SYS_CORE_UPDATE_NO_INVENTORY')) : '') . '</p>')
+                . $fileList('SYS_CORE_UPDATE_PLAN_DELETED_FILES', $paths(static fn(array $operation): bool => $operation['action'] === 'delete'))
                 . $fileList('SYS_CORE_UPDATE_PLAN_MODIFIED_FILES', $paths(static fn(array $operation): bool => ($operation['keep'] ?? '') === 'modified'))
-                . $fileList('SYS_CORE_UPDATE_PLAN_UNKNOWN_FILES', $paths(static fn(array $operation): bool => ($operation['keep'] ?? '') === 'unknown'));
-            $kept = (int)($plan['kept'] ?? 0) === 0 ? ''
-                : coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_DESC', array((string)$plan['kept'])))
-                    . (empty($plan['inventory']) ? ' ' . U\h(U\text($texts, 'SYS_CORE_UPDATE_NO_INVENTORY')) : ''));
+                . $fileList('SYS_CORE_UPDATE_PLAN_UNKNOWN_FILES', $paths(static fn(array $operation): bool => ($operation['keep'] ?? '') === 'unknown'))
+                . '</details>';
 
             // The backup of the database: by the updater where it can, or confirmed by the administrator.
             $canDump = (string)($state['dumpMethod'] ?? '') !== '';
             $radio = static fn(string $value, string $label, bool $checked): string => '<div class="form-check">'
                 . '<input class="form-check-input" type="radio" name="backup" id="backup_' . $value . '" value="' . $value . '" form="install-form" required'
-                . ($checked ? ' checked' : '') . '><label class="form-check-label" for="backup_' . $value . '">' . U\h(U\text($texts, $label)) . '</label></div>';
-            $backup = '<fieldset class="mt-4"><legend class="fs-5">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP')) . '</legend>'
+                . ($checked ? ' checked' : '') . '><label class="form-check-label fw-normal" for="backup_' . $value . '">' . U\h(U\text($texts, $label)) . '</label></div>';
+            $backup = '<fieldset class="mb-4"><legend class="fs-5">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP')) . '</legend>'
                 . ($canDump ? $radio('dump', 'SYS_CORE_UPDATE_BACKUP_DATABASE', true)
                     : coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_BACKUP_NOT_POSSIBLE'))))
                 . $radio('own', 'SYS_CORE_UPDATE_BACKUP_OWN', false) . '</fieldset>';
@@ -500,15 +497,12 @@ function coreUpdateShowPhaseB(array $context, array $state): void
             coreUpdatePage(
                 $texts,
                 $state,
-                $error
-                    . '<dl class="core-update-versions"><dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>' . U\h($previous) . '</dd>'
-                    . '<dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_TARGET')) . '</dt><dd>' . U\h((string)($state['targetVersionText'] ?? $state['targetVersion'])) . '</dd></dl>'
-                    . '<ul>' . $list . '</ul>'
-                    . coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_BACKUP')))
-                    . $kept . $files
-                    . '<h4 class="mt-4">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_CHECKS')) . '</h4>' . coreUpdateCheckList($checks, $texts)
-                    . $backup
-                    . coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_DESC'))),
+                '<h3>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_TITLE', array($target))) . '</h3>'
+                    . $error
+                    . ($problems !== array() ? '<div class="alert alert-' . (U\checksHaveErrors($checks) ? 'danger' : 'warning') . '" role="alert">' . coreUpdateCheckList($problems, $texts) . '</div>' : '')
+                    . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_DESC', array($previous, $target))) . '</p>'
+                    . (U\checksHaveErrors($checks) ? '' : $backup)
+                    . $details,
                 $actions
             );
             break;
@@ -554,25 +548,35 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                 '<h3>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_FAILED_TITLE')) . '</h3>'
                     . coreUpdateAlert('warning', U\h(U\text($texts, $canRestore ? 'SYS_CORE_UPDATE_DATABASE_FAILED' : 'SYS_CORE_UPDATE_DATABASE_FAILED_OWN',
                         array((string)($state['targetVersionText'] ?? $state['targetVersion']), $previous))))
+                    . coreUpdateDatabaseMessage($state, $texts, true)
                     . '<div class="core-update-actions">' . $restore
-                    . coreUpdateLink(U\databaseUpdateUrl($config, (string)$state['updateId']), 'bi-arrow-repeat',
-                        U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY'), true) . '</div>'
+                    . '<button class="btn btn-secondary" id="database-button" type="button"><i class="bi bi-arrow-repeat"></i>'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY')) . '</button></div>'
                     . coreUpdateChoices($texts, array(
                         U\text($texts, 'SYS_CORE_UPDATE_RESTORE_VERSION', array($previous))
                             => U\text($texts, $canRestore ? 'SYS_CORE_UPDATE_RESTORE_VERSION_DESC' : 'SYS_CORE_UPDATE_RESTORE_OWN_DESC', array($previous)),
                         U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY') => U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY_DESC')
                     ))
-                    . coreUpdateErrorDetails($state, $texts, true)
+                    . coreUpdateErrorDetails($state, $texts, true),
+                coreUpdateDatabaseScript($state, $texts, '')
             );
             break;
 
         case 'files_installed':
         case 'database_running':
+            // The page starts the database update as soon as the files are installed, and waits for
+            // one that is running. One that was started and no longer runs was cut off.
+            $interrupted = $state['state'] === 'database_running'
+                && !U\isDatabaseUpdateRunning($config['rootPath'], (string)$state['updateId']);
             coreUpdatePage(
                 $texts,
                 $state,
-                coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_CONTINUE'))) . $error,
-                coreUpdateLink(U\databaseUpdateUrl($config, (string)$state['updateId']), 'bi-database', U\text($texts, 'SYS_CORE_UPDATE_CONTINUE'))
+                '<h3>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_TITLE')) . '</h3>'
+                    . ($interrupted ? coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_INTERRUPTED'))) : '')
+                    . coreUpdateDatabaseMessage($state, $texts, $interrupted),
+                '<button class="btn btn-primary" id="database-button" type="button"' . ($interrupted ? '' : ' hidden') . '><i class="bi bi-arrow-repeat"></i>'
+                    . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY')) . '</button>'
+                    . coreUpdateDatabaseScript($state, $texts, $interrupted ? '' : ($state['state'] === 'files_installed' ? 'start' : 'wait'))
             );
             break;
 
@@ -585,6 +589,8 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                 coreUpdateAlert('success', U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)$state['targetVersion']))))
                     . ((string)($state['dumpFile'] ?? '') !== ''
                         ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</p>' : '')
+                    . implode('', array_map(static fn(array $note): string => coreUpdateAlert($note['type'] === 'info' ? 'info' : 'warning',
+                        nl2br(U\h((string)$note['text']))), (array)($state['databaseNotes'] ?? array())))
                     . ((string)($state['keptArchive'] ?? '') !== ''
                         ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/core-update/' . $state['keptArchive']))) . '</p>' : ''),
                 coreUpdateOpenAdmidio($config, $texts)
@@ -698,7 +704,7 @@ function coreUpdateCheckList(array $checks, array $texts): string
             . U\h(U\text($texts, $check['text'], $check['params'])) . '</span></li>';
     }
 
-    return '<ul class="list-unstyled">' . $list . '</ul>';
+    return '<ul class="list-unstyled mb-0">' . $list . '</ul>';
 }
 
 /**
@@ -732,8 +738,98 @@ function coreUpdateErrorDetails(array $state, array $texts, bool $withError): st
 }
 
 /**
+ * The notice that the database is being updated, which the script of the database update shows.
+ * @param array<string,mixed> $state
+ * @param array{language: string, texts: array<string,string>} $texts
+ */
+function coreUpdateDatabaseMessage(array $state, array $texts, bool $hidden): string
+{
+    return '<div id="database-message" class="alert alert-info" role="status"' . ($hidden ? ' hidden' : '') . '>'
+        . '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>'
+        . U\h(U\text($texts, 'SYS_CORE_UPDATE_DATABASE_UPDATING', array((string)($state['targetVersionText'] ?? $state['targetVersion'])))) . '</div>';
+}
+
+/**
+ * The script that has install/update.php of the new release update the database, in one request
+ * that may take minutes. Afterwards the page shows the result or the failure from the state. When
+ * the answer is lost, for example because a proxy cut off the request, it asks the updater until
+ * the database update no longer runs.
+ * @param array<string,mixed> $state
+ * @param array{language: string, texts: array<string,string>} $texts
+ * @param string $begin "start" the database update, "wait" for the one that runs, or "" for neither.
+ */
+function coreUpdateDatabaseScript(array $state, array $texts, string $begin): string
+{
+    return '<script>
+        const csrfToken = ' . U\js((string)$state['csrfToken']) . ';
+        const requestFailedText = ' . U\js(U\text($texts, 'SYS_CORE_UPDATE_REQUEST_FAILED')) . ';
+        const message = document.getElementById("database-message");
+        const runningMessage = message.innerHTML;
+        const databaseButton = document.getElementById("database-button");
+        const buttons = document.querySelectorAll("button");
+
+        async function post(url, data) {
+            try {
+                const response = await fetch(url, {method: "POST", credentials: "same-origin",
+                    body: new URLSearchParams(Object.assign({csrf_token: csrfToken}, data))});
+                return await response.json();
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function showError(text) {
+            message.className = "alert alert-danger";
+            message.textContent = text || requestFailedText;
+            buttons.forEach(button => button.disabled = false);
+            databaseButton.hidden = false;
+        }
+
+        function showRunning() {
+            buttons.forEach(button => button.disabled = true);
+            message.className = "alert alert-info";
+            message.innerHTML = runningMessage;
+            message.hidden = false;
+        }
+
+        async function waitForDatabase() {
+            showRunning();
+            while (true) {
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                const status = await post("index.php", {action: "database_status"});
+                if (status === null || status.running) {
+                    continue;
+                }
+                if (status.state === "files_installed") {
+                    // The request never got as far as the database.
+                    showError(requestFailedText);
+                    return;
+                }
+                window.location.reload();
+                return;
+            }
+        }
+
+        async function updateDatabase() {
+            showRunning();
+            const result = await post("../update.php?mode=core_update", {});
+            if (result === null || result.status === "running") {
+                waitForDatabase();
+            } else if (result.status === "success" || result.state === "database_failed") {
+                window.location.reload();
+            } else {
+                showError(result.message);
+            }
+        }
+
+        databaseButton.addEventListener("click", updateDatabase);
+        ' . ($begin === 'start' ? 'updateDatabase();' : ($begin === 'wait' ? 'waitForDatabase();' : '')) . '
+    </script>';
+}
+
+/**
  * The script that sends one request after the other until the update reaches a point where the
- * administrator decides, and then reloads the page or follows the redirect.
+ * administrator decides, or the database update, and then reloads the page.
  * @param array<string,mixed> $state
  * @param array{language: string, texts: array<string,string>} $texts
  */
@@ -771,11 +867,7 @@ function coreUpdateRunScript(array $state, array $texts, bool $start): string
                 if (progress) {
                     progress.style.width = (result.progress || 0) + "%";
                 }
-                if (result.status === "redirect") {
-                    window.location.href = result.url;
-                    return;
-                }
-                if (result.status === "review" || result.status === "rolled_back" || result.state === "rollback_required"
+                if (result.status === "review" || result.status === "reload" || result.status === "rolled_back" || result.state === "rollback_required"
                     || (result.state && !showStep(result.state))) {
                     window.location.reload();
                     return;

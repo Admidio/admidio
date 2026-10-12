@@ -14,10 +14,11 @@ require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
 /**
  * The side of an automatic core update that install/update.php sees.
  *
- * The core updater in install/core-update/ replaces the files and then hands over to the database
- * update. install/update.php runs the code of the new release, so it is the one that finishes the
- * update: it runs the migration, records whether it worked and switches maintenance mode off
- * again - in the same request, whether or not a browser is still waiting for the answer.
+ * The core updater in install/core-update/ replaces the files and then has the database updated.
+ * install/update.php runs the code of the new release, so the updater page calls it for that
+ * (mode core_update) and shows the result itself. The script runs the migration, records whether it
+ * worked and switches maintenance mode off again - in the same request, whether or not a browser
+ * is still waiting for the answer.
  *
  * The rules for that are kept here and not in the script, so that they can be tested:
  *
@@ -28,9 +29,9 @@ require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
  *   being copied.
  * - Maintenance mode that a core update switched on is only switched off by the migration that
  *   finishes this update.
- * - The updater cookie lets the administrator who started the update continue without another
- *   login. Without it, the normal administrator login of install/update.php is the proof of
- *   identity.
+ * - The updater page proves who it is with the updater cookie and the CSRF token of the update.
+ *   Somebody who runs install/update.php by hand logs in there as an administrator, as for every
+ *   manual update, and the migration then finishes the core update as well.
  *
  * The state and the cookie belong to the updater, so they are read and written with its functions,
  * which this file loads directly from install/core-update/lib/common.php.
@@ -67,6 +68,12 @@ final class CoreUpdateHandover
      * Overrides the installation directory in which the updates are kept. Only used by tests.
      */
     private static ?string $testRootPath = null;
+
+    /**
+     * The lock of the database update while this request runs it.
+     * @var resource|null
+     */
+    private $databaseLock = null;
 
     /**
      * @param string $rootPath
@@ -177,6 +184,18 @@ final class CoreUpdateHandover
     }
 
     /**
+     * Take the lock of the database update for the rest of this request. Only one request may run
+     * the migration of an update at a time.
+     * @return bool **false** if another request is running it.
+     */
+    public function lockDatabaseUpdate(): bool
+    {
+        $this->databaseLock ??= Updater\lockDatabaseUpdate($this->rootPath, $this->updateId);
+
+        return $this->databaseLock !== null;
+    }
+
+    /**
      * Record that the database update starts. From here on the files of the old release can no
      * longer be put back, because the database may already be ahead of them.
      * @return void
@@ -195,28 +214,30 @@ final class CoreUpdateHandover
      */
     public function markDatabaseFailed(string $error): void
     {
-        // The error of a failed update step is the HTML page of Database::showError(); the updater
-        // and the log show it as text, line by line.
-        $error = (string)preg_replace('/<(br|\/p|\/div|\/li|\/tr|\/h\d)\b[^>]*>/i', "\n", $error);
-        $error = html_entity_decode(strip_tags($error), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        $error = trim((string)preg_replace(array('/[^\S\n]+/', '/ ?\n ?/', '/\n{2,}/'), array(' ', "\n", "\n"), $error));
+        $error = self::toText($error);
         $this->update(array('state' => self::STATE_DATABASE_FAILED, 'lastError' => $error));
         Updater\updateLog($this->rootPath, $this->updateId, 'state database_failed: ' . $error);
     }
 
     /**
      * Record that the database is up to date and switch off the maintenance mode of this update.
+     * @param array<int,array{type: string, text: string}> $notes What the database update reports
+     *        about the installation, for example about plugins it could not move; the updater
+     *        shows it with the result.
      * @return void
      * @throws Exception The files are not installed yet.
      */
-    public function complete(): void
+    public function complete(array $notes = array()): void
     {
         if (!$this->isMigrationAllowed()) {
             throw new Exception('SYS_CORE_UPDATE_IN_PROGRESS');
         }
 
-        $this->update(array('state' => self::STATE_COMPLETED, 'lastError' => ''));
+        $this->update(array('state' => self::STATE_COMPLETED, 'lastError' => '', 'databaseNotes' => $notes));
         Updater\updateLog($this->rootPath, $this->updateId, 'state completed: database updated');
+        foreach ($notes as $note) {
+            Updater\updateLog($this->rootPath, $this->updateId, $note['type'] . ': ' . $note['text']);
+        }
 
         $maintenance = MaintenanceMode::getState();
         if ($maintenance !== null && ($maintenance['owner'] ?? '') === self::MAINTENANCE_OWNER_PREFIX . $this->updateId) {
@@ -225,49 +246,28 @@ final class CoreUpdateHandover
     }
 
     /**
-     * Whether the database update of this core update failed: the updater offers to retry it or
-     * to restore the previous version.
+     * Whether a request carries the CSRF token of this update, which the updater page sends.
+     * @param mixed $token
      * @return bool
      */
-    public function isDatabaseFailed(): bool
+    public function isValidCsrfToken(mixed $token): bool
     {
-        return $this->getState() === self::STATE_DATABASE_FAILED;
+        return $this->state !== array() && Updater\isValidCsrfToken($this->state, $token);
     }
 
     /**
-     * The version that was installed before the update, which the updater can restore.
+     * A message of Admidio as text for the updater, which shows no HTML of the installation, line
+     * by line. The error of a failed update step, for example, is the HTML page of
+     * Database::showError().
+     * @param string $html
      * @return string
      */
-    public function getPreviousVersion(): string
+    public static function toText(string $html): string
     {
-        return (string)($this->state['installedVersion'] ?? '');
-    }
+        $text = (string)preg_replace('/<(br|\/p|\/div|\/li|\/tr|\/h\d)\b[^>]*>/i', "\n", $html);
+        $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
-    /**
-     * Whether the updater backed up the database before the update, so that it can restore it.
-     * @return bool
-     */
-    public function hasDatabaseBackup(): bool
-    {
-        return (string)($this->state['dumpFile'] ?? '') !== '';
-    }
-
-    /**
-     * Address of the updater page, which shows a failed database update and its choices.
-     * @return string
-     */
-    public function getUpdaterUrl(): string
-    {
-        return ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php';
-    }
-
-    /**
-     * Address of the updater page that shows the result and cleans up the workspace.
-     * @return string
-     */
-    public function getResultUrl(): string
-    {
-        return ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php?action=finish';
+        return trim((string)preg_replace(array('/[^\S\n]+/', '/ ?\n ?/', '/\n{2,}/'), array(' ', "\n", "\n"), $text));
     }
 
     /**
