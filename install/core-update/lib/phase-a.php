@@ -323,6 +323,7 @@ function developerManifest(array $package, string $version): array
     }
     ksort($files, SORT_STRING);
     [$directories, $rootFiles] = managedPaths(array_keys($files));
+    $migrationIndex = packageFind($package, 'install/db_scripts/migration-paths.json');
 
     $require = is_array($composer['require'] ?? null) ? $composer['require'] : array();
     $php = is_string($require['php'] ?? null) && preg_match('/(\d+\.\d+(?:\.\d+)?)/', $require['php'], $matches) === 1 ? $matches[1] : '0';
@@ -335,7 +336,7 @@ function developerManifest(array $package, string $version): array
         'managedDirectories' => $directories,
         'managedRootFiles' => $rootFiles,
         'preservePaths' => array(),
-        'migrationPaths' => array(),
+        'migrationPaths' => readMigrationPaths($migrationIndex === null ? '' : packageRead($package, $migrationIndex, MAX_MANIFEST_SIZE)),
         'requirements' => array('php' => '>=' . $php, 'extensions' => $extensions),
         'totalSize' => $totalSize,
         'files' => $files

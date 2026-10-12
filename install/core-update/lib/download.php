@@ -377,6 +377,27 @@ function readManifest(string $json, string $expectedVersion): array
     return $data;
 }
 
+/**
+ * The paths that the database update of a release moves or removes itself, from
+ * install/db_scripts/migration-paths.json of the release: a JSON list of relative paths. A release
+ * without the file has none.
+ * @return array<int,string>
+ */
+function readMigrationPaths(string $json): array
+{
+    if (trim($json) === '') {
+        return array();
+    }
+
+    $paths = json_decode($json, true);
+    if (!is_array($paths) || !array_is_list($paths)
+        || array_filter($paths, static fn(mixed $path): bool => !is_string($path) || !isSafeRelativePath($path)) !== array()) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_MANIFEST_INVALID', 'install/db_scripts/migration-paths.json is no list of paths.');
+    }
+
+    return $paths;
+}
+
 // ------------------------------------------------------------------------------------------------
 // ZIP packages
 // ------------------------------------------------------------------------------------------------

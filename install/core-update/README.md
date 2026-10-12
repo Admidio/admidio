@@ -10,6 +10,7 @@ working while `src/`, `vendor/`, `system/`, `modules/` and the themes are replac
 index.php          the pages and requests of the browser
 cli.php            php install/core-update/cli.php status
 release-key.pem    the public key that signs update.txt (shipped with every release)
+texts/             the texts of the updater per language (written by the release builder)
 lib/bootstrap.php  loads the files below
 lib/common.php     configuration, texts, state and lock of an update, cookie, versions, pages
 lib/login.php      the updater's own login (fallback during maintenance mode)
@@ -68,9 +69,21 @@ contains `install/update-manifest.json` with `version`, `managedDirectories`,
 `managedRootFiles`, `preservePaths`, `migrationPaths` (optional), `requirements` (`php`,
 `extensions`), `totalSize` and `files` (path => SHA-256). The package may come from any mirror.
 
-Every installation can install the stable release. The beta channel is only offered with
-`$gDebug`. Downloads are HTTPS only, redirects are checked hop by hop, and packages are read
-entry by entry with path, link, collision and size checks.
+Every installation can install the stable release. With `$gDebug` the updater also offers the
+beta channel and the developer channels: master, a branch, a tag or a pull request (forks
+included) as the GitHub source archive `https://github.com/Admidio/admidio/archive/refs/...`,
+whose address the updater builds itself from the name entered. A source archive is unsigned: it
+is downloaded during the check, the administrator confirms its commit (from the ZIP comment), and
+exactly that file is installed. The updater makes its manifest from what a release of it would
+contain (`archive.exclude` of its `composer.json`, without `vendor/`), removes nothing, never
+touches `vendor/` (a changed `composer.lock` asks for `composer install --no-dev` by hand) and
+removes the manifest of the installed release, so the next update keeps every file it replaces.
+An archive without the updater is installed by the installed one, which stays; such a version
+cannot take over the database update, which the administrator then runs with
+`install/update.php`.
+
+Downloads are HTTPS only, redirects are checked hop by hop, and packages are read entry by entry
+with path, link, collision and size checks.
 
 ## Phase A
 
@@ -103,9 +116,13 @@ maintenance mode shows the maintenance page; every replaced or removed file is c
 in the workspace before the operation, and `journal.jsonl` records each operation before and after
 it (`installing`). The kept files go from that copy into a ZIP in `adm_my_files/core-update/kept/`,
 which is never removed automatically (`archiving`). Every installed file is hashed again and OPcache
-is reset (`verifying`); at `files_installed` `install/update.php` takes over and updates the
-database. Its result page removes the workspace and empties the Admidio session of the browser, so
-that Admidio builds its objects with the new classes while the administrator stays logged in.
+is reset (`verifying`). At `files_installed` the page of the updater has `install/update.php` of the
+new release update the database (`mode=core_update`, a POST with the updater cookie and the CSRF
+token of the update, answered with JSON only), while its sidebar shows the step. A lock keeps a
+second request from starting another migration next to it; if a proxy cuts off the long request,
+the page asks the updater until the migration no longer runs. The result page removes the
+workspace and empties the Admidio session of the browser, so that Admidio builds its objects with
+the new classes while the administrator stays logged in.
 
 Every request does at most 8 seconds or 200 files of work. Up to `review` nothing is changed and
 cancelling removes the workspace. From `installing` on an error stops in `rollback_required`: the
@@ -116,8 +133,9 @@ as a whole: the database from the backup of the updater (`restoring_database`; M
 PDO table by table, PostgreSQL with `psql`), the tables the new version created are removed, then the
 files from the journal. Without such a backup the administrator restores the database first and
 confirms it. Paths that the database update of a release moves or removes itself (6.0 moves
-`adm_plugins`) are named in `migrationPaths` of its manifest; the updater copies them before
-`install/update.php` runs and puts them back with the previous version.
+`adm_plugins`) are listed in `install/db_scripts/migration-paths.json` of the release and become
+`migrationPaths` of its manifest; the updater copies them before `install/update.php` runs and puts
+them back with the previous version.
 
 Every update writes `update.log` in its workspace (states, errors with their English detail,
 decisions); when the update is over it is copied to `adm_my_files/logs/core-update_<date>_<from>_to_<to>.log`.
@@ -129,9 +147,10 @@ With `$gDebug = true` two settings in `config.php` point the updater to a test s
 ```php
 $gCoreUpdateServerUrl = 'http://host.docker.internal:8090';      // serves update.txt(.sig)
 $gCoreUpdatePublicKeyFile = 'adm_my_files/core-update-test/release-key.pem';
+$gCoreUpdateArchiveUrl = 'http://host.docker.internal:8090/archive/'; // instead of GitHub
 ```
 
-Plain HTTP is only accepted below `$gCoreUpdateServerUrl`. Both settings are ignored without
+Plain HTTP is only accepted below `$gCoreUpdateServerUrl`. The settings are ignored without
 `$gDebug`.
 
 Because phase A replaces `install/core-update/` with the updater of the release it installs, a
@@ -140,10 +159,60 @@ Phase B replaces every file: test it on a separate installation, never on a deve
 
 ## Building a release
 
-> `build-release.php` is the builder of the first implementation. It is replaced in step 8 of
-> the concept and does not produce the formats above yet.
+`build-release.php` in the root of the repository builds a release from a clean export of a commit
+(`git archive`), never from the working tree, which therefore has to be clean:
 
 ```bash
-composer install --no-dev --prefer-dist --optimize-autoloader
-php build-release.php --private-key=/secure/path/admidio-release-private.pem
+php build-release.php --key=/secure/path/release-private.pem --ref=v5.1.0 \
+    --update-txt=https://www.admidio.org/update.txt
 ```
+
+It runs `composer install --no-dev` in the export and takes what `archive.exclude` of the exported
+`composer.json` leaves in - the one packaging rule, which the developer channels apply as well. It
+adds `install/core-update/texts/<language>.json` (the `SYS_CORE_UPDATE_*` keys of every language
+file) and `install/update-manifest.json` (managed directories and root files derived from the files,
+the official plugins included, `migrationPaths` from `install/db_scripts/migration-paths.json`,
+requirements from `composer.json`). In `build/` it writes:
+
+```text
+admidio-<version>.zip               the package; the same commit always gives the same bytes
+admidio-core-updater-<version>.zip  install/core-update/ alone, extracted into the Admidio
+                                    directory of an installation without the updater
+update.txt, update.txt.sig          the given update.txt with the lines of this release (stable, or
+                                    the Beta- lines of a beta), signed
+```
+
+The package URL in `update.txt` is the asset of the GitHub release of the tag, or `--package-url`.
+The builder refuses a dirty working tree (`--allow-dirty` builds the commit anyway), a tag that
+does not name the version of the constants (`v5.0.17`, `v5.0-Beta.1`), and a release whose
+`install/core-update/release-key.pem` is not the public part of the signing key. Before it ends it
+checks the result as the updater will: `update.txt` verifies and names the package, and every file
+matches the manifest. `php build-release.php sign --key=... --update-txt=update.txt` signs an
+`update.txt` that was edited by hand.
+
+The workflow `.github/workflows/release.yml` runs the builder for every `v*` tag in the protected
+environment `release` and creates a draft GitHub release with the three files. Publishing the
+release and copying `update.txt` and `update.txt.sig` to admidio.org are the final, deliberate
+steps.
+
+### The release key
+
+There is one key, an RSA key of 4096 bits:
+
+```bash
+openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -aes-256-cbc -out release-private.pem
+openssl pkey -in release-private.pem -pubout -out install/core-update/release-key.pem
+```
+
+The public part is committed as `install/core-update/release-key.pem`. The private part is kept
+offline by the maintainers and is the secret `ADMIDIO_RELEASE_KEY` (with
+`ADMIDIO_RELEASE_KEY_PASSPHRASE`) of the GitHub environment `release`, which needs the approval of
+a reviewer and is restricted to `v*` tags; the builder also reads it from `--key` or
+`ADMIDIO_RELEASE_KEY_FILE`. It never enters a package.
+
+To change the key, commit the new public key and build the next release with the old private key
+and `--key-rotation`: installations verify that release with the key they have and get the new one
+with it. An installation that skips that release cannot verify later ones and has to install one
+release by hand. If the private key leaks, publish a new key and announce a manual update.
+
+For a local test server, `--test-release` puts the public part of a test key into the package.

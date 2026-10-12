@@ -122,6 +122,7 @@
             ".env.test*",
             "phpunit.xml",
             "AGENTS.md",
+            "build-release.php",
             "docker-compose.test.yml",
             "!vendor/*",
             "vendor/maennchen/zipstream-php/test",
