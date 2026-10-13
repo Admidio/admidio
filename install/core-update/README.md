@@ -112,7 +112,12 @@ chooses a backup of the database by the updater or confirms an own backup, and s
 installation. Then the browser gets the updater cookie and maintenance mode goes on. The database is
 backed up table by table with mysqldump-php from the package (PostgreSQL with `pg_dump`, if PHP may
 run it) into `adm_my_files/core-update/dumps/` (`dumping`); if that fails, maintenance mode goes off
-again and nothing is changed. `system/bootstrap/` is installed first, so that even a release without
+again and nothing is changed. With a password the ZIP of the backup is encrypted with AES-256: the
+password comes from `--dump-password-env` of the command line, else from `$gCoreUpdateDumpPassword`
+in `config.php`, else from the write-only preference `system_update_dump_password` of the first
+organization. It is read again whenever it is needed, also for a restore, and never written to the
+state or the log; if the ZIP extension cannot encrypt, the review warns (D4) and the backup stays
+unencrypted. `system/bootstrap/` is installed first, so that even a release without
 maintenance mode shows the maintenance page; every replaced or removed file is copied to `backup/`
 in the workspace before the operation, and `journal.jsonl` records each operation before and after
 it (`installing`). The kept files go from that copy into a ZIP in `adm_my_files/core-update/kept/`,
@@ -173,6 +178,7 @@ page. If PHP may not start processes, `cli.php` prints the command to run next.
 | `--dry-run` | the update is checked and planned, then cancelled; the updater of the new release stays, as after a cancel on the page |
 | `--skip-database` | the update ends after the files; maintenance mode stays on until `apply --resume` or `install/update.php` updates the database |
 | `--resume` | continue the unfinished update, also to retry a failed database update |
+| `--dump-password-env=VAR` | the password of the backup is in the environment variable `VAR` (also for `rollback`), never on the command line itself |
 
 `rollback` cancels an update that has not changed anything, restores the previous files until the
 database update has started, and after a failed database update restores the previous version

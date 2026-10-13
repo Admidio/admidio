@@ -88,11 +88,14 @@ final class DatabaseRestoreTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox The database is restored as it was at the backup, and the tables of the new version are removed
+     * The installation before the update, two tables with a foreign key, backed up by the updater;
+     * then the failed database update changes data, drops a table and creates a new one.
+     * @param array<string,mixed> $context
+     * @return array{0: array<string,mixed>, 1: array<string,array<int,array<string,mixed>>>} The state in
+     *         database_failed and the tables at the backup.
      */
-    public function testRestore(): void
+    private function backUpAndFail(array $context): array
     {
-        // The installation before the update: two tables with a foreign key.
         $this->pdo->exec('CREATE TABLE ' . self::PREFIX . '_roles (rol_id integer PRIMARY KEY, rol_name varchar(50))');
         $this->pdo->exec('CREATE TABLE ' . self::PREFIX . '_members (mem_id integer PRIMARY KEY, mem_rol_id integer,
             FOREIGN KEY (mem_rol_id) REFERENCES ' . self::PREFIX . '_roles (rol_id))');
@@ -104,17 +107,26 @@ final class DatabaseRestoreTest extends AdmidioTestCase
         file_put_contents(U\workspace($this->root, $state['updateId']) . '/plan.json', '[]');
         $state = array_merge($state, array('state' => 'dumping', 'dumpMethod' => 'mysqldump', 'cursor' => 0));
         for ($request = 0; $request < 20 && $state['state'] === 'dumping'; $request++) {
-            $state = U\dumpPart($this->context, $state);
+            $state = U\dumpPart($context, $state);
         }
         U\writeState($this->root, $state);
 
-        // The failed database update changed data, dropped a table and created a new one.
         $this->pdo->exec("UPDATE " . self::PREFIX . "_roles SET rol_name = 'changed'");
         $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
         $this->pdo->exec('DROP TABLE ' . self::PREFIX . '_members');
         $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
         $this->pdo->exec('CREATE TABLE ' . self::PREFIX . '_columns (col_id integer PRIMARY KEY)');
-        U\updateState($this->root, $state['updateId'], static fn(array $s): array => array_merge($s, array('state' => 'database_failed', 'databaseStarted' => true)));
+
+        return array(U\updateState($this->root, $state['updateId'],
+            static fn(array $s): array => array_merge($s, array('state' => 'database_failed', 'databaseStarted' => true))), $before);
+    }
+
+    /**
+     * @testdox The database is restored as it was at the backup, and the tables of the new version are removed
+     */
+    public function testRestore(): void
+    {
+        [$state, $before] = $this->backUpAndFail($this->context);
 
         $this->assertSame('mysql', U\restoreMethod($this->context, U\readState($this->root, $state['updateId'])));
         $state = U\phaseBRestore($this->context, $state['updateId'], false);
@@ -128,5 +140,48 @@ final class DatabaseRestoreTest extends AdmidioTestCase
         $this->assertFalse($this->pdo->query("SHOW TABLES LIKE '" . self::PREFIX . "\\_columns'")->fetchColumn(), 'the table of the new version is removed');
         $this->assertStringContainsString('database restored from ' . $state['dumpFile'] . ' (2 tables)',
             (string)file_get_contents(U\workspace($this->root, $state['updateId']) . '/update.log'));
+    }
+
+    /**
+     * @testdox A backup with a password is encrypted, and only restored with that password
+     */
+    public function testEncryptedBackup(): void
+    {
+        if (!U\canEncryptZip()) {
+            $this->markTestSkipped('The ZIP extension of this PHP cannot encrypt with AES-256.');
+        }
+
+        $withPassword = array_merge($this->context, array('dumpPassword' => 'Backup-Passw0rd'));
+        [$state, $before] = $this->backUpAndFail($withPassword);
+
+        $this->assertTrue($state['dumpEncrypted']);
+        $this->assertStringNotContainsString('Backup-Passw0rd', (string)file_get_contents(U\workspace($this->root, $state['updateId']) . '/state.json'));
+        $zip = new \ZipArchive();
+        $zip->open($this->root . '/adm_my_files/core-update/' . $state['dumpFile']);
+        for ($index = 0; $index < $zip->numFiles; $index++) {
+            $this->assertSame(\ZipArchive::EM_AES_256, $zip->statIndex($index)['encryption_method'], $zip->getNameIndex($index));
+        }
+        $this->assertFalse($zip->getFromIndex(0), 'not readable without the password');
+        $zip->close();
+
+        // Without the password the updater cannot restore the database, and a restore that is forced
+        // fails before it removes anything.
+        $this->assertSame('', U\restoreMethod($this->context, $state));
+        $forced = array_merge($state, array('state' => 'restoring_database', 'restoreMethod' => 'mysql', 'cursor' => 0));
+        try {
+            U\restoreDatabasePart($this->context, $forced);
+            $this->fail('an unreadable backup was restored');
+        } catch (U\UpdaterException $exception) {
+            $this->assertStringContainsString('cannot be read', $exception->getDetail());
+        }
+        $this->assertNotFalse($this->pdo->query("SHOW TABLES LIKE '" . self::PREFIX . "\\_columns'")->fetchColumn(), 'nothing was removed');
+
+        $this->assertSame('mysql', U\restoreMethod($withPassword, $state));
+        $state = U\phaseBRestore($withPassword, $state['updateId'], false);
+        for ($request = 0; $request < 20 && $state['state'] === 'restoring_database'; $request++) {
+            $state = U\restoreDatabasePart($withPassword, $state);
+        }
+        $this->assertSame('rolling_back', $state['state']);
+        $this->assertSame($before, array('roles' => $this->rows('roles'), 'members' => $this->rows('members')));
     }
 }

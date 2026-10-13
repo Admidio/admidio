@@ -401,7 +401,18 @@ class PreferencesService
                 }
                 break;
 
-            case 'sso': 
+            case 'common':
+                // The password of the database backups is never shown, so an empty field keeps
+                // the stored one; only the checkbox removes it.
+                if (!empty($formValues['system_update_dump_password_remove'])) {
+                    $formValues['system_update_dump_password'] = '';
+                } elseif ((string) ($formValues['system_update_dump_password'] ?? '') === '') {
+                    unset($formValues['system_update_dump_password']);
+                }
+                unset($formValues['system_update_dump_password_remove']);
+                break;
+
+            case 'sso':
                 // empty issuerURL means "Use the default URL from the admidio installation's URL"
                 $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
                 if ($issuerURL !== '') {

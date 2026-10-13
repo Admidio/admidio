@@ -286,6 +286,19 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The password of the backup comes from the command line, else from config.php, else from the preferences
+     *
+     * The preference needs the database, which this test does not have; DatabaseRestoreTest uses it.
+     */
+    public function testDumpPasswordOrder(): void
+    {
+        $context = array('config' => U\configFromValues($this->root, array('gCoreUpdateDumpPassword' => 'from-config')), 'pdo' => null);
+        $this->assertSame('from-config', U\dumpPassword($context), 'also without debug mode');
+        $this->assertSame('from-command-line', U\dumpPassword(array_merge($context, array('dumpPassword' => 'from-command-line'))));
+        $this->assertSame('', U\dumpPassword(array('config' => U\configFromValues($this->root, array()), 'pdo' => null)));
+    }
+
+    /**
      * @testdox Restoring is refused once the database update has started
      */
     public function testNoRollbackAfterTheDatabaseStarted(): void

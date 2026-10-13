@@ -804,6 +804,26 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['system_update_check'],
             array('helpTextId' => 'ORG_UPDATE_CHECK_DESC')
         );
+        // The password of the database backups is never shown again: an empty field keeps it, and
+        // the browser must not fill in the password of the login.
+        $formCommon->addInput(
+            'system_update_dump_password',
+            $gL10n->get('ORG_UPDATE_DUMP_PASSWORD'),
+            '',
+            self::preferenceInputOptions('system_update_dump_password', array(
+                'type' => 'password',
+                'autocomplete' => 'new-password',
+                'placeholder' => $formValues['system_update_dump_password'] !== '' ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : '',
+                'helpTextId' => 'ORG_UPDATE_DUMP_PASSWORD_DESC'
+            ))
+        );
+        if ($formValues['system_update_dump_password'] !== '') {
+            $formCommon->addCheckbox(
+                'system_update_dump_password_remove',
+                $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_REMOVE'),
+                false
+            );
+        }
         $formCommon->addCheckbox(
             'system_pwa_enabled',
             $gL10n->get('SYS_PWA_ENABLED'),

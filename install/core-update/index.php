@@ -614,7 +614,7 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                     : coreUpdateAlert('success', U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)($state['targetVersionText'] ?? $state['targetVersion']))))))
                     . (!empty($state['composerChanged']) ? coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_COMPOSER_REQUIRED'))) : '')
                     . ((string)($state['dumpFile'] ?? '') !== ''
-                        ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</p>' : '')
+                        ? '<p>' . U\h(U\text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</p>' : '')
                     . implode('', array_map(static fn(array $note): string => coreUpdateAlert($note['type'] === 'info' ? 'info' : 'warning',
                         nl2br(U\h((string)$note['text']))), (array)($state['databaseNotes'] ?? array())))
                     . ((string)($state['keptArchive'] ?? '') !== ''
@@ -761,7 +761,7 @@ function coreUpdateErrorDetails(array $state, array $texts, bool $withError): st
         . ($withError && (string)($state['lastError'] ?? '') !== '' ? '<pre class="core-update-error mt-2">' . U\h((string)$state['lastError']) . '</pre>' : '')
         . '<p class="mt-2">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_LOG_FILE', array('adm_my_files/core-update/' . $state['updateId'] . '/update.log'))) . '</p>'
         . ((string)($state['dumpFile'] ?? '') !== ''
-            ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</p>' : '')
+            ? '<p>' . U\h(U\text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array('adm_my_files/core-update/' . $state['dumpFile']))) . '</p>' : '')
         . '</details>';
 }
 

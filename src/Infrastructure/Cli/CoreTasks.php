@@ -548,7 +548,7 @@ final class CoreTasks
                 . ' Asks before the download and before the installation unless --yes is given. If an update stops,'
                 . ' continue it with "php install/core-update/cli.php apply --resume".',
             'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--skip-database]'
-                . ' [--resume] [--dry-run] [--yes] [--format=text|json]',
+                . ' [--dump-password-env=VAR] [--resume] [--dry-run] [--yes] [--format=text|json]',
             'PREFERENCES',
             true,
             array(),
@@ -561,6 +561,7 @@ final class CoreTasks
                 self::opt('on-changed', 'Changed or unknown files are archived and replaced (default), or the update is cancelled.', 'ACTION',
                     false, false, false, array('archive', 'cancel')),
                 self::opt('skip-database', 'Install the files only; maintenance mode stays on until the database is updated.', '', false, false, true),
+                self::opt('dump-password-env', 'Environment variable with the password that encrypts the backup of the database.', 'VAR'),
                 self::opt('resume', 'Continue the unfinished update.', '', false, false, true),
                 self::opt('yes', 'Do not ask before the download and the installation.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
@@ -578,12 +579,13 @@ final class CoreTasks
             'Undo the unfinished core update: cancel it, restore the previous files, or after a failed database update'
                 . ' restore the previous version with its database. While Admidio cannot start, run'
                 . ' "php install/core-update/cli.php rollback" instead.',
-            'update:rollback [--database-restored] [--yes] [--format=text|json]',
+            'update:rollback [--database-restored] [--dump-password-env=VAR] [--yes] [--format=text|json]',
             'PREFERENCES',
             true,
             array(),
             array(
                 self::opt('database-restored', 'You have restored the database of the previous version from your own backup.', '', false, false, true),
+                self::opt('dump-password-env', 'Environment variable with the password of the backup, if apply was given one.', 'VAR'),
                 self::opt('yes', 'Do not ask before the update is undone.', '', false, false, true),
                 self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
             )
@@ -3127,7 +3129,7 @@ final class CoreTasks
     public static function updateApply(array $arguments, array $options): int
     {
         $updaterArguments = array('apply');
-        foreach (array('channel', 'ref', 'backup', 'on-changed') as $name) {
+        foreach (array('channel', 'ref', 'backup', 'on-changed', 'dump-password-env') as $name) {
             $value = CliApplication::optionString($options, $name);
             if ($value !== '') {
                 $updaterArguments[] = '--' . $name . '=' . $value;
@@ -3149,6 +3151,9 @@ final class CoreTasks
             if (CliApplication::optionBool($options, $name, false)) {
                 $updaterArguments[] = '--' . $name;
             }
+        }
+        if (CliApplication::optionString($options, 'dump-password-env') !== '') {
+            $updaterArguments[] = '--dump-password-env=' . CliApplication::optionString($options, 'dump-password-env');
         }
 
         return self::runCoreUpdater($updaterArguments, $options);

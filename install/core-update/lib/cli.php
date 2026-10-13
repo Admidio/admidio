@@ -482,7 +482,7 @@ function commandCompletedReport(array $state, array $texts): string
         $lines[] = text($texts, 'SYS_CORE_UPDATE_COMPOSER_REQUIRED');
     }
     if ((string)($state['dumpFile'] ?? '') !== '') {
-        $lines[] = text($texts, 'SYS_CORE_UPDATE_DUMP_FILE', array('adm_my_files/core-update/' . $state['dumpFile']));
+        $lines[] = text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array('adm_my_files/core-update/' . $state['dumpFile']));
     }
     foreach ((array)($state['databaseNotes'] ?? array()) as $note) {
         $lines[] = (string)$note['text'];

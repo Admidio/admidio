@@ -213,6 +213,10 @@
   <string name="ORG_TIMEZONE_DESC">This is the set time zone. If this is changed later in the config.php file of Admidio, already recorded dates and times are not adjusted to the new time zone.</string>
   <string name="ORG_UPDATE_CHECK">Notify about new Admidio versions</string>
   <string name="ORG_UPDATE_CHECK_DESC">Admidio asks the Admidio server at most twice a day whether a new version is available, and only while an administrator is using Admidio. Administrators then see a notice at the top of every page.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD">Password for the database backups of updates</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Before an update of Admidio changes anything, it backs up the database into a ZIP file in adm_my_files/core-update/dumps. With a password this file is encrypted (AES-256), so that it stays protected once it leaves the server. The password is never shown again, and an empty field keeps it. It is stored in the database; it is safer in adm_my_files/config.php as $gCoreUpdateDumpPassword, which takes precedence. Without the password the backup cannot be restored, so it has to be kept safe.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_REMOVE">Remove the stored password</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_STORED">A password is stored</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activation link for the new password</string>
   <string name="ORG_VARIABLE_EMAIL">Mail address of the user in regard to the mail context</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System e-mail address of the organization</string>
@@ -467,6 +471,7 @@
   <string name="SYS_CORE_UPDATE_CHECK_DATABASE_PENDING">The database has version #VAR1#, the files have version #VAR2#. Complete the database update (install/update.php) first.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DATABASE_UNKNOWN">The version of the database could not be read.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DEVELOPER">This version is installed from the source code #VAR1#, which is not signed: install it only if you trust this code. Files are added and replaced but never removed, and vendor/ is not changed.</string>
+  <string name="SYS_CORE_UPDATE_CHECK_DUMP_UNENCRYPTED">A password for the backup of the database is set, but the PHP of this server cannot encrypt ZIP files with AES-256. The backup is stored without encryption.</string>
   <string name="SYS_CORE_UPDATE_CHECK_EXTENSIONS">All required PHP extensions are available.</string>
   <string name="SYS_CORE_UPDATE_CHECK_EXTENSIONS_MISSING">These PHP extensions are missing: #VAR1#</string>
   <string name="SYS_CORE_UPDATE_CHECK_NOT_WRITABLE">The web server cannot replace files in: #VAR1#. Check the file permissions.</string>
@@ -507,6 +512,7 @@
   <string name="SYS_CORE_UPDATE_DOWNLOADING">Downloading version #VAR1# ...</string>
   <string name="SYS_CORE_UPDATE_DUMP_FAILED">The backup of the database failed, so the update has not started and nothing was changed. #VAR1# You can try again, or continue with your own backup of the database.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FILE">The backup of the database is in #VAR1#.</string>
+  <string name="SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED">The backup of the database is in #VAR1#, encrypted with the password for the backups.</string>
   <string name="SYS_CORE_UPDATE_DUMPING">Backing up the database ...</string>
   <string name="SYS_CORE_UPDATE_ERROR_DETAILS">Error details for a bug report</string>
   <string name="SYS_CORE_UPDATE_EXTRACTING">Unpacking the update package ...</string>

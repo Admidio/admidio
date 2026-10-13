@@ -202,6 +202,10 @@
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
   <string name="ORG_UPDATE_CHECK">Über neue Admidio-Versionen informieren</string>
   <string name="ORG_UPDATE_CHECK_DESC">Admidio fragt höchstens zweimal am Tag beim Admidio-Server nach, ob eine neue Version verfügbar ist, und nur während ein Administrator Admidio verwendet. Administratoren sehen dann oben auf jeder Seite einen Hinweis.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD">Passwort für die Datenbanksicherungen von Updates</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Bevor ein Update von Admidio etwas ändert, sichert es die Datenbank in eine ZIP-Datei in adm_my_files/core-update/dumps. Mit einem Passwort wird diese Datei verschlüsselt (AES-256), damit sie auch geschützt ist, wenn sie den Server verlässt. Das Passwort wird nie wieder angezeigt, ein leeres Feld behält es bei. Es wird in der Datenbank gespeichert; sicherer ist es in adm_my_files/config.php als $gCoreUpdateDumpPassword, das Vorrang hat. Ohne das Passwort kann die Sicherung nicht wiederhergestellt werden, es muss also sicher aufbewahrt werden.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_REMOVE">Gespeichertes Passwort entfernen</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_STORED">Ein Passwort ist gespeichert</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
   <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System-E-Mail-Adresse der Organisation</string>
@@ -462,6 +466,7 @@
   <string name="SYS_CORE_UPDATE_CHECK_DATABASE_PENDING">Die Datenbank hat die Version #VAR1#, die Dateien haben die Version #VAR2#. Schließe zuerst das Datenbank-Update (install/update.php) ab.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DATABASE_UNKNOWN">Die Version der Datenbank konnte nicht gelesen werden.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DEVELOPER">Diese Version wird aus dem Quellcode #VAR1# installiert, der nicht signiert ist: Installiere sie nur, wenn du diesem Code vertraust. Dateien werden hinzugefügt und ersetzt, aber nie entfernt, und vendor/ wird nicht verändert.</string>
+  <string name="SYS_CORE_UPDATE_CHECK_DUMP_UNENCRYPTED">Ein Passwort für die Sicherung der Datenbank ist festgelegt, aber das PHP dieses Servers kann ZIP-Dateien nicht mit AES-256 verschlüsseln. Die Sicherung wird unverschlüsselt gespeichert.</string>
   <string name="SYS_CORE_UPDATE_CHECK_EXTENSIONS">Alle benötigten PHP-Erweiterungen sind vorhanden.</string>
   <string name="SYS_CORE_UPDATE_CHECK_EXTENSIONS_MISSING">Diese PHP-Erweiterungen fehlen: #VAR1#</string>
   <string name="SYS_CORE_UPDATE_CHECK_NOT_WRITABLE">Der Webserver kann hier keine Dateien ersetzen: #VAR1#. Prüfe die Dateiberechtigungen.</string>
@@ -502,6 +507,7 @@
   <string name="SYS_CORE_UPDATE_DOWNLOADING">Version #VAR1# wird heruntergeladen ...</string>
   <string name="SYS_CORE_UPDATE_DUMP_FAILED">Die Sicherung der Datenbank ist fehlgeschlagen, daher wurde das Update nicht gestartet und nichts verändert. #VAR1# Du kannst es erneut versuchen oder mit deiner eigenen Sicherung der Datenbank fortfahren.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FILE">Die Sicherung der Datenbank liegt in #VAR1#.</string>
+  <string name="SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED">Die Sicherung der Datenbank liegt in #VAR1#, verschlüsselt mit dem Passwort für die Sicherungen.</string>
   <string name="SYS_CORE_UPDATE_DUMPING">Die Datenbank wird gesichert ...</string>
   <string name="SYS_CORE_UPDATE_ERROR_DETAILS">Fehlerdetails für einen Fehlerbericht</string>
   <string name="SYS_CORE_UPDATE_EXTRACTING">Das Update-Paket wird entpackt ...</string>

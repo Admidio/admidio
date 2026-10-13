@@ -170,6 +170,7 @@ final class PreferenceDefinitions
             'system_time' => array('default' => 'H:i', 'maxLength' => 20, 'required' => true),
             'system_update_check' => array('default' => '1', 'type' => 'bool'),
             'system_update_check_time' => array('default' => '0', 'type' => 'int', 'internal' => true),
+            'system_update_dump_password' => array('default' => '', 'sensitive' => true, 'maxLength' => 100),
             'system_update_information' => array('default' => '', 'internal' => true),
             'system_url_imprint' => array('default' => '', 'maxLength' => 250, 'validator' => self::VALIDATOR_URL_OPTIONAL),
             'system_url_data_protection' => array('default' => '', 'maxLength' => 250, 'validator' => self::VALIDATOR_URL_OPTIONAL),

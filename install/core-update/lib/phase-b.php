@@ -311,6 +311,18 @@ function restoreMethod(array $ctx, array $state): string
     if (($state['dumpFile'] ?? '') === '' || !is_file($file)) {
         return '';
     }
+    // An encrypted backup needs its password, which may have been changed or removed since.
+    if (!empty($state['dumpEncrypted'])) {
+        $zip = new \ZipArchive();
+        if ($zip->open($file, \ZipArchive::RDONLY) !== true) {
+            return '';
+        }
+        $readable = $zip->setPassword(dumpPassword($ctx)) && $zip->numFiles > 0 && $zip->getFromIndex(0) !== false;
+        $zip->close();
+        if (!$readable) {
+            return '';
+        }
+    }
     if ($ctx['config']['dbType'] === 'mysql') {
         return 'mysql';
     }
@@ -612,11 +624,18 @@ function planPart(array $ctx, array $state): array
         }
     }
 
+    // D4: a password for the backup is set, but this PHP cannot encrypt it.
+    $checks = planChecks($root, $workspace, $plan);
+    $dumpMethod = dumpMethod($ctx, $workspace);
+    if ($dumpMethod !== '' && !canEncryptZip() && dumpPassword($ctx) !== '') {
+        $checks[] = array('check' => 'D4', 'status' => 'warning', 'text' => 'SYS_CORE_UPDATE_CHECK_DUMP_UNENCRYPTED', 'params' => array());
+    }
+
     return array_merge($state, array(
         'state' => 'review',
         'plan' => $counts + array('unchanged' => count($files) - $counts['create'] - $counts['replace'], 'inventory' => $inventory !== null),
-        'planChecks' => planChecks($root, $workspace, $plan),
-        'dumpMethod' => dumpMethod($ctx, $workspace),
+        'planChecks' => $checks,
+        'dumpMethod' => $dumpMethod,
         'cursor' => 0,
         'cursorTotal' => 0
     ));
@@ -918,6 +937,43 @@ function dumpMethod(array $ctx, string $workspace): string
     return $status === 0 ? 'pg_dump' : '';
 }
 
+/**
+ * The password that protects the backup of the database once it leaves the server: the one given
+ * to the command line (--dump-password-env), else $gCoreUpdateDumpPassword of config.php, else the
+ * preference system_update_dump_password of the first organization; "" for none. It is read anew
+ * whenever it is needed, also to restore the backup, because it is never written to the state or
+ * the log.
+ * @param array<string,mixed> $ctx
+ */
+function dumpPassword(array $ctx): string
+{
+    if ((string)($ctx['dumpPassword'] ?? '') !== '') {
+        return (string)$ctx['dumpPassword'];
+    }
+    if ($ctx['config']['dumpPassword'] !== '') {
+        return $ctx['config']['dumpPassword'];
+    }
+    if (!($ctx['pdo'] ?? null) instanceof PDO) {
+        return '';
+    }
+
+    try {
+        $tablePrefix = $ctx['config']['tablePrefix'];
+        $row = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $tablePrefix . '_preferences WHERE prf_name = ?
+            AND prf_org_id = (SELECT MIN(org_id) FROM ' . $tablePrefix . '_organizations)', array('system_update_dump_password'));
+    } catch (Throwable) {
+        return '';
+    }
+
+    return (string)($row['prf_value'] ?? '');
+}
+
+/** Whether the ZIP extension of this PHP can encrypt with AES-256. */
+function canEncryptZip(): bool
+{
+    return defined('ZipArchive::EM_AES_256') && method_exists(\ZipArchive::class, 'setEncryptionName');
+}
+
 /** The file of mysqldump-php: from the verified package, or else from the installed release. */
 function mysqldumpLibrary(string $root, string $workspace): string
 {
@@ -995,9 +1051,12 @@ function dumpPart(array $ctx, array $state): array
         }
     }
 
-    // One ZIP for the whole backup; the table files are compressed already.
+    // One ZIP for the whole backup; the table files are compressed already. With a password every
+    // entry is encrypted with AES-256; without support for it the review has warned that the backup
+    // stays unencrypted.
     ensureDirectory(updatesDirectory($root) . '/dumps');
     $state['dumpFile'] = 'dumps/dump-' . date('Y-m-d_His') . '_' . $state['installedVersion'] . '_' . bin2hex(random_bytes(3)) . '.zip';
+    $password = canEncryptZip() ? dumpPassword($ctx) : '';
     $zip = new \ZipArchive();
     if ($zip->open(updatesDirectory($root) . '/' . $state['dumpFile'], \ZipArchive::CREATE) !== true) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be created.');
@@ -1005,7 +1064,11 @@ function dumpPart(array $ctx, array $state): array
     foreach (glob($directory . '/*.sql.gz') ?: array() as $file) {
         $zip->addFile($file, basename($file));
         $zip->setCompressionName(basename($file), \ZipArchive::CM_STORE);
+        if ($password !== '' && !$zip->setEncryptionName(basename($file), \ZipArchive::EM_AES_256, $password)) {
+            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be encrypted.');
+        }
     }
+    $state['dumpEncrypted'] = $password !== '';
     if (!$zip->close()) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be written.');
     }
@@ -1416,6 +1479,9 @@ function restoreDatabasePart(array $ctx, array $state): array
     if ($zip->open(updatesDirectory($root) . '/' . $state['dumpFile'], \ZipArchive::RDONLY) !== true) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $state['dumpFile'] . ' cannot be opened.');
     }
+    if (!empty($state['dumpEncrypted'])) {
+        $zip->setPassword(dumpPassword($ctx));
+    }
 
     try {
         $names = array();
@@ -1425,9 +1491,20 @@ function restoreDatabasePart(array $ctx, array $state): array
         sort($names, SORT_STRING);
         $tables = array();
 
+        // An entry that cannot be read - a wrong password - must never count as an empty table.
+        $read = static function (string $name) use ($zip, $state): string {
+            $content = $zip->getFromName($name);
+            $sql = $content === false ? false : gzdecode($content);
+            if ($sql === false) {
+                throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $name . ' of ' . $state['dumpFile'] . ' cannot be read.');
+            }
+
+            return $sql;
+        };
+
         if (($state['restoreMethod'] ?? '') === 'psql') {
             $file = workspace($root, $state['updateId']) . '/restore.sql';
-            $sql = (string)gzdecode((string)$zip->getFromName($names[0]));
+            $sql = $read($names[0]);
             writeFile($file, $sql);
             preg_match_all('/^CREATE TABLE (?:\w+\.)?"?(' . preg_quote($config['tablePrefix'], '/') . '_\w+)"?/m', $sql, $matches);
             $tables = $matches[1];
@@ -1448,7 +1525,7 @@ function restoreDatabasePart(array $ctx, array $state): array
                 if ($name === null) {
                     break;
                 }
-                runSqlScript($pdo, (string)gzdecode((string)$zip->getFromName($name)));
+                runSqlScript($pdo, $read($name));
                 $cursor++;
             } while (microtime(true) < $deadline);
             $state['cursor'] = $cursor;

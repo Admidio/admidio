@@ -46,7 +46,7 @@ require_once __DIR__ . '/lib/cli.php';
 $arguments = array_slice($argv, 1);
 $command = '';
 $values = array('format' => 'text', 'host' => (string)getenv('ADMIDIO_HOST'), 'channel' => 'stable', 'ref' => '', 'backup' => '',
-    'on-changed' => 'archive');
+    'on-changed' => 'archive', 'dump-password-env' => '');
 $flags = array('dry-run' => false, 'skip-database' => false, 'resume' => false, 'yes' => false, 'no-interaction' => false,
     'database-restored' => false);
 foreach ($arguments as $argument) {
@@ -91,10 +91,14 @@ if (!in_array($command, array('status', 'apply', 'rollback', 'database'), true) 
         . '  --resume                    continue the unfinished update' . PHP_EOL
         . '  --yes, -y                   do not ask before the download and before the installation' . PHP_EOL
         . '  --no-interaction            never ask; without --yes the update stops before it changes anything' . PHP_EOL
+        . '  --dump-password-env=VAR     encrypt the backup of the database with the password in the environment' . PHP_EOL
+        . '                              variable VAR, instead of $gCoreUpdateDumpPassword of config.php or the' . PHP_EOL
+        . '                              password of the preferences' . PHP_EOL
         . PHP_EOL
         . 'Options of rollback:' . PHP_EOL
         . '  --database-restored         after a failed database update without a backup of the updater: you' . PHP_EOL
         . '                              have restored the database of the previous version yourself' . PHP_EOL
+        . '  --dump-password-env=VAR     the password of the backup, if it was given so to apply' . PHP_EOL
         . '  --yes, -y, --no-interaction as for apply' . PHP_EOL);
     exit($command === 'help' ? U\EXIT_SUCCESS : U\EXIT_USAGE);
 }
@@ -148,6 +152,15 @@ try {
 
     coreUpdateOwnerWarning($config['rootPath']);
     $context = U\commandContext($config, __DIR__);
+    // The password is passed in the environment, never as an argument that others can see.
+    if ($values['dump-password-env'] !== '') {
+        $password = preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $values['dump-password-env']) === 1 ? (string)getenv($values['dump-password-env']) : '';
+        if ($password === '') {
+            fwrite(STDERR, 'The environment variable "' . $values['dump-password-env'] . '" holds no password.' . PHP_EOL);
+            exit(U\EXIT_USAGE);
+        }
+        $context['dumpPassword'] = $password;
+    }
     $texts = $context['texts'];
     $out = static function (string $line) use ($values): void {
         if ($values['format'] === 'text') {
