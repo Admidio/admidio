@@ -410,7 +410,8 @@ function commandCheckReport(array $state, array $texts): string
 {
     $lines = array(
         'Installed:  ' . $state['installedVersion'],
-        'Target:     ' . commandTarget($state) . ' (' . $state['channel'] . (($state['ref'] ?? '') !== '' ? ' ' . $state['ref'] : '') . ')'
+        // The version of a developer channel names its branch, tag or pull request already.
+        'Target:     ' . commandTarget($state) . ' (' . $state['channel'] . ')'
     );
     if (($state['commit'] ?? '') !== '') {
         $lines[] = 'Commit:     ' . $state['commit'];
