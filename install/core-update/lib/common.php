@@ -144,7 +144,8 @@ function configFromValues(string $rootPath, array $values): array
 
     return array(
         'rootPath' => rtrim(str_replace('\\', '/', $rootPath), '/'),
-        'dbType' => (string)($values['gDbType'] ?? 'mysql'),
+        // The PDO driver, as Admidio's Database chooses it: MariaDB is reached with the one of MySQL.
+        'dbType' => ($values['gDbType'] ?? 'mysql') === 'mariadb' ? 'mysql' : (string)($values['gDbType'] ?? 'mysql'),
         'dbHost' => (string)($values['g_adm_srv'] ?? ''),
         'dbPort' => ($port === null || $port === '') ? null : (int)$port,
         'dbName' => (string)($values['g_adm_db'] ?? ''),

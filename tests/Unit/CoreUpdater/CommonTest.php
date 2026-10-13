@@ -81,6 +81,15 @@ final class CommonTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox MariaDB is reached with the driver of MySQL, as Admidio does
+     */
+    public function testMariaDbIsMySql(): void
+    {
+        $this->assertSame('mysql', U\configFromValues('/srv/admidio', array('gDbType' => 'mariadb'))['dbType']);
+        $this->assertSame('pgsql', U\configFromValues('/srv/admidio', array('gDbType' => 'pgsql'))['dbType']);
+    }
+
+    /**
      * @testdox The test server and the test key are ignored unless debug mode is on
      */
     public function testDebugSettingsNeedDebugMode(): void
