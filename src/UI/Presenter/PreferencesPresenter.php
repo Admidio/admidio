@@ -5,6 +5,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Cli\CliApplication;
 use Admidio\Infrastructure\Cli\CliPolicy;
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
@@ -188,6 +189,7 @@ class PreferencesPresenter extends PagePresenter
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
                     array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true,  'sequence'=>10),
+                    array('id'=>'update_backup',        'title'=>$gL10n->get('SYS_UPDATE_BACKUP'),          'icon'=>'bi-cloud-arrow-down-fill',         'subcards'=>false, 'sequence'=>15),
                     array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false, 'sequence'=>20),
                     array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false, 'sequence'=>30),
                     array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false, 'sequence'=>40),
@@ -798,32 +800,6 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['system_browser_update_check'],
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
-        $formCommon->addCheckbox(
-            'system_update_check',
-            $gL10n->get('ORG_UPDATE_CHECK'),
-            (bool) $formValues['system_update_check'],
-            array('helpTextId' => 'ORG_UPDATE_CHECK_DESC')
-        );
-        // The password of the database backups is never shown again: an empty field keeps it, and
-        // the browser must not fill in the password of the login.
-        $formCommon->addInput(
-            'system_update_dump_password',
-            $gL10n->get('ORG_UPDATE_DUMP_PASSWORD'),
-            '',
-            self::preferenceInputOptions('system_update_dump_password', array(
-                'type' => 'password',
-                'autocomplete' => 'new-password',
-                'placeholder' => $formValues['system_update_dump_password'] !== '' ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : '',
-                'helpTextId' => 'ORG_UPDATE_DUMP_PASSWORD_DESC'
-            ))
-        );
-        if ($formValues['system_update_dump_password'] !== '') {
-            $formCommon->addCheckbox(
-                'system_update_dump_password_remove',
-                $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_REMOVE'),
-                false
-            );
-        }
         $formCommon->addCheckbox(
             'system_pwa_enabled',
             $gL10n->get('SYS_PWA_ENABLED'),
@@ -2796,14 +2772,13 @@ class PreferencesPresenter extends PagePresenter
         }
 
         $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
+        // The release the last update check found for this installation, which can be installed
+        // from here; the version comes from the update information of the Admidio server.
+        $this->assignSmartyVariable('availableUpdate', SecurityUtils::encodeHTML((new PreferencesService())->getAvailableUpdate()));
+        $this->assignSmartyVariable('coreUpdateUrl', ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php');
         $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
         $this->assignSmartyVariable('updateStepText', $updateStepText);
-        $this->assignSmartyVariable('databaseType', DB_TYPE);
-        $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
         $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
-        // The updater itself finds out which version it may install, from the signed release
-        // information, so it can be opened at any time.
-        $this->assignSmartyVariable('coreUpdateUrl', ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php');
 
         // Admidio System Information
         $this->assignSmartyVariable('operatingSystemName', SystemInfoUtils::getOS());
@@ -3093,6 +3068,93 @@ class PreferencesPresenter extends PagePresenter
             'cliDescription',
             $gL10n->get('SYS_COMMAND_LINE_DESC', array($description['file']))
         );
+    }
+
+    /**
+     * Generates the HTML of the panel with the update of Admidio and the backups: the installed
+     * version and the check for a new one, the start of the updater, the settings of both, the
+     * backup of the database and the list of the backups in adm_my_files/backups/.
+     * @return string
+     * @throws Exception|\Smarty\Exception
+     */
+    public function createUpdateBackupForm(): string
+    {
+        global $gL10n, $gSettingsManager, $gCurrentSession, $gCoreUpdateDumpPassword;
+
+        $formValues = $gSettingsManager->getAll();
+
+        $formUpdateBackup = new FormPresenter(
+            'adm_preferences_form_update_backup',
+            'preferences/preferences.update-backup.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'update_backup')),
+            null,
+            array('class' => 'form-preferences')
+        );
+        $formUpdateBackup->addCheckbox(
+            'system_update_check',
+            $gL10n->get('ORG_UPDATE_CHECK'),
+            (bool) $formValues['system_update_check'],
+            array('helpTextId' => 'ORG_UPDATE_CHECK_DESC')
+        );
+
+        // The password of the backups is never shown again: an empty field keeps it, and the
+        // browser must not fill in the password of the login. One in config.php takes precedence.
+        $passwordInConfig = (string) ($gCoreUpdateDumpPassword ?? '') !== '';
+        $passwordOptions = array(
+            'type' => 'password',
+            'autocomplete' => 'new-password',
+            'placeholder' => $passwordInConfig ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_CONFIG')
+                : ($formValues['system_update_dump_password'] !== '' ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : ''),
+            'helpTextId' => 'ORG_UPDATE_DUMP_PASSWORD_DESC'
+        );
+        if ($passwordInConfig) {
+            $passwordOptions['property'] = FormPresenter::FIELD_DISABLED;
+        }
+        $formUpdateBackup->addInput(
+            'system_update_dump_password',
+            $gL10n->get('ORG_UPDATE_DUMP_PASSWORD'),
+            '',
+            self::preferenceInputOptions('system_update_dump_password', $passwordOptions)
+        );
+        if ($formValues['system_update_dump_password'] !== '' && !$passwordInConfig) {
+            $formUpdateBackup->addCheckbox(
+                'system_update_dump_password_remove',
+                $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_REMOVE'),
+                false
+            );
+        }
+        $formUpdateBackup->addSubmitButton(
+            'adm_button_save_update_backup',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $backups = array();
+        foreach (Backups::getList() as $backup) {
+            $backups[] = array(
+                'name' => $backup['name'],
+                'kind' => $gL10n->get($backup['kind'] === 'database' ? 'SYS_DATABASE' : 'SYS_BACKUP_REPLACED_FILES'),
+                'date' => date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $backup['time']),
+                'size' => round($backup['size'] / 1024) . ' kB',
+                'downloadUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php',
+                    array('mode' => 'backup_download', 'name' => $backup['name'])),
+                'deleteUrl' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php',
+                    array('mode' => 'backup_delete', 'name' => $backup['name']))
+            );
+        }
+
+        $smarty = $this->getSmartyTemplate();
+        $smarty->assign('admidioVersion', ADMIDIO_VERSION_TEXT);
+        // The updater itself finds out which version it may install, from the signed release
+        // information, so it can be opened at any time.
+        $smarty->assign('coreUpdateUrl', ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php');
+        $smarty->assign('backupPossible', Backups::isDatabaseBackupPossible());
+        $smarty->assign('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
+        $smarty->assign('backups', $backups);
+        $smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
+        $formUpdateBackup->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formUpdateBackup);
+        return $smarty->fetch('preferences/preferences.update-backup.tpl');
     }
 
     /**

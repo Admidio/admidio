@@ -111,7 +111,7 @@ The administrator sees the plan, the files that are removed or kept and the chec
 chooses a backup of the database by the updater or confirms an own backup, and starts the
 installation. Then the browser gets the updater cookie and maintenance mode goes on. The database is
 backed up table by table with mysqldump-php from the package (PostgreSQL with `pg_dump`, if PHP may
-run it) into `adm_my_files/core-update/dumps/` (`dumping`); if that fails, maintenance mode goes off
+run it) into `adm_my_files/backups/` (`dumping`); if that fails, maintenance mode goes off
 again and nothing is changed. With a password the ZIP of the backup is encrypted with AES-256: the
 password comes from `--dump-password-env` of the command line, else from `$gCoreUpdateDumpPassword`
 in `config.php`, else from the write-only preference `system_update_dump_password` of the first
@@ -120,7 +120,7 @@ state or the log; if the ZIP extension cannot encrypt, the review warns (D4) and
 unencrypted. `system/bootstrap/` is installed first, so that even a release without
 maintenance mode shows the maintenance page; every replaced or removed file is copied to `backup/`
 in the workspace before the operation, and `journal.jsonl` records each operation before and after
-it (`installing`). The kept files go from that copy into a ZIP in `adm_my_files/core-update/kept/`,
+it (`installing`). The kept files go from that copy into a ZIP in `adm_my_files/backups/`,
 which is never removed automatically (`archiving`). Every installed file is hashed again and OPcache
 is reset (`verifying`). At `files_installed` the page of the updater has `install/update.php` of the
 new release update the database (`mode=core_update`, a POST with the updater cookie and the CSRF

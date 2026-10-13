@@ -203,7 +203,8 @@
   <string name="ORG_UPDATE_CHECK">Über neue Admidio-Versionen informieren</string>
   <string name="ORG_UPDATE_CHECK_DESC">Admidio fragt höchstens zweimal am Tag beim Admidio-Server nach, ob eine neue Version verfügbar ist, und nur während ein Administrator Admidio verwendet. Administratoren sehen dann oben auf jeder Seite einen Hinweis.</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD">Passwort für die Datenbanksicherungen von Updates</string>
-  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Bevor ein Update von Admidio etwas ändert, sichert es die Datenbank in eine ZIP-Datei in adm_my_files/core-update/dumps. Mit einem Passwort wird diese Datei verschlüsselt (AES-256), damit sie auch geschützt ist, wenn sie den Server verlässt. Das Passwort wird nie wieder angezeigt, ein leeres Feld behält es bei. Es wird in der Datenbank gespeichert; sicherer ist es in adm_my_files/config.php als $gCoreUpdateDumpPassword, das Vorrang hat. Ohne das Passwort kann die Sicherung nicht wiederhergestellt werden, es muss also sicher aufbewahrt werden.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_CONFIG">In adm_my_files/config.php festgelegt</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Bevor ein Update von Admidio etwas ändert, sichert es die Datenbank in eine ZIP-Datei in adm_my_files/backups. Mit einem Passwort wird diese Datei verschlüsselt (AES-256), damit sie auch geschützt ist, wenn sie den Server verlässt. Das Passwort wird nie wieder angezeigt, ein leeres Feld behält es bei. Es wird in der Datenbank gespeichert; sicherer ist es in adm_my_files/config.php als $gCoreUpdateDumpPassword, das Vorrang hat. Ohne das Passwort kann die Sicherung nicht wiederhergestellt werden, es muss also sicher aufbewahrt werden.</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD_REMOVE">Gespeichertes Passwort entfernen</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD_STORED">Ein Passwort ist gespeichert</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
@@ -314,6 +315,9 @@
   <string name="SYS_BACK">Zurück</string>
   <string name="SYS_BACK_TO_ALBUM">Zurück zum Album</string>
   <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
+  <string name="SYS_BACKUP_REPLACED_FILES">Durch ein Update ersetzte Dateien</string>
+  <string name="SYS_BACKUPS">Sicherungen</string>
+  <string name="SYS_BACKUPS_DESC">Die Sicherungen der Datenbank und die Dateien, die Updates ersetzt oder entfernt haben, in adm_my_files/backups. Sie werden nie automatisch entfernt und enthalten alle Daten der Organisation; sie sollten also bei Bedarf heruntergeladen und danach gelöscht werden.</string>
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
@@ -522,7 +526,7 @@
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installierte Version</string>
   <string name="SYS_CORE_UPDATE_INTERRUPTED">Die Installation der Dateien wurde unterbrochen</string>
   <string name="SYS_CORE_UPDATE_KEPT_ARCHIVE">Die geänderten und unbekannten Dateien der bisherigen Version sind in #VAR1# aufbewahrt.</string>
-  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# dieser Dateien wurden geändert oder gehören nicht zur installierten Version. Sie werden dauerhaft in einem ZIP-Archiv in adm_my_files/core-update/kept aufbewahrt.</string>
+  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# dieser Dateien wurden geändert oder gehören nicht zur installierten Version. Sie werden dauerhaft in einem ZIP-Archiv in adm_my_files/backups aufbewahrt.</string>
   <string name="SYS_CORE_UPDATE_LOG_FILE">Das Protokoll dieses Updates liegt in #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Anmelden</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Zu viele fehlgeschlagene Anmeldungen. Die Anmeldung beim Updater ist für 15 Minuten gesperrt.</string>
@@ -645,7 +649,11 @@
   <string name="SYS_DATA_PROTECTION_PERMISSION_DESC">Die von der Organisation bereitgestellten Informationen habe ich gelesen. Soweit die von mir angegebenen personenbezogenen Daten keine notwendigen Daten zur Vertragserfüllung sind, erkläre ich meine Einwilligung zur Verarbeitung dieser Daten. Meine Daten werden ausschließlich für die Zwecke der Organisation gespeichert und vertraulich behandelt.</string>
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
+  <string name="SYS_DATABASE_BACKUP_CREATE">Datenbank jetzt sichern</string>
+  <string name="SYS_DATABASE_BACKUP_CREATE_DESC">Sichert alle Daten von Admidio in eine ZIP-Datei in adm_my_files/backups, eine Datei pro Tabelle mit ihrer Struktur und ihren Daten. Mit einem Passwort für die Sicherungen wird die Datei verschlüsselt. Die Sicherung erscheint in der Liste darunter.</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Erstellt ein Backup aller Admidio-Daten in einer gzip-Datei. Neben den Daten enthält die Datei auch die Struktur der Tabellen, die Indizes und die Verknüpfungen zwischen den Tabellen. Das Backup enthält sensible Mitgliederdaten und sollte daher sicher aufbewahrt werden. Es sollte nicht möglich sein, dass Dritte auf die Datei zugreifen können.</string>
+  <string name="SYS_DATABASE_BACKUP_FAILED">Die Sicherung der Datenbank konnte nicht erstellt werden.</string>
+  <string name="SYS_DATABASE_BACKUP_NOT_POSSIBLE">Die Datenbank kann hier nicht gesichert werden: Für PostgreSQL wird das Programm pg_dump benötigt, das auf diesem Server nicht verfügbar ist.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Eine Aktualisierung der Datenbank ist nicht erforderlich.</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Die Admidio-Datenbank ist aktuell.</string>
   <string name="SYS_DATABASE_NO_LOGIN">Es konnte keine Verbindung zur Datenbank erstellt werden!\n\nFolgender Fehler ist aufgetreten:\n#VAR1#.</string>
@@ -888,6 +896,7 @@
   <string name="SYS_FILE_EXTENSION_INVALID">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</string>
   <string name="SYS_FILE_NAME_RULES">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner, in dem z. B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</string>
   <string name="SYS_FILE_NOT_CREATED">Die Datei #VAR1_BOLD# konnte nicht erstellt werden.</string>
+  <string name="SYS_FILE_NOT_DELETED">Die Datei #VAR1_BOLD# konnte nicht gelöscht werden.</string>
   <string name="SYS_FILE_NOT_EXIST">Die ausgewählte Datei existiert nicht auf dem Server.</string>
   <string name="SYS_FILE_NOT_EXIST_DELETE_FROM_DB">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</string>
   <string name="SYS_FILE_RENAME_ERROR">Beim Umbenennen der Datei #VAR1# ist ein Fehler aufgetreten.</string>
@@ -2137,6 +2146,7 @@
   <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
   <string name="SYS_UP_TO_DATE">Auf dem neuesten Stand</string>
   <string name="SYS_UPDATE_AVAILABLE">Update verfügbar</string>
+  <string name="SYS_UPDATE_BACKUP">Update &amp; Sicherung</string>
   <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# ist verfügbar.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>

@@ -343,6 +343,14 @@ class PreferencesService
         $html .= '
         </p>
         <strong>' . $versionsText . '</strong>';
+
+        // A release this installation is offered can be installed right from here.
+        if ($versionUpdate !== 99 && $this->getAvailableUpdate() !== '') {
+            $html .= '
+        <p class="mt-2"><a class="btn btn-primary" href="' . ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php">
+            <i class="bi bi-arrow-repeat"></i>' . $gL10n->get('SYS_CORE_UPDATE_START') . '</a></p>';
+        }
+
         return $html;
     }
 
@@ -401,7 +409,7 @@ class PreferencesService
                 }
                 break;
 
-            case 'common':
+            case 'update_backup':
                 // The password of the database backups is never shown, so an empty field keeps
                 // the stored one; only the checkbox removes it.
                 if (!empty($formValues['system_update_dump_password_remove'])) {

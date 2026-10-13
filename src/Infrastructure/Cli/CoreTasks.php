@@ -21,7 +21,7 @@ use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\DatabaseDump;
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
@@ -611,7 +611,8 @@ final class CoreTasks
         self::task(
             'database:backup',
             'databaseBackup',
-            'Create a native Admidio database dump.',
+            'Back up the database into adm_my_files/backups/, as the preferences and every core update do: a ZIP with one file per'
+                . ' table, encrypted with the password for the backups if one is set. --output copies it, for the invoking user only.',
             'database:backup [--output=FILE]',
             'PREFERENCES',
             true
@@ -3250,33 +3251,17 @@ final class CoreTasks
 
     public static function databaseBackup(array $arguments, array $options): int
     {
-        global $gDb;
+        $file = Backups::getFile(Backups::createDatabaseBackup());
 
-        $filename = 'admidio-' . date('Ymd-His') . '.sql.gz';
-        $dump = new DatabaseDump($gDb);
-
-        // The dump library creates the temporary file itself, so set the restrictive umask before it
-        // is observable. moveGeneratedFile() applies the same protection to the final destination.
-        $oldUmask = umask(0077);
-        try {
-            $dump->create($filename);
-        } finally {
-            umask($oldUmask);
+        if (CliApplication::optionString($options, 'output') === '') {
+            CliApplication::writeSuccess('Backup written to ' . $file . '.', $options, false);
+            return 0;
         }
 
-        $temporaryFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-        if (!chmod($temporaryFile, 0600)) {
-            @unlink($temporaryFile);
-            throw new RuntimeException('Could not restrict permissions of the generated database dump.');
-        }
-
-        // A dump contains every table of the installation, so restrict it to the invoking user.
-        self::moveGeneratedFile(
-            $temporaryFile,
-            $filename,
-            $options,
-            true
-        );
+        // A backup contains every table of the installation, so the copy is for the invoking user only.
+        $target = CliApplication::resolveOutputPath($options, basename($file));
+        CliApplication::copyToNewFile($file, $target, true, self::overwriteRequested($options));
+        CliApplication::writeSuccess('Backup written to ' . $file . ' and copied to ' . $target . '.', $options, false);
         return 0;
     }
 

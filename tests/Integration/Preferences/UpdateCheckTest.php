@@ -169,6 +169,18 @@ final class UpdateCheckTest extends AdministratorTestCase
     }
 
     /**
+     * @testdox The check in the preferences offers to start the update when this installation is offered a release
+     */
+    public function testCheckOffersTheUpdate(): void
+    {
+        $updater = '/install/core-update/index.php';
+
+        $this->assertStringContainsString($updater, $this->service("Version=99.0.0\n")->showUpdateInfo());
+        $this->assertStringNotContainsString($updater, $this->service("Version=1.0.0\n")->showUpdateInfo(), 'nothing newer');
+        $this->assertStringNotContainsString($updater, $this->service(false)->showUpdateInfo(), 'no connection');
+    }
+
+    /**
      * @testdox The notice names a newer stable release, a newer beta only to a beta, and ends with the update
      */
     public function testAvailableUpdate(): void

@@ -49,12 +49,14 @@ final class DatabaseDumpTest extends DatabaseTestCase
     }
 
     /**
-     * @testdox Every table of the installation is backed up into one ZIP, one compressed file per table
+     * The context of the backup functions for the test database, with the connection of the test.
+     * @return array<string,mixed>
      */
-    public function testDump(): void
+    private function context(): array
     {
         $database = admidioTestDatabaseConfig();
-        $context = array(
+
+        return array(
             'config' => U\configFromValues($this->root, array(
                 'gDbType' => 'mysql',
                 'g_adm_srv' => $database['host'],
@@ -66,6 +68,14 @@ final class DatabaseDumpTest extends DatabaseTestCase
             )),
             'pdo' => (new \ReflectionProperty($this->getDatabase(), 'pdo'))->getValue($this->getDatabase())
         );
+    }
+
+    /**
+     * @testdox Every table of the installation is backed up into one ZIP, one compressed file per table
+     */
+    public function testDump(): void
+    {
+        $context = $this->context();
         $state = U\createUpdate($this->root, array('installedVersion' => '5.0.14'));
         $workspace = U\workspace($this->root, $state['updateId']);
         file_put_contents($workspace . '/plan.json', '[]');
@@ -78,13 +88,13 @@ final class DatabaseDumpTest extends DatabaseTestCase
         }
 
         $this->assertSame('installing', $state['state']);
-        $this->assertMatchesRegularExpression('#^dumps/dump-\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_[a-f0-9]{6}\.zip$#', $state['dumpFile']);
+        $this->assertMatchesRegularExpression('#^database_\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_[a-f0-9]{6}\.zip$#', $state['dumpFile']);
         $this->assertDirectoryDoesNotExist($workspace . '/dump', 'the table files are packed and removed');
 
         $tables = $context['pdo']->query('SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()
             AND table_type = \'BASE TABLE\' AND table_name LIKE \'' . TABLE_PREFIX . '\\_%\'')->fetchAll(PDO::FETCH_COLUMN);
         $zip = new ZipArchive();
-        $zip->open($this->root . '/adm_my_files/core-update/' . $state['dumpFile']);
+        $zip->open(U\backupFile($this->root, $state['dumpFile']));
         $this->assertSame(count($tables), $zip->numFiles, 'one file per table');
         $users = '';
         for ($index = 0; $index < $zip->numFiles; $index++) {
@@ -95,5 +105,21 @@ final class DatabaseDumpTest extends DatabaseTestCase
         $zip->close();
         $this->assertStringContainsString('CREATE TABLE `' . TABLE_PREFIX . '_users`', $users);
         $this->assertStringContainsString('DROP TABLE IF EXISTS `' . TABLE_PREFIX . '_users`', $users);
+    }
+
+    /**
+     * @testdox A backup that an administrator asks for is the same kind of backup, made in one go
+     */
+    public function testBackupInOneGo(): void
+    {
+        $backup = U\createDatabaseBackup($this->context(), $this->root . self::LIBRARY, '6.0.0-beta.1');
+
+        $this->assertMatchesRegularExpression('#^database_\d{4}-\d{2}-\d{2}_\d{6}_6\.0\.0-beta\.1_[a-f0-9]{6}\.zip$#', $backup['file']);
+        $this->assertFalse($backup['encrypted'], 'no password for the backups is set');
+        $this->assertSame(array($backup['file']), array_column(U\listBackups($this->root), 'name'), 'nothing else is left in the directory');
+        $zip = new ZipArchive();
+        $zip->open(U\backupFile($this->root, $backup['file']));
+        $this->assertGreaterThan(10, $zip->numFiles, 'one file per table');
+        $zip->close();
     }
 }

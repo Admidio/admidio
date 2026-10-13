@@ -136,7 +136,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertFileDoesNotExist($this->root . '/tests/DevTest.php', 'only what a release would contain is installed');
         $this->assertFileDoesNotExist($this->root . '/install/update-manifest.json');
         $this->assertNull(U\installedInventory($this->root), 'the next update keeps every file it replaces');
-        $this->assertMatchesRegularExpression('#^kept/[0-9_-]+_5\.0\.14_to_5\.1\.0-feature-x-ababab[a-f0-9]_[a-f0-9]{6}\.zip$#',
+        $this->assertMatchesRegularExpression('#^files_[0-9_-]+_5\.0\.14_to_5\.1\.0-feature-x-ababab[a-f0-9]_[a-f0-9]{6}\.zip$#',
             (string)U\readState($this->root, $updateId)['keptArchive']);
     }
 
@@ -526,8 +526,8 @@ final class PhaseBTest extends AdmidioTestCase
         U\phaseBConfirm($context, $updateId, 'own');
         $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
 
-        $archive = U\updatesDirectory($this->root) . '/' . U\readState($this->root, $updateId)['keptArchive'];
-        $this->assertMatchesRegularExpression('#/kept/\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_to_5\.1\.0_[a-f0-9]{6}\.zip$#', $archive);
+        $archive = U\backupFile($this->root, U\readState($this->root, $updateId)['keptArchive']);
+        $this->assertMatchesRegularExpression('#/adm_my_files/backups/files_\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_to_5\.1\.0_[a-f0-9]{6}\.zip$#', $archive);
         $zip = new ZipArchive();
         $zip->open($archive);
         $this->assertSame('OLD BOOTSTRAP', $zip->getFromName('system/bootstrap/bootstrap.php'), 'the file as it was before the update');

@@ -14,11 +14,6 @@
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['plugin_module_pages']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_js_editor_enabled']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_browser_update_check']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_update_check']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['system_update_dump_password']}
-    {if isset($elements['system_update_dump_password_remove'])}
-        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_update_dump_password_remove']}
-    {/if}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_pwa_enabled']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['path_for_calculating_disk_usage']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_common']}

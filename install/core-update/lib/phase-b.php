@@ -9,11 +9,11 @@
  *                replaced and removed; checks D1-D3
  * review       - the administrator sees the plan and starts the installation
  * ready        - the plan is confirmed, with the choice of the database backup
- * dumping      - maintenance mode on; the database is backed up into adm_my_files/core-update/dumps/
+ * dumping      - maintenance mode on; the database is backed up into adm_my_files/backups/
  * installing   - system/bootstrap/ first, then the rest; every replaced or
  *                removed file is copied to the workspace first and every step is journaled
  * archiving    - the replaced and removed files that were changed or unknown go into the kept-files
- *                archive in adm_my_files/core-update/kept/, which is never removed automatically
+ *                archive in adm_my_files/backups/, which is never removed automatically
  * verifying    - every installed file is hashed again; then OPcache is reset
  * files_installed - install/update.php takes over and updates the database (phase C)
  *
@@ -307,8 +307,7 @@ function rolledBackMessage(array $ctx, array $state): string
  */
 function restoreMethod(array $ctx, array $state): string
 {
-    $file = updatesDirectory($ctx['config']['rootPath']) . '/' . ($state['dumpFile'] ?? '');
-    if (($state['dumpFile'] ?? '') === '' || !is_file($file)) {
+    if (($state['dumpFile'] ?? '') === '' || !is_file($file = backupFile($ctx['config']['rootPath'], (string)$state['dumpFile']))) {
         return '';
     }
     // An encrypted backup needs its password, which may have been changed or removed since.
@@ -917,61 +916,13 @@ function enterMaintenance(array $ctx, array $state): array
 // ------------------------------------------------------------------------------------------------
 
 /**
- * How this installation's database can be backed up: "mysqldump" (mysqldump-php, from the verified
- * package or else from the installed release), "pg_dump" (the PostgreSQL program, if PHP may run
- * it) or "" when it cannot.
+ * How this installation's database can be backed up (see databaseBackupMethod()), with mysqldump-php
+ * from the verified package or else from the installed release.
  * @param array<string,mixed> $ctx
  */
 function dumpMethod(array $ctx, string $workspace): string
 {
-    if ($ctx['config']['dbType'] === 'mysql') {
-        return mysqldumpLibrary($ctx['config']['rootPath'], $workspace) !== '' ? 'mysqldump' : '';
-    }
-
-    $disabled = array_map('trim', explode(',', (string)ini_get('disable_functions')));
-    if (!function_exists('exec') || in_array('exec', $disabled, true)) {
-        return '';
-    }
-    @exec('pg_dump --version 2>&1', $output, $status);
-
-    return $status === 0 ? 'pg_dump' : '';
-}
-
-/**
- * The password that protects the backup of the database once it leaves the server: the one given
- * to the command line (--dump-password-env), else $gCoreUpdateDumpPassword of config.php, else the
- * preference system_update_dump_password of the first organization; "" for none. It is read anew
- * whenever it is needed, also to restore the backup, because it is never written to the state or
- * the log.
- * @param array<string,mixed> $ctx
- */
-function dumpPassword(array $ctx): string
-{
-    if ((string)($ctx['dumpPassword'] ?? '') !== '') {
-        return (string)$ctx['dumpPassword'];
-    }
-    if ($ctx['config']['dumpPassword'] !== '') {
-        return $ctx['config']['dumpPassword'];
-    }
-    if (!($ctx['pdo'] ?? null) instanceof PDO) {
-        return '';
-    }
-
-    try {
-        $tablePrefix = $ctx['config']['tablePrefix'];
-        $row = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $tablePrefix . '_preferences WHERE prf_name = ?
-            AND prf_org_id = (SELECT MIN(org_id) FROM ' . $tablePrefix . '_organizations)', array('system_update_dump_password'));
-    } catch (Throwable) {
-        return '';
-    }
-
-    return (string)($row['prf_value'] ?? '');
-}
-
-/** Whether the ZIP extension of this PHP can encrypt with AES-256. */
-function canEncryptZip(): bool
-{
-    return defined('ZipArchive::EM_AES_256') && method_exists(\ZipArchive::class, 'setEncryptionName');
+    return databaseBackupMethod($ctx['config'], mysqldumpLibrary($ctx['config']['rootPath'], $workspace));
 }
 
 /** The file of mysqldump-php: from the verified package, or else from the installed release. */
@@ -988,94 +939,36 @@ function mysqldumpLibrary(string $root, string $workspace): string
 }
 
 /**
- * Back up the next tables of the installation, one file per table, and pack them into one ZIP in
- * adm_my_files/core-update/dumps/ at the end. PostgreSQL is backed up by pg_dump in one go.
+ * Back up the next tables of the installation, one file per table, and pack them into one backup
+ * in adm_my_files/backups/ at the end (see lib/backup.php).
  * @param array<string,mixed> $ctx
  * @param array<string,mixed> $state
  * @return array<string,mixed>
  */
 function dumpPart(array $ctx, array $state): array
 {
-    $config = $ctx['config'];
-    $root = $config['rootPath'];
+    $root = $ctx['config']['rootPath'];
     $workspace = workspace($root, $state['updateId']);
-    $directory = $workspace . '/dump';
-    ensureDirectory($directory);
     // A single large table is one piece of work, which may take longer than the usual budget, so
     // the time limit is generous; new tables are only started within the usual budget.
     startTimeBudget(300);
-    $deadline = microtime(true) + TIME_BUDGET;
 
-    if (($state['dumpMethod'] ?? '') === 'pg_dump') {
-        $file = $directory . '/' . $config['dbName'] . '.sql.gz';
-        putenv('PGPASSWORD=' . $config['dbPassword']);
-        exec('pg_dump --host=' . escapeshellarg($config['dbHost']) . ($config['dbPort'] !== null ? ' --port=' . (int)$config['dbPort'] : '')
-            . ' --username=' . escapeshellarg($config['dbUser']) . ' --dbname=' . escapeshellarg($config['dbName'])
-            . ' --clean --if-exists --no-owner --compress=6 --table=' . escapeshellarg($config['tablePrefix'] . '_*')
-            . ' --file=' . escapeshellarg($file) . ' 2>&1', $output, $status);
-        putenv('PGPASSWORD');
-        if ($status !== 0) {
-            throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', 'pg_dump failed: ' . implode(' ', $output), array());
-        }
-    } else {
-        if (!isset($state['dumpTables'])) {
-            $statement = $ctx['pdo']->prepare('SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()
-                AND table_type = ? AND table_name LIKE ? ORDER BY table_name');
-            $statement->execute(array('BASE TABLE', str_replace('_', '\\_', $config['tablePrefix']) . '\\_%'));
-            $state['dumpTables'] = $statement->fetchAll(\PDO::FETCH_COLUMN);
-        }
-
-        if (!class_exists(\Ifsnop\Mysqldump\Mysqldump::class, false)) {
-            require_once mysqldumpLibrary($root, $workspace);
-        }
-        $dsn = 'mysql:host=' . $config['dbHost'] . ($config['dbPort'] !== null ? ';port=' . $config['dbPort'] : '') . ';dbname=' . $config['dbName'];
-        $cursor = (int)$state['cursor'];
-        do {
-            $table = $state['dumpTables'][$cursor] ?? null;
-            if ($table === null) {
-                break;
-            }
-            $dump = new \Ifsnop\Mysqldump\Mysqldump($dsn, $config['dbUser'], $config['dbPassword'], array(
-                'include-tables' => array($table),
-                'compress' => \Ifsnop\Mysqldump\Mysqldump::GZIP,
-                'add-drop-table' => true,
-                'default-character-set' => \Ifsnop\Mysqldump\Mysqldump::UTF8MB4
-            ));
-            $dump->start(sprintf('%s/%03d_%s.sql.gz', $directory, $cursor + 1, $table));
-            $cursor++;
-        } while (microtime(true) < $deadline);
-        $state['cursor'] = $cursor;
-        $state['cursorTotal'] = count($state['dumpTables']);
-        if ($cursor < count($state['dumpTables'])) {
-            return $state;
-        }
+    $progress = array('cursor' => (int)$state['cursor']) + (isset($state['dumpTables']) ? array('tables' => $state['dumpTables']) : array());
+    $done = backUpTables($ctx, (string)$state['dumpMethod'], mysqldumpLibrary($root, $workspace), $workspace . '/dump', $progress,
+        microtime(true) + TIME_BUDGET);
+    $state['dumpTables'] = $progress['tables'] ?? array();
+    $state['cursor'] = (int)($progress['cursor'] ?? 0);
+    $state['cursorTotal'] = count($state['dumpTables']);
+    if (!$done) {
+        return $state;
     }
 
-    // One ZIP for the whole backup; the table files are compressed already. With a password every
-    // entry is encrypted with AES-256; without support for it the review has warned that the backup
-    // stays unencrypted.
-    ensureDirectory(updatesDirectory($root) . '/dumps');
-    $state['dumpFile'] = 'dumps/dump-' . date('Y-m-d_His') . '_' . $state['installedVersion'] . '_' . bin2hex(random_bytes(3)) . '.zip';
-    $password = canEncryptZip() ? dumpPassword($ctx) : '';
-    $zip = new \ZipArchive();
-    if ($zip->open(updatesDirectory($root) . '/' . $state['dumpFile'], \ZipArchive::CREATE) !== true) {
-        throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be created.');
-    }
-    foreach (glob($directory . '/*.sql.gz') ?: array() as $file) {
-        $zip->addFile($file, basename($file));
-        $zip->setCompressionName(basename($file), \ZipArchive::CM_STORE);
-        if ($password !== '' && !$zip->setEncryptionName(basename($file), \ZipArchive::EM_AES_256, $password)) {
-            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be encrypted.');
-        }
-    }
-    $state['dumpEncrypted'] = $password !== '';
-    if (!$zip->close()) {
-        throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $state['dumpFile'] . ' cannot be written.');
-    }
-    deleteDirectory($directory);
+    // Without support for encryption the review has warned that the backup stays unencrypted.
+    $backup = packDatabaseBackup($ctx, $workspace . '/dump', (string)$state['installedVersion']);
     unset($state['dumpTables']);
 
-    return array_merge($state, array('state' => 'installing', 'cursor' => 0, 'cursorTotal' => count(readPlan($workspace))));
+    return array_merge($state, array('state' => 'installing', 'dumpFile' => $backup['file'], 'dumpEncrypted' => $backup['encrypted'],
+        'cursor' => 0, 'cursorTotal' => count(readPlan($workspace))));
 }
 
 function leaveMaintenance(string $root, string $updateId): void
@@ -1154,13 +1047,12 @@ function archivePart(array $ctx, array $state): array
 
     if ($kept !== array()) {
         if (($state['keptArchive'] ?? '') === '') {
-            $state['keptArchive'] = 'kept/' . date('Y-m-d_His') . '_' . $state['installedVersion'] . '_to_' . $state['targetVersion']
-                . (isDeveloperChannel((string)$state['channel']) ? '-' . preg_replace('/[^A-Za-z0-9.-]+/', '-', developerSource($state))
-                    . (($state['commit'] ?? '') !== '' ? '-' . substr((string)$state['commit'], 0, 7) : '') : '')
-                . '_' . bin2hex(random_bytes(3)) . '.zip';
-            ensureDirectory(updatesDirectory($root) . '/kept');
+            $state['keptArchive'] = backupName('files', $state['installedVersion'] . '_to_' . $state['targetVersion']
+                . (isDeveloperChannel((string)$state['channel']) ? '-' . developerSource($state)
+                    . (($state['commit'] ?? '') !== '' ? '-' . substr((string)$state['commit'], 0, 7) : '') : ''));
+            ensureDirectory(backupsDirectory($root));
         }
-        $file = updatesDirectory($root) . '/' . $state['keptArchive'];
+        $file = backupFile($root, $state['keptArchive']);
         $zip = new \ZipArchive();
         if ($zip->open($file, \ZipArchive::CREATE) !== true) {
             throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $file . ' cannot be created.');
@@ -1439,7 +1331,7 @@ function rollbackPart(array $ctx, array $state): array
     }
     // The files are back where they were, so the archive of them is not needed.
     if (($state['keptArchive'] ?? '') !== '') {
-        @unlink(updatesDirectory($root) . '/' . $state['keptArchive']);
+        @unlink(backupFile($root, $state['keptArchive']));
         $state['keptArchive'] = '';
     }
     leaveMaintenance($root, $state['updateId']);
@@ -1476,7 +1368,7 @@ function restoreDatabasePart(array $ctx, array $state): array
     $deadline = microtime(true) + TIME_BUDGET;
 
     $zip = new \ZipArchive();
-    if ($zip->open(updatesDirectory($root) . '/' . $state['dumpFile'], \ZipArchive::RDONLY) !== true) {
+    if ($zip->open(backupFile($root, $state['dumpFile']), \ZipArchive::RDONLY) !== true) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $state['dumpFile'] . ' cannot be opened.');
     }
     if (!empty($state['dumpEncrypted'])) {
