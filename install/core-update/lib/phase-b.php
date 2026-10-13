@@ -43,8 +43,18 @@ const PHASE_B_STATES = array('prepared', 'extracting', 'planning', 'review', 're
 /** The states in which install/update.php has the update. */
 const PHASE_C_STATES = array('files_installed', 'database_running', 'database_failed');
 
-/** Files per request, besides the time budget. */
+/** Files per request of the browser, besides the time budget. */
 const FILES_PER_REQUEST = 200;
+
+/**
+ * How many files a request may work on: a request of the browser has to stay short; the command
+ * line only stops for the time budget, which still keeps its progress coming, because every piece
+ * of work reads and writes the state, the plan and the journal again.
+ */
+function filesPerRequest(int $factor = 1): int
+{
+    return PHP_SAPI === 'cli' ? PHP_INT_MAX : $factor * FILES_PER_REQUEST;
+}
 
 /** Never written, scanned or removed, whatever a manifest says. */
 const ALWAYS_PRESERVED = array('adm_my_files', 'install/core-update', 'config.php', 'custom_css.css', 'custom_favicon.png',
@@ -479,7 +489,8 @@ function extractPart(array $ctx, array $state): array
         $indexes = array_keys($package['entries']);
         $state['cursorTotal'] = count($indexes);
         $cursor = (int)$state['cursor'];
-        for ($done = 0; $cursor < count($indexes) && $done < FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
+        $directories = array();
+        for ($done = 0; $cursor < count($indexes) && $done < filesPerRequest() && microtime(true) < $deadline; $cursor++, $done++) {
             $path = $package['entries'][$indexes[$cursor]];
             // A source archive also has what no installation needs: tests, the files of GitHub.
             if ($path === INSTALLED_MANIFEST || isPreserved($path, $manifest) || ($manifest['developer'] && !isset($manifest['files'][$path]))) {
@@ -490,7 +501,7 @@ function extractPart(array $ctx, array $state): array
             }
 
             $target = $workspace . '/extracted/' . $path;
-            ensureDirectory(dirname($target));
+            knownDirectory(dirname($target), $directories);
             try {
                 $hash = packageExtract($package, $indexes[$cursor], $target, MAX_EXTRACTED_SIZE);
             } catch (UpdaterException $exception) {
@@ -501,6 +512,9 @@ function extractPart(array $ctx, array $state): array
             }
         }
         $state['cursor'] = $cursor;
+        // Every file the package has is extracted now, so the index of the package tells whether a
+        // file of the release is missing.
+        $packaged = $cursor < count($indexes) ? array() : array_flip($package['entries']);
     } finally {
         $package['zip']->close();
     }
@@ -510,7 +524,7 @@ function extractPart(array $ctx, array $state): array
     }
 
     foreach (releaseFiles($manifest) as $path) {
-        if (!is_file($workspace . '/extracted/' . $path)) {
+        if (!isset($packaged[$path])) {
             throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The package lacks ' . $path . '.'));
         }
     }
@@ -542,16 +556,15 @@ function planPart(array $ctx, array $state): array
     $inventory = installedInventory($root);
     $operations = array();
     $cursor = (int)$state['cursor'];
-    for ($done = 0; $cursor < count($files) && $done < 4 * FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
+    for ($done = 0; $cursor < count($files) && $done < filesPerRequest(4) && microtime(true) < $deadline; $cursor++, $done++) {
         $path = $files[$cursor];
-        $target = $root . '/' . $path;
-        $current = is_file($target) && !is_link($target) ? (string)hash_file('sha256', $target) : '';
-        if (hash_equals($manifest['files'][$path], $current)) {
+        $current = currentFile($root . '/' . $path);
+        if (hash_equals($manifest['files'][$path], $current['hash'])) {
             continue;
         }
-        $operation = array('action' => file_exists($target) || is_link($target) ? 'replace' : 'create', 'path' => $path,
-            'hash' => $manifest['files'][$path]);
-        if ($current !== '' && ($keep = keepReason($inventory, $path, $current)) !== null) {
+        $operation = array('action' => $current['exists'] ? 'replace' : 'create', 'path' => $path, 'hash' => $manifest['files'][$path])
+            + plannedFile($current);
+        if ($current['hash'] !== '' && ($keep = keepReason($inventory, $path, $current['hash'])) !== null) {
             $operation['keep'] = $keep;
         }
         $operations[] = $operation;
@@ -568,9 +581,9 @@ function planPart(array $ctx, array $state): array
     // describes the files, so it goes: the next update keeps every file it replaces.
     $removals = array();
     foreach ($manifest['developer'] ? array() : obsoleteFiles($root, $manifest) as $path) {
-        $removal = array('action' => 'delete', 'path' => $path, 'hash' => '');
-        $current = is_file($root . '/' . $path) && !is_link($root . '/' . $path) ? (string)hash_file('sha256', $root . '/' . $path) : '';
-        if ($current !== '' && ($keep = keepReason($inventory, $path, $current)) !== null) {
+        $current = currentFile($root . '/' . $path);
+        $removal = array('action' => 'delete', 'path' => $path, 'hash' => '') + plannedFile($current);
+        if ($current['hash'] !== '' && ($keep = keepReason($inventory, $path, $current['hash'])) !== null) {
             $removal['keep'] = $keep;
         }
         $removals[] = $removal;
@@ -607,6 +620,34 @@ function planPart(array $ctx, array $state): array
         'cursor' => 0,
         'cursorTotal' => 0
     ));
+}
+
+/**
+ * What is at a path of the installation, from one lstat(): whether anything is there, whether it is
+ * a symbolic link, the size and the SHA-256 of a regular file ("" for anything else).
+ * @return array{exists: bool, link: bool, size: int, hash: string}
+ */
+function currentFile(string $file): array
+{
+    $stat = @lstat($file);
+    if ($stat === false) {
+        return array('exists' => false, 'link' => false, 'size' => 0, 'hash' => '');
+    }
+    $type = $stat['mode'] & 0170000;
+
+    return array('exists' => true, 'link' => $type === 0120000, 'size' => (int)$stat['size'],
+        'hash' => $type === 0100000 ? (string)hash_file('sha256', $file) : '');
+}
+
+/**
+ * What the plan keeps about the file an operation replaces or removes, so that the checks of the
+ * plan need not look at it again: its size, and whether it is a symbolic link.
+ * @param array{exists: bool, link: bool, size: int, hash: string} $current
+ * @return array<string,int|bool>
+ */
+function plannedFile(array $current): array
+{
+    return array('size' => $current['hash'] !== '' ? $current['size'] : 0) + ($current['link'] ? array('link' => true) : array());
 }
 
 /**
@@ -704,10 +745,14 @@ function planChecks(string $root, string $workspace, array $plan): array
     $links = array();
     $needed = 0;
     $probed = array();
+    // The directories found to exist, and those found missing, which an update of 6.0 has many of.
+    $exists = array();
 
     foreach ($plan as $operation) {
         $target = $root . '/' . $operation['path'];
-        if (is_link($target)) {
+        // The plan knows the link and the size of the files it replaces or removes; the manifest
+        // of the release is looked at here.
+        if (array_key_exists('size', $operation) ? !empty($operation['link']) : is_link($target)) {
             $links[] = $operation['path'];
         }
         if ($operation['action'] !== 'delete') {
@@ -716,7 +761,7 @@ function planChecks(string $root, string $workspace, array $plan): array
 
             // The nearest directory that exists must take the new file or directory.
             $directory = dirname($target);
-            while (!is_dir($directory) && dirname($directory) !== $directory) {
+            while (!($exists[$directory] ??= is_dir($directory)) && dirname($directory) !== $directory) {
                 $directory = dirname($directory);
             }
             if (!isset($probed[$directory])) {
@@ -726,8 +771,8 @@ function planChecks(string $root, string $workspace, array $plan): array
                 }
             }
         }
-        if ($operation['action'] !== 'create' && is_file($target)) {
-            $needed += (int)filesize($target);
+        if ($operation['action'] !== 'create') {
+            $needed += array_key_exists('size', $operation) ? (int)$operation['size'] : (is_file($target) ? (int)filesize($target) : 0);
         }
     }
 
@@ -988,15 +1033,27 @@ function installPart(array $ctx, array $state): array
     $deadline = startTimeBudget(TIME_BUDGET);
 
     $journal = readJournal($workspace);
+    $journalFile = openJournal($workspace);
+    $directories = array();
     $cursor = (int)$state['cursor'];
-    for ($done = 0; $cursor < count($plan) && $done < FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
-        if (isset($journal[$cursor]['done'])) {
-            continue;
+    try {
+        for ($done = 0; $cursor < count($plan) && $done < filesPerRequest() && microtime(true) < $deadline; $cursor++, $done++) {
+            if (isset($journal[$cursor]['done'])) {
+                continue;
+            }
+            if (isset($journal[$cursor]['prepared'])) {
+                // The request ended within the operation. Its file of the package has been moved
+                // into place already if the target is right, otherwise it is still in the workspace.
+                if (isOperationComplete($root, $plan[$cursor])) {
+                    writeJournal($journalFile, array_merge($journal[$cursor]['prepared'], array('phase' => 'done')));
+                    continue;
+                }
+                undoOperation($root, $workspace, $journal[$cursor]['prepared']);
+            }
+            performOperation($root, $workspace, $cursor, $plan[$cursor], $journalFile, $directories);
         }
-        if (isset($journal[$cursor]['prepared'])) {
-            undoOperation($root, $workspace, $journal[$cursor]['prepared']);
-        }
-        performOperation($root, $workspace, $cursor, $plan[$cursor]);
+    } finally {
+        fclose($journalFile);
     }
     $state['cursor'] = $cursor;
     $state['cursorTotal'] = count($plan);
@@ -1038,7 +1095,7 @@ function archivePart(array $ctx, array $state): array
         }
 
         $cursor = (int)$state['cursor'];
-        for ($done = 0; $cursor < count($kept) && $done < FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
+        for ($done = 0; $cursor < count($kept) && $done < filesPerRequest() && microtime(true) < $deadline; $cursor++, $done++) {
             $backup = $workspace . '/backup/' . $kept[$cursor]['path'];
             if (is_file($backup)) {
                 $zip->addFile($backup, $kept[$cursor]['path']);
@@ -1069,41 +1126,106 @@ function archivePart(array $ctx, array $state): array
 }
 
 /**
+ * Replace, create or remove one file. The file that is replaced or removed is moved into the
+ * rollback copy, and the verified file of the package is moved into place: a rename is one atomic
+ * operation, where a copy reads and writes the whole file, which on a slow file system costs many
+ * times more. If the workspace is on another file system, the files are copied instead. The
+ * installed files are checked against the manifest by verifyPart(), so they are not hashed here.
  * @param array<string,string> $operation
+ * @param resource $journal
+ * @param array<string,bool> $directories The directories known to exist in this request.
  */
-function performOperation(string $root, string $workspace, int $index, array $operation): void
+function performOperation(string $root, string $workspace, int $index, array $operation, $journal, array &$directories): void
 {
     $path = $operation['path'];
     $target = $root . '/' . $path;
     $entry = array('index' => $index, 'phase' => 'prepared', 'action' => $operation['action'], 'path' => $path, 'mode' => null,
         'directories' => array());
 
-    if ($operation['action'] !== 'create' && is_file($target)) {
-        $backup = $workspace . '/backup/' . $path;
-        ensureDirectory(dirname($backup));
-        if (!@copy($target, $backup) || !hash_equals((string)hash_file('sha256', $target), (string)hash_file('sha256', $backup))) {
-            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILE_FAILED', 'The rollback copy of ' . $path . ' failed.', array($path));
-        }
-        $entry['mode'] = @fileperms($target) & 0777 ?: null;
+    $stat = $operation['action'] !== 'create' ? @lstat($target) : false;
+    $isFile = $stat !== false && ($stat['mode'] & 0170000) === 0100000;
+    if ($isFile) {
+        $entry['mode'] = $stat['mode'] & 0777 ?: null;
     }
 
     // The directories this operation creates, outermost first, so that a rollback removes them.
-    for ($directory = dirname($target); !is_dir($directory); $directory = dirname($directory)) {
+    for ($directory = dirname($target); !isset($directories[$directory]) && !is_dir($directory); $directory = dirname($directory)) {
         array_unshift($entry['directories'], substr($directory, strlen($root) + 1));
     }
-    appendJournal($workspace, $entry);
+    $directories[$directory] = true;
+    writeJournal($journal, $entry);
 
-    if ($operation['action'] === 'delete') {
-        if (file_exists($target) && !@unlink($target)) {
-            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILE_FAILED', $path . ' cannot be removed.', array($path));
+    if ($isFile) {
+        $backup = $workspace . '/backup/' . $path;
+        knownDirectory(dirname($backup), $directories);
+        moveFile($target, $backup, 'The rollback copy of ' . $path . ' failed.', $path);
+    } elseif ($operation['action'] === 'delete' && $stat !== false && !@unlink($target)) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILE_FAILED', $path . ' cannot be removed.', array($path));
+    }
+
+    if ($operation['action'] !== 'delete') {
+        knownDirectory(dirname($target), $directories);
+        if (isset($operation['source'])) {
+            // A file the workspace still needs, such as the manifest of the release.
+            installFile($workspace . '/' . $operation['source'], $target, $operation['hash'], $entry['mode'], $path);
+        } else {
+            moveFile($workspace . '/extracted/' . $path, $target, $path . ' cannot be written.', $path);
+            if ($entry['mode'] !== null) {
+                @chmod($target, $entry['mode']);
+            }
+            if (function_exists('opcache_invalidate')) {
+                @opcache_invalidate($target, true);
+            }
         }
-    } else {
-        $source = isset($operation['source']) ? $workspace . '/' . $operation['source'] : $workspace . '/extracted/' . $path;
-        installFile($source, $target, $operation['hash'], $entry['mode'], $path);
     }
 
     $entry['phase'] = 'done';
-    appendJournal($workspace, $entry);
+    writeJournal($journal, $entry);
+}
+
+/**
+ * Move a file, or where rename cannot (another file system) copy it next to its target, check it
+ * and rename it into place, then remove the original.
+ */
+function moveFile(string $source, string $target, string $failure, string $path): void
+{
+    if (@rename($source, $target)) {
+        return;
+    }
+
+    $hash = is_file($source) ? (string)hash_file('sha256', $source) : '';
+    if ($hash === '') {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILE_FAILED', $failure, array($path));
+    }
+    installFile($source, $target, $hash, null, $path);
+    @unlink($source);
+}
+
+/**
+ * Whether an operation that a request began has been carried out completely: the file of the
+ * release is in place, or the removed file is gone.
+ * @param array<string,string> $operation
+ */
+function isOperationComplete(string $root, array $operation): bool
+{
+    $target = $root . '/' . $operation['path'];
+    if ($operation['action'] === 'delete') {
+        return !file_exists($target) && !is_link($target);
+    }
+
+    return is_file($target) && !is_link($target) && hash_equals($operation['hash'], (string)hash_file('sha256', $target));
+}
+
+/**
+ * Create a directory unless this request already knows it.
+ * @param array<string,bool> $directories
+ */
+function knownDirectory(string $directory, array &$directories): void
+{
+    if (!isset($directories[$directory])) {
+        ensureDirectory($directory);
+        $directories[$directory] = true;
+    }
 }
 
 /**
@@ -1168,7 +1290,7 @@ function verifyPart(array $ctx, array $state): array
     $deadline = startTimeBudget(TIME_BUDGET);
 
     $cursor = (int)$state['cursor'];
-    for ($done = 0; $cursor < count($files) && $done < 4 * FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
+    for ($done = 0; $cursor < count($files) && $done < filesPerRequest(4) && microtime(true) < $deadline; $cursor++, $done++) {
         $path = $files[$cursor];
         if (is_link($root . '/' . $path) || !hash_equals($manifest['files'][$path], (string)@hash_file('sha256', $root . '/' . $path))) {
             throw UpdaterException::withDetail('SYS_CORE_UPDATE_VERIFY_FAILED', $path . ' does not match the manifest.', array($path));
@@ -1228,7 +1350,7 @@ function rollbackPart(array $ctx, array $state): array
     $prepared = array_values($prepared);
 
     $cursor = (int)$state['cursor'];
-    for ($done = 0; $cursor < count($prepared) && $done < FILES_PER_REQUEST && microtime(true) < $deadline; $cursor++, $done++) {
+    for ($done = 0; $cursor < count($prepared) && $done < filesPerRequest() && microtime(true) < $deadline; $cursor++, $done++) {
         undoOperation($root, $workspace, $prepared[$cursor]);
     }
     $state['cursor'] = $cursor;
@@ -1473,8 +1595,39 @@ function removeEmptiedDirectories(string $root, array $plan): void
  */
 function appendJournal(string $workspace, array $entry): void
 {
+    $journal = openJournal($workspace);
+    try {
+        writeJournal($journal, $entry);
+    } finally {
+        fclose($journal);
+    }
+}
+
+/**
+ * Open the journal for the entries of one request. The requests of an update are serialised by
+ * its lock, so one handle can serve all of them.
+ * @return resource
+ */
+function openJournal(string $workspace)
+{
+    $journal = @fopen($workspace . '/journal.jsonl', 'ab');
+    if ($journal === false) {
+        throw new UpdaterException('SYS_CORE_UPDATE_FILES_NOT_WRITABLE');
+    }
+
+    return $journal;
+}
+
+/**
+ * Write an entry of the journal before the step it records goes on: a request that ends at any
+ * point leaves at most its last line incomplete.
+ * @param resource $journal
+ * @param array<string,mixed> $entry
+ */
+function writeJournal($journal, array $entry): void
+{
     $line = json_encode($entry, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n";
-    if (@file_put_contents($workspace . '/journal.jsonl', $line, FILE_APPEND | LOCK_EX) !== strlen($line)) {
+    if (fwrite($journal, $line) !== strlen($line) || !fflush($journal)) {
         throw new UpdaterException('SYS_CORE_UPDATE_FILES_NOT_WRITABLE');
     }
 }

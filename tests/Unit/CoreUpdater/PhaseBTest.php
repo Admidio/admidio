@@ -289,7 +289,7 @@ final class PhaseBTest extends AdmidioTestCase
         U\phaseBConfirm($context, $updateId, 'own');
         U\phaseBRun($context, $updateId); // maintenance on
         $extracted = U\workspace($this->root, $updateId) . '/extracted/index.php';
-        file_put_contents($extracted, 'BROKEN');
+        rename($extracted, $extracted . '.away');
 
         $result = $this->runToDecision($context, $updateId);
         $this->assertSame('error', $result['status']);
@@ -297,9 +297,87 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('SYS_CORE_UPDATE_FILE_FAILED', U\readState($this->root, $updateId)['lastError']);
         $this->assertFileExists($this->root . '/adm_my_files/maintenance.json', 'maintenance mode stays on');
 
-        file_put_contents($extracted, 'NEW INDEX');
+        rename($extracted . '.away', $extracted);
         $this->assertSame('reload', $this->runToDecision($context, $updateId)['status'], 'continued after the cause was fixed');
         $this->assertSame('NEW INDEX', $this->read('index.php'));
+        $this->assertSame('OLD INDEX', (string)file_get_contents(U\workspace($this->root, $updateId) . '/backup/index.php'),
+            'the replaced file is in the rollback copy');
+    }
+
+    /**
+     * @testdox A file changed in the workspace after its extraction is found by the verification, and the previous files come back
+     */
+    public function testChangedWorkspaceFileIsFoundByTheVerification(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        U\phaseBRun($context, $updateId); // maintenance on
+        file_put_contents(U\workspace($this->root, $updateId) . '/extracted/index.php', 'BROKEN');
+
+        $result = $this->runToDecision($context, $updateId);
+        $this->assertSame('rollback_required', $result['state']);
+        $this->assertSame('SYS_CORE_UPDATE_VERIFY_FAILED', U\readState($this->root, $updateId)['lastError']);
+
+        U\phaseBRollback($context, $updateId);
+        $this->assertSame('rolled_back', $this->runToDecision($context, $updateId)['status']);
+        $this->assertSame('OLD INDEX', $this->read('index.php'));
+        $this->assertSame('REMOVED BY THE RELEASE', $this->read('src/Old/Gone.php'));
+        $this->assertSame('UNKNOWN', $this->read('src/Unknown.php'));
+        $this->assertFileDoesNotExist($this->root . '/src/New/Fresh.php');
+    }
+
+    /**
+     * @testdox An operation cut off after its file was moved into place is recognised as complete
+     *
+     * The file of the package is moved, not copied, so it is no longer in the workspace to repeat
+     * the operation with.
+     */
+    public function testResumeAfterAMovedFile(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        U\phaseBRun($context, $updateId); // maintenance on
+        $workspace = U\workspace($this->root, $updateId);
+
+        // The request died after both moves of the first operation, before its journal entry "done".
+        mkdir($workspace . '/backup/system/bootstrap', 0777, true);
+        rename($this->root . '/system/bootstrap/bootstrap.php', $workspace . '/backup/system/bootstrap/bootstrap.php');
+        rename($workspace . '/extracted/system/bootstrap/bootstrap.php', $this->root . '/system/bootstrap/bootstrap.php');
+        U\appendJournal($workspace, array('index' => 0, 'phase' => 'prepared', 'action' => 'replace', 'path' => 'system/bootstrap/bootstrap.php',
+            'mode' => null, 'directories' => array()));
+
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
+        $this->assertSame('NEW BOOTSTRAP', $this->read('system/bootstrap/bootstrap.php'));
+
+        // A rollback restores the file from its rollback copy.
+        U\phaseBRollback($context, $updateId);
+        $this->runToDecision($context, $updateId);
+        $this->assertSame('OLD BOOTSTRAP', $this->read('system/bootstrap/bootstrap.php'));
+    }
+
+    /**
+     * @testdox A file that can be neither renamed nor copied into place stays where it was
+     *
+     * The copy for a workspace on another file system cannot be brought about here; a directory as
+     * target makes the rename and the copy fail.
+     */
+    public function testFailedMoveKeepsTheFile(): void
+    {
+        $this->write(array('source.txt' => 'CONTENT'));
+        mkdir($this->root . '/occupied');
+        try {
+            U\moveFile($this->root . '/source.txt', $this->root . '/occupied', 'failed', 'occupied');
+            $this->fail('a directory was replaced');
+        } catch (UpdaterException $exception) {
+            $this->assertSame('SYS_CORE_UPDATE_FILE_FAILED', $exception->getMessage());
+        }
+        $this->assertSame('CONTENT', $this->read('source.txt'), 'the original stays when the copy fails');
+
+        U\moveFile($this->root . '/source.txt', $this->root . '/target.txt', 'failed', 'target.txt');
+        $this->assertSame('CONTENT', $this->read('target.txt'));
+        $this->assertFileDoesNotExist($this->root . '/source.txt');
     }
 
     /**
