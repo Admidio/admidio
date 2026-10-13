@@ -569,11 +569,14 @@
   <string name="SYS_CORE_UPDATE_REQUEST_INVALID">The request could not be verified. Reload the page and try again.</string>
   <string name="SYS_CORE_UPDATE_REQUEST_RUNNING">Another request of the updater is running. Wait a moment and try again.</string>
   <string name="SYS_CORE_UPDATE_REQUIRED_EXTENSIONS">The automatic update needs the PHP extensions curl, zip and openssl.</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_AND_UPDATE">Restore version #VAR1# and look for a corrected release</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_AND_UPDATE_DESC">Like restoring version #VAR1#, but afterwards a new update starts at once. If a corrected release has been published in the meantime, it is offered; otherwise the same version is offered again, and the new update can be cancelled.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_FILES_DESC">Puts back all files of version #VAR1#. The database has not been changed, so Admidio then works exactly as before the update.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_OWN_CONFIRM">I have restored the database from my own backup</string>
   <string name="SYS_CORE_UPDATE_RESTORE_OWN_DESC">The updater has no backup of the database that it can restore. To restore version #VAR1#, first restore the database from your own backup; then the updater restores the files.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION">Restore version #VAR1#</string>
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION_DESC">Recommended. Brings back the database from the backup made before the update, and then the files of version #VAR1#. Admidio then works exactly as before the update, and you can install the update again later, for example once a corrected version is available.</string>
+  <string name="SYS_CORE_UPDATE_RESTORED_LOOKING">Version #VAR1# has been restored after the failed database update. The updater now looks for a corrected release.</string>
   <string name="SYS_CORE_UPDATE_RESTORING_DATABASE">Restoring the database ...</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DESC">Version #VAR1# is replaced by version #VAR2#. During the update Admidio is in maintenance mode and visitors see a maintenance page. The update first keeps a copy of every file it replaces or removes, so that the previous version can be restored if anything goes wrong.</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DETAILS">Details of the changes</string>

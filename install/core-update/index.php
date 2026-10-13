@@ -66,7 +66,9 @@ try {
         }
 
         $updateId = U\activeUpdateId($rootPath)
-            ?? U\createUpdate($rootPath, array('installedVersion' => U\filesVersion($rootPath)))['updateId'];
+            ?? U\createUpdate($rootPath, array('installedVersion' => U\filesVersion($rootPath),
+                // The previous version has just been restored after a failed database update.
+                'afterRestore' => isset($_GET['restored'])))['updateId'];
     }
 
     if ($updateId === null) {
@@ -261,7 +263,9 @@ function coreUpdateHandlePhaseA(array $context, array $state, bool $isPost, stri
 function coreUpdateShowPhaseA(array $state, array $config, array $texts): void
 {
     $csrf = '<input type="hidden" name="csrf_token" value="' . U\h((string)$state['csrfToken']) . '">';
-    $error = (string)($state['lastError'] ?? '') !== '' ? coreUpdateAlert('danger', U\h((string)$state['lastError'])) : '';
+    $error = (!empty($state['afterRestore']) ? coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORED_LOOKING',
+            array((string)($state['installedVersion'] ?? ''))))) : '')
+        . ((string)($state['lastError'] ?? '') !== '' ? coreUpdateAlert('danger', U\h((string)$state['lastError'])) : '');
     $versions = '<dl class="core-update-versions"><dt>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_INSTALLED_VERSION')) . '</dt><dd>'
         . U\h((string)($state['installedVersion'] ?? '')) . '</dd>';
 
@@ -441,7 +445,7 @@ function coreUpdateHandlePhaseB(array $context, array $state, bool $isPost, stri
                 header('Location: index.php', true, 303);
             })(),
             'restore' => (static function () use ($context, $updateId): void {
-                U\phaseBRestore($context, $updateId, !empty($_POST['own_database_restored']));
+                U\phaseBRestore($context, $updateId, !empty($_POST['own_database_restored']), !empty($_POST['then_update']));
                 header('Location: index.php', true, 303);
             })(),
             'database_status' => U\jsonResponse(array('state' => (string)$state['state'],
@@ -563,7 +567,9 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                 . ($canRestore ? '' : '<div class="form-check mb-2"><input class="form-check-input" type="checkbox" name="own_database_restored" '
                     . 'id="own_database_restored" value="1" required><label class="form-check-label" for="own_database_restored">'
                     . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_OWN_CONFIRM')) . '</label></div>')
-                . coreUpdateButton('bi-arrow-counterclockwise', U\text($texts, 'SYS_CORE_UPDATE_RESTORE_VERSION', array($previous))) . '</form>';
+                . coreUpdateButton('bi-arrow-counterclockwise', U\text($texts, 'SYS_CORE_UPDATE_RESTORE_VERSION', array($previous)))
+                . '<button class="btn btn-secondary" type="submit" name="then_update" value="1"><i class="bi bi-cloud-arrow-down"></i>'
+                . U\h(U\text($texts, 'SYS_CORE_UPDATE_RESTORE_AND_UPDATE', array($previous))) . '</button></form>';
 
             coreUpdatePage(
                 $texts,
@@ -578,6 +584,8 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                     . coreUpdateChoices($texts, array(
                         U\text($texts, 'SYS_CORE_UPDATE_RESTORE_VERSION', array($previous))
                             => U\text($texts, $canRestore ? 'SYS_CORE_UPDATE_RESTORE_VERSION_DESC' : 'SYS_CORE_UPDATE_RESTORE_OWN_DESC', array($previous)),
+                        U\text($texts, 'SYS_CORE_UPDATE_RESTORE_AND_UPDATE', array($previous))
+                            => U\text($texts, 'SYS_CORE_UPDATE_RESTORE_AND_UPDATE_DESC', array($previous)),
                         U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY') => U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY_DESC')
                     ))
                     . coreUpdateErrorDetails($state, $texts, true),
@@ -630,6 +638,11 @@ function coreUpdateShowPhaseB(array $context, array $state): void
             // cannot read; the login stays.
             U\resetAdmidioSession($config, $context['pdo']);
             U\phaseBRolledBack($context, (string)$state['updateId']);
+            if (!empty($state['updateAfterRestore'])) {
+                // The previous version is back: a new update looks for a corrected release.
+                header('Location: index.php?restored=1', true, 303);
+                break;
+            }
             coreUpdatePage($texts, $state, coreUpdateAlert('success', U\h(U\rolledBackMessage($context, $state))),
                 coreUpdateOpenAdmidio($config, $texts));
             break;

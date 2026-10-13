@@ -562,11 +562,14 @@
   <string name="SYS_CORE_UPDATE_REQUEST_INVALID">Die Anfrage konnte nicht geprüft werden. Laden Sie die Seite neu und versuchen Sie es erneut.</string>
   <string name="SYS_CORE_UPDATE_REQUEST_RUNNING">Eine andere Anfrage des Updaters läuft gerade. Warten Sie einen Moment und versuchen Sie es erneut.</string>
   <string name="SYS_CORE_UPDATE_REQUIRED_EXTENSIONS">Das automatische Update benötigt die PHP-Erweiterungen curl, zip und openssl.</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_AND_UPDATE">Version #VAR1# wiederherstellen und nach einer korrigierten Version suchen</string>
+  <string name="SYS_CORE_UPDATE_RESTORE_AND_UPDATE_DESC">Wie das Wiederherstellen von Version #VAR1#, danach beginnt aber sofort ein neues Update. Wurde inzwischen eine korrigierte Version veröffentlicht, wird sie angeboten; sonst wird dieselbe Version wieder angeboten, und das neue Update kann abgebrochen werden.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_FILES_DESC">Stellt alle Dateien der Version #VAR1# wieder her. Die Datenbank wurde nicht verändert, daher funktioniert Admidio danach genau wie vor dem Update.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_OWN_CONFIRM">Ich habe die Datenbank aus meiner eigenen Sicherung wiederhergestellt</string>
   <string name="SYS_CORE_UPDATE_RESTORE_OWN_DESC">Das Update hat keine Sicherung der Datenbank, die es wiederherstellen kann. Um die Version #VAR1# wiederherzustellen, stellen Sie zuerst die Datenbank aus Ihrer eigenen Sicherung wieder her; danach stellt das Update die Dateien wieder her.</string>
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION">Version #VAR1# wiederherstellen</string>
   <string name="SYS_CORE_UPDATE_RESTORE_VERSION_DESC">Empfohlen. Stellt zuerst die Datenbank aus der Sicherung vor dem Update und dann die Dateien der Version #VAR1# wieder her. Admidio funktioniert danach genau wie vor dem Update, und Sie können das Update später erneut installieren, zum Beispiel sobald eine korrigierte Version verfügbar ist.</string>
+  <string name="SYS_CORE_UPDATE_RESTORED_LOOKING">Version #VAR1# wurde nach dem fehlgeschlagenen Datenbank-Update wiederhergestellt. Der Updater sucht jetzt nach einer korrigierten Version.</string>
   <string name="SYS_CORE_UPDATE_RESTORING_DATABASE">Die Datenbank wird wiederhergestellt ...</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DESC">Die Version #VAR1# wird durch die Version #VAR2# ersetzt. Während des Updates ist Admidio im Wartungsmodus und Besucher sehen eine Wartungsseite. Das Update bewahrt zuerst eine Kopie jeder Datei auf, die es ersetzt oder entfernt, damit die bisherige Version wiederhergestellt werden kann, falls etwas schiefgeht.</string>
   <string name="SYS_CORE_UPDATE_REVIEW_DETAILS">Details der Änderungen</string>

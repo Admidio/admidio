@@ -341,13 +341,15 @@ function restoreMethod(array $ctx, array $state): string
  * only the files are restored, and only after the administrator confirmed that the database was
  * restored from an own backup: the old files on a half-migrated database would not work.
  * @param array<string,mixed> $ctx
+ * @param bool $thenUpdate Start a new update once the previous version is back, which finds a
+ *                         corrected release if one has been published since.
  * @return array<string,mixed>
  */
-function phaseBRestore(array $ctx, string $updateId, bool $ownDatabaseRestored): array
+function phaseBRestore(array $ctx, string $updateId, bool $ownDatabaseRestored, bool $thenUpdate = false): array
 {
     $root = $ctx['config']['rootPath'];
 
-    return withLock($root, static function () use ($ctx, $root, $updateId, $ownDatabaseRestored): array {
+    return withLock($root, static function () use ($ctx, $root, $updateId, $ownDatabaseRestored, $thenUpdate): array {
         $state = readState($root, $updateId);
         if ($state['state'] !== 'database_failed') {
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
@@ -359,10 +361,11 @@ function phaseBRestore(array $ctx, string $updateId, bool $ownDatabaseRestored):
         }
 
         $state = array_merge($state, array('state' => $method !== '' ? 'restoring_database' : 'rolling_back', 'restoredVersion' => true,
-            'restoreMethod' => $method, 'cursor' => 0, 'cursorTotal' => 0, 'lastError' => ''));
+            'restoreMethod' => $method, 'updateAfterRestore' => $thenUpdate, 'cursor' => 0, 'cursorTotal' => 0, 'lastError' => ''));
         writeState($root, $state);
         updateLog($root, $updateId, 'restoring the previous version was requested: '
-            . ($method !== '' ? 'database from ' . $state['dumpFile'] : 'database restored by the administrator') . ', then the files');
+            . ($method !== '' ? 'database from ' . $state['dumpFile'] : 'database restored by the administrator') . ', then the files'
+            . ($thenUpdate ? ', then a new update' : ''));
 
         return $state;
     }, false);

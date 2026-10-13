@@ -601,4 +601,29 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json');
         $this->assertNull(U\activeUpdateId($this->root));
     }
+
+    /**
+     * @testdox Restoring can be followed by a new update, which then looks for a corrected release
+     *
+     * The page starts the new update once the previous version is back; here it is created as the
+     * page does.
+     */
+    public function testRestoreThenUpdate(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->runToDecision($context, $updateId);
+        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'database_failed', 'databaseStarted' => true)));
+
+        $this->assertTrue(U\phaseBRestore($context, $updateId, true, true)['updateAfterRestore']);
+        $this->assertSame('rolled_back', $this->runToDecision($context, $updateId)['status']);
+        $this->assertTrue(U\readState($this->root, $updateId)['updateAfterRestore'], 'the page knows to start a new update');
+        $this->assertStringContainsString('then the files, then a new update', (string)file_get_contents(U\workspace($this->root, $updateId) . '/update.log'));
+
+        U\phaseBRolledBack($context, $updateId);
+        $next = U\createUpdate($this->root, array('installedVersion' => '5.0.14', 'afterRestore' => true));
+        $this->assertSame($next['updateId'], U\activeUpdateId($this->root), 'nothing of the restored update stands in the way');
+        $this->assertSame('new', $next['state']);
+    }
 }

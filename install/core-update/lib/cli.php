@@ -236,7 +236,8 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
                     . text($texts, $canRestore ? 'SYS_CORE_UPDATE_DATABASE_FAILED' : 'SYS_CORE_UPDATE_DATABASE_FAILED_OWN',
                         array(commandTarget($state), (string)$state['installedVersion']))
                     . "\nRetry the database update with --resume, or restore version " . $state['installedVersion'] . ' with rollback'
-                    . ($canRestore ? '.' : ' --database-restored after you restored the database from your own backup.'), $state);
+                    . ($canRestore ? '' : ' --database-restored after you restored the database from your own backup')
+                    . ', then look for a corrected release with apply.', $state);
 
             case 'completed':
                 phaseBFinish($ctx, $updateId);
