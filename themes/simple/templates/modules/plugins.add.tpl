@@ -1,26 +1,7 @@
 {*
-    Adding a plugin: from a file the administrator already has, or from the plugins published for
-    Admidio. Two answers to the same question, so two cards on one page.
+    The plugin directory: the plugins published for Admidio. A plugin file the administrator already
+    has is uploaded on a page of its own (plugins.upload.tpl).
 *}
-<div class="card admidio-card mb-4">
-    <div class="card-header">
-        <i class="bi bi-upload me-1"></i>{$l10n->get('SYS_PLUGIN_INSTALL_FROM_FILE')}
-    </div>
-    <div class="card-body">
-        <form {foreach $attributes as $attribute}
-                {$attribute@key}="{$attribute}"
-            {/foreach}>
-
-            {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-            {include 'sys-template-parts/form.file.tpl' data=$elements['userfile']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['plugin_replace']}
-            {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_upload_plugin']}
-
-            <div class="form-alert" style="display: none;">&nbsp;</div>
-        </form>
-    </div>
-</div>
-
 <div class="card admidio-card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span><i class="bi bi-box-seam me-1"></i>{$l10n->get('SYS_PLUGIN_STORE')}</span>
@@ -87,5 +68,3 @@
         {/if}
     </div>
 </div>
-
-{$javascript}

@@ -12,6 +12,9 @@
  *  mode     : list          - (default) Show the list of all plugins with their state
  *             list_refresh  - The list content alone, for the state toggle of a plugin without a
  *                             menu entry to re-fetch after it enabled or disabled it via AJAX
+ *             add           - Show the plugin directory: the plugins published for Admidio
+ *             upload_form   - Show the form that installs a plugin from a ZIP file
+ *             upload        - Install the plugin of that ZIP file
  *             settings      - Show the settings of a plugin as the content of a dialog
  *             settings_save - Save the settings a plugin was given in that dialog
  *             install       - Install a plugin
@@ -43,9 +46,9 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'list_refresh', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
+        'validValues' => array('list', 'list_refresh', 'add', 'upload_form', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
     // Everything but the list, the list refresh and the settings dialog answers with JSON.
-    $isAjax = !in_array($getMode, array('list', 'list_refresh', 'add', 'settings'), true);
+    $isAjax = !in_array($getMode, array('list', 'list_refresh', 'add', 'upload_form', 'settings'), true);
 
     // check rights to use this module
     if (!$gCurrentUser->isAdministrator()) {
@@ -53,13 +56,13 @@ try {
     }
 
     /*
-     * Most modes work on one plugin, addressed by its ID. The list does not, and neither do the two
-     * modes that add a plugin: the page offers every plugin there is, and the upload learns which
-     * plugin it holds by reading the archive.
+     * Most modes work on one plugin, addressed by its ID. The list does not, and neither do the
+     * modes that add a plugin: the directory offers every plugin there is, and the upload learns
+     * which plugin it holds by reading the archive.
      */
     $getPluginId = '';
     $plugin = null;
-    if (!in_array($getMode, array('list', 'list_refresh', 'add', 'upload', 'store_refresh'), true)) {
+    if (!in_array($getMode, array('list', 'list_refresh', 'add', 'upload_form', 'upload', 'store_refresh'), true)) {
         $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
         $plugin = PluginRegistry::get($getPluginId);
     }
@@ -88,9 +91,16 @@ try {
             break;
 
         case 'add':
-            // create an HTML page object
+            // the plugin directory
             $page = new PluginsPresenter();
             $page->createAddPage();
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
+            $page->show();
+            break;
+
+        case 'upload_form':
+            $page = new PluginsPresenter();
+            $page->createUploadPage();
             $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             $page->show();
             break;
