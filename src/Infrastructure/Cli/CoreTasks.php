@@ -536,6 +536,58 @@ final class CoreTasks
             array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
+        /*
+         * The core updater replaces src/ and vendor/, which this process has loaded, so it runs as
+         * install/core-update/cli.php in a process of its own. While an update is unfinished,
+         * Admidio itself may not start, and that script continues it directly.
+         */
+        self::task(
+            'update:apply',
+            'updateApply',
+            'Install the newest Admidio release with the core updater: check, download, install the files and update the database.'
+                . ' Asks before the download and before the installation unless --yes is given. If an update stops,'
+                . ' continue it with "php install/core-update/cli.php apply --resume".',
+            'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--skip-database]'
+                . ' [--resume] [--dry-run] [--yes] [--format=text|json]',
+            'PREFERENCES',
+            true,
+            array(),
+            array(
+                self::opt('channel', 'Release channel; beta, master, branch, tag and pr need $gDebug.', 'CHANNEL', false, false, false,
+                    array('stable', 'beta', 'master', 'branch', 'tag', 'pr')),
+                self::opt('ref', 'Branch, tag or pull request number of the channels branch, tag and pr.', 'REF'),
+                self::opt('backup', 'Database backup by the updater (default where possible) or your own backup.', 'BACKUP', false, false, false,
+                    array('dump', 'own')),
+                self::opt('on-changed', 'Changed or unknown files are archived and replaced (default), or the update is cancelled.', 'ACTION',
+                    false, false, false, array('archive', 'cancel')),
+                self::opt('skip-database', 'Install the files only; maintenance mode stays on until the database is updated.', '', false, false, true),
+                self::opt('resume', 'Continue the unfinished update.', '', false, false, true),
+                self::opt('yes', 'Do not ask before the download and the installation.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            ),
+            array('admidio update:apply --as=admin --yes', 'admidio update:apply --as=admin --dry-run'),
+            null,
+            CliTaskRegistry::ACCESS_ADMINISTRABLE,
+            null,
+            null,
+            true
+        );
+        self::task(
+            'update:rollback',
+            'updateRollback',
+            'Undo the unfinished core update: cancel it, restore the previous files, or after a failed database update'
+                . ' restore the previous version with its database. While Admidio cannot start, run'
+                . ' "php install/core-update/cli.php rollback" instead.',
+            'update:rollback [--database-restored] [--yes] [--format=text|json]',
+            'PREFERENCES',
+            true,
+            array(),
+            array(
+                self::opt('database-restored', 'You have restored the database of the previous version from your own backup.', '', false, false, true),
+                self::opt('yes', 'Do not ask before the update is undone.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            )
+        );
         self::task(
             'system:info',
             'systemInfo',
@@ -3070,6 +3122,83 @@ final class CoreTasks
         return $versionUpdate === 0
             ? CliApplication::EXIT_SUCCESS
             : CliApplication::EXIT_UPDATE_AVAILABLE;
+    }
+
+    public static function updateApply(array $arguments, array $options): int
+    {
+        $updaterArguments = array('apply');
+        foreach (array('channel', 'ref', 'backup', 'on-changed') as $name) {
+            $value = CliApplication::optionString($options, $name);
+            if ($value !== '') {
+                $updaterArguments[] = '--' . $name . '=' . $value;
+            }
+        }
+        foreach (array('skip-database', 'resume', 'dry-run', 'yes', 'no-interaction') as $name) {
+            if (CliApplication::optionBool($options, $name, false)) {
+                $updaterArguments[] = '--' . $name;
+            }
+        }
+
+        return self::runCoreUpdater($updaterArguments, $options);
+    }
+
+    public static function updateRollback(array $arguments, array $options): int
+    {
+        $updaterArguments = array('rollback');
+        foreach (array('database-restored', 'yes', 'no-interaction') as $name) {
+            if (CliApplication::optionBool($options, $name, false)) {
+                $updaterArguments[] = '--' . $name;
+            }
+        }
+
+        return self::runCoreUpdater($updaterArguments, $options);
+    }
+
+    /**
+     * The command line of install/core-update/cli.php for the options of update:apply or
+     * update:rollback.
+     *
+     * @param array<int,string> $updaterArguments
+     * @param array<string,mixed> $options
+     * @return array<int,string>
+     */
+    public static function coreUpdaterCommand(array $updaterArguments, array $options): array
+    {
+        // The updater reads the installation's own configuration; another one would update the wrong files.
+        if (CliApplication::optionString($options, 'config') !== '') {
+            throw new InvalidArgumentException('The core updater works with adm_my_files/config.php of this installation only; omit --config.');
+        }
+
+        $command = array_merge(array(PHP_BINARY, ADMIDIO_PATH . '/install/core-update/cli.php'), $updaterArguments);
+        $command[] = '--format=' . (CliApplication::optionString($options, 'format', 'text') === 'json' ? 'json' : 'text');
+        if (CliApplication::optionString($options, 'host') !== '') {
+            $command[] = '--host=' . CliApplication::optionString($options, 'host');
+        }
+
+        return $command;
+    }
+
+    /**
+     * Run the core updater in a process of its own, with the terminal of this one.
+     *
+     * @param array<int,string> $updaterArguments
+     * @param array<string,mixed> $options
+     */
+    private static function runCoreUpdater(array $updaterArguments, array $options): int
+    {
+        $command = self::coreUpdaterCommand($updaterArguments, $options);
+        $disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+        if (PHP_BINARY === '' || !function_exists('proc_open') || in_array('proc_open', $disabled, true)) {
+            throw new RuntimeException('PHP cannot start processes here. Run the core updater directly: '
+                . implode(' ', array_map('escapeshellarg', $command)));
+        }
+
+        $process = proc_open($command, array(STDIN, STDOUT, STDERR), $pipes);
+        if (!is_resource($process)) {
+            throw new RuntimeException('The core updater could not be started.');
+        }
+
+        return proc_close($process);
     }
 
     public static function systemInfo(array $arguments, array $options): int

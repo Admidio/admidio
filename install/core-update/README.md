@@ -8,7 +8,7 @@ working while `src/`, `vendor/`, `system/`, `modules/` and the themes are replac
 
 ```text
 index.php          the pages and requests of the browser
-cli.php            php install/core-update/cli.php status
+cli.php            the command line: status, apply, rollback
 release-key.pem    the public key that signs update.txt (shipped with every release)
 texts/             the texts of the updater per language (written by the release builder)
 lib/bootstrap.php  loads the files below
@@ -17,6 +17,7 @@ lib/login.php      the updater's own login (fallback during maintenance mode)
 lib/download.php   HTTPS, signature of update.txt, release information, manifest, ZIP reading
 lib/phase-a.php    phase A and the checks P1-P9
 lib/phase-b.php    phase B: extraction, plan, installation, verification, rollback
+lib/cli.php        the command line: apply and rollback from one decision to the next (loaded by cli.php only)
 ```
 
 Everything in `lib/` is plain functions in the namespace `AdmidioCoreUpdater`. It reads
@@ -139,6 +140,46 @@ them back with the previous version.
 
 Every update writes `update.log` in its workspace (states, errors with their English detail,
 decisions); when the update is over it is copied to `adm_my_files/logs/core-update_<date>_<from>_to_<to>.log`.
+
+## Command line
+
+```bash
+php admidio update:apply --as=admin [--yes] [--dry-run]       # or: php install/core-update/cli.php apply
+php admidio update:rollback --as=admin                        # or: php install/core-update/cli.php rollback
+php install/core-update/cli.php status
+```
+
+`update:apply` and `update:rollback` of the Admidio command line run `cli.php` in a process of
+their own, because that process has `src/` and `vendor/` loaded, which the update replaces.
+`cli.php` can be run directly; shell access is the proof of authority, so it has no login. While an
+update is unfinished, Admidio itself may not start, and `cli.php` is the way to continue or undo
+it. It answers in English and warns when it runs as another user than the owner of the files.
+
+`apply` calls the same functions as the page, so it goes through the same states and keeps the
+same `state.json`: an update started in the browser can be continued on the command line and the
+other way round. It asks before the download and before the installation, as the page does;
+`--yes` answers both, and without a terminal or with `--no-interaction` it stops before it changes
+anything. Where the page loads a new page, the command line starts a new process: after phase A
+`cli.php apply --resume`, which runs the updater of the new release, and after the files
+`cli.php database`, which loads `system/bootstrap/cli.php` of the new release (no plugins, no
+session) and has `CoreUpdateHandover::updateDatabase()` do what `install/update.php` does for the
+page. If PHP may not start processes, `cli.php` prints the command to run next.
+
+| Option | Effect |
+|---|---|
+| `--channel=`, `--ref=` | the channel and its branch, tag or pull request, as on the page (`$gDebug` for all but stable) |
+| `--backup=dump\|own` | the updater backs up the database (the default where it can), or an own backup is confirmed |
+| `--on-changed=archive\|cancel` | changed and unknown files are kept in the archive and replaced (default), or the update is cancelled at the review |
+| `--dry-run` | the update is checked and planned, then cancelled; the updater of the new release stays, as after a cancel on the page |
+| `--skip-database` | the update ends after the files; maintenance mode stays on until `apply --resume` or `install/update.php` updates the database |
+| `--resume` | continue the unfinished update, also to retry a failed database update |
+
+`rollback` cancels an update that has not changed anything, restores the previous files until the
+database update has started, and after a failed database update restores the previous version
+with the backup of the updater, or with `--database-restored` once the administrator has restored
+the database from an own backup. The notes about plugins that the database update of 6.0 writes
+reach the command line only through the Admidio log, because `install/update.php` gets them from a
+cookie.
 
 ## Development
 

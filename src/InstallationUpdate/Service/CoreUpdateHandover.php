@@ -2,10 +2,15 @@
 
 namespace Admidio\InstallationUpdate\Service;
 
+use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\ChangeNotification;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
+use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use AdmidioCoreUpdater as Updater;
 use AdmidioCoreUpdater\UpdaterException;
+use RuntimeException;
 use Throwable;
 
 // The state of an update and the updater cookie have one implementation, the updater's own.
@@ -243,6 +248,62 @@ final class CoreUpdateHandover
         if ($maintenance !== null && ($maintenance['owner'] ?? '') === self::MAINTENANCE_OWNER_PREFIX . $this->updateId) {
             MaintenanceMode::disable(self::MAINTENANCE_OWNER_PREFIX . $this->updateId);
         }
+    }
+
+    /**
+     * Update the database for the command line of the updater, which runs this in a PHP process of
+     * its own after it has installed the files: install/core-update/cli.php loads
+     * system/bootstrap/cli.php of the new release, which loads no plugins and starts no session, and
+     * calls this instead of install/update.php. Shell access is the proof of authority, as for the
+     * whole command line of the updater, so there is no login. The notes about plugins that the
+     * database update of a release writes go to the Admidio log only, because they are passed on
+     * in a cookie.
+     * @return void
+     * @throws Exception The files are not installed yet, or another process runs the migration.
+     * @throws Throwable The migration failed; the state records the error and maintenance mode stays on.
+     */
+    public function updateDatabase(): void
+    {
+        global $gDb, $gCurrentOrgId, $gL10n, $gProfileFields, $gChangeNotification, $gLoginForUpdate, $gCurrentUserId;
+
+        if (!$this->isMigrationAllowed()) {
+            throw new Exception('SYS_CORE_UPDATE_IN_PROGRESS');
+        }
+        if (!$this->lockDatabaseUpdate()) {
+            throw new Exception('SYS_CORE_UPDATE_DATABASE_RUNNING');
+        }
+
+        // What install/update.php prepares before it updates the database.
+        Entity::setLoggingEnabled(false);
+        Entity::setHooksEnabled(false);
+        $gProfileFields = new ProfileFields($gDb, $gCurrentOrgId);
+        $gChangeNotification = new ChangeNotification();
+        $gLoginForUpdate = false;
+        $gCurrentUserId = (int)$gDb->queryPrepared('SELECT usr_id FROM ' . TBL_USERS . ' WHERE usr_login_name = \'System\'')->fetchColumn();
+
+        $component = new ComponentUpdate($gDb);
+        $component->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+        $installedDbVersion = (string)$component->getValue('com_version');
+        if ((int)$component->getValue('com_beta') > 0) {
+            $installedDbVersion .= ' Beta ' . (int)$component->getValue('com_beta');
+        }
+        if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '>')) {
+            throw new RuntimeException($gL10n->get('SYS_FILESYSTEM_VERSION_INVALID', array($installedDbVersion, ADMIDIO_VERSION_TEXT, '', '')));
+        }
+
+        $this->markDatabaseRunning();
+        try {
+            if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
+                || $component->getMaxUpdateStep() > (int)$component->getValue('com_update_step')) {
+                (new Update())->doAdmidioUpdate($installedDbVersion);
+            }
+        } catch (Throwable $exception) {
+            $gDb->rollback();
+            $this->markDatabaseFailed($exception->getMessage());
+            throw $exception;
+        }
+
+        $this->complete();
     }
 
     /**
