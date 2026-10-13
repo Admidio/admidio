@@ -224,6 +224,68 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox A replaced file keeps its permissions, and restoring brings back those of every file
+     */
+    public function testPermissionsAreKept(): void
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('Windows knows no Unix permissions.');
+        }
+
+        chmod($this->root . '/index.php', 0640);
+        chmod($this->root . '/src/Old/Gone.php', 0600);
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->runToDecision($context, $updateId);
+        clearstatcache();
+        $this->assertSame(0640, fileperms($this->root . '/index.php') & 0777, 'the new file has the permissions of the one it replaced');
+
+        U\phaseBRollback($context, $updateId);
+        $this->runToDecision($context, $updateId);
+        clearstatcache();
+        $this->assertSame('OLD INDEX', $this->read('index.php'));
+        $this->assertSame(0640, fileperms($this->root . '/index.php') & 0777);
+        $this->assertSame(0600, fileperms($this->root . '/src/Old/Gone.php') & 0777);
+    }
+
+    /**
+     * @testdox A step that was cut off continues at its cursor
+     *
+     * The browser works in pieces of a few seconds; the command line does a whole step at once,
+     * so the cursor of a piece is set here.
+     */
+    public function testExtractionContinuesAtItsCursor(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        U\phaseBRun($context, $updateId);
+        $this->assertSame('extracting', U\readState($this->root, $updateId)['state']);
+
+        // The package lists index.php, bootstrap.php, Same.php, then Fresh.php: a piece did the first three.
+        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('cursor' => 3)));
+        U\phaseBRun($context, $updateId);
+
+        $workspace = U\workspace($this->root, $updateId);
+        $this->assertSame('planning', U\readState($this->root, $updateId)['state']);
+        $this->assertFileExists($workspace . '/extracted/src/New/Fresh.php');
+        $this->assertFileDoesNotExist($workspace . '/extracted/index.php', 'what the cursor has passed is not extracted again');
+    }
+
+    /**
+     * @testdox The maintenance mode of the updater is the file that MaintenanceMode writes and the bootstrap reads
+     *
+     * The tests point FOLDER_DATA elsewhere, so the definitions of a real installation are read.
+     */
+    public function testMaintenanceFileIsTheOneOfAdmidio(): void
+    {
+        $root = dirname(__DIR__, 3);
+        $this->assertMatchesRegularExpression("/^const FOLDER_DATA = '\\/adm_my_files';/m", (string)file_get_contents($root . '/system/bootstrap/constants.php'));
+        $stateFile = (new \ReflectionClassConstant(\Admidio\Infrastructure\Utils\MaintenanceMode::class, 'STATE_FILE'))->getValue();
+        $this->assertSame('/srv/admidio/adm_my_files/' . $stateFile, U\maintenanceFile('/srv/admidio'));
+        $this->assertStringContainsString("ADMIDIO_PATH . FOLDER_DATA . '/" . $stateFile . "'", (string)file_get_contents($root . '/system/bootstrap/bootstrap.php'));
+    }
+
+    /**
      * @testdox Restoring is refused once the database update has started
      */
     public function testNoRollbackAfterTheDatabaseStarted(): void

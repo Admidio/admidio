@@ -843,9 +843,18 @@ function maintenanceOwner(string $updateId): string
     return 'core-update:' . $updateId;
 }
 
+/**
+ * The file of the maintenance mode, the one MaintenanceMode writes and system/bootstrap/bootstrap.php
+ * reads.
+ */
+function maintenanceFile(string $root): string
+{
+    return $root . '/adm_my_files/maintenance.json';
+}
+
 function isMaintenanceOwner(string $root, string $updateId): bool
 {
-    $state = json_decode((string)@file_get_contents($root . '/adm_my_files/maintenance.json'), true);
+    $state = json_decode((string)@file_get_contents(maintenanceFile($root)), true);
 
     return is_array($state) && ($state['owner'] ?? '') === maintenanceOwner($updateId);
 }
@@ -860,7 +869,7 @@ function isMaintenanceOwner(string $root, string $updateId): bool
 function enterMaintenance(array $ctx, array $state): array
 {
     $root = $ctx['config']['rootPath'];
-    $file = $root . '/adm_my_files/maintenance.json';
+    $file = maintenanceFile($root);
     if (is_file($file) && !isMaintenanceOwner($root, $state['updateId'])) {
         throw new UpdaterException('SYS_CORE_UPDATE_MAINTENANCE_OTHER');
     }
@@ -1009,7 +1018,7 @@ function dumpPart(array $ctx, array $state): array
 function leaveMaintenance(string $root, string $updateId): void
 {
     if (isMaintenanceOwner($root, $updateId)) {
-        @unlink($root . '/adm_my_files/maintenance.json');
+        @unlink(maintenanceFile($root));
     }
 }
 
