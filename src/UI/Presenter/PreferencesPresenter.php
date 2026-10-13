@@ -799,6 +799,12 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
         $formCommon->addCheckbox(
+            'system_update_check',
+            $gL10n->get('ORG_UPDATE_CHECK'),
+            (bool) $formValues['system_update_check'],
+            array('helpTextId' => 'ORG_UPDATE_CHECK_DESC')
+        );
+        $formCommon->addCheckbox(
             'system_pwa_enabled',
             $gL10n->get('SYS_PWA_ENABLED'),
             (bool) ($formValues['system_pwa_enabled'] ?? true),

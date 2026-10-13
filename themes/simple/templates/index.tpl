@@ -336,6 +336,10 @@
                 </nav>
 
                 <div id="adm_content" class="admidio-content {$contentClass}" role="main">
+                    {* An administrator is told about a new release of Admidio *}
+                    {if $availableUpdate != ''}
+                        {include file="system/update_notice.tpl"}
+                    {/if}
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
                         {include file='sys-template-parts/menu.functions.tpl'}

@@ -459,7 +459,7 @@ final class CoreTasks
      * @var array<int,string>
      */
     private const MAINTENANCE_JOBS = array(
-        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens'
+        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'update-check'
     );
 
     private static function registerSystemTasks(): void
@@ -3362,15 +3362,17 @@ final class CoreTasks
             'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath(),
             'sessions' => static fn (): mixed => self::cleanupSessions(30),
             'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
-            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens()
+            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens(),
+            'update-check' => static fn (): mixed => self::checkForUpdate()
         );
         $rows = array();
         $failures = 0;
 
         foreach ($requested as $jobName) {
             try {
-                $jobs[$jobName]();
-                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => '');
+                // A job that has something to report returns it as text.
+                $result = $jobs[$jobName]();
+                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => is_string($result) ? $result : '');
             } catch (\Throwable $exception) {
                 ++$failures;
                 $rows[] = array(
@@ -9473,6 +9475,29 @@ final class CoreTasks
 
         CliApplication::writeSuccess('OIDC token cleanup completed.', $options);
         return CliApplication::EXIT_SUCCESS;
+    }
+
+    /**
+     * Look for a new release of Admidio for the notice of the administrators, as the requests of
+     * administrators do twice a day - unless the check is switched off in the preferences. The time
+     * of the check is recorded, so that a request does not repeat it.
+     */
+    private static function checkForUpdate(): string
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('system_update_check')) {
+            return 'The update check is switched off in the preferences.';
+        }
+
+        $gSettingsManager->set('system_update_check_time', (string) time());
+        $service = new PreferencesService();
+        if ($service->getUpdateInformation()['versionUpdate'] === 99) {
+            throw new RuntimeException('The Admidio update information could not be read from ' . ADMIDIO_HOMEPAGE . 'update.txt.');
+        }
+        $availableUpdate = $service->getAvailableUpdate();
+
+        return $availableUpdate !== '' ? 'Admidio ' . $availableUpdate . ' is available.' : 'Admidio is up to date.';
     }
 
     private static function cleanupSsoTokens(): void

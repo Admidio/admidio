@@ -4,7 +4,9 @@ namespace Admidio\UI\Presenter;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\ValueObject\MenuNode;
+use Admidio\Preferences\Service\PreferencesService;
 use Smarty\Smarty;
 
 /**
@@ -671,7 +673,7 @@ class PagePresenter
      */
     public function show(): void
     {
-        global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
+        global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation, $gCurrentUser, $gValidLogin;
 
         // The page is finished. The two texts that name it can still be changed, and
         // page_before_render is the last point at which anything can be added to it; everything the
@@ -704,6 +706,11 @@ class PagePresenter
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
+        // An administrator is told about a new release of Admidio that the last update check found.
+        // The version comes from the update information of the Admidio server.
+        $this->smarty->assign('availableUpdate', isset($gCurrentUser) && $gValidLogin && $gCurrentUser->isAdministrator()
+            ? SecurityUtils::encodeHTML((new PreferencesService())->getAvailableUpdate()) : '');
+        $this->smarty->assign('availableUpdateUrl', ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php');
         $this->smarty->assign('rssFeeds', $this->rssFiles);
         $this->smarty->assign('cssFiles', $this->cssFiles);
         $this->smarty->assign('javascriptFiles', $this->jsFiles);

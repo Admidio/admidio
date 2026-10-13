@@ -199,6 +199,8 @@
   <string name="ORG_TIME_FORMAT_DESC">Das Format entspricht der PHP-Funktion #VAR1#. (Voreinstellung: H:i)</string>
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
+  <string name="ORG_UPDATE_CHECK">Über neue Admidio-Versionen informieren</string>
+  <string name="ORG_UPDATE_CHECK_DESC">Admidio fragt höchstens zweimal am Tag beim Admidio-Server nach, ob eine neue Version verfügbar ist, und nur während ein Administrator Admidio verwendet. Administratoren sehen dann oben auf jeder Seite einen Hinweis.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
   <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System-E-Mail-Adresse der Organisation</string>
@@ -2126,6 +2128,7 @@
   <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
   <string name="SYS_UP_TO_DATE">Auf dem neuesten Stand</string>
   <string name="SYS_UPDATE_AVAILABLE">Update verfügbar</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# ist verfügbar.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
