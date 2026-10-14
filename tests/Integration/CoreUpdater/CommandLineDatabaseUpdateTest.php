@@ -22,8 +22,14 @@ final class CommandLineDatabaseUpdateTest extends DatabaseTestCase
 
     private string $rootPath = '';
 
+    /** The globals updateDatabase() sets, as install/update.php does; they must not outlive the test. */
+    private const UPDATE_GLOBALS = array('gProfileFields', 'gChangeNotification', 'gLoginForUpdate', 'gCurrentUserId');
+
     /** @var array<string,bool> */
     private array $entityFlags = array();
+
+    /** @var array<string,mixed> */
+    private array $globalsBefore = array();
 
     protected function setUp(): void
     {
@@ -32,6 +38,12 @@ final class CommandLineDatabaseUpdateTest extends DatabaseTestCase
         // updateDatabase() switches the changelog and the entity hooks off, as install/update.php does.
         foreach (array('loggingEnabled', 'hooksEnabled') as $flag) {
             $this->entityFlags[$flag] = (new ReflectionProperty(Entity::class, $flag))->getValue();
+        }
+
+        foreach (self::UPDATE_GLOBALS as $name) {
+            if (array_key_exists($name, $GLOBALS)) {
+                $this->globalsBefore[$name] = $GLOBALS[$name];
+            }
         }
 
         $this->rootPath = sys_get_temp_dir() . '/adm_cli_database_' . uniqid();
@@ -46,6 +58,13 @@ final class CommandLineDatabaseUpdateTest extends DatabaseTestCase
         U\deleteDirectory($this->rootPath);
         Entity::setLoggingEnabled($this->entityFlags['loggingEnabled']);
         Entity::setHooksEnabled($this->entityFlags['hooksEnabled']);
+        foreach (self::UPDATE_GLOBALS as $name) {
+            if (array_key_exists($name, $this->globalsBefore)) {
+                $GLOBALS[$name] = $this->globalsBefore[$name];
+            } else {
+                unset($GLOBALS[$name]);
+            }
+        }
 
         parent::tearDown();
     }
