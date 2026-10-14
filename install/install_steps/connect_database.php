@@ -180,9 +180,10 @@ if ($mode === 'html') {
             $gDebug = true;
             $db = new Database($_SESSION['db_engine'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
             $db->checkWriteAccess();
-            $gDebug = false;
         } catch (Exception $e) {
             throw new Exception('SYS_DATABASE_NO_LOGIN', array($e->getMessage()));
+        } finally {
+            $gDebug = false;
         }
 
         // check database version
