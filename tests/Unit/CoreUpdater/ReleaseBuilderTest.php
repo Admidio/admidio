@@ -177,7 +177,7 @@ final class ReleaseBuilderTest extends AdmidioTestCase
         $this->assertSame("Version=5.1.0\nBeta-Version=\nBeta-Release=\nSome-Other=kept\n"
             . 'Package-URL=https://github.com/Admidio/admidio/releases/download/v5.1.0/admidio-5.1.0.zip' . "\n"
             . 'Package-SHA256=' . $result['packageSha256'] . "\nPackage-Size=" . $result['packageSize'] . "\n"
-            . "Minimum-Source-Version=5.0.0\nMinimum-PHP-Version=8.2\n", $text);
+            . "Minimum-Source-Version=4.0.0\nMinimum-PHP-Version=8.2\n", $text);
         $release = U\releaseFromUpdateInfo(U\parseUpdateInfo($text), 'stable');
         $this->assertSame('5.1.0', $release['version']);
     }

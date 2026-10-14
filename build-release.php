@@ -6,7 +6,7 @@
  *
  *   php build-release.php --key=<private key PEM> [--ref=v5.1.0] [--out=build]
  *       [--update-txt=<file or URL of the current update.txt>] [--package-url=<URL of the folder>]
- *       [--minimum-source-version=5.0.0] [--allow-dirty] [--key-rotation] [--test-release] [--no-composer]
+ *       [--minimum-source-version=4.0.0] [--allow-dirty] [--key-rotation] [--test-release] [--no-composer]
  *   php build-release.php sign --key=<private key PEM> --update-txt=<file>
  *
  * A release is built from a clean export of a commit, a tag or HEAD (git archive), never from the
@@ -52,8 +52,12 @@ const MIGRATION_PATHS_FILE = 'install/db_scripts/migration-paths.json';
 
 const RELEASE_KEY_FILE = 'install/core-update/release-key.pem';
 
-/** The oldest release the package can update, unless --minimum-source-version says otherwise. */
-const DEFAULT_MINIMUM_SOURCE_VERSION = '5.0.0';
+/**
+ * The oldest release the package can update, unless --minimum-source-version says otherwise: the first
+ * of Admidio 4.x, whose layout the updater knows (LEGACY_PATHS). Its database update starts earlier,
+ * at 3.1.0, but the updater has not been used on a version before 4.0.
+ */
+const DEFAULT_MINIMUM_SOURCE_VERSION = '4.0.0';
 
 if (PHP_SAPI === 'cli' && realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? '')) === __FILE__) {
     try {

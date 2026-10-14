@@ -603,6 +603,66 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The code of Admidio 4.x is removed and kept in the archive, themes of an own stay, and a rollback brings it all back
+     */
+    public function testLegacyCodeIsRemoved(): void
+    {
+        $this->write(array(
+            'adm_program/system/bootstrap/constants.php' => '<?php // 4.x',
+            'adm_program/modules/contacts/contacts.php' => 'OLD CONTACTS',
+            'adm_program/index.php' => 'OLD START',
+            'adm_themes/index.html' => '',
+            'adm_themes/simple/theme.css' => 'OLD STANDARD THEME',
+            'adm_themes/club/theme.css' => 'MY THEME'
+        ));
+        [$context, $updateId] = $this->prepared();
+
+        $this->assertSame('review', $this->runToDecision($context, $updateId)['status']);
+        $deleted = array_column(array_filter(U\readPlan(U\workspace($this->root, $updateId)), static fn(array $operation): bool => $operation['action'] === 'delete'), 'path');
+        foreach (array('adm_program/system/bootstrap/constants.php', 'adm_program/modules/contacts/contacts.php', 'adm_program/index.php',
+            'adm_themes/simple/theme.css', 'adm_themes/index.html') as $path) {
+            $this->assertContains($path, $deleted, $path);
+        }
+        $this->assertNotContains('adm_themes/club/theme.css', $deleted, 'a theme of an own is not touched');
+
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
+
+        $this->assertDirectoryDoesNotExist($this->root . '/adm_program', 'the old code and its folders are gone');
+        $this->assertDirectoryDoesNotExist($this->root . '/adm_themes/simple');
+        $this->assertSame('MY THEME', $this->read('adm_themes/club/theme.css'));
+        $this->assertSame('NEW INDEX', $this->read('index.php'));
+
+        $archive = new ZipArchive();
+        $archive->open(U\backupFile($this->root, U\readState($this->root, $updateId)['keptArchive']));
+        $this->assertSame('OLD CONTACTS', $archive->getFromName('adm_program/modules/contacts/contacts.php'));
+        $this->assertSame('OLD STANDARD THEME', $archive->getFromName('adm_themes/simple/theme.css'));
+        $archive->close();
+
+        U\phaseBRollback($context, $updateId);
+        $this->assertSame('rolled_back', $this->runToDecision($context, $updateId)['status']);
+        $this->assertSame('OLD CONTACTS', $this->read('adm_program/modules/contacts/contacts.php'));
+        $this->assertSame('OLD STANDARD THEME', $this->read('adm_themes/simple/theme.css'));
+        $this->assertSame('MY THEME', $this->read('adm_themes/club/theme.css'));
+    }
+
+    /**
+     * @testdox A folder that is called adm_program but does not hold the code of Admidio 4.x is not touched
+     */
+    public function testOtherFolderNamedLikeTheOldCodeStays(): void
+    {
+        $this->write(array('adm_program/my-script.php' => 'MINE', 'adm_themes/simple/theme.css' => 'MINE TOO'));
+        [$context, $updateId] = $this->prepared();
+
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
+
+        $this->assertSame('MINE', $this->read('adm_program/my-script.php'));
+        $this->assertSame('MINE TOO', $this->read('adm_themes/simple/theme.css'));
+    }
+
+    /**
      * @testdox Restoring can be followed by a new update, which then looks for a corrected release
      *
      * The page starts the new update once the previous version is back; here it is created as the

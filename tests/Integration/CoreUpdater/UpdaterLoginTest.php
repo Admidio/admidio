@@ -159,10 +159,12 @@ final class UpdaterLoginTest extends DatabaseTestCase
     }
 
     /**
-     * @testdox With two-factor authentication the security code is required
+     * @testdox With two-factor authentication switched on the security code is required
      */
     public function testTwoFactorAuthentication(): void
     {
+        // It is off by default, and then Admidio does not ask for a code either.
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ? WHERE prf_name = ?', array('1', 'two_factor_authentication_enabled'));
         $userId = $this->createUser('updater_tfa', true);
         $secret = 'JBSWY3DPEHPK3PXP';
         $this->getDatabase()->queryPrepared('UPDATE ' . TBL_USERS . ' SET usr_tfa_secret = ? WHERE usr_id = ?', array($secret, $userId));
@@ -172,6 +174,34 @@ final class UpdaterLoginTest extends DatabaseTestCase
         $now = time();
         $code = U\totpCode(U\decodeBase32($secret), intdiv($now, 30), 6);
         $this->assertSame($userId, $this->authenticate('updater_tfa', self::PASSWORD, $code, $now));
+    }
+
+    /**
+     * @testdox The security code is only asked for where the preference does not switch two-factor authentication off
+     */
+    public function testSecurityCodeFollowsThePreference(): void
+    {
+        $userId = $this->createUser('updater_tfa_off', true);
+        $secret = 'JBSWY3DPEHPK3PXP';
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_USERS . ' SET usr_tfa_secret = ? WHERE usr_id = ?', array($secret, $userId));
+        $setPreference = fn(string $value) => $this->getDatabase()->queryPrepared(
+            'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ? WHERE prf_name = ?', array($value, 'two_factor_authentication_enabled'));
+
+        $setPreference('1');
+        $this->assertTrue(U\twoFactorInUse($this->pdo, TABLE_PREFIX));
+        $this->assertRefused('updater_tfa_off', self::PASSWORD, 'switched on, no code');
+
+        // As Admidio's own login: a user with a secret needs no code while the preference says no.
+        $setPreference('0');
+        $this->assertFalse(U\twoFactorInUse($this->pdo, TABLE_PREFIX));
+        $this->assertSame($userId, $this->authenticate('updater_tfa_off', self::PASSWORD, '', time()));
+
+        $this->getDatabase()->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_name = ?', array('two_factor_authentication_enabled'));
+        $this->assertTrue(U\twoFactorInUse($this->pdo, TABLE_PREFIX), 'without the preference it is in use, as with Admidio');
+
+        // Admidio 4.x has no such column; a table that cannot be read counts the same. Last, because on
+        // PostgreSQL a failed statement ends the transaction of the test.
+        $this->assertFalse(U\twoFactorInUse($this->pdo, 'zz_no_such_prefix'));
     }
 
     /**

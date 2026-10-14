@@ -161,6 +161,8 @@ function phaseACheck(array $ctx, string $updateId, string $channel, string $ref 
             $state = array_merge($state, array(
                 'state' => 'checked',
                 'installedVersion' => $installedVersion,
+                // An update from Admidio 4.x: the result page tells what is left of it.
+                'legacyLayout' => hasLegacyLayout($root),
                 'databaseVersion' => $databaseVersion,
                 'probeToken' => $probeToken,
                 'lastError' => ''
@@ -861,6 +863,10 @@ function preflightChecks(string $root, array $release, string $installedVersion,
     // files - files the FTP user owns are found here, not halfway through the installation
     $manifest = is_file($root . '/install/update-manifest.json') ? json_decode((string)file_get_contents($root . '/install/update-manifest.json'), true) : null;
     $directories = is_array($manifest['managedDirectories'] ?? null) ? $manifest['managedDirectories'] : DEFAULT_MANAGED_DIRECTORIES;
+    // The old code of Admidio 4.x is removed, which needs the right to remove files there.
+    if (hasLegacyCode($root)) {
+        $directories = array_merge($directories, array('adm_program', 'adm_themes/simple'));
+    }
     $rootFiles = is_array($manifest['managedRootFiles'] ?? null) ? $manifest['managedRootFiles'] : DEFAULT_MANAGED_ROOT_FILES;
     $failed = array();
     foreach ($directories as $directory) {

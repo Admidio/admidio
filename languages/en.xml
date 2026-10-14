@@ -548,6 +548,7 @@
   <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatic updates are not available for this installation. Download the new version from the Admidio website and install it manually.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">The update could not be found. Start it again from the Admidio settings.</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Open Admidio</string>
+  <string name="SYS_CORE_UPDATE_OWN_THEMES">The themes of your own in the folder adm_themes (#VAR1#) cannot be used by this version of Admidio. They were not changed and can be deleted once they are no longer needed.</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_INVALID">The update package is invalid or damaged. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_PASSWORD">Password</string>
   <string name="SYS_CORE_UPDATE_PHP_TOO_OLD">Version #VAR1# needs at least PHP #VAR2#, but the server runs PHP #VAR3#.</string>

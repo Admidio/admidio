@@ -582,6 +582,68 @@ final class CommonTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The version constants are read in the form of 4.0 and 4.1 (define) as well as of later releases (const)
+     */
+    public function testVersionConstantsInBothForms(): void
+    {
+        $this->assertSame('4.3.17', U\versionFromConstants("<?php\nconst ADMIDIO_VERSION_MAIN = 4;\nconst ADMIDIO_VERSION_MINOR = 3;\n"
+            . "const ADMIDIO_VERSION_PATCH = 17;\nconst ADMIDIO_VERSION_BETA = 0;\n"));
+        $this->assertSame('4.1.19', U\versionFromConstants("<?php\ndefine('ADMIDIO_VERSION_MAIN', 4);\ndefine('ADMIDIO_VERSION_MINOR', 1);\n"
+            . "define(\"ADMIDIO_VERSION_PATCH\", 19);\ndefine('ADMIDIO_VERSION_BETA',0);\n"));
+        $this->assertSame('4.0.0-beta.3', U\versionFromConstants("define('ADMIDIO_VERSION_MAIN', 4); define('ADMIDIO_VERSION_MINOR', 0);\n"
+            . "define('ADMIDIO_VERSION_PATCH', 0); define('ADMIDIO_VERSION_BETA', 3);"));
+        $this->assertNull(U\versionFromConstants("<?php\nconst ADMIDIO_VERSION_MAIN = 4;\n"), 'a part is missing');
+        $this->assertNull(U\versionFromConstants("<?php\nconst ADMIDIO_VERSION_MAIN = 4 + 1;\n"), 'only plain numbers');
+    }
+
+    /**
+     * @testdox An installation of Admidio 4.x is recognised by its code below adm_program, which sets the paths of its pages
+     */
+    public function testLegacyLayout(): void
+    {
+        $config = U\configFromValues($this->rootPath, array('g_root_path' => 'https://club.example.org/'));
+        $this->assertFalse(U\hasLegacyCode($this->rootPath));
+        $this->assertFalse(U\hasLegacyLayout($this->rootPath));
+        $this->assertSame('https://club.example.org/system/login.php', U\loginPageUrl($config));
+
+        mkdir($this->rootPath . '/adm_program/system/bootstrap', 0777, true);
+        file_put_contents($this->rootPath . '/adm_program/system/bootstrap/constants.php', "<?php\ndefine('ADMIDIO_VERSION_MAIN', 4);\n"
+            . "define('ADMIDIO_VERSION_MINOR', 1);\ndefine('ADMIDIO_VERSION_PATCH', 19);\ndefine('ADMIDIO_VERSION_BETA', 0);\n");
+        $this->assertTrue(U\hasLegacyCode($this->rootPath));
+        $this->assertTrue(U\hasLegacyLayout($this->rootPath));
+        $this->assertSame('4.1.19', U\filesVersion($this->rootPath));
+        $this->assertSame('/adm_program/system/common.php', U\admidioPath($this->rootPath, 'system/common.php'));
+        $this->assertSame('https://club.example.org/adm_program/system/login.php', U\loginPageUrl($config));
+        $this->assertSame('https://club.example.org/adm_program/overview.php', U\overviewPageUrl($config));
+
+        // An update that has put the new files next to the old code: the layout is the new one, the old code is still there.
+        mkdir($this->rootPath . '/system/bootstrap', 0777, true);
+        file_put_contents($this->rootPath . '/system/bootstrap/constants.php', "<?php\nconst ADMIDIO_VERSION_MAIN = 6;\n"
+            . "const ADMIDIO_VERSION_MINOR = 0;\nconst ADMIDIO_VERSION_PATCH = 0;\nconst ADMIDIO_VERSION_BETA = 0;\n");
+        $this->assertTrue(U\hasLegacyCode($this->rootPath));
+        $this->assertFalse(U\hasLegacyLayout($this->rootPath));
+        $this->assertSame('6.0.0', U\filesVersion($this->rootPath), 'the new constants win');
+        $this->assertSame('/system/common.php', U\admidioPath($this->rootPath, 'system/common.php'));
+        $this->assertSame('https://club.example.org/modules/overview.php', U\overviewPageUrl($config));
+    }
+
+    /**
+     * @testdox Only the themes of an own are listed that the old standard theme leaves in adm_themes
+     */
+    public function testOwnLegacyThemes(): void
+    {
+        $this->assertSame(array(), U\ownLegacyThemes($this->rootPath), 'no adm_themes');
+
+        mkdir($this->rootPath . '/adm_themes/simple', 0777, true);
+        file_put_contents($this->rootPath . '/adm_themes/index.html', '');
+        $this->assertSame(array(), U\ownLegacyThemes($this->rootPath));
+
+        mkdir($this->rootPath . '/adm_themes/club');
+        mkdir($this->rootPath . '/adm_themes/club-dark');
+        $this->assertEqualsCanonicalizing(array('club', 'club-dark'), U\ownLegacyThemes($this->rootPath));
+    }
+
+    /**
      * @testdox The sidebar follows the update from step to step
      */
     public function testUpdateSteps(): void

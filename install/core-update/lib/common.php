@@ -46,6 +46,18 @@ const UPDATE_INFO_URL = 'https://www.admidio.org/update.txt';
 const SOURCE_ARCHIVE_URL = 'https://github.com/Admidio/admidio/archive/';
 
 /**
+ * What Admidio 4.x leaves behind in the installation: its code lies in adm_program/ and its standard
+ * theme in adm_themes/simple, where Admidio 5 has src/, modules/, system/ and themes/. An update
+ * removes them, as it removes every other file the new release no longer has, and keeps them in the
+ * kept-files archive. Themes of an own in adm_themes/ are not touched: nothing can use them any more,
+ * but they are the administrator's work.
+ */
+const LEGACY_PATHS = array('adm_program', 'adm_themes/simple', 'adm_themes/index.html');
+
+/** The file that tells the old code from any other folder of that name: the constants of 4.x. */
+const LEGACY_CONSTANTS_FILE = 'adm_program/system/bootstrap/constants.php';
+
+/**
  * An error the updater reports to the administrator.
  *
  * The message is either a text key (SYS_CORE_UPDATE_*) with its parameters, which the page
@@ -1001,8 +1013,66 @@ function versionFromParts(int $main, int $minor, int $patch, int $beta): string
 }
 
 /**
+ * Whether the installation still holds the code of Admidio 4.x (see LEGACY_PATHS), which is the case
+ * until an update has replaced it, and again after one that did not remove it.
+ */
+function hasLegacyCode(string $rootPath): bool
+{
+    return is_file($rootPath . '/' . LEGACY_CONSTANTS_FILE);
+}
+
+/**
+ * Whether the installation is one of Admidio 4.x, whose files lie below adm_program/: it has the
+ * old code and not the layout of Admidio 5 and later.
+ */
+function hasLegacyLayout(string $rootPath): bool
+{
+    return hasLegacyCode($rootPath) && !is_file($rootPath . '/system/bootstrap/constants.php');
+}
+
+/** The path of a file of Admidio below the installation, in the layout the installation has. */
+function admidioPath(string $rootPath, string $file): string
+{
+    return (hasLegacyLayout($rootPath) ? '/adm_program' : '') . '/' . $file;
+}
+
+/**
+ * The page of Admidio that shows its login, in the layout of the installation, for a link.
+ * @param array<string,mixed> $config
+ */
+function loginPageUrl(array $config): string
+{
+    return $config['baseUrl'] . admidioPath($config['rootPath'], 'system/login.php');
+}
+
+/**
+ * The start page of Admidio, in the layout of the installation, for a link.
+ * @param array<string,mixed> $config
+ */
+function overviewPageUrl(array $config): string
+{
+    return $config['baseUrl'] . (hasLegacyLayout($config['rootPath']) ? '/adm_program/overview.php' : '/modules/overview.php');
+}
+
+/**
+ * The themes of an own that Admidio 4.x leaves in adm_themes/, which no later version can use.
+ * @return array<int,string> Their folder names.
+ */
+function ownLegacyThemes(string $rootPath): array
+{
+    $themes = array();
+    foreach (is_dir($rootPath . '/adm_themes') ? (scandir($rootPath . '/adm_themes') ?: array()) : array() as $name) {
+        if ($name !== '.' && $name !== '..' && $name !== 'simple' && is_dir($rootPath . '/adm_themes/' . $name)) {
+            $themes[] = $name;
+        }
+    }
+
+    return $themes;
+}
+
+/**
  * The version of the installed files: from the manifest of the installed release, or else from the
- * version constants, read as text and never included.
+ * version constants, read as text and never included. Admidio 4.x keeps them below adm_program/.
  */
 function filesVersion(string $rootPath): string
 {
@@ -1014,22 +1084,26 @@ function filesVersion(string $rootPath): string
         }
     }
 
-    $version = versionFromConstants((string)@file_get_contents($rootPath . '/system/bootstrap/constants.php'));
+    $version = versionFromConstants((string)@file_get_contents($rootPath . '/system/bootstrap/constants.php'))
+        ?? versionFromConstants((string)@file_get_contents($rootPath . '/' . LEGACY_CONSTANTS_FILE));
     if ($version === null) {
-        throw UpdaterException::withDetail('SYS_CORE_UPDATE_NOT_AVAILABLE', 'The installed version cannot be read from system/bootstrap/constants.php.');
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_NOT_AVAILABLE',
+            'The installed version cannot be read from system/bootstrap/constants.php or ' . LEGACY_CONSTANTS_FILE . '.');
     }
 
     return $version;
 }
 
 /**
- * The version that the PHP code of system/bootstrap/constants.php defines, or null.
+ * The version that the PHP code of system/bootstrap/constants.php defines, or null. Admidio 4.0 and
+ * 4.1 define it with define(), later releases with const.
  */
 function versionFromConstants(string $constants): ?string
 {
     $parts = array();
     foreach (array('MAIN', 'MINOR', 'PATCH', 'BETA') as $part) {
-        if (preg_match('/const\s+ADMIDIO_VERSION_' . $part . '\s*=\s*(\d+)\s*;/', $constants, $matches) !== 1) {
+        if (preg_match('/(?:const\s+ADMIDIO_VERSION_' . $part . '\s*=|define\(\s*[\'"]ADMIDIO_VERSION_' . $part . '[\'"]\s*,)\s*(\d+)\s*(?:;|\))/',
+            $constants, $matches) !== 1) {
             return null;
         }
         $parts[] = (int)$matches[1];

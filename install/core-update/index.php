@@ -53,14 +53,14 @@ try {
         // its globals are globals. loadConfig() has read config.php in a scope of its own, so the
         // require_once of common.php would skip it: it is included here first.
         include $rootPath . '/adm_my_files/config.php';
-        require_once $rootPath . '/system/common.php';
+        require_once $rootPath . U\admidioPath($rootPath, 'system/common.php');
 
         if (!$gValidLogin || !$gCurrentUser->isAdministrator()) {
             coreUpdatePage(
                 $texts,
                 null,
                 coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_ADMIDIO_LOGIN'))),
-                coreUpdateLink($config['baseUrl'] . '/system/login.php', 'bi-box-arrow-in-right', U\text($texts, 'SYS_CORE_UPDATE_LOGIN'))
+                coreUpdateLink(U\loginPageUrl($config), 'bi-box-arrow-in-right', U\text($texts, 'SYS_CORE_UPDATE_LOGIN'))
             );
             exit;
         }
@@ -201,7 +201,10 @@ function coreUpdateHandleLogin(array $config, ?PDO $pdo, array $texts, bool $sub
         }
     }
 
-    coreUpdatePage($texts, null, U\loginForm($texts, U\loginCsrfToken($config, $loginCookie), $error));
+    // Where the second factor cannot matter, the form does not ask for it. If the database cannot be
+    // reached, the login fails anyway.
+    coreUpdatePage($texts, null, U\loginForm($texts, U\loginCsrfToken($config, $loginCookie), $error,
+        $pdo !== null && U\twoFactorInUse($pdo, $config['tablePrefix'])));
 }
 
 /**
@@ -626,7 +629,9 @@ function coreUpdateShowPhaseB(array $context, array $state): void
                     . implode('', array_map(static fn(array $note): string => coreUpdateAlert($note['type'] === 'info' ? 'info' : 'warning',
                         nl2br(U\h((string)$note['text']))), (array)($state['databaseNotes'] ?? array())))
                     . ((string)($state['keptArchive'] ?? '') !== ''
-                        ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/backups/' . $state['keptArchive']))) . '</p>' : ''),
+                        ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/backups/' . $state['keptArchive']))) . '</p>' : '')
+                    . (!empty($state['legacyLayout']) && U\ownLegacyThemes($config['rootPath']) !== array()
+                        ? coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_OWN_THEMES', array(implode(', ', U\ownLegacyThemes($config['rootPath'])))))) : ''),
                 !empty($state['databaseManual'])
                     ? coreUpdateLink($config['baseUrl'] . '/install/update.php', 'bi-database', U\text($texts, 'SYS_CORE_UPDATE_DATABASE_MANUAL'))
                     : coreUpdateOpenAdmidio($config, $texts)
@@ -715,7 +720,7 @@ function coreUpdateLink(string $url, string $icon, string $label, bool $secondar
  */
 function coreUpdateOpenAdmidio(array $config, array $texts): string
 {
-    return coreUpdateLink($config['baseUrl'] . '/modules/overview.php', 'bi-house-door-fill', U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO'));
+    return coreUpdateLink(U\overviewPageUrl($config), 'bi-house-door-fill', U\text($texts, 'SYS_CORE_UPDATE_OPEN_ADMIDIO'));
 }
 
 /**

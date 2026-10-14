@@ -50,8 +50,10 @@ function authenticateAdministrator(PDO $pdo, string $tablePrefix, string $direct
         throw new UpdaterException('SYS_CORE_UPDATE_LOGIN_BLOCKED');
     }
 
+    // Without two-factor authentication in use there is no secret to read and no code to ask for.
+    $twoFactor = twoFactorInUse($pdo, $tablePrefix);
     $user = $loginName === '' ? null : dbRow($pdo,
-        'SELECT usr_id, usr_password, usr_tfa_secret, usr_number_invalid, usr_date_invalid FROM ' . $tablePrefix . '_users
+        'SELECT usr_id, usr_password, ' . ($twoFactor ? 'usr_tfa_secret, ' : '') . 'usr_number_invalid, usr_date_invalid FROM ' . $tablePrefix . '_users
           WHERE LOWER(usr_login_name) = LOWER(?) AND usr_valid = true', array($loginName));
     $password = $user === null ? 'invalid' : verifyPassword($password, (string)$user['usr_password']);
 
@@ -79,6 +81,30 @@ function authenticateAdministrator(PDO $pdo, string $tablePrefix, string $direct
     $log('success, user ' . $user['usr_id']);
 
     return (int)$user['usr_id'];
+}
+
+/**
+ * Whether the login asks for the code of an authenticator app: the users have a secret for it
+ * (Admidio 4.x has none, two-factor authentication came with 5.0) and the preference
+ * two_factor_authentication_enabled does not switch it off, like User::checkLogin() of Admidio.
+ */
+function twoFactorInUse(PDO $pdo, string $tablePrefix): bool
+{
+    try {
+        $pdo->query('SELECT usr_tfa_secret FROM ' . $tablePrefix . '_users WHERE 1 = 0');
+    } catch (\Throwable) {
+        return false;
+    }
+
+    try {
+        $row = dbRow($pdo, 'SELECT prf_value FROM ' . $tablePrefix . '_preferences WHERE prf_name = ?
+            AND prf_org_id = (SELECT MIN(org_id) FROM ' . $tablePrefix . '_organizations)', array('two_factor_authentication_enabled'));
+    } catch (\Throwable) {
+        return true;
+    }
+
+    // Only a preference that says no switches it off; without one, as with Admidio, it is in use.
+    return $row === null || filter_var((string)$row['prf_value'], FILTER_VALIDATE_BOOLEAN);
 }
 
 /**
@@ -228,8 +254,9 @@ function changeThrottle(string $throttleFile, callable $change): void
  * The login form.
  * @param array{language: string, texts: array<string,string>} $texts
  * @param string $error An error to show above the form, already translated.
+ * @param bool $securityCode Whether to ask for the code of an authenticator app (see twoFactorInUse()).
  */
-function loginForm(array $texts, string $csrfToken, string $error = ''): string
+function loginForm(array $texts, string $csrfToken, string $error = '', bool $securityCode = true): string
 {
     $input = static fn(string $id, string $label, string $attributes): string => '<div class="mb-3"><label class="form-label" for="' . $id . '">'
         . h(text($texts, $label)) . '</label><input class="form-control form-control-small" id="' . $id . '" name="' . $id . '" ' . $attributes . '></div>';
@@ -241,7 +268,7 @@ function loginForm(array $texts, string $csrfToken, string $error = ''): string
         . '<input type="hidden" name="csrf_token" value="' . h($csrfToken) . '">'
         . $input('login_name', 'SYS_CORE_UPDATE_LOGIN_NAME', 'type="text" required maxlength="254" autocomplete="username"')
         . $input('password', 'SYS_CORE_UPDATE_PASSWORD', 'type="password" required autocomplete="current-password"')
-        . $input('totp_code', 'SYS_CORE_UPDATE_SECURITY_CODE', 'type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code"')
+        . ($securityCode ? $input('totp_code', 'SYS_CORE_UPDATE_SECURITY_CODE', 'type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code"') : '')
         . '<button class="btn btn-primary" type="submit"><i class="bi bi-box-arrow-in-right"></i>' . h(text($texts, 'SYS_CORE_UPDATE_LOGIN')) . '</button>'
         . '</form>';
 }

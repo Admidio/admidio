@@ -52,7 +52,7 @@ Version=5.1.0
 Package-URL=https://.../admidio-5.1.0.zip
 Package-SHA256=<sha256 of the ZIP>
 Package-Size=12345678
-Minimum-Source-Version=5.0.0
+Minimum-Source-Version=4.0.0
 Minimum-PHP-Version=8.2
 Beta-Version=5.2.0
 Beta-Release=1
@@ -145,6 +145,35 @@ them back with the previous version.
 
 Every update writes `update.log` in its workspace (states, errors with their English detail,
 decisions); when the update is over it is copied to `adm_my_files/logs/core-update_<date>_<from>_to_<to>.log`.
+
+## Updating from Admidio 4.x
+
+The updater also updates Admidio 4.x (4.0 and later) to the current release, in one step: the
+database update of the release starts at 3.1 and goes through all versions in between. The files of
+4.x lie below `adm_program/`, which is the only difference the updater has to know about
+(`LEGACY_PATHS` and `hasLegacyLayout()` in `lib/common.php`):
+
+- The installed version is read from `adm_program/system/bootstrap/constants.php`, and the Admidio
+  login of the first phase includes `adm_program/system/common.php`. Its links point to
+  `adm_program/system/login.php` and `adm_program/overview.php` as long as the old files are there.
+- A release is installed as always. Its plan also removes the old code: `adm_program/`, the old
+  standard theme `adm_themes/simple` and `adm_themes/index.html`. The old code is recognised by its
+  constants file, so a folder that is merely called `adm_program` stays. As every file of an
+  installation without an inventory, the removed files go into the kept-files archive, and a
+  rollback brings them back. The removal is part of the plan of a release; a source archive of a
+  developer channel removes nothing.
+- Themes of an own in `adm_themes/` stay where they are. No later version can use them, and the
+  result page names them.
+- The plugins in `adm_plugins/` are moved to `plugins/` by the database update of 5.0, as in a manual
+  update (`migration-paths.json`).
+- The login of the updater itself asks for the security code of an authenticator app only if
+  two-factor authentication exists (Admidio 4.x has none) and the preference does not switch it
+  off, as Admidio's own login does.
+
+Admidio 4.x does not know maintenance mode, so its pages stay reachable until the update has removed
+`adm_program/`; that is the same as with a manual update. The updater is not part of a 4.x
+installation: it is copied in with the bootstrap ZIP, and the first phase looks as unstyled as any
+update from a release whose files the updater page cannot use yet.
 
 ## Command line
 

@@ -125,6 +125,24 @@ final class LoginTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The login form asks for the security code of an authenticator app only where it can matter
+     */
+    public function testLoginFormSecurityCode(): void
+    {
+        $texts = array('language' => 'en', 'texts' => array());
+
+        $with = U\loginForm($texts, 'token');
+        $this->assertStringContainsString('name="totp_code"', $with, 'by default');
+        $this->assertStringContainsString('name="login_name"', $with);
+
+        $without = U\loginForm($texts, 'token', '', false);
+        $this->assertStringNotContainsString('totp_code', $without);
+        $this->assertStringNotContainsString('SYS_CORE_UPDATE_SECURITY_CODE', $without);
+        $this->assertStringContainsString('name="password"', $without);
+        $this->assertStringContainsString('name="csrf_token" value="token"', $without);
+    }
+
+    /**
      * @testdox Base32 is decoded case-insensitively and without padding
      */
     public function testBase32(): void

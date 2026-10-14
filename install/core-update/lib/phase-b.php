@@ -699,8 +699,9 @@ function keepReason(?array $inventory, string $path, string $currentHash): ?stri
 }
 
 /**
- * The files in the managed directories that the new release does not have, and the root files
- * that the installed release had and the new one has not. Unknown root files are never touched.
+ * The files in the managed directories that the new release does not have, the root files
+ * that the installed release had and the new one has not, and the code of Admidio 4.x (LEGACY_PATHS).
+ * Unknown root files are never touched.
  * @param array<string,mixed> $manifest
  * @return array<int,string>
  */
@@ -716,6 +717,21 @@ function obsoleteFiles(string $root, array $manifest): array
             $path = substr(str_replace('\\', '/', $entry->getPathname()), strlen($root) + 1);
             if (($entry->isFile() || $entry->isLink()) && !isset($manifest['files'][$path]) && $path !== INSTALLED_MANIFEST
                 && !isPreserved($path, $manifest)) {
+                $obsolete[] = $path;
+            }
+        }
+    }
+
+    foreach (hasLegacyCode($root) ? LEGACY_PATHS : array() as $legacy) {
+        if (is_link($root . '/' . $legacy)) {
+            continue;
+        }
+        $entries = is_dir($root . '/' . $legacy)
+            ? new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root . '/' . $legacy, \FilesystemIterator::SKIP_DOTS))
+            : (is_file($root . '/' . $legacy) ? array(new \SplFileInfo($root . '/' . $legacy)) : array());
+        foreach ($entries as $entry) {
+            $path = substr(str_replace('\\', '/', $entry->getPathname()), strlen($root) + 1);
+            if (($entry->isFile() || $entry->isLink()) && !isset($manifest['files'][$path]) && !isPreserved($path, $manifest)) {
                 $obsolete[] = $path;
             }
         }

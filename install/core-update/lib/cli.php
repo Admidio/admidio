@@ -242,7 +242,7 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
             case 'completed':
                 phaseBFinish($ctx, $updateId);
 
-                return commandResult(EXIT_SUCCESS, commandCompletedReport($state, $texts), $state);
+                return commandResult(EXIT_SUCCESS, commandCompletedReport($state, $texts, $root), $state);
 
             case 'rolling_back':
             case 'restoring_database':
@@ -474,7 +474,7 @@ function commandChecks(array $checks, array $texts): string
  * @param array<string,mixed> $state
  * @param array{language: string, texts: array<string,string>} $texts
  */
-function commandCompletedReport(array $state, array $texts): string
+function commandCompletedReport(array $state, array $texts, string $rootPath): string
 {
     $lines = array(!empty($state['databaseManual'])
         ? text($texts, 'SYS_CORE_UPDATE_FILES_ONLY', array(commandTarget($state)))
@@ -490,6 +490,9 @@ function commandCompletedReport(array $state, array $texts): string
     }
     if ((string)($state['keptArchive'] ?? '') !== '') {
         $lines[] = text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/backups/' . $state['keptArchive']));
+    }
+    if (!empty($state['legacyLayout']) && ownLegacyThemes($rootPath) !== array()) {
+        $lines[] = text($texts, 'SYS_CORE_UPDATE_OWN_THEMES', array(implode(', ', ownLegacyThemes($rootPath))));
     }
 
     return implode(PHP_EOL, $lines);
