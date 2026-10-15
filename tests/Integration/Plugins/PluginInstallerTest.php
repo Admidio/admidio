@@ -82,6 +82,8 @@ class PluginInstallerTest extends FilesystemTestCase
 
     protected function tearDown(): void
     {
+        unset($GLOBALS['helloPluginUpdateFirstStepRuns'], $GLOBALS['helloPluginUpdateShouldFail']);
+
         PluginRegistry::setPluginsPath(null);
         PluginRegistry::setInstallations(null);
         PluginRegistry::reset();
@@ -543,6 +545,45 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * A failed plugin update must leave its successful steps intact while its stored version
+     * remains unchanged. Retrying after the faulty step was repaired then skips the already
+     * completed step and finishes the update.
+     *
+     * @testdox An interrupted plugin update resumes at its first unfinished step
+     */
+    public function testInterruptedPluginUpdateResumesAtTheFirstUnfinishedStep(): void
+    {
+        PluginInstaller::enable($this->plugin());
+
+        $this->writeManifestVersion('1.3.0');
+        $this->writePluginUpdateScript();
+        $GLOBALS['helloPluginUpdateShouldFail'] = true;
+
+        try {
+            PluginInstaller::update($this->plugin());
+            $this->fail('The deliberately broken plugin update was expected to fail.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('STEP: 20', $exception->getMessage());
+        }
+
+        $component = $this->component();
+        $this->assertSame(self::PLUGIN_VERSION, $component['com_version']);
+        $this->assertSame(10, (int) $component['com_update_step']);
+        $this->assertFalse((bool) $component['com_update_completed']);
+        $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+
+        $GLOBALS['helloPluginUpdateShouldFail'] = false;
+
+        PluginInstaller::update($this->plugin());
+
+        $component = $this->component();
+        $this->assertSame('1.3.0', $component['com_version']);
+        $this->assertSame(20, (int) $component['com_update_step']);
+        $this->assertTrue((bool) $component['com_update_completed']);
+        $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+    }
+
+    /**
      * Test that an update fetches what the store publishes
      *
      * This is the one action the administrator performs, in the web interface and on the command
@@ -821,5 +862,23 @@ class PluginInstallerTest extends FilesystemTestCase
         file_put_contents($file, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         PluginRegistry::reset();
+    }
+
+    /**
+     * Write the two update steps used to verify that a failed update resumes at the right step.
+     */
+    private function writePluginUpdateScript(): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        FileSystemUtils::createDirectoryIfNotExists($directory);
+
+        $this->createFixtureFile(
+            $directory,
+            'update_1_3.xml',
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+            . "    <step id=\"10\">UpdateStepsCode::updateStep10Succeed</step>\n"
+            . "    <step id=\"20\">UpdateStepsCode::updateStep20FailWhileRequested</step>\n"
+            . "</update>\n"
+        );
     }
 }
