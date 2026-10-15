@@ -125,44 +125,79 @@ foreach (array('host', 'organization') as $bootstrapOption) {
     }
 }
 
-$cliHost = admCliBootstrapOption($argv, 'host');
-$cliOrganization = admCliBootstrapOption($argv, 'organization');
-$cliCommand = admCliBootstrapCommand($argv);
-
-/*
- * A second installation on the same machine, a test database or a restored backup can be
- * addressed with its own configuration file. The path is resolved here so that the bootstrap,
- * the check below and the install commands all mean the same file.
- */
-$cliConfigFile = admCliBootstrapOption($argv, 'config');
-
-if ($cliConfigFile === '') {
-    $cliConfigFile = __DIR__ . '/adm_my_files/config.php';
-}
-
-/*
- * Maintenance mode has to be manageable while the database is unavailable, so its command is
- * bootstrapped without a database connection (see system/bootstrap/cli.php).
- */
-$cliSkipDatabase = $cliCommand === 'maintenance:mode';
-
-/*
- * An installation has no configuration file and no database yet, so its commands need a bootstrap
- * that creates neither. Everything the constants are derived from is read from the command line
- * there, and the commands check that their options match what was bootstrapped.
- */
-$installationCommands = array('install:check', 'install:run');
-
-/*
- * The commands that only describe the command line have to work on an Admidio that is not installed
- * yet, otherwise install:run could not even be looked up before it is used.
- */
-$documentationCommands = array('', 'help', 'list', 'version', 'completion', 'cli:selfcheck', 'status');
-
-$installationBootstrap = in_array($cliCommand, $installationCommands, true)
-    || (in_array($cliCommand, $documentationCommands, true) && !is_file($cliConfigFile));
-
 try {
+    $cliHost = admCliBootstrapOption($argv, 'host');
+    $cliOrganization = admCliBootstrapOption($argv, 'organization');
+    $cliCommand = admCliBootstrapCommand($argv);
+
+    /*
+     * A second installation on the same machine, a test database or a restored backup can be
+     * addressed with its own configuration file. The path is resolved here so that the bootstrap,
+     * the check below and the install commands all mean the same file.
+     */
+    $cliConfigFile = admCliBootstrapOption($argv, 'config');
+
+    /*
+     * Who may use the command line at all, and the defaults of the options that are needed before
+     * config.php can be read, are configured in adm_my_files/cli-config.php. That file describes
+     * the installation whose code is executed, so it is looked up beside this script and can be
+     * selected neither with an option nor through the environment.
+     */
+    require_once __DIR__ . '/vendor/autoload.php';
+    $cliPolicy = Admidio\Infrastructure\Cli\CliPolicy::load(__DIR__);
+
+    if ($cliConfigFile === '') {
+        $cliConfigFile = (string)$cliPolicy->optionDefault($cliCommand, 'config');
+    }
+    if ($cliConfigFile === '') {
+        $cliConfigFile = __DIR__ . '/adm_my_files/config.php';
+    }
+    if ($cliHost === '') {
+        $cliHost = (string)$cliPolicy->optionDefault($cliCommand, 'host');
+    }
+    if ($cliOrganization === '') {
+        $cliOrganization = (string)$cliPolicy->optionDefault($cliCommand, 'organization');
+    }
+
+    $cliDenial = $cliPolicy->denialReason($cliCommand, $cliConfigFile);
+    if ($cliDenial !== null) {
+        throw new Admidio\Infrastructure\Cli\CliAccessDeniedException($cliDenial);
+    }
+
+    foreach ($cliPolicy->warnings() as $cliWarning) {
+        fwrite(STDERR, 'Warning: ' . $cliWarning . PHP_EOL);
+    }
+
+    /*
+     * Maintenance mode has to be manageable while the database is unavailable, so its command is
+     * bootstrapped without a database connection (see system/bootstrap/cli.php).
+     */
+    $cliSkipDatabase = $cliCommand === 'maintenance:mode';
+
+    /*
+     * An installation has no configuration file and no database yet, so its commands need a
+     * bootstrap that creates neither. Everything the constants are derived from is read from the
+     * command line there, and the commands check that their options match what was bootstrapped.
+     */
+    $installationCommands = array('install:check', 'install:run');
+
+    /*
+     * The commands that only describe the command line have to work on an Admidio that is not
+     * installed yet, otherwise install:run could not even be looked up before it is used.
+     */
+    $documentationCommands = array(
+        '', 'help', 'list', 'version', 'completion', 'cli:defaultconfig', 'cli:selfcheck', 'status'
+    );
+
+    /*
+     * cli:defaultconfig explains how the command line is configured, which is what an
+     * administrator reads when something is wrong. It must therefore not depend on a database
+     * connection either, and it needs nothing from one.
+     */
+    $installationBootstrap = in_array($cliCommand, $installationCommands, true)
+        || $cliCommand === 'cli:defaultconfig'
+        || (in_array($cliCommand, $documentationCommands, true) && !is_file($cliConfigFile));
+
     if (in_array($cliCommand, $installationCommands, true)) {
         /*
          * Ask for the values that the command line does not contain. This happens here and not in
@@ -188,16 +223,32 @@ try {
     }
 
     $application = new Admidio\Infrastructure\Cli\CliApplication();
-    exit($application->run($argv));
+    $cliExitCode = $application->run($argv);
+
+    $cliPolicy->logInvocation($argv, $cliExitCode, Admidio\Infrastructure\Cli\CliApplication::actorDescription());
+    exit($cliExitCode);
 } catch (Throwable $exception) {
     /*
      * The bootstrap itself can fail, for example when config.php is missing, and then the class is
-     * not available to classify the failure. Fall back to the plain message in that case.
+     * not available to classify the failure. Fall back to the plain message in that case. A refused
+     * command is the exception: it is rejected before anything of the application was needed, and
+     * it still has to be reported as a rejection and in the requested output format.
      */
-    if (class_exists(Admidio\Infrastructure\Cli\CliApplication::class, false)) {
-        exit(Admidio\Infrastructure\Cli\CliApplication::handleThrowable($exception, $argv));
+    if (class_exists(Admidio\Infrastructure\Cli\CliApplication::class, false)
+        || $exception instanceof Admidio\Infrastructure\Cli\CliAccessDeniedException) {
+        $cliExitCode = Admidio\Infrastructure\Cli\CliApplication::handleThrowable($exception, $argv);
+    } else {
+        fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
+        $cliExitCode = 1;
     }
 
-    fwrite(STDERR, 'Error: ' . $exception->getMessage() . PHP_EOL);
-    exit(1);
+    /*
+     * A refused or failed invocation is exactly what the log of the command line is read for, so it
+     * is written here as well and not only on the successful path.
+     */
+    if (isset($cliPolicy)) {
+        $cliPolicy->logInvocation($argv, $cliExitCode, Admidio\Infrastructure\Cli\CliApplication::actorDescription());
+    }
+
+    exit($cliExitCode);
 }

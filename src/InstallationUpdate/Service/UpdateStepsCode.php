@@ -280,6 +280,31 @@ final class UpdateStepsCode
     }
 
     /**
+     * Write adm_my_files/cli-config.php, the configuration file of the command line.
+     *
+     * An installation that was updated has no such file, so the command line would be disabled -
+     * which is the intended state - without the administrator having anything to edit in order to
+     * change it. The template documents every setting and disables the command line, so the update
+     * makes the configuration discoverable without granting anything.
+     *
+     * A data directory that cannot be written is not a reason to fail an update: the command line
+     * prints the same template with "admidio cli:defaultconfig".
+     */
+    public static function updateStep51WriteCliConfigTemplate(): void
+    {
+        global $gLogger;
+
+        try {
+            Installation::writeCliConfigFile();
+        } catch (Exception | RuntimeException | UnexpectedValueException $exception) {
+            $gLogger->warning(
+                'The configuration file of the command line could not be written: '
+                . $exception->getMessage()
+            );
+        }
+    }
+
+    /**
      * This method will convert the charset of the database tables to utf8mb4 if not already done.
      * This is necessary to support emojis and other special characters in the future.
      * @throws Exception
@@ -485,6 +510,19 @@ final class UpdateStepsCode
                 $profileFieldLinkedIn->setValue('usf_url', 'https://bsky.app/profile/#user_content#');
                 $profileFieldLinkedIn->save();
             }
+        }
+    }
+
+    /**
+     * Add the column crt_col_conditions where step 1920 never ran. db.sql did not get the column,
+     * and a fresh installation marks all update steps as done, so these installations lack it, while
+     * the update to 6.0 migrates it. MySQL has no ADD COLUMN IF NOT EXISTS.
+     * @throws Exception
+     */
+    public static function updateStep50AddCategoryReportConditions(): void
+    {
+        if (!in_array('crt_col_conditions', self::$db->getTableColumns(TBL_CATEGORY_REPORT), true)) {
+            self::$db->queryPrepared('ALTER TABLE ' . TBL_CATEGORY_REPORT . ' ADD COLUMN crt_col_conditions varchar(255)');
         }
     }
 
