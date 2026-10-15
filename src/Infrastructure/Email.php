@@ -644,9 +644,32 @@ class Email extends PHPMailer
             // now set the sender of the original mail as the recipients of the copy mail
             $this->addAddress($this->emSender['address'], $this->emSender['name']);
 
-            $this->send();
+            $this->sendKeepingConnection();
         } catch (Exception $e) {
             throw new \Admidio\Infrastructure\Exception($e->errorMessage());
+        }
+    }
+
+    /**
+     * Send the current message over the SMTP connection that is kept open for all mails of one sending.
+     * Some servers accept only a limited number of mails per connection and close it, e.g. with
+     * "421 too many messages". If the connection is closed after a failed mail, the mail is sent once more
+     * over a new connection. If the connection is still open, e.g. because a recipient was rejected, the
+     * mail is not sent again, because it could already have been delivered to the other recipients.
+     * @return bool Returns **true** if the mail was sent.
+     * @throws Exception
+     */
+    private function sendKeepingConnection(): bool
+    {
+        try {
+            return $this->send();
+        } catch (Exception $e) {
+            if (!$this->SMTPKeepAlive || $this->Mailer !== 'smtp' || $this->getSMTPInstance()->connected()) {
+                throw $e;
+            }
+
+            $this->smtpClose();
+            return $this->send();
         }
     }
 
@@ -703,7 +726,7 @@ class Email extends PHPMailer
                         }
 
                         // now send mail
-                        $this->send();
+                        $this->sendKeepingConnection();
                     } catch (Exception $e) {
                         $errorMessage = $e->getMessage();
                         $errorRecipients[] = $recipient['name'] . ' (' . $recipient['address'] . ')';
@@ -774,7 +797,7 @@ class Email extends PHPMailer
                     }
 
                     // now send mail
-                    $this->send();
+                    $this->sendKeepingConnection();
                 }
             }
             // now send the email as a copy to the sender
