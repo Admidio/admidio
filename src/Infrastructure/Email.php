@@ -664,6 +664,11 @@ class Email extends PHPMailer
         $errorMessage = '';
         $errorRecipients = array();
 
+        // In single mode or with several packages of recipients more than one mail is sent. Keep the
+        // SMTP connection open until all of them are delivered, so only the first mail needs the
+        // connection setup, the TLS handshake and the login.
+        $this->SMTPKeepAlive = true;
+
         try {
             // If email sending is disabled in the config.php than don't send emails.
             // This should only be used for demo systems so the email UI should still be there.
@@ -780,6 +785,9 @@ class Email extends PHPMailer
             return $e->errorMessage();
         } catch (\Throwable $e) {
             return $e->getMessage();
+        } finally {
+            $this->smtpClose();
+            $this->SMTPKeepAlive = false;
         }
 
         // initialize recipient addresses so same email could be sent to other recipients
