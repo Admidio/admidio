@@ -679,12 +679,20 @@ class Email extends PHPMailer
         $this->emRecipientsArray = Hooks::applyTypedFilters('email_recipients', $this->emRecipientsArray, $this->Subject);
         $recipientCount = count($this->emRecipientsArray);
 
+        // In single mode or with several packages of recipients more than one mail is sent. Keep the
+        // SMTP connection open until all of them are delivered, so only the first mail needs the
+        // connection setup, the TLS handshake and the login.
+        $this->SMTPKeepAlive = true;
+
         try {
             $this->deliver();
         } catch (\Throwable $exception) {
             Hooks::doActionCatchErrors('email_failed', $this->Subject, $recipientCount, $exception->getMessage());
 
             throw $exception;
+        } finally {
+            $this->smtpClose();
+            $this->SMTPKeepAlive = false;
         }
 
         Hooks::doActionCatchErrors('email_sent', $this->Subject, $recipientCount);
