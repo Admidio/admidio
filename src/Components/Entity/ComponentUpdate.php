@@ -2,6 +2,7 @@
 namespace Admidio\Components\Entity;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\InstallationUpdate\Service\UpdateStepsCode;
 use Admidio\Infrastructure\Database;
 use SimpleXMLElement;
@@ -85,7 +86,8 @@ class ComponentUpdate extends Component
 
             throw new UnexpectedValueException($message);
         } elseif ($this->getValue('com_type') === 'PLUGIN') {
-            $updateFile = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->getValue('com_name_intern') . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
+            $updateFile = PluginRegistry::getPluginsPath() . '/' . $this->getValue('com_name_intern')
+                . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if (is_file($updateFile)) {
                 try {
@@ -288,7 +290,7 @@ class ComponentUpdate extends Component
 
         // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
         // otherwise set the status to incomplete update
-        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
+        if (version_compare($this->getValue('com_version'), '4.2.0', '>=')) {
             $this->setValue('com_update_completed', false);
             $this->save();
         }
@@ -382,12 +384,8 @@ class ComponentUpdate extends Component
             && $updateCompleted !== ''
             && $updateCompleted !== null;
 
-        // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
-        // otherwise set the status to incomplete update
-        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
-            $this->setValue('com_update_completed', false);
-            $this->save();
-        }
+        $this->setValue('com_update_completed', false);
+        $this->save();
 
         for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion) {
             // Set max subversion for iteration. If we are in the loop of the target main version
@@ -453,10 +451,8 @@ class ComponentUpdate extends Component
                          WHERE com_id = ? -- :com_id';
         $this->db->queryPrepared($sql, array($targetVersion, $this->getValue('com_id')));
 
-        if (version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
-            $this->setValue('com_update_completed', true);
-            $this->save();
-        }
+        $this->setValue('com_update_completed', true);
+        $this->save();
 
     }
 }

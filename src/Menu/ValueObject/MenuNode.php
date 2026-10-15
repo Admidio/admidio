@@ -202,9 +202,7 @@ class MenuNode
             }
         }
 
-        return Hooks::hasFilter('menu_item_visible')
-            ? Hooks::applyTypedFilters('menu_item_visible', $visible, $menuId, $componentName)
-            : $visible;
+        return Hooks::applyTypedFilters('menu_item_visible', $visible, $menuId, $componentName);
     }
 
     /**
