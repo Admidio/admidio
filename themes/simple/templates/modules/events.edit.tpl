@@ -6,7 +6,7 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {$eventSections = ['basic' => 'SYS_BASIC_DATA', 'participation' => 'SYS_EVENT_REGISTRATION']}
     {if $eventInventoryReservationsEnabled|default:false}
-        {$eventSections['reservations'] = 'SYS_INVENTORY_ITEMS'}
+        {$eventSections['reservations'] = 'SYS_ITEM_RESERVATIONS'}
     {/if}
     <div class="tabs-x tabs-above tab-bordered admidio-event-tabs" data-max-title-length="-1">
         <ul class="nav nav-tabs admidio-tabs d-none d-md-flex" role="tablist">

@@ -914,6 +914,7 @@
   <string name="SYS_INVENTORY_ITEMNAME">Item name</string>
   <string name="SYS_INVENTORY_ITEMNAME_DESC">The name of the item</string>
   <string name="SYS_INVENTORY_ITEMS">Items</string>
+  <string name="SYS_ITEM_RESERVATIONS">Item reservations</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING">Disable borrowing functionality</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING_DESC">When this option is enabled, items can no longer be borrowed. Existing borrowing records will still be saved, but will no longer be displayed. (Default: no)</string>
   <string name="SYS_RESERVATIONS">Reservations</string>

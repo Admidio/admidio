@@ -925,6 +925,7 @@
   <string name="SYS_INVENTORY_ITEMNAME">Gegenstandsname</string>
   <string name="SYS_INVENTORY_ITEMNAME_DESC">Der Name des Gegenstandes</string>
   <string name="SYS_INVENTORY_ITEMS">Gegenstände</string>
+  <string name="SYS_ITEM_RESERVATIONS">Gegenstandsreservierungen</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING">Ausleih-Funktionalität deaktivieren</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING_DESC">Wenn diese Option aktiviert ist, können Gegenstände nicht mehr ausgeliehen werden. Vorhandene Ausleihdaten werden weiterhin gespeichert, allerdings nicht länger angezeigt. (Voreinstellung: nein)</string>
   <string name="SYS_RESERVATIONS">Reservierungen</string>
