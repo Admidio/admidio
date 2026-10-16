@@ -264,6 +264,11 @@
   <string name="SYS_ALBUM_CREATED_TITLE">A new photo album was created at #VAR1#</string>
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
+  <string name="SYS_ALIGN_CENTER">Center</string>
+  <string name="SYS_ALIGN_JUSTIFY">Justify</string>
+  <string name="SYS_ALIGN_LEFT">Left</string>
+  <string name="SYS_ALIGN_RIGHT">Right</string>
+  <string name="SYS_ALIGNMENT">Alignment</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Full time</string>
@@ -272,11 +277,6 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
-  <string name="SYS_ALIGN_CENTER">Center</string>
-  <string name="SYS_ALIGN_JUSTIFY">Justify</string>
-  <string name="SYS_ALIGN_LEFT">Left</string>
-  <string name="SYS_ALIGN_RIGHT">Right</string>
-  <string name="SYS_ALIGNMENT">Alignment</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participants can register anonymous guests</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participants may add additional seats to their registration. These are then subtracted from the maximum number of participants and the remaining free seats are thereby reduced. This is e.g. useful if a participant can bring more visitors and thus requires a total number of free places.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Allow comments within participation</string>
@@ -525,8 +525,8 @@
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
-  <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
+  <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Define a country for which this organization mainly operates. It will be preselected when new users are created or registered. It eases the data input and can be changed by the user.</string>
@@ -546,10 +546,8 @@
   <string name="SYS_DEFAULT_VIEW_DESC">A display mode of the events can be preselected. In #VAR1_BOLD# mode, all the information about an event is displayed in a box. In the #VAR2_BOLD# display mode, the most important event information is shown in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">A display mode of the forum topics can be preselected. Within mode #VAR1_BOLD#, each topic is presented in a card with a preview of the topic text. Within mode #VAR2_BOLD#, the topics are presented in a list to show the information in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DELETE">Delete</string>
-  <string name="SYS_DELETE_COLUMN">Delete column</string>
-  <string name="SYS_DELETE_ROW">Delete row</string>
-  <string name="SYS_DELETE_TABLE">Delete table</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
+  <string name="SYS_DELETE_COLUMN">Delete column</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
   <string name="SYS_DELETE_ENTRY">Delete entry</string>
@@ -562,9 +560,11 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
+  <string name="SYS_DELETE_ROW">Delete row</string>
   <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETE_TABLE">Delete table</string>
   <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
@@ -839,14 +839,14 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
-  <string name="SYS_INSERT_IMAGE">Insert image</string>
   <string name="SYS_INSERT_COLUMN_LEFT">Insert column to the left</string>
   <string name="SYS_INSERT_COLUMN_RIGHT">Insert column to the right</string>
+  <string name="SYS_INSERT_IMAGE">Insert image</string>
+  <string name="SYS_INSERT_LINK">Insert link</string>
   <string name="SYS_INSERT_ROW_ABOVE">Insert row above</string>
   <string name="SYS_INSERT_ROW_BELOW">Insert row below</string>
   <string name="SYS_INSERT_TABLE">Insert table (2 × 2)</string>
   <string name="SYS_INSERT_VIDEO">Insert video</string>
-  <string name="SYS_INSERT_LINK">Insert link</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Install</string>
   <string name="SYS_INSTALL_APP">Install app</string>
@@ -1171,7 +1171,6 @@
   <string name="SYS_NEXT">Next</string>
   <string name="SYS_NEXT_PHOTO">Next picture</string>
   <string name="SYS_NO">No</string>
-  <string name="SYS_NORMAL">Normal</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
@@ -1199,6 +1198,7 @@
   <string name="SYS_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
+  <string name="SYS_NORMAL">Normal</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not member of any organization</string>
@@ -1502,6 +1502,7 @@
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
+  <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
   <string name="SYS_RESTORE_ENTRY">Restore entry</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
@@ -1559,7 +1560,6 @@
   <string name="SYS_ROTATE_PHOTO_LEFT">Rotate photo left</string>
   <string name="SYS_ROTATE_PHOTO_RIGHT">Rotate photo right</string>
   <string name="SYS_ROW">Row</string>
-  <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_RUN_REPORT">Run report</string>
@@ -2033,11 +2033,13 @@
   <string name="SYS_VARIOUS_ROLES">Various roles</string>
   <string name="SYS_VARIOUS_USER_RELATION_TYPES">Various relationships</string>
   <string name="SYS_VCARD">vCard</string>
-  <string name="SYS_VERY_LARGE">Very large</string>
   <string name="SYS_VENUE">Venue</string>
   <string name="SYS_VENUE_LINK">If enough information (city, street, location) about the venue is entered, a link or route can be created via Google Maps.</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Your current database version is #VAR1#. Unfortunately, it is not possible to update to #VAR2# with this version.\n\nPlease install Admidio 4.1 first and then update to Admidio #VAR2#.</string>
+  <string name="SYS_VERY_LARGE">Very large</string>
+  <string name="SYS_VIDEO_URL">YouTube or Vimeo URL</string>
+  <string name="SYS_VIDEO_URL_INVALID">Please enter a valid YouTube or Vimeo URL.</string>
   <string name="SYS_VIEW">View</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Show full size picture</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
@@ -2047,8 +2049,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</string>
   <string name="SYS_VIEWS">Views</string>
   <string name="SYS_VIEWS_VAR">#VAR1# views</string>
-  <string name="SYS_VIDEO_URL">YouTube or Vimeo URL</string>
-  <string name="SYS_VIDEO_URL_INVALID">Please enter a valid YouTube or Vimeo URL.</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible for</string>
   <string name="SYS_VISITORS">Guests</string>
