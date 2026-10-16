@@ -36,8 +36,8 @@ use Throwable;
  * be able to take the whole installation down, because then it could not be disabled any more.
  * This is the opposite of the policy for hooks, where a failing callback fails the operation it
  * extends: an operation can be aborted, a request that never reaches the plugin administration
- * cannot be repaired. A plugin that crashes the request after it was loaded - a fatal error, or a
- * PHP Error nobody caught - is handled by PluginCrashGuard, which keeps it out of later requests.
+ * cannot be repaired. What no catch can intercept, a fatal error while a plugin is loaded, is
+ * handled by PluginCrashGuard, which keeps the plugin out of later requests.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -85,10 +85,6 @@ final class PluginLoader
             return;
         }
         self::$done = true;
-
-        // From here on plugin code runs, and a plugin that crashes the request is kept out of the
-        // next one instead of crashing every request.
-        PluginCrashGuard::activate();
 
         try {
             self::registerEnabledFlags();
@@ -221,6 +217,9 @@ final class PluginLoader
             return false;
         }
 
+        // A fatal error ends the request before endLoading() runs; the guard then knows which plugin
+        // it was loading and keeps it out of the next request.
+        PluginCrashGuard::beginLoading($plugin->id);
         try {
             self::registerClasses($plugin);
             self::registerLanguages($plugin);
@@ -243,6 +242,8 @@ final class PluginLoader
             unset(self::$loaded[$plugin->id]);
             self::report($plugin->id, $exception->getMessage());
             return false;
+        } finally {
+            PluginCrashGuard::endLoading();
         }
 
         return true;
