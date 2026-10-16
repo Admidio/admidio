@@ -85,6 +85,9 @@ class InventoryItemPresenter extends PagePresenter
             $form->addInput('guest_last_name', $gL10n->get('SYS_LASTNAME'), '', array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
             $form->addInput('guest_first_name', $gL10n->get('SYS_FIRSTNAME'), '', array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
             $form->addInput('guest_email', $gL10n->get('SYS_EMAIL'), '', array('type' => 'email', 'maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
+            if ($gSettingsManager->getBool('captcha_enabled')) {
+                $form->addCaptcha('adm_captcha_code');
+            }
         }
         $form->addInput('reservation_comment', $gL10n->get('SYS_COMMENT'), '', array('type' => 'text', 'maxLength' => 4000));
         $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-send'));

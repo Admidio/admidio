@@ -804,6 +804,7 @@ class InventoryTest extends DatabaseTestCase
         $this->withCurrentUser($guest, self::ORG_ID, false, function () {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'guests');
+            $GLOBALS['gSettingsManager']->set('captcha_enabled', '1');
             $previousSession = $GLOBALS['gCurrentSession'];
             $session = new class {
                 public ?FormPresenter $form = null;
@@ -828,6 +829,7 @@ class InventoryTest extends DatabaseTestCase
                 $this->assertTrue($form->hasElement('guest_first_name'));
                 $this->assertTrue($form->hasElement('guest_last_name'));
                 $this->assertTrue($form->hasElement('guest_email'));
+                $this->assertTrue($form->hasElement('adm_captcha_code'));
                 $this->assertFalse($form->hasElement('guest_name'));
                 $guestElementIds = array_values(array_filter(
                     array_keys($form->getElements()),
