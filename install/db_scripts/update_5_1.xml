@@ -232,5 +232,6 @@
     <step id="1380">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
     <step id="1390">UpdateStepsCode::updateStep51AddComponentUuid</step>
     <step id="1400">CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid)</step>
+    <step id="1410">UpdateStepsCode::updateStep51WriteCliConfigTemplate</step>
     <step>stop</step>
 </update>

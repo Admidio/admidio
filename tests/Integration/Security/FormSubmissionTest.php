@@ -316,6 +316,39 @@ class FormSubmissionTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox A Quill announcement with video can be saved repeatedly after the HTML definition is cached
+     */
+    public function testQuillVideoCanBeValidatedWithCachedHtmlDefinition(): void
+    {
+        $this->asAdministrator(function () {
+            $description = '<p>Video</p><iframe class="ql-video" allowfullscreen="true" '
+                . 'src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"></iframe>';
+            $cachePath = ADMIDIO_PATH . FOLDER_DATA . '/templates';
+            if (!is_dir($cachePath)) {
+                mkdir($cachePath, 0775, true);
+            }
+            $previousSession = $GLOBALS['gCurrentSession'] ?? null;
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+
+            try {
+                for ($attempt = 0; $attempt < 2; ++$attempt) {
+                    $form = new FormPresenter('adm_quill_video_form', 'modules/announcements.edit.tpl');
+                    $form->addEditor('ann_description', 'Description', '');
+                    $values = $form->validate(array(
+                        'adm_csrf_token' => $form->getCsrfToken(),
+                        'ann_description' => $description
+                    ));
+
+                    $this->assertStringContainsString('https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+                        $values['ann_description']);
+                }
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
+        });
+    }
+
+    /**
      * Test the direct token check used by the ajax actions
      *
      * @testdox The direct token check compares against the token of the session

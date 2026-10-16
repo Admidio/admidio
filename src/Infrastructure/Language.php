@@ -417,7 +417,7 @@ class Language
     }
 
     /**
-     * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
+     * Returns the language code needed by libraries such as the datepicker.
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguageLibs(): string

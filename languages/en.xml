@@ -77,6 +77,20 @@
   <string name="SYS_COHABITANT">Partner</string>
   <string name="SYS_COHABITANT_FEMALE">Partner</string>
   <string name="SYS_COHABITANT_MALE">Partner</string>
+  <string name="SYS_COMMAND_LINE">Command line</string>
+  <string name="SYS_COMMAND_LINE_ACCOUNTS">Allowed system accounts</string>
+  <string name="SYS_COMMAND_LINE_ACTOR">Acting user without --as</string>
+  <string name="SYS_COMMAND_LINE_ACTORS">Accounts allowed for --as</string>
+  <string name="SYS_COMMAND_LINE_ALLOWED_COMMANDS">Allowed commands</string>
+  <string name="SYS_COMMAND_LINE_DENIED_COMMANDS">Denied commands</string>
+  <string name="SYS_COMMAND_LINE_DESC">The Admidio command line is configured in the file #VAR1#. It is disabled until $gCliEnabled is set to true in that file, so a new installation cannot be administered from a shell before you allow it. The command "admidio cli:defaultconfig" prints a documented template of the file. These settings are deliberately not editable here: a configuration that anything with access to the database could change would restrict nothing.</string>
+  <string name="SYS_COMMAND_LINE_EVERY_ACCOUNT">Every local account</string>
+  <string name="SYS_COMMAND_LINE_FILE">Configuration file</string>
+  <string name="SYS_COMMAND_LINE_FILE_MISSING">The file does not exist, so the command line is disabled.</string>
+  <string name="SYS_COMMAND_LINE_LOG">Log of the invocations</string>
+  <string name="SYS_COMMAND_LINE_NOT_WRITABLE">cannot be written</string>
+  <string name="SYS_COMMAND_LINE_STATUS">Status</string>
+  <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unknown account</string>
   <string name="SYS_COMPANION">Companion</string>
   <string name="SYS_DAUGHTER">Daughter</string>
   <string name="SYS_EVENT_REGISTRATION">Registration</string>
@@ -250,6 +264,11 @@
   <string name="SYS_ALBUM_CREATED_TITLE">A new photo album was created at #VAR1#</string>
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Folder could not be found. In case the folder was deleted by using FTP or in case to be inaccessible, please delete the folder in Admidio.\nGuests without photo management permission can not display selected album.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">The album is currently locked and will not be shown to visitors and members for this reason.</string>
+  <string name="SYS_ALIGN_CENTER">Center</string>
+  <string name="SYS_ALIGN_JUSTIFY">Justify</string>
+  <string name="SYS_ALIGN_LEFT">Left</string>
+  <string name="SYS_ALIGN_RIGHT">Right</string>
+  <string name="SYS_ALIGNMENT">Alignment</string>
   <string name="SYS_ALL">All</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Full time</string>
@@ -306,6 +325,8 @@
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_BLUESKY">Bluesky</string>
+  <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BULLETED_LIST">Bulleted list</string>
   <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANCEL">Cancel</string>
@@ -504,6 +525,7 @@
   <string name="SYS_DECIMAL_NUMBER">Decimal number</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Default assignment of registering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">If a new user is created or a new registration is accepted, then this role is automatically assigned to the new user. When the creator has the right to assign roles, all role mappings are displayed and can be changed accordingly.</string>
+  <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Default configuration</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">One of the configurations specified here can be made the default configuration for lists of this organization. Member lists of roles that do not have a list configuration stored will be displayed with this configuration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Default country</string>
@@ -525,6 +547,7 @@
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">A display mode of the forum topics can be preselected. Within mode #VAR1_BOLD#, each topic is presented in a card with a preview of the topic text. Within mode #VAR2_BOLD#, the topics are presented in a list to show the information in a compact list. (Default setting: #VAR1#)</string>
   <string name="SYS_DELETE">Delete</string>
   <string name="SYS_DELETE_ALBUM">Delete album</string>
+  <string name="SYS_DELETE_COLUMN">Delete column</string>
   <string name="SYS_DELETE_CONFIGURATION">Delete configuration</string>
   <string name="SYS_DELETE_DATA">Data has been deleted.</string>
   <string name="SYS_DELETE_ENTRY">Delete entry</string>
@@ -537,9 +560,11 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Delete profile picture</string>
   <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_ROLE">Delete role</string>
+  <string name="SYS_DELETE_ROW">Delete row</string>
   <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">You can not delete system categories.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">You can not delete the system role #VAR1_BOLD#.</string>
+  <string name="SYS_DELETE_TABLE">Delete table</string>
   <string name="SYS_DELETED">Deleted</string>
   <string name="SYS_DELETED_ENTRY">Deleted entry</string>
   <string name="SYS_DELETED_USER">Deleted user</string>
@@ -748,6 +773,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while folder #VAR1# was renamed.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folder #VAR1_BOLD# cannot be created with required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# for help in order to check write permissions (by using FTP changing file attributes to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
+  <string name="SYS_FONT_SIZE">Font size</string>
   <string name="SYS_FORM_USE_FOR_EDIT">If this checkbox is activated, the corresponding field value will be used for editing the selection.</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
@@ -813,6 +839,14 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Info box</string>
   <string name="SYS_INFORMATIONS">Information</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Please enter the first and last name of the new contact. Before the record is created, a check is made to see if a person with a similar name already exists in the database.</string>
+  <string name="SYS_INSERT_COLUMN_LEFT">Insert column to the left</string>
+  <string name="SYS_INSERT_COLUMN_RIGHT">Insert column to the right</string>
+  <string name="SYS_INSERT_IMAGE">Insert image</string>
+  <string name="SYS_INSERT_LINK">Insert link</string>
+  <string name="SYS_INSERT_ROW_ABOVE">Insert row above</string>
+  <string name="SYS_INSERT_ROW_BELOW">Insert row below</string>
+  <string name="SYS_INSERT_TABLE">Insert table (2 × 2)</string>
+  <string name="SYS_INSERT_VIDEO">Insert video</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Install</string>
   <string name="SYS_INSTALL_APP">Install app</string>
@@ -967,11 +1001,13 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
+  <string name="SYS_ITALIC">Italic</string>
   <string name="SYS_KEEP_ORIGINAL">Save original files additionally</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Saves each photo not only with selected resolution but with original size. If option #VAR1_BOLD# is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
   <string name="SYS_LANGUAGE">Language</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio is displayed in the language set in the browser for websites. If the language stored there is not available, the language set here will be used.\nIs your language missing or would you like to translate more texts or improve existing translations? Then take a look at the #VAR1#Admidio wiki page#VAR2# to find out how you can help with the translation.</string>
+  <string name="SYS_LARGE">Large</string>
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Last edited by #VAR1# at #VAR2#</string>
   <string name="SYS_LAST_LOGIN">Last login</string>
@@ -1162,9 +1198,9 @@
   <string name="SYS_NO_VALID_RECIPIENTS">The selected roles and users have no valid e-mail addresses. For this reason, the e-mail can`t be sent.</string>
   <string name="SYS_NOBODY">Nobody</string>
   <string name="SYS_NONE">None</string>
+  <string name="SYS_NORMAL">Normal</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not at registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
-  <string name="SYS_NOT_INSTALLED">Not installed</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not member of organization #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Please use a valid number as condition for field #VAR1_BOLD#.</string>
@@ -1210,6 +1246,7 @@
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Order</string>
+  <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
@@ -1281,7 +1318,6 @@
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
   <string name="SYS_PLUGIN_ADD">Add plugin</string>
-  <string name="SYS_PLUGIN_ADD_DESC">Install a plugin from a file you have, or from the plugins published for Admidio.</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# is already there. Its files are replaced only if that was explicitly asked for.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1342,7 +1378,6 @@
   <string name="SYS_PLUGIN_STORE_UNAVAILABLE">The list of plugins published for Admidio could not be read. Uploading a plugin from a file still works.</string>
   <string name="SYS_PLUGIN_STORE_VERSION_MISMATCH">The catalogue announced version #VAR2# of the plugin #VAR1#, but the downloaded archive contains version #VAR3#. The download was refused.</string>
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
-  <string name="SYS_PLUGIN_UPDATED">Plugin successfully updated.</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
   <string name="SYS_PORT">Port</string>
@@ -1460,6 +1495,7 @@
   <string name="SYS_REMOVE_CONTACT_SELECTION">Remove contact selection</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">By choosing #VAR1_BOLD#, all selected contacts will be deleted and could not be viewed or restored anymore.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
+  <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPEATS">Repeats</string>
@@ -1469,6 +1505,7 @@
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
+  <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>
   <string name="SYS_RESTORE_ENTRY">Restore entry</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
@@ -1645,6 +1682,7 @@
   <string name="SYS_SINCE_TO">from #VAR1# to #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SIZE">Size</string>
+  <string name="SYS_SMALL">Small</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
@@ -1951,6 +1989,7 @@
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Tuesday</string>
   <string name="SYS_TYPE">Type</string>
+  <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
@@ -2001,6 +2040,9 @@
   <string name="SYS_VENUE_LINK">If enough information (city, street, location) about the venue is entered, a link or route can be created via Google Maps.</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Your current database version is #VAR1#. Unfortunately, it is not possible to update to #VAR2# with this version.\n\nPlease install Admidio 4.1 first and then update to Admidio #VAR2#.</string>
+  <string name="SYS_VERY_LARGE">Very large</string>
+  <string name="SYS_VIDEO_URL">YouTube or Vimeo URL</string>
+  <string name="SYS_VIDEO_URL_INVALID">Please enter a valid YouTube or Vimeo URL.</string>
   <string name="SYS_VIEW">View</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Show full size picture</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">View profiles of role members</string>
@@ -2016,8 +2058,6 @@
   <string name="SYS_WANT_DELETE_CATEGORY">Do you really want to delete category #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_ENTRY">Do you want to delete the entry #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
-  <string name="SYS_WANT_DISABLE_PLUGIN">Do you want to disable the plugin #VAR1_BOLD#? It keeps its settings and its data.</string>
-  <string name="SYS_WANT_ENABLE_PLUGIN">Do you want to enable the plugin #VAR1_BOLD#?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt is downloaded and added, but not switched on. You enable it afterwards in the plugin manager.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis applies to every organization of this installation. All data of the plugin is irrevocably deleted and its files are deleted from the server. Disable the plugin instead if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoving applies to every organization of this installation. All data of the plugin is irrevocably deleted and its files are deleted from the server. Disable the plugin instead if you only want to stop using it.</string>
