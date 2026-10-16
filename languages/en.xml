@@ -77,6 +77,20 @@
   <string name="SYS_COHABITANT">Partner</string>
   <string name="SYS_COHABITANT_FEMALE">Partner</string>
   <string name="SYS_COHABITANT_MALE">Partner</string>
+  <string name="SYS_COMMAND_LINE">Command line</string>
+  <string name="SYS_COMMAND_LINE_ACCOUNTS">Allowed system accounts</string>
+  <string name="SYS_COMMAND_LINE_ACTOR">Acting user without --as</string>
+  <string name="SYS_COMMAND_LINE_ACTORS">Accounts allowed for --as</string>
+  <string name="SYS_COMMAND_LINE_ALLOWED_COMMANDS">Allowed commands</string>
+  <string name="SYS_COMMAND_LINE_DENIED_COMMANDS">Denied commands</string>
+  <string name="SYS_COMMAND_LINE_DESC">The Admidio command line is configured in the file #VAR1#. It is disabled until $gCliEnabled is set to true in that file, so a new installation cannot be administered from a shell before you allow it. The command "admidio cli:defaultconfig" prints a documented template of the file. These settings are deliberately not editable here: a configuration that anything with access to the database could change would restrict nothing.</string>
+  <string name="SYS_COMMAND_LINE_EVERY_ACCOUNT">Every local account</string>
+  <string name="SYS_COMMAND_LINE_FILE">Configuration file</string>
+  <string name="SYS_COMMAND_LINE_FILE_MISSING">The file does not exist, so the command line is disabled.</string>
+  <string name="SYS_COMMAND_LINE_LOG">Log of the invocations</string>
+  <string name="SYS_COMMAND_LINE_NOT_WRITABLE">cannot be written</string>
+  <string name="SYS_COMMAND_LINE_STATUS">Status</string>
+  <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unknown account</string>
   <string name="SYS_COMPANION">Companion</string>
   <string name="SYS_DAUGHTER">Daughter</string>
   <string name="SYS_EVENT_REGISTRATION">Registration</string>
@@ -1036,6 +1050,7 @@
   <string name="SYS_LOGIN_NOT_ACTIVATED">Your account has not been activated yet.\n\nYou will be informed as soon as access is possible.</string>
   <string name="SYS_LOGIN_PROBLEMS">Login problems</string>
   <string name="SYS_LOGIN_TO">Sign in to #VAR1_BOLD#</string>
+  <string name="SYS_LOGIN_TO_VIEW_PAGE">Please log in to view the requested page. You will then be forwarded to it automatically.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Your login data were correct but the update process is only activated for administrators of the organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Your login data were correct but you are not an active member of this organization #VAR1_BOLD#.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">The given username and/or password is incorrect.</string>
@@ -1484,6 +1499,7 @@
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Image could not be processed because the resolution is greater than #VAR1# Megapixel.</string>

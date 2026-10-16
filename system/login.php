@@ -33,6 +33,13 @@ try {
 
         // create an HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('adm_login', $headline);
+
+        // a user who was forwarded to the login because the requested page needs a login gets a hint
+        if (array_key_exists('login_forward_url', $_SESSION)) {
+            $page->addHtml('<div class="alert alert-info" role="alert" style="max-width: 500px">
+                <i class="bi bi-info-circle-fill"></i>' . $gL10n->get('SYS_LOGIN_TO_VIEW_PAGE') . '</div>');
+        }
+
         $loginModule = new LoginService();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();

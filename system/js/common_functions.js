@@ -671,6 +671,23 @@ function redirectToURL(url, args = null) {
     }
 }
 /**
+ * Returns the message that is shown if an AJAX request failed, e.g. because of a timeout, a lost
+ * connection or an error of the server. The HTTP status is added if the server answered.
+ * @param {object} jqXHR The jqXHR object of the failed request.
+ * @returns {string}
+ */
+function getRequestFailedMessage(jqXHR) {
+    var message = "The request could not be completed. Please check your internet connection and try again.";
+    if (typeof gTranslations !== "undefined" && gTranslations.requestFailed) {
+        message = gTranslations.requestFailed;
+    }
+    if (jqXHR && jqXHR.status > 0) {
+        message += " (HTTP " + jqXHR.status + ")";
+    }
+    return message;
+}
+
+/**
  * The function will override the submitting of a form. It will call the action url and handle the response
  * of that url. Therefore, a json with status and message key is expected. Also a url key must be provided to
  * which the user will be guided if the form was successfully processed.
@@ -747,6 +764,14 @@ function formSubmit(event) {
                 formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage);
                 formAlert.fadeIn();
             }
+        },
+        error: function(jqXHR) {
+            // the request failed or the server didn't answer, so the form could be sent again
+            $("#" + submitButtonID).attr("disabled", false);
+            submitButtonIcon.attr("class", iconClass);
+            formAlert.attr("class", "alert alert-danger form-alert");
+            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + getRequestFailedMessage(jqXHR));
+            formAlert.fadeIn();
         }
     });
 }
