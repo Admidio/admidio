@@ -2,24 +2,24 @@
 
 namespace Admidio\Infrastructure\Plugins;
 
-use Error;
 use Throwable;
 
 /**
- * Notices when a plugin crashes Admidio and keeps it out until somebody decides to try it again.
+ * Notices when a plugin crashes Admidio while it is loaded and keeps it out until somebody decides
+ * to try it again.
  *
  * PluginLoader::load() already catches what a plugin throws while it is being loaded. What it cannot
- * catch is everything after that, and everything PHP does not throw at all:
+ * catch is a fatal error (E_ERROR, E_PARSE, E_COMPILE_ERROR, E_CORE_ERROR, E_USER_ERROR), for
+ * example a class whose method signature does not match the Admidio class it extends any more. Such
+ * a crash ends the request, and as a plugin is loaded on every request it ends every request,
+ * including the ones of the plugin administration that could switch it off. So PluginLoader tells
+ * the guard which plugin it is loading, and if the request ends in a fatal error meanwhile, the guard
+ * writes the crash to **adm_my_files/plugins-failed.json**. PluginRegistry::getLoadable() leaves the
+ * plugin out - and every plugin that requires it - from the next request on.
  *
- * - a fatal error (E_ERROR, E_PARSE, E_COMPILE_ERROR, E_CORE_ERROR), for example a class whose
- *   method signature does not match the Admidio class it extends any more;
- * - a PHP **Error** (TypeError, a call to an undefined method, ...) that nobody caught, in a hook,
- *   in an autoloaded class or on a page of the plugin.
- *
- * Such a crash ends the request, and if the plugin is loaded on every request it ends every request,
- * including the ones of the plugin administration that could switch it off. So the guard writes the
- * crash to **adm_my_files/plugins-failed.json**, and PluginRegistry::getLoadable() leaves the plugin
- * out - and every plugin that requires it - from the next request on.
+ * Only loading counts. Once all plugins are loaded, a crash is a bug of the plugin that is reported
+ * and fixed, while the plugin stays active: what a visitor sends with a request must never be able to
+ * take a plugin away from everybody.
  *
  * The record is installation-wide and deliberately not a preference: whether a plugin is enabled is
  * the decision of an organization, it is written to the changelog, and a crash must not change it.
@@ -27,14 +27,8 @@ use Throwable;
  * updating either gives the plugin a new chance. The administrators are shown the crash and can
  * remove the entry with "Try again".
  *
- * Not a crash, and therefore never recorded:
- * - an application exception. A hook that throws one fails the operation it extends, which is the
- *   hook policy, and a page reports it like any other error.
- * - exhausting the memory or the execution time. Whatever runs last is merely where the limit was
- *   reached, not what caused it.
- *
- * A crash is attributed to the plugin whose directory contains the file the error occurred in, or,
- * if that is a file of Admidio, the innermost stack frame inside a plugin directory.
+ * Exhausting the memory or the execution time is not a crash of the plugin: whatever runs last is
+ * merely where the limit was reached, not what caused it.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -50,7 +44,7 @@ final class PluginCrashGuard
     /**
      * The error types PHP cannot recover from. Anything else lets the request continue.
      */
-    private const FATAL_ERRORS = E_ERROR | E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR;
+    private const FATAL_ERRORS = E_ERROR | E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR | E_USER_ERROR;
 
     /**
      * Fatal errors that say the request ran out of a resource. Whatever code ran last only happened
@@ -77,6 +71,12 @@ final class PluginCrashGuard
     private static bool $active = false;
 
     /**
+     * ID of the plugin that is being loaded right now, or **null**. A request that ends in a fatal
+     * error while this is set was ended by that plugin.
+     */
+    private static ?string $loading = null;
+
+    /**
      * Whether this request already recorded a crash. A request ends with its first crash, so a
      * second one can only be a consequence of it.
      */
@@ -90,8 +90,12 @@ final class PluginCrashGuard
     }
 
     /**
-     * Start watching the request for plugin crashes. PluginLoader calls this before it runs any
-     * plugin code; calling it again is harmless.
+     * Register the shutdown function that records a fatal error during loading. Calling it again is
+     * harmless.
+     *
+     * The bootstrap calls this before it registers any other shutdown function: they run in the
+     * order of registration, and a warning or an error in an earlier one would replace the fatal
+     * error that error_get_last() still reports.
      *
      * A command line run is not watched: whoever started it sees the error, and a failed command
      * should not take a plugin away from the web interface.
@@ -108,33 +112,29 @@ final class PluginCrashGuard
     }
 
     /**
-     * Record a Throwable that ended the request, if it is a crash of a plugin. handleException()
-     * calls this for every exception a script did not handle itself.
-     * @param Throwable $throwable
+     * Note that the code of a plugin is about to run for loading. PluginLoader calls this before it
+     * loads a plugin and endLoading() afterwards.
+     * @param string $id ID of the plugin.
      * @return void
      */
-    public static function handleThrowable(Throwable $throwable): void
+    public static function beginLoading(string $id): void
     {
-        if (!self::$active) {
-            return;
-        }
-
-        try {
-            $crash = self::attributeThrowable($throwable);
-            if ($crash !== null) {
-                self::record($crash['plugin'], $crash['error'], $crash['file'], $crash['line']);
-            }
-        } catch (Throwable) {
-            // The request is already failing; the guard must not replace its error with its own.
-        }
+        self::$loading = $id;
     }
 
     /**
-     * Shutdown function: record the fatal error that ended the request, if a plugin caused it.
-     *
-     * A Throwable that no script caught ends up here as well, as the fatal error "Uncaught ...". PHP
-     * prints and logs it as usual; the guard only reads it. An exception handler could see the
-     * object itself, but it would have to replace what PHP does with an uncaught exception.
+     * Note that the plugin was loaded, whether it succeeded or threw something that the loader
+     * caught. A fatal error never gets here, which is how the guard knows it happened while loading.
+     * @return void
+     */
+    public static function endLoading(): void
+    {
+        self::$loading = null;
+    }
+
+    /**
+     * Shutdown function: record the fatal error that ended the request, if it happened while a
+     * plugin was loaded.
      * @return void
      */
     public static function handleShutdown(): void
@@ -150,34 +150,13 @@ final class PluginCrashGuard
     }
 
     /**
-     * The plugin crash a Throwable stands for, or **null** if it is none.
-     * @param Throwable $throwable
-     * @return array{plugin: string, error: string, file: string, line: int}|null
-     */
-    public static function attributeThrowable(Throwable $throwable): ?array
-    {
-        if (!$throwable instanceof Error) {
-            return null;
-        }
-
-        $locations = array(array('file' => $throwable->getFile(), 'line' => $throwable->getLine()));
-        foreach ($throwable->getTrace() as $frame) {
-            if (isset($frame['file'])) {
-                $locations[] = array('file' => (string)$frame['file'], 'line' => (int)($frame['line'] ?? 0));
-            }
-        }
-
-        return self::attribute(get_class($throwable) . ': ' . $throwable->getMessage(), $locations);
-    }
-
-    /**
      * The plugin crash an error of error_get_last() stands for, or **null** if it is none.
      * @param array{type: int, message: string, file: string, line: int}|null $error
      * @return array{plugin: string, error: string, file: string, line: int}|null
      */
     public static function attributeError(?array $error): ?array
     {
-        if ($error === null || ($error['type'] & self::FATAL_ERRORS) === 0) {
+        if (self::$loading === null || $error === null || ($error['type'] & self::FATAL_ERRORS) === 0) {
             return null;
         }
 
@@ -188,80 +167,12 @@ final class PluginCrashGuard
             }
         }
 
-        $locations = array(array('file' => (string)$error['file'], 'line' => (int)$error['line']));
-
-        if (str_starts_with($message, 'Uncaught ')) {
-            /*
-             * A Throwable nobody caught. PHP puts its class and its stack trace into the message;
-             * only an Error is a crash. The class is known, because it was thrown, so it is checked
-             * without the autoloader.
-             */
-            if (preg_match('/^Uncaught ([\w\\\\]+)/', $message, $matches) !== 1
-                || !class_exists($matches[1], false) || !is_a($matches[1], Error::class, true)) {
-                return null;
-            }
-
-            $parts = explode("\nStack trace:\n", $message, 2);
-            $message = substr($parts[0], strlen('Uncaught '));
-            if (isset($parts[1]) && preg_match_all('/^#\d+ (.+)\((\d+)\): /m', $parts[1], $frames, PREG_SET_ORDER) > 0) {
-                foreach ($frames as $frame) {
-                    $locations[] = array('file' => $frame[1], 'line' => (int)$frame[2]);
-                }
-            }
-        }
-
-        return self::attribute($message, $locations);
-    }
-
-    /**
-     * Find the plugin the first of the locations belongs to.
-     * @param string $error
-     * @param array<int,array{file: string, line: int}> $locations The location of the error first,
-     *        then the stack frames from the innermost outwards.
-     * @return array{plugin: string, error: string, file: string, line: int}|null
-     */
-    private static function attribute(string $error, array $locations): ?array
-    {
-        foreach ($locations as $location) {
-            $id = self::getPluginIdOfFile($location['file']);
-            if ($id !== null) {
-                return array('plugin' => $id, 'error' => $error, 'file' => $location['file'], 'line' => $location['line']);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * The ID of the plugin whose directory contains the file, or **null**. Only a plugin that the
-     * loader can load counts: a directory without a usable manifest is never loaded, so there is
-     * nothing to keep out.
-     * @param string $file
-     * @return string|null
-     */
-    public static function getPluginIdOfFile(string $file): ?string
-    {
-        $root = realpath(PluginRegistry::getPluginsPath());
-        if ($file === '' || $root === false) {
-            return null;
-        }
-
-        $root = rtrim(str_replace('\\', '/', $root), '/') . '/';
-        $file = str_replace('\\', '/', $file);
-
-        $compare = PHP_OS_FAMILY === 'Windows' ? 'strncasecmp' : 'strncmp';
-        if ($compare($file, $root, strlen($root)) !== 0) {
-            return null;
-        }
-
-        $id = strstr(substr($file, strlen($root)), '/', true);
-        if ($id === false || !Plugin::isValidId($id)) {
-            return null;
-        }
-
-        $plugin = PluginRegistry::get($id);
-
-        return ($plugin !== null && $plugin->isValid()) ? $plugin->id : null;
+        return array(
+            'plugin' => self::$loading,
+            'error' => $message,
+            'file' => (string)$error['file'],
+            'line' => (int)$error['line']
+        );
     }
 
     /**
@@ -326,16 +237,6 @@ final class PluginCrashGuard
     }
 
     /**
-     * Whether a crash of the plugin is recorded and still applies.
-     * @param string $id
-     * @return bool
-     */
-    public static function hasCrashed(string $id): bool
-    {
-        return isset(self::getActive()[$id]);
-    }
-
-    /**
      * Remove the entry of a plugin, so that the next request loads it again.
      * @param string $id
      * @return bool Whether there was an entry.
@@ -343,6 +244,9 @@ final class PluginCrashGuard
     public static function remove(string $id): bool
     {
         $found = false;
+        if (!is_file(self::getRecordFile())) {
+            return false;
+        }
 
         self::update(static function (array $records) use ($id, &$found): array {
             $found = isset($records[$id]);
@@ -364,6 +268,7 @@ final class PluginCrashGuard
     {
         self::$recordFile = $file;
         self::$records = null;
+        PluginRegistry::forgetExcluded();
     }
 
     /**
@@ -374,6 +279,8 @@ final class PluginCrashGuard
     {
         self::$records = null;
         self::$recorded = false;
+        self::$loading = null;
+        PluginRegistry::forgetExcluded();
     }
 
     /**
@@ -421,7 +328,8 @@ final class PluginCrashGuard
 
     /**
      * Change the record under an exclusive lock, so that two requests that crash at the same time
-     * do not lose an entry. An empty record removes the file.
+     * do not lose an entry. An empty record leaves an empty file: deleting it after the lock is
+     * released would also delete a crash that another request recorded in between.
      * @param callable(array<string,array<string,mixed>>): array<string,array<string,mixed>> $change
      * @return void
      */
@@ -451,12 +359,8 @@ final class PluginCrashGuard
         flock($handle, LOCK_UN);
         fclose($handle);
 
-        // Windows cannot remove a file that is still open, so this happens after the lock is gone.
-        if ($records === array()) {
-            @unlink($file);
-        }
-
         self::$records = $records;
+        PluginRegistry::forgetExcluded();
     }
 
     /**
