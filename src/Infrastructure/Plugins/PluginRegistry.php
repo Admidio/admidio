@@ -88,6 +88,12 @@ final class PluginRegistry
     private static ?array $installations = null;
 
     /**
+     * The result of getExcluded() in this request, or **null** while it has not been calculated.
+     * @var array<string,string>|null
+     */
+    private static ?array $excluded = null;
+
+    /**
      * Overrides the plugins directory. Only used by tests and by the installation of an uploaded
      * package, which validates a plugin before it is moved into place.
      * @var string|null
@@ -429,6 +435,10 @@ final class PluginRegistry
      */
     public static function getExcluded(): array
     {
+        if (self::$excluded !== null) {
+            return self::$excluded;
+        }
+
         $excluded = array();
         foreach (array_keys(PluginCrashGuard::getActive()) as $id) {
             $excluded[$id] = $id;
@@ -450,7 +460,18 @@ final class PluginRegistry
             }
         } while ($added);
 
+        self::$excluded = $excluded;
+
         return $excluded;
+    }
+
+    /**
+     * Forget the result of getExcluded(), because the record of crashes or the plugins changed.
+     * @return void
+     */
+    public static function forgetExcluded(): void
+    {
+        self::$excluded = null;
     }
 
     /**
@@ -469,15 +490,18 @@ final class PluginRegistry
     }
 
     /**
-     * Version of every installed and enabled plugin, to resolve plugin dependencies.
+     * Version of every installed and enabled plugin that is not kept out after a crash, to resolve
+     * plugin dependencies.
      * @return array<string,string>
      * @throws Exception
      */
     public static function getEnabledVersions(): array
     {
+        $excluded = self::getExcluded();
+
         $versions = array();
         foreach (self::all() as $id => $plugin) {
-            if ($plugin->isValid() && self::isEnabled($id)) {
+            if ($plugin->isValid() && !isset($excluded[$id]) && self::isEnabled($id)) {
                 $versions[$id] = self::getInstalledVersion($id);
             }
         }
@@ -601,6 +625,7 @@ final class PluginRegistry
         self::$plugins = null;
         self::$installations = null;
         self::$settingOwners = null;
+        self::$excluded = null;
     }
 
     /**
@@ -615,6 +640,7 @@ final class PluginRegistry
         self::$pluginsPath = $path === null ? null : rtrim(str_replace('\\', '/', $path), '/');
         self::$plugins = null;
         self::$settingOwners = null;
+        self::$excluded = null;
     }
 
     /**
