@@ -645,7 +645,7 @@ class EventFormPresenter extends PagePresenter
                 array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
             // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
-            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_RESERVATIONS'), $availableItems,
+            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_ITEMS'), $availableItems,
                 array('defaultValue' => $selectedItems, 'multiselect' => true));
             $reservationItems = array();
             foreach ($availableItems as $itemId => $itemName) {

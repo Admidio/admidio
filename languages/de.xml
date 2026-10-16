@@ -922,7 +922,7 @@
   <string name="SYS_INVENTORY_ITEMFIELD_SELECT_OPTIONS">Auswahloptionen für Eigenschaftsfelder</string>
   <string name="SYS_INVENTORY_ITEMFIELDS">Eigenschaftsfelder</string>
   <string name="SYS_INVENTORY_ITEMFIELDS_EDIT">Eigenschaftsfelder pflegen</string>
-  <string name="SYS_INVENTORY_ITEMNAME">Artikelname</string>
+  <string name="SYS_INVENTORY_ITEMNAME">Gegenstandsname</string>
   <string name="SYS_INVENTORY_ITEMNAME_DESC">Der Name des Gegenstandes</string>
   <string name="SYS_INVENTORY_ITEMS">Gegenstände</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING">Ausleih-Funktionalität deaktivieren</string>
@@ -960,7 +960,7 @@
   <string name="SYS_ITEM_NOT_AVAILABLE">Der Gegenstand ist im gewählten Zeitraum nicht verfügbar.</string>
   <string name="SYS_APPROVE">Freigeben</string>
   <string name="SYS_REJECT">Ablehnen</string>
-  <string name="SYS_RESERVATION_STATUS_PER_EVENT">Reservierungsstatus je Termin</string>
+  <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Reservierungsstatus der Gegenstände je Termin</string>
   <string name="SYS_ORIGIN">Herkunft</string>
   <string name="SYS_MEMBER_REQUEST">Mitgliederanfrage</string>
   <string name="SYS_GUEST_REQUEST">Gästeanfrage</string>
