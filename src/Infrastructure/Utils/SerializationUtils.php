@@ -25,12 +25,12 @@ final class SerializationUtils
                 $name = $key;
             }
 
-            if (property_exists($scope, $name)) {
-                (new ReflectionProperty($scope, $name))->setValue($object, $value);
-            } else {
-                // Preserve dynamic properties that may be present in older sessions.
-                $object->{$name} = $value;
+            // Ignore obsolete session properties instead of creating dynamic properties.
+            if (!property_exists($scope, $name)) {
+                continue;
             }
+
+            (new ReflectionProperty($scope, $name))->setValue($object, $value);
         }
     }
 }

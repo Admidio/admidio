@@ -115,6 +115,26 @@ class SerializationCompatibilityTest extends TestCase
         self::assertSame('admidio_test', (new ReflectionProperty($database, 'dbName'))->getValue($database));
     }
 
+    public function testUnknownLegacyPropertiesAreIgnored(): void
+    {
+        $GLOBALS['gDb'] = (new ReflectionClass(Database::class))->newInstanceWithoutConstructor();
+
+        $entity = unserialize($this->legacyObject(SerializationEntityFixture::class, array(
+            'legacyExtraProperty' => 'obsolete',
+            "\0*\0removedProtectedProperty" => 'obsolete',
+            "\0" . SerializationEntityFixture::class . "\0removedPrivateProperty" => 'obsolete',
+            "\0*\0tableName" => 'adm_example',
+            "\0" . SerializationEntityFixture::class . "\0sessionMarker" => 'legacy'
+        )));
+
+        self::assertFalse(property_exists($entity, 'legacyExtraProperty'));
+        self::assertFalse(property_exists($entity, 'removedProtectedProperty'));
+        self::assertFalse(property_exists($entity, 'removedPrivateProperty'));
+        self::assertSame('adm_example', (new ReflectionProperty($entity, 'tableName'))->getValue($entity));
+        self::assertSame('legacy', (new ReflectionProperty($entity, 'sessionMarker'))->getValue($entity));
+        self::assertSame($GLOBALS['gDb'], (new ReflectionProperty($entity, 'db'))->getValue($entity));
+    }
+
     public function testSelectiveSerializationKeepsOnlyLegacyProperties(): void
     {
         $language = (new ReflectionClass(Language::class))->newInstanceWithoutConstructor();
