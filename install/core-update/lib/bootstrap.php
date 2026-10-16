@@ -23,3 +23,4 @@ require_once __DIR__ . '/download.php';
 require_once __DIR__ . '/backup.php';
 require_once __DIR__ . '/phase-a.php';
 require_once __DIR__ . '/phase-b.php';
+require_once __DIR__ . '/process.php';

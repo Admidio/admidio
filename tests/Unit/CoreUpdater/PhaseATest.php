@@ -228,7 +228,7 @@ final class PhaseATest extends AdmidioTestCase
     private function runToTheEnd(array $context, string $updateId): array
     {
         for ($request = 0; $request < 20; $request++) {
-            $result = U\phaseARun($context, $updateId);
+            $result = U\runStep($context, $updateId);
             if ($result['status'] !== 'success') {
                 return $result;
             }
@@ -421,7 +421,7 @@ final class PhaseATest extends AdmidioTestCase
         $updateId = $this->createUpdate();
         U\phaseACheck($context, $updateId, 'stable');
 
-        U\phaseACancel($context, $updateId);
+        U\cancelUpdate($context, $updateId);
 
         $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId));
         $this->assertNull(U\activeUpdateId($this->root));
@@ -679,7 +679,7 @@ final class PhaseATest extends AdmidioTestCase
         $file = U\workspace($this->root, $updateId) . '/update.txt';
         file_put_contents($file, str_replace('Minimum-PHP-Version=8.2', 'Minimum-PHP-Version=8.1', (string)file_get_contents($file)));
 
-        $result = U\phaseARun($context, $updateId);
+        $result = U\runStep($context, $updateId);
         $this->assertSame('failed', $result['status']);
         $this->assertSame('SYS_CORE_UPDATE_SIGNATURE_INVALID', $result['message']);
         $this->assertNull(U\activeUpdateId($this->root));

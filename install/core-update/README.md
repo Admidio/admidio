@@ -17,6 +17,7 @@ lib/login.php      the updater's own login (fallback during maintenance mode)
 lib/download.php   HTTPS, signature of update.txt, release information, manifest, ZIP reading
 lib/phase-a.php    phase A and the checks P1-P9
 lib/phase-b.php    phase B: extraction, plan, installation, verification, rollback
+lib/process.php    runStep(): the next piece of work of an update, state by state
 lib/cli.php        the command line: apply and rollback from one decision to the next (loaded by cli.php only)
 ```
 
@@ -24,6 +25,10 @@ Everything in `lib/` is plain functions in the namespace `AdmidioCoreUpdater`. I
 `adm_my_files/config.php`, connects with plain PDO and needs nothing else.
 `install/update.php` loads `lib/common.php`, so the state of an update and the updater cookie
 have one implementation.
+
+`runStep()` in `lib/process.php` names every state in the order an update passes through them and
+does the next piece of work of the current one; the page and the command line call it until the
+administrator has to decide. `coreUpdateShowPage()` in `index.php` shows the page of each state.
 
 ## State and access
 

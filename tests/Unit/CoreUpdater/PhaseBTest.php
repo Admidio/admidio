@@ -45,7 +45,7 @@ final class PhaseBTest extends AdmidioTestCase
     private function runToDecision(array $context, string $updateId): array
     {
         for ($request = 0; $request < 50; $request++) {
-            $result = U\phaseBRun($context, $updateId);
+            $result = U\runStep($context, $updateId);
             if ($result['status'] !== 'success') {
                 return $result;
             }
@@ -258,12 +258,12 @@ final class PhaseBTest extends AdmidioTestCase
     public function testExtractionContinuesAtItsCursor(): void
     {
         [$context, $updateId] = $this->prepared();
-        U\phaseBRun($context, $updateId);
+        U\runStep($context, $updateId);
         $this->assertSame('extracting', U\readState($this->root, $updateId)['state']);
 
         // The package lists index.php, bootstrap.php, Same.php, then Fresh.php: a piece did the first three.
         U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('cursor' => 3)));
-        U\phaseBRun($context, $updateId);
+        U\runStep($context, $updateId);
 
         $workspace = U\workspace($this->root, $updateId);
         $this->assertSame('planning', U\readState($this->root, $updateId)['state']);
@@ -321,7 +321,7 @@ final class PhaseBTest extends AdmidioTestCase
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
         U\phaseBConfirm($context, $updateId, 'own');
-        U\phaseBRun($context, $updateId); // maintenance on
+        U\runStep($context, $updateId); // maintenance on
         $workspace = U\workspace($this->root, $updateId);
 
         // The request died after the journal entry of the first operation and half a copy.
@@ -362,7 +362,7 @@ final class PhaseBTest extends AdmidioTestCase
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
         U\phaseBConfirm($context, $updateId, 'own');
-        U\phaseBRun($context, $updateId); // maintenance on
+        U\runStep($context, $updateId); // maintenance on
         $extracted = U\workspace($this->root, $updateId) . '/extracted/index.php';
         rename($extracted, $extracted . '.away');
 
@@ -380,6 +380,46 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox A failed backup of the database goes back to the review, without maintenance mode
+     */
+    public function testFailedBackupGoesBackToTheReview(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        // The updater is to back up the database, which this installation does not have.
+        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('backup' => 'dump', 'dumpMethod' => 'mysql')));
+        U\runStep($context, $updateId); // maintenance on
+        $this->assertSame('dumping', U\readState($this->root, $updateId)['state']);
+
+        $result = U\runStep($context, $updateId);
+        $this->assertSame('error', $result['status']);
+        $this->assertSame('review', $result['state']);
+        $this->assertSame('SYS_CORE_UPDATE_DUMP_FAILED', U\readState($this->root, $updateId)['lastError']);
+        $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json', 'maintenance mode is off again');
+        $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId) . '/dump');
+        $this->assertSame('OLD INDEX', $this->read('index.php'), 'no file was changed');
+    }
+
+    /**
+     * @testdox An error before maintenance mode is on leaves the update ready, to be tried again or cancelled
+     */
+    public function testErrorBeforeMaintenanceModeKeepsTheUpdateReady(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        file_put_contents($this->root . '/adm_my_files/maintenance.json', json_encode(array('owner' => 'someone else')));
+
+        $result = U\runStep($context, $updateId);
+        $this->assertSame('error', $result['status']);
+        $this->assertSame('ready', $result['state']);
+        $this->assertSame('SYS_CORE_UPDATE_MAINTENANCE_OTHER', $result['message']);
+        U\cancelUpdate($context, $updateId);
+        $this->assertNull(U\activeUpdateId($this->root), 'nothing was changed, so it can still be cancelled');
+    }
+
+    /**
      * @testdox A file changed in the workspace after its extraction is found by the verification, and the previous files come back
      */
     public function testChangedWorkspaceFileIsFoundByTheVerification(): void
@@ -387,7 +427,7 @@ final class PhaseBTest extends AdmidioTestCase
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
         U\phaseBConfirm($context, $updateId, 'own');
-        U\phaseBRun($context, $updateId); // maintenance on
+        U\runStep($context, $updateId); // maintenance on
         file_put_contents(U\workspace($this->root, $updateId) . '/extracted/index.php', 'BROKEN');
 
         $result = $this->runToDecision($context, $updateId);
@@ -413,7 +453,7 @@ final class PhaseBTest extends AdmidioTestCase
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);
         U\phaseBConfirm($context, $updateId, 'own');
-        U\phaseBRun($context, $updateId); // maintenance on
+        U\runStep($context, $updateId); // maintenance on
         $workspace = U\workspace($this->root, $updateId);
 
         // The request died after both moves of the first operation, before its journal entry "done".
@@ -475,7 +515,7 @@ final class PhaseBTest extends AdmidioTestCase
             $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage());
         }
 
-        U\phaseBCancel($context, $updateId);
+        U\cancelUpdate($context, $updateId);
         $this->assertNull(U\activeUpdateId($this->root));
         $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId));
         $this->assertSame('NEW UPDATER', $this->read('install/core-update/index.php'), 'the updater of the new release stays');
@@ -562,7 +602,7 @@ final class PhaseBTest extends AdmidioTestCase
         }
 
         $this->assertSame('own', U\phaseBConfirm($context, $updateId, 'own')['backup']);
-        U\phaseBRun($context, $updateId);
+        U\runStep($context, $updateId);
         $this->assertSame('installing', U\readState($this->root, $updateId)['state'], 'without a backup by the updater no dumping state');
     }
 

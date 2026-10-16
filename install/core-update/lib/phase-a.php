@@ -12,6 +12,8 @@
  * prepared    - the manifest is read and the updater of the new release replaced this one;
  *               phase B, which that updater runs, starts here
  *
+ * runStep() in process.php does the work of each of these states, one request after the other.
+ *
  * A failed check, a network error or a missing requirement can be fixed and tried again. A failed
  * verification cannot: something is wrong with what the server delivered, so the workspace is
  * removed and the update ends there.
@@ -30,8 +32,6 @@ namespace AdmidioCoreUpdater;
 
 use RuntimeException;
 use Throwable;
-
-const PHASE_A_STATES = array('new', 'checking', 'checked', 'downloading', 'downloaded', 'prepared');
 
 /**
  * The channels of a release package with a signed update.txt, and the developer channels: GitHub
@@ -448,84 +448,6 @@ function phaseAConfirm(array $ctx, string $updateId): array
 
         return $state;
     }, false);
-}
-
-/**
- * Do the next bounded piece of work: a part of the download, or the verification and the copy of
- * the new updater.
- * @param array<string,mixed> $ctx
- * @return array{status: string, message: string, progress: int, state: string}
- */
-function phaseARun(array $ctx, string $updateId): array
-{
-    $root = $ctx['config']['rootPath'];
-
-    return withLock($root, static function () use ($ctx, $root, $updateId): array {
-        $state = readState($root, $updateId);
-
-        try {
-            $state = match ($state['state']) {
-                'downloading' => downloadPart($ctx, $state),
-                'downloaded' => verifyAndInstallUpdater($ctx, $state),
-                'prepared' => $state,
-                default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
-            };
-        } catch (VerificationFailure $failure) {
-            updateLog($root, $updateId, 'verification failed in ' . $state['state'] . ': ' . errorDetail($failure->getPrevious()));
-            abortUpdate($ctx, $updateId);
-
-            return array('status' => 'failed', 'message' => describeError($ctx, $failure->getPrevious()), 'progress' => 0, 'state' => 'failed');
-        } catch (UpdaterException $exception) {
-            // The download can be continued, the requirement fixed; the update stays where it is.
-            $state['lastError'] = describeError($ctx, $exception);
-            writeState($root, $state);
-            updateLog($root, $updateId, 'error in ' . $state['state'] . ': ' . errorDetail($exception));
-
-            return array('status' => 'error', 'message' => $state['lastError'], 'progress' => phaseAProgress($state), 'state' => $state['state']);
-        }
-
-        $state['lastError'] = '';
-        writeState($root, $state);
-        $prepared = $state['state'] === 'prepared';
-        if ($prepared) {
-            updateLog($root, $updateId, 'state prepared: package verified, updater of ' . $state['targetVersion'] . ' installed');
-        }
-
-        return array(
-            'status' => $prepared ? 'prepared' : 'success',
-            'message' => text($ctx['texts'], $prepared ? 'SYS_CORE_UPDATE_PREPARED' : 'SYS_CORE_UPDATE_DOWNLOADING', array((string)$state['targetVersion'])),
-            'progress' => phaseAProgress($state),
-            'state' => $state['state']
-        );
-    }, false);
-}
-
-/**
- * Give up an update that has not changed anything yet.
- * @param array<string,mixed> $ctx
- */
-function phaseACancel(array $ctx, string $updateId): void
-{
-    withLock($ctx['config']['rootPath'], static function () use ($ctx, $updateId): void {
-        if (!in_array(readState($ctx['config']['rootPath'], $updateId)['state'], PHASE_A_STATES, true)) {
-            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
-        }
-        abortUpdate($ctx, $updateId);
-    }, false);
-}
-
-/**
- * The progress of phase A in percent; the download is the long part.
- * @param array<string,mixed> $state
- */
-function phaseAProgress(array $state): int
-{
-    return match ($state['state']) {
-        'downloading' => 5 + (int)floor(80 * (int)($state['downloadedBytes'] ?? 0) / max(1, (int)($state['packageSize'] ?? 1))),
-        'downloaded' => 85,
-        'prepared' => 100,
-        default => 0
-    };
 }
 
 /**

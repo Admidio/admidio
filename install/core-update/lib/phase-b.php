@@ -17,6 +17,8 @@
  * verifying    - every installed file is hashed again; then OPcache is reset
  * files_installed - install/update.php takes over and updates the database (phase C)
  *
+ * runStep() in process.php does the work of each of these states, one request after the other.
+ *
  * Up to review nothing is changed, and cancelling removes the workspace. From installing on, an
  * error stops in rollback_required: the administrator continues the update or restores the old
  * files (rolling_back), which is possible until the database update starts. If the database update
@@ -35,13 +37,6 @@ declare(strict_types=1);
 namespace AdmidioCoreUpdater;
 
 use PDO;
-use Throwable;
-
-const PHASE_B_STATES = array('prepared', 'extracting', 'planning', 'review', 'ready', 'dumping', 'installing', 'archiving',
-    'verifying', 'rollback_required', 'rolling_back', 'restoring_database');
-
-/** The states in which install/update.php has the update. */
-const PHASE_C_STATES = array('files_installed', 'database_running', 'database_failed');
 
 /** Files per request of the browser, besides the time budget. */
 const FILES_PER_REQUEST = 200;
@@ -62,161 +57,6 @@ const ALWAYS_PRESERVED = array('adm_my_files', 'install/core-update', 'config.ph
 
 /** The inventory of an installation: the manifest of its release. */
 const INSTALLED_MANIFEST = 'install/update-manifest.json';
-
-/**
- * Do the next bounded piece of work of phase B.
- * @param array<string,mixed> $ctx
- * @return array{status: string, message: string, progress: int, state: string}
- */
-function phaseBRun(array $ctx, string $updateId): array
-{
-    $root = $ctx['config']['rootPath'];
-
-    return withLock($root, static function () use ($ctx, $root, $updateId): array {
-        $state = readState($root, $updateId);
-        $before = (string)$state['state'];
-
-        try {
-            $state = match ($before) {
-                'prepared' => startExtraction($ctx, $state),
-                'extracting' => extractPart($ctx, $state),
-                'planning' => planPart($ctx, $state),
-                'ready' => enterMaintenance($ctx, $state),
-                'dumping' => dumpPart($ctx, $state),
-                'installing' => installPart($ctx, $state),
-                'archiving' => archivePart($ctx, $state),
-                'verifying' => verifyPart($ctx, $state),
-                'rolling_back' => rollbackPart($ctx, $state),
-                'restoring_database' => restoreDatabasePart($ctx, $state),
-                // Continue where the error stopped the update.
-                'rollback_required' => array_merge($state, array('state' => (string)($state['failedIn'] ?? 'installing'))),
-                default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
-            };
-        } catch (VerificationFailure $failure) {
-            // Only extracting and planning verify, before anything was changed.
-            updateLog($root, $updateId, 'verification failed in ' . $before . ': ' . errorDetail($failure->getPrevious()));
-            abortUpdate($ctx, $updateId);
-
-            return array('status' => 'failed', 'message' => describeError($ctx, $failure->getPrevious()), 'progress' => 0, 'state' => 'failed');
-        } catch (Throwable $exception) {
-            $state['lastError'] = describeError($ctx, $exception instanceof UpdaterException
-                ? $exception : UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', (string)$exception));
-            updateLog($root, $updateId, 'error in ' . $before . ': ' . errorDetail($exception));
-            if ($before === 'dumping') {
-                // No file was changed yet: back to the review, without maintenance mode.
-                deleteDirectory(workspace($root, $updateId) . '/dump');
-                leaveMaintenance($root, $updateId);
-                $state = array_merge($state, array('state' => 'review', 'cursor' => 0, 'cursorTotal' => 0,
-                    'lastError' => text($ctx['texts'], 'SYS_CORE_UPDATE_DUMP_FAILED', array($state['lastError']))));
-            } elseif (in_array($before, array('installing', 'archiving', 'verifying'), true) || ($before === 'ready' && isMaintenanceOwner($root, $updateId))) {
-                // Files may have changed: only continuing or restoring is left. A failed rollback
-                // or a failed check before maintenance mode is simply repeated.
-                $state['failedIn'] = $before === 'ready' ? 'ready' : $before;
-                $state['state'] = 'rollback_required';
-            }
-            writeState($root, $state);
-            if ($state['state'] !== $before) {
-                updateLog($root, $updateId, 'state ' . $state['state']);
-            }
-
-            return array('status' => 'error', 'message' => $state['lastError'], 'progress' => phaseBProgress($state), 'state' => $state['state']);
-        }
-
-        $state['lastError'] = '';
-        writeState($root, $state);
-        if ($state['state'] !== $before) {
-            updateLog($root, $updateId, 'state ' . $state['state']
-                . ($state['state'] === 'review' ? ' ' . json_encode($state['plan']) : '')
-                . (($state['dumpFile'] ?? '') !== '' && $before === 'dumping' ? ' ' . $state['dumpFile'] : '')
-                . (($state['keptArchive'] ?? '') !== '' && $before === 'archiving' ? ' ' . $state['keptArchive'] : ''));
-        }
-
-        return phaseBResult($ctx, $state);
-    }, false);
-}
-
-/**
- * The answer to the page for the state an update has reached.
- * @param array<string,mixed> $ctx
- * @param array<string,mixed> $state
- * @return array{status: string, message: string, progress: int, state: string}
- */
-function phaseBResult(array $ctx, array $state): array
-{
-    $texts = $ctx['texts'];
-    $result = array('status' => 'success', 'message' => '', 'progress' => phaseBProgress($state), 'state' => (string)$state['state']);
-
-    switch ($state['state']) {
-        case 'prepared':
-        case 'extracting':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_EXTRACTING');
-            break;
-        case 'planning':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_PLANNING');
-            break;
-        case 'review':
-            $result['status'] = 'review';
-            break;
-        case 'ready':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_MAINTENANCE_ACTIVE');
-            break;
-        case 'dumping':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_DUMPING');
-            break;
-        case 'installing':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_FILES_INSTALLING');
-            break;
-        case 'archiving':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_ARCHIVING');
-            break;
-        case 'verifying':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_VERIFYING');
-            break;
-        case 'restoring_database':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_RESTORING_DATABASE');
-            break;
-        case 'rolling_back':
-            $result['message'] = text($texts, 'SYS_CORE_UPDATE_ROLLING_BACK');
-            break;
-        case 'rolled_back':
-            $result['status'] = 'rolled_back';
-            $result['message'] = rolledBackMessage($ctx, $state);
-            break;
-        case 'files_installed':
-        case 'completed':
-            // The page of the database update, or of the result, takes over.
-            $result['status'] = 'reload';
-            break;
-    }
-
-    return $result;
-}
-
-/**
- * The progress of phase B in percent.
- * @param array<string,mixed> $state
- */
-function phaseBProgress(array $state): int
-{
-    $part = static fn(int $from, int $to): int => $from + (int)floor(($to - $from) * min(1, (int)($state['cursor'] ?? 0) / max(1, (int)($state['cursorTotal'] ?? 1))));
-
-    return match ($state['state']) {
-        'prepared' => 0,
-        'extracting' => $part(0, 15),
-        'planning' => $part(15, 30),
-        'review', 'ready' => 30,
-        'dumping' => $part(30, 40),
-        'installing' => $part(40, 80),
-        'archiving' => $part(80, 85),
-        'verifying' => $part(85, 95),
-        'rollback_required' => 30,
-        'rolling_back' => 100 - $part(0, 100),
-        'restoring_database' => 100,
-        'files_installed', 'database_running', 'database_failed' => 95,
-        'completed' => 100,
-        default => 0
-    };
-}
 
 /**
  * Start the installation after the administrator saw the plan and chose the backup of the
@@ -243,21 +83,6 @@ function phaseBConfirm(array $ctx, string $updateId, string $backup): array
         sendCredentialCookie($ctx['config'], $cookie);
 
         return $state;
-    }, false);
-}
-
-/**
- * Give up an update before it changed anything. The updater of the new release, which phase A
- * installed, stays: it works with the old release as well.
- * @param array<string,mixed> $ctx
- */
-function phaseBCancel(array $ctx, string $updateId): void
-{
-    withLock($ctx['config']['rootPath'], static function () use ($ctx, $updateId): void {
-        if (!in_array(readState($ctx['config']['rootPath'], $updateId)['state'], array('prepared', 'extracting', 'planning', 'review', 'ready'), true)) {
-            throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
-        }
-        abortUpdate($ctx, $updateId);
     }, false);
 }
 

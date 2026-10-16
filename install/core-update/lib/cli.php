@@ -130,7 +130,7 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
             case 'downloading':
             case 'downloaded':
                 $phaseA = true;
-                $result = phaseARun($ctx, $updateId);
+                $result = runStep($ctx, $updateId);
                 commandProgress($result, $out, $progress);
                 if ($result['status'] === 'failed') {
                     return commandResult(EXIT_FAILED, $result['message'], $state);
@@ -144,17 +144,17 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
                 $out(commandPlanReport($ctx, $state));
                 $plan = (array)($state['plan'] ?? array());
                 if (checksHaveErrors((array)($state['planChecks'] ?? array()))) {
-                    phaseBCancel($ctx, $updateId);
+                    cancelUpdate($ctx, $updateId);
 
                     return commandResult(EXIT_REJECTED, 'The update cannot be installed: a check failed.', $state);
                 }
                 if ($options['dryRun']) {
-                    phaseBCancel($ctx, $updateId);
+                    cancelUpdate($ctx, $updateId);
 
                     return commandResult(EXIT_SUCCESS, 'Dry run: the update was checked and planned. Nothing was installed.', $state);
                 }
                 if ((int)($plan['kept'] ?? 0) > 0 && $options['onChanged'] === 'cancel') {
-                    phaseBCancel($ctx, $updateId);
+                    cancelUpdate($ctx, $updateId);
 
                     return commandResult(EXIT_REJECTED, 'The update was cancelled, as --on-changed=cancel asks: ' . (int)$plan['kept']
                         . ' files were changed or do not belong to the installed version.', $state);
@@ -168,7 +168,7 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
                 }
                 if (!$confirm('Install Admidio ' . commandTarget($state) . ' now? '
                     . ($backup === 'dump' ? 'The updater backs up the database first.' : 'You have confirmed your own backup of the database.'))) {
-                    phaseBCancel($ctx, $updateId);
+                    cancelUpdate($ctx, $updateId);
 
                     return commandResult(EXIT_FAILED, text($texts, 'SYS_CORE_UPDATE_CANCELLED'), $state);
                 }
@@ -189,7 +189,7 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
             case 'archiving':
             case 'verifying':
             case 'rollback_required':
-                $result = phaseBRun($ctx, $updateId);
+                $result = runStep($ctx, $updateId);
                 commandProgress($result, $out, $progress);
                 if ($result['status'] === 'failed') {
                     return commandResult(EXIT_FAILED, $result['message'], $state);
@@ -288,7 +288,7 @@ function commandRollback(array $ctx, bool $databaseRestored, callable $out, call
             if (!$confirm('Cancel the update to Admidio ' . commandTarget($state) . '?')) {
                 return commandResult(EXIT_FAILED, 'Nothing was done.', $state);
             }
-            in_array($state['state'], PHASE_A_STATES, true) ? phaseACancel($ctx, $updateId) : phaseBCancel($ctx, $updateId);
+            cancelUpdate($ctx, $updateId);
 
             return commandResult(EXIT_SUCCESS, text($texts, 'SYS_CORE_UPDATE_CANCELLED'), $state);
 
@@ -333,7 +333,7 @@ function commandRollback(array $ctx, bool $databaseRestored, callable $out, call
 
     $progress = array('message' => '', 'progress' => -100);
     while (($state = readState($root, $updateId))['state'] !== 'rolled_back') {
-        $result = phaseBRun($ctx, $updateId);
+        $result = runStep($ctx, $updateId);
         commandProgress($result, $out, $progress);
         if ($result['status'] === 'error') {
             return commandResult(EXIT_FAILED, $result['message'] . ' Run rollback again to continue.', readState($root, $updateId));
