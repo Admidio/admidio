@@ -1,17 +1,16 @@
 <?php
 /**
- * The plugin crash guard: which failures count as a crash of which plugin, the record it keeps, the
- * rules that let a recorded plugin back in, and what the registry does with it. The failures are
- * produced by the real code of the fixture plugin "crashing"; the two that end a PHP process are
- * produced in a process of their own.
+ * The plugin crash guard: a fatal error while a plugin is loaded is a crash of that plugin and
+ * nothing else is, the record it keeps, the rules that let a recorded plugin back in, and what the
+ * registry does with it. The failures that end a PHP process are produced in a process of their own.
  */
 
 namespace Admidio\Tests\Unit\Plugins;
 
 use Admidio\Infrastructure\Plugins\PluginCrashGuard;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
-use AdmidioPlugin\Crashing\Crash;
 
 final class PluginCrashGuardTest extends PluginTestCase
 {
@@ -56,29 +55,63 @@ final class PluginCrashGuardTest extends PluginTestCase
             'E_ERROR' => array(E_ERROR),
             'E_PARSE' => array(E_PARSE),
             'E_COMPILE_ERROR' => array(E_COMPILE_ERROR),
-            'E_CORE_ERROR' => array(E_CORE_ERROR)
+            'E_CORE_ERROR' => array(E_CORE_ERROR),
+            'E_USER_ERROR' => array(E_USER_ERROR)
         );
     }
 
     /**
-     * @testdox A fatal error in a file of a plugin is a crash of that plugin
+     * @testdox A fatal error while a plugin is loaded is a crash of that plugin
      * @dataProvider fatalErrorTypes
      */
-    public function testFatalErrorInPluginFile(int $type): void
+    public function testFatalErrorWhileLoading(int $type): void
     {
-        $crash = PluginCrashGuard::attributeError(array(
-            'type' => $type,
-            'message' => 'Declaration of Incompatible::count(string $mode): int must be compatible with Countable::count(): int',
-            'file' => self::crashingFile('src/Incompatible.php'),
-            'line' => 12
-        ));
+        PluginCrashGuard::beginLoading('crashing');
+        $message = 'Declaration of Incompatible::count(string $mode): int must be compatible with Countable::count(): int';
 
         $this->assertSame(array(
             'plugin' => 'crashing',
-            'error' => 'Declaration of Incompatible::count(string $mode): int must be compatible with Countable::count(): int',
+            'error' => $message,
             'file' => self::crashingFile('src/Incompatible.php'),
             'line' => 12
-        ), $crash);
+        ), PluginCrashGuard::attributeError(array(
+            'type' => $type,
+            'message' => $message,
+            'file' => self::crashingFile('src/Incompatible.php'),
+            'line' => 12
+        )));
+    }
+
+    /**
+     * @testdox A fatal error is no crash of a plugin when no plugin is being loaded
+     *
+     * What a visitor sends with a request can end it with a fatal error, for example a TypeError
+     * that a plugin does not catch. That is a bug to be reported, and must not be able to take the
+     * plugin away from everybody.
+     */
+    public function testFatalErrorOutsideLoading(): void
+    {
+        $error = array('type' => E_ERROR, 'message' => 'Uncaught TypeError', 'file' => self::crashingFile(), 'line' => 5);
+
+        $this->assertNull(PluginCrashGuard::attributeError($error), 'before a plugin is loaded');
+
+        PluginCrashGuard::beginLoading('crashing');
+        PluginCrashGuard::endLoading();
+        $this->assertNull(PluginCrashGuard::attributeError($error), 'after the plugin was loaded');
+    }
+
+    /**
+     * @testdox Loading a plugin ends with endLoading(), whether the plugin loads or fails
+     */
+    public function testLoaderEndsLoading(): void
+    {
+        $error = array('type' => E_ERROR, 'message' => 'Broken', 'file' => self::crashingFile(), 'line' => 5);
+
+        PluginLoader::load(PluginRegistry::get('hello'));
+        $this->assertNull(PluginCrashGuard::attributeError($error), 'a plugin that loads');
+
+        PluginLoader::load(PluginRegistry::get('broken-json'));
+        $this->assertNull(PluginCrashGuard::attributeError($error), 'a plugin that does not');
     }
 
     /**
@@ -86,7 +119,9 @@ final class PluginCrashGuardTest extends PluginTestCase
      */
     public function testNonFatalErrorIsIgnored(): void
     {
-        foreach (array(E_WARNING, E_NOTICE, E_DEPRECATED, E_USER_ERROR) as $type) {
+        PluginCrashGuard::beginLoading('crashing');
+
+        foreach (array(E_WARNING, E_NOTICE, E_DEPRECATED, E_USER_WARNING, E_USER_NOTICE) as $type) {
             $this->assertNull(PluginCrashGuard::attributeError(array(
                 'type' => $type, 'message' => 'Something', 'file' => self::crashingFile(), 'line' => 1
             )), 'error type ' . $type);
@@ -95,10 +130,12 @@ final class PluginCrashGuardTest extends PluginTestCase
     }
 
     /**
-     * @testdox Running out of memory or execution time is not attributed to the plugin that ran last
+     * @testdox Running out of memory or execution time is not attributed to the plugin that was loading
      */
     public function testResourceLimitsAreNotAttributed(): void
     {
+        PluginCrashGuard::beginLoading('crashing');
+
         foreach (array(
             'Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes)',
             'Out of memory (allocated 2097152) (tried to allocate 4096 bytes)',
@@ -108,115 +145,6 @@ final class PluginCrashGuardTest extends PluginTestCase
                 'type' => E_ERROR, 'message' => $message, 'file' => self::crashingFile(), 'line' => 5
             )), $message);
         }
-    }
-
-    /**
-     * @testdox A fatal error outside of a loadable plugin belongs to nobody
-     */
-    public function testFatalErrorOutsidePlugins(): void
-    {
-        $files = array(
-            'Admidio itself' => ADMIDIO_PATH . '/src/Infrastructure/Plugins/PluginLoader.php',
-            'a directory that is no plugin' => self::fixturePath('gone') . '/plugin.php',
-            'a plugin with a broken manifest' => self::fixturePath('broken-json') . '/plugin.php',
-            'the plugins directory itself' => self::fixturePath('') . '/index.php'
-        );
-
-        foreach ($files as $case => $file) {
-            $this->assertNull(PluginCrashGuard::attributeError(array(
-                'type' => E_COMPILE_ERROR, 'message' => 'Broken', 'file' => $file, 'line' => 1
-            )), $case);
-        }
-    }
-
-    /**
-     * @testdox An uncaught PHP Error is attributed through the first stack frame inside a plugin
-     *
-     * This is the message PHP leaves for error_get_last() when nothing caught a Throwable: the class,
-     * the message and the stack trace. Here the TypeError is raised in Admidio, because the plugin
-     * called it with an argument of the wrong type.
-     */
-    public function testUncaughtErrorAttributedByStackFrame(): void
-    {
-        $core = ADMIDIO_PATH . '/src/Infrastructure/Plugins/PluginRegistry.php';
-        $message = 'Uncaught TypeError: PluginRegistry::get(): Argument #1 ($id) must be of type string, array given, called in '
-            . self::crashingFile() . ' on line 27 and defined in ' . $core . ":178\n"
-            . "Stack trace:\n"
-            . '#0 ' . self::crashingFile() . '(27): Admidio\\Infrastructure\\Plugins\\PluginRegistry::get(Array)' . "\n"
-            . '#1 ' . ADMIDIO_PATH . '/modules/overview.php(33): AdmidioPlugin\\Crashing\\Crash::call(Object(Closure))' . "\n"
-            . "#2 {main}\n"
-            . '  thrown';
-
-        $crash = PluginCrashGuard::attributeError(array('type' => E_ERROR, 'message' => $message, 'file' => $core, 'line' => 178));
-
-        $this->assertNotNull($crash);
-        $this->assertSame('crashing', $crash['plugin']);
-        $this->assertSame(self::crashingFile(), $crash['file']);
-        $this->assertSame(27, $crash['line']);
-        $this->assertStringStartsWith('TypeError: PluginRegistry::get()', $crash['error']);
-        $this->assertStringNotContainsString('Stack trace', $crash['error'], 'the trace is not part of the error');
-    }
-
-    /**
-     * @testdox An uncaught application exception is no crash, even in a file of a plugin
-     */
-    public function testUncaughtExceptionIsNoCrash(): void
-    {
-        $this->assertNull(PluginCrashGuard::attributeError(array(
-            'type' => E_ERROR,
-            'message' => "Uncaught RuntimeException: The plugin refused the operation. in " . self::crashingFile()
-                . ":21\nStack trace:\n#0 {main}\n  thrown",
-            'file' => self::crashingFile(),
-            'line' => 21
-        )));
-    }
-
-    /**
-     * @testdox A PHP Error raised in a file of a plugin is a crash of that plugin
-     */
-    public function testThrowableAttributedByItsFile(): void
-    {
-        $crash = PluginCrashGuard::attributeThrowable(Crash::error());
-
-        $this->assertNotNull($crash);
-        $this->assertSame('crashing', $crash['plugin']);
-        $this->assertSame(self::crashingFile(), str_replace('\\', '/', $crash['file']));
-        $this->assertSame('TypeError: A plugin passed the wrong type.', $crash['error']);
-    }
-
-    /**
-     * @testdox A PHP Error raised in Admidio on behalf of a plugin is a crash of that plugin
-     */
-    public function testThrowableAttributedByStackFrame(): void
-    {
-        $error = Crash::call(static fn(): \Error => new \Error('Call to undefined method Admidio::gone()'));
-
-        $crash = PluginCrashGuard::attributeThrowable($error);
-
-        $this->assertNotNull($crash);
-        $this->assertSame('crashing', $crash['plugin']);
-        $this->assertSame(self::crashingFile(), str_replace('\\', '/', $crash['file']));
-    }
-
-    /**
-     * @testdox An application exception of a plugin is no crash
-     *
-     * A hook that throws one fails the operation it extends; that is the hook policy, not a crash.
-     */
-    public function testApplicationExceptionIsNoCrash(): void
-    {
-        $this->assertNull(PluginCrashGuard::attributeThrowable(Crash::exception()));
-        $this->assertNull(PluginCrashGuard::attributeThrowable(new \Error('Raised by Admidio alone')));
-    }
-
-    /**
-     * @testdox Outside of a guarded request a Throwable is not recorded
-     */
-    public function testInactiveGuardRecordsNothing(): void
-    {
-        PluginCrashGuard::handleThrowable(Crash::error());
-
-        $this->assertFileDoesNotExist($this->recordFile);
     }
 
     /**
@@ -237,7 +165,6 @@ final class PluginCrashGuardTest extends PluginTestCase
         $this->assertNotFalse(\DateTime::createFromFormat(DATE_ATOM, $stored['crashing']['time']));
 
         PluginCrashGuard::reset();
-        $this->assertTrue(PluginCrashGuard::hasCrashed('crashing'), 'read back from the file');
         $this->assertSame('TypeError: Broken', PluginCrashGuard::getActive()['crashing']['error']);
     }
 
@@ -342,7 +269,7 @@ final class PluginCrashGuardTest extends PluginTestCase
     }
 
     /**
-     * @testdox "Try again" removes the entry and the empty record with it
+     * @testdox "Try again" removes the entry and leaves an empty record
      */
     public function testRemove(): void
     {
@@ -354,6 +281,17 @@ final class PluginCrashGuardTest extends PluginTestCase
         $this->assertFalse(PluginCrashGuard::remove('crashing'), 'nothing left to remove');
 
         $this->assertTrue(PluginCrashGuard::remove('hello'));
+        $this->assertSame('', (string)file_get_contents($this->recordFile),
+            'the file stays, so that a crash recorded in the meantime is not deleted with it');
+        $this->assertSame(array(), PluginCrashGuard::getActive());
+    }
+
+    /**
+     * @testdox "Try again" without a record does not create one
+     */
+    public function testRemoveWithoutRecord(): void
+    {
+        $this->assertFalse(PluginCrashGuard::remove('crashing'));
         $this->assertFileDoesNotExist($this->recordFile);
     }
 
@@ -371,6 +309,8 @@ final class PluginCrashGuardTest extends PluginTestCase
 
         $this->assertSame(array('hello' => 'hello', 'dependent' => 'hello'), PluginRegistry::getExcluded());
         $this->assertSame(array('crashing'), array_map(static fn($plugin) => $plugin->id, PluginRegistry::getLoadable()));
+        $this->assertSame(array('crashing' => '2.0.0'), PluginRegistry::getEnabledVersions(),
+            'a plugin that is kept out does not satisfy a dependency');
         $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState('hello'),
             'the plugin stays enabled, the crash is not a preference');
 
@@ -420,9 +360,10 @@ final class PluginCrashGuardTest extends PluginTestCase
     /**
      * @testdox An incompatible method signature in a plugin is recorded when PHP shuts down
      */
-    public function testCompileErrorIsRecordedAtShutdown(): void
+    public function testCompileErrorWhileLoadingIsRecordedAtShutdown(): void
     {
-        $this->runGuardedProcess('require ' . var_export(self::crashingFile('src/Incompatible.php'), true) . ';');
+        $this->runGuardedProcess('\\Admidio\\Infrastructure\\Plugins\\PluginCrashGuard::beginLoading("crashing");
+            require ' . var_export(self::crashingFile('src/Incompatible.php'), true) . ';');
 
         $crash = PluginCrashGuard::getActive()['crashing'] ?? null;
         $this->assertNotNull($crash);
@@ -431,16 +372,38 @@ final class PluginCrashGuardTest extends PluginTestCase
     }
 
     /**
-     * @testdox A PHP Error that nothing caught is recorded when PHP shuts down
+     * @testdox A trigger_error(E_USER_ERROR) while a plugin is loaded is recorded when PHP shuts down
      */
-    public function testUncaughtErrorIsRecordedAtShutdown(): void
+    public function testUserErrorWhileLoadingIsRecordedAtShutdown(): void
+    {
+        $this->runGuardedProcess('\\Admidio\\Infrastructure\\Plugins\\PluginCrashGuard::beginLoading("crashing");
+            trigger_error("The plugin gives up", E_USER_ERROR);');
+
+        $this->assertSame('The plugin gives up', PluginCrashGuard::getActive()['crashing']['error'] ?? null);
+    }
+
+    /**
+     * @testdox A fatal error after the plugins are loaded is not recorded
+     */
+    public function testCompileErrorAfterLoadingIsNotRecorded(): void
+    {
+        $this->runGuardedProcess('\\Admidio\\Infrastructure\\Plugins\\PluginCrashGuard::beginLoading("crashing");
+            \\Admidio\\Infrastructure\\Plugins\\PluginCrashGuard::endLoading();
+            require ' . var_export(self::crashingFile('src/Incompatible.php'), true) . ';');
+
+        $this->assertSame(array(), PluginCrashGuard::getActive());
+        $this->assertFileDoesNotExist($this->recordFile);
+    }
+
+    /**
+     * @testdox A PHP Error that nothing caught, outside of loading, is not recorded
+     */
+    public function testUncaughtErrorOutsideLoadingIsNotRecorded(): void
     {
         $this->runGuardedProcess('require ' . var_export(self::crashingFile(), true) . ';
-            \AdmidioPlugin\Crashing\Crash::failUncaught();');
+            \\AdmidioPlugin\\Crashing\\Crash::failUncaught();');
 
-        $crash = PluginCrashGuard::getActive()['crashing'] ?? null;
-        $this->assertNotNull($crash);
-        $this->assertSame('tests/fixtures/plugins/crashing/src/Crash.php', $crash['file']);
-        $this->assertStringStartsWith('TypeError: ', $crash['error']);
+        $this->assertSame(array(), PluginCrashGuard::getActive());
+        $this->assertFileDoesNotExist($this->recordFile);
     }
 }
