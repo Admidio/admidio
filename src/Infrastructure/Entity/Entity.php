@@ -1051,7 +1051,7 @@ class Entity
         $normalize = static function (string $value) use ($column): string {
             $value = trim(str_replace(array("\r\n", "\r"), "\n", html_entity_decode($value, ENT_QUOTES, 'UTF-8')));
             if (in_array($column, array('room_description', 'usf_description'), true)) {
-                // CKEditor wraps a plain paragraph and normalizes HTML line breaks on submission.
+                // Rich-text editors wrap a plain paragraph and normalize HTML line breaks on submission.
                 if (str_starts_with($value, '<p>') && str_ends_with($value, '</p>') && substr_count($value, '<p>') === 1) {
                     $value = substr($value, 3, -4);
                 }
