@@ -192,7 +192,7 @@ class SsoServicePathTest extends AdministratorTestCase
         // role leadership adds the separately mapped client role.
         $user = $fixture->createAndSaveUser('regression-sso-' . $suffix, 'regression-sso-' . $suffix . '@example.local');
         $fixture->assignUserToRole($user['usr_id'], $firstTeam['rol_id']);
-        $fixture->assignUserToRolePeriod($user['usr_id'], $secondTeam['rol_id'], date('Y-m-d'), '9999-12-31', true);
+        $fixture->assignUserToRolePeriod($user['usr_id'], $secondTeam['rol_id'], DATE_NOW, '9999-12-31', true);
 
         $groups = $resaved->getMappedRoleMemberships($this->readUser($user['usr_id']));
         sort($groups);
