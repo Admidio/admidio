@@ -1,0 +1,50 @@
+name: Release package
+
+# Builds the package of a release for the automatic core updater from a version tag. The release
+# key is a secret of the protected environment "release": only maintainers create v* tags, and a
+# reviewer approves the run - after checking the workflow file of the tag, which whoever pushes the
+# tag can change. The result is a draft release; publishing it and copying update.txt(.sig) to
+# admidio.org are the final, deliberate steps.
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build the release
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: zip, openssl
+          tools: composer:v2
+
+      - name: Build the package, the bootstrap ZIP and update.txt
+        env:
+          ADMIDIO_RELEASE_KEY: ${{ secrets.ADMIDIO_RELEASE_KEY }}
+          ADMIDIO_RELEASE_KEY_PASSPHRASE: ${{ secrets.ADMIDIO_RELEASE_KEY_PASSPHRASE }}
+        run: php build-release.php --ref="$GITHUB_REF_NAME" --out=build --update-txt=https://www.admidio.org/update.txt
+
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --draft --verify-tag --title "Admidio ${GITHUB_REF_NAME#v}" \
+            --notes "Package for the automatic core updater, the updater alone for installations without it, and update.txt with its signature for admidio.org." \
+            build/*.zip build/update.txt build/update.txt.sig

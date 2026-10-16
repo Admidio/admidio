@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\InstallationUpdate\Service\CoreUpdateHandover;
 use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
@@ -28,11 +29,17 @@ use Admidio\UI\Presenter\InstallationPresenter;
  * mode = dialog: (Default) Check update status and show dialog with status
  *        update: Perform update
  *        result: Show result of update
+ *        core_update: Perform the update for the automatic core updater, which shows its own pages;
+ *                     the answer is JSON
  ***********************************************************************************************
  */
 const THEME_URL = 'layout';
 
 try {
+    // set once the database update has begun, so that a failure is recorded for the core update
+    $databaseUpdateStarted = false;
+    $isCoreUpdate = false;
+
     /**
      * Shows an error dialog with an error message to the user.
      * @param string $message Message that should be shown to the user.
@@ -41,7 +48,12 @@ try {
      */
     function showErrorMessage(string $message, bool $reloadPage = false): void
     {
-        global $gL10n;
+        global $gL10n, $isCoreUpdate;
+
+        // The core updater shows the message on its own page.
+        if ($isCoreUpdate) {
+            throw new RuntimeException($message);
+        }
 
         if (!is_object($gL10n)) {
             $gL10n = new Language('en');
@@ -57,6 +69,44 @@ try {
             ($reloadPage) ? 'bi-arrow-clockwise' : 'bi-house-door-fill',
             ($reloadPage) ? ADMIDIO_URL . FOLDER_INSTALLATION . '/index.php' : ADMIDIO_URL . FOLDER_MODULES . '/overview.php'
         );
+    }
+
+    /**
+     * The warnings and information about plugins that the update recorded.
+     * @param array<string,bool> $flags The values the update stored in the cookie adm_update_plugins_warnings.
+     * @return array{warning: array<int,array{id: string, alertWarning: string}>, info: array<int,array{id: string, alertInfo: string}>}
+     */
+    function getUpdateNotes(array $flags): array
+    {
+        global $gL10n;
+
+        $notes = array('warning' => array(), 'info' => array());
+        if (!empty($flags['warn_old_plugins'])) {
+            $notes['warning'][] = array(
+                'id' => 'warn_old_plugins',
+                'alertWarning' => $gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins'))
+            );
+        }
+        if (!empty($flags['warn_3rd_party_plugins'])) {
+            $notes['warning'][] = array(
+                'id' => 'warn_3rd_party_plugins',
+                'alertWarning' => $gL10n->get('INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins'))
+            );
+        }
+        if (!empty($flags['warn_old_plugins_folder'])) {
+            $notes['warning'][] = array(
+                'id' => 'warn_old_plugins_folder',
+                'alertWarning' => $gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins'))
+            );
+        }
+        if (!empty($flags['info_3rd_party_plugins'])) {
+            $notes['info'][] = array(
+                'id' => 'info_3rd_party_plugins',
+                'alertInfo' => $gL10n->get('INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins'))
+            );
+        }
+
+        return $notes;
     }
 
     $rootPath = dirname(__DIR__);
@@ -87,20 +137,43 @@ try {
 
     // Initialize and check the parameters
 
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'update', 'result')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'dialog', 'validValues' => array('dialog', 'update', 'result', 'core_update')));
+
+    /*
+     * An automatic core update owns the maintenance mode from the moment it changes files. It is
+     * looked at in every mode, so that no migration starts while it is still copying files. The
+     * updater runs the migration itself with the mode core_update and shows the result on its own
+     * pages.
+     */
+    $coreUpdate = CoreUpdateHandover::fromMaintenance();
+    $isCoreUpdate = $getMode === 'core_update' && $coreUpdate !== null;
 
     // connect to database
     $gDb = Database::createDatabaseInstance();
 
+    // The core update gets a separate, clean PHP session. This prevents the new database updater
+    // from depending on serialized objects created by the previous source version.
+    $updateSessionPrefix = COOKIE_PREFIX;
+    if ($isCoreUpdate) {
+        $updateSessionPrefix .= '_CORE_UPDATE_' . substr($coreUpdate->getUpdateId(), 0, 12);
+    }
+
     // start PHP session
     try {
-        Session::start(COOKIE_PREFIX);
+        Session::start(
+            $updateSessionPrefix,
+            0,
+            $isCoreUpdate ? rtrim(ADMIDIO_URL_PATH, '/') . '/install/' : ''
+        );
     } catch (RuntimeException $exception) {
         // TODO
     }
 
     // create a session object
-    if (array_key_exists('gCurrentSession', $_SESSION)) {
+    if ($isCoreUpdate) {
+        $gCurrentSession = new Session($gDb, $updateSessionPrefix);
+        $_SESSION['gCurrentSession'] = $gCurrentSession;
+    } elseif (array_key_exists('gCurrentSession', $_SESSION)) {
         $gCurrentSession = $_SESSION['gCurrentSession'];
     } else {
         // create a new session object and store it in PHP session
@@ -152,6 +225,23 @@ try {
     }
     $gL10n = new Language($gSettingsManager->getString('system_language'), true);
     $gChangeNotification = new ChangeNotification();
+
+    // Only the page of the core updater may run its migration: the request carries the updater
+    // cookie and the CSRF token of the update.
+    if ($getMode === 'core_update' && (!$isCoreUpdate || ($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST'
+        || !$coreUpdate->isAuthorized($_COOKIE[$coreUpdate->getCookieName()] ?? '')
+        || !$coreUpdate->isValidCsrfToken($_POST['csrf_token'] ?? ''))) {
+        throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
+    }
+    if ($isCoreUpdate) {
+        // The updater cookie has proven the administrator, so Update::checkLogin() asks for no login.
+        $gLoginForUpdate = false;
+    }
+
+    // The files of the core update that owns the maintenance mode are still a mix of two releases.
+    if ($coreUpdate !== null && !$coreUpdate->isMigrationAllowed()) {
+        throw new \Admidio\Infrastructure\Exception('SYS_CORE_UPDATE_IN_PROGRESS');
+    }
 
     // check if adm_my_files has "write" privileges and check some subfolders of adm_my_files
     Installation::checkFolderPermissions();
@@ -267,6 +357,11 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
+            // There is nothing to migrate, so this request finishes the core update.
+            if ($coreUpdate !== null) {
+                $coreUpdate->complete();
+            }
+
             $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
             $page->setUpdateModus();
             $page->showMessage(
@@ -305,67 +400,81 @@ try {
         }
 
         // start the update
+        if ($coreUpdate !== null) {
+            if (!$coreUpdate->lockDatabaseUpdate()) {
+                throw new \Admidio\Infrastructure\Exception('SYS_CORE_UPDATE_DATABASE_RUNNING');
+            }
+            $coreUpdate->markDatabaseRunning();
+        }
+        $databaseUpdateStarted = true;
+
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion);
+        $databaseUpdateStarted = false;
+
+        /*
+         * The migration has succeeded, so the core update is finished here and maintenance mode goes
+         * off in this request - whether or not the browser that started it is still waiting.
+         */
+        if ($coreUpdate !== null) {
+            $coreUpdate->complete();
+        }
 
         echo json_encode(array(
             'status' => 'success',
             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/update.php', array('mode' => 'result'))
         ));
         exit();
-    } elseif ($getMode === 'result') {
-        // check if there are warnings about the plugins
-        $updateWarnings = array();
-        $updateInfos = array();
-        // the variables are stored in a cookie so that they survive the redirect after the update
-        $cookie = isset($_COOKIE['adm_update_plugins_warnings']) ? json_decode($_COOKIE['adm_update_plugins_warnings'], true) : [];
-        $gWarnOldPlugins = false;
-        $gWarn3rdPartyPlugins = false;
-        $gWarnOldPluginsFolder = false;
-        $gInfo3rdPartyPlugins = false;
+    } elseif ($getMode === 'core_update') {
+        // A proxy may cut off the answer of this long request: the migration still has to finish,
+        // and the updater page then waits for it to end.
+        ignore_user_abort(true);
+        if (!$coreUpdate->lockDatabaseUpdate()) {
+            echo json_encode(array('status' => 'running'));
+            exit();
+        }
 
-        if (!empty($cookie)) {
-            if (isset($cookie['warn_old_plugins'])) {
-                $gWarnOldPlugins = $cookie['warn_old_plugins'];
-            }
-            if (isset($cookie['warn_3rd_party_plugins'])) {
-                $gWarn3rdPartyPlugins = $cookie['warn_3rd_party_plugins'];
-            }
-            if (isset($cookie['warn_old_plugins_folder'])) {
-                $gWarnOldPluginsFolder = $cookie['warn_old_plugins_folder'];
-            }
-            if (isset($cookie['info_3rd_party_plugins'])) {
-                $gInfo3rdPartyPlugins = $cookie['info_3rd_party_plugins'];
+        if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '>')) {
+            throw new RuntimeException($gL10n->get('SYS_FILESYSTEM_VERSION_INVALID', array($installedDbVersion, ADMIDIO_VERSION_TEXT, '', '')));
+        }
+
+        $coreUpdate->markDatabaseRunning();
+        $databaseUpdateStarted = true;
+
+        if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<') || $maxUpdateStep > $currentUpdateStep) {
+            $update = new Update();
+            $update->doAdmidioUpdate($installedDbVersion);
+        }
+        $databaseUpdateStarted = false;
+
+        // The notes about plugins go to the updater, which shows them with the result. The update
+        // has put them into a cookie for the result page of this script, which is not shown.
+        $pluginWarnings = array();
+        foreach (headers_list() as $header) {
+            if (preg_match('/^Set-Cookie: adm_update_plugins_warnings=([^;]+)/i', $header, $matches) === 1) {
+                $pluginWarnings = (array)json_decode(urldecode($matches[1]), true);
             }
         }
+        setcookie('adm_update_plugins_warnings', '', time() - 3600, '/');
+        $notes = array();
+        foreach (getUpdateNotes($pluginWarnings) as $type => $messages) {
+            foreach ($messages as $message) {
+                $notes[] = array('type' => $type, 'text' => CoreUpdateHandover::toText($message['alertWarning'] ?? $message['alertInfo']));
+            }
+        }
+
+        $coreUpdate->complete($notes);
+        echo json_encode(array('status' => 'success'));
+        exit();
+    } elseif ($getMode === 'result') {
+        // check if there are warnings about the plugins
+        // the variables are stored in a cookie so that they survive the redirect after the update
+        $notes = getUpdateNotes(isset($_COOKIE['adm_update_plugins_warnings']) ? (array)json_decode($_COOKIE['adm_update_plugins_warnings'], true) : array());
+        $updateWarnings = $notes['warning'];
+        $updateInfos = $notes['info'];
 
         // reset the cookie after reading the values so that the warnings are only shown once
         setcookie('adm_update_plugins_warnings', '', time() - 3600, '/');
-
-        if ($gWarnOldPlugins) {
-            $updateWarnings[] = array(
-                'id' => 'warn_old_plugins',
-                'alertWarning' => $gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins'))
-            );
-        }
-        if ($gWarn3rdPartyPlugins) {
-            $updateWarnings[] = array(
-                'id' => 'warn_3rd_party_plugins',
-                'alertWarning' => $gL10n->get('INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins'))
-            );
-        }
-        if ($gWarnOldPluginsFolder) {
-            $updateWarnings[] = array(
-                'id' => 'warn_old_plugins_folder',
-                'alertWarning' => $gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins'))
-            );
-        }
-        if ($gInfo3rdPartyPlugins) {
-            $updateInfos[] = array(
-                'id' => 'info_3rd_party_plugins',
-                'alertInfo' => $gL10n->get('INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins'))
-            );
-        }
 
         // show notice that update was successful
         $page = new InstallationPresenter('adm_update_successful', $gL10n->get('INS_UPDATE'));
@@ -377,7 +486,23 @@ try {
         $page->show();
     }
 } catch (Throwable $e) {
-    if ($getMode === 'update') {
+    // A failed migration leaves the maintenance mode on: the files are new, the database is not.
+    if ($databaseUpdateStarted && $coreUpdate !== null) {
+        try {
+            $coreUpdate->markDatabaseFailed($e->getMessage());
+        } catch (Throwable) {
+            // The error of the migration is the one to report.
+        }
+    }
+
+    if (($getMode ?? '') === 'core_update') {
+        // The updater shows the error on its own page: after a failed migration the one recorded
+        // in the state of the update, before that this message.
+        if (isset($gDb) && $gDb instanceof Database) {
+            $gDb->rollback();
+        }
+        echo json_encode(array('status' => 'error', 'message' => CoreUpdateHandover::toText($e->getMessage()), 'state' => $coreUpdate?->getState() ?? ''));
+    } elseif ($getMode === 'update') {
         handleException($e, true);
     } else {
         showErrorMessage($e->getMessage(), true);

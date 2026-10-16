@@ -93,7 +93,8 @@
             "Composer\\Config::disableProcessTimeout",
             "phpunit --coverage-html=tests/reports/coverage"
         ],
-        "test:setup": "php tests/bin/setup-test-env.php"
+        "test:setup": "php tests/bin/setup-test-env.php",
+        "build-release": "@php build-release.php"
     },
     "archive": {
         "exclude": [
@@ -121,6 +122,7 @@
             ".env.test*",
             "phpunit.xml",
             "AGENTS.md",
+            "build-release.php",
             "docker-compose.test.yml",
             "!vendor/*",
             "vendor/maennchen/zipstream-php/test",

@@ -21,7 +21,7 @@ use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\DatabaseDump;
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
@@ -459,7 +459,7 @@ final class CoreTasks
      * @var array<int,string>
      */
     private const MAINTENANCE_JOBS = array(
-        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens'
+        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'update-check'
     );
 
     private static function registerSystemTasks(): void
@@ -536,6 +536,60 @@ final class CoreTasks
             array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json', 'json-api')))
         );
+        /*
+         * The core updater replaces src/ and vendor/, which this process has loaded, so it runs as
+         * install/core-update/cli.php in a process of its own. While an update is unfinished,
+         * Admidio itself may not start, and that script continues it directly.
+         */
+        self::task(
+            'update:apply',
+            'updateApply',
+            'Install the newest Admidio release with the core updater: check, download, install the files and update the database.'
+                . ' Asks before the download and before the installation unless --yes is given. If an update stops,'
+                . ' continue it with "php install/core-update/cli.php apply --resume".',
+            'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--skip-database]'
+                . ' [--dump-password-env=VAR] [--resume] [--dry-run] [--yes] [--format=text|json]',
+            'PREFERENCES',
+            true,
+            array(),
+            array(
+                self::opt('channel', 'Release channel; beta, master, branch, tag and pr need $gDebug.', 'CHANNEL', false, false, false,
+                    array('stable', 'beta', 'master', 'branch', 'tag', 'pr')),
+                self::opt('ref', 'Branch, tag or pull request number of the channels branch, tag and pr.', 'REF'),
+                self::opt('backup', 'Database backup by the updater (default where possible) or your own backup.', 'BACKUP', false, false, false,
+                    array('dump', 'own')),
+                self::opt('on-changed', 'Changed or unknown files are archived and replaced (default), or the update is cancelled.', 'ACTION',
+                    false, false, false, array('archive', 'cancel')),
+                self::opt('skip-database', 'Install the files only; maintenance mode stays on until the database is updated.', '', false, false, true),
+                self::opt('dump-password-env', 'Environment variable with the password that encrypts the backup of the database.', 'VAR'),
+                self::opt('resume', 'Continue the unfinished update.', '', false, false, true),
+                self::opt('yes', 'Do not ask before the download and the installation.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            ),
+            array('admidio update:apply --as=admin --yes', 'admidio update:apply --as=admin --dry-run'),
+            null,
+            CliTaskRegistry::ACCESS_ADMINISTRABLE,
+            null,
+            null,
+            true
+        );
+        self::task(
+            'update:rollback',
+            'updateRollback',
+            'Undo the unfinished core update: cancel it, restore the previous files, or after a failed database update'
+                . ' restore the previous version with its database. While Admidio cannot start, run'
+                . ' "php install/core-update/cli.php rollback" instead.',
+            'update:rollback [--database-restored] [--dump-password-env=VAR] [--yes] [--format=text|json]',
+            'PREFERENCES',
+            true,
+            array(),
+            array(
+                self::opt('database-restored', 'You have restored the database of the previous version from your own backup.', '', false, false, true),
+                self::opt('dump-password-env', 'Environment variable with the password of the backup, if apply was given one.', 'VAR'),
+                self::opt('yes', 'Do not ask before the update is undone.', '', false, false, true),
+                self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('text', 'json'))
+            )
+        );
         self::task(
             'system:info',
             'systemInfo',
@@ -557,7 +611,8 @@ final class CoreTasks
         self::task(
             'database:backup',
             'databaseBackup',
-            'Create a native Admidio database dump.',
+            'Back up the database into adm_my_files/backups/, as the preferences and every core update do: a ZIP with one file per'
+                . ' table, encrypted with the password for the backups if one is set. --output copies it, for the invoking user only.',
             'database:backup [--output=FILE]',
             'PREFERENCES',
             true
@@ -3072,6 +3127,86 @@ final class CoreTasks
             : CliApplication::EXIT_UPDATE_AVAILABLE;
     }
 
+    public static function updateApply(array $arguments, array $options): int
+    {
+        $updaterArguments = array('apply');
+        foreach (array('channel', 'ref', 'backup', 'on-changed', 'dump-password-env') as $name) {
+            $value = CliApplication::optionString($options, $name);
+            if ($value !== '') {
+                $updaterArguments[] = '--' . $name . '=' . $value;
+            }
+        }
+        foreach (array('skip-database', 'resume', 'dry-run', 'yes', 'no-interaction') as $name) {
+            if (CliApplication::optionBool($options, $name, false)) {
+                $updaterArguments[] = '--' . $name;
+            }
+        }
+
+        return self::runCoreUpdater($updaterArguments, $options);
+    }
+
+    public static function updateRollback(array $arguments, array $options): int
+    {
+        $updaterArguments = array('rollback');
+        foreach (array('database-restored', 'yes', 'no-interaction') as $name) {
+            if (CliApplication::optionBool($options, $name, false)) {
+                $updaterArguments[] = '--' . $name;
+            }
+        }
+        if (CliApplication::optionString($options, 'dump-password-env') !== '') {
+            $updaterArguments[] = '--dump-password-env=' . CliApplication::optionString($options, 'dump-password-env');
+        }
+
+        return self::runCoreUpdater($updaterArguments, $options);
+    }
+
+    /**
+     * The command line of install/core-update/cli.php for the options of update:apply or
+     * update:rollback.
+     *
+     * @param array<int,string> $updaterArguments
+     * @param array<string,mixed> $options
+     * @return array<int,string>
+     */
+    public static function coreUpdaterCommand(array $updaterArguments, array $options): array
+    {
+        // The updater reads the installation's own configuration; another one would update the wrong files.
+        if (CliApplication::optionString($options, 'config') !== '') {
+            throw new InvalidArgumentException('The core updater works with adm_my_files/config.php of this installation only; omit --config.');
+        }
+
+        $command = array_merge(array(PHP_BINARY, ADMIDIO_PATH . '/install/core-update/cli.php'), $updaterArguments);
+        $command[] = '--format=' . (CliApplication::optionString($options, 'format', 'text') === 'json' ? 'json' : 'text');
+        if (CliApplication::optionString($options, 'host') !== '') {
+            $command[] = '--host=' . CliApplication::optionString($options, 'host');
+        }
+
+        return $command;
+    }
+
+    /**
+     * Run the core updater in a process of its own, with the terminal of this one.
+     *
+     * @param array<int,string> $updaterArguments
+     * @param array<string,mixed> $options
+     */
+    private static function runCoreUpdater(array $updaterArguments, array $options): int
+    {
+        $command = self::coreUpdaterCommand($updaterArguments, $options);
+        $disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+        if (PHP_BINARY === '' || !function_exists('proc_open') || in_array('proc_open', $disabled, true)) {
+            throw new RuntimeException('PHP cannot start processes here. Run the core updater directly: '
+                . implode(' ', array_map('escapeshellarg', $command)));
+        }
+
+        $process = proc_open($command, array(STDIN, STDOUT, STDERR), $pipes);
+        if (!is_resource($process)) {
+            throw new RuntimeException('The core updater could not be started.');
+        }
+
+        return proc_close($process);
+    }
+
     public static function systemInfo(array $arguments, array $options): int
     {
         global $gDb, $gCurrentOrganization;
@@ -3116,33 +3251,17 @@ final class CoreTasks
 
     public static function databaseBackup(array $arguments, array $options): int
     {
-        global $gDb;
+        $file = Backups::getFile(Backups::createDatabaseBackup());
 
-        $filename = 'admidio-' . date('Ymd-His') . '.sql.gz';
-        $dump = new DatabaseDump($gDb);
-
-        // The dump library creates the temporary file itself, so set the restrictive umask before it
-        // is observable. moveGeneratedFile() applies the same protection to the final destination.
-        $oldUmask = umask(0077);
-        try {
-            $dump->create($filename);
-        } finally {
-            umask($oldUmask);
+        if (CliApplication::optionString($options, 'output') === '') {
+            CliApplication::writeSuccess('Backup written to ' . $file . '.', $options, false);
+            return 0;
         }
 
-        $temporaryFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-        if (!chmod($temporaryFile, 0600)) {
-            @unlink($temporaryFile);
-            throw new RuntimeException('Could not restrict permissions of the generated database dump.');
-        }
-
-        // A dump contains every table of the installation, so restrict it to the invoking user.
-        self::moveGeneratedFile(
-            $temporaryFile,
-            $filename,
-            $options,
-            true
-        );
+        // A backup contains every table of the installation, so the copy is for the invoking user only.
+        $target = CliApplication::resolveOutputPath($options, basename($file));
+        CliApplication::copyToNewFile($file, $target, true, self::overwriteRequested($options));
+        CliApplication::writeSuccess('Backup written to ' . $file . ' and copied to ' . $target . '.', $options, false);
         return 0;
     }
 
@@ -3233,15 +3352,17 @@ final class CoreTasks
             'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath(),
             'sessions' => static fn (): mixed => self::cleanupSessions(30),
             'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
-            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens()
+            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens(),
+            'update-check' => static fn (): mixed => self::checkForUpdate()
         );
         $rows = array();
         $failures = 0;
 
         foreach ($requested as $jobName) {
             try {
-                $jobs[$jobName]();
-                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => '');
+                // A job that has something to report returns it as text.
+                $result = $jobs[$jobName]();
+                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => is_string($result) ? $result : '');
             } catch (\Throwable $exception) {
                 ++$failures;
                 $rows[] = array(
@@ -9344,6 +9465,29 @@ final class CoreTasks
 
         CliApplication::writeSuccess('OIDC token cleanup completed.', $options);
         return CliApplication::EXIT_SUCCESS;
+    }
+
+    /**
+     * Look for a new release of Admidio for the notice of the administrators, as the requests of
+     * administrators do twice a day - unless the check is switched off in the preferences. The time
+     * of the check is recorded, so that a request does not repeat it.
+     */
+    private static function checkForUpdate(): string
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('system_update_check')) {
+            return 'The update check is switched off in the preferences.';
+        }
+
+        $gSettingsManager->set('system_update_check_time', (string) time());
+        $service = new PreferencesService();
+        if ($service->getUpdateInformation()['versionUpdate'] === 99) {
+            throw new RuntimeException('The Admidio update information could not be read from ' . ADMIDIO_HOMEPAGE . 'update.txt.');
+        }
+        $availableUpdate = $service->getAvailableUpdate();
+
+        return $availableUpdate !== '' ? 'Admidio ' . $availableUpdate . ' is available.' : 'Admidio is up to date.';
     }
 
     private static function cleanupSsoTokens(): void
