@@ -5,6 +5,8 @@ use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Service\RegistrationService;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Messages\Entity\Message;
 use Admidio\Roles\Entity\RolesRights;
 
@@ -163,6 +165,8 @@ class MenuNode
                     } elseif ($node['men_name_intern'] === 'registration') {
                         $registration = new RegistrationService($gDb);
                         $badgeCount = count($registration->findAll());
+                    } elseif ($node['men_name_intern'] === 'inventory' && InventoryAccessService::canManageReservations()) {
+                        $badgeCount = ReservationService::countPendingReservations($gDb);
                     }
 
                     $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], (string) $node['men_icon'], '', $badgeCount, (string) $node['men_description']);

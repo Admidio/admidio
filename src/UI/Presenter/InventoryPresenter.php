@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -366,13 +367,25 @@ class InventoryPresenter extends PagePresenter
                 true
             );
 
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
-                $dataTables->disableColumnsSort(array(1, 2, count($templateData['headers'])));
-                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers']), count($templateData['headers'])));
-            } else {
-                $dataTables->disableColumnsSort(array(1, 2));
-                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'])));
+            $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
+            $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
+            $itemNameColumn = array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'], true) + 1;
+            $columnsWithoutSort = array();
+            if ($canUseBulkActions) {
+                $columnsWithoutSort[] = 1;
             }
+            if ($gSettingsManager->getBool('inventory_item_picture_enabled')) {
+                $columnsWithoutSort[] = $canUseBulkActions ? 2 : 1;
+            }
+            if ($hasActionsColumn) {
+                $columnsWithoutSort[] = count($templateData['headers']);
+            }
+            $dataTables->disableColumnsSort($columnsWithoutSort);
+            $columnsNotHideResponsive = array($itemNameColumn);
+            if ($hasActionsColumn) {
+                $columnsNotHideResponsive[] = count($templateData['headers']);
+            }
+            $dataTables->setColumnsNotHideResponsive($columnsNotHideResponsive);
             $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
             $dataTables->setColumnAlignByArray($templateData['column_align']);
             $dataTables->createJavascript(0, count($templateData['headers']));
@@ -393,12 +406,9 @@ class InventoryPresenter extends PagePresenter
      */
     protected function createHeader(): void
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields;
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager, $gValidLogin;
 
         if ($gCurrentUser->isAdministratorInventory()) {
-            // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
-
             // show link to create new item
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_create_item',
@@ -408,7 +418,37 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
+        if (InventoryAccessService::canManageReservations()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservations',
+                $gL10n->get('SYS_RESERVATIONS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_list')),
+                'bi-calendar-check',
+                '',
+                ReservationService::countPendingReservations($gDb)
+            );
+        } elseif (InventoryAccessService::canRequestReservation()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservation_request',
+                $gL10n->get('SYS_RESERVATION_REQUEST'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
+                'bi-calendar-plus'
+            );
+        }
+
+        if (InventoryAccessService::canManageBorrowings() && !$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_borrowings',
+                $gL10n->get('SYS_BORROWINGS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list')),
+                'bi-box-arrow-up-right'
+            );
+        }
+
         if ($gCurrentUser->isAdministratorInventory()) {
+            // show link to view inventory history
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data,inventory_reservations');
+
             // link to print overlay and exports
             $this->addPageFunctionsMenuItem(
                 'menu_item_lists_print_view',
@@ -549,6 +589,8 @@ class InventoryPresenter extends PagePresenter
             array('defaultValue' => $this->getFilterCategoryUUID)
         );
 
+        // Do not expose names in filter options to guests when anonymization is enabled.
+        if ($gValidLogin || !$gSettingsManager->getBool('inventory_anonymize_user_names_for_guests')) {
         // read all keeper
         if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $sql = 'SELECT DISTINCT ind_value,
@@ -660,6 +702,7 @@ class InventoryPresenter extends PagePresenter
                 'showContextDependentFirstEntry' => true
             )
         );
+        }
 
         // get the status options for the filter
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
@@ -827,8 +870,11 @@ class InventoryPresenter extends PagePresenter
         $headers = array();
         $exportHeaders = array();
 
+        $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
+        $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
+
         // initial checkbox header for HTML mode
-        if ($mode === 'html') {
+        if ($mode === 'html' && $canUseBulkActions) {
             $columnAlign[] = 'center';
             $headers[] = '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>';
         }
@@ -873,11 +919,9 @@ class InventoryPresenter extends PagePresenter
         }
 
         // decide if actions column is needed for html mode
-        if ($mode === 'html') {
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
-                $columnAlign[] = 'end';
-                $headers[] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
-            }
+        if ($mode === 'html' && $hasActionsColumn) {
+            $columnAlign[] = 'end';
+            $headers[] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
         }
 
         return array(
@@ -1009,7 +1053,7 @@ class InventoryPresenter extends PagePresenter
      */
     public function prepareData(string $mode = 'html'): array
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+        global $gCurrentUser, $gCurrentUserId, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
 
         // Initialize the result array
         $preparedData = array(
@@ -1030,7 +1074,9 @@ class InventoryPresenter extends PagePresenter
 
         $rows = array();
         $strikethroughs = array();
-        $actionsHeaderAdded = false;
+        $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
+        $actionsHeaderAdded = $mode === 'html'
+            && ($canUseBulkActions || InventoryAccessService::canRequestReservation());
 
         $this->itemsData->preloadItemData(array_column($this->itemsData->getItems(), 'ini_uuid'));
 
@@ -1062,7 +1108,9 @@ class InventoryPresenter extends PagePresenter
 
                 if ($columnNumber === 1) {
                     if ($mode === 'html') {
-                        $rowValues['data'][] = ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? '<input type="checkbox"/>' : '';
+                        if ($canUseBulkActions) {
+                            $rowValues['data'][] = $this->itemsData->isEditable() ? '<input type="checkbox"/>' : '';
+                        }
                         if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
                             $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $item['ini_uuid']));
                             $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid' => $item['ini_uuid']));
@@ -1134,6 +1182,14 @@ class InventoryPresenter extends PagePresenter
                     $rowValues['actions'][] = $historyButton;
                 }
 
+                if (!$this->itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
+                    $rowValues['actions'][] = array(
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid'])),
+                        'icon' => 'bi bi-calendar-plus',
+                        'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST')
+                    );
+                }
+
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
                     if (!$this->itemsData->isRetired()) {
                         // Add edit action
@@ -1200,11 +1256,6 @@ class InventoryPresenter extends PagePresenter
                     }
 
                     // add actions column to header
-                    if (!$actionsHeaderAdded) {
-                        $actionsHeaderAdded = true;
-                        $preparedData['column_align'][] = 'end';
-                        $preparedData['headers'][] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
-                    }
                 }
             }
 
@@ -1253,13 +1304,6 @@ class InventoryPresenter extends PagePresenter
                     if (!isset($row['actions'])) {
                         $row['actions'] = array();
                     }
-                }
-            } else {
-                // remove the checkbox column alignment and header if no action column was added
-                array_shift($preparedData['column_align']);
-                array_shift($preparedData['headers']);
-                foreach ($rows as &$row) {
-                    array_shift($row['data']);
                 }
             }
         }

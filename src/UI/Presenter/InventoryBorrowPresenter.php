@@ -1,0 +1,132 @@
+<?php
+
+namespace Admidio\UI\Presenter;
+
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\UI\Component\DataTables;
+use Admidio\Users\Entity\User;
+
+/** Displays the operational inventory borrowing workspace. */
+class InventoryBorrowPresenter extends PagePresenter
+{
+    /** @throws Exception */
+    public function createList(): void
+    {
+        global $gCurrentOrgId, $gCurrentUser, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gSettingsManager;
+
+        if (!InventoryAccessService::canManageBorrowings() || $gSettingsManager->getBool('inventory_items_disable_borrowing')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $canManageReservations = InventoryAccessService::canManageReservations();
+        if ($canManageReservations) {
+            $readyKeeperJoin = '';
+            $readyReservationParameters = array();
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                $readyKeeperJoin = '
+         INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
+         INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS keeper_field ON keeper_field.inf_id = keeper_data.ind_inf_id
+                AND keeper_field.inf_name_intern = \'KEEPER\'
+                AND (keeper_field.inf_org_id = ? OR keeper_field.inf_org_id IS NULL)';
+                $readyReservationParameters[] = $gCurrentOrgId;
+            }
+            $readyReservationParameters[] = $gCurrentOrgId;
+            $readyReservationParameters[] = Reservation::STATUS_APPROVED;
+            $readyReservationParameters[] = DATETIME_NOW;
+            if (!$gCurrentUser->isAdministratorInventory()) {
+                $readyReservationParameters[] = $gCurrentUserId;
+            }
+            $readyReservations = $gDb->queryPrepared(
+            'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ind_value AS item_name
+               FROM ' . TBL_INVENTORY_RESERVATIONS . '
+         INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
+         INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
+         INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+          LEFT JOIN ' . TBL_EVENTS . ' ON dat_id = ivr_dat_id
+          LEFT JOIN ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' ON inb_ini_id = ini_id
+                    ' . $readyKeeperJoin . '
+              WHERE ini_org_id = ?
+                AND ivr_status = ?
+                AND ivr_end >= ?
+                AND (inb_last_receiver IS NULL OR inb_last_receiver = \'\' OR inb_return_date IS NOT NULL)
+                ' . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : '') . '
+           ORDER BY ivr_begin',
+                $readyReservationParameters
+            )->fetchAll();
+
+            foreach ($readyReservations as &$reservation) {
+                $reservation['borrowUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                    'mode' => 'item_edit_borrow',
+                    'item_uuid' => $reservation['ini_uuid'],
+                    'reservation_uuid' => $reservation['ivr_uuid']
+                ));
+            }
+            unset($reservation);
+        }
+
+        $keeperRestriction = '';
+        $activeBorrowingParameters = array();
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            $keeperRestriction = '
+         INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
+         INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS keeper_field ON keeper_field.inf_id = keeper_data.ind_inf_id
+                AND keeper_field.inf_name_intern = \'KEEPER\'
+                AND (keeper_field.inf_org_id = ? OR keeper_field.inf_org_id IS NULL)';
+            $activeBorrowingParameters[] = $gCurrentOrgId;
+        }
+        $activeBorrowingParameters[] = $gCurrentOrgId;
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            $activeBorrowingParameters[] = $gCurrentUserId;
+        }
+        $keeperCondition = !$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : '';
+        $activeBorrowings = $gDb->queryPrepared(
+            'SELECT ini_uuid, ind_value AS item_name, inb_last_receiver, inb_borrow_date, ivr_uuid
+               FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+         INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = inb_ini_id
+         INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
+         INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+          LEFT JOIN ' . TBL_INVENTORY_RESERVATIONS . ' ON ivr_ini_id = ini_id AND ivr_status = \'borrowed\'
+                ' . $keeperRestriction . '
+              WHERE ini_org_id = ?
+                AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
+                AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL
+                ' . $keeperCondition . '
+           ORDER BY inb_borrow_date',
+            $activeBorrowingParameters
+        )->fetchAll();
+
+        $user = new User($gDb, $gProfileFields);
+        foreach ($activeBorrowings as &$borrowing) {
+            $receiver = (string)$borrowing['inb_last_receiver'];
+            if (is_numeric($receiver) && $user->readDataById((int)$receiver)) {
+                $receiver = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
+            }
+            $borrowing['receiver'] = $receiver;
+            $borrowing['returnUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
+                    'mode' => 'item_edit_borrow',
+                    'item_uuid' => $borrowing['ini_uuid'],
+                    'item_borrowed' => 1,
+                    'reservation_uuid' => $borrowing['ivr_uuid']
+                )));
+        }
+        unset($borrowing);
+        $this->assignSmartyVariable('readyReservations', $readyReservations ?? array());
+        $this->assignSmartyVariable('activeBorrowings', $activeBorrowings);
+        $this->assignSmartyVariable('canManageReservations', $canManageReservations);
+        $this->addHtmlByTemplate('modules/inventory.borrow.list.tpl');
+
+        if ($canManageReservations) {
+            $readyTable = new DataTables($this, 'adm_inventory_borrow_ready_table');
+            $readyTable->disableColumnsSort(array(4));
+            $readyTable->setColumnsNotHideResponsive(array(1, 4));
+            $readyTable->createJavascript(count($readyReservations), 4);
+        }
+        $activeTable = new DataTables($this, 'adm_inventory_borrow_active_table');
+        $activeTable->disableColumnsSort(array(4));
+        $activeTable->setColumnsNotHideResponsive(array(1, 4));
+        $activeTable->createJavascript(count($activeBorrowings), 4);
+    }
+}

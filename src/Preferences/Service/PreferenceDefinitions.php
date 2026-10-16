@@ -2,6 +2,7 @@
 namespace Admidio\Preferences\Service;
 
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\SSO\Service\OIDCService;
 use InvalidArgumentException;
@@ -43,6 +44,9 @@ final class PreferenceDefinitions
     private const VALIDATOR_INVENTORY_ROLES = 'inventory_roles';
     private const VALIDATOR_INVENTORY_KEEPER_FIELDS = 'inventory_keeper_fields';
     private const VALIDATOR_INVENTORY_PROFILE_FIELDS = 'inventory_profile_fields';
+    private const VALIDATOR_INVENTORY_RESERVATION_ROLES = 'inventory_reservation_roles';
+    private const VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES = 'inventory_reservation_notification_roles';
+    private const VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES = 'inventory_reservation_notification_statuses';
     private const VALIDATOR_SSO_KEY = 'sso_key';
     private const VALIDATOR_OIDC_SIGNING_KEY = 'oidc_signing_key';
 
@@ -67,6 +71,9 @@ final class PreferenceDefinitions
         self::VALIDATOR_INVENTORY_ROLES,
         self::VALIDATOR_INVENTORY_KEEPER_FIELDS,
         self::VALIDATOR_INVENTORY_PROFILE_FIELDS,
+        self::VALIDATOR_INVENTORY_RESERVATION_ROLES,
+        self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES,
+        self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES,
         self::VALIDATOR_SSO_KEY,
         self::VALIDATOR_OIDC_SIGNING_KEY,
     );
@@ -225,6 +232,7 @@ final class PreferenceDefinitions
             'changelog_table_inventory_items' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_inventory_item_data' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_inventory_item_borrow_data' => array('default' => '0', 'type' => 'bool'),
+            'changelog_table_inventory_reservations' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_saml_clients' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_oidc_clients' => array('default' => '0', 'type' => 'bool'),
             'changelog_table_oidc_consents' => array('default' => '0', 'type' => 'bool'),
@@ -277,6 +285,7 @@ final class PreferenceDefinitions
             'documents_files_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'documents_files_max_upload_size' => array('default' => '3', 'type' => 'int', 'minimum' => 0, 'maximum' => 999999999),
             'inventory_module_enabled' => array('default' => '2', 'type' => 'enum', 'values' => array('0', '1', '2', '3', '4', '5')),
+            'inventory_anonymize_user_names_for_guests' => array('default' => '1', 'type' => 'bool'),
             'inventory_visible_for' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_ROLES),
             'inventory_items_per_page' => array('default' => '25', 'type' => 'enum', 'values' => array('10', '25', '50', '100', '-1')),
             'inventory_field_history_days' => array('default' => '365', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999999999),
@@ -293,6 +302,16 @@ final class PreferenceDefinitions
             'inventory_decimal_places' => array('default' => '1', 'type' => 'int', 'minimum' => 0, 'maximum' => null, 'required' => true),
             'inventory_field_date_time_format' => array('default' => 'date', 'type' => 'enum', 'values' => array('date', 'datetime')),
             'inventory_items_disable_borrowing' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservations_enabled' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservations_events_enabled' => array('default' => '1', 'type' => 'bool'),
+            'inventory_reservation_keepers_manage' => array('default' => '1', 'type' => 'bool'),
+            'inventory_reservation_approval' => array('default' => 'manual', 'type' => 'enum', 'values' => array('automatic', 'manual')),
+            'inventory_reservation_requesters' => array('default' => 'members', 'type' => 'enum', 'values' => array('guests', 'members', 'roles')),
+            'inventory_reservation_requester_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_ROLES),
+            'inventory_reservation_notifications_enabled' => array('default' => '0', 'type' => 'bool'),
+            'inventory_reservation_notification_roles' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES),
+            'inventory_reservation_manager_statuses' => array('default' => 'requested,approved,rejected,cancelled,borrowed,returned', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES),
+            'inventory_reservation_notify_requester' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view_enabled' => array('default' => '1', 'type' => 'bool'),
             'inventory_profile_view' => array('default' => 'LAST_RECEIVER', 'type' => 'reference', 'validator' => self::VALIDATOR_INVENTORY_PROFILE_FIELDS),
             'inventory_export_filename' => array('default' => 'SYS_INVENTORY', 'maxLength' => 50, 'required' => true),
@@ -933,10 +952,42 @@ final class PreferenceDefinitions
                     array($value, $gCurrentOrgId)
                 )->fetchColumn();
                 if ($count !== 1) {
-                    throw new InvalidArgumentException('Preference "system_notifications_role" references an unavailable role.');
+                    throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable role.');
                 }
                 return $value;
+            case self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_ROLES:
+                $values = self::commaValues($value);
+                foreach ($values as $roleUuid) {
+                    $count = (int)$gDb->queryPrepared(
+                        'SELECT COUNT(*) FROM ' . TBL_ROLES . '
+                     INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                          WHERE rol_uuid = ? AND rol_valid = true AND rol_system = false
+                            AND rol_all_lists_view = true AND cat_org_id = ? AND cat_name_intern <> \'EVENTS\'',
+                        array($roleUuid, $gCurrentOrgId)
+                    )->fetchColumn();
+                    if ($count !== 1) {
+                        throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable role.');
+                    }
+                }
+                return implode(',', $values);
+            case self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES:
+                $values = self::commaValues($value);
+                $allowedStatuses = array(
+                    Reservation::STATUS_REQUESTED,
+                    Reservation::STATUS_APPROVED,
+                    Reservation::STATUS_REJECTED,
+                    Reservation::STATUS_CANCELLED,
+                    Reservation::STATUS_BORROWED,
+                    Reservation::STATUS_RETURNED
+                );
+                foreach ($values as $status) {
+                    if (!in_array($status, $allowedStatuses, true)) {
+                        throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable reservation status.');
+                    }
+                }
+                return implode(',', $values);
             case self::VALIDATOR_INVENTORY_ROLES:
+            case self::VALIDATOR_INVENTORY_RESERVATION_ROLES:
                 $values = self::commaValues($value);
                 foreach ($values as $roleId) {
                     self::assertNumeric($roleId, $name);
@@ -947,7 +998,7 @@ final class PreferenceDefinitions
                         array((int)$roleId)
                     )->fetchColumn();
                     if ($count !== 1) {
-                        throw new InvalidArgumentException('Preference "inventory_visible_for" references unavailable role ' . $roleId . '.');
+                        throw new InvalidArgumentException('Preference "' . $name . '" references unavailable role ' . $roleId . '.');
                     }
                 }
                 return implode(',', $values);
