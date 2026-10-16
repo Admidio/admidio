@@ -421,7 +421,7 @@ class InventoryPresenter extends PagePresenter
         if (InventoryAccessService::canManageReservations()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservations',
-                $gL10n->get('SYS_INVENTORY_RESERVATIONS'),
+                $gL10n->get('SYS_RESERVATIONS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_list')),
                 'bi-calendar-check',
                 '',
@@ -430,7 +430,7 @@ class InventoryPresenter extends PagePresenter
         } elseif (InventoryAccessService::canRequestReservation()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservation_request',
-                $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'),
+                $gL10n->get('SYS_RESERVATION_REQUEST'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
                 'bi-calendar-plus'
             );
@@ -439,7 +439,7 @@ class InventoryPresenter extends PagePresenter
         if (InventoryAccessService::canManageBorrowings() && !$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_borrowings',
-                $gL10n->get('SYS_INVENTORY_BORROWINGS'),
+                $gL10n->get('SYS_BORROWINGS'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list')),
                 'bi-box-arrow-up-right'
             );
@@ -1186,7 +1186,7 @@ class InventoryPresenter extends PagePresenter
                     $rowValues['actions'][] = array(
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid'])),
                         'icon' => 'bi bi-calendar-plus',
-                        'tooltip' => $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST')
+                        'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST')
                     );
                 }
 

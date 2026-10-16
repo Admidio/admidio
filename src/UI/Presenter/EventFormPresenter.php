@@ -247,12 +247,12 @@ class EventFormPresenter extends PagePresenter
         }
 
         $statusLabels = array(
-            Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
-            Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
-            Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
-            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED'),
-            Reservation::STATUS_BORROWED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_BORROWED'),
-            Reservation::STATUS_RETURNED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
+            Reservation::STATUS_REQUESTED => $gL10n->get('SYS_STATUS_REQUESTED'),
+            Reservation::STATUS_APPROVED => $gL10n->get('SYS_STATUS_APPROVED'),
+            Reservation::STATUS_REJECTED => $gL10n->get('SYS_STATUS_REJECTED'),
+            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_CANCELLED'),
+            Reservation::STATUS_BORROWED => $gL10n->get('SYS_STATUS_BORROWED'),
+            Reservation::STATUS_RETURNED => $gL10n->get('SYS_STATUS_RETURNED')
         );
         $statusIcons = array(
             Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
@@ -291,7 +291,7 @@ class EventFormPresenter extends PagePresenter
                 ));
                 $action = '<button type="button" class="btn btn-sm btn-outline-primary event-inventory-reservation-request-again" data-url="'
                     . SecurityUtils::encodeHTML($requestAgainUrl) . '" data-item-id="' . (int)$reservation['ivr_ini_id'] . '">'
-                    . SecurityUtils::encodeHTML($gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST_AGAIN')) . '</button>';
+                    . SecurityUtils::encodeHTML($gL10n->get('SYS_REQUEST_AGAIN')) . '</button>';
             }
 
             $jsonArray['data'][] = array(
@@ -645,13 +645,13 @@ class EventFormPresenter extends PagePresenter
                 array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
             // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
-            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_RESERVATIONS'), $availableItems,
+            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_RESERVATIONS'), $availableItems,
                 array('defaultValue' => $selectedItems, 'multiselect' => true));
             $reservationItems = array();
             foreach ($availableItems as $itemId => $itemName) {
                 $reservationItems[] = array('id' => (int)$itemId, 'name' => $itemName);
             }
-            $form->addButton('event_inventory_reservation_add', $gL10n->get('SYS_INVENTORY_ADD_ITEM'),
+            $form->addButton('event_inventory_reservation_add', $gL10n->get('SYS_ADD_ITEM'),
                 array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
             $page->assignSmartyVariable('eventInventoryReservationsEnabled', true);
             $page->assignSmartyVariable('eventInventoryReservationItems', $reservationItems);

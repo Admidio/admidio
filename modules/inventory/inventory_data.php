@@ -349,7 +349,7 @@ try {
                 ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
                 array('mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid'])
             ) . '"><i class="bi bi-calendar-plus" data-bs-toggle="tooltip" title="'
-                . htmlspecialchars($gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+                . htmlspecialchars($gL10n->get('SYS_RESERVATION_REQUEST'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }
 
         $keeperDbId = (int)$itemsData->getValue('KEEPER', 'database');

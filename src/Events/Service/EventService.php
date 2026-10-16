@@ -253,8 +253,8 @@ class EventService
 
         $status = (string)$reservation->getValue('ivr_status');
         $statusLabel = $status === Reservation::STATUS_APPROVED
-            ? $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED')
-            : $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED');
+            ? $gL10n->get('SYS_STATUS_APPROVED')
+            : $gL10n->get('SYS_STATUS_REQUESTED');
 
         return array(
             'status' => 'success',

@@ -124,7 +124,7 @@ class ReservationNotificationService
         };
         $dateFormat = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
         $status = $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_' . strtoupper((string)$reservation->getValue('ivr_status')));
-        $message = $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFICATION_MESSAGE', array(
+        $message = $gL10n->get('SYS_RESERVATION_NOTIFICATION_MESSAGE', array(
             $format($status),
             $format($item->readableName()),
             $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_begin')))->format($dateFormat)),
@@ -140,7 +140,7 @@ class ReservationNotificationService
             $email->setHtmlMail();
         }
         $email->setSubject($gCurrentOrganization->getValue('org_shortname') . ': '
-            . $gL10n->get('SYS_INVENTORY_RESERVATION_NOTIFICATION_SUBJECT', array($item->readableName(), $status)));
+            . $gL10n->get('SYS_RESERVATION_NOTIFICATION_SUBJECT', array($item->readableName(), $status)));
         $email->setText($message);
 
         return $email;

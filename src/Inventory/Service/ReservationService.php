@@ -85,7 +85,7 @@ class ReservationService
             $this->lockItemForReservation($itemId);
 
             if (!$this->isAvailable($itemId, $begin, $end)) {
-                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
             }
             $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
@@ -128,7 +128,7 @@ class ReservationService
                 new \DateTimeImmutable((string)$reservation->getValue('ivr_end')),
                 (int)$reservation->getValue('ivr_id')
             )) {
-                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
             }
 
             $this->transition($reservation, Reservation::STATUS_APPROVED);
@@ -258,17 +258,17 @@ class ReservationService
 
         foreach ($itemIds as $itemId) {
             if ($itemId <= 0) {
-                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
             }
 
             $item = $this->getItemInCurrentOrganization($itemId);
             if ($item->isRetired()) {
-                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
             }
             $this->lockItemForReservation($itemId);
 
             if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
-                throw new Exception('SYS_INVENTORY_RESERVATION_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
             }
         }
 

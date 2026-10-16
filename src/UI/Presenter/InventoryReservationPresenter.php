@@ -24,7 +24,7 @@ class InventoryReservationPresenter extends PagePresenter
         if (InventoryAccessService::canRequestReservation()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservation_request',
-                $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST'),
+                $gL10n->get('SYS_RESERVATION_REQUEST'),
                 SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
                 'bi-calendar-plus'
             );
@@ -66,16 +66,16 @@ class InventoryReservationPresenter extends PagePresenter
         );
 
         $statusLabels = array(
-            Reservation::STATUS_REQUESTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REQUESTED'),
-            Reservation::STATUS_APPROVED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_APPROVED'),
-            Reservation::STATUS_REJECTED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_REJECTED'),
-            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_CANCELLED'),
-            Reservation::STATUS_BORROWED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_BORROWED'),
-            Reservation::STATUS_RETURNED => $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_RETURNED')
+            Reservation::STATUS_REQUESTED => $gL10n->get('SYS_STATUS_REQUESTED'),
+            Reservation::STATUS_APPROVED => $gL10n->get('SYS_STATUS_APPROVED'),
+            Reservation::STATUS_REJECTED => $gL10n->get('SYS_STATUS_REJECTED'),
+            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_CANCELLED'),
+            Reservation::STATUS_BORROWED => $gL10n->get('SYS_STATUS_BORROWED'),
+            Reservation::STATUS_RETURNED => $gL10n->get('SYS_STATUS_RETURNED')
         );
         $reservationOrigins = array(
-            'member' => $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN_MEMBER_REQUEST'),
-            'guest' => $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN_GUEST_REQUEST')
+            'member' => $gL10n->get('SYS_MEMBER_REQUEST'),
+            'guest' => $gL10n->get('SYS_GUEST_REQUEST')
         );
         $itemOptions = array();
         $rows = array();
@@ -100,16 +100,16 @@ class InventoryReservationPresenter extends PagePresenter
         $filterForm->addInput('reservation_filter_date', $gL10n->get('SYS_DATE'), '', array('type' => 'date'));
         $filterForm->addSelectBox(
             'reservation_filter_status',
-            $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS'),
+            $gL10n->get('SYS_INVENTORY_STATUS'),
             array('' => $gL10n->get('SYS_ALL')) + $statusLabels,
             array('defaultValue' => Reservation::STATUS_REQUESTED, 'showContextDependentFirstEntry' => false)
         );
         $filterForm->addToHtmlPage();
 
         $templateData = array('headers' => array(
-            $gL10n->get('SYS_INVENTORY_ITEMNAME'), $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTER'),
-            $gL10n->get('SYS_INVENTORY_RESERVATION_REQUESTED_AT'), $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_FROM'),
-            $gL10n->get('SYS_INVENTORY_RESERVATION_PERIOD_TO'), $gL10n->get('SYS_INVENTORY_RESERVATION_ORIGIN'),
+            $gL10n->get('SYS_INVENTORY_ITEMNAME'), $gL10n->get('SYS_REQUESTER'),
+            $gL10n->get('SYS_REQUESTED_AT'), $gL10n->get('SYS_RESERVATION_PERIOD_FROM'),
+            $gL10n->get('SYS_RESERVATION_PERIOD_TO'), $gL10n->get('SYS_ORIGIN'),
             $gL10n->get('SYS_COMMENT'), ''
         ), 'rows' => array());
         $user = new User($gDb, $gProfileFields);
@@ -146,16 +146,16 @@ class InventoryReservationPresenter extends PagePresenter
             $canManageReservation = $isManager && InventoryAccessService::canManageReservationItem((int)$row['ivr_ini_id']);
             if ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_REQUESTED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']));
-                $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_APPROVE'));
+                $actions[] = array('url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_APPROVE'));
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']));
-                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_REJECT'));
+                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_REJECT'));
             } elseif ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_APPROVED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_cancel', 'reservation_uuid' => $row['ivr_uuid']));
                 $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL'));
             }
             if (!$isManager && in_array($row['ivr_status'], array(Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED), true)) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_withdraw', 'reservation_uuid' => $row['ivr_uuid']));
-                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_INVENTORY_RESERVATION_WITHDRAW'));
+                $actions[] = array('url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_WITHDRAW'));
             }
             $buttonIcon = match ($row['ivr_status']) {
                     Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',

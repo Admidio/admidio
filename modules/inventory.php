@@ -269,7 +269,7 @@ try {
             break;
 
         case 'borrow_list':
-            $headline = $gL10n->get('SYS_INVENTORY_BORROWINGS');
+            $headline = $gL10n->get('SYS_BORROWINGS');
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $borrowing = new InventoryBorrowPresenter();
             $borrowing->setHeadline($headline);
@@ -279,7 +279,7 @@ try {
             break;
 
         case 'reservation_request':
-            $headline = $gL10n->get('SYS_INVENTORY_RESERVATION_REQUEST');
+            $headline = $gL10n->get('SYS_RESERVATION_REQUEST');
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $reservation = new InventoryItemPresenter('adm_inventory_reservation_request');
             $reservation->setHeadline($headline);
@@ -288,7 +288,7 @@ try {
             break;
 
         case 'reservation_list':
-            $headline = $gL10n->get('SYS_INVENTORY_RESERVATIONS');
+            $headline = $gL10n->get('SYS_RESERVATIONS');
             $gNavigation->addUrl(CURRENT_URL, $headline);
             $reservations = new InventoryReservationPresenter();
             $reservations->setHeadline($headline);
@@ -320,8 +320,8 @@ try {
             );
             $gNavigation->deleteLastUrl();
             $messageId = $reservation->getValue('ivr_status') === Reservation::STATUS_APPROVED
-                ? 'SYS_INVENTORY_RESERVATION_REQUEST_APPROVED'
-                : 'SYS_INVENTORY_RESERVATION_REQUEST_SUBMITTED';
+                ? 'SYS_RESERVATION_REQUEST_APPROVED'
+                : 'SYS_RESERVATION_REQUEST_SUBMITTED';
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get($messageId), 'url' => $gNavigation->getUrl()));
             break;
 
