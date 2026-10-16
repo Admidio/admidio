@@ -21,7 +21,7 @@ class UserPhotoService
     /**
      * Maximum size in pixels of the longer side of a stored profile photo.
      */
-    public const PROFILE_PHOTO_MAX_SIZE = 700;
+    public const PROFILE_PHOTO_MAX_SIZE = 500;
 
     /**
      * Validate, scale and store a profile photo from an existing local file.
