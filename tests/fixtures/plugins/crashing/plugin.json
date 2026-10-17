@@ -1,0 +1,5 @@
+{
+    "name": "Crashing",
+    "description": "Fails in the ways the crash guard has to tell apart. Nothing loads its classes; the tests include them.",
+    "version": "2.0.0"
+}

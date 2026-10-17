@@ -211,6 +211,8 @@ final class PluginInstaller
 
         $deleted = $plugin instanceof Plugin ? self::deleteDirectory($plugin) : true;
 
+        // A plugin that is installed again later, even in the same version, starts without a crash.
+        PluginCrashGuard::remove($id);
         PluginRegistry::reset();
 
         return $deleted;

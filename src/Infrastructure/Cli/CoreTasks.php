@@ -8691,7 +8691,9 @@ final class CoreTasks
                 'version' => $plugin?->version ?? '',
                 'installed_version' => PluginRegistry::getInstalledVersion($id),
                 'installed' => $installed,
-                'enabled' => $installed && PluginRegistry::isEnabled($id)
+                'enabled' => $installed && PluginRegistry::isEnabled($id),
+                // Enabled, but kept out after a crash (or because a plugin it requires crashed).
+                'excluded' => isset(PluginRegistry::getExcluded()[$id])
             );
 
             if ($state !== '' && $rowState !== $state) {
@@ -8744,6 +8746,7 @@ final class CoreTasks
             'installed_version' => PluginRegistry::getInstalledVersion($plugin->id),
             'component_id' => PluginRegistry::getComponentId($plugin->id),
             'enabled' => PluginRegistry::isEnabled($plugin->id),
+            'excluded' => isset(PluginRegistry::getExcluded()[$plugin->id]),
             'author' => $plugin->author,
             'url' => $plugin->homepage,
             'icon' => $plugin->icon,
