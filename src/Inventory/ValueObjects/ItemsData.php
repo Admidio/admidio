@@ -10,6 +10,7 @@ use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
@@ -119,12 +120,23 @@ class ItemsData
     }
 
     /**
-     * A wakeup add the current database object to this class
+     * Preserve the data stored in existing sessions.
+     * @return array<string,mixed>
      */
-    public function __wakeup()
+    public function __serialize(): array
+    {
+        return (array)$this;
+    }
+
+    /**
+     * Restore legacy session properties and attach the current database object.
+     * @param array<string,mixed> $data
+     */
+    public function __unserialize(array $data): void
     {
         global $gDb;
 
+        SerializationUtils::restoreProperties($this, $data);
         if ($gDb instanceof Database) {
             $this->mDb = $gDb;
         }

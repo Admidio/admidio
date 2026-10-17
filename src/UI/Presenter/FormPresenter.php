@@ -18,6 +18,7 @@ use HTMLPurifier_Config;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Creates an Admidio specific form
@@ -212,11 +213,10 @@ class FormPresenter
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Keep the form data and its legacy session property names without serializing the page.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         global $gLogger;
 
@@ -224,7 +224,17 @@ class FormPresenter
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements', 'finalized');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0*\0" . $name,
+            array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements', 'finalized')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**

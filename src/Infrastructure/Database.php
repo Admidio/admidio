@@ -9,6 +9,7 @@ use PDOStatement;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Handle the connection to the database, send all SQL statements and handle the returned rows.
@@ -210,11 +211,10 @@ class Database
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a PDO-Statement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Exclude PDO objects while retaining the legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         global $gLogger;
 
@@ -222,7 +222,17 @@ class Database
             $gLogger->debug('DATABASE: sleep/serialize!');
         }
 
-        return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0*\0" . $name,
+            array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**
