@@ -1,20 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Τρέχων μήνας</string>
+  <string name="PLG_CALENDAR_FRIDAY_SHORT">Πα</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Δε</string>
   <string name="PLG_CALENDAR_MONTH">Ιανουάριος, Φεβρουάριος, Μάρτιος, Απρίλιος, Μάιος, Ιούνιος, Ιούλιος, Αύγουστος, Σεπτέμβριος, Οκτώβριος, Νοέμβριος, Δεκέμβριος</string>
   <string name="PLG_CALENDAR_MORE">(... περισσότερα)</string>
-  <string name="PLG_CALENDAR_MONDAY_SHORT">Δε</string>
-  <string name="PLG_CALENDAR_TUESDAY_SHORT">Τρ</string>
-  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Τε</string>
-  <string name="PLG_CALENDAR_THURSDAY_SHORT">Πε</string>
-  <string name="PLG_CALENDAR_FRIDAY_SHORT">Πα</string>
-  <string name="PLG_CALENDAR_SATURDAY_SHORT">Σα</string>
-  <string name="PLG_CALENDAR_SUNDAY_SHORT">Κυ</string>
-  <string name="PLG_CALENDAR_SEVERAL_DAYS">Πολλές ημέρες</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Αυτό το πρόσθετο εμφανίζει στη σελίδα επισκόπησης ημερολόγιο με όλες τις εκδηλώσεις του τρέχοντος μήνα.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Ημερολόγιο</string>
-  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Εμφάνιση εκδηλώσεων</string>
-  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Αν ενεργοποιηθεί, οι εκδηλώσεις εμφανίζονται στο ημερολόγιο. (Προεπιλογή: ενεργό)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Ρόλοι για τα γενέθλια</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Επιλέξτε τους ρόλους των οποίων τα μέλη θα εμφανίζονται με τα γενέθλιά τους. (Προεπιλογή: όλοι οι ρόλοι)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Ρόλοι με πρόσβαση στο περιεχόμενο</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Επιλέξτε τους ρόλους που μπορούν να δουν το περιεχόμενο του πρόσθετου. Χρήστες χωρίς επιλεγμένο ρόλο βλέπουν μόνο τον αριθμό εκδηλώσεων και γενεθλίων. (Προεπιλογή: όλοι οι ρόλοι)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Εμφάνιση γενεθλίων</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Αν ενεργοποιηθεί, τα γενέθλια των μελών εμφανίζονται στο ημερολόγιο. (Προεπιλογή: ενεργό)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Εμφάνιση γενεθλίων στους επισκέπτες</string>
@@ -27,8 +23,12 @@
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Επιλέξτε τις κατηγορίες για τις εκδηλώσεις του ημερολογίου. (Προεπιλογή: όλες οι κατηγορίες)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Εμφάνιση ονομάτων ημερολογίων</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Αν ενεργοποιηθεί, εμφανίζεται το όνομα του ημερολογίου για κάθε εκδήλωση. (Προεπιλογή: ανενεργό)</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Ρόλοι με πρόσβαση στο περιεχόμενο</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Επιλέξτε τους ρόλους που μπορούν να δουν το περιεχόμενο του πρόσθετου. Χρήστες χωρίς επιλεγμένο ρόλο βλέπουν μόνο τον αριθμό εκδηλώσεων και γενεθλίων. (Προεπιλογή: όλοι οι ρόλοι)</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Ρόλοι για τα γενέθλια</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Επιλέξτε τους ρόλους των οποίων τα μέλη θα εμφανίζονται με τα γενέθλιά τους. (Προεπιλογή: όλοι οι ρόλοι)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Εμφάνιση εκδηλώσεων</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Αν ενεργοποιηθεί, οι εκδηλώσεις εμφανίζονται στο ημερολόγιο. (Προεπιλογή: ενεργό)</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">Σα</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Πολλές ημέρες</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Κυ</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Πε</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Τρ</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Τε</string>
 </resources>
