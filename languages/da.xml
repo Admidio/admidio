@@ -165,7 +165,7 @@
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Denne side vises, når en bruger er logget ind. Sti skal angives som relativ sti til Admidio-hovedmappen.\n(f.eks.: moduler/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Denne side er standardsiden for Admidio for gæster. Sti skal angives som relativ sti til Admidio-hovedmappen.\n(f.eks.: moduler/overview.php)</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Brug af JavaScript editoren</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">En fuldt udstyret JavaScript editor bliver brugt i mange moduler i Admidio. Møder, Meddelelser osv. kan redigeres komfortabelt af brugeren. I tilfælde af at editoren er blevet deaktiveret, så vil en simpel multi-linie editor blive vist istedet.</string>
+  <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">En JavaScript-editor med mange funktioner gør det lettere at skrive beskrivelser til meddelelser, arrangementer og andet indhold. Hvis editoren er deaktiveret, vises et almindeligt tekstfelt med flere linjer.</string>
   <string name="ORG_LAST_UPDATE_STEP">Sidste trin af opdateringen</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Automatisk Login</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Brugere kan definere at login information og sessions data skal gemmes på deres computere. På den måde bliver de automatisk logget på næste gang de besøger hjemmesiden. Dette kan give anledning til ulovlig adgang og misbrug af uauthoriserede brugere. (Standard: Ja)</string>
@@ -427,7 +427,7 @@
   <string name="SYS_COPY_OF_YOUR_EMAIL">Din ønskede kopi af beskeden</string>
   <string name="SYS_COPY_VAR">Kopier #VAR1#</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuel modtager</string>
-  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural"># VAR1 # individuelle modtagere</string>
+  <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuelle modtagere</string>
   <string name="SYS_COUNTER">Tæller</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -619,7 +619,7 @@
   <string name="SYS_EDIT_VAR">Rediger #VAR1#</string>
   <string name="SYS_EDIT_WEBLINK">Rediger weblink</string>
   <string name="SYS_EDIT_WEBLINKS">Rediger web links</string>
-  <string name="SYS_EMAIL">E-mail</string>
+  <string name="SYS_EMAIL">Email</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-mail Administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildataene for brugeren #VAR1# #VAR2# (login: #VAR3#) blev ændret af #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev ændret</string>
@@ -635,7 +635,7 @@
   <string name="SYS_EMAIL_PARAMETERS_DESC">Du kan bruge følgende pladsholdere i e-mail-teksten til direkte at henvende dig til modtageren af e-mailen. #VAR1# for fornavnet, #VAR2# for efternavnet, #VAR3# for for- og efternavn og #VAR4# for e-mailadressen.</string>
   <string name="SYS_EMAIL_SEND">Mailen er afsendt</string>
   <string name="SYS_EMAIL_TEMPLATE">E-mail skabelon</string>
-  <string name="SYS_EMAIL_TEMPLATE_DESC">Her kan du vælge en HTML-skabelonfil fra mappen #VAR1_BOLD#. Når du sender en e-mail, kopieres indholdet af denne fil til e-mailen, og de følgende variabler erstattes: #afsender#, #meddelelse#, #modtagere#, #organisationsnavn#, #organisation_kortnavn#, #organisation_website#. For mere information om brug af e-mail-skabeloner, se #VAR2# dokumentation #VAR3#.</string>
+  <string name="SYS_EMAIL_TEMPLATE_DESC">Her kan du vælge en HTML-skabelonfil fra mappen #VAR1_BOLD#. Når du sender en e-mail, kopieres indholdet af denne fil til e-mailen, og de følgende variabler erstattes: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. For mere information om brug af e-mail-skabeloner, se #VAR2# dokumentation #VAR3#.</string>
   <string name="SYS_EMAIL_TO_LIST">E-mail til liste</string>
   <string name="SYS_EMAIL_TO_MEMBERS">E-mail til medlemmer</string>
   <string name="SYS_EMPTY">Tom</string>
@@ -676,7 +676,7 @@
   <string name="SYS_ERROR_PAGE_NOT_FOUND">FEJL 404 - SIDE IKKE FUNDET!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID mangler</string>
   <string name="SYS_EVENT">Aktivitet</string>
-  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Du har tildelt roller til deltagere, som ikke har tilladelse til at se datoer i den valgte kategori. Vælg en af følgende roller for deltagerne: # VAR1_BOLD #.</string>
+  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">Du har tildelt roller til deltagere, som ikke har tilladelse til at se datoer i den valgte kategori. Vælg en af følgende roller for deltagerne: #VAR1_BOLD#.</string>
   <string name="SYS_EVENT_CHANGED_TITLE">En begivenhed blev ændret ved #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">En ny begivenhed blev oprettet på #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Deltagere kan tilmelde sig arrangementet indtil denne dato. Ledere og medlemmer med ret til at redigere begivenheder kan stadig tildele deltagere. Hvis der ikke er angivet en dato for tilmeldingsfrist, tages startdatoen for arrangementet som tilmeldingsfrist.</string>
@@ -790,7 +790,7 @@
   <string name="SYS_HIGHLIGHT_EVENT">Fremhæv dato</string>
   <string name="SYS_HOMEPAGE">Hjemmeside</string>
   <string name="SYS_HOST">Host</string>
-  <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML e-mail</string>
+  <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML email</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</string>
   <string name="SYS_HTML_TABLE">‎HTML-tabel‎</string>
   <string name="SYS_ICAL_DISABLED">iCal-funktionen er deaktiveret.</string>
@@ -1025,7 +1025,7 @@
   <string name="SYS_LOGOUT_SUCCESSFUL">Logud lykkedes.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Det nye kodeord er blevet sendt til e-mail adressen #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Det nye kodeord er blevet sendt til brugeren #VAR1_BOLD#!</string>
-  <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mail adressen #VAR1_BOLD# er blevet tildelt til flere registreringer. En unik bruger registrering kunne identificeres.</string>
+  <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-mailadressen #VAR1_BOLD# er knyttet til flere registreringer. Det var derfor ikke muligt at identificere én bestemt brugerkonto.</string>
   <string name="SYS_MAIL_BULK">Samlet</string>
   <string name="SYS_MAIL_DISPATCH">E-mail forsendelse</string>
   <string name="SYS_MAIL_SENDING_MODE">E-mail afsendelsestilstand</string>
@@ -1294,7 +1294,7 @@
   <string name="SYS_PLUGIN_INVALID_ID">Plugin-mappen #VAR1# er ikke et gyldigt plugin-navn. Et plugin-navn kan kun indeholde bogstaver, cifre, bindestreger og understreger.</string>
   <string name="SYS_PLUGIN_INVALID_MANIFEST">Dette plugin er ikke kompatibelt med plugin-systemet i Admidio 6.0 og senere: Manifestet #VAR1# er ikke et gyldigt JSON-objekt.</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">Disse plugins kunne ikke indlæses og er derfor inaktive:</string>
-  <string name="SYS_PLUGIN_MANAGER">Plugin Manager</string>
+  <string name="SYS_PLUGIN_MANAGER">Plugin manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Her kan du administrere Admidios plugins. Plugins er yderligere moduler, der kan installeres for at udvide funktionaliteten af Admidio. Du kan installere, opdatere eller fjerne plugins.</string>
   <string name="SYS_PLUGIN_MODULE_DISABLED">Dette plugin kræver modulet #VAR1#, som er slået fra. Plugin\'et forbliver som det er og begynder at virke igen, så snart modulet tændes.</string>
   <string name="SYS_PLUGIN_MODULE_PAGES">Korte webadresser til plugin-sider</string>
@@ -1568,7 +1568,7 @@
   <string name="SYS_SEMICOLON">‎Semikolon (;)‎</string>
   <string name="SYS_SEND">Send</string>
   <string name="SYS_SEND_COPY">Send kopi af e-mail til min egen adresse</string>
-  <string name="SYS_SEND_EMAIL">Send e-mail</string>
+  <string name="SYS_SEND_EMAIL">Send email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send e-mails til tidligere medlemmer</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Hvis denne mulighed er indstillet, kan e-mails sendes til individuelle tidligere medlemmer såvel som til alle tidligere medlemmer af en rolle. (Standard: Aktiveret)</string>
   <string name="SYS_SEND_EMAIL_TO">Send e-mail til #VAR1#</string>
@@ -1577,7 +1577,7 @@
   <string name="SYS_SEND_GREETING_CARD">Send lykønskningskort</string>
   <string name="SYS_SEND_LOGIN_INFORMATION">Send login information</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Din e-mail vil blive sendt til alle medlemmer af den valgte rolle. Yderligere roller og modtagere er kun tilgængelige for loggede brugere.</string>
-  <string name="SYS_SEND_MAILS">Send e-mails</string>
+  <string name="SYS_SEND_MAILS">Send emails</string>
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">PHPs mail() -metode kan være begrænset af nogle internet udbydere og kan være en grund til mistanke om spam. Derfor anbefales det at sende mails ved hjælp af en eksisterende mail-adresse og SMTP-server. Du kan konfigurere SMTP-indstillingerne nedenfor (standard: PHP-mail()).</string>
   <string name="SYS_SEND_NEW_LOGIN">Vil du sende #VAR1_BOLD# en e-mail med det aktuelle brugernavn og en ny adgangskode?</string>
@@ -1892,18 +1892,18 @@
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Skift til relations konfiguration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Åbn lokale administration</string>
   <string name="SYS_SYMMETRICAL">Symmetrisk</string>
-  <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Logindata for #organization_long_name#\n#content# Hej #user_first_name#,\n\nDu modtager dine logindata til hjemmesiden #organization_homepage#.\nBrugernavn: #user_login_name#\nAdgangskode: #variable1#\n\nThe adgangskoden blev genereret automatisk,\nDu bør ændre den efter at have logget ind på #organisation_homepage# i din profil.\n\nVennlig hilsen\nTeamet i #organization_long_name#</string>
-  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Nulstil adgangskode for #organization_long_name#\n#content# Hej #user_first_name#,\n\nVi har modtaget en anmodning om at nulstille din adgangskode på #organization_homepage#.\n\nHvis anmodningen kom fra dig, kan du bruge Følgende link for at nulstille din adgangskode og indstille en ny: \n#variable1#\n\nMed venlig hilsen\nteamet af #organisation_long_name#</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#emne# i registrering på #organisation_langt_navn# afvist.\n#indhold#Hej #bruger_fornavn#,\n\din registrering på #organisation_hjemmeside# blev afvist.\n\nTilmeldinger accepteres generelt af vores brugere. Hvis du er medlem, og din registrering stadig blev afvist, kan det skyldes, at du ikke blev identificeret som medlem.\nFor at afklare årsagerne til afvisningen bedes du kontakte administratoren #administrator_email# fra #organization_homepage#.\n\nMed venlig hilsen\nThe team af #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Logindata for #organization_long_name#\n#content# Hej #user_first_name#,\n\nDu modtager dine logindata til hjemmesiden #organization_homepage#.\nBrugernavn: #user_login_name#\nAdgangskode: #variable1#\n\nAdgangskoden blev genereret automatisk,\nDu bør ændre den efter at have logget ind på #organization_homepage# i din profil.\n\nVenlig hilsen\nTeamet i #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Nulstil adgangskode for #organization_long_name#\n#content# Hej #user_first_name#,\n\nVi har modtaget en anmodning om at nulstille din adgangskode på #organization_homepage#.\n\nHvis anmodningen kom fra dig, kan du bruge følgende link til at nulstille din adgangskode og indstille en ny: \n#variable1#\n\nMed venlig hilsen\nTeamet hos #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrering hos #organization_long_name# afvist.\n#content#Hej #user_first_name#,\n\n\nDin registrering på #organization_homepage# blev afvist.\n\nVi accepterer som udgangspunkt kun registreringer fra medlemmer. Hvis du er medlem, og din registrering stadig blev afvist, kan det skyldes, at du ikke blev identificeret som medlem.\nFor at afklare årsagerne til afvisningen bedes du kontakte administratoren #administrator_email# fra #organization_homepage#.\n\nMed venlig hilsen\nTeamet hos #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Ny registrering på #organization_long_name# hjemmesiden \n#content# En ny bruger har registreret sig på  #organization_homepage#.\n\nEfternavn: #user_last_name#\nFornavn: #user_first_name#\nemail: #user_email#\n\n\nDenne besked blev genereret automatisk.</string>
   <string name="SYS_SYSMAIL_REGISTRATION_CONFIRMATION">#subject# Din registrering på #organization_long_name#\n#content# Hej #user_first_name#,\nvi er meget glade for, at du har registreret dig på vores hjemmeside #organization_homepage#.\n\nFor at fuldføre din registrering, klik venligst på følgende link: #variable1#. Ved at klikke på linket bliver du automatisk omdirigeret til vores hjemmeside, og din tilmelding vil blive bekræftet.\n\nNår du har bekræftet din tilmelding, tjekker vi den. Du vil modtage et svar inden for et par timer, om din registrering er blevet accepteret, og du kan logge ind med dine legitimationsoplysninger, eller om din registrering er blevet afvist.\n\nMed venlig hilsen\nTeamet fra #organization_long_name#</string>
-  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registrering på #organization_long_name# bekræftet\n#content# Hej #user_first_name#,\n\din registrering på #organisation_homepage# er blevet bekræftet.\n\nDu kan nu logge ind på hjemmesiden med dit brugernavn #user_login_name# og din adgangskode.\n\nHvis du har spørgsmål, så skriv en e-mail til #administrator_email#.\n\nMed venlig hilsen\nteamet i #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registrering på #organization_long_name# bekræftet\n#content# Hej #user_first_name#,\n\n\nDin registrering på #organization_homepage# er blevet bekræftet.\n\nDu kan nu logge ind på hjemmesiden med dit brugernavn #user_login_name# og din adgangskode.\n\nHvis du har spørgsmål, så skriv en e-mail til #administrator_email#.\n\nMed venlig hilsen\nteamet i #organization_long_name#</string>
   <string name="SYS_SYSTEM">System</string>
   <string name="SYS_SYSTEM_DEFAULT_LIST">System Standard liste</string>
   <string name="SYS_SYSTEM_EMAIL">System e-mail</string>
   <string name="SYS_SYSTEM_EMAIL_WITH_REPLY_TO">System e-mail med brugerens svaradresse</string>
   <string name="SYS_SYSTEM_INFORMATION">Oplysninger om systemet</string>
-  <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Her kan du begrunde teksten i hver systemmeddelelse. Teksterne er opdelt i to dele (emne og indhold) og identificeres med #emne# og #indhold#. Indholdet for hvert afsnit følger det. Hvis du ikke ønsker at sende nogen af disse meddelelser, skal du lade tekstfeltet stå tomt.\n\nI hver mail kan følgende jokertegn bruges. De vil blive erstattet med det tilsvarende indhold under kørsel.</string>
+  <string name="SYS_SYSTEM_MAIL_TEXTS_DESC">Her kan du begrunde teksten i hver systemmeddelelse. Teksterne er opdelt i to dele (emne og indhold) og identificeres med #subject# og #content#. Indholdet for hvert afsnit følger det. Hvis du ikke ønsker at sende nogen af disse meddelelser, skal du lade tekstfeltet stå tomt.\n\nI hver mail kan følgende jokertegn bruges. De vil blive erstattet med det tilsvarende indhold under kørsel.</string>
   <string name="SYS_SYSTEM_MAILS">System beskeder</string>
   <string name="SYS_TAB">Tab</string>
   <string name="SYS_TABLE">Tabel</string>
@@ -1974,7 +1974,7 @@
   <string name="SYS_USERNAME_OR_EMAIL">Brugernavn eller e-mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# på #VAR2# den #VAR3#</string>
   <string name="SYS_USERS">Brugere</string>
-  <string name="SYS_USING_CURRENT_VERSION">Du bruger den nyeste version af Admidio!</string>
+  <string name="SYS_USING_CURRENT_VERSION">Du bruger en opdateret #VAR1#version af Admidio.</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
   <string name="SYS_UTF16LE">UTF-16LE</string>
   <string name="SYS_UTF32BE">UTF-32BE</string>
@@ -2037,4 +2037,60 @@
   <string name="SYS_YOUR_LISTS">Egne lister</string>
   <string name="SYS_YOUR_NAME">Dit navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
+  <!-- English reference texts pending translation -->
+  <string name="SYS_COMMAND_LINE">Command line</string>
+  <string name="SYS_COMMAND_LINE_ACCOUNTS">Allowed system accounts</string>
+  <string name="SYS_COMMAND_LINE_ACTOR">Acting user without --as</string>
+  <string name="SYS_COMMAND_LINE_ACTORS">Accounts allowed for --as</string>
+  <string name="SYS_COMMAND_LINE_ALLOWED_COMMANDS">Allowed commands</string>
+  <string name="SYS_COMMAND_LINE_DENIED_COMMANDS">Denied commands</string>
+  <string name="SYS_COMMAND_LINE_DESC">The Admidio command line is configured in the file #VAR1#. It is disabled until $gCliEnabled is set to true in that file, so a new installation cannot be administered from a shell before you allow it. The command "admidio cli:defaultconfig" prints a documented template of the file. These settings are deliberately not editable here: a configuration that anything with access to the database could change would restrict nothing.</string>
+  <string name="SYS_COMMAND_LINE_EVERY_ACCOUNT">Every local account</string>
+  <string name="SYS_COMMAND_LINE_FILE">Configuration file</string>
+  <string name="SYS_COMMAND_LINE_FILE_MISSING">The file does not exist, so the command line is disabled.</string>
+  <string name="SYS_COMMAND_LINE_LOG">Command invocation log</string>
+  <string name="SYS_COMMAND_LINE_NOT_WRITABLE">not writable</string>
+  <string name="SYS_COMMAND_LINE_STATUS">Status</string>
+  <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unknown account</string>
+  <string name="SYS_ALIGN_CENTER">Center</string>
+  <string name="SYS_ALIGN_JUSTIFY">Justify</string>
+  <string name="SYS_ALIGN_LEFT">Left</string>
+  <string name="SYS_ALIGN_RIGHT">Right</string>
+  <string name="SYS_ALIGNMENT">Alignment</string>
+  <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BULLETED_LIST">Bulleted list</string>
+  <string name="SYS_COPY_LINK">Copy link</string>
+  <string name="SYS_DEFAULT_COLOR">Default color</string>
+  <string name="SYS_DELETE_COLUMN">Delete column</string>
+  <string name="SYS_DELETE_ROW">Delete row</string>
+  <string name="SYS_DELETE_TABLE">Delete table</string>
+  <string name="SYS_FILE_NOT_CREATED">File #VAR1_BOLD# could not be created.</string>
+  <string name="SYS_FONT_SIZE">Font size</string>
+  <string name="SYS_INSERT_COLUMN_LEFT">Insert column to the left</string>
+  <string name="SYS_INSERT_COLUMN_RIGHT">Insert column to the right</string>
+  <string name="SYS_INSERT_IMAGE">Insert image</string>
+  <string name="SYS_INSERT_LINK">Insert link</string>
+  <string name="SYS_INSERT_ROW_ABOVE">Insert row above</string>
+  <string name="SYS_INSERT_ROW_BELOW">Insert row below</string>
+  <string name="SYS_INSERT_TABLE">Insert table (2 × 2)</string>
+  <string name="SYS_INSERT_VIDEO">Insert video</string>
+  <string name="SYS_ITALIC">Italic</string>
+  <string name="SYS_LARGE">Large</string>
+  <string name="SYS_LOGIN_TO_VIEW_PAGE">Please log in to view the requested page. You will then be forwarded to it automatically.</string>
+  <string name="SYS_NO_RELATIONSHIP_TYPES">No relationship types have been created yet. Please create a relationship type in the relationship configurations first.</string>
+  <string name="SYS_NORMAL">Normal</string>
+  <string name="SYS_ORDERED_LIST">Numbered list</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_FILESIZE">The file must not be larger than #VAR1# MB.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
+  <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
+  <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
+  <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
+  <string name="SYS_RESIZE_IMAGE">Resize image</string>
+  <string name="SYS_SHARE_LINK">Share link</string>
+  <string name="SYS_SMALL">Small</string>
+  <string name="SYS_UNDERLINE">Underline</string>
+  <string name="SYS_VERY_LARGE">Very large</string>
+  <string name="SYS_VIDEO_URL">YouTube or Vimeo URL</string>
+  <string name="SYS_VIDEO_URL_INVALID">Please enter a valid YouTube or Vimeo URL.</string>
 </resources>
