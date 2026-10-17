@@ -77,6 +77,20 @@
   <string name="SYS_COHABITANT">Partner/-in</string>
   <string name="SYS_COHABITANT_FEMALE">Partnerin</string>
   <string name="SYS_COHABITANT_MALE">Partner</string>
+  <string name="SYS_COMMAND_LINE">Kommandozeile</string>
+  <string name="SYS_COMMAND_LINE_ACCOUNTS">Zugelassene Systemkonten</string>
+  <string name="SYS_COMMAND_LINE_ACTOR">Ausführendes Benutzerkonto ohne --as</string>
+  <string name="SYS_COMMAND_LINE_ACTORS">Für --as zugelassene Benutzerkonten</string>
+  <string name="SYS_COMMAND_LINE_ALLOWED_COMMANDS">Erlaubte Befehle</string>
+  <string name="SYS_COMMAND_LINE_DENIED_COMMANDS">Gesperrte Befehle</string>
+  <string name="SYS_COMMAND_LINE_DESC">Die Admidio-Kommandozeile wird in der Datei #VAR1# konfiguriert. Sie ist deaktiviert, bis $gCliEnabled in dieser Datei auf true gesetzt wird. Eine neue Installation kann daher erst über die Kommandozeile verwaltet werden, wenn du dies erlaubst. Der Befehl "admidio cli:defaultconfig" gibt eine dokumentierte Vorlage für diese Datei aus. Diese Einstellungen können hier bewusst nicht bearbeitet werden: Eine Konfiguration, die sich allein mit Datenbankzugriff ändern ließe, würde keinen wirksamen Schutz bieten.</string>
+  <string name="SYS_COMMAND_LINE_EVERY_ACCOUNT">Jedes lokale Konto</string>
+  <string name="SYS_COMMAND_LINE_FILE">Konfigurationsdatei</string>
+  <string name="SYS_COMMAND_LINE_FILE_MISSING">Die Datei ist nicht vorhanden. Daher ist die Kommandozeile deaktiviert.</string>
+  <string name="SYS_COMMAND_LINE_LOG">Protokoll der Befehlsaufrufe</string>
+  <string name="SYS_COMMAND_LINE_NOT_WRITABLE">nicht beschreibbar</string>
+  <string name="SYS_COMMAND_LINE_STATUS">Status</string>
+  <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unbekanntes Konto</string>
   <string name="SYS_COMPANION">Freund/-in</string>
   <string name="SYS_DAUGHTER">Tochter</string>
   <string name="SYS_EVENT_REGISTRATION">Anmeldung</string>
@@ -201,15 +215,15 @@
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
-  <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
+  <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System-E-Mail-Adresse der Organisation</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">Vorname der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Nachname der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
+  <string name="ORG_VARIABLE_FIRST_NAME">Vorname der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
+  <string name="ORG_VARIABLE_LAST_NAME">Nachname der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Name der Organisation</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Neues Passwort der betreffenden Person</string>
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Kurzbezeichnung der Organisation</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
-  <string name="ORG_VARIABLE_USERNAME">Anmeldename der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
+  <string name="ORG_VARIABLE_USERNAME">Anmeldename der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
   <!--System-Phrases
   for use in every module-->
   <string name="SYS_64BIT">64 Bit</string>
@@ -331,7 +345,7 @@
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergebnis der Rechnung wurde falsch eingegeben.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Der Bestätigungscode wurde falsch eingegeben.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bestätigungscode</string>
-  <string name="SYS_CAPTCHA_DESCRIPTION">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
+  <string name="SYS_CAPTCHA_DESCRIPTION">Der Bestätigungscode (Captcha) dient zur Spamerkennung. Mit dem Bild wird geprüft, ob das Formular von einer Person oder einem automatisierten Programm ausgefüllt wird.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
   <string name="SYS_CAPTION_SIZE">Größe des Bildtextes</string>
   <string name="SYS_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße nach der Formel \"Bildgröße/Divisor\" berechnet. Durch Erhöhung des Divisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
   <string name="SYS_CARBON_COPY">Kopie</string>
@@ -435,7 +449,7 @@
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da dein Browser das Setzen von Cookies verbietet!\n\nDamit du dich erfolgreich anmelden kannst, musst du deinen Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COOKIE_NOTE">Hinweis auf Nutzung von Cookies anzeigen</string>
   <string name="SYS_COOKIE_NOTE_DESC">Beim erstmaligen Aufruf der Webseite erhalten Gäste und angemeldete Personen einen Hinweis, dass diese Seite Cookies nutzt. Nach einmaliger Bestätigung erscheint der Hinweis auf diesem Gerät und in diesem Browser nicht mehr.</string>
-  <string name="SYS_COPIED_CLIPBOARD">In Zwischenablage kopiert...</string>
+  <string name="SYS_COPIED_CLIPBOARD">In die Zwischenablage kopiert.</string>
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_CLIPBOARD">In Zwischenablage kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
@@ -655,7 +669,7 @@
   <string name="SYS_EMAIL_INVALID">Die E-Mail-Adresse im Feld #VAR1_BOLD# enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</string>
   <string name="SYS_EMAIL_NOT_SEND">Die E-Mail konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
   <string name="SYS_EMAIL_NOT_SEND_TO_RECIPIENTS">#VAR1#\n\nEine E-Mail konnte nicht an folgende Empfänger gesendet werden:\n#VAR2#</string>
-  <string name="SYS_EMAIL_PARAMETERS_DESC">Du kannst im E-Mail-Text folgende Platzhalter benutzen, um den Empfänger der E-Mail direkt anzusprechen. #VAR1# für den Vornamen, #VAR2# für den Nachnamen, #VAR3# für Vor- und Nachnamen sowie #VAR4# für die E-Mail-Adresse.</string>
+  <string name="SYS_EMAIL_PARAMETERS_DESC">Du kannst im E-Mail-Text folgende Platzhalter verwenden, um die empfangende Person direkt anzusprechen: #VAR1# für den Vornamen, #VAR2# für den Nachnamen, #VAR3# für Vor- und Nachnamen sowie #VAR4# für die E-Mail-Adresse.</string>
   <string name="SYS_EMAIL_SEND">Die E-Mail wurde versendet.</string>
   <string name="SYS_EMAIL_TEMPLATE">E-Mail-Vorlage</string>
   <string name="SYS_EMAIL_TEMPLATE_DESC">Hier kann eine HTML-Vorlagendatei aus dem Ordner #VAR1_BOLD# ausgewählt werden. Beim Versand einer E-Mail wird der Inhalt dieser Datei in die E-Mail kopiert und folgende Variablen ersetzt: #sender#, #message#, #recipients#, #organization_name#, #organization_shortname#, #organization_website#. Weitere Informationen zu der Nutzung von E-Mail-Vorlagen findest du in der #VAR2#Dokumentation#VAR3#.</string>
@@ -857,7 +871,7 @@
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z. B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
   <string name="SYS_INTERVAL">Intervall</string>
   <string name="SYS_INTO_TO">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</string>
-  <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, werden bei gesetzter Einstellung alle Empfänger im TO-Feld der E-Mail aufgelistet. So sind die Namen und E-Mail-Adressen für alle Empfänger sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
+  <string name="SYS_INTO_TO_DESC">Wenn eine E-Mail an mehrere Personen gesendet wird, listet diese Einstellung alle empfangenden Personen im TO-Feld auf. Ihre Namen und E-Mail-Adressen sind dadurch für alle sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
   <string name="SYS_INVALID_ICON_NAME">Der eingegebene Icon-Name stimmt nicht mit der erwarteten Syntax überein. Ein Icon-Name von Bootstrap Icons sollte nur die Zeichen a-z, Zahlen und einen Bindestrich enthalten.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_INVENTORY">Inventarverwaltung</string>
@@ -1046,15 +1060,15 @@
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_CANCEL">Abbrechen</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du hast mehrmals innerhalb kurzer Zeit versucht, dich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist dein Zugang für 15 Minuten gesperrt.</string>
-  <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename existiert schon.\n\nWähle bitte einen anderen Namen.</string>
+  <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename ist bereits vergeben.\n\nBitte wähle einen anderen Namen.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Deine Anmeldung wurde noch nicht freigeschaltet.\n\nDu wirst benachrichtigt, sobald deine Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGIN_TO">Anmelden bei #VAR1_BOLD#</string>
   <string name="SYS_LOGIN_TO_VIEW_PAGE">Bitte melde dich an, um die gewünschte Seite zu sehen. Danach wirst du automatisch dorthin weitergeleitet.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Zugangsdaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administratoren der Organisation #VAR1_BOLD# freigeschaltet.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Zugangsdaten wurden richtig eingegeben, allerdings bist du kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
-  <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Anmeldename und/oder das Passwort ist falsch.</string>
-  <string name="SYS_LOGIN_WITH_EMAIL">Erlaube E-Mail-Adresse anstelle des Benutzernamens</string>
+  <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der Anmeldename oder das Passwort ist falsch.</string>
+  <string name="SYS_LOGIN_WITH_EMAIL">Anmeldung mit E-Mail-Adresse anstelle des Anmeldenamens erlauben</string>
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">Wenn für ein Konto eine E-Mail-Adresse angegeben wurde (und diese im System eindeutig ist), kann die E-Mail-Adresse auch für die Anmeldung verwendet werden. (Voreinstellung: nein)</string>
   <string name="SYS_LOGO_FILE">Logo-Datei</string>
   <string name="SYS_LOGO_FILE_DESC">Der Pfad zur Logodatei, die in der oberen linken Ecke angezeigt wird. Der Pfad sollte relativ zum Stammverzeichnis deiner Installation sein. Bleibt er leer, wird das Standardlogo des Themes verwendet. (Standard: leer)</string>
@@ -1150,7 +1164,7 @@
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger</string>
-  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger enthalten alle Empfänger im BCC-Feld. Dadurch sind die E-Mail-Adressen der anderen Empfänger nicht sichtbar. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kann ein versteckter Wert \"Undisclosed Recipients\" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle E-Mails an mehrere Empfänger werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender)</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Personen führen deren Adressen im BCC-Feld auf. Dadurch sind die E-Mail-Adressen für die anderen empfangenden Personen nicht sichtbar. Das TO-Feld muss ebenfalls ausgefüllt werden. Hier lässt sich festlegen, welche Adresse dort eingetragen wird. Möglich ist die verborgene Angabe \"Undisclosed Recipients\", die bei manchen Anbietern zu Problemen führt. Alternativ kann die Absenderadresse oder die Administrationsadresse aus den Systembenachrichtigungen verwendet werden. Hinweis: Alle E-Mails an mehrere Personen werden dann auch an die Adresse im TO-Feld gesendet. (Voreinstellung: Absenderadresse)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator muss mindestens ein Mitglied haben!</string>
   <string name="SYS_MY_PROFILE">Mein Profil</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier kannst du Bedingungen zu jedem Feld in deiner Liste hinterlegen. Damit werden die ermittelten Mitglieder der ausgewählten Rolle mit deinen Bedingungen weiter eingeschränkt.</string>
@@ -1161,7 +1175,7 @@
   <string name="SYS_NEW_BOTH_AVAILABLE">Eine neue stabile Version und eine neue Beta-Version sind verfügbar!</string>
   <string name="SYS_NEW_MESSAGE_RECEIVED">Neue Nachricht erhalten</string>
   <string name="SYS_NEW_NAME">Neuer Name</string>
-  <string name="SYS_NEW_ORGANIZATION_DESC">Gib in dieses Formular die Abkürzung, den offiziellen Namen und die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Bei der E-Mail-Adresse sollte es sich um eine allgemeine Adresse der Organisation handeln. Sie wird u. a. als Absenderadresse für automatische Systembenachrichtigungen verwendet. Es wird dann eine neue Organisation mit ihren Stammdaten hinzugefügt. Du wirst dort zum Administrator und kannst die weitere Einrichtung vornehmen.</string>
+  <string name="SYS_NEW_ORGANIZATION_DESC">Gib in dieses Formular die Abkürzung, den offiziellen Namen und die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Bei der E-Mail-Adresse sollte es sich um eine allgemeine Adresse der Organisation handeln. Sie wird u. a. als Absenderadresse für automatische Systembenachrichtigungen verwendet. Es wird dann eine neue Organisation mit ihren Stammdaten hinzugefügt. Du erhältst dort Administrationsrechte und kannst die weitere Einrichtung vornehmen.</string>
   <string name="SYS_NEW_PASSWORD">Neues Passwort</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Neues Profilfoto</string>
   <string name="SYS_NEW_ROLE">Neue Rolle</string>
@@ -1180,7 +1194,7 @@
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_LEADER">Ohne Leitung</string>
-  <string name="SYS_NO_LOGIN_DATA">Du hast noch keinen Benutzernamen und kein Passwort?</string>
+  <string name="SYS_NO_LOGIN_DATA">Du hast noch keinen Anmeldenamen und kein Passwort?</string>
   <string name="SYS_NO_MATCHING_ENTRIES">Keine passenden Einträge gefunden.</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
@@ -1344,7 +1358,7 @@
   <string name="SYS_PLUGIN_MODULE_PAGES_DESC">Einige Plugins bringen eigene Seiten mit. Eine solche Seite kann immer über eine Adresse wie plugins/calendar/list.php aufgerufen werden.\n\nIst diese Option aktiviert, kann dieselbe Seite zusätzlich über die kürzere Adresse modules/calendar/list.php aufgerufen werden und erscheint damit wie ein normales Admidio-Modul. Dazu erstellt Admidio kleine Dateien im eigenen Modulordner und löscht sie wieder, wenn du die Option deaktivierst.\n\nLass die Option deaktiviert, wenn Admidio niemals in seinen Programmordner schreiben soll, zum Beispiel weil du die Installation mit Git verwaltest oder in einem Container betreibst. Alle Funktionen bleiben erhalten, die Seiten behalten lediglich ihre längere Adresse.</string>
   <string name="SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE">Admidio darf nicht in den eigenen Modulordner schreiben. Daher kann diese Option nicht aktiviert werden. Plugin-Seiten behalten ihre längere Adresse; alle anderen Funktionen bleiben erhalten.</string>
   <string name="SYS_PLUGIN_NOT_FOUND">Das Plugin wurde nicht gefunden.</string>
-  <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin ist nicht installiert.</string>
+  <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin #VAR1# ist nicht installiert.</string>
   <string name="SYS_PLUGIN_NO_MANIFEST">Dieses Plugin ist nicht mit dem Plugin-System von Admidio ab Version 6.0 kompatibel: Das Manifest #VAR1# fehlt.</string>
   <string name="SYS_PLUGIN_ORPHANED">Plugins mit fehlenden Dateien</string>
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">Die plugin.json dieses Plugins kann nicht gelesen werden: #VAR1#</string>
@@ -1631,7 +1645,7 @@
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_METHOD">Versenden über</string>
   <string name="SYS_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Voreinstellung: PHP mail())</string>
-  <string name="SYS_SEND_NEW_LOGIN">Möchtest du #VAR1_BOLD# eine E-Mail mit dem aktuellen Anmeldenamen und einem neuen Passwort mailen?</string>
+  <string name="SYS_SEND_NEW_LOGIN">Möchtest du #VAR1_BOLD# eine E-Mail mit dem aktuellen Anmeldenamen und einem neuen Passwort senden?</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Foto als Grußkarte versenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Deine private Nachricht wird an die ausgewählte Person gesendet</string>
@@ -1642,7 +1656,7 @@
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Absender-E-Mail-Adresse für das Versenden von Systembenachrichtigungen und E-Mails an Rollen und Personen. Die E-Mail-Adresse sollte die Domain der Webseite enthalten, auf der Admidio installiert ist.</string>
   <string name="SYS_SENDER_MODE_DESC">Gib an, wie der Absender einer E-Mail überprüft wird. Viele Anbieter erlauben es dem Absender einer E-Mail nicht, eine E-Mail-Adresse aus einer anderen Domain zu verwenden. In diesem Fall sollte eine der beiden Optionen mit der System-E-Mail ausgewählt werden. Die entsprechende E-Mail-Adresse und der Name können in den folgenden beiden Einstellungen gespeichert werden. (Standard: #VAR1#)</string>
   <string name="SYS_SENDER_NAME">Absendername</string>
-  <string name="SYS_SENDER_NAME_DESC">Name der E-Mail-Adresse des Absenders. Dieses Feld muss gepflegt werden, wenn das Feld für die E-Mail-Adresse des Absenders nicht leer ist.</string>
+  <string name="SYS_SENDER_NAME_DESC">Name, der beim Versand von E-Mails als Absender angezeigt wird. Dieses Feld muss ausgefüllt werden, wenn eine Absender-E-Mail-Adresse angegeben ist.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
@@ -1693,7 +1707,7 @@
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP-Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
-  <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden. (Voreinstellung: Ja)</string>
+  <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden. (Voreinstellung: ja)</string>
   <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
   <string name="SYS_SMTP_AUTH_PLAIN">Plain</string>
   <string name="SYS_SMTP_AUTH_TYPE">SMTP-Authentifizierungstyp</string>
@@ -2019,7 +2033,7 @@
   <string name="SYS_USER_DELETE_DESC">Willst du #VAR1_BOLD# wirklich löschen?\n\nDie Person wird damit vollständig aus der Datenbank gelöscht und ein Zugriff auf ihre Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_EMAIL">E-Mail-Adresse der angemeldeten Person</string>
   <string name="SYS_USER_ID_NOT_FOUND">Zu der übergebenen ID wurde kein Konto gefunden!</string>
-  <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+  <string name="SYS_USER_NO_EMAIL">Im Profil von #VAR1_BOLD# ist keine gültige E-Mail-Adresse hinterlegt.</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese Person ist noch kein Mitglied der Organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten. Möchtest du die neuen Zugangsdaten sowie die entsprechenden Rollen dieser Person zuordnen?</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1# und hat auch noch keine Zugangsdaten. Möchtest du die Zugangsdaten sowie die entsprechenden Rollen dieser Person zuordnen?</string>

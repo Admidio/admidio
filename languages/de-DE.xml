@@ -77,6 +77,20 @@
   <string name="SYS_COHABITANT">Partner/-in</string>
   <string name="SYS_COHABITANT_FEMALE">Partnerin</string>
   <string name="SYS_COHABITANT_MALE">Partner</string>
+  <string name="SYS_COMMAND_LINE">Kommandozeile</string>
+  <string name="SYS_COMMAND_LINE_ACCOUNTS">Zugelassene Systemkonten</string>
+  <string name="SYS_COMMAND_LINE_ACTOR">Ausführendes Benutzerkonto ohne --as</string>
+  <string name="SYS_COMMAND_LINE_ACTORS">Für --as zugelassene Benutzerkonten</string>
+  <string name="SYS_COMMAND_LINE_ALLOWED_COMMANDS">Erlaubte Befehle</string>
+  <string name="SYS_COMMAND_LINE_DENIED_COMMANDS">Gesperrte Befehle</string>
+  <string name="SYS_COMMAND_LINE_DESC">Die Admidio-Kommandozeile wird in der Datei #VAR1# konfiguriert. Sie ist deaktiviert, bis $gCliEnabled in dieser Datei auf true gesetzt wird. Eine neue Installation kann daher erst über die Kommandozeile verwaltet werden, wenn Sie dies erlauben. Der Befehl "admidio cli:defaultconfig" gibt eine dokumentierte Vorlage für diese Datei aus. Diese Einstellungen können hier bewusst nicht bearbeitet werden: Eine Konfiguration, die sich allein mit Datenbankzugriff ändern ließe, würde keinen wirksamen Schutz bieten.</string>
+  <string name="SYS_COMMAND_LINE_EVERY_ACCOUNT">Jedes lokale Konto</string>
+  <string name="SYS_COMMAND_LINE_FILE">Konfigurationsdatei</string>
+  <string name="SYS_COMMAND_LINE_FILE_MISSING">Die Datei ist nicht vorhanden. Daher ist die Kommandozeile deaktiviert.</string>
+  <string name="SYS_COMMAND_LINE_LOG">Protokoll der Befehlsaufrufe</string>
+  <string name="SYS_COMMAND_LINE_NOT_WRITABLE">nicht beschreibbar</string>
+  <string name="SYS_COMMAND_LINE_STATUS">Status</string>
+  <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unbekanntes Konto</string>
   <string name="SYS_COMPANION">Freund/-in</string>
   <string name="SYS_DAUGHTER">Tochter</string>
   <string name="SYS_EVENT_REGISTRATION">Anmeldung</string>
@@ -185,7 +199,7 @@
   <string name="ORG_PASSWORD_MIN_STRENGTH_MID">Mittel</string>
   <string name="ORG_PASSWORD_MIN_STRENGTH_VERY_HIGH">Sehr hoch</string>
   <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE">Pfad zur Berechnung der Speicherplatzbelegung</string>
-  <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Pfad zu dem Ordner, für den die Speicherplatzbelegung berechnet wird. Diese Angabe wird in den Systeminformationen verwenden Siet, um die Speicherplatzbelegung der Admidio-Installation zu berechnen. Der Pfad kann absolut oder relativ zum Admidio-Hauptverzeichnis angegeben werden. Bleibt das Feld leer, wird die Speicherplatzbelegung für das Stammverzeichnis des Servers berechnet. (Standard: leer)</string>
+  <string name="ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC">Pfad zu dem Ordner, für den die Speicherplatzbelegung berechnet wird. Diese Angabe wird in den Systeminformationen verwendet, um die Speicherplatzbelegung der Admidio-Installation zu berechnen. Der Pfad kann absolut oder relativ zum Admidio-Hauptverzeichnis angegeben werden. Bleibt das Feld leer, wird die Speicherplatzbelegung für das Stammverzeichnis des Servers berechnet. (Standard: leer)</string>
   <string name="ORG_PIXEL">Pixel</string>
   <string name="ORG_PROFILE_FIELDS">Profilfelder</string>
   <string name="ORG_REFUSE_REGISTRATION">Benachrichtigung bei einer Ablehnung der Registrierung</string>
@@ -200,15 +214,15 @@
   <string name="ORG_TIMEZONE">Zeitzone</string>
   <string name="ORG_TIMEZONE_DESC">Dies ist die festgelegte Zeitzone. Wird diese später in der Konfigurationsdatei config.php von Admidio geändert, so werden bereits erfasste Daten und Uhrzeiten nicht an die neue Zeitzone angepasst.</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
-  <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
+  <string name="ORG_VARIABLE_EMAIL">E-Mail-Adresse der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
   <string name="ORG_VARIABLE_EMAIL_ORGANIZATION">System-E-Mail-Adresse der Organisation</string>
-  <string name="ORG_VARIABLE_FIRST_NAME">Vorname der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
-  <string name="ORG_VARIABLE_LAST_NAME">Nachname der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
+  <string name="ORG_VARIABLE_FIRST_NAME">Vorname der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
+  <string name="ORG_VARIABLE_LAST_NAME">Nachname der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
   <string name="ORG_VARIABLE_NAME_ORGANIZATION">Name der Organisation</string>
   <string name="ORG_VARIABLE_NEW_PASSWORD">Neues Passwort der betreffenden Person</string>
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Kurzbezeichnung der Organisation</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">URL der Webseite der Organisation</string>
-  <string name="ORG_VARIABLE_USERNAME">Anmeldename der betreffenden Person aus dem jeweiligen E-Mailkontext</string>
+  <string name="ORG_VARIABLE_USERNAME">Anmeldename der betreffenden Person aus dem jeweiligen E-Mail-Kontext</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64 Bit</string>
   <string name="SYS_A_TO_Z">A bis Z</string>
@@ -252,6 +266,11 @@
   <string name="SYS_ALBUM_CREATED_TITLE">Ein neues Fotoalbum wurde angelegt auf #VAR1#</string>
   <string name="SYS_ALBUM_FOLDER_NOT_FOUND">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen, ihn wiederherzustellen, dann lösche bitte den Ordner über die Oberfläche.\nGästen der Webseite ohne Fotoverwaltungsrecht wird dieses Album nicht mehr angezeigt.</string>
   <string name="SYS_ALBUM_NOT_APPROVED">Das Album ist gesperrt und wird Gästen und Mitgliedern nicht angezeigt.</string>
+  <string name="SYS_ALIGN_CENTER">Zentriert</string>
+  <string name="SYS_ALIGN_JUSTIFY">Blocksatz</string>
+  <string name="SYS_ALIGN_LEFT">Linksbündig</string>
+  <string name="SYS_ALIGN_RIGHT">Rechtsbündig</string>
+  <string name="SYS_ALIGNMENT">Ausrichtung</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALL_CONTACTS">Alle Kontakte</string>
   <string name="SYS_ALL_DAY">Ganztägig</string>
@@ -309,6 +328,8 @@
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
+  <string name="SYS_BOLD">Fett</string>
+  <string name="SYS_BULLETED_LIST">Aufzählung</string>
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Absagen</string>
@@ -322,7 +343,7 @@
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Das Ergebnis der Rechnung wurde falsch eingegeben.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Der Bestätigungscode wurde falsch eingegeben.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bestätigungscode</string>
-  <string name="SYS_CAPTCHA_DESCRIPTION">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte tragen Sie den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
+  <string name="SYS_CAPTCHA_DESCRIPTION">Der Bestätigungscode (Captcha) dient zur Spamerkennung. Mit dem Bild wird geprüft, ob das Formular von einer Person oder einem automatisierten Programm ausgefüllt wird.\nBitte tragen Sie den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</string>
   <string name="SYS_CAPTION_SIZE">Größe des Bildtextes</string>
   <string name="SYS_CAPTION_SIZE_DESC">Die Größe des Bildtextes wird proportional zur Bildgröße nach der Formel \"Bildgröße/Divisor\" berechnet. Durch Erhöhung des Divisors verringert sich die Schriftgröße. (Voreinstellung: 40)</string>
   <string name="SYS_CARBON_COPY">Kopie</string>
@@ -426,7 +447,7 @@
   <string name="SYS_COOKIE_NOT_SET">Der Login kann nicht durchgeführt werden, da Ihr Browser das Setzen von Cookies verbietet!\n\nDamit Sie sich erfolgreich anmelden können, müssen Sie Ihren Browser so einstellen, dass dieser Cookies von #VAR1_BOLD# akzeptiert.</string>
   <string name="SYS_COOKIE_NOTE">Hinweis auf Nutzung von Cookies anzeigen</string>
   <string name="SYS_COOKIE_NOTE_DESC">Beim erstmaligen Aufruf der Webseite erhalten Gäste und angemeldete Personen einen Hinweis, dass diese Seite Cookies nutzt. Nach einmaliger Bestätigung erscheint der Hinweis auf diesem Gerät und in diesem Browser nicht mehr.</string>
-  <string name="SYS_COPIED_CLIPBOARD">In Zwischenablage kopiert...</string>
+  <string name="SYS_COPIED_CLIPBOARD">In die Zwischenablage kopiert.</string>
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_CLIPBOARD">In Zwischenablage kopieren</string>
   <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
@@ -511,6 +532,7 @@
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neues Profil angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der betreffenden Person zugeordnet. Wer das Recht hat, Rollen zuzuordnen, sieht alle Rollenzuordnungen und kann sie entsprechend anpassen.</string>
+  <string name="SYS_DEFAULT_COLOR">Standardfarbe</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
   <string name="SYS_DEFAULT_REPORT">Standardreport</string>
   <string name="SYS_DEFAULT_REPORT_DESC">Wählen Sie den Report, der beim Aufruf des Kategorienreports für diese Organisation angezeigt wird.</string>
@@ -533,6 +555,7 @@
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">Ein Anzeigemodus für die Forenthemen kann vorgewählt werden. Im Modus #VAR1_BOLD# wird jedes Thema in einer Karte mit einer Vorschau des Thementextes dargestellt. Im Modus #VAR2_BOLD# werden die Themen in einer Liste dargestellt, um die Informationen in einer kompakten Liste zu zeigen. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DELETE">Löschen</string>
   <string name="SYS_DELETE_ALBUM">Album löschen</string>
+  <string name="SYS_DELETE_COLUMN">Spalte löschen</string>
   <string name="SYS_DELETE_CONFIGURATION">Konfiguration löschen</string>
   <string name="SYS_DELETE_REPORT">Ausgewählten Report löschen?</string>
   <string name="SYS_DELETE_DATA">Die Daten wurden gelöscht.</string>
@@ -545,9 +568,11 @@
   <string name="SYS_DELETE_ORGANIZATION">Wollen Sie die Organisation #VAR1_BOLD# wirklich löschen?\n\nAlle Daten (Ankündigungen, Dokumente, Veranstaltungen, Mitgliedschaften, Fotos, Rollen und Weblinks) dieser Organisation werden unwiederbringlich gelöscht.</string>
   <string name="SYS_DELETE_PROFILE_PICTURE">Profilbild löschen</string>
   <string name="SYS_DELETE_ROLE">Rolle löschen</string>
+  <string name="SYS_DELETE_ROW">Zeile löschen</string>
   <string name="SYS_DELETE_SELECTION">Auswahl löschen</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Sie dürfen keine Systemkategorien löschen.</string>
   <string name="SYS_DELETE_SYSTEM_ROLE">Sie können die Systemrolle #VAR1_BOLD# nicht löschen.</string>
+  <string name="SYS_DELETE_TABLE">Tabelle löschen</string>
   <string name="SYS_DELETED">Gelöscht</string>
   <string name="SYS_DELETED_ENTRY">Gelöschter Eintrag</string>
   <string name="SYS_DELETED_USER">Gelöschte Person</string>
@@ -757,6 +782,7 @@
   <string name="SYS_FOLDER_RENAME_ERROR">Beim Umbenennen des Ordners #VAR1# ist ein Fehler aufgetreten.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Der Ordner #VAR1_BOLD# kann nicht mit Schreibrechten angelegt werden.\n\nWenden Sie sich bitte an eine #VAR2#administrierende Person#VAR3#, damit diese die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüft.</string>
   <string name="SYS_FONT">Schriftart</string>
+  <string name="SYS_FONT_SIZE">Schriftgröße</string>
   <string name="SYS_FORM_USE_FOR_EDIT">Wenn diese Checkbox aktiviert ist, wird der entsprechende Feldwert zum Bearbeiten der Auswahl verwendet.</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Ehemaliger</string>
@@ -822,6 +848,14 @@
   <string name="SYS_INFOBOX" description="A small html box that will show additional information">Infobox</string>
   <string name="SYS_INFORMATIONS">Informationen</string>
   <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Geben Sie bitte den Vor- und Nachnamen des neuen Kontakts ein. Bevor der Datensatz angelegt wird, wird geprüft, ob eine Person mit einem ähnlichen Namen bereits in der Datenbank existiert.</string>
+  <string name="SYS_INSERT_COLUMN_LEFT">Spalte links einfügen</string>
+  <string name="SYS_INSERT_COLUMN_RIGHT">Spalte rechts einfügen</string>
+  <string name="SYS_INSERT_IMAGE">Bild einfügen</string>
+  <string name="SYS_INSERT_LINK">Link einfügen</string>
+  <string name="SYS_INSERT_ROW_ABOVE">Zeile oberhalb einfügen</string>
+  <string name="SYS_INSERT_ROW_BELOW">Zeile unterhalb einfügen</string>
+  <string name="SYS_INSERT_TABLE">Tabelle einfügen (2 × 2)</string>
+  <string name="SYS_INSERT_VIDEO">Video einfügen</string>
   <string name="SYS_INSTAGRAM">Instagram</string>
   <string name="SYS_INSTALL">Installieren</string>
   <string name="SYS_INSTALL_APP">App installieren</string>
@@ -835,7 +869,7 @@
   <string name="SYS_INTERNAL_NAME_DESC">Der interne Name wird für den eindeutigen Zugriff auf dieses Datenobjekt benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z. B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Datensatzes automatisch gefüllt.</string>
   <string name="SYS_INTERVAL">Intervall</string>
   <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
-  <string name="SYS_INTO_TO_DESC">Geht eine E-Mail an mehrere Personen, werden bei gesetzter Einstellung alle Empfangenden im TO-Feld der E-Mail aufgelistet. So sind die Namen und E-Mail-Adressen für alle Empfangenden sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
+  <string name="SYS_INTO_TO_DESC">Wenn eine E-Mail an mehrere Personen gesendet wird, listet diese Einstellung alle empfangenden Personen im TO-Feld auf. Ihre Namen und E-Mail-Adressen sind dadurch für alle sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
   <string name="SYS_INVALID_ICON_NAME">Der eingegebene Icon-Name stimmt nicht mit der erwarteten Syntax überein. Ein Icon-Name von Bootstrap Icons sollte nur die Zeichen a-z, Zahlen und einen Bindestrich enthalten.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_INVENTORY">Inventarverwaltung</string>
@@ -976,11 +1010,13 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">Benutzerdefinierte Felder</string>
   <string name="SYS_IS_VAR_FROM">ist #VAR1# von</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
+  <string name="SYS_ITALIC">Kursiv</string>
   <string name="SYS_KEEP_ORIGINAL">Originale zusätzlich speichern</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option #VAR1_BOLD# aktiviert, werden die Originalfotos heruntergeladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Querformat</string>
   <string name="SYS_LANGUAGE">Sprache</string>
   <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio wird in der Sprache angezeigt, die im Browser für Webseiten eingestellt ist. Wenn die dort hinterlegte Sprache nicht verfügbar ist, wird die hier eingestellte Sprache verwendet.\nIst Ihre Sprache nicht vorhanden oder möchten Sie weitere Texte übersetzen oder bestehende Übersetzungen verbessern? Dann werfen Sie einen Blick auf die #VAR1#Admidio-Wiki-Seite#VAR2#, um herauszufinden, wie Sie bei der Übersetzung helfen können.</string>
+  <string name="SYS_LARGE">Groß</string>
   <string name="SYS_LAST_EDITED_AT">Zuletzt bearbeitet am #VAR1#</string>
   <string name="SYS_LAST_EDITED_BY">Zuletzt bearbeitet von #VAR1# am #VAR2#</string>
   <string name="SYS_LAST_LOGIN">Letzter Login</string>
@@ -1022,15 +1058,15 @@
   <string name="SYS_LOGIN">Anmelden</string>
   <string name="SYS_LOGIN_CANCEL">Abbrechen</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Sie haben mehrmals innerhalb kurzer Zeit versucht, sich mit einem falschen Passwort einzuloggen.\nAus Sicherheitsgründen ist Ihr Zugang für 15 Minuten gesperrt.</string>
-  <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename existiert schon.\n\nWähle bitte einen anderen Namen.</string>
+  <string name="SYS_LOGIN_NAME_EXIST">Der gewählte Anmeldename ist bereits vergeben.\n\nBitte wählen Sie einen anderen Namen.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Ihre Anmeldung wurde noch nicht freigeschaltet.\n\nSie werden benachrichtigt, sobald Ihre Anmeldung freigeschaltet wurde und ein Login möglich ist.</string>
   <string name="SYS_LOGIN_PROBLEMS">Anmeldeprobleme</string>
   <string name="SYS_LOGIN_TO">Anmelden bei #VAR1_BOLD#</string>
   <string name="SYS_LOGIN_TO_VIEW_PAGE">Bitte melden Sie sich an, um die gewünschte Seite zu sehen. Danach werden Sie automatisch dorthin weitergeleitet.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">Die Zugangsdaten wurden richtig eingegeben, jedoch ist der Update-Prozess nur für Administrierende der Organisation #VAR1_BOLD# freigeschaltet.</string>
   <string name="SYS_LOGIN_USER_NO_MEMBER_IN_ORGANISATION">Die Zugangsdaten wurden richtig eingegeben, allerdings sind Sie kein aktives Mitglied der Organisation #VAR1_BOLD#.</string>
-  <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der eingegebene Anmeldename und/oder das Passwort ist falsch.</string>
-  <string name="SYS_LOGIN_WITH_EMAIL">Erlaube E-Mail-Adresse anstelle des Benutzernamens</string>
+  <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">Der Anmeldename oder das Passwort ist falsch.</string>
+  <string name="SYS_LOGIN_WITH_EMAIL">Anmeldung mit E-Mail-Adresse anstelle des Anmeldenamens erlauben</string>
   <string name="SYS_LOGIN_WITH_EMAIL_DESC">Wenn für ein Konto eine E-Mail-Adresse angegeben wurde (und diese im System eindeutig ist), kann die E-Mail-Adresse auch für die Anmeldung verwendet werden. (Voreinstellung: nein)</string>
   <string name="SYS_LOGO_FILE">Logo-Datei</string>
   <string name="SYS_LOGO_FILE_DESC">Der Pfad zur Logodatei, die in der oberen linken Ecke angezeigt wird. Der Pfad sollte relativ zum Stammverzeichnis Ihrer Installation sein. Bleibt er leer, wird das Standardlogo des Themes verwendet. (Standard: leer)</string>
@@ -1126,7 +1162,7 @@
   <string name="SYS_MOVE_UP">#VAR1# nach oben verschieben</string>
   <string name="SYS_MOVE_VAR">#VAR1# verschieben</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Mehrere Empfänger:innen</string>
-  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Empfänger:innen enthalten alle Empfänger:innen im BCC-Feld. Dadurch sind die E-Mail-Adressen der anderen Empfangenden nicht sichtbar. Das TO-Feld muss allerdings auch befüllt werden. Über diese Einstellung kann festgelegt werden, was im Empfängerfeld (TO) hinterlegt wird. Dies kann ein versteckter Wert "Undisclosed Recipients" sein, was aber bei manchen Providern zu Problemen führt. Alternativ kann das Empfängerfeld (TO) mit der Absenderadresse bzw. der Administratoradresse aus den Systembenachrichtigungen gefüllt werden. Hinweis: Alle E-Mails an mehrere Empfangende werden dann auch an die E-Mail-Adresse im Empfängerfeld (TO) geschickt. (Voreinstellung: Absender:in)</string>
+  <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-Mails an mehrere Personen führen deren Adressen im BCC-Feld auf. Dadurch sind die E-Mail-Adressen für die anderen empfangenden Personen nicht sichtbar. Das TO-Feld muss ebenfalls ausgefüllt werden. Hier lässt sich festlegen, welche Adresse dort eingetragen wird. Möglich ist die verborgene Angabe \"Undisclosed Recipients\", die bei manchen Anbietern zu Problemen führt. Alternativ kann die Absenderadresse oder die Administrationsadresse aus den Systembenachrichtigungen verwendet werden. Hinweis: Alle E-Mails an mehrere Personen werden dann auch an die Adresse im TO-Feld gesendet. (Voreinstellung: Absenderadresse)</string>
   <string name="SYS_MUST_HAVE_ADMINISTRATOR">Die Rolle Administrator:in muss mindestens ein Mitglied haben!</string>
   <string name="SYS_MY_PROFILE">Mein Profil</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier können Sie Bedingungen zu jedem Feld in Ihrer Liste hinterlegen. Damit werden die ermittelten Mitglieder der ausgewählten Rolle mit Ihren Bedingungen weiter eingeschränkt.</string>
@@ -1155,7 +1191,7 @@
   <string name="SYS_NO_ENTRIES">Es sind keine Einträge vorhanden.</string>
   <string name="SYS_NO_ENTRY">Der angeforderte Eintrag existiert nicht in der Datenbank.</string>
   <string name="SYS_NO_LEADER">Ohne Leitung</string>
-  <string name="SYS_NO_LOGIN_DATA">Sie haben noch keinen Benutzernamen und kein Passwort?</string>
+  <string name="SYS_NO_LOGIN_DATA">Sie haben noch keinen Anmeldenamen und kein Passwort?</string>
   <string name="SYS_NO_MATCHING_ENTRIES">Keine passenden Einträge gefunden.</string>
   <string name="SYS_NO_MORE_COLUMN">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</string>
   <string name="SYS_NO_NEW_REGISTRATIONS">Es sind keine Registrierungen vorhanden.</string>
@@ -1174,6 +1210,7 @@
   <string name="SYS_NO_VALID_RECIPIENTS">Die ausgewählten Rollen und Personen besitzen keine gültigen E-Mail-Adressen. Aus diesem Grund kann die E-Mail nicht versendet werden.</string>
   <string name="SYS_NOBODY">Niemand</string>
   <string name="SYS_NONE">Keine</string>
+  <string name="SYS_NORMAL">Normal</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
   <string name="SYS_NOT_INSTALLED">Nicht installiert</string>
@@ -1222,10 +1259,11 @@
   <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
   <string name="SYS_ORDER">Reihenfolge</string>
+  <string name="SYS_ORDERED_LIST">Nummerierte Liste</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organisationszugehörigkeit</string>
   <string name="SYS_ORGANIZATION_DESC">Name und Kontaktangaben der aktuellen Organisation sowie die Möglichkeit, Unterorganisationen zu erstellen und anzuzeigen.</string>
-  <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio darf Anfragen nur an öffentliche HTTPS-Adressen senden. Diese URL kann nicht verwenden Siet werden.</string>
+  <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio darf Anfragen nur an öffentliche HTTPS-Adressen senden. Diese URL kann nicht verwendet werden.</string>
   <string name="SYS_OVERHANG">Überhang</string>
   <string name="SYS_OVERVIEW">Übersicht</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Übersicht Erweiterungen</string>
@@ -1304,7 +1342,7 @@
   <string name="SYS_PLUGIN_ENABLE">Plugin aktivieren</string>
   <string name="SYS_PLUGIN_ENABLED">Das Plugin wurde erfolgreich aktiviert.</string>
   <string name="SYS_PLUGIN_ID_CONFLICT">Der Plugin-Ordner #VAR1# kann nicht verwendet werden: Ein anderer Plugin-Ordner hat einen Namen, der sich nur in Groß-/Kleinschreibung, Bindestrichen oder Unterstrichen unterscheidet, und beide würden sich ihre Einstellungen teilen. Entfernen Sie einen der beiden Ordner oder benennen Sie ihn um.</string>
-  <string name="SYS_PLUGIN_INCOMPATIBLE">Dieses Plugin kann nicht verwenden Siet werden: #VAR1#</string>
+  <string name="SYS_PLUGIN_INCOMPATIBLE">Dieses Plugin kann nicht verwendet werden: #VAR1#</string>
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE">Aus einer Datei installieren</string>
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE_DESC">Wählen Sie die ZIP-Datei eines Plugins aus. Admidio prüft die Datei, bevor Inhalte entpackt werden. Das Plugin wird nur hinzugefügt und nicht aktiviert. Aktivieren Sie es anschließend in der Plugin-Verwaltung.</string>
   <string name="SYS_PLUGIN_INVALID_ID">Der Plugin-Ordner #VAR1# ist kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</string>
@@ -1317,7 +1355,7 @@
   <string name="SYS_PLUGIN_MODULE_PAGES_DESC">Einige Plugins bringen eigene Seiten mit. Eine solche Seite kann immer über eine Adresse wie plugins/calendar/list.php aufgerufen werden.\n\nIst diese Option aktiviert, kann dieselbe Seite zusätzlich über die kürzere Adresse modules/calendar/list.php aufgerufen werden und erscheint damit wie ein normales Admidio-Modul. Dazu erstellt Admidio kleine Dateien im eigenen Modulordner und löscht sie wieder, wenn Sie die Option deaktivieren.\n\nLassen Sie die Option deaktiviert, wenn Admidio niemals in seinen Programmordner schreiben soll, zum Beispiel weil Sie die Installation mit Git verwalten oder in einem Container betreiben. Alle Funktionen bleiben erhalten, die Seiten behalten lediglich ihre längere Adresse.</string>
   <string name="SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE">Admidio darf nicht in den eigenen Modulordner schreiben. Daher kann diese Option nicht aktiviert werden. Plugin-Seiten behalten ihre längere Adresse; alle anderen Funktionen bleiben erhalten.</string>
   <string name="SYS_PLUGIN_NOT_FOUND">Das Plugin wurde nicht gefunden.</string>
-  <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin ist nicht installiert.</string>
+  <string name="SYS_PLUGIN_NOT_INSTALLED">Das Plugin #VAR1# ist nicht installiert.</string>
   <string name="SYS_PLUGIN_NO_MANIFEST">Dieses Plugin ist nicht mit dem Plugin-System von Admidio ab Version 6.0 kompatibel: Das Manifest #VAR1# fehlt.</string>
   <string name="SYS_PLUGIN_ORPHANED">Plugins mit fehlenden Dateien</string>
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">Die plugin.json dieses Plugins kann nicht gelesen werden: #VAR1#</string>
@@ -1473,6 +1511,7 @@
   <string name="SYS_REMOVE_CONTACT_SELECTION">Kontaktauswahl löschen</string>
   <string name="SYS_REMOVE_CONTACT_SELECTION_DESC">Wenn Sie #VAR1_BOLD# wählen, werden alle Daten der ausgewählten Kontakte gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Wollen Sie die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
+  <string name="SYS_REMOVE_FORMATTING">Formatierung entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
@@ -1482,6 +1521,7 @@
   <string name="SYS_REQUEST_FAILED">Die Anfrage konnte nicht abgeschlossen werden. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
   <string name="SYS_REQUIRED_INPUT">Erforderliche Eingabe</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Sie sind bereits im System angemeldet. Das Anfordern eines neuen Passworts ist nicht notwendig.</string>
+  <string name="SYS_RESIZE_IMAGE">Bildgröße ändern</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Das Bild konnte nicht verarbeitet werden, weil die Auflösung größer als #VAR1# Megapixel ist.</string>
   <string name="SYS_RESTORE_ENTRY">Eintrag wiederherstellen</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Mitgliederlisten aller Rollen und alle Mitgliederprofile einsehen</string>
@@ -1602,7 +1642,7 @@
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_METHOD">Versandmethode</string>
   <string name="SYS_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Voreinstellung: PHP mail())</string>
-  <string name="SYS_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Anmeldenamen und einem neuen Passwort mailen?</string>
+  <string name="SYS_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Anmeldenamen und einem neuen Passwort senden?</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Foto als Grußkarte versenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre private Nachricht wird an die ausgewählte Person gesendet.</string>
@@ -1613,7 +1653,7 @@
   <string name="SYS_SENDER_EMAIL_ADDRESS_DESC">Absender-E-Mail-Adresse für das Versenden von Systembenachrichtigungen und E-Mails an Rollen und Personen. Die E-Mail-Adresse sollte die Domain der Webseite enthalten, auf der Admidio installiert ist.</string>
   <string name="SYS_SENDER_MODE_DESC">Geben Sie an, wie der Absender einer E-Mail überprüft wird. Viele Anbieter erlauben es dem Absender einer E-Mail nicht, eine E-Mail-Adresse aus einer anderen Domain zu verwenden. In diesem Fall sollte eine der beiden Optionen mit der System-E-Mail ausgewählt werden. Die entsprechende E-Mail-Adresse und der Name können in den folgenden beiden Einstellungen gespeichert werden. (Standard: #VAR1#) </string>
   <string name="SYS_SENDER_NAME">Absendername</string>
-  <string name="SYS_SENDER_NAME_DESC">Name der E-Mail-Adresse des Absenders. Dieses Feld muss gepflegt werden, wenn das Feld für die E-Mail-Adresse des Absenders nicht leer ist.</string>
+  <string name="SYS_SENDER_NAME_DESC">Name, der beim Versand von E-Mails als Absender angezeigt wird. Dieses Feld muss ausgefüllt werden, wenn eine Absender-E-Mail-Adresse angegeben ist.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
   <string name="SYS_SERVER_NO_UPLOAD">Die Servereinstellungen lassen leider keine Dateiuploads zu.</string>
@@ -1660,10 +1700,11 @@
   <string name="SYS_SINCE_TO">von #VAR1# bis #VAR2#</string>
   <string name="SYS_SINCE_VAR">seit #VAR1#</string>
   <string name="SYS_SIZE">Größe</string>
+  <string name="SYS_SMALL">Klein</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP-Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
-  <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden.  (Voreinstellung: Ja)</string>
+  <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden. (Voreinstellung: ja)</string>
   <string name="SYS_SMTP_AUTH_LOGIN">Login</string>
   <string name="SYS_SMTP_AUTH_PLAIN">Plain</string>
   <string name="SYS_SMTP_AUTH_TYPE">SMTP-Authentifizierungstyp </string>
@@ -1787,7 +1828,7 @@
   <string name="SYS_SSO_OIDC_ATTRIBUTES">Claims in benutzerdefinierten Bereichen und Feldüberschreibungen</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES_DESC">Wählen Sie Profilfelder aus, die im Scope „custom“ enthalten sein sollen. Zusätzlich können Standard-Claims überschrieben werden, zum Beispiel indem ein Profilfeld auf phone_number oder name abgebildet wird.</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Gültigkeit des Autorisierungscodes</string>
-  <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Gültigkeitsdauer eines Autorisierungscodes in Sekunden. Codes können nur einmal verwenden Siet werden. Standard: 600.</string>
+  <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Gültigkeitsdauer eines Autorisierungscodes in Sekunden. Codes können nur einmal verwendet werden. Standard: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentifizierungs-Endpunkt</string>
   <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">#VAR1# autorisieren</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Sitzungskennung (sid) für Back-Channel-Abmeldung verlangen</string>
@@ -1893,7 +1934,7 @@
   <string name="SYS_SSO_USERDATA_ACCESS">Benutzerdaten und Zugangsberechtigungen</string>
   <string name="SYS_SSO_USERID_FIELD">Benutzer-ID-Feld</string>
   <string name="SYS_SSO_USERID_FIELD_DESC">Admidio-Feld, mit dem ein Konto gegenüber dieser Anwendung identifiziert wird. OpenID Connect verlangt eine Kennung, die eindeutig ist und nie an eine andere Person vergeben wird. Daher sind nur die Benutzer-UUID und die numerische Benutzer-ID möglich. Verwenden Sie die Benutzer-UUID, sofern die Anwendung nicht die numerische ID benötigt.</string>
-  <string name="SYS_SSO_USERID_FIELD_INVALID">#VAR1# kann nicht als Benutzerkennung verwenden Siet werden. OpenID Connect benötigt eine eindeutige Kennung, die niemals einer anderen Person zugewiesen wird.</string>
+  <string name="SYS_SSO_USERID_FIELD_INVALID">#VAR1# kann nicht als Benutzerkennung verwendet werden. OpenID Connect benötigt eine eindeutige Kennung, die niemals einer anderen Person zugewiesen wird.</string>
   <string name="SYS_SSO_USERID_FIELD_UNSUPPORTED">nicht mehr unterstützt</string>
   <string name="SYS_SSO_USERID_FIELDS">Benutzer-ID-Felder</string>
   <string name="SYS_SSO_USERID_ID">Benutzer-ID (numerisch)</string>
@@ -1969,6 +2010,7 @@
   <string name="SYS_TOTAL">Summe</string>
   <string name="SYS_TUESDAY">Dienstag</string>
   <string name="SYS_TYPE">Typ</string>
+  <string name="SYS_UNDERLINE">Unterstrichen</string>
   <string name="SYS_UNIDIRECTIONAL">unidirektional</string>
   <string name="SYS_UNIQUE_ID">Eindeutige Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
@@ -1988,7 +2030,7 @@
   <string name="SYS_USER_DELETE_DESC">Wollen Sie #VAR1_BOLD# wirklich löschen?\n\nDie Person wird damit vollständig aus der Datenbank gelöscht und ein Zugriff auf ihre Daten ist nicht mehr möglich.</string>
   <string name="SYS_USER_EMAIL">E-Mail-Adresse der angemeldeten Person</string>
   <string name="SYS_USER_ID_NOT_FOUND">Zu der übergebenen ID wurde kein Konto gefunden!</string>
-  <string name="SYS_USER_NO_EMAIL">#VAR1_BOLD# hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</string>
+  <string name="SYS_USER_NO_EMAIL">Im Profil von #VAR1_BOLD# ist keine gültige E-Mail-Adresse hinterlegt.</string>
   <string name="SYS_USER_NO_MEMBERSHIP">Diese Person ist noch kein Mitglied der Organisation #VAR1#.</string>
   <string name="SYS_USER_NO_MEMBERSHIP_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1#, besitzt aber bereits Zugangsdaten. Möchten Sie die neuen Zugangsdaten sowie die entsprechenden Rollen dieser Person zuordnen?</string>
   <string name="SYS_USER_NO_MEMBERSHIP_NO_LOGIN">Die gefundene Person ist noch kein Mitglied der Organisation #VAR1# und hat auch noch keine Zugangsdaten. Möchten Sie die Zugangsdaten sowie die entsprechenden Rollen dieser Person zuordnen?</string>
@@ -2019,6 +2061,9 @@
   <string name="SYS_VENUE_LINK">Wenn genügend Informationen (Stadt, Straße, Treffpunkt) über den Veranstaltungsort eingegeben werden, kann ein Link oder eine Route über Google Maps erstellt werden.</string>
   <string name="SYS_VERSION">Version</string>
   <string name="SYS_VERSION_TO_OLD">Ihre aktuelle Datenbankversion ist #VAR1#. Mit dieser Version ist ein Update auf #VAR2# leider nicht möglich.\n\nBitte installieren Sie zuerst Admidio 4.1 und führen Sie anschließend ein Update auf Admidio #VAR2# durch.</string>
+  <string name="SYS_VERY_LARGE">Sehr groß</string>
+  <string name="SYS_VIDEO_URL">YouTube- oder Vimeo-URL</string>
+  <string name="SYS_VIDEO_URL_INVALID">Bitte geben Sie eine gültige YouTube- oder Vimeo-URL ein.</string>
   <string name="SYS_VIEW">Ansicht</string>
   <string name="SYS_VIEW_PICTURE_FULL_SIZED">Bild in voller Größe anzeigen</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Profile der Rollenmitglieder einsehen</string>
