@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">ПТ</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">ПН</string>
   <string name="PLG_CALENDAR_MONTH">Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь</string>
-  <string name="PLG_CALENDAR_MORE">(... больше)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Плагин показывает на странице обзора календарь всех событий текущего месяца.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Календарь</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Роли для дней рождения</string>

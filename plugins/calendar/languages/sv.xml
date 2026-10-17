@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Fre</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Mån</string>
   <string name="PLG_CALENDAR_MONTH">Januari,Februari,Mars,April,Maj,Juni,Juli,Augusti,September,Oktober,November,December</string>
-  <string name="PLG_CALENDAR_MORE">(... mer)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Detta tillägg visar en kalender med alla händelser under aktuell månad på översiktssidan.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roller för födelsedagar</string>

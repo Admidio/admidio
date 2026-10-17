@@ -4,7 +4,6 @@
     <string name="PLG_CALENDAR_FRIDAY_SHORT">Fr</string>
     <string name="PLG_CALENDAR_MONDAY_SHORT">Mo</string>
     <string name="PLG_CALENDAR_MONTH">Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember</string>
-    <string name="PLG_CALENDAR_MORE">(... weitere)</string>
     <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Dieses Plugin zeigt auf der Übersichtsseite einen Kalender mit allen Terminen des aktuellen Monats an.</string>
     <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
     <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Berücksichtigte Rollen für Geburtstage</string>

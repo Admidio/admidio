@@ -1,13 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!-- Some strings use English reference texts pending translation. -->
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">返回留言板</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">部门的最新留言条目 #VAR1#</string>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ANOTHER_ORGANIZATION">添加其他部门</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Only an administrator can perform an update. Please enter the administrator credentials.</string>
   <string name="INS_BOARD">Association\'s board</string>
   <string name="INS_CONFERENCE_ROOM">Conference room</string>
@@ -49,7 +45,6 @@
   <string name="INS_LANGUAGE_NOT_CHOSEN">No language has been selected.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">The current installation could not be found. If you used Admidio 1.x, update to Admidio 2.x first. You can then update to version #VAR1#. If you are already using Admidio 2.x or later, please check the consistency of your database.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">提供的部门名称不完整!</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">部门 “#VAR1_BOLD#” 已经存在，请选择其他部门名称。</string>
   <string name="INS_PHONE_LIST">Phone list</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
@@ -241,7 +236,6 @@
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">这个部门的所有会员</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
-  <string name="SYS_ANNOUNCEMENT">公告</string>
   <string name="SYS_ANNOUNCEMENTS">公告</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">显示或编辑公告，新闻和其他信息</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
@@ -281,12 +275,7 @@
   <string name="SYS_AVAILABLE_BETA">Available beta version</string>
   <string name="SYS_A_TO_Z">A到Z</string>
   <string name="SYS_BACK">Back</string>
-  <string name="SYS_BACKUP_COMPLETED">已在 #VAR1# 中创建备份</string>
-  <string name="SYS_BACKUP_FILE">备份文件</string>
-  <string name="SYS_BACKUP_FROM">在 #VAR1# 上创建备份于 #VAR2#</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">备份模块只能与MySQL数据库结合使用。</string>
   <string name="SYS_BACK_TO_ALBUM">Back to album</string>
-  <string name="SYS_BACK_TO_BACKUP_PAGE">返回备份页面</string>
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
@@ -323,7 +312,6 @@
   <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">The category selection can be used to restrict a report to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Generates a listing of a member's role and category memberships.</string>
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
-  <string name="SYS_CATEGORY_VAR">#VAR1# - 类别</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">如果激活选项，此类别的配置文件字段将出现，并且可在以下部门的配置文件视图中进行编辑：#VAR1#.\n\n如果字段只应显示在您的部门中，请停用。</string>
   <string name="SYS_CAT_SELECTION">Category selection</string>
   <string name="SYS_CHANGED_AT">Last modified</string>
@@ -505,7 +493,6 @@
   <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">字段历史记录的默认时间段(天)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC"> 配置文件字段的更改将以指定的时间段（以天为单位）列出。这是过滤器的默认选项，用户以后可以更改。对于大型数据库，此选项用于限制更改历史列表。(默认值: 365)</string>
-  <string name="SYS_DAYS_VAR">#VAR1# 天</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate the role #VAR1_BOLD#, it can no longer be used or assigned to objects, and its permissions no longer apply. The role, its settings, and all member assignments are preserved so it can be reactivated later.</string>
   <string name="SYS_DEADLINE">Deadline</string>
@@ -710,10 +697,8 @@
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
   <string name="SYS_EXPORT">Export</string>
-  <string name="SYS_EXPORT_ICAL">导出(iCal)</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Users can export group and role lists they have permission to view. Use this setting to restrict who can export lists. (Default: all)</string>
-  <string name="SYS_EXPORT_TO">导出到</string>
   <string name="SYS_EXPORT_VCARD">Export vCard</string>
   <string name="SYS_EXTENSION">Extension</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
@@ -737,7 +722,6 @@
   <string name="SYS_FILES_UPLOAD_DESC">请选择要上传的文件夹 #VAR1_BOLD# 里的所有文件</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">并非所有文件都已成功上传。</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">所有的文件已成功上传。\n\n可关闭对话框。</string>
-  <string name="SYS_FILE_COLUMN">文件列</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
   <string name="SYS_FILE_EXIST">The file #VAR1# already exists.\n\nPlease choose a different file name.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">不被允许的文件类型。</string>
@@ -763,7 +747,6 @@
   <string name="SYS_FOLDER_NOT_EXISTS">文件夹不存在于服务器上，应该从数据库中删除。</string>
   <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) not found.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. The required folder permissions could not be set automatically. Please give the folder #VAR1_BOLD# write permissions (via FTP set the file attributes to 0777 or drwxrwxrwx).</string>
-  <string name="SYS_FOLDER_NO_FILES">文件夹内不包含任何文件。</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">所选文件夹不被允许显示。</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while renaming the folder #VAR1#.</string>
@@ -815,13 +798,10 @@
   <string name="SYS_HIGHLIGHT_EVENT">高亮显示日期</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_HOST">Host</string>
-  <string name="SYS_HOURS_VAR">#VAR1# 小时</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML email</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Allow registered users to create and send HTML emails. A JavaScript editor replaces the standard text field to make editing easier. This option is unavailable to guests for security reasons.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_HUSBAND">Husband</string>
-  <string name="SYS_ICAL_DAYS_FUTURE">未来的iCal天数</string>
-  <string name="SYS_ICAL_DAYS_PAST">过去的iCal天数</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icon</string>
   <string name="SYS_ICON_FONT_DESC">Choose an icon from \"Bootstrap Icons\" at #VAR1#https://icons.getbootstrap.com#VAR2# and enter its name in this field.</string>
@@ -1036,7 +1016,6 @@
   <string name="SYS_LINK_TARGET_DESC">Choose whether the linked website opens in the Admidio window or in a new window.</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
-  <string name="SYS_LOCATION_LINK">如果提供了足够多关于位置的信息(街道，城市，位置)，Google地图就能计算到达该位置的路线。</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Choose where to store profile pictures: in the database or in the adm_my_files folder. Changing this setting does not move existing pictures to the new location. (Default: database)</string>
   <string name="SYS_LOCKED">Locked</string>
@@ -1131,7 +1110,6 @@
   <string name="SYS_MESSAGES_DESC">View sent emails and private messages. Compose and send new messages to individual contacts or roles.</string>
   <string name="SYS_MESSAGE_WENT_TO">Message was sent to</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# 分钟</string>
   <string name="SYS_MOBILE">Mobile</string>
   <string name="SYS_MODAL_WINDOW">Modal window</string>
   <string name="SYS_MODULES">Modules</string>
@@ -1200,8 +1178,6 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as the condition for the field #VAR1_BOLD#.</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">找不到备份文件！</string>
-  <string name="SYS_NO_CHANGES_LOGGED">没有记录被更改。</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_DEFAULT_ROLE">You cannot remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">The role management contains no default role for new users. Please contact an administrator who can edit this setting.</string>
@@ -1445,7 +1421,6 @@
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">部门最新公告 #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail 收件人</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
@@ -1505,7 +1480,6 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">您要移除这个项目吗？所有参与者将被删除。</string>
   <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
-  <string name="SYS_REMOVE_USER">删除用户</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPEATS">Repeats</string>
   <string name="SYS_REPLACE">替换</string>
@@ -1606,7 +1580,6 @@
   <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Finds all users for whom the checkbox is selected</string>
   <string name="SYS_SEATING">Seating</string>
   <string name="SYS_SEAT_AMOUNT">Additional seats</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# 秒</string>
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_CODE">Authentication code</string>
@@ -1937,7 +1910,6 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START">Start</string>
-  <string name="SYS_START_BACKUP">开始备份</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">#VAR1# characters remaining</string>
   <string name="SYS_STREET">Street</string>
@@ -2018,22 +1990,17 @@
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">未经确认的</string>
-  <string name="SYS_UNLIMITED">无限</string>
-  <string name="SYS_UNLOCK">被释放</string>
   <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNMANAGED_FILES">非托管文件</string>
-  <string name="SYS_UPDATE">更新</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_UPLOAD_FILES">上传文件</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">最大文件上传大小</string>
-  <string name="SYS_UPLOAD_NAME_ERROR">文件名不能命名为\"Submit\"。</string>
   <string name="SYS_UPLOAD_PHOTOS">Upload photos</string>
   <string name="SYS_UPLOAD_PROFILE_PICTURE">Upload profile picture</string>
   <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
-  <string name="SYS_USER">用户</string>
   <string name="SYS_USERNAME">用户名</string>
   <string name="SYS_USERNAME_DESCRIPTION">You can log in to the system with this name.\nThe name must be unique in the system. If your desired name is already taken, try combinations such as Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">用户名或电子邮件</string>
@@ -2081,7 +2048,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">For other organizations, only roles visible to all registered users are displayed. If you are a member of the organization, you can also see roles that your permissions in that organization allow you to view.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">View role memberships</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Choose who can view the members of this role. Users can see role memberships in member profiles and role lists. This setting does not grant access to member profiles. Lists display only first and last names. The #VAR1_BOLD# role permission overrides this setting.</string>
-  <string name="SYS_VISIBILITY">可见度</string>
   <string name="SYS_VISIBLE">可见</string>
   <string name="SYS_VISIBLE_FOR">Visible to</string>
   <string name="SYS_VISITORS"> 访客</string>
@@ -2089,7 +2055,6 @@
   <string name="SYS_WANT_DELETE_ENTRY">Do you want to delete the entry #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt will be downloaded and installed without being enabled. You can enable it in the plugin manager afterward.</string>
-  <string name="SYS_WANT_REGISTER">我想要注册！</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoval affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
@@ -2103,7 +2068,6 @@
   <string name="SYS_WEEKDAY">Weekday</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
   <string name="SYS_WEEKLY">Weekly</string>
-  <string name="SYS_WHAT_TO_DO">该怎么办？</string>
   <string name="SYS_WIDTH">宽度</string>
   <string name="SYS_WIFE">Wife</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>

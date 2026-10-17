@@ -99,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">கோட்டின் நிறம்</string>
   <string name="ORG_CAPTCHA_PREVIEW">கேப்ட்சா முன்னோட்டம்</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">கேப்சா முன்னோட்டம் ஏற்கனவே சேமிக்கப்பட்ட விருப்பங்களை மட்டுமே கருத்தில் கொள்கிறது.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">செயல்படுத்தப்பட்ட பிறகு, புதிய பயனர்களுக்கு கேப்ட்சா குறியீட்டைக் கொண்ட ஒரு படம் அல்லது ஒரு எளிய கணக்கீடு காட்டப்படும். தற்போது திருத்தப்படும் உள்ளீட்டைச் சேமிக்க, சரியான குறியீடு அல்லது முடிவை உள்ளிடுவது அவசியம். இந்த கேப்ட்சா, அட்மிடியோவில் உள்ள ஸ்பேம் தடுப்புத் தீர்வின் ஒரு பகுதியாகும். (இயல்புநிலை: ஆம்)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">கேப்ட்சா துணைத்தலைப்பு</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">கேப்ட்சாவிற்கான நீங்கள் விரும்பும் துணைத் தலைப்பை உள்ளிடவும். தற்போதைய தீமின் இயல்புநிலை எழுத்துரு வகை பயன்படுத்தப்படும்</string>
   <string name="ORG_CAPTCHA_SIGNS">செல்லுபடியாகும் எழுத்துக்கள்</string>
@@ -137,8 +136,6 @@
   <string name="ORG_FIELD_URL_DESC">உள்ளிடப்பட்ட URL பின்னர் சுயவிவரத்தில் பயனர் இந்த புலத்தில் உள்ளிட்ட உள்ளடக்கத்துடன் இணைக்கப்படுகிறது. விருப்பப்படி, #user_content# என்ற வைல்டு கார்டையும் URL-இல் வரையறுக்கலாம். இது பயனர் அந்தப் புலத்தில் உள்ளிட்ட உள்ளடக்கமாகும்.\n\nஉதாரணம்:\nURL: https://www.google.de/search?q=#user_content#\nபுலத்தின் மதிப்பு: Admidio\nசுயவிவரத்தில் உள்ள இணைப்பு: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">ஒரு பயனர் உள்நுழைந்ததும் இந்தப் பக்கம் தோன்றும். பாதையானது அட்மிடியோ பிரதான கோப்புறையிலிருந்து ஒரு சார்புப் பாதையாக வழங்கப்பட வேண்டும்.\n(உதாரணமாக: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">இந்தப் பக்கம் விருந்தினர்களுக்கான அட்மிடியோவின் இயல்புநிலை பக்கமாகும். பாதையானது அட்மிடியோவின் பிரதான கோப்புறையிலிருந்து ஒரு சார்புப் பாதையாக வழங்கப்பட வேண்டும்.\n(உதாரணமாக: modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">சரியான வடிவமைப்பு கண்டறியப்படவில்லை.</string>
-  <string name="ORG_INVALID_THEME_FALLBACK">தேர்ந்தெடுக்கப்பட்ட மாற்று வடிவமைப்பு செல்லுபடியாகாது.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">ஜாவாஸ்கிரிப்ட் எடிட்டரைப் பயன்படுத்துதல்</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">முழு அம்சங்களைக் கொண்ட JavaScript உரைத்திருத்தி அறிவிப்புகள், நிகழ்வுகள் மற்றும் பிற உள்ளடக்கங்களுக்கான விளக்கங்களை உள்ளிடுவதை எளிதாக்குகிறது. உரைத்திருத்தி முடக்கப்பட்டிருந்தால், எளிய பலவரி உரைப்புலம் காட்டப்படும்.</string>
   <string name="ORG_LAST_UPDATE_STEP">புதுப்பித்தலின் கடைசி படி</string>
@@ -198,7 +195,6 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">கூடுதல் பாணி வரையறைகளைக் கொண்ட ஒரு .css கோப்பிற்கான பாதை. இந்தக் கோப்பு, தீமின் admidio.css கோப்பிற்குப் பிறகும், கடைசியாக ஏற்றப்படும். (இயல்புநிலை: காலியாக உள்ளது)</string>
   <string name="SYS_ADDITIONAL_FILES">இந்த பட்டியல், தரவுத்தளத்தில் இன்னும் இறக்குமதி செய்யப்படாத கோப்புகள் மற்றும் கோப்புறைகளின் ஒரு மேலோட்டமான பார்வையை வழங்குவதை நோக்கமாகக் கொண்டுள்ளது. அவற்றை தரவுத்தளத்தில் சேர்க்கலாம். தேர்ந்தெடுக்கப்பட்ட கோப்புறையிலிருந்து அணுகல் உரிமைகள் நகலெடுக்கப்படும்.</string>
   <string name="SYS_ADDRESS">முகவரி</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">மேலும் உள்ளமைவைச் சேர்க்கவும்</string>
   <string name="SYS_ADD_ATTACHMENT">இணைப்பை இணைக்கவும்</string>
   <string name="SYS_ADD_COLUMN">நெடுவரிசையைச் சேர்</string>
   <string name="SYS_ADD_COLUMNS_DESC">கீழே உள்ள அட்டவணையில் உள்ள சுயவிவரப் புலங்களுக்கு ஏற்ப எத்தனை வேண்டுமானாலும் நெடுவரிசைகளை ஒதுக்கலாம். மேலும், நீங்கள் இயல்புநிலை வரிசைப்படுத்தலைக் குறிப்பிடலாம் மற்றும் தொடர்புடைய உறுப்பினர்களை வடிகட்ட வேண்டிய நிபந்தனைகளையும் சேர்க்கலாம்.</string>
@@ -242,7 +238,6 @@
   <string name="SYS_ALL_OTHERS">மற்ற அனைவரும்</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">இந்த அமைப்பின் அனைத்து உறுப்பினர்களும்</string>
   <string name="SYS_ALSO_VISITORS">மேலும் பார்வையாளர்கள்</string>
-  <string name="SYS_ANNOUNCEMENT">அறிவிப்பு</string>
   <string name="SYS_ANNOUNCEMENTS">அறிவிப்புகள்</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">அறிவிப்புகள், செய்திகள் மற்றும் பிற தகவல்களைக் காண்பிக்கவும் அல்லது திருத்தவும்.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">#VAR1# இல் ஒரு அறிவிப்பு மாற்றப்பட்டது.</string>
@@ -321,7 +316,6 @@
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">இந்த விருப்பம் செயல்படுத்தப்பட்டால், இந்தக் வகையின் சுயவிவரப் புலங்கள் பின்வரும் நிறுவனங்களின் சுயவிவரக் காட்சியில் தோன்றும் மற்றும் திருத்தப்படலாம்: #VAR1#\n\nபுலங்கள் உங்கள் நிறுவனத்தில் மட்டுமே காட்டப்பட வேண்டும் என்றால், தயவுசெய்து இதைச் செயலிழக்கச் செய்யவும்.</string>
   <string name="SYS_CAT_SELECTION">வகை தேர்வு</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">வகைத் தேர்வுப் பகுதியானது, ஒரு உள்ளமைவை தேர்ந்தெடுக்கப்பட்ட வகைகளின் உறுப்பினர்களுக்கு மட்டும் கட்டுப்படுத்தப் பயன்படுகிறது. எந்தக் கட்டுப்பாடும் தேவையில்லை என்றால், இரண்டு புலங்களையும் (பங்குத் தேர்வு மற்றும் வகை தேர்வு) காலியாக விட வேண்டும்.</string>
   <string name="SYS_CHANGED_AT">கடைசியாக மாற்றியது</string>
   <string name="SYS_CHANGED_BY">மாற்றப்பட்டது</string>
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profile and role settings</string>
@@ -347,8 +341,6 @@
   <string name="SYS_CHANGE_HISTORY_USERDATA">பயனர் தரவு மற்றும் உறுப்பினர் பதிவுகளின் மாற்ற வரலாறு</string>
   <string name="SYS_CHANGE_PASSWORD">கடவுச்சொல்லை மாற்றவும்</string>
   <string name="SYS_CHARACTERS">பாத்திரங்கள்</string>
-  <string name="SYS_CHARACTER_ENCODING">எழுத்து குறியாக்கம்</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">அட்மிடியோவால் அனுப்பப்படும் மின்னஞ்சல்களில் பயன்படுத்தப்படும் எழுத்துக் குறியாக்கம். எல்லா மின்னஞ்சல் கிளையண்டுகளாலும் UTF-8-ஐச் செயல்படுத்த முடியாது. எனவே, அதற்குப் பதிலாக இங்கு ISO-8859-1-ஐ அமைக்கலாம்.</string>
   <string name="SYS_CHECKBOX">தேர்வுப்பெட்டி</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">குறித்த பிறகு தேர்வுப்பெட்டி நிலை தானாகவே சேமிக்கப்படும்.</string>
   <string name="SYS_CHECK_FOR_UPDATE">புதுப்பிப்பிற்காகச் சரிபார்க்கவும்</string>
@@ -401,8 +393,6 @@
   <string name="SYS_COMPLEMENT">நிரப்பு</string>
   <string name="SYS_CONDITION">நிபந்தனை</string>
   <string name="SYS_CONFIGURATION">கட்டமைப்பு</string>
-  <string name="SYS_CONFIGURATIONS">கட்டமைப்புகள்</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">வகை அறிக்கைக்காக இங்கு எத்தனை வேண்டுமானாலும் உள்ளமைப்புகளை உருவாக்கலாம். திரைக் காட்சியில், 'உள்ளமைப்பைத் தேர்ந்தெடு' என்பதன் மூலம் இந்த உள்ளமைப்புகளில் ஒன்று ஒவ்வொரு சந்தர்ப்பத்திலும் காட்சிப்படுத்துவதற்கான அடிப்படையாகப் பயன்படுத்தப்படுகிறது.</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">அனைத்து உறுப்பினர்களுக்கும் உள்ளமைவைப் பயன்படுத்த அனுமதி.</string>
   <string name="SYS_CONFIGURATION_DELETE">தேர்ந்தெடுக்கப்பட்ட பட்டியல் உள்ளமைவை நீக்க விரும்புகிறீர்களா?</string>
   <string name="SYS_CONFIGURATION_LIST">பட்டியல் கட்டமைப்பு</string>
@@ -432,7 +422,6 @@
   <string name="SYS_COPIED_CLIPBOARD">கிளிப்போர்டில் நகலெடுக்கப்பட்டது...</string>
   <string name="SYS_COPY">நகலெடு</string>
   <string name="SYS_COPY_CLIPBOARD">கிளிப்போர்டுக்கு நகலெடுக்கவும்</string>
-  <string name="SYS_COPY_CONFIGURATION">உள்ளமைவை நகலெடுக்கவும்</string>
   <string name="SYS_COPY_ENTRY">உள்ளீட்டை நகலெடுக்கவும்</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">நீங்கள் கோரிய செய்தியின் நகல்</string>
@@ -517,7 +506,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">ஒரு புதிய பயனர் உருவாக்கப்பட்டாலோ அல்லது ஒரு புதிய பதிவு ஏற்றுக்கொள்ளப்பட்டாலோ, இந்த பாத்திரம் தானாகவே புதிய பயனருக்கு ஒதுக்கப்படும். உருவாக்குபவருக்கு பாத்திரங்களை ஒதுக்கும் உரிமை இருக்கும்போது, ​​அனைத்து பாத்திர வரைபடங்களும் காட்டப்படும், மேலும் அதற்கேற்ப மாற்றியமைக்கப்படலாம்.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">இயல்புநிலை கட்டமைப்பு</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">இங்கு கொடுக்கப்பட்டுள்ள கட்டமைப்புகளில் ஒன்றை இந்த அமைப்பின் வகை அறிக்கைக்கான இயல்புநிலை கட்டமைப்பாக மாற்றலாம். தேர்ந்தெடுக்கப்பட்ட கட்டமைப்பு, அறிக்கை அழைக்கப்படும்போது நேரடியாகக் காட்டப்படும்.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">இங்கு குறிப்பிடப்பட்டுள்ள கட்டமைப்புகளில் ஒன்றை இந்த அமைப்பின் பட்டியல்களுக்கான இயல்புநிலை கட்டமைப்பாக மாற்றலாம். பட்டியல் கட்டமைப்பு சேமிக்கப்படாத பாத்திரங்களின் உறுப்பினர் பட்டியல்கள் இந்தக் கட்டமைப்புடன் காட்டப்படும்.</string>
   <string name="SYS_DEFAULT_COUNTRY">இயல்புநிலை நாடு</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">இந்த அமைப்பு முக்கியமாக இயங்கும் ஒரு நாட்டை வரையறுக்கவும். புதிய பயனர்கள் உருவாக்கப்படும்போது அல்லது பதிவு செய்யப்படும்போது இது முன்பே தேர்ந்தெடுக்கப்பட்டிருக்கும். இது தரவு உள்ளீட்டை எளிதாக்குகிறது மற்றும் பயனரால் மாற்றப்படலாம்.</string>
@@ -601,7 +589,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">உங்கள் வாழ்த்து அட்டை அனுப்பப்படவில்லை!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">உங்கள் வாழ்த்து அட்டை அனுப்பப்பட்டது.</string>
   <string name="SYS_EDIT">திருத்து</string>
-  <string name="SYS_EDITED_BY">கடைசியாகத் திருத்தியவர்</string>
   <string name="SYS_EDIT_ALBUM">ஆல்பத்தைத் திருத்து</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">அறிவிப்புகளைத் திருத்து</string>
   <string name="SYS_EDIT_CALENDAR">நாட்காட்டியைத் திருத்து</string>
@@ -808,7 +795,6 @@
   <string name="SYS_HEADER_CONTENT_MODULES">உள்ளடக்க தொகுதிகள் (ஆவணங்கள், நிகழ்வுகள், அறிவிப்புகள் போன்றவை)</string>
   <string name="SYS_HEADER_PREFERENCES">பொது விருப்பத்தேர்வுகள்</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">பயனர் சுயவிவரத் தரவு மற்றும் பாத்திரங்கள்</string>
-  <string name="SYS_HEADER_USER_ROLE_SETTINGS">பயனர்கள் மற்றும் குழுக்கள்/பாத்திரங்களுக்கான அமைப்புகள்</string>
   <string name="SYS_HEADLINE">தலைப்பு</string>
   <string name="SYS_HIDDEN">மறைக்கப்பட்டது</string>
   <string name="SYS_HIGHLIGHT_EVENT">முக்கிய நிகழ்வு</string>
@@ -1040,8 +1026,6 @@
   <string name="SYS_LOG">பதிவு</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
-  <string name="SYS_LOGGED_TABLES">பதிவு செய்யப்பட்ட அட்டவணைகள்</string>
-  <string name="SYS_LOGGED_TABLES_DESC">மாற்றப் பதிவிற்கான அனைத்து வகையான பொருட்களையும் தேர்ந்தெடுக்கவும். அந்தப் பொருட்களுக்கு, அனைத்து தனிப்பட்ட மாற்றங்களும் பழைய மற்றும் புதிய மதிப்புடன், அத்துடன் மாற்றியமைக்கப்பட்ட நேரம் மற்றும் பயனருடன் மாற்ற வரலாற்றில் பதிவு செய்யப்படும். ஒரு பொருள் வகை தேர்ந்தெடுக்கப்படாவிட்டால், ஏற்கனவே உள்ள பதிவு உள்ளீடுகள் நீக்கப்படாது. இதை மாற்றப் பதிவுப் பக்கத்தில் செய்யலாம்.</string>
   <string name="SYS_LOGIN">உள்நுழை</string>
   <string name="SYS_LOGIN_CANCEL">Cancel</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">சமீபத்தில் தவறான கடவுச்சொல்லைப் பயன்படுத்தி நீங்கள் பலமுறை உள்நுழைய முயன்றுள்ளீர்கள்.\nபாதுகாப்புக் காரணங்களுக்காக உங்கள் கணக்கு 15 நிமிடங்களுக்குப் பூட்டப்பட்டுள்ளது.</string>
@@ -1061,9 +1045,6 @@
   <string name="SYS_LOGO_FILE_DESC">மேல் இடது மூலையில் காட்டப்படும் லோகோ கோப்பின் பாதை. இந்த பாதை உங்கள் நிறுவலின் மூல அடைவுக்குச் சார்புடையதாக இருக்க வேண்டும். இது காலியாக விடப்பட்டால், தீமின் இயல்புநிலை லோகோ பயன்படுத்தப்படும். (இயல்புநிலை: காலி)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">அதிகபட்ச லோகோ உயரம்</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">தலைப்பில் லோகோவிற்குக் கிடைக்கும் அதிகபட்ச இடம் இந்த மதிப்புக்கு வரம்பிடப்பட்டுள்ளது. லோகோ குறிப்பிட்ட மதிப்பை விட உயரமாக இருந்தால், அது இந்த உயரத்திற்குச் சுருக்கப்படும். (இயல்புநிலை: 60 பிக்சல்கள்)</string>
-  <string name="SYS_LOG_ALLOW_DELETION">மாற்ற வரலாற்றை நீக்க அனுமதி</string>
-  <string name="SYS_LOG_ALLOW_DELETION_DESC">மாற்றப் பதிவுப் பக்கத்தில், மாற்றப் பதிவு வரலாற்றின் பகுதிகளை அல்லது முழுவதையும் நீக்குவதற்கான ஒரு பொத்தானை இயக்கவும்.</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">அவற்றை அணுகுவதற்குப் போதுமான பயனர் அனுமதிகள் இல்லாததால், சில அல்லது அனைத்து மாற்றப் பதிவு உள்ளீடுகளும் மறைக்கப்பட்டுள்ளன.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">புதிய கடவுச்சொல் #VAR1_BOLD# என்ற மின்னஞ்சல் முகவரிக்கு அனுப்பப்பட்டுள்ளது!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">புதிய கடவுச்சொல் #VAR1_BOLD# என்ற பயனருக்கு அனுப்பப்பட்டுள்ளது!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">#VAR1_BOLD# என்ற மின்னஞ்சல் முகவரி பல பதிவுகளுக்கு ஒதுக்கப்பட்டுள்ளது. ஒரு தனிப்பட்ட பயனர் பதிவைக் கண்டறிய முடியவில்லை.</string>
@@ -1402,7 +1383,6 @@
   <string name="SYS_PREVIOUS_VALUE">முந்தைய மதிப்பு</string>
   <string name="SYS_PRINT_PREVIEW">அச்சு முன்னோட்டம்</string>
   <string name="SYS_PRIVATE_MESSAGES">தனிப்பட்ட செய்திகள்</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">தனிப்பட்ட செய்தியை #VAR1_BOLD# என்பவருக்கு அனுப்ப முடியவில்லை.\n\nபின்வரும் பிழை ஏற்பட்டுள்ளது:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">தனிப்பட்ட செய்தி #VAR1_BOLD# என்பவருக்கு அனுப்பப்பட்டது.</string>
   <string name="SYS_PRNG">போலி-சீரற்ற எண் ஜெனரேட்டர்</string>
   <string name="SYS_PRNG_INSECURE">அட்மிடியோ/PHP-ஆல் பாதுகாப்பான போலி-சீரற்ற எண்களை உருவாக்க முடியவில்லை! பின்வரும் தகவல்களுடன் அட்மிடியோ குழுவைத் தொடர்பு கொள்ளவும்:</string>
@@ -1419,7 +1399,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">புகைப்படத்தில் நீங்கள் இருக்க வேண்டும். புகைப்படம் அதிகபட்சமாக #VAR1# மெகாபிக்சல் தெளிவுத்திறனைக் கொண்டிருக்கலாம். புகைப்படக் கோப்பு #VAR1# MB-க்கு மேல் இருக்கக்கூடாது மற்றும் அது JPG அல்லது PNG வடிவத்தில் இருக்க வேண்டும்.</string>
   <string name="SYS_PROPERTIES">பண்புகள்</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
@@ -1555,7 +1534,6 @@
   <string name="SYS_ROLE_PAST">Past role</string>
   <string name="SYS_ROLE_RIGHTS">பங்கு உரிமைகள்</string>
   <string name="SYS_ROLE_SELECTION">பங்குத் தேர்வு</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">பங்குத் தேர்வானது, தேர்ந்தெடுக்கப்பட்ட பங்குகளின் உறுப்பினர்களுக்கு ஒரு உள்ளமைவைக் கட்டுப்படுத்தப் பயன்படுத்தப்படலாம். எந்தக் கட்டுப்பாடும் தேவையில்லை என்றால், இரண்டு புலங்களும் (பங்குத் தேர்வு மற்றும் வகை தேர்வு) காலியாக விடப்பட வேண்டும்.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">#VAR1# என்ற பங்கைத் தேர்ந்தெடுக்க உங்களுக்கு அனுமதி இல்லை.\nதயவுசெய்து மற்றொரு பங்கைத் தேர்ந்தெடுக்கவும்.</string>
   <string name="SYS_ROLE_TYPES">பங்கு வகைகள்</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">தலைவர் இல்லாத பங்கு</string>
@@ -1668,7 +1646,6 @@
   <string name="SYS_SHOW_MAP_LINK">வரைபடத்திற்கான இணைப்பைக் காண்பி</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">இருப்பிடம் அமைக்கப்பட்டிருந்தால், கூகிள் மேப்ஸ் பயன்படுத்தி இருப்பிடமும் சொந்த இருப்பிடத்திலிருந்து செல்லும் வழியும் காட்டப்படும். (இயல்புநிலை: ஆம்)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">முகவரி சுயவிவரத்தில் சேமிக்கப்பட்டிருந்தால், முகவரிக்கு அருகில் கூகிள் மேப்ஸிற்கான இரண்டு இணைப்புகள் காட்டப்படும். பயனரின் வசிப்பிடத்திற்கு ஒரு இணைப்பும், அவரது சொந்த வசிப்பிடத்திலிருந்து காட்டப்படும் பயனரின் வசிப்பிடத்திற்கான வழித்தடத்திற்கு ஒரு இணைப்பும் வழங்கப்படும். இந்த இணைப்புகளை அணுகும்போது, ​​பின்வரும் சுயவிவரத் தகவல்கள் கூகிளுக்கு அனுப்பப்படும்: தெரு, அஞ்சல் குறியீடு, நகரம் மற்றும் நாடு. (இயல்புநிலை: இல்லை)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">உறுப்பினர் பட்டியலைக் காட்டு</string>
   <string name="SYS_SHOW_MORE">மேலும் காட்டு</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">காலாவதியான தேர்வு விருப்பங்களைக் காண்பி</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">இந்த அமைப்பு, சுயவிவரப் புல உள்ளமைவில் காலாவதியான தேர்வு விருப்பங்களைக் காண்பிக்க வேண்டுமா என்பதை நீங்கள் குறிப்பிட அனுமதிக்கிறது. இந்த அமைப்பு அமைக்கப்பட்டிருந்தால், காலாவதியான தேர்வு விருப்பங்களை மீட்டெடுக்க முடியும்.\nஇந்த விருப்பம் கீழிறங்கு பட்டியல் மற்றும் விருப்பப் புல வகைகளின் சுயவிவரப் புலங்களுக்கு மட்டுமே கிடைக்கும். (இயல்புநிலை: ஆம்)</string>
@@ -1688,7 +1665,6 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">ஒத்த தொடர்புகள் கண்டறியப்பட்டன</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">#VAR1_BOLD# என்ற பெயருடன் ஒத்த தொடர்புகள் கண்டறியப்பட்டன.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">#VAR1_BOLD# என்ற பெயருடனும் #VAR2_BOLD# என்ற மின்னஞ்சல் முகவரியுடனும் பதிவு செய்வதற்கு ஒத்த தொடர்புகள் கண்டறியப்பட்டன. பதிவைச் சரிபார்த்து, கண்டறியப்பட்ட ஒரு தொடர்புடன் அதை ஒதுக்கவும் அல்லது ஒரு புதிய தொடர்பை உருவாக்கவும்.</string>
-  <string name="SYS_SINCE">#VAR1# முதல்</string>
   <string name="SYS_SINCE_TO">#VAR1# முதல் #VAR2# வரை</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SISTER">சகோதரி</string>
@@ -1759,7 +1735,6 @@
   <string name="SYS_SSO_CLIENT_SCOPES_INVALID">The selected OIDC scopes are invalid: #VAR1#</string>
   <string name="SYS_SSO_CLIENT_SECRET">கிளையன்ட் சீக்ரெட்</string>
   <string name="SYS_SSO_CLIENT_SECRET_DESC">கிளையன்ட்டை அங்கீகரிப்பதற்கான (ரகசிய) கடவுச்சொல். பொதுவாக இது ஒரு முறை பரிமாறப்படும் ஒரு சீரற்ற சரம் ஆகும். உருவாக்கும்போது, ​​கிளையன்ட் சீக்ரெட் ஒரு முறை காட்டப்படும், அதை கிளையன்ட்டில் நகலெடுக்க வேண்டும். அதன் பிறகு அது தரவுத்தளத்தில் ஒரு ஹாஷ் செய்யப்பட்ட மதிப்பாக சேமிக்கப்படும், எனவே அதை மீட்டெடுப்பது சாத்தியமற்றது. ஒரு புதிய கிளையன்ட் சீக்ரெட்டை மீண்டும் உருவாக்கி, அதை கிளையன்ட்டின் உள்ளமைவில் நகலெடுக்க மட்டுமே முடியும்.</string>
-  <string name="SYS_SSO_CLIENT_SECRET_HIDDE">பாதுகாப்புக் காரணங்களுக்காக, கிளையன்ட் சீக்ரெட் உருவாக்கும்போது மட்டுமே காட்டப்படும்.</string>
   <string name="SYS_SSO_CLIENT_SECRET_HIDDEN">Not shown again after saving.</string>
   <string name="SYS_SSO_CLIENT_SECRET_RECREATE">மீண்டும் உருவாக்கு</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">OIDC கிளையன்ட்டை (சேவை வழங்குநர்) திருத்து</string>
@@ -1919,7 +1894,6 @@
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">பெறப்படும் அனைத்து கோரிக்கைகளிலும் கையொப்பங்கள் தேவை.</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">If a client supports signing and a certificate is entered in the client configuration, all requests must be signed. Clients without a certificate are not affected and do not require signatures.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Previously selected key — no longer usable</string>
-  <string name="SYS_SSO_SIGNATURE_ENCRYPTION">கையொப்பம் மற்றும் குறியாக்கம்</string>
   <string name="SYS_SSO_SIGNING_KEY">கையொப்பங்களுக்கான திறவுகோல்</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">கிளையண்டிற்கு (SP) அனுப்பப்பட்ட உறுதிப்படுத்தல்களில் கையொப்பமிடுங்கள்.</string>
   <string name="SYS_SSO_SLO_URL">ஒற்றை வெளியேறும் URL (விரும்பினால்)</string>
@@ -2076,7 +2050,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">பதிவுசெய்யப்பட்ட அனைத்து பயனர்களுக்கும் தெரியும் பிற நிறுவனங்களின் பாத்திரங்கள் மட்டுமே காட்டப்படும். நீங்கள் இந்த அமைப்பின் உறுப்பினராக இருந்தால், நிறுவனத்திற்குள் உங்கள் உரிமைகளுடன் நீங்கள் காணக்கூடிய பாத்திரங்களும் உங்களுக்குக் காண்பிக்கப்படும்.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">பங்கு உறுப்பினர்களைக் காண்க</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">இந்த அமைப்பைப் பயன்படுத்தி, இந்தப் பாத்திரத்தின் உறுப்பினர்களை யார் பார்க்கலாம் என்பதை நீங்கள் வரையறுக்கலாம். பயனர் அந்தந்த நபரின் சுயவிவரத்திலும், அந்தப் பாத்திரத்திற்கான பட்டியல்களிலும் பங்கு உறுப்பினர் நிலையைப் பார்க்கலாம். இந்த அமைப்பு பங்கு உறுப்பினர் சுயவிவரத்தை அணுக அனுமதிக்காது. பட்டியல்களில் பெயர் மற்றும் முதல் பெயர் மட்டுமே காட்டப்படும். பங்கு வலது #VAR1_BOLD# இந்த அமைப்பை மீறுகிறது.</string>
-  <string name="SYS_VISIBILITY">தெரிவுநிலை</string>
   <string name="SYS_VISIBLE">தெரியும்</string>
   <string name="SYS_VISIBLE_FOR">க்கு தெரியும்</string>
   <string name="SYS_VISITORS">விருந்தினர்கள்</string>

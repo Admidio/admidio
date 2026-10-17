@@ -98,7 +98,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Linienfarbe</string>
   <string name="ORG_CAPTCHA_PREVIEW">Captcha-Vorschau</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Die Captcha-Vorschau berücksichtigt nur die bereits gespeicherten Einstellungen.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Bei der Registrierung wird bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Der Code muss korrekt eingegeben oder die Aufgabe gelöst werden. Dies soll sicherstellen, dass das Formular nicht für Spam missbraucht werden kann. (Voreinstellung: ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha-Untertitel</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</string>
   <string name="ORG_CAPTCHA_SIGNS">Zulässige Zeichen</string>
@@ -136,8 +135,6 @@
   <string name="ORG_FIELD_URL_DESC">Die eingegebene URL verlinkt später den Inhalt dieses Profilfelds. Optional kann noch der Platzhalter #user_content# in die URL eingebaut werden. Dieser steht für den Inhalt des Felds.\n\nBeispiel:\nURL: https://www.google.de/search?q=#user_content#\nFeldinhalt: Admidio\nLink im Profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Auf diese Seite werden Personen nach der Anmeldung geleitet. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: modules/index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Diese Seite ist die Standard-Startseite von Admidio, auf die Gäste geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Es wurde kein gültiges Theme ausgewählt.</string>
-  <string name="ORG_INVALID_THEME_FALLBACK">Das gewählte Fallback-Theme ist nicht gültig.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Javascript-Editor benutzen</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Ein umfangreicher Javascript-Editor wird an vielen Stellen im Programm genutzt, um Beschreibungen z. B. für Ankündigungen oder Veranstaltungen komfortabler einzugeben. Wird der Editor deaktiviert, so wird ein einfaches mehrzeiliges Textfeld dargestellt.</string>
   <string name="ORG_LAST_UPDATE_STEP">Letzter Update-Schritt</string>
@@ -197,7 +194,6 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">Der relative Pfad zu einer .css-Datei mit zusätzlichen Stildefinitionen, ausgehend vom Admidio-Hauptverzeichnis. Diese Datei wird zuletzt geladen, auch nach der admidio.css des Themes. (Standard: leer)</string>
   <string name="SYS_ADDITIONAL_FILES">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</string>
   <string name="SYS_ADDRESS">Adresse</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Weitere Konfiguration hinzufügen</string>
   <string name="SYS_ADD_ATTACHMENT">Anhang hinzufügen</string>
   <string name="SYS_ADD_COLUMN">Spalte hinzufügen</string>
   <string name="SYS_ADD_COLUMNS_DESC">Ordnen Sie in der folgenden Tabelle beliebig vielen Spalten entsprechende Profilfelder zu. Zusätzlich können Sie die Standardsortierung vorgeben und Bedingungen zu Feldern hinzufügen, nach denen die jeweiligen Mitglieder gefiltert werden sollen.</string>
@@ -241,7 +237,6 @@
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
   <string name="SYS_ALSO_VISITORS">auch Gäste</string>
-  <string name="SYS_ANNOUNCEMENT">Ankündigung</string>
   <string name="SYS_ANNOUNCEMENTS">Ankündigungen</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
@@ -320,7 +315,6 @@
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">Die Rollenauswahl kann verwendet werden, um einen Report auf die Mitglieder der ausgewählten Rollen zu beschränken. Wenn keine Einschränkung gewünscht ist, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer gelassen werden.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden: #VAR1#.\n\nMöchten Sie die Daten nur in Ihrer Organisation sehen, dann sollte diese Option deaktiviert werden.</string>
   <string name="SYS_CAT_SELECTION">Kategorieauswahl</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Über die Kategorieauswahl kann eine Konfiguration auf die Mitglieder von Rollen der ausgewählten Kategorien eingeschränkt werden. Soll keine Einschränkung vorgenommen werden, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer sein.</string>
   <string name="SYS_CHANGED_AT">Geändert am</string>
   <string name="SYS_CHANGED_BY">Geändert von</string>
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profil- und Rolleneinstellungen</string>
@@ -398,8 +392,6 @@
   <string name="SYS_COMPLEMENT">Ergänzen</string>
   <string name="SYS_CONDITION">Bedingung</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
-  <string name="SYS_CONFIGURATIONS">Konfigurationen</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Hier können beliebig viele Konfigurationen für den Kategoriereport angelegt werden. In der Bildschirmanzeige wird über \"Konfiguration auswählen\" jeweils eine dieser Konfigurationen als Basis für die Anzeige verwendet.</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Konfiguration allen angemeldeten Personen zur Verfügung stellen</string>
   <string name="SYS_CONFIGURATION_DELETE">Wollen Sie aktuelle Listenkonfiguration wirklich löschen?</string>
   <string name="SYS_CONFIGURATION_LIST">Listenkonfiguration</string>
@@ -429,7 +421,6 @@
   <string name="SYS_COPIED_CLIPBOARD">In die Zwischenablage kopiert.</string>
   <string name="SYS_COPY">Kopieren</string>
   <string name="SYS_COPY_CLIPBOARD">In Zwischenablage kopieren</string>
-  <string name="SYS_COPY_CONFIGURATION">Konfiguration kopieren</string>
   <string name="SYS_COPY_ENTRY">Eintrag kopieren</string>
   <string name="SYS_COPY_LINK">Link kopieren</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Hier ist Ihre angeforderte Kopie der Nachricht</string>
@@ -514,7 +505,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neues Profil angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der betreffenden Person zugeordnet. Wer das Recht hat, Rollen zuzuordnen, sieht alle Rollenzuordnungen und kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_COLOR">Standardfarbe</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für den Kategorienreport dieser Organisation gemacht werden. Die gewählte Konfiguration wird beim Aufruf des Reports direkt angezeigt.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Eine der hier vorgegebenen Konfigurationen kann zur Standardkonfiguration für Listen dieser Organisation gemacht werden. Mitgliederlisten von Rollen, die keine Listenkonfiguration hinterlegt haben, werden mit dieser Konfiguration angezeigt.</string>
   <string name="SYS_DEFAULT_COUNTRY">Standard-Land</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Angabe eines Landes, in dessen Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z. B. bei der Registrierung oder beim Anlegen neuer Profile vorausgewählt. Die Auswahl erleichtert die Eingabe und kann später beliebig geändert werden.</string>
@@ -598,7 +588,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Ihre Grußkarte wurde leider nicht erfolgreich versendet!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Ihre Grußkarte wurde erfolgreich versendet.</string>
   <string name="SYS_EDIT">Bearbeiten</string>
-  <string name="SYS_EDITED_BY">Geändert von</string>
   <string name="SYS_EDIT_ALBUM">Album bearbeiten</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Ankündigungen bearbeiten</string>
   <string name="SYS_EDIT_CALENDAR">Kalender bearbeiten</string>
@@ -1055,9 +1044,6 @@
   <string name="SYS_LOGO_FILE_DESC">Der Pfad zur Logodatei, die in der oberen linken Ecke angezeigt wird. Der Pfad sollte relativ zum Stammverzeichnis Ihrer Installation sein. Bleibt er leer, wird das Standardlogo des Themes verwendet. (Standard: leer)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maximale Logohöhe</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">Der maximal verfügbare Platz für das Logo in der Kopfzeile ist auf diesen Wert begrenzt. Wenn das Logo höher als der angegebene Wert ist, wird es auf diese Höhe verkleinert. (Standard: 60 Pixel)</string>
-  <string name="SYS_LOG_ALLOW_DELETION">Löschen der Änderungshistorie zulassen</string>
-  <string name="SYS_LOG_ALLOW_DELETION_DESC">Aktivieren Sie eine Schaltfläche auf der Änderungshistorienseite, um Teile oder den gesamten Verlauf des Änderungsprotokolls zu löschen.</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">Einige oder alle Einträge der Änderungshistorie wurden ausgeblendet, weil die Berechtigung für den Zugriff fehlt.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Das neue Passwort wurde an die E-Mail-Adresse #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Das neue Passwort wurde an #VAR1_BOLD# geschickt!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Die E-Mail-Adresse #VAR1_BOLD# wurde mehrfach zugeordnet. Es konnte keine eindeutige Person gefunden werden.</string>
@@ -1185,7 +1171,6 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rolle erhalten die Benachrichtigungen über neue oder geänderte Einträge in den Modulen und Änderungen in den Profildaten der Mitglieder. Aus Datenschutzgründen können nur Rollen hinterlegt werden, die das Rollenrecht #VAR1_BOLD# haben.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
-  <string name="SYS_NOT_INSTALLED">Nicht installiert</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Kein Mitglied einer Organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nicht Mitglied der Organisation #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Bitte in der Bedingung des Feldes #VAR1_BOLD# nur gültige Zahlen verwenden.</string>
@@ -1317,7 +1302,6 @@
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
   <string name="SYS_PLUGIN_ADD">Plugin hinzufügen</string>
-  <string name="SYS_PLUGIN_ADD_DESC">Installieren Sie ein Plugin aus einer vorhandenen Datei oder aus den für Admidio veröffentlichten Plugins.</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">Das Plugin #VAR1# ist bereits vorhanden. Seine Dateien werden nur ersetzt, wenn dies ausdrücklich angefordert wurde.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">Das Plugin #VAR1# ist bereits installiert.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">Das Archiv konnte nicht nach #VAR1# geschrieben werden.</string>
@@ -1378,7 +1362,6 @@
   <string name="SYS_PLUGIN_STORE_UNAVAILABLE">Die Liste der für Admidio veröffentlichten Plugins konnte nicht gelesen werden. Das Hochladen eines Plugins aus einer Datei ist weiterhin möglich.</string>
   <string name="SYS_PLUGIN_STORE_VERSION_MISMATCH">Der Katalog hat für das Plugin #VAR1# die Version #VAR2# angekündigt, aber das heruntergeladene Archiv enthält die Version #VAR3#. Der Download wurde abgelehnt.</string>
   <string name="SYS_PLUGIN_UPDATE">Plugin aktualisieren</string>
-  <string name="SYS_PLUGIN_UPDATED">Das Plugin wurde erfolgreich aktualisiert.</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Das Plugin wurde erfolgreich auf Version #VAR1# aktualisiert.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin-Version</string>
   <string name="SYS_PORT">Port</string>
@@ -1399,7 +1382,6 @@
   <string name="SYS_PREVIOUS_VALUE">Vorheriger Wert</string>
   <string name="SYS_PRINT_PREVIEW">Druckvorschau</string>
   <string name="SYS_PRIVATE_MESSAGES">Private Nachrichten</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Die private Nachricht konnte nicht an #VAR1_BOLD# gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Die private Nachricht wurde an #VAR1_BOLD# versendet.</string>
   <string name="SYS_PRNG">Pseudozufallszahlengenerator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kann keine sicheren Pseudo-Zufallszahlen generieren! Bitte um Kontaktaufnahme mit dem Admidio-Team mit folgenden Informationen:</string>
@@ -1551,7 +1533,6 @@
   <string name="SYS_ROLE_PAST">Frühere Rolle</string>
   <string name="SYS_ROLE_RIGHTS">Rollenrechte</string>
   <string name="SYS_ROLE_SELECTION">Rollenauswahl</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Die Rollenauswahl kann verwendet werden, um eine Konfiguration auf die Mitglieder der ausgewählten Rollen zu beschränken. Wenn keine Einschränkung gewünscht ist, müssen beide Felder (Rollenauswahl und Kategorieauswahl) leer gelassen werden.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Sie Haben keine Berechtigung, die Rolle #VAR1# auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</string>
   <string name="SYS_ROLE_TYPES">Rollentypen</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Rollen ohne Leitung</string>
@@ -1664,7 +1645,6 @@
   <string name="SYS_SHOW_MAP_LINK">Kartenlink anzeigen</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Wird ein Ort angegeben, so wird versucht, einen Link zu Google Maps zu erstellen, der den Ort anzeigt, sowie einen Routenlink vom eigenen Wohnort aus. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Ist eine Adresse im Profil hinterlegt, werden daneben zwei Links zu Google Maps angezeigt. Ein Link führt zum Wohnort der betreffenden Person, der andere zeigt die Route vom eigenen Wohnort dorthin. Beim Aufruf der Links werden folgende Informationen der Profile an Google übertragen: Straße, Postleitzahl, Ort und Land. (Voreinstellung: nein)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Mitgliederliste anzeigen</string>
   <string name="SYS_SHOW_MORE">Mehr anzeigen</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Alte Auswahloptionen anzeigen</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Mit dieser Einstellung kann festgelegt werden, ob alte Auswahloptionen in der Profilfeld-Konfiguration angezeigt werden sollen. Wenn die Einstellung aktiviert ist, können alte Auswahloptionen wiederhergestellt werden.\nDiese Option ist nur für Profilfelder der Typen Dropdown-Listenfeld und Optionsfeld verfügbar. (Voreinstellung: ja)</string>
@@ -1778,7 +1758,6 @@
   <string name="SYS_SSO_KEY_DELETE">Schlüssel löschen</string>
   <string name="SYS_SSO_KEY_EDIT">Schlüssel bearbeiten</string>
   <string name="SYS_SSO_KEY_EXPIRATION_INVALID">Das Ablaufdatum des ausgewählten Schlüssels ist ungültig.</string>
-  <string name="SYS_SSO_KEY_EXPIRATION_MISSING">Für den ausgewählten Schlüssel fehlt das Ablaufdatum.</string>
   <string name="SYS_SSO_KEY_EXPIRED">Der ausgewählte Schlüssel ist abgelaufen.</string>
   <string name="SYS_SSO_KEY_EXPIRES">Verfallsdatum</string>
   <string name="SYS_SSO_KEY_EXPORT">Privaten Schlüssel exportieren</string>
@@ -1828,7 +1807,6 @@
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC-Zugriffszustimmungen</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# möchte auf Ihr Admidio-Konto zugreifen.</string>
-  <string name="SYS_SSO_OIDC_CONSENT_SAVED">Ihre Zustimmung wurde gespeichert.</string>
   <string name="SYS_SSO_OIDC_CONSENT_SCOPES">Zugestimmte Bereiche</string>
   <string name="SYS_SSO_OIDC_DENY_ACCESS">Zugriff ablehnen</string>
   <string name="SYS_SSO_OIDC_DISCOVERY_URL">URL für die Suche</string>
@@ -1915,7 +1893,6 @@
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Signierte Authentifizierungsanfragen verlangen, sofern der Client signieren kann</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">Gilt für alle Clients mit hinterlegtem Zertifikat, denn nur damit lässt sich eine Signatur prüfen. Clients ohne Zertifikat sind nicht betroffen. Um von einem einzelnen Client trotzdem eine Signatur zu verlangen, verwenden Sie die Einstellung dieses Clients.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Bisher ausgewählter Schlüssel – nicht mehr verwendbar</string>
-  <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signatur und Verschlüsselung</string>
   <string name="SYS_SSO_SIGNING_KEY">Schlüssel für Signaturen</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Signieren von Assertions, die an den Client gesendet werden (SP)</string>
   <string name="SYS_SSO_SLO_URL">Einzelne Abmelde-URL (optional)</string>
@@ -2072,15 +2049,12 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Es werden Ihnen hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldeten Personen sichtbar sind. Falls Sie auch Mitglied dieser Organisation sind, werden Ihnen zusätzlich die Rollen angezeigt, die Sie mit Ihren Rechten innerhalb der jeweiligen Organisation sehen dürfen.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Rollenmitgliedschaft sehen</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Mit dieser Einstellung kann festgelegt werden, wer die Mitglieder dieser Rolle sehen kann. Wer dazu berechtigt ist, kann die Rollenmitgliedschaft im Profil der jeweiligen Person und in Listen zu der Rolle sehen. Mit dieser Einstellung wird kein Zugriff auf das Profil der Rollenmitglieder ermöglicht. In Listen werden nur Name und Vorname angezeigt. Das Rollenrecht #VAR1_BOLD# überschreibt diese Einstellung.</string>
-  <string name="SYS_VISIBILITY">Sichtbarkeit</string>
   <string name="SYS_VISIBLE">Sichtbar</string>
   <string name="SYS_VISIBLE_FOR">Sichtbar für</string>
   <string name="SYS_VISITORS">Gäste</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Möchten Sie die Kategorie #VAR1_BOLD# wirklich löschen?</string>
   <string name="SYS_WANT_DELETE_ENTRY">Wollen Sie den Eintrag #VAR1_BOLD# löschen?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Soll das ausgewählte Foto wirklich gelöscht werden?</string>
-  <string name="SYS_WANT_DISABLE_PLUGIN">Möchten Sie das Plugin #VAR1_BOLD# deaktivieren? Seine Einstellungen und Daten bleiben erhalten.</string>
-  <string name="SYS_WANT_ENABLE_PLUGIN">Möchten Sie das Plugin #VAR1_BOLD# aktivieren?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Möchten Sie das Plugin #VAR1_BOLD# installieren?\n\nEs wird heruntergeladen und hinzugefügt, aber nicht aktiviert. Aktivieren Sie es anschließend in der Plugin-Verwaltung.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Möchten Sie das Plugin #VAR1_BOLD# entfernen?\n\nDies gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktivieren Sie das Plugin stattdessen, wenn Sie es nicht mehr verwenden möchten.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Möchten Sie das Plugin #VAR1_BOLD# entfernen?\n\nEs ist in diesen Organisationen noch aktiviert: #VAR2_BOLD#.\n\nDas Entfernen gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktivieren Sie das Plugin stattdessen, wenn Sie es nicht mehr verwenden möchten.</string>

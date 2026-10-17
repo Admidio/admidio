@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Πα</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Δε</string>
   <string name="PLG_CALENDAR_MONTH">Ιανουάριος, Φεβρουάριος, Μάρτιος, Απρίλιος, Μάιος, Ιούνιος, Ιούλιος, Αύγουστος, Σεπτέμβριος, Οκτώβριος, Νοέμβριος, Δεκέμβριος</string>
-  <string name="PLG_CALENDAR_MORE">(... περισσότερα)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Αυτό το πρόσθετο εμφανίζει στη σελίδα επισκόπησης ημερολόγιο με όλες τις εκδηλώσεις του τρέχοντος μήνα.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Ημερολόγιο</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Ρόλοι για τα γενέθλια</string>

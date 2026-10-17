@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">ve</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">lu</string>
   <string name="PLG_CALENDAR_MONTH">janvier,février,mars,avril,mai,juin,juillet,août,septembre,octobre,novembre,décembre</string>
-  <string name="PLG_CALENDAR_MORE"> (... plus)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Ce plugin affiche sur la page de présentation un calendrier de tous les événements du mois en cours.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Calendrier</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Rôles retenus pour les anniversaires</string>

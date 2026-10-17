@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">пе</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">по</string>
   <string name="PLG_CALENDAR_MONTH">Януари,Февруари,Март,Април,Май,Юни,Юли,Август,Септември,Октомври,Ноември,Декември</string>
-  <string name="PLG_CALENDAR_MORE">(... още)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Тази добавка показва календар с всички събития за текущия месец на обзорната страница.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Календар</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Роли за рождените дни</string>

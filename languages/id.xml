@@ -1,33 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!-- Some strings use English reference texts pending translation. -->
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">Indietro al libro degli ospiti</string>
-  <string name="GBO_COMMENTS4ALL">Consenti commenti anonimi</string>
-  <string name="GBO_COMMENT_BY">Commento di #VAR1#</string>
-  <string name="GBO_CREATE_COMMENT">Lascia un commento</string>
-  <string name="GBO_EDIT_COMMENT">Modifica commento</string>
-  <string name="GBO_ENTRY_QUEUED">Inserimento salvato. Esso sarà visualizzato dopo la moderazione.</string>
-  <string name="GBO_FLOODING_PROTECTION">Il tuo ultimo inserimento è stato effettuato meno di #VAR1# secondi fa.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL">Intervallo per la protezione dagli intasamenti</string>
-  <string name="GBO_GUESTBOOK">Libro degli ospiti</string>
-  <string name="GBO_GUESTBOOK_DESC">Gli ospiti e gli utanti possono lasciare saluti e commenti e possono effettuare annotazioni agli inserimenti degli altri.</string>
-  <string name="GBO_GUESTBOOK_MODERATION">Moderazione attivata per</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Gli inserimenti nel libro degli ospiti saranno visualizzati dopo la moderazione. Definisci se la moderazione deve funzionare per gli ospiti o solo per gli utenti registrati, altrimenti in futuro non saranno verificati i commenti di nessuno. (predefinito: no)</string>
-  <string name="GBO_HIDE_COMMENTS">Nascondi commenti</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING">Visualizza subito i commenti</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Quando questa opzione è attiva e la pagina del libro degli ospiti sta per essere caricata, i commneti relativi alla pagina saranno caricati direttamente. In caso contrario, l\'utente deve fare clic su un link per vedere i commenti. (predefinito: no)</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Ultime voci nel guestbook dell\'organizzazione #VAR1#</string>
-  <string name="GBO_MODERATE_ENTRIES">Moderazione degli inserimenti</string>
-  <string name="GBO_ONLY_VISITORS">Solo visitatori</string>
-  <string name="GBO_SHOW_COMMENTS">Visualizza commenti</string>
-  <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Mostra i commenti di #VAR1# di questo inserimento nel libro degli ospiti</string>
-  <string name="GBO_WRITE_COMMENT">Lascia commento</string>
   <string name="INS_ADDIDIONAL_DATA">Informazioni aggiuntive</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ANOTHER_ORGANIZATION">Aggiungi un\'altra organizzazione</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Le informazioni sull\'Amministratore sono incomplete!</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Only an administrator can perform an update. Please enter the administrator credentials.</string>
   <string name="INS_BOARD">Association\'s board</string>
   <string name="INS_CONFERENCE_ROOM">Conference room</string>
@@ -38,14 +14,12 @@
   <string name="INS_CREATE_CONFIGURATION_FILE">Creating configuration file</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">File #VAR1_BOLD# could not be found in folder #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Enter the name of the database server. This can be a URL or localhost if the database runs on the same machine as the website.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Aggiornamento database</string>
   <string name="INS_DATABASE_LOGIN">Database access</string>
   <string name="INS_DATABASE_LOGIN_DESC">Enter your database credentials. You can customize the table prefix if needed. A unique prefix is required if multiple Admidio installations use the same database.</string>
   <string name="INS_DATABASE_PORT_INFO">Leave this field blank to use the default database port (MariaDB/MySQL: 3306, PostgreSQL: 5432). If you or your hosting provider require a different port, enter it here.</string>
   <string name="INS_DATABASE_PORT_INVALID">The specified port is invalid. Enter a number between 1 and 65535, or leave the field blank.</string>
   <string name="INS_DATABASE_SYSTEM">Sistema database</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio only supports MariaDB, MySQL and PostgreSQL.</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Crea database</string>
   <string name="INS_DATA_DO_NOT_MATCH">The data in #VAR1_BOLD# does not match the information provided in the installation wizard.\n\nCheck config.php and all other information.</string>
   <string name="INS_DATA_FULLY_ENTERED">You have entered all the necessary data for installing Admidio.\n\nNow the database has to be created and filled with your data.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administrator\'s details</string>
@@ -65,15 +39,12 @@
   <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Some third-party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
   <string name="INS_INSTALLATION">Installazione</string>
   <string name="INS_INSTALLATION_EXISTS">The database already contains an Admidio installation. An additional installation is not possible.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">L\'installazione del database di Admidio e la configurazione sono complete, il sistema è pronto per l\'uso. Per favore accedi ora usando le informazioni di accesso come amministratore del sistema.</string>
   <string name="INS_INSTALLATION_VERSION">Installation version #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">L\'installazione ha avuto successo</string>
   <string name="INS_INSTALL_ADMIDIO">Installa Admidio</string>
   <string name="INS_INTERN">Interno</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">No language has been selected.</string>
   <string name="INS_MEMBERSHIP">Membership</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">The current installation could not be found. If you used Admidio 1.x, update to Admidio 2.x first. You can then update to version #VAR1#. If you are already using Admidio 2.x or later, please check the consistency of your database.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Il nome dell\'organizzazione fornito non è cpmpleto!</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organization #VAR1_BOLD# already exists. Please select another name.</string>
   <string name="INS_PHONE_LIST">Phone list</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Please choose a language</string>
@@ -83,7 +54,6 @@
   <string name="INS_SET_UP_ORGANIZATION">Setting up the organization</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">We would appreciate a donation to support the development of Admidio!</string>
   <string name="INS_TABLE_PREFIX">Prefisso delle tabelle</string>
-  <string name="INS_TABLE_PREFIX_INVALID">Il prefisso delle tabelle include caratteri non validi!</string>
   <string name="INS_TEAMS">Team</string>
   <string name="INS_TRAINING">Formazione</string>
   <string name="INS_UPDATE">Aggiornamento</string>
@@ -129,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Line color</string>
   <string name="ORG_CAPTCHA_PREVIEW">Anteprima captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">The captcha preview uses only saved settings.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Dopo l\'attivazione un\'immagine con un codice captcha o un semplice calcolo sarà visualizzato ai nuovi utenti. E\' necessario inserire il codice corretto o il risultato per salvare la voce modificata ora. Il captcha è parte del sistema anti-spam di Admidio. (predefinito: sì)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Firma del captcha</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Enter your preferred captcha subtitle. The current theme\'s default font will be used.</string>
   <string name="ORG_CAPTCHA_SIGNS">Valid characters</string>
@@ -140,14 +109,12 @@
   <string name="ORG_CAPTCHA_TYPE_TEXT">Choose the captcha type. The captcha is displayed as an image containing random characters, a simple math problem, or two words. Use the other options to customize it further. (Default: random characters)</string>
   <string name="ORG_CAPTCHA_TYPE_WORDS">Words (English)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha width in pixels. The height is calculated in proportion to the width, which also determines the character size. (Default: 215)</string>
-  <string name="ORG_CREATE_ITEM_FIELD">Crea campo della voce</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Crea campo del profilo</string>
   <string name="ORG_CURRENCY">Valuta</string>
   <string name="ORG_CURRENCY_DESC">Select the currency to display after all amounts.</string>
   <string name="ORG_DATATYPE">Tipo di data</string>
   <string name="ORG_DATE_FORMAT">Formato della data</string>
   <string name="ORG_DATE_FORMAT_DESC">Format complies with PHP function #VAR1#. (Default: d.m.Y)</string>
-  <string name="ORG_DIFFERENT_DATABASE_VERSION">Versione del database diversa</string>
   <string name="ORG_EDIT_PROFILE_FIELD">Editing profile field</string>
   <string name="ORG_EMAIL_ALERTS">Allerta via email</string>
   <string name="ORG_EMAIL_ALERTS_DESC">All members of all roles with permission #VAR1_BOLD# receive email in case of new user registration. (Default: yes)</string>
@@ -169,19 +136,13 @@
   <string name="ORG_FIELD_URL_DESC">The URL entered here links to content from this profile field. You can include the placeholder #user_content# in the URL to insert the value entered by the user.\n\nExample:\nURL: https://www.google.de/search?q=#user_content#\nField value: Admidio\nLink in profile: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">This page appears after a user logs in. Enter a path relative to the Admidio main folder.\n(e.g., modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">This is the default Admidio page for guests. Enter a path relative to the Admidio main folder.\n(e.g., modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Impossibile trovare un tema valido.</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Colore dell\'editor JavaScript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Usa l\'editor JavaScript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">A full-featured JavaScript editor makes it easier to enter descriptions for announcements, events, and other content. If the editor is disabled, a simple multiline text field is displayed.</string>
   <string name="ORG_LAST_UPDATE_STEP">Last step of update</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Accedi automaticamente</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">At login, users can choose whether to save their login information and session on their computer. They will then be logged in automatically on their next visit. This may allow unauthorized people to access or misuse the account. (Default: yes)</string>
-  <string name="ORG_NEW_ORGANIZATION">Nuova organizzazione</string>
-  <string name="ORG_NEW_ORGANIZATION_DESC">Inserisci l\'abbreviazione, il nome ufficiale e l\'indirizzo email dell\'organizzazione che vuoi aggiungere. L\'indirizzo email potrebbe essere uno generale. Esso sarà usato come indirizzo di invio quando saranno inviate notifiche automatiche di sistema.</string>
   <string name="ORG_NOT_SAVED_SETTINGS_CONTINUE">Do you want to continue?</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">When changing the view all unsaved changes will be lost.</string>
-  <string name="ORG_NO_FIELD_CREATED">Nessun campo specifico dell\'organizzazione è stato ancora creato!</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Numero di voci per pagina</string>
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Enabled, but only visible to administrators</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">For module administrators only</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">For logged-in users only</string>
@@ -202,9 +163,6 @@
   <string name="ORG_REGISTERED_USERS">Logged-in users</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Ricerca nomi simili</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">During registration and when assigning registrations, Admidio searches for similar first and last names to avoid duplicate entries. If disabled, it searches only for identical names. (Default: yes)</string>
-  <string name="ORG_SECONDS">secondi</string>
-  <string name="ORG_SEND_NEW_PASSWORD">Invia nuova password</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Se questa opzione è abilitata, gli ex membri e i membri di altre organizzazioni saranno visualizzati in aggiunta ai membri attivi dell\'organizzazione corrente. Altrimenti saranno visualizzati solo i membri dell\'organizzazione corrente. Quando si creano nuovi utenti o si assegnano delle registrazioni tutte le organizzazioni saranno comunque controllate rispetto agli utenti esistenti.</string>
   <string name="ORG_SHOW_CREATE_EDIT">Show creator and timestamp of creation</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Some views display who created and last modified a record, together with the corresponding timestamps. Use this setting to control whether this information appears and whether users are identified by their username or their first and last name.</string>
   <string name="ORG_TIMEZONE">Time zone</string>
@@ -222,7 +180,6 @@
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user relevant to the notification</string>
   <string name="SYS_64BIT">64-bit</string>
-  <string name="SYS_ABORT">Annulla</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Account activated</string>
   <string name="SYS_ACTIVATE_ROLE">Activate role</string>
@@ -244,7 +201,6 @@
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Tambahkan Acara ke kalender</string>
   <string name="SYS_ADD_FIELD">Add field</string>
   <string name="SYS_ADD_ORGANIZATION">Add organization</string>
-  <string name="SYS_ADD_RECIPIENTS">Aggiungi destinatario</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
   <string name="SYS_ADMIDIO">Admidio</string>
@@ -257,7 +213,6 @@
   <string name="SYS_ADMINISTRATORS">Administrators</string>
   <string name="SYS_ADMINISTRATORS_DESC">Members of these roles administer the Documents &amp; Files module and have access to all folders and files. They can upload and download files and assign access permissions. Grant the #VAR1_BOLD# permission to make a role an administrator.</string>
   <string name="SYS_AFTER_NUMBER_OF_OCCURRENCES">After number of occurrences</string>
-  <string name="SYS_AJAX_REQUEST_ERROR">Errore di richiesta ajax.\nDettagli dell\'errore: #VAR1#</string>
   <string name="SYS_ALBUM">Album</string>
   <string name="SYS_ALBUM_CHANGED_TITLE">A photo album was changed at #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Album contains no photos.</string>
@@ -282,7 +237,6 @@
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Semua anggota organisasi ini</string>
   <string name="SYS_ALSO_VISITORS">anche i visitatori</string>
-  <string name="SYS_ANNOUNCEMENT">Pengumuman</string>
   <string name="SYS_ANNOUNCEMENTS">Pengumuman</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Menampilkan atau mengedit pengumuman, berita dan informasi lainnya.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
@@ -322,14 +276,8 @@
   <string name="SYS_AVAILABLE_BETA">Available beta version</string>
   <string name="SYS_A_TO_Z">A to Z</string>
   <string name="SYS_BACK">Back</string>
-  <string name="SYS_BACKUP_COMPLETED">Cadangan dibuat di #VAR1#</string>
-  <string name="SYS_BACKUP_FILE">File cadangan</string>
-  <string name="SYS_BACKUP_FROM">Backup dibuat pada #VAR1# di #VAR2#</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">Modul cadangan hanya bisa digunakan dalam kombinasi dengan database MySQL.</string>
   <string name="SYS_BACK_TO_ALBUM">Back to album</string>
-  <string name="SYS_BACK_TO_BACKUP_PAGE">Kembali ke halaman cadangan</string>
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
-  <string name="SYS_BACK_TO_MODULE_OVERVIEW">Ritorna alla pagina principale del modulo</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Compleanno</string>
   <string name="SYS_BLUESKY">Bluesky</string>
@@ -347,9 +295,7 @@
   <string name="SYS_CANT_DELETE_ROLE">You cannot delete the role #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Capacità</string>
   <string name="SYS_CAPTCHA">Captcha</string>
-  <string name="SYS_CAPTCHA_CALC">Risultato del calcolo</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">The result of the calculation is not correct.</string>
-  <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Il calcolo è parte del captcha. Il captcha serve per prevenire lo SPAM. Il calcolo viene utilizzato per rilevare se si è un utente o uno script (o uno spambot) che compila il modulo.\nSi prega di inserire il risultato del calcolo nel modulo.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">The verification code is incorrect.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Codice di autenticazione</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">The verification code is part of a captcha used to detect spam. The image helps distinguish people filling out the form from automated scripts or spambots.\nPlease enter the code shown in the image into the form field.</string>
@@ -503,7 +449,6 @@
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
   <string name="SYS_CREATE_MEMBER">Create member</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Create a new configuration</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">Potrai creare un nuovo utente, se l\'utente non è elencato tra gli utenti trovati.</string>
   <string name="SYS_CREATE_POST">Create post</string>
   <string name="SYS_CREATE_RELATIONSHIP">Create relationship</string>
   <string name="SYS_CREATE_ROLE">Create role</string>
@@ -524,7 +469,6 @@
   <string name="SYS_DATABASE_BACKUP">Cadangan databse</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Membuat dan mendownload cadangan database tabel Admidio.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">It is not necessary to update the database.</string>
-  <string name="SYS_DATABASE_ERROR">Errore nel database</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidio\'s database is up to date.</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Could not connect to the database.\n\nPlease check the database credentials in adm_my_files/config.php. If this file is from another installation, remove it from the folder so the installation wizard can create a new one. You can then continue the installation.\n\nThe following error occurred:\n#VAR1#.</string>
@@ -550,7 +494,6 @@
   <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Default time period for field history (days)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Changes in profile fields will be listed for the given period of time in days. This is the default filter option which can be changed by the user later on. For huge databases this option is used to limit the change history list. (Default: 365)</string>
-  <string name="SYS_DAYS_VAR">#VAR1# hari</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate the role #VAR1_BOLD#, it can no longer be used or assigned to objects, and its permissions no longer apply. The role, its settings, and all member assignments are preserved so it can be reactivated later.</string>
   <string name="SYS_DEADLINE">Batas waktu</string>
@@ -645,7 +588,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Your greeting card could not be sent!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Your greeting card was sent.</string>
   <string name="SYS_EDIT">Edit</string>
-  <string name="SYS_EDITED_BY">Ultima modifica di</string>
   <string name="SYS_EDIT_ALBUM">Edit album</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edit pengumuman</string>
   <string name="SYS_EDIT_CALENDAR">Edit calendar</string>
@@ -734,7 +676,6 @@
   <string name="SYS_ENTIRE_SERIES">Entire series</string>
   <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Error</string>
-  <string name="SYS_ERROR_DATABASE_ACCESS">Errore durante l\'accesso al database:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">The list #VAR1_BOLD# is the default configuration for the #VAR2# module in this organization and cannot be deleted. Select a different default in the module settings, then try deleting this configuration again.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - PAGE NOT FOUND!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID missing</string>
@@ -752,29 +693,23 @@
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Invited</string>
   <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">I may take part</string>
   <string name="SYS_EVENT_REGISTRATION">Registration</string>
-  <string name="SYS_EXAMPLE">Esempio</string>
   <string name="SYS_EXAMPLES">Esempi</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
   <string name="SYS_EXPORT">Export</string>
-  <string name="SYS_EXPORT_ICAL">Ekspor (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Users can export group and role lists they have permission to view. Use this setting to restrict who can export lists. (Default: all)</string>
   <string name="SYS_EXPORT_VCARD">Esporta vCard</string>
-  <string name="SYS_EXPORT_VCARD_FROM_VAR">Esporta vCard di #VAR1#</string>
   <string name="SYS_EXTENSION">Extension</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_EXTENSIONS_AVAILABLE">Available extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_FADE_IN">Dissolvenza in</string>
   <string name="SYS_FATHER">Father</string>
   <string name="SYS_FAVICON_FILE">Favicon file</string>
   <string name="SYS_FAVICON_FILE_DESC">The relative path to the logo file, starting from the Admidio root directory. The logo is displayed in the upper-left corner. If left empty, the theme's default logo will be used. (Default: empty)</string>
-  <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Femmmina</string>
   <string name="SYS_FIELD">Campo</string>
-  <string name="SYS_FIELDS_EMPTY">Alcuni campi sono vuoti.</string>
   <string name="SYS_FIELD_EMPTY">Field #VAR1_BOLD# is empty.</string>
   <string name="SYS_FIELD_ENCLOSURE">Quotation character for the fields</string>
   <string name="SYS_FIELD_INVALID_CHAR">The entered value in the field #VAR1_BOLD# contains illegal characters.\n\nAllowed characters are letters from \'a\' to \'z\' and \'A\' to \'Z\', numbers from 0 to 9 and special characters like .-_+@ .</string>
@@ -813,14 +748,12 @@
   <string name="SYS_FOLDER_NOT_EXISTS">The folder no longer exists on the server. Its entry should be deleted from the database.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Folder (ID #VAR1#) not found.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">The folder #VAR1_BOLD# has no write permissions. The required folder permissions could not be set automatically. Please give the folder #VAR1_BOLD# write permissions (via FTP set the file attributes to 0777 or drwxrwxrwx).</string>
-  <string name="SYS_FOLDER_NO_FILES">La cartella non contiene file.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You do not have permission to view the selected folder.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while renaming the folder #VAR1#.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS">The folder #VAR1_BOLD# could not be created with the required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# to check the permissions (use FTP to set the permissions to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
-  <string name="SYS_FORGOT_MY_PASSWORD">Ho dimenticato la password!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Former</string>
   <string name="SYS_FORMER_CONTACTS">Former contacts</string>
@@ -862,21 +795,14 @@
   <string name="SYS_HEADER_PREFERENCES">Settings</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
   <string name="SYS_HEADLINE">Titolo</string>
-  <string name="SYS_HELP">Aiuto</string>
   <string name="SYS_HIDDEN">Hidden</string>
-  <string name="SYS_HIDE">Nascondi</string>
   <string name="SYS_HIGHLIGHT_EVENT">Penunjukan acara sorotan</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_HOST">Host</string>
-  <string name="SYS_HOURS_VAR">#VAR1# jam</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML email</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Allow registered users to create and send HTML emails. A JavaScript editor replaces the standard text field to make editing easier. This option is unavailable to guests for security reasons.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_HUSBAND">Husband</string>
-  <string name="SYS_ICAL_DAYS_FUTURE">Nomor iCal hari kedepan</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Jumlah hari di masa depan untuk disertakan dalam unduhan iCal atau abo. Jika download iCal dimulai dalam modul acara, maka pengaturan ini akan diabaikan dan tanggal yang disaring diekspor. (Standar: 365)</string>
-  <string name="SYS_ICAL_DAYS_PAST">Jumlah hari iCal di masa lalu</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Jumlah hari di masa lalu, untuk dimasukkan dalam unduhan iCal atau -Abo. Jika unduhan iCal dimulai dalam modul Acara, Pengaturan ini diabaikan dan mengekspor tanggal yang difilter. (Standar: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icona</string>
   <string name="SYS_ICON_FONT_DESC">Choose an icon from \"Bootstrap Icons\" at #VAR1#https://icons.getbootstrap.com#VAR2# and enter its name in this field.</string>
@@ -1055,11 +981,9 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER_DESC">If this option is enabled, the current user is used as the default selection for the keeper when creating a new item. (Default: no)</string>
-  <string name="SYS_IO_ERROR">Errore di I/O</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ITALIC">Italic</string>
-  <string name="SYS_ITEMNAME">Nome dell\'elemento</string>
   <string name="SYS_KEEP_ORIGINAL">Also save original files</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Save each photo at its original size as well as at the selected resolution. If #VAR1_BOLD# is enabled, downloads use the original photos. This option requires significantly more storage space and should only be enabled if enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Panoramica</string>
@@ -1091,14 +1015,10 @@
   <string name="SYS_LINK_NAME">Link name</string>
   <string name="SYS_LINK_TARGET">Link target</string>
   <string name="SYS_LINK_TARGET_DESC">Choose whether the linked website opens in the Admidio window or in a new window.</string>
-  <string name="SYS_LINK_TO">Collegamento a #VAR1#</string>
   <string name="SYS_LIST">List</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
-  <string name="SYS_LOADING_CONTENT">Caricamento contenuto ...</string>
-  <string name="SYS_LOCATION_LINK">Jika informasi yang cukup mengenai lokasi disediakan (jalan, kota, lokasi), Google Maps dapat menghitung rute ke lokasi.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Choose where to store profile pictures: in the database or in the adm_my_files folder. Changing this setting does not move existing pictures to the new location. (Default: database)</string>
-  <string name="SYS_LOCK">Blocca</string>
   <string name="SYS_LOCKED">Bloccato</string>
   <string name="SYS_LOCK_ALBUM">Blocca album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums cannot be viewed by visitors or members. For example, you can lock an album until all images have been uploaded.</string>
@@ -1124,9 +1044,6 @@
   <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (Default: empty)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maximum logo height</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">The maximum space available for the logo in the header is limited to this value. If the logo is higher than the specified value, it will be scaled down to this height. (Default: 60 pixels)</string>
-  <string name="SYS_LOG_ALL_CHANGES">Registra tutti i cambiamenti</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Le modifiche nei campi del profilo sono registrate per ogni utente e per ogni campo. Il precedente e il nuovo valore saranno registrati in base all\'utente che ha eseguito i cambiamenti e in base alla data. (Default: Sì)</string>
-  <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Sei già registrato. Dunque devi già avere la pssword corretta!</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">The new password has been sent to the email address #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">The new password has been sent to the user #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Email address #VAR1_BOLD# has been assigned to multiple registrations. A unique user registration could not be identified.</string>
@@ -1194,7 +1111,6 @@
   <string name="SYS_MESSAGES_DESC">View sent emails and private messages. Compose and send new messages to individual contacts or roles.</string>
   <string name="SYS_MESSAGE_WENT_TO">Message was sent to</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# menit</string>
   <string name="SYS_MOBILE">Cellulare</string>
   <string name="SYS_MODAL_WINDOW">Finestra modale</string>
   <string name="SYS_MODULES">Moduli</string>
@@ -1263,7 +1179,6 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Please use a valid date as the condition for the field #VAR1_BOLD#.</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No additional permissions set</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">Tidak ada file cadangan yang ditemukan!</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_DEFAULT_ROLE">You cannot remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">The role management contains no default role for new users. Please contact an administrator who can edit this setting.</string>
@@ -1323,7 +1238,6 @@
   <string name="SYS_OVERVIEW">Panoramica</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Overview extensions</string>
   <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Change the order of extensions on the overview page using drag and drop on larger screens or the move buttons on smaller screens.\n\nThe new order takes effect only after you save the settings.</string>
-  <string name="SYS_PAGE">Pagina</string>
   <string name="SYS_PAGE_NEXT">Next</string>
   <string name="SYS_PAGE_PREVIOUS">Previous</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2">#VAR1# and #VAR2#</string>
@@ -1354,7 +1268,6 @@
   <string name="SYS_PASSWORD_OLD_WRONG">Old password is incorrect.</string>
   <string name="SYS_PASSWORD_RESET_INVALID">You have requested an invalid password reset link. If you haven't reset your password yet, please request a new link using the #VAR1# function.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">The new password has now been applied!</string>
-  <string name="SYS_PASSWORD_UNKNOWN">Accesso non riuscito a causa di password errata.\n\nVerifica la tua password e riprova.</string>
   <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Path separator</string>
   <string name="SYS_PDF">PDF</string>
@@ -1388,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Seleziona l\'opzione</string>
-  <string name="SYS_PLEASE_WAIT">Attendere prego</string>
   <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
@@ -1452,7 +1364,6 @@
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
-  <string name="SYS_POPUP_WINDOW">finestra popup</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Ritratto</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Column names for auto detection: #VAR1#</string>
@@ -1465,7 +1376,6 @@
   <string name="SYS_PREVIEW">Anteprima</string>
   <string name="SYS_PREVIEW_CHARACTERS">Characters in the description preview</string>
   <string name="SYS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a description. The text is shortened at the last space before this limit. Clicking the expand icon displays the complete text. A value of 0 always displays the complete description. (Default: #VAR1#)</string>
-  <string name="SYS_PREVIOUS">Precedente</string>
   <string name="SYS_PREVIOUS_EVENTS">Sebelumnya #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Previous name</string>
   <string name="SYS_PREVIOUS_PHOTO">Previous picture</string>
@@ -1488,10 +1398,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Dovresti essere tu nella foto.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">La foto deve essere salvata come JPG o PNG.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Il server può gestire foto di dimensione massima #VAR1# megapixels.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">I file caricati non devono essere più grandi di #VAR1# MB.</string>
   <string name="SYS_PROPERTIES">Proprietà</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
@@ -1516,7 +1422,6 @@
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Pulsante di opzione</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Pengumuman terbaru dari organisasi #VAR1#</string>
   <string name="SYS_RECIPIENT">Destinatario</string>
   <string name="SYS_RECIPIENT_EMAIL">Email recipient</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
@@ -1587,7 +1492,6 @@
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
   <string name="SYS_RESTORE_ENTRY">Restore entry</string>
-  <string name="SYS_RESTRICTIONS">Restrizioni</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
@@ -1646,8 +1550,6 @@
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_RUN_REPORT">Run report</string>
-  <string name="SYS_SAFE_MODE">Safe Mode</string>
-  <string name="SYS_SAFE_MODE_PROBLEM">Potrebbe causare problemi con il caricamento dei file</string>
   <string name="SYS_SAME_WINDOW">Stessa finestra</string>
   <string name="SYS_SATURDAY">Sabato</string>
   <string name="SYS_SAVE">Save</string>
@@ -1658,7 +1560,6 @@
   <string name="SYS_SAVE_CHANGES">Save changes</string>
   <string name="SYS_SAVE_CONFIGURATION">Save configuration</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
-  <string name="SYS_SEARCH">Cerca</string>
   <string name="SYS_SEARCH_AGE_DESC">Finds all users older than 18</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18y</string>
   <string name="SYS_SEARCH_DATE_DESC">Finds all users born after 01.03.1986</string>
@@ -1680,7 +1581,6 @@
   <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Finds all users for whom the checkbox is selected</string>
   <string name="SYS_SEATING">posti a sedere</string>
   <string name="SYS_SEAT_AMOUNT">Additional seats</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# detik</string>
   <string name="SYS_SECURE">Secure</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_CODE">Authentication code</string>
@@ -1717,14 +1617,12 @@
   <string name="SYS_SEND_METHOD">Send via</string>
   <string name="SYS_SEND_METHOD_DESC">Some providers restrict PHP\'s mail() function, and messages sent with it may be flagged as spam. We recommend sending email through an existing email address and SMTP server. Configure the SMTP settings below. (Default: PHP mail())</string>
   <string name="SYS_SEND_NEW_LOGIN">Do you want to send #VAR1_BOLD# an email with the current username and a new password?</string>
-  <string name="SYS_SEND_NEW_PW">Invia nuova password</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Send photo as greeting card</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Your PM will be sent to the selected recipient.</string>
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send email with username and password.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">CSV field separator</string>
-  <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">The server settings do not allow file uploads.</string>
   <string name="SYS_SETTINGS">Preferenze</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Set folder permissions</string>
@@ -1733,7 +1631,6 @@
   <string name="SYS_SHOW_ALL_CONTACTS">Allow showing all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
-  <string name="SYS_SHOW_CALENDAR">Visualizza calendartio</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">When enabled, users who are not logged in must enter the alphanumeric captcha text in the corresponding field. This helps prevent spammers from abusing the form. (Default: yes)</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
@@ -1767,12 +1664,10 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Similar contacts found</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Contacts with names similar to #VAR1_BOLD# were found.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Contacts with a similar name were found for the registration of #VAR1_BOLD# with the email address #VAR2_BOLD#. Please check the registration and assign it to a found contact or create a new contact.</string>
-  <string name="SYS_SINCE">dal #VAR1#</string>
   <string name="SYS_SINCE_TO">da #VAR1# a #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SISTER">Sister</string>
   <string name="SYS_SIZE">Grandezza</string>
-  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMALL">Small</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
@@ -2016,10 +1911,8 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Avvia</string>
-  <string name="SYS_START_BACKUP">Mulai proses cadangan</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">ancora #VAR1# caratteri</string>
-  <string name="SYS_STOP">Ferma</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUBJECT">Subject</string>
   <string name="SYS_SUBORDINATE">Subordinate</string>
@@ -2092,29 +1985,23 @@
   <string name="SYS_TOPIC">Topic</string>
   <string name="SYS_TOTAL">Total</string>
   <string name="SYS_TUESDAY">Martedì</string>
-  <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Tipo</string>
   <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Non identificato</string>
-  <string name="SYS_UNLIMITED">Illimitato</string>
-  <string name="SYS_UNLOCK">Sblocca</string>
   <string name="SYS_UNLOCK_ALBUM">Sblocca album</string>
   <string name="SYS_UNMANAGED_FILES">File non gestiti</string>
-  <string name="SYS_UPDATE">Aggiorna</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
-  <string name="SYS_UPLOAD_NAME_ERROR">Il nome del file non può essere \"Submit\".</string>
   <string name="SYS_UPLOAD_PHOTOS">Carica foto</string>
   <string name="SYS_UPLOAD_PROFILE_PICTURE">Upload profile picture</string>
   <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
-  <string name="SYS_USER">Utente</string>
   <string name="SYS_USERNAME">Username</string>
   <string name="SYS_USERNAME_DESCRIPTION">You can log in to the system with this name.\nThe name must be unique in the system. If your desired name is already taken, try combinations such as Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Username or email</string>
@@ -2162,7 +2049,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">For other organizations, only roles visible to all registered users are displayed. If you are a member of the organization, you can also see roles that your permissions in that organization allow you to view.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">View role memberships</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Choose who can view the members of this role. Users can see role memberships in member profiles and role lists. This setting does not grant access to member profiles. Lists display only first and last names. The #VAR1_BOLD# role permission overrides this setting.</string>
-  <string name="SYS_VISIBILITY">Visibilità</string>
   <string name="SYS_VISIBLE">Visibile</string>
   <string name="SYS_VISIBLE_FOR">Visible to</string>
   <string name="SYS_VISITORS">Ospiti</string>
@@ -2170,7 +2056,6 @@
   <string name="SYS_WANT_DELETE_ENTRY">Do you want to delete the entry #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt will be downloaded and installed without being enabled. You can enable it in the plugin manager afterward.</string>
-  <string name="SYS_WANT_REGISTER">Vorrei iscrivermi!</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoval affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
@@ -2184,7 +2069,6 @@
   <string name="SYS_WEEKDAY">Weekday</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
   <string name="SYS_WEEKLY">Weekly</string>
-  <string name="SYS_WHAT_TO_DO">Cosa fare?</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WIFE">Wife</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>

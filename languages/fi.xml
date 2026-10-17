@@ -1180,7 +1180,6 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Tämän roolin jäsenet saavat ilmoituksia moduulien uusista tai muuttuneista tiedoista sekä jäsenten profiilitietojen muutoksista. Tietosuojasyistä voidaan tallentaa vain rooleja, joilla on roolioikeus #VAR1_BOLD#.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Ei ilmoittautumisen yhteydessä</string>
   <string name="SYS_NOT_EMPTY">Ei Tyhjä</string>
-  <string name="SYS_NOT_INSTALLED">Ei asennettu</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Ei kuulu mihinkään organisaatioon</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Ei kuulu järjestöön #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Käytä kelvollista numeroa ehtona kentälle #VAR1_BOLD#.</string>
@@ -1372,7 +1371,6 @@
   <string name="SYS_PLUGIN_STORE_UNAVAILABLE">The list of plugins published for Admidio could not be read. Uploading a plugin from a file still works.</string>
   <string name="SYS_PLUGIN_STORE_VERSION_MISMATCH">The catalog listed version #VAR2# of the plugin #VAR1#, but the downloaded archive contains version #VAR3#. The download was rejected.</string>
   <string name="SYS_PLUGIN_UPDATE">Päivitä laajennus</string>
-  <string name="SYS_PLUGIN_UPDATED">Laajennus päivitettiin onnistuneesti.</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Laajennuksen versio</string>
   <string name="SYS_PORT">Portti</string>
@@ -1409,7 +1407,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Sinun tulisi olla itse kuvassa. Kuvan enimmäistarkkuus voi olla #VAR1# megapikseliä. Kuvatiedoston koko ei saa ylittää #VAR1# Mt, ja sen on oltava JPG- tai PNG-muodossa.</string>
   <string name="SYS_PROPERTIES">Ominaisuudet</string>
   <string name="SYS_PWA_ENABLED">Ota Progressive Web App  (PWA) käyttöön</string>
   <string name="SYS_PWA_ENABLED_DESC">Antaa käyttäjille mahdollisuuden asentaa Admidio itsenäisenä verkkosovelluksena älypuhelimeen, tablet-laitteeseen tai tietokoneelle. Sovelluksen nimi perustuu organisaation nimeen. Mukautetut sovelluskuvakkeet voidaan tallentaa kansioon adm_my_files/ tiedostoina app_icon.png tai app_icon_512.png. Muussa tapauksessa varasuunnitelmana käytetään ”Design”-kohdassa määritettyä PNG-muotoista favicon-kuvaketta tai oletuslogoa.</string>

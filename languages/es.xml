@@ -1,60 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!-- Some strings use English reference texts pending translation. -->
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">Volver el Libro de Visitas</string>
-  <string name="GBO_CAPTCHA_DESC">Si esta opción está activada, los usuarios que no hayan iniciado sesión obtendrán una imagen con un código captcha o un cálculo simple. Es necesario escribir correctamente el código  suministrado, o el resultado del cálculo presentado para permitir su entrada. El captcha es parte de la solución antispam en Admidio. (Predeterminado: sí)</string>
-  <string name="GBO_COMMENTS4ALL">Permitir comentarios anónimos</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Después de activar esta opción, los usuarios que no hayan iniciado sesión pueden comentar en las entradas del Libro de Visitas. Se pasará por alto la asignación de privilegios para esta función. (Predeterminado: No)</string>
-  <string name="GBO_COMMENT_BY">Comentario de #VAR1#</string>
-  <string name="GBO_CREATE_COMMENT">Comentar</string>
-  <string name="GBO_EDIT_COMMENT">Editar comentario</string>
-  <string name="GBO_ENTRY_QUEUED">Entrada guardada. Será visible cuando sea aprobada.</string>
-  <string name="GBO_FLOODING_PROTECTION">Su última entrada fue creada hace menos de #VAR1# segundos.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL">Protección intervalo de inundaciones</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Se controlarán las entradas de los usuarios no registrados. No se permiten muchas entradas en un periodo determinado de tiempo. Esta opción le permite controlar esas entradas no deseadas. Si el valor es 0, no se realizará ningún control. (Predeterminado: 60 segundos)</string>
-  <string name="GBO_GUESTBOOK">Libro de Visitas</string>
-  <string name="GBO_GUESTBOOK_DESC">Los visitantes y los usuarios pueden dejar sus saludos y comentarios aquí, así como comentar sobre las entradas de otros.</string>
-  <string name="GBO_GUESTBOOK_MODERATION">Moderación activada para</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Las entradas en el Libro de Vistas serán visibles después de su aprobación. Defina si esta moderación debe hacerse para los invitados, solo para los usuarios registrados, o no revisar ninguno. (Predeterminado: ninguno)</string>
-  <string name="GBO_HIDE_COMMENTS">Ocultar comentarios</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING">mostrar comentarios directamente</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Si esta opción está activa, al cargar una página del Libro de Visitas los comentarios serán visualizados directamente. Si no, el usuario tendrá que hacer clic en un enlace para poder leer los comentarios. (Predeterminado: No)</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Últimas entradas en el Libro de visitas de la organización #VAR1#.</string>
-  <string name="GBO_MODERATE_ENTRIES">moderar los mensajes</string>
-  <string name="GBO_MODERATE_VAR">moderar #VAR1#</string>
-  <string name="GBO_ONLY_VISITORS">solo visitantes</string>
-  <string name="GBO_SHOW_COMMENTS">Ver comentarios</string>
-  <string name="GBO_SHOW_COMMENTS_ON_ENTRY">mostar  #VAR1# comentario(s) de este mensaje</string>
-  <string name="GBO_WRITE_COMMENT">escribir un comentario</string>
   <string name="INS_ADDIDIONAL_DATA">datos adicionales</string>
   <string name="INS_ADDRESS_LIST">lista de direcciones</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ANOTHER_ORGANIZATION">añadir otra organización</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">La información del administrador está incompleta.</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">La actualización de la base de datos solo puede ser realizada por un Administrador. Por favor ingrese aquí los datos de acceso de un usuario administrador.</string>
   <string name="INS_BOARD">Junta Directiva</string>
-  <string name="INS_BOYFRIEND">Amigo</string>
-  <string name="INS_COMPANION">Amig@</string>
   <string name="INS_CONFERENCE_ROOM">Sala de reuniones.</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">El archivo #VAR1_BOLD# no se pudo encontrar en la carpeta principal de Admidio\n\nPor favor descargue nuevamente el archivo y cópielo al directorio indicado.</string>
   <string name="INS_CONTINUE_INSTALLATION">continuar la instalación</string>
   <string name="INS_COURSES">cursos</string>
   <string name="INS_CREATE_ADMINISTRATOR">crear administrador</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Creando el archivo de configuración.</string>
-  <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">¡Los parámetros de la base de datos no se han completado!</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">El archivo #VAR1_BOLD# no se pudo encontrar en la carpeta #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Escriba el nombre del servidor de la base de datos. Puede ser una URL o localhost si la base de datos está corriendo en la misma máquina que la página web.</string>
-  <string name="INS_DATABASE_IS_UPDATED">La base de datos se actualiza</string>
   <string name="INS_DATABASE_LOGIN">Datos de acceso a la base de datos</string>
   <string name="INS_DATABASE_LOGIN_DESC">Escriba la información de acceso a su base de datos. El prefijo de tabla puede ser modificado si es necesario. Se requiere una configuración personalizada si múltiples instalaciones de Admidio están usando la misma base de datos.</string>
-  <string name="INS_DATABASE_NAME_INVALID">¡El nombre de la base de datos contiene caracteres inválidos!</string>
   <string name="INS_DATABASE_PORT_INFO">Si este campo está vacío, se usará el puerto estándar para la base de datos (MySQL: 3306, PostgreSQL: 5432). Si su proveedor de hosting requiere que use otro puerto, puede escribirlo aquí.</string>
   <string name="INS_DATABASE_PORT_INVALID">El puerto especificado no es válido. Para un puerto válido, seleccione entre 1 y 65535 o deje el campo en blanco.</string>
   <string name="INS_DATABASE_SYSTEM">sistema de base de datos</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio sólo es compatible con MySQL y PostgreSQL.</string>
-  <string name="INS_DATABASE_USER_INVALID">¡El nombre de usuario de la base de datos contiene caracteres no válidos!</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Se establecerá la base de datos</string>
   <string name="INS_DATA_DO_NOT_MATCH">La información suministrada en #VAR1_BOLD# no coincide con la información del asistente de instalación.\n\nPor favor, compruebe su config.php y cambie los datos de acuerdo con la información que acaba de ingresar.</string>
   <string name="INS_DATA_FULLY_ENTERED">Usted ha registrado toda la información necesaria para instalar Admidio.\n\nAhora se creará la base de datos y se alimentará con su información.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Datos del administrador</string>
@@ -69,21 +34,17 @@
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">El archivo de configuración #VAR1_BOLD# no pudo ser guardado en la carpeta #VAR2_BOLD#. Por favor asigne a la carpeta los respectivos privilegiosen el directorio Admidio  de escritura (cambie el atributo del archivo a través de FTP a 0777 o drwxrwxrwx) o descargue el archivo de configuraciones y cópielo en el directorio Admidio #VAR3_BOLD# usando un programa FTP.\n\nCuando haya copiado el archivo en esta ubicación podrá continuar con la instalación.</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Introduzca el acceso a la base de datos</string>
   <string name="INS_ERROR_OPEN_FILE">El archivo #VAR1_BOLD# no pudo abrirse.</string>
-  <string name="INS_GIRLFRIEND">Amiga</string>
   <string name="INS_GROUPS">grupos</string>
   <string name="INS_HOST_INVALID">El hostname no es válido. Escriba un nombre correcto o una dirección IP válida.</string>
   <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Some third-party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
   <string name="INS_INSTALLATION">Instalación</string>
   <string name="INS_INSTALLATION_EXISTS">En la base de datos, una instalación Admidio ya existe. Una re-instalación no es posible.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">La instalación y configuración de la base de datos Admidio se ha completado, el sistema está listo para ser usado. Por favor inicie sesión con los datos del administrador del sistema.</string>
   <string name="INS_INSTALLATION_VERSION">Instalación de la versión #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">La instalación se ha realizado con éxito</string>
   <string name="INS_INSTALL_ADMIDIO">instalar Admidio</string>
   <string name="INS_INTERN">interno</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">no se ha seleccionado un lenguaje.</string>
   <string name="INS_MEMBERSHIP">membresía</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">No se pudo encontrar la instalación actual. Si usted usó Admidio 1.x actualice primero a Admidio 2.x  Después podrá actualizar la versión a #VAR1#. Si ya está usando Admidio 2.x o superior, por favor revise la consistencia de su base de datos.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">¡El nombre de organización suministrado no está completo!</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">La organización #VAR1_BOLD# ya existe. Por favor use otro nombre.</string>
   <string name="INS_PHONE_LIST">lista de teléfonos</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Por favor seleccione un idioma.</string>
@@ -91,12 +52,8 @@
   <string name="INS_SETUP_WAS_SUCCESSFUL">La configuración se realizó con éxito</string>
   <string name="INS_SET_ORGANIZATION">Establecer organización </string>
   <string name="INS_SET_UP_ORGANIZATION">Instalar organización</string>
-  <string name="INS_SUPERIOR">Superiores</string>
-  <string name="INS_SUPERIOR_FEMALE">Jefa</string>
-  <string name="INS_SUPERIOR_MALE">Superior</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">¡Agradeceríamos mucho que usted pudiera apoyar el desarrollo de Admidio con su donación!</string>
   <string name="INS_TABLE_PREFIX">Prefijo de tabla</string>
-  <string name="INS_TABLE_PREFIX_INVALID">El prefijo de tabla ontiene caracteres no válidos!</string>
   <string name="INS_TEAMS">equipos</string>
   <string name="INS_TRAINING">entrenamiento</string>
   <string name="INS_UPDATE">actualización</string>
@@ -121,7 +78,6 @@
   <string name="ORG_ACCESS_TO_PLUGIN">Plugin access</string>
   <string name="ORG_ACCESS_TO_PLUGIN_DESC">The plugin can be disabled or restricted to logged-in users. If access is restricted to logged-in users, the plugin is hidden from guests and the web feed is disabled for everyone. (Default: enabled)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Variables adicionales</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">Agrega una nueva organización, con sus datos maestros, en la base de datos. El usuario actual se designa automáticamente como administrador y puede llevar a cabo la configuración adicional. Los usuarios que inicien sesión en el sistema, deberán seleccionar la organización respectiva.</string>
   <string name="ORG_ADMIDIO_THEME">Tema Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">El diseño actual de Admidio se puede seleccionar aquí. Se muestran todos los diseños de la carpeta themes. (Predeterminado: simple)</string>
   <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback theme</string>
@@ -143,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Color de la línea</string>
   <string name="ORG_CAPTCHA_PREVIEW">Vista preliminar del captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">La vista previa del Captcha solo tiene en cuenta las configuraciones ya guardadas.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Al registrarse, se mostrará una imagen con un código captcha  o un cálculo simple para todos los usuarios. Es necesario escribir el código correcto o el resultado matemático para ingresar. Esto es para asegurar que los spammers no abusen del formulario. (Predeterminado: sí)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Subtítulo captcha</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Aquí se puede especificar el subtítulo del captcha. Se usará la fuente predeterminada del tema actual.</string>
   <string name="ORG_CAPTCHA_SIGNS">Caracteres válidos</string>
@@ -282,7 +237,6 @@
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Todos los miembros de esta organización.</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
-  <string name="SYS_ANNOUNCEMENT">Anuncio</string>
   <string name="SYS_ANNOUNCEMENTS">Anuncios</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Publicar o editar anuncios, novedades, u otra información.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
@@ -305,7 +259,6 @@
   <string name="SYS_ASSIGN_REGISTRATION">Asignar registro</string>
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The member can now log in to the system.</string>
   <string name="SYS_ASSIGN_ROLE">Asignar rol</string>
-  <string name="SYS_ASSIGN_ROLES">Asignar roles</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Seleccione un rol al que se asignarán automáticamente todos los usuarios importados.\n\nSólo podrá seleccionar los roles que usted tiene.</string>
   <string name="SYS_ASSIGN_ROLE_TO_USER">The data cannot be saved.\nAt least one role must be assigned to the contact.</string>
   <string name="SYS_ASYMMETRICAL">Asymmetrical</string>
@@ -323,12 +276,7 @@
   <string name="SYS_AVAILABLE_BETA">Available beta version</string>
   <string name="SYS_A_TO_Z">A hasta Z</string>
   <string name="SYS_BACK">Atrás</string>
-  <string name="SYS_BACKUP_COMPLETED">Archivo de respaldo creado en #VAR1#</string>
-  <string name="SYS_BACKUP_FILE">Archivo de respaldo</string>
-  <string name="SYS_BACKUP_FROM">Archivo de respaldo creado en #VAR1# a las #VAR2#</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">El módulo de backup sólo se puede utilizar en una base de datos MySQL.</string>
   <string name="SYS_BACK_TO_ALBUM">Back to album</string>
-  <string name="SYS_BACK_TO_BACKUP_PAGE">Volver a la página de respaldo</string>
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Cumpleaños</string>
@@ -392,8 +340,6 @@
   <string name="SYS_CHANGE_HISTORY_USERDATA">Change history of user data and memberships</string>
   <string name="SYS_CHANGE_PASSWORD">Change password</string>
   <string name="SYS_CHARACTERS">Characters</string>
-  <string name="SYS_CHARACTER_ENCODING">Codificación de caracteres</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Codificación de caracteres con la que Admidio envía un correo electrónico. Dado que no todos los clientes de correo electrónico pueden procesar UTF-8 correctamente, ISO-8859-1 puede configurarse alternativamente aquí.</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">The checkbox state is saved automatically when changed.</string>
   <string name="SYS_CHECK_FOR_UPDATE">Check for update</string>
@@ -501,7 +447,6 @@
   <string name="SYS_CREATE_FOLDER">Crear carpeta</string>
   <string name="SYS_CREATE_FOLDER_DESC">Una nueva carpeta será creada en la carpeta #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Create .htaccess</string>
-  <string name="SYS_CREATE_LINK">Crear enlace</string>
   <string name="SYS_CREATE_MEMBER">Crear usuario</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Crear nueva configuración</string>
   <string name="SYS_CREATE_POST">Create post</string>
@@ -524,7 +469,6 @@
   <string name="SYS_DATABASE_BACKUP">Respaldo (backup) de la base de datos.</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Copias de respaldo de bases de datos de las tablas Admidio se pueden crear y descargar aquí.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">No se requiere una actualización de la base de datos.</string>
-  <string name="SYS_DATABASE_ERROR">Error de la base de datos</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">la base de datos de Admidio es actual</string>
   <string name="SYS_DATABASE_NO_LOGIN">The connection to the database failed!\n\nThe following error occurred:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Could not connect to the database.\n\nPlease check the database credentials in adm_my_files/config.php. If this file is from another installation, remove it from the folder so the installation wizard can create a new one. You can then continue the installation.\n\nThe following error occurred:\n#VAR1#.</string>
@@ -550,7 +494,6 @@
   <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Período predeterminado para el historial de cambios (en días)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Los cambios en los campos del perfil serán listados por este período de tiempo en días. Este es el filtro predeterminado, que el usuario puede cambiar más adelante. En el caso de grandes bases de datos, esto sirve para restringir la cantidad de datos al consultar el historial de cambios. (Predeterminado: 365)</string>
-  <string name="SYS_DAYS_VAR">#VAR1# días</string>
   <string name="SYS_DEACTIVATE_ROLE">Deactivate role</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">If you deactivate the role #VAR1_BOLD#, it can no longer be used or assigned to objects, and its permissions no longer apply. The role, its settings, and all member assignments are preserved so it can be reactivated later.</string>
   <string name="SYS_DEADLINE">Cierre de inscripción</string>
@@ -688,7 +631,6 @@
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was created</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">The profile of the user #VAR1# #VAR2# (login: #VAR3#) was deleted by #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was deleted</string>
-  <string name="SYS_EMAIL_DESC">Los correos electrónicos se pueden enviar a diferentes roles como grupos, cursos o departamentos.</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# function test email</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">This email was sent via the #VAR1# website of the #VAR2# organization with the email settings stored there.</string>
   <string name="SYS_EMAIL_INVALID">Email address in field #VAR1_BOLD# includes invalid characters or is incomplete.</string>
@@ -756,10 +698,8 @@
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
   <string name="SYS_EXPORT">Export</string>
-  <string name="SYS_EXPORT_ICAL">Exportar (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Export lists</string>
   <string name="SYS_EXPORT_LISTS_DESC">Users can export group and role lists they have permission to view. Use this setting to restrict who can export lists. (Default: all)</string>
-  <string name="SYS_EXPORT_TO">Exportar a</string>
   <string name="SYS_EXPORT_VCARD">Export vCard</string>
   <string name="SYS_EXTENSION">Extension</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
@@ -768,7 +708,6 @@
   <string name="SYS_FATHER">Padre</string>
   <string name="SYS_FAVICON_FILE">Favicon file</string>
   <string name="SYS_FAVICON_FILE_DESC">The relative path to the logo file, starting from the Admidio root directory. The logo is displayed in the upper-left corner. If left empty, the theme's default logo will be used. (Default: empty)</string>
-  <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Feminino</string>
   <string name="SYS_FIELD">Field</string>
   <string name="SYS_FIELD_EMPTY">Field #VAR1_BOLD# is empty.</string>
@@ -784,7 +723,6 @@
   <string name="SYS_FILES_UPLOAD_DESC">Por favor seleccione todos los archivos a cargar en la carpeta  #VAR1_BOLD#.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">No todos los archivos fueron cargados exitosamente.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Todos los archivos fueron cargados exitosamente. \n\nEl cuadro de diálogo puede ser cerrado.</string>
-  <string name="SYS_FILE_COLUMN">Columna de archivos</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
   <string name="SYS_FILE_EXIST">El archivo #VAR1# ya existe.\n\nPor favor use un nombre diferente.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Tipo de archivo no permitido en este servidor.</string>
@@ -810,7 +748,6 @@
   <string name="SYS_FOLDER_NOT_EXISTS">La carpeta ya no existe físicamente en el servidor. Debe ser eliminada de la base de datos.</string>
   <string name="SYS_FOLDER_NOT_FOUND">La carpeta (ID #VAR1#) no se pudo encontrar.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">La carpeta #VAR1_BOLD# no tiene permisos de escritura. No se pudieron establecer automáticamente los permisos necesarios. Conceda permisos de escritura a la carpeta #VAR1_BOLD# (mediante FTP, establezca los atributos en 0777 o drwxrwxrwx).</string>
-  <string name="SYS_FOLDER_NO_FILES">La carpeta no contiene ningún archivo.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">No tiene autorización para ver la carpeta seleccionada.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Ocurrió un error al renombrar la carpeta #VAR1#.</string>
@@ -858,21 +795,14 @@
   <string name="SYS_HEADER_PREFERENCES">Settings</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
   <string name="SYS_HEADLINE">Titulo</string>
-  <string name="SYS_HELP">Ayuda</string>
   <string name="SYS_HIDDEN">Oculto</string>
-  <string name="SYS_HIDE">Ocultar</string>
   <string name="SYS_HIGHLIGHT_EVENT">Resaltar la fecha.</string>
   <string name="SYS_HOMEPAGE">Página principal</string>
   <string name="SYS_HOST">Host</string>
-  <string name="SYS_HOURS_VAR">#VAR1# Horas</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML-Mails</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">La creación y envío de correos HTML se puede activar para los usuarios registrados. En lugar del campo de texto normal, se muestra un editor de JavaScript a través del cual el texto se puede editar cómodamente. Por razones de seguridad, esta función no está disponible para los invitados.</string>
   <string name="SYS_HTML_TABLE">HTML table</string>
   <string name="SYS_HUSBAND">Esposo</string>
-  <string name="SYS_ICAL_DAYS_FUTURE">Número de días iCal en el futuro.</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Número de días en el futuro, para ser incluidos en una descarga iCal. Si la descarga iCal se inicia en el módulo de eventos, este ajuste será ignorado y las citas filtradas serán exportadas. (Predeterminado: 365)</string>
-  <string name="SYS_ICAL_DAYS_PAST">Número de días iCal en el pasado.</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Número de días en el pasado, para ser incluidos en una descarga iCal. Si la descarga iCal se inicia en el módulo de Eventos, este ajuste será ignorado y las citas filtradas serán exportadas. (Predeterminado: 30)</string>
   <string name="SYS_ICAL_DISABLED">The iCal function is disabled.</string>
   <string name="SYS_ICON">Icono</string>
   <string name="SYS_ICON_FONT_DESC">Choose an icon from \"Bootstrap Icons\" at #VAR1#https://icons.getbootstrap.com#VAR2# and enter its name in this field.</string>
@@ -1051,11 +981,9 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER_DESC">If this option is enabled, the current user is used as the default selection for the keeper when creating a new item. (Default: no)</string>
-  <string name="SYS_IO_ERROR">Error I/O</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ITALIC">Italic</string>
-  <string name="SYS_ITEMNAME">Nombre del producto</string>
   <string name="SYS_KEEP_ORIGINAL">Also save original files</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Save each photo at its original size as well as at the selected resolution. If #VAR1_BOLD# is enabled, downloads use the original photos. This option requires significantly more storage space and should only be enabled if enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Formato oblongo</string>
@@ -1089,10 +1017,8 @@
   <string name="SYS_LINK_TARGET_DESC">Decida si el sitio web seleccionado se debe visualizar en la ventana de Admidio o en una nueva ventana.</string>
   <string name="SYS_LIST">Lista</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
-  <string name="SYS_LOCATION_LINK">Si se suministra suficiente información sobre el lugar (calle, ciudad, lugar), Google Maps podrá calcular la ruta al mismo.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Storage location of profile pictures</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Choose where to store profile pictures: in the database or in the adm_my_files folder. Changing this setting does not move existing pictures to the new location. (Default: database)</string>
-  <string name="SYS_LOCK">Bloquear</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOCK_ALBUM">Lock album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Locked albums cannot be viewed by visitors or members. For example, you can lock an album until all images have been uploaded.</string>
@@ -1185,7 +1111,6 @@
   <string name="SYS_MESSAGES_DESC">View sent emails and private messages. Compose and send new messages to individual contacts or roles.</string>
   <string name="SYS_MESSAGE_WENT_TO">El mensaje fue a</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# Minutos</string>
   <string name="SYS_MOBILE">Celular</string>
   <string name="SYS_MODAL_WINDOW">Modal window</string>
   <string name="SYS_MODULES">Módulo</string>
@@ -1222,7 +1147,6 @@
   <string name="SYS_NEW_ORGANIZATION_DESC">Enter the abbreviation, official name, and email address of the organization you want to add. Use a general organization email address, which will also serve as the sender address for automatic system notifications. The organization will be created with these details, and you will become its administrator so you can complete the setup.</string>
   <string name="SYS_NEW_PASSWORD">New password</string>
   <string name="SYS_NEW_PROFILE_PICTURE">New profile picture</string>
-  <string name="SYS_NEW_REGISTRATIONS">Nuevos registraciones</string>
   <string name="SYS_NEW_ROLE">New role</string>
   <string name="SYS_NEW_VALUE">Nuevo Valor</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">A new stable version is available!</string>
@@ -1255,9 +1179,6 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Por favor, se requiere una fecha válida para el campo #VAR1_BOLD#</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">No se han establecido permisos adicionales.</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">No additional rights</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">¡No se encontró un archivo de backup!</string>
-  <string name="SYS_NO_CHANGES_LOGGED">No se han registrado cambios.</string>
-  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">No se han registrado cambios para #VAR1_BOLD#.</string>
   <string name="SYS_NO_DATA_FOUND">No data found!</string>
   <string name="SYS_NO_DEFAULT_ROLE">You cannot remove the setting #VAR1_BOLD#, because at least one role must be stored as the default assignment.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">The role management contains no default role for new users. Please contact an administrator who can edit this setting.</string>
@@ -1317,7 +1238,6 @@
   <string name="SYS_OVERVIEW">Vista general</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Overview extensions</string>
   <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Change the order of extensions on the overview page using drag and drop on larger screens or the move buttons on smaller screens.\n\nThe new order takes effect only after you save the settings.</string>
-  <string name="SYS_PAGE">Página</string>
   <string name="SYS_PAGE_NEXT">Siguiente</string>
   <string name="SYS_PAGE_PREVIOUS">Anterior</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2">#VAR1# and #VAR2#</string>
@@ -1381,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio necesita #VAR1# o mas alto</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Elige por favor</string>
-  <string name="SYS_PLEASE_WAIT">Espere por favor</string>
   <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
@@ -1463,7 +1382,6 @@
   <string name="SYS_PREVIOUS_VALUE">Previous value</string>
   <string name="SYS_PRINT_PREVIEW">Vista previa de impresión</string>
   <string name="SYS_PRIVATE_MESSAGES">Mensaje privado</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">El mensaje privado no se pudo enviar a #VAR1_BOLD#.\n\nOcurrió el siguiente error:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">El mensaje privado ha sido enviado a #VAR1_BOLD#.</string>
   <string name="SYS_PRNG">Pseudo-random number generator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP cannot generate secure pseudo-random numbers! Please contact the Admidio team with the following information:</string>
@@ -1504,7 +1422,6 @@
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Campo opcionales</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Últimos anuncios de la organización #VAR1#</string>
   <string name="SYS_RECIPIENT">Destinario</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail del destinatario</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
@@ -1564,8 +1481,6 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">¿Realmente desea eliminar este evento? Los participantes también serán removidos.</string>
   <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Eliminar mensaje</string>
-  <string name="SYS_REMOVE_USER">Remover usuario</string>
-  <string name="SYS_REMOVE_USER_DESC">Si selecciona #VAR1_BOLD#, el registro se eliminará irrevocablemente de la base de datos, y sus datos no se podrán recuperar.</string>
   <string name="SYS_REPEAT">Repetir</string>
   <string name="SYS_REPEATS">Repeats</string>
   <string name="SYS_REPLACE">Reemplazar</string>
@@ -1577,7 +1492,6 @@
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
   <string name="SYS_RESTORE_ENTRY">Restore entry</string>
-  <string name="SYS_RESTRICTIONS">Limitaciones</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">View member lists of all roles and all member profiles</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Manage announcements</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Organize and assign registrations</string>
@@ -1636,7 +1550,6 @@
   <string name="SYS_RSS_DISABLED">Web feed is disabled.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Web feed for #VAR1#</string>
   <string name="SYS_RUN_REPORT">Run report</string>
-  <string name="SYS_SAFE_MODE">Modo seguro</string>
   <string name="SYS_SAME_WINDOW">Misma ventanilla</string>
   <string name="SYS_SATURDAY">Sabado</string>
   <string name="SYS_SAVE">Guardar</string>
@@ -1647,7 +1560,6 @@
   <string name="SYS_SAVE_CHANGES">Guardar cambios</string>
   <string name="SYS_SAVE_CONFIGURATION">Guardar configuración</string>
   <string name="SYS_SAVE_DATA">Data has been saved.</string>
-  <string name="SYS_SEARCH">Busqueda</string>
   <string name="SYS_SEARCH_AGE_DESC">Busca a los usuarios mayores de 18 años</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18años</string>
   <string name="SYS_SEARCH_DATE_DESC">Busca todo los usuarios, que nacieron despues del 01.03.1986</string>
@@ -1669,7 +1581,6 @@
   <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Busca a todos los usuarios con una marca de verificación.</string>
   <string name="SYS_SEATING">Seating</string>
   <string name="SYS_SEAT_AMOUNT">Sillas adicionales</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# segundos</string>
   <string name="SYS_SECURE">Seguro</string>
   <string name="SYS_SECURITY">Security</string>
   <string name="SYS_SECURITY_CODE">Authentication code</string>
@@ -1712,7 +1623,6 @@
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Enviar un email con el nombre de usuario y la contraseña.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">CSV field separator</string>
-  <string name="SYS_SERVER">Servidor</string>
   <string name="SYS_SERVER_NO_UPLOAD">The server settings do not allow file uploads.</string>
   <string name="SYS_SETTINGS">Ajustes</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Eestablecer permisos de carpeta</string>
@@ -1721,13 +1631,11 @@
   <string name="SYS_SHOW_ALL_CONTACTS">Allow showing all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">Si esta opción no está seleccionada, solo serán listados los miembros de esta organización. De lo contrario, serán visibles todos los usuarios de la base de datos.</string>
-  <string name="SYS_SHOW_CALENDAR">Mostrar calendario</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Para los usuarios desconectados aparecerá un texto alfanumérico cuando el módulo captcha esté activado. El texto suministrado debe escribirse en el campo apropiado. Esto debería evitar el acceso de los spammers. (Predeterminado: sí)</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Muestra a los ex miembros.</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Este campo se puede usar para determinar quién puede ver antiguos miembros. El usuario debe, sin embargo, tener el derecho de ver su propio rol. Los líderes de un rol también pueden ver los miembros de su rol, si se les ha otorgado el mismo derecho que se establece aquí. (Predeterminado: #VAR1#)</string>
-  <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Muestra solamente miembros antiguos</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Usuario con permiso #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Display former role memberships</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">A box will be shown with all roles of the user in the current organization. Membership start and end date will be displayed. (Default: yes)</string>
@@ -1760,7 +1668,6 @@
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SISTER">Hermana</string>
   <string name="SYS_SIZE">Size</string>
-  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMALL">Small</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">Autenticación SMTP</string>
@@ -2004,10 +1911,8 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Empezar</string>
-  <string name="SYS_START_BACKUP">Iniciar backup</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
   <string name="SYS_STILL_X_CHARACTERS">#VAR1# characters remaining</string>
-  <string name="SYS_STOP">Pare</string>
   <string name="SYS_STREET">Calle</string>
   <string name="SYS_SUBJECT">Asunto</string>
   <string name="SYS_SUBORDINATE">Subordinad@</string>
@@ -2080,18 +1985,14 @@
   <string name="SYS_TOPIC">Topic</string>
   <string name="SYS_TOTAL">Suma</string>
   <string name="SYS_TUESDAY">Martes</string>
-  <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Tipo</string>
   <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Unidirectional</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Desconocido</string>
-  <string name="SYS_UNLIMITED">Ilimitado</string>
-  <string name="SYS_UNLOCK">Desboquear</string>
   <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNMANAGED_FILES">Archivos no administrados</string>
-  <string name="SYS_UPDATE">actualizar</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
   <string name="SYS_UPLOAD_FILES">Subir archivos</string>
@@ -2101,13 +2002,11 @@
   <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">The URL in the field #VAR1_BOLD# contains invalid characters.\n\nOnly alphabetic characters, umlauts, numbers 0-9 and special characters .-+_:/#?= are allowed.</string>
-  <string name="SYS_USER">Usuario</string>
   <string name="SYS_USERNAME">Nombre del usuario</string>
   <string name="SYS_USERNAME_DESCRIPTION">You can log in to the system with this name.\nThe name must be unique in the system. If your desired name is already taken, try combinations such as Andi78 or SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Nombre del usuario y E-Mail</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_USERS">Users</string>
-  <string name="SYS_USERS_PER_PAGE">Cantidad de usuarios por página</string>
   <string name="SYS_USER_COULD_BE_CREATED">El usuario puede ser creado</string>
   <string name="SYS_USER_DELETE_DESC">¿Realmente desea eliminar a #VAR1_BOLD#?\n\nEl usuario será eliminado de la base de datos, lo que impedirá el acceso posterior a su información.</string>
   <string name="SYS_USER_EMAIL">User email</string>
@@ -2150,7 +2049,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">For other organizations, only roles visible to all registered users are displayed. If you are a member of the organization, you can also see roles that your permissions in that organization allow you to view.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">View role memberships</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Choose who can view the members of this role. Users can see role memberships in member profiles and role lists. This setting does not grant access to member profiles. Lists display only first and last names. The #VAR1_BOLD# role permission overrides this setting.</string>
-  <string name="SYS_VISIBILITY">Visibilidad</string>
   <string name="SYS_VISIBLE">Visible</string>
   <string name="SYS_VISIBLE_FOR">Visible to</string>
   <string name="SYS_VISITORS">Visitantes</string>
@@ -2158,7 +2056,6 @@
   <string name="SYS_WANT_DELETE_ENTRY">Do you want to delete the entry #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Would you like to delete the selected photo?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt will be downloaded and installed without being enabled. You can enable it in the plugin manager afterward.</string>
-  <string name="SYS_WANT_REGISTER">Yo quiero registrarme!</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoval affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
@@ -2172,7 +2069,6 @@
   <string name="SYS_WEEKDAY">Weekday</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
   <string name="SYS_WEEKLY">Weekly</string>
-  <string name="SYS_WHAT_TO_DO">¿Qué hay que hacer?</string>
   <string name="SYS_WIDTH">Ancho</string>
   <string name="SYS_WIFE">Esposa</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>

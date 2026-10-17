@@ -1,61 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!-- Some strings use English reference texts pending translation. -->
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">Πίσω στο βιβλίο επισκεπτών</string>
-  <string name="GBO_CAPTCHA_DESC">Εάν ενεργοποιηθεί αυτή η επιλογή, οι χρήστες που δεν είναι συνδεδεμένοι θα λάβουν μια εικόνα με έναν κωδικό captcha ή έναν απλό υπολογισμό. Είναι απαραίτητο να συμπληρώσετε τον σωστό κωδικό ή αποτέλεσμα για να αποθηκεύσετε την καταχώριση. Το captcha είναι μέρος της λύσης antispam στο Admidio. (default: yes)</string>
-  <string name="GBO_COMMENTS4ALL">Επιτρέπονται σχόλια σε όλους</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Οι χρήστες που δεν είναι συνδεδεμένοι μπορούν να σχολιάσουν τις εγγραφές στο βιβλίο επισκεπτών αφού ενεργοποιήσουν αυτήν την επιλογή. Στη συνέχεια, αγνοείται η εκχώρηση δικαιωμάτων για αυτήν τη λειτουργία μέσω της διαχείρισης ρόλων. (Default: no)</string>
-  <string name="GBO_COMMENT_BY">Σχόλια από #VAR1#</string>
-  <string name="GBO_CREATE_COMMENT"> Αφήστε σχόλια</string>
-  <string name="GBO_EDIT_COMMENT">Τροποποίηση σχολίων</string>
-  <string name="GBO_ENTRY_QUEUED">Η καταχώρηση αποθηκεύτηκε. Θα εμφανιστεί μετά από έλεγχο.</string>
-  <string name="GBO_FLOODING_PROTECTION">Η τελευταία καταχώρισή σας δημιουργήθηκε λιγότερο από #VAR1# δευτερόλεπτα πριν.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL">Χρονικό διάστημα προστασίας από πολλαπλές καταχωρήσεις.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Οι καταχωρήσεις μη εγγεγραμμένων χρηστών θα ελέγχονται. Δεν επιτρέπονται πάρα πολλές καταχωρήσεις εντός του δεδομένου χρονικού διαστήματος. Αυτή η επιλογή επιτρέπει τον έλεγχο των ανεπιθύμητων καταχωρήσεων. Εάν το διάστημα έχει οριστεί στο 0, δεν θα γίνει κανένας έλεγχος. (default: 60 seconds)</string>
-  <string name="GBO_GUESTBOOK">Βιβλίο επισκεπτών</string>
-  <string name="GBO_GUESTBOOK_DESC">Οι επισκέπτες και οι χρήστες μπορούν να αφήνουν χαιρετισμούς και σχόλια και μπορούν να σχολιάζουν τις καταχωρήσεις άλλων.</string>
-  <string name="GBO_GUESTBOOK_MODERATION">Ενεργοποίηση ελέγχου για</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Οι καταχωρήσεις στο βιβλίο επισκεπτών θα εμφανίζονται μετά την εποπτεία. Καθορίστε εάν η εποπτεία θα πρέπει να εκτελείται σε περίπτωση επισκεπτών ή μόνο για συνδεδεμένους χρήστες, ή εάν τα σχόλια κανενός δεν πρέπει να ελέγχονται εκ των προτέρων. (default: Nobody)</string>
-  <string name="GBO_HIDE_COMMENTS">Απόκρυψη σχολίων</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING">Εμφάνιση σχολίων άμεσα</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Εάν αυτή η επιλογή είναι ενεργή και φορτώνεται μια σελίδα βιβλίου επισκεπτών, τα σχόλια σε αυτήν τη σελίδα θα φορτωθούν αμέσως. Διαφορετικά, ο χρήστης πρέπει να κάνει κλικ σε έναν υπερσύνδεσμο για να αποκαλύψει σχόλια. (default: no)</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Τελευταίες καταχωρήσεις στο βιβλίο επισκεπτών του Συλλόγου #VAR1#</string>
-  <string name="GBO_MODERATE_ENTRIES">Moderate αναρτήσεις</string>
-  <string name="GBO_MODERATE_VAR">Moderate #VAR1#</string>
-  <string name="GBO_ONLY_VISITORS">Επισκέπτες μόνο</string>
-  <string name="GBO_SHOW_COMMENTS">Εμφάνιση σχολίων</string>
-  <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Προβολή #VAR1# σχόλιου(-ων) της καταχώρησης στο βιβλίο επισκεπτών</string>
-  <string name="GBO_WRITE_COMMENT">Αφήστε σχόλιο</string>
   <string name="INS_ADDIDIONAL_DATA">Επιπλέον πληροφορίες</string>
   <string name="INS_ADDRESS_LIST">Λίστα διευθύνσεων</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ANOTHER_ORGANIZATION">Προσθήκη άλλου συλλόγου</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Τα στοιχεία του διαχειριστή είναι ελλιπή!</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Μια ενημέρωση μπορεί να πραγματοποιηθεί μόνο από τον διαχειριστή. Ορίστε τα διαπιστευτήρια διαχειριστή.</string>
   <string name="INS_BOARD">ΔΣ του Συλλόγου</string>
-  <string name="INS_BOYFRIEND">Φίλος,-η</string>
-  <string name="INS_COMPANION">Φίλος,-η</string>
   <string name="INS_CONFERENCE_ROOM">Αίθουσα συνεδριάσεων</string>
   <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Το αρχείο #VAR1_BOLD# δεν βρέθηκε στο κύριο κατάλογο του Admidio!\n\nΠαρακαλούμε κατεβάστε το αρχείο ξανά και αντιγράψτε το στο κύριο κατάλογο.</string>
   <string name="INS_CONTINUE_INSTALLATION">Συνέχιση εγκατάστασης</string>
   <string name="INS_COURSES">Τμήματα</string>
   <string name="INS_CREATE_ADMINISTRATOR">Δημιουργία διαχειριστή</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Δημιουργία αρχείου διαμόρφωσης</string>
-  <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Οι παράμετροι της βάσης δεδομένων δεν έχουν εισαχθεί πλήρως!</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Το αρχείο #VAR1_BOLD# δεν βρέθηκε στο φάκελο #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Εισαγάγετε εδώ το όνομα του server βάσης δεδομένων. Αυτό μπορεί να είναι μια διεύθυνση URL ή localhost εάν η βάση δεδομένων εκτελείται στον ίδιο υπολογιστή με την ιστοσελίδα.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Αναβάθμιση βάσης δεδομένων</string>
   <string name="INS_DATABASE_LOGIN">Πρόσβαση βάσης δεδομένων</string>
   <string name="INS_DATABASE_LOGIN_DESC">Δώστε τις πληροφορίες πρόσβασης στη βάση δεδομένων σας εδώ. Το πρόθεμα πίνακα μπορεί να προσαρμοστεί εάν χρειάζεται. Η προσαρμογή είναι απαραίτητη εάν πολλές εγκαταστάσεις Admidio χρησιμοποιούν την ίδια βάση δεδομένων.</string>
-  <string name="INS_DATABASE_NAME_INVALID">Το όνομα της βάσης δεδομένων περιέχει μη έγκυρους χαρακτήρες!</string>
   <string name="INS_DATABASE_PORT_INFO">Εάν αυτό το πεδίο δεν είναι συμπληρωμένο, χρησιμοποιείται η τυπική θύρα για τη βάση δεδομένων (MySQL: 3306, PostgreSQL: 5432). Εάν εσείς ή ο webhoster σας χρειάζεστε μια ειδική θύρα, μπορείτε να την πληκτρολογήσετε εδώ.</string>
   <string name="INS_DATABASE_PORT_INVALID">Η καθορισμένη θύρα δεν είναι έγκυρη. Για έγκυρη θύρα, επιλέξτε μεταξύ 1 και 65535 ή αφήστε την κενή.</string>
   <string name="INS_DATABASE_SYSTEM">Σύστημα βάσης δεδομένων</string>
   <string name="INS_DATABASE_TYPE_INVALID">Το Admidio υποστηρίζει μόνο MySQL και PostgreSQL.</string>
-  <string name="INS_DATABASE_USER_INVALID">Ο χρήστης της βάσης δεδομένων περιέχει μη έγκυρους χαρακτήρες!</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Δημιουργία βάσης δεδομένων</string>
-  <string name="INS_DATA_DIR_RIGHTS">Δεν ήταν δυνατή η αυτόματη ρύθμιση των απαραίτητων δικαιωμάτων φακέλου για το \"adm_my_files\". Για να συνεχίσετε, τα δικαιώματα πρέπει να οριστούν μη αυτόματα σε \"777\".</string>
   <string name="INS_DATA_DO_NOT_MATCH">Τα δεδομένα από το #VAR1_BOLD# δεν συμφωνούν με τις πληροφορίες που παρέχονται στον οδηγό εγκατάστασης.\n\nΕλέγξτε το config.php και όλες τις άλλες πληροφορίες.</string>
   <string name="INS_DATA_FULLY_ENTERED">Έχετε εισαγάγει όλα τα απαραίτητα δεδομένα για την εγκατάσταση του Admidio.\n\nΤώρα πρέπει να δημιουργηθεί η βάση δεδομένων και να συμπληρωθεί με τα δεδομένα σας.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Πληροφορίες διαχειριστή</string>
@@ -70,21 +34,17 @@
   <string name="INS_DOWNLOAD_CONFIGURATION_FILE_DESC">Δεν ήταν δυνατή η αποθήκευση του αρχείου διαμόρφωσης #VAR1_BOLD# στον φάκελο #VAR2_BOLD#. Ορίστε πρόσβαση εγγραφής στο φάκελο (αλλάξτε το χαρακτηριστικό αρχείου μέσω FTP σε 0777 ή drwxrwxrwx αντίστοιχα) ή πραγματοποιήστε λήψη του αρχείου ρυθμίσεων και αντιγράψτε το στον κατάλογο Admidio #VAR3_BOLD# χρησιμοποιώντας ένα πρόγραμμα FTP.\n\nΜετά την αποθήκευση του αρχείου σε αυτή τη θέση μπορείτε να συνεχίσετε με την εγκατάσταση.</string>
   <string name="INS_ENTER_LOGIN_TO_DATABASE">Εισάγετε τις πληροφορίες πρόσβασης για τη βάση δεδομένων</string>
   <string name="INS_ERROR_OPEN_FILE">Το αρχείο #VAR1_BOLD# δεν ήταν δυνατό να ανοιχτεί</string>
-  <string name="INS_GIRLFRIEND">Φιλενάδα</string>
   <string name="INS_GROUPS">Γκρουπ</string>
   <string name="INS_HOST_INVALID">Το όνομα κεντρικού υπολογιστή δεν είναι έγκυρο. Εισαγάγετε ένα έγκυρο όνομα κεντρικού υπολογιστή ή διεύθυνση IP.</string>
   <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Some third-party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
   <string name="INS_INSTALLATION">Εγκατάσταση</string>
   <string name="INS_INSTALLATION_EXISTS">Η βάση δεδομένων περιέχει ήδη μια εγκατάσταση Admidio. Δεν είναι δυνατή μια πρόσθετη εγκατάσταση.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">Η εγκατάσταση και η διαμόρφωση της βάσης δεδομένων Admidio ολοκληρώθηκαν, το σύστημα είναι έτοιμο για χρήση. Συνδεθείτε τώρα χρησιμοποιώντας τα στοιχεία πρόσβασης του διαχειριστή συστήματος.</string>
   <string name="INS_INSTALLATION_VERSION">Έκδοση εγκατάστασης #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Επιτυχής εγκατάσταση</string>
   <string name="INS_INSTALL_ADMIDIO">Εγκατάσταση Admidio</string>
   <string name="INS_INTERN">Εσωτερικό</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">Δεν έχει επιλεγεί κάποια γλώσσα</string>
   <string name="INS_MEMBERSHIP">Συνδρομή</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Δεν ήταν δυνατή η εύρεση της τρέχουσας εγκατάστασης. Εάν έχετε χρησιμοποιήσει πρώτα την ενημέρωση Admidio 1.x σε Admidio 2.x. Στη συνέχεια, μπορείτε να ενημερώσετε την έκδοση σε #VAR1#. Εάν χρησιμοποιείτε ήδη Admidio 2.x ή νεότερη έκδοση, ελέγξτε τη συνοχή της βάσης δεδομένων σας.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Το όνομα του συλλόγου που παρέχεται δεν είναι πλήρες!</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Ο σύλλογος #VAR1_BOLD# υπάρχει ήδη. Επιλέξτε άλλο όνομα.</string>
   <string name="INS_PHONE_LIST">Λίστα τηλεφώνων</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Παρακαλούμε επιλέξτε γλώσσα</string>
@@ -92,12 +52,8 @@
   <string name="INS_SETUP_WAS_SUCCESSFUL">Επιτυχής εγκατάσταση</string>
   <string name="INS_SET_ORGANIZATION">Ορισμός συλλόγου</string>
   <string name="INS_SET_UP_ORGANIZATION">Ρύθμιση συλλόγου</string>
-  <string name="INS_SUPERIOR">Αφεντικό</string>
-  <string name="INS_SUPERIOR_FEMALE">Προϊσταμένη</string>
-  <string name="INS_SUPERIOR_MALE">Αφεντικό</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Θα εκτιμούσαμε πολύ αν μπορούσατε να υποστηρίξετε την ανάπτυξη του Admidio με τη δωρεά σας!</string>
   <string name="INS_TABLE_PREFIX">Πρόθεμα πίνακα</string>
-  <string name="INS_TABLE_PREFIX_INVALID">Το πρόθεμα πίνακα περιέχει μη επιτρεπτούς χαρακτήρες!</string>
   <string name="INS_TEAMS">Ομάδες</string>
   <string name="INS_TRAINING">Προπόνηση</string>
   <string name="INS_UPDATE">Ενημέρωση</string>
@@ -122,7 +78,6 @@
   <string name="ORG_ACCESS_TO_PLUGIN">Plugin access</string>
   <string name="ORG_ACCESS_TO_PLUGIN_DESC">The plugin can be disabled or restricted to logged-in users. If access is restricted to logged-in users, the plugin is hidden from guests and the web feed is disabled for everyone. (Default: enabled)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Πρόσθετες μεταβλητές</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">Ένας νέος σύλλογος θα προστεθεί στη βάση δεδομένων, συμπεριλαμβανομένων των βασικών δεδομένων του. Ο τρέχων χρήστης θα ανακοινωθεί ως διαχειριστής και θα μπορεί να διατηρήσει το σύνολο δεδομένων. Οι χρήστες που συνδέονται στο σύστημα πρέπει να επιλέξουν τον αντίστοιχο σύλλογο.</string>
   <string name="ORG_ADMIDIO_THEME">Θέμα Admidio</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Μπορείτε να επιλέξετε το τρέχον θέμα Admidio εδώ. Εμφανίζονται όλες οι διατάξεις από το φάκελο themes. (default: simple)</string>
   <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback theme</string>
@@ -144,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Χρώμα γραμμής</string>
   <string name="ORG_CAPTCHA_PREVIEW">Προεπισκόπηση Captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Η προεπισκόπηση Captcha εξετάζει μόνο επιλογές που έχουν ήδη αποθηκευτεί.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Μετά την ενεργοποίηση μια εικόνα με έναν κωδικό captcha ή έναν απλό υπολογισμό θα εμφανιστεί στους νέους χρήστες. Είναι απαραίτητο να συμπληρώσετε τον σωστό κωδικό ή αποτέλεσμα για να αποθηκεύσετε την τρέχουσα επεξεργασία. Το captcha είναι μέρος της λύσης anti-spam στο Admidio. (default: yes)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Υπότιτλοι Captcha</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Συμπληρώστε τον υπότιτλο που προτιμάτε για το captcha. Θα χρησιμοποιηθεί ο προεπιλεγμένος τύπος γραμματοσειράς του τρέχοντος θέματος.</string>
   <string name="ORG_CAPTCHA_SIGNS">Επιτρεπτοί χαρακτήρες</string>
@@ -155,14 +109,12 @@
   <string name="ORG_CAPTCHA_TYPE_TEXT">Εδώ μπορείτε να ορίσετε τον τύπο Captcha. Το Captcha θα εμφανιστεί ως εικόνα. Μπορεί να αποτελείται από τυχαίους χαρακτήρες, ένα μικρό μαθηματικό πρόβλημα ή δύο λέξεις. Περαιτέρω επιλογές επιτρέπουν τον λεπτομερή ορισμό του Captcha. (default: random characters)</string>
   <string name="ORG_CAPTCHA_TYPE_WORDS">Λέξεις (Αγγλικά)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Πλάτος Captcha σε pixel. Το ύψος Captcha θα υπολογιστεί αναλογικά με το πλάτος. Επιπλέον, θα καθορίσει το μέγεθος του χαρακτήρα. (default: 215)</string>
-  <string name="ORG_CREATE_ITEM_FIELD">Δημιουργία πεδίου αντικειμένου</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Δημιουργία πεδίου προφίλ</string>
   <string name="ORG_CURRENCY">Νόμισμα</string>
   <string name="ORG_CURRENCY_DESC">Επιλέξτε νόμισμα. Ο τύπος νομίσματος θα εμφανιστεί μετά από όλα τα εμφανιζόμενα ποσά.</string>
   <string name="ORG_DATATYPE">Τύπος δεδομένων</string>
   <string name="ORG_DATE_FORMAT">Τύπος ημερομηνίας</string>
   <string name="ORG_DATE_FORMAT_DESC">Η μορφή συμμορφώνεται με τη συνάρτηση PHP #VAR1#. (default: d.m.Y)</string>
-  <string name="ORG_DIFFERENT_DATABASE_VERSION">Διαφορετική έκδοση βάσης δεδομένων</string>
   <string name="ORG_EDIT_PROFILE_FIELD">Επεξεργασία πεδίου προφίλ</string>
   <string name="ORG_EMAIL_ALERTS">Ειδοποίηση email</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Όλα τα μέλη όλων των ρόλων με άδεια #VAR1_BOLD# λαμβάνουν e-mail σε περίπτωση εγγραφής νέου χρήστη. (default: yes)</string>
@@ -184,21 +136,13 @@
   <string name="ORG_FIELD_URL_DESC">Η εισαγόμενη διεύθυνση URL συνδέεται αργότερα στο προφίλ με το περιεχόμενο που έχει εισαγάγει ο χρήστης σε αυτό το πεδίο. Προαιρετικά, ακόμη και ο χαρακτήρας μπαλαντέρ #user_content# μπορεί να οριστεί στη διεύθυνση URL. Αυτό είναι το περιεχόμενο που έχει καταχωρίσει ο χρήστης στο πεδίο..\n\nΠαράδειγμα:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nΣύνδεσμος στο προφίλ: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Αυτή η σελίδα εμφανίζεται όταν ένας χρήστης συνδεθεί. Η διαδρομή πρέπει να παρέχεται ως σχετική διαδρομή προς τον κύριο φάκελο Admidio.\n(e.g.: adm_program/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Αυτή η σελίδα είναι η προεπιλεγμένη σελίδα του Admidio για τους επισκέπτες. Η διαδρομή πρέπει να παρέχεται ως σχετική διαδρομή προς τον κύριο φάκελο Admidio.\n(e.g.: adm_program/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Δεν ήταν δυνατή η εύρεση έγκυρου θέματος.</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Χρώμα του επεξεργαστή JavaScript</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Ορίστε εδώ το χρώμα φόντου του JavaScript editor. Η τιμή μπορεί να είναι μια δεκαεξαδική τιμή χρώματος όπως #ffa500 ή μαι τιμή RGB όπως (255, 185, 0).</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Χρησιμοποιώντας το πρόγραμμα επεξεργασίας JavaScript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Ένας επεξεργαστής JavaScript με πλήρεις δυνατότητες διευκολύνει την εισαγωγή περιγραφών για ανακοινώσεις, εκδηλώσεις και άλλο περιεχόμενο. Αν ο επεξεργαστής είναι απενεργοποιημένος, εμφανίζεται ένα απλό πεδίο κειμένου πολλαπλών γραμμών.</string>
   <string name="ORG_LAST_UPDATE_STEP">Τελευταίο βήμα ενημέρωσης</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Αυτόματη είσοδος</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Οι χρήστες μπορούν να καθορίσουν κατά τη σύνδεση εάν οι πληροφορίες σύνδεσης και η περίοδος λειτουργίας πρέπει να αποθηκευτούν στους υπολογιστές τους. Με αυτόν τον τρόπο, θα συνδεθούν αυτόματα κατά την επίσκεψή τους. Ωστόσο, αυτό μπορεί να οδηγήσει σε ανεπιθύμητη πρόσβαση και κακή χρήση μη εξουσιοδοτημένων προσώπων. (default: yes)</string>
-  <string name="ORG_NEW_ORGANIZATION">Νέος σύλλογος</string>
-  <string name="ORG_NEW_ORGANIZATION_DESC">Εισαγάγετε τη συντομογραφία, το επίσημο όνομα και τη διεύθυνση email για τον σύλλογο που θέλετε να προσθέσετε. Η διεύθυνση email πρέπει να είναι γενική. Θα χρησιμοποιηθεί ως διεύθυνση αποστολέα κατά την αποστολή αυτόματων ειδοποιήσεων συστήματος.</string>
   <string name="ORG_NOT_SAVED_SETTINGS_CONTINUE">Do you want to continue?</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">Κατά την αλλαγή της προβολής, όλες οι μη αποθηκευμένες αλλαγές θα χαθούν.</string>
-  <string name="ORG_NO_FIELD_CREATED">Δεν έχει δημιουργηθεί ακόμη πεδίο συγκεκριμένου συλλόγου!</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Αριθμός εγγραφών ανά σελίδα</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Καθορίστε τον αριθμό των στοιχείων που εμφανίζονται σε μια σελίδα. Η σελιδοποίηση παρέχεται εάν ο αριθμός των στοιχείων υπερβαίνει την καθορισμένη τιμή. Η προεπισκόπηση εκτύπωσης και η λειτουργία εξαγωγής δεν επηρεάζονται. Εάν η τιμή είναι 0, όλα τα στοιχεία θα εμφανίζονται στη λίστα και η σελιδοποίηση θα απενεργοποιηθεί. (default: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Enabled, but only visible to administrators</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">For module administrators only</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">Μόνο για συνδεδεμένους χρήστες</string>
@@ -219,13 +163,8 @@
   <string name="ORG_REGISTERED_USERS">Συνδεδεμένος χρήστης</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Αναζήτηση για παρόμοια ονόματα</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Κατά την εγγραφή και την ανάθεση εγγραφών η Admidio αναζητά παρόμοια επώνυμα και ονόματα για να αποφύγει διπλές καταχωρήσεις. Τα αποτελέσματα απενεργοποίησης αναζητούν μόνο πανομοιότυπα ονόματα. (default: yes)</string>
-  <string name="ORG_SECONDS">δευτερόλεπτα</string>
-  <string name="ORG_SEND_NEW_PASSWORD">Αποστολή νέου κωδικού</string>
-  <string name="ORG_SHOW_ALL_USERS">Προαιρετική εμφάνιση όλων των χρηστών</string>
-  <string name="ORG_SHOW_ALL_USERS_DESC">Εάν αυτή η επιλογή είναι ενεργοποιημένη, θα εμφανίζονται και πρώην μέλη και μέλη άλλων συλλόγων εκτός από τα ενεργά μέλη του τρέχοντος συλλόγου. Διαφορετικά θα εμφανίζονται μόνο μέλη του τρέχοντος συλλόγου. Κατά τη δημιουργία νέων χρηστών ή την εκχώρηση εγγραφών, όλοι οι σύλλογοι θα εξακολουθούν να ελέγχονται για υπάρχοντες χρήστες.</string>
   <string name="ORG_SHOW_CREATE_EDIT">Εμφάνιση του δημιουργού και του χρόνου της δημιουργίας</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Σε ορισμένα σημεία ο δημιουργός και ο χρήστης με την τελευταία αλλαγή σε μια εγγραφή εμφανίζεται μαζί με το χρόνο. Αυτή η ρύθμιση μπορεί να χρησιμοποιηθεί για να καθοριστεί εάν αυτές οι πληροφορίες εμφανίζονται καθόλου και εάν ο χρήστης θα πρέπει να εμφανίζεται με το όνομα χρήστη ή με το όνομα και το επώνυμό του.</string>
-  <string name="ORG_THEME_FOLDER_OPEN">Δεν ήταν δυνατό το άνοιγμα/ανάγνωση του φακέλου θεμάτων.</string>
   <string name="ORG_TIMEZONE">Ζώνη ώρας</string>
   <string name="ORG_TIMEZONE_DESC">Αυτή είναι η καθορισμένη ζώνη ώρας. Εάν αυτό αλλάξει αργότερα στο αρχείο config.php του Admidio, οι ήδη καταγεγραμμένες ημερομηνίες και ώρες δεν προσαρμόζονται στη νέα ζώνη ώρας.</string>
   <string name="ORG_TIME_FORMAT">Μορφή ώρας</string>
@@ -242,7 +181,6 @@
   <string name="ORG_VARIABLE_USERNAME">Όνομα χρήστη του χρήστη από το αντίστοιχο πλαίσιο ηλεκτρονικού ταχυδρομείου</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64-bit</string>
-  <string name="SYS_ABORT">Ακύρωση</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Νο</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Account activated</string>
   <string name="SYS_ACTIVATE_ROLE">Ενεργοποίηση ρόλου</string>
@@ -257,7 +195,6 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The relative path to a .css file with additional style definitions, starting from the Admidio root directory. This file is loaded last, even after the theme's admidio.css. (Default: empty)</string>
   <string name="SYS_ADDITIONAL_FILES">Αυτή η λίστα σκοπεύει να παρέχει μια επισκόπηση αρχείων και φακέλων που δεν έχουν εισαχθεί ακόμα στη βάση δεδομένων. Μπορούν να προστεθούν στη βάση δεδομένων. Τα δικαιώματα πρόσβασης θα αντιγραφούν από τον επιλεγμένο φάκελο.</string>
   <string name="SYS_ADDRESS">Διεύθυνση</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Προσθήκη επιπλέον ρυθμίσεων</string>
   <string name="SYS_ADD_ATTACHMENT">Επισύναψη συνημμένου</string>
   <string name="SYS_ADD_COLUMN">Προσθήκη στήλης</string>
   <string name="SYS_ADD_COLUMNS_DESC">Αντιστοιχίστε οποιονδήποτε αριθμό στηλών που αντιστοιχεί σε πεδία προφίλ στον παρακάτω πίνακα. Επιπλέον, μπορείτε να καθορίσετε την προεπιλεγμένη ταξινόμηση και να προσθέσετε συνθήκες υπό τις οποίες θα φιλτράρονται τα αντίστοιχα μέλη.</string>
@@ -265,21 +202,18 @@
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Πρόσθεσε εκδήλωση στο ημερολόγιο</string>
   <string name="SYS_ADD_FIELD">Add field</string>
   <string name="SYS_ADD_ORGANIZATION">Προσθήκη συλλόγου</string>
-  <string name="SYS_ADD_RECIPIENTS">Προσθήκη παραλήπτη</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Προσθήκη στη βάση δεδομένων</string>
   <string name="SYS_ADMIDIO">Admidio</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Πήγαινε στη σελίδα λήψεων του Admidio</string>
   <string name="SYS_ADMIDIO_HEADLINE_DESC">The headline is displayed in the navigation bar of Admidio. Here you can also enter the name of a translation string. (Default: SYS_ONLINE_MEMBERSHIP_ADMINISTRATION)</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Το διαδικτυακό σύστημα διαχείρισης για συλλόγους, ομάδες και οργανισμούς</string>
-  <string name="SYS_ADMIDIO_UPDATE">Αναβάθμιση Admidio</string>
   <string name="SYS_ADMIDIO_VERSION">Έκδοση Admidio</string>
   <string name="SYS_ADMINISTRATION">Διαχείριση</string>
   <string name="SYS_ADMINISTRATOR">Διαχειριστής</string>
   <string name="SYS_ADMINISTRATORS">Διαχειριστές</string>
   <string name="SYS_ADMINISTRATORS_DESC">Αυτοί οι ρόλοι είναι διαχειριστές της ενότητας Documents and Files και επομένως έχουν πρόσβαση σε όλους τους φακέλους και τα αρχεία. Μπορούν να ανεβάζουν και να κατεβάζουν αρχεία και να εκχωρούν δικαιώματα πρόσβασης. Ένας ρόλος μπορεί να γίνει διαχειριστής εκχωρώντας του το σωστό #VAR1_BOLD#.</string>
   <string name="SYS_AFTER_NUMBER_OF_OCCURRENCES">After number of occurrences</string>
-  <string name="SYS_AJAX_REQUEST_ERROR">Σφάλμα αιτήματος Ajax.\nΛεπτομέρειες σφάλματος: #VAR1#</string>
   <string name="SYS_ALBUM">Άλμπουμ</string>
   <string name="SYS_ALBUM_CHANGED_TITLE">A photo album was changed at #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Το άλμπουμ δεν περιέχει φωτογραφίες.</string>
@@ -304,7 +238,6 @@
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Όλα τα μέλη του συλλόγου</string>
   <string name="SYS_ALSO_VISITORS">Επισκέπτες επίσης</string>
-  <string name="SYS_ANNOUNCEMENT">Ανακοίνωση</string>
   <string name="SYS_ANNOUNCEMENTS">Ανακοινώσεις</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Εδώ παρουσιάζονται και γίνονται διορθώσεις στις ανακοινώσεις, νέα, και άλλες πληροφορίες</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
@@ -327,7 +260,6 @@
   <string name="SYS_ASSIGN_REGISTRATION">Προσδιορισμός εγγραφής</string>
   <string name="SYS_ASSIGN_REGISTRATION_SUCCESSFUL">Registration has been confirmed. The member can now log in to the system.</string>
   <string name="SYS_ASSIGN_ROLE">Προσδιορισμός ρόλου</string>
-  <string name="SYS_ASSIGN_ROLES">Προσδιορισμός ρόλου</string>
   <string name="SYS_ASSIGN_ROLE_FOR_IMPORT">Επιλέξτε έναν ρόλο για όλους τους εισαγόμενους χρήστες.\n\nΔιαθέσιμοι είναι μόνο οι ρόλοι για τους οποίους έχετε άδεια χρήστη.</string>
   <string name="SYS_ASSIGN_ROLE_TO_USER">The data cannot be saved.\nAt least one role must be assigned to the contact.</string>
   <string name="SYS_ASYMMETRICAL">Ασύμμετρο</string>
@@ -345,14 +277,8 @@
   <string name="SYS_AVAILABLE_BETA">Διαθέσιμη έκδση beta</string>
   <string name="SYS_A_TO_Z">Α έως Ω</string>
   <string name="SYS_BACK">Πίσω</string>
-  <string name="SYS_BACKUP_COMPLETED">Δημιουργήθηκε αντίγραφο ασφαλείας στο  #VAR1#</string>
-  <string name="SYS_BACKUP_FILE">Αρχείο αντιγράφου ασφαλείας</string>
-  <string name="SYS_BACKUP_FROM">Δημιουργήθηκε αντίγραφο ασφαλείας στο #VAR1# στις #VAR2#</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">Το τμήμα αντιγράφων ασφαλείας μπορεί να χρησιμοποιηθεί μόνο σε συνδυασμό με μια βάση δεδομένων MySQL.</string>
   <string name="SYS_BACK_TO_ALBUM">Πίσω στο άλμπουμ</string>
-  <string name="SYS_BACK_TO_BACKUP_PAGE">Πίσω στη σελίδα αντιγράφου ασφαλείας</string>
   <string name="SYS_BACK_TO_FOLDER">Πίσω στο φάκελο</string>
-  <string name="SYS_BACK_TO_MODULE_OVERVIEW">Πίσω στην επισκόπηση της ενότητας</string>
   <string name="SYS_BASIC_DATA">Βασικά δεδομένα</string>
   <string name="SYS_BIRTHDAY">Γενέθλια</string>
   <string name="SYS_BLUESKY">Bluesky</string>
@@ -370,9 +296,7 @@
   <string name="SYS_CANT_DELETE_ROLE">Δεν επιτρέπεται η διαγραφή ρόλου #VAR1_BOLD#</string>
   <string name="SYS_CAPACITY">Χωρητικότητα</string>
   <string name="SYS_CAPTCHA">Captcha</string>
-  <string name="SYS_CAPTCHA_CALC">Αποτέλεσμα υπολογισμού</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Το αποτέλεσμα του υπολογισμού είναι λάθος</string>
-  <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Ο υπολογισμός είναι μέρος ενός captcha. Ένα captcha χρησιμοποιείται για την πρόληψη ανεπιθύμητων μηνυμάτων. Ο υπολογισμός χρησιμοποιείται για τον εντοπισμό εάν ένας χρήστης ή ένα script (ή ένα ανεπιθύμητο μήνυμα) συμπληρωμένο στη φόρμα.\nΣυμπληρώστε το αποτέλεσμα του υπολογισμού στη φόρμα.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Ο κωδικός αυθεντικοποίησης δεν είναι έγκυρος.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Κωδικός αυθεντικοποίησης</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Ο κωδικός ελέγχου ταυτότητας είναι μέρος ενός captcha. Ένα captcha χρησιμοποιείται για τον εντοπισμό ανεπιθύμητων μηνυμάτων. Η εικόνα χρησιμοποιείται για τον εντοπισμό εάν ένας χρήστης ή ένα σενάριο (ή ένα ανεπιθύμητο μήνυμα) συμπλήρωσε τη φόρμα.\nΣυμπληρώστε το αποτέλεσμα του κωδικού ελέγχου ταυτότητας στη φόρμα.</string>
@@ -390,10 +314,8 @@
   <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">The category selection can be used to restrict a report to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Δημιουργεί μια λίστα με τους ρόλους και τις συνδρομές κατηγορίας ενός μέλους.</string>
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
-  <string name="SYS_CATEGORY_VAR">#VAR1#-κατηγορία</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Εάν ενεργοποιηθεί η επιλογή, τα πεδία προφίλ αυτής της κατηγορίας θα εμφανιστούν και μπορούν να επεξεργαστούν στην προβολή προφίλ των ακόλουθων συλλόγων: #VAR1#\n\nΠαρακαλούμε, απενεργοποιήστε, εάν τα πεδία πρέπει να εμφανίζονται μόνο στον σύλλογο σας.</string>
   <string name="SYS_CAT_SELECTION">Επιλογή κατηγορίας</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Η επιλογή κατηγορίας μπορεί να χρησιμοποιηθεί για τον περιορισμό μιας διαμόρφωσης στα μέλη των ρόλων των επιλεγμένων κατηγοριών.\n\n Εάν δεν πρόκειται να γίνει περιορισμός, και τα δύο πεδία (επιλογή ρόλων και επιλογή κατηγορίας) πρέπει να παραμείνουν κενά.</string>
   <string name="SYS_CHANGED_AT">Τελευταία ανασκόπηση</string>
   <string name="SYS_CHANGED_BY">Αλλαγή από</string>
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profile and role settings</string>
@@ -419,8 +341,6 @@
   <string name="SYS_CHANGE_HISTORY_USERDATA">Change history of user data and memberships</string>
   <string name="SYS_CHANGE_PASSWORD">Αλλαγή κωδικού πρόσβασης</string>
   <string name="SYS_CHARACTERS">Χαρακτήρες</string>
-  <string name="SYS_CHARACTER_ENCODING">Κωδικοποίηση χαρακτήρα</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Κωδικοποίηση χαρακτήρων που χρησιμοποιείται σε μηνύματα ηλεκτρονικού ταχυδρομείου που αποστέλλονται από την Admidio. Δεν είναι όλα τα προγράμματα-πελάτες ηλεκτρονικού ταχυδρομείου σε θέση να επεξεργαστούν το UTF-8. Επομένως, το ISO-8859-1 μπορεί να ρυθμιστεί εδώ εναλλακτικά.</string>
   <string name="SYS_CHECKBOX">Checkbox</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Η κατάσταση του πλαισίου ελέγχου αποθηκεύεται αυτόματα μετά την επισήμανση.</string>
   <string name="SYS_CHECK_FOR_UPDATE">Έλεγχος για αναβάθμιση</string>
@@ -473,8 +393,6 @@
   <string name="SYS_COMPLEMENT">Συμπλήρωμα</string>
   <string name="SYS_CONDITION">Απαίτηση</string>
   <string name="SYS_CONFIGURATION">Διαμόρφωση</string>
-  <string name="SYS_CONFIGURATIONS">Διαμoρφώσεις</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Οποιοσδήποτε αριθμός διαμορφώσεων μπορεί να δημιουργηθεί εδώ για την αναφορά κατηγορίας. Στην εμφάνιση της οθόνης, μία από αυτές τις διαμορφώσεις χρησιμοποιείται ως βάση για την εμφάνιση σε κάθε περίπτωση μέσω της \"Επιλογή διαμόρφωσης\".</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Άδεια χρήσης ρυθμίσεων για όλα τα μέλη</string>
   <string name="SYS_CONFIGURATION_DELETE">Θέλετε να διαγράψετε τη διαμόρφωση της επιλεγμένης λίστας;</string>
   <string name="SYS_CONFIGURATION_LIST">Διαμόρφωση λίστας</string>
@@ -504,7 +422,6 @@
   <string name="SYS_COPIED_CLIPBOARD">Copied to clipboard...</string>
   <string name="SYS_COPY">Αντιγραφή</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
-  <string name="SYS_COPY_CONFIGURATION">Αντιγραφή διαμόρφωσης</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Ζητήσατε αντίγραφο του μηνύματος</string>
@@ -531,10 +448,8 @@
   <string name="SYS_CREATE_FOLDER">Δημιουργία φακέλου</string>
   <string name="SYS_CREATE_FOLDER_DESC">Θα δημιουργηθεί ένας νέος φάκελος στο φάκελο #VAR1_BOLD#.</string>
   <string name="SYS_CREATE_HTACCESS">Δημιουργία .htaccess</string>
-  <string name="SYS_CREATE_LINK">Δημιουργία νέου συνδέσμου</string>
   <string name="SYS_CREATE_MEMBER">Δημιουργία χρήστη</string>
   <string name="SYS_CREATE_NEW_CONFIGURATION">Δημιουργία νέας διαμόρφωσης</string>
-  <string name="SYS_CREATE_NOT_FOUND_USER">Εάν ο νέος χρήστης δεν περιλαμβάνεται στους χρήστες που βρέθηκαν, μπορείτε να τον δημιουργήσετε.</string>
   <string name="SYS_CREATE_POST">Create post</string>
   <string name="SYS_CREATE_RELATIONSHIP">Δημιουργία σχέσης</string>
   <string name="SYS_CREATE_ROLE">Δημιουργία ρόλου</string>
@@ -555,7 +470,6 @@
   <string name="SYS_DATABASE_BACKUP">Αντίγραφο ασφαλείας της Βάσης Δεδομένων</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Δημιούργησε και κατέβασε αντίγραφα ασφαλείας των πινάκων της βάσης δεδομένων του Admidio</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Δεν είναι απαραίτητο να ενημερώσετε τη βάση δεδομένων.</string>
-  <string name="SYS_DATABASE_ERROR">Σφάλμα βάσης δεδομένων</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Η βάση δεδομένων του Admidio είναι ενημερωμένη.</string>
   <string name="SYS_DATABASE_NO_LOGIN">Η σύνδεση με τη βάση δεδομένων απέτυχε!\n\nΠαρουσιάστηκε το ακόλουθο σφάλμα:\n#VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Δεν ήταν δυνατή η δημιουργία σύνδεσης με τη βάση δεδομένων!\n\nΕλέγξτε τα δεδομένα πρόσβασης στο αρχείο config.php στο φάκελο adm_my_files. Εάν το αρχείο εξακολουθεί να είναι από άλλη εγκατάσταση, αφαιρέστε το config.php από το φάκελο, γιατί θα δημιουργηθεί ένα νέο αρχείο μέσω του οδηγού εγκατάστασης. Μετά από αυτό μπορείτε να συνεχίσετε την εγκατάσταση.\n\nΠαρουσιάστηκε το ακόλουθο σφάλμα: \n#VAR1#.</string>
@@ -581,7 +495,6 @@
   <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Προεπιλεγμένη χρονική περίοδος για το ιστορικό πεδίου (ημέρες)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Οι αλλαγές στα πεδία προφίλ θα παρατίθενται για τη δεδομένη χρονική περίοδο σε ημέρες. Αυτή είναι η προεπιλεγμένη επιλογή φίλτρου που μπορεί να αλλάξει αργότερα ο χρήστης. Για τεράστιες βάσεις δεδομένων, αυτή η επιλογή χρησιμοποιείται για τον περιορισμό της λίστας ιστορικού αλλαγών. (Default: 365)</string>
-  <string name="SYS_DAYS_VAR">#VAR1# ημέρες</string>
   <string name="SYS_DEACTIVATE_ROLE">Απενεργοποίηση ρόλου</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Εάν απενεργοποιήσετε τον ρόλο #VAR1_BOLD#, ο ρόλος δεν μπορεί πλέον να χρησιμοποιηθεί και να εκχωρηθεί σε αντικείμενα. Ομοίως, όλα τα δικαιώματα αυτού του ρόλου δεν ισχύουν πλέον. Ωστόσο, ο ρόλος με τη ρύθμισή του και όλες τις αντιστοιχίσεις μελών παραμένει και μπορεί να ενεργοποιηθεί εκ νέου σε μεταγενέστερη ημερομηνία.</string>
   <string name="SYS_DEADLINE">Τελική προθεσμία</string>
@@ -593,7 +506,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Εάν δημιουργηθεί ένας νέος χρήστης ή γίνει αποδεκτή μια νέα εγγραφή, τότε αυτός ο ρόλος εκχωρείται αυτόματα στον νέο χρήστη. Όταν ο δημιουργός έχει το δικαίωμα να εκχωρήσει ρόλους, εμφανίζονται όλες οι αντιστοιχίσεις ρόλων και μπορούν να αλλάξουν ανάλογα.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Προεπιλεγμένη διαμόρφωση</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Μία από τις διαμορφώσεις που δίνονται εδώ μπορεί να γίνει η προεπιλεγμένη διαμόρφωση για την αναφορά κατηγορίας αυτού του συλλόγου. Η επιλεγμένη διαμόρφωση θα εμφανιστεί απευθείας όταν καλείται η αναφορά.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Μία από τις διαμορφώσεις που καθορίζονται εδώ μπορεί να γίνει η προεπιλεγμένη διαμόρφωση για λίστες αυτού του οργανισμού. Οι λίστες μελών με ρόλους που δεν έχουν αποθηκευμένη διαμόρφωση λίστας θα εμφανίζονται με αυτήν τη διαμόρφωση.</string>
   <string name="SYS_DEFAULT_COUNTRY">Προεπιλεγμένη χώρα</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Ορίστε μια χώρα για την οποία δραστηριοποιείται κυρίως αυτός ο σύλλογος. Θα προεπιλεγεί όταν δημιουργηθούν ή εγγραφούν νέοι χρήστες. Διευκολύνει την εισαγωγή δεδομένων και μπορεί να αλλάξει από τον χρήστη. (Default: Germany)</string>
@@ -631,7 +543,6 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Διαγραφή προφίλ</string>
   <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_ROLE">Διαγραφή ρόλου</string>
-  <string name="SYS_DELETE_ROLE_DESC">Είστε βέβαιοι ότι θέλετε να διαγράψετε τον ρόλο #VAR1_BOLD#;\n\nΌλες οι συνδρομές θα καταργηθούν επίσης οριστικά.</string>
   <string name="SYS_DELETE_ROW">Delete row</string>
   <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Δεν μπορείτε να διαγράψετε κατηγορίες του συστήματος</string>
@@ -642,8 +553,6 @@
   <string name="SYS_DEPENDENCIES">Εξαρτήσεις</string>
   <string name="SYS_DEPENDENT">Εξαρτώμενος</string>
   <string name="SYS_DESCRIPTION">Περιγραφή</string>
-  <string name="SYS_DESCRIPTION_INLINE_DESC">Εμφανίστε την περιγραφή κάτω από το πεδίο απευθείας στη φόρμα.</string>
-  <string name="SYS_DESCRIPTION_POPOVER_DESC">Η περιγραφή εμφανίζεται σε ένα μικρό παράθυρο, στο οποίο μπορείτε να έχετε πρόσβαση μέσω ενός εικονιδίου ερωτηματικού δίπλα στην ετικέτα του πεδίου.</string>
   <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Όνομα</string>
   <string name="SYS_DETAILED">Λεπτομερής</string>
@@ -680,7 +589,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Η κάρτα χαιρετισμού δεν μπορεί να σταλθεί!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Η κάρτα χαιρετισμού στάλθηκε!</string>
   <string name="SYS_EDIT">Επεξεργασία</string>
-  <string name="SYS_EDITED_BY">Τελευταία επεξεργασία από</string>
   <string name="SYS_EDIT_ALBUM">Διορθώσεις άλμπουμ</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Διόρθωσε ανακοινώσεις</string>
   <string name="SYS_EDIT_CALENDAR">Επεξεργασία ημερολογίου</string>
@@ -724,7 +632,6 @@
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_TITLE">Ο χρήστης #VAR1# #VAR2# (είσοδος: #VAR3#) δημιουργήθηκε</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_MESSAGE">Το προφίλ του χρήστη #VAR1# #VAR2# (είσοδος: #VAR3#) διαγράφηκε από το #VAR4#.</string>
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Ο χρήστης #VAR1# #VAR2# (είσοδος: #VAR3#) διαγράφηκε</string>
-  <string name="SYS_EMAIL_DESC">Τα e-mail μπορούν να σταλούν σε διαφορετικούς ρόλους, όπως ομάδες, μαθήματα ή τμήματα.</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# email δοκιμής λειτουργίας</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Αυτό το email στάλθηκε μέσω του ιστότοπου #VAR1# του συλλόγου #VAR2# με τις ρυθμίσεις email αποθηκευμένες εκεί.</string>
   <string name="SYS_EMAIL_INVALID">Η διεύθυνση ηλεκτρονικού ταχυδρομείου στο πεδίο #VAR1_BOLD# περιλαμβάνει μη έγκυρους χαρακτήρες ή είναι ελλιπής.</string>
@@ -743,12 +650,8 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Η αναφορά κατηγορίας παραθέτει όλους τους ρόλους και τις κατηγορίες στους οποίους ανήκει ένα μέλος. Για πρόσβαση στην αναφορά απαιτείται το δικαίωμα #VAR1_BOLD#. (Προεπιλογή: ναι)</string>
   <string name="SYS_ENABLE_CHANGELOG">Enable changelog</string>
   <string name="SYS_ENABLE_CHANGELOG_DESC">The change history records all changes, including old and new values, to the selected objects (corresponding to database tables). Only administrators and users with permission to edit the corresponding module can view it. Users can also view changes to their own profile data. (Default: yes)</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Ενεργοποίηση εγγράφων &amp; files</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Έγγραφα &amp; files μπορούν να ενεργοποιηθούν ή να απενεργοποιηθούν μέσω αυτής της ρύθμισης. (Default: yes)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Ενεργοποίηση κατεβάσματος</string>
   <string name="SYS_ENABLE_DOWNLOAD_DESC">Επιτρέπει τη λήψη μεμονωμένων φωτογραφιών ή ολόκληρων άλμπουμ ως αρχείο zip. Θα εμφανίζεται ένας υπερσύνδεσμος για κάθε φωτογραφία ή άλμπουμ. Εάν η επιλογή #VAR1_BOLD# είναι ενεργή, θα γίνει λήψη μόνο των αρχικών φωτογραφιών.</string>
-  <string name="SYS_ENABLE_EMAILS">Ενεργοποίηση emails</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">Τα e-mail εντός του module μηνυμάτων μπορούν να ενεργοποιηθούν ή να απενεργοποιηθούν μέσω αυτής της ρύθμισης. Εάν ο διακομιστής δεν υποστηρίζει e-mail, η επιλογή θα πρέπει να απενεργοποιηθεί. (Default: enabled)</string>
   <string name="SYS_ENABLE_EVENT_REGISTRATION">Θέλετε να ενεργοποιήσετε την εγγραφή συμβάντων;\nΕάν το συμβάν διαγραφεί, όλοι οι εγγεγραμμένοι συμμετέχοντες θα αφαιρεθούν επίσης.\nΘέλετε να μπλοκάρετε επιπλέον εγγραφές, παρακαλούμε μειώστε τον αριθμό των επιτρεπόμενων συμμετεχόντων.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Ενεργοποιήστε τις ευχετήριες κάρτες</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">Οι ευχετήριες κάρτες μπορούν να ενεργοποιηθούν ή να απενεργοποιηθούν μέσω αυτής της ρύθμισης. Εάν ο διακομιστής δεν υποστηρίζει e-mail, η μονάδα θα πρέπει να απενεργοποιηθεί. Αυτό το module είναι γενικά διαθέσιμο μόνο σε εγγεγραμμένους χρήστες. (Default: yes)</string>
@@ -774,7 +677,6 @@
   <string name="SYS_ENTIRE_SERIES">Entire series</string>
   <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Σφάλμα</string>
-  <string name="SYS_ERROR_DATABASE_ACCESS">Παρουσιάστηκε σφάλμα κατά την πρόσβαση στη βάση δεδομένων:\n\n#VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Η λίστα #VAR1_BOLD# αποθηκεύεται ως προεπιλεγμένη διαμόρφωση για τη λειτουργική μονάδα #VAR2# σε αυτόν τον σύλλογο και δεν μπορεί να διαγραφεί. Ορίστε μια άλλη διαμόρφωση στην προεπιλεγμένη ρύθμιση παραμέτρων στις ρυθμίσεις του module και προσπαθήστε να διαγράψετε αυτήν τη διαμόρφωση στη συνέχεια.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ΣΦΑΛΜΑ 404 - ΔΕΝ ΒΡΕΘΗΚΕ ΣΕΛΙΔΑ!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID missing</string>
@@ -792,30 +694,23 @@
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Προσεκλήθη</string>
   <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">Ίσως συμμετάσχω</string>
   <string name="SYS_EVENT_REGISTRATION">Registration</string>
-  <string name="SYS_EXAMPLE">Παράδειγμα</string>
   <string name="SYS_EXAMPLES">Παραδείγματα</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
   <string name="SYS_EXISTING_CONTACTS">Existing contacts</string>
   <string name="SYS_EXPORT">Export</string>
-  <string name="SYS_EXPORT_ICAL">Εξαγωγή (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Εξαγωγή λιστών</string>
   <string name="SYS_EXPORT_LISTS_DESC">Οι λίστες ομάδων και ρόλων μπορούν να εξαχθούν από τους χρήστες, υπό την προϋπόθεση ότι έχετε το δικαίωμα να προβάλετε αυτές τις λίστες. Αυτή η ρύθμιση μπορεί να χρησιμοποιηθεί για τον περιορισμό της λειτουργίας εξαγωγής. (Default: All)</string>
-  <string name="SYS_EXPORT_TO">Εξαγωγή σε</string>
   <string name="SYS_EXPORT_VCARD">Εξαγωγή vCard</string>
-  <string name="SYS_EXPORT_VCARD_FROM_VAR">Εξαγωγή vCard από #VAR1#</string>
   <string name="SYS_EXTENSION">Extension</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_EXTENSIONS_AVAILABLE">Available extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_FADE_IN">Ξεθώριασμα</string>
   <string name="SYS_FATHER">Πατέρας</string>
   <string name="SYS_FAVICON_FILE">Favicon file</string>
   <string name="SYS_FAVICON_FILE_DESC">The relative path to the logo file, starting from the Admidio root directory. The logo is displayed in the upper-left corner. If left empty, the theme's default logo will be used. (Default: empty)</string>
-  <string name="SYS_FAX">Φαξ</string>
   <string name="SYS_FEMALE">Θήλυ</string>
   <string name="SYS_FIELD">Πεδίο</string>
-  <string name="SYS_FIELDS_EMPTY">Κάποια πεδία είναι κενά.</string>
   <string name="SYS_FIELD_EMPTY">Το πεδίο #VAR1_BOLD# είναι κενό.</string>
   <string name="SYS_FIELD_ENCLOSURE">Χαρακτήρας προσφοράς για τα πεδία</string>
   <string name="SYS_FIELD_INVALID_CHAR">Το πεδίο #VAR1_BOLD# περιέχει παράνομους χαρακτήρες.\n\nΟι επιτρεπόμενοι χαρακτήρες είναι γράμματα από \'a\' έως \'z\' και \'A\' έως \'Z\', αριθμοί από 0 έως 9 και ειδικοί χαρακτήρες όπως .-_+@ .</string>
@@ -829,7 +724,6 @@
   <string name="SYS_FILES_UPLOAD_DESC">Επιλέξτε όλα τα αρχεία που θα μεταφορτωθούν στο φάκελο #VAR1_BOLD#</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Δεν μεταφορτώθηκαν όλα τα αρχεία επιτυχώς.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Όλα τα αρχεία μεταφορτώθηκαν με επιτυχία.\n\nΜπορείτε να κλείσετε το διάλογο τώρα.</string>
-  <string name="SYS_FILE_COLUMN">Στήλη αρχείου</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
   <string name="SYS_FILE_EXIST">Το αρχείο #VAR1# υπάρχει ήδη!\n\nΕπιλέξτε διαφορετικό όνομα αρχείου.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Αυτός ο τύπος αρχείου δεν επιτρέπεται από τον server.</string>
@@ -855,15 +749,12 @@
   <string name="SYS_FOLDER_NOT_EXISTS">Ο φάκελος δεν υπάρχει πλέον στον διακομιστή. Θα πρέπει να διαγραφεί από τη βάση δεδομένων.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Ο φάκελος (ID #VAR1#) δεν βρέθηκε.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">Ο φάκελος #VAR1_BOLD# δεν έχει δικαιώματα εγγραφής. Τα απαιτούμενα δικαιώματα δεν μπόρεσαν να οριστούν αυτόματα. Δώστε δικαιώματα εγγραφής στον φάκελο #VAR1_BOLD# (μέσω FTP ορίστε τα χαρακτηριστικά σε 0777 ή drwxrwxrwx).</string>
-  <string name="SYS_FOLDER_NO_FILES">Ο φάκελος δεν περιέχει αρχεία.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Δεν υπάρχουν έγγραφα ή αρχεία διαθέσιμα για τους επισκέπτες.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Δεν επιτρέπεται να εμφανίσετε τον επιλεγμένο φάκελο.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Παρουσιάστηκε σφάλμα κατά τη μετονομασία του φακέλου #VAR1#.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Ο φάκελος #VAR1_BOLD# δεν μπορεί να δημιουργηθεί με τα απαιτούμενα δικαιώματα εγγραφής.\n\nΖητήστε βοήθεια από έναν #VAR2#administrator#VAR3# για να ελέγξετε τα δικαιώματα εγγραφής (χρησιμοποιώντας το FTP αλλάζοντας τα χαρακτηριστικά του αρχείου σε 0777 ή drwxrwxrwx).</string>
   <string name="SYS_FONT">Γραμματοσειρά</string>
-  <string name="SYS_FONT_AWESOME_DESC">Μπορείτε να αποθηκεύσετε ένα εικονίδιο με διάφορους τρόπους:\n1. Ένα εικονίδιο της γραμματοσειράς web \"Font Awesome\". Μεταβείτε στο #VAR1#http://fontawesome.com#VAR2# και επιλέξτε ένα δωρεάν εικονίδιο από τη συλλογή \"Solid\" ή \"Brands\". Ως πρόθεμα πρέπει να βάλετε ένα fa- μπροστά του. Επομένως, εάν επιλέξετε το εικονίδιο \"user\", πρέπει να εισαγάγετε \"fa-user\" εδώ.\n2. Ένα εικονίδιο JPEG ή PNG. Για να το κάνετε αυτό, εισαγάγετε την πλήρη διεύθυνση URL μαζί με το όνομα αρχείου του εικονιδίου. Εναλλακτικά, μπορείτε να βάλετε το εικονίδιο στο θέμα του φακέλου \"εικόνες\", τότε θα χρειαστεί να καθορίσετε μόνο το όνομα του αρχείου. </string>
   <string name="SYS_FONT_SIZE">Font size</string>
-  <string name="SYS_FORGOT_MY_PASSWORD">Ξέχασα τον κωδικό πρόσβασης!</string>
   <string name="SYS_FORMAT">Διαμόρφωση</string>
   <string name="SYS_FORMER">Πρώην</string>
   <string name="SYS_FORMER_CONTACTS">Former contacts</string>
@@ -894,7 +785,6 @@
   <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Γενική ανάθεση ρόλων</string>
   <string name="SYS_GEN_RANDOM_ERROR">Παρουσιάστηκε απροσδόκητο σφάλμα κατά τη δημιουργία ενός τυχαίου αριθμού.\nΚωδικός σφάλματος: #VAR1#\nΜήνυμα σφάλματος: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Το πρόγραμμα δεν μπορεί να δημιουργήσει τυχαίους αριθμούς.\nΚωδικός σφάλματος: #VAR1#\nΜήνυμα σφάλματος: #VAR2#</string>
-  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Το πρόγραμμα αναμένει μια συμβολοσειρά με τουλάχιστον 2 διαφορετικούς χαρακτήρες.</string>
   <string name="SYS_GIRLFRIEND">Girlfriend</string>
   <string name="SYS_GREETING_CARD">Κάρτα χαιρετισμού</string>
   <string name="SYS_GROUPS_ROLES">Ρόλοι Groups &amp;</string>
@@ -906,21 +796,14 @@
   <string name="SYS_HEADER_PREFERENCES">Settings</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
   <string name="SYS_HEADLINE">Επικεφαλίδα</string>
-  <string name="SYS_HELP">Βοήθεια</string>
   <string name="SYS_HIDDEN">Απόκρυψη</string>
-  <string name="SYS_HIDE">Κρύψε</string>
   <string name="SYS_HIGHLIGHT_EVENT">Επισήμανση ημερομηνίας</string>
   <string name="SYS_HOMEPAGE">Αρχική σελίδα</string>
   <string name="SYS_HOST">Host</string>
-  <string name="SYS_HOURS_VAR">#VAR1# ώρες</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">HTML email</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Η δημιουργία και η αποστολή μηνυμάτων ηλεκτρονικού ταχυδρομείου που βασίζονται σε HTML μπορεί να ενεργοποιηθεί για εγγεγραμμένους χρήστες. Θα εμφανιστεί ένα πρόγραμμα επεξεργασίας JavaScript για άνετη επεξεργασία, αντί για το τυπικό πεδίο κειμένου. Η τρέχουσα επιλογή είναι για τους επισκέπτες για λόγους ασφαλείας δεν είναι διαθέσιμη.</string>
   <string name="SYS_HTML_TABLE">Πίνακας HTML</string>
   <string name="SYS_HUSBAND">Σύζυγος</string>
-  <string name="SYS_ICAL_DAYS_FUTURE">Αριθμός ημερών iCal στο μέλλον</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Αριθμός ημερών στο μέλλον, που θα συμπεριληφθούν σε μία iCal λήψη ή abo. Εάν η λήψη iCal ξεκινά μέσα στη μονάδα εκδηλώσεων, τότε αυτή η ρύθμιση αγνοείται και εξάγονται τα φιλτραρισμένα ραντεβού. (Προεπιλογή: 365)</string>
-  <string name="SYS_ICAL_DAYS_PAST">Αριθμός ημερών iCal στο παρελθόν</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Αριθμός ημερών στο παρελθόν, που θα συμπεριληφθούν σε μία iCal λήψη ή abo. Εάν η λήψη iCal ξεκίνησε μέσα από ένα Event module, τότε αυτή η ρύθμιση αγνοείται και εξάγονται τα φιλτραρισμένα ραντεβού. (Προεπιλογή: 30)</string>
   <string name="SYS_ICAL_DISABLED">Το iCal έχει απενεργοποιηθεί από τον διαχειριστή του συστήματος.</string>
   <string name="SYS_ICON">Εικονίδιο</string>
   <string name="SYS_ICON_FONT_DESC">Choose an icon from \"Bootstrap Icons\" at #VAR1#https://icons.getbootstrap.com#VAR2# and enter its name in this field.</string>
@@ -961,7 +844,6 @@
   <string name="SYS_INTERVAL">Interval</string>
   <string name="SYS_INTO_TO">Οι παραλήπτες πρέπει να αναφέρονται στο πεδίο ΠΡΟΣ αντί για το πεδίο BCC</string>
   <string name="SYS_INTO_TO_DESC">Όλοι οι παραλήπτες θα παρατίθενται στο πεδίο ΠΡΟΣ, εάν οριστεί αναλόγως και ένα email θα ληφθεί από πολλά άτομα. Έτσι, κάθε παραλήπτης θα δει το όνομα και τη διεύθυνση email των άλλων παραληπτών. Επιπλέον, κάθε παραλήπτης μπορεί να απαντήσει σε όλους. (Default: deactivated)</string>
-  <string name="SYS_INVALID_FONT_AWESOME">Το όνομα του εικονιδίου που εισάγετε δεν αντιστοιχεί στην αναμενόμενη σύνταξη. Ένα εικονίδιο της γραμματοσειράς Awesome πρέπει να αντιστοιχεί στο σχήμα fa-iconname. Ένα αρχείο πρέπει να είναι αποθηκευμένο στο φάκελο θέματος εικόνων και να έχει επέκταση png ή jpg.</string>
   <string name="SYS_INVALID_ICON_NAME">The entered icon name does not correspond to the expected syntax. An icon name of Bootstrap Icons should only contain characters a-z, numbers and a hyphen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Μη έγκυρη προβολή σελίδας</string>
   <string name="SYS_INVENTORY">Inventory manager</string>
@@ -1100,11 +982,9 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER_DESC">If this option is enabled, the current user is used as the default selection for the keeper when creating a new item. (Default: no)</string>
-  <string name="SYS_IO_ERROR">Σφάλμα I/O</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ITALIC">Italic</string>
-  <string name="SYS_ITEMNAME">Όνομα αντικειμένου</string>
   <string name="SYS_KEEP_ORIGINAL">Αποθηκεύστε επιπλέον πρωτότυπα αρχεία</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Αποθηκεύει κάθε φωτογραφία όχι μόνο με επιλεγμένη ανάλυση αλλά με αρχικό μέγεθος. Εάν η επιλογή #VAR1_BOLD# είναι ενεργή, θα γίνει λήψη όλων των αρχικών φωτογραφιών. Αυτή η επιλογή απαιτεί πολύ περισσότερο χώρο αποθήκευσης και θα πρέπει να επιλεγεί μόνο εάν υπάρχει αρκετός διαθέσιμος χώρος.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Τοπίο</string>
@@ -1136,14 +1016,10 @@
   <string name="SYS_LINK_NAME">Όνομα συνδέσμου</string>
   <string name="SYS_LINK_TARGET">Στόχος συνδέσμου</string>
   <string name="SYS_LINK_TARGET_DESC">Επιλέξτε εάν ο επιλεγμένος ιστότοπος θα πρέπει να εμφανίζεται στο παράθυρο του Admidio ή σε νέο παράθυρο.</string>
-  <string name="SYS_LINK_TO">Σύνδεσμος στο #VAR1#</string>
   <string name="SYS_LIST">Λίστα</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
-  <string name="SYS_LOADING_CONTENT">Φόρτωση περιεχομένου</string>
-  <string name="SYS_LOCATION_LINK">Εάν παρέχονται αρκετές πληροφορίες σχετικά με την τοποθεσία (οδός, πόλη, τοποθεσία), οι Χάρτες Google μπορούν να υπολογίσουν τη διαδρομή προς την τοποθεσία.</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Χώρος αποθήκευσης εικόνων προφίλ</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Ορίστε πού θα αποθηκεύεται η εικόνα προφίλ (στη βάση δεδομένων ή στο φάκελο adm_my_files). Όταν γίνεται μια αλλαγή, οι τρέχουσες φωτογραφίες δεν αντιγράφονται σε νέα τοποθεσία. (default: database)</string>
-  <string name="SYS_LOCK">Κλείδωμα</string>
   <string name="SYS_LOCKED">Κλειδωμένο</string>
   <string name="SYS_LOCK_ALBUM">Κλείδωμα άλμπουμ</string>
   <string name="SYS_LOCK_ALBUM_DESC">Τα κλειδωμένα άλμπουμ δεν μπορούν να προβληθούν από επισκέπτες ή μέλη, π.χ. μπορείτε να κλειδώσετε ένα άλμπουμ εφόσον ανεβαίνουν όλες οι εικόνες.</string>
@@ -1169,9 +1045,6 @@
   <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (Default: empty)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maximum logo height</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">The maximum space available for the logo in the header is limited to this value. If the logo is higher than the specified value, it will be scaled down to this height. (Default: 60 pixels)</string>
-  <string name="SYS_LOG_ALL_CHANGES">Καταγραφή όλων των αλλαγών</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Οι αλλαγές στα πεδία προφίλ καταγράφονται για κάθε χρήστη και κάθε πεδίο. Η προηγούμενη και η νέα τιμή θα καταγραφούν καθώς και ο χρήστης που πραγματοποίησε την αλλαγή και η χρονική σήμανση. (Default: yes)</string>
-  <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Έχετε ήδη συνδεθεί. Επομένως πρέπει να έχετε ήδη τον σωστό κωδικό πρόσβασης!</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Ο νέος κωδικός έχει σταλεί στη διεύθυνση ηλεκτρονικού ταχυδρομείου #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Ο νέος κωδικός έχει σταλεί στον χρήστη #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Η διεύθυνση ηλεκτρονικού ταχυδρομείου #VAR1_BOLD# έχει εκχωρηθεί σε πολλές εγγραφές. Δεν ήταν δυνατή η αναγνώριση μιας μοναδικής εγγραφής χρήστη.</string>
@@ -1231,7 +1104,6 @@
   <string name="SYS_MENU_DESC">Το μενού μπορεί να διαμορφωθεί εδώ. Δίπλα στη διεύθυνση URL μπορεί να κατατεθεί μια περιγραφή και ένα εικονίδιο. Επιπλέον, μπορεί να προσδιοριστεί ποιος επιτρέπεται να προβάλλει την καταχώριση μενού.</string>
   <string name="SYS_MENU_ITEM">Αντικείμενο μενού</string>
   <string name="SYS_MENU_LEVEL">Επίπεδο μενού</string>
-  <string name="SYS_MENU_LEVEL_DESC">Ένα στοιχείο μενού είναι πάντα υποδεέστερο ενός άλλου στοιχείου μενού. Στη λίστα επιλογής, επιλέξτε ένα επίπεδο μενού στο οποίο θα πρέπει να είναι ορατό το νέο στοιχείο μενού.</string>
   <string name="SYS_MENU_MODULE_RIGHTS_DESC">Εάν καθορίσετε μια ενότητα εδώ, το στοιχείο μενού θα εμφανίζεται μόνο εάν ο χρήστης έχει επίσης το δικαίωμα να δει αυτήν την ενότητα.</string>
   <string name="SYS_MENU_NAME_DESC">Το όνομα της καταχώρισης στο μενού. Εδώ μπορείτε επίσης να εισαγάγετε το όνομα μιας συμβολοσειράς μετάφρασης.</string>
   <string name="SYS_MENU_RESTRICT_VISIBILITY">Only the visibility of the menu item is restricted. Access to the underlying page is not affected by this authorization.</string>
@@ -1240,7 +1112,6 @@
   <string name="SYS_MESSAGES_DESC">View sent emails and private messages. Compose and send new messages to individual contacts or roles.</string>
   <string name="SYS_MESSAGE_WENT_TO">Το μήνυμα στάλθηκε στον</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# λεπτά</string>
   <string name="SYS_MOBILE">Κινητό</string>
   <string name="SYS_MODAL_WINDOW">Παράθυρο modal</string>
   <string name="SYS_MODULES">Ενότητες</string>
@@ -1277,7 +1148,6 @@
   <string name="SYS_NEW_ORGANIZATION_DESC">Enter the abbreviation, official name, and email address of the organization you want to add. Use a general organization email address, which will also serve as the sender address for automatic system notifications. The organization will be created with these details, and you will become its administrator so you can complete the setup.</string>
   <string name="SYS_NEW_PASSWORD">Νέος κωδικός πρόσβασης</string>
   <string name="SYS_NEW_PROFILE_PICTURE">Νέα εικόνα προφίλ</string>
-  <string name="SYS_NEW_REGISTRATIONS">Νέες εγγραφές</string>
   <string name="SYS_NEW_ROLE">Νέος ρόλος</string>
   <string name="SYS_NEW_VALUE">Νέα τιμή</string>
   <string name="SYS_NEW_VERSION_AVAILABLE">Είναι διαθέσιμη μια νέα σταθερή έκδοση</string>
@@ -1310,9 +1180,6 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Χρησιμοποιήστε μια έγκυρη ημερομηνία ως προϋπόθεση για το πεδίο #VAR1_BOLD#.</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Δεν έχουν οριστεί πρόσθετα δικαιώματα</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">Χωρίς πρόσθετα δικαιώματα</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">Δεν βρέθηκε αρχείο με αντίγραφο ασφαλείας</string>
-  <string name="SYS_NO_CHANGES_LOGGED">Δεν καταγράφονται αλλαγές.</string>
-  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">Δεν καταγράφονται αλλαγές για το #VAR1_BOLD#.</string>
   <string name="SYS_NO_DATA_FOUND">Δεν βρέθηκαν δεδομένα!</string>
   <string name="SYS_NO_DEFAULT_ROLE">Δεν μπορείτε να καταργήσετε τη ρύθμιση #VAR1_BOLD#, επειδή τουλάχιστον ένας ρόλος πρέπει να αποθηκευτεί ως η προεπιλεγμένη ανάθεση.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Η διαχείριση ρόλων δεν περιέχει προεπιλεγμένο ρόλο για νέους χρήστες. Επικοινωνήστε με έναν διαχειριστή που μπορεί να επεξεργαστεί αυτήν τη ρύθμιση.</string>
@@ -1372,7 +1239,6 @@
   <string name="SYS_OVERVIEW">Ανασκόπηση</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Overview extensions</string>
   <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Change the order of extensions on the overview page using drag and drop on larger screens or the move buttons on smaller screens.\n\nThe new order takes effect only after you save the settings.</string>
-  <string name="SYS_PAGE">Σελίδα</string>
   <string name="SYS_PAGE_NEXT">Επόμενη</string>
   <string name="SYS_PAGE_PREVIOUS">Προηγούμενη</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# και #VAR2#</string>
@@ -1403,7 +1269,6 @@
   <string name="SYS_PASSWORD_OLD_WRONG">Ο παλιός κωδικός πρόσβασης είναι λανθασμένος.</string>
   <string name="SYS_PASSWORD_RESET_INVALID">Έχετε ζητήσει έναν μη έγκυρο σύνδεσμο επαναφοράς κωδικού πρόσβασης. Εάν δεν έχετε επαναφέρει ακόμα τον κωδικό πρόσβασής σας, ζητήστε έναν νέο σύνδεσμο χρησιμοποιώντας τη συνάρτηση #VAR1#.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Ο νέος κωδικός έχει πλέον εφαρμοστεί!</string>
-  <string name="SYS_PASSWORD_UNKNOWN">Η σύνδεση απέτυχε λόγω λανθασμένου κωδικού πρόσβασης.\n\nΕλέγξτε τον κωδικό πρόσβασής σας και δοκιμάστε ξανά.</string>
   <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Διαχωριστής διαδρόμου</string>
   <string name="SYS_PDF">PDF</string>
@@ -1437,8 +1302,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Το Admidio απαιτεί #VAR1# ή υψηλότερο</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Επιλέξτε επιλογή</string>
-  <string name="SYS_PLEASE_WAIT">Παρακαλούμε περιμένετε</string>
-  <string name="SYS_PLUGINS">Πρόσθετα</string>
   <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
@@ -1502,7 +1365,6 @@
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
-  <string name="SYS_POPUP_WINDOW">Αναδυόμενο παράθυρο</string>
   <string name="SYS_PORT">Θύρα</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Πορτραίτο</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Ονόματα στηλών για αυτόματη ανίχνευση: #VAR1#</string>
@@ -1515,14 +1377,12 @@
   <string name="SYS_PREVIEW">Προεπισκόπηση</string>
   <string name="SYS_PREVIEW_CHARACTERS">Characters in the description preview</string>
   <string name="SYS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a description. The text is shortened at the last space before this limit. Clicking the expand icon displays the complete text. A value of 0 always displays the complete description. (Default: #VAR1#)</string>
-  <string name="SYS_PREVIOUS">Προηγούμενο</string>
   <string name="SYS_PREVIOUS_EVENTS">Προηγούμεν. #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Προηγούμενο όνομα</string>
   <string name="SYS_PREVIOUS_PHOTO">Προηγούμενη εικόνα</string>
   <string name="SYS_PREVIOUS_VALUE">Προηγούμενη τιμή</string>
   <string name="SYS_PRINT_PREVIEW">Προεπισκόπηση εκτύπωσης</string>
   <string name="SYS_PRIVATE_MESSAGES">Ιδιωτικά μηνύματα</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Δεν ήταν δυνατή η αποστολή προσωπικού μηνύματος στο #VAR1_BOLD#.\n\nΠαρουσιάστηκε το ακόλουθο σφάλμα:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Το προσωπικό μήνυμα έχει σταλεί στο #VAR1_BOLD#.</string>
   <string name="SYS_PRNG">Γεννήτρια ψευδοτυχαίων αριθμών</string>
   <string name="SYS_PRNG_INSECURE">Το Admidio/PHP δεν μπορεί να δημιουργήσει ασφαλείς ψευδοτυχαίους αριθμούς! Επικοινωνήστε με την ομάδα της Admidio με τις ακόλουθες πληροφορίες:</string>
@@ -1539,10 +1399,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_1">Θα πρέπει να φαίνονται ακόμη και στη φωτογραφία.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_2">Η φωτογραφία πρέπει να αποθηκευτεί ως JPG ή PNG.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_3">Ο διακομιστής μπορεί να χειριστεί φωτογραφίες με μέγιστο μέγεθος #VAR1# megapixel.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS_HELP_4">Τα μεταφορτωμένα αρχεία δεν πρέπει να είναι μεγαλύτερα από #VAR1# MB.</string>
   <string name="SYS_PROPERTIES">Ιδιότητες</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
@@ -1567,7 +1423,6 @@
   <string name="SYS_QUOTE">Single quote (\')</string>
   <string name="SYS_RADIO_BUTTON">Κουμπί</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Τελευταίο άλμπουμ φωτογραφιών του συλλόγου #VAR1#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Τελευταίες ανακοινώσεις του συλλόγου #VAR1#</string>
   <string name="SYS_RECIPIENT">Παραλήπτης</string>
   <string name="SYS_RECIPIENT_EMAIL">Ηλεκτρονική διεύθυνση (e-mail) παραλήπτη</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
@@ -1627,8 +1482,6 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Θέλετε να καταργήσετε αυτό το συμβάν; Όλοι οι συμμετέχοντες θα αφαιρεθούν.</string>
   <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Αφαίρεση μηνύματος</string>
-  <string name="SYS_REMOVE_USER">Αφαίρεση χρήστη</string>
-  <string name="SYS_REMOVE_USER_DESC">Επιλέγοντας #VAR1_BOLD#, όλα τα δεδομένα θα διαγραφούν και αυτές οι πληροφορίες δεν θα είναι πλέον διαθέσιμες.</string>
   <string name="SYS_REPEAT">Επανάληψη</string>
   <string name="SYS_REPEATS">Repeats</string>
   <string name="SYS_REPLACE">Αντικατάσταση</string>
@@ -1640,7 +1493,6 @@
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
   <string name="SYS_RESTORE_ENTRY">Restore entry</string>
-  <string name="SYS_RESTRICTIONS">Περιορισμοί</string>
   <string name="SYS_RIGHT_ALL_LISTS_VIEW">Προβολή λιστών μελών όλων των ρόλων</string>
   <string name="SYS_RIGHT_ANNOUNCEMENTS">Διαχείριση ανακοινώσεων</string>
   <string name="SYS_RIGHT_APPROVE_USERS">Οργάνωση και ανάθεση εγγραφών</string>
@@ -1653,8 +1505,6 @@
   <string name="SYS_RIGHT_EDIT_USER_DESC">Οι ρόλοι που έχουν αυτήν την άδεια μπορούν να επεξεργάζονται τα δεδομένα άλλων χρηστών (εκτός των κωδικών πρόσβασης).\n Επιπλέον, έχουν πρόσβαση στη διαχείριση χρηστών και μπορούν να προσθέτουν/διαγράφουν χρήστες.</string>
   <string name="SYS_RIGHT_FORUM">Manage forum</string>
   <string name="SYS_RIGHT_FORUM_DESC">Members of roles with this permission can manage the forum module. They can view, edit, and delete all forum topics and posts.</string>
-  <string name="SYS_RIGHT_GUESTBOOK">Διόρθωση και διαγραφή εγγραφών στο βιβλίο επισκεπτών</string>
-  <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Δημιουργία σχολίων σε εγγραφές του βιβλίου επισκεπτών</string>
   <string name="SYS_RIGHT_INVENTORY">Manage inventory</string>
   <string name="SYS_RIGHT_INVENTORY_DESC">Roles with this permission can manage the inventory in the inventory manager module.</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Οι συμμετέχοντες μπορούν να στείλουν email σε όλους τους συμμετέχοντες</string>
@@ -1684,7 +1534,6 @@
   <string name="SYS_ROLE_PAST">Past role</string>
   <string name="SYS_ROLE_RIGHTS">Role rights</string>
   <string name="SYS_ROLE_SELECTION">Επιλογή ρόλων</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Η επιλογή ρόλου μπορεί να περιοριστεί σε μια διαμόρφωση στα μέλη των επιλεγμένων ρόλων.\n\n Εάν δεν πρόκειται να γίνει περιορισμός, και τα δύο πεδία (επιλογή ρόλων και επιλογή κατηγορίας) πρέπει να μείνουν κενά.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Δεν έχετε άδεια επιλογής ρόλου #VAR1#.\nΔοκιμάστε να επιλέξετε άλλο ρόλο.</string>
   <string name="SYS_ROLE_TYPES">Τύποι ρόλων</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Ρόλοι χωρίς επικεφαλής</string>
@@ -1702,8 +1551,6 @@
   <string name="SYS_RSS_DISABLED">Η ροή Ιστού έχει απενεργοποιηθεί από τον διαχειριστή του συστήματος.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Ροή Ιστού για #VAR1#</string>
   <string name="SYS_RUN_REPORT">Run report</string>
-  <string name="SYS_SAFE_MODE">Λειτουργία ασφαλείας</string>
-  <string name="SYS_SAFE_MODE_PROBLEM">Ενδέχεται να προκαλέσει προβλήματα με τις μεταφορτώσεις αρχείων</string>
   <string name="SYS_SAME_WINDOW">Ίδιο παράθυρο</string>
   <string name="SYS_SATURDAY">Σάββατο</string>
   <string name="SYS_SAVE">Αποθήκευση</string>
@@ -1714,7 +1561,6 @@
   <string name="SYS_SAVE_CHANGES">Αποθήκευση αλλαγών</string>
   <string name="SYS_SAVE_CONFIGURATION">Αποθήκευση διαμόρφωσης</string>
   <string name="SYS_SAVE_DATA">Τα δεδομένα έχουν αποθηκευτεί.</string>
-  <string name="SYS_SEARCH">Αναζήτηση</string>
   <string name="SYS_SEARCH_AGE_DESC">Αναζήτηση για όλους τους χρήστες άνω των 18 ετών</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">18 ετών</string>
   <string name="SYS_SEARCH_DATE_DESC">Αναζήτηση για όλους τους χρήστες που γεννήθηκαν μετά την 01.03.1986</string>
@@ -1736,12 +1582,10 @@
   <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Αναζήτηση για επισημασμένους (επισημασμένους) χρήστες</string>
   <string name="SYS_SEATING">Καθίσματα</string>
   <string name="SYS_SEAT_AMOUNT">Επιπλέον θέσεις</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# δευτερόλεπτα</string>
   <string name="SYS_SECURE">Ασφαλισμένο</string>
   <string name="SYS_SECURITY">Ασφάλεια</string>
   <string name="SYS_SECURITY_CODE">Authentication code</string>
   <string name="SYS_SECURITY_CODE_INVALID">The entered authentication code is incorrect.</string>
-  <string name="SYS_SECURITY_ERROR">Σφάλμα ασφαλείας</string>
   <string name="SYS_SELECTION">Selection</string>
   <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Επιλογή διαμόρφωσης</string>
@@ -1774,14 +1618,12 @@
   <string name="SYS_SEND_METHOD">Αποστολή μέσω</string>
   <string name="SYS_SEND_METHOD_DESC">Η μέθοδος PHP mail() μπορεί να μην επιτρέπεται από κάποιους παρόχους και επομένως μπορεί να είναι ένας λόγος για υποψία spam. Έτσι προτείνεται να αποστέλνονται mails χρησιμοποιώντας μία υπάρχουσα διεύθυνση mail και SMTP server. Μπορείτε να ορίσετε τις ρυθμίσεις SMTP παρακάτω (default: PHP mail()).</string>
   <string name="SYS_SEND_NEW_LOGIN">Θέλετε να στείλετε #VAR1_BOLD# ένα email με το τρέχων όνομα χρήστη και νέο κωδικό πρόσβασης;</string>
-  <string name="SYS_SEND_NEW_PW">Αποστολή νέου κωδικού πρόσβασης</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Στείλτε φωτογραφία ως ευχετήρια κάρτα</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Αποστολή ιδιωτικού μηνύματος</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Το PM σας θα αποσταλεί στον συγκεκριμένο παραλήπτη.</string>
   <string name="SYS_SEND_TEST_MAIL">Αποστολή δοκιμαστικού mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Αποστολή email με όνομα χρήστη και κωδικό πρόσβασης.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Διαχωριστής για CSV-αρχεία</string>
-  <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Ρυθμίσεις server που δεν επιτρέπουν την μεταφόρτωση αρχείων.</string>
   <string name="SYS_SETTINGS">Προτιμήσεις</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ορισμός προτιμήσεων φακέλου</string>
@@ -1790,13 +1632,11 @@
   <string name="SYS_SHOW_ALL_CONTACTS">Allow showing all contacts</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">Μόνο ενεργά μέλη του συλλόγου θα βρίσκονται στη λίστα όταν αυτή η επιλογή δεν είναι ενεργή. Διαφορετικά όλοι οι χρήστες της βάσης δεδομένων θα βρίσκονται στη λίστα.</string>
-  <string name="SYS_SHOW_CALENDAR">Εμφάνιση ημερολογίου</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Για χρήστε εκτός σύνδεσης, ένα αλφαρηθμιτικό κείμενο θα εμφανιστεί όταν η μέθοδος captcha είναι ενεργοποιημένη. Το κείμενο θα πρέπει να εισαχθεί στο αντίστοιχο πεδίο. Αυτό θα αποτρέψει τυχόν εισβολή από spammers. (default: yes)</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Προβολή πρώην μελών</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Αυτή η ρύθμιση μπορεί να χρησιμοποιηθεί για ορισθεί ποιος μπορεί να δει πρώην ρόλους. Ωστόσο, θα πρέπει ο χρήστης να έχει το δικαίωμα να δει και τον ίδιο τον ρόλο. Οι επικεφαλής ενός ρόλου μπορούν επίσης να προβάλουν ανενεργά μέλη του ρόλου τους, εάν έχουν την άδεια να έχουν αυτή τη ρύθμιση εδώ. (Default: #VAR1#)</string>
-  <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Εμφάνιση μόνο πρώην μελών</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Χρήστης με άδεια #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Εμφάνιση πρώην συνδρομών ρόλων</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Θα εμφανιστεί ένα πλαίσιο με όλους τους ρόλους του χρήστη στον τρέχοντα σύλλογο. Θα εμφανιστεί η ημερομηνία έναρξης και λήξης της συνδρομής. (default: yes)</string>
@@ -1806,7 +1646,6 @@
   <string name="SYS_SHOW_MAP_LINK">Εμφάνιση συνδέσμου σε χάρτη</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Εάν έχει οριστεί τοποθεσία, οι Χάρτες Google χρησιμοποιούνται για την εμφάνιση τοποθεσίας και διαδρομής από τη δική σας τοποθεσία. (default: yes)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Εάν η διεύθυνση είναι αποθηκευμένη στο προφίλ, δύο σύνδεσμοι προς τους Χάρτες Google εμφανίζονται δίπλα στη διεύθυνση. Ο τόπος διαμονής του χρήστη είναι συνδεδεμένος και η διαδρομή από τον τόπο διαμονής του στον τόπο διαμονής του εμφανιζόμενου χρήστη συνδέεται. Κατά την επίσκεψη στους συνδέσμους, οι ακόλουθες πληροφορίες προφίλ θα μεταδοθούν στην Google: οδός, ταχυδρομικός κώδικας, πόλη και χώρα. (Default: no)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Εμφάνιση μελών</string>
   <string name="SYS_SHOW_MORE">Show more</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Display obsolete selection options</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Choose whether obsolete options appear in the profile field configuration so they can be restored.\nThis setting applies only to drop-down lists and option fields. (Default: yes)</string>
@@ -1826,12 +1665,10 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Similar contacts found</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Contacts with names similar to #VAR1_BOLD# were found.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Contacts with a similar name were found for the registration of #VAR1_BOLD# with the email address #VAR2_BOLD#. Please check the registration and assign it to a found contact or create a new contact.</string>
-  <string name="SYS_SINCE">από #VAR1#</string>
   <string name="SYS_SINCE_TO">Από #VAR1# σε #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SISTER">Αδερφή</string>
   <string name="SYS_SIZE">Μέγεθος</string>
-  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMALL">Small</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">Αυθεντικοποίηση SMTP</string>
@@ -2075,10 +1912,8 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Έναρξη</string>
-  <string name="SYS_START_BACKUP">Εκκίνηση διαδικασίας αντιγράφου ασφαλείας</string>
   <string name="SYS_STATUS_CODE_INVALID">Μη έγκυρος κωδικός κατάστασης!</string>
   <string name="SYS_STILL_X_CHARACTERS">ακόμη #VAR1# χαρακτήρες</string>
-  <string name="SYS_STOP">Σταματήστε</string>
   <string name="SYS_STREET">Οδός</string>
   <string name="SYS_SUBJECT">Θέμα</string>
   <string name="SYS_SUBORDINATE">Υφιστάμενος</string>
@@ -2093,7 +1928,6 @@
   <string name="SYS_SUPERIOR">Superior</string>
   <string name="SYS_SUPERIOR_FEMALE">Female superior</string>
   <string name="SYS_SUPERIOR_MALE">Male superior</string>
-  <string name="SYS_SUPPORT_ADMIDIO">Υποστηρίξτε το Admidio</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Μετάβαση στη διαχείριση ημερολογίου</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Εναλλαγή σε κατηγορία διαχείρισης</string>
   <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Switch to profile field configuration</string>
@@ -2101,7 +1935,6 @@
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Διαχείριση ανοιχτού χώρου/αίθουσας</string>
   <string name="SYS_SYMMETRICAL">Συμμετρικό</string>
   <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Login information for #organization_long_name#\n#content# Hello #user_first_name#,\n\nHere is your login information for #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThis password was generated automatically.\nPlease change it in your profile after logging in to #organization_homepage#.\n\nRegards,\nThe #organization_long_name# team</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Στοιχεία εισόδου για #organization_long_name#\n#content# Γεια σας #user_first_name#,\n\nΠαρακάτω θα βρείτε τα στοιχεία εισόδου σας για #organization_homepage#.\nΌνομα χρήστη: #user_login_name#\nΚωδικός πρόσβασης: #variable1#\n\nΟ κωδικός πρόσβασης δημιουργήθηκε αυτοματοποιημένα,\n Θα πρέπει να τον αλλάξετε μετά την είσοδο σας στο #organization_homepage# στις ρυθμίσεις του προφίλ σας.\n\nCheers,\nΟι διαχειριστές</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Επαναφορά κωδικού πρόσβασης για #organization_long_name#\n#content# Γεια σας #user_first_name#,\n\nΈχουμε λάβει αίτημα επαναφοράς του κωδικού πρόσβασης για το #organization_homepage#.\n\nΕάν το αίτημα έγινε από εσάς, ακολουθήστε τον παρακάτω σύνδεσμο για να επαναφέρετε τον κωδικό σας και να δημιουργήσετε έναν νέο κωδικό: \n#variable1#\n\nΜε εκτίμηση\nΗ ομάδα του #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# η εγγραφή σας στο #organization_long_name# απορρίφθηκε.\n#content#Γεια σας #user_first_name#,\n\nη εγγραφή σας στο #organization_homepage# απορρίφθηκε.\n\nΚατά κανόνα δεχόμαστε εγγραφές μόνο από μέλη. Εάν είστε μέλος και η εγγραφή σας απορρίφθηκε, είναι ίσως επειδή δεν σας αναγνωρίσαμε ως μέλος.\nΓια περισσότερες πληροφορίες επικοινωνήστε με τους διαχειριστές #administrator_email# του #organization_homepage#.\n\nΦιλικά,\nΗ ομάδα του #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Νέα εγγραφή #organization_long_name# website\n#content# Ένας νέος χρήστης έκανε εγγραφή στο #organization_homepage#.\n\nΕπίθετο: #user_last_name#\nΌνομα: #user_first_name#\nE-Mail: #user_email#\n\n\nΑυτό το μήνυμα δημιουργήθηκε αυτοματοποιημένα.</string>
@@ -2153,35 +1986,28 @@
   <string name="SYS_TOPIC">Topic</string>
   <string name="SYS_TOTAL">Σύνολο</string>
   <string name="SYS_TUESDAY">Τρίτη</string>
-  <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Τύπος</string>
   <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Μονής κατεύθυνσης</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Άγνωστα</string>
-  <string name="SYS_UNLIMITED">Απεριόριστα</string>
-  <string name="SYS_UNLOCK">Ξεκλείδωμα</string>
   <string name="SYS_UNLOCK_ALBUM">Ξεκλείδωμα άλμπουμ</string>
   <string name="SYS_UNMANAGED_FILES">μη διαχειριζόμενα αρχεία</string>
-  <string name="SYS_UPDATE">Ενημέρωση</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Επιτυχής ενημέρωση</string>
   <string name="SYS_UPLOAD_FILES">Μεταφόρτωση αρχείων</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Μέγιστο μέγεθος αρχείου μεταφόρτωσης</string>
-  <string name="SYS_UPLOAD_NAME_ERROR">Το όνομα αρχείου δεν μπορεί να ονομαστεί \"Submit\".</string>
   <string name="SYS_UPLOAD_PHOTOS">Μεταφόρτωση (upload) φωτογραφιών</string>
   <string name="SYS_UPLOAD_PROFILE_PICTURE">Μεταφόρτωση εικόνας προφίλ</string>
   <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">Το URL στο πεδίο #VAR1_BOLD# περιλαμβάνει μη έγκυρους χαρακτήρες.\n\nΕπιτρέπονται μόνο αλφαβητικοί χαρακτήρες, σημεία στίξης, αριθμοί 0-9 και ειδικοί χαρακτήρες .-+_:/#?=.</string>
-  <string name="SYS_USER">Μέλος</string>
   <string name="SYS_USERNAME">Όνομα χρήστη</string>
   <string name="SYS_USERNAME_DESCRIPTION">Θα μπορείτε να συνδεθείτε με αυτό το όνομα χρήστη.\n\nΑυτό το όνομα πρέπει να είναι καλά καθορισμένο. Εάν το επιλεγμένο όνομα δεν είναι πλέον διαθέσιμο, δοκιμάστε να χρησιμοποιήσετε συνδυασμούς όπως Andi78 ή SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Όνομα χρήστη ή email</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# on #VAR2# at #VAR3#</string>
   <string name="SYS_USERS">Users</string>
-  <string name="SYS_USERS_PER_PAGE">Αριθμός χρηστών ανά σελίδα</string>
   <string name="SYS_USER_COULD_BE_CREATED">Το μέλος μπορεί να δημιουργηθεί</string>
   <string name="SYS_USER_DELETE_DESC">Θέλετε να διαγράψετε το #VAR1_BOLD#;\n\nΟ χρήστης θα διαγραφεί οριστικά από τη βάση δεδομένων, γεγονός που καθιστά αδύνατη τη μετέπειτα πρόσβαση.</string>
   <string name="SYS_USER_EMAIL">User email</string>
@@ -2224,16 +2050,13 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Εμφανίζονται μόνο οι ρόλοι άλλων συλλόγων που είναι ορατοί σε όλους τους εγγεγραμμένους χρήστες. Εάν είστε μέλος αυτού του συλλόγου, θα εμφανιστούν επίσης οι ρόλοι που ενδέχεται να δείτε με τα δικαιώματά σας εντός του συλλόγου.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Προβολή συνδρομών ρόλου</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Αυτή η ρύθμιση ελέγχει ποιοι χρήστες έχουν το δικαίωμα να προβάλλουν διάφορες λίστες και τα μεμονωμένα προφίλ χρηστών των μελών του ρόλου. Ωστόσο, ο ρόλος δεξιά #VAR1_BOLD# εξακολουθεί να βρίσκεται πάνω από αυτήν τη ρύθμιση.</string>
-  <string name="SYS_VISIBILITY">Ορατότης</string>
   <string name="SYS_VISIBLE">Ορατό</string>
   <string name="SYS_VISIBLE_FOR">Ορατό για</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# ορατό μόνο σε συνδεδεμένους χρήστες</string>
   <string name="SYS_VISITORS">Επισκέπτες</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Θέλεις να διαγραφεί η κατηγορία #VAR1_BOLD# ?</string>
   <string name="SYS_WANT_DELETE_ENTRY">Θέλετε να διαγράψετε την εγγραφή #VAR1_BOLD#;</string>
   <string name="SYS_WANT_DELETE_PHOTO">Θέλετε να διαγράψετε την επιλεγμένη φωτογραφία;</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt will be downloaded and installed without being enabled. You can enable it in the plugin manager afterward.</string>
-  <string name="SYS_WANT_REGISTER">Θέλω να κάνω εγγραφή</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoval affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
@@ -2247,12 +2070,10 @@
   <string name="SYS_WEEKDAY">Ημέρα εβδομάδας</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
   <string name="SYS_WEEKLY">Weekly</string>
-  <string name="SYS_WHAT_TO_DO">Τι να κάνετε</string>
   <string name="SYS_WIDTH">Πλάτος</string>
   <string name="SYS_WIFE">Σύζυγος</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Φύλλο εργασίας (αριθμός ή όνομα)</string>
   <string name="SYS_WRITE_EMAIL">Γράψτε email</string>
-  <string name="SYS_WRITE_ENTRY">Γράψτε εγγραφή</string>
   <string name="SYS_WRITE_PM">Γράψτε ιδιωτικό μήνυμα</string>
   <string name="SYS_XING">Xing</string>
   <string name="SYS_YEAR">Year</string>

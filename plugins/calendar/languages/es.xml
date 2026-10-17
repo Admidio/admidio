@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Vie</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Lun</string>
   <string name="PLG_CALENDAR_MONTH">enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre</string>
-  <string name="PLG_CALENDAR_MORE">(más ...)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Este complemento muestra un calendario con todos los eventos del mes actual en la página de resumen.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Calendario</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roles incluidos en los cumpleaños</string>

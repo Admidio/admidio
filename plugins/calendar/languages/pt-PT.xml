@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Sex</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Seg</string>
   <string name="PLG_CALENDAR_MONTH">Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro</string>
-  <string name="PLG_CALENDAR_MORE">(... mais)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Este plugin apresenta um calendário com todos os eventos do mês atual na página de visão geral.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Calendário</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Papéis incluídos nos aniversários</string>

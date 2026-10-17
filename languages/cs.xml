@@ -1174,7 +1174,6 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Členové této role dostávají oznámení o nových nebo změněných záznamech v modulech a změnách v profilových údajích členů. Z důvodu ochrany osobních údajů lze ukládat pouze role, které mají právo role #VAR1_BOLD#.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nikoli při registraci</string>
   <string name="SYS_NOT_EMPTY">Není prázdné</string>
-  <string name="SYS_NOT_INSTALLED">Není nainstalováno</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Není členem žádné organizace</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Není členem organizace #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Použijte prosím platné číslo jako podmínku pro pole #VAR1_BOLD#.</string>
@@ -1402,7 +1401,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Na fotce byste měli být vy. Fotka může mít maximální rozlišení #VAR1# megapixelů. Soubor fotky nesmí být větší než #VAR1# MB a musí být ve formátu JPG nebo PNG.</string>
   <string name="SYS_PROPERTIES">Vlastnosti</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>

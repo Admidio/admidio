@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">R</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">E</string>
   <string name="PLG_CALENDAR_MONTH">Jaanuar, veebruar, märts, aprill, mai, juuni, juuli, august, september, oktoober, november, detsember</string>
-  <string name="PLG_CALENDAR_MORE">(... rohkem)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">See plugin kuvab ülevaatelehel kalendri kõigi käesoleva kuu sündmustega.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Sünnipäevade jaoks valitud rollid</string>

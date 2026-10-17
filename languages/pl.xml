@@ -99,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Kolor linii</string>
   <string name="ORG_CAPTCHA_PREVIEW">Podgląd captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Podgląd Captcha pokazuje tylko wcześniej zapisane opcje.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Po aktywacji nowym użytkownikom zostanie wyświetlony obraz z kodem Captcha lub proste działanie matematyczne. Wpisanie poprawnego kodu lub wyniku jest niezbędne, aby zapisać aktualnie edytowany wpis. Captcha jest częścią rozwiązania antyspamowego Admidio. (domyślnie: tak)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Podpis Captcha</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Wprowadź preferowany podpis dla Captchy. Zostanie użyta domyślna czcionka aktualnie wybranego motywu.</string>
   <string name="ORG_CAPTCHA_SIGNS">Ważne znaki </string>
@@ -137,8 +136,6 @@
   <string name="ORG_FIELD_URL_DESC">Wprowadzony adres URL będzie później w profilu prowadził do treści wpisanej przez użytkownika w tym polu. Opcjonalnie w adresie URL można zdefiniować symbol wieloznaczny #user_content#. Oznacza on treść wprowadzoną przez użytkownika w polu.\n\nPrzykład:\nURL: https://www.google.de/search?q=#user_content#\nwartość_pola: Admidio\nLink w profilu: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Ta strona jest wyświetlana, gdy użytkownik jest zalogowany. Ścieżka musi być podana jako ścieżka względna względem głównego folderu Admidio.\n(np.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Ta strona jest domyślną stroną Admidio dla gości. Ścieżka musi być podana jako ścieżka względna względem głównego folderu Admidio.\n(np.: modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Nie znaleziono poprawnego motywu.</string>
-  <string name="ORG_INVALID_THEME_FALLBACK">Wybrany motyw zapasowy jest nieprawidłowy.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Użycie edytora JavaScript</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">W pełni funkcjonalny edytor JavaScript ułatwia wprowadzanie opisów ogłoszeń, wydarzeń i innych treści. Jeśli edytor jest wyłączony, wyświetlane jest proste wielowierszowe pole tekstowe.</string>
   <string name="ORG_LAST_UPDATE_STEP">Ostatni krok aktualizacji</string>
@@ -198,7 +195,6 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">Ścieżka do pliku .css z dodatkowymi definicjami stylów. Ten plik zostanie wczytany jako ostatni, nawet po pliku admidio.css motywu. (domyślnie: puste)</string>
   <string name="SYS_ADDITIONAL_FILES">Ta lista zawiera przegląd plików i folderów niezaimportowanych jeszcze do bazy danych. Mogą one zostać dodane do bazy danych. Prawa dostępu zostaną skopiowane z wybranego folderu.</string>
   <string name="SYS_ADDRESS">Adres</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Konfiguruj dalej</string>
   <string name="SYS_ADD_ATTACHMENT">Dodaj załącznik</string>
   <string name="SYS_ADD_COLUMN">Dodaj kolumnę</string>
   <string name="SYS_ADD_COLUMNS_DESC">Przypisz dowolną liczbę kolumn odpowiadających polom profilu w tabeli poniżej. Dodatkowo, możesz określić domyślne sortowanie i dodać warunki na podstawie których filtrowani będą odpowiedni członkowie.</string>
@@ -242,7 +238,6 @@
   <string name="SYS_ALL_OTHERS">Wszyscy pozostali</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Wszyscy członkowie tej organizacji</string>
   <string name="SYS_ALSO_VISITORS">Też goście</string>
-  <string name="SYS_ANNOUNCEMENT">Ogłoszenie</string>
   <string name="SYS_ANNOUNCEMENTS">Ogłoszenia</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Pokazuj i edytuj ogłoszenia, wiadomości i inne informacje.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Ogłoszenie zostało zmienione dnia #VAR1#</string>
@@ -321,7 +316,6 @@
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Jeśli opcja jest aktywowana, pola profilu tej kategorii będą wyświetlane i możliwe do edycji w widoku profilu następujących organizacji:#VAR1#\n\nProszę pozostawić nieaktywnym, jeśli pola mają być wyświetlane jedynie w twojej organizacji.</string>
   <string name="SYS_CAT_SELECTION">Wybór kategorii</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Wybór kategorii może zostać użyty do ograniczenia konfiguracji do członków ról należących do wybranych kategorii. Jeśli nie chcesz żadnych ograniczeń, oba pola (wybór ról i wybór kategorii) muszą pozostać puste.</string>
   <string name="SYS_CHANGED_AT">Ostatnio zmodyfikowane</string>
   <string name="SYS_CHANGED_BY">Zmienione przez</string>
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profile and role settings</string>
@@ -399,8 +393,6 @@
   <string name="SYS_COMPLEMENT">Komplement</string>
   <string name="SYS_CONDITION">Warunek</string>
   <string name="SYS_CONFIGURATION">Konfiguracja</string>
-  <string name="SYS_CONFIGURATIONS">Konfiguruj</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Dowolna liczba konfiguracji może zostać tu utworzona dla raportu kategorii. Na ekranie, jedna z tych konfiguracji jest używana jako podstawa dla wyświetlania w każdym wypadku poprzez \"Wybierz konfigurację\".</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Pozwolenie na konfigurację wszystkich członków</string>
   <string name="SYS_CONFIGURATION_DELETE">Czy chcesz usunąć wybraną konfigurację list?</string>
   <string name="SYS_CONFIGURATION_LIST">Konfiguracja list</string>
@@ -430,7 +422,6 @@
   <string name="SYS_COPIED_CLIPBOARD">Skopiowano do schowka...</string>
   <string name="SYS_COPY">Kopiuj</string>
   <string name="SYS_COPY_CLIPBOARD">Kopiuj do schowka</string>
-  <string name="SYS_COPY_CONFIGURATION">Kopiuj konfigurację</string>
   <string name="SYS_COPY_ENTRY">Kopiuj wpis</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Twoja żądana kopia wiadomości</string>
@@ -515,7 +506,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Jeśli nowy użytkownik zostaje utworzony lub nowa rejestracja zostaje zaakceptowana, ta rola jest automatycznie przypisywana nowemu użytkownikowi. Kiedy twórca ma dostęp do przypisywania ról, wszystkie mapowania ról są wyświetlone i mogą zostać zmienione.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Domyślna konfiguracja</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">Jedna z podanych tu konfiguracji może zostać wybrana domyślną kategorią dla raportu kategorii tej organizacji. Wybrana konfiguracja będzie bezpośrednio wyświetlana kiedy wzywany jest raport.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Jedna z podanych tu konfiguracji może zostać wybrana domyślną kategorią dla list tej organizacji. Listy członków ról które nie mają przechowywanej konfiguracji listy będą wyświetlane z tą konfiguracją.</string>
   <string name="SYS_DEFAULT_COUNTRY">Domyślny kraj</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Określ kraj, w którym ta organizacja głównie działa. Będzie on domyślnie wybierany podczas tworzenia lub rejestracji nowych użytkowników. Ułatwia to wprowadzanie danych i może zostać zmieniony przez użytkownika.</string>
@@ -599,7 +589,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Twoja kartka nie mogła zostać wysłana.</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Twoja kartka została wysłana</string>
   <string name="SYS_EDIT">Edytuj</string>
-  <string name="SYS_EDITED_BY">Ostatnia edycja:</string>
   <string name="SYS_EDIT_ALBUM">Edytuj album</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Edytuj ogłoszenia</string>
   <string name="SYS_EDIT_CALENDAR">Edytuj kalendarz</string>
@@ -806,7 +795,6 @@
   <string name="SYS_HEADER_CONTENT_MODULES">Moduły treści (dokumenty, wydarzenia, ogłoszenia itd.)</string>
   <string name="SYS_HEADER_PREFERENCES">Ustawienia ogólne</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Dane profilu użytkownika i role</string>
-  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Ustawienia użytkowników oraz grup/ról</string>
   <string name="SYS_HEADLINE">Nagłówek</string>
   <string name="SYS_HIDDEN">Ukryte</string>
   <string name="SYS_HIGHLIGHT_EVENT">Wyróżnij datę</string>
@@ -1038,8 +1026,6 @@
   <string name="SYS_LOG">Dziennik</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
-  <string name="SYS_LOGGED_TABLES">Rejestrowane tabele</string>
-  <string name="SYS_LOGGED_TABLES_DESC">Wybierz wszystkie typy obiektów dla dziennika zmian. Dla tych obiektów wszystkie pojedyncze modyfikacje będą zapisywane w historii zmian wraz ze starą i nową wartością, czasem modyfikacji oraz użytkownikiem. Odznaczenie typu obiektu nie usuwa istniejących wpisów dziennika. Można to zrobić na stronie dziennika zmian.</string>
   <string name="SYS_LOGIN">Zaloguj się</string>
   <string name="SYS_LOGIN_CANCEL">Cancel</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Zbyt wiele razy sprobowano zalogować się za pomocą nieprawidłowego hasła. Z powodów bezpieczeństwa konto zostało zablokowane na 15 minut.</string>
@@ -1059,9 +1045,6 @@
   <string name="SYS_LOGO_FILE_DESC">Ścieżka do pliku logo wyświetlanego w lewym górnym rogu. Ścieżka powinna być względna względem katalogu głównego instalacji. Jeśli pole pozostanie puste, zostanie użyte domyślne logo motywu. (domyślnie: puste)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maksymalna wysokość logo</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">Maksymalna przestrzeń dostępna dla logo w nagłówku jest ograniczona do tej wartości. Jeśli logo jest wyższe niż podana wartość, zostanie pomniejszone do tej wysokości. (domyślnie: 60 pikseli)</string>
-  <string name="SYS_LOG_ALLOW_DELETION">Zezwól na usuwanie historii zmian</string>
-  <string name="SYS_LOG_ALLOW_DELETION_DESC">Włącza przycisk na stronie dziennika zmian umożliwiający usunięcie części lub całości historii zmian.</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">Niektóre lub wszystkie wpisy dziennika zmian zostały ukryte z powodu niewystarczających uprawnień użytkownika.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Nowe hasło zostało wysłane na adres e-mail #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Nowe hasło wysłane do użytkownika #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">Adres e-mail #VAR1_BOLD# został przypisany do wielu rejestracji. Nie można zidentyfikować unikalnej rejestracji użytkownika.</string>
@@ -1189,7 +1172,6 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Członkowie tej roli otrzymują powiadomienia o nowych lub zmienionych wpisach w modułach oraz zmianach danych profili członków. Ze względu na ochronę danych można wybrać tylko role z uprawnieniem #VAR1_BOLD#.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nie przy rejestracji</string>
   <string name="SYS_NOT_EMPTY">Nie puste</string>
-  <string name="SYS_NOT_INSTALLED">Nie zainstalowano</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Nie jest członkiem żadnej organizacji</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nie jest członkiem organizacji #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Użyj poprawnej liczby jako warunku dla pola #VAR1_BOLD#.</string>
@@ -1401,7 +1383,6 @@
   <string name="SYS_PREVIOUS_VALUE">Poprzednia wartość</string>
   <string name="SYS_PRINT_PREVIEW">Podgląd wydruku</string>
   <string name="SYS_PRIVATE_MESSAGES">Prywatne wiadomości</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Nie można wysłać prywatnej wiadomości do #VAR1_BOLD#.\n\nWystąpił następujący błąd:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Prywatna wiadomość została wysłana do #VAR1_BOLD#.</string>
   <string name="SYS_PRNG">Pseudolosowy generator liczbowy</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP nie może generować bezpiecznych liczb pseudolosowych! Skontaktuj się z zespołem Admidio, podając następujące informacje:</string>
@@ -1418,7 +1399,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Na zdjęciu powinieneś znajdować się Ty. Zdjęcie może mieć maksymalną rozdzielczość #VAR1# megapikseli. Plik zdjęcia nie może być większy niż #VAR1# MB i musi być w formacie JPG lub PNG.</string>
   <string name="SYS_PROPERTIES">Właściwości</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
@@ -1554,7 +1534,6 @@
   <string name="SYS_ROLE_PAST">Była rola</string>
   <string name="SYS_ROLE_RIGHTS">Uprawnienia roli</string>
   <string name="SYS_ROLE_SELECTION">Wybór roli</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Wybór ról może służyć do ograniczenia konfiguracji do członków wybranych ról. Jeśli nie chcesz żadnych ograniczeń, oba pola (wybór ról i wybór kategorii) muszą pozostać puste.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Nie masz uprawnień, aby wybrać rolę #VAR1#.\nSpróbuj wybrać inną rolę.</string>
   <string name="SYS_ROLE_TYPES">Typy ról</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Rola bez lidera</string>
@@ -1667,7 +1646,6 @@
   <string name="SYS_SHOW_MAP_LINK">Wyświetl link do mapy</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Jeśli ustawiona jest lokalizacja, Mapy Google służą do wyświetlania lokalizacji i trasy. (domyślnie: tak)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Jeśli adres jest przechowywany w profilu, obok niego wyświetlane są dwa linki do Google Maps. Miejsce zamieszkania użytkownika to jeden link, drugi link to droga z jego miejsca zamieszkania do miejsca zamieszkania wyświetlanego użytkownika. Przy używaniu linku, następujące informacje z profilu zostaną przesłane Google: ulica, kod pocztowy, miasto, kraj. (Domyślnie: nie)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Pokaż listę członków</string>
   <string name="SYS_SHOW_MORE">Pokaż więcej</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Pokaż nieaktualne opcje wyboru</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">To ustawienie pozwala określić, czy nieaktualne opcje wyboru mają być wyświetlane w konfiguracji pola profilu. Jeśli to ustawienie jest włączone, nieaktualne opcje można przywrócić.\nTa opcja jest dostępna tylko dla pól profilu typu lista rozwijana i pole opcji. (domyślnie: tak)</string>
@@ -1757,7 +1735,6 @@
   <string name="SYS_SSO_CLIENT_SCOPES_INVALID">The selected OIDC scopes are invalid: #VAR1#</string>
   <string name="SYS_SSO_CLIENT_SECRET">Sekret klienta</string>
   <string name="SYS_SSO_CLIENT_SECRET_DESC">Tajne hasło służące do uwierzytelnienia klienta. Zwykle jest to losowy ciąg znaków, który jest wymieniany tylko raz. Przy tworzeniu sekret klienta jest wyświetlany jeden raz i powinien zostać skopiowany do klienta. Następnie jest przechowywany w bazie danych w postaci skrótu, więc nie da się go odzyskać. Można jedynie wygenerować nowy sekret klienta i skopiować go do konfiguracji klienta.</string>
-  <string name="SYS_SSO_CLIENT_SECRET_HIDDE">Ze względów bezpieczeństwa sekret klienta jest wyświetlany tylko podczas tworzenia.</string>
   <string name="SYS_SSO_CLIENT_SECRET_HIDDEN">Not shown again after saving.</string>
   <string name="SYS_SSO_CLIENT_SECRET_RECREATE">Utwórz ponownie</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">Edytuj klienta OIDC (dostawcę usług)</string>
@@ -1917,7 +1894,6 @@
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Wymagaj podpisów dla wszystkich otrzymanych żądań</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">If a client supports signing and a certificate is entered in the client configuration, all requests must be signed. Clients without a certificate are not affected and do not require signatures.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Previously selected key — no longer usable</string>
-  <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Podpis i szyfrowanie</string>
   <string name="SYS_SSO_SIGNING_KEY">Klucz do podpisów</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Podpisuj asercje wysyłane do klienta (SP)</string>
   <string name="SYS_SSO_SLO_URL">Adres URL Single Log-Out (opcjonalny)</string>
@@ -2074,7 +2050,6 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Jedynie role innych organizacji widoczne dla wszystkich zarejestrowanych użytkowników zostają wyświetlone. Jeśli jesteś członkiem danej organizacji, będziesz mógł widzieć role zależnie od twoich uprawnień wewnątrz organizacji.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Pokaż członków roli</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Za pomocą tego ustawienia możesz określić, kto może zobaczyć członków tej roli. Użytkownik może zobaczyć członkostwo w roli w profilu odpowiedniej osoby i na listach roli. To ustawienie nie zezwala na dostęp do profilu członków roli. Na listach wyświetlane są tylko nazwisko i imię. Uprawnienie roli #VAR1_BOLD# zastępuje to ustawienie.</string>
-  <string name="SYS_VISIBILITY">Widoczność</string>
   <string name="SYS_VISIBLE">Widoczne</string>
   <string name="SYS_VISIBLE_FOR">Widoczne dla</string>
   <string name="SYS_VISITORS">Goście</string>

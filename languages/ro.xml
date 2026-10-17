@@ -1174,7 +1174,6 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Membrii acestui rol primesc notificări despre intrările noi sau modificate în module și modificările din datele profilului membrilor. Din motive de protecție a datelor, pot fi depuse numai roluri care au dreptul de rol #VAR1_BOLD#.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nu la înregistrare</string>
   <string name="SYS_NOT_EMPTY">Nu este gol</string>
-  <string name="SYS_NOT_INSTALLED">Neinstalat</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Nu este membru al niciunei organizații</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nu este membru al organizației #VAR1#</string>
   <string name="SYS_NOT_NUMERIC">Vă rugăm să utilizați un număr valid ca condiție pentru câmpul #VAR1_BOLD#.</string>
@@ -1366,7 +1365,6 @@
   <string name="SYS_PLUGIN_STORE_UNAVAILABLE">The list of plugins published for Admidio could not be read. Uploading a plugin from a file still works.</string>
   <string name="SYS_PLUGIN_STORE_VERSION_MISMATCH">The catalog listed version #VAR2# of the plugin #VAR1#, but the downloaded archive contains version #VAR3#. The download was rejected.</string>
   <string name="SYS_PLUGIN_UPDATE">Actualizare plugin</string>
-  <string name="SYS_PLUGIN_UPDATED">Pluginul a fost actualizat cu succes.</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Versiune plugin</string>
   <string name="SYS_PORT">Port</string>
@@ -1403,7 +1401,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Trebuie să apăreți și dumneavoastră în fotografie. Fotografia poate avea o rezoluție maximă de #VAR1# megapixeli. Fișierul foto nu trebuie să depășească #VAR1# MB și trebuie să fie în format JPG sau PNG.</string>
   <string name="SYS_PROPERTIES">Proprietăți</string>
   <string name="SYS_PWA_ENABLED">Activare aplicație web progresivă (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Permite utilizatorilor să instaleze Admidio ca aplicație web autonomă pe smartphone, tabletă sau computer. Numele aplicației se bazează pe numele organizației. Pictogramele personalizate ale aplicației pot fi plasate în directorul adm_my_files/ sub numele app_icon.png sau app_icon_512.png. În caz contrar, se va utiliza ca alternativă o faviconă PNG configurată în secțiunea „Design” sau logo-ul implicit.</string>

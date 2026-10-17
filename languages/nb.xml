@@ -99,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Linjefarge</string>
   <string name="ORG_CAPTCHA_PREVIEW">Forhåndsvisning av Captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Forhåndsvisningen av Captcha tar bare hensyn til alternativer som allerede er lagret.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Etter aktivering vil et bilde med en captcha-kode eller en enkel beregning vises til nye brukere. Det er nødvendig å fylle inn riktig kode eller resultat for å lagre den redigerte oppføringen. Captchaen er en del av anti-spam-løsningen i Admidio. (standard: ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha-undertittel</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Fyll inn din foretrukne undertittel for captchaen. Standard skrifttype for gjeldende tema vil bli brukt.</string>
   <string name="ORG_CAPTCHA_SIGNS">Gyldige tegn</string>
@@ -137,8 +136,6 @@
   <string name="ORG_FIELD_URL_DESC">Den angitte URL-en lenker senere i profilen til innholdet som brukeren har angitt i dette feltet. Alternativt kan jokertegnet #user_content# defineres i URL-en. Dette er innholdet som brukeren har angitt i feltet.\n\nEksempel:\nUrl:https://www.google.de/search?q=#user_content#\nfield_value: Admidio\nLenke i profil: https://www.google.de/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Denne siden vises når en bruker logger inn. Stien må oppgis som relativ sti til Admidios hovedmappe.\n(f.eks.: modules/overview.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Denne siden vises når en bruker logger inn. Stien må oppgis som relativ sti til Admidios hovedmappe.\n(f.eks.: modules/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Kunne ikke finne et gyldig tema.</string>
-  <string name="ORG_INVALID_THEME_FALLBACK">Det valgte reservetemaet er ikke gyldig.</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Bruke JavaScript-editoren</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">En fullfunksjonell JavaScript-editor gjør det enklere å skrive beskrivelser for kunngjøringer, arrangementer og annet innhold. Hvis editoren er deaktivert, vises et enkelt tekstfelt med flere linjer.</string>
   <string name="ORG_LAST_UPDATE_STEP">Siste trinn i oppdateringen</string>
@@ -198,7 +195,6 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">Stien til en .css-fil med ytterligere stildefinisjoner. Denne filen lastes inn sist, selv etter temaets admidio.css-fil. (standard: tom)</string>
   <string name="SYS_ADDITIONAL_FILES">Denne listen har som mål å gi en oversikt over filer og mapper som ikke er importert til databasen ennå. De kan legges til i databasen. Tilgangsrettigheter vil bli kopiert fra den valgte mappen.</string>
   <string name="SYS_ADDRESS">Adresse</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Legg til ytterligere konfigurasjon</string>
   <string name="SYS_ADD_ATTACHMENT">Legg ved fil</string>
   <string name="SYS_ADD_COLUMN">Legg til kolonne</string>
   <string name="SYS_ADD_COLUMNS_DESC">Tildel et valgfritt antall kolonner som korresponderer med profilfeltene i tabellen nedenfor. I tillegg kan du angi standard sortering og legge til betingelser for filtrering av de respektive medlemmene.</string>
@@ -242,7 +238,6 @@
   <string name="SYS_ALL_OTHERS">Alle andre</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle medlemmer av denne organisasjonen</string>
   <string name="SYS_ALSO_VISITORS">Også gjester</string>
-  <string name="SYS_ANNOUNCEMENT">Kunngjøring</string>
   <string name="SYS_ANNOUNCEMENTS">Kunngjøringer</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Vis eller endre meddelelser, nyheter og annen informasjon.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">En kunngjøring ble endret på #VAR1#</string>
@@ -321,7 +316,6 @@
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Hvis alternativet er aktivert, vil profilfeltene i denne kategorien vises og kan redigeres i profilvisningen til følgende organisasjoner: #VAR1#\n\nDeaktiver hvis feltene bare skal vises i din organisasjon.</string>
   <string name="SYS_CAT_SELECTION">Kategorivalg</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Kategorivalget kan brukes til å begrense en konfigurasjon til medlemmene av rollene i de valgte kategoriene. Hvis ingen begrensning er ønsket, må begge feltene (rollevalg og kategorivalg) stå tomme.</string>
   <string name="SYS_CHANGED_AT">Sist endret</string>
   <string name="SYS_CHANGED_BY">Endret av</string>
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profile and role settings</string>
@@ -347,8 +341,6 @@
   <string name="SYS_CHANGE_HISTORY_USERDATA">Endringshistorikk for brukerdata og medlemskap</string>
   <string name="SYS_CHANGE_PASSWORD">Endre passord</string>
   <string name="SYS_CHARACTERS">Tegn</string>
-  <string name="SYS_CHARACTER_ENCODING">Tegnkoding</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Tegnkoding brukt i e-poster sendt av Admidio. Ikke alle e-postklienter kan behandle UTF-8. Derfor kan ISO-8859-1 alternativt angis her.</string>
   <string name="SYS_CHECKBOX">Sjekkboks</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Status for avmerkingsboksen lagres automatisk etter merking.</string>
   <string name="SYS_CHECK_FOR_UPDATE">Se etter oppdatering</string>
@@ -401,8 +393,6 @@
   <string name="SYS_COMPLEMENT">Komplement</string>
   <string name="SYS_CONDITION">Betingelse</string>
   <string name="SYS_CONFIGURATION">Konfigurasjon</string>
-  <string name="SYS_CONFIGURATIONS">Konfigurasjoner</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Her kan du opprette et valgfritt antall konfigurasjoner for kategorirapporten. I skjermvisningen brukes én av disse konfigurasjonene som grunnlag for visningen i hvert tilfelle via \"Velg konfigurasjon\".</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Tillatelse til å bruke konfigurasjon for alle medlemmer</string>
   <string name="SYS_CONFIGURATION_DELETE">Vil du slette den valgte listekonfigurasjonen?</string>
   <string name="SYS_CONFIGURATION_LIST">Listekonfigurasjon</string>
@@ -432,7 +422,6 @@
   <string name="SYS_COPIED_CLIPBOARD">Kopiert til utklippstavlen...</string>
   <string name="SYS_COPY">Kopier</string>
   <string name="SYS_COPY_CLIPBOARD">Kopier til utklippstavlen</string>
-  <string name="SYS_COPY_CONFIGURATION">Kopier konfigurasjon</string>
   <string name="SYS_COPY_ENTRY">Kopier oppføring</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Din forespurte kopi av meldingen</string>
@@ -517,7 +506,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Hvis en ny bruker opprettes eller en ny registrering godtas, tildeles denne rollen automatisk til den nye brukeren. Når oppretteren har rett til å tildele roller, vises alle rolletilordninger og kan endres deretter.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfigurasjon</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">En av konfigurasjonene som er gitt her, kan gjøres til standardkonfigurasjon for kategorirapporten til denne organisasjonen. Den valgte konfigurasjonen vises direkte når rapporten kalles.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">En av konfigurasjonene som er angitt her, kan gjøres til standardkonfigurasjon for lister i denne organisasjonen. Medlemslister over roller som ikke har en lagret listekonfigurasjon, vises sammen med denne konfigurasjonen.</string>
   <string name="SYS_DEFAULT_COUNTRY">Standardland</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Definer et land som denne organisasjonen hovedsakelig opererer for. Det vil bli forhåndsvalgt når nye brukere opprettes eller registreres. Det forenkler datainntastingen og kan endres av brukeren.</string>
@@ -601,7 +589,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Hilsningskortet ditt kunne ikke sendes!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Hilsningskortet ditt ble sendt.</string>
   <string name="SYS_EDIT">Endre</string>
-  <string name="SYS_EDITED_BY">Sist endret av</string>
   <string name="SYS_EDIT_ALBUM">Endre album</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Endre kunngjøringer</string>
   <string name="SYS_EDIT_CALENDAR">Endre kalender</string>
@@ -808,7 +795,6 @@
   <string name="SYS_HEADER_CONTENT_MODULES">Innholdsmoduler (dokumenter, arrangementer, kunngjøringer osv.)</string>
   <string name="SYS_HEADER_PREFERENCES">Generelle preferanser</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">Brukerprofildata og roller</string>
-  <string name="SYS_HEADER_USER_ROLE_SETTINGS">Innstillinger for brukere og grupper/roller</string>
   <string name="SYS_HEADLINE">Overskrift</string>
   <string name="SYS_HIDDEN">Skjult</string>
   <string name="SYS_HIGHLIGHT_EVENT">Fremhev arrangement</string>
@@ -1041,8 +1027,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_LOG">Logg</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
-  <string name="SYS_LOGGED_TABLES">Loggede tabeller</string>
-  <string name="SYS_LOGGED_TABLES_DESC">Velg alle objekttyper for endringsloggen. For disse objektene vil alle individuelle endringer bli logget i endringshistorikken med gammel og ny verdi, samt endringstidspunkt og bruker. Hvis en objekttype ikke er valgt, slettes ikke eksisterende loggoppføringer. Dette kan gjøres på endringsloggsiden.</string>
   <string name="SYS_LOGIN">Logg inn</string>
   <string name="SYS_LOGIN_CANCEL">Cancel</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">Du har prøvd å logge inn for mange ganger i det siste med feil passord. Av sikkerhetshensyn har kontoen din vært låst i 15 minutter.</string>
@@ -1062,9 +1046,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_LOGO_FILE_DESC">Stien til logofilen som vises øverst til venstre. Stien skal være relativ til installasjonens rotkatalog. Hvis feltet står tomt, vil standardlogoen til temaet bli brukt. (standard: tom)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maksimal logohøyde</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">Maksimal tilgjengelig plass for logoen i overskriften er begrenset til denne verdien. Hvis logoen er høyere enn den angitte verdien, vil den bli skalert ned til denne høyden. (standard: 60 piksler)</string>
-  <string name="SYS_LOG_ALLOW_DELETION">Tillat sletting av endringshistorikken</string>
-  <string name="SYS_LOG_ALLOW_DELETION_DESC">Aktiver en knapp på endringsloggsiden for å slette deler av eller hele endringslogghistorikken.</string>
-  <string name="SYS_LOG_RECORDS_HIDDEN">Noen eller alle endringsloggoppføringer har blitt skjult på grunn av utilstrekkelige brukertillatelser til å få tilgang til dem.</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Det nye passordet er sendt til e-postadressen #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Det nye passordet er sendt til brukeren #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-postadressen #VAR1_BOLD# er tilordnet flere registreringer. En unik brukerregistrering kunne ikke identifiseres.</string>
@@ -1403,7 +1384,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_PREVIOUS_VALUE">Forrige verdi</string>
   <string name="SYS_PRINT_PREVIEW">Forhåndsvisning</string>
   <string name="SYS_PRIVATE_MESSAGES">Private meldinger</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Kunne ikke sende privat melding til #VAR1_BOLD#.\n\nFølgende feil har oppstått:\n#VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Privat melding er sendt til #VAR1_BOLD#.</string>
   <string name="SYS_PRNG">Pseudo-tilfeldig tallgenerator</string>
   <string name="SYS_PRNG_INSECURE">Admidio/PHP kan ikke generere sikre pseudotilfeldige tall! Ta kontakt med Admidio-teamet med følgende informasjon:</string>
@@ -1420,7 +1400,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du bør selv være på bildet. Bildet kan ha en maksimal oppløsning på #VAR1# megapiksler. Bildefilen må ikke være større enn #VAR1# MB og må være i JPG- eller PNG-format.</string>
   <string name="SYS_PROPERTIES">Egenskaper</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
@@ -1556,7 +1535,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_ROLE_PAST">Past role</string>
   <string name="SYS_ROLE_RIGHTS">Rollerettigheter</string>
   <string name="SYS_ROLE_SELECTION">Rollevalg</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Rollevalget kan brukes til å begrense en konfigurasjon til medlemmene i de valgte rollene. Hvis ingen begrensning er ønsket, må begge feltene (rollevalg og kategorivalg) stå tomme.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Du har ikke tillatelse til å velge rolle #VAR1#.\nPrøv å velge en annen rolle.</string>
   <string name="SYS_ROLE_TYPES">Rolletyper</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Rolle uten leder</string>
@@ -1669,7 +1647,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SHOW_MAP_LINK">Vis lenke til kart</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Hvis plassering er angitt, brukes Google Maps til å vise plassering og rute fra egen plassering. (standard: ja)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Hvis adressen er lagret i profilen, vises to lenker til Google Maps ved siden av adressen. Brukerens bosted er lenket, og ruten fra brukerens eget bosted til brukerens bosted som vises er lenket. Når du åpner lenkene, vil følgende profilinformasjon bli overført til Google: gate, postnummer, by og land. (Standard: nei)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Vis medlemsliste</string>
   <string name="SYS_SHOW_MORE">Vis mer</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Vis foreldede valgalternativer</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Denne innstillingen lar deg angi om foreldede valgalternativer skal vises i profilfeltkonfigurasjonen. Hvis denne innstillingen er angitt, kan foreldede valgalternativer gjenopprettes.\nDette alternativet er bare tilgjengelig for profilfelt av rullegardinlisten og valgfelttypene. (Standard: ja)</string>
@@ -1689,7 +1666,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Lignende kontakter funnet</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med et lignende navn som #VAR1_BOLD# ble funnet.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med lignende navn ble funnet for registreringen #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Vennligst sjekk registreringen og tilordne den til en funnet kontakt eller opprett en ny kontakt.</string>
-  <string name="SYS_SINCE">siden #VAR1#</string>
   <string name="SYS_SINCE_TO">fra #VAR1# til #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SISTER">Søster</string>
@@ -1760,7 +1736,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SSO_CLIENT_SCOPES_INVALID">The selected OIDC scopes are invalid: #VAR1#</string>
   <string name="SYS_SSO_CLIENT_SECRET">Klienthemmelighet</string>
   <string name="SYS_SSO_CLIENT_SECRET_DESC">(Det hemmelige) passordet for å autentisere klienten. Vanligvis en tilfeldig streng som utveksles én gang. Ved opprettelse vises klienthemmeligheten én gang og skal kopieres til klienten. Etterpå lagres den som en hashet verdi i databasen, så det er umulig å hente den. Man kan bare generere en ny klienthemmelighet på nytt og kopiere den til klientens konfigurasjon.</string>
-  <string name="SYS_SSO_CLIENT_SECRET_HIDDE">Av sikkerhetshensyn vises klienthemmeligheten bare ved opprettelse.</string>
   <string name="SYS_SSO_CLIENT_SECRET_HIDDEN">Not shown again after saving.</string>
   <string name="SYS_SSO_CLIENT_SECRET_RECREATE">Gjenskap</string>
   <string name="SYS_SSO_EDIT_OIDC_CLIENT">Rediger OIDC-klient (tjenesteleverandør)</string>
@@ -1920,7 +1895,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED">Ønsker signaturer på alle mottatte forespørsler</string>
   <string name="SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC">If a client supports signing and a certificate is entered in the client configuration, all requests must be signed. Clients without a certificate are not affected and do not require signatures.</string>
   <string name="SYS_SSO_SELECTED_KEY_INVALID">Previously selected key — no longer usable</string>
-  <string name="SYS_SSO_SIGNATURE_ENCRYPTION">Signatur og kryptering</string>
   <string name="SYS_SSO_SIGNING_KEY">Nøkkel for signaturer</string>
   <string name="SYS_SSO_SIGN_ASSERTIONS">Signeringserklæringer sendt til klienten (SP)</string>
   <string name="SYS_SSO_SLO_URL">Enkel utloggings-URL (valgfritt)</string>
@@ -2077,7 +2051,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Bare roller for andre organisasjoner som er synlige for alle registrerte brukere vises. Hvis du er medlem av denne organisasjonen, vil du også se rollene du kan se med dine rettigheter i organisasjonen.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Se rollemedlemskap</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Med denne innstillingen kan du definere hvem som kan se medlemmene i denne rollen. Brukeren kan se rollemedlemskapet i profilen til den respektive personen og i lister for rollen. Denne innstillingen tillater ikke tilgang til rollemedlemmets profil. I lister vises bare navn og fornavn. Rollerettigheten #VAR1_BOLD# overstyrer denne innstillingen.</string>
-  <string name="SYS_VISIBILITY">Synlighet</string>
   <string name="SYS_VISIBLE">Synlig</string>
   <string name="SYS_VISIBLE_FOR">Synlig for</string>
   <string name="SYS_VISITORS">Gjester</string>

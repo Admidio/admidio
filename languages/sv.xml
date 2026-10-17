@@ -1,37 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <!-- Some strings use English reference texts pending translation. -->
-  <!--Phrases only in guestbook module-->
-  <string name="GBO_BACK_TO_GUESTBOOK">Tillbaka till gästboken</string>
-  <string name="GBO_CAPTCHA_DESC">Om det här alternativet är aktiverat får användare som inte är inloggade en bild med en captcha-kod eller en enkel beräkning. Det är nödvändigt att fylla i rätt kod eller resultat för att spara posten. Captcha är en del av antispam-lösningen i Admidio. (standard: ja)</string>
-  <string name="GBO_COMMENTS4ALL">Tillåt anonyma kommentarer</string>
-  <string name="GBO_COMMENTS4ALL_DESC">Användare som inte är inloggade kan kommentera posten i gästboken om alternativet är aktiverat. Rättighetstilldelningen via rollhantering ignoreras därmed. (Standard: nej)</string>
-  <string name="GBO_COMMENT_BY">Kommentar från #VAR1#</string>
-  <string name="GBO_CREATE_COMMENT">Lämna kommentar</string>
-  <string name="GBO_EDIT_COMMENT">Redigera kommentar</string>
-  <string name="GBO_ENTRY_QUEUED">Inlägg sparat. Det kommer att visas efter moderering.</string>
-  <string name="GBO_FLOODING_PROTECTION">Din senaste post skapades för mindre än #VAR1# sekunder sedan.</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL">\"Flooding Protection\" Intervall</string>
-  <string name="GBO_FLOODING_PROTECTION_INTERVALL_DESC">Uppgifter från oregistrerade användare kommer att kontrolleras. För många poster inom det givna tidsintervallet är inte tillåtna. Det här alternativet gör det möjligt att ta kontroll över oönskade poster. Om intervallet är inställt på 0 görs ingen kontroll. (standard: 60 sekunder)</string>
-  <string name="GBO_GUESTBOOK">Gästbok</string>
-  <string name="GBO_GUESTBOOK_DESC">Gäster och användare kan lämna hälsningar och kommentarer och kan kommentera andra poster.</string>
-  <string name="GBO_GUESTBOOK_MODERATION">Moderering aktiverad för</string>
-  <string name="GBO_GUESTBOOK_MODERATION_DESC">Gästbokposter visas efter moderering. Definiera om moderation ska utföras i fallet med gäster eller endast för inloggade användare, eller om ingen kommentarer ska kontrolleras i förväg. (standard: Ingen)</string>
-  <string name="GBO_HIDE_COMMENTS">Dölj kommentarer</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING">Visa kommentarer direkt</string>
-  <string name="GBO_INITIAL_COMMENTS_LOADING_DESC">Om det här alternativet är aktivt och en gästbokssida laddas kommer kommentarer på den här sidan att laddas direkt. Annars måste användaren klicka på en hyperlänk för att avslöja kommentarer. (standard: nej)</string>
-  <string name="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA">Organisationens senaste gästbokposter #VAR1#</string>
-  <string name="GBO_MODERATE_ENTRIES">Moderera inlägg</string>
-  <string name="GBO_MODERATE_VAR">Moderate #VAR1#</string>
-  <string name="GBO_ONLY_VISITORS">Endast besökare</string>
-  <string name="GBO_SHOW_COMMENTS">Visa kommentarer</string>
-  <string name="GBO_SHOW_COMMENTS_ON_ENTRY">Visa gästboksinläggets #VAR1# kommentar(er)</string>
-  <string name="GBO_WRITE_COMMENT">Lämna kommentar</string>
   <string name="INS_ADDIDIONAL_DATA">Ytterligare information</string>
   <string name="INS_ADDRESS_LIST">Adresslista</string>
   <!--Phrases only in installation-->
-  <string name="INS_ADD_ANOTHER_ORGANIZATION">Lägg till en annan organisation</string>
-  <string name="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY">Administratörens information är ofullständig!</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">En uppdatering kan endast utföras av en administratör. Definiera administratörsuppgifterna.</string>
   <string name="INS_BOARD">Föreningens styrelse</string>
   <string name="INS_CONFERENCE_ROOM">Konfcrensrum</string>
@@ -40,19 +12,14 @@
   <string name="INS_COURSES">Kurser</string>
   <string name="INS_CREATE_ADMINISTRATOR">Skapa en administratör</string>
   <string name="INS_CREATE_CONFIGURATION_FILE">Skapar konfigurationsfil</string>
-  <string name="INS_DATABASE_CONNECTION_NOT_COMPLETELY">Databasparametrarna har inte skrivits in helt!</string>
   <string name="INS_DATABASE_FILE_NOT_FOUND">Fil #VAR1_BOLD# kunde inte hittas i mappen #VAR2_BOLD#.</string>
   <string name="INS_DATABASE_HOST_INFO">Ange namnet på databasservern här. Det här kan vara en URL eller localhost om databasen körs på samma maskin som webbsidan.</string>
-  <string name="INS_DATABASE_IS_UPDATED">Uppdaterar databas</string>
   <string name="INS_DATABASE_LOGIN">Databastillgång</string>
   <string name="INS_DATABASE_LOGIN_DESC">Ange din databasåtkomstinformation här. Tabellprefix kan anpassas vid behov. Anpassning är nödvändig om flera Admidio-installationer använder samma databas.</string>
-  <string name="INS_DATABASE_NAME_INVALID">Databasnamnet innehåller ogiltiga tecken!</string>
   <string name="INS_DATABASE_PORT_INFO">Om detta fält inte fylls, används standardporten för databasen (MySQL: 3306, PostgreSQL: 5432). Om du eller din webbhoster behöver en speciell port kan du skriva den här. </string>
   <string name="INS_DATABASE_PORT_INVALID">Den specificerade tiden Ã¤r ogiltig. För en giltig port, välj mellan 1 och 65535 eller lämna den tom.</string>
   <string name="INS_DATABASE_SYSTEM">Databas</string>
   <string name="INS_DATABASE_TYPE_INVALID">Admidio stöder bara MySQL och PostgreSQL.</string>
-  <string name="INS_DATABASE_USER_INVALID">Databasanvändaren innehåller ogiltiga tecken!</string>
-  <string name="INS_DATABASE_WILL_BE_ESTABLISHED">Skapa databas</string>
   <string name="INS_DATA_DO_NOT_MATCH">Data från #VAR1_BOLD# överensstämmer inte med informationen i installationsguiden. \n\nCheck config.php och all annan information.</string>
   <string name="INS_DATA_FULLY_ENTERED">Du har angett alla nödvändiga data för installation av Admidio. \n\n Nu måste databasen skapas och fyllas med dina data.</string>
   <string name="INS_DATA_OF_ADMINISTRATOR">Administratörsuppgifter</string>
@@ -72,15 +39,12 @@
   <string name="INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED">Some third-party plugins have been moved to the new plugin folder #VAR1_BOLD#. Please check the functionality of these plugins after the update.</string>
   <string name="INS_INSTALLATION">Installation</string>
   <string name="INS_INSTALLATION_EXISTS">Databasen innehåller redan en Admidio-installation. En ytterligare installation är inte möjlig.</string>
-  <string name="INS_INSTALLATION_SUCCESSFUL">Admidio-databasinstallationen och -konfigurationen är klar, systemet är klart för användning. Logga in nu genom att använda åtkomstinformation från systemadministratören.</string>
   <string name="INS_INSTALLATION_VERSION">Installation av version #VAR1#</string>
-  <string name="INS_INSTALLATION_WAS_SUCCESSFUL">Installationen lyckades</string>
   <string name="INS_INSTALL_ADMIDIO">Installera Admidio</string>
   <string name="INS_INTERN">Intern</string>
   <string name="INS_LANGUAGE_NOT_CHOSEN">Inget språk har valts.</string>
   <string name="INS_MEMBERSHIP">Medlemskap</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">Det gick inte att hitta den aktuella installationen. Om du har använt Admidio 1.x uppdatering till Admidio 2.x först. Efteråt kan du uppdatera versionen till #VAR1#. Om du redan använder Admidio 2.x eller högre, kontrollera din databas konsistens.</string>
-  <string name="INS_ORGANIZATION_NAME_NOT_COMPLETELY">Organisationsnamnet är inte komplett!</string>
   <string name="INS_ORGA_SHORTNAME_EXISTS">Organisation #VAR1_BOLD# finns redan. Välj ett annat datum.</string>
   <string name="INS_PHONE_LIST">Telefonlista</string>
   <string name="INS_PLEASE_CHOOSE_LANGUAGE">Vänligen välj ett språk</string>
@@ -90,7 +54,6 @@
   <string name="INS_SET_UP_ORGANIZATION">Ställa in organisation</string>
   <string name="INS_SUPPORT_FURTHER_DEVELOPMENT">Vi skulle uppskatta mycket om du kunde stödja utvecklingen av Admidio med din donation!</string>
   <string name="INS_TABLE_PREFIX">Tabellprefix</string>
-  <string name="INS_TABLE_PREFIX_INVALID">Tabellprefixet innehåller ogiltigt tecken!</string>
   <string name="INS_TEAMS">Team</string>
   <string name="INS_TRAINING">Utbildning</string>
   <string name="INS_UPDATE">Uppdatera</string>
@@ -115,7 +78,6 @@
   <string name="ORG_ACCESS_TO_PLUGIN">Plugin access</string>
   <string name="ORG_ACCESS_TO_PLUGIN_DESC">The plugin can be disabled or restricted to logged-in users. If access is restricted to logged-in users, the plugin is hidden from guests and the web feed is disabled for everyone. (Default: enabled)</string>
   <string name="ORG_ADDITIONAL_VARIABLES">Ytterligare variabler</string>
-  <string name="ORG_ADD_ORGANIZATION_DESC">En ny organisation läggs till i databasen inklusive dess stamdata. Den nuvarande användaren kommer att meddelas som administratör och kan behålla datasatsen. Användare som loggar in i systemet måste välja respektive organisation.</string>
   <string name="ORG_ADMIDIO_THEME">Admidio-tema</string>
   <string name="ORG_ADMIDIO_THEME_DESC">Välj layout för Admidio. Alla teman sparade i mappen themes visas. (standard: simple)</string>
   <string name="ORG_ADMIDIO_THEME_FALLBACK">Fallback theme</string>
@@ -137,7 +99,6 @@
   <string name="ORG_CAPTCHA_LINE_COLOR">Linjefärg</string>
   <string name="ORG_CAPTCHA_PREVIEW">Förhandsvisning av Captcha</string>
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">Förhandsgranskningen av Captcha tar bara hänsyn till alternativ som redan har sparats.</string>
-  <string name="ORG_CAPTCHA_REGISTRATION">Efter aktivering visas en bild med en captcha-kod eller en enkel beräkning för nya användare. Det är nödvändigt att fylla i rätt kod eller resultat för att spara aktuell redigerad post. Captcha är en del av anti-spam-lösningen i Admidio. (standard: ja)</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha undertext</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Fyll i önskad undertext för captcha. Standardtypsnitt för det aktuella temat kommer att användas.</string>
   <string name="ORG_CAPTCHA_SIGNS">Giltiga tecken</string>
@@ -148,14 +109,12 @@
   <string name="ORG_CAPTCHA_TYPE_TEXT">Här kan du definiera typen Captcha. Captcha visas som bild. Det kan bestå av slumpmässiga tecken, ett litet matematikproblem eller två ord. Ytterligare alternativ gör det möjligt att definiera Captcha i detalj. (standard: slumpmässiga tecken)</string>
   <string name="ORG_CAPTCHA_TYPE_WORDS">Ord (engelska)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">Captcha-bredd i pixel. Captcha-höjden kommer att beräknas i proportion till bredden. Dessutom kommer den att definiera teckenstorleken. (standard: 215)</string>
-  <string name="ORG_CREATE_ITEM_FIELD">Skapa objektfält</string>
   <string name="ORG_CREATE_PROFILE_FIELD">Skapa profilfält</string>
   <string name="ORG_CURRENCY">Valuta</string>
   <string name="ORG_CURRENCY_DESC">Välj valuta Valutatyp visas efter alla visade belopp.</string>
   <string name="ORG_DATATYPE">Datatyp</string>
   <string name="ORG_DATE_FORMAT">Datumformat</string>
   <string name="ORG_DATE_FORMAT_DESC">Format uppfyller PHP-funktionen #VAR1#. (standard: dmY)</string>
-  <string name="ORG_DIFFERENT_DATABASE_VERSION">Olika databasversioner</string>
   <string name="ORG_EDIT_PROFILE_FIELD">Redigerar profilfält</string>
   <string name="ORG_EMAIL_ALERTS">E-postvarning</string>
   <string name="ORG_EMAIL_ALERTS_DESC">Alla medlemmar i alla roller med behörighet #VAR1_BOLD# får e-post vid ny användarregistrering. (standard: ja)</string>
@@ -177,21 +136,13 @@
   <string name="ORG_FIELD_URL_DESC">Den angivna URLen länkar senare i profilen till det innehåll som användaren har angett i det här fältet. Eventuellt kan även jokertecken #user_content# definieras i URL: en. Detta är innehållet som användaren har angett i fältet.\n\nExempel:\nUrl:https://www.google.se/search?q=#user_content#\nfield_value: Admidio\nLänk i profilen: https://www.google.se/search?q=Admidio</string>
   <string name="ORG_HOMEPAGE_REGISTERED_USERS">Den här sidan visas när en användare är inloggad. Sökväg måste anges som relativ sökväg till Admidio-huvudmappen. \n (t.ex.: adm_program / index.php)</string>
   <string name="ORG_HOMEPAGE_VISITORS">Denna sida är standardsidan när gäster besöker Admidio. Sökväg måste anges som relativ sökväg till Admidios huvudmapp.\n(t.ex.: adm_program/overview.php)</string>
-  <string name="ORG_INVALID_THEME">Det gick inte att hitta ett giltigt tema.</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR">Färg på JavaScript-redigeraren</string>
-  <string name="ORG_JAVASCRIPT_EDITOR_COLOR_DESC">Definiera bakgrundsfärgen för JavaScript-redigeraren här. Värdet kan vara ett hexadecimalt färgvärde som # ffa500 eller RGB-värde som (255, 185, 0).</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">Använda JavaScript-redigeraren</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">En fullständig JavaScript-redigerare gör det enklare att skriva beskrivningar för meddelanden, evenemang och annat innehåll. Om redigeraren är inaktiverad visas ett enkelt textfält med flera rader.</string>
   <string name="ORG_LAST_UPDATE_STEP">Sista steget i uppdateringen</string>
   <string name="ORG_LOGIN_AUTOMATICALLY">Logga in automatiskt</string>
   <string name="ORG_LOGIN_AUTOMATICALLY_DESC">Användare kan definiera vid inloggning om inloggningsinformation och session ska sparas på sina datorer. På det här sättet kommer de att loggas in automatiskt vid sitt besök. Detta kan dock leda till oönskad åtkomst och missbruk av obehöriga personer. (standard: ja)</string>
-  <string name="ORG_NEW_ORGANIZATION">Ny organisation</string>
-  <string name="ORG_NEW_ORGANIZATION_DESC">Ange förkortningen, det officiella namnet och e-postadressen för den organisation du vill lägga till. E-postadressen ska vara en allmän adress. Den kommer att användas som avsändaradress när du skickar automatiska systemaviseringar.</string>
   <string name="ORG_NOT_SAVED_SETTINGS_CONTINUE">Do you want to continue?</string>
   <string name="ORG_NOT_SAVED_SETTINGS_LOST">När du ändrar vyn kommer alla osparade ändringar att gå förlorade.</string>
-  <string name="ORG_NO_FIELD_CREATED">Inget organisationsspecifikt fält har skapats än!</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE">Antal poster per sida</string>
-  <string name="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC">Definiera antalet objekt som visas på en sida. Pagination tillhandahålls om antalet objekt överstiger det definierade värdet. Utskriftsförhandsgranskning och exportfunktioner påverkas inte. Om värdet är 0 kommer alla objekt att listas och paginering inaktiveras. (standard: #VAR1#)</string>
   <string name="ORG_ONLY_FOR_ADMINISTRATOR">Enabled, but only visible to administrators</string>
   <string name="ORG_ONLY_FOR_MODULE_ADMINISTRATOR">For module administrators only</string>
   <string name="ORG_ONLY_FOR_REGISTERED_USER">För inloggade användare endast</string>
@@ -212,11 +163,8 @@
   <string name="ORG_REGISTERED_USERS">Inloggad användare</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES">Sök efter liknande namn</string>
   <string name="ORG_SEARCH_SIMILAR_NAMES_DESC">Vid registrering och tilldelning av registreringar söker Admidio efter liknande efternamn och förnamn för att undvika dubbla poster. Deaktiveringsresultat söker endast efter identiska namn. (standard: ja)</string>
-  <string name="ORG_SECONDS">sekunder</string>
-  <string name="ORG_SEND_NEW_PASSWORD">Skicka nytt lösenord</string>
   <string name="ORG_SHOW_CREATE_EDIT">Visa skaparen och tidsstämpeln för skapelsen</string>
   <string name="ORG_SHOW_CREATE_EDIT_DESC">Ett fält är normalt synligt för alla användare. Om den här funktionen inte är vald kan informationen bara ses av användare som har rätt att redigera alla användare. I sin egen profil kan användaren se och redigera data.</string>
-  <string name="ORG_THEME_FOLDER_OPEN">Temamappen kunde inte öppnas / läsas.</string>
   <string name="ORG_TIMEZONE">Tidszon</string>
   <string name="ORG_TIMEZONE_DESC">Detta är den inställda tidszonen. Om detta ändras senare i config.php-filen i Admidio, anpassas inte redan inspelade datum och tider till den nya tidszonen.</string>
   <string name="ORG_TIME_FORMAT">Tidsformat</string>
@@ -233,7 +181,6 @@
   <string name="ORG_VARIABLE_USERNAME">Användarnamn för användaren från respektive e-postkontext</string>
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64-bit</string>
-  <string name="SYS_ABORT">Avbryt</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Account activated</string>
   <string name="SYS_ACTIVATE_ROLE">Aktivera roll</string>
@@ -248,7 +195,6 @@
   <string name="SYS_ADDITIONAL_CSS_FILE_DESC">The relative path to a .css file with additional style definitions, starting from the Admidio root directory. This file is loaded last, even after the theme's admidio.css. (Default: empty)</string>
   <string name="SYS_ADDITIONAL_FILES">Denna lista avser att ge en översikt över filer och mappar som ännu inte har importerats till databasen. De kan läggas till i databasen. Åtkomsträttigheter kopieras från vald mapp.</string>
   <string name="SYS_ADDRESS">Adress</string>
-  <string name="SYS_ADD_ANOTHER_CONFIG">Lägg till ytterligare konfiguration</string>
   <string name="SYS_ADD_ATTACHMENT">Bifoga fil</string>
   <string name="SYS_ADD_COLUMN">Lägg till kolumn</string>
   <string name="SYS_ADD_COLUMNS_DESC">Tilldela valfritt antal kolumner som motsvarar profilfält i tabellen nedan. Dessutom kan du ange standardsorteringen och lägga till villkor under vilka respektive medlemmar ska filtreras.</string>
@@ -256,21 +202,18 @@
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Lägg till evenemang i kalendern</string>
   <string name="SYS_ADD_FIELD">Add field</string>
   <string name="SYS_ADD_ORGANIZATION">﻿Lägg till organisation</string>
-  <string name="SYS_ADD_RECIPIENTS">Lägg till mottagare</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Lägg till i databasen</string>
   <string name="SYS_ADMIDIO">Admidio</string>
   <string name="SYS_ADMIDIO_DOWNLOAD_PAGE">Gå till Admidio nedladdningssida</string>
   <string name="SYS_ADMIDIO_HEADLINE_DESC">The headline is displayed in the navigation bar of Admidio. Here you can also enter the name of a translation string. (Default: SYS_ONLINE_MEMBERSHIP_ADMINISTRATION)</string>
   <string name="SYS_ADMIDIO_SHORT_DESC">Onlinehanteringssystemet för föreningar, grupper och organisationer</string>
-  <string name="SYS_ADMIDIO_UPDATE">Admidio uppdatering</string>
   <string name="SYS_ADMIDIO_VERSION">Admidio-version</string>
   <string name="SYS_ADMINISTRATION">Administration</string>
   <string name="SYS_ADMINISTRATOR">Administratör</string>
   <string name="SYS_ADMINISTRATORS">Administratörer</string>
   <string name="SYS_ADMINISTRATORS_DESC">Dessa roller är administratörer för modulen Dokument och filer och har därför tillgång till alla mappar och filer. De kan ladda upp och ladda ner filer och tilldela åtkomsträttigheter. En roll kan göras till administratör genom att tilldela den rätt #VAR1_BOLD#.</string>
   <string name="SYS_AFTER_NUMBER_OF_OCCURRENCES">After number of occurrences</string>
-  <string name="SYS_AJAX_REQUEST_ERROR">Ajax begärningsfel. \n Feldetaljer: #VAR1#</string>
   <string name="SYS_ALBUM">Album</string>
   <string name="SYS_ALBUM_CHANGED_TITLE">Ett fotoalbum ändrades den #VAR1#</string>
   <string name="SYS_ALBUM_CONTAINS_NO_PHOTOS">Albumet innehåller inga foton.</string>
@@ -295,7 +238,6 @@
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alla medlemmar i denna organisation</string>
   <string name="SYS_ALSO_VISITORS">Även besökare</string>
-  <string name="SYS_ANNOUNCEMENT">Annonsering</string>
   <string name="SYS_ANNOUNCEMENTS">Meddelanden</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Visa eller redigera meddelanden, nyheter och annan information.</string>
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Ett meddelande blev ändrat den #VAR1#</string>
@@ -335,14 +277,8 @@
   <string name="SYS_AVAILABLE_BETA">Tillgänglig</string>
   <string name="SYS_A_TO_Z">A-Ö</string>
   <string name="SYS_BACK">Tillbaka</string>
-  <string name="SYS_BACKUP_COMPLETED">Backup skapad i #VAR1#</string>
-  <string name="SYS_BACKUP_FILE">Backupfil</string>
-  <string name="SYS_BACKUP_FROM">Backup skapad #VAR1# den #VAR2#</string>
-  <string name="SYS_BACKUP_ONLY_MYSQL">Backupmodulen kan endast användas i kombination med MySQL-databaser.</string>
   <string name="SYS_BACK_TO_ALBUM">Tillbaka till albumet</string>
-  <string name="SYS_BACK_TO_BACKUP_PAGE">Tillbaka till säkerhetskopior</string>
   <string name="SYS_BACK_TO_FOLDER">Tillbaka till mappen</string>
-  <string name="SYS_BACK_TO_MODULE_OVERVIEW">Tillbaka till modulöversikt</string>
   <string name="SYS_BASIC_DATA">Grunddata</string>
   <string name="SYS_BIRTHDAY">Födelsedag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
@@ -360,9 +296,7 @@
   <string name="SYS_CANT_DELETE_ROLE">Du kan inte radera rollen #VAR1_BOLD#.</string>
   <string name="SYS_CAPACITY">Kapacitet</string>
   <string name="SYS_CAPTCHA">Captcha</string>
-  <string name="SYS_CAPTCHA_CALC">Resultat av beräkningen</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Resultatet av beräkningen är inte korrekt.</string>
-  <string name="SYS_CAPTCHA_CALC_DESCRIPTION">Beräkningen är en del av en captcha. En captcha används för att förebygga skräppost. Beräkningen används för att upptäcka om en användare eller ett skript (eller spambot) har fyllt i formuläret. \n Fyll i resultatet av beräkningen i formuläret.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Autentiseringskoden var ogiltig.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Autentiseringskod</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Autentiseringskoden är en del av en captcha. En captcha används för att upptäcka skräppost. Bilden används för att upptäcka om en användare eller ett skript (eller spambot) har fyllt i formuläret. \n Fyll i resultatet av verifieringskoden i formuläret.</string>
@@ -380,10 +314,8 @@
   <string name="SYS_CATEGORY_REPORT_CATEGORY_FILTER_DESC">The category selection can be used to restrict a report to the members of roles of the selected categories. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
   <string name="SYS_CATEGORY_REPORT_DESC">Genererar en lista med medlemmars roll och kategorier.</string>
   <string name="SYS_CATEGORY_REPORT_ROLE_FILTER_DESC">The role selection can be used to restrict a report to the members of the selected roles. If no restriction is desired, both fields (role selection and category selection) must be left blank.</string>
-  <string name="SYS_CATEGORY_VAR">#VAR1# -kategori</string>
   <string name="SYS_CATEGORY_VISIBLE_ALL_ORGA">Om alternativt är aktiverat visa profil är den här kategorin och kan redigeras i profilen för att följa organisationer: #VAR1# \n\nDeaktivera om fält bara ska visas i din organisation. </string>
   <string name="SYS_CAT_SELECTION">Välj kategori</string>
-  <string name="SYS_CAT_SELECTION_CONF_DESC">Kategorier kan användas för att begränsa en konfiguration till specifika medlemmar eller roller i den valda kategorin.\n\nOm du inte vill begränsa ska båda fälten (roll och kategori) vara tomma.</string>
   <string name="SYS_CHANGED_AT">Senast ändrad</string>
   <string name="SYS_CHANGED_BY">Ändrad av</string>
   <string name="SYS_CHANGELOG_AREA_PROFILE_ROLE_SETTINGS">Profile and role settings</string>
@@ -409,8 +341,6 @@
   <string name="SYS_CHANGE_HISTORY_USERDATA">Change history of user data and memberships</string>
   <string name="SYS_CHANGE_PASSWORD">Ändra lösenord</string>
   <string name="SYS_CHARACTERS">Tecken</string>
-  <string name="SYS_CHARACTER_ENCODING">Teckenkodning</string>
-  <string name="SYS_CHARACTER_ENCODING_DESC">Teckenkodning som används i e-postmeddelanden skickade av Admidio. Inte alla e-postklienter kan bearbeta UTF-8. Därför kan ISO-8859-1 ställas in alternativt här.</string>
   <string name="SYS_CHECKBOX">Kryssruta</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Kontrollboxens status sparas automatiskt efter markeringen.</string>
   <string name="SYS_CHECK_FOR_UPDATE">Kolla efter uppdatering</string>
@@ -463,8 +393,6 @@
   <string name="SYS_COMPLEMENT">Tillägg</string>
   <string name="SYS_CONDITION">Obligatoriskt steg</string>
   <string name="SYS_CONFIGURATION">Konfiguration</string>
-  <string name="SYS_CONFIGURATIONS">Konfigurationer</string>
-  <string name="SYS_CONFIGURATIONS_HEADER">Valfritt antal konfigurationer kan skapas för kategori-rapport. Vid skärmvisning kommer en av konfigurationerna att användas som bas för visning utifrån \"Välj konfiguration\"</string>
   <string name="SYS_CONFIGURATION_ALL_USERS">Behörighet att använda konfiguration för alla medlemmar</string>
   <string name="SYS_CONFIGURATION_DELETE">Vill du ta bort vald listkonfiguration?</string>
   <string name="SYS_CONFIGURATION_LIST">Listkonfiguration</string>
@@ -494,7 +422,6 @@
   <string name="SYS_COPIED_CLIPBOARD">Copied to clipboard...</string>
   <string name="SYS_COPY">Kopiera</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
-  <string name="SYS_COPY_CONFIGURATION">Kopiera konfiguration</string>
   <string name="SYS_COPY_ENTRY">Kopiera inlägget</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Din begärda kopia av meddelandet</string>
@@ -543,7 +470,6 @@
   <string name="SYS_DATABASE_BACKUP">Databasbackup</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Skapa och ladda ner säkerhetskopior av Admidio tabeller.</string>
   <string name="SYS_DATABASE_DOESNOT_NEED_UPDATED">Databasuppdatering krävs</string>
-  <string name="SYS_DATABASE_ERROR">Databasfel</string>
   <string name="SYS_DATABASE_IS_UP_TO_DATE">Admidios databas är uppdaterad</string>
   <string name="SYS_DATABASE_NO_LOGIN">Anslutningen till databasen misslyckades!\n\n Följande fel inträffade: \n #VAR1#.</string>
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Ingen anslutning till databasen kunde skapas!\n\nKontrollera åtkomstdata i filen config.php i mappen adm_my_files. Om filen kommer från en annan installation, ta bort config.php från mappen, eftersom en ny fil skapas via installationsguiden. Efter det kan du fortsätta installationen.\n\nFöljande fel inträffade:\n#VAR1#.</string>
@@ -569,7 +495,6 @@
   <string name="SYS_DAYS">Days</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Standard tidsperiod för fälthistorik (dagar)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Under angivet antal dagar sparas ändringar i profilens fält. Detta är standardalternativet och kan senare ändras av användaren. För stora databaser används detta alternativ för att begränsa listan med ändringshistorik. (Standard: 365)</string>
-  <string name="SYS_DAYS_VAR">#VAR1# dagar</string>
   <string name="SYS_DEACTIVATE_ROLE">Inaktivera roll</string>
   <string name="SYS_DEACTIVATE_ROLE_DESC">Om du inaktiverar roll #VAR1_BOLD# kan rollen inte längre användas och tilldelas objekt. På samma sätt är alla rättigheter till denna roll inte längre effektiva. Rollen med dess inställning och alla medlemsmappningar finns dock kvar och kan återaktiveras vid ett senare tillfälle.</string>
   <string name="SYS_DEADLINE">Deadline</string>
@@ -581,7 +506,6 @@
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Om en ny användare skapas eller en ny registrering accepteras tilldelas denna roll automatiskt den nya användaren. När skaparen har rätt att tilldela roller visas alla rollkartläggningar och kan ändras i enlighet därmed.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardinställning</string>
-  <string name="SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC">En av dessa konfigurationer kan markeras som standard-konfiguration för organisationens kategorirapporter. Rapporten kommer visas med den valda konfigurationen när rapporten öppnas.</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">En av de konfigurationer som anges här kan göras till standardkonfiguration för listor i organisationen. Medlemslistor för roller som inte har en listkonfiguration lagrad kommer att visas med denna konfiguration.</string>
   <string name="SYS_DEFAULT_COUNTRY">Förvalt land</string>
   <string name="SYS_DEFAULT_COUNTRY_DESC">Definiera ett land som denna organisation huvudsakligen verkar för. Det kommer att förvalas när nya användare skapas eller registreras. Det underlättar datainmatningen och kan ändras av användaren. (Standard: Tyskland)</string>
@@ -619,7 +543,6 @@
   <string name="SYS_DELETE_PROFILE_PICTURE">Radera profilbild</string>
   <string name="SYS_DELETE_REPORT">Delete the selected report?</string>
   <string name="SYS_DELETE_ROLE">Raderar</string>
-  <string name="SYS_DELETE_ROLE_DESC">Är du säker på att du vill ta bort rollen #VAR1_BOLD#?\n\n Alla medlemskap kommer också att tas bort permanent.</string>
   <string name="SYS_DELETE_ROW">Delete row</string>
   <string name="SYS_DELETE_SELECTION">Delete selection</string>
   <string name="SYS_DELETE_SYSTEM_CATEGORY">Du kan inte ta bort systemkategorier.</string>
@@ -630,8 +553,6 @@
   <string name="SYS_DEPENDENCIES">Beroenden</string>
   <string name="SYS_DEPENDENT">Beroende</string>
   <string name="SYS_DESCRIPTION">Beskrivning</string>
-  <string name="SYS_DESCRIPTION_INLINE_DESC">Visa beskrivningen nedanför fältet direkt i formuläret.</string>
-  <string name="SYS_DESCRIPTION_POPOVER_DESC">Beskrivningen visas i ett litet fönster, som kan nås via en frågeteckenikon bredvid fältetiketten.</string>
   <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Namn</string>
   <string name="SYS_DETAILED">Detaljerad</string>
@@ -668,7 +589,6 @@
   <string name="SYS_ECARD_NOT_SUCCESSFULLY_SEND">Ditt gratulationskort kunde inte skickas!</string>
   <string name="SYS_ECARD_SUCCESSFULLY_SEND">Ditt gratulationskort skickades.</string>
   <string name="SYS_EDIT">Redigera</string>
-  <string name="SYS_EDITED_BY">Senast redigerad av</string>
   <string name="SYS_EDIT_ALBUM">Redigera album</string>
   <string name="SYS_EDIT_ANNOUNCEMENTS">Redigera annonseringar</string>
   <string name="SYS_EDIT_CALENDAR">Redigera kalender</string>
@@ -706,7 +626,6 @@
   <string name="SYS_EDIT_WEBLINKS">Redigera webblänkar</string>
   <string name="SYS_EMAIL">E-post</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Mejla administratören</string>
-  <string name="SYS_EMAIL_ADMINISTRATOR_DESC">Om något oväntat händer i systemet visas administratörens e-postadress och en text om att kontakta administratören.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildata för användaren #VAR1# #VAR2# (inloggning: #VAR3#) ändrades av #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Användare #VAR1# #VAR2# (inloggning: #VAR3#) har ändrats</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Användaren #VAR1# #VAR2# (användarnamn: #VAR3#) skapades av #VAR4#.</string>
@@ -731,12 +650,8 @@
   <string name="SYS_ENABLE_CATEGORY_REPORT_DESC">Kategorirapporten skapar en lista över alla roller och kategorier som en medlem har. Behörigheten #VAR1_BOLD# krävs för tillgång till rapporten. (Standard: ja)</string>
   <string name="SYS_ENABLE_CHANGELOG">Enable changelog</string>
   <string name="SYS_ENABLE_CHANGELOG_DESC">The change history records all changes, including old and new values, to the selected objects (corresponding to database tables). Only administrators and users with permission to edit the corresponding module can view it. Users can also view changes to their own profile data. (Default: yes)</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE">Aktivera dokument &amp; filer</string>
-  <string name="SYS_ENABLE_DOCUMENTS_FILES_MODULE_DESC">Dokument &amp; filer kan aktiveras eller avaktiveras med denna inställning. (Standard: aktiverad)</string>
   <string name="SYS_ENABLE_DOWNLOAD">Aktivera nedladdning</string>
   <string name="SYS_ENABLE_DOWNLOAD_DESC">Gör det möjligt att ladda ner enstaka foton eller kompletta album som zip-fil. En hyperlänk visas för varje foto eller album. Om alternativet #VAR1_BOLD# är aktivt laddas endast originalfoton ned.</string>
-  <string name="SYS_ENABLE_EMAILS">Aktivera e-post</string>
-  <string name="SYS_ENABLE_EMAILS_DESC">E-post i meddelandemodulen kan aktiveras eller avaktiveras med denna inställning. Om servern inte kan e-posta bör denna avaktiveras. (Standard: aktiverad)</string>
   <string name="SYS_ENABLE_EVENT_REGISTRATION">Vill du aktivera anmälan till evenemang?\nOm evenemanget raderas kommer alla anmälda deltagare att tas bort. Vill du blockera ytterligare anmälningar, vänligen minska antalet tillåtna deltagare.</string>
   <string name="SYS_ENABLE_GREETING_CARDS">Aktivera gratulationskort</string>
   <string name="SYS_ENABLE_GREETING_CARDS_DESC">Gratulationskorten kan aktiveras eller inaktiveras via denna inställning. Om servern inte stöder e-post bör modulen vara inaktiverad. Denna modul är i allmänhet endast tillgänglig för registrerade användare. (Standard: aktiverad)</string>
@@ -762,7 +677,6 @@
   <string name="SYS_ENTIRE_SERIES">Entire series</string>
   <string name="SYS_ENTRY">Entry</string>
   <string name="SYS_ERROR">Fel</string>
-  <string name="SYS_ERROR_DATABASE_ACCESS">Fel inträffade under databasåtkomst: \n\n #VAR1#</string>
   <string name="SYS_ERROR_DELETE_DEFAULT_LIST">Listan #VAR1_BOLD# är standardkonfigurationen för modulen #VAR2# i den här organisationen och kan inte tas bort. Välj en annan standardkonfiguration i modulinställningarna och försök sedan ta bort denna konfiguration igen.</string>
   <string name="SYS_ERROR_PAGE_NOT_FOUND">ERROR 404 - Sidan kunde inte hittas!</string>
   <string name="SYS_ERROR_UUID_MISSING">UUID missing</string>
@@ -780,31 +694,23 @@
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Inbjuden</string>
   <string name="SYS_EVENT_PARTICIPATION_TENTATIVE">Jag kanske deltar</string>
   <string name="SYS_EVENT_REGISTRATION">Registration</string>
-  <string name="SYS_EXAMPLE">Exempel</string>
   <string name="SYS_EXAMPLES">Exempel</string>
   <string name="SYS_EXCEL_2007_365">Excel 2007-365 (*.xlsx, *.xlsm, *.xlsb)</string>
   <string name="SYS_EXCEL_97_2003">Excel 97-2003 (*.xls, *.xlm)</string>
-  <string name="SYS_EXECUTE_BACKUP">Utför backup</string>
   <string name="SYS_EXISTING_CONTACTS">Befintliga kontakter</string>
   <string name="SYS_EXPORT">Export</string>
-  <string name="SYS_EXPORT_ICAL">Exportera (iCal)</string>
   <string name="SYS_EXPORT_LISTS">Exportera listor</string>
   <string name="SYS_EXPORT_LISTS_DESC">Listor över grupper och roller kan exporteras av användare, förutsatt att du har rätt att se dessa listor. Denna inställning kan användas för att begränsa exportfunktionen. (Standard: Alla)</string>
-  <string name="SYS_EXPORT_TO">Exportera till</string>
   <string name="SYS_EXPORT_VCARD">Exportera vCard</string>
-  <string name="SYS_EXPORT_VCARD_FROM_VAR">Exportera vCard för #VAR1#</string>
   <string name="SYS_EXTENSION">Extension</string>
   <string name="SYS_EXTENSIONS">Extensions</string>
   <string name="SYS_EXTENSIONS_AVAILABLE">Available extensions</string>
   <string name="SYS_FACEBOOK">Facebook</string>
-  <string name="SYS_FADE_IN">Tona in</string>
   <string name="SYS_FATHER">Far</string>
   <string name="SYS_FAVICON_FILE">Favicon file</string>
   <string name="SYS_FAVICON_FILE_DESC">The relative path to the logo file, starting from the Admidio root directory. The logo is displayed in the upper-left corner. If left empty, the theme's default logo will be used. (Default: empty)</string>
-  <string name="SYS_FAX">Fax</string>
   <string name="SYS_FEMALE">Kvinna</string>
   <string name="SYS_FIELD">Fält</string>
-  <string name="SYS_FIELDS_EMPTY">Fälten är tomma</string>
   <string name="SYS_FIELD_EMPTY">Fältet #VAR1_BOLD# är tomt.</string>
   <string name="SYS_FIELD_ENCLOSURE">Citatstecken för fälten</string>
   <string name="SYS_FIELD_INVALID_CHAR">Fält #VAR1_BOLD# innehåller olagliga tecken. \n\n Tillåtna tecken är bokstäver från \ &amp;#39;a \&amp;#39; till \ &amp;#39;z \&amp;#39; och \ &amp;#39;A \&amp;#39; till \ &amp;#39;Z \&amp;#39;, siffror från 0 till 9 och specialtecken som.-_+@ .</string>
@@ -818,7 +724,6 @@
   <string name="SYS_FILES_UPLOAD_DESC">Välj alla filer som ska överföras till mappen #VAR1_BOLD#</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Alla filer överfördes inte.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alla filer överfördes.</string>
-  <string name="SYS_FILE_COLUMN">Kolumn</string>
   <string name="SYS_FILE_CREATED_TITLE">En ny fil laddades upp den #VAR1#</string>
   <string name="SYS_FILE_EXIST">Fil #VAR1# finns redan! \n\nVälj ett annat filnamn.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Filtyp är inte tillåten på den här servern.</string>
@@ -844,15 +749,12 @@
   <string name="SYS_FOLDER_NOT_EXISTS">Mappen finns inte längre på servern. Det bör raderas från databasen.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Mapp (ID #VAR1#) hittades inte.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">Mappen #VAR1_BOLD# har inte skrivbehörigheter. Nödvändiga rättigheter kunde inte sättas automatiskt. Ge mappen #VAR1_BOLD# skrivbehörigheter (sätt filattributen till 0777 eller drwxrwxrwx).</string>
-  <string name="SYS_FOLDER_NO_FILES">Mappen innehåller inga filer.</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Det finns inga dokument eller filer tillgängliga för besökare.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du får inte visa vald mapp.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Ett fel uppstod när mappen #VAR1# bytt namn.</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Mappen #VAR1_BOLD# kan inte skapas med nödvändiga skrivbehörigheter. \n\nBe en #VAR2#administratör#VAR3# att kontrollera skrivbehörigheter (att ändra filattribut till 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Typsnitt</string>
-  <string name="SYS_FONT_AWESOME_DESC">Här kan en ikon från \"Font Awesome\" placeras. Gå till #VAR1#https://fontawesome.com#VAR2# och välj en gratis ikon från \"Solid\" eller \"Brands\" collection. Som prefix till namnet måste du lägga till fa- framför. Om du väljer ikonen \"user\" så ska du ange \"fa-user\" i fältet.</string>
   <string name="SYS_FONT_SIZE">Font size</string>
-  <string name="SYS_FORGOT_MY_PASSWORD">Jag har glömt mitt lösenord!</string>
   <string name="SYS_FORMAT">Format</string>
   <string name="SYS_FORMER">Tidigare</string>
   <string name="SYS_FORMER_CONTACTS">Former contacts</string>
@@ -883,41 +785,28 @@
   <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Generell rolltilldelning</string>
   <string name="SYS_GEN_RANDOM_ERROR">Ett oväntat fel inträffade vid generering av ett slumpmässigt nummer. \nFelkod: #VAR1# \nFelmeddelande: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Programmet kan inte generera slumpmässiga nummer. \nError Code: #VAR1# \nError Message: #VAR2#</string>
-  <string name="SYS_GEN_RANDOM_TWO_DISTINCT_CHARS">Programmet förväntar sig en sträng med minst 2 olika tecken.</string>
   <string name="SYS_GIRLFRIEND">Flickvän</string>
   <string name="SYS_GREETING_CARD">Gratulationskort</string>
   <string name="SYS_GROUPS_ROLES">Grupper &amp; roller</string>
   <string name="SYS_GROUPS_ROLES_DESC">Översikt och hantering av alla grupper och roller i organisationen. Olika medlemslistor kan visas, exporteras och egna listor kan skapas.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
-  <string name="SYS_GUESTBOOK_COMMENT_CHANGED_TITLE">En kommentar i gästboken ändrades den #VAR1#</string>
-  <string name="SYS_GUESTBOOK_COMMENT_CREATED_TITLE">En gästbokskommentar skapades den #VAR1#</string>
-  <string name="SYS_GUESTBOOK_ENTRY_CHANGED_TITLE">Ett gästboksinlägg ändrades den #VAR1#</string>
-  <string name="SYS_GUESTBOOK_ENTRY_CREATED_TITLE">Ett gästboksinlägg skapades den #VAR1#</string>
   <string name="SYS_HALF_YEARLY">Halvårligt</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-header har redan skickats!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
   <string name="SYS_HEADER_PREFERENCES">Settings</string>
   <string name="SYS_HEADER_USER_ROLE_DATA">User profile data and roles</string>
   <string name="SYS_HEADLINE">Rubrik</string>
-  <string name="SYS_HELP">Hjälp</string>
   <string name="SYS_HIDDEN">Gömd</string>
-  <string name="SYS_HIDE">Dölj</string>
   <string name="SYS_HIGHLIGHT_EVENT">Lyft fram evenemang</string>
   <string name="SYS_HOMEPAGE">Homepage</string>
   <string name="SYS_HOST">Värd</string>
-  <string name="SYS_HOURS_VAR">#VAR1# timmar</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS">E-post</string>
   <string name="SYS_HTML_MAILS_REGISTERED_USERS_DESC">Skapa och skicka HTML-baserade e-postmeddelanden kan aktiveras för registrerade användare. En JavaScript-redigerare visas för bekväm redigering i stället för det vanliga textfältet. Det nuvarande alternativet är av gäster av säkerhetsskäl inte tillgängliga.</string>
   <string name="SYS_HTML_TABLE">HTML -tabell</string>
   <string name="SYS_HUSBAND">Make</string>
-  <string name="SYS_ICAL_DAYS_FUTURE">Antal iCal-dagar i framtiden</string>
-  <string name="SYS_ICAL_DAYS_FUTURE_DESC">Antal dagar i framtiden som ska inkluderas i en iCal-nedladdning eller abo. Om nedladdningen av iCal startas i Evenemang-modulen ignoreras denna inställning och de möten som filtrerats fram exporteras. (Standard: 365)</string>
-  <string name="SYS_ICAL_DAYS_PAST">Antal iCal-dagar tidigare</string>
-  <string name="SYS_ICAL_DAYS_PAST_DESC">Antal tidigare dagar som ska inkluderas i en iCal-nedladdning eller prenumeration. Om nedladdningen av iCal startade i Evenemang-modulen ignoreras denna inställning och de möten som filtrerats fram exporteras. (Standard: 30)</string>
   <string name="SYS_ICAL_DISABLED">iCal har inaktiverats av systemadministratören.</string>
   <string name="SYS_ICON">Ikon</string>
   <string name="SYS_ICON_FONT_DESC">Choose an icon from \"Bootstrap Icons\" at #VAR1#https://icons.getbootstrap.com#VAR2# and enter its name in this field.</string>
-  <string name="SYS_ICQ">ICQ</string>
   <string name="SYS_IDENTIFY_USERS">Identifiering av befintliga användare görs med förnamn och efternamn.</string>
   <string name="SYS_IMPORT">Importera</string>
   <string name="SYS_IMPORTANT">Viktigt</string>
@@ -955,7 +844,6 @@
   <string name="SYS_INTERVAL">Interval</string>
   <string name="SYS_INTO_TO">Mottagare måste anges i TO-fältet istället för BCC-fältet</string>
   <string name="SYS_INTO_TO_DESC">Alla mottagare kommer att listas i TO-fältet om de anges i enlighet därmed och ett e-postmeddelande kommer att tas emot av flera personer. Således kommer varje mottagare att se namnet och e-postadressen för de andra mottagarna. Dessutom kan varje mottagare svara på alla. (Standard: inaktiverad)</string>
-  <string name="SYS_INVALID_FONT_AWESOME">Det angivna ikonnamnet motsvarar inte den förväntade syntaxen. En ikon från typsnittet Awesome måste motsvara formen fa-ikonnamn.</string>
   <string name="SYS_INVALID_ICON_NAME">The entered icon name does not correspond to the expected syntax. An icon name of Bootstrap Icons should only contain characters a-z, numbers and a hyphen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ogiltig sidvy</string>
   <string name="SYS_INVENTORY">Inventory manager</string>
@@ -1094,11 +982,9 @@
   <string name="SYS_INVENTORY_USER_DEFINED_FIELDS">User-defined item fields</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER">Current user as default selection</string>
   <string name="SYS_INVENTORY_USE_CURRENT_USER_DESC">If this option is enabled, the current user is used as the default selection for the keeper when creating a new item. (Default: no)</string>
-  <string name="SYS_IO_ERROR">I/ O- fel.</string>
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_IS_VAR_FROM">är #VAR1# till</string>
   <string name="SYS_ITALIC">Italic</string>
-  <string name="SYS_ITEMNAME">Objektnamn</string>
   <string name="SYS_KEEP_ORIGINAL">Spara originalfiler dessutom</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Sparar varje foto inte bara med vald upplösning utan med originalstorlek. Om alternativet #VAR1_BOLD# är aktivt kommer alla originalfoton att laddas ner. Det här alternativet kräver betydligt mer lagringsutrymme och bör endast väljas om tillräckligt med utrymme är tillgängligt.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Liggande</string>
@@ -1130,12 +1016,10 @@
   <string name="SYS_LINK_NAME">Länknamn</string>
   <string name="SYS_LINK_TARGET">Länkmål</string>
   <string name="SYS_LINK_TARGET_DESC">Välj om vald webbplats ska visas i Admidios fönster eller i ett nytt fönster.</string>
-  <string name="SYS_LINK_TO">Länk till #VAR1#</string>
   <string name="SYS_LIST">Lista</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Lagringsplats för profilbilder</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Ange var du vill lagra profilbilden (i databasen eller i mappen adm_my_files). När en ändring görs kopieras inte de aktuella bilderna till en ny plats. (standard: databas)</string>
-  <string name="SYS_LOCK">Lås</string>
   <string name="SYS_LOCKED">Låst</string>
   <string name="SYS_LOCK_ALBUM">Album</string>
   <string name="SYS_LOCK_ALBUM_DESC">Låsta album kan inte ses av besökare eller medlemmar, du kan t.ex. låsa ett album så länge alla bilder laddas upp.</string>
@@ -1161,9 +1045,6 @@
   <string name="SYS_LOGO_FILE_DESC">The path to the logo file that is displayed in the top left corner. The path should be relative to your installation's root directory. If left empty, the default logo of the theme will be used. (Default: empty)</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT">Maximum logo height</string>
   <string name="SYS_LOGO_FILE_MAX_HEIGHT_DESC">The maximum space available for the logo in the header is limited to this value. If the logo is higher than the specified value, it will be scaled down to this height. (Default: 60 pixels)</string>
-  <string name="SYS_LOG_ALL_CHANGES">Logga alla ändringar</string>
-  <string name="SYS_LOG_ALL_CHANGES_DESC">Ändringar i profilfält registreras för varje användare och varje fält. Det föregående och det nya värdet kommer att loggas såväl som användaren som utförde ändringen och tidsstämpeln. (Standard: ja)</string>
-  <string name="SYS_LOSTPW_AREADY_LOGGED_ID">Du har redan loggat in. Därför måste du redan ha rätt lösenord!</string>
   <string name="SYS_LOSTPW_SEND_EMAIL">Det nya lösenordet har skickats till e-postadressen #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEND_USERNAME">Det nya lösenordet har skickats till användaren #VAR1_BOLD#!</string>
   <string name="SYS_LOSTPW_SEVERAL_EMAIL">E-postadress #VAR1_BOLD# har tilldelats flera registreringar. En unik användarregistrering kunde inte identifieras.</string>
@@ -1231,7 +1112,6 @@
   <string name="SYS_MESSAGES_DESC">En översikt av alla skickade mejl och privata meddelanden. Nya mejl och privata meddelanden kan skrivas och skickas till individuella kontakter eller roller. </string>
   <string name="SYS_MESSAGE_WENT_TO">Meddelandet skickades till</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
-  <string name="SYS_MINUTES_VAR">#VAR1# minuter</string>
   <string name="SYS_MOBILE">Mobil</string>
   <string name="SYS_MODAL_WINDOW">Modalt fönster</string>
   <string name="SYS_MODULES">Moduler</string>
@@ -1300,9 +1180,6 @@
   <string name="SYS_NOT_VALID_DATE_FORMAT">Använd ett giltigt datum som villkor för fält #VAR1_BOLD#.</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Inga ytterligare behörigheter har ställts in</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">Ytterligare rättigheter</string>
-  <string name="SYS_NO_BACKUP_FILE_EXISTS">Ingen backupfil hittades!</string>
-  <string name="SYS_NO_CHANGES_LOGGED">Det finns inga ändringar loggade.</string>
-  <string name="SYS_NO_CHANGES_LOGGED_PROFIL">Inga ändringar finns loggade för #VAR1_BOLD#.</string>
   <string name="SYS_NO_DATA_FOUND">Hittade inga data !</string>
   <string name="SYS_NO_DEFAULT_ROLE">Du kan inte ta bort inställningen #VAR1_BOLD#, eftersom minst en roll måste lagras som standardtilldelning.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Rollhanteringen innehåller ingen standardroll för nya användare. Kontakta en administratör som kan redigera den här inställningen.</string>
@@ -1362,7 +1239,6 @@
   <string name="SYS_OVERVIEW">Översikt</string>
   <string name="SYS_OVERVIEW_EXTENSIONS">Overview extensions</string>
   <string name="SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC">Change the order of extensions on the overview page using drag and drop on larger screens or the move buttons on smaller screens.\n\nThe new order takes effect only after you save the settings.</string>
-  <string name="SYS_PAGE">Sida</string>
   <string name="SYS_PAGE_NEXT">Nästa</string>
   <string name="SYS_PAGE_PREVIOUS">Föregående</string>
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# och #VAR2#</string>
@@ -1393,7 +1269,6 @@
   <string name="SYS_PASSWORD_OLD_WRONG">Gamla lösenordet är felaktigt</string>
   <string name="SYS_PASSWORD_RESET_INVALID">Du har begärt en ogiltig länk för återställning av lösenord. Om du inte har återställt ditt lösenord ännu, begär en ny länk med funktionen #VAR1#.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Det nya lösenordet har nu tillämpats!</string>
-  <string name="SYS_PASSWORD_UNKNOWN">Inloggningen misslyckades på grund av fel lösenord. \n\n Kontrollera ditt lösenord och försök igen.</string>
   <string name="SYS_PATH">Path</string>
   <string name="SYS_PATH_SEPARATOR">Sökvägsavskiljare</string>
   <string name="SYS_PDF">PDF</string>
@@ -1427,8 +1302,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio kräver #VAR1# eller högre</string>
   <string name="SYS_PIPE">Rör (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Välj alternativ</string>
-  <string name="SYS_PLEASE_WAIT">Vänligen vänta</string>
-  <string name="SYS_PLUGINS">Plugins</string>
   <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
@@ -1492,7 +1365,6 @@
   <string name="SYS_PLUGIN_UPDATE">Update plugin</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Plugin version</string>
-  <string name="SYS_POPUP_WINDOW">Popup Fönster</string>
   <string name="SYS_PORT">Port</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Stående</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Kolumnnamn för autodetektering: #VAR1#</string>
@@ -1505,14 +1377,12 @@
   <string name="SYS_PREVIEW">Förhandsgranska</string>
   <string name="SYS_PREVIEW_CHARACTERS">Characters in the description preview</string>
   <string name="SYS_PREVIEW_CHARACTERS_DESC">Number of characters shown in the preview of a description. The text is shortened at the last space before this limit. Clicking the expand icon displays the complete text. A value of 0 always displays the complete description. (Default: #VAR1#)</string>
-  <string name="SYS_PREVIOUS">Föregående</string>
   <string name="SYS_PREVIOUS_EVENTS">Föregående #VAR1#</string>
   <string name="SYS_PREVIOUS_NAME">Tidigare namn</string>
   <string name="SYS_PREVIOUS_PHOTO">Föregående bild</string>
   <string name="SYS_PREVIOUS_VALUE">Tidigare värde</string>
   <string name="SYS_PRINT_PREVIEW">Förhandsgranska</string>
   <string name="SYS_PRIVATE_MESSAGES">Privata meddelanden</string>
-  <string name="SYS_PRIVATE_MESSAGE_NOT_SEND">Privat meddelande kunde inte skickas till #VAR1_BOLD#. \n\n Följande fel har inträffat: \n #VAR2#</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Privat meddelande har skickats till #VAR1_BOLD#.</string>
   <string name="SYS_PRNG">Pseudo-slumptalgenerator</string>
   <string name="SYS_PRNG_INSECURE">Admidio / PHP kan inte generera säkra pseudo-slumpmässiga nummer! Kontakta Admidio-teamet med följande information:</string>
@@ -1529,7 +1399,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Du bör vara med på bilden. Bilden får ha en upplösning på max #VAR1# MegaPixel. Filen får inte vara större än #VAR1# MB och måste vara i formatet JPG eller PNG.</string>
   <string name="SYS_PROPERTIES">Egenskaper</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
@@ -1554,7 +1423,6 @@
   <string name="SYS_QUOTE">Enkelt citat (\')</string>
   <string name="SYS_RADIO_BUTTON">Radioknapp</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Organisationens senaste fotoalbum #VAR1#</string>
-  <string name="SYS_RECENT_ANNOUNCEMENTS_OF_ORGA">Senaste meddelanden från organisationen #VAR1#</string>
   <string name="SYS_RECIPIENT">Mottagare</string>
   <string name="SYS_RECIPIENT_EMAIL">E- postmottagare</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
@@ -1637,8 +1505,6 @@
   <string name="SYS_RIGHT_EDIT_USER_DESC">Roller med denna behörighet kan redigera information på andra kontakter (utom lösenord). de kan även skapa och ta bort kontakter.</string>
   <string name="SYS_RIGHT_FORUM">Manage forum</string>
   <string name="SYS_RIGHT_FORUM_DESC">Members of roles with this permission can manage the forum module. They can view, edit, and delete all forum topics and posts.</string>
-  <string name="SYS_RIGHT_GUESTBOOK">Redigera och ta bort gästbokposter</string>
-  <string name="SYS_RIGHT_GUESTBOOK_COMMENTS">Skapa kommentarer till gästbokposter</string>
   <string name="SYS_RIGHT_INVENTORY">Manage inventory</string>
   <string name="SYS_RIGHT_INVENTORY_DESC">Roles with this permission can manage the inventory in the inventory manager module.</string>
   <string name="SYS_RIGHT_MAIL_PARTICIPANTS">Deltagarna kan skicka e-post till alla deltagare</string>
@@ -1668,7 +1534,6 @@
   <string name="SYS_ROLE_PAST">Past role</string>
   <string name="SYS_ROLE_RIGHTS">Role rights</string>
   <string name="SYS_ROLE_SELECTION">Välj roll</string>
-  <string name="SYS_ROLE_SELECTION_CONF_DESC">Sektionen roll kan begränsas till medlemmar med den valda rollen.\n\nOm begränsning inte ska användas ska båda fälten (roll och kategori) vara tomma.</string>
   <string name="SYS_ROLE_SELECT_RIGHT">Du har inte behörighet att välja roll #VAR1#. \nVänligen försöka välja en annan roll.</string>
   <string name="SYS_ROLE_TYPES">Rolltyper</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Roll utan ledare</string>
@@ -1686,8 +1551,6 @@
   <string name="SYS_RSS_DISABLED">Webflödet har inaktiverats.</string>
   <string name="SYS_RSS_FEED_FOR_VAR">Webflöde för #VAR1#</string>
   <string name="SYS_RUN_REPORT">Run report</string>
-  <string name="SYS_SAFE_MODE">Säkert läge</string>
-  <string name="SYS_SAFE_MODE_PROBLEM">Kan orsaka problem med filuppladdningar</string>
   <string name="SYS_SAME_WINDOW">Samma fönster</string>
   <string name="SYS_SATURDAY">Lördag</string>
   <string name="SYS_SAVE">Spara</string>
@@ -1698,7 +1561,6 @@
   <string name="SYS_SAVE_CHANGES">Spara ändringarna</string>
   <string name="SYS_SAVE_CONFIGURATION">Spara konfiguration</string>
   <string name="SYS_SAVE_DATA">Alla uppgifter har sparats</string>
-  <string name="SYS_SEARCH">Sök</string>
   <string name="SYS_SEARCH_AGE_DESC">Söker efter alla användare är äldre än 18 år</string>
   <string name="SYS_SEARCH_AGE_EXAMPLE">”18y.</string>
   <string name="SYS_SEARCH_DATE_DESC">Söker efter alla användare födda efter 01.03.1986</string>
@@ -1720,12 +1582,10 @@
   <string name="SYS_SEARCH_YES_NO_FIELD_DESC">Söker efter markerade (markerade) användare</string>
   <string name="SYS_SEATING">Sittplatser</string>
   <string name="SYS_SEAT_AMOUNT">Ytterligare platser</string>
-  <string name="SYS_SECONDS_VAR">#VAR1# sekunder</string>
   <string name="SYS_SECURE">Säkert</string>
   <string name="SYS_SECURITY">Säkerhet</string>
   <string name="SYS_SECURITY_CODE">Authentication code</string>
   <string name="SYS_SECURITY_CODE_INVALID">The entered authentication code is incorrect.</string>
-  <string name="SYS_SECURITY_ERROR">Säkerhetsfel</string>
   <string name="SYS_SELECTION">Selection</string>
   <string name="SYS_SELECT_ALL">Select all</string>
   <string name="SYS_SELECT_CONFIGURATION">Välj konfiguration</string>
@@ -1758,14 +1618,12 @@
   <string name="SYS_SEND_METHOD">Skicka via</string>
   <string name="SYS_SEND_METHOD_DESC">PHP\'s mail()-metod kan vara begränsad av vissa leverantörer och kan flaggas som skräppost. Därför rekommenderas att skicka e-post med hjälp av en befintlig e-postadress och SMTP-server. Du kan konfigurera SMTP-inställningarna nedan (standard: PHP mail()).</string>
   <string name="SYS_SEND_NEW_LOGIN">Vill du skicka #VAR1_BOLD# ett e-postmeddelande med det aktuella användarnamnet och ett nytt lösenord?</string>
-  <string name="SYS_SEND_NEW_PW">Skicka nytt lösenord</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Skicka foto som gratulationskort</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Skicka privat meddelande</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Din PM kommer att skickas till den valda mottagaren.</string>
   <string name="SYS_SEND_TEST_MAIL">Skicka testmeddelande</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Skicka e-post med användarnamn och lösenord.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Separator för CSV-fil</string>
-  <string name="SYS_SERVER">Server</string>
   <string name="SYS_SERVER_NO_UPLOAD">Serverinställningar tillåter inte uppladdning av filer.</string>
   <string name="SYS_SETTINGS">Inställningar</string>
   <string name="SYS_SET_FOLDER_PERMISSIONS">Ange mappbehörigheter</string>
@@ -1774,13 +1632,11 @@
   <string name="SYS_SHOW_ALL_CONTACTS">Valfritt visa alla kontakter</string>
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Om aktiverat kan tidigare kontakter och kontakter i andra organisationer visas i medlemsadministrationen utöver den aktuella organisationens aktiva kontakter. I annat fall visas endast aktiva kontakter i den aktuella organisationen. Vid skapande av nya kontakter eller tilldelning av registreringar söks dock fortfarande hela databasen för alla organisationer efter befintliga kontakter. (Standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Endast aktiva medlemmar i denna organisation kommer att listas om detta alternativ inte är inställt. Annars listas alla användare av databasen.</string>
-  <string name="SYS_SHOW_CALENDAR">Visa kalender</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">För utloggade användare kommer en alfanumerisk text att visas när captcha-modulen är aktiverad. Den medföljande texten måste anges i rätt fält. Detta bör förhindra missbruk av formuläret av spammare. (standard: ja)</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Visa tidigare medlemmar</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Denna inställning kan användas för att avgöra vem som kan visa tidigare roller. Men användaren måste också ha rätt att se själva rollen. Ledare för en roll kan också se tidigare medlemmar av sin roll om de har tillstånd att ställas in här. (Standard: #VAR1#)</string>
-  <string name="SYS_SHOW_FORMER_MEMBERS_ONLY">Visa endast tidigare medlemmar</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Användare med behörighet #VAR1_BOLD#</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Visa tidigare rollmedlemskap</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">En ruta visas med alla roller för användaren i den aktuella organisationen. Start- och slutdatum för medlemskap visas. (standard: ja)</string>
@@ -1790,7 +1646,6 @@
   <string name="SYS_SHOW_MAP_LINK">Visa länk till karta</string>
   <string name="SYS_SHOW_MAP_LINK_DESC">Om plats är inställt, använder Google Maps för att visa plats och rutt från eget plats. (standard: ja)</string>
   <string name="SYS_SHOW_MAP_LINK_PROFILE_DESC">Om adressen lagras i profilen visas två länkar till Google Maps bredvid adressen. Användarens bostad är länkat och rutten från hans egen bostad till den visade användarens bostad är länkad. Vid åtkomst till länkarna överförs följande profilinformation till Google: gata, postnummer, stad och land. (Standard: nej)</string>
-  <string name="SYS_SHOW_MEMBER_LIST">Visa medlemslista</string>
   <string name="SYS_SHOW_MORE">Show more</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS">Display obsolete selection options</string>
   <string name="SYS_SHOW_OBSOLETE_SELECT_FIELD_OPTIONS_DESC">Choose whether obsolete options appear in the profile field configuration so they can be restored.\nThis setting applies only to drop-down lists and option fields. (Default: yes)</string>
@@ -1810,12 +1665,10 @@
   <string name="SYS_SIMILAR_CONTACTS_FOUND">Liknande kontakt funnen</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_ASSIGN">Kontakter med liknande namn som #VAR1_BOLD# hittades.</string>
   <string name="SYS_SIMILAR_CONTACTS_FOUND_REGISTRATION">Kontakter med liknande namn hittades vid registrering av #VAR1_BOLD# med e-postadressen #VAR2_BOLD#. Kontrollera informationen och koppla till en befintlig kontakt eller skapa en ny kontakt.</string>
-  <string name="SYS_SINCE">sedan #VAR1#</string>
   <string name="SYS_SINCE_TO">från #VAR1# till #VAR2#</string>
   <string name="SYS_SINCE_VAR">since #VAR1#</string>
   <string name="SYS_SISTER">Syster</string>
   <string name="SYS_SIZE">Storlek</string>
-  <string name="SYS_SKYPE">Skype</string>
   <string name="SYS_SMALL">Small</string>
   <string name="SYS_SMTP">SMTP</string>
   <string name="SYS_SMTP_AUTH">SMTP-autentisering</string>
@@ -1839,7 +1692,6 @@
   <string name="SYS_SMTP_USER">Utgående SMTP-server</string>
   <string name="SYS_SMTP_USER_DESC">Användarnamnet som används i SMTP-autentiseringen.</string>
   <string name="SYS_SOCIAL_NETWORKS">Sociala medier</string>
-  <string name="SYS_SOCIAL_NETWORK_FIELD_DESC">Ange ditt användarnamn du har i sociala nätverk. Andra medlemmar kommer kunna hitta dig på dessa platser.</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">För att länka till din profil på ett socialt nätverk loggar du in på nätverket och öppnar din profil. Kopiera profilens URL till det här fältet och spara din Admidio-profil. Besökare kan sedan följa länken direkt till din profil på nätverket.</string>
   <string name="SYS_SON">Son</string>
   <string name="SYS_SPOUSE">Make/maka</string>
@@ -2060,10 +1912,8 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
-  <string name="SYS_START_BACKUP">Starta säkerhetskopiera</string>
   <string name="SYS_STATUS_CODE_INVALID">Ogiltig statuskod</string>
   <string name="SYS_STILL_X_CHARACTERS">fortfarande #VAR1# tecken</string>
-  <string name="SYS_STOP">Stop - Stopp</string>
   <string name="SYS_STREET">Gata</string>
   <string name="SYS_SUBJECT">Ämne</string>
   <string name="SYS_SUBORDINATE">Underordnad</string>
@@ -2078,7 +1928,6 @@
   <string name="SYS_SUPERIOR">Överordnad</string>
   <string name="SYS_SUPERIOR_FEMALE">Kvinnlig överordnad</string>
   <string name="SYS_SUPERIOR_MALE">Manlig överordnad</string>
-  <string name="SYS_SUPPORT_ADMIDIO">Stöd Admidio</string>
   <string name="SYS_SWITCH_TO_CALENDAR_MANAGEMENT">Byt till kalenderhantering</string>
   <string name="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION">Byt till kategoriadministration</string>
   <string name="SYS_SWITCH_TO_PROFILE_FIELDS_CONFIGURATION">Växla till att konfigurera profilens fält</string>
@@ -2086,7 +1935,6 @@
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Öppet rumadministration</string>
   <string name="SYS_SYMMETRICAL">Symmetri</string>
   <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Login information for #organization_long_name#\n#content# Hello #user_first_name#,\n\nHere is your login information for #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThis password was generated automatically.\nPlease change it in your profile after logging in to #organization_homepage#.\n\nRegards,\nThe #organization_long_name# team</string>
-  <string name="SYS_SYSMAIL_NEW_PASSWORD">#subject# Inloggningsuppgifter för #organization_long_name# \n#content# Hej #user_first_name#,\n\nHär kommer inloggningsuppgifter för webbplatsen #organization_homepage#.\nAnvändarnamn: #user_login_name# \nLösenord: #variable1# \n\nLösenordet har genereras automatiskt,\nDu bör ändra det efter att du har loggat in på #organization_homepage#.\n\nLycka till, \nAdministratören</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Återställ lösenord för #organization_long_name#\n#content# Hej #user_first_name#, \n \nVi har fått en begäran om att återställa ditt lösenord på #organization_homepage#. \n\nOm begäran kom från dig kan du använda följande länk för att återställa ditt lösenord och ställa in ett nytt: \n#variable1#\n\nHälsningar \nTeamet på #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# vid registrering på #organization_long_name# avvisad.\n#content#Hej #user_first_name#,\n\ndin registrering på #organization_homepage# avvisades.\n\nVi godtar som regel bara registreringar från medlemmar. Om du är medlem och din registrering fortfarande avvisades kan det bero på att du inte identifierades som medlem. \nFör att klargöra orsakerna till avslaget vänligen kontakta administratören #administrator_email# från #organization_homepage#.\n\nHälsningar,\n Teamet hos #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Ny registrering på #organization_long_name# webbplats \n #content# En ny användare har registrerat sig på #organization_homepage#. \n\n Efternamn: #user_last_name# \nFörsta namn: #user_first_name# \nE-post: #user_email# \n\n \nDetta meddelande genererades automatiskt.</string>
@@ -2138,29 +1986,23 @@
   <string name="SYS_TOPIC">Topic</string>
   <string name="SYS_TOTAL">Totalt</string>
   <string name="SYS_TUESDAY">Tisdag</string>
-  <string name="SYS_TWITTER">X (Twitter)</string>
   <string name="SYS_TYPE">Typ</string>
   <string name="SYS_UNDERLINE">Underline</string>
   <string name="SYS_UNIDIRECTIONAL">Envägs</string>
   <string name="SYS_UNIQUE_ID">Unique Admidio-ID</string>
   <string name="SYS_UNIX">UNIX</string>
   <string name="SYS_UNKNOWN">Oidentifierad data</string>
-  <string name="SYS_UNLIMITED">Obegränsat</string>
-  <string name="SYS_UNLOCK">Lås upp</string>
   <string name="SYS_UNLOCK_ALBUM">Lås upp albumet</string>
   <string name="SYS_UNMANAGED_FILES">Ohanterade filer</string>
-  <string name="SYS_UPDATE">Uppdatera</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Uppdateringen lyckades</string>
   <string name="SYS_UPLOAD_FILES">Ladda upp filer</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Maximal storlek för uppladdning</string>
-  <string name="SYS_UPLOAD_NAME_ERROR">Filnamnet kan inte namnges \ &amp;quot;Skicka \&amp;quot;.</string>
   <string name="SYS_UPLOAD_PHOTOS">Ladda upp foton</string>
   <string name="SYS_UPLOAD_PROFILE_PICTURE">LADDA UPP DIN PROFILBILD</string>
   <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_URL">Internetadress</string>
   <string name="SYS_URL_INVALID_CHAR">URL: en i fältet #VAR1_BOLD# innehåller ogiltiga tecken. \n\n Bara alfabetiska tecken, umlauts, siffror 0-9 och specialtecken.-+_:/#?= är tillåtna. </string>
-  <string name="SYS_USER">Användare</string>
   <string name="SYS_USERNAME">Användarnamn</string>
   <string name="SYS_USERNAME_DESCRIPTION">Du kommer använda användarnamnet vid inloggning.\nNamnet måste vara väl definierat. Om det önskade namnet redan används, försök att använda kombinationer som Arne78 eller StefanT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">E-postadress</string>
@@ -2208,16 +2050,13 @@
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Endast roller för andra organisationer som är synliga för alla registrerade användare visas. Om du är medlem i denna organisation får du också visa vilka roller du kan se med dina rättigheter inom organisationen.</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Visa rollmedlemskap</string>
   <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Med den här inställningen kan du definiera vem som kan se rollens medlemmar. Användaren kan se rollmedlemskapet i profilen för respektive person och i listor för rollen. Den här inställningen tillåter inte åtkomst till rollmedlemmarnas profil. I listor visas endast namn och förnamn. Rollens rättighet #VAR1_BOLD# åsidosätter denna inställning.</string>
-  <string name="SYS_VISIBILITY">Synlighet</string>
   <string name="SYS_VISIBLE">Synlig</string>
   <string name="SYS_VISIBLE_FOR">Synlig för alla</string>
-  <string name="SYS_VISIBLE_TO_USERS">#VAR1# syns bara för inloggade användare</string>
   <string name="SYS_VISITORS">Gäster</string>
   <string name="SYS_WANT_DELETE_CATEGORY">Vill du verkligen ta bort kategori #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_ENTRY">Vill du ta bort inlägg #VAR1_BOLD#?</string>
   <string name="SYS_WANT_DELETE_PHOTO">Vill du ta bort det valda fotot?</string>
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt will be downloaded and installed without being enabled. You can enable it in the plugin manager afterward.</string>
-  <string name="SYS_WANT_REGISTER">Jag vill registrera mig nu</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoval affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
@@ -2231,12 +2070,10 @@
   <string name="SYS_WEEKDAY">Veckodag</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
   <string name="SYS_WEEKLY">Weekly</string>
-  <string name="SYS_WHAT_TO_DO">Vad gör jag?</string>
   <string name="SYS_WIDTH">Bredd</string>
   <string name="SYS_WIFE">Fru</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Arbetsblad (index eller namn)</string>
   <string name="SYS_WRITE_EMAIL">Skriv e-post</string>
-  <string name="SYS_WRITE_ENTRY">Skriv inlägg</string>
   <string name="SYS_WRITE_PM">Skriv privat meddelande</string>
   <string name="SYS_XING">Xing</string>
   <string name="SYS_YEAR">Year</string>

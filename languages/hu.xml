@@ -1174,7 +1174,6 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">A szerepkör tagjai értesítést kapnak a modulokban történt új vagy módosított bejegyzésekről, valamint a tagok profiladatainak változásairól. Adatvédelmi okokból csak olyan szerepköröket lehet rögzíteni, amelyek rendelkeznek a #VAR1_BOLD# szerepkörjoggal.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nem a regisztrációkor</string>
   <string name="SYS_NOT_EMPTY">Nem üres</string>
-  <string name="SYS_NOT_INSTALLED">Nincs telepítve</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Egy szervezetnek sem tagja</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nem tagja a #VAR1# szervezetnek</string>
   <string name="SYS_NOT_NUMERIC">Kérjük, adjon meg érvényes számot a #VAR1_BOLD# mező feltételeként.</string>
@@ -1366,7 +1365,6 @@
   <string name="SYS_PLUGIN_STORE_UNAVAILABLE">The list of plugins published for Admidio could not be read. Uploading a plugin from a file still works.</string>
   <string name="SYS_PLUGIN_STORE_VERSION_MISMATCH">The catalog listed version #VAR2# of the plugin #VAR1#, but the downloaded archive contains version #VAR3#. The download was rejected.</string>
   <string name="SYS_PLUGIN_UPDATE">Bővítmény frissítése</string>
-  <string name="SYS_PLUGIN_UPDATED">A bővítmény frissítése sikeresen befejeződött.</string>
   <string name="SYS_PLUGIN_UPDATED_TO">Plugin successfully updated to version #VAR1#.</string>
   <string name="SYS_PLUGIN_VERSION">Bővítmény verziója</string>
   <string name="SYS_PORT">Port</string>
@@ -1403,7 +1401,6 @@
   <string name="SYS_PROFILE_PICTURE_HINT_FORMAT">Allowed file types are JPG and PNG.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
-  <string name="SYS_PROFILE_PICTURE_RESTRICTIONS">Önnek is szerepelnie kell a fotón. A fotó maximális felbontása #VAR1# megapixelt tehet ki. A fotófájl mérete nem haladhatja meg a #VAR1# MB-ot, és JPG vagy PNG formátumban kell lennie.</string>
   <string name="SYS_PROPERTIES">Jellemzők</string>
   <string name="SYS_PWA_ENABLED">Progresszív webalkalmazás (PWA) engedélyezése</string>
   <string name="SYS_PWA_ENABLED_DESC">Lehetővé teszi a felhasználók számára, hogy az Admidio-t önálló webalkalmazásként telepítsék okostelefonjukra, táblagépükre vagy asztali számítógépükre. Az alkalmazás neve a szervezet nevére épül. Egyedi alkalmazásikonok helyezhetők el az adm_my_files/ mappában app_icon.png vagy app_icon_512.png néven. Ellenkező esetben a „Design” menüpont alatt beállított PNG-formátumú favicon vagy az alapértelmezett logó kerül felhasználásra.</string>

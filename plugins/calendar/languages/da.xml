@@ -4,7 +4,6 @@
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Fr</string>
   <string name="PLG_CALENDAR_MONDAY_SHORT">Ma</string>
   <string name="PLG_CALENDAR_MONTH">Januar,Februar,Marts,April,Maj,Juni,Juli,August,September,Oktober,November,December</string>
-  <string name="PLG_CALENDAR_MORE">(... mere)</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Dette plugin viser en kalender med alle begivenheder i den aktuelle måned på oversigtssiden.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Kalender</string>
   <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Roller for fødselsdage</string>
