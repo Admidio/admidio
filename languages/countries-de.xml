@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <!-- Country and territory names based on Unicode CLDR (ICU 78.2, locale de_DE). -->
   <string name="AFG">Afghanistan</string>
   <string name="EGY">Ägypten</string>
   <string name="ALB">Albanien</string>
@@ -26,7 +27,7 @@
   <string name="BTN">Bhutan</string>
   <string name="BOL">Bolivien</string>
   <string name="BIH">Bosnien und Herzegowina</string>
-  <string name="BWA">Botswana</string>
+  <string name="BWA">Botsuana</string>
   <string name="BVT">Bouvetinsel</string>
   <string name="BRA">Brasilien</string>
   <string name="BRN">Brunei Darussalam</string>
@@ -57,7 +58,7 @@
   <string name="GRD">Grenada</string>
   <string name="GRC">Griechenland</string>
   <string name="GRL">Grönland</string>
-  <string name="GBR">Großbritannien</string>
+  <string name="GBR">Vereinigtes Königreich</string>
   <string name="GLP">Guadeloupe</string>
   <string name="GUM">Guam</string>
   <string name="GTM">Guatemala</string>
@@ -69,7 +70,7 @@
   <string name="HKG">Hongkong</string>
   <string name="IND">Indien</string>
   <string name="IDN">Indonesien</string>
-  <string name="IMN">Insel Man</string>
+  <string name="IMN">Isle of Man</string>
   <string name="IRQ">Irak</string>
   <string name="IRN">Iran</string>
   <string name="IRL">Irland</string>
@@ -92,7 +93,7 @@
   <string name="CCK">Kokosinseln</string>
   <string name="COL">Kolumbien</string>
   <string name="COM">Komoren</string>
-  <string name="COG">Kongo</string>
+  <string name="COG">Kongo-Brazzaville</string>
   <string name="HRV">Kroatien</string>
   <string name="CUB">Kuba</string>
   <string name="KWT">Kuwait</string>
@@ -105,7 +106,7 @@
   <string name="LIE">Liechtenstein</string>
   <string name="LTU">Litauen</string>
   <string name="LUX">Luxemburg</string>
-  <string name="MAC">Macao</string>
+  <string name="MAC">Macau</string>
   <string name="MDG">Madagaskar</string>
   <string name="MWI">Malawi</string>
   <string name="MYS">Malaysia</string>
@@ -120,7 +121,7 @@
   <string name="MYT">Mayotte</string>
   <string name="MEX">Mexiko</string>
   <string name="FSM">Mikronesien</string>
-  <string name="MDA">Moldawien</string>
+  <string name="MDA">Republik Moldau</string>
   <string name="MCO">Monaco</string>
   <string name="MNG">Mongolei</string>
   <string name="MNE">Montenegro</string>
@@ -155,9 +156,9 @@
   <string name="PRI">Puerto Rico</string>
   <string name="RWA">Ruanda</string>
   <string name="ROU">Rumänien</string>
-  <string name="RUS">Russische Föderation</string>
+  <string name="RUS">Russland</string>
   <string name="SLB">Salomonen</string>
-  <string name="BLM">Saint-Barthélemy</string>
+  <string name="BLM">St. Barthélemy</string>
   <string name="ZMB">Sambia</string>
   <string name="WSM">Samoa</string>
   <string name="SMR">San Marino</string>
@@ -179,7 +180,7 @@
   <string name="SDN">Sudan</string>
   <string name="KOR">Südkorea</string>
   <string name="SUR">Suriname</string>
-  <string name="SWZ">Swasiland</string>
+  <string name="SWZ">Eswatini</string>
   <string name="SYR">Syrien</string>
   <string name="TJK">Tadschikistan</string>
   <string name="TWN">Taiwan</string>
@@ -190,7 +191,7 @@
   <string name="TON">Tonga</string>
   <string name="TTO">Trinidad und Tobago</string>
   <string name="TCD">Tschad</string>
-  <string name="CZE">Tschechische Republik</string>
+  <string name="CZE">Tschechien</string>
   <string name="TUN">Tunesien</string>
   <string name="TUR">Türkei</string>
   <string name="TKM">Turkmenistan</string>
@@ -204,10 +205,50 @@
   <string name="VAT">Vatikanstadt</string>
   <string name="VEN">Venezuela</string>
   <string name="ARE">Vereinigte Arabische Emirate</string>
-  <string name="USA">Vereinigte Staaten von Amerika</string>
+  <string name="USA">Vereinigte Staaten</string>
   <string name="VNM">Vietnam</string>
-  <string name="BLR">Weißrussland</string>
+  <string name="BLR">Belarus</string>
   <string name="ESH">Westsahara</string>
   <string name="CAF">Zentralafrikanische Republik</string>
   <string name="CYP">Zypern</string>
+  <!-- Additional ISO 3166-1 countries and territories -->
+  <string name="ALA">Ålandinseln</string>
+  <string name="ASM">Amerikanisch-Samoa</string>
+  <string name="ATA">Antarktis</string>
+  <string name="ATF">Französische Süd- und Antarktisgebiete</string>
+  <string name="BES">Karibische Niederlande</string>
+  <string name="CIV">Côte d’Ivoire</string>
+  <string name="COD">Kongo-Kinshasa</string>
+  <string name="COK">Cookinseln</string>
+  <string name="CPV">Cabo Verde</string>
+  <string name="CUW">Curaçao</string>
+  <string name="CXR">Weihnachtsinsel</string>
+  <string name="FRO">Färöer</string>
+  <string name="GGY">Guernsey</string>
+  <string name="GUF">Französisch-Guayana</string>
+  <string name="HMD">Heard und McDonaldinseln</string>
+  <string name="IOT">Britisches Territorium im Indischen Ozean</string>
+  <string name="JEY">Jersey</string>
+  <string name="KNA">St. Kitts und Nevis</string>
+  <string name="LCA">St. Lucia</string>
+  <string name="MAF">St. Martin</string>
+  <string name="MNP">Nördliche Marianen</string>
+  <string name="PLW">Palau</string>
+  <string name="PSE">Palästinensische Autonomiegebiete</string>
+  <string name="PYF">Französisch-Polynesien</string>
+  <string name="REU">Réunion</string>
+  <string name="SGS">Südgeorgien und die Südlichen Sandwichinseln</string>
+  <string name="SHN">St. Helena</string>
+  <string name="SJM">Spitzbergen und Jan Mayen</string>
+  <string name="SPM">St. Pierre und Miquelon</string>
+  <string name="SSD">Südsudan</string>
+  <string name="STP">São Tomé und Príncipe</string>
+  <string name="SXM">Sint Maarten</string>
+  <string name="TCA">Turks- und Caicosinseln</string>
+  <string name="TLS">Timor-Leste</string>
+  <string name="UMI">Amerikanische Überseeinseln</string>
+  <string name="VCT">St. Vincent und die Grenadinen</string>
+  <string name="VGB">Britische Jungferninseln</string>
+  <string name="VIR">Amerikanische Jungferninseln</string>
+  <string name="WLF">Wallis und Futuna</string>
 </resources>

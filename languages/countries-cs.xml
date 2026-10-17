@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="AFG">Afgánistán</string>
+  <!-- Country and territory names based on Unicode CLDR (ICU 78.2, locale cs). -->
+  <string name="AFG">Afghánistán</string>
   <string name="EGY">Egypt</string>
   <string name="ALB">Albánie</string>
   <string name="DZA">Alžírsko</string>
@@ -24,7 +25,7 @@
   <string name="BEN">Benin</string>
   <string name="BMU">Bermudy</string>
   <string name="BTN">Bhútán</string>
-  <string name="BOL">Bolivie</string>
+  <string name="BOL">Bolívie</string>
   <string name="BIH">Bosna a Hercegovina</string>
   <string name="BWA">Botswana</string>
   <string name="BVT">Bouvetův ostrov</string>
@@ -57,7 +58,7 @@
   <string name="GRD">Grenada</string>
   <string name="GRC">Řecko</string>
   <string name="GRL">Grónsko</string>
-  <string name="GBR">Velká Británie</string>
+  <string name="GBR">Spojené království</string>
   <string name="GLP">Guadeloupe</string>
   <string name="GUM">Guam</string>
   <string name="GTM">Guatemala</string>
@@ -89,10 +90,10 @@
   <string name="KEN">Keňa</string>
   <string name="KGZ">Kyrgyzstán</string>
   <string name="KIR">Kiribati</string>
-  <string name="CCK">Kokosové (Keelingovy) ostrovy</string>
+  <string name="CCK">Kokosové ostrovy</string>
   <string name="COL">Kolumbie</string>
   <string name="COM">Komory</string>
-  <string name="COG">Kongo</string>
+  <string name="COG">Kongo – Brazzaville</string>
   <string name="HRV">Chorvatsko</string>
   <string name="CUB">Kuba</string>
   <string name="KWT">Kuvajt</string>
@@ -126,7 +127,7 @@
   <string name="MNE">Černá Hora</string>
   <string name="MSR">Montserrat</string>
   <string name="MOZ">Mosambik</string>
-  <string name="MMR">Myanmar</string>
+  <string name="MMR">Myanmar (Barma)</string>
   <string name="NAM">Namibie</string>
   <string name="NRU">Nauru</string>
   <string name="NPL">Nepál</string>
@@ -138,7 +139,7 @@
   <string name="NGA">Nigérie</string>
   <string name="NIU">Niue</string>
   <string name="PRK">Severní Korea</string>
-  <string name="NFK">Norfolkské ostrovy</string>
+  <string name="NFK">Norfolk</string>
   <string name="MKD">Severní Makedonie</string>
   <string name="NOR">Norsko</string>
   <string name="OMN">Omán</string>
@@ -155,7 +156,7 @@
   <string name="PRI">Portoriko</string>
   <string name="RWA">Rwanda</string>
   <string name="ROU">Rumunsko</string>
-  <string name="RUS">Ruská federace</string>
+  <string name="RUS">Rusko</string>
   <string name="SLB">Šalamounovy ostrovy</string>
   <string name="BLM">Svatý Bartoloměj</string>
   <string name="ZMB">Zambie</string>
@@ -174,23 +175,23 @@
   <string name="SVN">Slovinsko</string>
   <string name="SOM">Somálsko</string>
   <string name="ESP">Španělsko</string>
-  <string name="LKA">Šrí Lanka</string>
+  <string name="LKA">Srí Lanka</string>
   <string name="ZAF">Jihoafrická republika</string>
   <string name="SDN">Súdán</string>
   <string name="KOR">Jižní Korea</string>
   <string name="SUR">Surinam</string>
-  <string name="SWZ">Svazijsko</string>
+  <string name="SWZ">Eswatini</string>
   <string name="SYR">Sýrie</string>
-  <string name="TJK">Tádžikistan</string>
+  <string name="TJK">Tádžikistán</string>
   <string name="TWN">Tchaj-wan</string>
-  <string name="TZA">Tanzánie</string>
+  <string name="TZA">Tanzanie</string>
   <string name="THA">Thajsko</string>
   <string name="TGO">Togo</string>
   <string name="TKL">Tokelau</string>
   <string name="TON">Tonga</string>
   <string name="TTO">Trinidad a Tobago</string>
   <string name="TCD">Čad</string>
-  <string name="CZE">Česká republika</string>
+  <string name="CZE">Česko</string>
   <string name="TUN">Tunisko</string>
   <string name="TUR">Turecko</string>
   <string name="TKM">Turkmenistán</string>
@@ -204,10 +205,50 @@
   <string name="VAT">Vatikán</string>
   <string name="VEN">Venezuela</string>
   <string name="ARE">Spojené arabské emiráty</string>
-  <string name="USA">Spojené státy americké</string>
+  <string name="USA">Spojené státy</string>
   <string name="VNM">Vietnam</string>
   <string name="BLR">Bělorusko</string>
   <string name="ESH">Západní Sahara</string>
   <string name="CAF">Středoafrická republika</string>
   <string name="CYP">Kypr</string>
+  <!-- Additional ISO 3166-1 countries and territories -->
+  <string name="ALA">Ålandy</string>
+  <string name="ASM">Americká Samoa</string>
+  <string name="ATA">Antarktida</string>
+  <string name="ATF">Francouzská jižní území</string>
+  <string name="BES">Karibské Nizozemsko</string>
+  <string name="CIV">Pobřeží slonoviny</string>
+  <string name="COD">Kongo – Kinshasa</string>
+  <string name="COK">Cookovy ostrovy</string>
+  <string name="CPV">Kapverdy</string>
+  <string name="CUW">Curaçao</string>
+  <string name="CXR">Vánoční ostrov</string>
+  <string name="FRO">Faerské ostrovy</string>
+  <string name="GGY">Guernsey</string>
+  <string name="GUF">Francouzská Guyana</string>
+  <string name="HMD">Heardův ostrov a McDonaldovy ostrovy</string>
+  <string name="IOT">Britské indickooceánské území</string>
+  <string name="JEY">Jersey</string>
+  <string name="KNA">Svatý Kryštof a Nevis</string>
+  <string name="LCA">Svatá Lucie</string>
+  <string name="MAF">Svatý Martin (Francie)</string>
+  <string name="MNP">Severní Mariany</string>
+  <string name="PLW">Palau</string>
+  <string name="PSE">Palestinská území</string>
+  <string name="PYF">Francouzská Polynésie</string>
+  <string name="REU">Réunion</string>
+  <string name="SGS">Jižní Georgie a Jižní Sandwichovy ostrovy</string>
+  <string name="SHN">Svatá Helena</string>
+  <string name="SJM">Špicberky a Jan Mayen</string>
+  <string name="SPM">Saint-Pierre a Miquelon</string>
+  <string name="SSD">Jižní Súdán</string>
+  <string name="STP">Svatý Tomáš a Princův ostrov</string>
+  <string name="SXM">Svatý Martin (Nizozemsko)</string>
+  <string name="TCA">Turks a Caicos</string>
+  <string name="TLS">Východní Timor</string>
+  <string name="UMI">Menší odlehlé ostrovy USA</string>
+  <string name="VCT">Svatý Vincenc a Grenadiny</string>
+  <string name="VGB">Britské Panenské ostrovy</string>
+  <string name="VIR">Americké Panenské ostrovy</string>
+  <string name="WLF">Wallis a Futuna</string>
 </resources>
