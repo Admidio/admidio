@@ -10,6 +10,7 @@ use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\DataTables;
 
@@ -105,7 +106,7 @@ class EventListPresenter extends PagePresenter
         $data = array('headers' => array(), 'rows' => array(), 'column_align' => array(), 'column_width' => array());
 
         if ($outputMode === 'html') {
-            $page->assignSmartyVariable('classTable', 'table table-condensed table-hover');
+            $page->assignSmartyVariable('classTable', 'table table-sm table-hover align-middle');
 
             if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('events_module_enabled') === 1) {
                 $page->addRssFile(ADMIDIO_URL . '/rss/events.php?organization=' . $gCurrentOrganization->getValue('org_shortname'), $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS'))));
@@ -202,7 +203,7 @@ class EventListPresenter extends PagePresenter
                 $form->addToHtmlPage();
             }
         } else { // $outputMode = 'print'
-            $page->assignSmartyVariable('classTable', 'table table-condensed table-striped');
+            $page->assignSmartyVariable('classTable', 'table table-sm table-striped align-middle');
 
             // create an HTML page object without the custom theme files
             $page->setPrintMode();
@@ -220,6 +221,10 @@ class EventListPresenter extends PagePresenter
                 $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
             }
         } else {
+            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            // the weekday is shown in its own column, so the column width fits to the weekday names of every language
+            $showWeekdayColumn = ($weekdayFormat !== 'none');
+
             // Output table header for compact view
             if ($getView !== 'detail') { // $getView = 'compact' or 'room' or 'participants' or 'description'
                 $page->setContentFullWidth();
@@ -229,45 +234,90 @@ class EventListPresenter extends PagePresenter
                 $columnHeading = array();
                 $columnAlign = array();
 
+                // period and weekday are only shown as columns on desktop screens, on smaller screens they are shown
+                // below the title. The DataTables class "desktop" lets the responsive extension know that the columns
+                // are hidden, so it can collapse other columns if the table is still too wide.
+                $periodClass = '';
+                if ($outputMode === 'html') {
+                    $periodClass = 'desktop';
+                }
+
                 switch ($getView) {
                     case 'compact':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_VENUE'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
-                        $compactTable->disableColumnsSort(array(6));
-                        $compactTable->setColumnsNotHideResponsive(array(6));
-                        $data['column_width'] = array('', '', '', '', '', '');
+                        $columnClass = array('text-nowrap', $periodClass, '', '', '', '');
+                        $data['column_width'] = array('1%', '1%', '', '', '', '');
                         break;
                     case 'room':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left', 'left');
-                        $compactTable->disableColumnsSort(array(7));
-                        $compactTable->setColumnsNotHideResponsive(array(7));
-                        $data['column_width'] = array('', '', '', '', '', '', '');
+                        $columnClass = array('text-nowrap', $periodClass, '', '', '', '', '');
+                        $data['column_width'] = array('1%', '1%', '', '', '', '', '');
                         break;
                     case 'participants':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left');
-                        $compactTable->disableColumnsSort(array(5));
-                        $compactTable->setColumnsNotHideResponsive(array(5));
-                        $data['column_width'] = array('', '', '', '35%', '');
+                        $columnClass = array('text-nowrap', $periodClass, '', '', '');
+                        $data['column_width'] = array('1%', '1%', '', '35%', '');
                         break;
                     case 'description':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_CALENDAR'));
                         $columnAlign = array('center', 'left', 'left', 'left', 'left');
-                        $compactTable->disableColumnsSort(array(5));
-                        $compactTable->setColumnsNotHideResponsive(array(5));
-                        $data['column_width'] = array('', '', '', '35%', '');
+                        $columnClass = array('text-nowrap', $periodClass, '', '', '');
+                        $data['column_width'] = array('1%', '1%', '', '35%', '');
                         break;
+                }
+
+                $columnOffset = 0;
+                if ($showWeekdayColumn) {
+                    array_splice($columnHeading, 1, 0, array($gL10n->get('SYS_WEEKDAY')));
+                    array_splice($columnAlign, 1, 0, array('left'));
+                    array_splice($columnClass, 1, 0, array(trim('text-nowrap ' . $periodClass)));
+                    array_splice($data['column_width'], 1, 0, array('1%'));
+                    $columnOffset = 1;
                 }
 
                 if ($outputMode === 'html') {
                     $columnHeading[] = '&nbsp;';
                     $columnAlign[] = 'right';
-                    $data['column_width'][] = '';
+                    $columnClass[] = 'text-nowrap';
+                    $data['column_width'][] = '1%';
+                    $columnsWithoutSort = array(1, count($columnHeading));
+                    if ($showWeekdayColumn) {
+                        $columnsWithoutSort[] = 2;
+                    }
+                    $compactTable->disableColumnsSort($columnsWithoutSort);
+
+                    // Responsive priorities:
+                    // Priority 1: Status / Collapse column (Column 1) and Title
+                    // These must NEVER be hidden on mobile so rows can be expanded and status is visible.
+                    $compactTable->setColumnsNotHideResponsive(array(1, 3 + $columnOffset), 1);
+
+                    // Priority 2: Actions (Last Column)
+                    $compactTable->setColumnsNotHideResponsive(array(count($columnHeading)), 2);
+
+                    if ($getView === 'compact') {
+                        $compactTable->setColumnsNotHideResponsive(array(5 + $columnOffset), 3); // Ort (Veranstaltungsort)
+                        $compactTable->setColumnsNotHideResponsive(array(4 + $columnOffset), 4); // Teilnehmende
+                        $compactTable->setColumnsNotHideResponsive(array(6 + $columnOffset), 5); // Kalender
+                        $priority = 6;
+                    } else {
+                        $priority = 3;
+                        for ($col = 4 + $columnOffset; $col < count($columnHeading); $col++) {
+                            $compactTable->setColumnsNotHideResponsive(array($col), $priority++);
+                        }
+                    }
+                    // Zeitraum and Wochentag (on mobile, date and weekday are already shown in title column)
+                    $compactTable->setColumnsNotHideResponsive(array(2 + $columnOffset), $priority);
+                    if ($showWeekdayColumn) {
+                        $compactTable->setColumnsNotHideResponsive(array(2), $priority + 1);
+                    }
                 }
 
                 $data['headers'] = $columnHeading;
                 $data['column_align'] = $columnAlign;
+                $data['column_class'] = $columnClass;
             }
 
             // create a fake event object
@@ -326,39 +376,37 @@ class EventListPresenter extends PagePresenter
                     $participateModalForm = true;
                 }
 
+                $beginDateTime = DateTimeUtils::parseDateTime($event->getValue('dat_begin', 'Y-m-d H:i:s'));
+                $endDateTime = DateTimeUtils::parseDateTime($event->getValue('dat_end', 'Y-m-d H:i:s'));
+
+                $formattedBeginDate = ($beginDateTime !== null)
+                    ? DateTimeUtils::formatWithWeekday($beginDateTime, $weekdayFormat, null, null, true)
+                    : $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+
                 // set the end date of event
                 if ($event->getValue('dat_begin', $gSettingsManager->getString('system_date')) !== $event->getValue('dat_end', $gSettingsManager->getString('system_date'))) {
-                    $outputEndDate = ' - ' . $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+                    $formattedEndDate = ($endDateTime !== null)
+                        ? DateTimeUtils::formatWithWeekday($endDateTime, $weekdayFormat, null, null, true)
+                        : $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+                    $outputEndDate = ' &ndash; ' . $formattedEndDate;
                 }
 
                 if ($outputMode === 'html') {
                     // iCal Download
                     if ($gSettingsManager->getBool('events_ical_export_enabled')) {
-                        $outputButtonICal = '
-                        <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'export')) . '">
-                            <i class="bi bi-download" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DOWNLOAD_ICAL') . '"></i></a>';
+                        $outputButtonICal = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'export')) . '"><i class="bi bi-download" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DOWNLOAD_ICAL') . '"></i></a>';
                     }
 
                     // change and delete is only for users with additional rights
                     if ($event->isEditable()) {
-                        $outputButtonCopy = '
-                        <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'edit', 'dat_uuid' => $eventUUID, 'copy' => 1)) . '">
-                            <i class="bi bi-copy" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
-                        $outputButtonEdit = '
-                        <a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventEditUrlParams) . '">
-                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
-                        $outputButtonDelete = '
-                        <a class="admidio-messagebox" href="javascript:void(0);"  data-message="' . $eventDeleteMessage . '" data-buttons="yes-no"
-                            data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $eventDeleteLabel . '"></i></a>';
+                        $outputButtonCopy = '<a class="admidio-icon-link ms-1" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'edit', 'dat_uuid' => $eventUUID, 'copy' => 1)) . '"><i class="bi bi-copy" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
+                        $outputButtonEdit = '<a class="admidio-icon-link ms-1" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventEditUrlParams) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
+                        $outputButtonDelete = '<a class="admidio-icon-link ms-1 admidio-messagebox" href="javascript:void(0);"  data-message="' . $eventDeleteMessage . '" data-buttons="yes-no"
+                            data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $eventDeleteLabel . '"></i></a>';
 
                         if ($recurrenceBadge !== '') {
-                            $outputButtonEdit = '
-                            <a class="openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'edit')) . '">
-                                <i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
-                            $outputButtonDelete = '
-                            <a class="openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'delete')) . '">
-                                <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+                            $outputButtonEdit = '<a class="admidio-icon-link ms-1 openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'edit')) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
+                            $outputButtonDelete = '<a class="admidio-icon-link ms-1 openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'delete')) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
                         }
                     }
                 }
@@ -523,10 +571,12 @@ class EventListPresenter extends PagePresenter
                                     }
                                 }
 
+                                $buttonClass = ($getView === 'detail') ? 'btn btn-primary' : 'btn btn-sm btn-primary';
+
                                 if ($participateModalForm === false) {
                                     $outputButtonParticipation = '
                                 <div class="btn-group admidio-event-approval" role="group">
-                                    <button class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
+                                    <button class="' . $buttonClass . ' dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="icon-link dropdown-item ' . $disableStatusAttend . '" href="javascript:void(0)" data-id="' . $eventUUID . '" data-mode="participate">
@@ -549,9 +599,9 @@ class EventListPresenter extends PagePresenter
                                 </div>';
                                 } else {
                                     $outputButtonParticipation = '
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-primary openPopup"
-                                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'participation_form', 'dat_uuid' => $eventUUID)) . '">' . $iconParticipationStatus . $buttonText . '
+                                <div class="btn-group admidio-event-approval" role="group">
+                                    <button class="' . $buttonClass . ' openPopup"
+                                        data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'participation_form', 'dat_uuid' => $eventUUID)) . '">' . $iconParticipationStatus . $buttonText . '</button>
                                 </div>';
                                 }
                             }
@@ -610,10 +660,16 @@ class EventListPresenter extends PagePresenter
 
                 if ($getView === 'detail') {
                     if (!$event->getValue('dat_all_day')) {
+                        $timeFormat = $gSettingsManager->getString('system_time');
+                        $dateFormat = $gSettingsManager->getString('system_date');
+
                         // Write start in an array
-                        $eventElements[] = array($gL10n->get('SYS_START'), '<strong>' . $event->getValue('dat_begin', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
-                        // Write the end in an array
-                        $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $gSettingsManager->getString('system_time')) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                        $eventElements[] = array($gL10n->get('SYS_START'), '<strong>' . $event->getValue('dat_begin', $timeFormat) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                        // Write the end in an array if not same day with same time
+                        if ($event->getValue('dat_begin', $dateFormat) !== $event->getValue('dat_end', $dateFormat)
+                            || $event->getValue('dat_begin', $timeFormat) !== $event->getValue('dat_end', $timeFormat)) {
+                            $eventElements[] = array($gL10n->get('SYS_END'), '<strong>' . $event->getValue('dat_end', $timeFormat) . '</strong> ' . $gL10n->get('SYS_CLOCK'));
+                        }
                     }
 
                     $eventElements[] = array($gL10n->get('SYS_CALENDAR'), '<strong>' . $event->getValue('cat_name') . '</strong>');
@@ -666,7 +722,7 @@ class EventListPresenter extends PagePresenter
                     $page->addHtml('
                     <div class="card admidio-blog ' . ($row['dat_highlight'] ? 'admidio-event-highlight' : '') . '" id="evt_' . $eventUUID . '">
                         <div class="card-header">
-                            <i class="bi bi-calendar-week-fill"></i>' . $event->getValue('dat_begin', $gSettingsManager->getString('system_date')) . $outputEndDate . ' ' . $dateHeadline . $recurrenceBadge);
+                            <i class="bi bi-calendar-week-fill"></i>' . $formattedBeginDate . $outputEndDate . ' ' . $dateHeadline . $recurrenceBadge);
 
                     if ($event->isEditable() || $gSettingsManager->getBool('events_ical_export_enabled')) {
                         $page->addHtml('
@@ -757,10 +813,10 @@ class EventListPresenter extends PagePresenter
                         $cssClass = 'admidio-event-highlight';
                     }
 
-                    $dateBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
-                    $timeBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_time'));
-                    $dateEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
-                    $timeEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_time'));
+                    $eventDateBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_date'));
+                    $eventTimeBegin = $event->getValue('dat_begin', $gSettingsManager->getString('system_time'));
+                    $eventDateEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_date'));
+                    $eventTimeEnd = $event->getValue('dat_end', $gSettingsManager->getString('system_time'));
 
                     $columnValues = array();
 
@@ -770,15 +826,36 @@ class EventListPresenter extends PagePresenter
                         $columnValues[] = '';
                     }
 
-                    $columnValues[] = $event->getDateTimePeriod();
+                    $dateTimeSortKey = $event->getValue('dat_begin', 'Y-m-d H:i:s');
+                    $isMultiDay = ($eventDateBegin !== $eventDateEnd);
+
+                    if ($showWeekdayColumn) {
+                        $weekdayBegin = DateTimeUtils::getLocalizedWeekday($beginDateTime, $weekdayFormat);
+                        $weekdayEnd = DateTimeUtils::getLocalizedWeekday($endDateTime, $weekdayFormat);
+
+                        if (!$isMultiDay) {
+                            $columnValues[] = $weekdayBegin;
+                        } elseif ($outputMode === 'html') {
+                            // two lines like the period of events over several days
+                            $columnValues[] = '<div>' . $weekdayBegin . '</div><div>' . $weekdayEnd . '</div>';
+                        } else {
+                            $columnValues[] = $weekdayBegin . ' &ndash; ' . $weekdayEnd;
+                        }
+                    }
 
                     if ($outputMode === 'html') {
+                        $columnValues[] = '<span class="d-none">' . $dateTimeSortKey . '</span>' . $this->getTablePeriodHtml($event, 'none');
+
+                        $eventTitleHtml = '<span class="d-none">' . $dateTimeSortKey . '</span>';
+                        $eventTitleHtml .= '<a class="admidio-event-title fw-bold" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'cards', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>' . $recurrenceBadge;
+                        // on small screens the period and weekday columns are hidden, so the period with weekday is shown below the title
+                        $eventTitleHtml .= '<div class="text-muted small mt-1 admidio-event-period-small">' . $this->getTablePeriodHtml($event, $weekdayFormat) . '</div>';
                         if ($outputDeadline !== '') {
-                            $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'cards', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>' . $recurrenceBadge . '<br />' . $gL10n->get('SYS_DEADLINE') . ': ' . $outputDeadline;
-                        } else {
-                            $columnValues[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'cards', 'headline' => $dateHeadline)) . '">' . $dateHeadline . '</a>' . $recurrenceBadge;
+                            $eventTitleHtml .= '<div class="small text-danger mt-1 text-nowrap"><i class="bi bi-hourglass-split me-1"></i>' . $gL10n->get('SYS_DEADLINE') . ': ' . $outputDeadline . '</div>';
                         }
+                        $columnValues[] = $eventTitleHtml;
                     } else {
+                        $columnValues[] = $event->getDateTimePeriod(true, 'none');
                         $columnValues[] = $dateHeadline . ($recurrenceBadge !== '' ? ' ' . $this->getEventRecurrenceHint($event) : '');
                     }
 
@@ -850,7 +927,7 @@ class EventListPresenter extends PagePresenter
                     $columnValues[] = Language::translateIfTranslationStrId($row['category_name']);
 
                     if ($outputMode === 'html') {
-                        $columnValues[] = $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete;
+                        $columnValues[] = '<div class="text-nowrap">' . $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '</div>';
                     }
 
                     $data['rows'][] = array('id' => 'evt_' . $event->getValue('dat_uuid'), 'class' => $cssClass, 'data' => $columnValues);
@@ -863,6 +940,7 @@ class EventListPresenter extends PagePresenter
                 $compactTable->createJavascript(count($data['rows']), count($data['headers']));
 
                 $page->assignSmartyVariable('columnAlign', $data['column_align']);
+                $page->assignSmartyVariable('columnClass', $data['column_class']);
                 $page->assignSmartyVariable('columnWidth', $data['column_width']);
                 $page->assignSmartyVariable('headers', $data['headers']);
                 $page->assignSmartyVariable('rows', $data['rows']);
@@ -901,6 +979,37 @@ class EventListPresenter extends PagePresenter
         }
 
         return $headline;
+    }
+
+    /**
+     * Returns the period of the event for the events table. Events over several days get two lines,
+     * one for the begin and one for the end.
+     * @param Event $event The event whose period should be returned.
+     * @param string $weekdayFormat Format of the weekday that is shown in front of the date: 'none', 'short' or 'long'.
+     * @return string Returns the HTML of the period.
+     * @throws Exception
+     */
+    private function getTablePeriodHtml(Event $event, string $weekdayFormat): string
+    {
+        global $gSettingsManager;
+
+        $dateFormat = $gSettingsManager->getString('system_date');
+        $timeFormat = $gSettingsManager->getString('system_time');
+
+        if ($event->getValue('dat_begin', $dateFormat) === $event->getValue('dat_end', $dateFormat)) {
+            return '<span class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $event->getDateTimePeriod(true, $weekdayFormat) . '</span>';
+        }
+
+        $beginPart = DateTimeUtils::formatWithWeekday(DateTimeUtils::parseDateTime($event->getValue('dat_begin', 'Y-m-d H:i:s')), $weekdayFormat, $dateFormat);
+        $endPart = DateTimeUtils::formatWithWeekday(DateTimeUtils::parseDateTime($event->getValue('dat_end', 'Y-m-d H:i:s')), $weekdayFormat, $dateFormat);
+
+        if (!$event->getValue('dat_all_day')) {
+            $beginPart .= ' ' . $event->getValue('dat_begin', $timeFormat);
+            $endPart .= ' ' . $event->getValue('dat_end', $timeFormat);
+        }
+
+        return '<div class="text-nowrap"><i class="bi bi-calendar-event me-1"></i>' . $beginPart . ' &ndash;</div>'
+            . '<div class="text-nowrap"><i class="bi bi-arrow-return-right me-1 text-muted"></i>' . $endPart . '</div>';
     }
 
     private function getModeForView(string $view): string
