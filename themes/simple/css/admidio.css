@@ -1162,11 +1162,29 @@ div.adm-changelog-details-table {
 /* File upload validation & items  */
 /***********************************/
 #admidio-upload-invalid-container {
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  width: 100%;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: var(--bs-border-radius, 0.375rem);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+#admidio-upload-invalid-container .card-header {
+  background-color: var(--bs-tertiary-bg, #f8f9fa);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+  color: var(--bs-body-color, #212529);
+}
+
+#admidio-upload-invalid-list .list-group-item {
+  background: transparent;
+  color: var(--bs-body-color, #212529);
 }
 
 #admidio-upload-invalid-list .list-group-item:last-child {
   border-bottom: none !important;
+}
+
+#progress-wrapper {
+  width: 100%;
 }
 
 .upload-item {

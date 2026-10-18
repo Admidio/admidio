@@ -89,17 +89,17 @@ class FileUpload
             </div>
         </div>
 
-        <div id="admidio-upload-invalid-container" class="card border-warning mb-4 d-none" style="max-width: 800px;">
-            <div class="card-header bg-warning bg-opacity-10 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div id="admidio-upload-invalid-container" class="card mb-4 d-none">
+            <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <div class="d-flex align-items-center">
-                    <i class="bi bi-exclamation-triangle-fill text-warning me-2 fs-5"></i>
+                    <i class="bi bi-pencil-square text-primary me-2 fs-5"></i>
                     <strong>' . $textInvalidFilesTitle . '</strong>
                 </div>
                 <div class="d-flex gap-2">
-                    <button id="btn-sanitize-all" type="button" class="btn btn-sm btn-warning">
+                    <button id="btn-sanitize-all" type="button" class="btn btn-sm btn-primary">
                         <i class="bi bi-check2-circle me-1"></i>' . $textApplyAllAndUpload . '
                     </button>
-                    <button id="btn-cancel-pending" type="button" class="btn btn-sm btn-outline-secondary">
+                    <button id="btn-cancel-pending" type="button" class="btn btn-sm btn-secondary">
                         <i class="bi bi-x-circle me-1"></i>' . $textCancelAll . '
                     </button>
                 </div>
@@ -110,7 +110,7 @@ class FileUpload
             </div>
         </div>
 
-        <div id="progress-wrapper" class="mb-4 d-none" style="max-width: 600px;">
+        <div id="progress-wrapper" class="mb-4 d-none">
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <span id="upload-status-text" class="text-muted small"></span>
                 <button id="btn-cancel-all-uploads" type="button" class="btn btn-sm btn-outline-danger py-0 px-2" title="' . $textCancelUpload . '">
@@ -263,7 +263,7 @@ class FileUpload
                 var renamedBadge = "";
                 if (file.uploadName && file.uploadName !== file.name) {
                     var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + $("<div>").text(file.uploadName).html() + "</strong>");
-                    renamedBadge = " <span class=\"badge bg-info text-dark ms-2 small\">" + renamedText + "</span>";
+                    renamedBadge = " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
                 }
 
                 var $row = $("<div class=\"upload-item alert alert-light border d-flex justify-content-between align-items-center py-2 px-3 mb-2\" id=\"upload-item-" + uploadId + "\">" +
@@ -318,7 +318,7 @@ class FileUpload
                             "<button type=\"button\" class=\"btn btn-sm btn-primary btn-upload-single me-1\" title=\"" + textUpload + "\">" +
                                 "<i class=\"bi bi-upload\"></i>" +
                             "</button>" +
-                            "<button type=\"button\" class=\"btn btn-sm btn-outline-secondary btn-remove-single\" title=\"" + textRemove + "\">" +
+                            "<button type=\"button\" class=\"btn btn-sm btn-secondary btn-remove-single\" title=\"" + textRemove + "\">" +
                                 "<i class=\"bi bi-x-lg\"></i>" +
                             "</button>" +
                         "</div>" +
@@ -522,7 +522,7 @@ class FileUpload
                             var renamedBadge = "";
                             if (data.files[0] && data.files[0].uploadName && data.files[0].uploadName !== data.files[0].name) {
                                 var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + $("<div>").text(data.files[0].uploadName).html() + "</strong>");
-                                renamedBadge = " <span class=\"badge bg-info text-dark ms-2 small\">" + renamedText + "</span>";
+                                renamedBadge = " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
                             }
                             if ($row && $row.length) {
                                 $row.removeClass("alert-light border").addClass("alert-success");
