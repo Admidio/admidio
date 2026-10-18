@@ -79,4 +79,47 @@ class StringUtilsTest extends AdmidioTestCase
         $this->assertFalse(StringUtils::strValidCharacters('not an email', 'email'));
         $this->assertFalse(StringUtils::strValidCharacters('', 'email'));
     }
+
+    /**
+     * @testdox Invalid filename character pattern returns valid character class
+     */
+    public function testInvalidFilenameCharsPattern(): void
+    {
+        $pattern = StringUtils::getInvalidFilenameCharsPattern();
+        $this->assertSame('[' . StringUtils::INVALID_FILENAME_CHARS . ']', $pattern);
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad/file');
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad?file');
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad*file');
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad:file');
+        $this->assertDoesNotMatchRegularExpression('#' . $pattern . '#', 'valid-file.pdf');
+    }
+
+    /**
+     * @testdox Filename sanitization cleans invalid characters, dots, and hyphens
+     */
+    public function testFilenameSanitization(): void
+    {
+        $this->assertSame('normal.pdf', StringUtils::sanitizeFilename('normal.pdf'));
+        $this->assertSame('test-file-name.txt', StringUtils::sanitizeFilename('test?file*name.txt'));
+        $this->assertSame('bad-char-slash-back.doc', StringUtils::sanitizeFilename("bad:char/slash\\back.doc"));
+        $this->assertSame('hidden_file.png', StringUtils::sanitizeFilename('.hidden_file.png'));
+        $this->assertSame('multiple.dots.test.jpg', StringUtils::sanitizeFilename('multiple...dots...test.jpg'));
+        $this->assertSame('dashes.txt', StringUtils::sanitizeFilename('---dashes---.txt'));
+        $this->assertSame('file.txt', StringUtils::sanitizeFilename('???***.txt'));
+        $this->assertSame('file', StringUtils::sanitizeFilename(''));
+    }
+
+    /**
+     * @testdox Filename validation correctly validates filenames and foldernames
+     */
+    public function testFilenameValidation(): void
+    {
+        $this->assertTrue(StringUtils::strValidCharacters('document.pdf', 'file'));
+        $this->assertTrue(StringUtils::strValidCharacters('my [1] document.pdf', 'file'));
+        $this->assertFalse(StringUtils::strValidCharacters('document/bad.pdf', 'file'));
+        $this->assertFalse(StringUtils::strValidCharacters('document?bad.pdf', 'file'));
+        $this->assertTrue(StringUtils::strValidCharacters('My Folder', 'folder'));
+        $this->assertFalse(StringUtils::strValidCharacters('My/Folder', 'folder'));
+    }
 }
+

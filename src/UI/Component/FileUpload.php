@@ -266,10 +266,12 @@ class FileUpload
                 cleaned = cleaned.replace(/^\.+/, "");
                 var lastDot = cleaned.lastIndexOf(".");
                 if (lastDot !== -1 && lastDot > 0) {
-                    var base = cleaned.substring(0, lastDot).replace(/\\.{2,}/g, ".");
-                    var ext = cleaned.substring(lastDot + 1).replace(/\\./g, "");
+                    var base = cleaned.substring(0, lastDot).replace(/\.{2,}/g, ".");
+                    var ext = cleaned.substring(lastDot + 1).replace(/\./g, "");
+                    base = base.replace(/^-+|-+$/g, "");
                     cleaned = (base.length > 0 ? base : "file") + "." + ext;
                 } else {
+                    cleaned = cleaned.replace(/^-+|-+$/g, "");
                     cleaned = cleaned.length > 0 ? cleaned : "file";
                 }
                 cleaned = cleaned.replace(/-{2,}/g, "-");

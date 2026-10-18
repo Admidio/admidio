@@ -1224,21 +1224,14 @@ final class FileSystemUtils
     }
 
     /**
-     * Remove anything which isn't a word, whitespace, number
-     * or any of the following characters: "-_~:;<>|[]()."
-     * @params string $filename The filename where the invalid characters should be removed
-     * @return string Returns the filename with the removed invalid characters
+     * Remove or sanitize invalid characters in a filename by delegating to StringUtils::sanitizeFilename().
+     *
+     * @param string $filename The filename where invalid characters should be sanitized.
+     * @return string Returns the sanitized filename.
      */
     public static function removeInvalidCharsInFilename(string $filename): string
     {
-        // remove NULL value from filename
-        $filename = str_replace(chr(0), '', $filename);
-        //$filename = preg_replace("/([^\w\s\d\-_~:;<>|\[\]\(\).])/u", '', $filename);
-        $filename = preg_replace("/<>:\?\/\*\"'/", '-', $filename);
-        // Remove any runs of periods
-        $filename = preg_replace("/([.]{2,})/u", '', $filename);
-
-        return $filename;
+        return StringUtils::sanitizeFilename($filename);
     }
 
     /**
