@@ -4,6 +4,7 @@ namespace Admidio\UI\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\PagePresenter;
 
 /**
@@ -47,7 +48,7 @@ class FileUpload
      * @return string Returns the html output for an upload dialog.
      * @throws Exception
      */
-    public function getHtml(string $destinationName): string
+    public function getHtml(string $destinationName, bool $isModal = false): string
     {
         global $gL10n;
 
@@ -74,8 +75,11 @@ class FileUpload
         $textCancelAll = $gL10n->get('SYS_CANCEL_ALL');
         $textCancelUpload = $gL10n->get('SYS_UPLOAD_CANCEL');
 
+        $leadHtml = $isModal ? '' : '<p class="lead">' . $textUploadDescription . '</p>';
+        $backButtonHtml = $isModal ? '' : '<button id="back" class="btn btn-secondary admidio-margin-bottom d-none">' . $textBackButton . '</button>';
+
         return '
-        <p class="lead">' . $textUploadDescription . '</p>
+        ' . $leadHtml . '
 
         <div id="admidio-dropzone" class="admidio-dropzone mb-4" tabindex="0" role="region" aria-label="' . $textDragAndDrop . '">
             <div class="admidio-dropzone-content">
@@ -123,14 +127,60 @@ class FileUpload
             </div>
         </div>
         <div id="files" class="files mb-3"></div>
-        <button id="back" class="btn btn-secondary admidio-margin-bottom d-none">' . $textBackButton . '</button>';
+        ' . $backButtonHtml;
+    }
+
+    /**
+     * Creates the html output for the upload modal and full-screen drag & drop overlay.
+     * @param string $destinationName Name of the folder or album where the file should be uploaded
+     * @return string Returns the html output for an upload modal and drag overlay.
+     * @throws Exception
+     */
+    public function getModalHtml(string $destinationName): string
+    {
+        global $gL10n;
+
+        $headline = $this->module === 'photos' ? $gL10n->get('SYS_UPLOAD_PHOTOS') : $gL10n->get('SYS_UPLOAD_FILES');
+        $textClose = $gL10n->get('SYS_CLOSE');
+        $textDragAndDrop = $this->module === 'photos' ? $gL10n->get('SYS_DRAG_AND_DROP_PHOTOS') : $gL10n->get('SYS_DRAG_AND_DROP_FILES');
+
+        return '
+        <div id="admidio-folder-drop-overlay" class="admidio-folder-drop-overlay d-none">
+            <div class="admidio-folder-drop-overlay-box">
+                <i class="bi bi-cloud-arrow-up-fill admidio-folder-drop-overlay-icon"></i>
+                <h3 class="admidio-folder-drop-overlay-title">' . $textDragAndDrop . '</h3>
+                <p class="admidio-folder-drop-overlay-desc">' . htmlspecialchars($destinationName, ENT_QUOTES, 'UTF-8') . '</p>
+            </div>
+        </div>
+
+        <div class="modal fade" id="admidio-upload-modal" tabindex="-1" aria-labelledby="admidio-upload-modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title d-flex align-items-center" id="admidio-upload-modal-title">
+                            <i class="bi bi-cloud-arrow-up text-primary me-2"></i>
+                            <span>' . $headline . ' - ' . htmlspecialchars($destinationName, ENT_QUOTES, 'UTF-8') . '</span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="' . $textClose . '"></button>
+                    </div>
+                    <div class="modal-body">
+                        ' . $this->getHtml($destinationName, true) . '
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg me-1"></i>' . $textClose . '
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>';
     }
 
     /**
      * Adds the necessary css and javascript files of the jquery-file-upload library to the page header of the
      * PagePresenter object that was set in the constructor.
      */
-    public function setHeaderData()
+    public function setHeaderData(bool $isModal = false)
     {
         if ($this->module === 'photos') {
             $textFileUploaded = $GLOBALS['gL10n']->get('SYS_PHOTO_FILE_UPLOADED');
@@ -151,6 +201,7 @@ class FileUpload
         $textRemove = $GLOBALS['gL10n']->get('SYS_REMOVE');
         $textFilenameInvalidNotice = $GLOBALS['gL10n']->get('SYS_FILENAME_INVALID', array(''));
         $textFilenameInvalidNotice = str_replace(array("\n", "\r"), ' ', trim(strip_tags($textFilenameInvalidNotice)));
+        $invalidFilenamePattern = StringUtils::getInvalidFilenameCharsPattern();
 
         $this->page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/css/jquery.fileupload.css');
         $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
@@ -167,6 +218,7 @@ class FileUpload
             var countAbortedFiles = 0;
             var dragCounter       = 0;
             var dropzone          = $("#admidio-dropzone");
+            var isModal           = ' . ($isModal ? 'true' : 'false') . ';
 
             var pendingFiles      = {};
             var activeUploads     = {};
@@ -183,6 +235,9 @@ class FileUpload
             var textRemove                = ' . json_encode($textRemove) . ';
             var textUpload                = ' . json_encode($textUpload) . ';
             var textFilenameInvalidNotice = ' . json_encode($textFilenameInvalidNotice) . ';
+            var invalidPattern            = ' . json_encode($invalidFilenamePattern) . ';
+            var invalidRegex              = new RegExp(invalidPattern);
+            var invalidGlobalRegex        = new RegExp(invalidPattern, "g");
 
             function isFilenameValid(name) {
                 if (!name || typeof name !== "string") {
@@ -199,7 +254,6 @@ class FileUpload
                 if (lastDot <= 0 || lastDot === trimmed.length - 1) {
                     return false;
                 }
-                var invalidRegex = /[/?*;:~<>|"\\\\\\\\]/;
                 return !invalidRegex.test(trimmed);
             }
 
@@ -208,7 +262,7 @@ class FileUpload
                     return "file";
                 }
                 var trimmed = name.trim();
-                var cleaned = trimmed.replace(/[/?*;:~<>|"\\\\\\\\]/g, "-");
+                var cleaned = trimmed.replace(invalidGlobalRegex, "-");
                 cleaned = cleaned.replace(/^\.+/, "");
                 var lastDot = cleaned.lastIndexOf(".");
                 if (lastDot !== -1 && lastDot > 0) {
@@ -228,7 +282,9 @@ class FileUpload
 
                 if (activeCount === 0) {
                     $("#progress-wrapper").addClass("d-none");
-                    $("#back").removeClass("d-none");
+                    if (!isModal) {
+                        $("#back").removeClass("d-none");
+                    }
 
                     if (pendingCount === 0 && (countFiles > 0 || countErrorFiles > 0 || countAbortedFiles > 0)) {
                         $("#upload-summary-alert").remove();
@@ -258,7 +314,9 @@ class FileUpload
                 activeUploads[uploadId] = data;
 
                 $("#progress-wrapper").removeClass("d-none");
-                $("#back").addClass("d-none");
+                if (!isModal) {
+                    $("#back").addClass("d-none");
+                }
                 $("#upload-summary-alert").remove();
 
                 var renamedBadge = "";
@@ -422,9 +480,105 @@ class FileUpload
                 checkIfAllFinished();
             });
 
-            $("#back").click(function () {
-                window.location.href = "' . $GLOBALS['gNavigation']->getPreviousUrl() . '";
-            });
+            if (!isModal) {
+                $("#back").click(function () {
+                    window.location.href = "' . $GLOBALS['gNavigation']->getPreviousUrl() . '";
+                });
+            } else {
+                var folderDragCounter = 0;
+
+                function isDragFiles(e) {
+                    if (e.dataTransfer && e.dataTransfer.types) {
+                        for (var i = 0; i < e.dataTransfer.types.length; i++) {
+                            if (e.dataTransfer.types[i] === "Files") {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+
+                $(window).on("dragenter", function (e) {
+                    if (!isDragFiles(e.originalEvent)) return;
+                    if ($("#admidio-upload-modal").hasClass("show")) return;
+                    e.preventDefault();
+                    folderDragCounter++;
+                    if (folderDragCounter === 1) {
+                        $("#admidio-folder-drop-overlay").removeClass("d-none");
+                    }
+                });
+
+                $(window).on("dragover", function (e) {
+                    if (!isDragFiles(e.originalEvent)) return;
+                    e.preventDefault();
+                });
+
+                $(window).on("dragleave", function (e) {
+                    if (!isDragFiles(e.originalEvent)) return;
+                    e.preventDefault();
+                    folderDragCounter--;
+                    if (folderDragCounter <= 0) {
+                        folderDragCounter = 0;
+                        $("#admidio-folder-drop-overlay").addClass("d-none");
+                    }
+                });
+
+                $(window).on("drop", function (e) {
+                    folderDragCounter = 0;
+                    $("#admidio-folder-drop-overlay").addClass("d-none");
+                    if (!isDragFiles(e.originalEvent)) return;
+                    e.preventDefault();
+
+                    var dt = e.originalEvent.dataTransfer;
+                    if (dt && dt.files && dt.files.length > 0) {
+                        var modalEl = document.getElementById("admidio-upload-modal");
+                        if (modalEl) {
+                            var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+                            modalInstance.show();
+
+                            if (Object.keys(activeUploads).length === 0 && Object.keys(pendingFiles).length === 0) {
+                                countErrorFiles = 0;
+                                countFiles = 0;
+                                countAbortedFiles = 0;
+                                $("#files").empty();
+                                $("#upload-summary-alert").remove();
+                            }
+
+                            $("#fileupload").fileupload("add", { files: dt.files });
+                        }
+                    }
+                });
+
+                $("#menu_item_documents_upload_files, #menu_item_photos_upload_photos").on("click", function (e) {
+                    e.preventDefault();
+                    var modalEl = document.getElementById("admidio-upload-modal");
+                    if (modalEl) {
+                        var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        modalInstance.show();
+                    }
+                });
+
+                $("#admidio-upload-modal").on("hidden.bs.modal", function () {
+                    if (countFiles > 0) {
+                        window.location.reload();
+                    }
+                });
+
+                $("#admidio-upload-modal").on("hide.bs.modal", function (e) {
+                    if (Object.keys(activeUploads).length > 0) {
+                        if (!confirm(textUploadCancel)) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        $.each(activeUploads, function (id, d) {
+                            if (d && d.abort) {
+                                d.abort();
+                            }
+                        });
+                        activeUploads = {};
+                    }
+                });
+            }
 
             // Clicking or keyboard interaction on the drop zone opens the file chooser
             dropzone.on("click", function (e) {
@@ -482,7 +636,7 @@ class FileUpload
 
             $("#fileupload").fileupload({
                 url: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)) . '",
-                dropZone: dropzone,
+                dropZone: isModal ? $("#admidio-dropzone, #admidio-upload-modal .modal-content") : dropzone,
                 sequentialUploads: true,
                 maxChunkSize: ' . $maxChunkSize . ',
                 dataType: "json",

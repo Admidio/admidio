@@ -1211,3 +1211,49 @@ div.adm-changelog-details-table {
   padding: 0;
 }
 
+/* Full-window Drag & Drop Overlay on Folder Page */
+.admidio-folder-drop-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1060;
+  background-color: rgba(38, 51, 64, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.admidio-folder-drop-overlay-box {
+  background: var(--bs-body-bg, #ffffff);
+  border: 3px dashed var(--bs-primary, #e30513);
+  border-radius: var(--bs-border-radius-lg, 0.75rem);
+  padding: 3rem 4rem;
+  text-align: center;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  max-width: 90%;
+  color: var(--bs-body-color, #212529);
+}
+
+.admidio-folder-drop-overlay-icon {
+  font-size: 4rem;
+  color: var(--bs-primary, #e30513);
+  margin-bottom: 1rem;
+}
+
+.admidio-folder-drop-overlay-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--bs-body-color, #212529);
+}
+
+.admidio-folder-drop-overlay-desc {
+  font-size: 1.1rem;
+  color: var(--bs-secondary-color, #6c757d);
+  margin-bottom: 0;
+}
+

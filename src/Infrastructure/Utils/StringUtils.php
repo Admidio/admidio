@@ -11,6 +11,19 @@ use Admidio\Infrastructure\Exception;
 final class StringUtils
 {
     /**
+     * Regex character class for invalid filename and foldername characters.
+     */
+    public const INVALID_FILENAME_CHARS_REGEX = '[/?*;:~<>|"\\\\\\\\]';
+
+    /**
+     * Returns the regex pattern for invalid filename characters (without delimiters, e.g. for character classes).
+     */
+    public static function getInvalidFilenameCharsPattern(): string
+    {
+        return self::INVALID_FILENAME_CHARS_REGEX;
+    }
+
+    /**
      * In case the multibyte functions are not supported, we do a fallback to a no-multibyte function
      * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
      * StringUtils::strToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
@@ -166,10 +179,10 @@ final class StringUtils
                 $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/i';
                 break;
             case 'file':
-                $validRegex = '=^[^/?*;:~<>|\"\\\\]+\.[^/?*;:~<>|‚\"\\\\]+$=';
+                $validRegex = '=^[^' . self::INVALID_FILENAME_CHARS_REGEX . ']+\.[^' . self::INVALID_FILENAME_CHARS_REGEX . '‚]+$=';
                 break;
             case 'folder':
-                $validRegex = '=^[^/?*;:~<>|\"\\\\]+$=';
+                $validRegex = '=^[^' . self::INVALID_FILENAME_CHARS_REGEX . ']+$=';
                 break;
             case 'url':
                 $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?(), \/%=#:~.@+\-\[\]]+$/i';
