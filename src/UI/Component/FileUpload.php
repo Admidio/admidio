@@ -380,7 +380,7 @@ class FileUpload
                                 "<button type=\"button\" class=\"btn btn-outline-primary btn-upload-single\" title=\"" + textUpload + "\" aria-label=\"" + textUpload + "\">" +
                                     "<i class=\"bi bi-upload\"></i>" +
                                 "</button>" +
-                                "<button type=\"button\" class=\"btn btn-outline-secondary btn-remove-single\" title=\"" + textRemove + "\" aria-label=\"" + textRemove + "\">" +
+                                "<button type=\"button\" class=\"btn btn-outline-danger btn-remove-single\" title=\"" + textRemove + "\" aria-label=\"" + textRemove + "\">" +
                                     "<i class=\"bi bi-trash\"></i>" +
                                 "</button>" +
                             "</div>" +

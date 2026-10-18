@@ -280,6 +280,16 @@ a {
     border-color: var(--bs-primary) !important;
 }
 
+.btn-outline-secondary, .btn-outline-secondary:hover {
+    color: var(--bs-secondary) !important;
+    border-color: var(--bs-secondary) !important;
+}
+
+.btn-outline-danger, .btn-outline-danger:hover {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+}
+
 /* Use the btn-secondary variables on file inputs for their native buttons. */
 input[type="file"].btn-secondary::file-selector-button {
     color: var(--bs-btn-color);
