@@ -122,4 +122,3 @@ class StringUtilsTest extends AdmidioTestCase
         $this->assertFalse(StringUtils::strValidCharacters('My/Folder', 'folder'));
     }
 }
-
