@@ -581,6 +581,8 @@
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DO_NOT_SHOW_AGAIN">Nicht mehr anzeigen</string>
   <string name="SYS_DQUOTE">Anführungszeichen (\")</string>
+  <string name="SYS_DRAG_AND_DROP_FILES">Dateien per Drag &amp; Drop hier ablegen</string>
+  <string name="SYS_DRAG_AND_DROP_PHOTOS">Fotos per Drag &amp; Drop hier ablegen</string>
   <string name="SYS_DROPDOWN_DATE_INTERVAL_LISTBOX">Dropdown-Listenfeld (Datumsintervall)</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
   <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Dropdown-Listenfeld (Mehrfachauswahl)</string>
@@ -722,7 +724,7 @@
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Skripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Wähle bitte alle Dateien aus, die du in den Ordner #VAR1_BOLD# hochladen möchtest.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Wähle bitte alle Dateien aus oder ziehe sie per Drag &amp; Drop hierher, die du in den Ordner #VAR1_BOLD# hochladen möchtest.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
   <string name="SYS_FILE_CREATED_TITLE">Eine neue Datei wurde hochgeladen auf #VAR1#</string>
@@ -1230,6 +1232,7 @@
   <string name="SYS_OPERATING_SYSTEM">Betriebssystem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
+  <string name="SYS_OR">oder</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORDERED_LIST">Nummerierte Liste</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
@@ -1292,7 +1295,7 @@
   <string name="SYS_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG- oder PNG-Format hochgeladen und angezeigt werden.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von #VAR1# Megapixeln.</string>
-  <string name="SYS_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
+  <string name="SYS_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus oder ziehe sie per Drag &amp; Drop hierher, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_X_OF_Y">Foto #VAR1# von #VAR2#</string>

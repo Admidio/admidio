@@ -54,28 +54,39 @@ class FileUpload
         $textUploadDescription = '';
         $textSelectFiles = '';
         $textBackButton = '';
+        $textDragAndDrop = '';
 
         if ($this->module === 'photos') {
             $textUploadDescription = $gL10n->get('SYS_PHOTO_UPLOAD_DESC', array($destinationName));
             $textSelectFiles = $gL10n->get('SYS_SELECT_PHOTOS');
             $textBackButton = $gL10n->get('SYS_BACK_TO_ALBUM');
+            $textDragAndDrop = $gL10n->get('SYS_DRAG_AND_DROP_PHOTOS');
         } elseif ($this->module === 'documents_files') {
             $textUploadDescription = $gL10n->get('SYS_FILES_UPLOAD_DESC', array($destinationName));
             $textSelectFiles = $gL10n->get('SYS_SELECT_FILES');
             $textBackButton = $gL10n->get('SYS_BACK_TO_FOLDER');
+            $textDragAndDrop = $gL10n->get('SYS_DRAG_AND_DROP_FILES');
         }
 
         return '
-        <p class="lead">'.$textUploadDescription.'</p>
+        <p class="lead">' . $textUploadDescription . '</p>
 
-        <span class="btn btn-primary fileinput-button mb-3">
-            <i class="bi bi-upload"></i>'.$textSelectFiles.'
-            <input id="fileupload" class="btn-secondary" type="file" name="files[]" multiple>
-        </span>
-        <div id="progress" class="progress mb-5" style="max-width: 600px;">
-            <div class="progress-bar progress-bar-success"></div>
+        <div id="admidio-dropzone" class="admidio-dropzone mb-4" tabindex="0" role="region" aria-label="' . $textDragAndDrop . '">
+            <div class="admidio-dropzone-content">
+                <i class="bi bi-cloud-arrow-up admidio-dropzone-icon"></i>
+                <div class="admidio-dropzone-title">' . $textDragAndDrop . '</div>
+                <div class="admidio-dropzone-or">' . $gL10n->get('SYS_OR') . '</div>
+                <span class="btn btn-primary fileinput-button">
+                    <i class="bi bi-upload me-2"></i>' . $textSelectFiles . '
+                    <input id="fileupload" class="btn-secondary" type="file" name="files[]" multiple>
+                </span>
+            </div>
         </div>
-        <div id="files" class="files"></div>
+
+        <div id="progress" class="progress mb-4 d-none" style="max-width: 600px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"></div>
+        </div>
+        <div id="files" class="files mb-3"></div>
         <button id="back" class="btn btn-secondary admidio-margin-bottom d-none">' . $textBackButton . '</button>';
     }
 
@@ -107,13 +118,53 @@ class FileUpload
             '
             var countErrorFiles = 0;
             var countFiles      = 0;
+            var dragCounter     = 0;
+            var dropzone        = $("#admidio-dropzone");
 
             $("#back").click(function () {
                 window.location.href = "' . $GLOBALS['gNavigation']->getPreviousUrl() . '";
             });
 
+            // Clicking or keyboard interaction on the drop zone opens the file chooser
+            dropzone.on("click", function (e) {
+                if (!$(e.target).closest(".fileinput-button").length) {
+                    $("#fileupload").trigger("click");
+                }
+            }).on("keydown", function (e) {
+                if ((e.key === "Enter" || e.key === " ") && !$(e.target).closest(".fileinput-button").length) {
+                    e.preventDefault();
+                    $("#fileupload").trigger("click");
+                }
+            });
+
+            // Prevent default drag and drop handling to avoid browser navigating away
+            $(document).on("dragenter dragover drop", function (e) {
+                e.preventDefault();
+            });
+
+            // Drag visual indicators on dropzone
+            dropzone.on("dragenter", function (e) {
+                e.preventDefault();
+                dragCounter++;
+                dropzone.addClass("dragover");
+            }).on("dragover", function (e) {
+                e.preventDefault();
+                dropzone.addClass("dragover");
+            }).on("dragleave", function (e) {
+                e.preventDefault();
+                dragCounter--;
+                if (dragCounter <= 0) {
+                    dragCounter = 0;
+                    dropzone.removeClass("dragover");
+                }
+            }).on("drop", function () {
+                dragCounter = 0;
+                dropzone.removeClass("dragover");
+            });
+
             $("#fileupload").fileupload({
                 url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
+                dropZone: dropzone,
                 sequentialUploads: true,
                 maxChunkSize: ' . $maxChunkSize . ',
                 dataType: "json",
@@ -123,6 +174,8 @@ class FileUpload
                 }],
                 add: function(e, data) {
                     $("#files").html("");
+                    $("#progress").removeClass("d-none");
+                    $("#progress .progress-bar").css("width", "0%");
                     countErrorFiles = 0;
                     countFiles = 0;
                     data.submit();
@@ -131,7 +184,7 @@ class FileUpload
                     $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
                     $.each(data.result.files, function(index, file) {
                         if (typeof file.error !== "undefined") {
-                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
+                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill me-2\"></i>"
                                 + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                             countErrorFiles++;
                         } else {
@@ -165,12 +218,13 @@ class FileUpload
                         fileName = $("<div/>").text(data.files[0].name).html();
                         fileError = $("<div/>").text(data.errorThrown || data.textStatus).html();
                     }
-                    $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
+                    $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill me-2\"></i>"
                         + fileName + " - <strong>" + fileError + "</strong></div>").appendTo("#files");
                     countErrorFiles++;
                 },
                 progressall: function(e, data) {
                     const progress = parseInt(data.loaded / data.total * 100, 10);
+                    $("#progress").removeClass("d-none");
                     $("#progress .progress-bar").css(
                         "width",
                         progress + "%"
@@ -179,9 +233,9 @@ class FileUpload
                 stop: function(e, data) {
                     $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
                     if (countErrorFiles === 0 && countFiles > 0) {
-                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg me-2\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
                     } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
+                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill me-2\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
                     }
                 }
             }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");',

@@ -581,6 +581,8 @@
   <string name="SYS_DO_NOT_EDIT">Do not edit</string>
   <string name="SYS_DO_NOT_SHOW_AGAIN">Do not show again</string>
   <string name="SYS_DQUOTE">Double quote (")</string>
+  <string name="SYS_DRAG_AND_DROP_FILES">Drag &amp; drop files here</string>
+  <string name="SYS_DRAG_AND_DROP_PHOTOS">Drag &amp; drop photos here</string>
   <string name="SYS_DROPDOWN_DATE_INTERVAL_LISTBOX">Drop-down list box (date interval)</string>
   <string name="SYS_DROPDOWN_LISTBOX">Drop-down list box</string>
   <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Drop-down list box (multi-select)</string>
@@ -722,7 +724,7 @@
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is newer than the Admidio script version #VAR2#.\n\nPlease update the Admidio files on the server #VAR3#using a newer version of Admidio#VAR4#.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Please select all files you want to upload to the folder #VAR1_BOLD#.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Please select or drag and drop all files you want to upload to the folder #VAR1_BOLD#.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Not all files were uploaded successfully.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
@@ -1230,6 +1232,7 @@
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Optional</string>
+  <string name="SYS_OR">or</string>
   <string name="SYS_ORDER">Order</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organization</string>
@@ -1291,7 +1294,7 @@
   <string name="SYS_PHOTO_FORMAT_INVALID">Only photos in JPG or PNG format are allowed.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Photo processing error</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">The uploaded picture exceeds the server\'s maximum resolution of #VAR1# megapixels.</string>
-  <string name="SYS_PHOTO_UPLOAD_DESC">Please select the images which you want to upload to album #VAR1_BOLD#.</string>
+  <string name="SYS_PHOTO_UPLOAD_DESC">Please select or drag and drop the photos you want to upload to album #VAR1_BOLD#.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.</string>
   <string name="SYS_PHOTO_X_OF_Y">Photo #VAR1# of #VAR2#</string>
