@@ -90,23 +90,24 @@ class FileUpload
         </div>
 
         <div id="admidio-upload-invalid-container" class="card mb-4 d-none">
-            <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-pencil-square text-primary me-2 fs-5"></i>
-                    <strong>' . $textInvalidFilesTitle . '</strong>
-                </div>
-                <div class="d-flex gap-2">
-                    <button id="btn-sanitize-all" type="button" class="btn btn-sm btn-primary">
-                        <i class="bi bi-check2-circle me-1"></i>' . $textApplyAllAndUpload . '
-                    </button>
-                    <button id="btn-cancel-pending" type="button" class="btn btn-sm btn-secondary">
-                        <i class="bi bi-x-circle me-1"></i>' . $textCancelAll . '
-                    </button>
-                </div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0 d-flex align-items-center">
+                    <i class="bi bi-pencil-square text-primary me-2"></i>
+                    <span>' . $textInvalidFilesTitle . '</span>
+                </h5>
+                <button type="button" class="btn-close" id="btn-close-invalid" aria-label="' . $textCancelAll . '"></button>
             </div>
             <div class="card-body">
-                <p class="card-text text-muted small mb-3">' . $textInvalidFilesDesc . '</p>
+                <p class="card-text text-muted mb-3">' . $textInvalidFilesDesc . '</p>
                 <div id="admidio-upload-invalid-list" class="list-group list-group-flush"></div>
+            </div>
+            <div class="card-footer d-flex flex-wrap justify-content-end align-items-center gap-2">
+                <button id="btn-cancel-pending" type="button" class="btn btn-secondary">
+                    <i class="bi bi-x-circle me-1"></i>' . $textCancelAll . '
+                </button>
+                <button id="btn-sanitize-all" type="button" class="btn btn-primary">
+                    <i class="bi bi-check2-circle me-1"></i>' . $textApplyAllAndUpload . '
+                </button>
             </div>
         </div>
 
@@ -302,25 +303,27 @@ class FileUpload
                 var escapedOriginal = $("<div>").text(file.name).html();
                 var escapedSanitized = $("<div>").text(sanitized).html();
 
-                var $item = $("<div class=\"list-group-item px-0 py-2 border-bottom\" id=\"pending-item-" + id + "\">" +
+                var $item = $("<div class=\"list-group-item px-3 py-3 border-bottom\" id=\"pending-item-" + id + "\">" +
                     "<div class=\"row g-2 align-items-center\">" +
                         "<div class=\"col-12 col-md-5\">" +
-                            "<div class=\"text-truncate small\" title=\"" + escapedOriginal + "\">" +
-                                "<i class=\"bi bi-file-earmark-x text-danger me-1\"></i>" +
-                                "<span class=\"text-danger fw-semibold text-decoration-line-through\">" + escapedOriginal + "</span>" +
+                            "<div class=\"text-truncate\" title=\"" + escapedOriginal + "\">" +
+                                "<i class=\"bi bi-file-earmark-x text-danger me-1 align-middle\"></i>" +
+                                "<span class=\"text-danger fw-semibold text-decoration-line-through align-middle\">" + escapedOriginal + "</span>" +
                             "</div>" +
                         "</div>" +
                         "<div class=\"col-8 col-md-5\">" +
-                            "<input type=\"text\" class=\"form-control form-control-sm input-sanitized-name\" value=\"" + escapedSanitized + "\">" +
-                            "<div class=\"invalid-feedback small\">" + textFilenameInvalidNotice + "</div>" +
+                            "<input type=\"text\" class=\"form-control input-sanitized-name\" value=\"" + escapedSanitized + "\">" +
+                            "<div class=\"invalid-feedback\">" + textFilenameInvalidNotice + "</div>" +
                         "</div>" +
                         "<div class=\"col-4 col-md-2 text-end\">" +
-                            "<button type=\"button\" class=\"btn btn-sm btn-primary btn-upload-single me-1\" title=\"" + textUpload + "\">" +
-                                "<i class=\"bi bi-upload\"></i>" +
-                            "</button>" +
-                            "<button type=\"button\" class=\"btn btn-sm btn-secondary btn-remove-single\" title=\"" + textRemove + "\">" +
-                                "<i class=\"bi bi-x-lg\"></i>" +
-                            "</button>" +
+                            "<div class=\"btn-group upload-action-group\" role=\"group\">" +
+                                "<button type=\"button\" class=\"btn btn-outline-primary btn-upload-single\" title=\"" + textUpload + "\" aria-label=\"" + textUpload + "\">" +
+                                    "<i class=\"bi bi-upload\"></i>" +
+                                "</button>" +
+                                "<button type=\"button\" class=\"btn btn-outline-secondary btn-remove-single\" title=\"" + textRemove + "\" aria-label=\"" + textRemove + "\">" +
+                                    "<i class=\"bi bi-trash\"></i>" +
+                                "</button>" +
+                            "</div>" +
                         "</div>" +
                     "</div>" +
                 "</div>");
@@ -402,7 +405,7 @@ class FileUpload
                 });
             });
 
-            $("#btn-cancel-pending").on("click", function () {
+            $("#btn-cancel-pending, #btn-close-invalid").on("click", function () {
                 pendingFiles = {};
                 $("#admidio-upload-invalid-list").empty();
                 updatePendingContainer();
