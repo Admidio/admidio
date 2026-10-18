@@ -245,6 +245,7 @@
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNUALLY">Annually</string>
   <string name="SYS_APPLY">Apply</string>
+  <string name="SYS_APPLY_ALL_AND_UPLOAD">Accept all &amp; upload</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Set by the roles</string>
@@ -290,6 +291,7 @@
   <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANCEL">Cancel</string>
+  <string name="SYS_CANCEL_ALL">Discard all</string>
   <string name="SYS_CANCELLED">Canceled</string>
   <string name="SYS_CANCEL_EVENT">You canceled your participation in the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Cancel membership</string>
@@ -847,6 +849,8 @@
   <string name="SYS_INTERVAL">Interval</string>
   <string name="SYS_INTO_TO">List recipients in the To field instead of the BCC field</string>
   <string name="SYS_INTO_TO_DESC">When enabled, all recipients of an email sent to multiple people are listed in the To field. Each recipient can see the other recipients\' names and email addresses and use Reply All. (Default: disabled)</string>
+  <string name="SYS_INVALID_FILENAMES_DESC">Adjust the suggested file names or accept them before uploading:</string>
+  <string name="SYS_INVALID_FILENAMES_DETECTED">The following file names contain invalid characters:</string>
   <string name="SYS_INVALID_ICON_NAME">The entered icon name does not correspond to the expected syntax. An icon name of Bootstrap Icons should only contain characters a-z, numbers and a hyphen.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Invalid page view</string>
   <string name="SYS_INVENTORY">Inventory manager</string>
@@ -1478,6 +1482,7 @@
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Do you want to send the member a reminder with their login information and a new password?</string>
+  <string name="SYS_RENAMED_TO">renamed to #VAR1_BOLD#</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_CONTACT">Remove contact</string>
   <string name="SYS_REMOVE_CONTACT_DESC">Choosing #VAR1_BOLD# permanently deletes all data for this contact. The data can no longer be viewed or restored.</string>
@@ -2000,6 +2005,9 @@
   <string name="SYS_UNMANAGED_FILES">Unmanaged files</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
+  <string name="SYS_UPLOADING">Uploading...</string>
+  <string name="SYS_UPLOAD_CANCEL">Cancel upload</string>
+  <string name="SYS_UPLOAD_CANCELLED">Upload canceled.</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_PHOTOS">Upload photos</string>

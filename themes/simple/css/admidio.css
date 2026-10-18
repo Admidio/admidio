@@ -1158,3 +1158,18 @@ div.adm-changelog-details-table {
   margin-left: 0.5em;
 }
 
+/***********************************/
+/* File upload validation & items  */
+/***********************************/
+#admidio-upload-invalid-container {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+#admidio-upload-invalid-list .list-group-item:last-child {
+  border-bottom: none !important;
+}
+
+.upload-item {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+

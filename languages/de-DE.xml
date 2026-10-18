@@ -243,6 +243,7 @@
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
   <string name="SYS_APPLY">Übernehmen</string>
+  <string name="SYS_APPLY_ALL_AND_UPLOAD">Alle übernehmen &amp; hochladen</string>
   <string name="SYS_APPOINTMENT">Termin</string>
   <string name="SYS_APPOINTMENTS">Termine</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
@@ -288,6 +289,7 @@
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Absagen</string>
+  <string name="SYS_CANCEL_ALL">Alle verwerfen</string>
   <string name="SYS_CANCELLED">Abgesagt</string>
   <string name="SYS_CANCEL_EVENT">Sie haben die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# wieder abgesagt. </string>
   <string name="SYS_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
@@ -845,6 +847,8 @@
   <string name="SYS_INTERVAL">Intervall</string>
   <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
   <string name="SYS_INTO_TO_DESC">Wenn eine E-Mail an mehrere Personen gesendet wird, listet diese Einstellung alle empfangenden Personen im TO-Feld auf. Ihre Namen und E-Mail-Adressen sind dadurch für alle sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
+  <string name="SYS_INVALID_FILENAMES_DESC">Passen Sie die vorgeschlagenen Dateinamen an oder übernehmen Sie sie vor dem Hochladen:</string>
+  <string name="SYS_INVALID_FILENAMES_DETECTED">Die folgenden Dateinamen enthalten ungültige Zeichen:</string>
   <string name="SYS_INVALID_ICON_NAME">Der eingegebene Icon-Name stimmt nicht mit der erwarteten Syntax überein. Ein Icon-Name von Bootstrap Icons sollte nur die Zeichen a-z, Zahlen und einen Bindestrich enthalten.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_INVENTORY">Inventarverwaltung</string>
@@ -1476,6 +1480,7 @@
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Möchten Sie dem Mitglied seine Zugangsdaten mit Passwort als Erinnerung zuschicken?</string>
+  <string name="SYS_RENAMED_TO">umbenannt in #VAR1_BOLD#</string>
   <string name="SYS_REMOVE">Entfernen</string>
   <string name="SYS_REMOVE_CONTACT">Kontakt entfernen</string>
   <string name="SYS_REMOVE_CONTACT_DESC">Wenn Sie #VAR1_BOLD# wählen, werden alle Daten dieses Kontakts gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
@@ -1998,6 +2003,9 @@
   <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
   <string name="SYS_UPDATE_AVAILABLE">Update verfügbar</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
+  <string name="SYS_UPLOADING">Wird hochgeladen...</string>
+  <string name="SYS_UPLOAD_CANCEL">Upload abbrechen</string>
+  <string name="SYS_UPLOAD_CANCELLED">Upload abgebrochen.</string>
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
   <string name="SYS_UPLOAD_PHOTOS">Fotos hochladen</string>
