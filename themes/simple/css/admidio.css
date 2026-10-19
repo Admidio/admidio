@@ -1207,18 +1207,19 @@ div.adm-changelog-details-table {
 }
 
 .upload-action-group {
-  display: inline-flex;
+  display: inline-flex !important;
   vertical-align: middle;
 }
 
 .upload-action-group .btn {
-  width: 2.5rem;
-  height: 38px;
-  display: inline-flex;
+  width: 2.5rem !important;
+  height: 38px !important;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
   padding: 0;
+  float: none !important;
 }
 
 /* Full-window Drag & Drop Overlay on Folder Page */
