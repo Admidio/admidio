@@ -890,6 +890,9 @@ final class PreferenceDefinitions
                 }
                 return $value;
             case self::VALIDATOR_LANGUAGE:
+                if ($value === 'pt') {
+                    $value = 'pt-PT';
+                }
                 if (!StringUtils::strIsValidFolderName($value)
                     || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $value . '.xml')) {
                     throw new InvalidArgumentException('Preference "system_language" references an unavailable language.');

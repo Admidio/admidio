@@ -185,7 +185,7 @@ class DefaultEntryTranslationsTest extends DatabaseTestCase
         $db = $this->getDatabase();
         $boardId = (int)$db->queryPrepared('SELECT rol_id FROM ' . TBL_ROLES . ' WHERE rol_name = ?', array('INS_BOARD'))->fetchColumn();
         $db->queryPrepared('UPDATE ' . TBL_ROLES . ' SET rol_name = ?, rol_description = ? WHERE rol_id = ?',
-            array("Association's board", 'Administrative board of association', $boardId));
+            array("Association's board", $GLOBALS['gL10n']->get('INS_DESCRIPTION_BOARD'), $boardId));
         UpdateStepsCode::setDatabase($db);
         UpdateStepsCode::updateStep51TranslateDefaultEntries();
         $board = new Role($db, $boardId);

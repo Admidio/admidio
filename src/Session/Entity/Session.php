@@ -42,6 +42,11 @@ class Session extends Entity
     public const AUTHENTICATION_METHOD_AUTO_LOGIN = 'auto';
 
     /**
+     * Key of the PHP session that holds the Admidio version that wrote the session data.
+     */
+    public const SESSION_VERSION_KEY = 'admidioVersion';
+
+    /**
      * @var array<string,mixed> Array with all objects of this session object.
      */
     protected array $mObjectArray = array();
@@ -650,10 +655,49 @@ class Session extends Entity
             $gLogger->notice('Session is already started!');
         }
 
-        // Start session
-        session_start();
+        self::startReadableSession();
 
         $gLogger->info('Session Started!', array('name' => $sessionName, 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax'));
+    }
+
+    /**
+     * Starts the PHP session and keeps its data only if this version of Admidio can read it.
+     *
+     * Data written by another Admidio version (before an update) or damaged data may not fit the
+     * current classes. PHP then reports deprecations while it restores the objects, or stops with an
+     * error and discards the data. In both cases, and whenever the data was written by another
+     * version, the data is emptied, but the session ID stays: adm_sessions keeps the user of that
+     * ID, so a logged-in user stays logged in and Admidio builds all objects anew.
+     */
+    private static function startReadableSession(): void
+    {
+        global $gLogger;
+
+        $unreadable = false;
+        set_error_handler(static function () use (&$unreadable): bool {
+            $unreadable = true;
+            return true;
+        }, E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_WARNING);
+        try {
+            $started = session_start();
+        } catch (\Throwable) {
+            $started = false;
+            $unreadable = true;
+        } finally {
+            restore_error_handler();
+        }
+
+        if (!$started) {
+            // PHP has discarded the data it could not read; the browser keeps its session ID.
+            session_start();
+        }
+
+        if ($unreadable || ($_SESSION[self::SESSION_VERSION_KEY] ?? ADMIDIO_VERSION_TEXT) !== ADMIDIO_VERSION_TEXT
+            || ($_SESSION !== array() && !isset($_SESSION[self::SESSION_VERSION_KEY]))) {
+            $gLogger->notice('Session data discarded, because it could not be read or was written by another Admidio version.');
+            $_SESSION = array();
+        }
+        $_SESSION[self::SESSION_VERSION_KEY] = ADMIDIO_VERSION_TEXT;
     }
 
     /**

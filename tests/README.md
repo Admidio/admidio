@@ -101,6 +101,18 @@ transaction, and a test that drives it must not let it write anything. The trait
 `tests/Support/CliSubprocess` writes the configuration file for the engine of the run and starts
 the process.
 
+Because the subprocess is the real entry point, it reads `adm_my_files/cli-config.php` **of the
+checkout** and refuses to run when the command line is not enabled there. When the checkout is not
+an installation of its own - the usual case on a build server - the trait writes that file and
+removes it again at the end of the run. When `adm_my_files/config.php` exists, the checkout belongs
+to a real installation whose configuration the suite must not touch, so the file has to be created
+once by hand:
+
+```bash
+php admidio cli:defaultconfig --output=adm_my_files/cli-config.php
+# then set $gCliEnabled = true in that file
+```
+
 ## How a test runs
 
 ```

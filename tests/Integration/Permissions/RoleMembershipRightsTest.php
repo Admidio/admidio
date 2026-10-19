@@ -207,7 +207,7 @@ class RoleMembershipRightsTest extends DatabaseTestCase
         $leader = $fixture->createAndSaveUser('editleader', 'el@example.local');
         $member = $fixture->createAndSaveUser('editmember', 'em@example.local');
 
-        $fixture->assignUserToRolePeriod($leader['usr_id'], $role['rol_id'], date('Y-m-d'), '9999-12-31', true);
+        $fixture->assignUserToRolePeriod($leader['usr_id'], $role['rol_id'], DATE_NOW, '9999-12-31', true);
         $fixture->assignUserToRole($member['usr_id'], $role['rol_id']);
 
         $leaderUser = $this->loadUserInOrganization($leader['usr_id'], $org['org_id']);
