@@ -113,6 +113,7 @@ class InventoryReservationPresenter extends PagePresenter
             $gL10n->get('SYS_COMMENT'), ''
         ), 'rows' => array());
         $user = new User($gDb, $gProfileFields);
+        $dateTimeFormat = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
         foreach ($rows as $row) {
             $email = '';
             $mailUrl = '';
@@ -164,7 +165,28 @@ class InventoryReservationPresenter extends PagePresenter
                     Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success',
                     default => 'bi-x-circle-fill text-danger'
                 };
-            $templateData['rows'][] = array('id' => $reservationRowId, 'status' => $row['ivr_status'], 'itemName' => $row['item_name'], 'requester' => $requester, 'email' => $email, 'mailUrl' => $mailUrl, 'timestamp' => $row['ivr_timestamp_create'], 'begin' => $row['ivr_begin'], 'end' => $row['ivr_end'], 'origin' => $origin, 'originUrl' => $originUrl, 'comment' => $row['ivr_comment'], 'actions' => $actions, 'statusIcon' => $buttonIcon, 'statusLabel' => $statusLabels[$row['ivr_status']]);
+            $templateData['rows'][] = array(
+                'id' => $reservationRowId,
+                'status' => $row['ivr_status'],
+                'itemName' => $row['item_name'],
+                'requester' => $requester,
+                'email' => $email,
+                'mailUrl' => $mailUrl,
+                'timestamp' => (new \DateTimeImmutable($row['ivr_timestamp_create']))->format($dateTimeFormat),
+                'begin' => (new \DateTimeImmutable($row['ivr_begin']))->format($dateTimeFormat),
+                'end' => (new \DateTimeImmutable($row['ivr_end']))->format($dateTimeFormat),
+                'timestampIso' => (new \DateTimeImmutable($row['ivr_timestamp_create']))->format('Y-m-d H:i:s'),
+                'beginDateTimeIso' => (new \DateTimeImmutable($row['ivr_begin']))->format('Y-m-d H:i:s'),
+                'endDateTimeIso' => (new \DateTimeImmutable($row['ivr_end']))->format('Y-m-d H:i:s'),
+                'beginIso' => (new \DateTimeImmutable($row['ivr_begin']))->format('Y-m-d'),
+                'endIso' => (new \DateTimeImmutable($row['ivr_end']))->format('Y-m-d'),
+                'origin' => $origin,
+                'originUrl' => $originUrl,
+                'comment' => $row['ivr_comment'],
+                'actions' => $actions,
+                'statusIcon' => $buttonIcon,
+                'statusLabel' => $statusLabels[$row['ivr_status']]
+            );
         }
         $this->assignSmartyVariable('reservationList', $templateData);
         $this->addHtmlByTemplate('modules/inventory.reservations.list.tpl');
@@ -185,9 +207,9 @@ class InventoryReservationPresenter extends PagePresenter
                     return true;
                 }
                 var selectedDate = $("#reservation_filter_date").val();
-                var dateMatches = !selectedDate || (data[3].substring(0, 10) <= selectedDate && selectedDate <= data[4].substring(0, 10));
                 var selectedStatus = $("#reservation_filter_status").val();
                 var reservationRow = settings.aoData[dataIndex].nTr;
+                var dateMatches = !selectedDate || (reservationRow.dataset.beginIso <= selectedDate && selectedDate <= reservationRow.dataset.endIso);
                 var statusMatches = !selectedStatus || reservationRow.getAttribute("data-reservation-status") === selectedStatus;
 
                 return dateMatches && statusMatches;
