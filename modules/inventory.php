@@ -388,23 +388,34 @@ try {
                 }
             }
 
-            if (count($getItemUUIDs) > 0) {
-                foreach ($getItemUUIDs as $itemUuid) {
-                    $itemService = new ItemService($gDb, $itemUuid, $postCopyField, $postCopyNumber, $postImported);
-                    $itemService->save(true);
+            $gDb->startTransaction();
+            try {
+                $reservationService = $reservation instanceof Reservation ? new ReservationService($gDb) : null;
+                if ($reservationService !== null && !$getBorrowed) {
+                    $reservationService->assertCanStartBorrowing($reservation);
                 }
-            } else {
-                $itemService = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
-                $itemService->save();
-            }
 
-            if ($reservation instanceof Reservation) {
-                $reservationService = new ReservationService($gDb);
-                if ($getBorrowed) {
-                    $reservationService->finishBorrowing($reservation);
+                if (count($getItemUUIDs) > 0) {
+                    foreach ($getItemUUIDs as $itemUuid) {
+                        $itemService = new ItemService($gDb, $itemUuid, $postCopyField, $postCopyNumber, $postImported);
+                        $itemService->save(true);
+                    }
                 } else {
-                    $reservationService->startBorrowing($reservation);
+                    $itemService = new ItemService($gDb, $getiniUUID, $postCopyField, $postCopyNumber, $postImported);
+                    $itemService->save();
                 }
+
+                if ($reservationService !== null) {
+                    if ($getBorrowed) {
+                        $reservationService->finishBorrowing($reservation);
+                    } else {
+                        $reservationService->startBorrowing($reservation, false);
+                    }
+                }
+                $gDb->endTransaction();
+            } catch (\Throwable $exception) {
+                $gDb->rollback();
+                throw $exception;
             }
 
             $gNavigation->deleteLastUrl();

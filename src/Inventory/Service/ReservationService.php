@@ -155,8 +155,37 @@ class ReservationService
         $this->refreshMenuBadge();
     }
 
-    /** Mark an approved reservation as physically handed over. */
-    public function startBorrowing(Reservation $reservation): void
+    /**
+     * Mark an approved reservation as physically handed over.
+     *
+     * @param bool $checkActiveBorrowing Set to false only after assertCanStartBorrowing() has
+     *                                   checked and locked the item in the same transaction.
+     */
+    public function startBorrowing(Reservation $reservation, bool $checkActiveBorrowing = true): void
+    {
+        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $this->getItemInCurrentOrganization($itemId);
+        if (!InventoryAccessService::canManageReservationItem($itemId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->withinReservationTransaction(function () use ($reservation, $itemId, $checkActiveBorrowing): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            if ($checkActiveBorrowing) {
+                $this->assertReservationCanBeBorrowed($reservation, $itemId);
+            }
+            $this->transition($reservation, Reservation::STATUS_BORROWED);
+        });
+    }
+
+    /**
+     * Lock and validate an approved reservation before its borrowing data is saved.
+     *
+     * Call this in the same transaction as saving the borrowing data so another active loan
+     * cannot be overwritten between this check and the status transition.
+     */
+    public function assertCanStartBorrowing(Reservation $reservation): void
     {
         $itemId = (int)$reservation->getValue('ivr_ini_id');
         $this->getItemInCurrentOrganization($itemId);
@@ -167,7 +196,7 @@ class ReservationService
         $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
             $this->lockItemForReservation($itemId);
             $this->refreshReservation($reservation);
-            $this->transition($reservation, Reservation::STATUS_BORROWED);
+            $this->assertReservationCanBeBorrowed($reservation, $itemId);
         });
     }
 
@@ -207,23 +236,13 @@ class ReservationService
     }
 
     /**
-     * Checks confirmed reservations and the existing active physical borrowing record.
+     * Checks confirmed reservations.
      * The end is exclusive, so a return and a new reservation may meet at the same instant.
      */
     public function isAvailable(int $itemId, DateTimeInterface $begin, DateTimeInterface $end, int $ignoreReservationId = 0): bool
     {
         $this->assertValidPeriod($begin, $end);
         $this->getItemInCurrentOrganization($itemId);
-
-        $activeBorrowing = (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
-              WHERE inb_ini_id = ? AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
-                AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL',
-            array($itemId)
-        )->fetchColumn();
-        if ($activeBorrowing > 0) {
-            return false;
-        }
 
         $conflicts = (int)$this->database->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
@@ -318,20 +337,6 @@ class ReservationService
 
     private function isAvailableForEvent(int $itemId, DateTimeInterface $begin, DateTimeInterface $end, int $eventId): bool
     {
-        $activeBorrowing = (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
-              WHERE inb_ini_id = ? AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
-                AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL',
-            array($itemId)
-        )->fetchColumn();
-        if ($activeBorrowing > 0) {
-            return (int)$this->database->queryPrepared(
-                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
-                  WHERE ivr_ini_id = ? AND ivr_dat_id = ? AND ivr_status = ?',
-                array($itemId, $eventId, Reservation::STATUS_BORROWED)
-            )->fetchColumn() > 0;
-        }
-
         return (int)$this->database->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
               WHERE ivr_ini_id = ? AND ivr_status = ? AND (ivr_dat_id IS NULL OR ivr_dat_id <> ?)
@@ -354,6 +359,24 @@ class ReservationService
             'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
             array($itemId)
         );
+    }
+
+    /** Reject a handover while another physical borrowing record is still open. */
+    private function assertReservationCanBeBorrowed(Reservation $reservation, int $itemId): void
+    {
+        if ($reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $activeBorrowing = (int)$this->database->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+              WHERE inb_ini_id = ? AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
+                AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL FOR UPDATE',
+            array($itemId)
+        )->fetchColumn();
+        if ($activeBorrowing > 0) {
+            throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+        }
     }
 
     /** Reload a reservation after acquiring its item lock to avoid acting on stale lifecycle state. */
