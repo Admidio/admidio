@@ -1198,6 +1198,84 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Reservations for a currently borrowed item may be requested and approved
+     */
+    public function testManualReservationCanBeRequestedWhileItemIsBorrowed(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationborrowedmanual', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Borrowed manual reservation projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-07-01'
+            ));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 10:00:00'),
+                new DateTimeImmutable('2030-07-15 12:00:00')
+            );
+
+            $this->assertSame(Reservation::STATUS_REQUESTED, $reservation->getValue('ivr_status'));
+            $service->approve($reservation);
+            $this->assertSame(Reservation::STATUS_APPROVED, $reservation->getValue('ivr_status'));
+
+            try {
+                $service->startBorrowing($reservation);
+                $this->fail('A borrowed item must not be handed over for another reservation.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_ITEM_NOT_AVAILABLE', $exception->getTranslationId());
+            }
+
+            $this->getDatabase()->queryPrepared(
+                'UPDATE ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' SET inb_return_date = ? WHERE inb_ini_id = ?',
+                array('2020-07-15', $itemId)
+            );
+            $service->assertCanStartBorrowing($reservation);
+            $this->getDatabase()->queryPrepared(
+                'UPDATE ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' SET inb_return_date = NULL WHERE inb_ini_id = ?',
+                array($itemId)
+            );
+            $service->startBorrowing($reservation, false);
+            $this->assertSame(Reservation::STATUS_BORROWED, $reservation->getValue('ivr_status'));
+        });
+    }
+
+    /**
+     * @testdox Automatic reservations can be created for an item that is currently borrowed
+     */
+    public function testAutomaticReservationAllowsBorrowedItem(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationborrowedauto', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Borrowed automatic reservation projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-07-01'
+            ));
+
+            $reservation = (new ReservationService($this->getDatabase()))->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 10:00:00'),
+                new DateTimeImmutable('2030-07-15 12:00:00')
+            );
+            $this->assertSame(Reservation::STATUS_APPROVED, $reservation->getValue('ivr_status'));
+        });
+    }
+
+    /**
      * @testdox A manual request is rejected when its period is already confirmed
      */
     public function testManualReservationRequestRejectsConfirmedOverlappingPeriod(): void
@@ -1375,6 +1453,46 @@ class InventoryTest extends DatabaseTestCase
                 new DateTimeImmutable('2030-08-01 11:00:00'),
                 new DateTimeImmutable('2030-08-01 13:00:00')
             ));
+        });
+    }
+
+    /**
+     * @testdox Events may request a currently borrowed item with manual approval
+     */
+    public function testEventReservationCanBeRequestedForBorrowedItemWithManualApproval(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationborrowedmanual', true);
+        $category = $this->getFixture()->createAndSaveCategory('Borrowed reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Borrowed event reservation projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-08-01'
+            ));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with borrowed equipment request');
+            $event->setValue('dat_begin', '2030-08-15 10:00:00');
+            $event->setValue('dat_end', '2030-08-15 12:00:00');
+            $event->save();
+
+            (new ReservationService($this->getDatabase()))->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-08-15 10:00:00'),
+                new DateTimeImmutable('2030-08-15 12:00:00')
+            );
+
+            $this->assertSame(Reservation::STATUS_REQUESTED, $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchColumn());
         });
     }
 
