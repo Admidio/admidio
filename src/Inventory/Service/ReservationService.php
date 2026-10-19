@@ -368,13 +368,13 @@ class ReservationService
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        $activeBorrowing = (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+        $activeBorrowing = $this->database->queryPrepared(
+            'SELECT inb_id FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
               WHERE inb_ini_id = ? AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
                 AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL FOR UPDATE',
             array($itemId)
         )->fetchColumn();
-        if ($activeBorrowing > 0) {
+        if ($activeBorrowing !== false) {
             throw new Exception('SYS_ITEM_NOT_AVAILABLE');
         }
     }
