@@ -1418,6 +1418,8 @@ class ItemsData
             throw new Exception('SYS_NO_RIGHTS');
         }
 
+        $this->assertReturnDateIsNotInFuture();
+
         global $gCurrentUser;
         $this->mDb->startTransaction();
         // All records of one item save belong to one user action, even though an item and its
@@ -1490,6 +1492,29 @@ class ItemsData
         $this->readItemData($this->mItemUUID);
         $this->mDb->endTransaction();
         LogChanges::endChangeSet($previousChangeSet);
+    }
+
+    /** A return date records an actual return and therefore cannot be in the future. */
+    private function assertReturnDateIsNotInFuture(): void
+    {
+        global $gSettingsManager;
+
+        $returnDateValue = $this->getValue('RETURN_DATE', 'database');
+        if ($returnDateValue === '') {
+            return;
+        }
+
+        $returnDate = new DateTime($returnDateValue);
+        $now = new DateTime();
+        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+            $isInFuture = $returnDate > $now;
+        } else {
+            $isInFuture = $returnDate->format('Y-m-d') > $now->format('Y-m-d');
+        }
+
+        if ($isInFuture) {
+            throw new Exception('SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE');
+        }
     }
 
     /**

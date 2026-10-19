@@ -958,6 +958,7 @@
   <string name="SYS_RESERVATION_NOTIFY_REQUESTER_DESC">Wenn diese Option aktiviert ist, erhalten Antragstellende E-Mails über automatische Freigaben und spätere Statusänderungen. (Voreinstellung: ja)</string>
   <string name="SYS_RESERVATION_NOTIFICATION_SUBJECT">Reservierung für #VAR1#: #VAR2#</string>
   <string name="SYS_RESERVATION_NOTIFICATION_MESSAGE">Reservierungsstatus: #VAR1#&lt;br /&gt;&lt;br /&gt;Gegenstand: #VAR2#&lt;br /&gt;Reservieren von: #VAR3#&lt;br /&gt;Reservieren bis: #VAR4#&lt;br /&gt;Angefragt von: #VAR5#</string>
+  <string name="SYS_ITEM_ALREADY_BORROWED">Dieser Gegenstand kann nicht ausgeliehen werden, weil er bereits ausgeliehen ist.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE">Der Gegenstand ist im gewählten Zeitraum nicht verfügbar.</string>
   <string name="SYS_APPROVE">Freigeben</string>
   <string name="SYS_REJECT">Ablehnen</string>
@@ -1012,6 +1013,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">Die Tabelle zeigt die an dich ausgeliehenen Gegenstände:</string>
   <string name="SYS_INVENTORY_RETURN_DATE">Rückgabedatum</string>
   <string name="SYS_INVENTORY_RETURN_DATE_DESC">Das Datum, an dem der Gegenstand an den Verwalter zurückgegeben wurde</string>
+  <string name="SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE">Das Rückgabedatum darf nicht in der Zukunft liegen.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Ausgewählte Gegenstände löschen</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">Wenn du #VAR1_BOLD# auswählst, werden die Gegenstände zusammen mit den dazugehörigen Datensätzen unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich, Daten dieser Gegenstände einzusehen.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">Die ausgewählten Gegenstände wurden gelöscht.</string>

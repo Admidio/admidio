@@ -947,6 +947,7 @@
   <string name="SYS_RESERVATION_NOTIFY_REQUESTER_DESC">If enabled, requesters receive emails about automatic approval and later status changes. (Default: yes)</string>
   <string name="SYS_RESERVATION_NOTIFICATION_SUBJECT">Reservation for #VAR1#: #VAR2#</string>
   <string name="SYS_RESERVATION_NOTIFICATION_MESSAGE">Reservation status: #VAR1#&lt;br /&gt;&lt;br /&gt;Item: #VAR2#&lt;br /&gt;Reserve from: #VAR3#&lt;br /&gt;Reserve until: #VAR4#&lt;br /&gt;Requested by: #VAR5#</string>
+  <string name="SYS_ITEM_ALREADY_BORROWED">This item cannot be borrowed because it is already borrowed.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE">The item is not available for the selected period.</string>
   <string name="SYS_APPROVE">Approve</string>
   <string name="SYS_REJECT">Reject</string>
@@ -1001,6 +1002,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items borrrowed to you:</string>
   <string name="SYS_INVENTORY_RETURN_DATE">Return date</string>
   <string name="SYS_INVENTORY_RETURN_DATE_DESC">The date the item was returned to the keeper</string>
+  <string name="SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE">The return date must not be in the future.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selected items</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>

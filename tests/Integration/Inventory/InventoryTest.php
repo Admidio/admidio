@@ -462,8 +462,8 @@ class InventoryTest extends DatabaseTestCase
             return $this->createItem($itemsData, array(
                 'ITEMNAME' => 'Projector',
                 'LAST_RECEIVER' => 'Alice',
-                'BORROW_DATE' => '2030-03-01',
-                'RETURN_DATE' => '2030-03-31'
+                'BORROW_DATE' => '2020-03-01',
+                'RETURN_DATE' => '2020-03-31'
             ));
         });
 
@@ -473,8 +473,8 @@ class InventoryTest extends DatabaseTestCase
 
         $this->assertCount(1, $rows);
         $this->assertEquals('Alice', $rows[0]['inb_last_receiver']);
-        $this->assertStringStartsWith('2030-03-01', $rows[0]['inb_borrow_date']);
-        $this->assertStringStartsWith('2030-03-31', $rows[0]['inb_return_date']);
+        $this->assertStringStartsWith('2020-03-01', $rows[0]['inb_borrow_date']);
+        $this->assertStringStartsWith('2020-03-31', $rows[0]['inb_return_date']);
 
         // the three borrow fields do not appear among the ordinary item data
         $sql = 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?';
@@ -509,6 +509,30 @@ class InventoryTest extends DatabaseTestCase
             $fresh = new ItemsData($this->getDatabase(), self::ORG_ID);
             $fresh->readItemData($this->uuidOfItem($itemId));
             $this->assertTrue($fresh->isBorrowed());
+        });
+    }
+
+    /**
+     * @testdox An actual return date cannot be in the future
+     */
+    public function testFutureReturnDateIsRejected(): void
+    {
+        $admin = $this->makeInventoryUser('invfuturedate', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+
+            try {
+                $this->createItem($itemsData, array(
+                    'ITEMNAME' => 'Projector with future return date',
+                    'LAST_RECEIVER' => 'Alice',
+                    'BORROW_DATE' => '2020-03-01',
+                    'RETURN_DATE' => (new DateTimeImmutable('tomorrow'))->format('Y-m-d')
+                ));
+                $this->fail('A future return date must be rejected.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE', $exception->getTranslationId());
+            }
         });
     }
 
