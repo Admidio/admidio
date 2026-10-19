@@ -22,6 +22,7 @@ class InventoryBorrowPresenter extends PagePresenter
         }
 
         $canManageReservations = InventoryAccessService::canManageReservations();
+        $dateTimeFormat = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
         if ($canManageReservations) {
             $readyKeeperJoin = '';
             $readyReservationParameters = array();
@@ -40,7 +41,10 @@ class InventoryBorrowPresenter extends PagePresenter
                 $readyReservationParameters[] = $gCurrentUserId;
             }
             $readyReservations = $gDb->queryPrepared(
-            'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ind_value AS item_name
+            'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ind_value AS item_name,
+                    CASE WHEN inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
+                              AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL
+                         THEN 1 ELSE 0 END AS item_is_borrowed
                FROM ' . TBL_INVENTORY_RESERVATIONS . '
          INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
@@ -51,13 +55,16 @@ class InventoryBorrowPresenter extends PagePresenter
               WHERE ini_org_id = ?
                 AND ivr_status = ?
                 AND ivr_end >= ?
-                AND (inb_last_receiver IS NULL OR inb_last_receiver = \'\' OR inb_return_date IS NOT NULL)
                 ' . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : '') . '
            ORDER BY ivr_begin',
                 $readyReservationParameters
             )->fetchAll();
 
             foreach ($readyReservations as &$reservation) {
+                $reservation['ivr_begin_iso'] = $reservation['ivr_begin'];
+                $reservation['ivr_end_iso'] = $reservation['ivr_end'];
+                $reservation['ivr_begin'] = (new \DateTimeImmutable($reservation['ivr_begin']))->format($dateTimeFormat);
+                $reservation['ivr_end'] = (new \DateTimeImmutable($reservation['ivr_end']))->format($dateTimeFormat);
                 $reservation['borrowUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
                     'mode' => 'item_edit_borrow',
                     'item_uuid' => $reservation['ini_uuid'],
@@ -105,6 +112,8 @@ class InventoryBorrowPresenter extends PagePresenter
                 $receiver = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
             }
             $borrowing['receiver'] = $receiver;
+            $borrowing['inb_borrow_date_iso'] = $borrowing['inb_borrow_date'];
+            $borrowing['inb_borrow_date'] = (new \DateTimeImmutable($borrowing['inb_borrow_date']))->format($dateTimeFormat);
             $borrowing['returnUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
                     'mode' => 'item_edit_borrow',
                     'item_uuid' => $borrowing['ini_uuid'],
