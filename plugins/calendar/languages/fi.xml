@@ -1,20 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Nykyinen kuukausi</string>
-  <string name="PLG_CALENDAR_MONTH">Tammikuu,Helmikuu,Maaliskuu,Huhtikuu,Toukokuu,Kesäkuu,Heinäkuu,Elokuu,Syyskuu,Lokakuu,Marraskuu,Joulukuu</string>
-  <string name="PLG_CALENDAR_MORE">(... lisää)</string>
-  <string name="PLG_CALENDAR_MONDAY_SHORT">Ma</string>
-  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ti</string>
-  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Ke</string>
-  <string name="PLG_CALENDAR_THURSDAY_SHORT">To</string>
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Pe</string>
-  <string name="PLG_CALENDAR_SATURDAY_SHORT">La</string>
-  <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
-  <string name="PLG_CALENDAR_SEVERAL_DAYS">Monta päivää</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Ma</string>
+  <string name="PLG_CALENDAR_MONTH">Tammikuu,Helmikuu,Maaliskuu,Huhtikuu,Toukokuu,Kesäkuu,Heinäkuu,Elokuu,Syyskuu,Lokakuu,Marraskuu,Joulukuu</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Tämä lisäosa näyttää yleiskatsaussivulla kalenterin, jossa ovat kuluvan kuukauden kaikki tapahtumat.</string>
   <string name="PLG_CALENDAR_PLUGIN_NAME">Kalenteri</string>
-  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Näytä tapahtumat</string>
-  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Kun käytössä, tapahtumat näytetään kalenterissa. (Oletus: käytössä)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Syntymäpäiviin sisällytettävät roolit</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Valitse roolit, joiden jäsenten syntymäpäivät näytetään. (Oletus: kaikki roolit)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Sisällön katseluun oikeutetut roolit</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Valitse roolit, jotka saavat nähdä lisäosan sisällön. Ilman valittua roolia käyttäjä näkee vain tapahtumien ja syntymäpäivien määrän. (Oletus: kaikki roolit)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Näytä syntymäpäivät</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Kun käytössä, jäsenten syntymäpäivät näytetään kalenterissa. (Oletus: käytössä)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Näytä syntymäpäivät vierailijoille</string>
@@ -27,8 +22,12 @@
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Valitse kalenterin tapahtumissa huomioitavat luokat. (Oletus: kaikki luokat)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Näytä kalenterien nimet</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Kun käytössä, kunkin tapahtuman yhteydessä näytetään kalenterin nimi. (Oletus: pois käytöstä)</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Sisällön katseluun oikeutetut roolit</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Valitse roolit, jotka saavat nähdä lisäosan sisällön. Ilman valittua roolia käyttäjä näkee vain tapahtumien ja syntymäpäivien määrän. (Oletus: kaikki roolit)</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Syntymäpäiviin sisällytettävät roolit</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Valitse roolit, joiden jäsenten syntymäpäivät näytetään. (Oletus: kaikki roolit)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Näytä tapahtumat</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Kun käytössä, tapahtumat näytetään kalenterissa. (Oletus: käytössä)</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">La</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Monta päivää</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Su</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">To</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Ti</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">Ke</string>
 </resources>

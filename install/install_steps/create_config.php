@@ -9,6 +9,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Cli\CliPolicy;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
@@ -39,6 +40,21 @@ try {
     Installation::writeConfigFile($installationConfig, $configPath);
 } catch (RuntimeException $exception) {
     $configFileWritten = false;
+}
+
+/*
+ * The command line is disabled until an administrator enables it, so the file this installation
+ * writes only documents the settings. It is optional: an installation that cannot write it is
+ * complete, and the command line then reports how the file is created.
+ */
+try {
+    Installation::writeCliConfigFile(dirname($configPath) . '/' . CliPolicy::FILE_NAME);
+} catch (Throwable $exception) {
+    if (isset($gLogger)) {
+        $gLogger->notice(
+            'The configuration file of the command line could not be written: ' . $exception->getMessage()
+        );
+    }
 }
 
 if ($configFileWritten) {

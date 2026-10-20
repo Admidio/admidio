@@ -363,7 +363,11 @@ class ListConfigurationTest extends DatabaseTestCase
         });
 
         $this->assertEquals(3, $names[1]);
-        $this->assertEquals(['Surname', 'First name', 'Start'], $names[0]);
+        $this->assertEquals([
+            $GLOBALS['gL10n']->get('SYS_LASTNAME'),
+            $GLOBALS['gL10n']->get('SYS_FIRSTNAME'),
+            $GLOBALS['gL10n']->get('SYS_START'),
+        ], $names[0]);
     }
 
     /**
