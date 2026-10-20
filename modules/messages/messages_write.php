@@ -574,7 +574,7 @@ try {
             array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 
-        // add multiline text element or ckeditor to form
+        // add a multiline text field or rich-text editor to the form
         if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
             $form->addEditor(
                 'msg_body',

@@ -15,6 +15,7 @@
  *
  * **********************************************************************************************
  */
+use Admidio\Session\Service\LoginService;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -32,12 +33,19 @@ try {
 
         // create an HTML page object
         $page = PagePresenter::withHtmlIDAndHeadline('adm_login', $headline);
-        $loginModule = new ModuleLogin();
+
+        // a user who was forwarded to the login because the requested page needs a login gets a hint
+        if (array_key_exists('login_forward_url', $_SESSION)) {
+            $page->addHtml('<div class="alert alert-info" role="alert" style="max-width: 500px">
+                <i class="bi bi-info-circle-fill"></i>' . $gL10n->get('SYS_LOGIN_TO_VIEW_PAGE') . '</div>');
+        }
+
+        $loginModule = new LoginService();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();
     } elseif ($getMode === 'check') {
         // check the data of the login dialog
-        $loginModule = new ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->checkLogin();
 
         // check if browser can set cookies and throw error if not
