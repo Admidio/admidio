@@ -149,7 +149,7 @@ class FileUpload
             <div class="admidio-folder-drop-overlay-box">
                 <i class="bi bi-cloud-arrow-up-fill admidio-folder-drop-overlay-icon"></i>
                 <h3 class="admidio-folder-drop-overlay-title">' . $textDragAndDrop . '</h3>
-                <p class="admidio-folder-drop-overlay-desc">' . htmlspecialchars($destinationName, ENT_QUOTES, 'UTF-8') . '</p>
+                <p class="admidio-folder-drop-overlay-desc">' . $destinationName . '</p>
             </div>
         </div>
 
@@ -159,7 +159,7 @@ class FileUpload
                     <div class="modal-header">
                         <h5 class="modal-title d-flex align-items-center" id="admidio-upload-modal-title">
                             <i class="bi bi-cloud-arrow-up text-primary me-2"></i>
-                            <span>' . $headline . ' - ' . htmlspecialchars($destinationName, ENT_QUOTES, 'UTF-8') . '</span>
+                            <span>' . $headline . ' - ' . $destinationName . '</span>
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="' . $textClose . '"></button>
                     </div>
@@ -199,8 +199,8 @@ class FileUpload
         $textUploadCancelled = $GLOBALS['gL10n']->get('SYS_UPLOAD_CANCELLED');
         $textUploading = $GLOBALS['gL10n']->get('SYS_UPLOADING');
         $textRemove = $GLOBALS['gL10n']->get('SYS_REMOVE');
-        $textFilenameInvalidNotice = $GLOBALS['gL10n']->get('SYS_FILENAME_INVALID', array(''));
-        $textFilenameInvalidNotice = str_replace(array("\n", "\r"), ' ', trim(strip_tags($textFilenameInvalidNotice)));
+        $textFilenameInvalidNotice = $GLOBALS['gL10n']->get('SYS_FILENAME_INVALID_HINT');
+        $textUploadCancelConfirm = $GLOBALS['gL10n']->get('SYS_UPLOAD_CANCEL_CONFIRM');
         $invalidFilenamePattern = StringUtils::getInvalidFilenameCharsPattern();
 
         $this->page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/css/jquery.fileupload.css');
@@ -235,6 +235,7 @@ class FileUpload
             var textRemove                = ' . json_encode($textRemove) . ';
             var textUpload                = ' . json_encode($textUpload) . ';
             var textFilenameInvalidNotice = ' . json_encode($textFilenameInvalidNotice) . ';
+            var textUploadCancelConfirm   = ' . json_encode($textUploadCancelConfirm) . ';
             var invalidPattern            = ' . json_encode($invalidFilenamePattern) . ';
             var invalidRegex              = new RegExp(invalidPattern);
             var invalidGlobalRegex        = new RegExp(invalidPattern, "g");
@@ -568,7 +569,7 @@ class FileUpload
 
                 $("#admidio-upload-modal").on("hide.bs.modal", function (e) {
                     if (Object.keys(activeUploads).length > 0) {
-                        if (!confirm(textUploadCancel)) {
+                        if (!confirm(textUploadCancelConfirm)) {
                             e.preventDefault();
                             return false;
                         }

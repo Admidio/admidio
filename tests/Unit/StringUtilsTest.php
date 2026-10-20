@@ -95,21 +95,6 @@ class StringUtilsTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox Filename sanitization cleans invalid characters, dots, and hyphens
-     */
-    public function testFilenameSanitization(): void
-    {
-        $this->assertSame('normal.pdf', StringUtils::sanitizeFilename('normal.pdf'));
-        $this->assertSame('test-file-name.txt', StringUtils::sanitizeFilename('test?file*name.txt'));
-        $this->assertSame('bad-char-slash-back.doc', StringUtils::sanitizeFilename("bad:char/slash\\back.doc"));
-        $this->assertSame('hidden_file.png', StringUtils::sanitizeFilename('.hidden_file.png'));
-        $this->assertSame('multiple.dots.test.jpg', StringUtils::sanitizeFilename('multiple...dots...test.jpg'));
-        $this->assertSame('dashes.txt', StringUtils::sanitizeFilename('---dashes---.txt'));
-        $this->assertSame('file.txt', StringUtils::sanitizeFilename('???***.txt'));
-        $this->assertSame('file', StringUtils::sanitizeFilename(''));
-    }
-
-    /**
      * @testdox Filename validation correctly validates filenames and foldernames
      */
     public function testFilenameValidation(): void

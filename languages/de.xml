@@ -291,8 +291,8 @@
   <string name="SYS_CALENDAR">Kalender</string>
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Abbrechen</string>
-  <string name="SYS_CANCEL_ALL">Alle verwerfen</string>
   <string name="SYS_CANCELLED">Abgesagt</string>
+  <string name="SYS_CANCEL_ALL">Alle verwerfen</string>
   <string name="SYS_CANCEL_EVENT">Du hast die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# wieder abgesagt.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Beziehung löschen</string>
@@ -725,8 +725,9 @@
   <string name="SYS_FILE">Datei</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfe den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : " | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID_HINT">Der Dateiname muss eine Dateiendung haben, darf nicht mit einem Punkt beginnen und darf keines der folgenden Zeichen enthalten: / \ ? * ; : ~ " | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Skripte #VAR2#.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Wähle bitte alle Dateien aus oder ziehe sie per Drag &amp; Drop hierher, die du in den Ordner #VAR1_BOLD# hochladen möchtest.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Wähle bitte alle Dateien aus, die du in den Ordner #VAR1_BOLD# hochladen möchtest, oder ziehe sie per Drag &amp; Drop hierher.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
   <string name="SYS_FILE_CREATED_TITLE">Eine neue Datei wurde hochgeladen auf #VAR1#</string>
@@ -1299,7 +1300,7 @@
   <string name="SYS_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG- oder PNG-Format hochgeladen und angezeigt werden.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von #VAR1# Megapixeln.</string>
-  <string name="SYS_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus oder ziehe sie per Drag &amp; Drop hierher, die du in das Album #VAR1_BOLD# hochladen möchtest.</string>
+  <string name="SYS_PHOTO_UPLOAD_DESC">Wähle bitte alle Fotos aus, die du in das Album #VAR1_BOLD# hochladen möchtest, oder ziehe sie per Drag &amp; Drop hierher.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_X_OF_Y">Foto #VAR1# von #VAR2#</string>
@@ -1483,7 +1484,6 @@
   <string name="SYS_RELOAD">Neuladen</string>
   <string name="SYS_REMEMBER_ME">Angemeldet bleiben</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Möchtest du dem Mitglied seine Zugangsdaten mit Passwort als Erinnerung zuschicken?</string>
-  <string name="SYS_RENAMED_TO">umbenannt in #VAR1_BOLD#</string>
   <string name="SYS_REMOVE">Entfernen</string>
   <string name="SYS_REMOVE_CONTACT">Kontakt entfernen</string>
   <string name="SYS_REMOVE_CONTACT_DESC">Wenn du #VAR1_BOLD# wählst, werden alle Daten dieses Kontakts gelöscht und können nicht mehr eingesehen oder wiederhergestellt werden.</string>
@@ -1492,6 +1492,7 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Willst du die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmendenn gelöscht.</string>
   <string name="SYS_REMOVE_FORMATTING">Formatierung entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
+  <string name="SYS_RENAMED_TO">umbenannt in #VAR1_BOLD#</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
   <string name="SYS_REPLACE">Ersetzen</string>
@@ -2009,6 +2010,7 @@
   <string name="SYS_UPLOADING">Wird hochgeladen...</string>
   <string name="SYS_UPLOAD_CANCEL">Upload abbrechen</string>
   <string name="SYS_UPLOAD_CANCELLED">Upload abgebrochen.</string>
+  <string name="SYS_UPLOAD_CANCEL_CONFIRM">Es werden noch Dateien hochgeladen. Möchtest du den Upload abbrechen?</string>
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
   <string name="SYS_UPLOAD_PHOTOS">Fotos hochladen</string>

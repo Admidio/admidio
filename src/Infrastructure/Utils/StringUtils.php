@@ -29,49 +29,6 @@ final class StringUtils
     }
 
     /**
-     * Sanitizes a filename by removing null bytes, replacing invalid filename characters with hyphens,
-     * removing leading dots and collapsing consecutive periods and hyphens.
-     *
-     * @param string $filename The original filename to sanitize.
-     * @return string The sanitized, safe filename.
-     */
-    public static function sanitizeFilename(string $filename): string
-    {
-        // Remove NULL bytes
-        $filename = str_replace(chr(0), '', $filename);
-        $filename = trim($filename);
-        if ($filename === '') {
-            return 'file';
-        }
-
-        // Replace invalid characters with hyphen
-        $cleaned = preg_replace('#' . self::getInvalidFilenameCharsPattern() . '#', '-', $filename);
-        // Strip leading dots to prevent hidden/dotfiles
-        $cleaned = ltrim($cleaned, '.');
-
-        $lastDot = strrpos($cleaned, '.');
-        if ($lastDot !== false && $lastDot > 0) {
-            $base = substr($cleaned, 0, $lastDot);
-            $ext = substr($cleaned, $lastDot + 1);
-            // Collapse multiple consecutive dots in base name
-            $base = preg_replace('/\.{2,}/', '.', $base);
-            // Remove any dots in extension
-            $ext = str_replace('.', '', $ext);
-            // Trim leading/trailing hyphens from base
-            $base = trim($base, '-');
-            $cleaned = ($base !== '' ? $base : 'file') . '.' . $ext;
-        } else {
-            $cleaned = trim($cleaned, '-');
-            $cleaned = ($cleaned !== '' ? $cleaned : 'file');
-        }
-
-        // Collapse multiple consecutive hyphens
-        $cleaned = preg_replace('/-{2,}/', '-', $cleaned);
-
-        return $cleaned;
-    }
-
-    /**
      * In case the multibyte functions are not supported, we do a fallback to a no-multibyte function
      * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
      * StringUtils::strToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')

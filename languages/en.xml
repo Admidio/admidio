@@ -291,8 +291,8 @@
   <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANCEL">Cancel</string>
-  <string name="SYS_CANCEL_ALL">Discard all</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Discard all</string>
   <string name="SYS_CANCEL_EVENT">You canceled your participation in the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Delete relationship</string>
@@ -725,8 +725,9 @@
   <string name="SYS_FILE">File</string>
   <string name="SYS_FILENAME_EMPTY">Filename is missing!</string>
   <string name="SYS_FILENAME_INVALID">The selected file name #VAR1_BOLD# contains invalid characters. Please check the file name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID_HINT">The file name needs a file extension, must not start with a dot and must not contain any of the following characters: / \ ? * ; : ~ \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">The database version #VAR1# is newer than the Admidio script version #VAR2#.\n\nPlease update the Admidio files on the server #VAR3#using a newer version of Admidio#VAR4#.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Please select or drag and drop all files you want to upload to the folder #VAR1_BOLD#.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Please select all files you want to upload to the folder #VAR1_BOLD#, or drag and drop them here.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Not all files were uploaded successfully.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">All files were uploaded successfully.</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
@@ -1298,7 +1299,7 @@
   <string name="SYS_PHOTO_FORMAT_INVALID">Only photos in JPG or PNG format are allowed.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Photo processing error</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">The uploaded picture exceeds the server\'s maximum resolution of #VAR1# megapixels.</string>
-  <string name="SYS_PHOTO_UPLOAD_DESC">Please select or drag and drop the photos you want to upload to album #VAR1_BOLD#.</string>
+  <string name="SYS_PHOTO_UPLOAD_DESC">Please select all photos you want to upload to the album #VAR1_BOLD#, or drag and drop them here.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Not all photos were successfully uploaded.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">All photos were successfully uploaded.</string>
   <string name="SYS_PHOTO_X_OF_Y">Photo #VAR1# of #VAR2#</string>
@@ -1482,7 +1483,6 @@
   <string name="SYS_RELOAD">Reload</string>
   <string name="SYS_REMEMBER_ME">Stay signed in</string>
   <string name="SYS_REMINDER_SEND_LOGIN">Do you want to send the member a reminder with their login information and a new password?</string>
-  <string name="SYS_RENAMED_TO">renamed to #VAR1_BOLD#</string>
   <string name="SYS_REMOVE">Remove</string>
   <string name="SYS_REMOVE_CONTACT">Remove contact</string>
   <string name="SYS_REMOVE_CONTACT_DESC">Choosing #VAR1_BOLD# permanently deletes all data for this contact. The data can no longer be viewed or restored.</string>
@@ -1491,6 +1491,7 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
   <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
+  <string name="SYS_RENAMED_TO">renamed to #VAR1_BOLD#</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPEATS">Repeats</string>
   <string name="SYS_REPLACE">Replace</string>
@@ -2008,6 +2009,7 @@
   <string name="SYS_UPLOADING">Uploading...</string>
   <string name="SYS_UPLOAD_CANCEL">Cancel upload</string>
   <string name="SYS_UPLOAD_CANCELLED">Upload canceled.</string>
+  <string name="SYS_UPLOAD_CANCEL_CONFIRM">Files are still being uploaded. Do you want to cancel the upload?</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_PHOTOS">Upload photos</string>
