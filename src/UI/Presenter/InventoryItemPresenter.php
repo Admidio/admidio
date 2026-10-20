@@ -116,6 +116,11 @@ class InventoryItemPresenter extends PagePresenter
                 && (int)$items->getItemFields()[0]->getValue('ini_org_id') !== $gCurrentOrgId) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
+            if (!$items->isEditable()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+        } elseif (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         // display History button
@@ -436,6 +441,17 @@ class InventoryItemPresenter extends PagePresenter
             // Check whether the field belongs to the current organization
             if ($items->getValue('ini_org_id') > 0
                 && (int)$items->getItemFields()[0]->getValue('ini_org_id') !== $gCurrentOrgId) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+            if (!$items->isEditable()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+        }
+
+        foreach ($itemUUIDs as $uuid) {
+            $item = new ItemsData($gDb, $gCurrentOrgId);
+            $item->readItemData($uuid);
+            if (!$item->isEditable()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
         }
@@ -780,7 +796,6 @@ class InventoryItemPresenter extends PagePresenter
             && (int)$items->getItemFields()[0]->getValue('ini_org_id') !== $gCurrentOrgId) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-
         // A borrow form changes the item state. Do not merely disable its inputs for a forged
         // direct URL: reject callers who are not entitled to process this specific item.
         if (!$items->isEditable()
@@ -1168,7 +1183,13 @@ class InventoryItemPresenter extends PagePresenter
      */
     public function createPictureChooseForm(string $itemUUID): void
     {
-        global $gCurrentSession, $gL10n;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb;
+        $items = new ItemsData($gDb, $gCurrentOrgId);
+        $items->readItemData($itemUUID);
+        if (!$items->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // show form
         $form = new FormPresenter(
             'adm_upload_picture_form',
@@ -1209,7 +1230,13 @@ class InventoryItemPresenter extends PagePresenter
      */
     public function createPictureReviewForm(string $itemUUID): void
     {
-        global $gCurrentSession, $gL10n;
+        global $gCurrentSession, $gL10n, $gCurrentOrgId, $gDb;
+        $items = new ItemsData($gDb, $gCurrentOrgId);
+        $items->readItemData($itemUUID);
+        if (!$items->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // show form
         $form = new FormPresenter(
             'adm_review_picture_form',

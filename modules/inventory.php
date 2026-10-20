@@ -70,6 +70,18 @@ try {
     // check if module is active
     InventoryPresenter::checkModuleAccess();
 
+    // Public inventory access may expose the item list and, if explicitly configured, the guest
+    // reservation request. All management pages and their endpoints require an authenticated user.
+    $guestAccessibleModes = array('list', 'item_picture_show', 'item_picture_show_modal', 'reservation_request', 'reservation_request_save');
+    if (!$gValidLogin && !in_array($getMode, $guestAccessibleModes, true)) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
+    $administratorModes = array('import_file_selection', 'import_read_file', 'import_assign_fields', 'import_items');
+    if (in_array($getMode, $administratorModes, true) && !$gCurrentUser->isAdministratorInventory()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
     // when saving folders, check whether the subfolder in adm_my_files exists with the corresponding rights
     if ((int)$gSettingsManager->get('inventory_item_picture_storage') === 1) {
         // Create folder for item pictures in adm_my_files if necessary
@@ -423,6 +435,12 @@ try {
             break;
 
         case 'item_delete_explain_msg':
+            foreach (count($getItemUUIDs) > 0 ? $getItemUUIDs : array($getiniUUID) as $itemUuid) {
+                if (!(new ItemService($gDb, $itemUuid))->isEditable()) {
+                    throw new Exception('SYS_NO_RIGHTS');
+                }
+            }
+
             // check if all items are shown
             $showAll = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1)) === 0;
             if (count($getItemUUIDs) > 0) {
@@ -486,6 +504,10 @@ try {
             break;
 
         case 'item_delete_keeper_explain_msg':
+            if (!(new ItemService($gDb, $getiniUUID))->isEditable()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // check if all items are shown
             $showAll = admFuncVariableIsValid($_GET, 'items_filter_status', 'int', array('defaultValue' => 1)) === 0;
             $retireOnClick = 'callUrlHideElement(\'adm_inventory_item_' . $getiniUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_retire', 'item_uuid' => $getiniUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', ' . ($showAll ?  '\'refreshInventoryTable\'' : '\'\'') . ')';
