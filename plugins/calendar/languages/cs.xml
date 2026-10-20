@@ -1,19 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="PLG_CALENDAR_CURRENT_MONTH">Aktuální měsíc</string>
-  <string name="PLG_CALENDAR_MONTH">Leden,Únor,Březen,Duben,Květen,Červen,Červenec,Srpen,Září,Říjen,Listopad,Prosinec</string>
-  <string name="PLG_CALENDAR_MONDAY_SHORT">Po</string>
-  <string name="PLG_CALENDAR_TUESDAY_SHORT">Út</string>
-  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">St</string>
-  <string name="PLG_CALENDAR_THURSDAY_SHORT">Čt</string>
   <string name="PLG_CALENDAR_FRIDAY_SHORT">Pá</string>
-  <string name="PLG_CALENDAR_SATURDAY_SHORT">So</string>
-  <string name="PLG_CALENDAR_SUNDAY_SHORT">Ne</string>
-  <string name="PLG_CALENDAR_SEVERAL_DAYS">Poslední dny</string>
-  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalendář</string>
+  <string name="PLG_CALENDAR_MONDAY_SHORT">Po</string>
+  <string name="PLG_CALENDAR_MONTH">Leden,Únor,Březen,Duben,Květen,Červen,Červenec,Srpen,Září,Říjen,Listopad,Prosinec</string>
   <string name="PLG_CALENDAR_PLUGIN_DESCRIPTION">Tento doplněk zobrazuje na stránce přehledu kalendář všech událostí aktuálního měsíce.</string>
-  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Zobrazit události</string>
-  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Je-li zapnuto, události se zobrazují v kalendáři. (Výchozí: zapnuto)</string>
+  <string name="PLG_CALENDAR_PLUGIN_NAME">Kalendář</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Role zahrnuté do narozenin</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Vyberte role, jejichž členům se mají zobrazovat narozeniny. (Výchozí: všechny role)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Role s přístupem k obsahu</string>
+  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Vyberte role, které smějí zobrazit obsah tohoto doplňku. Uživatelům bez některé z vybraných rolí se zobrazí pouze počet událostí a narozenin. (Výchozí: všechny role)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS">Zobrazit narozeniny</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_DESC">Je-li zapnuto, narozeniny členů se zobrazují v kalendáři. (Výchozí: zapnuto)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_BIRTHDAYS_TO_GUESTS">Zobrazit narozeniny návštěvníkům</string>
@@ -26,8 +22,12 @@
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_DESC">Vyberte kategorie, které se mají zohlednit u událostí v kalendáři. (Výchozí: všechny kategorie)</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES">Zobrazit názvy kalendářů</string>
   <string name="PLG_CALENDAR_PREFERENCES_SHOW_CATEGORIES_NAMES_DESC">Je-li zapnuto, u každé události se zobrazí název kalendáře. (Výchozí: vypnuto)</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN">Role s přístupem k obsahu</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_VIEW_PLUGIN_DESC">Vyberte role, které smějí zobrazit obsah tohoto doplňku. Uživatelům bez některé z vybraných rolí se zobrazí pouze počet událostí a narozenin. (Výchozí: všechny role)</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL">Role zahrnuté do narozenin</string>
-  <string name="PLG_CALENDAR_PREFERENCES_ROLES_SQL_DESC">Vyberte role, jejichž členům se mají zobrazovat narozeniny. (Výchozí: všechny role)</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS">Zobrazit události</string>
+  <string name="PLG_CALENDAR_PREFERENCES_SHOW_EVENTS_DESC">Je-li zapnuto, události se zobrazují v kalendáři. (Výchozí: zapnuto)</string>
+  <string name="PLG_CALENDAR_SATURDAY_SHORT">So</string>
+  <string name="PLG_CALENDAR_SEVERAL_DAYS">Poslední dny</string>
+  <string name="PLG_CALENDAR_SUNDAY_SHORT">Ne</string>
+  <string name="PLG_CALENDAR_THURSDAY_SHORT">Čt</string>
+  <string name="PLG_CALENDAR_TUESDAY_SHORT">Út</string>
+  <string name="PLG_CALENDAR_WEDNESDAY_SHORT">St</string>
 </resources>

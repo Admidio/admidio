@@ -367,7 +367,8 @@ class AdmidioTestFixture
     public function assignUserToRole(int $usrId, int $rolId, string $startDate = ''): array
     {
         if (empty($startDate)) {
-            $startDate = date('Y-m-d');
+            // DATE_NOW is fixed when the suite starts; date() would move on if the run crosses midnight
+            $startDate = DATE_NOW;
         }
 
         $membership = new Membership($this->gDb);
