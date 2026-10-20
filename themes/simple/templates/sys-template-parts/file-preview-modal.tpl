@@ -192,12 +192,12 @@ document.addEventListener('DOMContentLoaded', function () {
         previewBody.replaceChildren();
 
         if (isVideo) {
-            previewIcon.className = 'bi bi-camera-video-fill text-danger me-2';
+            previewIcon.className = 'bi bi-file-earmark-play-fill text-primary me-2';
             previewBody.parentElement.className = 'modal-body p-0 text-center bg-black d-flex align-items-center justify-content-center';
             previewBody.append(createElement('video', {controls: '', autoplay: '', playsinline: '', class: 'w-100', src: viewUrl},
                 'max-height: 70vh; display: block; background: #000;'));
         } else if (isAudio) {
-            previewIcon.className = 'bi bi-music-note-beamed text-primary me-2';
+            previewIcon.className = 'bi bi-file-earmark-music-fill text-primary me-2';
             previewBody.parentElement.className = 'modal-body p-4 text-center bg-light';
             const wrapper = createElement('div', {class: 'my-3'});
             wrapper.append(
@@ -206,12 +206,12 @@ document.addEventListener('DOMContentLoaded', function () {
             );
             previewBody.append(wrapper);
         } else if (isImage) {
-            previewIcon.className = 'bi bi-image-fill text-success me-2';
+            previewIcon.className = 'bi bi-file-earmark-image text-primary me-2';
             previewBody.parentElement.className = 'modal-body p-2 text-center bg-dark d-flex align-items-center justify-content-center';
             previewBody.append(createElement('img', {src: viewUrl, alt: filename, class: 'img-fluid rounded'},
                 'max-height: 75vh; object-fit: contain;'));
         } else if (isPdf) {
-            previewIcon.className = 'bi bi-file-earmark-pdf-fill text-danger me-2';
+            previewIcon.className = 'bi bi-file-earmark-pdf-fill text-primary me-2';
             previewBody.parentElement.className = 'modal-body p-0 text-center bg-dark';
             newWindowLink.href = viewUrl;
             newWindowLink.classList.remove('d-none');
