@@ -8,33 +8,31 @@
     no file extension are opened in a new window. The file url must support the parameter view=1 to
     show the file inline.
 *}
-<div class="modal fade" id="adm_file_preview_modal" tabindex="-1" aria-labelledby="adm_file_preview_title" aria-hidden="true" data-label-new-window="{$l10n->get('SYS_NEW_WINDOW')}">
+<div class="modal fade" id="adm_file_preview_modal" tabindex="-1" aria-labelledby="adm_file_preview_title" aria-hidden="true"
+    data-label-share-link="{$l10n->get('SYS_SHARE_LINK')}" data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}"
+    data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-truncate" id="adm_file_preview_title">
+                <h5 class="modal-title text-truncate me-auto" id="adm_file_preview_title">
                     <i id="adm_file_preview_icon" class="bi bi-file-earmark me-2"></i>
                     <span id="adm_file_preview_filename">{$l10n->get('SYS_PREVIEW')}</span>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{$l10n->get('SYS_CLOSE')}"></button>
+                <!-- the actions are icon links in the title bar like in the documents list, so the preview gets the whole space -->
+                <div class="d-flex align-items-center flex-shrink-0 ms-2">
+                    <a class="admidio-icon-link admidio-file-preview-download ms-1" href="#" download aria-label="{$l10n->get('SYS_DOWNLOAD_FILE')}">
+                        <i class="bi bi-download" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DOWNLOAD_FILE')}"></i></a>
+                    <a class="admidio-icon-link admidio-file-preview-share ms-1" href="#" role="button" aria-label="{$l10n->get('SYS_COPY_LINK')}">
+                        <i class="bi bi-link-45deg" data-bs-toggle="tooltip" title="{$l10n->get('SYS_COPY_LINK')}"></i></a>
+                    <a class="admidio-icon-link admidio-file-preview-new-window ms-1 d-none" href="#" target="_blank" rel="noopener noreferrer" aria-label="{$l10n->get('SYS_NEW_WINDOW')}">
+                        <i class="bi bi-box-arrow-up-right" data-bs-toggle="tooltip" title="{$l10n->get('SYS_NEW_WINDOW')}"></i></a>
+                </div>
+                <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="{$l10n->get('SYS_CLOSE')}"></button>
             </div>
             <div class="modal-body p-0 text-center bg-black d-flex align-items-center justify-content-center" style="min-height: 200px;">
                 <div id="adm_file_preview_body" class="w-100">
                     <!-- Populated dynamically with <video>, <audio>, <img>, or <iframe> -->
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a id="adm_file_preview_download_btn" href="#" download class="btn btn-outline-primary col-12 col-lg-auto">
-                    <i class="bi bi-download me-1"></i> {$l10n->get('SYS_DOWNLOAD_FILE')}
-                </a>
-                <button id="adm_file_preview_share_btn" type="button" class="btn btn-outline-primary col-12 col-lg-auto"
-                    data-label-share-link="{$l10n->get('SYS_SHARE_LINK')}" data-label-copy-link="{$l10n->get('SYS_COPY_LINK')}"
-                    data-label-copied="{$l10n->get('SYS_COPIED_CLIPBOARD')}">
-                    <i class="bi bi-link-45deg me-1"></i> <span>{$l10n->get('SYS_COPY_LINK')}</span>
-                </button>
-                <button type="button" class="btn btn-secondary col-12 col-lg-auto ms-lg-auto" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> {$l10n->get('SYS_CLOSE')}
-                </button>
             </div>
         </div>
     </div>
@@ -50,39 +48,53 @@ document.addEventListener('DOMContentLoaded', function () {
     const previewTitle = document.getElementById('adm_file_preview_filename');
     const previewIcon = document.getElementById('adm_file_preview_icon');
     const previewBody = document.getElementById('adm_file_preview_body');
-    const previewDownloadBtn = document.getElementById('adm_file_preview_download_btn');
-    const previewShareBtn = document.getElementById('adm_file_preview_share_btn');
-    const previewShareIcon = previewShareBtn.querySelector('i');
-    const previewShareText = previewShareBtn.querySelector('span');
+    const downloadLink = previewModalEl.querySelector('.admidio-file-preview-download');
+    const newWindowLink = previewModalEl.querySelector('.admidio-file-preview-new-window');
+    const shareLink = previewModalEl.querySelector('.admidio-file-preview-share');
+    const shareIcon = shareLink.querySelector('i');
+    const labels = previewModalEl.dataset;
     let previewShareUrl = '';
 
+    // a tooltip is only shown if the element had a title, so the tooltip is created again with the new title
+    const setTooltip = function (icon, title, options) {
+        const tooltip = bootstrap.Tooltip.getInstance(icon);
+        if (tooltip) {
+            tooltip.dispose();
+        }
+        icon.setAttribute('title', title);
+        return new bootstrap.Tooltip(icon, options || {});
+    };
+
+    // show the icon and the tooltip of the share link
+    const setShareLink = function (iconClass, text, tooltipOptions) {
+        shareIcon.className = iconClass;
+        shareLink.setAttribute('aria-label', text);
+        return setTooltip(shareIcon, text, tooltipOptions);
+    };
+
     // share the link with the share dialog of the system, or copy it if the browser can't share links.
-    // If the browser still uses an older cached common_functions.js without these functions, the button
+    // If the browser still uses an older cached common_functions.js without these functions, the link
     // is hidden, so the preview itself still works.
     if (typeof shareOrCopyLink !== 'function' || typeof canShareLink !== 'function') {
-        previewShareBtn.classList.add('d-none');
+        shareLink.classList.add('d-none');
     } else {
-        const shareIconClass = canShareLink() ? 'bi bi-share me-1' : 'bi bi-link-45deg me-1';
-        const shareText = canShareLink() ? previewShareBtn.dataset.labelShareLink : previewShareBtn.dataset.labelCopyLink;
-        previewShareIcon.className = shareIconClass;
-        previewShareText.textContent = shareText;
-        previewShareBtn.addEventListener('click', function () {
-            shareOrCopyLink(previewShareUrl, previewTitle.textContent, previewShareBtn.dataset.labelCopyLink).then(function (result) {
+        const shareIconClass = canShareLink() ? 'bi bi-share' : 'bi bi-link-45deg';
+        const shareTitle = canShareLink() ? labels.labelShareLink : labels.labelCopyLink;
+        setShareLink(shareIconClass, shareTitle);
+        shareLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            shareOrCopyLink(previewShareUrl, previewTitle.textContent, labels.labelCopyLink).then(function (result) {
                 if (result === 'copied') {
-                    previewShareIcon.className = 'bi bi-clipboard-check me-1';
-                    previewShareText.textContent = previewShareBtn.dataset.labelCopied;
+                    const copiedTooltip = setShareLink('bi bi-clipboard-check', labels.labelCopied, {trigger: 'manual'});
+                    copiedTooltip.show();
                     setTimeout(function () {
-                        previewShareIcon.className = shareIconClass;
-                        previewShareText.textContent = shareText;
+                        copiedTooltip.dispose();
+                        setShareLink(shareIconClass, shareTitle);
                     }, 2000);
                 }
             });
         });
     }
-
-    const newWindowLabel = (previewModalEl.dataset && previewModalEl.dataset.labelNewWindow)
-        ? previewModalEl.dataset.labelNewWindow
-        : 'New window';
 
     const videoExts = ['mp4', 'webm', 'mov', 'm4v', 'ogv'];
     const audioExts = ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac'];
@@ -90,6 +102,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Clean up media when modal is hidden
     previewModalEl.addEventListener('hidden.bs.modal', function () {
+        previewModalEl.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (element) {
+            const tooltip = bootstrap.Tooltip.getInstance(element);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        });
         const media = previewBody.querySelector('video, audio');
         if (media) {
             media.pause();
@@ -162,14 +180,15 @@ document.addEventListener('DOMContentLoaded', function () {
             tooltip.hide();
         }
 
-        // the preview needs the inline view of the file, the download button the attachment
+        // the preview needs the inline view of the file, the download link the attachment
         const downloadUrl = link.href.replace(/&view=1/g, '');
         const viewUrl = downloadUrl + '&view=1';
 
         previewTitle.textContent = filename;
-        previewDownloadBtn.href = downloadUrl;
+        downloadLink.href = downloadUrl;
+        downloadLink.setAttribute('download', filename);
         previewShareUrl = viewUrl;
-        previewDownloadBtn.setAttribute('download', filename);
+        newWindowLink.classList.add('d-none');
         previewBody.replaceChildren();
 
         if (isVideo) {
@@ -194,16 +213,10 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (isPdf) {
             previewIcon.className = 'bi bi-file-earmark-pdf-fill text-danger me-2';
             previewBody.parentElement.className = 'modal-body p-0 text-center bg-dark';
-            const buttonBar = createElement('div', {class: 'p-2 bg-light border-top d-flex justify-content-center'});
-            const newWindowButton = createElement('a', {href: viewUrl, target: '_blank', rel: 'noopener noreferrer',
-                class: 'btn btn-sm btn-outline-secondary', title: newWindowLabel});
-            newWindowButton.append(createElement('i', {class: 'bi bi-box-arrow-up-right me-1'}), ' ' + newWindowLabel);
-            buttonBar.append(newWindowButton);
-            previewBody.append(
-                createElement('iframe', {src: viewUrl, title: filename},
-                    'width: 100%; height: clamp(320px, 55vh, 700px); border: none; display: block;'),
-                buttonBar
-            );
+            newWindowLink.href = viewUrl;
+            newWindowLink.classList.remove('d-none');
+            previewBody.append(createElement('iframe', {src: viewUrl, title: filename},
+                'width: 100%; height: clamp(320px, 65vh, 760px); border: none; display: block;'));
         }
 
         previewModal.show();
