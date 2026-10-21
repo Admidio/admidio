@@ -18,7 +18,7 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         {foreach $forumTopic.actions as $actionItem}
                                             <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                                                data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                                data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
                                                     {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
                                                 <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
                                         {/foreach}

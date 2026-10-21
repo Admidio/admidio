@@ -114,7 +114,6 @@ class SsoAuthnContextTest extends AdministratorTestCase
         try {
             $service = new SAMLService($this->getDatabase(), $gCurrentUser);
             $method = new ReflectionMethod($service, 'getAuthenticationContextClassRef');
-            $method->setAccessible(true);
 
             return (string) $method->invoke($service);
         } finally {

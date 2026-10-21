@@ -449,6 +449,9 @@ try {
             $preloadData = 'dummy';
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
+            if (!$showList->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
             $form->addInput('userUuidList', '', $postUserUuidList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('list_uuid', '', $postListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
