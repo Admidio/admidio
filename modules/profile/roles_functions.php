@@ -204,9 +204,10 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                         $icon = 'bi bi-box-arrow-right';
                         $description = $gL10n->get('SYS_CANCEL_MEMBERSHIP');
                     }
+                    // Escape the role name for the dialog HTML and the complete message for the attribute.
                     $linkMembershipDelete = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get($deleteMessage, array($role->getValue('rol_name', 'database'))) . '"
+                        data-message="' . SecurityUtils::encodeHTML($gL10n->get($deleteMessage, array($role->getValue('rol_name')))) . '"
                         data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
                         <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
                 } else {
