@@ -18,7 +18,10 @@ class ConfirmationMessageEscapingTest extends TestCase
             'modules/announcements.cards.tpl',
             'modules/forum.cards.tpl',
             'modules/inventory.item-fields.list.tpl',
-            'modules/weblinks.cards.tpl'
+            'modules/weblinks.cards.tpl',
+            'modules/photos.albums.tpl',
+            'modules/profile.view.relations.tpl',
+            'modules/organizations.edit.tpl'
         ) as $template) {
             foreach (array(
                 '" onmouseover="alert(1)" x="',
@@ -49,7 +52,7 @@ class ConfirmationMessageEscapingTest extends TestCase
         $l10n = new class {
             public function get(string $id, array $params = array()): string
             {
-                return $id === 'SYS_WANT_DELETE_ENTRY'
+                return in_array($id, array('SYS_WANT_DELETE_ENTRY', 'SYS_DELETE_ORGANIZATION'), true)
                     ? 'Delete "<strong>' . $params[0] . '</strong>"?'
                     : $id;
             }
@@ -70,13 +73,30 @@ class ConfirmationMessageEscapingTest extends TestCase
             'userUUID' => '', 'userName' => '', 'timestamp' => '',
             'dataType' => '', 'mandatory' => '', 'system' => false,
             'destination' => '', 'destinationHost' => '', 'counter' => 0,
-            'editUrl' => '', 'deleteUrl' => 'delete'
+            'editUrl' => '', 'deleteUrl' => 'delete',
+            'imageUrl' => '', 'date' => '', 'locked' => false, 'folderMissing' => false,
+            'photoCount' => 0, 'relationName' => $escapedName, 'urlUserProfile' => '',
+            'userFirstName' => '', 'userLastName' => '', 'urlRelationDelete' => 'delete'
         );
+        $elements = array();
+        foreach (array('adm_csrf_token', 'org_shortname', 'org_longname', 'org_homepage', 'org_email_administrator') as $id) {
+            $elements[$id] = array('property' => 4, 'type' => 'hidden', 'id' => $id, 'value' => '', 'attributes' => array());
+        }
+        $elements['adm_button_save'] = array('id' => 'save', 'class' => '', 'link' => '', 'attributes' => array(), 'icon' => '', 'value' => 'Save');
         $smarty->assign(array(
             'l10n' => $l10n, 'data' => $entry, 'cards' => array($entry), 'list' => array($entry),
             'categories' => array(array('name' => '', 'links' => array($entry))),
             'pagination' => '', 'urlAdmidio' => '', 'showCategories' => false,
-            'target' => '_blank', 'csrfToken' => 'csrf'
+            'target' => '_blank', 'csrfToken' => 'csrf',
+            'albumInfo' => null, 'photos' => array(), 'albums' => array($entry),
+            'albumsCount' => 1, 'albumPagination' => '',
+            'userRelations' => array($entry), 'isAdministratorUsers' => true, 'showRelationsCreateEdit' => false,
+            // Organization rows come directly from the database, without HTML escaping.
+            'organizationsList' => array(array(
+                'org_uuid' => 'entry', 'org_shortname' => '', 'org_longname' => $name,
+                'org_homepage' => '', 'org_email_administrator' => ''
+            )),
+            'attributes' => array(), 'elements' => $elements
         ));
 
         $document = $this->parseHtml($smarty->fetch($template));
