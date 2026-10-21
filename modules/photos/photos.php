@@ -402,7 +402,7 @@ try {
                                             </li>
                                             ' . $htmlLock . '
                                             <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                                data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($childPhotoAlbum->getValue('pho_name'))) . '"
+                                                data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array($childPhotoAlbum->getValue('pho_name')))) . '"
                                                 data-href="callUrlHideElement(\'panel_pho_' . $childPhotoAlbum->getValue('pho_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/photos/photo_album_function.php', array('mode' => 'delete', 'photo_uuid' => $childPhotoAlbum->getValue('pho_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                                                 <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE_ALBUM') . '</a>
                                             </li>
