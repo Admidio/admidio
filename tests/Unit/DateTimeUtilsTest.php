@@ -41,13 +41,13 @@ class DateTimeUtilsTest extends AdmidioTestCase
         $this->assertSame('Tue, 19.05.2026', DateTimeUtils::formatWithWeekday($tuesday, 'short', 'd.m.Y', 'en'));
         $this->assertSame('Tuesday, 19.05.2026', DateTimeUtils::formatWithWeekday($tuesday, 'long', 'd.m.Y', 'en'));
 
-        // HTML wrapped for column alignment
+        // HTML weekday stays on one line
         $this->assertSame(
-            '<span class="admidio-event-weekday admidio-event-weekday-short">Di,</span> 19.05.2026',
+            '<span class="text-nowrap admidio-event-weekday admidio-event-weekday-short">Di,</span> 19.05.2026',
             DateTimeUtils::formatWithWeekday($tuesday, 'short', 'd.m.Y', 'de', true)
         );
         $this->assertSame(
-            '<span class="admidio-event-weekday admidio-event-weekday-long">Dienstag,</span> 19.05.2026',
+            '<span class="text-nowrap admidio-event-weekday admidio-event-weekday-long">Dienstag,</span> 19.05.2026',
             DateTimeUtils::formatWithWeekday($tuesday, 'long', 'd.m.Y', 'de', true)
         );
         $this->assertSame(

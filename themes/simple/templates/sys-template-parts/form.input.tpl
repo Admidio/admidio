@@ -22,7 +22,7 @@
             <div class="col-auto">
                 {if isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}
                     <div class="input-group">
-                        <span class="input-group-text admidio-input-weekday" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
+                        <span class="input-group-text admidio-input-weekday fw-medium justify-content-center" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
                         <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}{if isset($data.attributes.dateValueAttributes.class)} {$data.attributes.dateValueAttributes.class}{/if}" type="date" value="{$data.attributes.dateValue}"
                             {foreach $data.attributes.dateValueAttributes as $itemvar}
                                 {if $itemvar@key neq "class"}{$itemvar@key}="{$itemvar}"{/if}
@@ -48,7 +48,7 @@
         {else}
             {if $data.type == "date" && isset($data.attributes.weekdayFormat) && $data.attributes.weekdayFormat neq "none"}
                 <div class="input-group">
-                    <span class="input-group-text admidio-input-weekday" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
+                    <span class="input-group-text admidio-input-weekday fw-medium justify-content-center" id="{$data.id}_weekday" data-weekday-format="{$data.attributes.weekdayFormat}">{$data.attributes.weekday}</span>
                     <input id="{$data.id}" name="{$data.id}" class="form-control focus-ring {$data.class}" type="date" value="{$data.value}"
                         {foreach $data.attributes as $itemvar}
                             {if $itemvar@key neq "weekday" && $itemvar@key neq "weekdayFormat"}

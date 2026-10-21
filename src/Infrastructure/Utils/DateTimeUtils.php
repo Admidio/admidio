@@ -216,7 +216,7 @@ final class DateTimeUtils
         }
 
         if ($asHtml) {
-            $weekdayClass = 'admidio-event-weekday admidio-event-weekday-' . htmlspecialchars($weekdayFormat, ENT_QUOTES, 'UTF-8');
+            $weekdayClass = 'text-nowrap admidio-event-weekday admidio-event-weekday-' . htmlspecialchars($weekdayFormat, ENT_QUOTES, 'UTF-8');
             return '<span class="' . $weekdayClass . '">' . $weekday . ',</span> ' . $formattedDate;
         }
 

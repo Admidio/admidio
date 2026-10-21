@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 {foreach $headers as $key => $header}
-                    <th{if isset($columnClass[$key]) && $columnClass[$key] !== ''} class="{$columnClass[$key]}"{/if} style="text-align:{$columnAlign[$key]};{if $columnWidth[$key] !== ''} width:{$columnWidth[$key]};{/if}">{$header}</th>
+                    <th class="align-middle{if isset($columnClass[$key]) && $columnClass[$key] !== ''} {$columnClass[$key]}{/if}" style="text-align:{$columnAlign[$key]};{if $columnWidth[$key] !== ''} width:{$columnWidth[$key]};{/if}">{$header}</th>
                 {/foreach}
             </tr>
         </thead>

@@ -106,7 +106,7 @@ class EventListPresenter extends PagePresenter
         $data = array('headers' => array(), 'rows' => array(), 'column_align' => array(), 'column_width' => array());
 
         if ($outputMode === 'html') {
-            $page->assignSmartyVariable('classTable', 'table table-sm table-hover align-middle');
+            $page->assignSmartyVariable('classTable', 'table table-sm table-hover align-middle lh-sm');
 
             if ($gSettingsManager->getBool('enable_rss') && $gSettingsManager->getInt('events_module_enabled') === 1) {
                 $page->addRssFile(ADMIDIO_URL . '/rss/events.php?organization=' . $gCurrentOrganization->getValue('org_shortname'), $gL10n->get('SYS_RSS_FEED_FOR_VAR', array($gCurrentOrganization->getValue('org_longname') . ' - ' . $gL10n->get('SYS_EVENTS'))));
@@ -203,7 +203,7 @@ class EventListPresenter extends PagePresenter
                 $form->addToHtmlPage();
             }
         } else { // $outputMode = 'print'
-            $page->assignSmartyVariable('classTable', 'table table-sm table-striped align-middle');
+            $page->assignSmartyVariable('classTable', 'table table-sm table-striped align-middle lh-sm');
 
             // create an HTML page object without the custom theme files
             $page->setPrintMode();
@@ -245,25 +245,25 @@ class EventListPresenter extends PagePresenter
                 switch ($getView) {
                     case 'compact':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_VENUE'), $gL10n->get('SYS_CALENDAR'));
-                        $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left');
+                        $columnAlign = array('left', 'left', 'left', 'left', 'left', 'left');
                         $columnClass = array('text-nowrap', $periodClass, '', '', '', '');
                         $data['column_width'] = array('1%', '1%', '', '', '', '');
                         break;
                     case 'room':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_ROOM'), $gL10n->get('SYS_LEADERS'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
-                        $columnAlign = array('center', 'left', 'left', 'left', 'left', 'left', 'left');
+                        $columnAlign = array('left', 'left', 'left', 'left', 'left', 'left', 'left');
                         $columnClass = array('text-nowrap', $periodClass, '', '', '', '', '');
                         $data['column_width'] = array('1%', '1%', '', '', '', '', '');
                         break;
                     case 'participants':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('SYS_CALENDAR'));
-                        $columnAlign = array('center', 'left', 'left', 'left', 'left');
+                        $columnAlign = array('left', 'left', 'left', 'left', 'left');
                         $columnClass = array('text-nowrap', $periodClass, '', '', '');
                         $data['column_width'] = array('1%', '1%', '', '35%', '');
                         break;
                     case 'description':
                         $columnHeading = array('&nbsp;', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_EVENT'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_CALENDAR'));
-                        $columnAlign = array('center', 'left', 'left', 'left', 'left');
+                        $columnAlign = array('left', 'left', 'left', 'left', 'left');
                         $columnClass = array('text-nowrap', $periodClass, '', '', '');
                         $data['column_width'] = array('1%', '1%', '', '35%', '');
                         break;
@@ -512,6 +512,7 @@ class EventListPresenter extends PagePresenter
                             $iconParticipationStatus = '<i class="bi bi-pencil-square"></i>';
                     }
 
+                    $buttonLabel = SecurityUtils::encodeHTML($buttonText);
                     if ($getView !== 'detail') {
                         // Status text only in detail view
                         $buttonText = '';
@@ -571,12 +572,12 @@ class EventListPresenter extends PagePresenter
                                     }
                                 }
 
-                                $buttonClass = ($getView === 'detail') ? 'btn btn-primary' : 'btn btn-sm btn-primary';
+                                $buttonClass = ($getView === 'detail') ? 'btn btn-primary' : 'btn btn-sm btn-primary p-0 d-inline-flex align-items-center justify-content-center align-middle fs-6 lh-1 rounded-2';
 
                                 if ($participateModalForm === false) {
                                     $outputButtonParticipation = '
                                 <div class="btn-group admidio-event-approval" role="group">
-                                    <button class="' . $buttonClass . ' dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
+                                    <button type="button" class="' . $buttonClass . ($getView === 'detail' ? ' dropdown-toggle' : '') . '" aria-label="' . $buttonLabel . '" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $iconParticipationStatus . $buttonText . '</button>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="icon-link dropdown-item ' . $disableStatusAttend . '" href="javascript:void(0)" data-id="' . $eventUUID . '" data-mode="participate">
@@ -600,7 +601,7 @@ class EventListPresenter extends PagePresenter
                                 } else {
                                     $outputButtonParticipation = '
                                 <div class="btn-group admidio-event-approval" role="group">
-                                    <button class="' . $buttonClass . ' openPopup"
+                                    <button type="button" class="' . $buttonClass . ' openPopup" aria-label="' . $buttonLabel . '"
                                         data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'participation_form', 'dat_uuid' => $eventUUID)) . '">' . $iconParticipationStatus . $buttonText . '</button>
                                 </div>';
                                 }
