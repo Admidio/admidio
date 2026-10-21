@@ -408,6 +408,10 @@ try {
             break;
 
         case 'html_selection':
+            if (!$gValidLogin) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // set headline of the script
             $headline = $gL10n->get('SYS_EDIT_PROFILES');
             $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -456,6 +460,15 @@ try {
                     // do not show last name and first name in selection mode
                     continue;
                 }
+
+                // Only include fields that may be edited for every selected user.
+                // Check before reading the first user's value to avoid disclosing restricted data.
+                foreach ($users as $user) {
+                    if (!$gCurrentUser->allowedEditProfileField($user['user'], $usfNameIntern)) {
+                        continue 2;
+                    }
+                }
+
                 if ($gProfileFields->getProperty($usfNameIntern, 'usf_disabled') == 1
                     && !$gCurrentUser->hasRightEditProfile($users[0]['user'], false) && $users[0]['uuid'] !== '') {
                     // disable field if this is configured in profile field configuration
@@ -648,6 +661,23 @@ try {
             $profileEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $profileEditForm->validate($_POST, $editSelection);
 
+            $profileValues = array_filter($formValues, static function ($key) {
+                return !str_starts_with($key, 'usr_')
+                    && !in_array($key, array('adm_password_confirm', 'adm_org_id', 'adm_captcha_code'));
+            }, ARRAY_FILTER_USE_KEY);
+
+            // Recheck permissions for the actual targets, even if the stored form included the field.
+            // Validate the whole selection before changing any user to prevent partial updates.
+            if ($gValidLogin) {
+                foreach ($users as $user) {
+                    foreach ($profileValues as $key => $value) {
+                        if (!$gCurrentUser->allowedEditProfileField($user['user'], $key)) {
+                            throw new Exception('SYS_NO_RIGHTS');
+                        }
+                    }
+                }
+            }
+
             // loop over all users and save the data
             foreach ($users as $user) {
                 // Login name and password must be checked during registration
@@ -668,10 +698,8 @@ try {
                 }
 
                 // write all profile fields to the user object
-                foreach ($formValues as $key => $value) {
-                    if (!str_starts_with($key, 'usr_') && !in_array($key, array('adm_password_confirm', 'adm_org_id', 'adm_captcha_code'))) {
-                        $user['user']->setValue($key, $value);
-                    }
+                foreach ($profileValues as $key => $value) {
+                    $user['user']->setValue($key, $value);
                 }
 
                 if (isset($_POST['usr_login_name']) && ($gCurrentUser->isAdministrator() || $user['uuid'] === '')) {
