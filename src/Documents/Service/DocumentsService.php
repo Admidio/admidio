@@ -59,9 +59,9 @@ class DocumentsService
 
     /**
      * Send the file to the user for download. Optional the parameter inline could be set and then the file will
-     * be shown in the browser.
+     * be shown in the browser if its file type allows it.
      * @param string $fileUUID The UUID of the file that should be downloaded.
-     * @param bool $inline If set to **true** than the output will be sent inline otherwise as attachment.
+     * @param bool $inline Request inline output for viewable file types, otherwise send an attachment.
      * @return void
      * @throws Exception
      */
@@ -86,7 +86,9 @@ class DocumentsService
         // determine filesize
         $fileSize = filesize($completePath);
 
-        if ($inline) {
+        // Only explicitly viewable types may be rendered on the Admidio origin.
+        // Other types, such as SVG, can contain active content and must be downloaded.
+        if ($inline && $file->isViewableInBrowser()) {
             $content = 'inline';
         } else {
             $content = 'attachment';
@@ -94,6 +96,7 @@ class DocumentsService
 
         // Create appropriate header information of the file
         header('Content-Type: ' . $file->getMimeType());
+        header('X-Content-Type-Options: nosniff');
         header('Content-Length: ' . $fileSize);
         header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
 
