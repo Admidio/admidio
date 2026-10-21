@@ -115,6 +115,7 @@ class Language
     public function __unserialize(array $data): void
     {
         SerializationUtils::restoreProperties($this, $data);
+        $this->__wakeup();
     }
 
     /** Normalize legacy language codes when restoring an existing session. */
