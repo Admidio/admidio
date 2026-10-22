@@ -244,6 +244,7 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNUALLY">Annually</string>
+  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Anonymous technical data about this installation is sent to admidio.org after installation or an update. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. The complete JSON data to be sent is shown below. Uncheck the checkbox to continue without sending these data.</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
@@ -1605,6 +1606,7 @@
   <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">The display name for the sender\'s email address. This field is required if a sender email address is provided.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
+  <string name="SYS_SEND_ANONYMOUS_STATISTICS">Send anonymous statistics</string>
   <string name="SYS_SEND_COPY">Send copy of email to my address</string>
   <string name="SYS_SEND_EMAIL">Send email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send emails to former members</string>
@@ -1956,6 +1958,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">The installation ID has not been initialized.</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Save all email settings before using this function.\nA test email with the subject #VAR1_BOLD# will be sent to the logged-in user\'s email address using the saved settings. When sending via SMTP, a delivery log is displayed to help diagnose problems.</string>
   <string name="SYS_TEXT">Text</string>

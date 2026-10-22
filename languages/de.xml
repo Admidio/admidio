@@ -244,6 +244,7 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
+  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Nach der Installation oder einem Update werden anonyme technische Daten dieser Installation an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das vollständige JSON, das übermittelt wird, wird unten angezeigt. Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren.</string>
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_APPOINTMENT">Termin</string>
   <string name="SYS_APPOINTMENTS">Termine</string>
@@ -1606,6 +1607,7 @@
   <string name="SYS_SENDER_NAME">Absendername</string>
   <string name="SYS_SENDER_NAME_DESC">Name, der beim Versand von E-Mails als Absender angezeigt wird. Dieses Feld muss ausgefüllt werden, wenn eine Absender-E-Mail-Adresse angegeben ist.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
+  <string name="SYS_SEND_ANONYMOUS_STATISTICS">Anonyme Statistiken senden</string>
   <string name="SYS_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="SYS_SEND_EMAIL">E-Mail senden</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
@@ -1957,6 +1959,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Lege die Vorlage fest, die bei der Erstellung der E-Card vorausgewählt wird. (Standard: Postkarte)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template-Ordner konnte nicht geöffnet/gelesen werden.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">Die Installations-ID wurde noch nicht initialisiert.</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor du diese Funktion aufrufst, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse der angemeldeten Person auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
