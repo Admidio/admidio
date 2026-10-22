@@ -115,10 +115,11 @@ class DatabaseDateTimeEdit
             $diff = $firstDateTime->diff($relativeDateTime);
 
             $days = random_int($minDaysLimit, $maxDaysLimit);
-            $daysRelative = $days + $diff->days;
 
-            $newDateTime = $this->addDaysToDateTime(DATETIME_NOW, $days, $pastPeriod);
-            $newDateTimeRelative = $this->addDaysToDateTime(DATETIME_NOW, $daysRelative, $pastPeriod);
+            // Move the start date while preserving its time and the full event duration.
+            $newDateTime = $this->addDaysToDateTime(substr(DATETIME_NOW, 0, 10) . ' ' . $firstDateTime->format('H:i:s'), $days, $pastPeriod);
+            $newRelativeDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $newDateTime);
+            $newDateTimeRelative = $newRelativeDateTime->add($diff)->format('Y-m-d H:i:s');
 
             $sqlUpdate = 'UPDATE ' . $tableName . '
                              SET ' . $columnName . ' = ?
