@@ -82,7 +82,11 @@ class PluginInstallerTest extends FilesystemTestCase
 
     protected function tearDown(): void
     {
-        unset($GLOBALS['helloPluginUpdateFirstStepRuns'], $GLOBALS['helloPluginUpdateShouldFail']);
+        unset(
+            $GLOBALS['helloPluginUpdateFirstStepRuns'],
+            $GLOBALS['helloPluginUpdatePreviousStepRuns'],
+            $GLOBALS['helloPluginUpdateShouldFail']
+        );
 
         PluginRegistry::setPluginsPath(null);
         PluginRegistry::setInstallations(null);
@@ -546,17 +550,18 @@ class PluginInstallerTest extends FilesystemTestCase
 
     /**
      * A failed plugin update must leave its successful steps intact while its stored version
-     * remains unchanged. Retrying after the faulty step was repaired then skips the already
-     * completed step and finishes the update.
+     * remains unchanged. Retrying after the faulty step was repaired must neither replay the
+     * previous migration nor skip the unfinished steps of the failed migration.
      *
      * @testdox An interrupted plugin update resumes at its first unfinished step
      */
     public function testInterruptedPluginUpdateResumesAtTheFirstUnfinishedStep(): void
     {
         PluginInstaller::enable($this->plugin());
+        $this->setComponentUpdateState('1.2.5', 100);
 
         $this->writeManifestVersion('1.3.0');
-        $this->writePluginUpdateScript();
+        $this->writePluginUpdateScripts();
         $GLOBALS['helloPluginUpdateShouldFail'] = true;
 
         try {
@@ -567,10 +572,11 @@ class PluginInstallerTest extends FilesystemTestCase
         }
 
         $component = $this->component();
-        $this->assertSame(self::PLUGIN_VERSION, $component['com_version']);
+        $this->assertSame('1.2.5', $component['com_version']);
         $this->assertSame(10, (int) $component['com_update_step']);
         $this->assertFalse((bool) $component['com_update_completed']);
         $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+        $this->assertSame(0, $GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0);
 
         $GLOBALS['helloPluginUpdateShouldFail'] = false;
 
@@ -581,6 +587,7 @@ class PluginInstallerTest extends FilesystemTestCase
         $this->assertSame(20, (int) $component['com_update_step']);
         $this->assertTrue((bool) $component['com_update_completed']);
         $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+        $this->assertSame(0, $GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0);
     }
 
     /**
@@ -865,13 +872,33 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
-     * Write the two update steps used to verify that a failed update resumes at the right step.
+     * Set the version and checkpoint of the previously completed migration.
      */
-    private function writePluginUpdateScript(): void
+    private function setComponentUpdateState(string $version, int $step): void
+    {
+        $sql = 'UPDATE ' . TBL_COMPONENTS . '
+                   SET com_version = ?
+                     , com_update_step = ?
+                 WHERE com_type = ?
+                   AND com_name_intern = ?';
+        $this->getDatabase()->queryPrepared($sql, array($version, $step, PluginRegistry::COMPONENT_TYPE, self::PLUGIN_ID));
+    }
+
+    /**
+     * Write the completed 1.2 migration and the two 1.3 steps used to test a resumed update.
+     */
+    private function writePluginUpdateScripts(): void
     {
         $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
         FileSystemUtils::createDirectoryIfNotExists($directory);
 
+        $this->createFixtureFile(
+            $directory,
+            'update_1_2.xml',
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+            . "    <step id=\"100\">UpdateStepsCode::updateStep100MustNotRun</step>\n"
+            . "</update>\n"
+        );
         $this->createFixtureFile(
             $directory,
             'update_1_3.xml',

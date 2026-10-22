@@ -370,20 +370,20 @@ class ComponentUpdate extends Component
     {
         global $gLogger;
 
-        if (empty($this->getValue('com_version'))) {
+        $installedVersion = $this->getValue('com_version');
+        if (empty($installedVersion)) {
             $currentVersionArray = array(0, 0, 0);
         } else {
-            $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+            $currentVersionArray = self::getVersionArrayFromVersion($installedVersion);
         }
         $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
-        $initialMinorVersion = $currentVersionArray[1];
+        $initialMinorVersion = empty($installedVersion) ? 0 : $currentVersionArray[1] + 1;
         $updateCompleted = $this->getValue('com_update_completed');
         $resumeIncompleteUpdate = $updateCompleted !== true
             && $updateCompleted !== 1
             && $updateCompleted !== '1'
             && $updateCompleted !== ''
             && $updateCompleted !== null;
-
         $this->setValue('com_update_completed', false);
         $this->save();
 
@@ -396,16 +396,16 @@ class ComponentUpdate extends Component
             }
 
             for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion) {
-                // if version is not equal to current version then start update step with 0
-                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1]) {
-                    // Preserve the successful steps of the failed version so that a repaired
-                    // update can resume without advancing the persisted component version.
-                    if (!$resumeIncompleteUpdate) {
-                        $this->setValue('com_update_step', 0);
-                        $this->save();
-                    }
-                    $resumeIncompleteUpdate = false;
+                $migrationVersion = $mainVersion . '.' . $minorVersion . '.0';
+
+                // The stored version is the last successfully completed migration. Therefore an
+                // incomplete update can only resume at the first following migration, whose
+                // checkpoint is kept. All later migrations start at step zero.
+                if (!$resumeIncompleteUpdate) {
+                    $this->setValue('com_update_step', 0);
+                    $this->save();
                 }
+                $resumeIncompleteUpdate = false;
 
                 // output of the version number for better debugging
                 $gLogger->notice('UPDATE: Start executing update steps to version ' . $mainVersion . '.' . $minorVersion);
@@ -423,7 +423,7 @@ class ComponentUpdate extends Component
                             if ($namespace === '') {
                                 $namespace = 'Admidio\\InstallationUpdate\\Service\\';
                             }
-                            $this->executeStep($updateStep, $mainVersion . '.' . $minorVersion . '.0', $namespace);
+                            $this->executeStep($updateStep, $migrationVersion, $namespace);
                         } else {
                             $gLogger->info('UPDATE: Skip update step Nr: ' . (int)$updateStep['id']);
                         }
@@ -437,7 +437,7 @@ class ComponentUpdate extends Component
                 $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
                 // Only persist a version after all of its update steps succeeded.
-                $this->setValue('com_version', $mainVersion . '.' . $minorVersion . '.0');
+                $this->setValue('com_version', $migrationVersion);
                 $this->save();
             }
 
@@ -445,12 +445,8 @@ class ComponentUpdate extends Component
             $initialMinorVersion = 0;
         }
 
-        // save current version of plugin
-        $sql = 'UPDATE '.TBL_COMPONENTS.'
-                           SET com_version = ? -- $targetVersion
-                         WHERE com_id = ? -- :com_id';
-        $this->db->queryPrepared($sql, array($targetVersion, $this->getValue('com_id')));
-
+        // save the exact target version, including its patch version
+        $this->setValue('com_version', $targetVersion);
         $this->setValue('com_update_completed', true);
         $this->save();
 

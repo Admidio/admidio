@@ -16,6 +16,11 @@ final class UpdateStepsCode
         $GLOBALS['helloPluginUpdateFirstStepRuns'] = ($GLOBALS['helloPluginUpdateFirstStepRuns'] ?? 0) + 1;
     }
 
+    public static function updateStep100MustNotRun(): void
+    {
+        $GLOBALS['helloPluginUpdatePreviousStepRuns'] = ($GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0) + 1;
+    }
+
     public static function updateStep20FailWhileRequested(): void
     {
         if ($GLOBALS['helloPluginUpdateShouldFail'] ?? false) {
