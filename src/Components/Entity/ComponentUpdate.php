@@ -458,7 +458,7 @@ class ComponentUpdate extends Component
 
         // save the exact target version, including its patch version
         $this->setValue('com_version', $targetVersion);
-        $this->setValue('com_update_version', '');
+        $this->setValue('com_update_version', '', false);
         $this->setValue('com_update_completed', true);
         $this->save();
 
