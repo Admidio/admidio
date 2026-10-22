@@ -72,11 +72,11 @@
                             <td>{$pluginEntry.version}</td>
                             <td>
                                 {if $pluginEntry.versionState === 'update'}
-                                    <i class="bi bi-exclamation-triangle-fill admidio-plugin-version-status admidio-plugin-version-status-update"
+                                    <i class="bi bi-exclamation-triangle-fill me-1 text-warning"
                                        role="img" aria-label="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
                                        data-bs-toggle="tooltip" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"></i>
                                 {elseif $pluginEntry.versionState === 'current'}
-                                    <i class="bi bi-check-circle-fill admidio-plugin-version-status admidio-plugin-version-status-current"
+                                    <i class="bi bi-check-circle-fill me-1 text-success"
                                        role="img" aria-label="{$l10n->get('SYS_UP_TO_DATE')}"
                                        data-bs-toggle="tooltip" title="{$l10n->get('SYS_UP_TO_DATE')}"></i>
                                 {/if}
@@ -155,12 +155,12 @@
                                 {if $pluginEntry.versionState === 'not_installed'}
                                     <p>&ndash;</p>
                                 {elseif $pluginEntry.versionState === 'update'}
-                                    <p><i class="bi bi-exclamation-triangle-fill admidio-plugin-version-status admidio-plugin-version-status-update"
+                                    <p><i class="bi bi-exclamation-triangle-fill me-1 text-warning"
                                           role="img" aria-label="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
                                           data-bs-toggle="tooltip" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"></i>
                                         {$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</p>
                                 {elseif $pluginEntry.versionState === 'current'}
-                                    <p><i class="bi bi-check-circle-fill admidio-plugin-version-status admidio-plugin-version-status-current"
+                                    <p><i class="bi bi-check-circle-fill me-1 text-success"
                                           role="img" aria-label="{$l10n->get('SYS_UP_TO_DATE')}"
                                           data-bs-toggle="tooltip" title="{$l10n->get('SYS_UP_TO_DATE')}"></i>
                                         {$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</p>
