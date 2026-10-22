@@ -85,7 +85,7 @@ class Database
     /**
      * @var string The version of the database
      */
-    protected string $version;
+    protected string $version = '';
     /**
      * @var string The host of the database server ("localhost", "127.0.0.1")
      */

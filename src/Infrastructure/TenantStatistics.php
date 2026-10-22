@@ -1,20 +1,14 @@
 <?php
 namespace Admidio\Infrastructure;
 
-use Admidio\Infrastructure\Exception;
 use DateTime;
 use DateTimeZone;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use PDO;
 
 /**
- * @brief Create menu from database and serve several output formats
- *
- * This class will read the menu structure from the database table **adm_menu** and stores each main
- * node as a MenuNode object within an internal array. There are several output methods to use the
- * menu within the layout. You can create a simple html list, a bootstrap media object list or
- * add it to an existing navbar.
+ * @brief Collect anonymous installation statistics and send the reviewed JSON payload.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -30,8 +24,14 @@ class TenantStatistics
     /**
      * Constructor that will create an object of a TenantStatistics.
      * @param string $tenantID Unique id of this tenant.
+     * @param string|null $previousVersion Admidio version installed before this update.
+     * @param ClientInterface|null $client HTTP client, optionally supplied for testing.
      */
-    public function __construct(string $tenantID)
+    public function __construct(
+        string $tenantID,
+        private ?string $previousVersion = null,
+        private ?ClientInterface $client = null
+    )
     {
         $this->tenantID = $tenantID;
     }
@@ -54,6 +54,7 @@ class TenantStatistics
             ),
             'admidio' => array(
                 'version' => TenantStatistics::getAdmidioVersion(),
+                'previous_version' => $this->previousVersion,
                 'plugins' => TenantStatistics::getAdmidioPlugins()
             )
         );
@@ -111,9 +112,7 @@ class TenantStatistics
     {
         global $gDb;
 
-        $versionStatement = $gDb->query('SELECT version()');
-
-        return $versionStatement->fetchColumn();
+        return $gDb->getVersion();
     }
 
     /**
@@ -133,7 +132,10 @@ class TenantStatistics
 
         $pluginsFolder = ADMIDIO_PATH . DIRECTORY_SEPARATOR . FOLDER_PLUGINS;
 
-        $dir = scandir($pluginsFolder);
+        $dir = is_dir($pluginsFolder) ? scandir($pluginsFolder) : array();
+        if ($dir === false) {
+            return array($plugins);
+        }
         foreach ($dir as $entry)
         {
             $pluginFolder = $pluginsFolder . DIRECTORY_SEPARATOR . $entry;
@@ -142,6 +144,9 @@ class TenantStatistics
             if (!in_array($entry, array('.', '..'), true) && is_dir($pluginFolder) && is_file($pluginFile))
             {
                 $handle = fopen($pluginFile, 'r');
+                if ($handle === false) {
+                    continue;
+                }
                 while (($line = fgets($handle)) !== false)
                 {
                     preg_match('/^ \* Version (\d+\.\d+\.\d+.*$)/', $line, $matches);
@@ -158,18 +163,29 @@ class TenantStatistics
         return array($plugins);
     }
 
+    /** Encode the same complete payload for the preview and the HTTP request. */
+    public function getJsonData(?array $infoData = null): string
+    {
+        return json_encode(array($infoData ?? $this->getInfoData()),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+    }
+
     /**
      * Sends the anonymous data of this tenant to the Admidio server.
+     * @param array|null $infoData Server-side snapshot previously shown in the update dialog.
      * @return bool Returns **true** if the data could successfully send to the server.
      * @throws GuzzleException
      */
-    public function sent(): bool
+    public function sent(?array $infoData = null): bool
     {
-        $client = new Client();
+        $client = $this->client ?? new Client(array('connect_timeout' => 2, 'timeout' => 5));
         $response = $client->request(
             'POST',
             ADMIDIO_URL . '/api/statistics.php',
-            ['json' => [$this->getInfoData()]]
+            array(
+                'headers' => array('Content-Type' => 'application/json'),
+                'body' => $this->getJsonData($infoData)
+            )
         );
 
         if ($response->getStatusCode() === 200) {
