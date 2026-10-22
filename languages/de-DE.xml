@@ -2101,6 +2101,7 @@
   <string name="SYS_RESERVATION_REQUEST">Reservierung anfragen</string>
   <string name="SYS_REQUEST_AGAIN">Erneut anfragen</string>
   <string name="SYS_ADD_ITEM">Gegenstand hinzufügen</string>
+  <string name="SYS_ADD_ITEMS">Gegenstände hinzufügen</string>
   <string name="SYS_RESERVATION_REQUEST_APPROVED">Die Reservierung wurde genehmigt.</string>
   <string name="SYS_RESERVATION_REQUEST_SUBMITTED">Die Reservierung wurde zur Genehmigung eingereicht.</string>
   <string name="SYS_RESERVATION_APPROVAL">Freigabe von Reservierungsanfragen</string>

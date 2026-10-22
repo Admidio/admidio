@@ -6,7 +6,7 @@
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {$eventSections = ['basic' => 'SYS_BASIC_DATA', 'participation' => 'SYS_EVENT_REGISTRATION']}
     {if $eventInventoryReservationsEnabled|default:false}
-        {$eventSections['reservations'] = 'SYS_ITEM_RESERVATIONS'}
+        {$eventSections['reservations'] = 'SYS_INVENTORY_ITEMS'}
     {/if}
     <div class="tabs-x tabs-above tab-bordered admidio-event-tabs" data-max-title-length="-1">
         <ul class="nav nav-tabs admidio-tabs d-none d-md-flex" role="tablist">
@@ -93,7 +93,7 @@
                                 </div>
                             {elseif $section === 'reservations'}
                                 <div class="card admidio-tabbed-field-group">
-                                    <div class="card-header">{$l10n->get('SYS_INVENTORY_ITEMS')}</div>
+                                    <div class="card-header">{$l10n->get('SYS_ADD_ITEMS')}</div>
                                     <div class="card-body">
                                         {include 'modules/events.edit.inventory-reservations.tpl'}
                                     </div>
