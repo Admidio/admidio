@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Semua entri</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Pengumuman</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Tidak ada pengumuman yang tersedia bagi pengunjung. Masuk untuk melihat pengumuman.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Plugin ini menampilkan pratinjau daftar pengumuman terbaru di halaman ringkasan.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Daftar pengumuman</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Jumlah pengumuman</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Jumlah pengumuman yang ditampilkan. (Bawaan: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Karakter sebelum pergantian baris</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Jumlah karakter maksimum dalam satu kata sebelum berganti baris. (0: tanpa pergantian baris, bawaan: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Kategori yang ditampilkan</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Pilih kategori pengumuman yang ingin ditampilkan. (Bawaan: semua kategori)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Tampilkan deskripsi lengkap</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Jika diaktifkan, deskripsi lengkap ditampilkan; jika tidak, hanya pratinjau teks. (Bawaan: nonaktif)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Teks pratinjau</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Jumlah karakter teks pratinjau. (0: tanpa pratinjau singkat, bawaan: 70)</string>
+</resources>

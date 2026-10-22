@@ -16,14 +16,15 @@
                 <table class="table table-condensed" id="mylist_fields_table">
                     <thead>
                     <tr>
-                        <th style="width: 20%;">{$l10n->get('SYS_ABR_NO')}</th>
-                        <th style="width: 37%;">{$l10n->get('SYS_CONTENT')}</th>
-                        <th style="width: 18%;">{$l10n->get('SYS_ORDER')}</th>
+                        <th style="width: 17%;">{$l10n->get('SYS_ABR_NO')}</th>
+                        <th style="width: 35%;">{$l10n->get('SYS_CONTENT')}</th>
+                        <th style="width: 17%;">{$l10n->get('SYS_ORDER')}</th>
                         <th style="width: 25%;">{$l10n->get('SYS_CONDITION')}
                             <a class="admidio-icon-link openPopup" href="javascript:void(0);" data-class="modal-lg" data-href="{$urlConditionHelpText}">
                                 <i class="bi bi-info-circle-fill admidio-info-icon"></i>
                             </a>
                         </th>
+                        <th style="width: 6%;">&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody id="mylist_fields_tbody">

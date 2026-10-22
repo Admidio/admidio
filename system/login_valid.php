@@ -36,5 +36,5 @@ try {
         // => EXIT
     }
 } catch (Throwable $e) {
-    echo $e->getMessage();
+    handleException($e);
 }

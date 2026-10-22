@@ -1,0 +1,1196 @@
+<?php
+namespace Admidio\CategoryReport\Service;
+
+use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Roles\ValueObject\ConditionParser;
+use Admidio\Roles\Entity\Membership;
+use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
+
+
+/**
+ * @brief Class manages the data for the report of module CategoryReport
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ *
+ * The column definitions use a shorthand code of the form Xnn, where X describes the type of object/relation and nn is the ID of the object (profile field, role, etc.)
+ * Possible values for "X" are:
+ *   p# ... Profile field with ID #
+ *   u# ... User field # (uuid, login, photo, text)
+ *   c# ... Current member of a role of category with ID #
+ *   r# ... Current member of role with ID #
+ *   l# ... Current leader of role with ID #
+ *   w# ... Current member (NOT leader) of role with ID # (*w*ithout leader)
+ *   f# ... Former member of role with ID #
+ *   b# ... Membership start of role with ID #
+ *   e# ... Membership end of role with ID #
+ *   d# ... Membership duration of role with ID #
+ *   ndummy ...  Number (running counter)
+ *   adummy ...  All roles
+ *   ddummy ... Duration of membership
+ *
+ */
+class CategoryReportGenerator
+{
+    public array $headerData = array();          ///< Array mit allen Spaltenueberschriften
+    public array $listData = array();          ///< Array mit den Daten für den Report
+    public array $userUuids = array();         ///< UUIDs of report members, keyed by user ID
+    public array $headerSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
+    public array $headerRolePropSelection = array();          ///< Array mit der Auswahlliste für die Spaltenauswahl
+    protected int $conf;                               ///< die gewaehlte Konfiguration
+    private CategoryReportRepository $repository;
+    protected array $arrConfiguration = array();         ///< Array with the all configurations from the database
+
+    /**
+     * CategoryReport constructor
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->repository = new CategoryReportRepository();
+        $this->generate_headerSelection();
+    }
+
+    /**
+     * Erzeugt die Arrays listData und headerData fuer den Report
+     * @return void
+     * @throws Exception
+     */
+    public function generate_listData(string $date = DATE_NOW)
+    {
+        global $gDb, $gProfileFields, $gL10n, $gCurrentOrgId, $gSettingsManager;
+
+        $workArray = array();
+        $number_row_pos = -1;
+        $number_col = array();
+        $this->userUuids = array();
+
+        $columns = $this->arrConfiguration[$this->conf]['columns'];
+
+        // run through the saved configurations
+        foreach ($columns as $key => $column) {
+            $data = $column['field'];
+            // This is only to check whether this release still exists.
+            // It could be that a profile field or role has been deleted since the last save
+            $found = $this->isInHeaderSelection($data);
+            if ($found == 0) {
+                continue;
+            } else {
+                $workArray[$key + 1] = array();
+            }
+
+            //$data splitten in Typ und ID
+            $type = substr($data, 0, 1);
+            $id = (int)substr($data, 1);
+            $field = substr($data, 1); // some types like 'u' use a non-numeric identifier
+
+            $workArray[$key + 1]['type'] = $type;
+            $workArray[$key + 1]['id'] = $id;
+            $workArray[$key + 1]['field'] = $field;
+
+            // store the optional condition for this column
+            $workArray[$key + 1]['condition'] = $column['condition'];
+
+            $this->headerData[$key + 1]['id'] = 0;
+            $this->headerData[$key + 1]['data'] = $this->headerSelection[$found]['data'];
+
+            switch ($type) {
+                case 'p':                    //p=profileField
+                    // nur bei Profilfeldern wird 'id' mit der 'usf_id' ueberschrieben
+                    $this->headerData[$key + 1]['id'] = $id;
+                    $workArray[$key + 1]['profile_name'] = $gProfileFields->getPropertyById($id, 'usf_name_intern');
+                    $number_col[$key + 1] = '';
+                    break;
+                case 'c':                    //c=categorie
+
+                    $sql = 'SELECT DISTINCT mem_usr_id
+                              FROM ' . TBL_CATEGORIES . '
+                             INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
+                             INNER JOIN ' . TBL_MEMBERS . ' ON mem_rol_id = rol_id
+                             WHERE cat_id = ? -- $id
+                               AND cat_type = \'ROL\'
+                               AND mem_begin <= ? -- $date
+                               AND mem_end    > ? -- $date
+                               AND ( cat_org_id = ? -- $gCurrentOrgId
+                                   OR cat_org_id IS NULL )';
+                    $queryParams = array(
+                        $id,
+                        $date,
+                        $date,
+                        $gCurrentOrgId
+                    );
+                    $statement = $gDb->queryPrepared($sql, $queryParams);
+
+                    while ($row = $statement->fetch()) {
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
+                    }
+                    $number_col[$key + 1] = 0;
+                    break;
+                case 'r':                    //r=role
+
+                    $sql = 'SELECT mem_usr_id
+             				  FROM ' . TBL_ROLES . '
+                             INNER JOIN ' . TBL_MEMBERS . ' ON mem_rol_id = rol_id
+                             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
+             				   AND mem_begin <= ? -- $date
+           					   AND mem_end    > ? -- $date ';
+                    $queryParams = array(
+                        $id,
+                        $date,
+                        $date
+                    );
+                    $statement = $gDb->queryPrepared($sql, $queryParams);
+
+                    while ($row = $statement->fetch()) {
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
+                    }
+                    $number_col[$key + 1] = 0;
+                    break;
+                case 'f':                    //f=former role
+
+                    $sql = 'SELECT mem_usr_id
+             				  FROM ' . TBL_ROLES . '
+                             INNER JOIN ' . TBL_MEMBERS . ' ON mem_rol_id = rol_id
+                             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
+             				   AND mem_begin < ? -- $date
+           					   AND mem_end    < ? -- $date ';
+                    $queryParams = array(
+                        $id,
+                        $date,
+                        $date
+                    );
+                    $statement = $gDb->queryPrepared($sql, $queryParams);
+
+                    while ($row = $statement->fetch()) {
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
+                        // NOTE: By default, all current members as of the given date are included. However, if
+                        // a column has the "former members" type, then we need to include all former members
+                        // of that role, too (it will be marked as former members, so no risk of confusion)
+                        $this->listData[$row['mem_usr_id']] = array();
+                    }
+                    $number_col[$key + 1] = 0;
+                    break;
+                case 'w':                    //w=without (Leader)
+
+                    $sql = 'SELECT mem_usr_id
+             				  FROM ' . TBL_ROLES . '
+                             INNER JOIN ' . TBL_MEMBERS . ' ON mem_rol_id = rol_id
+                             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
+             				   AND mem_begin <= ? -- $date
+           					   AND mem_end    > ? -- $date
+             				   AND mem_leader = false ';
+                    $queryParams = array(
+                        $id,
+                        $date,
+                        $date
+                    );
+                    $statement = $gDb->queryPrepared($sql, $queryParams);
+
+                    while ($row = $statement->fetch()) {
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
+                    }
+                    $number_col[$key + 1] = 0;
+                    break;
+                case 'l':                    //l=leader
+
+                    $sql = 'SELECT mem_usr_id
+             				  FROM ' . TBL_ROLES . '
+                             INNER JOIN ' . TBL_MEMBERS . ' ON mem_rol_id = rol_id
+                             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                               AND cat_type = \'ROL\'
+             				 WHERE rol_id = ? -- $id
+             				   AND mem_begin <= ? -- $date
+           					   AND mem_end    > ? -- $date
+             				   AND mem_leader = true ';
+                    $queryParams = array(
+                        $id,
+                        $date,
+                        $date
+                    );
+                    $statement = $gDb->queryPrepared($sql, $queryParams);
+
+                    while ($row = $statement->fetch()) {
+                        $workArray[$key + 1]['usr_id'][(int)$row['mem_usr_id']] = true;
+                    }
+                    $number_col[$key + 1] = 0;
+                    break;
+                case 'n':                    //n=number
+                    // eine oder mehrere Zaehlspalten wurden definiert
+                    // die Position der letzten Spalte zwischenspeichern
+                    // Werte werden aber nur in der letzten Zaehlspalte angezeigt
+                    // alles andere ist Unsinn (warum soll derselbe Wert mehrfach angezeigt werden)
+                    $number_row_pos = $key + 1;
+                    $number_col[$key + 1] = '';
+                    break;
+                case 'a':                    //a=additional
+                case 'b':                    //b=membership begin
+                case 'e':                    //e=membership end
+                case 'd':                    //d=membership duration
+                case 'u':                    //u=user profile fields
+                    $number_col[$key + 1] = '';
+                    break;
+            }
+        }
+
+        $number_col[1] = $gL10n->get('SYS_TOTAL');
+
+
+        // ---------------------------------------------------------------------
+        // Apply per-column conditions (similar to myList) by translating them into SQL
+        // and pre-filtering the user ids. Conditions are only applied to:
+        //  - profile fields (type 'p')
+        //  - user fields (type 'u' : uuid, login_name, text, last_login, number_login)
+        // ---------------------------------------------------------------------
+        $conditionSqlJoins = '';
+        $conditionSqlWhere = '';
+        $conditionUsesUserTable = false;
+
+        foreach ($workArray as $colKey => $colDef) {
+            $rawCond = trim((string)($colDef['condition']));
+            if ($rawCond === '') {
+                continue;
+            }
+
+            $type = $colDef['type'];
+            $parser = new ConditionParser();
+
+            if ($type === 'p') {
+                $usfId = (int)($colDef['id'] ?? 0);
+                if ($usfId <= 0) {
+                    continue;
+                }
+
+                // add a dedicated LEFT JOIN for this profile field (so empty fields can be tested as well)
+                $alias = 'usd' . $colKey;
+                $conditionSqlJoins .= ' LEFT JOIN ' . TBL_USER_DATA . ' ' . $alias . '
+                                           ON ' . $alias . '.usd_usr_id = usr_id
+                                          AND ' . $alias . '.usd_usf_id = ' . $usfId . ' ';
+
+                // detect the value type (same logic as in myList)
+                $userFieldType = $gProfileFields->getPropertyById($usfId, 'usf_type');
+                $typeHint = 'string';
+                $id = (int) $colDef['id'];
+                $field = (string) $colDef['field'];
+                switch ($userFieldType) {
+                    case 'CHECKBOX':
+                        $typeHint = 'checkbox';
+                        // 'yes'/'no' will be replaced with 1/0 so it can be compared with the database value
+                        $arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                        $arrCheckboxKeys = array(1, 0, 1, 0);
+                        $rawCond = str_replace(
+                            array_map(array(StringUtils::class, 'strToLower'), $arrCheckboxValues),
+                            $arrCheckboxKeys,
+                            StringUtils::strToLower($rawCond)
+                        );
+                        break;
+
+                    case 'DROPDOWN': // fallthrough
+                    case 'RADIO_BUTTON':
+                        $typeHint = 'int';
+                        // replace all field values with their internal numbers
+                        $arrOptions = $gProfileFields->getPropertyById($usfId, 'ufo_usf_options', 'text');
+                        $rawCond = array_search(
+                            StringUtils::strToLower($rawCond),
+                            array_map(array(StringUtils::class, 'strToLower'), $arrOptions),
+                            true
+                        );
+                        break;
+
+                    case 'NUMBER': // fallthrough
+                    case 'DECIMAL':
+                        $typeHint = 'int';
+                        break;
+
+                    case 'DATE':
+                        $typeHint = 'date';
+                        break;
+
+                    default:
+                        $typeHint = 'string';
+                }
+
+                // if profile field then add NOT EXISTS statement (same idea as in myList)
+                $parser->setNotExistsStatement('SELECT 1
+                                                  FROM ' . TBL_USER_DATA . ' ' . $alias . 's
+                                                 WHERE ' . $alias . 's.usd_usr_id = usr_id
+                                                   AND ' . $alias . 's.usd_usf_id = ' . $usfId);
+
+                $conditionSqlWhere .= $parser->makeSqlStatement(
+                    (string)$rawCond,
+                    $alias . '.usd_value',
+                    $typeHint,
+                    $gProfileFields->getPropertyById($usfId, 'usf_name'),
+                    $gDb
+                );
+                continue;
+            }
+
+            if ($type === 'u') {
+                // map the supported special user fields to database columns
+                $dbCol = '';
+                $typeHint = 'string';
+
+                switch ($colDef['field']) {
+                    case 'uuid':
+                        $dbCol = 'usr_uuid';
+                        $typeHint = 'string';
+                        break;
+
+                    case 'login_name':
+                        $dbCol = 'usr_login_name';
+                        $typeHint = 'string';
+                        break;
+
+                    case 'text':
+                        $dbCol = 'usr_text';
+                        $typeHint = 'string';
+                        break;
+
+                    case 'last_login':
+                        $dbCol = 'usr_last_login';
+                        $typeHint = 'date';
+                        break;
+
+                    case 'number_login':
+                        $dbCol = 'usr_number_login';
+                        $typeHint = 'int';
+                        break;
+
+                    // photo is not filterable, ignore
+                    default:
+                        $dbCol = '';
+                }
+
+                if ($dbCol === '') {
+                    continue;
+                }
+
+                $conditionUsesUserTable = true;
+                $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $dbCol, $typeHint, $dbCol, $gDb);
+            }
+            // handle all other column types (role/category/membership related and dummy columns)
+            // For these types we build an SQL expression (often via EXISTS-subqueries) that can be filtered by ConditionParser.
+            // This allows conditions for ALL column types, not only profile/user fields.
+            $expr = '';
+            $typeHint = 'string';
+
+            // normalize checkbox-like textual values (yes/no/true/false) to 1/0
+            $normalizeYesNo = static function ($v) {
+                $arrCheckboxValues = array('yes', 'no', 'true', 'false');
+                $arrCheckboxKeys   = array(1, 0, 1, 0);
+                return str_replace($arrCheckboxValues, $arrCheckboxKeys, StringUtils::strToLower((string) $v));
+            };
+
+            switch ($type) {
+                // membership boolean flags ---------------------------------------------------------
+                case 'c': // current member of any role in category id
+                    $typeHint = 'checkbox';
+                    $rawCond  = $normalizeYesNo($rawCond);
+                    $expr = '(EXISTS (
+                                SELECT 1
+                                  FROM ' . TBL_CATEGORIES . ' c2
+                                 INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_cat_id = c2.cat_id
+                                 INNER JOIN ' . TBL_MEMBERS . ' m2 ON m2.mem_rol_id = r2.rol_id
+                                 WHERE c2.cat_id = ' . (int) $id . '
+                                   AND c2.cat_type = \'ROL\'
+                                   AND ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
+                                   AND r2.rol_valid  = true
+                                   AND m2.mem_usr_id = usr_id
+                                   AND m2.mem_begin <= \'' . $date . '\'
+                                   AND m2.mem_end    > \'' . $date . '\'
+                            ))';
+                    break;
+
+                case 'r': // current member of role id
+                    $typeHint = 'checkbox';
+                    $rawCond  = $normalizeYesNo($rawCond);
+                    $expr = '(EXISTS (
+                                SELECT 1
+                                  FROM ' . TBL_MEMBERS . ' m2
+                                 INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_id = m2.mem_rol_id
+                                 INNER JOIN ' . TBL_CATEGORIES . ' c2 ON c2.cat_id = r2.rol_cat_id AND c2.cat_type = \'ROL\'
+                                 WHERE r2.rol_id = ' . (int) $id . '
+                                   AND r2.rol_valid  = true
+                                   AND m2.mem_usr_id = usr_id
+                                   AND m2.mem_begin <= \'' . $date . '\'
+                                   AND m2.mem_end    > \'' . $date . '\'
+                            ))';
+                    break;
+
+                case 'l': // current leader of role id
+                    $typeHint = 'checkbox';
+                    $rawCond  = $normalizeYesNo($rawCond);
+                    $expr = '(EXISTS (
+                                SELECT 1
+                                  FROM ' . TBL_MEMBERS . ' m2
+                                 INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_id = m2.mem_rol_id
+                                 INNER JOIN ' . TBL_CATEGORIES . ' c2 ON c2.cat_id = r2.rol_cat_id AND c2.cat_type = \'ROL\'
+                                 WHERE r2.rol_id = ' . (int) $id . '
+                                   AND r2.rol_valid  = true
+                                   AND m2.mem_leader = true
+                                   AND m2.mem_usr_id = usr_id
+                                   AND m2.mem_begin <= \'' . $date . '\'
+                                   AND m2.mem_end    > \'' . $date . '\'
+                            ))';
+                    break;
+
+                case 'w': // current member (not leader) of role id
+                    $typeHint = 'checkbox';
+                    $rawCond  = $normalizeYesNo($rawCond);
+                    $expr = '(EXISTS (
+                                SELECT 1
+                                  FROM ' . TBL_MEMBERS . ' m2
+                                 INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_id = m2.mem_rol_id
+                                 INNER JOIN ' . TBL_CATEGORIES . ' c2 ON c2.cat_id = r2.rol_cat_id AND c2.cat_type = \'ROL\'
+                                 WHERE r2.rol_id = ' . (int) $id . '
+                                   AND r2.rol_valid  = true
+                                   AND (m2.mem_leader IS NULL OR m2.mem_leader = false)
+                                   AND m2.mem_usr_id = usr_id
+                                   AND m2.mem_begin <= \'' . $date . '\'
+                                   AND m2.mem_end    > \'' . $date . '\'
+                            ))';
+                    break;
+
+                case 'f': // former member of role id (as of report date)
+                    $typeHint = 'checkbox';
+                    $rawCond  = $normalizeYesNo($rawCond);
+                    $expr = '(EXISTS (
+                                SELECT 1
+                                  FROM ' . TBL_MEMBERS . ' m2
+                                 INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_id = m2.mem_rol_id
+                                 INNER JOIN ' . TBL_CATEGORIES . ' c2 ON c2.cat_id = r2.rol_cat_id AND c2.cat_type = \'ROL\'
+                                 WHERE r2.rol_id = ' . (int) $id . '
+                                   AND r2.rol_valid  = true
+                                   AND m2.mem_usr_id = usr_id
+                                   AND m2.mem_begin <  \'' . $date . '\'
+                                   AND m2.mem_end   <  \'' . $date . '\'
+                            ))';
+                    break;
+
+                // membership dates ---------------------------------------------------------------
+                case 'b': // membership start date (current membership as of report date)
+                    $typeHint = 'date';
+                    $expr = '(SELECT MIN(m2.mem_begin)
+                                FROM ' . TBL_MEMBERS . ' m2
+                               WHERE m2.mem_usr_id = usr_id
+                                 AND m2.mem_rol_id = ' . (int) $id . '
+                                 AND m2.mem_begin <= \'' . $date . '\'
+                                 AND m2.mem_end    > \'' . $date . '\')';
+                    break;
+
+                case 'e': // membership end date (current membership as of report date)
+                    $typeHint = 'date';
+                    $expr = '(SELECT MAX(m2.mem_end)
+                                FROM ' . TBL_MEMBERS . ' m2
+                               WHERE m2.mem_usr_id = usr_id
+                                 AND m2.mem_rol_id = ' . (int) $id . '
+                                 AND m2.mem_begin <= \'' . $date . '\'
+                                 AND m2.mem_end    > \'' . $date . '\')';
+                    break;
+
+                case 'd':
+                    // two meanings:
+                    //   d#     -> membership duration of role with ID # (in days, as of report date)
+                    //   ddummy -> overall membership duration (as of report date)
+
+                    // If the condition uses a year suffix supported by ConditionParser we switch to DATE mode:
+                    // We then compare membership START DATE against a threshold date (reportDate - X).
+                    $useDateMode = ConditionParser::containsAgeCondition((string)$rawCond);
+                    if ($colDef['field'] === 'dummy' || (int) $id === 0) {
+                        if ($useDateMode) {
+                            // ddummy as DATE: earliest membership start in org
+                            $typeHint = 'date';
+                            $expr = '(SELECT MIN(m2.mem_begin)
+                        FROM ' . TBL_CATEGORIES . ' c2
+                       INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_cat_id = c2.cat_id
+                       INNER JOIN ' . TBL_MEMBERS . ' m2 ON m2.mem_rol_id = r2.rol_id
+                       WHERE c2.cat_type = \'ROL\'
+                         AND ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
+                         AND r2.rol_valid  = true
+                         AND m2.mem_usr_id = usr_id)';
+                        } else {
+                            // ddummy as INT: duration in days since earliest membership start in org
+                            $typeHint = 'int';
+                            $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
+                        FROM ' . TBL_CATEGORIES . ' c2
+                       INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_cat_id = c2.cat_id
+                       INNER JOIN ' . TBL_MEMBERS . ' m2 ON m2.mem_rol_id = r2.rol_id
+                       WHERE c2.cat_type = \'ROL\'
+                         AND ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
+                         AND r2.rol_valid  = true
+                         AND m2.mem_usr_id = usr_id)';
+                        }
+                    } else {
+                        if ($useDateMode) {
+                            // d# as DATE: membership start (current membership as of report date)
+                            $typeHint = 'date';
+                            $expr = '(SELECT MIN(m2.mem_begin)
+                        FROM ' . TBL_MEMBERS . ' m2
+                       WHERE m2.mem_usr_id = usr_id
+                         AND m2.mem_rol_id = ' . (int) $id . '
+                         AND m2.mem_begin <= \'' . $date . '\'
+                         AND m2.mem_end    > \'' . $date . '\')';
+                        } else {
+                            // d# as INT: duration in days since membership start (current membership as of report date)
+                            $typeHint = 'int';
+                            $expr = '(SELECT DATEDIFF(\'' . $date . '\', MIN(m2.mem_begin))
+                        FROM ' . TBL_MEMBERS . ' m2
+                       WHERE m2.mem_usr_id = usr_id
+                         AND m2.mem_rol_id = ' . (int) $id . '
+                         AND m2.mem_begin <= \'' . $date . '\'
+                         AND m2.mem_end    > \'' . $date . '\')';
+                        }
+                    }
+                    break;
+
+                // dummy columns -----------------------------------------------------------------
+                case 'a': // adummy - all current roles (as of report date)
+                    $typeHint = 'string';
+                    $expr = '(SELECT GROUP_CONCAT(r2.rol_name ORDER BY r2.rol_name SEPARATOR \', \')
+                                FROM ' . TBL_MEMBERS . ' m2
+                               INNER JOIN ' . TBL_ROLES . ' r2 ON r2.rol_id = m2.mem_rol_id
+                               INNER JOIN ' . TBL_CATEGORIES . ' c2 ON c2.cat_id = r2.rol_cat_id AND c2.cat_type = \'ROL\'
+                               WHERE ( c2.cat_org_id = ' . (int) $gCurrentOrgId . ' OR c2.cat_org_id IS NULL )
+                                 AND r2.rol_valid  = true
+                                 AND m2.mem_usr_id = usr_id
+                                 AND m2.mem_begin <= \'' . $date . '\'
+                                 AND m2.mem_end    > \'' . $date . '\')';
+                    break;
+
+                default:
+                    $expr = '';
+            }
+
+            if ($expr !== '') {
+                // for any condition we rely on usr_id in the SQL, therefore we must join the user table in the main query
+                $conditionUsesUserTable = true;
+                $conditionSqlWhere .= $parser->makeSqlStatement((string)$rawCond, $expr, $typeHint, $this->headerData[$colKey]['data'], $gDb);
+            }
+
+        }
+
+
+        // Read in all current members of the current organisation
+        // Then add all former members of the groups, where former memberships should be displayed.
+        // They will be marked as former members, so the confusion risk is minimized.
+        $sql = ' SELECT mem_usr_id
+                   FROM ' . TBL_CATEGORIES . '
+                  INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
+                  INNER JOIN ' . TBL_MEMBERS . ' ON mem_rol_id = rol_id '
+                    . ( ($conditionUsesUserTable || $conditionSqlJoins !== '') ? ' INNER JOIN ' . TBL_USERS . ' ON usr_id = mem_usr_id ' : '' )
+                    . $conditionSqlJoins . '
+                  WHERE cat_type = \'ROL\'
+             	    AND ( cat_org_id = ? -- $gCurrentOrgId
+               		 OR cat_org_id IS NULL )
+             	    AND rol_valid  = true
+             	    AND mem_begin <= ? -- $date
+           		    AND mem_end    > ? -- $date
+           		    ' . $conditionSqlWhere;
+        $queryParams = array(
+            $gCurrentOrgId,
+            $date,
+            $date
+        );
+        $statement = $gDb->queryPrepared($sql, $queryParams);
+
+        while ($row = $statement->fetch()) {
+            $this->listData[$row['mem_usr_id']] = array();
+        }
+
+        $roleSelection = trim((string)($this->arrConfiguration[$this->conf]['selection_role'] ?? ''));
+        $selectedRoles = $roleSelection === '' ? array() : array_values(array_filter(
+            array_map('intval', explode(',', $roleSelection)),
+            static fn(int $roleId): bool => $roleId > 0
+        ));
+        $needsMemberships = count($selectedRoles) > 0;
+        $needsUser = $needsMemberships;
+        $needsRoleNames = false;
+        $profileFieldIds = array();
+        $membershipRoleIds = array();
+        $needsAllMembershipDetails = false;
+        foreach ($workArray as $column) {
+            if ($column['type'] === 'p' || $column['type'] === 'u') {
+                $needsUser = true;
+            }
+            if ($column['type'] === 'p') {
+                $profileFieldIds[] = (int)$column['id'];
+            }
+            if ($column['type'] === 'a' || ($column['type'] === 'd' && $column['field'] === 'dummy')) {
+                $needsMemberships = true;
+                $needsRoleNames = true;
+            }
+            if ($column['type'] === 'd' && $column['field'] === 'dummy') {
+                $needsAllMembershipDetails = true;
+            } elseif (in_array($column['type'], array('b', 'e', 'd'), true)) {
+                $membershipRoleIds[] = (int)$column['id'];
+            }
+        }
+        $profileFieldIds = array_values(array_unique($profileFieldIds));
+        $membershipRoleIds = array_values(array_unique($membershipRoleIds));
+        $categorySelection = trim((string)($this->arrConfiguration[$this->conf]['selection_cat'] ?? ''));
+        $selectedCategories = $categorySelection === '' ? array() : array_values(array_filter(
+            array_map('intval', explode(',', $categorySelection)),
+            static fn(int $categoryId): bool => $categoryId > 0
+        ));
+        $categoryMatches = array();
+
+        if (count($selectedCategories) > 0) {
+            $placeholders = implode(', ', array_fill(0, count($selectedCategories), '?'));
+            $categoryStatement = $gDb->queryPrepared(
+                'SELECT DISTINCT mem_usr_id, cat_id
+                   FROM ' . TBL_MEMBERS . '
+                  INNER JOIN ' . TBL_ROLES . ' ON mem_rol_id = rol_id
+                  INNER JOIN ' . TBL_CATEGORIES . ' ON rol_cat_id = cat_id
+                  WHERE cat_id IN (' . $placeholders . ')
+                    AND mem_begin <= ?
+                    AND mem_end > ?
+                    AND rol_valid = true
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)
+               ORDER BY mem_usr_id, cat_id',
+                array_merge($selectedCategories, array($date, $date, $gCurrentOrgId))
+            );
+            while ($row = $categoryStatement->fetch()) {
+                $categoryMatches[(int)$row['mem_usr_id']][(int)$row['cat_id']] = true;
+            }
+        }
+
+        $memberIds = array_map('intval', array_keys($this->listData));
+        $userData = array();
+        $profileData = array();
+        $membershipsByUser = array();
+        $roleNames = array();
+        $membershipCache = array();
+
+        if ($needsUser && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $userStatement = $gDb->queryPrepared(
+                'SELECT usr_id, usr_uuid, usr_login_name, usr_photo, usr_text,
+                        usr_last_login, usr_number_login
+                   FROM ' . TBL_USERS . '
+                  WHERE usr_id IN (' . $memberPlaceholders . ')',
+                $memberIds
+            );
+            while ($row = $userStatement->fetch()) {
+                $userData[(int)$row['usr_id']] = $row;
+            }
+        }
+
+        if (count($profileFieldIds) > 0 && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $fieldPlaceholders = implode(', ', array_fill(0, count($profileFieldIds), '?'));
+            $profileStatement = $gDb->queryPrepared(
+                'SELECT usd_usr_id, usd_usf_id, usd_value
+                   FROM ' . TBL_USER_DATA . '
+                  WHERE usd_usr_id IN (' . $memberPlaceholders . ')
+                    AND usd_usf_id IN (' . $fieldPlaceholders . ')',
+                array_merge($memberIds, $profileFieldIds)
+            );
+            while ($row = $profileStatement->fetch()) {
+                $profileData[(int)$row['usd_usr_id']][(int)$row['usd_usf_id']] = $row['usd_value'] ?? '';
+            }
+        }
+
+        if ($needsMemberships && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $membershipStatement = $gDb->queryPrepared(
+                'SELECT mem_usr_id, mem_rol_id, rol_name
+                   FROM ' . TBL_MEMBERS . '
+                  INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+                  INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
+                  WHERE mem_usr_id IN (' . $memberPlaceholders . ')
+                    AND mem_begin <= ?
+                    AND mem_end > ?
+                    AND rol_valid = true
+                    AND (cat_org_id = ? OR cat_org_id IS NULL)',
+                array_merge($memberIds, array(DATE_NOW, DATE_NOW, $gCurrentOrgId))
+            );
+            while ($row = $membershipStatement->fetch()) {
+                $userId = (int)$row['mem_usr_id'];
+                $roleId = (int)$row['mem_rol_id'];
+                $membershipsByUser[$userId][$roleId] = true;
+                if ($needsRoleNames && !isset($roleNames[$roleId])) {
+                    $roleNames[$roleId] = Language::translateIfTranslationStrId((string)$row['rol_name']);
+                }
+            }
+        }
+
+        if (($needsAllMembershipDetails || count($membershipRoleIds) > 0) && count($memberIds) > 0) {
+            $memberPlaceholders = implode(', ', array_fill(0, count($memberIds), '?'));
+            $queryParams = $memberIds;
+            $roleCondition = '';
+            if (!$needsAllMembershipDetails) {
+                $rolePlaceholders = implode(', ', array_fill(0, count($membershipRoleIds), '?'));
+                $roleCondition = ' AND mem_rol_id IN (' . $rolePlaceholders . ')';
+                $queryParams = array_merge($queryParams, $membershipRoleIds);
+            }
+            $queryParams[] = $date;
+            $queryParams[] = $date;
+            $membershipDetailStatement = $gDb->queryPrepared(
+                'SELECT ' . TBL_MEMBERS . '.*
+                   FROM ' . TBL_MEMBERS . '
+                  WHERE mem_usr_id IN (' . $memberPlaceholders . ')'
+                    . $roleCondition . '
+                    AND mem_begin <= ?
+                    AND mem_end > ?
+               ORDER BY mem_usr_id, mem_rol_id, mem_begin DESC, mem_id DESC',
+                $queryParams
+            );
+            while ($row = $membershipDetailStatement->fetch()) {
+                $userId = (int)$row['mem_usr_id'];
+                $roleId = (int)$row['mem_rol_id'];
+                if (!isset($membershipCache[$userId][$roleId])) {
+                    $membership = new Membership($gDb);
+                    $membership->setArray($row);
+                    $membershipCache[$userId][$roleId] = $membership;
+                }
+            }
+        }
+
+        // go through all members
+        foreach ($this->listData as $member => $dummy) {
+            $member = (int)$member;
+            $memberShips = array_map('intval', array_keys($membershipsByUser[$member] ?? array()));
+            $memberRoleSet = count($selectedRoles) > 0 ? array_fill_keys($memberShips, true) : array();
+            $number_row_count = 0;
+
+            // Are there role and/or category restrictions?
+            $roleMarker = true;
+            if (count($selectedRoles) > 0) {
+                $roleMarker = false;
+                foreach ($selectedRoles as $rol) {
+                    if (isset($memberRoleSet[$rol])) {
+                        $roleMarker = true;
+                        break;
+                    }
+                }
+            }
+
+            $categoryMarker = true;
+            if (count($selectedCategories) > 0) {
+                $categoryMarker = false;
+                foreach ($selectedCategories as $cat) {
+                    if (isset($categoryMatches[(int)$member][$cat])) {
+                        $categoryMarker = true;
+                        break;
+                    }
+                }
+            }
+            // If any of the role or category restrictions fails to match, exclude this member
+            if (!$roleMarker || !$categoryMarker) {
+                unset($this->listData[$member]);
+                continue;
+            }
+
+            if ($needsUser) {
+                $this->userUuids[$member] = (string)($userData[$member]['usr_uuid'] ?? '');
+            }
+
+            foreach ($workArray as $key => $data) {
+                if ($data['type'] == 'p') {
+                    $this->listData[$member][$key] = $profileData[$member][(int)$data['id']] ?? '';
+
+                } elseif ($data['type'] == 'u') {       // User profile fields (UUID, login, photo, text, ...)
+                    $fieldId = null;
+                    switch ($data['field']) {
+                        case 'uuid':
+                        case 'login_name':
+                        case 'photo':
+                        case 'text':
+                        case 'last_login':
+                        case 'number_login':
+                            $fieldId = 'usr_' . $data['field'];
+                            break;
+                    }
+                    if (!empty($fieldId)) {
+                        if ($data['field'] == 'last_login') {
+                            $loginDate = (string)($userData[$member][$fieldId] ?? '');
+                            if ($loginDate !== '') {
+                                try {
+                                    $loginDate = (new \DateTime($loginDate))->format(
+                                        $gSettingsManager->getString('system_date') . ' ' .
+                                        $gSettingsManager->getString('system_time')
+                                    );
+                                } catch (\Throwable) {
+                                    // Keep an invalid legacy value unchanged, as Entity::getValue() does.
+                                }
+                            }
+                            $this->listData[$member][$key] = $loginDate;
+                        } else {
+                            $value = $userData[$member][$fieldId] ?? '';
+                            if ($data['field'] === 'number_login' && $value !== '') {
+                                $value = (int)$value;
+                            } elseif ($data['field'] === 'photo' && is_resource($value)) {
+                                ob_start();
+                                fpassthru($value);
+                                $hexValue = ob_get_clean();
+                                $value = is_string($hexValue) ? (hex2bin($hexValue) ?: '') : '';
+                            }
+                            $this->listData[$member][$key] = $value;
+                        }
+                    } else {
+                        $this->listData[$member][$key] = '';
+                    }
+
+                } elseif ($data['type'] == 'a') {              // Sonderfall: Rollengesamtuebersicht erstellen
+                    $this->listData[$member][$key] = '';
+                    foreach ($memberShips as $rol_id) {
+                        $this->listData[$member][$key] .= ($roleNames[$rol_id] ?? '') . '; ';
+                    }
+                    $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
+
+                } elseif ($data['type'] == 'd' && $data['field'] == 'dummy') {              //Sonderfall: Mitgliedschaftsdauern aller Rollen
+
+                    // Get membership durations for all roles
+                    $this->listData[$member][$key] = '';
+
+                    foreach ($memberShips as $rol_id) {
+                        $membership = $membershipCache[$member][$rol_id] ?? null;
+                        if ($membership !== null) {
+                            $duration = $membership->calculateDuration();
+                            $this->listData[$member][$key] .= ($roleNames[$rol_id] ?? '') . ': ' . $duration['formatted'] . '; ';
+                        }
+                    }
+                    $this->listData[$member][$key] = trim($this->listData[$member][$key], '; ');
+
+                } elseif ($data['type'] === 'b') {      // Membership begin
+                    $this->listData[$member][$key] = '';
+                    $membership = $membershipCache[$member][$data['id']] ?? null;
+                    if ($membership !== null) {
+                        $this->listData[$member][$key] = $membership->getValue('mem_begin', 'Y-m-d');
+                    }
+
+                } elseif ($data['type'] === 'e') {      // Membership end
+                    $this->listData[$member][$key] = '';
+                    $membership = $membershipCache[$member][$data['id']] ?? null;
+                    if ($membership !== null) {
+                        $this->listData[$member][$key] = $membership->getValue('mem_end', 'Y-m-d');
+                    }
+
+                } elseif ($data['type'] === 'd') {      // Membership duration
+                    $this->listData[$member][$key] = '';
+                    $membership = $membershipCache[$member][$data['id']] ?? null;
+                    if ($membership !== null) {
+                        $duration = $membership->calculateDuration();
+                        if (isset($duration['formatted'])) {
+                            $this->listData[$member][$key] = $duration['formatted'];
+                        }
+                    }
+
+                } elseif ($data['type'] == 'n') {              //Sonderfall: Anzahlspalte
+                    $this->listData[$member][$key] = '';
+
+                } else {
+                    if (isset($data['usr_id'][(int)$member])) {
+                        $this->listData[$member][$key] = true;
+                        $number_row_count++;
+                        $number_col[$key]++;
+                    } else {
+                        $this->listData[$member][$key] = '';
+                    }
+                }
+            }
+            if ($number_row_pos > -1) {
+                $this->listData[$member][$number_row_pos] = $number_row_count;
+            }
+        }
+
+        if ($this->arrConfiguration[$this->conf]['number_col'] == 1) {
+            $this->listData[] = $number_col;
+        }
+    }
+
+    /**
+     * Erzeugt die Auswahlliste fuer die Spaltenauswahl
+     * @return void
+     * @throws Exception
+     */
+    private function generate_headerSelection()
+    {
+        global $gDb, $gL10n, $gProfileFields, $gCurrentUser, $gCurrentOrgId;
+
+        $categories = array();
+
+        $i = 1;
+        foreach ($gProfileFields->getProfileFields() as $field) {
+            if ($field->getValue('usf_hidden') == 0 || $gCurrentUser->isAdministratorUsers()) {
+                $this->headerSelection[$i]['id'] = 'p' . $field->getValue('usf_id');
+                $this->headerSelection[$i]['cat_name'] = $field->getValue('cat_name');
+                $this->headerSelection[$i]['data'] = Language::translateIfTranslationStrId(
+                    (string)$field->getValue('usf_name', 'database')
+                );
+                $i++;
+            }
+        }
+
+        // User fields (uuid, login_name, number_login, last_login)
+        $this->headerSelection[$i]['id'] = 'uuuid';       // u wie User profile
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_PROFILE_DATA');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_UNIQUE_ID');
+        $i++;
+
+        $this->headerSelection[$i]['id'] = 'ulogin_name';       // u wie User profile
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_PROFILE_DATA');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_USERNAME');
+        $i++;
+
+        $this->headerSelection[$i]['id'] = 'unumber_login';       // u wie User profile
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_PROFILE_DATA');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_NUMBER_OF_LOGINS');
+        $i++;
+
+        $this->headerSelection[$i]['id'] = 'ulast_login';       // u wie User profile
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_PROFILE_DATA');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_LAST_LOGIN');
+        $i++;
+
+        // alle (Rollen-)Kategorien der aktuellen Organisation einlesen
+        $sql = ' SELECT cat_name, cat_id
+             	   FROM ' . TBL_CATEGORIES . '
+             	  WHERE cat_type = \'ROL\'
+             	    AND ( cat_org_id = ? -- $gCurrentOrgId
+               	        OR cat_org_id IS NULL )';
+        $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
+
+        $k = 0;
+        while ($row = $statement->fetch()) {
+            // check if the category name must be translated
+            if (Language::isTranslationStringId($row['cat_name'])) {
+                $row['cat_name'] = $gL10n->get($row['cat_name']);
+            }
+            $categories[$k]['cat_id'] = $row['cat_id'];
+            $categories[$k]['cat_name'] = $row['cat_name'];
+            $categories[$k]['data'] = $gL10n->get('SYS_CATEGORY') . ': ' . $row['cat_name'];
+            $k++;
+        }
+
+        // alle eingelesenen Kategorien durchlaufen und die Rollen dazu einlesen
+        foreach ($categories as $data) {
+            $this->headerSelection[$i]['id'] = 'c' . $data['cat_id'];
+            $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+            $this->headerSelection[$i]['data'] = $data['data'];
+            $i++;
+
+            $sql = 'SELECT DISTINCT rol_name, rol_id, rol_valid
+                	           FROM ' . TBL_CATEGORIES . '
+                	          INNER JOIN ' . TBL_ROLES . ' ON rol_cat_id = cat_id
+                	          WHERE cat_id = ? ';
+            $statement = $gDb->queryPrepared($sql, array($data['cat_id']));
+
+            while ($row = $statement->fetch()) {
+                $roleName = Language::translateIfTranslationStrId((string)$row['rol_name']);
+                $marker = '';
+                if ($row['rol_valid'] == 0) {
+                    $marker = ' (*)';
+                }
+
+                $this->headerSelection[$i]['id'] = 'r' . $row['rol_id'];       //r wie role
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE') . ': ' . $roleName . $marker;
+                $i++;
+
+                $this->headerSelection[$i]['id'] = 'w' . $row['rol_id'];        //w wie without (Leader)
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_WITHOUT_LEADER') . ': ' . $roleName . $marker;
+                $i++;
+
+                $this->headerSelection[$i]['id'] = 'l' . $row['rol_id'];        //l wie leader
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_LEADER') . ': ' . $roleName . $marker;
+                $i++;
+
+                $this->headerSelection[$i]['id'] = 'f' . $row['rol_id'];        //f wie former member
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_PAST') . ': ' . $roleName . $marker;
+                $i++;
+
+                $this->headerSelection[$i]['id'] = 'b' . $row['rol_id'];        //b wie begin of membership
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_START') . ': ' . $roleName . $marker;
+                $i++;
+
+                $this->headerSelection[$i]['id'] = 'e' . $row['rol_id'];        //e wie end of membership
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_END') . ': ' . $roleName . $marker;
+                $i++;
+
+                $this->headerSelection[$i]['id'] = 'd' . $row['rol_id'];        //d wie duration of membership
+                $this->headerSelection[$i]['cat_name'] = $data['cat_name'];
+                $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION') . ': ' . $roleName . $marker;
+                $i++;
+
+            }
+        }
+        //Zusatzspalte fuer die Gesamtrollenuebersicht erzeugen
+        $this->headerSelection[$i]['id'] = 'adummy';          //a wie additional
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_ROLE_MEMBERSHIPS');
+        $i++;
+
+        //Custom column for membership duration
+        $this->headerSelection[$i]['id'] = 'ddummy';          //d wie duration
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_MEMBERSHIP_DURATION');
+        $i++;
+
+        //Zusatzspalte fuer die Anzahl erzeugen
+        $this->headerSelection[$i]['id'] = 'ndummy';          //n wie number
+        $this->headerSelection[$i]['cat_name'] = $gL10n->get('SYS_ADDITIONAL_COLUMNS');
+        $this->headerSelection[$i]['data'] = $gL10n->get('SYS_QUANTITY') . ' (' . $gL10n->get('SYS_ROW') . ')';
+
+
+        $this->headerRolePropSelection = array(
+            array('id' => "r", 'data' => $gL10n->get('SYS_GROUP_ROLE_MEMBERSHIP')),
+            array('id' => "w", 'data' => $gL10n->get('SYS_ROLE_WITHOUT_LEADER')),
+            array('id' => "l", 'data' => $gL10n->get('SYS_LEADER')),
+            array('id' => "f", 'data' => $gL10n->get('SYS_ROLE_PAST')),
+            array('id' => "b", 'data' => $gL10n->get('SYS_MEMBERSHIP_START')),
+            array('id' => "e", 'data' => $gL10n->get('SYS_MEMBERSHIP_END')),
+            array('id' => "d", 'data' => $gL10n->get('SYS_MEMBERSHIP_DURATION')),
+        );
+    }
+
+    /** @return array<int,array<string,mixed>> */
+    public function getConfigArray(): array
+    {
+        return $this->arrConfiguration = $this->repository->getConfigArray();
+    }
+
+    /**
+     * get the active configuration
+     */
+    public function getConfiguration(): int
+    {
+        return $this->conf;
+    }
+
+    /**
+     * Checks whether the transferred value exists in the column selection list.
+     * Note: the column selection list is always up-to-date as it is newly generated,
+     * but the value to be checked may be out of date as it comes from the configuration table
+     * @param string $search_value
+     * @return int
+     */
+    public function isInHeaderSelection(string $search_value): int
+    {
+        $ret = 0;
+        foreach ($this->headerSelection as $key => $data) {
+            if ($data['id'] == $search_value) {
+                $ret = $key;
+                break;
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Validate a column condition with the same type and normalization used when generating a report.
+     *
+     * @throws Exception
+     */
+    public function validateColumnCondition(string $field, string $condition): void
+    {
+        global $gDb, $gL10n, $gProfileFields;
+
+        if (trim($condition) === '') {
+            return;
+        }
+
+        $selectionIndex = $this->isInHeaderSelection($field);
+        if ($selectionIndex === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $fieldName = (string)$this->headerSelection[$selectionIndex]['data'];
+        $type = substr($field, 0, 1);
+        $fieldIdentifier = substr($field, 1);
+        $typeHint = 'string';
+        $normalizedCondition = $condition;
+
+        if ($type === 'p') {
+            $profileFieldId = (int)$fieldIdentifier;
+            switch ($gProfileFields->getPropertyById($profileFieldId, 'usf_type')) {
+                case 'CHECKBOX':
+                    $checkboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+                    $normalizedCondition = str_replace(
+                        array_map(array(StringUtils::class, 'strToLower'), $checkboxValues),
+                        array(1, 0, 1, 0),
+                        StringUtils::strToLower($normalizedCondition)
+                    );
+                    $typeHint = 'checkbox';
+                    break;
+
+                case 'DROPDOWN':
+                case 'RADIO_BUTTON':
+                    $options = $gProfileFields->getPropertyById($profileFieldId, 'ufo_usf_options', 'text');
+                    $option = array_search(
+                        StringUtils::strToLower($normalizedCondition),
+                        array_map(array(StringUtils::class, 'strToLower'), $options),
+                        true
+                    );
+                    if ($option === false) {
+                        throw new Exception('SYS_FIELD_INVALID_INPUT', array($fieldName));
+                    }
+                    $normalizedCondition = (string)$option;
+                    $typeHint = 'int';
+                    break;
+
+                case 'NUMBER':
+                case 'DECIMAL':
+                    $typeHint = 'int';
+                    break;
+
+                case 'DATE':
+                    $typeHint = 'date';
+                    break;
+            }
+        } elseif ($type === 'u') {
+            $typeHint = match ($fieldIdentifier) {
+                'last_login' => 'date',
+                'number_login' => 'int',
+                default => 'string'
+            };
+        } elseif (in_array($type, array('c', 'r', 'l', 'w', 'f'), true)) {
+            $normalizedCondition = str_replace(
+                array('yes', 'no', 'true', 'false'),
+                array(1, 0, 1, 0),
+                StringUtils::strToLower($normalizedCondition)
+            );
+            $typeHint = 'checkbox';
+        } elseif ($type === 'b' || $type === 'e') {
+            $typeHint = 'date';
+        } elseif ($type === 'd') {
+            $typeHint = ConditionParser::containsAgeCondition($normalizedCondition) ? 'date' : 'int';
+        } elseif ($type === 'n') {
+            throw new Exception('SYS_FIELD_INVALID_INPUT', array($fieldName));
+        }
+
+        ConditionParser::validateCondition(
+            $normalizedCondition,
+            $typeHint,
+            $fieldName,
+            $gDb
+        );
+    }
+
+    /**
+     * set the internal active configuration to the crtId of the parameter
+     */
+    public function setConfiguration(int $crtId): void
+    {
+        foreach ($this->arrConfiguration as $key => $values) {
+            if ((int)$values['id'] === $crtId) {
+                $this->conf = $key;
+                return;
+            }
+        }
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
+    }
+}

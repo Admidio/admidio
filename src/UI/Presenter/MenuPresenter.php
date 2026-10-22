@@ -91,7 +91,7 @@ class MenuPresenter extends PagePresenter
             // Each role is now added to this array
             $parentRoleViewSet[] = array(
                 $rowViewRoles['rol_id'],
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')',
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ')',
                 $rowViewRoles['cat_name']
             );
         }
@@ -119,7 +119,7 @@ class MenuPresenter extends PagePresenter
         $form->addInput(
             'men_name',
             $gL10n->get('SYS_NAME'),
-            htmlentities($menu->getValue('men_name', 'database'), ENT_QUOTES),
+            htmlentities((string)$menu->getValue('men_name', 'database'), ENT_QUOTES),
             array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_MENU_NAME_DESC')
         );
 
@@ -291,7 +291,7 @@ class MenuPresenter extends PagePresenter
                 if (!$menuEntry['men_standard']) {
                     $templateRowMenu['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_menu_entry_' . $menuEntry['men_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'delete', 'uuid' => $menuEntry['men_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($templateRowMenu['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($templateRowMenu['name']))),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE')
                     );

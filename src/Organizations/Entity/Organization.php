@@ -3,6 +3,7 @@
 namespace Admidio\Organizations\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\CategoryReport\Entity\CategoryReport;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Events\Entity\Event;
 use Admidio\Forum\Service\ForumService;
@@ -75,7 +76,7 @@ class Organization extends Entity
         if (is_numeric($organization)) {
             $this->readDataById($organization);
         } else {
-            $this->readDataByColumns(array('org_shortname' => $organization));
+            $this->readDataByShortname($organization);
         }
 
         if ((int)$this->getValue('org_id') > 0) {
@@ -85,11 +86,45 @@ class Organization extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'organization';
+    }
+
+    /**
+     * Read the organization that carries the given short name.
+     *
+     * The short name identifies the organization in the configuration file, in the login and in the
+     * URL, so the comparison must not depend on the case. MySQL folds it through the collation of
+     * the column, PostgreSQL does not, therefore the statement says so itself.
+     * @param string $shortname The short name of the organization
+     * @return bool Returns **true** if an organization with that short name was found
+     * @throws Exception
+     */
+    public function readDataByShortname(string $shortname): bool
+    {
+        // initialize the object, so that all fields are empty
+        $this->clear();
+
+        $returnCode = $this->readData(' UPPER(org_shortname) = UPPER(?) ', array($shortname));
+
+        // as readDataByColumns() does, keep the name that was searched for when nothing was found
+        if (!$returnCode) {
+            $this->setValue('org_shortname', $shortname);
+        }
+
+        return $returnCode;
+    }
+
+    /**
      * Initialize all necessary data of this object.
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -125,24 +160,17 @@ class Organization extends Entity
      */
     public function createBasicData(int $userId)
     {
-        global $gL10n, $gProfileFields;
+        global $gProfileFields;
 
         // read id of system user from database
         $sql = 'SELECT usr_id
                   FROM ' . TBL_USERS . '
-                 WHERE usr_login_name = ? -- $gL10n->get(\'SYS_SYSTEM\')';
-        $systemUserStatement = $this->db->queryPrepared($sql, array($gL10n->get('SYS_SYSTEM')));
+                 WHERE usr_login_name = ? AND usr_valid = false';
+        $systemUserStatement = $this->db->queryPrepared($sql, array('SYS_SYSTEM'));
         $systemUserId = (int)$systemUserStatement->fetchColumn();
 
         // create all systemmail texts and write them into table adm_texts
-        $systemmailsTexts = array(
-            'SYSMAIL_REGISTRATION_CONFIRMATION' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_CONFIRMATION'),
-            'SYSMAIL_REGISTRATION_NEW' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR'),
-            'SYSMAIL_REGISTRATION_APPROVED' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-            'SYSMAIL_REGISTRATION_REFUSED' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
-            'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-            'SYSMAIL_PASSWORD_RESET' => $gL10n->get('SYS_SYSMAIL_PASSWORD_RESET')
-        );
+        $systemmailsTexts = Text::SYSTEM_MAIL_DEFAULTS;
         $text = new Text($this->db);
 
         $orgId = (int)$this->getValue('org_id');
@@ -226,13 +254,13 @@ class Organization extends Entity
         // insert inventory fields
         $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELDS . '
                        (inf_uuid, inf_org_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_required_input, inf_sequence, inf_usr_id_create, inf_timestamp_create, inf_usr_id_change, inf_timestamp_change)
-                VALUES (?, ?, \'TEXT\', \'ITEMNAME\', \'SYS_INVENTORY_ITEMNAME\', \'SYS_INVENTORY_ITEMNAME_DESC\', 1, 1, 0, ?, ?, NULL, NULL),
-                       (?, ?, \'CATEGORY\', \'CATEGORY\', \'SYS_CATEGORY\', \'SYS_INVENTORY_CATEGORY_DESC\', 1, 1, 1, ?, ?, NULL, NULL),
-                       (?, ?, \'TEXT\', \'KEEPER\', \'SYS_INVENTORY_KEEPER\', \'SYS_INVENTORY_KEEPER_DESC\', 1, 0, 2, ?, ?, NULL, NULL),
-                       (?, ?, \'CHECKBOX\', \'IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY\', \'SYS_INVENTORY_IN_INVENTORY_DESC\', 1, 0, 3, ?, ?, NULL, NULL),
-                       (?, ?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER_DESC\', 1, 0, 4, ?, ?, NULL, NULL),
-                       (?, ?, \'DATE\', \'RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON\', \'SYS_INVENTORY_RECEIVED_ON_DESC\', 1, 0, 5, ?, ?, NULL, NULL),
-                       (?, ?, \'DATE\', \'RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON\', \'SYS_INVENTORY_RECEIVED_BACK_ON_DESC\', 1, 0, 6, ?, ?, NULL, NULL);
+                VALUES (?, ?, \'TEXT\', \'ITEMNAME\', \'SYS_INVENTORY_ITEMNAME\', \'SYS_INVENTORY_ITEMNAME_DESC\', true, 1, 0, ?, ?, NULL, NULL),
+                       (?, ?, \'CATEGORY\', \'CATEGORY\', \'SYS_CATEGORY\', \'SYS_INVENTORY_CATEGORY_DESC\', true, 1, 1, ?, ?, NULL, NULL),
+                       (?, ?, \'DROPDOWN\', \'STATUS\', \'SYS_INVENTORY_STATUS\', \'SYS_INVENTORY_STATUS_DESC\', true, 1, 2, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'KEEPER\', \'SYS_INVENTORY_KEEPER\', \'SYS_INVENTORY_KEEPER_DESC\', true, 0, 3, ?, ?, NULL, NULL),
+                       (?, ?, \'TEXT\', \'LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER\', \'SYS_INVENTORY_LAST_RECEIVER_DESC\', true, 0, 4, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'BORROW_DATE\', \'SYS_INVENTORY_BORROW_DATE\', \'SYS_INVENTORY_BORROW_DATE_DESC\', true, 0, 5, ?, ?, NULL, NULL),
+                       (?, ?, \'DATE\', \'RETURN_DATE\', \'SYS_INVENTORY_RETURN_DATE\', \'SYS_INVENTORY_RETURN_DATE_DESC\', true, 0, 6, ?, ?, NULL, NULL);
                 ';
         $queryParams = array(
             Uuid::uuid4(), $orgId, $systemUserId, DATETIME_NOW,
@@ -245,14 +273,35 @@ class Organization extends Entity
         );
         $this->db->queryPrepared($sql, $queryParams);
 
+        // insert default options for the status field
+        $sql = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_name_intern = \'STATUS\'
+                AND inf_org_id = ? -- $orgId';
+        $statusFieldId =  $this->db->queryPrepared($sql, array($orgId))->fetchColumn();
+
+        if ($statusFieldId !== false) {
+            $arrStatusOptions = array(
+                array('inf_name' => 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'ifo_sequence' => 1),
+                array('inf_name' => 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 'ifo_sequence' => 2),
+            );
+
+            foreach ($arrStatusOptions as $statusOption) {
+                $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                         (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                         VALUES (?, ?, true, ?)';
+                $this->db->queryPrepared($sql, array($statusFieldId, $statusOption['inf_name'], $statusOption['ifo_sequence']));
+            }
+        }
+
+
         // now create default roles
 
         // Create role administrator
         $roleAdministrator = new Role($this->db);
         $roleAdministrator->saveChangesWithoutRights();
         $roleAdministrator->setValue('rol_cat_id', $categoryCommon, false);
-        $roleAdministrator->setValue('rol_name', $gL10n->get('SYS_ADMINISTRATOR'));
-        $roleAdministrator->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_ADMINISTRATOR'));
+        $roleAdministrator->setValue('rol_name', 'SYS_ADMINISTRATOR');
+        $roleAdministrator->setValue('rol_description', 'INS_DESCRIPTION_ADMINISTRATOR');
         $roleAdministrator->setValue('rol_assign_roles', 1);
         $roleAdministrator->setValue('rol_approve_users', 1);
         $roleAdministrator->setValue('rol_announcements', 1);
@@ -275,8 +324,8 @@ class Organization extends Entity
         $roleMember = new Role($this->db);
         $roleMember->saveChangesWithoutRights();
         $roleMember->setValue('rol_cat_id', $categoryCommon, false);
-        $roleMember->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
-        $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
+        $roleMember->setValue('rol_name', 'SYS_MEMBER');
+        $roleMember->setValue('rol_description', 'INS_DESCRIPTION_MEMBER');
         $roleMember->setValue('rol_mail_this_role', 2);
         $roleMember->setValue('rol_profile', 1);
         $roleMember->setValue('rol_default_registration', 1);
@@ -287,8 +336,8 @@ class Organization extends Entity
         $roleManagement = new Role($this->db);
         $roleManagement->saveChangesWithoutRights();
         $roleManagement->setValue('rol_cat_id', $categoryCommon, false);
-        $roleManagement->setValue('rol_name', $gL10n->get('INS_BOARD'));
-        $roleManagement->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
+        $roleManagement->setValue('rol_name', 'INS_BOARD');
+        $roleManagement->setValue('rol_description', 'INS_DESCRIPTION_BOARD');
         $roleManagement->setValue('rol_announcements', 1);
         $roleManagement->setValue('rol_events', 1);
         $roleManagement->setValue('rol_weblinks', 1);
@@ -322,7 +371,7 @@ class Organization extends Entity
 
         // create default list configurations
         $addressList = new ListConfiguration($this->db);
-        $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
+        $addressList->setValue('lst_name', 'INS_ADDRESS_LIST');
         $addressList->setValue('lst_org_id', $orgId);
         $addressList->setValue('lst_global', 1);
         $addressList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -334,7 +383,7 @@ class Organization extends Entity
         $addressList->save();
 
         $phoneList = new ListConfiguration($this->db);
-        $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
+        $phoneList->setValue('lst_name', 'INS_PHONE_LIST');
         $phoneList->setValue('lst_org_id', $orgId);
         $phoneList->setValue('lst_global', 1);
         $phoneList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -345,7 +394,7 @@ class Organization extends Entity
         $phoneList->save();
 
         $contactDetailsList = new ListConfiguration($this->db);
-        $contactDetailsList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $contactDetailsList->setValue('lst_name', 'SYS_CONTACT_DETAILS');
         $contactDetailsList->setValue('lst_org_id', $orgId);
         $contactDetailsList->setValue('lst_global', 1);
         $contactDetailsList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -360,7 +409,7 @@ class Organization extends Entity
         $contactDetailsList->save();
 
         $formerList = new ListConfiguration($this->db);
-        $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
+        $formerList->setValue('lst_name', 'INS_MEMBERSHIP');
         $formerList->setValue('lst_org_id', $orgId);
         $formerList->setValue('lst_global', 1);
         $formerList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -371,7 +420,7 @@ class Organization extends Entity
         $formerList->save();
 
         $participantList = new ListConfiguration($this->db);
-        $participantList->setValue('lst_name', $gL10n->get('SYS_PARTICIPANTS'));
+        $participantList->setValue('lst_name', 'SYS_PARTICIPANTS');
         $participantList->setValue('lst_org_id', $orgId);
         $participantList->setValue('lst_global', 1);
         $participantList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -382,7 +431,7 @@ class Organization extends Entity
         $participantList->save();
 
         $contactsList = new ListConfiguration($this->db);
-        $contactsList->setValue('lst_name', $gL10n->get('SYS_CONTACTS'));
+        $contactsList->setValue('lst_name', 'SYS_CONTACTS');
         $contactsList->setValue('lst_org_id', $orgId);
         $contactsList->setValue('lst_global', 1);
         $contactsList->addColumn((int)$gProfileFields->getProperty('LAST_NAME', 'usf_id'), 0, 'ASC');
@@ -395,19 +444,25 @@ class Organization extends Entity
         $contactsList->save();
 
         // create default category report configuration
-        $categoryReportColumns = 'p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . ',' .
-            'p' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . ',' .
-            'p' . $gProfileFields->getProperty('STREET', 'usf_id') . ',' .
-            'p' . $gProfileFields->getProperty('CITY', 'usf_id') . ',' .
-            'r' . $roleAdministrator->getValue('rol_id') . ',' .
-            'r' . $roleManagement->getValue('rol_id') . ',' .
-            'r' . $roleMember->getValue('rol_id');
-        $categoryReport = new Entity($this->db, TBL_CATEGORY_REPORT, 'crt');
+        $categoryReportColumns = array(
+            'p' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            'p' . $gProfileFields->getProperty('LAST_NAME', 'usf_id'),
+            'p' . $gProfileFields->getProperty('STREET', 'usf_id'),
+            'p' . $gProfileFields->getProperty('CITY', 'usf_id'),
+            'r' . $roleAdministrator->getValue('rol_id'),
+            'r' . $roleManagement->getValue('rol_id'),
+            'r' . $roleMember->getValue('rol_id')
+        );
+        $categoryReport = new CategoryReport($this->db);
         $categoryReport->setValue('crt_org_id', $orgId);
-        $categoryReport->setValue('crt_name', $gL10n->get('SYS_GENERAL_ROLE_ASSIGNMENT'));
-        $categoryReport->setValue('crt_col_fields', $categoryReportColumns);
+        $categoryReport->setValue('crt_name', 'SYS_GENERAL_ROLE_ASSIGNMENT');
         $categoryReport->setValue('crt_number_col', 0);
+        $categoryReport->setColumns(array_map(
+            static fn(string $field): array => array('field' => $field, 'condition' => ''),
+            $categoryReportColumns
+        ));
         $categoryReport->save();
+        $categoryReportId = (int)$categoryReport->getValue('crt_id');
 
         // set new default configuration to the module settings
         $organizationSettings = new SettingsManager($this->db, $orgId);
@@ -416,7 +471,7 @@ class Organization extends Entity
         $organizationSettings->set('groups_roles_default_configuration', $addressList->getValue('lst_id'));
         $organizationSettings->set('events_list_configuration', $participantList->getValue('lst_id'));
         $organizationSettings->set('contacts_list_configuration', $contactsList->getValue('lst_id'));
-        $organizationSettings->set('category_report_default_configuration', $categoryReport->getValue('crt_id'));
+        $organizationSettings->set('category_report_default_configuration', $categoryReportId);
     }
 
     /**
@@ -451,6 +506,11 @@ class Organization extends Entity
      */
     public function delete(): bool
     {
+        // The records of the organization are deleted in bulk on purpose and are deliberately not
+        // written to the change history: the history is scoped to an organization itself, so the
+        // entries of a deleted organization could never be viewed again anyway. Everywhere else a
+        // bulk deletion has to go through deleteDependentRecords(), see the class documentation of
+        // ChangelogService.
         $this->db->startTransaction();
 
         // delete all category reports
@@ -588,8 +648,8 @@ class Organization extends Entity
         $sqlAdminRoles = 'SELECT fol_uuid
                         FROM ' . TBL_FOLDERS . '
                        WHERE fol_type = \'DOCUMENTS\'
-                         AND fol_name = \'documents_' . $this->getValue('org_shortname') . '\' ';
-        $statementFolder = $this->db->queryPrepared($sqlAdminRoles);
+                         AND fol_org_id = ? /* $this->getValue(\'org_id\') */ ';
+        $statementFolder = $this->db->queryPrepared($sqlAdminRoles, array($this->getValue('org_id')));
         $folder_uuid = $statementFolder->fetchColumn();
 
         $documentsFilesRootFolder = new Folder($this->db);
@@ -672,8 +732,8 @@ class Organization extends Entity
         $this->db->queryPrepared($sql, array($this->getValue('org_id')));
 
         // delete all inventory item lend data
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_LEND_DATA . '
-                 WHERE inl_ini_id IN (
+        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+                 WHERE inb_ini_id IN (
                        SELECT ini.ini_id
                          FROM (SELECT ini_id
                                  FROM ' . TBL_INVENTORY_ITEMS . '
@@ -755,6 +815,69 @@ class Organization extends Entity
         $organizationIds = array_keys($organizations);
         $organizationIds[] = (int)$this->getValue('org_id');
         return implode(',', $organizationIds);
+    }
+
+    /**
+     * Determine all organization ids that share users with the current organization.
+     * Child organizations inherit the member-sharing setting from their direct parent and
+     * cannot define a separate scope.
+     * @return array<int,int>
+     * @throws Exception
+     */
+    public function getSharedUsersOrganizationIds(): array
+    {
+        $currentOrganizationId = (int)$this->getValue('org_id');
+        $parentOrganizationId = (int)$this->getValue('org_org_id_parent');
+        $sharingRootOrganization = $this;
+
+        if ($parentOrganizationId > 0) {
+            $sharingRootOrganization = new self($this->db, $parentOrganizationId);
+        }
+
+        $memberSharingEnabled = (bool)$sharingRootOrganization->getValue('org_suborg_use_same_members');
+
+        if (!$memberSharingEnabled) {
+            return array($currentOrganizationId);
+        }
+
+        $sharedOrganizationIds = array_keys($sharingRootOrganization->getOrganizationsInRelationship(true, false));
+        $sharedOrganizationIds[] = (int)$sharingRootOrganization->getValue('org_id');
+
+        if (!in_array($currentOrganizationId, $sharedOrganizationIds, true)) {
+            $sharedOrganizationIds[] = $currentOrganizationId;
+        }
+
+        $sharedOrganizationIds = array_values(array_unique(array_map('intval', $sharedOrganizationIds)));
+        sort($sharedOrganizationIds);
+
+        return $sharedOrganizationIds;
+    }
+
+    /**
+     * Create a comma separated list with all organizations that share users prepared for SQL.
+     * @param bool $shortname If set to true then a list of all short names will be returned.
+     * @return string Returns a comma separated list of organization ids or short names.
+     * @throws Exception
+     */
+    public function getSharedUsersOrganizationsSQL(bool $shortname = false): string
+    {
+        $sharedOrganizationIds = $this->getSharedUsersOrganizationIds();
+
+        if (!$shortname) {
+            return implode(',', $sharedOrganizationIds);
+        }
+
+        $sql = 'SELECT org_shortname
+                  FROM ' . TBL_ORGANIZATIONS . '
+                 WHERE org_id IN (' . Database::getQmForValues($sharedOrganizationIds) . ')';
+        $pdoStatement = $this->db->queryPrepared($sql, $sharedOrganizationIds);
+
+        $organizationShortnames = array();
+        while ($row = $pdoStatement->fetch()) {
+            $organizationShortnames[] = '\'' . $row['org_shortname'] . '\'';
+        }
+
+        return implode(',', $organizationShortnames);
     }
 
     /**
@@ -841,7 +964,7 @@ class Organization extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($checkValue) {
             // org_shortname shouldn't be edited
@@ -851,6 +974,12 @@ class Organization extends Entity
                 $newValue = admFuncCheckUrl($newValue);
 
                 if ($newValue === false) {
+                    return false;
+                }
+            } elseif ($columnName === 'org_suborg_use_same_members'
+                && filter_var($newValue, FILTER_VALIDATE_BOOLEAN)) {
+                // Member sharing belongs exclusively to a top-level parent organization.
+                if ($this->isChildOrganization() || !$this->isParentOrganization()) {
                     return false;
                 }
             }
@@ -869,19 +998,19 @@ class Organization extends Entity
 
     /**
      * Adjust the changelog entry for this db record: Add the parent fold as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         $orgParentId = (int) $this->getValue('org_org_id_parent');
         if ($orgParentId > 0) {
             $sql = 'SELECT org_id, org_longname, org_shortname
                       FROM '.TBL_ORGANIZATIONS.'
                      WHERE org_id = ?';
             $pdoStatement = $this->db->queryPrepared($sql, [$orgParentId]);
-    
+
             while ($row = $pdoStatement->fetch()) {
                 $logEntry->setLogRelated($row['org_id'], $row['org_longname']);
             }
@@ -890,15 +1019,17 @@ class Organization extends Entity
     /**
      * Return a human-readable representation of this record.
      * For organizations, simply use the longname
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string
     {
         if (array_key_exists($this->columnPrefix.'_longname', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix.'_longname'];
+            $name = $this->dbColumns[$this->columnPrefix.'_longname'];
         } else {
-            return $this->dbColumns[$this->keyColumnName];
+            $name = $this->dbColumns[$this->keyColumnName];
         }
+
+        return $this->filterReadableName($name);
     }
 }

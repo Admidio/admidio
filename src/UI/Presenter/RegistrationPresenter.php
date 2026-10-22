@@ -79,7 +79,7 @@ class RegistrationPresenter extends PagePresenter
             );
             $templateRow['actions'][] = array(
                 'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('mode' => 'delete_user', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($user->getValue('FIRST_NAME', 'database') . ' ' .$user->getValue('LAST_NAME'))),
+                'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($user->getValue('FIRST_NAME') . ' ' .$user->getValue('LAST_NAME'))),
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_DELETE')
             );
@@ -89,8 +89,14 @@ class RegistrationPresenter extends PagePresenter
                     'name' => $gL10n->get('SYS_ASSIGN_REGISTRATION')
                 );
             } else {
+                if ($gCurrentUser->isAdministratorUsers()) {
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('accept_registration' => true, 'user_uuid' => $row['usr_uuid']));
+                } else {
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration.php', array('mode' => 'create_user', 'user_uuid' => $row['usr_uuid']));
+                }
                 $templateRow['buttons'][] = array(
-                    'url' => ($gCurrentUser->isAdministratorUsers() ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/profile_new.php', array('accept_registration' => true, 'user_uuid' => $row['usr_uuid'])) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/registration.php', array('mode' => 'create_user', 'user_uuid' => $row['usr_uuid']))),
+                    'csrfToken' => $gCurrentSession->getCsrfToken(),
+                    'url' => $url,
                     'name' => $gL10n->get('SYS_CONFIRM_REGISTRATION')
                 );
             }

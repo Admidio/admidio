@@ -1,0 +1,92 @@
+.ql-container.ql-snow .ql-editor {
+    background-color: #fff;
+    color: #212529;
+}
+
+.ql-toolbar.ql-snow {
+    background-color: #fff;
+}
+
+.ql-toolbar.ql-snow :is(button.ql-active, .ql-picker-label.ql-active, .ql-picker-item.ql-selected) {
+    color: var(--bs-link-color);
+}
+
+.ql-toolbar.ql-snow :is(button.ql-active, .ql-picker-label.ql-active, .ql-picker-item.ql-selected) :is(.ql-fill, .ql-stroke.ql-fill) {
+    fill: var(--bs-link-color);
+}
+
+.ql-toolbar.ql-snow :is(button.ql-active, .ql-picker-label.ql-active, .ql-picker-item.ql-selected) :is(.ql-stroke, .ql-stroke-miter) {
+    stroke: var(--bs-link-color);
+}
+
+.ql-toolbar.ql-snow :is(button:hover, button:focus, .ql-picker-label:hover, .ql-picker-label:focus, .ql-picker-item:hover, .admidio-quill-table-action:hover) {
+    color: var(--bs-link-hover-color);
+}
+
+.ql-toolbar.ql-snow :is(button:hover, button:focus, .ql-picker-label:hover, .ql-picker-label:focus, .ql-picker-item:hover) :is(.ql-fill, .ql-stroke.ql-fill) {
+    fill: var(--bs-link-hover-color);
+}
+
+.ql-toolbar.ql-snow :is(button:hover, button:focus, .ql-picker-label:hover, .ql-picker-label:focus, .ql-picker-item:hover) :is(.ql-stroke, .ql-stroke-miter) {
+    stroke: var(--bs-link-hover-color);
+}
+
+.ql-toolbar .admidio-quill-table-action {
+    height: 28px;
+    max-width: 190px;
+    padding: 0 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background: #fff;
+    color: #444;
+    cursor: pointer;
+}
+
+.ql-toolbar .admidio-quill-table-action:focus-visible,
+.admidio-quill-resize-handle:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before {
+    font-size: 10px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before {
+    font-size: 18px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='32px']::before {
+    font-size: 32px;
+}
+
+.ql-editor table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ql-editor td {
+    border: 1px solid #ccc;
+    min-width: 2rem;
+    padding: 0.25rem;
+}
+
+.ql-editor iframe.ql-video {
+    width: min(100%, 560px);
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
+.ql-container .admidio-quill-resize-handle {
+    position: absolute;
+    z-index: 1;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    background: #0d6efd;
+    box-shadow: 0 0 0 1px #0d6efd;
+    cursor: nwse-resize;
+    touch-action: none;
+}

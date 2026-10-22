@@ -18,10 +18,12 @@
  *                false : Show only active members of the current organization
  *****************************************************************************/
 
+use Admidio\Events\Entity\Event;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
+use Admidio\UI\Component\DataTables;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
@@ -64,6 +66,13 @@ try {
 
         if ((isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true')
             || $leadership) {
+            $event = new Event($gDb);
+            if ($event->readDataByRoleId((int) $role->getValue('rol_id'))
+                && !$user->isMemberOfRole((int) $role->getValue('rol_id'))
+                && $event->participantLimitReached()) {
+                throw new Exception('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name')));
+            }
+
             $role->startMembership($user->getValue('usr_id'), $leadership);
         } else {
             $role->stopMembership($user->getValue('usr_id'));
@@ -96,7 +105,7 @@ try {
         }
 
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-members-assignement', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_groups_roles_members_assignment', $headline);
 
         if ($getMembersShowAll) {
             $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
@@ -122,7 +131,7 @@ try {
         });
 
         // if checkbox of user is clicked then change membership
-        $("#tbl_assign_role_membership").on("click", "input[type=checkbox]", function() {
+        $("#adm_assign_role_membership").on("click", "input[type=checkbox]", function() {
             var checkbox = $(this);
             var userUuid = $(this).data("user");
 
@@ -208,7 +217,7 @@ try {
         $form->addToHtmlPage();
 
         // create table object
-        $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');
+        $table = new DataTables($page, 'adm_assign_role_membership');
         $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
 
         // create column header to assign role leaders
@@ -235,7 +244,7 @@ try {
         $columnHeading = array(
             '<i class="bi bi-person-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', array($gCurrentOrganization->getValue('org_longname'))) . '"></i>',
             $gL10n->get('SYS_MEMBER'));
-        $columnAlignment = array('left', 'left');
+        $columnAlignment = array('left', 'center');
 
         if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->isAdministratorUsers())) {
             $columnHeading[] = $gL10n->get('SYS_LASTNAME');
@@ -257,22 +266,29 @@ try {
             $columnAlignment[] = 'left';
         }
         $columnHeading[] = $gL10n->get('SYS_LEADER') . FormPresenter::getHelpTextIcon($htmlLeaderText);
-        $columnAlignment[] = 'left';
+        $columnAlignment[] = 'center';
 
         $table->setServerSideProcessing(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment_data.php', array('role_uuid' => $getRoleUuid, 'filter_rol_uuid' => $getFilterRoleUuid, 'mem_show_all' => $getMembersShowAll)));
         $table->setColumnAlignByArray($columnAlignment);
-        $table->addRowHeadingByArray($columnHeading);
+        $table->setColumnsNotHideResponsive(array(1, count($columnHeading)));
+        $table->createJavascript(0, count($columnHeading));
 
-        $page->addHtml($table->show());
+        $smarty = $page->createSmartyObject();
+        $smarty->assign('columnAlign', $columnAlignment);
+        $smarty->assign('headers', $columnHeading);
+
+        // Fetch the HTML table from our Smarty template
+        $htmlTable = $smarty->fetch('modules/groups-roles.members-assignment.list.tpl');
+
+        $page->addHtml($htmlTable);
         $page->addHtml('<p>' . $gL10n->get('SYS_CHECKBOX_AUTOSAVE') . '</p>');
 
         $page->show();
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
         // ajax mode then only show text if error occurs
-        echo $e->getMessage();
-    } else {
-        $gMessage->show($e->getMessage());
+        $gMessage->showTextOnly();
     }
+    handleException($e);
 }

@@ -2,6 +2,7 @@
 namespace Admidio\Roles\Service;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Roles\Entity\Role;
@@ -50,6 +51,10 @@ class RolesService
         if ($roleUUID !== '') {
             $this->roleRessource->readDataByUuid($roleUUID);
             $this->eventRole = $this->roleRessource->getValue('cat_name_intern') === 'EVENTS';
+
+            if (!$this->roleRessource->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
         }
     }
 
@@ -59,17 +64,18 @@ class RolesService
      */
     public function export(): void
     {
-        global $gCurrentUser, $gCurrentOrganization, $gProfileFields;
+        global $gCurrentUser, $gCurrentOrganization, $gProfileFields, $gSettingsManager;
 
-        $role = new Role($this->db);
-        $role->readDataByUuid($this->UUID);
-
-        if (!$gCurrentUser->hasRightViewProfiles($role->getValue('rol_id'))) {
+        if (!$gCurrentUser->hasRightViewProfiles($this->roleRessource->getValue('rol_id'))) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if ($gSettingsManager->getInt('groups_roles_export') === 0 // nobody
+            || ($gSettingsManager->getInt('groups_roles_export') === 2 && !$gCurrentUser->checkRolesRight('rol_edit_user'))) { // users with not the right to edit all profiles
             throw new Exception('SYS_NO_RIGHTS');
         }
 
         // create filename of organization name and role name
-        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $role->getValue('rol_name')) . '.vcf';
+        $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $this->roleRessource->getValue('rol_name')) . '.vcf';
 
         $filename = FileSystemUtils::getSanitizedPathEntry($filename);
 
@@ -85,11 +91,11 @@ class RolesService
                      WHERE mem_rol_id = ? -- $role->getValue(\'rol_id\')
                        AND mem_begin <= ? -- DATE_NOW
                        AND mem_end    > ? -- DATE_NOW';
-        $pdoStatement = $this->db->queryPrepared($sql, array($role->getValue('rol_id'), DATE_NOW, DATE_NOW));
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->roleRessource->getValue('rol_id'), DATE_NOW, DATE_NOW));
 
         while ($memberUserId = $pdoStatement->fetchColumn()) {
             $user = new User($this->db, $gProfileFields, (int)$memberUserId);
-            // create vcard and check if user is allowed to edit profile, so he can see more data
+            // create vCard and check if user is allowed to edit profile, so he can see more data
             echo $user->getVCard();
         }
     }
@@ -223,29 +229,33 @@ class RolesService
      */
     public function save()
     {
-        global $gCurrentOrgId, $gCurrentSession, $gCurrentUserId;
+        global $gCurrentOrgId, $gCurrentSession, $gCurrentUserId, $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministratorRoles()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         // check form field input and sanitized it from malicious content
         $groupsRolesEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $groupsRolesEditForm->validate($_POST);
 
         if ($this->roleRessource->getValue('rol_name') !== $_POST['rol_name']) {
+            $nameCandidates = Language::getTranslationCandidates($_POST['rol_name'], array('SYS_ADMINISTRATOR', 'SYS_MEMBER', 'INS_BOARD'));
             // check if the role already exists
             $sql = 'SELECT COUNT(*) AS count
                       FROM ' . TBL_ROLES . '
                 INNER JOIN ' . TBL_CATEGORIES . '
                         ON cat_id = rol_cat_id
-                     WHERE rol_name   = ? -- $_POST[\'rol_name\']
+                     WHERE rol_name IN (' . implode(', ', array_fill(0, count($nameCandidates), '?')) . ')
                        AND rol_cat_id = ? -- $_POST[\'rol_cat_id\']
                        AND rol_id    <> ? -- $role->getValue(\'rol_id\')
                        AND (  cat_org_id = ? -- $gCurrentOrgId
                            OR cat_org_id IS NULL )';
-            $queryParams = array(
-                $_POST['rol_name'],
+            $queryParams = array_merge($nameCandidates, array(
                 (int)$_POST['rol_cat_id'],
                 $this->roleRessource->getValue('rol_id'),
                 $gCurrentOrgId
-            );
+            ));
             $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
             if ($pdoStatement->fetchColumn() > 0) {
@@ -329,13 +339,24 @@ class RolesService
             }
         }
 
+        $sentChildRoles = array();
+        if (array_key_exists('dependent_roles', $_POST) && !$this->eventRole) {
+            $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
+        }
+
         $this->db->startTransaction();
         $this->roleRessource->save();
 
+        if (RoleDependency::createsCircularDependency(
+            $this->db,
+            (int)$this->roleRessource->getValue('rol_id'),
+            $sentChildRoles
+        )) {
+            throw new Exception('SYS_ROLE_DEPENDENCY_CIRCULAR');
+        }
+
         // save role dependencies in database
         if (array_key_exists('dependent_roles', $_POST) && !$this->eventRole) {
-            $sentChildRoles = array_map('intval', $_POST['dependent_roles']);
-
             $roleDep = new RoleDependency($this->db);
 
             // Fetches a list of the selected dependent roles

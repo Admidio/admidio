@@ -6,10 +6,7 @@
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
- ***********************************************************************************************
- */
-
-/******************************************************************************
+ *
  * Parameters:
  *
  * user_uuid   : Uuid of the user who should be edited
@@ -17,8 +14,8 @@
  *      - save : Save all data of the user profile form
  * copy        : true - The user of the user_id will be copied and the base for this new user
  * accept_registration : If set to true, another forward url to role assignment will be set.
- * lastname    : (Optional) Lastname could be set and will than be preassigned for new users
- * firstname   : (Optional) First name could be set and will than be preassigned for new users
+ * lastname: (Optional) Lastname could be set and will then be preassigned for new users
+ * firstname: (Optional) First name could be set and will then be preassigned for new users
  *
  *****************************************************************************/
 use Admidio\Infrastructure\Exception;
@@ -28,6 +25,7 @@ use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Entity\UserRegistration;
+use Admidio\Users\Service\ProfileEditService;
 use Admidio\Changelog\Service\ChangelogService;
 
 try {
@@ -38,15 +36,21 @@ try {
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getAcceptRegistration = admFuncVariableIsValid($_GET, 'accept_registration', 'bool');
     $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
+    $editSelection = true;
     if (empty($getUserUuids)) {
+        $editSelection = false;
         $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
         $getUserUuids = array_map(function($uuid) {
             return preg_replace('/row_members_/', '', $uuid);
         }, $getUserUuids);
 
         if (empty($getUserUuids)) {
-            $getUserUuids = array(admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('defaultValue' => '')));
+            $getUserUuids = array(admFuncVariableIsValid($_GET, 'user_uuid', 'uuid'));
         }
+    }
+
+    if (!$gValidLogin && $getUserUuids[0] !== '') {
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
     $registrationOrgId = $gCurrentOrgId;
@@ -55,9 +59,16 @@ try {
     foreach ($getUserUuids as $userUuid) {
         // read user data
         if (!$gValidLogin || $getAcceptRegistration) {
-            // create user registration object and set requested organization
+            if ($getAcceptRegistration && $getMode === 'html') {
+                // check the CSRF token of "confirm registration" button
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            }
+
+            // create a user registration object and set requested organization
             $user = new UserRegistration($gDb, $gProfileFields);
-            $user->readDataByUuid($userUuid);
+            if ($gValidLogin) {
+                $user->readDataByUuid($userUuid);
+            }
             if (isset($_POST['adm_org_id'])) {
                 $user->setOrganization((int)$_POST['adm_org_id']);
             }
@@ -80,7 +91,7 @@ try {
                 }
 
                 if (isset($_GET['lastname']) && isset($_GET['firstname'])) {
-                    // If last name and first name are passed, then these are already preassigned
+                    // If lastname and firstname are passed, then these are already preassigned
                     $user->setValue('LAST_NAME', stripslashes($_GET['lastname']));
                     $user->setValue('FIRST_NAME', stripslashes($_GET['firstname']));
                 }
@@ -92,7 +103,7 @@ try {
             }
         }
 
-        // add user object to array
+        // add a user object to array
         $users[] = array(
             'user' => $user,
             'uuid' => $userUuid
@@ -103,7 +114,7 @@ try {
         case 'html':
             // set headline of the script
             if ($getCopy) {
-                // if we want to copy the user than set id = 0
+                // if we want to copy the user than set ID = 0
                 $users[0]['user']->setValue('usr_id', 0);
                 $users[0]['uuid'] = '';
                 $headline = $gL10n->get('SYS_COPY_VAR', array($users[0]['user']->getValue('FIRST_NAME') . ' ' . $users[0]['user']->getValue('LAST_NAME')));
@@ -119,13 +130,13 @@ try {
 
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
-            // create html page object
-            $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-edit', $headline);
+            // create an HTML page object
+            $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_edit', $headline);
 
-            // show link to view profile field change history
+            // show a link to view profile field change history
             ChangelogService::displayHistoryButton($page, 'profile', 'users,user_data,user_relations,members', !empty($users[0]['uuid']) && $gCurrentUser->hasRightEditProfile($users[0]['user']), array('uuid' => $users[0]['uuid']));
 
-            // create html form
+            // create an HTML form
             $form = new FormPresenter(
                 'adm_profile_edit_form',
                 'modules/profile.edit.tpl',
@@ -228,7 +239,7 @@ try {
                     }
                 }
 
-                // only show fields that are enabled for registration or the user has permission to edit that field
+                // only show fields that are enabled for registration, or the user has permission to edit that field
                 if ($showField) {
                     // add profile fields to form
                     $fieldProperty = FormPresenter::FIELD_DEFAULT;
@@ -277,13 +288,13 @@ try {
                         } else {
                             $arrOptions = $gProfileFields->getProperty($usfNameIntern, 'ufo_usf_options', '', false);
                             $defaultValue = $users[0]['user']->getValue($usfNameIntern, 'database');
-                            // if the field is a dropdown multiselect then convert the values to an array
+                            // if the field is a dropdown multiselect, then convert the values to an array
                             if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') {
                                 // prevent adding an empty string to the selectbox
                                 $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                             }
                         }
-                        
+
                         $form->addSelectBox(
                             $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
                             $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
@@ -294,7 +305,7 @@ try {
                                 'helpTextId' => $helpId,
                                 'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
                                 'category' => $category,
-                                'multiselect' => ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                                'multiselect' => $gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT',
                                 'maximumSelectionNumber' => ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                             )
                         );
@@ -371,8 +382,8 @@ try {
                 }
             }
 
-            // if captchas are enabled then visitors of the website must resolve this
-            if (!$gValidLogin && $gSettingsManager->getBool('registration_enable_captcha')) {
+            // if captchas are enabled, then visitors of the website must resolve this
+            if (!$gValidLogin && $gSettingsManager->getBool('captcha_enabled')) {
                 $form->addCaptcha('adm_captcha_code');
             }
 
@@ -384,11 +395,11 @@ try {
             }
 
             if ($users[0]['uuid'] !== '') {
-                // show information about user who creates the recordset and changed it
+                // show information about the user who creates the recordset and changed it
                 $page->assignSmartyVariable('userCreatedName', $users[0]['user']->getNameOfCreatingUser());
-                $page->assignSmartyVariable('userCreatedTimestamp', $users[0]['user']->getValue('ann_timestamp_create'));
+                $page->assignSmartyVariable('userCreatedTimestamp', $users[0]['user']->getValue('usr_timestamp_create'));
                 $page->assignSmartyVariable('lastUserEditedName', $users[0]['user']->getNameOfLastEditingUser());
-                $page->assignSmartyVariable('lastUserEditedTimestamp', $users[0]['user']->getValue('ann_timestamp_change'));
+                $page->assignSmartyVariable('lastUserEditedTimestamp', $users[0]['user']->getValue('usr_timestamp_change'));
             }
 
             $form->addToHtmlPage();
@@ -396,16 +407,20 @@ try {
 
             $page->show();
             break;
-        
+
         case 'html_selection':
+            if (!$gValidLogin) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
             // set headline of the script
             $headline = $gL10n->get('SYS_EDIT_PROFILES');
             $gNavigation->addUrl(CURRENT_URL, $headline);
 
-            // create html page object
-            $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-edit-selection', $headline);
+            // create an HTML page object
+            $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_edit_selection', $headline);
 
-            // create html form
+            // create an HTML form
             $form = new FormPresenter(
                 'adm_profile_edit_selection_form',
                 'modules/profile.edit.selection.tpl',
@@ -430,18 +445,19 @@ try {
             );
 
             // *******************************************************************************
-            // Loop over all categories and profile fields and take the first user as base
+            // Only expose fields editable for every selected user, using the first user's values.
             // *******************************************************************************
 
             $category = '';
-            foreach ($gProfileFields->getProfileFields() as $field) {
+            $profileEditService = new ProfileEditService($gCurrentUser);
+            foreach ($profileEditService->getEditableFields($gProfileFields, array_column($users, 'user')) as $field) {
                 $category = $field->getValue('cat_name');
 
                 // add profile fields to form
                 $fieldProperty = FormPresenter::FIELD_DEFAULT;
                 $helpId = '';
                 $usfNameIntern = $field->getValue('usf_name_intern');
-                
+
                 if ($usfNameIntern === 'LAST_NAME' || $usfNameIntern === 'FIRST_NAME') {
                     // do not show last name and first name in selection mode
                     continue;
@@ -489,13 +505,13 @@ try {
                     } else {
                         $arrOptions = $gProfileFields->getProperty($usfNameIntern, 'ufo_usf_options', '', false);
                         $defaultValue = $users[0]['user']->getValue($usfNameIntern, 'database');
-                        // if the field is a dropdown multiselect then convert the values to an array
+                        // if the field is a dropdown multiselect, then convert the values to an array
                         if ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') {
                             // prevent adding an empty string to the selectbox
                             $defaultValue = ($defaultValue !== "") ? explode(',', $defaultValue) : array();
                         }
                     }
-                    
+
                     $form->addSelectBox(
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name_intern'),
                         $gProfileFields->getProperty($usfNameIntern, 'usf_name'),
@@ -506,7 +522,7 @@ try {
                             'helpTextId' => $helpId,
                             'icon' => 'bi-' . $gProfileFields->getProperty($usfNameIntern, 'usf_icon', 'database'),
                             'category' => $category,
-                            'multiselect' => ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') ? true : false,
+                            'multiselect' => $gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT',
                             'maximumSelectionNumber' => ($gProfileFields->getProperty($usfNameIntern, 'usf_type') === 'DROPDOWN_MULTISELECT') ? count($arrOptions) : 0,
                             'toggleable' => true
                         )
@@ -588,7 +604,7 @@ try {
 
             $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SAVE'), array('icon' => 'bi-check-lg'));
 
-            // add javascript to toggle profile fields editability
+            // add JavaScript to toggle profile fields editability
             $page->addJavascript('
                 function toggleProfileFields(fieldIdPrefix) {
                     var toggleCheckbox = document.getElementById("toggle_" + fieldIdPrefix);
@@ -618,7 +634,7 @@ try {
                 });'
             );
 
-            // add a information that this is a multi-edit form
+            // add an information that this is a multi-edit form
             $infoAlert = $gL10n->get('SYS_EDIT_PROFILES_DESC');
 
             $page->assignSmartyVariable('infoAlert', $infoAlert);
@@ -636,7 +652,11 @@ try {
 
             // check form field input and sanitized it from malicious content
             $profileEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-            $formValues = $profileEditForm->validate($_POST, (count($users) > 1));
+            $formValues = $profileEditForm->validate($_POST, $editSelection);
+
+            // Recheck the actual targets and current permissions before changing any user.
+            $profileEditService = new ProfileEditService($gValidLogin ? $gCurrentUser : null);
+            $profileValues = $profileEditService->validateProfileValues(array_column($users, 'user'), $formValues);
 
             // loop over all users and save the data
             foreach ($users as $user) {
@@ -658,20 +678,20 @@ try {
                 }
 
                 // write all profile fields to the user object
-                foreach ($formValues as $key => $value) {
-                    if (strpos($key, 'usr_') !== 0 && !in_array($key, array('adm_password_confirm', 'adm_org_id', 'adm_captcha_code'))) {
-                        $user['user']->setValue($key, $value);
-                    }
+                foreach ($profileValues as $key => $value) {
+                    $user['user']->setValue($key, $value);
                 }
 
                 if (isset($_POST['usr_login_name']) && ($gCurrentUser->isAdministrator() || $user['uuid'] === '')) {
-                    // Only administrators could change login name or within a new registration
+                    // Only administrators could change the login name or within a new registration
                     if ($_POST['usr_login_name'] !== $user['user']->getValue('usr_login_name')) {
                         if (strlen($_POST['usr_login_name']) > 0) {
                             // check if the username is already assigned
+                            // the login folds the case, so this check has to do the same or a second
+                            // account that differs only in case slips through on PostgreSQL
                             $sql = 'SELECT usr_uuid
                             FROM ' . TBL_USERS . '
-                            WHERE usr_login_name = ?';
+                            WHERE UPPER(usr_login_name) = UPPER(?)';
                             $pdoStatement = $gDb->queryPrepared($sql, array($_POST['usr_login_name']));
 
                             if ($pdoStatement->rowCount() > 0 && $pdoStatement->fetchColumn() !== $user['uuid']) {
@@ -715,13 +735,12 @@ try {
                             'message' => $gL10n->get('SYS_REGISTRATION_SAVED'),
                             'url' => $gHomepage
                         ));
-                        exit();
                     } else {
                         if ($user['uuid'] === '' || $getAcceptRegistration) {
                             // assign a registration or create a new user
 
                             if ($getAcceptRegistration && ($user['user'] instanceof UserRegistration)) {
-                                // accept a registration, assign necessary roles and send a notification email
+                                // accept a registration, assign the necessary roles and send a notification email
                                 $user['user']->acceptRegistration();
                                 $messageId = 'SYS_ASSIGN_REGISTRATION_SUCCESSFUL';
                             } else {
@@ -731,8 +750,8 @@ try {
                                 $messageId = 'SYS_SAVE_DATA';
                             }
 
-                            // if current user has the right to assign roles then show roles dialog
-                            // otherwise go to previous url (default roles are assigned automatically)
+                            // if the current user has the right to assign roles, then show roles dialog
+                            // otherwise goes to previous url (default roles are assigned automatically)
                             if ($gCurrentUser->isAdministratorRoles()) {
                                 echo json_encode(array(
                                     'status' => 'success',
@@ -744,7 +763,6 @@ try {
                                             'new_user' => $users[0]['uuid'] === ''
                                         ))
                                 ));
-                                exit();
                             } else {
                                 $gNavigation->deleteLastUrl();
                                 echo json_encode(array(
@@ -752,37 +770,28 @@ try {
                                     'message' => $messageId,
                                     'url' => $gNavigation->getPreviousUrl()
                                 ));
-                                exit();
                             }
                         } elseif (!$user['user']->getValue('usr_valid')) {
                             // a registration was edited then go back to profile view
                             $gNavigation->deleteLastUrl();
                             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getPreviousUrl()));
-                            exit();
                         } else {
                             // go back to profile view
                             $gNavigation->deleteLastUrl();
                             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
-                            exit();
                         }
                     }
+                    exit();
                 }
             }
-            // go back to previous page when multiple users were edited
+            // go back to the previous page when multiple users were edited
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
-            exit();
-
             break;
 
         default:
             throw new Exception('SYS_INVALID_PAGE_VIEW');
-            break;
     }
-} catch (Exception $e) {
-    if ($getMode === 'save') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, $getMode == 'save');
 }

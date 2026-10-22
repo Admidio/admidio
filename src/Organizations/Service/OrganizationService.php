@@ -61,8 +61,8 @@ class OrganizationService
         // After setting up the base organization record, we don't want to add changelog entries for all the copying of the settings to the new org!
         Entity::setLoggingEnabled(false);
 
-        // write all preferences from preferences.php in table adm_preferences
-        require_once(ADMIDIO_PATH . FOLDER_INSTALLATION . '/db_scripts/preferences.php');
+        // every organization starts with the registered defaults of the core and of the plugins
+        $defaultOrgPreferences = PreferenceDefinitions::defaults();
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
@@ -71,6 +71,11 @@ class OrganizationService
         $settingsManager =& $newOrganization->getSettingsManager();
         $settingsManager->setMulti($defaultOrgPreferences, false);
         $newOrganization->createBasicData($gCurrentUserId);
+
+        // the base data of the new organization is set up, so log all further changes again.
+        // Entity::$loggingEnabled is a static, so leaving it disabled would switch off the
+        // changelog for every entity for the rest of the request.
+        Entity::setLoggingEnabled(true);
 
         // now refresh the session organization object because of the new organization
         $currentOrganizationId = $gCurrentOrgId;
@@ -107,5 +112,6 @@ class OrganizationService
 
         // write category into database
         $gCurrentOrganization->save();
+
     }
 }

@@ -3,6 +3,8 @@ namespace Admidio\SSO\Entity;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
+use Admidio\Infrastructure\Database;
+use Admidio\SSO\Service\OIDCSessionParticipantService;
 use OpenIDConnectServer\Entities\ClaimSetEntity;
 use OpenIDConnectServer\Repositories\IdentityProviderInterface;
 use OpenIDConnectServer\ClaimExtractor;
@@ -25,15 +27,29 @@ use OpenIDConnectServer\ClaimExtractor;
 // Since the 'custom' scope's claims depend on the client-specific 
 class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
 {
-    protected ?string $nonce;
+    protected ?string $nonce = null;
+    private string $issuerURL;
+    protected ?int $authenticationTime = null;
+    protected string $externalSessionId = '';
+    protected array $authenticationMethods = array();
+    protected ?string $authenticationContext = null;
+    private Database $database;
+    private int $participantLifetime;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
         ClaimExtractor $claimExtractor,
+        string $issuerURL,
+        Database $database,
+        int $participantLifetime,
         ?string $keyIdentifier = null
     ) {
         parent::__construct($identityProvider, $claimExtractor, $keyIdentifier);
+        $this->issuerURL = $issuerURL;
+        $this->database = $database;
+        $this->participantLifetime = $participantLifetime;
     }
+
     /**
      * @param AccessTokenEntityInterface $accessToken
      * @return array
@@ -48,23 +64,89 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
                 new ClaimSetEntity('custom', array_keys($client->getFieldMapping()))
             );
         }
-        return parent::getExtraParams($accessToken);
+        $extraParams = parent::getExtraParams($accessToken);
+        $this->persistSessionParticipant($accessToken);
+
+        return $extraParams;
+    }
+
+    /**
+     * Persist the client participation represented by the issued ID token.
+     */
+    private function persistSessionParticipant(AccessTokenEntityInterface $accessToken): void
+    {
+        global $gCurrentOrgId, $gLogger;
+        if ($this->externalSessionId === '') {
+            $gLogger->warning('OIDC session participant was not persisted because no external session identifier is available.');
+            return;
+        }
+
+        $client = $accessToken->getClient();
+        if (!$client instanceof OIDCClient) {
+            throw new \RuntimeException('Cannot persist an OIDC participant for an invalid client.');
+        }
+
+        if (!$accessToken instanceof TokenEntity) {
+            throw new \RuntimeException('Cannot persist an OIDC participant for an unsupported access token entity.');
+        }
+
+        $user = $accessToken->getUser();
+        $userId = (int) $user->getValue('usr_id');
+        if ($userId <= 0) {
+            throw new \RuntimeException('Cannot persist an OIDC participant without a valid Admidio user.');
+        }
+
+        $participantExpiresAt = (new \DateTimeImmutable())->modify(
+            '+' . $this->participantLifetime . ' seconds'
+        );
+        if ($accessToken->getExpiryDateTime() > $participantExpiresAt) {
+            $participantExpiresAt = $accessToken->getExpiryDateTime();
+        }
+
+        $participantService = new OIDCSessionParticipantService($this->database);
+        $participantService->persistParticipant(
+            $gCurrentOrgId,
+            $userId,
+            (int) $client->getValue('ocl_id'),
+            $this->externalSessionId,
+            (string) $accessToken->getUserIdentifier(),
+            $participantExpiresAt
+        );
     }
 
     // The issuer in the JWT token MUST be the same as the issuer in the discovery document
     // (https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery)
     // The issuer is the URL of the OpenID Provider (OP) that issued the ID token.
     // The OIDC library sets the issuer to the server name only ('https://' . $_SERVER['HTTP_HOST'),
-    // so we need to correct this here!
+    // so we need to override the correct issuerURL here!
 
     protected function getBuilder(AccessTokenEntityInterface $accessToken, UserEntityInterface $userEntity)
     {
-        global $gSettingsManager;
+        global $gLogger;
+
         $builder = parent::getBuilder($accessToken, $userEntity);
         if (!empty($this->nonce)) {
             $builder = $builder->withClaim('nonce', $this->nonce);
         }
-        return $builder->issuedBy( $gSettingsManager->get('sso_oidc_issuer_url'));
+        /*
+        * An absent auth_time says that the time of the authentication is not known, while
+        * a zero would assert that the user authenticated at the start of the epoch.
+        */
+        if ($this->authenticationTime !== null && $this->authenticationTime > 0) {
+            $builder = $builder->withClaim('auth_time', $this->authenticationTime);
+        }
+        if ($this->externalSessionId !== '') {
+            $builder = $builder->withClaim('sid', $this->externalSessionId);
+        } else {
+            $gLogger->warning('OIDC ID token is issued without a sid claim because no external session identifier is available.');
+        }
+        if (!empty($this->authenticationMethods)) {
+            $builder = $builder->withClaim('amr', $this->authenticationMethods);
+        }
+        if ($this->authenticationContext !== null) {
+            $builder = $builder->withClaim('acr', $this->authenticationContext);
+        }
+        return $builder->issuedBy($this->issuerURL);
     }
 
     public function getNonce(): string|null {   
@@ -73,6 +155,32 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
     public function setNonce(?string $nonce) {
         $this->nonce = $nonce;
     }
+
+    public function setAuthenticationTime(int $authenticationTime): void
+    {
+        $this->authenticationTime = $authenticationTime;
+    }
+
+    public function setExternalSessionId(string $externalSessionId): void
+    {
+        if ($externalSessionId === '') {
+            throw new \InvalidArgumentException('The external session identifier must not be empty.');
+        }
+        $this->externalSessionId = $externalSessionId;
+    }
+
+    /**
+     * @param array<int,string> $authenticationMethods
+     */
+    public function setAuthenticationMethods(array $authenticationMethods): void
+    {
+        $this->authenticationMethods = $authenticationMethods;
+    }
+
+    public function setAuthenticationContext(string $authenticationContext): void
+    {
+         $this->authenticationContext = $authenticationContext;
+     }
 
 
 }

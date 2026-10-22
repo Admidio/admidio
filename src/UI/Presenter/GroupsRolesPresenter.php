@@ -1,8 +1,10 @@
 <?php
+
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\CollapsibleHtml;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\ValueObject\RoleDependency;
 use Admidio\Roles\Service\RolesService;
@@ -17,7 +19,7 @@ use Admidio\Changelog\Service\ChangelogService;
  *
  * **Code example**
  * ```
- * // generate html output with available registrations
+ * // generate HTML output with available registrations
  * $page = new ModuleGroupsRoles('admidio-groups-roles', $headline);
  * $page->createRegistrationList();
  * $page->show();
@@ -34,11 +36,12 @@ class GroupsRolesPresenter extends PagePresenter
     public const ROLE_TYPE_INACTIVE = 0;
     public const ROLE_TYPE_ACTIVE = 1;
     public const ROLE_TYPE_EVENT_PARTICIPATION = 2;
+
     /**
      * Show all roles of the organization in card view. The roles must be read before with the method readData.
      * The cards will show various functions like activate, deactivate, vcard export, edit or delete. Also, the
-     * role information e.g. description, start and end date, number of active and former members. A button with
-     * the link to the default list will be shown.
+     * role information e.g. description, start and end date, number of active and former members. The role name
+     * links to the default member list.
      * @param string $categoryUUID UUID of the category for which the roles should be shown.
      * @param int $roleType The type of roles that should be shown within this page.
      *                         0 - inactive roles
@@ -51,7 +54,7 @@ class GroupsRolesPresenter extends PagePresenter
     {
         global $gSettingsManager, $gCurrentUser, $gCurrentSession, $gL10n, $gDb;
 
-        $this->createSharedHeader($categoryUUID, $roleType, 'card');
+        $this->createSharedHeader($categoryUUID, $roleType);
         $rolesService = new RolesService($gDb);
         $data = $rolesService->findAll($roleType, $categoryUUID);
 
@@ -73,7 +76,7 @@ class GroupsRolesPresenter extends PagePresenter
                     );
                 }
                 $categoryUUID = $row['cat_uuid'];
-                $categoryName = $row['cat_name'];
+                $categoryName = $role->getValue('cat_name');
                 $templateDataRoles = array();
             }
 
@@ -81,23 +84,17 @@ class GroupsRolesPresenter extends PagePresenter
             $templateRow['category'] = $role->getValue('cat_name');
             $templateRow['id'] = 'role_' . $role->getValue('rol_uuid');
             $templateRow['title'] = $role->getValue('rol_name');
+            $templateRow['url'] = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php',
+                array('role_list' => $row['rol_uuid'])
+            );
 
-            // send a mail to all role members
+            // send mail to all role members
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $templateRow['actions'][] = array(
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'bi bi-envelope',
                     'tooltip' => $gL10n->get('SYS_EMAIL_TO_MEMBERS')
-                );
-            }
-
-            // show link to export vCard if user is allowed to see the profiles of members and the role has members
-            if ($gCurrentUser->hasRightViewProfiles($row['rol_id'])
-                && ($row['num_members'] > 0 || $row['num_leader'] > 0)) {
-                $templateRow['actions'][] = array(
-                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'export', 'role_uuid' => $row['rol_uuid'])),
-                    'icon' => 'bi bi-download',
-                    'tooltip' => $gL10n->get('SYS_EXPORT_VCARD_FROM_VAR', array($row['rol_name']))
                 );
             }
 
@@ -111,18 +108,18 @@ class GroupsRolesPresenter extends PagePresenter
             }
 
             if ($gCurrentUser->isAdministratorRoles()) {
-                // set role active or inactive
+                // set a role active or inactive
                 if ($roleType === GroupsRolesPresenter::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
+                        'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                         'icon' => 'bi bi-eye',
                         'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                     );
                 } elseif ($roleType === GroupsRolesPresenter::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
+                        'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                         'icon' => 'bi bi-eye-slash',
                         'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                     );
@@ -137,7 +134,7 @@ class GroupsRolesPresenter extends PagePresenter
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['rol_name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($role->getValue('rol_name'))),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                     );
@@ -145,46 +142,53 @@ class GroupsRolesPresenter extends PagePresenter
             }
 
             if (!empty($role->getValue('rol_description'))) {
-                $roleDescription = strip_tags($role->getValue('rol_description'));
-
-                if (strlen($roleDescription) > 200) {
-                    // read first 200 chars of text, then search for last space and cut the text there. After that add a "more" link
-                    $textPrev = substr($roleDescription, 0, 200);
-                    $maxPosPrev = strrpos($textPrev, ' ');
-                    $roleDescription = substr($textPrev, 0, $maxPosPrev) .
-                        ' <span class="collapse" id="viewdetails-' . $row['rol_uuid'] . '">' . substr($roleDescription, $maxPosPrev) . '.
-                                </span> <a class="admidio-icon-link" data-bs-toggle="collapse" data-bs-target="#viewdetails-' . $row['rol_uuid'] . '">»</a>';
-                }
-
-                $templateRow['information'][] = $roleDescription;
+                $templateRow['information'][] = CollapsibleHtml::render(
+                    $role->getValue('rol_description'),
+                    $gSettingsManager->getInt('groups_roles_preview_characters'),
+                    'viewdetails-' . $row['rol_uuid'],
+                    $gL10n->get('SYS_SHOW_MORE')
+                );
             }
 
-            // block with information about events and meeting-point
+            // Block with information about events and meeting-point
             if (!empty($role->getValue('rol_start_date')) || $role->getValue('rol_weekday') > 0
                 || !empty($role->getValue('rol_start_time')) || !empty($role->getValue('rol_location'))) {
-                $html = '<h6>' . $gL10n->get('SYS_APPOINTMENTS') . ' / ' . $gL10n->get('SYS_MEETINGS') . '</h6>';
+                $html = '';
                 if ($role->getValue('rol_start_date') !== '') {
-                    $html .= '<span class="d-block">' . $gL10n->get('SYS_DATE_FROM_TO', array($role->getValue('rol_start_date', $gSettingsManager->getString('system_date')), $role->getValue('rol_end_date', $gSettingsManager->getString('system_date')))) . '</span>';
+                    $html .= '<span class="d-block"><i class="bi bi-calendar-event me-2" data-bs-toggle="tooltip" title="'
+                        . $gL10n->get('SYS_APPOINTMENT') . '" aria-label="' . $gL10n->get('SYS_APPOINTMENT') . '"></i>'
+                        . $gL10n->get('SYS_DATE_FROM_TO', array(
+                            $role->getValue('rol_start_date', $gSettingsManager->getString('system_date')),
+                            $role->getValue('rol_end_date', $gSettingsManager->getString('system_date'))
+                        )) . '</span>';
                 }
 
                 if ($role->getValue('rol_weekday') > 0 || !empty($role->getValue('rol_start_time'))) {
+                    $schedule = '';
                     if ($role->getValue('rol_weekday') > 0) {
-                        $html .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
+                        $schedule .= RolesService::getWeekdays($role->getValue('rol_weekday')) . ' ';
                     }
                     if (!empty($role->getValue('rol_start_time'))) {
-                        $html .= $gL10n->get('SYS_FROM_TO', array($role->getValue('rol_start_time', $gSettingsManager->getString('system_time')), $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))));
+                        $schedule .= $gL10n->get('SYS_FROM_TO', array(
+                            $role->getValue('rol_start_time', $gSettingsManager->getString('system_time')),
+                            $role->getValue('rol_end_time', $gSettingsManager->getString('system_time'))
+                        ));
                     }
-                    $html = '<span class="d-block">' . $html . '</span>';
+                    $html .= '<span class="d-block"><i class="bi bi-clock me-2" data-bs-toggle="tooltip" title="'
+                        . $gL10n->get('SYS_TIME') . '" aria-label="' . $gL10n->get('SYS_TIME') . '"></i>'
+                        . $schedule . '</span>';
                 }
 
                 // Meeting point
                 if (!empty($role->getValue('rol_location'))) {
-                    $html .= '<span class="d-block">' . $gL10n->get('SYS_MEETING_POINT') . ' ' . $role->getValue('rol_location') . '</span>';
+                    $html .= '<span class="d-block"><i class="bi bi-geo-alt-fill me-2" data-bs-toggle="tooltip" title="'
+                        . $gL10n->get('SYS_MEETING_POINT') . '" aria-label="' . $gL10n->get('SYS_MEETING_POINT') . '"></i>'
+                        . $role->getValue('rol_location') . '</span>';
                 }
                 $templateRow['information'][] = $html;
             }
 
-            // show members fee
+            // show member fee
             if (!empty($role->getValue('rol_cost')) || $role->getValue('rol_cost_period') > 0) {
                 $html = '';
 
@@ -198,17 +202,37 @@ class GroupsRolesPresenter extends PagePresenter
                     $html .= ' - ' . Role::getCostPeriods($role->getValue('rol_cost_period'));
                 }
 
-                $templateRow['information'][] = '<h6>' . $gL10n->get('SYS_CONTRIBUTION') . '</h6><span class="d-block">' . $html . '</span></li>';
+                $templateRow['information'][] = '<span class="d-block"><span class="admidio-contribution-icon me-2"'
+                    . ' data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CONTRIBUTION') . '"'
+                    . ' aria-label="' . $gL10n->get('SYS_CONTRIBUTION') . '">'
+                    . '<i class="bi bi-wallet2" aria-hidden="true"></i>'
+                    . '<i class="bi bi-cash admidio-contribution-currency" aria-hidden="true"></i>'
+                    . '</span>' . $html . '</span>';
             }
 
-            // show count of members and leaders of this role
-            $html = '';
-            $htmlLeader = '';
-
+            // show count of members, leaders and former members of this role
             if ($role->getValue('rol_max_members') > 0) {
-                $html .= $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array((int)$row['num_members'], (int)$role->getValue('rol_max_members')));
+                $memberCount = (int)$row['num_members'] . '/' . (int)$role->getValue('rol_max_members');
+                $memberTooltip = $gL10n->get('SYS_MAX_PARTICIPANTS_OF_ROLE', array(
+                    (int)$row['num_members'],
+                    (int)$role->getValue('rol_max_members')
+                ));
             } else {
-                $html .= $row['num_members'] . ' ' . $gL10n->get('SYS_PARTICIPANTS');
+                $memberCount = (int)$row['num_members'];
+                $memberTooltip = $memberCount . ' ' . $gL10n->get('SYS_PARTICIPANTS');
+            }
+            $templateRow['statistics'][] = array(
+                'count' => $memberCount,
+                'icon' => 'bi bi-person-fill',
+                'tooltip' => $memberTooltip
+            );
+
+            if ($row['num_leader'] > 0) {
+                $templateRow['statistics'][] = array(
+                    'count' => (int)$row['num_leader'],
+                    'icon' => 'bi bi-person-fill-gear',
+                    'tooltip' => (int)$row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS')
+                );
             }
 
             if ($gCurrentUser->hasRightViewFormerRolesMembers($row['rol_id']) && $roleType === $this::ROLE_TYPE_ACTIVE && $row['num_former'] > 0) {
@@ -219,18 +243,12 @@ class GroupsRolesPresenter extends PagePresenter
                     $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                 }
 
-                $html .= '&nbsp;&nbsp;(<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'], 'mem_show_filter' => 1)) . '">' . $row['num_former'] . ' ' . $textFormerMembers . '</a>) ';
+                $templateRow['statistics'][] = array(
+                    'count' => (int)$row['num_former'],
+                    'icon' => 'bi bi-person-fill-dash',
+                    'tooltip' => (int)$row['num_former'] . ' ' . $textFormerMembers
+                );
             }
-
-            if ($row['num_leader'] > 0) {
-                $htmlLeader = '<span class="d-block">' . $row['num_leader'] . ' ' . $gL10n->get('SYS_LEADERS') . '</span>';
-            }
-            $templateRow['information'][] = '<span class="d-block">' . $html . '</span>' . $htmlLeader;
-
-            $templateRow['buttons'][] = array(
-                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('role_list' => $row['rol_uuid'])),
-                'name' => $gL10n->get('SYS_SHOW_MEMBER_LIST')
-            );
 
             $templateDataRoles[] = $templateRow;
         }
@@ -261,12 +279,11 @@ class GroupsRolesPresenter extends PagePresenter
 
         if ($roleUUID !== '') {
             $role->readDataByUuid($roleUUID);
-            $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
-
-            // check if the role belongs to the current organization
-            if ((int)$role->getValue('cat_org_id') !== $gCurrentOrgId && $role->getValue('cat_org_id') > 0) {
+            if (!$role->isVisible()) {
                 throw new Exception('SYS_NO_RIGHTS');
             }
+
+            $eventRole = $role->getValue('cat_name_intern') === 'EVENTS';
 
             // administrator role could only be created or edited by administrators
             if ($role->getValue('rol_administrator') == 1 && !$gCurrentUser->isAdministrator()) {
@@ -452,6 +469,8 @@ class GroupsRolesPresenter extends PagePresenter
             );
         }
 
+        $roleName = $gL10n->get('SYS_NEW_ROLE');
+
         // event roles should not set rights, events meetings and dependencies
         if (!$eventRole) {
             $form->addCheckbox(
@@ -555,7 +574,6 @@ class GroupsRolesPresenter extends PagePresenter
             $form->addSelectBox('rol_weekday', $gL10n->get('SYS_WEEKDAY'), RolesService::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday'), 'class' => 'form-control-small'));
             $form->addInput('rol_location', $gL10n->get('SYS_MEETING_POINT'), $role->getValue('rol_location'), array('maxLength' => 100));
 
-            $roleName = $gL10n->get('SYS_NEW_ROLE');
             if ($role->getValue('rol_name') !== '') {
                 $roleName = $gL10n->get('SYS_ROLE') . ' <strong>' . $role->getValue('rol_name') . '</strong>';
             }
@@ -608,7 +626,11 @@ class GroupsRolesPresenter extends PagePresenter
      */
     public function createPermissionsList(string $categoryUUID, string $roleType): void
     {
-        global $gSettingsManager, $gL10n, $gDb, $gCurrentSession;
+        global $gSettingsManager, $gL10n, $gDb, $gCurrentSession, $gCurrentUser;
+
+        if (!$gCurrentUser->isAdministratorRoles()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $templateData = array();
         $this->createSharedHeader($categoryUUID, $roleType, 'permissions');
@@ -735,14 +757,14 @@ class GroupsRolesPresenter extends PagePresenter
             if ($roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($row['rol_name'])),
+                    'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                     'icon' => 'bi bi-eye',
                     'tooltip' => $gL10n->get('SYS_ACTIVATE_ROLE')
                 );
             } elseif ($roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($row['rol_name'])),
+                    'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                     'icon' => 'bi bi-eye-slash',
                     'tooltip' => $gL10n->get('SYS_DEACTIVATE_ROLE')
                 );
@@ -750,7 +772,7 @@ class GroupsRolesPresenter extends PagePresenter
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['rol_name'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($role->getValue('rol_name'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE_ROLE')
                 );
@@ -772,58 +794,58 @@ class GroupsRolesPresenter extends PagePresenter
 
     /**
      * Create content that is used on several pages and could be called in other methods. It will
-     * create a functions menu and a filter navbar.
+     * create a function menu and a filter navbar.
      * @param string $categoryUUID UUID of the category for which the roles should be shown.
      * @param string $roleType The type of roles that should be shown within this page.
      *                         0 - inactive roles
      *                         1 - active roles
      *                         2 - event participation roles
-     * @param string $mode The purpose of the current page. One of: 'card', 'permissions', 'edit'
+     * @param string $mode The purpose of the current page. One of: 'cards', 'permissions', 'edit'
      *
      * @return void
      * @throws Exception
      */
-    protected function createSharedHeader(string $categoryUUID, string $roleType, string $mode = 'card'): void
+    protected function createSharedHeader(string $categoryUUID, string $roleType, string $mode = 'cards'): void
     {
         global $gCurrentUser, $gSettingsManager, $gL10n, $gDb;
 
         if ($gCurrentUser->isAdministratorRoles()) {
-            // show link to create new role
+            // show a link to create a new role
             $this->addPageFunctionsMenuItem(
                 'menu_item_groups_roles_add',
                 $gL10n->get('SYS_CREATE_ROLE'),
-                ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php?mode=edit',
+                ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php?mode=edit',
                 'bi-plus-circle-fill'
             );
 
-            if ($mode == 'card') {
+            if ($mode == 'cards') {
                 // show permissions of all roles
                 $this->addPageFunctionsMenuItem(
                     'menu_item_groups_roles_show_permissions',
                     $gL10n->get('SYS_SHOW_PERMISSIONS'),
-                    SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php', array('mode' => 'permissions', 'cat_uuid' => $categoryUUID, 'role_type' => $roleType)),
+                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'permissions', 'cat_uuid' => $categoryUUID, 'role_type' => $roleType)),
                     'bi-shield-lock-fill'
                 );
             }
 
             $logShowTable = 'roles';
-            if ($mode == 'card') {
+            if ($mode == 'cards') {
                 $logShowTable = 'members';
             } elseif ($mode == 'permissions') {
                 $logShowTable = 'roles_rights_data';
             }
             ChangelogService::displayHistoryButton($this, 'members', $logShowTable);
 
-            // show link to maintain categories
+            // show a link to maintain categories
             $this->addPageFunctionsMenuItem(
                 'menu_item_groups_roles_maintain_categories',
                 $gL10n->get('SYS_EDIT_CATEGORIES'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/categories.php', array('type' => 'ROL')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ROL')),
                 'bi-hdd-stack-fill'
             );
         }
 
-        // show link to create own list
+        // show a link to create an own list
         if ($gSettingsManager->getInt('groups_roles_edit_lists') === 1 // everyone
             || ($gSettingsManager->getInt('groups_roles_edit_lists') === 2 && $gCurrentUser->checkRolesRight('rol_edit_user')) // users with the right to edit all profiles
             || ($gSettingsManager->getInt('groups_roles_edit_lists') === 3 && $gCurrentUser->isAdministrator())) {
@@ -846,11 +868,11 @@ class GroupsRolesPresenter extends PagePresenter
             true
         );
 
-        // create filter menu with elements for category
+        // create a filter menu with elements for category
         $form = new FormPresenter(
             'adm_navbar_filter_form',
             'sys-template-parts/form.filter.tpl',
-            ADMIDIO_URL.FOLDER_MODULES.'/groups-roles/groups_roles.php',
+            ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php',
             $this,
             array('type' => 'navbar', 'setFocus' => false)
         );

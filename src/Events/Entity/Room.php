@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Events\Entity;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
@@ -28,16 +29,25 @@ class Room extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'room';
+    }
+
+    /**
      * Get the value of a column of the database table.
      * If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         if ($columnName === 'room_description') {
             if (!isset($this->dbColumns['room_description'])) {
@@ -45,7 +55,7 @@ class Room extends Entity
             } elseif ($format === 'database') {
                 $value = html_entity_decode(StringUtils::strStripTags($this->dbColumns['room_description']));
             } else {
-                $value = $this->dbColumns['room_description'];
+                $value = Language::translateIfTranslationStrId($this->dbColumns['room_description']);
             }
 
             return $value;
@@ -63,7 +73,7 @@ class Room extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if ($columnName === 'room_description') {
             return parent::setValue($columnName, $newValue, false);

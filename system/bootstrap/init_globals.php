@@ -19,7 +19,7 @@ if (!isset($gDebug) || !$gDebug) {
 
 // create database object and establish connection to database
 if (!isset($gDbType)) {
-    $gDbType = 'mysql'; // DB_ENGINE
+    $gDbType = 'mysql'; // DB_TYPE
 }
 
 if (!isset($g_adm_srv)) {

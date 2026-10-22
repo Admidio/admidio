@@ -3,7 +3,7 @@ Short description to update the current lib
 1. Go to https://datatables.net/download/
 2. Now select the following options for download:
    Styling framework:
-   - Bootstrap 4
+   - Bootstrap 5
    Packages:
    - Datatables
    Extensions:

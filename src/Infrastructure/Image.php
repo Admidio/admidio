@@ -67,6 +67,7 @@ class Image
                 break;
 
             case IMAGETYPE_PNG:
+                imagesavealpha($imageResource, true);
                 echo imagepng($imageResource);
                 break;
 
@@ -99,6 +100,7 @@ class Image
                 return imagejpeg($imageResource, $pathAndFilename, $quality);
 
             case IMAGETYPE_PNG:
+                imagesavealpha($imageResource, true);
                 return imagepng($imageResource, $pathAndFilename);
 
             default:
@@ -138,9 +140,6 @@ class Image
      */
     public function delete()
     {
-        if(is_object($this->imageResource)) {
-            imagedestroy($this->imageResource);
-        }
         $this->imageResource = null;
         $this->imagePath = '';
     }
@@ -254,9 +253,6 @@ class Image
         // save
         $this->copyToFile($imageRotated);
 
-        // Delete image from ram
-        imagedestroy($imageRotated);
-
         return true;
     }
 
@@ -299,8 +295,6 @@ class Image
 
         // create new resized image
         $resizedImageResource = imagescale($this->imageResource, $newXSize, $newYSize);
-
-        imagedestroy($this->imageResource);
 
         // update the class parameters to new image data
         $this->imageResource = $resizedImageResource;

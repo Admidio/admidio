@@ -112,7 +112,10 @@ class MenuService
             }
         }
 
-        if($this->menuRessource->save()) {
+        // save menu entry
+        // if we edit an existing menu entry and only changed the visible for field then $this->menuRessource->save() will return false
+        // so we need to check whether we have an ID for the menu item that indicates that the menu item is present in the database so that we can save the changed role rights.
+        if($this->menuRessource->save() || !empty($this->menuRessource->getValue('men_id'))) {
             // save changed roles rights of the menu
             if (isset($_POST['menu_view'])) {
                 $menuViewRoles = array_map('intval', $_POST['menu_view']);

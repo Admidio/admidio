@@ -64,6 +64,9 @@ try {
     // create list object
     $list = new ListConfiguration($gDb);
     $list->readDataByUuid($getListUuid);
+    if (!$list->isVisible()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
 
     // if a saved configuration was loaded then add columns to formValues array
     if ($getListUuid !== '') {
@@ -74,29 +77,29 @@ try {
             $userField = new ProfileField($gDb, (int)$column->getValue('lsc_usf_id'));
 
             if ($column->getValue('lsc_usf_id') > 0) {
-                $formValues['column' . $number] = $userField->getValue('usf_name_intern');
+                $formValues['column'][] = $userField->getValue('usf_name_intern');
             } else {
-                $formValues['column' . $number] = $column->getValue('lsc_special_field');
+                $formValues['column'][] = $column->getValue('lsc_special_field');
             }
 
-            $formValues['sort' . $number] = $column->getValue('lsc_sort');
-            $formValues['condition' . $number] = $column->getValue('lsc_filter');
+            $formValues['sort'][] = $column->getValue('lsc_sort');
+            $formValues['condition'][] = $column->getValue('lsc_filter');
         }
     }
 
-    // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-mylist', $headline);
+    // create HTML page object
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_groups_roles_mylist', $headline);
 
     ChangelogService::displayHistoryButton($page, 'lists', 'lists,list_columns', true, array('uuid' => $getListUuid));
 
     // within MySql it's only possible to join 61 tables therefore show a message if user
     // want's to join more than 57 columns
-    if (DB_ENGINE === Database::PDO_ENGINE_MYSQL) {
+    if (DB_TYPE !== Database::PDO_ENGINE_PGSQL) {
         $mySqlMaxColumnAlert = '
-    if (fieldNumberIntern >= 57) {
-        messageBox("' . $gL10n->get('SYS_NO_MORE_COLUMN') . '");
-        return;
-    }';
+        if (fieldNumberIntern >= 57) {
+            messageBox("' . $gL10n->get('SYS_NO_MORE_COLUMN') . '");
+            return;
+        }';
     }
 
     $javascriptCode = '
@@ -122,7 +125,7 @@ try {
 
         // neue Spalte zur Auswahl des Profilfeldes
         var newCellField = newTableRow.insertCell(-1);
-        htmlCboFields = "<select class=\"form-control\" onchange=\"getConditionField(" + fieldNumberShow + ", this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column" + fieldNumberShow + "\">" +
+        htmlCboFields = "<select class=\"form-control\" onchange=\"getConditionField(" + fieldNumberShow + ", this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column[]\">" +
                 "<option value=\"\"></option>";
         for (var counter = 1; counter < arrUserFields.length; counter++) {
             if (category !== arrUserFields[counter]["cat_name"]) {
@@ -170,7 +173,7 @@ try {
         }
 
         var newCellOrder = newTableRow.insertCell(-1);
-        newCellOrder.innerHTML = "<select class=\"form-control\" size=\"1\" id=\"sort" + fieldNumberShow + "\" name=\"sort" + fieldNumberShow + "\">" +
+        newCellOrder.innerHTML = "<select class=\"form-control\" size=\"1\" id=\"sort" + fieldNumberShow + "\" name=\"sort[]\">" +
                 "<option value=\"\">&nbsp;</option>" +
                 "<option value=\"ASC\" " + selectAsc + ">' . $gL10n->get('SYS_A_TO_Z') . '</option>" +
                 "<option value=\"DESC\" " + selectDesc + ">' . $gL10n->get('SYS_Z_TO_A') . '</option>" +
@@ -195,6 +198,12 @@ try {
         newCellConditions.setAttribute("id", "td_condition" + fieldNumberShow);
         newCellConditions.innerHTML = htmlFormCondition;
 
+        var newCellHandle = newTableRow.insertCell(-1);
+        newCellHandle.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+            "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
+            "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+            "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
+
         $(newTableRow).fadeIn("slow");
         fieldNumberIntern++;
     }
@@ -204,13 +213,6 @@ try {
 
     // create a multidimensional array for all columns with the necessary data
     $i = 0;
-    $arrParticipantsInformation = array(
-        'mem_approved' => $gL10n->get('SYS_PARTICIPATION_STATUS'),
-        'mem_usr_id_change' => $gL10n->get('SYS_CHANGED_BY'),
-        'mem_timestamp_change' => $gL10n->get('SYS_CHANGED_AT'),
-        'mem_comment' => $gL10n->get('SYS_COMMENT'),
-        'mem_count_guests' => $gL10n->get('SYS_SEAT_AMOUNT')
-    );
 
     foreach ($gProfileFields->getProfileFields() as $field) {
         // add profile field to user field array
@@ -237,81 +239,35 @@ try {
         }
     }
 
+    $arrAdditionalColumns = array(
+        array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_photo', 'usf_name' => $gL10n->get('SYS_PHOTO')),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_login_name', 'usf_name' => $gL10n->get('SYS_USERNAME')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_usr_id_create', 'usf_name' => $gL10n->get('SYS_CREATED_BY')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_timestamp_create', 'usf_name' => $gL10n->get('SYS_CREATED_AT')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_usr_id_change', 'usf_name' => $gL10n->get('SYS_CHANGED_BY')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_timestamp_change', 'usf_name' => $gL10n->get('SYS_CHANGED_AT')) : []),
+        ($gCurrentUser->isAdministratorUsers() ? array('cat_name' => $gL10n->get('SYS_PROFILE_INFORMATION'), 'usf_name_intern' => 'usr_uuid', 'usf_name' => $gL10n->get('SYS_UNIQUE_ID')) : []),
+        array('cat_name' => $gL10n->get('SYS_ROLE_INFORMATION'), 'usf_name_intern' => 'mem_begin', 'usf_name' => $gL10n->get('SYS_MEMBERSHIP_START')),
+        array('cat_name' => $gL10n->get('SYS_ROLE_INFORMATION'), 'usf_name_intern' => 'mem_end', 'usf_name' => $gL10n->get('SYS_MEMBERSHIP_END')),
+        array('cat_name' => $gL10n->get('SYS_ROLE_INFORMATION'), 'usf_name_intern' => 'mem_duration', 'usf_name' => $gL10n->get('SYS_MEMBERSHIP_DURATION')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_approved', 'usf_name' => $gL10n->get('SYS_PARTICIPATION_STATUS')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_usr_id_change', 'usf_name' => $gL10n->get('SYS_CHANGED_BY')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_timestamp_change', 'usf_name' => $gL10n->get('SYS_CHANGED_AT')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_comment', 'usf_name' => $gL10n->get('SYS_COMMENT')),
+        array('cat_name' => $gL10n->get('SYS_PARTICIPATION_INFORMATION'), 'usf_name_intern' => 'mem_count_guests', 'usf_name' => $gL10n->get('SYS_SEAT_AMOUNT'))
+    );
+
+
     // after the profile fields add some special profile information e.g. username, photo, created at ...
-    $javascriptCode .= '
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_PHOTO') . '",
-            "usf_name_intern": "usr_photo"
-        };';
-
-    // administrator could export the uuid of each user to identify the user later at the import
-    if ($gCurrentUser->isAdministratorUsers()) {
-        $javascriptCode .= '
+    foreach ($arrAdditionalColumns as $column) {
+        if (is_array($column) && count($column) > 0) {
+            $javascriptCode .= '
             userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_USERNAME') . '",
-                "usf_name_intern": "usr_login_name"
-            };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CREATED_BY') . '",
-                "usf_name_intern": "usr_usr_id_create"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CREATED_AT') . '",
-                "usf_name_intern": "usr_timestamp_create"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CHANGED_BY') . '",
-                "usf_name_intern": "usr_usr_id_change"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_CHANGED_AT') . '",
-                "usf_name_intern": "usr_timestamp_change"
-                };
-
-            userFields[' . ++$i . '] = {
-                "cat_name": "' . $gL10n->get('SYS_PROFILE_INFORMATION') . '",
-                "usf_name": "' . $gL10n->get('SYS_UNIQUE_ID') . '",
-                "usf_name_intern": "usr_uuid"
-                };';
-    }
-
-    $javascriptCode .= '
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_START') . '",
-            "usf_name_intern": "mem_begin"
-        };
-
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_END') . '",
-            "usf_name_intern": "mem_end"
-        };
-        
-        userFields[' . ++$i . '] = {
-            "cat_name": "' . $gL10n->get('SYS_ROLE_INFORMATION') . '",
-            "usf_name": "' . $gL10n->get('SYS_MEMBERSHIP_DURATION') . '",
-            "usf_name_intern": "mem_duration"
-        };';
-
-    // add new category with participant information of events
-    foreach ($arrParticipantsInformation as $memberStatus => $columnName) {
-        $javascriptCode .= '
-            userFields[' . ++$i . '] = {
-                "cat_name" : "' . $gL10n->get('SYS_PARTICIPATION_INFORMATION') . '",
-                "usf_name" : "' . $columnName . '",
-                "usf_name_intern" : "' . $memberStatus . '",
+                "cat_name" : "' . $column['cat_name'] . '",
+                "usf_name" : "' . $column['usf_name'] . '",
+                "usf_name_intern" : "' . $column['usf_name_intern'] . '",
             };';
+        }
     }
 
     $javascriptCode .= '
@@ -322,28 +278,24 @@ try {
     {
         var defaultFields = [];';
 
-    // now add all columns to the javascript row objects
+    // now add all columns to the JavaScript row objects
     $actualColumnNumber = 1;
-    while (isset($formValues['column' . $actualColumnNumber])) {
-        $sortValue = '';
-        $conditionValue = '';
+    array_map(
+        function ($col, $sort = null, $cond = null) use (&$javascriptCode, &$actualColumnNumber) {
+            $javascriptCode .= '
+            defaultFields[' . $actualColumnNumber . '] = {
+                "usf_name_intern": "' . ($col ?? '') . '",
+                "sort": "' . ($sort ?? '') . '",
+                "condition": "' . ($cond ?? '') . '"
+            };';
 
-        if (isset($formValues['sort' . $actualColumnNumber])) {
-            $sortValue = $formValues['sort' . $actualColumnNumber];
-        }
-        if (isset($formValues['condition' . $actualColumnNumber])) {
-            $conditionValue = $formValues['condition' . $actualColumnNumber];
-        }
-
-        $javascriptCode .= '
-        defaultFields[' . $actualColumnNumber . '] = {
-            "usf_name_intern": "' . $formValues['column' . $actualColumnNumber] . '",
-            "sort": "' . $sortValue . '",
-            "condition": "' . $conditionValue . '"
-        };';
-
-        ++$actualColumnNumber;
-    }
+            $actualColumnNumber++;
+            return null; // return value unused
+        },
+        $formValues['column'] ?? [],
+        $formValues['sort'] ?? [],
+        $formValues['condition'] ?? []
+    );
 
     $javascriptCode .= '
         return defaultFields;
@@ -363,7 +315,7 @@ try {
      * @param {string} columnName
      */
     function setConditionField(fieldNumberShow, columnName) {
-        html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
+        html = "<input type=\"text\" class=\"form-control\" id=\"condition" + fieldNumberShow + "\" name=\"condition[]\" maxlength=\"50\" value=\"" + condition + "\" />";
         var key;
 
         for (key in arrUserFields) {
@@ -371,7 +323,7 @@ try {
                 if (arrUserFields[key]["usf_type"] === "DROPDOWN"
                 ||  arrUserFields[key]["usf_type"] === "DROPDOWN_MULTISELECT"
                 ||  arrUserFields[key]["usf_type"] === "RADIO_BUTTON") {
-                    html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition" + fieldNumberShow + "\">" +
+                    html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" class=\"ListConditionField\" name=\"condition[]\">" +
                     "<option value=\"\">&nbsp;</option>";
 
                     for (selectValue in arrUserFields[key]["ufo_usf_options"]) {
@@ -389,7 +341,7 @@ try {
                 }
 
                 if (arrUserFields[key]["usf_type"] === "CHECKBOX") {
-                    html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\">" +
+                    html = "<select class=\"form-control\" size=\"1\" id=\"condition" + fieldNumberShow + "\" name=\"condition[]\">" +
                     "<option value=\"\">&nbsp;</option>";
 
                     selected = "";
@@ -475,10 +427,28 @@ try {
         $("#adm_button_save_changes").click(function() { send("save"); });
         $("#btn_delete").click(function() { send("delete"); });
         $("#btn_copy").click(function() { send("save_as"); });
+        $("#mylist_fields_tbody").sortable({
+            handle: ".admidio-move-row",
+            items: "tr",
+            update: updateNumbering
+        });
+        function updateNumbering() {
+            $("tbody#mylist_fields_tbody").find("tr").each(function(index) {
+                $(this).find("td:first").text((index + 1) + ". ' . $gL10n->get('SYS_COLUMN') . ':");
+            });
+        }
+        $(document).on("click", ".admidio-delete", function(){
+            let row = $(this).closest("tr").fadeOut(300, function() {
+                $(this).remove();
+                updateNumbering();
+            });
+        });
+
 
         for (var counter = 0; counter < ' . $defaultColumnRows . '; counter++) {
             addColumn();
         }
+        updateNumbering();
     });', true);
 
     // show form
@@ -644,6 +614,6 @@ try {
     $gCurrentSession->addFormObject($form);
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

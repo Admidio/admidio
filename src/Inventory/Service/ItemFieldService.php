@@ -45,6 +45,13 @@ class ItemFieldService
      */
     public function delete(): bool
     {
+        global $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         return $this->itemFieldRessource->delete();
     }
 
@@ -56,7 +63,12 @@ class ItemFieldService
      */
     public function moveSequence(string $mode): bool
     {
-        global $gCurrentOrgId;
+        global $gCurrentOrgId, $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         $infSequence = (int)$this->itemFieldRessource->getValue('inf_sequence');
         $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
@@ -70,6 +82,8 @@ class ItemFieldService
         } // item field will get one number higher and therefore move a position down in the list
         elseif ($mode === self::MOVE_DOWN) {
             $newSequence = $infSequence + 1;
+        } else {
+            throw new Exception('Invalid mode for moveSequence');
         }
 
         // update the existing entry with the sequence of the field that should get the new sequence
@@ -82,6 +96,7 @@ class ItemFieldService
     /**
      * Get the ID of the item field.
      * @return int The ID of the item field.
+     * @throws Exception
      */
     public function getFieldID(): int
     {
@@ -96,8 +111,13 @@ class ItemFieldService
      */
     public function setSequence(array $sequence): bool
     {
-        global $gCurrentOrgId;
-        //$usfCatId = $this->getValue('usf_cat_id');
+        global $gCurrentOrgId, $gCurrentUser;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $infUUID = $this->itemFieldRessource->getValue('inf_uuid');
 
         $sql = 'UPDATE ' . TBL_INVENTORY_FIELDS . '
@@ -129,20 +149,38 @@ class ItemFieldService
      */
     public function save(): bool
     {
-        global $gCurrentSession, $gCurrentOrgId, $gDb;
+        global $gCurrentSession;
 
         // check form field input and sanitized it from malicious content
         $itemFieldsEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $itemFieldsEditForm->validate($_POST);
 
-        if (isset($_POST['inf_name']) && $this->itemFieldRessource->getValue('inf_name') !== $_POST['inf_name']) {
+        return $this->saveData($formValues);
+    }
+
+    /**
+     * Save already validated inventory field data.
+     *
+     * @param array $formValues Validated inventory field values.
+     * @throws Exception
+     */
+    public function saveData(array $formValues): bool
+    {
+        global $gCurrentOrgId, $gCurrentUser, $gDb;
+
+        // check if user has admin rights for inventory
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        if (isset($formValues['inf_name']) && $this->itemFieldRessource->getValue('inf_name') !== $formValues['inf_name']) {
             // See if the field already exists
             $sql = 'SELECT COUNT(*) AS count FROM ' . TBL_INVENTORY_FIELDS . '
-            WHERE inf_name = ? -- $_POST[\'inf_name\']
+            WHERE inf_name = ? -- $formValues[\'inf_name\']
             AND (inf_org_id = ? -- $gCurrentOrgId
                 OR inf_org_id IS NULL)
             AND inf_uuid <> ? -- $this->UUID;';
-            $pdoStatement = $gDb->queryPrepared($sql, array($_POST['inf_name'], $gCurrentOrgId, $this->UUID));
+            $pdoStatement = $gDb->queryPrepared($sql, array($formValues['inf_name'], $gCurrentOrgId, $this->UUID));
 
             if ($pdoStatement->fetchColumn() > 0) {
                 throw new Exception('ORG_FIELD_EXIST');
@@ -157,8 +195,7 @@ class ItemFieldService
             if (str_starts_with($key, 'inf_')) {
                 $this->itemFieldRessource->setValue($key, $value);
             } elseif (str_starts_with($key, 'ifo_')) {
-                // if the key starts with 'ufo_' then it is a user field option
-                // and we save it in the user field options table
+                // if the key starts with 'ifo_' then it is an inventory field option
                 $options = $value;
             }
         }

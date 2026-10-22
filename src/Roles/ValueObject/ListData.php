@@ -2,11 +2,15 @@
 namespace Admidio\Roles\ValueObject;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PdfUtils;
+use Admidio\Infrastructure\Utils\SpreadsheetUtils;
 use Admidio\Roles\Entity\ListConfiguration;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Writer\Html;
 use PhpOffice\PhpSpreadsheet\Writer\Ods;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -30,10 +34,10 @@ class ListData
      */
     protected array $data = array();
     /**
-     * @var ListConfiguration An object of the ListConfiguration that could be used to read data
+     * @var ListConfiguration|null An object of the ListConfiguration that could be used to read data
      * and to format data to different output formats.
      */
-    protected ListConfiguration $listConfiguration;
+    protected ?ListConfiguration $listConfiguration = null;
     /**
      * @var Spreadsheet An object of the PhpSpreadsheet which will handle the export
      */
@@ -83,6 +87,13 @@ class ListData
     protected function prepareOutputFormat(string $outputFormat): array
     {
         global $gL10n;
+
+        // Custom SQL and array data have no ListConfiguration that could apply
+        // column-specific formatting. In that case the supplied values are already
+        // the output representation.
+        if ($this->listConfiguration === null) {
+            return $this->data;
+        }
 
         $outputData = array();
         $startRow = 0;
@@ -245,12 +256,52 @@ class ListData
      */
     public function export(string $filename, string $format = 'csv')
     {
+        $export = $this->createExportFile($filename, $format);
+
+        header('Content-Type: ' . $export['contentType']);
+        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Cache-Control: max-age=0');
+        header('Content-Length: ' . filesize($export['path']));
+
+        if (ob_get_length() > 0) { // Issue 1607 Fix
+            ob_end_clean();
+        }
+
+        readfile($export['path']);
+        unlink($export['path']);
+        exit();
+    }
+
+    /**
+     * Create an export file without sending an HTTP response.
+     *
+     * @return array{path:string,filename:string,contentType:string}
+     * @throws Exception
+     */
+    public function createExportFile(string $filename, string $format = 'csv'): array
+    {
         if (count($this->data) === 0) {
             throw new Exception('The export file will contain no data.');
         }
 
         $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->getActiveSheet()->fromArray($this->prepareOutputFormat($format));
+        $activeSheet = $this->spreadsheet->getActiveSheet();
+        $outputData = $this->prepareOutputFormat($format);
+        $effectiveFormat = in_array($format, array('xlsx', 'ods', 'pdf'), true) ? $format : 'csv';
+        if ($effectiveFormat === 'pdf') {
+            $activeSheet->fromArray($outputData);
+        } else {
+            foreach (array_values($outputData) as $rowIndex => $row) {
+                foreach (array_values($row) as $columnIndex => $value) {
+                    SpreadsheetUtils::setCellValue(
+                        $activeSheet,
+                        Coordinate::stringFromColumnIndex($columnIndex + 1) . ($rowIndex + 1),
+                        $value,
+                        $effectiveFormat === 'csv'
+                    );
+                }
+            }
+        }
 
         switch ($format) {
             case 'xlsx':
@@ -266,8 +317,10 @@ class ListData
                 $contentType = 'application/vnd.oasis.opendocument.spreadsheet';
                 break;
             case 'pdf':
+                $this->spreadsheet->getDefaultStyle()->getFont()->setName('Helvetica')->setSize(10);
                 $this->format();
-                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Pdf\Tcpdf($this->spreadsheet);
+                $writer = new Html($this->spreadsheet);
+                $writer->setUseInlineCss(true);
                 $filename .= '.pdf';
                 $contentType = 'application/pdf';
                 break;
@@ -278,19 +331,19 @@ class ListData
                 break;
         }
 
-        // save file to server folder because we need the content length otherwise the Excel file is corrupt
-        $tempFileFolderName = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
-        $writer->save($tempFileFolderName);
-
-        header('Content-Type: ' . $contentType);
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-        header('Content-Length: ' . filesize($tempFileFolderName));
-        if(ob_get_length() > 0) { // Issue 1607 Fix
-            ob_end_clean();
+        $tempFilePath = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
+        if ($writer instanceof Html) {
+            $pdf = PdfUtils::createDocument('P', pathinfo($filename, PATHINFO_FILENAME));
+            $pdf->writeTable($writer->generateSheetData());
+            FileSystemUtils::writeFile($tempFilePath, $pdf->getOutPDFString());
+        } else {
+            $writer->save($tempFilePath);
         }
-        $writer->save('php://output');
-        unlink($tempFileFolderName);
-        exit();
+
+        return array(
+            'path' => $tempFilePath,
+            'filename' => $filename,
+            'contentType' => $contentType
+        );
     }
 }

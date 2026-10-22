@@ -23,6 +23,8 @@
                     <div class="card-body">
             {/if}
             {include 'sys-template-parts/form.select.tpl' data=$itemField}
+        {elseif {string_contains haystack=$key needle="INF-"}}
+            {include 'sys-template-parts/form.input.tpl' data=$itemField}
         {/if}
     {/foreach}
     </div></div>

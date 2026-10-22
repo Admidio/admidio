@@ -1,10 +1,12 @@
 <?php
 
 use Admidio\Application\Navigation;
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -63,6 +65,13 @@ try {
     exit();
 }
 
+// check HTML string for invalid tags and scripts
+$gHtmlPurifierConfig = HTMLPurifier_Config::createDefault();
+$gHtmlPurifierConfig->set('HTML.Doctype', 'HTML 4.01 Transitional');
+$gHtmlPurifierConfig->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+$gHtmlPurifierConfig->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+
+$gHtmlPurifierFilter = new HTMLPurifier($gHtmlPurifierConfig);
 
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
@@ -76,13 +85,17 @@ try {
 }
 
 if (array_key_exists('gCurrentSession', $_SESSION)) {
-    // read a session object from PHP session
+    // read a session object from PHP session, after update of Admidio it could be an incomplete class
     /**
      * @var Session $gCurrentSession The global session object that will store the other global objects and
      *                               validates the session against the stored session in the database
      */
     $gCurrentSession = $_SESSION['gCurrentSession'];
-    $gCurrentSession->refresh();
+    if ($gCurrentSession instanceof __PHP_Incomplete_Class) {
+        unset($_SESSION['gCurrentSession']);
+    } else {
+        $gCurrentSession->refresh();
+    }
 }
 
 // Session handling
@@ -152,6 +165,9 @@ if (array_key_exists('gCurrentSession', $_SESSION)
 
     // delete old entries in session table
     $gCurrentSession->tableCleanup($gSettingsManager->getInt('logout_minutes'));
+
+    // delete the entries of the change history that are older than the configured retention period
+    ChangelogService::purgeOldEntriesIfDue();
 }
 
 // Check if reduced layout should be shown
@@ -232,7 +248,14 @@ if ($sesUsrId > 0) {
 
 // update session recordset (i.a. refresh timestamp)
 $gCurrentSession->setValue('ses_reload', 0);
-$gCurrentSession->save();
+if ($gCurrentSession->isNewRecord() && !$gDb->tableExists(TBL_LOG_CHANGES)) {
+    //temporary disable logging cause log table doesn't exist yet
+    $gCurrentSession->setLoggingEnabled(false);
+    $gCurrentSession->save();
+    $gCurrentSession->setLoggingEnabled(true);
+} else {
+    $gCurrentSession->save();
+}
 
 // create the necessary objects and parameters
 
@@ -281,3 +304,6 @@ if ($gValidLogin) {
 } else {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }
+
+// the plugins of this organization extend the fully initialized request, and only then
+PluginLoader::loadEnabled();

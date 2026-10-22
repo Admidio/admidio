@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Tutte le voci</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Annunci</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Non ci sono annunci disponibili per i visitatori. Accedi per visualizzarli.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Questo plugin mostra un’anteprima degli ultimi annunci nella pagina di riepilogo.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Elenco degli annunci</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Numero di annunci</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Numero di annunci da visualizzare. (Predefinito: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caratteri prima dell’interruzione di riga</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Numero massimo di caratteri in una parola prima di inserire un’interruzione di riga. (0: nessuna interruzione, predefinito: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Categorie visualizzate</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Seleziona le categorie di cui visualizzare gli annunci. (Predefinito: tutte le categorie)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Mostra la descrizione completa</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Se attivata, questa opzione mostra la descrizione completa; altrimenti, solo un’anteprima del testo. (Predefinito: disattivato)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Testo di anteprima</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Numero di caratteri del testo di anteprima. (0: nessuna anteprima breve, predefinito: 70)</string>
+</resources>

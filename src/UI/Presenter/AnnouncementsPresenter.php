@@ -10,6 +10,7 @@ use Admidio\Forum\Service\ForumService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Component\CollapsibleHtml;
 
 /**
  * @brief Class with methods to display the module pages of announcements.
@@ -35,6 +36,10 @@ class AnnouncementsPresenter extends PagePresenter
      */
     protected string $categoryUUID = '';
     /**
+     * @var string UUID of the announcement that should be displayed.
+     */
+    protected string $announcementUUID = '';
+    /**
      * @var CategoryService An object of the class CategoryService to get all categories.
      */
     protected CategoryService $categories;
@@ -50,13 +55,15 @@ class AnnouncementsPresenter extends PagePresenter
     /**
      * Constructor creates the page object and initialized all parameters.
      * @param string $categoryUUID UUID of the category for which the topics should be filtered.
+     * @param string $announcementUUID UUID of the announcement that should be displayed.
      * @throws Exception
      */
-    public function __construct(string $categoryUUID = '')
+    public function __construct(string $categoryUUID = '', string $announcementUUID = '')
     {
         global $gDb;
 
         $this->categoryUUID = $categoryUUID;
+        $this->announcementUUID = $announcementUUID;
         $this->categories = new CategoryService($gDb, 'FOT');
 
         parent::__construct($categoryUUID);
@@ -65,7 +72,7 @@ class AnnouncementsPresenter extends PagePresenter
     /**
      * Create content that is used on several pages and could be called in other methods. It will
      * create a functions menu and a filter navbar.
-     * @param string $view Name of the view that should be created. This could be 'cards' or 'list'.
+     * @param string $view Name of the view that should be created. This should be 'cards'.
      * @return void
      * @throws Exception
      */
@@ -143,10 +150,17 @@ class AnnouncementsPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb;
 
-        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'cards', 'category_uuid' => $this->categoryUUID));
+        $baseUrl = SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',
+            array(
+                'mode' => 'cards',
+                'category_uuid' => $this->categoryUUID,
+                'announcement_uuid' => $this->announcementUUID
+            )
+        );
 
         $this->prepareData($offset);
-        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID);
+        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID, $this->announcementUUID);
 
         $this->setHtmlID('adm_announcements_cards');
         $this->createSharedHeader('cards');
@@ -157,21 +171,6 @@ class AnnouncementsPresenter extends PagePresenter
             $this->smarty->assign('showCategories', false);
         }
 
-        $this->addJavascript('
-            $(".clamp-text").each(function(){
-                var clampHeight = this.offsetHeight;
-                var fullHeight  = this.scrollHeight;
-
-                if (fullHeight < clampHeight + 1) {
-                    $(this).next(".clamp-button").hide();
-                } else {
-                    $(this).next(".clamp-button").show();
-                }
-            });',
-            true
-        );
-        $this->smarty->assign('clampLines', $gSettingsManager->getInt('announcements_clamp_text_lines'));
-        $this->smarty->assign('enableClampLines', ( $gSettingsManager->getInt('announcements_clamp_text_lines') > 0) ?? false);
         $this->smarty->assign('cards', $this->templateData);
         $this->smarty->assign('l10n', $gL10n);
         $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $announcementsService->count(), $gSettingsManager->getInt('announcements_per_page'), $offset, true, 'offset'));
@@ -263,39 +262,6 @@ class AnnouncementsPresenter extends PagePresenter
         $gCurrentSession->addFormObject($form);
     }
 
-    /**
-     * Read all available forum topics from the database and an HTML list with all topics.
-     * @param int $offset Offset of the first record that should be returned.
-     * @throws Exception
-     * @throws \DateMalformedStringException
-     */
-    public function createList(int $offset = 0): void
-    {
-        global $gL10n, $gSettingsManager, $gDb;
-
-        $baseUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'cards', 'cat_uuid' => $this->categoryUUID));
-
-        $this->prepareData($offset);
-        $categoryService = new ForumService($gDb, $this->categoryUUID);
-
-        $this->setHtmlID('adm_forum_cards');
-        $this->createSharedHeader('list');
-
-        if (count($this->categories->getVisibleCategories()) > 1) {
-            $this->smarty->assign('showCategories', true);
-        } else {
-            $this->smarty->assign('showCategories', false);
-        }
-
-        $this->smarty->assign('list', $this->templateData);
-        $this->smarty->assign('l10n', $gL10n);
-        $this->smarty->assign('pagination', admFuncGeneratePagination($baseUrl, $categoryService->getTopicCount(), $gSettingsManager->getInt('forum_topics_per_page'), $offset, true, 'offset'));
-        try {
-            $this->pageContent .= $this->smarty->fetch('modules/forum.list.tpl');
-        } catch (\Smarty\Exception $e) {
-            throw new Exception($e->getMessage());
-        }
-    }
 
     /**
      * @param int $offset Offset of the first record that should be returned.
@@ -306,7 +272,7 @@ class AnnouncementsPresenter extends PagePresenter
     {
         global $gSettingsManager, $gDb, $gCurrentUser, $gL10n, $gCurrentSession;
 
-        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID);
+        $announcementsService = new AnnouncementsService($gDb, $this->categoryUUID, $this->announcementUUID);
         $data = $announcementsService->findAll($offset, $gSettingsManager->getInt('announcements_per_page'));
         $announcement = new Announcement($gDb);
 
@@ -317,7 +283,13 @@ class AnnouncementsPresenter extends PagePresenter
             $templateRow = array();
             $templateRow['uuid'] = $announcementData['ann_uuid'];
             $templateRow['title'] = $announcement->getValue('ann_headline');
-            $templateRow['description'] = $announcement->getValue('ann_description');
+            $templateRow['description'] = CollapsibleHtml::render(
+                (string)$announcement->getValue('ann_description'),
+                $gSettingsManager->getInt('announcements_preview_characters'),
+                'viewdetails-announcement-' . $announcementData['ann_uuid'],
+                $gL10n->get('SYS_SHOW_MORE'),
+                true
+            );
 
             $templateRow['userCreatedUUID'] = $announcementData['create_uuid'];
             if ($gSettingsManager->getInt('system_show_create_edit') === 2) {
@@ -358,7 +330,7 @@ class AnnouncementsPresenter extends PagePresenter
                             ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',
                             array('mode' => 'delete', 'announcement_uuid' => $announcementData['ann_uuid'])
                         ) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($announcementData['ann_headline'])),
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($announcement->getValue('ann_headline'))),
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_DELETE')
                 );

@@ -2,6 +2,7 @@
 
 namespace Admidio\UI\Presenter;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
@@ -92,7 +93,7 @@ class DocumentsPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_documents_file_rename_form',
             'modules/documents-files.rename.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'file_rename_save', 'folder_uuid' => $this->folderUUID, 'file_uuid' => $fileUUID)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'file_rename_save', 'file_uuid' => $fileUUID)),
             $this
         );
         $form->addInput(
@@ -335,7 +336,7 @@ class DocumentsPresenter extends PagePresenter
 
         $adminRoles = array();
         while ($row = $statementAdminRoles->fetch()) {
-            $adminRoles[] = $row['rol_name'];
+            $adminRoles[] = Language::translateIfTranslationStrId($row['rol_name']);
         }
 
         // create html page object
@@ -542,6 +543,12 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('folder_uuid' => $row['uuid']));
                 $templateRow['icon'] = 'bi bi-folder-fill';
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
+                $templateRow['actions'][] = array(
+                    'url' => $templateRow['url'],
+                    'icon' => 'bi bi-link-45deg',
+                    'tooltip' => $gL10n->get('SYS_COPY_LINK'),
+                    'class' => 'admidio-share-link'
+                );
 
                 if ($this->folder->hasUploadRight()) {
                     if ($gCurrentUser->isAdministratorDocumentsFiles()) {
@@ -570,7 +577,7 @@ class DocumentsPresenter extends PagePresenter
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'folder_delete', 'folder_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($row['name']))),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FOLDER')
                     );
@@ -585,6 +592,12 @@ class DocumentsPresenter extends PagePresenter
                     'icon' => 'bi bi-download',
                     'tooltip' => $gL10n->get('SYS_DOWNLOAD_FILE')
                 );
+                $templateRow['actions'][] = array(
+                    'url' => $templateRow['url'],
+                    'icon' => 'bi bi-link-45deg',
+                    'tooltip' => $gL10n->get('SYS_COPY_LINK'),
+                    'class' => 'admidio-share-link'
+                );
 
                 if ($this->folder->hasUploadRight()) {
                     if ($row['existsInFileSystem']) {
@@ -592,14 +605,13 @@ class DocumentsPresenter extends PagePresenter
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array(
                                     'mode' => 'file_rename',
-                                    'folder_uuid' => $this->folder->getValue('fol_uuid'),
                                     'file_uuid' => $row['uuid']
                                 )),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_EDIT')
                         );
                         $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'folder_uuid' => $this->folder->getValue('fol_uuid'), 'file_uuid' => $row['uuid'])),
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'file_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-folder-symlink',
                             'tooltip' => $gL10n->get('SYS_MOVE_FILE')
                         );
@@ -607,7 +619,7 @@ class DocumentsPresenter extends PagePresenter
                     $templateRow['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'file_delete', 'file_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($row['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($row['name']))),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE_FILE')
                     );
@@ -633,6 +645,7 @@ class DocumentsPresenter extends PagePresenter
 
         foreach($unregisteredFoldersFiles as $row) {
             $templateRow = array();
+            $templateRow['csrfToken'] = $gCurrentSession->getCSRFToken();
 
             if ($row['folder']) {
                 $templateRow['icon'] = 'bi bi-folder-fill';

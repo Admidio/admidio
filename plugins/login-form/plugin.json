@@ -1,0 +1,71 @@
+{
+    "name": "PLG_LOGIN_FORM_PLUGIN_NAME",
+    "description": "PLG_LOGIN_FORM_PLUGIN_DESCRIPTION",
+    "version": "1.0.0",
+    "author": "Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-box-arrow-in-right",
+    "requires": {
+        "admidio": ">=5.1",
+        "php": ">=8.2",
+        "modules": ["messages", "registration"]
+    },
+    "autoload": {
+        "AdmidioPlugin\\LoginForm\\": "src/"
+    },
+    "preferences": {
+        "section": "overview_extensions"
+    },
+    "settings": {
+        "login_form_plugin_enabled": {
+            "type": "enum",
+            "default": "1",
+            "values": ["0", "1", "2"],
+            "label": "ORG_ACCESS_TO_PLUGIN",
+            "description": "ORG_ACCESS_TO_PLUGIN_DESC"
+        },
+        "login_form_overview_sequence": {
+            "type": "integer",
+            "default": 1
+        },
+        "login_form_show_register_link": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK",
+            "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC"
+        },
+        "login_form_show_email_link": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK",
+            "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC"
+        },
+        "login_form_show_logout_link": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK",
+            "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC"
+        },
+        "login_form_enable_ranks": {
+            "type": "boolean",
+            "default": true,
+            "label": "PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS",
+            "description": "PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC"
+        },
+        "login_form_ranks": {
+            "type": "array",
+            "default": {
+                "0": "PLG_LOGIN_FORM_NEW_ONLINE_MEMBER",
+                "50": "PLG_LOGIN_FORM_ONLINE_MEMBER",
+                "100": "PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER",
+                "200": "PLG_LOGIN_FORM_HONORARY_MEMBER"
+            },
+            "label": "PLG_LOGIN_FORM_PREFERENCES_RANKS",
+            "description": "PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC"
+        },
+        "login_form_ranks_keys": {
+            "type": "string",
+            "default": "0,50,100,200"
+        }
+    }
+}

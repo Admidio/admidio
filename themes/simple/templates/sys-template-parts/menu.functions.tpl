@@ -10,7 +10,7 @@
                     <ul class="dropdown-menu">
                         {foreach $menuItem.items as $subItem}
                             <li>
-                                <a id="{$subItem.id}" class="dropdown-item" href="{$subItem.url}">
+                                <a id="{$subItem.id}" class="dropdown-item icon-link" href="{$subItem.url}">
                                     <i class="{$subItem.icon}"></i>{$subItem.name}
                                 </a>
                             </li>

@@ -21,6 +21,7 @@
  *             send_login    - Registration does not need to be assigned, simply send login data
  ***********************************************************************************************
  */
+use Admidio\UI\Presenter\ContactsPresenter;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -82,12 +83,15 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = new ModuleContacts('adm_registration_assign', $headline);
+        $page = new ContactsPresenter('adm_registration_assign', $headline);
         $registrationUser = new User($gDb, $gProfileFields);
         $registrationUser->readDataByUuid($getUserUUID);
         $page->createContentAssignUser($registrationUser, true);
         $page->show();
     } elseif (in_array($getMode, array('assign_member', 'assign_user'))) {
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $registrationService = new RegistrationService($gDb, $getUserUUID);
         $message = $registrationService->assignRegistration($getUserUUIDAssigned, $getMode === 'assign_member');
 
@@ -104,6 +108,10 @@ try {
         exit();
     } elseif ($getMode === 'create_user') {
         // accept a registration, assign necessary roles and send a notification email
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $registrationUser->acceptRegistration();
 
         // if current user has the right to assign roles then show roles dialog
@@ -118,16 +126,20 @@ try {
         }
     } elseif ($getMode === 'send_login') {
         // User already exists and has a login than sent access data with a new password
+
+        // check the CSRF token of the form against the session token
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
         $user = new User($gDb, $gProfileFields);
         $user->readDataByUuid($getUserUUIDAssigned);
         $user->sendNewPassword();
 
-        // delete the registration because it isn't needed anymore
+        // delete the registration because it isn't necessary anymore
         $registrationUser->notSendEmail();
         $registrationUser->delete();
         admRedirect(ADMIDIO_URL.FOLDER_MODULES.'/registration.php');
         // => EXIT
     }
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

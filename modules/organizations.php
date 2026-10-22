@@ -92,9 +92,5 @@ try {
         exit();
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'create', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('save', 'create', 'delete')));
 }

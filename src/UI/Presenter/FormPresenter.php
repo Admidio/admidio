@@ -2,19 +2,23 @@
 
 namespace Admidio\UI\Presenter;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use DateTime;
 use PDO;
+use Ramsey\Uuid\Uuid;
 use Securimage;
-use Admidio\Infrastructure\Utils\SecurityUtils;
 use SimpleXMLElement;
 use Smarty\Smarty;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Creates an Admidio specific form
@@ -105,6 +109,17 @@ class FormPresenter
      * @var array Array with all elements of the form and their attributes as array
      */
     protected array $elements = array();
+    /**
+     * @var bool Whether the form is finished and form_built has been dispatched for it.
+     */
+    protected bool $finalized = false;
+
+    /**
+     * The element types whose offered entries validate() checks the submitted value against. Only
+     * these are handed to the **form_select_options** filter, because only for these does taking an
+     * entry away also mean that it is not accepted any more.
+     */
+    protected const TYPES_WITH_OFFERED_VALUES = array('select', 'radio', 'button-group.radio');
 
     /**
      * Constructor creates the form element
@@ -198,11 +213,10 @@ class FormPresenter
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Keep the form data and its legacy session property names without serializing the page.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         global $gLogger;
 
@@ -210,7 +224,17 @@ class FormPresenter
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0*\0" . $name,
+            array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements', 'finalized')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**
@@ -465,21 +489,21 @@ class FormPresenter
      * If you don't need the field structure and want to add html then use the method addHtml()
      * @param string $label The label of the custom content.
      */
-    public function addSeperator(string $id, string $label = '', array $options = array()): void
+    public function addSeparator(string $id, string $label = '', array $options = array()): void
     {
         $optionsAll = $this->buildOptionsArray(array_replace(array(
-            'type'     => 'seperator',
-            'id'       => $id,
-            'label'    => $label
+            'type' => 'separator',
+            'id' => $id,
+            'label' => $label
         ), $options));
 
         $this->elements[$id] = $optionsAll;
     }
 
     /**
-     * Add a new CKEditor element to the form.
-     * @param string $id ID of the password field. This will also be the name of the password field.
-     * @param string $label The label of the password field.
+     * Add a rich text editor element to the form.
+     * @param string $id ID of the editor field. This will also be the name of the editor field.
+     * @param string $label The label of the editor field.
      * @param string $value A value for the editor field. The editor will contain this value when created.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
@@ -500,7 +524,7 @@ class FormPresenter
      */
     public function addEditor(string $id, string $label, string $value, array $options = array()): void
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager;
 
         $flagLabelVertical = $this->type;
 
@@ -513,6 +537,8 @@ class FormPresenter
             'value' => $value
         ), $options));
 
+        $optionsAll['quillEnabled'] = $gSettingsManager->getBool('system_js_editor_enabled');
+
         $attributes = array();
 
         if ($optionsAll['labelVertical']) {
@@ -524,38 +550,14 @@ class FormPresenter
             $this->flagRequiredFields = true;
         }
 
-        if ($optionsAll['toolbar'] === 'AdmidioComments') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "link", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "undo", "redo"],';
-        } elseif ($optionsAll['toolbar'] === 'AdmidioNoMedia') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "link", "blockQuote", "insertTable", "|", "undo", "redo"],';
-        } else {
-            $toolbarJS = '';
-        }
-
-        $javascriptCode = '
-        let editor;
-        ClassicEditor
-        .create( document.querySelector( "#' . $id . '" ), {
-            ' . $toolbarJS . '
-            language: "' . $gL10n->getLanguageLibs() . '",
-            simpleUpload: {
-                uploadUrl: "' . ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php?id=' . $id . '"
-            }
-        } )
-        .then( newEditor => {
-            editor = newEditor;
-        })
-        .catch( error => {
-            console.error( error );
-        } );';
-
-        if ($gSettingsManager->getBool('system_js_editor_enabled')) {
-            // if a htmlPage object was set then add code to the page, otherwise to the current string
+        if ($optionsAll['quillEnabled']) {
             if (isset($this->htmlPage)) {
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/quill-editor.css');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js');
             }
-            $this->addJavascriptCode($javascriptCode, true);
+            $this->addJavascriptCode(QuillEditor::initializationCode($id, $optionsAll['toolbar']), true);
         }
 
         $this->type = $flagLabelVertical;
@@ -587,6 +589,7 @@ class FormPresenter
      *                        - **enableMultiUploads** : If set to true a button will be added where the user can
      *                          add new upload fields to upload more than one file.
      *                        - **multiUploadLabel** : The label for the button who will add new upload fields to the form.
+     *                        - **removeUploadLabel** : The accessible label for removing an added upload field.
      *                        - **hideUploadField** : Hide the upload field if multi uploads are enabled. Then the first
      *                          upload field will be shown if the user will click the multi upload button.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
@@ -607,7 +610,8 @@ class FormPresenter
             'allowedMimeTypes' => array(),
             'enableMultiUploads' => false,
             'hideUploadField' => false,
-            'multiUploadLabel' => ''
+            'multiUploadLabel' => '',
+            'removeUploadLabel' => ''
         ), $options));
 
         $attributes = array();
@@ -630,13 +634,24 @@ class FormPresenter
             $javascriptCode = '
                 // add new line to add new attachment to this mail
                 $("#btn_add_attachment_' . $id . '").click(function() {
-                    newAttachment = document.createElement("input");
-                    $(newAttachment).attr("type", "file");
-                    $(newAttachment).attr("name", "userfile[]");
-                    $(newAttachment).attr("class", "form-control mb-2 focus-ring ' . $optionsAll['class'] . '");
-                    $(newAttachment).hide();
-                    $("#btn_add_attachment_' . $id . '").before(newAttachment);
-                    $(newAttachment).show("slow");
+                    var attachmentRow = $("<div>").addClass("input-group mb-2 admidio-attachment-upload");
+                    var newAttachment = $("<input>").attr({
+                        type: "file",
+                        name: "userfile[]",
+                        class: "form-control btn-secondary focus-ring ' . $optionsAll['class'] . '"
+                    });
+                    var removeButton = $("<button>").attr({
+                        type: "button",
+                        title: ' . json_encode($optionsAll['removeUploadLabel'], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP) . ',
+                        "aria-label": ' . json_encode($optionsAll['removeUploadLabel'], JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP) . '
+                    }).addClass("btn btn-secondary focus-ring")
+                        .append($("<i>").addClass("bi bi-trash").attr("aria-hidden", "true"));
+                    removeButton.on("click", function() {
+                        attachmentRow.remove();
+                    });
+                    attachmentRow.append(newAttachment, removeButton).hide();
+                    $("#btn_add_attachment_' . $id . '").before(attachmentRow);
+                    attachmentRow.show("slow");
                 });';
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
@@ -661,7 +676,7 @@ class FormPresenter
      * @param string $value A value for the text field. The field will be created with this value.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **type** : Set the type if the field. Default will be **text**. Possible values are **text**,
-     *                          **number**, **date**, **datetime** or **birthday**. If **date**, **datetime** or **birthday** are set
+     *                          **number**, **date**, **datetime** or **uuid**. If **date** or **datetime** are set
      *                          than a small calendar will be shown if the date field will be selected.
      *                        - **maxLength** : The maximum number of characters that are allowed in a text field.
      *                        - **minNumber** : The minimum number that is allowed in a number field.
@@ -753,13 +768,12 @@ class FormPresenter
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'), $value);
+            $datetime = DateTimeUtils::parseDateTime($value);
 
-            // now add a date and a time field to the form
             $attributes['dateValue'] = null;
             $attributes['timeValue'] = null;
 
-            if ($datetime) {
+            if ($datetime !== null) {
                 $attributes['dateValue'] = $datetime->format('Y-m-d');
                 $attributes['timeValue'] = $datetime->format('H:i');
             }
@@ -779,14 +793,18 @@ class FormPresenter
             $optionsTime['type'] = 'time';
             $this->elements[$id . '_time'] = $optionsTime;
         } elseif ($optionsAll['type'] === 'date') {
-            $datetime = DateTime::createFromFormat($gSettingsManager->getString('system_date'), $value);
-            if (!empty($value) && is_object($datetime))
+            $datetime = DateTimeUtils::parseDate($value);
+
+            if ($value !== '' && $datetime !== null) {
                 $value = $datetime->format('Y-m-d');
+            }
             $attributes['pattern'] = '\d{4}-\d{2}-\d{2}';
         } elseif ($optionsAll['type'] === 'time') {
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
             if (!empty($value) && is_object($datetime))
                 $value = $datetime->format('H:i');
+        } elseif ($optionsAll['type'] === 'uuid') {
+            $attributes['pattern'] = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
         }
 
         // set field properties
@@ -998,11 +1016,25 @@ class FormPresenter
     {
         global $gL10n;
 
+        // sort values based on sortable or not sortable (system) fields
+        $sortable = array();
+        $notSortable = array();
+        foreach ($values as $key => $value) {
+            if (!$value['system']) {
+                $sortable[$key] = $value;
+            } else {
+                $notSortable[$key] = $value;
+            }
+        }
+
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type' => 'option-editor',
             'id' => $id,
             'label' => $label,
-            'values' => $values,
+            'values' => array(
+                'sortable' => $sortable,
+                'notSortable' => $notSortable
+            ),
             'filename' => 'profile-fields'
         ), $options));
         $attributes = array();
@@ -1037,10 +1069,11 @@ class FormPresenter
 
         $this->addJavascriptCode('
             function addOptionRow(dataId, checkUrl, deleteUrl, csrfToken, translationStrings) {
-                const table = document.getElementById(dataId + "_table").getElementsByTagName("tbody")[0];
+                const table = document.querySelector("#" + dataId + "_table tbody.admidio-sortable");
                 const newRow = document.createElement("tr");
                 const rows = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\');
-                let maxId = 0;
+                let notSortableContainer = document.querySelector("#" + dataId + "_table tbody.admidio-not-sortable");
+                let maxId = notSortableContainer ? notSortableContainer.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length : 0;
                 rows.forEach(row => {
                     const currentId = row.id.replace(dataId + "_option_", "");
                     const num = parseInt(currentId, 10);
@@ -1100,7 +1133,14 @@ class FormPresenter
                     if (!row) return;
 
                     const table = row.parentNode;
-                    const countOptions = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    const tableNotSortable = table.parentNode.querySelector("tbody.admidio-not-sortable");
+                    const countOptionsSortable = table.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    var countOptionsNotSortable = 0;
+                    if (tableNotSortable !== null) {
+                        countOptionsNotSortable = tableNotSortable.querySelectorAll(\'tr[id^="\' + dataId + \'_option_"]\').length;
+                    }
+                    // Total count of options
+                    const countOptions = countOptionsSortable + countOptionsNotSortable;
                     // If there is only one option left, do not delete it or mark it as obsolete
                     if (countOptions <= 1) return;
 
@@ -1269,6 +1309,9 @@ class FormPresenter
      *                          of selections that could be done. If this limit is reached the user can't add another entry to the selectbox.
      *                        - **valueAttributes**: An array which contain the same ids as the value array. The value of this array will be
      *                          another array with the combination of attributes name and attributes value.
+     *                        - **allowCustomValues** : If set to **true** the validation of the form accepts a value that is
+     *                          not one of the entries above. Set it for a select box whose select2 is created with **tags**,
+     *                          where the user may enter an entry of their own.
      *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
      *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
      *                          If you need an additional parameter for the text you can add an array. The first entry
@@ -1299,6 +1342,7 @@ class FormPresenter
             'placeholder' => '',
             'maximumSelectionNumber' => 0,
             'valueAttributes' => '',
+            'allowCustomValues' => false,
             'toggleable' => false
         ), $options));
         $attributes = array('name' => $id);
@@ -1557,9 +1601,9 @@ class FormPresenter
                 // translate category name
                 $row[2] = Language::translateIfTranslationStrId((string)$row[2]);
 
-                $selectBoxEntries[] = array($row[0], (string)$row[1], $row[2]);
+                $selectBoxEntries[] = array($row[0], Language::translateIfTranslationStrId((string)$row[1]), $row[2]);
             } else {
-                $selectBoxEntries[$row[0]] = (string)$row[1];
+                $selectBoxEntries[$row[0]] = Language::translateIfTranslationStrId((string)$row[1]);
             }
         }
 
@@ -1797,7 +1841,7 @@ class FormPresenter
             // add label that this category is visible to all organizations
             if ($row['cat_org_id'] === null) {
                 if ($row['cat_name'] !== $gL10n->get('SYS_ALL_ORGANIZATIONS')) {
-                    $row['cat_name'] .= ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
+                    $row['cat_name'] = Language::translateIfTranslationStrId($row['cat_name']) . ' (' . $gL10n->get('SYS_ALL_ORGANIZATIONS') . ')';
                 }
                 $optionsAll['valueAttributes'][$row['cat_uuid']] = array('data-global' => 1);
             } else {
@@ -1859,6 +1903,8 @@ class FormPresenter
      */
     public function addToHtmlPage(bool $ajaxSubmit = true): void
     {
+        $this->finalize();
+
         try {
             if (isset($this->htmlPage)) {
                 if ($this->type === 'navbar') {
@@ -1891,6 +1937,8 @@ class FormPresenter
     {
         global $gL10n, $gSettingsManager;
 
+        $this->finalize();
+
         $smarty->assign('urlAdmidio', ADMIDIO_URL);
         $smarty->assign('l10n', $gL10n);
         $smarty->assign('settings', $gSettingsManager);
@@ -1902,20 +1950,291 @@ class FormPresenter
     }
 
     /**
-     * This method returns the attributes array.
+     * This method appends the form attributes and all form elements to the Smarty object.
+     * It also assigns the template file of the form to the Smarty object.
+     * After this method is called the whole form could be rendered through the Smarty object.
+     *
+     * Important: This method creates an array of the form type, elements, attributes, javascript code and hasRequiredFields variables if they already exist in the Smarty object.
+     * If the variables do not exist, they will be assigned as normal.
+     * The variables urlAdmidio, l10n, and settings are only one time assigned to the Smarty object.
+     * This results in the following structure for the zero-based array variables:
+     * [variableName] => [
+     *      0 => first form element values,
+     *      1 => second form element values,
+     *      2 => ...,
+     * ]
+     *
+     *
+     * @param Smarty $smarty The Smarty object where the form data should be appended.
+     * @return void
+     */
+    public function appendToSmarty(Smarty $smarty): void
+    {
+        global $gL10n, $gSettingsManager;
+
+        $this->finalize();
+
+        if (!isset($smarty->tpl_vars['urlAdmidio'])) {
+            $smarty->assign('urlAdmidio', ADMIDIO_URL);
+        }
+        if (!isset($smarty->tpl_vars['l10n'])) {
+            $smarty->assign('l10n', $gL10n);
+        }
+        if (!isset($smarty->tpl_vars['settings'])) {
+            $smarty->assign('settings', $gSettingsManager);
+        }
+        if (!isset($smarty->tpl_vars['formType'])) {
+            $smarty->assign('formType', $this->type);
+        } else {
+            $curType = $smarty->getTemplateVars('formType');
+            if (is_array($curType) && array_key_first($curType) === 0) {
+                // if type is already an array then append the new type to the existing ones
+                $smarty->assign('formType', array_merge($curType, array($this->type)));
+            } else {
+                // if type is not an array then create a new array with the current and new type
+                $smarty->assign('formType', array($curType, $this->type));
+            }
+        }
+        if (!isset($smarty->tpl_vars['attributes'])) {
+            $smarty->assign('attributes', $this->attributes);
+        } else {
+            $curAttributes = $smarty->getTemplateVars('attributes');
+            if (is_array($curAttributes) && count(array_filter($curAttributes, 'is_array')) > 0 && array_key_first($curAttributes) === 0) {
+                // if attributes are already an array then append the new attributes to the existing ones
+                $smarty->assign('attributes', array_merge($curAttributes, array($this->attributes)));
+            } else {
+                // if attributes are not an array then create a new array with the current and new attributes
+                $smarty->assign('attributes', array($curAttributes, $this->attributes));
+            }
+        }
+        if (!isset($smarty->tpl_vars['elements'])) {
+            $smarty->assign('elements', $this->elements);
+        } else {
+            $curElements = $smarty->getTemplateVars('elements');
+            if (is_array($curElements) && count(array_filter($curElements, 'is_array')) > 0 && array_key_first($curElements) === 0) {
+                // if elements are already an array then append the new elements to the existing ones
+                $smarty->assign('elements', array_merge($curElements, array($this->elements)));
+            } else {
+                // if elements are not an array then create a new array with the current and new elements
+                $smarty->assign('elements', array($curElements, $this->elements));
+            }
+        }
+        if (!isset($smarty->tpl_vars['javascript'])) {
+            $smarty->assign('javascript', $this->javascript);
+        } else {
+            $curJavascript = $smarty->getTemplateVars('javascript');
+            if (is_array($curJavascript) && array_key_first($curJavascript) === 0) {
+                // if javascript is already an array then append the new javascript to the existing ones
+                $smarty->assign('javascript', array_merge($curJavascript, array($this->javascript)));
+            } else {
+                // if javascript is not an array then create a new array with the current and new javascript
+                $smarty->assign('javascript', array($curJavascript, $this->javascript));
+            }
+        }
+        if (!isset($smarty->tpl_vars['hasRequiredFields'])) {
+            $smarty->assign('hasRequiredFields', ($this->flagRequiredFields && $this->showRequiredFields ? true : false));
+        } else {
+            $curRequiredFields = $smarty->getTemplateVars('hasRequiredFields');
+            $newRequiredFields = ($this->flagRequiredFields && $this->showRequiredFields ? true : false);
+            if (is_array($curRequiredFields) && array_key_first($curRequiredFields) === 0) {
+                // if hasRequiredFields is already an array then append the new hasRequiredFields to the existing ones
+                $smarty->assign('hasRequiredFields', array_merge($curRequiredFields, array($newRequiredFields)));
+            } else {
+                // if hasRequiredFields is not an array then create a new array with the current and new hasRequiredFields
+                $smarty->assign('hasRequiredFields', array($curRequiredFields, $newRequiredFields));
+            }
+        }
+    }
+
+    /**
+     * The form is finished: everything that builds it has run, and what it holds now is what is
+     * rendered and what the POST of it is validated against. The **form_built** action is dispatched
+     * here, so a callback can add, remove or replace an element through hasElement(), getElement(),
+     * insertElement(), replaceElement() and removeElement(), and the change reaches both the browser
+     * and the validation.
+     *
+     * It runs at most once per form. Every way of reading a finished form calls it - addToHtmlPage(),
+     * addToSmarty(), appendToSmarty(), getAttributes(), getElements() - and so does
+     * Session::addFormObject(), for a form that is stored without being rendered. Code that is still
+     * building a form must therefore not call any of those; getElement() is the way to look at a
+     * single element in between, and it does not finalize.
+     *
+     * A callback must not put a closure into an element: FormPresenter is serialized into the session
+     * and a closure cannot be. The form is passed rather than the elements, because getElements()
+     * returns a copy.
+     *
+     * @return void
+     */
+    public function finalize(): void
+    {
+        if ($this->finalized) {
+            return;
+        }
+
+        // set before the dispatch, so that a callback which reads the form does not recurse
+        $this->finalized = true;
+
+        Hooks::doAction('form_built', $this);
+
+        // after form_built, so that a select which a callback has just added is filtered as well
+        $this->filterOfferedValues();
+    }
+
+    /**
+     * Let the **form_select_options** filter change the entries that a select box, a radio group or a
+     * button group offers. It is called once per form, at the end of finalize(), and only for the
+     * element types whose entries validate() enforces - taking an entry away here also means that a
+     * request which submits it is refused, which is the whole point of the hook.
+     *
+     * The callback is handed the entries, the ID of the element, its type and the form. The entries
+     * have the shape the element type uses and must keep it: a **select** and a **button-group.radio**
+     * carry a list of **array('id' => ..., 'value' => ...)**, a **radio** an array of value to label.
+     * The filter has to answer with an array.
+     *
+     * An element that was built with **allowCustomValues** - the borrower of an inventory item is the
+     * one in the core - is filtered like any other, but its entries are not enforced, because that
+     * control deliberately accepts an entry the user typed.
+     *
+     * @return void
+     */
+    protected function filterOfferedValues(): void
+    {
+        if (!Hooks::hasFilter('form_select_options')) {
+            return;
+        }
+
+        foreach ($this->elements as $elementId => $element) {
+            if (!in_array($element['type'] ?? '', self::TYPES_WITH_OFFERED_VALUES, true)
+                || !array_key_exists('values', $element)) {
+                continue;
+            }
+
+            $this->elements[$elementId]['values'] = Hooks::applyTypedFilters(
+                'form_select_options',
+                $element['values'],
+                $elementId,
+                $element['type'],
+                $this
+            );
+        }
+    }
+
+    /**
+     * @return string Returns the ID of the form, which is also the HTML id of the form element.
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Whether the form has an element with that ID. It does not finalize the form, so it may be used
+     * while the form is still being built.
+     * @param string $id ID of the element.
+     * @return bool Returns **true** if the form has that element.
+     */
+    public function hasElement(string $id): bool
+    {
+        return array_key_exists($id, $this->elements);
+    }
+
+    /**
+     * One element of the form. It does not finalize the form, so it may be used while the form is
+     * still being built, which is what a presenter that looks at an element before it adds the next
+     * one needs.
+     * @param string $id ID of the element.
+     * @return array|null Returns the element, or **null** if the form has no element with that ID.
+     */
+    public function getElement(string $id): ?array
+    {
+        return $this->elements[$id] ?? null;
+    }
+
+    /**
+     * Replace one element of the form, keeping its position.
+     * @param string $id ID of the element that should be replaced.
+     * @param array $element The element that takes its place.
+     * @return bool Returns **true** if the element was replaced.
+     */
+    public function replaceElement(string $id, array $element): bool
+    {
+        if (!array_key_exists($id, $this->elements)) {
+            return false;
+        }
+
+        $this->elements[$id] = $element;
+
+        return true;
+    }
+
+    /**
+     * Remove one element from the form. It is then neither rendered nor accepted by validate().
+     * @param string $id ID of the element that should be removed.
+     * @return bool Returns **true** if the element was removed.
+     */
+    public function removeElement(string $id): bool
+    {
+        if (!array_key_exists($id, $this->elements)) {
+            return false;
+        }
+
+        unset($this->elements[$id]);
+
+        return true;
+    }
+
+    /**
+     * Put an element into the form at a given position. The order of the elements is the order in
+     * which the form is rendered, so an element that is appended ends up after the buttons unless a
+     * position is named.
+     * @param string $id ID of the new element.
+     * @param array $element The element.
+     * @param string|null $beforeId ID of the element it should precede. If it is **null** or the form
+     *                              has no element with that ID, the element is appended.
+     * @return void
+     */
+    public function insertElement(string $id, array $element, ?string $beforeId = null): void
+    {
+        if ($beforeId === null || !array_key_exists($beforeId, $this->elements)) {
+            $this->elements[$id] = $element;
+            return;
+        }
+
+        $reordered = array();
+        foreach ($this->elements as $elementId => $existing) {
+            if ($elementId === $beforeId) {
+                $reordered[$id] = $element;
+            }
+            if ($elementId !== $id) {
+                $reordered[$elementId] = $existing;
+            }
+        }
+
+        $this->elements = $reordered;
+    }
+
+    /**
+     * This method returns the attributes array. Reading the finished form finalizes it.
      * @return array Returns all attributes of the form.
+     * @throws Exception
      */
     public function getAttributes(): array
     {
+        $this->finalize();
+
         return $this->attributes;
     }
 
     /**
-     * This method returns the elements array.
+     * This method returns the elements array. Reading the finished form finalizes it, so a presenter
+     * that is still building the form has to use getElement() or hasElement() instead.
      * @return array Returns all elements of the form.
+     * @throws Exception
      */
     public function getElements(): array
     {
+        $this->finalize();
+
         return $this->elements;
     }
 
@@ -1998,11 +2317,19 @@ class FormPresenter
      * valid format. The method will return an array with all form input with sanitized html
      * from editor fields and html free content of all other fields.
      * @param array $fieldValues Array with field name as key and field value as array value.
+     * @param bool $editSelection Set to **true** if a selection of objects should be edited.
      * @return array Returns an array with all valid fields and their values of this form
      * @throws Exception
      */
     public function validate(array $fieldValues, bool $editSelection = false): array
     {
+        global $gSettingsManager;
+
+        // the POST is judged against the finished form. A form that comes out of the session was
+        // finished before it was stored; one that is validated right after it was built is finished
+        // here, so that both are judged against the same elements.
+        $this->finalize();
+
         $validFieldValues = array();
         $selectedFields = array();
 
@@ -2016,10 +2343,10 @@ class FormPresenter
             throw new Exception('No CSRF token provided.');
         }
 
+        // if edit selection is active then check the toggle fields in the field values and
+        // add the selected fields to the selected fields array and remove the toggle fields from the field values array
         foreach ($fieldValues as $key => $value) {
-            // remove all fieldValues that have the prefix toggle_ (used for toggling field usage when editing a selection of fields)
             if ($editSelection && strpos($key, 'toggle_') === 0) {
-                // add the field to the selected fields array
                 $selectedFields[] = substr($key, 7);
                 unset($fieldValues[$key]);
                 continue;
@@ -2032,7 +2359,7 @@ class FormPresenter
         }
 
         foreach ($this->elements as $element) {
-            if(!(($editSelection && in_array($element['id'], $selectedFields)) || !$editSelection)) {
+            if (!(($editSelection && in_array($element['id'], $selectedFields)) || !$editSelection)) {
                 // if the field is not selected in edit selection mode or edit selection is not active, continue with validation
                 continue;
             }
@@ -2054,10 +2381,13 @@ class FormPresenter
                     throw new Exception('SYS_FIELD_EMPTY', array($element['label']));
                 }
             } elseif (isset($element['property']) && $element['property'] === $this::FIELD_DISABLED) {
-                // no value should be set if a field is marked as disabled
-                if (isset($fieldValues[$element['id']])) {
-                    unset($fieldValues[$element['id']]);
-                }
+                // No value should be set if a field is marked as disabled. The browser does not
+                // submit a disabled control at all, so there is nothing the user could have
+                // entered. Continue with the next element instead of only dropping the value:
+                // the checkbox default below would otherwise store '0' for a disabled checkbox
+                // and thereby clear a value the user was never able to change.
+                unset($fieldValues[$element['id']]);
+                continue;
             }
 
             // if element is a checkbox than add entry to $fieldValues if checkbox is unchecked
@@ -2069,11 +2399,20 @@ class FormPresenter
                 // remove html from every input value
                 $validFieldValues[$element['id']] = StringUtils::strStripTags($fieldValues[$element['id']]);
 
+                // a value that the form did not offer must not be accepted, no matter whether the
+                // control submits one value or a list of them
+                $this->validateOfferedValues($element, $validFieldValues[$element['id']]);
+
                 // check value depending on the field type
                 if (!is_array($fieldValues[$element['id']]) && strlen($fieldValues[$element['id']]) > 0) {
                     switch ($element['type']) {
                         case 'captcha':
                             $this->validateCaptcha($fieldValues[$element['id']]);
+                            break;
+                        case 'date':
+                            if (DateTimeUtils::parseDate($fieldValues[$element['id']]) === null) {
+                                throw new Exception('The date "' . $element['label'] . '" has an invalid date format!');
+                            }
                             break;
                         case 'editor':
                             // check html string vor invalid tags and scripts
@@ -2081,6 +2420,15 @@ class FormPresenter
                             $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
                             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
                             $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+                            $config->set('HTML.SafeIframe', true);
+                            $config->set('URI.SafeIframeRegexp', '%\\Ahttps://(?:(?:www\\.)?youtube(?:-nocookie)?\\.com/embed/[A-Za-z0-9_-]{11}|player\\.vimeo\\.com/video/[0-9]+)\\z%');
+                            $config->set('HTML.DefinitionID', 'admidio-quill-video');
+                            $config->set('HTML.DefinitionRev', 1);
+                            // A cached definition is already configured and needs no further changes.
+                            $definition = $config->maybeGetRawHTMLDefinition();
+                            if ($definition !== null) {
+                                $definition->addAttribute('iframe', 'allowfullscreen', 'Bool#allowfullscreen');
+                            }
 
                             $filter = new HTMLPurifier($config);
                             $validFieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);
@@ -2100,11 +2448,64 @@ class FormPresenter
                                 throw new Exception('SYS_URL_INVALID_CHAR', array($element['label']));
                             }
                             break;
+                        case 'uuid':
+                            if (!Uuid::isValid($fieldValues[$element['id']])) {
+                                throw new Exception('The parameter "' . $element['label'] . '" is not a valid UUID!');
+                            }
+                            break;
                     }
                 }
             }
         }
         return $validFieldValues;
+    }
+
+    /**
+     * Check the submitted value or values of a control that offers a fixed set of entries against
+     * that set. The set of an element is the one the form was built with, and the form is stored in
+     * the session, so a value that the user was never offered is rejected here even if the browser
+     * submitted it.
+     * @param array $element The form element that should be checked.
+     * @param mixed $value The submitted value, an array for a control that allows several entries.
+     * @return void
+     * @throws Exception SYS_FIELD_INVALID_INPUT
+     */
+    protected function validateOfferedValues(array $element, mixed $value): void
+    {
+        if (!empty($element['allowCustomValues'])) {
+            // the control lets the user enter an entry of their own, e.g. a select2 with tags
+            return;
+        }
+
+        switch ($element['type']) {
+            case 'select':
+            case 'button-group.radio':
+                // the entries were reorganized into an array of id and visible value
+                $offeredValues = array_column($element['values'], 'id');
+                break;
+
+            case 'radio':
+                // the entries were kept as they were given, the key of an entry is its value
+                $offeredValues = array_keys($element['values']);
+                if (!empty($element['showNoValueButton'])) {
+                    $offeredValues[] = '0';
+                }
+                break;
+
+            default:
+                return;
+        }
+
+        // an empty value means that nothing was selected, which the required check has covered
+        foreach ((is_array($value) ? $value : array($value)) as $singleValue) {
+            if ((string)$singleValue === '') {
+                continue;
+            }
+
+            if (!in_array((string)$singleValue, array_map('strval', $offeredValues), true)) {
+                throw new Exception('SYS_FIELD_INVALID_INPUT', array($element['label']));
+            }
+        }
     }
 
     /**

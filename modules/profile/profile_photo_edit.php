@@ -27,6 +27,7 @@ use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
+use Admidio\Users\Service\UserPhotoService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -164,7 +165,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_photo_edit', $headline);
 
         // show form
         $form = new FormPresenter(
@@ -179,13 +180,22 @@ try {
             $gL10n->get('SYS_CURRENT_PROFILE_PICTURE'),
             '<img class="imageFrame" src="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))) . '" alt="' . $gL10n->get('SYS_CURRENT_PROFILE_PICTURE') . '" />'
         );
+        $form->addCustomContent(
+            'admPhotoUploadHints',
+            '',
+            '<ul class="mb-0">'
+            . '<li>' . $gL10n->get('SYS_PROFILE_PICTURE_HINT_YOURSELF') . '</li>'
+            . '<li>' . $gL10n->get('SYS_PROFILE_PICTURE_HINT_SCALING', array(UserPhotoService::PROFILE_PHOTO_MAX_SIZE)) . '</li>'
+            . '<li>' . $gL10n->get('SYS_PROFILE_PICTURE_HINT_FORMAT') . '</li>'
+            . '<li>' . $gL10n->get('SYS_PROFILE_PICTURE_HINT_FILESIZE', array(round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2))) . '</li>'
+            . '</ul>'
+        );
         $form->addFileUpload(
             'admPhotoUploadFile',
             $gL10n->get('SYS_SELECT_PHOTO'),
             array(
                 'property' => FormPresenter::FIELD_REQUIRED,
-                'allowedMimeTypes' => array('image/jpeg', 'image/png'),
-                'helpTextId' => array('SYS_PROFILE_PICTURE_RESTRICTIONS', array(round(SystemInfoUtils::getProcessableImageSize() / 1000000, 2), round(PhpIniUtils::getUploadMaxSize() / 1024 ** 2, 2)))
+                'allowedMimeTypes' => array('image/jpeg', 'image/png')
             )
         );
         $form->addSubmitButton(
@@ -230,7 +240,7 @@ try {
         // Adjust photo to appropriate size
         $userImage = new Image($_FILES['userfile']['tmp_name'][0]);
         $userImage->setImageType('jpeg');
-        $userImage->scale(130, 170);
+        $userImage->scale(UserPhotoService::PROFILE_PHOTO_MAX_SIZE, UserPhotoService::PROFILE_PHOTO_MAX_SIZE);
 
         if ((int)$gSettingsManager->get('profile_photo_storage') === 1) {
             // Folder storage
@@ -253,7 +263,7 @@ try {
         ));
         exit();
     } elseif ($getMode === 'review') {
-        // show dialog with current and new profile photo for review
+        // show dialog with the current and new profile photo for review
 
         if ((int)$user->getValue('usr_id') === $gCurrentUserId) {
             $headline = $gL10n->get('SYS_EDIT_MY_PROFILE_PICTURE');
@@ -261,18 +271,14 @@ try {
             $headline = $gL10n->get('SYS_EDIT_PROFILE_PIC_FROM', array($user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME')));
         }
 
-        // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile-photo-edit', $headline);
+        // create HTML page object
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_profile_photo_edit', $headline);
         $page->addTemplateFile('modules/profile.new-photo.tpl');
         $page->assignSmartyVariable('urlCurrentProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'timestamp' => $user->getValue('usr_timestamp_change', 'Y-m-d-H-i-s'))));
         $page->assignSmartyVariable('urlNewProfilePhoto', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $getUserUuid, 'new_photo' => 1)));
         $page->assignSmartyVariable('urlNextPage', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'save', 'user_uuid' => $getUserUuid)));
         $page->show();
     }
-} catch (Exception|Exception|RuntimeException $e) {
-    if (in_array($getMode, array('upload', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, in_array($getMode, array('upload', 'delete')));
 }

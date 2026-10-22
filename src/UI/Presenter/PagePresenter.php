@@ -1,7 +1,9 @@
 <?php
 namespace Admidio\UI\Presenter;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
 use Smarty\Smarty;
 
@@ -9,7 +11,7 @@ use Smarty\Smarty;
  * @brief Creates an Admidio specific complete HTML page with the template engine Smarty.
  *
  * This class creates an HTML page with head and body and integrates some Admidio
- * specific elements like CSS files, JavaScript files and JavaScript code. The class is derived
+ * specific elements like CSS files, JavaScript files, and JavaScript code. The class is derived
  * from the Smarty class. It provides a method to add new HTML data to the page and also set or
  * choose the necessary template files. The generated page will automatically integrate the
  * chosen theme. You can also create an HTML reduces page without a menu header and footer
@@ -18,7 +20,7 @@ use Smarty\Smarty;
  * **Code example**
  * ```
  * // create a simple HTML page with some text
- * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
+ * $page = PagePresenter::withHtmlIDAndHeadline('adm_example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple HTML page');
  * $page->addHtml('<strong>This is a simple HTML page!</strong>');
@@ -99,9 +101,16 @@ class PagePresenter
      */
     protected string $templateFile = '';
     /**
-     * @var bool Flag that will be responsible for a back button with the url to the previous page will be shown.
+     * @var bool The Flag that will be responsible for a back button with the url to the previous page will be shown.
      */
     protected bool $showBackLink = false;
+    /**
+     * @var bool Whether page_title and page_headline have already been dispatched. A caller that
+     * needs the filtered text before show() runs - to build an export filename or an embedded
+     * document's title, for example - asks through getFilteredTitle()/getFilteredHeadline() instead
+     * of reading the raw text, and show() then finds the work already done instead of doing it again.
+     */
+    protected bool $textFiltered = false;
 
     /**
      * Static method which will return an instance of the PagePresenter. The HTML ID of the page will be set and
@@ -120,7 +129,7 @@ class PagePresenter
     }
 
     /**
-     * Constructor creates the page object and initialized all parameters.
+     * Constructor creates the page object and initializes all parameters.
      * @param string $objectUUID UUID of an object that represents the page. The data shown on the page will belong
      *                           to this object.
      * @throws Exception
@@ -190,7 +199,7 @@ class PagePresenter
     /**
      * Adds any JavaScript content to the page. The JavaScript will be added in the order you call this method.
      * @param string $javascriptCode       A valid JavaScript code that will be added to the header of the page.
-     * @param bool $executeAfterPageLoad (optional) If set to **true** the JavaScript code will be executed after
+     * @param bool $executeAfterPageLoad (optional) If set to **true**, the JavaScript code will be executed after
      *                                     the page is fully loaded.
      */
     public function addJavascript(string $javascriptCode, bool $executeAfterPageLoad = false): void
@@ -316,26 +325,42 @@ class PagePresenter
         $this->smarty->assign('validLogin', $gValidLogin);
         $this->smarty->assign('debug', $gDebug);
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
-        
+
         // Design variables
-        $this->smarty->assign('additionalStylesFile',  $gSettingsManager->getString('additional_styles_file'));
-        $this->smarty->assign('logoFile',  $gSettingsManager->getString('logo_file'));
-        $this->smarty->assign('faviconFile',  $gSettingsManager->getString('favicon_file'));
+        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('theme_additional_styles_file'));
+        $this->smarty->assign('logoFile', $gSettingsManager->getString('theme_logo_file'));
+        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('theme_logo_file_max_height'));
+        $this->smarty->assign('faviconFile', $gSettingsManager->getString('theme_favicon_file'));
+        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('theme_admidio_headline')));
 
         $styles = '';
-        $color_primary = $gSettingsManager->getString('color_primary');
+        $color_primary = $gSettingsManager->getString('theme_color_primary');
         if ($color_primary && $this->isValidHexColor($color_primary)) {
             $styles .= '    --bs-primary: ' . $color_primary . ";\n";
             $styles .= '    --bs-primary-rgb: ' . hexdec(substr($color_primary, 1, 2)) . ', ' . hexdec(substr($color_primary, 3, 2)) . ', ' . hexdec(substr($color_primary, 5, 2)) . ";\n";
         }
-        $color_secondary = $gSettingsManager->getString('color_secondary');
+        $color_secondary = $gSettingsManager->getString('theme_color_secondary');
         if ($color_secondary && $this->isValidHexColor($color_secondary)) {
             $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
             $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
         }
+        $color_tertiary = $gSettingsManager->getString('theme_color_tertiary');
+        if ($color_tertiary && $this->isValidHexColor($color_tertiary)) {
+            $styles .= '    --bs-tertiary: ' . $color_tertiary . ";\n";
+            $styles .= '    --bs-tertiary-rgb: ' . hexdec(substr($color_tertiary, 1, 2)) . ', ' . hexdec(substr($color_tertiary, 3, 2)) . ', ' . hexdec(substr($color_tertiary, 5, 2)) . ";\n";
+        }
+        $color_text = $gSettingsManager->getString('theme_color_text');
+        if ($color_text && $this->isValidHexColor($color_text)) {
+            $styles .= '    --bs-body-color: ' . $color_text . ";\n";
+        }
+        $color_background = $gSettingsManager->getString('theme_color_background');
+        if ($color_background && $this->isValidHexColor($color_background)) {
+            $styles .= '    --bs-body-bg: ' . $color_background . ";\n";
+        }
         if (!empty($styles)) {
             $this->smarty->assign('additionalStyles', ":root {\n$styles};");
         }
+        $this->smarty->assign('themeColorPrimary', ($color_primary && $this->isValidHexColor($color_primary)) ? $color_primary : '#349aaa');
 
 
         // add imprint and data protection
@@ -348,6 +373,8 @@ class PagePresenter
         $this->smarty->assign('urlImprint', $urlImprint);
         $this->smarty->assign('urlDataProtection', $urlDataProtection);
         $this->smarty->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+        $pwaEnabled = $gSettingsManager->has('system_pwa_enabled') ? $gSettingsManager->getBool('system_pwa_enabled') : true;
+        $this->smarty->assign('pwaEnabled', $pwaEnabled);
 
         // show cookie note
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note')) {
@@ -375,17 +402,17 @@ class PagePresenter
     /**
      * Public method to assign new variables to the Smarty template of the PagePresenter.
      * @param string $variable Name of the variable within the Smarty template.
-     * @param array|string $value Value of the variable.
+     * @param mixed $value Value of the variable.
      * @return void
      */
-    public function assignSmartyVariable(string $variable, array|string $value): void
+    public function assignSmartyVariable(string $variable, mixed $value): void
     {
         $this->smarty->assign($variable, $value);
     }
 
     /**
      * Create an object of the template engine Smarty. This object uses the template folder of the
-     * current theme. The all cacheable and compilable files will be stored in the templates folder
+     * current theme. All cacheable and compilable files will be stored in the templates folder
      * of **adm_my_files**.
      * @return Smarty Returns the initialized Smarty object.
      * @throws Exception
@@ -402,14 +429,14 @@ class PagePresenter
             if (defined('THEME_FALLBACK_PATH')) {
                 $smartyObject->addTemplateDir(THEME_FALLBACK_PATH . '/templates/');
             }
-            
+
             $smartyObject->setCacheDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/cache/');
             $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $smartyObject->registerPlugin('function', 'string_contains', 'Admidio\Infrastructure\Plugins\Smarty::stringContains');
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
-            $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Infrastructure\Plugins\Smarty::loadAdmidioPlugin');
             $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
+            $smartyObject->registerPlugin('function', 'version_compare', 'Admidio\Infrastructure\Plugins\Smarty::versionCompare');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
@@ -452,7 +479,7 @@ class PagePresenter
     }
 
     /**
-     * Returns the headline of the current Admidio page. This is the text of the <h1> tag of the page.
+     * Returns the headline of the current Admidio page. This is the text of the <h1> tag from the page.
      * @return string Returns the headline of the current Admidio page.
      */
     public function getHeadline(): string
@@ -486,6 +513,46 @@ class PagePresenter
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    /**
+     * Dispatch page_title and page_headline exactly once, however many times this is called and
+     * whether it runs before or after show(): the same guarantee finalize() gives a form's elements.
+     * @return void
+     */
+    private function filterText(): void
+    {
+        if ($this->textFiltered) {
+            return;
+        }
+        $this->textFiltered = true;
+
+        $this->title = Hooks::applyTypedFilters('page_title', $this->title, $this);
+        $this->headline = Hooks::applyTypedFilters('page_headline', $this->headline, $this);
+    }
+
+    /**
+     * Returns the title of the page after page_title has run. Call this instead of getTitle() when
+     * the filtered text is needed before show() - to build an export filename or the title of an
+     * embedded document, for example.
+     * @return string Returns the filtered title of the HTML page.
+     */
+    public function getFilteredTitle(): string
+    {
+        $this->filterText();
+
+        return $this->title;
+    }
+
+    /**
+     * Returns the headline of the page after page_headline has run. See getFilteredTitle().
+     * @return string Returns the filtered headline of the HTML page.
+     */
+    public function getFilteredHeadline(): string
+    {
+        $this->filterText();
+
+        return $this->headline;
     }
 
     /**
@@ -531,13 +598,29 @@ class PagePresenter
 
 
     /**
-     * Set the HTML ID of the current HTML page.
+     * Set the HTML ID of the current HTML page. It is written into the **id** attribute of the body
+     * element and it is the stable name of the page for the **page_before_render** hook.
+     *
+     * The value is handed to the template here, the same way setHeadline() does it: the basic
+     * variables are assigned in the constructor, and every caller sets the ID afterwards.
      * @param string $htmlID The HTML ID of the current page.
      * @return void
      */
     public function setHtmlID(string $htmlID): void
     {
         $this->id = $htmlID;
+
+        if (isset($this->smarty)) {
+            $this->smarty->assign('id', $this->id);
+        }
+    }
+
+    /**
+     * @return string Returns the HTML ID of the page, its stable name in the page hooks.
+     */
+    public function getHtmlID(): string
+    {
+        return $this->id;
     }
 
     /** If set to true, then a page without a header menu and sidebar menu will be created.
@@ -571,14 +654,23 @@ class PagePresenter
 
     /**
      * If print mode is set, then the reduced template file **index.reduced.tpl** will be loaded with
-     * a print specific CSS file **print.css**. All styles will be more print-compatible and are
-     * only black, grey and white.
+     * a print-specific CSS file **print.css**. All styles will be more print-compatible and are
+     * only black, gray and white.
      * @return void
      */
     public function setPrintMode(): void
     {
         $this->setInlineMode();
         $this->printView = true;
+    }
+
+    /**
+     * Returns true if the page is shown in print mode.
+     * @return bool Returns **true** if the print mode was set with **setPrintMode()**.
+     */
+    public function isPrintMode(): bool
+    {
+        return $this->printView;
     }
 
     /**
@@ -589,6 +681,16 @@ class PagePresenter
     public function show(): void
     {
         global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
+
+        // The page is finished. The two texts that name it can still be changed, and
+        // page_before_render is the last point at which anything can be added to it; everything the
+        // three of them touch is handed to the template below, so nothing has to be assigned twice.
+        $this->filterText();
+        Hooks::doAction('page_before_render', $this);
+
+        $this->smarty->assign('id', $this->id);
+        $this->smarty->assign('title', $this->title);
+        $this->smarty->assign('headline', $this->headline);
 
         $hasPreviousUrl = false;
 
@@ -629,7 +731,7 @@ class PagePresenter
             }
         } catch (\Smarty\Exception $exception) {
             echo $exception->getMessage();
-            echo '<br />Please check if the theme folder "<strong>' . $gSettingsManager->getString('theme') . '</strong>" exists within the folder "themes".';
+            echo '<br />Please check if the theme folder <strong>' . $gSettingsManager->getString('theme') . '</strong> exists within the folder <strong>themes</strong>.';
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

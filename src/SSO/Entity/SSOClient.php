@@ -18,8 +18,8 @@ class SSOClient extends Entity
     protected ?RolesRights $rolesAccess;
     protected string $ssoType = '';
 
-    public function __construct(Database $database, ?string $tableName, string $columnPrefix, $client_id = null) {
-        $this->ssoType = 'saml';
+    public function __construct(Database $database, string $type, ?string $tableName, string $columnPrefix, $client_id = null) {
+        $this->ssoType = $type;
         if (is_numeric($client_id)) {
             parent::__construct($database, $tableName, $columnPrefix, $client_id);
         } else {
@@ -28,8 +28,17 @@ class SSOClient extends Entity
                 $this->readDataByColumns([$this->columnPrefix . '_client_id' => $client_id]);
             }  else {
                 // Set default values for clock skew, assertion lifetime and included fields
-                $this->dbColumns[$this->columnPrefix . '_field_mapping'] = '{"username":"usr_login_name","fullname":"fullname","email":"EMAIL","roles":"roles"}';
-                $this->dbColumns[$this->columnPrefix . '_userid_field'] = 'usr_login_name';
+                $defaultMapping = array(
+                    'username' => 'usr_login_name',
+                    'fullname' => 'fullname',
+                    'email' => 'EMAIL',
+                    'roles' => 'roles'
+                );
+                $this->dbColumns[$this->columnPrefix . '_field_mapping'] = json_encode($defaultMapping, JSON_THROW_ON_ERROR);
+                // Use setValue() so this default participates in Entity change tracking for new clients.
+                // A login name can be changed and then names a different person to the client,
+                // so a new client starts with the identifier that never changes.
+                $this->setValue($this->columnPrefix . '_userid_field', 'usr_uuid');
             }
         }
     }
@@ -42,6 +51,15 @@ class SSOClient extends Entity
         return $this->getValue($this->columnPrefix . '_client_name')??'';
     }
 
+    public function save(bool $updateFingerPrint = true): bool
+    {
+        if ($this->isNewRecord()) {
+            // new clients get the current organization assigned
+            $this->setValue($this->columnPrefix . '_org_id', $GLOBALS['gCurrentOrgId']);
+        }
+
+        return parent::save($updateFingerPrint);
+    }
 
     /**
      * Deletes the selected record of the table and all references in other tables.
@@ -192,23 +210,51 @@ class SSOClient extends Entity
     }
 
     /**
-     * Returns an associative array with all selected user roles (internal names) to be submitted to the client / Service Provider upon successful login.
-     * The keys are the SAML role names, the values are the Admidio roles. This means, that the same Admidio role can be used for multiple SAML attributes.
-     * @return array<string,string> Returns an array with all selected user role names that are sent to the SAML client. The keys are the SAML role names, the values are the Admidio roles.
+     * Returns all role mappings, grouped by the role name that is sent to the client / Service Provider.
+     * The same Admidio role can be mapped to several client roles, and several Admidio roles can be
+     * mapped to the same client role, so each entry holds a list of Admidio role IDs. A negative ID
+     * maps the leaders of that role instead of its members.
+     * @return array<string,array<int,int>> Returns the client role names as keys, each with the list of Admidio role IDs mapped to it.
      */
     public function getRoleMapping(): array
+    {
+        $mapping = array();
+        foreach ($this->getRoleMappingList() as list($clientRole, $roleId)) {
+            $mapping[$clientRole][] = $roleId;
+        }
+        return $mapping;
+    }
+
+    /**
+     * Returns the role mappings as a flat list of [client role name, Admidio role ID] pairs, in the
+     * configured order. In contrast to getRoleMapping() every single assignment stays a separate
+     * entry, which is what the edit form needs to render one row per assignment.
+     * @return array<int,array{0:string,1:int}> Returns a list of [client role name, Admidio role ID] pairs.
+     */
+    public function getRoleMappingList(): array
     {
         $roles = $this->getValue($this->columnPrefix . '_role_mapping', 'database'); // Read the raw string from the database, so html tags don't get replaced!
         if (empty($roles)) {
             return array();
         }
         $mapping = json_decode($roles, true);
-        if (empty($mapping)) {
+        if (empty($mapping) || !is_array($mapping)) {
             return array();
-        } else {
-            unset($mapping['*']);
-            return $mapping;
         }
+        unset($mapping['*']);
+
+        $list = array();
+        foreach ($mapping as $clientRole => $roleIds) {
+            // Mappings stored before several Admidio roles per client role were supported hold a
+            // single role ID instead of a list.
+            if (!is_array($roleIds)) {
+                $roleIds = array($roleIds);
+            }
+            foreach ($roleIds as $roleId) {
+                $list[] = array((string) $clientRole, (int) $roleId);
+            }
+        }
+        return $list;
     }
 
     /**
@@ -228,11 +274,18 @@ class SSOClient extends Entity
 
     /**
      * Sets the selected user roles to be sent to SAML clients upon login
+     * @param array<int,array{0:string,1:int|string}> $roles List of [client role name, Admidio role ID] pairs.
+     *                                                       The same client role name may be used more than once.
+     * @param bool $catchall
      */
-    public function setRoleMapping($roles, $catchall = false)
+    public function setRoleMapping(array $roles, bool $catchall = false)
     {
-        $roles['*'] = $catchall;
-        $this->setValue($this->columnPrefix . '_role_mapping', json_encode($roles));
+        $mapping = array();
+        foreach ($roles as list($clientRole, $roleId)) {
+            $mapping[(string) $clientRole][] = (int) $roleId;
+        }
+        $mapping['*'] = $catchall;
+        $this->setValue($this->columnPrefix . '_role_mapping', json_encode($mapping));
     }
 
     public function getMappedRoleMemberships(User $user): array
@@ -243,14 +296,20 @@ class SSOClient extends Entity
         $mappedRoles = array();
         // Loop through all roles of the user. If it is part of the mapping, or catchall is set, append it to the attribute
         foreach ($user->getRoleMemberships() as $roleId) {
-
-            $rolesFound = array_keys($mapping, $roleId);
-            $mappedRoles = array_merge($mappedRoles, $rolesFound);
+            $roleId = (int) $roleId;
             $isLeader = $user->isLeaderOfRole($roleId);
-            if ($isLeader) {
-                $rolesLeaderFound = array_keys($mapping, -$roleId);
-                $mappedRoles = array_merge($mappedRoles, $rolesLeaderFound);
+
+            $rolesFound = array();
+            $rolesLeaderFound = array();
+            foreach ($mapping as $clientRole => $mappedRoleIds) {
+                if (in_array($roleId, $mappedRoleIds, true)) {
+                    $rolesFound[] = $clientRole;
+                }
+                if ($isLeader && in_array(-$roleId, $mappedRoleIds, true)) {
+                    $rolesLeaderFound[] = $clientRole;
+                }
             }
+            $mappedRoles = array_merge($mappedRoles, $rolesFound, $rolesLeaderFound);
 
             // The catchall applies only to "normal" group memberships. Role leaderships are not implicitly
             // added, only when they are explicitly mapped to a particular role.
@@ -260,21 +319,34 @@ class SSOClient extends Entity
                 $mappedRoles[] = $role->getValue('rol_name');
             }
         }
-        return $mappedRoles;
+        // Several Admidio roles can be mapped to the same client role, so the same name can be
+        // collected more than once. The client expects each role only once.
+        return array_values(array_unique($mappedRoles));
     }
 
     /**
-     * Checks if the current user has access rights to the SAML client.
-     * @return bool Return **true** if the user has access rights to the SAML client
+     * Checks if a user has access rights to the client.
+     *
+     * The user is normally the one who is logged in, but the access right also has to be judged
+     * for a user who is not present in the request: when a role membership ends, the tokens that
+     * this right justified are revoked for the affected user.
+     *
+     * @param User|null $user User to judge, by default the currently logged-in user.
+     * @return bool Return **true** if the user has access rights to the client
      * @throws Exception
      */
-   public function hasAccessRight(): bool
+   public function hasAccessRight(?User $user = null): bool
     {
         global $gCurrentUser;
+
+        if ($user === null) {
+            $user = $gCurrentUser;
+        }
+
         if (empty($this->rolesAccess) || empty($this->rolesAccess->getRolesIds())) {
             return true;
         } else {
-            return $this->rolesAccess->hasRight($gCurrentUser->getRoleMemberships()) || $gCurrentUser->isAdministrator();
+            return $this->rolesAccess->hasRight($user->getRoleMemberships()) || $user->isAdministrator();
         }
     }
 
@@ -312,7 +384,7 @@ class SSOClient extends Entity
      */
     public function readableName(): string
     {
-        return $this->dbColumns[$this->columnPrefix . '_client_name']??'';
+        return $this->filterReadableName($this->dbColumns[$this->columnPrefix . '_client_name']??'');
     }
 
 

@@ -42,6 +42,11 @@ class AutoLogin extends Entity
     {
         parent::__construct($database, TBL_AUTO_LOGIN, 'atl');
 
+        // NOTE: Changes to the auto login table must not be logged, but this must NOT be done by
+        // setting Entity::$loggingEnabled, which is a static and would switch off the changelog
+        // for every other entity for the rest of the request. The table 'auto_login' is listed in
+        // ChangelogService::$noLogTables, which already prevents any log entry for it.
+
         // if not integer than the auto-login-id is committed
         if (is_int($session)) {
             $this->readDataById($session);

@@ -10,7 +10,7 @@
  * Parameters:
  *
  * module : Name of module (folder name) in adm_my_files where the image lies
- * file   : Name of image file that should be shown (without path)
+ * file   : Name of an image file that should be shown (without a path)
  ***********************************************************************************************
  */
 
@@ -26,7 +26,7 @@ try {
     // Initialize locale parameters
     $imageServerPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $getModule . '/images/' . $getFile;
 
-    // check if image exists
+    // check if the image exists
     if (!is_file($imageServerPath)) {
         http_response_code(404);
         exit();
@@ -37,5 +37,5 @@ try {
     $image->copyToBrowser();
     $image->delete();
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

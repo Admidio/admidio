@@ -1,0 +1,180 @@
+<?php
+/**
+ * Test Database Initializer
+ *
+ * Initializes a full production-like Admidio installation for the test suite.
+ * This runs once at test suite startup to create schema, default data, and admin user.
+ */
+
+namespace Admidio\Tests\Support;
+
+use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
+use Admidio\InstallationUpdate\Service\Installation;
+use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
+
+class TestDatabaseInitializer
+{
+    /**
+     * Initialize test database with full Admidio installation
+     *
+     * This creates the complete database schema, default data, organizations, and admin user.
+     * Should be called once in test suite setUpBeforeClass()
+     *
+     * @param Database $database Test database connection
+     * @param array $config Database configuration from .env.test
+     * @return array Installation result with organizationId and administratorId
+     */
+    public static function initialize(Database $database, array $config): array
+    {
+        global $gDb, $gLogger, $gL10n, $gCurrentUser, $gCurrentUserId, $gCurrentSession;
+
+        // Make database available to global scope for Installation service
+        $gDb = $database;
+        $GLOBALS['gDb'] = $gDb;
+
+        // Ensure logger exists
+        if (!isset($GLOBALS['gLogger'])) {
+            $gLogger = new \Admidio\Infrastructure\Logger();
+            $GLOBALS['gLogger'] = $gLogger;
+        }
+
+        // Set up language for error messages
+        if (!isset($GLOBALS['gL10n'])) {
+            $gL10n = new Language('en');
+            $GLOBALS['gL10n'] = $gL10n;
+        }
+
+        // Initialize required globals
+        $gCurrentUser = null;
+        $gCurrentUserId = 0;
+        $gCurrentSession = null;
+        $GLOBALS['gCurrentUser'] = $gCurrentUser;
+        $GLOBALS['gCurrentUserId'] = $gCurrentUserId;
+        $GLOBALS['gCurrentSession'] = $gCurrentSession;
+
+        // Every PHPUnit process starts from a schema produced by the current production installer.
+        // Reusing a database merely because it already has many tables can hide installer/schema
+        // regressions and makes tests depend on whatever a previous run left behind.
+        echo "  Installing Admidio production setup...\n";
+
+        // Drop the tables of the installation that is replaced to start fresh
+        $dropped = self::dropTables($database, $config);
+        if ($dropped > 0) {
+            echo "  ✓ Dropped $dropped existing tables\n";
+        }
+
+        // Create installation configuration from environment
+        $installConfig = InstallationConfig::fromArray([
+            'dbType' => $config['engine'] === 'mariadb' ? Database::DB_TYPE_MARIADB :
+                       ($config['engine'] === 'postgres' ? Database::DB_TYPE_PGSQL : Database::DB_TYPE_MYSQL),
+            'dbHost' => $config['host'],
+            'dbPort' => $config['port'],
+            'dbName' => $config['database'],
+            'dbUsername' => $config['user'],
+            'dbPassword' => $config['password'],
+            'tablePrefix' => TABLE_PREFIX,
+            'rootUrl' => 'http://localhost/admidio',
+            'language' => 'en',
+            'timezone' => 'UTC',
+            'organizationName' => 'Test Organization',
+            'organizationShortName' => 'TEST',
+            'organizationEmail' => 'test@example.local',
+            'adminLogin' => 'admin',
+            'adminFirstName' => 'Admin',
+            'adminLastName' => 'User',
+            'adminEmail' => 'admin@test.local',
+            'adminPassword' => 'test_admin_123',
+        ]);
+
+        // Run full installation
+        $result = Installation::install($database, $installConfig);
+
+        // Installation::install() gives itself five minutes through set_time_limit(), which in a
+        // web request covers only that request but here applies to the whole PHPUnit process and
+        // kills the run once the suite needs longer than that.
+        @set_time_limit(0);
+
+        echo "  ✓ Database initialized\n";
+        echo "  ✓ Schema created\n";
+        echo "  ✓ Default data installed\n";
+        echo "  ✓ Administrator user created\n";
+
+        return $result;
+    }
+
+    /**
+     * Name of the schema the Admidio tables live in
+     *
+     * MySQL and MariaDB report the database itself as the schema, PostgreSQL the schema inside it.
+     */
+    private static function schemaName(array $config): string
+    {
+        return $config['engine'] === 'postgres' ? 'public' : $config['database'];
+    }
+
+    /**
+     * Drop every Admidio table of one table prefix
+     *
+     * The test database is shared, so only the tables of the installation that is replaced are
+     * dropped. A second installation under a prefix of its own stays untouched, and so does
+     * anything in the database that has nothing to do with Admidio.
+     *
+     * @param string $prefix Table prefix of the installation, the prefix of the fixture by default.
+     * @return int Returns the number of dropped tables.
+     */
+    public static function dropTables(Database $database, array $config, string $prefix = TABLE_PREFIX): int
+    {
+        $postgres = $config['engine'] === 'postgres';
+
+        try {
+            if (!$postgres) {
+                // Disable foreign key checks temporarily
+                $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 0');
+            }
+
+            // Get list of all tables
+            $result = $database->queryPrepared(
+                'SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND table_type = ?',
+                [self::schemaName($config), 'BASE TABLE']
+            );
+
+            // read the whole list before dropping anything, the statement is reused for the drops
+            $tables = [];
+            while ($row = $result->fetch()) {
+                $tables[] = $row['table_name'] ?? $row['TABLE_NAME'];
+            }
+
+            $count = 0;
+            foreach ($tables as $tableName) {
+                // Never delete unrelated tables just because they share a dedicated test database.
+                if (!str_starts_with((string)$tableName, $prefix . '_')) {
+                    continue;
+                }
+
+                // PostgreSQL does not know backticks and needs the dependent constraints dropped too
+                $sql = $postgres
+                    ? 'DROP TABLE IF EXISTS "' . $tableName . '" CASCADE'
+                    : 'DROP TABLE IF EXISTS `' . $tableName . '`';
+
+                try {
+                    $database->query($sql, false);
+                    $count++;
+                } catch (\Exception $e) {
+                    // Silently skip errors
+                }
+            }
+
+            if (!$postgres) {
+                // Re-enable foreign key checks
+                $database->queryPrepared('SET FOREIGN_KEY_CHECKS = 1');
+            }
+
+            return $count;
+        } catch (\Exception $e) {
+            // If we can't drop tables, installation will fail anyway
+        }
+
+        return 0;
+    }
+}

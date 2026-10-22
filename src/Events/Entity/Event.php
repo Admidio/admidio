@@ -66,6 +66,15 @@ class Event extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'event';
+    }
+
+    /**
      * Check if the current user is allowed to participate in this event.
      * Therefore, we check if the user is member of a role that is assigned to
      * the right event_participation. This method will also return **true** if the deadline is exceeded
@@ -92,7 +101,7 @@ class Event extends Entity
      * Calls clear() Method of parent class and initialize child class specific parameters
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -217,11 +226,11 @@ class Event extends Entity
      *                           the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return
      *                           the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -335,6 +344,32 @@ class Event extends Entity
     }
 
     /**
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
+     * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the
+     * default table will be read and stored in the object. Only events of the current organization will be read.
+     * If the event belongs to another organization than an exception will be thrown.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByUuid
+     * @see Entity#readDataByColumns
+     * @see Entity#readDataById
+     */
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
+    {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            // check if event belongs to this organization
+            if ($this->getValue('cat_org_id') > 0 && $this->getValue('cat_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Event ' . $this->getValue('dat_uuid') . ' belongs to another organization.');
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Read an event that has the given role has stored as participant role.
      * @param int $roleId ID of the participants role of the event.
      * @throws Exception
@@ -370,7 +405,25 @@ class Event extends Entity
             throw new Exception('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
-        return parent::save($updateFingerPrint);
+        $returnCode = parent::save($updateFingerPrint);
+        if ($returnCode) {
+            // Refresh the joined category columns used by isVisible() and isEditable().
+            // Reading the record back clears the inserted state, which sendNotification() needs.
+            $inserted = $this->wasInserted();
+            $this->readDataById((int) $this->getValue('dat_id'));
+            $this->insertedRecord = $inserted;
+
+            // The event is the source of truth for the participant limit. Keep its
+            // participation role in sync so generic role assignments enforce it, too.
+            if ((int) $this->getValue('dat_rol_id') > 0) {
+                $role = new Role($this->db, (int) $this->getValue('dat_rol_id'));
+                if ($role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
+                    $role->save($updateFingerPrint);
+                }
+            }
+        }
+
+        return $returnCode;
     }
 
     /**
@@ -422,7 +475,7 @@ class Event extends Entity
 
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
@@ -432,7 +485,7 @@ class Event extends Entity
                 $messageDateText = 'SYS_CHANGED_AT';
             }
             $message = $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))) . '<br /><br />'
-                . $gL10n->get('SYS_TITLE') . ': ' . $_POST['dat_headline'] . '<br />'
+                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('dat_headline') . '<br />'
                 . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br />'
                 . $gL10n->get('SYS_CALENDAR') . ': ' . $calendar . '<br />'
                 . $gL10n->get('SYS_VENUE') . ': ' . $location . '<br />'
@@ -440,7 +493,7 @@ class Event extends Entity
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message
@@ -458,7 +511,7 @@ class Event extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 
@@ -472,7 +525,7 @@ class Event extends Entity
                 }
             } elseif ($columnName === 'dat_deadline' && (string) $newValue !== '') {
                 if(!\DateTime::createFromFormat('Y-m-d H:i', $newValue)) {
-                    throw new Exception('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD'));
+                    throw new Exception('SYS_DATE_INVALID', array($gL10n->get('SYS_DEADLINE'), 'YYYY-MM-DD HH:MM'));
                 } elseif (strtotime($newValue) > strtotime($this->getValue('dat_begin'))) {
                     throw new Exception('SYS_DEADLINE_AFTER_START');
                 }

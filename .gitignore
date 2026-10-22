@@ -10,16 +10,17 @@
 !/adm_my_files/index.html
 
 # Only allow commit of official plugins
-/adm_plugins/*
-!/adm_plugins/birthday/
-!/adm_plugins/calendar/
-!/adm_plugins/login_form/
-!/adm_plugins/random_photo/
-!/adm_plugins/announcement-list/
-!/adm_plugins/event-list/
-!/adm_plugins/latest-documents-files/
-!/adm_plugins/who-is-online/
-!/adm_plugins/category_report/
+/plugins/*
+!/plugins/birthday/
+!/plugins/calendar/
+!/plugins/login-form/
+!/plugins/random-photo/
+!/plugins/announcement-list/
+!/plugins/hello-world/
+!/plugins/event-list/
+!/plugins/latest-documents-files/
+!/plugins/who-is-online/
+
 
 # Only allow commit of official themes
 /themes/*
@@ -28,6 +29,10 @@
 # Don't commit the external libs from vendor folder
 /vendor
 
+# Local configuration and cache of the regression test suite
+/.env.test
+/.phpunit.cache/
+
 # Some special OS files that should not commited
 /*.phar
 .DS_Store
@@ -35,6 +40,8 @@ php-cs-fixer
 
 # Project-specific IDE settings are local for each developer
 /.vscode/
+CLAUDE.md
+.claudeignore
 
 # For custom configuration
 /.php_cs

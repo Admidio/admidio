@@ -16,7 +16,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
+use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
+use Admidio\SSO\Repository\AuthCodeRepository;
+use Admidio\SSO\Entity\AuthCodeEntity;
+use Admidio\SSO\Entity\IdTokenResponse;
 
 /**
  * Custom AuthCodeGrant class to support nonces. The nonce in the auth request is stored 
@@ -27,6 +33,37 @@ use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     protected ?string $nonce = null;
+    protected ?int $authenticationTime = null;
+    protected string $externalSessionId = '';
+    protected array $authenticationMethods = array();
+    protected ?string $authenticationContext = null;
+
+    public function __construct(
+        AuthCodeRepositoryInterface $authCodeRepository,
+        RefreshTokenRepositoryInterface $refreshTokenRepository,
+        DateInterval $authCodeTTL
+    ) {
+        parent::__construct($authCodeRepository, $refreshTokenRepository, $authCodeTTL);
+    }
+
+    public function setAuthenticationTime(int $authenticationTime): void {
+        $this->authenticationTime = $authenticationTime;
+    }
+
+    public function setExternalSessionId(string $externalSessionId): void {
+        if ($externalSessionId === '') {
+            throw new \InvalidArgumentException('The external session identifier must not be empty.');
+        }
+        $this->externalSessionId = $externalSessionId;
+    }
+
+    public function setAuthenticationMethods(array $authenticationMethods): void {
+        $this->authenticationMethods = $authenticationMethods;
+    }
+
+    public function setAuthenticationContext(string $authenticationContext): void {
+        $this->authenticationContext = $authenticationContext;
+    }
 
     public function validateAuthorizationRequest(ServerRequestInterface $request): AuthorizationRequestInterface
     {
@@ -43,7 +80,14 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         array $scopes = []
     ): AuthCodeEntityInterface {
         $authCode = parent::issueAuthCode($authCodeTTL, $client, $userIdentifier, $redirectUri, $scopes);
+        if (!$authCode instanceof AuthCodeEntity) {
+            throw OAuthServerException::serverError('Authorization code is not an instance of AuthCodeEntity.');
+        }
         $authCode->setValue($authCode->getColumnPrefix() . '_nonce', $this->nonce);
+        $authCode->setValue($authCode->getColumnPrefix() . '_auth_time', $this->authenticationTime);
+        $authCode->setValue($authCode->getColumnPrefix() . '_external_session_id', $this->externalSessionId);
+        $authCode->setValue($authCode->getColumnPrefix() . '_authentication_methods', implode(' ', $this->authenticationMethods));
+        $authCode->setValue($authCode->getColumnPrefix() . '_authentication_context', $this->authenticationContext);
         $authCode->save();
         return $authCode;
     }
@@ -53,18 +97,53 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
     ): ResponseTypeInterface {
+        global $gLogger;
+
         $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
+        if (!$responseType instanceof IdTokenResponse) {
+            throw OAuthServerException::serverError('Response type is not an instance of IdTokenResponse.');
+        }
 
         // If we arrive here, the auth code was valid -> No need to check validity again!
         $encryptedAuthCode = $this->getRequestParameter('code', $request);
         $authCodePayload = json_decode($this->decrypt($encryptedAuthCode));
 
         // Load the AuthCode from the DB (including the nonce) and pass on the nonce to the response type ()
+        if (!$this->authCodeRepository instanceof AuthCodeRepository) {
+            throw OAuthServerException::serverError('Invalid authorization code repository.');
+        }
+
         $authCode = $this->authCodeRepository->getToken($authCodePayload->auth_code_id);
         if (!($authCode->isNewRecord())) {
             $nonce = $authCode->getValue($authCode->getColumnPrefix() . '_nonce');
             if (!empty($nonce)) {
                 $responseType->setNonce($nonce);
+            }
+
+            $authenticationTime = (int) $authCode->getValue($authCode->getColumnPrefix() . '_auth_time', 'U');
+            $externalSessionId = (string) $authCode->getValue($authCode->getColumnPrefix() . '_external_session_id', 'database');
+            $authenticationMethods = preg_split('/\s+/',
+                trim((string) $authCode->getValue($authCode->getColumnPrefix() . '_authentication_methods')),
+                -1, PREG_SPLIT_NO_EMPTY
+            );
+            $authenticationContext = (string) $authCode->getValue($authCode->getColumnPrefix() . '_authentication_context');
+
+            if ($externalSessionId !== '') {
+                $responseType->setExternalSessionId($externalSessionId);
+            } else {
+                $gLogger->warning('OIDC authorization code has no external session identifier; the ID token will be issued without sid.');
+             }
+
+            if ($authenticationTime > 0) {
+                $responseType->setAuthenticationTime($authenticationTime);
+            }
+
+            if (is_array($authenticationMethods)) {
+                $responseType->setAuthenticationMethods($authenticationMethods);
+            }
+
+            if ($authenticationContext !== '') {
+                $responseType->setAuthenticationContext($authenticationContext);
             }
         }
         return $responseType;

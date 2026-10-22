@@ -15,17 +15,17 @@
  ***********************************************************************************************
  */
 
-// Select your database system for example 'mysql' or 'pgsql'
+// Select your database system between 'mariadb', 'mysql' or 'pgsql'
 $gDbType = 'mysql';
 
 // Table prefix for Admidio-Tables in database
 // Example: 'adm'
 $g_tbl_praefix = 'adm';
 
-// Access to the database of the MySQL-Server
-$g_adm_srv  = 'URL_to_your_MySQL-Server';    // Server
+// Access to the database
+$g_adm_srv  = 'URL_to_your_database_server'; // Server
 $g_adm_port = null;                          // Port
-$g_adm_db   = 'Databasename';                // Database
+$g_adm_db   = 'Database-name';               // Database
 $g_adm_usr  = 'Username';                    // User
 $g_adm_pw   = 'Password';                    // Password
 
@@ -37,12 +37,3 @@ $g_root_path = 'https://www.your-website.de/admidio';
 // This must be one of the strings that are defined here https://www.php.net/manual/en/timezones.php
 // Example: 'Europe/Berlin'
 $gTimezone = 'Europe/Berlin';
-
-// If this flag is set = 1 then you must enter your loginname and password
-// for an update of the Admidio database to a new version of Admidio.
-// For a more comfortable and easy update you can set this preference = 0.
-$gLoginForUpdate = 1;
-
-// Set the preferred password hashing algorithm.
-// Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
-$gPasswordHashAlgorithm = 'DEFAULT';

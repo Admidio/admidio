@@ -12,14 +12,11 @@
 :root {
     --admidio-header-font-color: #ffffff;
     --admidio-header-link-color: #263340;
-    --admidio-header-link-color-hover: #000000;
-    --admidio-menu-bg-color-hover: #3d5266;
-    --admidio-menu-font-color-hover: #ffffff;
     --admidio-clamp-text-lines: 0;
     --bs-primary: #349aaa;
     --bs-primary-rgb: 52, 154, 170;
-    --bs-secondary: #263340;
-    --bs-secondary-rgb: 38, 51, 64;
+    --bs-secondary: #A7D9E0;
+    --bs-secondary-rgb: 167, 217, 224;
     --bs-tertiary: #e9ecef;
     --bs-tertiary-rgb: 233, 236, 269;
     --bs-success: #04e01a;
@@ -29,7 +26,7 @@
     --bs-link-color-rgb: var(--bs-primary-rgb);
     --bs-link-hover-color: color-mix(in srgb, var(--bs-link-color) 80%, white);
     --bs-link-hover-color-rgb: color-mix(in srgb, rgb(var(--bs-link-color-rgb)) 80%, white);
-    --bs-focus-ring-color: #c4e9ef;
+    --bs-focus-ring-color: color-mix(in srgb, var(--bs-primary) 20%, white);
 }
 
 #adm_main_navbar {
@@ -43,17 +40,36 @@
     padding-top: 0;
 }
 
+#adm_main_navbar .navbar-brand {
+    color: var(--admidio-header-font-color);
+    font-size: inherit;
+    font-weight: inherit;
+    /* the name of the organization may shrink, otherwise the header is wider than small screens */
+    min-width: 0;
+}
+
+#adm_headline_organization {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#adm_main_navbar .navbar-brand:hover,
+#adm_main_navbar .navbar-brand:focus {
+    color: var(--admidio-header-font-color);
+}
+
 #adm_main_navbar .navbar-brand img {
     margin-right: 1rem;
 }
 
 #adm_navbar_nav a, #adm_main_navbar .dropdown-toggle {
     color: var(--admidio-header-link-color);
-    font-size: 1rem
+    font-size: 1rem;
+    padding: 0.3rem 0.6rem;
 }
 
 #adm_navbar_nav a:hover, #adm_main_navbar .dropdown-toggle {
-    color: var(--admidio-header-link-color-hover);
+    color: color-mix(in srgb, var(--admidio-header-link-color) 10%, black);
 }
 
 @media (max-width: 767px)
@@ -64,6 +80,10 @@
         position: relative;
         top: auto;
     }
+}
+
+#adm_dropdown_user_photo {
+    min-width: fit-content;
 }
 
 #adm_dropdown_user_photo .dropdown-menu {
@@ -109,12 +129,29 @@
 .admidio-headline-mobile-menu {
     width: 100%;
     font-size: 1.1rem;
-    color: var(--bs-secondary);
+    color: var(--bs-primary);
     letter-spacing: 2px;
 }
 
-.admidio-headline-mobile-menu .btn {
+.admidio-headline-mobile-menu .btn,
+.admidio-headline-mobile-menu .btn:hover,
+.admidio-headline-mobile-menu .btn:focus,
+.admidio-headline-mobile-menu .btn:active {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0;
+    line-height: 1;
+    color: inherit;
+}
+
+.admidio-headline-mobile-menu .btn .bi {
+    margin-right: 0;
+}
+
+.admidio-headline-mobile-menu .bi::before {
+    vertical-align: 0;
+    line-height: 1;
 }
 
 .admidio-menu-list {
@@ -122,12 +159,12 @@
 }
 
 .admidio-menu-list a {
-    color: var(--bs-tertiary);
+    color: var(--bs-body-color);
 }
 
 .admidio-menu-list a:hover {
-    color: var(--admidio-menu-font-color-hover);
-    background-color: var(--admidio-menu-bg-color-hover);
+    color: var(--admidio-header-font-color);
+    background-color: var(--bs-primary);
 }
 
 @media (min-width: 768px)
@@ -150,7 +187,7 @@
     text-transform: uppercase;
     padding: 0.5rem 1rem;
     margin: 0;
-    color: rgba(222, 222, 222, 0.65);
+    color: var(--bs-primary);
 }
 
 /***********************************/
@@ -171,6 +208,39 @@
 }
 
 /***********************************/
+/* Navigation text selection */
+/***********************************/
+
+/* Prevent accidental text selection while tapping through the navigation on touch devices.
+   user-select: none also applies to all child elements, so no * selectors are necessary.
+   Only add navigation and UI elements here and no containers with input fields or content. */
+#adm_main_navbar,
+.admidio-sidebar,
+.admidio-breadcrumb,
+.admidio-content-header,
+.navbar-filter .navbar-brand,
+.nav-tabs .nav-link,
+.pagination,
+.plgCalendarWeekday,
+.plgCalendarWeekdaySaturday,
+.plgCalendarWeekdaySunday,
+#adm_logout_link {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Text that could not be selected and is no link should not show the text cursor */
+.admidio-module-headline,
+.admidio-headline-mobile-menu,
+.admidio-menu-header,
+.breadcrumb-item.active,
+.plgCalendarWeekday,
+.plgCalendarWeekdaySaturday,
+.plgCalendarWeekdaySunday {
+    cursor: default;
+}
+
+/***********************************/
 /* Default tags */
 /***********************************/
 
@@ -180,6 +250,10 @@ a {
 
 .btn, .btn:hover {
     color: var(--bs-body-bg);
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: none;
 }
 
 .btn-primary {
@@ -206,10 +280,32 @@ a {
     border-color: var(--bs-primary) !important;
 }
 
+/* Use the btn-secondary variables on file inputs for their native buttons. */
+input[type="file"].btn-secondary::file-selector-button {
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+    border-color: var(--bs-btn-border-color);
+}
+
+input[type="file"].btn-secondary:hover:not(:disabled):not([readonly])::file-selector-button {
+    color: var(--bs-btn-hover-color);
+    background-color: var(--bs-btn-hover-bg);
+    border-color: var(--bs-btn-hover-border-color);
+}
+
+.admidio-attachment-upload button.btn-secondary:hover {
+    background-color: var(--bs-danger);
+    border-color: var(--bs-danger);
+}
+
 .btn-check:checked + .btn {
     color: var(--bs-body-bg) !important;
     background-color: var(--bs-secondary);
     border-color: var(--bs-secondary) !important;
+}
+
+.bg-info {
+    background-color: var(--bs-secondary) !important;
 }
 
 /* default distance between elements */
@@ -234,7 +330,7 @@ a {
 /* add 5px distance to all icons within a icon text combination */
 .admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
 .admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
-.accordion .bi, .form-control-static > .bi, .icon-link .bi  {
+.accordion .bi, .form-control-static > .bi {
     margin-right: 0.5rem;
 }
 
@@ -261,6 +357,7 @@ a {
 .alert-info {
     background-color: color-mix(in srgb, var(--bs-primary) 40%, white);
     border-color: color-mix(in srgb, var(--bs-primary) 70%, white);
+    color: color-mix(in srgb, var(--bs-primary) 80%, black);
 }
 
 /* show vertical btn group in mobile view */
@@ -347,6 +444,19 @@ label {
 
 .form-separator-line + label {
     font-size: 1.25em;
+    text-decoration: underline;
+}
+
+.admidio-form-separator-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding-right: calc(var(--bs-gutter-x) * 0.25);
+}
+
+.admidio-form-separator-label .admidio-open-close-caret {
+    flex: 0 0 auto;
+    align-self: center;
 }
 
 @media (min-width: 768px) {
@@ -370,6 +480,11 @@ label {
             padding: 0 !important;
             margin: 0 !important;
     }
+}
+
+.admidio-form-custom-content > div {
+    padding-top: calc(0.375rem + 1px);
+    padding-bottom: calc(0.375rem + 1px);
 }
 
 /***********************************/
@@ -416,13 +531,13 @@ label {
     flex-wrap: nowrap;     /* never wrap */
     width: 100%;
 }
-  
+
 .admidio-tabs .nav-item, .admidio-tabs .nav-link {
     display: flex;
 }
-  
+
 .admidio-tabs .nav-link {
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     max-width: 250px;
@@ -487,12 +602,34 @@ label {
     border: none;
     background-color: var(--bs-tertiary);
     margin: 1rem 0;
-    height: 95%;
+    min-height: 95%;
+}
+
+.admidio-album-info {
+    background-color: var(--bs-tertiary);
 }
 
 .admidio-blog img, .admidio-card img {
     max-width: 100%;
     height: auto;
+}
+
+.admidio-blog .card-body table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.admidio-blog .card-body td {
+    border: 1px solid var(--bs-border-color);
+    padding: 0.25rem;
+}
+
+.admidio-blog .card-body iframe.ql-video {
+    display: block;
+    width: min(100%, 560px);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
 }
 
 .admidio-card li {
@@ -501,9 +638,48 @@ label {
     background-color: var(--bs-tertiary);
 }
 
+.admidio-contribution-icon {
+    position: relative;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    vertical-align: -0.125em;
+}
+
+.admidio-contribution-currency {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 0.55em;
+    transform: translate(-50%, -45%);
+}
+
 /***********************************/
 /* Tabs */
 /***********************************/
+
+/* Event fields are shared by desktop tabs and the mobile accordion. */
+@media (min-width: 768px) {
+    .admidio-event-tabs .accordion-item {
+        border: 0;
+    }
+
+    .admidio-event-tabs .accordion-collapse {
+        display: block;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .tabs-x.admidio-event-tabs .tab-content > .tab-pane {
+        display: block;
+    }
+
+    .tabs-x.admidio-event-tabs .tab-content {
+        padding: 0;
+        border: 0;
+    }
+}
 
 .tab-content {
     padding: 1rem 1rem 0 1rem;
@@ -520,7 +696,7 @@ label {
 .accordion {
     --bs-accordion-bg: var(--bs-body-bg);
     --bs-accordion-btn-color: var(--bs-link-color);
-    --bs-accordion-active-color: var(--bs-tertiary);
+    --bs-accordion-active-color: var(--bs-body-color);
     --bs-accordion-active-bg: var(--bs-secondary);
 }
 
@@ -595,7 +771,7 @@ label {
 /***********************************/
 
 .table td, .table th {
-    color: var(--bs-secondary);
+    color: var(--bs-body-color);
 }
 
 .table-hover tbody tr td .admidio-functions {
@@ -604,6 +780,13 @@ label {
 
 .table-hover tbody tr:hover td .admidio-functions {
     visibility: visible;
+}
+
+.admidio-category-report-scroll {
+    width: 100%;
+    min-height: 20rem;
+    margin-bottom: 1rem;
+    overflow: auto;
 }
 
 /***********************************/
@@ -627,17 +810,24 @@ label {
 }
 
 .dropdown-item {
-    color: var(--bs-secondary);
+    color: var(--bs-body-color);
     background: var(--bs-body-bg);
+}
+
+.dropdown-item:hover {
+    color: var(--bs-body-bg);
+    background: var(--bs-primary);
 }
 
 .popover {
     --bs-popover-bg: var(--bs-body-bg);
-    --bs-popover-header-bg: var(--bs-tertiary);
+    --bs-popover-header-bg: var(--bs-secondary);
 }
 
 .tooltip {
+    --bs-tooltip-color: var(--bs-body-color);
     --bs-tooltip-bg: var(--bs-secondary);
+    --bs-tooltip-opacity: unset;
 }
 
 .breadcrumb {
@@ -657,6 +847,7 @@ label {
 }
 
 .page-item.active .page-link {
+    color: var(--bs-body-color);
     background-color: var(--bs-secondary);
     border-color: var(--bs-secondary);
 }
@@ -664,6 +855,10 @@ label {
 #adm_imprint {
     margin-bottom: 2rem;
     font-size: 80%;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    hyphens: none;
 }
 
 .admidio-info-icon {
@@ -672,7 +867,7 @@ label {
     margin-left: 0.5rem;
 }
 
-#adm_profile_photo {
+#adm_profile_photo, #adm_inventory_item_picture {
     max-width: 300px;
     width: 100% !important;
     object-fit: cover !important;
@@ -684,7 +879,6 @@ label {
 
 .admidio-event-highlight .card-header {
     background-color: var(--bs-secondary);
-    color: var(--bs-tertiary);
 }
 
 tr.admidio-event-highlight {
@@ -762,6 +956,22 @@ tr.admidio-event-highlight {
     color: var(--bs-body-bg);
 }
 
+#plgCalendarTable td.plgCalendarToday a,
+#plgCalendarTable td.plgCalendarToday span {
+    color: var(--bs-body-bg);
+}
+
+#plgCalendarTable td.plgCalendarToday a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+#plgCalendarTable td.plgCalendarToday a:hover,
+#plgCalendarTable td.plgCalendarToday a:focus {
+    color: var(--bs-body-bg);
+    text-decoration: underline;
+}
+
 #plgCalendarTable td {
     text-align: center;
 }
@@ -805,6 +1015,21 @@ ul.changelog-tableselect-list {
     list-style-type: none;
 }
 
+/* An area of the change history has three states. Bootstrap fills the indeterminate state with
+   the same colour as the checked one, so an area whose objects are only logged in part would
+   look like a fully logged one. Only the fill is muted here, the dash of Bootstrap is kept. */
+ul.changelog-tableselect-list .form-check-input[type=checkbox]:indeterminate {
+    background-color: #999999;
+    border-color: #999999;
+}
+
+/* The single entries that one change consists of are shown in a table inside the row of that
+   change. It is indented on both sides, so that it is clearly subordinate to its row, and it
+   scrolls on its own if its values are wider than the space that is left. */
+div.adm-changelog-details-table {
+    margin: 0.5rem 6rem;
+}
+
 /************************************/
 /* subinfo form controls (showing/hiding rows) */
 /************************************/
@@ -814,7 +1039,7 @@ ul.changelog-tableselect-list {
   font-weight: normal;
 }
 .subinfo-sub-row, .subinfo-row {
-  margin-bottom: 0pt !important;
+  margin-bottom: 0 !important;
 }
 .subinfo_head {
   margin-bottom: 1.5rem;
@@ -824,10 +1049,10 @@ ul.changelog-tableselect-list {
     padding-bottom: 2pt;
 }
 
-.subinfo-row .form-control-plaintext {
+.subinfo-row .form-text {
   width: 75%;
 }
-.subinfo-sub-row .form-control-plaintext {
+.subinfo-sub-row .form-text {
   width: 75%;
   padding-bottom: 0;
   padding-top: 0;

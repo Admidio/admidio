@@ -55,36 +55,38 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     } elseif ($gSettingsManager->getInt('forum_module_enabled') === 1
         && !in_array($getMode, array('cards', 'list', 'topic')) && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
+        require(__DIR__ . '/../system/login_valid.php');
+    } elseif ($gSettingsManager->getInt('forum_module_enabled') === 2 && !$gValidLogin) {
+        require(__DIR__ . '/../system/login_valid.php');
     }
 
     switch ($getMode) {
         case 'cards':
-            $page = new ForumPresenter($getCategoryUUID);
-            $page->createCards($getOffset);
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
-            $page->show();
+            $forum = new ForumPresenter($getCategoryUUID);
+            $forum->createCards($getOffset);
+            $gNavigation->addStartUrl(CURRENT_URL, $forum->getHeadline(), 'bi-chat-dots-fill');
+            $forum->show();
             break;
 
         case 'list':
-            $page = new ForumPresenter($getCategoryUUID);
-            $page->createList();
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
-            $page->show();
+            $forum = new ForumPresenter($getCategoryUUID);
+            $forum->createList();
+            $gNavigation->addStartUrl(CURRENT_URL, $forum->getHeadline(), 'bi-chat-dots-fill');
+            $forum->show();
             break;
 
         case 'topic':
-            $page = new ForumTopicPresenter($getTopicUUID);
-            $page->createCards($getOffset);
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
-            $page->show();
+            $forumTopic = new ForumTopicPresenter($getTopicUUID);
+            $forumTopic->createCards($getOffset);
+            $gNavigation->addUrl(CURRENT_URL, $forumTopic->getHeadline());
+            $forumTopic->show();
             break;
 
         case 'topic_edit':
-            $page = new ForumTopicPresenter($getTopicUUID);
-            $page->createEditForm();
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
-            $page->show();
+            $forumTopic = new ForumTopicPresenter($getTopicUUID);
+            $forumTopic->createEditForm();
+            $gNavigation->addUrl(CURRENT_URL, $forumTopic->getHeadline());
+            $forumTopic->show();
             break;
 
         case 'topic_save':
@@ -103,15 +105,19 @@ try {
 
             $topic = new Topic($gDb);
             $topic->readDataByUuid($getTopicUUID);
-            $topic->delete();
-            echo json_encode(array('status' => 'success'));
+            if ($topic->isEditable()) {
+                $topic->delete();
+                echo json_encode(array('status' => 'success'));
+            } else {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             break;
 
         case 'post_edit':
-            $page = new ForumPostPresenter($getPostUUID);
-            $page->createEditForm($getTopicUUID);
-            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
-            $page->show();
+            $forumPost = new ForumPostPresenter($getPostUUID);
+            $forumPost->createEditForm($getTopicUUID);
+            $gNavigation->addUrl(CURRENT_URL, $forumPost->getHeadline());
+            $forumPost->show();
             break;
 
         case 'post_save':
@@ -130,14 +136,16 @@ try {
 
             $post = new Post($gDb);
             $post->readDataByUuid($getPostUUID);
-            $post->delete();
-            echo json_encode(array('status' => 'success'));
+            $topic = new Topic($gDb);
+            $topic->readDataByUuid($post->getValue('fot_uuid'));
+            if ($topic->isCategoryEditable() && $post->isEditableByCurrentUser()) {
+                $post->delete();
+                echo json_encode(array('status' => 'success'));
+            } else {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('topic_save', 'topic_delete', 'post_save', 'post_delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('topic_save', 'topic_delete', 'post_save', 'post_delete')));
 }

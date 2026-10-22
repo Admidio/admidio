@@ -15,7 +15,6 @@
  */
 
 use Admidio\Forum\Service\ForumService;
-use Admidio\Infrastructure\Exception;
 
 try {
     require_once(__DIR__ . '/../system/common.php');
@@ -23,14 +22,9 @@ try {
     // Initialize and check the parameters
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
-    // check if module is active
-    if ($gSettingsManager->getInt('forum_module_enabled') === 0) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    }
-
-    // Show the RSS feed of the forum topics
+    // The service checks RSS and module access for the requested organization.
     $forumService = new ForumService($gDb);
     $forumService->rssFeed($getOrganization);
 } catch (Throwable $e) {
-    echo $e->getMessage();
+    handleException($e);
 }

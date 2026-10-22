@@ -3,6 +3,7 @@ namespace Admidio\Infrastructure\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 
 /**
  * @brief Class manages access to database table adm_texts
@@ -13,6 +14,57 @@ use Admidio\Infrastructure\Exception;
  */
 class Text extends Entity
 {
+    public const SYSTEM_MAIL_DEFAULTS = array(
+        'SYSMAIL_REGISTRATION_CONFIRMATION' => 'SYS_SYSMAIL_REGISTRATION_CONFIRMATION',
+        'SYSMAIL_REGISTRATION_NEW' => 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR',
+        'SYSMAIL_REGISTRATION_APPROVED' => 'SYS_SYSMAIL_REGISTRATION_USER',
+        'SYSMAIL_REGISTRATION_REFUSED' => 'SYS_SYSMAIL_REFUSE_REGISTRATION',
+        'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SYSMAIL_LOGIN_INFORMATION',
+        'SYSMAIL_PASSWORD_RESET' => 'SYS_SYSMAIL_PASSWORD_RESET',
+    );
+
+    /** Null means that no custom version has been saved yet; an empty version is intentional. */
+    public function getSystemMailCustomText(): ?string
+    {
+        $active = $this->getValue('txt_text', 'database');
+        return Language::isTranslationStringId($active) ? $this->dbColumns['txt_custom_text'] : $active;
+    }
+
+    /** Switch the active mail template without discarding the administrator's own text. */
+    public function setSystemMailTemplate(bool $useDefault, ?string $customText = null): void
+    {
+        $name = $this->getValue('txt_name', 'database');
+        if (!isset(self::SYSTEM_MAIL_DEFAULTS[$name])) {
+            throw new \InvalidArgumentException('Unknown system mail template: ' . $name);
+        }
+        $id = self::SYSTEM_MAIL_DEFAULTS[$name];
+        $active = $this->getValue('txt_text', 'database');
+
+        // Also preserve existing custom templates created before the switch was introduced.
+        if (!Language::isTranslationStringId($active)) {
+            $this->setValue('txt_custom_text', $active);
+        }
+        if ($customText !== null && Language::isTranslationStringId(trim($customText))) {
+            // Entering a translation ID restores the standard without replacing the backup.
+            $useDefault = true;
+        } elseif ($customText !== null) {
+            $this->setValue('txt_custom_text', $customText);
+        }
+
+        if ($useDefault) {
+            $this->setValue('txt_text', $id);
+        } else {
+            $custom = $this->dbColumns['txt_custom_text'];
+            if ($custom === null) {
+                $custom = self::translateColumnValue('txt_text', $id);
+                $this->setValue('txt_custom_text', $custom);
+            }
+            // An explicit custom mode must store text even when it equals today's default.
+            parent::setValue('txt_text', null, false);
+            $this->setValue('txt_text', $custom);
+        }
+    }
+
     /**
      * Constructor that will create an object of a recordset of the table adm_texts.
      * If the id is set than the specific text will be loaded.
@@ -26,22 +78,12 @@ class Text extends Entity
         parent::__construct($database, TBL_TEXTS, 'txt', $name);
     }
 
-    /**
-     * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string Returns the value of the database column.
-     *                    If the value was manipulated before with **setValue** than the manipulated value is returned.
-     * @throws Exception
-     */
-    public function getValue(string $columnName, string $format = '')
+    /** The text format resolves a template ID without HTML-encoding the mail body. */
+    public function getValue(string $columnName, string $format = ''): mixed
     {
-        if ($columnName === 'txt_text') {
-            return $this->dbColumns['txt_text'];
+        if ($columnName === 'txt_text' && $format === 'text') {
+            return self::translateColumnValue($columnName, parent::getValue($columnName, 'database'));
         }
-
         return parent::getValue($columnName, $format);
     }
 
@@ -74,11 +116,16 @@ class Text extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        if ($columnName === 'txt_text') {
+        if (in_array($columnName, array('txt_text', 'txt_custom_text'), true) && $newValue !== null) {
             // convert <br /> to a normal line feed
             $newValue = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', chr(13) . chr(10), $newValue);
+        }
+
+        if ($columnName === 'txt_custom_text' && $newValue === '') {
+            // Preserve an intentionally empty custom version separately from "not created yet".
+            return parent::setValue($columnName, '', false);
         }
 
         return parent::setValue($columnName, $newValue, $checkValue);
@@ -88,7 +135,7 @@ class Text extends Entity
      * Return a human-readable representation of this record.
      * If a column [prefix]_name exists, it is returned, otherwise the id.
      * This method can be overridden in child classes for custom behavior.
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
      */
     public function readableName(): string
@@ -98,20 +145,18 @@ class Text extends Entity
             'SYSMAIL_REGISTRATION_NEW' => 'SYS_NOTIFICATION_NEW_REGISTRATION',
             'SYSMAIL_REGISTRATION_APPROVED' => 'SYS_NOTIFICATION_REGISTRATION_APPROVAL',
             'SYSMAIL_REGISTRATION_REFUSED' => 'ORG_REFUSE_REGISTRATION',
-            'SYSMAIL_NEW_PASSWORD' => 'ORG_SEND_NEW_PASSWORD',
+            'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SEND_LOGIN_INFORMATION',
             'SYSMAIL_PASSWORD_RESET' => 'SYS_PASSWORD_FORGOTTEN',
         );
 //        $textLabel = Language::translateIfTranslationStrId($textLabels[$row['name']]);
         if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {
             $textLabel = $this->dbColumns[$this->columnPrefix.'_name'];
-            if (array_key_exists($textLabel, $textLabels)) {
-                return $textLabels[$textLabel];
-            } else {
-                return $textLabel;
-            }
+            $name = array_key_exists($textLabel, $textLabels) ? $textLabels[$textLabel] : $textLabel;
         } else {
-            return $this->dbColumns[$this->keyColumnName];
+            $name = $this->dbColumns[$this->keyColumnName];
         }
+
+        return $this->filterReadableName($name);
     }
     /**
      * Retrieve the list of database fields that are ignored for the changelog.

@@ -94,7 +94,7 @@ try {
     if ($getSearch !== '' && count($searchColumns) > 0) {
         $searchString = explode(' ', $getSearch);
 
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $searchValue = ' ?::text ';
         } else {
             // mysql
@@ -207,7 +207,7 @@ try {
         $arrContent['4'] = $messageObject->getValue('msg_timestamp');
         $arrContent['5'] = $links . '
             <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                data-message="' . $gL10n->get('SYS_DELETE_MESSAGE', array($messageObject->getValue('msg_subject', 'database'))) . '"
+                data-message="' . $gL10n->get('SYS_DELETE_MESSAGE', array($messageObject->getValue('msg_subject'))) . '"
                 data-href="callUrlHideElement(\'row_message_' . $message['msg_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $message['msg_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                 <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_MESSAGE') . '"></i>
             </a>';
@@ -238,7 +238,8 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();

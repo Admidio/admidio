@@ -34,6 +34,7 @@ use Admidio\Documents\Entity\File;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Documents\Service\DocumentsService;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\DocumentsPresenter;
 
 try {
@@ -61,11 +62,7 @@ try {
                 'download')
         )
     );
-    $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid',
-        array(
-            'requireValue' => !in_array($getMode, array('list', 'file_delete', 'download'))
-        )
-    );
+    $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
     $getFileUUID = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
 
     // Check if the module is activated
@@ -73,6 +70,24 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     } elseif ($gSettingsManager->getInt('documents_files_module_enabled') === 2 && !$gValidLogin) {
         throw new Exception('SYS_NO_RIGHTS');
+    }
+
+    if ($getMode != 'list' && $getMode != 'download') {
+        if ($getFileUUID !== '') {
+            // when file UUID is set then read the folder of that file from database and check the rights
+            $file = new File($gDb);
+            $file->readDataByUuid($getFileUUID);
+            $getFolderUUID = $file->getValue('fol_uuid');
+        }
+        // check the rights of the current folder
+        // user must be administrator or must have the right to upload files
+        $folder = new Folder($gDb);
+        $folder->getFolderForDownload($getFolderUUID);
+
+        if (!$folder->hasUploadRight()) {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            // => EXIT
+        }
     }
 
     switch ($getMode) {
@@ -124,6 +139,8 @@ try {
                 // the uuid of the current folder must be set
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             } else {
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
                 $folder = new Folder($gDb);
                 $folder->getFolderForDownload($getFolderUUID);
 
@@ -152,6 +169,8 @@ try {
                 // if no file id was set then show error
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             } else {
+                SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
                 $file = new File($gDb);
                 $file->getFileForDownload($getFileUUID);
 
@@ -202,7 +221,8 @@ try {
             break;
 
         case 'add':
-            $getName = admFuncVariableIsValid($_GET, 'name', 'string');
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $getName = admFuncVariableIsValid($_GET, 'name', 'file');
 
             // only users with download administration rights should set new roles rights
             if (!$gCurrentUser->isAdministratorDocumentsFiles()) {
@@ -224,13 +244,22 @@ try {
             $getView = admFuncVariableIsValid($_GET, 'view', 'bool', array('defaultValue' => false));
 
             $documentsService = new DocumentsService($gDb);
-            $documentsService->downloadFile($getFileUUID, $getView);
+            try {
+                $documentsService->downloadFile($getFileUUID, $getView);
+            } catch (Exception $e) {
+                // A visitor who isn't logged in should see the login page, like for the link of a folder.
+                // After the login the file will be shown if the user has the right to see it.
+                if (!$gValidLogin && $e->getMessage() === $gL10n->get('SYS_FOLDER_NO_RIGHTS')) {
+                    throw new Exception('LOGIN');
+                }
+                throw $e;
+            }
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    if ($e->getMessage() === 'LOGIN') {
+        require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {
-        $gMessage->show($e->getMessage());
+        handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save')));
     }
 }

@@ -41,6 +41,15 @@ class Folder extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'folder';
+    }
+
+    /**
      * @param array<string,array<int,array<string,mixed>>> $completeFolder
      * @return array<string,array<int,array<string,mixed>>>
      * @throws Exception
@@ -124,6 +133,20 @@ class Folder extends Entity
         $newObjectPath = $this->getFullFolderPath() . '/' . $newFolderFileName;
         $folderId = (int)$this->getValue('fol_id');
 
+        // Ensure the resolved path is within the folder directory.
+        // realpath() uses the native directory separator, so normalize both paths before comparing them.
+        $realPath = realpath($newObjectPath);
+        $folderPath = realpath($this->getFullFolderPath());
+        if ($realPath === false || $folderPath === false) {
+            throw new Exception('SYS_FILENAME_INVALID');
+        }
+
+        $realPath = str_replace('\\', '/', $realPath);
+        $folderPath = rtrim(str_replace('\\', '/', $folderPath), '/');
+        if (!str_starts_with($realPath, $folderPath . '/')) {
+            throw new Exception('SYS_FILENAME_INVALID');
+        }
+
         // check if a file or folder should be created
         if (is_file($newObjectPath)) {
             // add the file to the database
@@ -193,7 +216,7 @@ class Folder extends Entity
 
         try {
             FileSystemUtils::createDirectoryIfNotExists($baseFolder . '/' . $folderName);
-        } catch (\RuntimeException $exception) {
+        } catch (\RuntimeException) {
             return array(
                 'text' => 'SYS_FOLDER_NOT_CREATED',
                 'path' => $baseFolder . '/' . $folderName
@@ -696,6 +719,11 @@ class Folder extends Entity
             $folId = (int)$this->getValue('fol_id');
             $this->folderViewRolesObject = new RolesRights($this->db, 'folder_view', $folId);
             $this->folderUploadRolesObject = new RolesRights($this->db, 'folder_upload', $folId);
+
+            // check if folder belongs to this organization
+            if ($this->getValue('fol_org_id') > 0 && $this->getValue('fol_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Folder ' . $this->getValue('fol_uuid') . ' belongs to another organization.');
+            }
 
             return true;
         }

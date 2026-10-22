@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -8,12 +9,13 @@ use PDOStatement;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
- * @brief Handle the connection to the database, send all sql statements and handle the returned rows.
+ * @brief Handle the connection to the database, send all SQL statements and handle the returned rows.
  *
  * This class creates a connection to the database and provides several methods
- * to communicate with the database. There are methods to send sql statements
+ * to communicate with the database. There are methods to send SQL statements
  * and to handle the response of the database. This class also supports transactions.
  * Just call Database#startTransaction and finish it with Database#endTransaction. If
  * you call this multiple times only 1 transaction will be open, and it will be closed
@@ -25,9 +27,9 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * // create object and open connection to database
  * try
  * {
- *     $gDb = new Database(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
+ *     $gDb = new Database(DB_TYPE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
  * }
- * catch (Exception $e)
+ * catch (Throwable $e)
  * {
  *     $e->showText();
  * }
@@ -36,7 +38,7 @@ use Admidio\Infrastructure\Utils\StringUtils;
  * **Code example**
  * ```
  * // Now you can use the new object **$gDb** to send a query to the database
- * // send sql to database and assign the returned PDOStatement
+ * // send SQL to database and assign the returned PDOStatement
  * $organizationsStatement = $gDb->queryPrepared('SELECT org_shortname, org_longname FROM ' . TBL_ORGANIZATIONS);
  *
  * // now fetch all rows of the returned PDOStatement within one array
@@ -65,13 +67,25 @@ use Admidio\Infrastructure\Utils\StringUtils;
  */
 class Database
 {
+    public const DB_TYPE_MARIADB = 'mariadb';
+    public const DB_TYPE_MYSQL = 'mysql';
+    public const DB_TYPE_PGSQL = 'pgsql';
+
     public const PDO_ENGINE_MYSQL = 'mysql';
     public const PDO_ENGINE_PGSQL = 'pgsql';
 
     /**
-     * @var string The database engine ("mysql", "pgsql")
+     * @var string The database engine that will be used for db access with DBO ("mysql", "pgsql")
      */
     protected string $engine;
+    /**
+     * @var string The database type that will describe all supported databases ("mysql", "pgsql", "mariadb")
+     */
+    protected string $type;
+    /**
+     * @var string The version of the database
+     */
+    protected string $version;
     /**
      * @var string The host of the database server ("localhost", "127.0.0.1")
      */
@@ -106,14 +120,21 @@ class Database
      */
     protected PDO $pdo;
     /**
-     * @var PDOStatement $pdoStatement The PDOStatement object which is needed to handle the return of a query.
-     * #todo# add union datatype PDOStatement|boolean when minimum requirement is PHP8
+     * @var PDOStatement|bool $pdoStatement The PDOStatement object which is needed to handle the return of a query.
      */
-    protected $pdoStatement;
+    protected PDOStatement|bool $pdoStatement;
     /**
      * @var int The transaction marker. If this is > 0 than a transaction is open.
      */
     protected int $transactions = 0;
+    /**
+     * @var array<int,callable> Work that may only run once the outermost transaction has committed.
+     */
+    protected array $afterCommitCallbacks = array();
+    /**
+     * @var array<int,callable> Work that has to run when the transaction did not commit.
+     */
+    protected array $afterRollbackCallbacks = array();
     /**
      * @var array<string,array<string,array<string,mixed>>> Array with arrays of every table with their structure
      */
@@ -130,45 +151,59 @@ class Database
     /**
      * Simple way to create a database object with the default Admidio globals
      * @return self Returns a Database instance
+     * @throws Exception
      */
     public static function createDatabaseInstance(): Database
     {
         global $gLogger;
 
+        $engine = DB_TYPE;
+
+        // PDO does not support mariadb as engine, but since mariadb is compatible to mysql we can use the mysql driver for it.
+        if ($engine === self::DB_TYPE_MARIADB) {
+            $engine = self::PDO_ENGINE_MYSQL;
+        }
+
         $gLogger->debug(
             'DATABASE: Create DB-Instance with default params!',
             array(
-                'engine' => DB_ENGINE, 'host' => DB_HOST, 'port' => DB_PORT,
+                'engine' => $engine, 'host' => DB_HOST, 'port' => DB_PORT,
                 'name' => DB_NAME, 'username' => DB_USERNAME, 'password' => '******'
             )
         );
 
-        return new self(DB_ENGINE, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
+        return new self($engine, DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD);
     }
 
     /**
      * The constructor will check if a valid engine was set and try to connect to the database.
      * If the engine is invalid or the connection not possible an exception will be thrown.
-     * @param string $engine   The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
-     * @param string $host     The hostname or server where the database is running. e.g. localhost or 127.0.0.1
-     * @param int|null $port        If you don't use the default port of the database then set your port here.
-     * @param string $dbName   Name of the database you want to connect.
+     * @param string $engine The database type that is supported from Admidio. **mysql** and **pgsql** are valid values.
+     * @param string $host The hostname or server where the database is running. e.g. localhost or 127.0.0.1
+     * @param int|null $port If you don't use the default port of the database then set your port here.
+     * @param string $dbName Name of the database you want to connect.
      * @param string|null $username Username to connect to database
      * @param string|null $password Password to connect to database
-     * @param array  $options
+     * @param array $options
      * @throws Exception
      */
     public function __construct(string $engine, string $host, ?int $port, string $dbName, ?string $username = null, ?string $password = null, array $options = array())
     {
         global $gLogger;
 
-        $this->engine   = $engine;
-        $this->host     = $host;
-        $this->port     = $port;
-        $this->dbName   = $dbName;
+        // PDO does not support mariadb as engine, but since mariadb is compatible to mysql we can use the mysql driver for it.
+        if ($engine === self::DB_TYPE_MARIADB) {
+            $this->engine = self::PDO_ENGINE_MYSQL;
+        } else {
+            $this->engine = $engine;
+        }
+        $this->type = $engine;
+        $this->host = $host;
+        $this->port = $port;
+        $this->dbName = $dbName;
         $this->username = $username;
         $this->password = $password;
-        $this->options  = $options;
+        $this->options = $options;
 
         $this->connect();
 
@@ -176,11 +211,10 @@ class Database
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a PDO-Statement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Exclude PDO objects while retaining the legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         global $gLogger;
 
@@ -188,7 +222,17 @@ class Database
             $gLogger->debug('DATABASE: sleep/serialize!');
         }
 
-        return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0*\0" . $name,
+            array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**
@@ -210,9 +254,24 @@ class Database
     }
 
     /**
+     * Method will check if the database version is at least the minimum required version.
+     * @return bool Return true if the database version is at least the minimum required version. Otherwise, false will be returned.
      * @throws Exception
      */
-    protected function connect()
+    public function checkMinimumRequiredVersion(): bool
+    {
+        $this->getInformation();
+
+        if (version_compare($this->version, $this->getMinimumRequiredVersion(), '<')) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function connect(): void
     {
         global $gLogger;
 
@@ -225,13 +284,13 @@ class Database
             $this->setConnectionOptions();
         } catch (PDOException $e) {
             $logContext = array(
-                'engine'   => $this->engine,
-                'host'     => $this->host,
-                'port'     => $this->port,
-                'dbName'   => $this->dbName,
+                'engine' => $this->engine,
+                'host' => $this->host,
+                'port' => $this->port,
+                'dbName' => $this->dbName,
                 'username' => $this->username,
                 'password' => '******',
-                'options'  => $this->options
+                'options' => $this->options
             );
             $gLogger->alert('DATABASE: Could not connect to Database! EXCEPTION MSG: ' . $e->getMessage(), $logContext);
 
@@ -273,15 +332,119 @@ class Database
         $result = $this->pdo->commit();
 
         if (!$result) {
+            // showError() rolls back and runs the after-rollback callbacks
             $this->showError();
             // => EXIT
         }
 
         $this->transactions = 0;
 
+        // The change is in the database now, so the work that was waiting for it may run. It runs
+        // outside the transaction on purpose: it is allowed to fail without taking the change with
+        // it, and it may open a transaction of its own.
+        $this->runAfterCommitCallbacks();
+
         return $result;
     }
 
+
+    /**
+     * Register work that may only be done once the change is really in the database. If no
+     * transaction is open, the statement itself was the commit and the callback runs immediately;
+     * otherwise it runs when the outermost transaction is committed and never at all if that
+     * transaction is rolled back or abandoned.
+     *
+     * This is infrastructure for the persistence hooks and not an extension point of its own. A
+     * plugin does not register here, it listens to entity_created and its relatives, which use it.
+     *
+     * @param callable $callback The work that has to wait for the commit.
+     * @return void
+     * @see Database#registerAfterRollback
+     */
+    public function registerAfterCommit(callable $callback): void
+    {
+        if ($this->transactions === 0) {
+            $callback();
+            return;
+        }
+
+        $this->afterCommitCallbacks[] = $callback;
+    }
+
+    /**
+     * Register work that has to be done when the transaction does not reach the database: a
+     * rollback, a failed commit, or a request that ends while a transaction is still open. It is
+     * how the failure hooks get their chance to release what a pre-action reserved.
+     *
+     * @param callable $callback The work that has to run when the change is lost.
+     * @return void
+     * @see Database#registerAfterCommit
+     */
+    public function registerAfterRollback(callable $callback): void
+    {
+        $this->afterRollbackCallbacks[] = $callback;
+    }
+
+    /**
+     * Whether a transaction is currently open. A caller that has to know whether its change is
+     * already final asks this instead of counting its own start and end calls.
+     * @return bool Returns **true** while a transaction is open.
+     */
+    public function isInTransaction(): bool
+    {
+        return $this->transactions > 0;
+    }
+
+    /**
+     * Run and drop the callbacks that were waiting for the commit. A failing callback is logged and
+     * does not keep the remaining ones from running: the change is written, and the work that
+     * follows it has to be attempted as far as it can be.
+     * @return void
+     */
+    protected function runAfterCommitCallbacks(): void
+    {
+        global $gLogger;
+
+        $callbacks = $this->afterCommitCallbacks;
+        $this->afterCommitCallbacks = array();
+        $this->afterRollbackCallbacks = array();
+
+        foreach ($callbacks as $callback) {
+            try {
+                $callback();
+            } catch (\Throwable $exception) {
+                if ($gLogger instanceof \Psr\Log\LoggerInterface) {
+                    $gLogger->error('DATABASE: after-commit callback failed', array('exception' => $exception));
+                }
+                throw $exception;
+            }
+        }
+    }
+
+    /**
+     * Run and drop the callbacks of a transaction that did not reach the database. Their failure is
+     * logged and swallowed: they are cleanup, and the reason the transaction was lost has to stay
+     * the failure that Admidio reports.
+     * @return void
+     */
+    public function runAfterRollbackCallbacks(): void
+    {
+        global $gLogger;
+
+        $callbacks = $this->afterRollbackCallbacks;
+        $this->afterCommitCallbacks = array();
+        $this->afterRollbackCallbacks = array();
+
+        foreach ($callbacks as $callback) {
+            try {
+                $callback();
+            } catch (\Throwable $exception) {
+                if ($gLogger instanceof \Psr\Log\LoggerInterface) {
+                    $gLogger->error('DATABASE: after-rollback callback failed', array('exception' => $exception));
+                }
+            }
+        }
+    }
     /**
      * Escapes special characters within the input string.
      * Note: This method will add a high comma at the beginning and the end of the $string.
@@ -305,7 +468,7 @@ class Database
     public function getArrayFromSql(string $sql, array $queryParameters = array()): array
     {
         $arrayResults = array();
-        $statement    = $this->queryPrepared($sql, $queryParameters);
+        $statement = $this->queryPrepared($sql, $queryParameters);
 
         while ($row = $statement->fetch()) {
             $arrayResults[] = $row;
@@ -353,18 +516,59 @@ class Database
             }
 
             $trace['class'] = array_key_exists('class', $trace) ? $trace['class'] : '';
-            $trace['type']  = array_key_exists('type', $trace) ? $trace['type'] : '';
+            $trace['type'] = array_key_exists('type', $trace) ? $trace['type'] : '';
 
             $output .= '<br />';
             $output .= '<strong>FILE:</strong> ' . SecurityUtils::encodeHTML($trace['file']) . '<br />';
             $output .= '<strong>LINE:</strong> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
 
             $output .= '<strong>CALL:</strong> ' . SecurityUtils::encodeHTML($trace['class'] . $trace['type'] . $trace['function']) .
-                       '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
+                '(' . (count($args) ? implode(', ', $args) : '') . ')<br />';
         }
         $output .= '</div>';
 
         return $output;
+    }
+
+    /**
+     * Get the database engine that is used for the connection. This is the engine that is used for the PDO connection
+     * and not the database type. For example, if you use MariaDB as database type, the engine will be MySQL,
+     * because there is no separate PDO driver for MariaDB.
+     * @return string Returns a string with the database engine e.g. 'mysql' or 'pgsql'
+     */
+    public function getEngine(): string
+    {
+        return $this->engine;
+    }
+
+    /**
+     * Get the version of the connected database. The method will also determine the database type
+     * (mysql, mariadb, pgsql) and save it in the class variable $type.
+     * @return array Returns a string with the database version e.g. '5.5.8' and the database type e.g. 'mysql' or 'pgsql' as array.
+     * @throws Exception
+     */
+    public function getInformation(): array
+    {
+        $versionStatement = $this->queryPrepared('SELECT version()');
+        $version = $versionStatement->fetchColumn();
+
+        if ($this->engine === self::PDO_ENGINE_PGSQL) {
+            // the string (Postgres 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+            $versionArray = explode(',', $version);
+            $versionArray2 = explode(' ', $versionArray[0]);
+            $this->type = $this::DB_TYPE_PGSQL;
+            $this->version = $versionArray2[1];
+        } else {
+            // Since Admidio did not differentiate between MySQL and MariaDB in the past, this must be determined here.
+            $versionArray = explode('-', $version);
+            if (isset($versionArray[1]) && $versionArray[1] === 'MariaDB') {
+                $this->type = $this::DB_TYPE_MARIADB;
+            } else {
+                $this->type = $this::DB_TYPE_MYSQL;
+            }
+            $this->version = $versionArray[0];
+        }
+        return array($this->type, $this->version);
     }
 
     /**
@@ -375,7 +579,7 @@ class Database
     public function getMinimumRequiredVersion(): string
     {
         if ($this->minRequiredVersion === '') {
-            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig('minversion');
+            $this->minRequiredVersion = $this->getPropertyFromDatabaseConfig($this->type, 'minversion');
         }
 
         return $this->minRequiredVersion;
@@ -389,22 +593,23 @@ class Database
     public function getName(): string
     {
         if ($this->databaseName === '') {
-            $this->databaseName = $this->getPropertyFromDatabaseConfig('name');
+            $this->databaseName = $this->getPropertyFromDatabaseConfig($this->type, 'name');
         }
 
         return $this->databaseName;
     }
 
     /**
+     * @param string $engine Database engine for which the property should be read
      * @param string $property Property name of the in use database config
      * @return string Returns the value of the chosen property
      * @throws Exception
      */
-    protected function getPropertyFromDatabaseConfig(string $property): string
+    protected function getPropertyFromDatabaseConfig(string $engine, string $property): string
     {
         try {
             $xmlDatabases = new \SimpleXMLElement(ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml', 0, true);
-            $node = $xmlDatabases->xpath('/databases/database[@id="' . $this->engine . '"]/' . $property);
+            $node = $xmlDatabases->xpath('/databases/database[@id="' . $engine . '"]/' . $property);
             return (string)$node[0];
         } catch (\Throwable $e) {
             throw new Exception($e->getMessage());
@@ -424,7 +629,7 @@ class Database
     {
         $sqlFileContent = FileSystemUtils::readFile($sqlFilePath);
 
-        $sqlArray = explode(';', $sqlFileContent);
+        $sqlArray = preg_split('/;\s*[\r\n]+/', $sqlFileContent, -1, PREG_SPLIT_NO_EMPTY);
 
         $sqlStatements = array();
         foreach ($sqlArray as $sql) {
@@ -474,17 +679,35 @@ class Database
      */
     public function getVersion(): string
     {
-        $versionStatement = $this->queryPrepared('SELECT version()');
-        $version = $versionStatement->fetchColumn();
-
-        if ($this->engine === self::PDO_ENGINE_PGSQL) {
-            // the string (Postgres 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
-            $versionArray  = explode(',', $version);
-            $versionArray2 = explode(' ', $versionArray[0]);
-            return $versionArray2[1];
+        if ($this->version === '') {
+            $this->getInformation();
         }
 
-        return $version;
+        return $this->version;
+    }
+
+    /**
+     * Method checks if a table exists in the current database.
+     * @param string $tableName
+     * @return bool
+     * @throws Exception
+     */
+    public function tableExists(string $tableName): bool
+    {
+        $tableExists = false;
+
+        if ($this->engine === self::PDO_ENGINE_PGSQL) {
+            $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = current_schema() AND table_name = ?';
+            $statement = $this->queryPrepared($sql, array($tableName));
+        } else {
+            $sql = 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ? AND table_name = ?';
+            $statement = $this->queryPrepared($sql, array(DB_NAME, $tableName));
+        }
+        if ($statement->fetchColumn() > 0) {
+            $tableExists = true;
+        }
+
+        return $tableExists;
     }
 
     /**
@@ -513,21 +736,21 @@ class Database
      *       https://dev.mysql.com/doc/refman/5.7/en/columns-table.html
      * @throws Exception
      */
-    private function loadTableColumnsProperties(string $table)
+    private function loadTableColumnsProperties(string $table): void
     {
         $tableColumnsProperties = array();
 
         if ($this->engine === self::PDO_ENGINE_MYSQL) {
             $sql = 'SHOW COLUMNS FROM ' . $table;
             $columnsStatement = $this->query($sql); // TODO add more params
-            $columnsList      = $columnsStatement->fetchAll();
+            $columnsList = $columnsStatement->fetchAll();
 
             foreach ($columnsList as $properties) {
                 $props = array(
-                    'serial'   => $properties['Extra'] === 'auto_increment',
-                    'null'     => $properties['Null'] === 'YES',
-                    'key'      => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
-                    'default'  => $properties['Default'],
+                    'serial' => $properties['Extra'] === 'auto_increment',
+                    'null' => $properties['Null'] === 'YES',
+                    'key' => $properties['Key'] === 'PRI' || $properties['Key'] === 'MUL',
+                    'default' => $properties['Default'],
                     'unsigned' => str_contains($properties['Type'], 'unsigned')
                 );
 
@@ -546,18 +769,21 @@ class Database
                 $tableColumnsProperties[$properties['Field']] = $props;
             }
         } elseif ($this->engine === self::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT column_name, column_default, is_nullable, data_type
-                      FROM information_schema.columns
+            $sql = 'SELECT column_name, column_default, is_nullable, data_type,
+                           (SELECT DISTINCT \'YES\' from information_schema.key_column_usage kcu
+                             WHERE kcu.table_name  = c.table_name
+                               and kcu.column_name = c.column_name ) as key
+                      FROM information_schema.columns c
                      WHERE table_name = ?';
             $columnsStatement = $this->queryPrepared($sql, array($table));
             $columnsList = $columnsStatement->fetchAll();
 
             foreach ($columnsList as $properties) {
                 $props = array(
-                    'serial'   => str_contains((string) $properties['column_default'], 'nextval'),
-                    'null'     => $properties['is_nullable'] === 'YES',
-                    'key'      => null,
-                    'default'  => $properties['column_default'],
+                    'serial' => str_contains((string)$properties['column_default'], 'nextval'),
+                    'null' => $properties['is_nullable'] === 'YES',
+                    'key' => $properties['key'] === 'YES',
+                    'default' => $properties['column_default'],
                     'unsigned' => null
                 );
 
@@ -586,7 +812,7 @@ class Database
      * used if the database structure has changed since the first database object where created.
      * After that it's possible to rebuild the cache with the current database data.
      */
-    public function initializeTableColumnProperties()
+    public function initializeTableColumnProperties(): void
     {
         $this->dbStructure = array();
     }
@@ -603,22 +829,22 @@ class Database
         if ($this->engine === self::PDO_ENGINE_PGSQL) {
             $lastValStatement = $this->queryPrepared('SELECT lastval()');
 
-            return (int) $lastValStatement->fetchColumn();
+            return (int)$lastValStatement->fetchColumn();
         }
 
-        return (int) $this->pdo->lastInsertId();
+        return (int)$this->pdo->lastInsertId();
     }
 
     /**
-     * Prepares the sql parameters for Postgres specifics. The SQL is mainly written for MySQL,
+     * Prepares the SQL parameters for Postgres specifics. The SQL is mainly written for MySQL,
      * so we need to change some MySQL syntax for Postgres. For example the handling with boolean values
      * must be changed.
-     * @param array $params Array with the sql parameters that should be prepared for Postgres.
-     * @return array Returns the prepared sql parameters.
+     * @param array $params Array with the SQL parameters that should be prepared for Postgres.
+     * @return array Returns the prepared SQL parameters.
      */
     private function preparePgParamsQuery(array $params): array
     {
-        foreach($params as $key => $value) {
+        foreach ($params as $key => $value) {
             if (is_bool($value)) {
                 if ($value) {
                     $params[$key] = 'true';
@@ -632,15 +858,15 @@ class Database
     }
 
     /**
-     * Prepares the sql statement for Postgres specific syntax. The SQL is mainly written for MySQL,
+     * Prepares the SQL statement for Postgres specific syntax. The SQL is mainly written for MySQL,
      * so we need to change some MySQL syntax for Postgres. For example some datatype like unsigned or
      * blob must be converted and also the auto increment handling.
-     * @param string $sql The sql statement that should be prepared for Postgres.
+     * @param string $sql The SQL statement that should be prepared for Postgres.
      * @return string Returns a prepared sql statement.
      */
     private function preparePgSqlQuery(string $sql): string
     {
-        // prepare the sql statement to be compatible with Postgres
+        // prepare the SQL statement to be compatible with Postgres
         if (StringUtils::strContains($sql, 'CREATE TABLE', false)) {
             // on a create-table-statement if necessary cut existing MySQL table options
             $sql = substr($sql, 0, strrpos($sql, ')') + 1);
@@ -649,10 +875,17 @@ class Database
             $replaces = array(
                 // Postgres doesn't know unsigned
                 'unsigned' => '',
+                // Postgres only supports text as a generic text with large limit
+                'tinytext' => 'text',
+                'mediumtext' => 'text',
+                'longtext' => 'text',
                 // since version 4.1 we don't replace boolean with smallint
                 //'boolean'  => 'smallint',
                 // A blob is in Postgres a bytea datatype
-                'blob'     => 'bytea'
+                'mediumblob' => 'bytea',
+                'blob' => 'bytea',
+                'DEFAULT CHARSET = utf8mb4' => 'ENCODING \'UTF8\'',
+                'COLLATE = utf8mb4_unicode_ci' => ''
             );
             $sql = StringUtils::strMultiReplace($sql, $replaces);
 
@@ -702,11 +935,11 @@ class Database
     }
 
     /**
-     * Send a sql statement to the database that will be executed. If debug mode is set
+     * Send a SQL statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be sent to the browser.
-     * @param string $sql A string with the sql statement that should be executed in database.
+     * @param string $sql A string with the SQL statement that should be executed in database.
      * @param bool $showError Default will be **true** and if an error the script will be terminated and
      *                         occurred the error with a backtrace will be sent to the browser. If set to
      *                         **false** no error will be shown and the script will be continued.
@@ -714,7 +947,7 @@ class Database
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      * @throws Exception
      */
-    public function query(string $sql, bool $showError = true)
+    public function query(string $sql, bool $showError = true): false|PDOStatement
     {
         global $gLogger;
 
@@ -735,8 +968,7 @@ class Database
             }
 
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
-        }
-        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        } // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (PDOException $exception) {
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
 
@@ -755,11 +987,11 @@ class Database
     }
 
     /**
-     * Send a sql statement to the database that will be executed. If debug mode is set
+     * Send a SQL statement to the database that will be executed. If debug mode is set
      * then this statement will be written to the error log. If it's a **SELECT** statement
      * then also the number of rows will be logged. If an error occurred the script will
      * be terminated and the error with a backtrace will be sent to the browser.
-     * @param string $sql A string with the sql statement that should be executed in database.
+     * @param string $sql A string with the SQL statement that should be executed in database.
      * @param array<int,mixed> $params An array of parameters to bind to the prepared statement.
      * @param bool $showError Default will be **true** and if an error the script will be terminated and
      *                                     occurred the error with a backtrace will be sent to the browser. If set to
@@ -768,7 +1000,7 @@ class Database
      *                             This should be used to fetch the returned rows. If an error occurred then **false** will be returned.
      * @throws Exception
      */
-    public function queryPrepared(string $sql, array $params = array(), bool $showError = true)
+    public function queryPrepared(string $sql, array $params = array(), bool $showError = true): false|PDOStatement
     {
         global $gLogger;
 
@@ -786,7 +1018,24 @@ class Database
             $this->pdoStatement = $this->pdo->prepare($sql);
 
             if ($this->pdoStatement !== false) {
-                if (!$this->pdoStatement->execute($params)) {
+                $success = $this->pdoStatement->execute($params);
+
+                // With PDO::ERRMODE_SILENT a failed execute() returns false instead of throwing.
+                // Report that error through the same application path as a PDOException.
+                if (!$success) {
+                    $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
+
+                    $errorInfo = $this->pdoStatement->errorInfo();
+                    $errorCode = (string) ($errorInfo[0] ?? '');
+                    $errorMessage = (string) ($errorInfo[2] ?? 'Unknown database error');
+
+                    if ($showError) {
+                        $gLogger->critical('PDO error: ' . $errorMessage);
+                        $this->showError($errorMessage, $errorCode);
+                        // => EXIT
+                    }
+
+                    $gLogger->warning('PDO error: ' . $errorMessage);
                     return false;
                 }
 
@@ -796,8 +1045,7 @@ class Database
             }
 
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
-        }
-        // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
+        } // only throws if "PDO::ATTR_ERRMODE" is set to "PDO::ERRMODE_EXCEPTION"
         catch (PDOException $exception) {
             $gLogger->debug('SQL: Execution time ' . getExecutionTime($startTime));
 
@@ -818,10 +1066,15 @@ class Database
     /**
      * Get a string with question marks that are comma separated.
      * @param array<int,mixed> $valuesArray An array with the values that should be replaced with question marks
-     * @return string Question marks string
+     * @return string returns 'NULL' if the values array is empty otherwise a question marks string
      */
     public static function getQmForValues(array $valuesArray): string
     {
+        // if no values are given return NULL to avoid syntax errors in SQL statements
+        if (empty($valuesArray)) {
+            return 'NULL';
+        }
+
         return implode(',', array_fill(0, count($valuesArray), '?'));
     }
 
@@ -853,6 +1106,8 @@ class Database
 
         $this->transactions = 0;
 
+        $this->runAfterRollbackCallbacks();
+
         return true;
     }
 
@@ -861,7 +1116,7 @@ class Database
      * If no valid engine is set than an exception is thrown.
      * @throws PDOException
      */
-    private function setDSNString()
+    private function setDSNString(): void
     {
         global $gLogger;
 
@@ -904,7 +1159,7 @@ class Database
      * These options should always be set if Admidio connect to a database.
      * @throws Exception
      */
-    private function setConnectionOptions()
+    private function setConnectionOptions(): void
     {
         global $gDebug;
 
@@ -937,17 +1192,17 @@ class Database
      * Throws a detailed error message that occurs during the SQL execution.
      * The error must be caught by the child method. This method will call a backtrace, so
      * you see the script and specific line in which the error occurred.
-     * @param string $errorMessage Optional an error message could be set and integrated in the output of the sql error.
-     * @param string $code Optional a code for the error be set and integrated in the output of the sql error.
-     * @return void Will exit the script and returns a html output with the error information.
+     * @param string $errorMessage Optional an error message could be set and integrated in the output of the SQL error.
+     * @param string $code Optional a code for the error be set and integrated in the output of the SQL error.
+     * @return void Will exit the script and returns an HTML output with the error information.
      * @throws Exception
      */
-    public function showError(string $errorMessage = '', string $code = '')
+    public function showError(string $errorMessage = '', string $code = ''): void
     {
         global $gLogger;
 
         if ($errorMessage === '') {
-            // transform the database error to html
+            // transform the database error to HTML
             $code = $this->pdo->errorCode();
             $errorMessage = $this->pdo->errorInfo()[2];
         }
@@ -958,7 +1213,17 @@ class Database
             $this->transactions = 0;
         }
 
+        // Whether a transaction was open or not, nothing that was waiting for a commit may run now.
+        $this->runAfterRollbackCallbacks();
+
         $gLogger->critical($code . ': ' . $errorMessage);
+
+        // The command line and the test suite have nobody to render the markup, and PHPUnit
+        // repeats the whole message for every failing test. Report the error as one plain
+        // paragraph there and leave the call stack to the exception itself.
+        if (PHP_SAPI === 'cli') {
+            throw new Exception('SQL error ' . $code . ': ' . trim($errorMessage));
+        }
 
         throw new Exception('
             <div style="font-family: monospace;">

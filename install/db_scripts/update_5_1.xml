@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update>
+    <step id="10">UpdateStepsCode::updateStep51AddSocialNetworkProfileFields</step>
+    <step id="20">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
+        VALUES ('MODULE', 'SYS_PLUGIN_MANAGER', 'PLUGINS',  '5.0.0', 0)</step>
+    <step id="30">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description)
+        VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'PLUGINS'), 2, %UUID%, false, 5, true, 'plugins', '/modules/plugins.php', 'puzzle', 'SYS_PLUGIN_MANAGER', 'SYS_PLUGIN_MANAGER_DESC')</step>
+    <step id="40">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/adm_plugins', 'plugins') WHERE men_url LIKE '%/adm_plugins%'</step>
+    <step id="70">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
+    <step id="80" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(100) NOT NULL</step>
+    <step id="90" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(100)</step>
+    <step id="100" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name SET NOT NULL</step>
+    <step id="120">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_character_encoding'</step>
+    <step id="130" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id AND COALESCE(LENGTH(pr2.prf_value), 0) = 0 SET pr1.prf_value = '3' WHERE pr1.prf_name = 'mail_sender_mode'</step>
+    <step id="140" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = '3' FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id AND COALESCE(LENGTH(pr2.prf_value), 0) = 0 AND pr1.prf_name = 'mail_sender_mode'</step>
+    <step id="150" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sendmail_name' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_sender_name'</step>
+    <step id="160" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sendmail_name' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'mail_sender_name'</step>
+    <step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sendmail_name'</step>
+    <step id="180" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'mail_sender_email'</step>
+    <step id="190" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_sendmail_address' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'mail_sender_email'</step>
+    <step id="200">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_sendmail_address'</step>
+    <step id="210" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_longname WHERE prf.prf_name = 'mail_sender_name' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="220" database="pgsql">UPDATE %PREFIX%_preferences prf SET prf_value = org.org_longname FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_name' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="230" database="mysql">UPDATE %PREFIX%_preferences prf INNER JOIN %PREFIX%_organizations org ON org.org_id = prf.prf_org_id SET prf.prf_value = org.org_email_administrator WHERE prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="240" database="pgsql">UPDATE %PREFIX%_preferences prf SET prf_value = org.org_email_administrator FROM %PREFIX%_organizations org WHERE org.org_id = prf.prf_org_id AND prf.prf_name = 'mail_sender_email' AND COALESCE(LENGTH(prf.prf_value), 0) = 0</step>
+    <step id="250" database="mysql">UpdateStepsCode::updateStep51ConvertCharsetToUtf8mb4</step>
+    <step id="260">UPDATE %PREFIX%_preferences SET prf_value = '#a7d9e0' WHERE prf_name = 'color_secondary' AND prf_value = '#263340'</step>
+    <step id="270" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'color_primary' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_color_primary'</step>
+    <step id="280" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'color_primary' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_color_primary'</step>
+    <step id="281">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'color_primary'</step>
+    <step id="290" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'color_secondary' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_color_secondary'</step>
+    <step id="291" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'color_secondary' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_color_secondary'</step>
+    <step id="300">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'color_secondary'</step>
+    <step id="310" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'logo_file' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_logo_file'</step>
+    <step id="320" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'logo_file' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_logo_file'</step>
+    <step id="330">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'logo_file'</step>
+    <step id="340" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'logo_file_max_height' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_logo_file_max_height'</step>
+    <step id="350" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'logo_file_max_height' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_logo_file_max_height'</step>
+    <step id="360">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'logo_file_max_height'</step>
+    <step id="370" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'admidio_headline' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_admidio_headline'</step>
+    <step id="380" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'admidio_headline' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_admidio_headline'</step>
+    <step id="390">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'admidio_headline'</step>
+    <step id="400" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'favicon_file' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_favicon_file'</step>
+    <step id="410" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'favicon_file' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_favicon_file'</step>
+    <step id="420">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'favicon_file'</step>
+    <step id="430" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'additional_styles_file' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'theme_additional_styles_file'</step>
+    <step id="440" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'additional_styles_file' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'theme_additional_styles_file'</step>
+    <step id="450">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'additional_styles_file'</step>
+    <step id="460" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'mail_captcha_enabled' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'captcha_enabled'</step>
+    <step id="470" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'mail_captcha_enabled' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'captcha_enabled'</step>
+    <step id="480">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'mail_captcha_enabled'</step>
+    <step id="490">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'registration_enable_captcha'</step>
+    <step id="500">UPDATE %PREFIX%_preferences SET prf_value = '1' WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
+    <step id="510">ALTER TABLE %PREFIX%_log_changes ADD COLUMN log_org_id integer unsigned</step>
+    <step id="520">UPDATE %PREFIX%_log_changes SET log_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE log_org_id IS NULL AND (SELECT COUNT(*) FROM %PREFIX%_organizations) = 1</step>
+    <step id="530">CREATE INDEX %PREFIX%_idx_log_org_timestamp ON %PREFIX%_log_changes (log_org_id, log_timestamp_create)</step>
+    <step id="540">CREATE INDEX %PREFIX%_idx_log_table_record ON %PREFIX%_log_changes (log_table, log_record_id)</step>
+    <step id="550">CREATE INDEX %PREFIX%_idx_log_record_uuid ON %PREFIX%_log_changes (log_record_uuid)</step>
+    <!-- rename preference 'contacts_field_history_days' to 'changelog_default_days'. The new preference
+         has already been inserted with its default value by Update::updateOrgPreferences(), so the old
+         value is copied over and the obsolete preference is removed afterwards. -->
+    <step id="560" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'contacts_field_history_days' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'changelog_default_days'</step>
+    <step id="570" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'contacts_field_history_days' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'changelog_default_days'</step>
+    <step id="580">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_field_history_days'</step>
+    <step id="590">INSERT INTO %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta) VALUES ('MODULE', 'SYS_CHANGE_HISTORY', 'CHANGELOG', '5.1.0', 0)</step>
+    <step id="600">INSERT INTO %PREFIX%_menu (men_com_id, men_men_id_parent, men_uuid, men_node, men_order, men_standard, men_name_intern, men_url, men_icon, men_name, men_description) VALUES ((SELECT com_id FROM %PREFIX%_components WHERE com_name_intern = 'CHANGELOG'), 2, %UUID%, false, 6, true, 'changelog', '/modules/changelog/changelog.php', 'clock-history', 'SYS_CHANGE_HISTORY', 'SYS_CHANGE_HISTORY_DESC')</step>
+    <step id="610">ALTER TABLE %PREFIX%_log_changes ADD COLUMN log_change_uuid varchar(36)</step>
+    <step id="620">CREATE INDEX %PREFIX%_idx_log_change_uuid ON %PREFIX%_log_changes (log_change_uuid)</step>
+    <step id="630">CREATE TABLE %PREFIX%_event_recurrences
+        (
+        evr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+        evr_uuid                    varchar(36)         NOT NULL,
+        evr_dat_id_master           integer unsigned    NOT NULL,
+        evr_frequency               varchar(20)         NOT NULL,
+        evr_interval                integer             NOT NULL    DEFAULT 1,
+        evr_byday                   varchar(50),
+        evr_bymonthday              integer,
+        evr_monthly_mode            varchar(20),
+        evr_end_type                varchar(20)         NOT NULL    DEFAULT 'never',
+        evr_until                   timestamp           NULL        DEFAULT NULL,
+        evr_count                   integer,
+        evr_timezone                varchar(100),
+        evr_generated_until         timestamp           NULL        DEFAULT NULL,
+        evr_usr_id_create           integer unsigned,
+        evr_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+        evr_usr_id_change           integer unsigned,
+        evr_timestamp_change        timestamp           NULL        DEFAULT NULL,
+        PRIMARY KEY (evr_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="640">CREATE UNIQUE INDEX %PREFIX%_idx_evr_uuid ON %PREFIX%_event_recurrences (evr_uuid)</step>
+    <step id="650">CREATE INDEX %PREFIX%_idx_evr_dat_id_master ON %PREFIX%_event_recurrences (evr_dat_id_master)</step>
+    <step id="660">CREATE INDEX %PREFIX%_idx_evr_generated_until ON %PREFIX%_event_recurrences (evr_generated_until)</step>
+    <step id="670">ALTER TABLE %PREFIX%_events ADD COLUMN dat_evr_id integer unsigned</step>
+    <step id="680">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_original_begin timestamp NULL DEFAULT NULL</step>
+    <step id="690">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_status varchar(20)</step>
+    <step id="700">ALTER TABLE %PREFIX%_events ADD COLUMN dat_recurrence_scope varchar(20)</step>
+    <step id="710">CREATE INDEX %PREFIX%_idx_dat_evr_original_begin ON %PREFIX%_events (dat_evr_id, dat_recurrence_original_begin)</step>
+    <step id="720">CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status)</step>
+    <step id="730">ALTER TABLE %PREFIX%_events ADD CONSTRAINT %PREFIX%_fk_dat_evr FOREIGN KEY (dat_evr_id) REFERENCES %PREFIX%_event_recurrences (evr_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="740">ALTER TABLE %PREFIX%_event_recurrences
+        ADD CONSTRAINT %PREFIX%_fk_evr_dat_master  FOREIGN KEY (evr_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_evr_usr_create  FOREIGN KEY (evr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_evr_usr_change  FOREIGN KEY (evr_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="750">UPDATE %PREFIX%_menu SET men_url = '/modules/events.php' WHERE men_name_intern = 'events'</step>
+    <step id="760" database="pgsql">SELECT setval(pg_get_serial_sequence('%PREFIX%_user_relation_types', 'urt_id'), COALESCE(MAX(urt_id), 1), MAX(urt_id) IS NOT NULL) FROM %PREFIX%_user_relation_types</step>
+    <step id="770">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_value = '' AND prf_name IN ('groups_roles_default_configuration', 'events_list_configuration', 'contacts_list_configuration')</step>
+    <step id="790">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_time timestamp NULL</step>
+    <step id="800">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_authentication_methods varchar(255) NULL</step>
+    <step id="810">ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_external_session_id varchar(64) NULL</step>
+    <step id="820">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_auth_time timestamp NULL DEFAULT NULL</step>
+    <step id="830">CREATE TABLE %PREFIX%_oidc_consents (
+            oco_id                  integer unsigned    AUTO_INCREMENT,
+            oco_org_id              integer unsigned    NOT NULL,
+            oco_usr_id              integer unsigned    NOT NULL,
+            oco_ocl_id              integer unsigned    NOT NULL,
+            oco_scopes              text                NOT NULL,
+            oco_timestamp_create    timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            oco_timestamp_change    timestamp           NULL,
+            PRIMARY KEY (oco_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="840">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_external_session_id varchar(64) NULL</step>
+    <step id="850">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_authentication_methods varchar(255) NULL</step>
+    <step id="860">ALTER TABLE %PREFIX%_oidc_auth_codes ADD COLUMN oac_authentication_context varchar(255) NULL</step>
+    <step id="870">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_trusted boolean NOT NULL DEFAULT false</step>
+    <step id="880">CREATE INDEX %PREFIX%_idx_oat_expires_at ON %PREFIX%_oidc_access_tokens (oat_expires_at)</step>
+    <step id="890">CREATE INDEX %PREFIX%_idx_ort_expires_at ON %PREFIX%_oidc_refresh_tokens (ort_expires_at)</step>
+    <step id="900">CREATE INDEX %PREFIX%_idx_oac_expires_at ON %PREFIX%_oidc_auth_codes (oac_expires_at)</step>
+    <step id="910">ALTER TABLE %PREFIX%_saml_clients ADD COLUMN smc_request_lifetime integer unsigned NULL</step>
+    <step id="920">CREATE TABLE %PREFIX%_saml_logout_transactions (
+            slt_id                      integer unsigned    AUTO_INCREMENT,
+            slt_token                   varchar(64)         NOT NULL,
+            slt_org_id                  integer unsigned    NOT NULL,
+            slt_data                    text                NOT NULL,
+            slt_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (slt_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="930">CREATE UNIQUE INDEX %PREFIX%_idx_slt_token ON %PREFIX%_saml_logout_transactions (slt_token)</step>
+    <step id="940">CREATE INDEX %PREFIX%_idx_slt_expires_at ON %PREFIX%_saml_logout_transactions (slt_expires_at)</step>
+    <step id="950">CREATE TABLE %PREFIX%_saml_session_participants (
+            ssp_id                      integer unsigned    AUTO_INCREMENT,
+            ssp_org_id                  integer unsigned    NOT NULL,
+            ssp_usr_id                  integer unsigned    NOT NULL,
+            ssp_client_id               integer unsigned    NOT NULL,
+            ssp_name_id                 text                NOT NULL,
+            ssp_name_id_format          varchar(255)        NOT NULL,
+            ssp_name_id_sp_name_qualifier varchar(255)      NULL,
+            ssp_external_session_id     varchar(64)         NOT NULL,
+            ssp_session_index           varchar(255)        NOT NULL,
+            ssp_authn_instant           timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            ssp_expires_at              timestamp           NOT NULL,
+            PRIMARY KEY (ssp_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="960">CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id)</step>
+    <step id="970">CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id)</step>
+    <step id="980">CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at)</step>
+    <step id="990">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_require_pkce boolean NOT NULL DEFAULT false</step>
+    <step id="1000">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_post_logout_redirect_uris text NULL</step>
+    <step id="1010">CREATE TABLE %PREFIX%_oidc_session_participants (
+            osp_id                      integer unsigned    AUTO_INCREMENT,
+            osp_org_id                  integer unsigned    NOT NULL,
+            osp_usr_id                  integer unsigned    NOT NULL,
+            osp_client_id               integer unsigned    NOT NULL,
+            osp_external_session_id     varchar(64)         NOT NULL,
+            osp_subject                 varchar(255)        NOT NULL,
+            osp_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+            osp_timestamp_create        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (osp_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="1020">CREATE UNIQUE INDEX %PREFIX%_idx_osp_session_client ON %PREFIX%_oidc_session_participants (osp_external_session_id, osp_client_id)</step>
+    <step id="1030">CREATE INDEX %PREFIX%_idx_osp_expires_at ON %PREFIX%_oidc_session_participants (osp_expires_at)</step>
+    <step id="1040">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_frontchannel_logout_uri varchar(2000) NULL</step>
+    <step id="1050">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_frontchannel_logout_session_required boolean NOT NULL DEFAULT false</step>
+    <step id="1060">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_backchannel_logout_uri varchar(2000) NULL</step>
+    <step id="1070">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_backchannel_logout_session_required boolean NOT NULL DEFAULT false</step>
+    <step id="1080">UPDATE %PREFIX%_oidc_clients SET ocl_grant_types = 'authorization_code refresh_token'</step>
+    <step id="1090">ALTER TABLE %PREFIX%_oidc_clients ADD COLUMN ocl_org_id integer unsigned</step>
+    <step id="1100">UPDATE %PREFIX%_oidc_clients SET ocl_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE ocl_org_id IS NULL</step>
+    <step id="1110" database="mysql">ALTER TABLE %PREFIX%_oidc_clients MODIFY COLUMN ocl_org_id integer unsigned NOT NULL</step>
+    <step id="1120" database="pgsql">ALTER TABLE %PREFIX%_oidc_clients ALTER COLUMN ocl_org_id SET NOT NULL</step>
+    <step id="1130">UPDATE %PREFIX%_saml_clients SET smc_org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations) WHERE smc_org_id = 0 OR smc_org_id IS NULL</step>
+    <step id="1140">UpdateStepsCode::updateStep51HashSsoTokenIdentifiers</step>
+    <step id="1150">UpdateStepsCode::updateStep51WarnAboutMutableOIDCSubjects</step>
+    <step id="1160">CREATE UNIQUE INDEX %PREFIX%_idx_oco_user_client ON %PREFIX%_oidc_consents (oco_org_id, oco_usr_id, oco_ocl_id)</step>
+    <step id="1170">ALTER TABLE %PREFIX%_oidc_consents ADD COLUMN oco_policy_hash varchar(64) NULL</step>
+    <!--
+        A TIMESTAMP column without an explicit default makes MySQL add both
+        DEFAULT CURRENT_TIMESTAMP and ON UPDATE CURRENT_TIMESTAMP to the first such column
+        of a table. Every UPDATE then silently resets the expiry, so a logout transaction
+        expired as soon as it was continued. Declaring the default removes the auto-update.
+    -->
+    <step id="1180" database="mysql">ALTER TABLE %PREFIX%_oidc_access_tokens MODIFY COLUMN oat_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1190" database="mysql">ALTER TABLE %PREFIX%_oidc_refresh_tokens MODIFY COLUMN ort_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1200" database="mysql">ALTER TABLE %PREFIX%_oidc_auth_codes MODIFY COLUMN oac_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1210" database="mysql">ALTER TABLE %PREFIX%_oidc_session_participants MODIFY COLUMN osp_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1220" database="mysql">ALTER TABLE %PREFIX%_saml_logout_transactions MODIFY COLUMN slt_expires_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <step id="1230" database="mysql">ALTER TABLE %PREFIX%_saml_session_participants MODIFY COLUMN ssp_authn_instant timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP</step>
+    <!-- Move the member-sharing setting from preferences to its owning organization.
+         Organizations predating the preference retain the former implicit shared-member behavior. -->
+    <step id="1240">ALTER TABLE %PREFIX%_organizations ADD COLUMN org_suborg_use_same_members boolean NOT NULL DEFAULT false</step>
+    <step id="1250" database="mysql">UPDATE %PREFIX%_organizations org INNER JOIN (SELECT DISTINCT org_org_id_parent FROM %PREFIX%_organizations WHERE org_org_id_parent IS NOT NULL) child ON child.org_org_id_parent = org.org_id LEFT JOIN %PREFIX%_preferences prf ON prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' SET org.org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND (prf.prf_org_id IS NULL OR prf.prf_value = '1')</step>
+    <step id="1260" database="pgsql">UPDATE %PREFIX%_organizations org SET org_suborg_use_same_members = true WHERE org.org_org_id_parent IS NULL AND EXISTS (SELECT 1 FROM %PREFIX%_organizations child WHERE child.org_org_id_parent = org.org_id) AND (NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members') OR EXISTS (SELECT 1 FROM %PREFIX%_preferences prf WHERE prf.prf_org_id = org.org_id AND prf.prf_name = 'contacts_suborganization_use_same_members' AND prf.prf_value = '1'))</step>
+    <step id="1270">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'contacts_suborganization_use_same_members'</step>
+    <step id="1280">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/modules/links/links.php', '/modules/weblinks.php') WHERE men_name_intern = 'weblinks' AND men_url LIKE '%/modules/links/links.php%'</step>
+    <step id="1290">UPDATE %PREFIX%_menu SET men_url = REPLACE(men_url, '/modules/photos/photos.php', '/modules/photos.php') WHERE men_name_intern = 'photo' AND men_url LIKE '%/modules/photos/photos.php%'</step>
+    <step id="1300" database="mysql">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name = 'announcements_clamp_text_lines' AND pr2.prf_org_id = pr1.prf_org_id SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name = 'announcements_preview_characters'</step>
+    <step id="1310" database="pgsql">UPDATE %PREFIX%_preferences pr1 SET prf_value = pr2.prf_value FROM %PREFIX%_preferences pr2 WHERE pr2.prf_name = 'announcements_clamp_text_lines' AND pr2.prf_org_id = pr1.prf_org_id AND pr1.prf_name = 'announcements_preview_characters'</step>
+    <step id="1320">DELETE FROM %PREFIX%_preferences WHERE prf_name = 'announcements_clamp_text_lines'</step>
+    <step id="1330">UpdateStepsCode::updateStep51TranslateDefaultEntries</step>
+    <step id="1340">ALTER TABLE %PREFIX%_texts ADD COLUMN txt_custom_text text NULL</step>
+    <step id="1350">UPDATE %PREFIX%_texts SET txt_custom_text = txt_text WHERE txt_custom_text IS NULL AND txt_name IN ('SYSMAIL_REGISTRATION_CONFIRMATION', 'SYSMAIL_REGISTRATION_NEW', 'SYSMAIL_REGISTRATION_APPROVED', 'SYSMAIL_REGISTRATION_REFUSED', 'SYSMAIL_LOGIN_INFORMATION', 'SYSMAIL_PASSWORD_RESET') AND txt_text NOT IN ('SYS_SYSMAIL_REGISTRATION_CONFIRMATION', 'SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR', 'SYS_SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REFUSE_REGISTRATION', 'SYS_SYSMAIL_LOGIN_INFORMATION', 'SYS_SYSMAIL_PASSWORD_RESET')</step>
+    <step id="1360">UPDATE %PREFIX%_components SET com_name_intern = LOWER(com_name_intern) WHERE com_type = 'PLUGIN'</step>
+    <!--
+        com_uuid has to exist before ConvertBuiltInPlugins runs: it may install a plugin that was
+        never installed before, which creates a Component row and therefore needs the column.
+    -->
+    <step id="1370">ALTER TABLE %PREFIX%_components ADD COLUMN com_uuid varchar(36)</step>
+    <step id="1380">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <step id="1390">UpdateStepsCode::updateStep51AddComponentUuid</step>
+    <step id="1400">CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid)</step>
+    <step id="1410">UpdateStepsCode::updateStep51WriteCliConfigTemplate</step>
+    <step>stop</step>
+</update>

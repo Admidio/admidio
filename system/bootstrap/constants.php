@@ -21,7 +21,7 @@ define('SCRIPT_START_TIME', microtime(true));
 // !!! Please do not edit these version numbers !!!
 const MIN_PHP_VERSION = '8.2.0';
 
-const ADMIDIO_VERSION_MAIN = 5;
+const ADMIDIO_VERSION_MAIN = 6;
 const ADMIDIO_VERSION_MINOR = 0;
 const ADMIDIO_VERSION_PATCH = 0;
 const ADMIDIO_VERSION_BETA = 1;
@@ -79,7 +79,7 @@ const FOLDER_LIBS = '/libs'; // PHP libs
 const FOLDER_LANGUAGES = '/languages';
 const FOLDER_THEMES = '/themes';
 const FOLDER_MODULES = '/modules';
-const FOLDER_PLUGINS = '/adm_plugins';
+const FOLDER_PLUGINS = '/plugins';
 
 // ####################
 // ###  DATE-STUFF  ###
@@ -97,7 +97,7 @@ const DATE_MAX = '9999-12-31';
 // ###  DB-CONFIG  ###
 // ###################
 
-define('DB_ENGINE', $gDbType);
+define('DB_TYPE', $gDbType);
 define('DB_HOST', $g_adm_srv);
 define('DB_PORT', $g_adm_port);
 define('DB_NAME', $g_adm_db);
@@ -114,8 +114,10 @@ const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
 const TBL_AUTO_LOGIN = TABLE_PREFIX . '_auto_login';
 const TBL_CATEGORIES = TABLE_PREFIX . '_categories';
 const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
+const TBL_CATEGORY_REPORT_COLUMNS = TABLE_PREFIX . '_category_report_columns';
 const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
+const TBL_EVENT_RECURRENCES = TABLE_PREFIX . '_event_recurrences';
 const TBL_FILES = TABLE_PREFIX . '_files';
 const TBL_FOLDERS = TABLE_PREFIX . '_folders';
 const TBL_FORUM_TOPICS = TABLE_PREFIX . '_forum_topics';
@@ -126,7 +128,7 @@ const TBL_IDS = TABLE_PREFIX . '_ids';
 const TBL_LINKS = TABLE_PREFIX . '_links';
 const TBL_LIST_COLUMNS = TABLE_PREFIX . '_list_columns';
 const TBL_LISTS = TABLE_PREFIX . '_lists';
-const TBL_LOG = TABLE_PREFIX . '_log_changes';
+const TBL_LOG_CHANGES = TABLE_PREFIX . '_log_changes';
 const TBL_MEMBERS = TABLE_PREFIX . '_members';
 const TBL_MENU = TABLE_PREFIX . '_menu';
 const TBL_MESSAGES = TABLE_PREFIX . '_messages';
@@ -134,8 +136,10 @@ const TBL_MESSAGES_ATTACHMENTS = TABLE_PREFIX . '_messages_attachments';
 const TBL_MESSAGES_CONTENT = TABLE_PREFIX . '_messages_content';
 const TBL_MESSAGES_RECIPIENTS = TABLE_PREFIX . '_messages_recipients';
 const TBL_OIDC_CLIENTS = TABLE_PREFIX . '_oidc_clients';
+const TBL_OIDC_CONSENTS = TABLE_PREFIX . '_oidc_consents';
 const TBL_OIDC_ACCESS_TOKENS = TABLE_PREFIX . '_oidc_access_tokens';
 const TBL_OIDC_REFRESH_TOKENS = TABLE_PREFIX . '_oidc_refresh_tokens';
+const TBL_OIDC_SESSION_PARTICIPANTS = TABLE_PREFIX . '_oidc_session_participants';
 const TBL_OIDC_AUTH_CODES = TABLE_PREFIX . '_oidc_auth_codes';
 const TBL_ORGANIZATIONS = TABLE_PREFIX . '_organizations';
 const TBL_PHOTOS = TABLE_PREFIX . '_photos';
@@ -147,6 +151,8 @@ const TBL_ROLES_RIGHTS = TABLE_PREFIX . '_roles_rights';
 const TBL_ROLES_RIGHTS_DATA = TABLE_PREFIX . '_roles_rights_data';
 const TBL_ROOMS = TABLE_PREFIX . '_rooms';
 const TBL_SAML_CLIENTS = TABLE_PREFIX . '_saml_clients';
+const TBL_SAML_LOGOUT_TRANSACTIONS = TABLE_PREFIX . '_saml_logout_transactions';
+const TBL_SAML_SESSION_PARTICIPANTS = TABLE_PREFIX . '_saml_session_participants';
 const TBL_SSO_KEYS = TABLE_PREFIX . '_sso_keys';
 const TBL_SESSIONS = TABLE_PREFIX . '_sessions';
 const TBL_TEXTS = TABLE_PREFIX . '_texts';
@@ -160,7 +166,7 @@ const TBL_INVENTORY_ITEM_DATA = TABLE_PREFIX . '_inventory_item_data';
 const TBL_INVENTORY_FIELDS = TABLE_PREFIX . '_inventory_fields';
 const TBL_INVENTORY_FIELD_OPTIONS = TABLE_PREFIX . '_inventory_field_select_options';
 const TBL_INVENTORY_ITEMS = TABLE_PREFIX . '_inventory_items';
-const TBL_INVENTORY_ITEM_LEND_DATA = TABLE_PREFIX . '_inventory_item_lend_data';
+const TBL_INVENTORY_ITEM_BORROW_DATA = TABLE_PREFIX . '_inventory_item_borrow_data';
 
 // #####################
 // ###  OTHER STUFF  ###

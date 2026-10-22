@@ -10,6 +10,7 @@
  */
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -45,10 +46,10 @@ try {
         array('icon' => 'bi-plus-circle-fill')
     );
 
-    $smarty = HtmlPage::createSmartyObject();
+    $smarty = PagePresenter::createSmartyObject();
     $form->addToSmarty($smarty);
     $gCurrentSession->addFormObject($form);
     echo $smarty->fetch('modules/contacts.new.tpl');
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

@@ -8,8 +8,6 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
-use Admidio\UI\Presenter\FormPresenter;
-use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Changelog\Service\ChangelogService;
 
 /**
@@ -32,11 +30,13 @@ use Admidio\Changelog\Service\ChangelogService;
 class InventoryFieldsPresenter extends PagePresenter
 {
     /**
-     * Create the data for the edit form of a item field.
-     * @param string $itemFieldID ID of the item field that should be edited.
+     * Create the data for the edit form of an item field.
+     * @param string $itemFieldUUID UUID of the item field to edit. If empty, a new item field will be created.
+     * @param string $itemFieldName Name of the item field to create. Only used if $itemFieldUUID is "0".
+     * @return void
      * @throws Exception
      */
-    public function createEditForm(string $itemFieldUUID = '', string $itemFieldName = '')
+    public function createEditForm(string $itemFieldUUID = '', string $itemFieldName = ''): void
     {
         global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gCurrentOrgId, $gDb;
 
@@ -60,11 +60,11 @@ class InventoryFieldsPresenter extends PagePresenter
 
         $this->addJavascript('
             $("#inf_type").change(function() {
-                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "RADIO_BUTTON") {
+                if ($("#inf_type").val() === "DROPDOWN" || $("#inf_type").val() === "DROPDOWN_MULTISELECT" || $("#inf_type").val() === "DROPDOWN_DATE_INTERVAL" || $("#inf_type").val() === "RADIO_BUTTON") {
                     $("#ifo_inf_options_table").attr("required", "required");
                     $("#ifo_inf_options_group").addClass("admidio-form-group-required");
                     $("#ifo_inf_options_group").show("slow");
-                    // find all option input fields in the table and set the required atribute
+                    // find all option input fields in the table and set the required attribute
                     $("#ifo_inf_options_table").find("input[name$=\'[value]\']").each(function() {
                         $(this).attr("required", "required");
                     });
@@ -72,10 +72,27 @@ class InventoryFieldsPresenter extends PagePresenter
                     $("#ifo_inf_options_table").removeAttr("required");
                     $("#ifo_inf_options_group").removeClass("admidio-form-group-required");
                     $("#ifo_inf_options_group").hide();
-                    // find all options and remove the required atribute from the input field
+                    // find all options and remove the required attribute from the input field
                     $("#ifo_inf_options_table").find("input[name$=\'[value]\']").each(function() {
                         $(this).removeAttr("required");
                     });
+                }
+
+                var valueListTooltipContainer = document.getElementById("ifo_inf_options_group").getElementsByTagName("div")[0].getElementsByClassName("form-text")[0];
+                if ($("#inf_type").val() === "DROPDOWN_DATE_INTERVAL") {
+                    // if the field type is dropdown date interval, then the connected field must be a date field
+                    $("#inf_inf_uuid_connected").attr("required", "required");
+                    $("#inf_inf_uuid_connected_group").addClass("admidio-form-group-required");
+                    $("#inf_inf_uuid_connected_group").show();
+                    
+                    valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_INVENTORY_DATE_INTERVAL_LIST_DESC') . '";
+                } else {
+                    // if the field type is not dropdown date interval, then the connected field must not be required
+                    $("#inf_inf_uuid_connected").removeAttr("required");
+                    $("#inf_inf_uuid_connected_group").removeClass("admidio-form-group-required");
+                    $("#inf_inf_uuid_connected_group").hide();
+                    
+                    valueListTooltipContainer.innerHTML = "' . $gL10n->get('SYS_VALUE_LIST_DESC', array('<a href=\'https://icons.getbootstrap.com/\' target=\'_blank\'>', '</a>')) . '";
                 }
             });
             $("#inf_type").trigger("change");', true
@@ -93,14 +110,14 @@ class InventoryFieldsPresenter extends PagePresenter
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name'), ENT_QUOTES),
+                $itemField->getValue('inf_name'),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
             );
         } else {
             $form->addInput(
                 'inf_name',
                 $gL10n->get('SYS_NAME'),
-                htmlentities($itemField->getValue('inf_name'), ENT_QUOTES),
+                $itemField->getValue('inf_name'),
                 array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
@@ -122,6 +139,8 @@ class InventoryFieldsPresenter extends PagePresenter
             'DATE' => $gL10n->get('SYS_DATE'),
             'DECIMAL' => $gL10n->get('SYS_DECIMAL_NUMBER'),
             'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+            'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
+            'DROPDOWN_DATE_INTERVAL' => $gL10n->get('SYS_DROPDOWN_DATE_INTERVAL_LISTBOX'),
             'EMAIL' => $gL10n->get('SYS_EMAIL'),
             'NUMBER' => $gL10n->get('SYS_NUMBER'),
             'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -150,18 +169,32 @@ class InventoryFieldsPresenter extends PagePresenter
             );
         }
 
+        // get all date fields from the database
+        $sql = 'SELECT inf_uuid, inf_name FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_org_id = ' . $gCurrentOrgId
+            . ' AND inf_type = \'DATE\' ORDER BY inf_name';
+
+        $form->addSelectBoxFromSql(
+            'inf_inf_uuid_connected',
+            $gL10n->get('SYS_INVENTORY_CONNECTED_FIELD'),
+            $gDb,
+            $sql,
+            array('defaultValue' => $itemField->getValue('inf_inf_uuid_connected')),
+        );
+
         $options = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-        $optionValueList = $options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options'));
+        foreach ($options->getAllOptions($gSettingsManager->getBool('inventory_show_obsolete_select_field_options')) as $option) {
+            $optionValueList[] = $option;
+        }
         if (empty($optionValueList)) {
             $optionValueList = array(
-                0 => array('id' => 1, 'value' => '', 'sequence' => 0, 'obsolete' => false)
+                0 => array('id' => 1, 'value' => '', 'system' => false, 'sequence' => 0, 'obsolete' => false)
             );
         }
         $form->addOptionEditor(
             'ifo_inf_options',
             $gL10n->get('SYS_VALUE_LIST'),
             $optionValueList,
-            array('helpTextId' => array('SYS_VALUE_LIST_DESC' /* SYS_INVENTORY_VALUE_LIST_DESC */, array('<a href="https://icons.bootstrap.com" target="_blank">', '</a>')), 'filename' => 'inventory')
+            array('helpTextId' => array('SYS_VALUE_LIST_DESC', array('<a href="https://icons.getbootstrap.com/" target="_blank">', '</a>')), 'filename' => 'inventory')
         );
 
         $mandatoryFieldValues = array(0 => 'SYS_NO', 1 => 'SYS_YES');
@@ -199,17 +232,15 @@ class InventoryFieldsPresenter extends PagePresenter
 
     /**
      * Create the list with all item fields and their preferences.
+     * @return void
      * @throws Exception
      * @throws \Smarty\Exception
      */
-    public function createList()
+    public function createList(): void
     {
         global $gL10n, $gCurrentOrgId, $gDb, $gCurrentSession, $gCurrentUser, $gSettingsManager;
 
         $this->addJavascript('
-            $(".admidio-open-close-caret").click(function() {
-                showHideBlock($(this));
-            });
             $("tbody.admidio-sortable").sortable({
                 axis: "y",
                 handle: ".handle",
@@ -219,6 +250,7 @@ class InventoryFieldsPresenter extends PagePresenter
                     $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php?mode=sequence&uuid=" + uuid + "&order=" + order,
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"}
                     );
+                    updateMoveActions("tbody.admidio-sortable", "adm_profile_field", "admidio-field-move");
                 }
             });
             $(".admidio-field-move").click(function() {
@@ -227,7 +259,20 @@ class InventoryFieldsPresenter extends PagePresenter
                     "' . ADMIDIO_URL . FOLDER_MODULES . '/inventory.php",
                     "' . $gCurrentSession->getCsrfToken() . '"
                 );
-            });', true
+            });
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.url.indexOf("mode=delete") !== -1) {
+                    // wait for callUrlHideElement to finish hiding the element
+                    setTimeout(function() {
+                        updateMoveActions("tbody.admidio-sortable", "adm_item_field", "admidio-field-move");
+                    }, 1000);
+                } else {
+                    updateMoveActions("tbody.admidio-sortable", "adm_item_field", "admidio-field-move");
+                }
+            });
+
+            updateMoveActions("tbody.admidio-sortable", "adm_item_field", "admidio-field-move");
+            ', true
         );
 
         // show link to view inventory fields history
@@ -244,25 +289,10 @@ class InventoryFieldsPresenter extends PagePresenter
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $templateItemFieldsCategories = array();
         $templateItemFields = array();
-        $itemFieldCategoryID = -1;
-        $prevItemFieldCategoryID = -1;
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
 
         foreach ($items->getItemFields() as $itemField) {
-            if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($itemField->getValue('inf_name_intern'), $lendFieldNames)) {
-                continue; // skip lending fields if lending is disabled
-            }
-            $prevItemFieldCategoryID = $itemFieldCategoryID;
-            $itemFieldCategoryID = ((bool)$itemField->getValue('inf_system')) ? 1 : 2;
-
-            if ($itemFieldCategoryID !== $prevItemFieldCategoryID &&  count($templateItemFields) > 0) {
-                $templateItemFieldsCategories[] = array(
-                    'id' => $templateItemFields[0]['categoryID'],
-                    'name' => $templateItemFields[0]['categoryName'],
-                    'entries' => $templateItemFields
-                );
-                $templateItemFields = array();
+            if ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($itemField->getValue('inf_name_intern'), $items->borrowFieldNames)) {
+                continue; // skip borrowing fields if borrowing is disabled
             }
 
             $itemFieldText = array(
@@ -270,6 +300,8 @@ class InventoryFieldsPresenter extends PagePresenter
                 'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                 'DATE' => $gL10n->get('SYS_DATE'),
                 'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                'DROPDOWN_MULTISELECT' => $gL10n->get('SYS_DROPDOWN_MULTISELECT_LISTBOX'),
+                'DROPDOWN_DATE_INTERVAL' => $gL10n->get('SYS_DROPDOWN_DATE_INTERVAL_LISTBOX'),
                 'EMAIL' => $gL10n->get('SYS_EMAIL'),
                 'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
                 'PHONE' => $gL10n->get('SYS_PHONE'),
@@ -286,19 +318,18 @@ class InventoryFieldsPresenter extends PagePresenter
             // if the field is a category, the edit URL is different from the other fields
             $editUrl = ($itemField->getValue('inf_type') === 'CATEGORY') ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'IVT')) : SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_edit', 'uuid' => $itemField->getValue('inf_uuid')));
 
-            $templateRowItemField = array(
-                'categoryID' => ((bool)$itemField->getValue('inf_system')) ? 1 : 2,
-                'categoryName' => ((bool)$itemField->getValue('inf_system')) ? $gL10n->get('SYS_BASIC_DATA') : $gL10n->get('SYS_INVENTORY_USER_DEFINED_FIELDS'),
+            $templateRowItemField = [
+                'system' => ($itemField->getValue('inf_system')),
                 'uuid' => $itemField->getValue('inf_uuid'),
                 'name' => $itemField->getValue('inf_name'),
                 'description' => $itemField->getValue('inf_description'),
                 'urlEdit' => $editUrl,
                 'dataType' => $itemFieldText[$itemField->getValue('inf_type')],
                 'mandatory' => $gL10n->get($mandatoryFieldValues[$itemField->getValue('inf_required_input')]),
-            );
+            ];
 
             $templateRowItemField['actions'][] = array(
-                'url' =>  $editUrl,
+                'url' => $editUrl,
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT')
             );
@@ -321,13 +352,7 @@ class InventoryFieldsPresenter extends PagePresenter
             $templateItemFields[] = $templateRowItemField;
         }
 
-        $templateItemFieldsCategories[] = array(
-            'id' => $templateItemFields[0]['categoryID'],
-            'name' => $templateItemFields[0]['categoryName'],
-            'entries' => $templateItemFields
-        );
-
-        $this->smarty->assign('list', $templateItemFieldsCategories);
+        $this->smarty->assign('list', $templateItemFields);
         $this->smarty->assign('l10n', $gL10n);
         $this->addJavascript('
             function checkEmptyCategories() {

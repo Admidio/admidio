@@ -1,12 +1,13 @@
 <?php
 namespace Admidio\Messages\Entity;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
-use Role;
+use Admidio\Roles\Entity\Role;
 
 /**
  * @brief Class manages access to database table adm_messages
@@ -53,6 +54,15 @@ class Message extends Entity
         parent::__construct($database, TBL_MESSAGES, 'msg', $msgId);
 
         $this->getContent('database');
+    }
+
+    /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'message';
     }
 
     /**
@@ -249,17 +259,21 @@ class Message extends Entity
      */
     public function delete(): bool
     {
+        global $gSettingsManager;
+
         $this->db->startTransaction();
 
         $msgId = (int) $this->getValue('msg_id');
 
         if ($this->getValue('msg_type') === self::MESSAGE_TYPE_EMAIL || (int) $this->getValue('msg_read') === 2) {
             // first delete attachments files and the database entry
-            $attachments   = $this->getAttachmentsInformations();
+            $attachments   = $this->getAttachmentsInformation();
 
-            foreach ($attachments as $attachment) {
-                // delete attachment in file system
-                FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']);
+            if ($gSettingsManager->getBool('mail_save_attachments')) {
+                foreach ($attachments as $attachment) {
+                    // delete attachment in file system
+                    FileSystemUtils::deleteFileIfExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name']);
+                }
             }
 
             $sql = 'DELETE FROM '.TBL_MESSAGES_ATTACHMENTS.'
@@ -290,11 +304,11 @@ class Message extends Entity
     /**
      * Read all attachments from the database and will return an array with all necessary information about
      * the attachments. The array contains for each attachment a subarray with the following elements:
-     * **msa_id** and **file_name** and **admidio_file_name**.
+     * **msa_uuid** and **file_name** and **admidio_file_name**.
      * @return array Returns an array with all attachments and the following elements: **msa_id** and **file_name**
      * @throws Exception
      */
-    public function getAttachmentsInformations(): array
+    public function getAttachmentsInformation(): array
     {
         $attachments = array();
 
@@ -304,7 +318,7 @@ class Message extends Entity
         $attachmentsStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
         while ($row = $attachmentsStatement->fetch()) {
-            $attachments[] = array('msa_id' => $row['msa_id'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
+            $attachments[] = array('msa_uuid' => $row['msa_uuid'], 'file_name' => $row['msa_original_file_name'], 'admidio_file_name' => $row['msa_file_name']);
         }
 
         return $attachments;
@@ -322,16 +336,11 @@ class Message extends Entity
         $content = '';
 
         // if content was not set until now than read it from the database if message was already stored there
-        if (isset($this->msgContentObject) && $this->getValue('msg_id') > 0) {
+        if (!isset($this->msgContentObject) && $this->getValue('msg_id') > 0) {
             $sql = 'SELECT msc_id, msc_msg_id, msc_usr_id, msc_message, msc_timestamp
-                      FROM '. TBL_MESSAGES_CONTENT. ' msc1
+                      FROM '. TBL_MESSAGES_CONTENT. '
                      WHERE msc_msg_id = ? -- $this->getValue(\'msg_id\')
-                       AND NOT EXISTS (
-                           SELECT 1
-                             FROM '. TBL_MESSAGES_CONTENT. ' msc2
-                            WHERE msc2.msc_msg_id = msc1.msc_msg_id
-                              AND msc2.msc_timestamp > msc1.msc_timestamp
-                           )';
+                  ORDER BY msc_id DESC';
             $messageContentStatement = $this->db->queryPrepared($sql, array($this->getValue('msg_id')));
 
             $this->msgContentObject = new MessageContent($this->db);
@@ -413,15 +422,19 @@ class Message extends Entity
             }
         } else {
             // email receivers are all stored in the recipients array
-            foreach ($recipients as $recipient) {
-                if ($recipient['type'] === 'user' && !$showFullUserNames) {
-                    $singleRecipientsCount++;
-                } else {
-                    if (strlen($recipientsString) > 0) {
-                        $recipientsString .= '; ';
-                    }
+            if (count($recipients) === 0) {
+                $recipientsString = '<i>' . $gL10n->get('SYS_DELETED_USER_OR_ROLE') . '</i>';
+            } else {
+                foreach ($recipients as $recipient) {
+                    if ($recipient['type'] === 'user' && !$showFullUserNames) {
+                        $singleRecipientsCount++;
+                    } else {
+                        if (strlen($recipientsString) > 0) {
+                            $recipientsString .= '; ';
+                        }
 
-                    $recipientsString .= $recipient['name'];
+                        $recipientsString .= $recipient['name'];
+                    }
                 }
             }
 
@@ -514,7 +527,7 @@ class Message extends Entity
                     $this->msgRecipientsArray[] =
                         array('type'   => 'role',
                               'id'     => (int) $row['msr_rol_id'],
-                              'name'   => $row['rol_name'],
+                              'name'   => Language::translateIfTranslationStrId($row['rol_name']),
                               'mode'   => (int) $row['msr_role_mode'],
                               'msr_id' => (int) $row['msr_id']
                         );
@@ -533,7 +546,8 @@ class Message extends Entity
      * For new records the name intern will be set per default.
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset if
      *                                table has columns like **usr_id_create** or **usr_id_changed**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     * @return bool Returns **true** if at least one record was saved and all records that needed saving
+     *              were saved successfully, otherwise **false**.
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
@@ -543,49 +557,67 @@ class Message extends Entity
             $this->setValue('msg_timestamp', DATETIME_NOW);
         }
 
-        $returnValue = parent::save($updateFingerPrint);
+        $messageNeedsSave = $this->isNewRecord() || $this->hasColumnsValueChanged();
+        $messageSaved = parent::save($updateFingerPrint);
 
-        if ($returnValue) {
-            // now save every recipient
+        $somethingSaved = $messageSaved;
+        $allSaved = !$messageNeedsSave || $messageSaved;
+
+        // Dependent records may have changed even if no column of adm_messages changed.
+        // Only save them if the message itself did not fail and has a database id.
+        if ($allSaved && (int) $this->getValue('msg_id') > 0) {
             foreach ($this->msgRecipientsObjectArray as $msgRecipientsObject) {
-                $msgRecipientsObject->setValue('msr_msg_id', $this->getValue('msg_id'));
-                $msgRecipientsObject->save();
+                if ($msgRecipientsObject->isNewRecord() || $msgRecipientsObject->hasColumnsValueChanged()) {
+                    $msgRecipientsObject->setValue('msr_msg_id', $this->getValue('msg_id'));
+                    $recipientSaved = $msgRecipientsObject->save();
+
+                    $somethingSaved = $somethingSaved || $recipientSaved;
+                    $allSaved = $allSaved && $recipientSaved;
+                }
             }
 
-            if (isset($this->msgContentObject)) {
-                // now save the message to the database
+            if (isset($this->msgContentObject)
+                && ($this->msgContentObject->isNewRecord() || $this->msgContentObject->hasColumnsValueChanged())) {
                 $this->msgContentObject->setValue('msc_msg_id', $this->getValue('msg_id'));
                 $this->msgContentObject->setValue('msc_usr_id', $GLOBALS['gCurrentUserId']);
-                $returnValue = $this->msgContentObject->save();
+                $contentSaved = $this->msgContentObject->save();
+
+                $somethingSaved = $somethingSaved || $contentSaved;
+                $allSaved = $allSaved && $contentSaved;
             }
 
-            $this->saveAttachments();
+            if (count($this->msgAttachments) > 0) {
+                $attachmentsSaved = $this->saveAttachments();
+
+                $somethingSaved = $somethingSaved || $attachmentsSaved;
+                $allSaved = $allSaved && $attachmentsSaved;
+            }
         }
 
-        return $returnValue;
+        return $somethingSaved && $allSaved;
     }
 
     /**
      * Saves the files of the stored filenames in the array **$msgAttachments** within the filesystem folder
      * adm_my_files/messages_attachments. Therefore, the filename will get the prefix with the id of this
      * message.
-     * @throw RuntimeException Folder could not be created
+     * @return bool Returns **true** if all queued attachments were saved, otherwise **false**.
      * @throws Exception
      */
-    protected function saveAttachments()
+    protected function saveAttachments(): bool
     {
-        global $gSettingsManager;
+        global $gSettingsManager, $gCurrentOrganization;
 
         if ($gSettingsManager->getBool('mail_save_attachments')) {
             try {
                 FileSystemUtils::createDirectoryIfNotExists(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments');
-            } catch (\RuntimeException $exception) {
-                return array(
-                    'text' => 'SYS_FOLDER_NOT_CREATED',
-                    'path' => ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments'
-                );
+            } catch (\Throwable) {
+                throw new Exception('SYS_FOLDER_NOT_CREATED', array(ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments', '<a href="mailto:' . $gCurrentOrganization->getValue('org_email_administrator') . '">', '</a>'));
             }
         }
+
+        $allSaved = true;
+        $unsavedAttachments = array();
 
         foreach ($this->msgAttachments as $attachment) {
             $file_name = $this->getValue('msg_id').'_'.$attachment[1];
@@ -594,13 +626,22 @@ class Message extends Entity
                 FileSystemUtils::copyFile($attachment[0], ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $file_name);
             }
 
-            // save message recipient as Entity object to the array
+            // save message attachment as Entity object
             $messageAttachment = new Entity($this->db, TBL_MESSAGES_ATTACHMENTS, 'msa');
             $messageAttachment->setValue('msa_msg_id', $this->getValue('msg_id'));
             $messageAttachment->setValue('msa_file_name', $file_name);
             $messageAttachment->setValue('msa_original_file_name', $attachment[1]);
-            $messageAttachment->save();
+
+            if (!$messageAttachment->save()) {
+                $allSaved = false;
+                $unsavedAttachments[] = $attachment;
+            }
         }
+
+        // Keep only failed attachments queued, so another save() does not duplicate successful ones.
+        $this->msgAttachments = $unsavedAttachments;
+
+        return $allSaved;
     }
 
     /**

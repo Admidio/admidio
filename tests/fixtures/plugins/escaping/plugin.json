@@ -1,0 +1,7 @@
+{
+    "name": "Escaping",
+    "version": "1.0.0",
+    "autoload": {
+        "AdmidioPlugin\\Escaping\\": "../hello/src"
+    }
+}

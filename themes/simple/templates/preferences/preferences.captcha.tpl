@@ -3,6 +3,7 @@
     {/foreach}>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
+    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['captcha_enabled']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['captcha_type']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['captcha_fonts']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['captcha_width']}

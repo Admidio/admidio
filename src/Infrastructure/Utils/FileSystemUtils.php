@@ -42,20 +42,29 @@ final class FileSystemUtils
         'png'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/png', 'viewable' => true),
         'tiff' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/tiff', 'viewable' => true),
         'doc'  => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
-        'docx' => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
+        'docx' => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'viewable' => false),
         'dot'  => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
-        'dotx' => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/msword', 'viewable' => false),
+        'dotx' => array('icon' => 'bi-file-earmark-word-fill', 'mime-type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template', 'viewable' => false),
         'odt'  => array('icon' => 'bi-file-earmark-text-fill', 'mime-type' => 'application/vnd.oasis.opendocument.text', 'viewable' => false),
-        'csv'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'text/comma-separated-values', 'viewable' => false),
-        'xls'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/msexcel', 'viewable' => false),
-        'xlsx' => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/msexcel', 'viewable' => false),
-        'xlt'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/msexcel', 'viewable' => false),
-        'xltx' => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/msexcel', 'viewable' => false),
+        'ott'  => array('icon' => 'bi-file-earmark-text', 'mime-type' => 'application/vnd.oasis.opendocument.text-template', 'viewable' => false),
+        'ots'  => array('icon' => 'bi-file-earmark-spreadsheet', 'mime-type' => 'application/vnd.oasis.opendocument.spreadsheet-template', 'viewable' => false),
+        'otp'  => array('icon' => 'bi-file-earmark-slides', 'mime-type' => 'application/vnd.oasis.opendocument.presentation-template', 'viewable' => false),
+        'otg'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'application/vnd.oasis.opendocument.graphics-template', 'viewable' => false),
+        'odg'  => array('icon' => 'bi-file-earmark-image-fill', 'mime-type' => 'application/vnd.oasis.opendocument.graphics', 'viewable' => false),
+        'odc'  => array('icon' => 'bi-file-earmark-bar-graph-fill', 'mime-type' => 'application/vnd.oasis.opendocument.chart', 'viewable' => false),
+        'odf'  => array('icon' => 'bi-file-earmark-code-fill', 'mime-type' => 'application/vnd.oasis.opendocument.formula', 'viewable' => false),
+        'odi'  => array('icon' => 'bi-file-earmark-image-fill', 'mime-type' => 'application/vnd.oasis.opendocument.image', 'viewable' => false),
+        'odm'  => array('icon' => 'bi-file-earmark-fill', 'mime-type' => 'application/vnd.oasis.opendocument.text-master', 'viewable' => false),
+        'csv'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'text/csv', 'viewable' => false),
+        'xls'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/vnd.ms-excel', 'viewable' => false),
+        'xlsx' => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'viewable' => false),
+        'xlt'  => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/vnd.ms-excel', 'viewable' => false),
+        'xltx' => array('icon' => 'bi-file-earmark-excel-fill', 'mime-type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template', 'viewable' => false),
         'ods'  => array('icon' => 'bi-file-earmark-spreadsheet-fill', 'mime-type' => 'application/vnd.oasis.opendocument.spreadsheet', 'viewable' => false),
-        'pps'  => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
-        'ppsx' => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
-        'ppt'  => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
-        'pptx' => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/mspowerpoint', 'viewable' => false),
+        'pps'  => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/vnd.ms-powerpoint', 'viewable' => false),
+        'ppsx' => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow', 'viewable' => false),
+        'ppt'  => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/vnd.ms-powerpoint', 'viewable' => false),
+        'pptx' => array('icon' => 'bi-file-earmark-ppt-fill', 'mime-type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'viewable' => false),
         'odp'  => array('icon' => 'bi-file-earmark-slides-fill', 'mime-type' => 'application/vnd.oasis.opendocument.presentation', 'viewable' => false),
         'css'  => array('icon' => 'bi-file-earmark-text-fill', 'mime-type' => 'text/css', 'viewable' => true),
         'log'  => array('icon' => 'bi-file-earmark-text-fill', 'mime-type' => 'text/plain', 'viewable' => true),
@@ -73,12 +82,25 @@ final class FileSystemUtils
         'mpeg' => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/mpeg', 'viewable' => true),
         'mpg'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/mpeg', 'viewable' => true),
         'webm' => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/webm', 'viewable' => true),
+        'ogv'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/ogg', 'viewable' => true),
         'wmv'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/x-ms-wmv', 'viewable' => true),
         'aac'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/aac', 'viewable' => true),
         'midi' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-midi', 'viewable' => true),
-        'mp3'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/mpeg3', 'viewable' => true),
-        'wav'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-midi', 'viewable' => true),
-        'wma'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true)
+        'mp3'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/mpeg', 'viewable' => true),
+        'wav'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/wav', 'viewable' => true),
+        'wma'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/x-ms-wma', 'viewable' => true),
+        'm4a'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/mp4', 'viewable' => true),
+        'm4v'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/mp4', 'viewable' => true),
+        'mkv'  => array('icon' => 'bi-file-earmark-play-fill', 'mime-type' => 'video/x-matroska', 'viewable' => true),
+        'flac' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/flac', 'viewable' => true),
+        'ogg'  => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/ogg', 'viewable' => true),
+        'opus' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/opus', 'viewable' => true),
+        '7z'   => array('icon' => 'bi-file-earmark-zip-fill', 'mime-type' => 'application/x-7z-compressed', 'viewable' => false),
+        'rar'  => array('icon' => 'bi-file-earmark-zip-fill', 'mime-type' => 'application/vnd.rar', 'viewable' => false),
+        'svg'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/svg+xml', 'viewable' => false),
+        'webp' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/webp', 'viewable' => true),
+        'heic' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/heic', 'viewable' => true),
+        'heif' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/heif', 'viewable' => true)
     );
 
     /**
@@ -91,11 +113,7 @@ final class FileSystemUtils
     {
         $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        if (array_key_exists($fileExtension, self::$iconFileExtension)) {
-            return true;
-        }
-
-        return false;
+        return array_key_exists($fileExtension, self::$iconFileExtension);
     }
 
     /**

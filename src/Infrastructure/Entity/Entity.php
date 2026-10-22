@@ -3,12 +3,21 @@
 namespace Admidio\Infrastructure\Entity;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Hooks\Hooks;
+use Admidio\Hooks\Service\EntityHookQueue;
+use Admidio\Hooks\ValueObject\EntityChangeSet;
+use Admidio\Hooks\ValueObject\EntityFieldChange;
+use DateTime;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 
 /**
  * @brief Controls read and write access to database tables
@@ -39,19 +48,19 @@ use Ramsey\Uuid\Uuid;
 class Entity
 {
     /**
-     * @var array<string,string> Array with sub array that contains additional tables and their connected fields that should be selected when data is read
+     * @var array<string,string> Array with subarray that contains additional tables and their connected fields that should be selected when data is read
      */
     protected array $additionalTables = array();
     /**
-     * @var string Name of the database table of this object. This must be the table name with the installation specific prefix e.g. **demo_users**
+     * @var string Name of the database table from this object. This must be the table name with the installation-specific prefix e.g. **demo_users**
      */
     protected string $tableName;
     /**
-     * @var string The prefix of each column that this table has. E.g. the table adm_users has the column prefix **usr**
+     * @var string The prefix of each column that this table has. E.g., the table adm_users has the column prefix **usr**
      */
     protected string $columnPrefix;
     /**
-     * @var string Name of the unique autoincrement index column of the database table
+     * @var string Name of the unique autoincrement index column from the database table
      */
     protected string $keyColumnName = '';
     /**
@@ -64,11 +73,17 @@ class Entity
      */
     protected bool $newRecord;
     /**
+     * @var bool Flag whether a save() of this object has inserted the record into the database.
+     *           Unlike newRecord it stays true when the same object is saved again afterwards, so
+     *           code that runs after save() can still tell a created record from a changed one.
+     */
+    protected bool $insertedRecord = false;
+    /**
      * @var bool Flag if the data of this record must be inserted or updated
      */
     protected bool $insertRecord;
     /**
-     * @var bool Flag will be set to true if data in array dbColumns was changed
+     * @var bool The Flag will be set to true if data in array dbColumns was changed
      */
     protected bool $columnsValueChanged;
     /**
@@ -80,34 +95,42 @@ class Entity
      */
     protected array $columnsInfos = array();
     /**
-     * @var bool If this flag is set then some right checks will be disabled, so that the object could be saved also
+     * @var bool If this flag is set, then some right checks will be disabled, so that the object could be saved also
      * if the current user doesn't have the right to do this.
      */
     protected bool $saveChangesWithoutRights;
 
     /**
      * Flag to enable/disable logging changes to the database.
-     * @var bool If this flag is set (default), all changes will be logged to the database, if the corresponding preferences item is set.
+     * @var bool If this flag is set (default), all changes will be logged to the database if the corresponding preferences item is set.
      * Setting this to false will disable logging in all cases, even with the preference set.
      */
-    protected static $loggingEnabled = true;
+    protected static bool $loggingEnabled = true;
 
     /**
-     * Constructor that will create an object of a recordset of the specified table.
-     * If the id is set than this recordset will be loaded.
+     * Flag to enable/disable the persistence hooks of the entities.
+     * @var bool If this flag is set (default), every entity that has a hook ID dispatches its
+     * create, update and delete hooks. The installation and the update switch it off, because the
+     * schema and the core are not in a state a plugin could work with while they run.
+     */
+    protected static bool $hooksEnabled = true;
+
+    /**
+     * Constructor that will create an object of a recordset from the specified table.
+     * If the id is set, then this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param string $tableName The name of the database table. Because of specific prefixes this should be the defined value e.g. **TBL_USERS**
-     * @param string $columnPrefix The prefix of each column of that table. E.g. for table **adm_roles** this is **rol**
-     * @param string|int $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+     * @param string $tableName The name of the database table. Because of specific prefixes, this should be the defined value e.g. **TBL_USERS**
+     * @param string $columnPrefix The prefix of each column from that table. E.g., for table **adm_roles** this is **rol**
+     * @param int|string $id The id of the recordset that should be loaded. If id isn't set, then an empty object of the table is created.
      * @throws Exception
      */
-    public function __construct(Database $database, string $tableName, string $columnPrefix, $id = '')
+    public function __construct(Database $database, string $tableName, string $columnPrefix, int|string $id = '')
     {
         $this->db =& $database;
         $this->tableName = $tableName;
         $this->columnPrefix = $columnPrefix;
 
-        // if an ID is committed, then read data out of database
+        // if an ID is committed, then read data out of a database
         if ($id > 0) {
             $this->readDataById($id);
         } else {
@@ -116,12 +139,23 @@ class Entity
     }
 
     /**
-     * A wakeup add the current database object to this class
+     * Preserve the properties of this entity and its subclasses in session data.
+     * @return array<string,mixed>
      */
-    public function __wakeup()
+    public function __serialize(): array
+    {
+        return (array)$this;
+    }
+
+    /**
+     * Restore legacy session properties and attach the current database object.
+     * @param array<string,mixed> $data
+     */
+    public function __unserialize(array $data): void
     {
         global $gDb;
 
+        SerializationUtils::restoreProperties($this, $data);
         if ($gDb instanceof Database) {
             $this->db = $gDb;
         }
@@ -133,10 +167,11 @@ class Entity
      * read and stored in the arrays **dbColumns** and **columnsInfos**
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         $this->newRecord = true;
         $this->insertRecord = true;
+        $this->insertedRecord = false;
         $this->columnsValueChanged = false;
         $this->saveChangesWithoutRights = false;
 
@@ -149,7 +184,7 @@ class Entity
             }
             unset($fieldValue);
         } else {
-            // read all columns information of the tables
+            // read all column information of the tables
             $this->setColumnsInfos();
         }
     }
@@ -161,6 +196,7 @@ class Entity
      * @param string $table Database table name that should be connected.
      * @param string $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
      * @param string $columnNameClassTable Name of the column in the class table that has the foreign key to the connected table
+     * @throws Exception
      *
      * **Code example**
      * ```
@@ -172,17 +208,24 @@ class Entity
      * }
      * ```
      */
-    public function connectAdditionalTable(string $table, string $columnNameAdditionalTable, string $columnNameClassTable)
+    public function connectAdditionalTable(string $table, string $columnNameAdditionalTable, string $columnNameClassTable): void
     {
         $this->additionalTables[] = array(
             'table' => $table,
             'columnNameAdditionalTable' => $columnNameAdditionalTable,
             'columnNameClassTable' => $columnNameClassTable
         );
+
+        // An additional table can also be connected after the entity was initialized.
+        // In this case, load its column metadata immediately so readData() can process
+        // the additional columns as well.
+        if (count($this->columnsInfos) > 0) {
+            $this->setColumnsInfosForTable($table);
+        }
     }
 
     /**
-     * Get the name of the underlying database table. This can be used to construct sql queries  without hardcoding the table.
+     * Get the name of the underlying database table. This can be used to construct SQL queries without hardcoding the table.
      * @return string The name of the underlying database table
      */
     public function getTableName(): string
@@ -200,7 +243,7 @@ class Entity
     }
 
     /**
-     * Get the key column of the underlying database table. This can be used to construct sql queries names without hardcoding the column name.
+     * Get the key column of the underlying database table. This can be used to construct SQL queries names without hardcoding the column name.
      * @return string The key column name used for the underlying database table
      */
     public function getKeyColumnName(): string
@@ -209,7 +252,7 @@ class Entity
     }
 
     /**
-     * Reads the number of all records of this table
+     * Reads the number of all records from this table
      * @return int Number of records of this table
      * @throws Exception
      */
@@ -231,16 +274,40 @@ class Entity
     public function readableName(): string
     {
         if (array_key_exists($this->columnPrefix . '_name', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_name'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_name'] ?? '';
         } elseif (array_key_exists($this->columnPrefix . '_title', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_title'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_title'] ?? '';
         } elseif (array_key_exists($this->columnPrefix . '_headline', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_headline'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_headline'] ?? '';
         } elseif (array_key_exists($this->columnPrefix . '_text', $this->dbColumns)) {
-            return $this->dbColumns[$this->columnPrefix . '_text'] ?? '';
+            $name = $this->dbColumns[$this->columnPrefix . '_text'] ?? '';
         } else {
-            return $this->dbColumns[$this->keyColumnName] ?? '';
+            $name = $this->dbColumns[$this->keyColumnName] ?? '';
         }
+
+        return $this->filterReadableName($name);
+    }
+
+    /**
+     * Pass the result of readableName() through entity_readable_name and, for an entity that names
+     * itself for the persistence hooks (see getHookId()), through <hookId>_readable_name as well.
+     * A subclass that overrides readableName() calls this on its own return value instead of
+     * dispatching the filter itself, so that one name reaches every entity regardless of how its
+     * readable name is built.
+     *
+     * @param string $name The readable name before filtering.
+     * @return string The readable name after both filters.
+     */
+    protected function filterReadableName(string $name): string
+    {
+        $name = Hooks::applyFilters('entity_readable_name', $name, $this);
+
+        $hookId = $this->getHookId();
+        if ($hookId !== null) {
+            $name = Hooks::applyFilters($hookId . '_readable_name', $name, $this);
+        }
+
+        return $name;
     }
 
     /**
@@ -255,27 +322,395 @@ class Entity
     }
 
     /**
-     * Enable/disable logging globally, irrespective of the preference setting. Used e.g. during setup / updates
+     * Enable/disable logging globally, irrespective of the preference setting. Used, e.g., during setup / updates
      * @param mixed $enabled Whether logging should be enabled or not.
      * @return void
      */
-    public static function setLoggingEnabled($enabled)
+    public static function setLoggingEnabled(mixed $enabled): void
     {
         self::$loggingEnabled = $enabled;
     }
 
+
+    /**
+     * Switch the persistence hooks of all entities on or off. The installation and the update
+     * switch them off: they write records of every kind while the schema and the core are still
+     * changing, and a plugin callback has nothing useful to do with that.
+     * @param bool $enabled **false** disables the hooks for the rest of the request.
+     * @return void
+     */
+    public static function setHooksEnabled(bool $enabled): void
+    {
+        self::$hooksEnabled = $enabled;
+    }
+
+    /**
+     * The stable public identifier of this entity in the hook API. It is the first half of the
+     * entity-specific hook names, so an entity with the hook ID **oidc_client** dispatches
+     * **oidc_client_created**, **oidc_client_updated** and **oidc_client_deleted**, next to the
+     * generic **entity_created**, **entity_updated** and **entity_deleted**.
+     *
+     * The identifier is a public API and is deliberately not derived from the PHP class name, so
+     * that a class can be renamed without breaking the plugins that listen to it.
+     *
+     * An entity that returns **null**, which is the default, dispatches nothing at all, the
+     * generic hooks included. That is how an entity opts out, and it is also why a new entity is
+     * silent until someone decides what its public name should be. Sessions, auto logins, the
+     * changelog itself and the OAuth tokens stay silent on purpose: they are written constantly,
+     * they hold infrastructure state or secrets, and a changelog entry that reports the writing of
+     * a changelog entry would not stop.
+     *
+     * @return string|null Returns the hook ID of this entity, or **null** if it has no hooks.
+     */
+    public function getHookId(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * The columns whose value must not be handed to a hook callback: secrets such as a password,
+     * a key or a token, and values that have no meaning outside the record, such as an image. The
+     * change set reports that these columns changed and replaces both values with
+     * EntityChangeSet::REDACTED_VALUE, and it leaves them out of its snapshot.
+     *
+     * This is deliberately not getIgnoredLogColumns(), which lists the columns that are noise in
+     * the change history. Noise and secrets are two different problems and an entity usually has
+     * different columns for each of them.
+     *
+     * @return array Returns the list of database columns whose value must not leave the record.
+     */
+    public function getSensitiveHookColumns(): array
+    {
+        return array();
+    }
+
+    /**
+     * Whether this entity dispatches persistence hooks at all and at least one callback is
+     * registered for the given stage. Building a change set reads the whole record, so nothing of
+     * it is built while nobody listens.
+     * @param string $suffix The stage, e.g. **updating** or **updated**.
+     * @return bool Returns **true** if the stage has to be dispatched.
+     */
+    protected function hasHookListener(string $suffix): bool
+    {
+        $hookId = $this->getHookId();
+
+        if (!self::$hooksEnabled || $hookId === null) {
+            return false;
+        }
+
+        return Hooks::hasAction('entity_' . $suffix) || Hooks::hasAction($hookId . '_' . $suffix);
+    }
+
+    /**
+     * Dispatch one stage of the persistence lifecycle, to the generic hook and to the hook of this
+     * entity. The order nests the two: before the operation the generic hook runs first, after it
+     * and on failure the entity-specific hook runs first, so that a callback of the generic layer
+     * encloses the callbacks of the specific one.
+     *
+     * Every stage also hands the callback this object, so it can read fields the change set does not
+     * carry - an unchanged column, a related record - or call a domain method on it, with two
+     * exceptions: **deleted** and **delete_failed** receive **null** instead. By the time either can
+     * fire, delete() has already cleared the object - immediately for a direct failure, later through
+     * the commit/rollback queue for everything else - and a bulk deletion reuses one object for every
+     * row it removes, so it would as often be the wrong record as an empty one. The change set's
+     * snapshot is what those two describe the record from.
+     *
+     * @param string $suffix The stage, e.g. **updating** or **updated**.
+     * @param EntityChangeSet $changeSet What the operation changes or changed.
+     * @param bool $genericFirst **true** before the operation, **false** after it and on failure.
+     * @param bool $catchErrors **true** for the failure stages, where the original failure has to
+     *                          stay the one that Admidio reports.
+     * @return void
+     */
+    protected function dispatchHook(string $suffix, EntityChangeSet $changeSet, bool $genericFirst, bool $catchErrors = false): void
+    {
+        $names = array('entity_' . $suffix, $this->getHookId() . '_' . $suffix);
+
+        if (!$genericFirst) {
+            $names = array_reverse($names);
+        }
+
+        $entity = in_array($suffix, array('deleted', 'delete_failed'), true) ? null : $this;
+
+        foreach ($names as $name) {
+            if ($catchErrors) {
+                Hooks::doActionCatchErrors($name, $changeSet, $entity);
+            } else {
+                Hooks::doAction($name, $changeSet, $entity);
+            }
+        }
+    }
+
+    /**
+     * Dispatch the hooks of an operation that is now really in the database. The queue calls this
+     * at the commit of the outermost transaction, with the operations of one record already put
+     * together, so a plugin sees one event for one logical change and never one for a change that
+     * was rolled back.
+     * @param EntityChangeSet $changeSet What the transaction changed about this record.
+     * @return void
+     */
+    public function dispatchCommittedHook(EntityChangeSet $changeSet): void
+    {
+        $suffix = match ($changeSet->getOperation()) {
+            EntityChangeSet::OPERATION_CREATE => 'created',
+            EntityChangeSet::OPERATION_DELETE => 'deleted',
+            default => 'updated'
+        };
+
+        $this->dispatchHook($suffix, $changeSet, false);
+    }
+
+    /**
+     * Dispatch the failure hooks of an operation whose transaction never reached the database. The
+     * queue calls this on a rollback and at the end of a request that abandoned a transaction, so
+     * that a callback which reserved something in the pre-action can release it again.
+     * @param EntityChangeSet $changeSet What the operation would have changed.
+     * @return void
+     */
+    public function dispatchFailedHook(EntityChangeSet $changeSet): void
+    {
+        $suffix = match ($changeSet->getOperation()) {
+            EntityChangeSet::OPERATION_CREATE => 'create_failed',
+            EntityChangeSet::OPERATION_DELETE => 'delete_failed',
+            default => 'update_failed'
+        };
+
+        $this->dispatchHook($suffix, $changeSet, false, true);
+    }
+
+    /**
+     * Whether one of the three stages of a deletion has a listener, so that the record has to be
+     * described before it is removed.
+     * @return bool Returns **true** if a deletion of this entity has to be reported.
+     */
+    protected function hasDeletionHookListener(): bool
+    {
+        return $this->hasHookListener('deleting') || $this->hasHookListener('deleted')
+            || $this->hasHookListener('delete_failed');
+    }
+
+    /**
+     * The change set of the deletion of the record this object currently holds. A deletion reports
+     * every column of the own table as a change to **null**, so that hasChanged() and getOldValue()
+     * work the same way as for a create and an update, and the snapshot carries the record that the
+     * post-action can no longer read anywhere else.
+     * @return EntityChangeSet Returns what the deletion removes.
+     */
+    protected function buildDeletionChangeSet(): EntityChangeSet
+    {
+        $deletedColumns = array();
+        foreach ($this->dbColumns as $column => $value) {
+            if (str_starts_with($column, $this->columnPrefix . '_')) {
+                // A caller may set a column - ProfileFields::saveUserData() clears a field before
+                // deciding whether to delete the now-empty record - and dbColumns already holds that
+                // proposed value, not the persisted one. previousValue is what the database still
+                // holds whenever the column has already been changed; only a column nobody touched
+                // can be read from dbColumns directly.
+                $oldValue = empty($this->columnsInfos[$column]['changed'])
+                    ? $value
+                    : $this->columnsInfos[$column]['previousValue'];
+                $deletedColumns[$column] = array('oldValue' => $oldValue, 'newValue' => null);
+            }
+        }
+
+        return $this->buildChangeSet(
+            EntityChangeSet::OPERATION_DELETE,
+            (string)Uuid::uuid4(),
+            $deletedColumns
+        );
+    }
+
+    /**
+     * Queue the delete hooks of every record that the given condition selects. It is called by
+     * deleteDependentRecords() right before the records are removed, so that a record which is
+     * deleted together with the record it belongs to is reported like any other deletion. Without
+     * it the bulk DELETE would take those records out of the hook API without a trace, exactly as
+     * it would take them out of the changelog without logBulkDeletion().
+     *
+     * The records are read in one query and the values are put into this object one after the
+     * other, so a caller must not rely on what the object holds afterwards - it is cleared.
+     *
+     * @param string $sqlWhereCondition Condition that selects the records, without the leading
+     *                                  keyword WHERE. It may only use columns of the own table.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @param Entity|null $cause The record whose deletion removes these ones. Every change set
+     *                           names it, so that a listener can tell a membership that was ended
+     *                           from one that disappeared with its role.
+     * @return int Returns the number of deletions that were reported.
+     * @throws Exception
+     */
+    public function hookBulkDeletion(string $sqlWhereCondition, array $queryParams = array(), ?Entity $cause = null): int
+    {
+        if (!$this->hasDeletionHookListener()) {
+            return 0;
+        }
+
+        $sql = 'SELECT * FROM ' . $this->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+        $reported = 0;
+
+        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $this->clear();
+            $this->assignRowToColumns($row);
+            $this->newRecord = false;
+            $this->insertRecord = false;
+
+            $changeSet = $this->buildDeletionChangeSet();
+            if ($cause !== null) {
+                list($causeId) = $cause->getHookKey();
+                $changeSet = $changeSet->withCause($cause->getHookId(), $causeId);
+            }
+            $this->dispatchHook('deleting', $changeSet, true);
+            EntityHookQueue::add($this, $changeSet, $this->db);
+            $reported++;
+        }
+
+        $this->clear();
+
+        return $reported;
+    }
+
+    /**
+     * Build the change set of one operation from the change tracking that the object keeps anyway.
+     * @param string $operation One of the EntityChangeSet::OPERATION_... constants.
+     * @param string $operationId Identifies the operation across its stages.
+     * @param array $changedColumns The changed columns as **column => array('oldValue', 'newValue')**.
+     *                              For a deletion this is empty, the snapshot describes the record.
+     * @return EntityChangeSet Returns what the operation changes or changed.
+     */
+    protected function buildChangeSet(string $operation, string $operationId, array $changedColumns): EntityChangeSet
+    {
+        $sensitiveColumns = $this->getSensitiveHookColumns();
+        $technicalColumns = $this->getIgnoredLogColumns();
+        $changes = array();
+
+        foreach ($changedColumns as $column => $values) {
+            if (in_array($column, $sensitiveColumns, true)) {
+                $kind = EntityFieldChange::KIND_REDACTED;
+                $oldValue = ($values['oldValue'] === null) ? null : EntityChangeSet::REDACTED_VALUE;
+                $newValue = ($values['newValue'] === null) ? null : EntityChangeSet::REDACTED_VALUE;
+            } else {
+                $kind = in_array($column, $technicalColumns, true)
+                    ? EntityFieldChange::KIND_TECHNICAL : EntityFieldChange::KIND_BUSINESS;
+                $oldValue = $values['oldValue'];
+                $newValue = $values['newValue'];
+            }
+
+            $changes[$column] = new EntityFieldChange(
+                $column,
+                $oldValue,
+                $newValue,
+                $this->columnsInfos[$column]['type'] ?? '',
+                $kind
+            );
+        }
+
+        // The snapshot is what the database holds. For an update the object already carries the
+        // new values, so the changed columns are put back to the value they are changed from.
+        $snapshot = array();
+        if ($operation !== EntityChangeSet::OPERATION_CREATE) {
+            foreach ($this->dbColumns as $column => $value) {
+                if (in_array($column, $sensitiveColumns, true)) {
+                    continue;
+                }
+                $snapshot[$column] = array_key_exists($column, $changedColumns)
+                    ? $changedColumns[$column]['oldValue'] : $value;
+            }
+        }
+
+        list($id, $uuid) = $this->getHookKey();
+
+        return new EntityChangeSet(
+            (string)$this->getHookId(),
+            static::class,
+            $this->tableName,
+            $this->columnPrefix,
+            $this->keyColumnName,
+            $id,
+            $uuid,
+            $operation,
+            $operationId,
+            $changes,
+            $snapshot
+        );
+    }
+
+    /**
+     * The key of the record as the hooks report it. Before an insert the database has not assigned
+     * the ID yet, so it is null there and known in the matching post-action.
+     * @return array Returns **array($id, $uuid)**, either of them **null** when it does not exist.
+     */
+    protected function getHookKey(): array
+    {
+        $uuidColumn = $this->columnPrefix . '_uuid';
+
+        $id = (isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '')
+            ? $this->dbColumns[$this->keyColumnName] : null;
+        $uuid = (array_key_exists($uuidColumn, $this->dbColumns) && $this->dbColumns[$uuidColumn] !== '')
+            ? (string)$this->dbColumns[$uuidColumn] : null;
+
+        return array($id, $uuid);
+    }
+
+    /**
+     * Let the filters transform a value that is about to be set. It runs before the type handling
+     * and the sanitizing of setValue(), so that everything a filter returns still goes through the
+     * normal checks of the column and nothing can bypass them.
+     *
+     * The key column, the UUID and the creator and editor columns are not filtered: they are the
+     * bookkeeping of the record and not data anyone should rewrite through a hook.
+     *
+     * A callback must not call setValue() on the entity it is filtering for, that would recurse.
+     *
+     * @param string $columnName The database column that is about to be set.
+     * @param mixed $newValue The proposed value.
+     * @return mixed Returns the value after the filters.
+     */
+    protected function applyValueFilters(string $columnName, mixed $newValue): mixed
+    {
+        $hookId = $this->getHookId();
+
+        if (!self::$hooksEnabled || $hookId === null) {
+            return $newValue;
+        }
+
+        $unfiltered = array(
+            $this->keyColumnName,
+            $this->columnPrefix . '_uuid',
+            $this->columnPrefix . '_usr_id_create',
+            $this->columnPrefix . '_timestamp_create',
+            $this->columnPrefix . '_usr_id_change',
+            $this->columnPrefix . '_timestamp_change'
+        );
+
+        if (in_array($columnName, $unfiltered, true)) {
+            return $newValue;
+        }
+
+        $oldValue = $this->dbColumns[$columnName] ?? null;
+
+        foreach (array('entity_value', $hookId . '_value') as $name) {
+            if (Hooks::hasFilter($name)) {
+                $newValue = Hooks::applyFilters($name, $newValue, $this, $columnName, $oldValue);
+            }
+        }
+
+        return $newValue;
+    }
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
      * to log changes to these columns. Subclasses can also add further fields
-     * (e.g. the users table stores and auto-increments the login count, which
+     * (e.g., the user's table stores and auto-increments the login count, which
      * we do not want to log)
      *
      * @return array Returns the list of database columns to be ignored for logging.
      */
     public function getIgnoredLogColumns(): array
     {
-        $ignored = [
+        return [
             $this->columnPrefix . '_uuid',
             $this->columnPrefix . '_usr_id_create',
             $this->columnPrefix . '_timestamp_create',
@@ -284,35 +719,48 @@ class Entity
             $this->columnPrefix . '_usr_id',
             $this->columnPrefix . '_timestamp'
         ];
-        return $ignored;
     }
 
     /**
      * Adjust the changelog entry for this db record. By default, record_id, record_name are taken
-     * from this record, linkid and related are left empty, and the field is the column name of each change.
+     * from this record, linked and related are left empty, and the field is the column name of each change.
+     *
+     * What a class has to provide so that its table produces useful changelog entries:
+     *  - a key column, and preferably a <prefix>_uuid column. Without the uuid the changelog can
+     *    only show the record name as plain text and cannot link to the record.
+     *  - a readableName() that names the record. The default falls back to the name, headline or
+     *    text column and finally to the numeric id, which is of little use in a log.
+     *  - getIgnoredLogColumns() for the columns that are noise, and adjustLogEntry() for the ones
+     *    whose value must not be stored, see User::adjustLogEntry() for the masking of secrets.
+     *  - an adjustLogEntry() override for relation and composite-key tables, where the record of
+     *    the log entry is not the record itself. Membership and RolesDependencies point their
+     *    entries at the user and name the role as the related object.
+     * The table also has to be registered in ChangelogService, which documents the methods that
+     * have to be kept in sync.
      *
      * @param LogChanges $logEntry The log entry to adjust
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
     }
 
 
     /**
      * Logs creation of the DB record
-     * @param integer $id the unique index of the new record in the database table
-     * @param string $record_name the human-readable representation of the record
-     *
      * @return true Returns **true** if no error occurred
      * @throws Exception
      */
     public function logCreation(): bool
     {
         if (!self::$loggingEnabled) return false;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        // Check whether this table is logged at all before collecting the data for the log entry.
+        // readableName() and adjustLogEntry() may read further records from the database, and
+        // LogChanges::save() would discard all of that work again.
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
             $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
@@ -330,12 +778,17 @@ class Entity
      * Logs deletion of the DB record
      *
      * @return true Returns **true** if no error occurred
+     * @throws Exception
      */
     public function logDeletion(): bool
     {
         if (!self::$loggingEnabled) return false;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        // Check whether this table is logged at all before collecting the data for the log entry.
+        // readableName() and adjustLogEntry() may read further records from the database, and
+        // LogChanges::save() would discard all of that work again.
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
             $uuid = (string)$this->getValue($this->columnPrefix . '_uuid');
@@ -361,9 +814,10 @@ class Entity
     {
         if (!self::$loggingEnabled) return false;
         if (count($logChanges) === 0) return false;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return false;
+
         $retVal = true;
-        $table = $this->tableName;
-        $table = str_replace(TABLE_PREFIX . '_', '', $table);
         $id = $this->dbColumns[$this->keyColumnName];
         $record_name = $this->readableName();
         if (array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)) {
@@ -395,12 +849,41 @@ class Entity
      */
     public function delete(): bool
     {
-        if (array_key_exists($this->keyColumnName, $this->dbColumns) && $this->dbColumns[$this->keyColumnName] !== '') {
-            // Log record deletion, then delete
+        if (array_key_exists($this->keyColumnName, $this->dbColumns) && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
+            // The change set has to be built while the record still exists: clear() below empties
+            // the object, so the snapshot it carries is the only thing a post-delete callback can
+            // read the deleted record from.
+            $changeSet = null;
+            if ($this->hasDeletionHookListener()) {
+                $changeSet = $this->buildDeletionChangeSet();
+                $this->dispatchHook('deleting', $changeSet, true);
+            }
+
+            // Log record deletion, then delete. The deletion of the dependent records that a
+            // derived delete() removes beforehand is a change of its own and is not part of this
+            // change set.
+            $previousChangeSet = LogChanges::startChangeSet();
             $this->logDeletion();
+            LogChanges::endChangeSet($previousChangeSet);
+
             $sql = 'DELETE FROM ' . $this->tableName . '
                      WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
-            $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
+            try {
+                $this->db->queryPrepared($sql, array($this->dbColumns[$this->keyColumnName]));
+            } catch (Throwable $exception) {
+                if ($changeSet !== null && !$this->db->isInTransaction()) {
+                    $this->dispatchFailedHook($changeSet);
+                }
+                throw $exception;
+            }
+
+            $this->clear();
+
+            if ($changeSet !== null) {
+                EntityHookQueue::add($this, $changeSet, $this->db);
+            }
+
+            return true;
         }
 
         $this->clear();
@@ -408,9 +891,76 @@ class Entity
     }
 
     /**
+     * Delete all records of a dependent table that belong to this record. The records are removed
+     * with one DELETE, but every one of them is described before that: logBulkDeletion() writes its
+     * changelog entry and hookBulkDeletion() queues its delete hooks. A plain bulk DELETE would take
+     * the records out of the audit trail and out of the hook API without a trace, see the class
+     * documentation of ChangelogService.
+     *
+     * The identifying columns are named explicitly, because not every table has a single key
+     * column. adm_role_dependencies for example is identified by its parent and its child.
+     *
+     * @param Entity $object An empty object of the dependent table. It is reused for every record.
+     * @param array $identifyingColumns The columns that identify a single record of that table.
+     * @param string $sqlWhereCondition Condition that selects the dependent records, without the
+     *                                  leading keyword WHERE.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of deleted records.
+     * @throws Exception
+     */
+    protected function deleteDependentRecords(Entity $object, array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        $object->logBulkDeletion($identifyingColumns, $sqlWhereCondition, $queryParams);
+        $object->hookBulkDeletion($sqlWhereCondition, $queryParams, $this);
+
+        $sql = 'DELETE FROM ' . $object->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $statement = $this->db->queryPrepared($sql, $queryParams);
+
+        return $statement->rowCount();
+    }
+
+    /**
+     * Write one changelog entry for every record that the given condition selects. It is called by
+     * deleteDependentRecords() right before the records are deleted, so the entries still describe
+     * records that exist.
+     *
+     * The default implementation reads one record after the other and lets logDeletion() build its
+     * entry, so that an entity which customizes its log entry keeps exactly the entry it writes for
+     * a single deletion. An entity whose dependent records can be many should override this method
+     * and collect the same data in as few queries as possible.
+     *
+     * @param array $identifyingColumns The columns that identify a single record of that table.
+     * @param string $sqlWhereCondition Condition that selects the records, without the leading
+     *                                  keyword WHERE. It may only use columns of the own table,
+     *                                  because deleteDependentRecords() reuses it for the DELETE.
+     * @param array $queryParams Values of the prepared parameters of the condition.
+     * @return int Returns the number of written log entries.
+     * @throws Exception
+     */
+    public function logBulkDeletion(array $identifyingColumns, string $sqlWhereCondition, array $queryParams = array()): int
+    {
+        if (!self::$loggingEnabled) return 0;
+        $table = str_replace(TABLE_PREFIX . '_', '', $this->tableName);
+        if (!ChangelogService::isTableLogged($table)) return 0;
+
+        $sql = 'SELECT ' . implode(', ', $identifyingColumns) . '
+                  FROM ' . $this->tableName . '
+                 WHERE ' . $sqlWhereCondition;
+        $records = $this->db->queryPrepared($sql, $queryParams)->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($records as $record) {
+            $this->readDataByColumns($record);
+            $this->logDeletion();
+        }
+
+        return count($records);
+    }
+
+    /**
      * Get the first name and last name of the person who has created this record. In dependence of the preference
      * system_show_create_edit the login name will be shown. If the current user has a valid login and the
-     * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
+     * parameter **$linkToProfile** is set, then an HTML link to the profile is set around the name.
      * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
      * @return string Returns the first name and last name of the person optional with a link to the profile.
      * @throws Exception
@@ -446,7 +996,7 @@ class Entity
     /**
      * Get the first name and last name of the person who was the last editor of this record. In dependence of the preference
      * system_show_create_edit the login name will be shown. If the current user has a valid login and the
-     * parameter **$linkToProfile** is set than a html link to the profile is set around the name.
+     * parameter **$linkToProfile** is set, then an HTML link to the profile is set around the name.
      * @param bool $linkToProfile If set to **true** a link to the profile is set around the name.
      * @return string Returns the first name and last name of the person optional with a link to the profile.
      * @throws Exception
@@ -479,25 +1029,74 @@ class Entity
         return $nameOfLastEditingUser;
     }
 
+    private static function isTranslatableColumn(string $column): bool
+    {
+        return in_array($column, array(
+            'rol_name', 'rol_description', 'lst_name', 'crt_name',
+            'room_name', 'room_description', 'txt_text',
+            'cat_name', 'usf_name', 'usf_description',
+        ), true);
+    }
+
+    protected static function translateColumnValue(string $column, string $value): string
+    {
+        if (!Language::isTranslationStringId($value)) {
+            return $value;
+        }
+        $value = Language::translateIfTranslationStrId($value);
+        // Mail templates and their textareas use real line breaks, not HTML breaks.
+        if ($column === 'txt_text') {
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', "\r\n", $value);
+            $value = StringUtils::strStripTags(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        }
+        return $value;
+    }
+
+    /** Keep the ID when an edit form submits its unchanged, translated value. */
+    private static function preserveTranslationId(string $column, mixed $stored, mixed $submitted): mixed
+    {
+        if (!self::isTranslatableColumn($column) || !is_string($stored) || !is_string($submitted)
+            || !Language::isTranslationStringId($stored)) {
+            return $submitted;
+        }
+
+        $normalize = static function (string $value) use ($column): string {
+            $value = trim(str_replace(array("\r\n", "\r"), "\n", html_entity_decode($value, ENT_QUOTES, 'UTF-8')));
+            if (in_array($column, array('room_description', 'usf_description'), true)) {
+                // Rich-text editors wrap a plain paragraph and normalize HTML line breaks on submission.
+                if (str_starts_with($value, '<p>') && str_ends_with($value, '</p>') && substr_count($value, '<p>') === 1) {
+                    $value = substr($value, 3, -4);
+                }
+                $value = preg_replace('/<br\s*\/?\s*>/', '<br>', $value);
+            }
+            return $value;
+        };
+        if ($normalize($submitted) === $normalize(self::translateColumnValue($column, $stored))) {
+            return $stored;
+        }
+        return $submitted;
+    }
+
     /**
      * Get the value of a column of the database table.
-     * If the value was manipulated before with **setValue** than the manipulated value is returned.
+     * If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @param string $columnName The name of the database column whose value should be read
-     * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
-     *                           For text columns the format can be **database** that would return the original database value without any transformations
+     * @param string $format For date or timestamp columns, the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
+     *                           For text, date, time and timestamp columns, the format **database** returns the
+     *                           original database value without any transformation (e.g. a date as **Y-m-d**).
      * @return mixed Returns the value of the database column.
-     *               If the value was manipulated before with **setValue** than the manipulated value is returned.
+     *               If the value was manipulated before with **setValue** then the manipulated value is returned.
      * @throws Exception
      * @see Entity#setValue
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gSettingsManager;
 
         $columnValue = '';
 
         if (array_key_exists($columnName, $this->dbColumns)) {
-            // if key field is empty, return 0
+            // if the key field is empty, return 0
             if ($this->keyColumnName === $columnName && empty($this->dbColumns[$columnName])) {
                 $columnValue = 0;
             } else {
@@ -511,10 +1110,21 @@ class Entity
                 case 'char': // fallthrough
                 case 'varchar': // fallthrough
                 case 'text':
+                case 'tinytext':
+                case 'mediumtext':
+                case 'longtext':
                     if ($format !== 'database') {
-                        // if text field and format not 'database' then convert all quotes to html syntax
+                        // if text field and format not 'database' then convert all quotes to HTML syntax
                         $columnValue = SecurityUtils::encodeHTML((string)$columnValue);
+                    } else {
+                        // Postgres returns null for empty text fields, so we convert it to empty string here
+                        $columnValue = $columnValue ?? '';
                     }
+                    break;
+
+                case 'blob': // fallthrough
+                case 'mediumblob':
+                    // For blobs, we return the raw data as is
                     break;
 
                 case 'bytea':
@@ -531,7 +1141,14 @@ class Entity
                 case 'timestamp': // fallthrough
                 case 'date': // fallthrough
                 case 'time':
-                    if ($columnValue !== '' && $columnValue !== null) {
+                    if (isset($columnValue) && $columnValue !== '') {
+                        if ($format === 'database') {
+                            // the value exactly as the database holds it, e.g. a date as Y-m-d, for a
+                            // comparison or a re-insert - never run through DateTime::format().
+                            $columnValue = $this->dbColumns[$columnName];
+                            break;
+                        }
+
                         if ($format === '' && isset($gSettingsManager)) {
                             if (str_contains($this->columnsInfos[$columnName]['type'], 'timestamp')) {
                                 $format = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
@@ -544,9 +1161,9 @@ class Entity
 
                         // try to format the date, else output the available data
                         try {
-                            $datetime = new \DateTime($columnValue);
+                            $datetime = new DateTime($columnValue);
                             $columnValue = $datetime->format($format);
-                        } catch (Exception $e) {
+                        } catch (Throwable) {
                             $columnValue = $this->dbColumns[$columnName];
                         }
                     } else {
@@ -556,11 +1173,16 @@ class Entity
             }
         }
 
+        if ($format !== 'database' && is_string($columnValue) && self::isTranslatableColumn($columnName)
+            && Language::isTranslationStringId($columnValue)) {
+            $columnValue = SecurityUtils::encodeHTML(self::translateColumnValue($columnName, $columnValue));
+        }
+
         return $columnValue;
     }
 
     /**
-     * If a column of the row in this object has changed throw setValue then this method
+     * If a column of the row in this object has changed throw setValue, then this method
      * will return **true** otherwise @false
      * @return bool Returns **true** if at least one value of one column has changed
      *              after the recordset was loaded otherwise **false**
@@ -571,9 +1193,9 @@ class Entity
     }
 
     /**
-     * If the recordset is new and wasn't read from database or was not stored in database
+     * If the recordset is new and wasn't read from a database or was not stored in a database,
      * then this method will return true otherwise false
-     * @return bool Returns **true** if record is not stored in database
+     * @return bool Returns **true** if record is not stored in a database
      */
     public function isNewRecord(): bool
     {
@@ -581,9 +1203,21 @@ class Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out of the table.
-     * If the sql find more than one record the method returns **false**.
-     * Per default all columns of the default table will be read and stored in the object.
+     * If a save() of this object has inserted the record into the database, then this method will
+     * return true. In contrast to isNewRecord() the answer does not change when the same object is
+     * saved again afterwards, so it can be used after save() to tell a created record from a changed
+     * one, e.g. to choose between a "created" and a "changed" notification.
+     * @return bool Returns **true** if this object has created the record it represents
+     */
+    public function wasInserted(): bool
+    {
+        return $this->insertedRecord;
+    }
+
+    /**
+     * Reads a record out of the table in the database selected by the conditions of the param **$sqlWhereCondition** out of the table.
+     * If the SQL finds more than one record, the method returns **false**.
+     * Per default, all columns of the default table will be read and stored in the object.
      * @param string $sqlWhereCondition Conditions for the table to select one record
      * @param array<int,mixed> $queryParams The query params for the prepared statement
      * @return bool Returns **true** if one record is found
@@ -596,7 +1230,7 @@ class Entity
     {
         $sqlAdditionalTables = '';
 
-        // create sql to connect additional tables to the select statement
+        // create SQL to connect additional tables to the select statement
         if (count($this->additionalTables) > 0) {
             foreach ($this->additionalTables as $arrAdditionalTable) {
                 $sqlAdditionalTables .= ', ' . $arrAdditionalTable['table'];
@@ -604,7 +1238,7 @@ class Entity
             }
         }
 
-        // if condition starts with AND then remove this
+        // if the condition starts with AND then remove this
         if (StringUtils::strStartsWith(ltrim($sqlWhereCondition), 'AND', false)) {
             $sqlWhereCondition = substr($sqlWhereCondition, 4);
         }
@@ -620,21 +1254,10 @@ class Entity
                 $row = $readDataStatement->fetch();
                 $this->newRecord = false;
                 $this->insertRecord = false;
+                $this->insertedRecord = false;
 
                 // move data to class column value array
-                foreach ($row as $key => $value) {
-                    if ($this->columnsInfos[$key]['type'] === 'boolean'
-                        || $this->columnsInfos[$key]['type'] === 'tinyint') {
-                        $this->dbColumns[$key] = (bool)$value;
-                    } elseif (($this->columnsInfos[$key]['type'] === 'integer'
-                            || $this->columnsInfos[$key]['type'] === 'smallint')
-                        && $value != '') {
-                        // only convert to int if it's not a null value
-                        $this->dbColumns[$key] = (int)$value;
-                    } else {
-                        $this->dbColumns[$key] = $value;
-                    }
-                }
+                $this->assignRowToColumns($row);
 
                 return true;
             }
@@ -646,8 +1269,31 @@ class Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the unique id column in the table.
-     * Per default all columns of the default table will be read and stored in the object.
+     * Move the columns of a database row into the value array of this object and convert them to
+     * the PHP type of their column, so that a boolean column is a bool and an id an int.
+     * @param array $row One row of the table, as the database returned it.
+     * @return void
+     */
+    protected function assignRowToColumns(array $row): void
+    {
+        foreach ($row as $key => $value) {
+            if ($this->columnsInfos[$key]['type'] === 'boolean'
+                || $this->columnsInfos[$key]['type'] === 'tinyint') {
+                $this->dbColumns[$key] = (bool)$value;
+            } elseif (($this->columnsInfos[$key]['type'] === 'integer'
+                    || $this->columnsInfos[$key]['type'] === 'smallint')
+                && $value != '') {
+                // only convert to int if it's not a null value
+                $this->dbColumns[$key] = (int)$value;
+            } else {
+                $this->dbColumns[$key] = $value;
+            }
+        }
+    }
+
+    /**
+     * Reads a record out of the table in the database selected by the unique id column in the table.
+     * Per default, all columns of the default table will be read and stored in the object.
      * @param int $id Unique id of id column of the table.
      * @return bool Returns **true** if one record is found
      * @throws Exception
@@ -660,9 +1306,9 @@ class Entity
         // initialize the object, so that all fields are empty
         $this->clear();
 
-        // add id to sql condition
+        // add id to SQL condition
         if ($id > 0) {
-            // call method to read data out of database
+            // call method to read data out of a database
             return $this->readData(' AND ' . $this->keyColumnName . ' = ? ', array($id));
         }
 
@@ -670,9 +1316,9 @@ class Entity
     }
 
     /**
-     * Reads a record out of the table in database selected by the unique uuid column in the table.
-     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g. usr_uuid.
-     * Per default all columns of the default table will be read and stored in the object.
+     * Reads a record out of the table in the database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
+     * Per default, all columns of the default table will be read and stored in the object.
      * Not every Admidio table has a UUID. Please check the database structure before you use this method.
      * @param string $uuid Unique uuid that should be searched.
      * @return bool Returns **true** if one record is found
@@ -686,9 +1332,9 @@ class Entity
         // initialize the object, so that all fields are empty
         $this->clear();
 
-        // add id to sql condition
+        // add id to SQL condition
         if ($uuid !== '') {
-            // call method to read data out of database
+            // call method to read data out of a database
             return $this->readData(' AND ' . $this->columnPrefix . '_uuid = ? ', array($uuid));
         }
 
@@ -698,10 +1344,10 @@ class Entity
     /**
      * Reads a record out of the table in database selected by different columns in the table.
      * The columns are committed with an array where every element index is the column name and the value is the column value.
-     * If you want a column to be null than set the value to **NULL**
+     * If you want a column to be null, then set the value to **NULL**
      * The columns and values must be selected so that they identify only one record.
-     * If the sql find more than one record the method returns **false**.
-     * Per default all columns of the default table will be read and stored in the object.
+     * If the SQL finds more than one record, the method returns **false**.
+     * Per default, all columns of the default table will be read and stored in the object.
      * @param array<string,mixed> $columnArray An array where every element index is the column name and the value is the column value
      * @return bool Returns **true** if one record is found
      *
@@ -728,7 +1374,7 @@ class Entity
         $sqlWhereCondition = '';
         $sqlParams = array();
 
-        // add every array element as a sql condition to the condition string
+        // add every array element as an SQL condition to the condition string
         foreach ($columnArray as $columnName => $columnValue) {
             if ($columnValue === 'NULL') {
                 $sqlWhereCondition .= ' AND ' . $columnName . ' IS NULL ';
@@ -738,10 +1384,10 @@ class Entity
             }
         }
 
-        // call method to read data out of database
+        // call method to read data out of a database
         $returnCode = $this->readData($sqlWhereCondition, array_values($sqlParams));
 
-        // if no record was found then save the array fields in the object
+        // if no record was found, then save the array fields in the object
         if (!$returnCode) {
             foreach ($columnArray as $columnName => $columnValue) {
                 if (str_starts_with($columnName, $this->columnPrefix . '_')) {
@@ -754,22 +1400,47 @@ class Entity
     }
 
     /**
-     * Save all changed columns of the recordset in table of database. Therefore, the class remembers if it's
+     * Save all changed columns of the recordset in table of a database. Therefore, the class remembers if it's
      * a new record or if only an update is necessary. The update statement will only update the changed columns.
-     * If the table has columns for creator or editor than these column with their timestamp will be updated.
-     * For a new record if there is an uuid column a new uuid will be created and stored.
+     * If the table has columns for creator or editor, then these columns with their timestamp will be updated.
+     * For a new record if there is a UUID column, a new uuid will be created and stored.
+     *
+     * The changelog entries of the change are written after the record itself was written, and
+     * they are not part of a transaction of their own. A failing log write does not undo the
+     * change and does not turn the return value into false: an error of the database ends the
+     * request anyway, and the changelog must not be able to block an ordinary save. Callers that
+     * need the record and its log entries to be written together have to open a transaction
+     * around the whole operation themselves, e.g.
+     * ```
+     * $gDb->startTransaction();
+     * $entity->save();
+     * $gDb->endTransaction();
+     * ```
+     * Transactions are counted, so this is also safe when the caller is already within one.
+     *
+     * An entity that has a hook ID dispatches its persistence hooks here: **entity_creating** and
+     * **&lt;entity&gt;_creating** before the statement, **&lt;entity&gt;_created** and
+     * **entity_created** after it, and the matching failure hooks when the statement fails. The
+     * pre-hooks run before anything of the object is modified, so a callback that throws to reject
+     * the operation leaves an object the caller can still save.
+     *
+     * The post-hooks do not fire here. EntityHookQueue holds them until the outermost transaction
+     * commits, and it reduces the saves of one record within that transaction to the one change
+     * that happened as far as anybody outside can tell. Without an open transaction the statement
+     * is the commit and they fire immediately.
+     *
      * @param bool $updateFingerPrint Default **true**. Will update the creator or editor of the recordset
-     *                                if table has columns like **usr_id_create** or **usr_id_change**
-     * @return bool If an update or insert into the database was done then return true, otherwise false.
+     *                                if a table has columns like **usr_id_create** or **usr_id_change**
+     * @return bool If an update or insert into the database was done, then return true, otherwise false.
      * @throws Exception
      */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if (!$this->columnsValueChanged && $this->dbColumns[$this->keyColumnName] !== '') {
+        if (!$this->columnsValueChanged && isset($this->dbColumns[$this->keyColumnName]) && $this->dbColumns[$this->keyColumnName] !== '') {
             return false;
         }
 
-        // if new role then set create the uuid
+        // if a new role then set create the uuid
         if ($this->isNewRecord()
             && array_key_exists($this->columnPrefix . '_uuid', $this->dbColumns)
             && (string)$this->getValue($this->columnPrefix . '_uuid') === '') {
@@ -801,11 +1472,55 @@ class Entity
 
         $logChanges = array();
 
+        // The hooks describe the same operation as the changelog, but they also report the
+        // bookkeeping columns and they need the value of the object and not the one that the
+        // PostgreSQL boolean conversion below produces. Nothing of this is collected while no
+        // callback is registered for any stage of this operation.
+        $operation = $this->insertRecord ? EntityChangeSet::OPERATION_CREATE : EntityChangeSet::OPERATION_UPDATE;
+        $hookStages = ($operation === EntityChangeSet::OPERATION_CREATE)
+            ? array('creating', 'created', 'create_failed')
+            : array('updating', 'updated', 'update_failed');
+        $collectHookChanges = false;
+        foreach ($hookStages as $hookStage) {
+            if ($this->hasHookListener($hookStage)) {
+                $collectHookChanges = true;
+                break;
+            }
+        }
+        // Collect them before the loop below, because that loop clears the changed flags as it
+        // builds the statement. A pre-action that vetoes the operation by throwing has to leave
+        // the object exactly as it found it, so that the caller can handle the rejection and save
+        // again.
+        $hookChanges = array();
+        if ($collectHookChanges) {
+            foreach ($this->dbColumns as $key => $value) {
+                if (str_starts_with($key, $this->columnPrefix . '_')
+                    && !$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
+                    $hookChanges[$key] = array(
+                        'oldValue' => ($operation === EntityChangeSet::OPERATION_CREATE)
+                            ? null : $this->columnsInfos[$key]['previousValue'],
+                        'newValue' => $value
+                    );
+                }
+            }
+        }
+
+        $changeSet = null;
+        if ($collectHookChanges
+            && ($operation === EntityChangeSet::OPERATION_CREATE || count($hookChanges) > 0)) {
+            $changeSet = $this->buildChangeSet($operation, (string)Uuid::uuid4(), $hookChanges);
+            $this->dispatchHook($hookStages[0], $changeSet, true);
+        }
+
+        // An insert must also contain the columns for which the database requires a value but which the
+        // caller has not set. It is read before the loop below, because that loop resets the changed flags.
+        $requiredColumns = $this->insertRecord ? $this->getRequiredColumnsWithoutValue() : array();
+
         // Loop over all DB fields and add them to the update
         foreach ($this->dbColumns as $key => $value) {
             // fields of other tables must not appear in insert/update
             if (str_starts_with($key, $this->columnPrefix . '_')) {
-                if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+                if ($this->columnsInfos[$key]['type'] === 'boolean' && DB_TYPE === Database::PDO_ENGINE_PGSQL) {
                     if ($value || $value === '1') {
                         $value = 'true';
                     } else {
@@ -817,20 +1532,13 @@ class Entity
                 if (!$this->columnsInfos[$key]['serial'] && $this->columnsInfos[$key]['changed']) {
                     if ($this->insertRecord) {
                         // Prepare data for an insert
-                        if ($value !== '') {
-                            $sqlFieldArray[] = $key;
-                            $queryParams[] = $value;
-                        }
+                        $sqlFieldArray[] = $key;
                     } else {
                         // Prepare data for an update
                         $sqlSetArray[] = $key . ' = ?';
 
-                        if ($value === '' || $value === null) {
-                            $queryParams[] = null;
-                        } else {
-                            $queryParams[] = $value;
-                        }
                     }
+                    $queryParams[] = $value;
                     // Ignore the usr_id_create and timestamp_create (and *_change) columns in the change log...
                     if (!in_array($key, $this->getIgnoredLogColumns())) {
                         $logChanges[$key] = array('oldValue' => $this->columnsInfos[$key]['previousValue'], 'newValue' => $value);
@@ -841,53 +1549,161 @@ class Entity
             }
         }
 
-        if ($this->insertRecord) {
-            // insert record and remember the new id
-            $sql = 'INSERT INTO ' . $this->tableName . '
-                           (' . implode(',', $sqlFieldArray) . ')
-                    VALUES (' . Database::getQmForValues($sqlFieldArray) . ')';
-            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
-                $returnCode = true;
-                if ($this->keyColumnName !== '') {
-                    $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
-                }
-                $this->logCreation();
-                $this->logModifications($logChanges);
-                $this->insertRecord = false;
-            }
-        } else {
-            $sql = 'UPDATE ' . $this->tableName . '
-                       SET ' . implode(', ', $sqlSetArray) . '
-                     WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
-            $queryParams[] = $this->dbColumns[$this->keyColumnName];
-            if ($this->db->queryPrepared($sql, $queryParams) !== false) {
-                $returnCode = true;
-                // Log record modification
-                $this->logModifications($logChanges);
-            }
+        // These columns carry no information, so they are deliberately not part of the changelog.
+        foreach ($requiredColumns as $key => $value) {
+            $sqlFieldArray[] = $key;
+            $queryParams[] = $value;
         }
 
+        // A caller may set columnsValueChanged for a change that belongs to a connected object and
+        // not to a column of this table, User::save() for its profile fields for example. If no
+        // column of this table changed, there is nothing to update, and an UPDATE without a SET
+        // clause would be a syntax error.
+        if (!$this->insertRecord && count($sqlSetArray) === 0) {
+            $this->columnsValueChanged = false;
+            return false;
+        }
+
+        // Every log entry that is written by this save belongs to the same change: the creation
+        // entry and the entries of the initial values of a new record, or all fields that this
+        // save has modified. LogChanges stamps them with one UUID, so that they can be shown
+        // together in the change history.
+        $previousChangeSet = LogChanges::startChangeSet();
+
+        try {
+            if ($this->insertRecord) {
+                // insert record and remember the new id
+                $sql = 'INSERT INTO ' . $this->tableName . '
+                               (' . implode(',', $sqlFieldArray) . ')
+                        VALUES (' . Database::getQmForValues($sqlFieldArray) . ')';
+                if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                    $returnCode = true;
+                    if ($this->keyColumnName !== '') {
+                        $this->dbColumns[$this->keyColumnName] = $this->db->lastInsertId();
+                    }
+                    // The result of the log writes is deliberately not evaluated, see the comment
+                    // about transactions in the description of this method.
+                    $this->logCreation();
+                    $this->logModifications($logChanges);
+                    // the flags are set after the log was written, because the log methods of some
+                    // classes decide by the new-record state what they have to write
+                    $this->newRecord = false;
+                    $this->insertRecord = false;
+                    $this->insertedRecord = true;
+                }
+            } else {
+                $sql = 'UPDATE ' . $this->tableName . '
+                           SET ' . implode(', ', $sqlSetArray) . '
+                         WHERE ' . $this->keyColumnName . ' = ? -- $this->dbColumns[$this->keyColumnName]';
+                $queryParams[] = $this->dbColumns[$this->keyColumnName];
+                if ($this->db->queryPrepared($sql, $queryParams) !== false) {
+                    $returnCode = true;
+                    // Log record modification
+                    $this->logModifications($logChanges);
+                }
+            }
+        } catch (Throwable $exception) {
+            // cleanup for whoever prepared something in the pre-action, and the original failure
+            // stays the one that Admidio reports. Inside a transaction the database runs the
+            // failure hooks of everything the transaction did, this one included.
+            if ($changeSet !== null && !$this->db->isInTransaction()) {
+                $this->dispatchFailedHook($changeSet);
+            }
+            throw $exception;
+        }
+
+        LogChanges::endChangeSet($previousChangeSet);
+
         $this->columnsValueChanged = false;
+
+        if ($changeSet !== null && $returnCode) {
+            // an insert only learns its ID from the database, so the post-action gets the key that
+            // the pre-action could not know yet
+            list($id, $uuid) = $this->getHookKey();
+            EntityHookQueue::add($this, $changeSet->withKey($id, $uuid), $this->db);
+        }
 
         return $returnCode;
     }
 
     /**
-     * If this method is set then the current user can save changes to this object if he hasn't the necessary rights.
+     * Collect the columns of the table for which the database requires a value but which the caller has
+     * not set: columns that are NOT NULL and have no default. save() writes only the changed columns, so
+     * such a column is missing from the INSERT. MySQL accepts that only because
+     * Database::setConnectionOptions() switches the connection to SQL_MODE 'ANSI', which replaces the
+     * server default and therefore drops STRICT_TRANS_TABLES. PostgreSQL rejects the row, so without this
+     * the same entity code stores a record on one engine and nothing on the other.
+     *
+     * The value that is written is the empty value of the column type. Date and time columns are
+     * deliberately left out: there is no empty date, and a fabricated one would hide the missing value
+     * instead of letting the database report it.
+     *
+     * @return array<string,mixed> Column name and value of every column that must be added to an INSERT
+     */
+    private function getRequiredColumnsWithoutValue(): array
+    {
+        $requiredColumns = array();
+
+        foreach ($this->dbColumns as $key => $value) {
+            // only columns of the table of this class and only those the caller has not set
+            if (!str_starts_with($key, $this->columnPrefix . '_')
+                || $this->columnsInfos[$key]['serial']
+                || $this->columnsInfos[$key]['changed']) {
+                continue;
+            }
+
+            // the column accepts NULL, or the database fills it itself
+            if ($this->columnsInfos[$key]['null']
+                || array_key_exists('default', $this->columnsInfos[$key])) {
+                continue;
+            }
+
+            switch ($this->columnsInfos[$key]['type']) {
+                case 'boolean': // fallthrough
+                case 'tinyint':
+                    $requiredColumns[$key] = (DB_TYPE === Database::PDO_ENGINE_PGSQL) ? 'false' : 0;
+                    break;
+
+                case 'integer': // fallthrough
+                case 'smallint': // fallthrough
+                case 'bigint': // fallthrough
+                case 'decimal': // fallthrough
+                case 'numeric': // fallthrough
+                case 'double': // fallthrough
+                case 'float':
+                    $requiredColumns[$key] = 0;
+                    break;
+
+                case 'date': // fallthrough
+                case 'time': // fallthrough
+                case 'datetime': // fallthrough
+                case 'timestamp':
+                    break;
+
+                default:
+                    $requiredColumns[$key] = '';
+            }
+        }
+
+        return $requiredColumns;
+    }
+
+    /**
+     * If this method is set, then the current user can save changes to this object if he hasn't the necessary rights.
      * The flag must be used within the class implementation.
      * @return void
      */
-    public function saveChangesWithoutRights()
+    public function saveChangesWithoutRights(): void
     {
         $this->saveChangesWithoutRights = true;
     }
 
     /**
-     * The method requires an array with all fields of one recordset of the table object.
+     * The method requires an array with all fields of one recordset from the table object.
      * These fields will be added to the object as if you read one record with **readDataById**
      * but without a separate SQL. This method is useful if you have several recordset of the
      * table and want to use a table object for each recordset. So you don't have to do a
-     * separate sql read for each record. This is a performant way to fill the object with
+     * separate SQL read for each record. This is a performant way to fill the object with
      * the necessary data.
      * @param array $fieldArray An array with all fields and their values of the table. If the object has
      *                          more connected tables than you should add the fields of these tables, too.
@@ -899,7 +1715,7 @@ class Entity
      * $announcementsStatement = $gDb->queryPrepared($sql);
      * $announcement = new Announcements($gDb);
      *
-     * while ($row = $announcementsStatement->fetch())
+     * While ($row = $announcementsStatement->fetch())
      * {
      *     // add each recordset to an object without a separate sql within the object
      *     $announcement->clear();
@@ -909,7 +1725,7 @@ class Entity
      * ```
      * @throws Exception
      */
-    public function setArray(array $fieldArray)
+    public function setArray(array $fieldArray): void
     {
         foreach ($fieldArray as $field => $value) {
             if (!empty($this->dbColumns[$field])) {
@@ -924,6 +1740,7 @@ class Entity
         } else {
             $this->newRecord = false;
             $this->insertRecord = false;
+            $this->insertedRecord = false;
         }
     }
 
@@ -932,9 +1749,9 @@ class Entity
      * **null** (or not), **key** and **serial**. Also, the changed flag will be set to false.
      * @throws Exception
      */
-    protected function setColumnsInfos()
+    protected function setColumnsInfos(): void
     {
-        // create array with base table and all connected tables
+        // create an array with base table and all connected tables
         $tables = array($this->tableName);
 
         foreach ($this->additionalTables as $values) {
@@ -942,27 +1759,43 @@ class Entity
         }
 
         foreach ($tables as $table) {
-            $tableColumnsProperties = $this->db->getTableColumnsProperties($table);
+            $this->setColumnsInfosForTable($table);
+        }
+    }
 
-            foreach ($tableColumnsProperties as $columnName => $property) {
-                // some actions should only be done for columns of the main table from this class
-                if (str_starts_with($columnName, $this->columnPrefix . '_')) {
-                    $this->dbColumns[$columnName] = '';
+    /**
+     * Read and store the metadata of a table used by this entity.
+     * @param string $table Database table name
+     * @return void
+     * @throws Exception
+     */
+    private function setColumnsInfosForTable(string $table): void
+    {
+        $tableColumnsProperties = $this->db->getTableColumnsProperties($table);
 
-                    if ($property['serial']) {
-                        $this->keyColumnName = $columnName;
-                    }
+        foreach ($tableColumnsProperties as $columnName => $property) {
+            // some actions should only be done for columns of the main table from this class
+            if (str_starts_with($columnName, $this->columnPrefix . '_')) {
+                $this->dbColumns[$columnName] = null;
+
+                if ($property['serial']) {
+                    $this->keyColumnName = $columnName;
                 }
-                $this->columnsInfos[$columnName]['changed'] = false;
-                $this->columnsInfos[$columnName]['previousValue'] = null;
-                if (strpos($property['type'], '(') > 0) {
-                    $this->columnsInfos[$columnName]['type'] = substr($property['type'], 0, strpos($property['type'], '('));
-                } else {
-                    $this->columnsInfos[$columnName]['type'] = $property['type'];
-                }
-                $this->columnsInfos[$columnName]['null'] = $property['null'];
-                $this->columnsInfos[$columnName]['key'] = $property['key'];
-                $this->columnsInfos[$columnName]['serial'] = $property['serial'];
+            }
+            $this->columnsInfos[$columnName]['changed'] = false;
+            $this->columnsInfos[$columnName]['previousValue'] = null;
+            if (strpos($property['type'], '(') > 0) {
+                $this->columnsInfos[$columnName]['type'] = substr($property['type'], 0, strpos($property['type'], '('));
+            } else {
+                $this->columnsInfos[$columnName]['type'] = $property['type'];
+            }
+            $this->columnsInfos[$columnName]['null'] = $property['null'];
+            $this->columnsInfos[$columnName]['key'] = $property['key'];
+            $this->columnsInfos[$columnName]['serial'] = $property['serial'];
+            if (isset($property['default'])) {
+                $this->columnsInfos[$columnName]['default'] = $property['default'];
+            } elseif ($property['null']) {
+                $this->columnsInfos[$columnName]['default'] = null;
             }
         }
     }
@@ -973,10 +1806,11 @@ class Entity
      * @return void
      * @throws Exception
      */
-    public function setNewRecord()
+    public function setNewRecord(): void
     {
         $this->newRecord = true;
         $this->insertRecord = true;
+        $this->insertedRecord = false;
 
         if (array_key_exists($this->columnPrefix . '_id', $this->dbColumns)) {
             $this->setValue($this->columnPrefix . '_id', 0);
@@ -989,49 +1823,154 @@ class Entity
     /**
      * Set a new value for a column of the database table. The value is only saved in the object.
      * You must call the method **save** to store the new value to the database. If the unique key
-     * column is set to 0 than this record will be a new record and all other columns are marked as changed.
+     * column is set to 0, then this record will be a new record and all other columns are marked as changed.
      * @param string $columnName The name of the database column whose value should get a new value
      * @param mixed $newValue The new value that should be stored in the database field
-     * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
+     * @param bool $checkValue The value will be checked if it's valid. If set to **false** then the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
-     * @throws Exception If **columnName** doesn't exist. exception->text contains a string with the reason why the login failed.
+     * @throws Exception If **columnName** doesn't exist. Exception->text contains a string with the reason why the login failed.
      * @see Entity#getValue
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         if (!array_key_exists($columnName, $this->dbColumns)) {
             throw new Exception('Column ' . $columnName . ' does not exists in table ' . $this->tableName . '!');
         }
 
-        // General plausibility checks based on the field type
-        if ($checkValue && $newValue !== '') {
-            switch ($this->columnsInfos[$columnName]['type']) {
-                // Numeric
-                case 'integer': // fallthrough
-                case 'smallint':
-                    if (!is_numeric($newValue)) {
-                        $newValue = '';
+        $type     = strtolower($this->columnsInfos[$columnName]['type']);
+        $nullable = $this->columnsInfos[$columnName]['null'] ?? false;
+        $isKey    = $this->columnsInfos[$columnName]['key'] ?? false;
+
+        // normalize string values
+        $newValue = is_string($newValue) ? trim($newValue) : $newValue;
+
+        $newValue = self::preserveTranslationId($columnName, $this->dbColumns[$columnName], $newValue);
+
+        // a filter may transform or reject the proposed value, the checks below then run on its result
+        $newValue = $this->applyValueFilters($columnName, $newValue);
+
+        if ($checkValue) {
+            if (!isset($newValue) || $newValue === '') {
+                if ($nullable) {
+                    $newValue = null;
+                } else {
+                    // fallback to safe defaults when NULL not allowed
+                    if (preg_match('/int|tinyint|smallint|mediumint|bigint/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = 0;
+                        }
+                        // Key fields should not contain 0
+                        if ($isKey && (int)$newValue === 0) {
+                            $newValue = '';
+                        }
+                    } elseif (preg_match('/decimal|numeric|float|double|real/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = 0.0;
+                        }
+                    } elseif (preg_match('/date|time|year/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '1970-01-01';
+                        }
+                    } elseif (preg_match('/datetime|timestamp/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '1970-01-01 00:00:00';
+                        }
+                    } elseif (preg_match('/bool|tinyint\(1\)/', $type)) {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = false;
+                        }
+                    } else {
+                        if (isset($this->columnsInfos[$columnName]['default'])) {
+                            $newValue = $this->columnsInfos[$columnName]['default'];
+                        } else {
+                            $newValue = '';
+                        }
                     }
+                }
+            } else {
+                // Convert and sanitize based on type
+                switch ($type) {
+                    // Numeric
+                    case 'integer':
+                    case 'smallint':
+                    case 'bigint':
+                    case 'tinyint':
+                        if (!is_numeric($newValue)) {
+                            $newValue = $nullable ? null : 0;
+                        } else {
+                            $newValue = (int)$newValue;
+                        }
 
-                    // Key fields should not contain 0
-                    if ((int)$newValue === 0 &&
-                        ($this->columnsInfos[$columnName]['key'] || $this->columnsInfos[$columnName]['null'])) {
-                        $newValue = '';
-                    }
-                    break;
+                        // Key fields should not contain 0
+                        if ($isKey && (int)$newValue === 0) {
+                            $newValue = $nullable ? null : '';
+                        }
+                        break;
 
-                // String
-                case 'char': // fallthrough
-                case 'varchar': // fallthrough
-                case 'text':
-                    $newValue = StringUtils::strStripTags($newValue);
-                    break;
+                    // Decimal / Float
+                    case 'decimal':
+                    case 'numeric':
+                    case 'float':
+                    case 'double':
+                    case 'real':
+                        $newValue = (float)str_replace(',', '.', $newValue);
+                        break;
 
-                // Byte/Blob
-                case 'bytea':
-                    // Postgres can only store hex values in bytea, so we must decode binary in hex
-                    $newValue = bin2hex($newValue);
-                    break;
+                    // Boolean
+                    case 'boolean':
+                        $boolVal = filter_var($newValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                        $newValue = $boolVal ?? ($nullable ? null : false);
+                        break;
+
+                    // Date
+                    case 'date':
+                        $date = date_create($newValue);
+                        $newValue = $date ? $date->format('Y-m-d') : ($nullable ? null : '1970-01-01');
+                        break;
+
+                    // Datetime
+                    case 'datetime':
+                    case 'timestamp':
+                        $dateTime = date_create($newValue);
+                        $newValue = $dateTime ? $dateTime->format('Y-m-d H:i:s') : ($nullable ? null : '1970-01-01 00:00:00');
+                        break;
+
+                    // Strings
+                    case 'char':
+                    case 'varchar':
+                    case 'text':
+                    case 'tinytext':
+                    case 'mediumtext':
+                    case 'longtext':
+                        // no HTML tags and no HTML entities should be stored in the database
+                        $newValue = StringUtils::strStripTags(html_entity_decode($newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+                        break;
+
+                    // Byte/Blob
+                    case 'blob': // fallthrough
+                    case 'mediumblob':
+                        // For blobs, we accept the raw data as is
+                        break;
+
+                    case 'bytea':
+                        // Postgres can only store hex values in bytea, so we must decode binary in hex
+                        $newValue = bin2hex($newValue);
+                        break;
+
+                    default:
+                        // fallback sanitize
+                        $newValue = is_scalar($newValue) ? htmlspecialchars((string)$newValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : $newValue;
+                }
             }
         }
 
@@ -1042,38 +1981,84 @@ class Entity
 
             // now mark all other columns with values of this object as changed
             foreach ($this->dbColumns as $column => $value) {
-                if ((is_array($value) && count($value) > 0) || (strlen((string)$value) > 0)) {
+                if ((is_array($value) && count($value) > 0) || isset($value)) {
                     $this->columnsInfos[$column]['changed'] = true;
                 }
             }
         }
 
         if ($this->valueChanged($columnName, $newValue)) {
-            $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];
-            $this->dbColumns[$columnName] = $newValue;
-            $this->columnsValueChanged = true;
-            $this->columnsInfos[$columnName]['changed'] = true;
+            if ($this->columnsInfos[$columnName]['changed'] && !$this->insertRecord
+                && !$this->valuesDiffer($columnName, $this->columnsInfos[$columnName]['previousValue'], $newValue)) {
+                // The field is back at the value that the database holds. It is not a change any
+                // more, so it must neither be written nor appear in the change history.
+                $this->dbColumns[$columnName] = $newValue;
+                $this->columnsInfos[$columnName]['changed'] = false;
+                $this->columnsInfos[$columnName]['previousValue'] = null;
+                $this->columnsValueChanged = $this->hasChangedColumns();
+            } else {
+                if (!$this->columnsInfos[$columnName]['changed']) {
+                    // Remember the value that the database holds. A field that is set more than once
+                    // before the save must still report the change from its persisted value and not
+                    // from the intermediate one.
+                    $this->columnsInfos[$columnName]['previousValue'] = $this->dbColumns[$columnName];
+                }
+                $this->dbColumns[$columnName] = $newValue;
+                $this->columnsValueChanged = true;
+                $this->columnsInfos[$columnName]['changed'] = true;
+            }
         }
 
         return true;
     }
 
     /**
+     * Check whether at least one column of the object still differs from the value that the
+     * database holds.
+     * @return bool Returns **true** if at least one column is marked as changed.
+     */
+    protected function hasChangedColumns(): bool
+    {
+        foreach ($this->columnsInfos as $columnInfo) {
+            if (!empty($columnInfo['changed'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check if the given column has changed, considering the DB column type.
      * Since loading from the database converts to the actual data types, but setting
      * uses strings, some datatypes need special-casing. Boolean false are read as null,
-     * but set as 0 -> null and 0 must be considered as false. Similarily, loading a
-     * (date)time will include seconds, but setting will not include seconds in the string
+     * but set as 0 -> null and 0 must be considered as false. Similarly, loading a
+     * (date)time will include seconds, but the setting will not include seconds in the string
      * value.
      *
      * @param string $columnName the database column name to check
-     * @param string $newValue the new value to set
-     * @return bool Whether the $newValue can be considered differnt from the current value
+     * @param string|null $newValue the new value to set
+     * @return bool Whether the $newValue can be considered different from the current value
      */
     protected function valueChanged(string $columnName, ?string $newValue): bool
     {
-        global $gSettingsManager;
-        $oldValue = $this->dbColumns[$columnName];
+        return $this->valuesDiffer($columnName, $this->dbColumns[$columnName] ?? null, $newValue);
+    }
+
+    /**
+     * Check whether a new value differs from a given old value, considering the DB column type.
+     * valueChanged() compares against the value that the object currently holds; a change of the
+     * record has to be reported against the value that the database holds, which is the comparison
+     * this method also allows.
+     *
+     * @param string $columnName the database column name to check
+     * @param mixed $oldValue the value to compare against
+     * @param string|null $newValue the new value to set
+     * @return bool Whether the $newValue can be considered different from $oldValue
+     */
+    protected function valuesDiffer(string $columnName, mixed $oldValue, ?string $newValue): bool
+    {
+        $oldValue = !empty($oldValue) ? $oldValue : null;
 
         // certain data types need special handling to detect changes
         //   * bool: unset/null and 0 mean false
@@ -1082,7 +2067,6 @@ class Entity
         switch ($this->columnsInfos[$columnName]['type']) {
             case 'boolean': // fallthrough
             case 'tinyint':
-                if (empty($oldValue)) $oldValue = 0;
                 if (empty($newValue)) $newValue = 0;
                 return $oldValue != $newValue;
             case 'timestamp': // fallthrough
@@ -1096,16 +2080,22 @@ class Entity
                 }
                 try {
                     // Convert old and new to a DateTime and compare that directly
-                    $oldDate = new \DateTime($oldValue);
-                    $newDate = new \DateTime($newValue);
-                    return ($oldDate != $newDate) ? true : false;
-                } catch (\Exception $e) {
+                    $oldDate = new DateTime($oldValue);
+                    $newDate = new DateTime($newValue);
+                    return $oldDate != $newDate;
+                } catch (\Exception) {
                     // if DateTime-conversion did not work, compare the strings
                     return $oldValue != $newValue;
                 }
             default:
                 // only mark as "changed" if the value is different (DON'T use binary safe function!)
-                return strcmp((string)$oldValue, (string)$newValue) !== 0;
+                if (!isset($oldValue) && !isset($newValue)) {
+                    return false;
+                } elseif (!isset($oldValue) && isset($newValue)) {
+                    return true;
+                } else {
+                    return strcmp((string)$oldValue, (string)$newValue) !== 0;
+                }
         }
     }
 

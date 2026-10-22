@@ -7,6 +7,20 @@
         <strong>{$l10n->get('INS_UPDATING_WAS_SUCCESSFUL')}</strong>
     </div>
 
+    {if $updateWarnings|@count > 0 || $updateInfos|@count > 0}
+        <h4>{$l10n->get('SYS_NOTE')}</h4>
+        {if $updateInfos|@count > 0}
+            {foreach from=$updateInfos item=data}
+                {include file="sys-template-parts/parts/form.part.info.tpl"}
+            {/foreach}
+        {/if}
+        {if $updateWarnings|@count > 0}
+            {foreach from=$updateWarnings item=data}
+                {include file="sys-template-parts/parts/form.part.warning.tpl"}
+            {/foreach}
+        {/if}
+    {/if}
+
     <p>
         {$l10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', array(ADMIDIO_VERSION_TEXT))}<br /><br />
         {$l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT')}

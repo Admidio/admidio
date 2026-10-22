@@ -1,0 +1,23 @@
+# Test artifacts and temporary files
+reports/
+coverage/
+.phpunit.cache/
+*.log
+
+# Ignore generated adm_my_files content, but keep the safety marker in Git.
+adm_my_files/*
+!adm_my_files/.admidio-regression-test
+
+# Test environment
+.env.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

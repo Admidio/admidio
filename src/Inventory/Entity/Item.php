@@ -5,6 +5,7 @@ namespace Admidio\Inventory\Entity;
 // Admidio namespaces
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Changelog\Entity\LogChanges;
 
@@ -42,13 +43,16 @@ class Item extends Entity
      * @var bool Flag if the changes to the item data should be handled by the ChangeNotification service.
      */
     protected bool $changeNotificationEnabled;
+    /**
+     * @var array Array with old and new value of changed item table columns.
+     */
+    protected array $changedValues;
 
     /**
      * Constructor that will create an object of a recordset of the users table.
      * If the id is set than this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
-     * @param ItemsData|null $itemFields An object of the ItemsData class with the profile field structure
-     *                                  of the current organization.
+     * @param ItemsData|null $itemsData object with current item field structure
      * @param int $itemId The id of the item which should be loaded. If id isn't set than an empty
      *                                  object with no specific item is created.
      * @throws Exception
@@ -65,12 +69,21 @@ class Item extends Entity
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
         $this->itemId = $itemId;
-        
+
         $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'ini_cat_id');
 
         parent::__construct($database, TBL_INVENTORY_ITEMS, 'ini', $itemId);
     }
- 
+
+    /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'inventory_item';
+    }
+
     /**
      * Changes to user data could be sent as a notification email to a specific role if this
      * function is enabled in the settings. If you want to suppress this logic you can
@@ -78,9 +91,49 @@ class Item extends Entity
      * result in a notification email.
      * @return void
      */
-    public function disableChangeNotification()
+    public function disableChangeNotification(): void
     {
         $this->changeNotificationEnabled = false;
+    }
+
+    /**
+     * Set a new value for a specific column in the table.
+     * @param string $columnName
+     * @param mixed $newValue
+     * @param bool $checkValue
+     * @return bool
+     * @throws Exception
+     */
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
+    {
+        $this->changedValues[$columnName] = array('oldValue' => $this->getValue($columnName), 'newValue' => $newValue);
+        return parent::setValue($columnName, $newValue, $checkValue);
+    }
+
+    /**
+     * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
+     * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the
+     * default table will be read and stored in the object. Only items of the current organization will be read.
+     * If the item belongs to another organization than an exception will be thrown.
+     * @param string $sqlWhereCondition Conditions for the table to select one record
+     * @param array<int,mixed> $queryParams The query params for the prepared statement
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByUuid
+     * @see Entity#readDataByColumns
+     * @see Entity#readDataById
+     */
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
+    {
+        if (parent::readData($sqlWhereCondition, $queryParams)) {
+            // check if item belongs to this organization
+            if ($this->getValue('ini_org_id') > 0 && $this->getValue('ini_org_id') !== $GLOBALS['gCurrentOrgId']) {
+                throw new Exception('Item ' . $this->getValue('ini_uuid') . ' belongs to another organization.');
+            }
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -104,6 +157,13 @@ class Item extends Entity
         return $ret;
     }
 
+    /**
+     * Reads a record out of the table in database selected by the unique uuid column in the table.
+     * Per default all columns of the default table will be read and stored in the object.
+     * @param string $uuid Unique uuid of the item
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     */
     public function readDataByUuid(string $uuid): bool
     {
         $ret = parent::readDataByUuid($uuid);
@@ -118,18 +178,67 @@ class Item extends Entity
      * Return a human-readable representation of this record.
      * If a column [prefix]_name exists, it is returned, otherwise the id.
      * This method can be overridden in child classes for custom behavior.
-     * 
+     *
      * @return string The readable representation of the record (can also be a translatable identifier)
+     * @throws Exception
      */
     public function readableName(): string
     {
-        global $gDb;
-        // check if mItemsData is set
-        $itemData = new ItemData($gDb, $this->mItemsData);
+        $itemData = new ItemData($this->db, $this->mItemsData);
         $itemData->readDataByColumns(array('ind_ini_id' => $this->itemId, 'ind_inf_id' => $this->mItemsData->getProperty('ITEMNAME', 'inf_id')));
-        return $itemData->getValue('ind_value'); 
+        $itemName = (string)$itemData->getValue('ind_value');
+
+        if ($itemName === '') {
+            // The item data is not yet stored in the database (e.g. while a new item is created),
+            // so use the value that is currently held by the item data object instead.
+            $itemName = (string)$this->mItemsData->getValue('ITEMNAME', 'database');
+        }
+
+        return $this->filterReadableName($itemName);
     }
-    
+
+    /**
+     * Get the status of the item.
+     * @return int The status of the item.
+     * @throws Exception
+     */
+    public function getStatus(): int
+    {
+        return $this->getValue('ini_status');
+    }
+
+    /**
+     * Check if the item is retired.
+     * @return bool Returns true if the item is retired, false otherwise.
+     * @throws Exception
+     */
+    public function isRetired(): bool
+    {
+        global $gDb;
+        $optionId = $this->getStatus();
+        $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
+        if ($option->readDataById($optionId)) {
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_RETIRED_ITEMS';
+        }
+        return false;
+    }
+
+    /**
+     * Check if the item is in use.
+     * @return bool Returns true if the item is in use, false otherwise.
+     * @throws Exception
+     */
+    public function isInUse(): bool
+    {
+        global $gDb;
+        $optionId = $this->getStatus();
+        $option = new SelectOptions($gDb, $this->mItemsData->getProperty('STATUS', 'inf_id'));
+        if ($option->readDataById($optionId)) {
+            return $option->getValue('ifo_value') === 'SYS_INVENTORY_FILTER_IN_USE_ITEMS';
+        }
+        return false;
+    }
+
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * Some tables contain columns _usr_id_create, timestamp_create, etc. We do not want
@@ -140,28 +249,100 @@ class Item extends Entity
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(),
-            ['ini_id', 'ini_uuid', 'ini_org_id', 'ind_id', 'ind_inf_id', 'ind_ini_id']/* ,
-            ($this->newRecord)?[$this->columnPrefix.'_text']:[] */
-        );
+        return array_merge(parent::getIgnoredLogColumns(), ['ini_id', 'ini_org_id']);
     }
 
     /**
-     * Adjust the changelog entry for this db record: Add the first forum post as a related object
+     * Logs creation of the DB record.
+     *
+     * The name of an item is not stored in the item record itself, but in the item data table,
+     * which can only be written after the item record has been created. As long as the name is
+     * not available yet, the creation is not logged here, but explicitly by
+     * ItemsData::saveItemData() as soon as the item data has been saved.
+     *
+     * @return bool Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logCreation(): bool
+    {
+        if ($this->readableName() === '') {
+            return true;
+        }
+
+        return parent::logCreation();
+    }
+
+    /**
+     * Logs all modifications of the DB record.
+     *
+     * As long as the item name is not available, the modifications are not logged here, but
+     * together with the creation of the item (see logCreation() and logPostponedCreation()).
+     *
+     * @param array $logChanges Array of all changes, generated by the save method
+     * @return bool Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logModifications(array $logChanges): bool
+    {
+        if (count($logChanges) === 0) {
+            return false;
+        }
+
+        if ($this->readableName() === '') {
+            return true;
+        }
+
+        return parent::logModifications($logChanges);
+    }
+
+    /**
+     * Logs the creation of the item together with the values it was created with.
+     *
+     * The item record has to be inserted before its data rows can be written, so the item name
+     * was not yet available when the record was created and neither the creation nor the values
+     * of the new record could be logged at that time. This method writes those postponed log
+     * entries and is called by ItemsData::saveItemData() once the item data has been saved.
+     *
+     * @return bool Returns **true** if no error occurred
+     * @throws Exception
+     */
+    public function logPostponedCreation(): bool
+    {
+        if ($this->readableName() === '') {
+            return false;
+        }
+
+        // The record was just created, so every stored value is a new value
+        $logChanges = array();
+        $ignoredColumns = $this->getIgnoredLogColumns();
+        foreach ($this->dbColumns as $column => $value) {
+            if (str_starts_with($column, $this->columnPrefix . '_') && (string)$value !== ''
+                && !in_array($column, $ignoredColumns, true)) {
+                $logChanges[$column] = array('oldValue' => '', 'newValue' => $value);
+            }
+        }
+
+        return parent::logCreation() && parent::logModifications($logChanges);
+    }
+
+    /**
+     * Adjust the changelog entry for this db record: The picture is stored as binary data, which
+     * cannot be displayed in the changelog, so it is converted to base64 (see the field type
+     * PICTURE in ChangelogService::formatValue()).
+     *
      * @param LogChanges $logEntry The log entry to adjust
      * @return void
      * @throws Exception
      */
     protected function adjustLogEntry(LogChanges $logEntry): void
-    {      
-        $itemName = $this->mItemsData->getValue('ITEMNAME', 'database');
-        if (isset($_POST['INF-ITEMNAME']) && $itemName === '') {
-            $itemName = $_POST['INF-ITEMNAME'];
+    {
+        if ($logEntry->getValue('log_field') === 'ini_picture') {
+            if (!empty($this->changedValues['ini_picture']['newValue'])) {
+                $logEntry->setValue('log_value_new', base64_encode($this->changedValues['ini_picture']['newValue']));
+            }
+            if (!empty($this->changedValues['ini_picture']['oldValue'])) {
+                $logEntry->setValue('log_value_old', base64_encode($this->changedValues['ini_picture']['oldValue']));
+            }
         }
-        elseif (!isset( $_POST['INF-ITEMNAME']) && $itemName === '') {
-            $itemName =  $logEntry->getValue('log_record_name');
-        }
-        $logEntry->setValue('log_record_name', $itemName);
-        $logEntry->setValue('log_related_id', $logEntry->getValue('log_record_id'));
     }
 }

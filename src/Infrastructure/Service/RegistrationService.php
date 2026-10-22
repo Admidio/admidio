@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Infrastructure\Service;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\SystemMail;
@@ -50,7 +51,8 @@ class RegistrationService
      * @return array{message: string, forwardUrl: string} Array with message and forward url.
      * @throws Exception
      */
-    public function assignRegistration(string $assignUserUUID, bool $memberOfOrganization): array
+    public function assignRegistration(string $assignUserUUID, bool $memberOfOrganization,
+        bool $redirectToRoleAssignment = true): array
     {
         global $gSettingsManager, $gProfileFields, $gCurrentUser, $gL10n, $gNavigation;
 
@@ -78,6 +80,13 @@ class RegistrationService
             }
             $this->db->endTransaction();
 
+            // The merge itself has already committed at this point - the mail below is a separate
+            // concern and its own catch block does not undo it, so the semantic event fires whether
+            // or not the mail succeeds.
+            $this->db->registerAfterCommit(function () use ($user) {
+                Hooks::doAction('user_registration_accepted', $user, UserRegistration::ACCEPTED_BY_ASSIGNMENT);
+            });
+
             if ($gSettingsManager->getBool('system_notifications_enabled')) {
                 // Send mail to the user to confirm the registration or the assignment to the new organization
                 $systemMail = new SystemMail($this->db);
@@ -90,17 +99,19 @@ class RegistrationService
 
             // if current user has the right to assign roles then show roles dialog
             // otherwise go to previous url (default roles are assigned automatically)
-            if ($gCurrentUser->isAdministratorRoles()) {
+            if ($redirectToRoleAssignment && $gCurrentUser->isAdministratorRoles()) {
                 // User already exists, but is not yet a member of the current organization, so first assign roles and then send mail later
                 admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES.'/profile/roles.php', array('user_uuid' => $assignUserUUID, 'accept_registration' => true)));
                 // => EXIT
             }
         } catch (Exception $e) {
-            // exception is thrown when email couldn't be sent
-            // so save user data and then show error
+            // The exception is normally thrown when the email could not be sent, at which point the
+            // transaction is already committed and the user data only has to be written again. If it
+            // comes from the block above instead, the transaction is still open and must not be
+            // committed, because the changes it holds are only half applied.
+            $this->db->rollback();
             $user->save();
-            $this->db->endTransaction();
-            return array('message' => $e->getMessage(), 'forwardUrl' => $gNavigation->getPreviousUrl());
+            return array('message' => $e->getMessage(), 'forwardUrl' => isset($gNavigation) ? $gNavigation->getPreviousUrl() : '');
         }
 
         return array('message' => $message, 'forwardUrl' => ADMIDIO_URL.FOLDER_MODULES.'/registration.php');

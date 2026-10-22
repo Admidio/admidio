@@ -9,12 +9,13 @@
  *
  * Parameters:
  *
- * mode     : dialog - (Default) show the login dialog
- *            check  - Check the data to the login dialog
- * organization_short_name : short name of the organization that should be preselected at the select box
+ * mode: dialog - (Default) show the login dialog
+ *       check - Check the data to the login dialog
+ * organization_short_name: short name of the organization that should be preselected at the select box
  *
  * **********************************************************************************************
  */
+use Admidio\Session\Service\LoginService;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -30,14 +31,21 @@ try {
         // remember url (will be removed in login_check)
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
-        // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
-        $loginModule = new ModuleLogin();
+        // create an HTML page object
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_login', $headline);
+
+        // a user who was forwarded to the login because the requested page needs a login gets a hint
+        if (array_key_exists('login_forward_url', $_SESSION)) {
+            $page->addHtml('<div class="alert alert-info" role="alert" style="max-width: 500px">
+                <i class="bi bi-info-circle-fill"></i>' . $gL10n->get('SYS_LOGIN_TO_VIEW_PAGE') . '</div>');
+        }
+
+        $loginModule = new LoginService();
         $loginModule->addHtmlLogin($page, $getOrganizationShortName);
         $page->show();
     } elseif ($getMode === 'check') {
         // check the data of the login dialog
-        $loginModule = new ModuleLogin();
+        $loginModule = new LoginService();
         $loginModule->checkLogin();
 
         // check if browser can set cookies and throw error if not
@@ -75,10 +83,6 @@ try {
         echo json_encode($payload);
         exit();
     }
-} catch (Exception $e) {
-    if($getMode === 'check') {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, $getMode == 'check');
 }

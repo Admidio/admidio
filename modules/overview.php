@@ -10,6 +10,7 @@
  */
 
 use Admidio\UI\Presenter\PagePresenter;
+use Admidio\Infrastructure\Plugins\PluginWidget;
 
 try {
     // if the config file doesn't exist, then show the installation dialog
@@ -26,15 +27,14 @@ try {
     $gNavigation->addStartUrl(CURRENT_URL, $headline, 'bi-house-door-fill');
 
     // create html page object and load template file
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-overview', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_overview', $headline);
     $page->setContentFullWidth();
+
+    // A plugin contributes a widget to the overview through the overview_widgets filter.
+    $page->assignSmartyVariable('overviewWidgets', PluginWidget::collect($page));
     $page->addTemplateFile('system/overview.tpl');
 
     $page->show();
 } catch (Throwable $e) {
-    if (isset($gMessage)) {
-        $gMessage->show($e->getMessage());
-    } else {
-        echo $e->getMessage();
-    }
+    handleException($e);
 }

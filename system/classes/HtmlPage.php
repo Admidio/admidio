@@ -1,6 +1,7 @@
 <?php
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Menu\ValueObject\MenuNode;
 use Smarty\Smarty;
 
@@ -17,7 +18,7 @@ use Smarty\Smarty;
  * **Code example**
  * ```
  * // create a simple html page with some text
- * $page = PagePresenter::withHtmlIDAndHeadline('admidio-example');
+ * $page = PagePresenter::withHtmlIDAndHeadline('adm_example');
  * $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery/jquery.min.js');
  * $page->setHeadline('A simple Html page');
  * $page->addHtml('<strong>This is a simple Html page!</strong>');
@@ -301,6 +302,42 @@ class HtmlPage
         $this->smarty->assign('debug', $gDebug);
         $this->smarty->assign('registrationEnabled', $gSettingsManager->getBool('registration_module_enabled'));
 
+       // Design variables
+        $this->smarty->assign('additionalStylesFile', $gSettingsManager->getString('theme_additional_styles_file'));
+        $this->smarty->assign('logoFile', $gSettingsManager->getString('theme_logo_file'));
+        $this->smarty->assign('logoFileMaxHeight', $gSettingsManager->getString('theme_logo_file_max_height'));
+        $this->smarty->assign('faviconFile', $gSettingsManager->getString('theme_favicon_file'));
+        $this->smarty->assign('admidioHeadline', Language::translateIfTranslationStrId($gSettingsManager->getString('theme_admidio_headline')));
+
+        $styles = '';
+        $color_primary = $gSettingsManager->getString('theme_color_primary');
+        if ($color_primary && $this->isValidHexColor($color_primary)) {
+            $styles .= '    --bs-primary: ' . $color_primary . ";\n";
+            $styles .= '    --bs-primary-rgb: ' . hexdec(substr($color_primary, 1, 2)) . ', ' . hexdec(substr($color_primary, 3, 2)) . ', ' . hexdec(substr($color_primary, 5, 2)) . ";\n";
+        }
+        $color_secondary = $gSettingsManager->getString('theme_color_secondary');
+        if ($color_secondary && $this->isValidHexColor($color_secondary)) {
+            $styles .= '    --bs-secondary: ' . $color_secondary . ";\n";
+            $styles .= '    --bs-secondary-rgb: ' . hexdec(substr($color_secondary, 1, 2)) . ', ' . hexdec(substr($color_secondary, 3, 2)) . ', ' . hexdec(substr($color_secondary, 5, 2)) . ";\n";
+        }
+        $color_tertiary = $gSettingsManager->getString('theme_color_tertiary');
+        if ($color_tertiary && $this->isValidHexColor($color_tertiary)) {
+            $styles .= '    --bs-tertiary: ' . $color_tertiary . ";\n";
+            $styles .= '    --bs-tertiary-rgb: ' . hexdec(substr($color_tertiary, 1, 2)) . ', ' . hexdec(substr($color_tertiary, 3, 2)) . ', ' . hexdec(substr($color_tertiary, 5, 2)) . ";\n";
+        }
+        $color_text = $gSettingsManager->getString('theme_color_text');
+        if ($color_text && $this->isValidHexColor($color_text)) {
+            $styles .= '    --bs-body-color: ' . $color_text . ";\n";
+        }
+        $color_background = $gSettingsManager->getString('theme_color_background');
+        if ($color_background && $this->isValidHexColor($color_background)) {
+            $styles .= '    --bs-body-bg: ' . $color_background . ";\n";
+        }
+        if (!empty($styles)) {
+            $this->smarty->assign('additionalStyles', ":root {\n$styles};");
+        }
+        $this->smarty->assign('themeColorPrimary', ($color_primary && $this->isValidHexColor($color_primary)) ? $color_primary : '#349aaa');
+
         // add imprint and data protection
         if ($gSettingsManager->has('system_url_imprint') && strlen($gSettingsManager->getString('system_url_imprint')) > 0) {
             $urlImprint = $gSettingsManager->getString('system_url_imprint');
@@ -311,6 +348,8 @@ class HtmlPage
         $this->smarty->assign('urlImprint', $urlImprint);
         $this->smarty->assign('urlDataProtection', $urlDataProtection);
         $this->smarty->assign('cookieNote', $gSettingsManager->getBool('system_cookie_note'));
+        $pwaEnabled = $gSettingsManager->has('system_pwa_enabled') ? $gSettingsManager->getBool('system_pwa_enabled') : true;
+        $this->smarty->assign('pwaEnabled', $pwaEnabled);
 
         // show cookie note
         if ($gSettingsManager->has('system_cookie_note') && $gSettingsManager->getBool('system_cookie_note')) {
@@ -372,7 +411,6 @@ class HtmlPage
             $smartyObject->setCompileDir(ADMIDIO_PATH . FOLDER_DATA . '/templates/compile/');
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
-            $smartyObject->registerPlugin('function', 'load_admidio_plugin', 'Admidio\Infrastructure\Plugins\Smarty::loadAdmidioPlugin');
             $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
@@ -644,5 +682,15 @@ class HtmlPage
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+	/**
+     * Checks if the provided color string is a valid hex color format.
+     * @param string $color Color string to check.
+     * @return bool True if valid hex color, false otherwise.
+     */
+    private static function isValidHexColor(string $color): bool
+    {
+        return (bool) preg_match('/^#([a-fA-F0-9]{6})$/', $color);
     }
 }

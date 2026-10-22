@@ -12,7 +12,7 @@
                         <span class="me-2">
                             {$membership.period}
                             {if isset($membership.duration)}
-                                <span class="badge rounded-pill bg-info ms-1" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MEMBERSHIP_DURATION')}">{$membership.duration}</span>
+                                <span class="badge bg-info ms-1" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MEMBERSHIP_DURATION')}">{$membership.duration}</span>
                             {/if}
                         </span>
                         {if isset($membership.linkMembershipEdit)}
@@ -39,7 +39,7 @@
                     </form>
                 </li>
                 {if $membership.showRelationsCreateEdit}
-                    <li class="list-group-item" id="member_info_{$membership.memberUUID}_Content" style="display: none;">
+                    <li class="list-group-item" id="member_info_{$membership.memberUUID}_content" style="display: none;">
                         {include file="sys-template-parts/system.info-create-edit.tpl" userCreatedName=$membership.userCreatedName userCreatedTimestamp=$membership.userCreatedTimestamp lastUserEditedName=$membership.lastUserEditedName lastUserEditedTimestamp=$membership.lastUserEditedTimestamp}
                     </li>
                 {/if}

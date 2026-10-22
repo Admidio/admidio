@@ -21,7 +21,11 @@
         <tbody id="adm_menu_entries_{$menuNode.uuid}" class="admidio-sortable">
             {foreach $menuNode.entries as $menuEntry}
                 <tr id="adm_menu_entry_{$menuEntry.uuid}">
-                    <td style="word-break: break-word;"><i class="bi bi-{$menuEntry.icon}"></i> {$menuEntry.name}</td>
+                    <td style="word-break: break-word;">
+                        <i class="admidio-icon-chain bi bi-{$menuEntry.icon}"></i>{$menuEntry.name}
+                        {assign var="data" value=['helpTextId' => $menuEntry.description]}
+                        {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
+                    </td>
                     <td>
                         <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}"
                            data-direction="UP" data-target="adm_menu_entry_{$menuEntry.uuid}">

@@ -11,7 +11,7 @@
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 
@@ -41,7 +41,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter the organization names
-    $page = new InstallationPresenter('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_create_organization', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_SET_ORGANIZATION'));
     $page->assignSmartyVariable('text', $gL10n->get('SYS_NEW_ORGANIZATION_DESC'));
@@ -101,14 +101,13 @@ if ($mode === 'html') {
     $_SESSION['orga_email']     = $formValues['adm_organization_email'];
     $_SESSION['orga_timezone']  = $formValues['adm_organization_timezone'];
 
-    if (!in_array($_SESSION['orga_timezone'], \DateTimeZone::listIdentifiers(), true)) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('ORG_TIMEZONE'));
-    }
-
-    // allow only letters, numbers and special characters like .-_+@
-    if (!StringUtils::strValidCharacters($_SESSION['orga_shortname'], 'noSpecialChar')) {
-        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_NAME_ABBREVIATION'));
-    }
+    // check the entered values with the same rules that a headless installation uses
+    Installation::validateOrganizationInput(
+        $_SESSION['orga_shortname'],
+        $_SESSION['orga_longname'],
+        $_SESSION['orga_email'],
+        $_SESSION['orga_timezone']
+    );
 
     echo json_encode(array(
         'status' => 'success',

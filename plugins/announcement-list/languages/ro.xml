@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="PLG_ANNOUNCEMENT_LIST_ALL_ENTRIES">Toate intrările</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_HEADLINE">Anunțuri</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_NO_ENTRIES_VISITORS">Nu există anunțuri disponibile pentru vizitatori. Conectați-vă pentru a vedea anunțurile.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_DESCRIPTION">Acest plugin afișează o listă de previzualizare a celor mai recente anunțuri pe pagina Prezentare generală.</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PLUGIN_NAME">Lista anunțuri</string>
+  <!-- Plugin preferences -->
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT">Numarul anunțurilor</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_ANNOUNCEMENTS_COUNT_DESC">Numărul de anunțuri care vor fi afișate. (implicit: 2)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK">Caractere înainte de întreruperea liniei</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_CHARS_BEFORE_LINEBREAK_DESC">Numărul maxim de caractere dintr-un cuvânt înainte de a se efectua o întrerupere de linie. (0: dezactivează întreruperea de linie, implicit: 0)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES">Categorii afișate</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_DISPLAYED_CATEGORIES_DESC">Dacă doriți să afișați numai anunțurile dintr-o categorie specială, puteți selecta categoriile aici. (implicit: toate categoriile)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION">Afișează descrierea completă</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_FULL_DESCRIPTION_DESC">Dacă această setare este activată, va fi afișat întregul conținut al descrierii. În caz contrar, va fi afișată doar o previzualizare a textului. (implicit: fals)</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS">Previzualizare text</string>
+  <string name="PLG_ANNOUNCEMENT_LIST_PREFERENCES_SHOW_PREVIEW_CHARS_DESC">Numărul de caractere din textul de previzualizare. (0: fără previzualizare scurtă, implicit: 70)</string>
+</resources>

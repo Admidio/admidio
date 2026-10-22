@@ -9,8 +9,10 @@
  ***********************************************************************************************
  */
 
+use Admidio\Infrastructure\Cli\CliPolicy;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\InstallationUpdate\Service\Installation;
+use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 
@@ -24,44 +26,38 @@ if (is_file($configPath)) {
     // => EXIT
 }
 
-// read configuration file structure
-$filename          = 'config.php';
-$configFileHandle  = fopen($filename, 'rb');
-$configFileContent = fread($configFileHandle, filesize($filename));
-fclose($configFileHandle);
+// create the content of the configuration file out of the data of the installation wizard
+$installationConfig = InstallationConfig::fromInstallerSession($_SESSION, $g_root_path);
+$_SESSION['config_file_content'] = Installation::generateConfigFileContent($installationConfig);
 
-$port = 'null';
-if ($_SESSION['db_port']) {
-    $port = $_SESSION['db_port'];
-}
-
-// replace placeholders in configuration file structure with data of installation wizard
-$replaces = array(
-    '%DB_ENGINE%'    => $_SESSION['db_engine'],
-    '%DB_HOST%'      => $_SESSION['db_host'],
-    '\'%DB_PORT%\''  => $port, // String -> Int
-    '%DB_NAME%'      => $_SESSION['db_name'],
-    '%DB_USERNAME%'  => $_SESSION['db_username'],
-    '%DB_PASSWORD%'  => $_SESSION['db_password'],
-    '%TABLE_PREFIX%' => $_SESSION['table_prefix'],
-    '%ROOT_PATH%'    => $g_root_path,
-    '%TIMEZONE%'     => $_SESSION['orga_timezone']
-);
-$configFileContent = StringUtils::strMultiReplace($configFileContent, $replaces);
-
-$_SESSION['config_file_content'] = $configFileContent;
-
-$page = new InstallationPresenter('adm_installation_create_config', $gL10n->get('INS_INSTALLATION'));
+$page = new InstallationPresenter('adm_installation_create_config', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
 $page->addTemplateFile('installation.tpl');
 
 // now save new configuration file in Admidio folder if user has write access to this folder
-$configFileHandle = @fopen($configPath, 'ab');
+$configFileWritten = true;
 
-if ($configFileHandle) {
-    // save config file in Admidio folder
-    fwrite($configFileHandle, $configFileContent);
-    fclose($configFileHandle);
+try {
+    Installation::writeConfigFile($installationConfig, $configPath);
+} catch (RuntimeException $exception) {
+    $configFileWritten = false;
+}
 
+/*
+ * The command line is disabled until an administrator enables it, so the file this installation
+ * writes only documents the settings. It is optional: an installation that cannot write it is
+ * complete, and the command line then reports how the file is created.
+ */
+try {
+    Installation::writeCliConfigFile(dirname($configPath) . '/' . CliPolicy::FILE_NAME);
+} catch (Throwable $exception) {
+    if (isset($gLogger)) {
+        $gLogger->notice(
+            'The configuration file of the command line could not be written: ' . $exception->getMessage()
+        );
+    }
+}
+
+if ($configFileWritten) {
     // start installation
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_INSTALL_ADMIDIO'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));

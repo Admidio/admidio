@@ -13,6 +13,7 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'roles_functions.php') {
@@ -112,7 +113,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
     $countShowRoles = 0;
     $member = new Membership($gDb);
     $role   = new Role($gDb);
-    $smarty = HtmlPage::createSmartyObject();
+    $smarty = PagePresenter::createSmartyObject();
     $smarty->assign('listID', $htmlListId);
     $smarty->assign('l10n', $gL10n);
     $smarty->assign('settings', $gSettingsManager);
@@ -177,9 +178,9 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             if ($showRoleEndDate) {
                 $membership['period'] = $gL10n->get('SYS_SINCE_TO', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date')), $member->getValue('mem_end', $gSettingsManager->getString('system_date'))));
             } elseif ($futureMembership) {
-                $membership['period'] = $gL10n->get('SYS_FROM', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_FROM_VAR', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             } else {
-                $membership['period'] = $gL10n->get('SYS_SINCE', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
+                $membership['period'] = $gL10n->get('SYS_SINCE_VAR', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             }
 
             if ($role->allowedToAssignMembers($gCurrentUser)) {
@@ -203,9 +204,10 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                         $icon = 'bi bi-box-arrow-right';
                         $description = $gL10n->get('SYS_CANCEL_MEMBERSHIP');
                     }
+                    // Escape the role name for the dialog HTML and the complete message for the attribute.
                     $linkMembershipDelete = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get($deleteMessage, array($role->getValue('rol_name', 'database'))) . '"
+                        data-message="' . SecurityUtils::encodeHTML($gL10n->get($deleteMessage, array($role->getValue('rol_name')))) . '"
                         data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
                         <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
                 } else {
@@ -246,14 +248,18 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
             // only show info if system setting is activated
             if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
                 $membership['userCreatedName'] = $member->getNameOfCreatingUser();
-                $membership['userCreatedTimestamp'] = $member->getValue('ure_timestamp_create');
+                $membership['userCreatedTimestamp'] = $member->getValue('mem_timestamp_create');
                 $membership['lastUserEditedName'] = $member->getNameOfLastEditingUser();
-                $membership['lastUserEditedTimestamp'] = $member->getValue('ure_timestamp_change');
+                $membership['lastUserEditedTimestamp'] = $member->getValue('mem_timestamp_change');
             }
+            $gCurrentSession->addFormObject($form);
 
             ++$countShowRoles;
             $memberships[] = $membership;
         }
+    }
+    if (count($memberships) === 0) {
+        throw new \Admidio\Infrastructure\Exception('NO_VISIBLE_ROLES');
     }
     $smarty->assign('memberships', $memberships);
     try {
@@ -262,5 +268,3 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
         throw new \Admidio\Infrastructure\Exception($e->getMessage());
     }
 }
-
-// This function has been moved to the Membership class as calculateDuration() method

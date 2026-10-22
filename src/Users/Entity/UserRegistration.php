@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Users\Entity;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
@@ -42,6 +43,17 @@ use Admidio\ProfileFields\ValueObjects\ProfileFields;
  */
 class UserRegistration extends User
 {
+    /**
+     * How user_registration_accepted was reached: an administrator approved the pending
+     * registration on the account it created.
+     */
+    public const ACCEPTED_BY_APPROVAL = 'approval';
+    /**
+     * How user_registration_accepted was reached: the registration was matched to an existing
+     * account and merged into it instead of staying a record of its own.
+     */
+    public const ACCEPTED_BY_ASSIGNMENT = 'assignment';
+
     /**
      * @var bool Flag if the object will send a SystemMail if registration is accepted or deleted.
      */
@@ -105,8 +117,18 @@ class UserRegistration extends User
 
         $this->db->endTransaction();
 
+        // A registration record disappearing and a user becoming valid look like two unrelated
+        // entity changes to a listener; this one semantic event says what actually happened, once
+        // the whole thing has really committed - registerAfterCommit() fires immediately if this
+        // was the outermost transaction, or waits for the caller's if it was not.
+        $this->db->registerAfterCommit(function () {
+            Hooks::doAction('user_registration_accepted', $this, self::ACCEPTED_BY_APPROVAL);
+        });
+
         // update registration count in menu
-        $gMenu->initialize();
+        if (isset($gMenu)) {
+            $gMenu->initialize();
+        }
 
         // only send mail if systemmails are enabled
         if ($gSettingsManager->getBool('system_notifications_enabled')
@@ -185,7 +207,9 @@ class UserRegistration extends User
         $this->db->endTransaction();
 
         // update registration count in menu
-        $gMenu->initialize();
+        if (isset($gMenu)) {
+            $gMenu->initialize();
+        }
 
         return $return;
     }

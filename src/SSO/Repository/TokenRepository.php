@@ -12,16 +12,14 @@ abstract class TokenRepository
         $this->db = $database;
     }
 
-    /**
-     * Creates a Token entity.
-     */
-    abstract public function newToken(): TokenEntity;
     abstract public function getToken(string $tokenId) : TokenEntity;
 
     /**
-     * Persists a new refresh token to the database.
+     * Persists a new token to the database.
+     * Also cleans up the repository for expired tokens.
      */
     public function persistNewToken(TokenEntity $token): void {
+        $token->deleteExpiredTokens();
         $token->save();
     }
 
@@ -44,11 +42,4 @@ abstract class TokenRepository
         return ($token->isNewRecord() || $token->getValue($token->getColumnPrefix() . '_revoked'));
     }
 
-    /**
-     * Deletes expired tokens to clean up storage.
-     */
-    public function removeExpiredTokens(): void {
-        $token = $this->newToken();
-        $token->deleteExpiredTokens();
-    }
 }

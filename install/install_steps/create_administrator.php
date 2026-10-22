@@ -10,9 +10,8 @@
  */
 
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 
@@ -37,7 +36,7 @@ if ($mode === 'html') {
     $userData = array($userLastName, $userFirstName, $userEmail, $userLogin);
 
     // create a page to enter all necessary data to create a administrator user
-    $page = new InstallationPresenter('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_create_administrator', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'));
@@ -111,27 +110,14 @@ if ($mode === 'html') {
     $_SESSION['user_password']         = $formValues['adm_user_password'];
     $_SESSION['user_password_confirm'] = $formValues['adm_user_password_confirm'];
 
-    // username should only have valid chars
-    if (!StringUtils::strValidCharacters($_SESSION['user_login'], 'noSpecialChar')) {
-        throw new Exception('SYS_FIELD_INVALID_CHAR', array('SYS_USERNAME'));
-    }
-
-    // Password min length is 8 chars
-    if (strlen($_SESSION['user_password']) < PASSWORD_MIN_LENGTH) {
-        throw new Exception('SYS_PASSWORD_LENGTH');
-    }
-
-    // check if password is strong enough
-    $userData = array(
-        $_SESSION['user_last_name'],
+    // check the entered values with the same rules that a headless installation uses
+    Installation::validateAdministratorInput(
+        $_SESSION['user_login'],
         $_SESSION['user_first_name'],
+        $_SESSION['user_last_name'],
         $_SESSION['user_email'],
-        $_SESSION['user_login']
+        $_SESSION['user_password']
     );
-    // Admin Password should have a minimum strength of 1
-    if (PasswordUtils::passwordStrength($_SESSION['user_password'], $userData) < 1) {
-        throw new Exception('SYS_PASSWORD_NOT_STRONG_ENOUGH');
-    }
 
     // password must be the same with password confirm
     if ($_SESSION['user_password'] !== $_SESSION['user_password_confirm']) {

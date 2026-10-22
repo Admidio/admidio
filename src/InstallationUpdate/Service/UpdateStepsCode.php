@@ -1,22 +1,32 @@
 <?php
+
 namespace Admidio\InstallationUpdate\Service;
 
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
+use Admidio\Infrastructure\Plugins\PluginLoader;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Categories\Entity\Category;
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\StringUtils;
 use DateTime;
+use PDOException;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Exception;
 use RuntimeException;
+use UnexpectedValueException;
 
 // this must be declared for backwards compatibility. Can be removed if update scripts don't use it anymore
 const TBL_DATES = TABLE_PREFIX . '_dates';
@@ -29,6 +39,67 @@ const TBL_DATES = TABLE_PREFIX . '_dates';
 final class UpdateStepsCode
 {
     /**
+     * Move category report columns and their conditions to the normalized child table.
+     * @throws Exception
+     */
+    public static function updateStep51MigrateCategoryReportColumns(): void
+    {
+        $referenceIds = array();
+        foreach (array(
+            'crc_usf_id' => array(TBL_USER_FIELDS, 'usf_id'),
+            'crc_rol_id' => array(TBL_ROLES, 'rol_id'),
+            'crc_cat_id' => array(TBL_CATEGORIES, 'cat_id')
+        ) as $field => list($table, $idColumn)) {
+            $referenceIds[$field] = array();
+            $referenceStatement = self::$db->queryPrepared('SELECT ' . $idColumn . ' FROM ' . $table);
+            while ($reference = $referenceStatement->fetch()) {
+                $referenceIds[$field][(int)$reference[$idColumn]] = true;
+            }
+        }
+
+        $sql = 'SELECT crt_id, crt_col_fields, crt_col_conditions
+                  FROM ' . TBL_CATEGORY_REPORT;
+        $statement = self::$db->queryPrepared($sql);
+
+        while ($row = $statement->fetch()) {
+            $fields = array_values(array_filter(
+                explode(',', (string)$row['crt_col_fields']),
+                static fn(string $field): bool => $field !== ''
+            ));
+            $conditions = explode(',', (string)$row['crt_col_conditions']);
+            $number = 1;
+
+            foreach ($fields as $index => $field) {
+                $fieldValues = CategoryReportColumn::getFieldDatabaseValues($field);
+                if (($fieldValues['crc_usf_id'] !== null
+                        && !isset($referenceIds['crc_usf_id'][$fieldValues['crc_usf_id']]))
+                    || ($fieldValues['crc_rol_id'] !== null
+                        && !isset($referenceIds['crc_rol_id'][$fieldValues['crc_rol_id']]))
+                    || ($fieldValues['crc_cat_id'] !== null
+                        && !isset($referenceIds['crc_cat_id'][$fieldValues['crc_cat_id']]))) {
+                    continue;
+                }
+
+                $sql = 'INSERT INTO ' . TBL_CATEGORY_REPORT_COLUMNS . '
+                               (crc_crt_id, crc_number, crc_field_type, crc_usf_id, crc_rol_id,
+                                crc_cat_id, crc_special_field, crc_condition)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+                self::$db->queryPrepared($sql, array(
+                    (int)$row['crt_id'],
+                    $number,
+                    $fieldValues['crc_field_type'],
+                    $fieldValues['crc_usf_id'],
+                    $fieldValues['crc_rol_id'],
+                    $fieldValues['crc_cat_id'],
+                    $fieldValues['crc_special_field'],
+                    $conditions[$index] ?? ''
+                ));
+                ++$number;
+            }
+        }
+    }
+
+    /**
      * @var Database
      */
     private static Database $db;
@@ -37,16 +108,477 @@ final class UpdateStepsCode
      * Set the database
      * @param Database $database The database instance
      */
-    public static function setDatabase(Database $database)
+    public static function setDatabase(Database $database): void
     {
         self::$db = $database;
     }
 
-    public static function updateStep50MoveFieldListValues()
+    /** Convert default texts to IDs once, after legacy updates have used their old names. */
+    public static function updateStep51TranslateDefaultEntries(): void
     {
-        $sql = 'SELECT usf_id, usf_value_list FROM ' . TBL_USER_FIELDS . '
-                 WHERE usf_type = \'DROPDOWN\' 
-                 OR usf_type = \'RADIO_BUTTON\'';
+        $db = self::$db;
+        $translations = array();
+        $language = new Language(Language::REFERENCE_LANGUAGE);
+        foreach (array_keys($language->getAvailableLanguages()) as $code) {
+            $translations[] = new Language($code);
+        }
+        $candidates = array();
+        // Only accept exact, unambiguous matches of the expected defaults.
+        $findId = static function (string $value, array $ids, string $column) use ($translations, &$candidates): ?string {
+            if (in_array($value, $ids, true)) {
+                return $value;
+            }
+            $matches = array();
+            foreach ($ids as $id) {
+                if (!isset($candidates[$column][$id])) {
+                    $variants = array();
+                    foreach ($translations as $language) {
+                        $text = $language->get($id);
+                        if ($text === '#' . $id . '#') {
+                            continue;
+                        }
+                        if ($column === 'txt_text') {
+                            $text = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/', "\n", $text);
+                        }
+                        foreach (array($text, StringUtils::strStripTags(html_entity_decode($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')),
+                            str_replace(array('&rsquo;', '’'), "'", StringUtils::strStripTags(html_entity_decode($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')))) as $variant) {
+                            $variants[trim(str_replace("\r\n", "\n", $variant))] = true;
+                        }
+                    }
+                    $candidates[$column][$id] = $variants;
+                }
+                if (isset($candidates[$column][$id][str_replace("\r\n", "\n", $value)])) {
+                    $matches[$id] = true;
+                }
+            }
+            return count($matches) === 1 ? array_key_first($matches) : null;
+        };
+        $convert = static function (string $table, string $key, string $column, array $ids, string $where = '1 = 1', array $params = array()) use ($db, $findId): void {
+            $rows = $db->queryPrepared('SELECT ' . $key . ', ' . $column . ' FROM ' . $table . ' WHERE ' . $where, $params)->fetchAll();
+            foreach ($rows as $row) {
+                $value = (string) $row[$column];
+                $id = $findId($value, $ids, $column);
+                if ($id !== null && $id !== $value) {
+                    // Compare in PHP, not in the database's possibly case/accent-insensitive collation.
+                    $db->queryPrepared('UPDATE ' . $table . ' SET ' . $column . ' = ? WHERE ' . $key . ' = ?', array($id, $row[$key]));
+                }
+            }
+        };
+
+        $db->startTransaction();
+        try {
+            // The installer creates the disabled system account before any other user.
+            $systemUser = $db->queryPrepared('SELECT usr_id, usr_login_name, usr_valid, usr_usr_id_create FROM ' . TBL_USERS . ' ORDER BY usr_id')->fetch();
+            $systemId = null;
+            if ($systemUser && !$systemUser['usr_valid'] && empty($systemUser['usr_usr_id_create'])
+                && $findId((string) $systemUser['usr_login_name'], array('SYS_SYSTEM'), 'usr_login_name') === 'SYS_SYSTEM') {
+                $systemId = (int) $systemUser['usr_id'];
+                $convert(TBL_USERS, 'usr_id', 'usr_login_name', array('SYS_SYSTEM'), 'usr_id = ?', array($systemId));
+                $convert(TBL_USER_DATA, 'usd_id', 'usd_value', array('SYS_SYSTEM'),
+                    'usd_usr_id = ? AND usd_usf_id IN (SELECT usf_id FROM ' . TBL_USER_FIELDS . " WHERE usf_name_intern = 'LAST_NAME')", array($systemId));
+            }
+
+            $mails = Text::SYSTEM_MAIL_DEFAULTS;
+            foreach ($mails as $name => $id) {
+                $convert(TBL_TEXTS, 'txt_id', 'txt_text', array($id), 'txt_name = ?', array($name));
+            }
+
+            $convert(TBL_ROLES, 'rol_id', 'rol_name', array('SYS_ADMINISTRATOR', 'SYS_MEMBER', 'INS_BOARD'),
+                "rol_cat_id IN (SELECT cat_id FROM " . TBL_CATEGORIES . " WHERE cat_type = 'ROL' AND cat_name_intern = 'COMMON')");
+            $convert(TBL_ROLES, 'rol_id', 'rol_description', array('INS_DESCRIPTION_ADMINISTRATOR', 'INS_DESCRIPTION_MEMBER', 'INS_DESCRIPTION_BOARD'),
+                "rol_cat_id IN (SELECT cat_id FROM " . TBL_CATEGORIES . " WHERE cat_type = 'ROL' AND cat_name_intern = 'COMMON')");
+
+            // Additional organizations' default lists belong to their administrator. Personal lists are excluded.
+            $convert(TBL_LISTS, 'lst_id', 'lst_name', array('INS_ADDRESS_LIST', 'INS_PHONE_LIST', 'SYS_CONTACT_DETAILS', 'INS_MEMBERSHIP', 'SYS_PARTICIPANTS', 'SYS_CONTACTS'),
+                'lst_global = true');
+            if ($systemId !== null) {
+                $convert(TBL_ROOMS, 'room_id', 'room_name', array('INS_CONFERENCE_ROOM'), 'room_usr_id_create = ?', array($systemId));
+                $convert(TBL_ROOMS, 'room_id', 'room_description', array('INS_DESCRIPTION_CONFERENCE_ROOM'), 'room_usr_id_create = ?', array($systemId));
+            }
+            $convert(TBL_CATEGORY_REPORT, 'crt_id', 'crt_name', array('SYS_GENERAL_ROLE_ASSIGNMENT'));
+
+            $categories = array('COMMON' => 'SYS_COMMON', 'GROUPS' => 'INS_GROUPS', 'COURSES' => 'INS_COURSES',
+                'TEAMS' => 'INS_TEAMS', 'EVENTS' => 'SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION', 'INTERN' => 'INS_INTERN',
+                'IMPORTANT' => 'SYS_IMPORTANT', 'TRAINING' => 'INS_TRAINING', 'BASIC_DATA' => 'SYS_BASIC_DATA',
+                'SOCIAL_NETWORKS' => 'SYS_SOCIAL_NETWORKS', 'ADDIDIONAL_DATA' => 'INS_ADDIDIONAL_DATA');
+            foreach ($categories as $name => $id) {
+                $convert(TBL_CATEGORIES, 'cat_id', 'cat_name', array($id), 'cat_name_intern = ?', array($name));
+            }
+            $convert(TBL_USER_FIELDS, 'usf_id', 'usf_description', array('SYS_DATA_PROTECTION_PERMISSION_DESC'),
+                'usf_name_intern = ?', array('DATA_PROTECTION_PERMISSION'));
+            $convert(TBL_USER_FIELDS, 'usf_id', 'usf_description', array('SYS_SOCIAL_NETWORK_FIELD_URL_DESC'),
+                "usf_name_intern IN ('BLUESKY', 'FACEBOOK', 'INSTAGRAM', 'LINKEDIN', 'MASTODON', 'XING')");
+            $db->endTransaction();
+        } catch (\Throwable $exception) {
+            $db->rollback();
+            throw $exception;
+        }
+    }
+
+    /**
+     * Re-hash existing SSO/OIDC token identifiers in place. As of this update, TokenEntity
+     * stores only a SHA-256 hash of access/refresh token and auth code identifiers instead
+     * of the plaintext value, so lookups by presented token now hash before querying.
+     * Existing rows still hold the plaintext identifier and must be converted, or every
+     * outstanding access/refresh token would stop validating immediately after the update.
+     *
+     * @throws Exception
+     */
+    public static function updateStep51HashSsoTokenIdentifiers(): void
+    {
+        $tokenColumns = array(
+            TBL_OIDC_ACCESS_TOKENS  => array('id' => 'oat_id', 'token' => 'oat_token'),
+            TBL_OIDC_REFRESH_TOKENS => array('id' => 'ort_id', 'token' => 'ort_token'),
+            TBL_OIDC_AUTH_CODES     => array('id' => 'oac_id', 'token' => 'oac_token'),
+        );
+
+        foreach ($tokenColumns as $table => $columns) {
+            $selectSql = 'SELECT ' . $columns['id'] . ' AS id, ' . $columns['token'] . ' AS token FROM ' . $table;
+            $statement = self::$db->queryPrepared($selectSql);
+
+            while ($row = $statement->fetch()) {
+                // A 64-char lowercase hex string is already a SHA-256 hash - running this step
+                // twice (e.g. on a retried update) must not double-hash already-migrated rows.
+                if (preg_match('/^[0-9a-f]{64}$/', (string) $row['token']) === 1) {
+                    continue;
+                }
+
+                $updateSql = 'UPDATE ' . $table . ' SET ' . $columns['token'] . ' = ? WHERE ' . $columns['id'] . ' = ?';
+                self::$db->queryPrepared($updateSql, array(hash('sha256', (string) $row['token']), $row['id']));
+            }
+        }
+    }
+
+    /**
+     * Report the OIDC clients whose subject is a value that can change or be reassigned.
+     * OpenID Connect requires the subject to be unique and never reassigned, so a login name
+     * and an e-mail address are no longer offered when a client is edited. The stored value
+     * is deliberately left alone: changing it would give the relying party a new subject for
+     * the same person, and every account it has bound to the old subject would be orphaned.
+     * The administrator has to make that decision, so this step only names the clients.
+     *
+     * @throws Exception
+     */
+    public static function updateStep51WarnAboutMutableOIDCSubjects(): void
+    {
+        global $gLogger, $gL10n;
+
+        $sql = 'SELECT ocl_client_name, ocl_userid_field
+                  FROM ' . TBL_OIDC_CLIENTS . '
+                 WHERE ocl_userid_field NOT IN (\'usr_uuid\', \'usr_id\')
+                 ORDER BY ocl_client_name';
+        $statement = self::$db->queryPrepared($sql);
+
+        $clients = array();
+        while ($row = $statement->fetch()) {
+            $clients[] = $row['ocl_client_name'] . ' (' . $row['ocl_userid_field'] . ')';
+        }
+
+        if (count($clients) > 0) {
+            $gLogger->warning($gL10n->get('INS_WARNING_SSO_OIDC_MUTABLE_SUBJECT', array(implode(', ', $clients))));
+        }
+    }
+
+    /**
+     * Write adm_my_files/cli-config.php, the configuration file of the command line.
+     *
+     * An installation that was updated has no such file, so the command line would be disabled -
+     * which is the intended state - without the administrator having anything to edit in order to
+     * change it. The template documents every setting and disables the command line, so the update
+     * makes the configuration discoverable without granting anything.
+     *
+     * A data directory that cannot be written is not a reason to fail an update: the command line
+     * prints the same template with "admidio cli:defaultconfig".
+     */
+    public static function updateStep51WriteCliConfigTemplate(): void
+    {
+        global $gLogger;
+
+        try {
+            Installation::writeCliConfigFile();
+        } catch (Exception | RuntimeException | UnexpectedValueException $exception) {
+            $gLogger->warning(
+                'The configuration file of the command line could not be written: '
+                . $exception->getMessage()
+            );
+        }
+    }
+
+    /**
+     * This method will convert the charset of the database tables to utf8mb4 if not already done.
+     * This is necessary to support emojis and other special characters in the future.
+     * @throws Exception
+     */
+    public static function updateStep51ConvertCharsetToUtf8mb4(): void
+    {
+        global $g_adm_db, $g_tbl_praefix;
+
+        $sql = 'SELECT table_name
+                  FROM information_schema.tables
+                 WHERE table_schema = ? -- $g_adm_db
+                   AND table_name LIKE ? -- $g_tbl_praefix
+                   AND table_type = \'BASE TABLE\'
+                   AND (table_collation NOT LIKE \'utf8mb4%\' OR table_collation IS NULL)';
+
+        $admidioTables = self::$db->queryPrepared($sql, array($g_adm_db, $g_tbl_praefix . '_%'));
+        while ($row = $admidioTables->fetch()) {
+            $tableName = isset($row['table_name']) ? $row['table_name'] : (isset($row['TABLE_NAME']) ? $row['TABLE_NAME'] : null);
+            $sql = 'ALTER TABLE ' . $tableName . ' CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+            self::$db->queryPrepared($sql);
+        }
+    }
+
+    /**
+     * This method will check if there are still plugins in the old adm_plugins folder. If yes, it will try to move
+     * them to the new plugins' folder. If there are old overview plugins, it will try to delete them because they
+     * are no longer supported. If there are 3rd party plugins, it will try to move them to the new plugins folder
+     * and update the menu entries if necessary. If there are problems with the file system operations, it will set
+     * a cookie to show a warning after the update process.
+     */
+    public static function updateStep51CheckFor3rdPartyPlugins(): void
+    {
+        global $gLogger, $gL10n;
+
+        $arrayOldOverviewPlugins = array('announcement-list', 'birthday', 'calendar', 'event-list', 'latest-documents-files', 'login_form', 'random_photo', 'who-is-online');
+        $oldFolderPluginPath = ADMIDIO_PATH . '/adm_plugins';
+        $gWarnOldPlugins = false;
+        $gWarn3rdPartyPlugins = false;
+        $gInfo3rdPartyPlugins = false;
+        $gWarnOldPluginsFolder = false;
+
+        // check if the old adm_plugins folder exists
+        if (!is_dir($oldFolderPluginPath)) {
+            return;
+        }
+
+        // get all folders inside the adm_plugins folder
+        $pluginFolders = FileSystemUtils::getDirectoryContent($oldFolderPluginPath, false, true, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY));
+        foreach ($pluginFolders as $oldPluginPath => $type) {
+            $folderName = basename($oldPluginPath);
+            if (in_array($folderName, $arrayOldOverviewPlugins)) {
+                // the old plugin is no longer supported, so we remove it
+                try {
+                    FileSystemUtils::deleteDirectoryIfExists($oldPluginPath, true);
+                } catch (RuntimeException|UnexpectedValueException) {
+                    // no rights to delete the old folder, then continue the update process
+                    $gWarnOldPlugins = true;
+                    continue;
+                }
+            } else {
+                // there is a 3rd party plugin installed, so we try to move it to the new plugin folder
+                $newPluginPath = ADMIDIO_PATH . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $folderName;
+                try {
+                    FileSystemUtils::moveDirectory($oldPluginPath, $newPluginPath);
+                    // now we need to check if there is a menu entry for this plugin and if yes we need to update the path by replacing adm_plugins with plugins
+                    $sql = 'UPDATE ' . TBL_MENU . ' SET men_url = REPLACE(men_url, \'adm_plugins/' . $folderName . '\', \'' . DIRECTORY_SEPARATOR . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $folderName . '\') WHERE men_url LIKE \'%adm_plugins/' . $folderName . '%\' ';
+                    self::$db->queryPrepared($sql);
+                    $gInfo3rdPartyPlugins = true;
+                } catch (Exception|PDOException|RuntimeException|UnexpectedValueException) {
+                    // no rights to move the old folder, then continue the update process
+                    $gWarn3rdPartyPlugins = true;
+                    continue;
+                }
+            }
+        }
+
+        if ($gWarnOldPlugins) {
+            $gLogger->warning($gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins')));
+        }
+        if ($gWarn3rdPartyPlugins) {
+            $gLogger->warning($gL10n->get('INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED', array('plugins', 'adm_plugins')));
+        }
+        if ($gInfo3rdPartyPlugins) {
+            $gLogger->info($gL10n->get('INS_INFO_3RD_PARTY_PLUGINS_HAVE_BEEN_MOVED', array('plugins')));
+        }
+
+        if (!$gWarnOldPlugins && !$gWarn3rdPartyPlugins) {
+            // if nothing happened we can delete the old adm_plugins folder
+            try {
+                FileSystemUtils::deleteDirectoryIfExists($oldFolderPluginPath);
+            } catch (RuntimeException|UnexpectedValueException) {
+                // no rights to delete the old folder, then continue the update process
+                // but warn the user that the folder could not be deleted
+                $gWarnOldPluginsFolder = true;
+                $gLogger->warning($gL10n->get('INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED', array('adm_plugins', 'adm_plugins')));
+            }
+        }
+
+        // set a cookie to show the warnings/information after the update process
+        if ($gWarnOldPlugins || $gWarn3rdPartyPlugins || $gWarnOldPluginsFolder || $gInfo3rdPartyPlugins) {
+            $cookieValue = array(
+                'warn_old_plugins' => $gWarnOldPlugins,
+                'warn_3rd_party_plugins' => $gWarn3rdPartyPlugins,
+                'warn_old_plugins_folder' => $gWarnOldPluginsFolder,
+                'info_3rd_party_plugins' => $gInfo3rdPartyPlugins
+            );
+            setcookie('adm_update_plugins_warnings', json_encode($cookieValue), time() + 3600, '/');
+        }
+    }
+
+    /**
+     * Move the built-in plugins onto the new plugin runtime.
+     *
+     * The previous runtime identified a plugin by its translated display name and stored an
+     * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
+     * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
+
+    /**
+     * Give every component a UUID.
+     *
+     * The column is added empty, so the rows that already exist need one before the unique index can
+     * be created. A component is what records an installed plugin, so its UUID is what the changelog
+     * relates a plugin's settings to.
+     * @throws Exception
+     */
+    public static function updateStep51AddComponentUuid(): void
+    {
+        $statement = self::$db->queryPrepared('SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_uuid IS NULL');
+
+        while ($row = $statement->fetch()) {
+            $sql = 'UPDATE ' . TBL_COMPONENTS . ' SET com_uuid = ? -- $uuid
+                     WHERE com_id = ? -- $row[\'com_id\']';
+            self::$db->queryPrepared($sql, array(Uuid::uuid4(), $row['com_id']));
+        }
+
+        self::$db->initializeTableColumnProperties();
+    }
+
+    /**
+     * Move the built-in plugins onto the new plugin runtime.
+     *
+     * The previous runtime identified a plugin by its translated display name and stored an
+     * uppercased com_name_intern; the registry identifies a plugin by its directory and nothing
+     * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
+     * again with everything it already has - its version, its preferences and its data.
+     *
+     * A built-in plugin that has no component row at all is installed here, and the menu entry of a
+     * plugin that only contributes a widget is removed, because the file it pointed at is gone.
+     * @return void
+     * @throws Exception
+     */
+    public static function updateStep51ConvertBuiltInPlugins(): void
+    {
+        PluginRegistry::reset();
+
+        foreach (PluginRegistry::BUILT_IN as $id) {
+            $plugin = PluginRegistry::get($id);
+            if ($plugin === null || !$plugin->isValid()) {
+                // The plugin is still on the previous runtime, or it is not shipped any more.
+                continue;
+            }
+
+            if (!PluginRegistry::isInstalled($id)) {
+                PluginInstaller::install($plugin);
+                continue;
+            }
+
+            // The plugin keeps its component row and every setting an administrator made. What it
+            // needs is a row for the preferences the new format adds - loading it registers them.
+            PluginLoader::load($plugin);
+            PreferencesService::seedDefaults(PluginInstaller::getPreferenceNames($plugin));
+
+            if (!$plugin->wantsMenuEntry()) {
+                PluginInstaller::removeMenuEntries(PluginRegistry::getComponentId($id));
+            }
+        }
+    }
+
+    /**
+     * This method will add a new profile field BlueSky to the database,
+     * but only if the category social networks exists
+     * @throws Exception
+     */
+    public static function updateStep51AddSocialNetworkProfileFields(): void
+    {
+        global $gProfileFields;
+
+        $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name_intern = \'SOCIAL_NETWORKS\' ';
+        $categoriesStatement = self::$db->queryPrepared($sql);
+
+        if ($row = $categoriesStatement->fetch()) {
+            $profileFields = $gProfileFields->getProfileFields();
+
+            if (!array_key_exists('BLUESKY', $profileFields)) {
+                $profileFieldLinkedIn = new ProfileField(self::$db);
+                $profileFieldLinkedIn->saveChangesWithoutRights();
+                $profileFieldLinkedIn->setValue('usf_cat_id', (int)$row['cat_id']);
+                $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
+                $profileFieldLinkedIn->setValue('usf_name_intern', 'BLUESKY');
+                $profileFieldLinkedIn->setValue('usf_name', 'SYS_BLUESKY');
+                $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
+                $profileFieldLinkedIn->setValue('usf_icon', 'bluesky');
+                $profileFieldLinkedIn->setValue('usf_url', 'https://bsky.app/profile/#user_content#');
+                $profileFieldLinkedIn->save();
+            }
+        }
+    }
+
+    /**
+     * Add the column crt_col_conditions where step 1920 never ran. db.sql did not get the column,
+     * and a fresh installation marks all update steps as done, so these installations lack it, while
+     * the update to 6.0 migrates it. MySQL has no ADD COLUMN IF NOT EXISTS.
+     * @throws Exception
+     */
+    public static function updateStep50AddCategoryReportConditions(): void
+    {
+        if (!in_array('crt_col_conditions', self::$db->getTableColumns(TBL_CATEGORY_REPORT), true)) {
+            self::$db->queryPrepared('ALTER TABLE ' . TBL_CATEGORY_REPORT . ' ADD COLUMN crt_col_conditions varchar(255)');
+        }
+    }
+
+    /**
+     * This method updates wrongly assigned select options for the inventory status field.
+     * In previous new Admidio 5.0 installations and additional added organizations, the options were wrongly assigned
+     * to the organization id instead of the field id. Therefore, we check whether options exist whose assigned id
+     * matches the organization id of a STATUS field and update them to the corresponding field id.
+     * @throws Exception
+     */
+    public static function updateStep50FixInventorySelectOptions(): void
+    {
+        $statusFields = array();
+        $statusFieldOptions = array();
+
+        // Select all item fields with internal name STATUS
+        $sql = 'SELECT inf_id, inf_org_id FROM ' . TBL_INVENTORY_FIELDS . ' WHERE inf_name_intern = ?';
+        $inventoryStatement = self::$db->queryPrepared($sql, array('STATUS'));
+
+        while ($row = $inventoryStatement->fetch()) {
+            $statusFields[] = array( 'id' => (int) $row['inf_id'], 'org_id' => (int) $row['inf_org_id']);
+        }
+
+        // Select all status field options present for this installation
+        $sql = 'SELECT ifo_id, ifo_inf_id FROM ' . TBL_INVENTORY_FIELD_OPTIONS . ' WHERE ifo_value IN (?, ?)';
+        $inventoryOptionStatement = self::$db->queryPrepared( $sql, array('SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'SYS_INVENTORY_FILTER_RETIRED_ITEMS') );
+
+        while ($row = $inventoryOptionStatement->fetch()) {
+            $statusFieldOptions[] = array( 'id' => (int) $row['ifo_id'], 'inf_id' => (int) $row['ifo_inf_id']);
+        }
+
+        // check if there are options wrongly assigned to the organization id of a status field instead of the corresponding field id and update them
+        foreach ($statusFieldOptions as $statusFieldOption) {
+            foreach ($statusFields as $statusField) {
+                if ($statusField['id'] === $statusFieldOption['inf_id']) {
+                    // The option is already assigned to the field
+                    continue 2;
+                }
+
+                if ($statusField['org_id'] === $statusFieldOption['inf_id']) {
+                    // The option is wrongly assigned to the organization id
+                    $sql = 'UPDATE ' . TBL_INVENTORY_FIELD_OPTIONS . ' SET ifo_inf_id = ? WHERE ifo_id = ?';
+                    self::$db->queryPrepared($sql, array($statusField['id'], $statusFieldOption['id']));
+                    continue 2;
+                }
+            }
+        }
+    }
+
+    public static function updateStep50MoveFieldListValues(): void
+    {
+        global $gDbType;
+
+        $sql = 'SELECT usf_id, usf_value_list
+                  FROM ' . TBL_USER_FIELDS . '
+                 WHERE usf_type IN (\'DROPDOWN\', \'RADIO_BUTTON\')';
 
         $userFieldsStatement = self::$db->queryPrepared($sql);
         while ($row = $userFieldsStatement->fetch()) {
@@ -67,13 +599,19 @@ final class UpdateStepsCode
                     self::$db->queryPrepared($sql, array((int)$row['usf_id'], $value, $key + 1));
                 }
 
+                if ($gDbType === 'pgsql') {
+                    $sqlUfoSequence = 'CAST(ufo_sequence AS CHAR)';
+                } else {
+                    $sqlUfoSequence = 'ufo_sequence';
+                }
+
                 // update the user field values to use the new option id
                 $sql = 'UPDATE ' . TBL_USER_DATA . '
-                        JOIN ' . TBL_USER_FIELD_OPTIONS . '
-                            ON ufo_usf_id = usd_usf_id
-                            AND usd_value = ufo_sequence
-                        SET usd_value = ufo_id
-                            WHERE usd_usf_id = ? -- $row[\'usf_id\']';
+                           SET usd_value = (SELECT ufo_id
+                                              FROM ' . TBL_USER_FIELD_OPTIONS . '
+                                             WHERE ufo_usf_id = usd_usf_id
+                                               AND ' . $sqlUfoSequence . ' = usd_value)
+                         WHERE usd_usf_id = ? -- $row[\'usf_id\'] ';
                 self::$db->queryPrepared($sql, array((int)$row['usf_id']));
             }
         }
@@ -83,16 +621,16 @@ final class UpdateStepsCode
      * Add default fields for the inventory module.
      * @throws Exception
      */
-    public static function updateStep50AddInventoryFields()
+    public static function updateStep50AddInventoryFields(): void
     {
         $arrItemFields = array(
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'ITEMNAME', 'inf_name' => 'SYS_INVENTORY_ITEMNAME', 'inf_description' => 'SYS_INVENTORY_ITEMNAME_DESC', 'inf_required_input' => 1, 'inf_sequence' => 0),
             array('inf_type' => 'CATEGORY', 'inf_name_intern' => 'CATEGORY', 'inf_name' => 'SYS_CATEGORY', 'inf_description' => 'SYS_INVENTORY_CATEGORY_DESC', 'inf_required_input' => 1, 'inf_sequence' => 1),
-            array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 2),
-            array('inf_type' => 'CHECKBOX', 'inf_name_intern' => 'IN_INVENTORY', 'inf_name' => 'SYS_INVENTORY_IN_INVENTORY', 'inf_description' => 'SYS_INVENTORY_IN_INVENTORY_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
+            array('inf_type' => 'DROPDOWN', 'inf_name_intern' => 'STATUS', 'inf_name' => 'SYS_INVENTORY_STATUS', 'inf_description' => 'SYS_INVENTORY_STATUS_DESC', 'inf_required_input' => 1, 'inf_sequence' => 2),
+            array('inf_type' => 'TEXT', 'inf_name_intern' => 'KEEPER', 'inf_name' => 'SYS_INVENTORY_KEEPER', 'inf_description' => 'SYS_INVENTORY_KEEPER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 3),
             array('inf_type' => 'TEXT', 'inf_name_intern' => 'LAST_RECEIVER', 'inf_name' => 'SYS_INVENTORY_LAST_RECEIVER', 'inf_description' => 'SYS_INVENTORY_LAST_RECEIVER_DESC', 'inf_required_input' => 0, 'inf_sequence' => 4),
-            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
-            array('inf_type' => 'DATE', 'inf_name_intern' => 'RECEIVED_BACK_ON', 'inf_name' => 'SYS_INVENTORY_RECEIVED_BACK_ON', 'inf_description' => 'SYS_INVENTORY_RECEIVED_BACK_ON_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'BORROW_DATE', 'inf_name' => 'SYS_INVENTORY_BORROW_DATE', 'inf_description' => 'SYS_INVENTORY_BORROW_DATE_DESC', 'inf_required_input' => 0, 'inf_sequence' => 5),
+            array('inf_type' => 'DATE', 'inf_name_intern' => 'RETURN_DATE', 'inf_name' => 'SYS_INVENTORY_RETURN_DATE', 'inf_description' => 'SYS_INVENTORY_RETURN_DATE_DESC', 'inf_required_input' => 0, 'inf_sequence' => 6)
         );
 
         $sql = 'SELECT org_id, org_shortname FROM ' . TBL_ORGANIZATIONS;
@@ -112,15 +650,34 @@ final class UpdateStepsCode
                 $itemField->setValue('inf_sequence', (int)$itemFieldData['inf_sequence']);
                 $itemField->save();
             }
-        }
 
+            // add default options for the status field
+            $sql = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . '
+                 WHERE inf_name_intern = \'STATUS\' 
+                 and inf_org_id = ? -- $row[org_id] ';
+            $statusFieldId = self::$db->queryPrepared($sql, array((int)$row['org_id']))->fetchColumn();
+
+            if ($statusFieldId !== false) {
+                $arrStatusOptions = array(
+                    array('ifo_value' => 'SYS_INVENTORY_FILTER_IN_USE_ITEMS', 'ifo_sequence' => 1),
+                    array('ifo_value' => 'SYS_INVENTORY_FILTER_RETIRED_ITEMS', 'ifo_sequence' => 2),
+                );
+
+                foreach ($arrStatusOptions as $statusOption) {
+                    $sql = 'INSERT INTO ' . TBL_INVENTORY_FIELD_OPTIONS . '
+                         (ifo_inf_id, ifo_value, ifo_system, ifo_sequence)
+                         VALUES (?, ?, ?, ?)';
+                    self::$db->queryPrepared($sql, array($statusFieldId, $statusOption['ifo_value'], true, $statusOption['ifo_sequence']));
+                }
+            }
+        }
     }
-    
+
     /**
      * Create categories for the inventory for each organization.
      * @throws Exception
      */
-    public static function updateStep50InventoryCategories()
+    public static function updateStep50InventoryCategories(): void
     {
         global $gL10n;
 
@@ -137,7 +694,7 @@ final class UpdateStepsCode
         while ($row = $organizationStatement->fetch()) {
             $sql = 'INSERT INTO ' . TBL_CATEGORIES . '
                            (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
+                    VALUES (?, ?, \'IVT\', \'COMMON\', \'SYS_COMMON\', false, true, 1, ?, ?) -- $rowId, $systemUserId, DATETIME_NOW';
             self::$db->queryPrepared($sql, array((int)$row['org_id'], Uuid::uuid4(), $systemUserId, DATETIME_NOW));
 
             // set edit role rights to inventory categories for administrator role
@@ -165,7 +722,7 @@ final class UpdateStepsCode
      * The sequence starts with 1 for each category and is incremented by 1 for each link.
      * @throws Exception
      */
-    public static function updateStep50AddLinkSequence()
+    public static function updateStep50AddLinkSequence(): void
     {
         $sql = 'SELECT lnk_id, lnk_cat_id FROM ' . TBL_LINKS . ' ORDER BY lnk_cat_id, lnk_id';
         $statement = self::$db->queryPrepared($sql);
@@ -187,7 +744,7 @@ final class UpdateStepsCode
      * Create categories for the forum and each organization.
      * @throws Exception
      */
-    public static function updateStep50ForumCategories()
+    public static function updateStep50ForumCategories(): void
     {
         global $gL10n;
 
@@ -221,10 +778,10 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     * This method will add an uuid to each row of the tables adm_users and adm_roles
      * @throws Exception
      */
-    public static function updateStep50AddUuid()
+    public static function updateStep50AddUuid(): void
     {
         $updateTablesUuid = array(
             array('table' => TBL_MESSAGES_ATTACHMENTS, 'column_id' => 'msa_id', 'column_uuid' => 'msa_uuid'),
@@ -252,7 +809,7 @@ final class UpdateStepsCode
     /**
      * Repair the path of the folders
      */
-    public static function updateStep43RepairDocumentsPath()
+    public static function updateStep43RepairDocumentsPath(): void
     {
         $maintenance = new Maintenance(self::$db);
         $maintenance->repairDocumentsFilesPath();
@@ -262,12 +819,12 @@ final class UpdateStepsCode
      * This method removes wrong configured visible roles of category Basic_Data
      * @throws Exception
      */
-    public static function updateStep43RemoveInvalidVisibleRoleRights()
+    public static function updateStep43RemoveInvalidVisibleRoleRights(): void
     {
         $sql = 'SELECT rrd_id
-                  FROM '.TBL_CATEGORIES.'
-                 INNER JOIN '.TBL_ROLES_RIGHTS.' ON ror_name_intern = \'category_view\'
-                 INNER JOIN '.TBL_ROLES_RIGHTS_DATA.' ON rrd_ror_id = ror_id
+                  FROM ' . TBL_CATEGORIES . '
+                 INNER JOIN ' . TBL_ROLES_RIGHTS . ' ON ror_name_intern = \'category_view\'
+                 INNER JOIN ' . TBL_ROLES_RIGHTS_DATA . ' ON rrd_ror_id = ror_id
                    AND rrd_object_id = cat_id
                  WHERE cat_name_intern = \'BASIC_DATA\' ';
         $rolesRightsStatement = self::$db->queryPrepared($sql);
@@ -284,7 +841,7 @@ final class UpdateStepsCode
      * but only if the category social networks exists
      * @throws Exception
      */
-    public static function updateStep43AddSocialNetworkProfileFields()
+    public static function updateStep43AddSocialNetworkProfileFields(): void
     {
         global $gProfileFields;
 
@@ -297,12 +854,12 @@ final class UpdateStepsCode
             if (!array_key_exists('LINKEDIN', $profileFields)) {
                 $profileFieldLinkedIn = new ProfileField(self::$db);
                 $profileFieldLinkedIn->saveChangesWithoutRights();
-                $profileFieldLinkedIn->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldLinkedIn->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldLinkedIn->setValue('usf_type', 'TEXT');
                 $profileFieldLinkedIn->setValue('usf_name_intern', 'LINKEDIN');
                 $profileFieldLinkedIn->setValue('usf_name', 'SYS_LINKEDIN');
-                $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
-                $profileFieldLinkedIn->setValue('usf_icon', 'fab fa-linkedin');
+                $profileFieldLinkedIn->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
+                $profileFieldLinkedIn->setValue('usf_icon', 'linkedin');
                 $profileFieldLinkedIn->setValue('usf_url', 'https://www.linkedin.com/in/#user_content#');
                 $profileFieldLinkedIn->save();
             }
@@ -310,12 +867,12 @@ final class UpdateStepsCode
             if (!array_key_exists('INSTAGRAM', $profileFields)) {
                 $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'INSTAGRAM');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_INSTAGRAM');
-                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
-                $profileFieldInstagram->setValue('usf_icon', 'fab fa-instagram');
+                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
+                $profileFieldInstagram->setValue('usf_icon', 'instagram');
                 $profileFieldInstagram->setValue('usf_url', 'https://www.instagram.com/#user_content#');
                 $profileFieldInstagram->save();
             }
@@ -323,12 +880,12 @@ final class UpdateStepsCode
             if (!array_key_exists('MASTODON', $profileFields)) {
                 $profileFieldInstagram = new ProfileField(self::$db);
                 $profileFieldInstagram->saveChangesWithoutRights();
-                $profileFieldInstagram->setValue('usf_cat_id',(int) $row['cat_id']);
+                $profileFieldInstagram->setValue('usf_cat_id', (int)$row['cat_id']);
                 $profileFieldInstagram->setValue('usf_type', 'TEXT');
                 $profileFieldInstagram->setValue('usf_name_intern', 'MASTODON');
                 $profileFieldInstagram->setValue('usf_name', 'SYS_MASTODON');
-                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_DESC');
-                $profileFieldInstagram->setValue('usf_icon', 'fab fa-mastodon');
+                $profileFieldInstagram->setValue('usf_description', 'SYS_SOCIAL_NETWORK_FIELD_URL_DESC');
+                $profileFieldInstagram->setValue('usf_icon', 'mastodon');
                 $profileFieldInstagram->setValue('usf_url', 'https://mastodon.social/#user_content#');
                 $profileFieldInstagram->save();
             }
@@ -340,7 +897,7 @@ final class UpdateStepsCode
      * organization in the database.
      * @throws Exception
      */
-    public static function updateStep43AddNewNotificationText()
+    public static function updateStep43AddNewNotificationText(): void
     {
         global $gL10n;
 
@@ -357,10 +914,10 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method only execute an sql statement but because of the use of & it could not done in our XML structure
+     * This method only execute a SQL statement but because of the use of & it could not be done in our XML structure
      * @throws Exception
      */
-    public static function updateStep41CleanUpRoleNames()
+    public static function updateStep41CleanUpRoleNames(): void
     {
         $sql = 'UPDATE ' . TBL_ROLES . ' SET rol_name = REPLACE(rol_name, \'&nbsp;&nbsp;\', \' \') ';
         self::$db->queryPrepared($sql);
@@ -371,7 +928,7 @@ final class UpdateStepsCode
      * and show the columns of the members management overview.
      * @throws Exception
      */
-    public static function updateStep41CleanUpInternalNameProfileFields()
+    public static function updateStep41CleanUpInternalNameProfileFields(): void
     {
         $sql = 'SELECT * FROM ' . TBL_USER_FIELDS;
         $userFieldsStatement = self::$db->queryPrepared($sql);
@@ -389,10 +946,10 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     * This method will add an uuid to each row of the tables adm_users and adm_roles
      * @throws Exception
      */
-    public static function updateStep41PostgreSqlSetBoolean()
+    public static function updateStep41PostgreSqlSetBoolean(): void
     {
         $updateColumnsBoolean = array(
             array('table' => TBL_CATEGORIES, 'column' => 'cat_system'),
@@ -458,7 +1015,7 @@ final class UpdateStepsCode
     /**
      * This method will move the folder with the ecard templates to the adm_my_files folder
      */
-    public static function updateStep41MoveEcardTemplates()
+    public static function updateStep41MoveEcardTemplates(): void
     {
         global $gLogger;
 
@@ -490,7 +1047,7 @@ final class UpdateStepsCode
      * to module category report (table adm_category_report).
      * @throws Exception
      */
-    public static function updateStep41CategoryReportMigration()
+    public static function updateStep41CategoryReportMigration(): void
     {
         global $gL10n, $gProfileFields;
 
@@ -524,7 +1081,7 @@ final class UpdateStepsCode
                     while ($row = $statement->fetch()) {
                         $array = explode('__', $row['plp_name']);
 
-                        if ((substr($row['plp_value'], 0, 2) == '((') && (substr($row['plp_value'], -2) == '))')) {
+                        if ((str_starts_with($row['plp_value'], '((')) && (str_ends_with($row['plp_value'], '))'))) {
                             $row['plp_value'] = substr($row['plp_value'], 2, -2);
                             $config[$array[2]] = explode($dbtoken, $row['plp_value']);
                         } else {
@@ -585,10 +1142,10 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method will add a uuid to each row of the tables adm_users and adm_roles
+     * This method will add an uuid to each row of the tables adm_users and adm_roles
      * @throws Exception
      */
-    public static function updateStep41AddUuid()
+    public static function updateStep41AddUuid(): void
     {
         $updateTablesUuid = array(
             array('table' => TBL_ANNOUNCEMENTS, 'column_id' => 'ann_id', 'column_uuid' => 'ann_uuid'),
@@ -635,7 +1192,7 @@ final class UpdateStepsCode
      * and show the columns of the members management overview.
      * @throws Exception
      */
-    public static function updateStep41AddMembersManagementDefaultList()
+    public static function updateStep41AddMembersManagementDefaultList(): void
     {
         global $gL10n, $gProfileFields;
 
@@ -671,7 +1228,7 @@ final class UpdateStepsCode
      * organization in the database.
      * @throws Exception
      */
-    public static function updateStep41AddSystemmailText()
+    public static function updateStep41AddSystemmailText(): void
     {
         global $gL10n;
 
@@ -689,11 +1246,11 @@ final class UpdateStepsCode
 
     /**
      * This method will migrate the recipients of messages from the database column msg_usr_id_receiver
-     * to the new table adm_messages_recipients. There each recipient will be add in a separate row that
+     * to the new table adm_messages_recipients. There each recipient will be added in a separate row that
      * reference to the message.
      * @throws Exception
      */
-    public static function updateStep41MigrateMessageRecipients()
+    public static function updateStep41MigrateMessageRecipients(): void
     {
         $sql = 'SELECT msg_id, msg_usr_id_receiver FROM ' . TBL_MESSAGES;
         $messagesStatement = self::$db->queryPrepared($sql);
@@ -729,18 +1286,16 @@ final class UpdateStepsCode
      * This method adds the email template to the preferences
      * @throws Exception
      */
-    public static function updateStep40AddEmailTemplate()
+    public static function updateStep40AddEmailTemplate(): void
     {
         if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/template.html')) {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'template.html\' WHERE prf_name = \'mail_template\'';
-            self::$db->queryPrepared($sql);
         } elseif (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates/default.html')) {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'default.html\' WHERE prf_name = \'mail_template\'';
-            self::$db->queryPrepared($sql);
         } else {
             $sql = 'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'\' WHERE prf_name = \'mail_template\'';
-            self::$db->queryPrepared($sql);
         }
+        self::$db->queryPrepared($sql);
     }
 
     /**
@@ -748,7 +1303,7 @@ final class UpdateStepsCode
      * with the prefix 'documents' and the shortname of the current organization.
      * @throws Exception
      */
-    public static function updateStep40RenameDownloadRootFolder()
+    public static function updateStep40RenameDownloadRootFolder(): void
     {
         global $gLogger;
 
@@ -795,7 +1350,7 @@ final class UpdateStepsCode
      * @throws Exception
      * @throws \Exception
      */
-    public static function updateStep40RenameParticipationRoles()
+    public static function updateStep40RenameParticipationRoles(): void
     {
         global $gSettingsManager;
 
@@ -834,7 +1389,7 @@ final class UpdateStepsCode
      * This method adds a new global list configuration for participants of events.
      * @throws Exception
      */
-    public static function updateStep33AddDefaultParticipantList()
+    public static function updateStep33AddDefaultParticipantList(): void
     {
         global $gL10n;
 
@@ -893,7 +1448,7 @@ final class UpdateStepsCode
      * This method adds new categories for all organizations.
      * @throws Exception
      */
-    public static function updateStep33AddGlobalCategories()
+    public static function updateStep33AddGlobalCategories(): void
     {
         global $gCurrentOrganization;
 
@@ -923,7 +1478,7 @@ final class UpdateStepsCode
      * organization depending.
      * @throws Exception
      */
-    public static function updateStep33EventCategory()
+    public static function updateStep33EventCategory(): void
     {
         global $g_organization, $gL10n;
 
@@ -943,7 +1498,7 @@ final class UpdateStepsCode
                            AND cat_name_intern = \'CONFIRMATION_OF_PARTICIPATION\' ';
                 self::$db->queryPrepared($sql, array($gL10n->get('SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION'), $rowId));
             } else {
-                // create organization depending category for events
+                // create organization depending on category for events
                 $category = new Category(self::$db);
                 $category->setValue('cat_org_id', $rowId);
                 $category->setValue('cat_type', 'ROL');
@@ -974,7 +1529,7 @@ final class UpdateStepsCode
      * This method migrate the data of the table adm_date_role to the table adm_roles_rights_data.
      * @throws Exception
      */
-    public static function updateStep33MigrateDatesRightsToFolderRights()
+    public static function updateStep33MigrateDatesRightsToFolderRights(): void
     {
         // migrate adm_folder_roles to adm_roles_rights
         $sql = 'SELECT ror_id
@@ -1015,7 +1570,7 @@ final class UpdateStepsCode
      * This method update the security settings for menus to standard values
      * @throws Exception
      */
-    public static function updateStep33MigrateToStandardMenu()
+    public static function updateStep33MigrateToStandardMenu(): void
     {
         // add new module menu to components table
         $sql = 'INSERT INTO ' . TBL_COMPONENTS . '
@@ -1033,10 +1588,10 @@ final class UpdateStepsCode
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'DOCUMENTS-FILES\'), 1, 0, 3, 1, \'documents-files\', \'' . FOLDER_MODULES . '/documents-files/documents_files.php\', \'fa-file-download\', \'SYS_DOCUMENTS_FILES\', \'SYS_DOCUMENTS_FILES_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'GROUPS-ROLES\'), 1, 0, 7, 1, \'groups-roles\', \'' . FOLDER_MODULES . '/groups-roles/groups_roles.php\', \'fa-user-tie\', \'SYS_GROUPS_ROLES\', \'SYS_GROUPS_ROLES_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'ANNOUNCEMENTS\'), 1, 0, 2, 1, \'announcements\', \'' . FOLDER_MODULES . '/announcements.php\', \'announcements.png\', \'SYS_ANNOUNCEMENTS\', \'SYS_ANNOUNCEMENTS_DESC\')
-                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \'' . FOLDER_MODULES . '/photos/photos.php\', \'photo.png\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PHOTOS\'), 1, 0, 5, 1, \'photo\', \'' . FOLDER_MODULES . '/photos.php\', \'photo.png\', \'SYS_PHOTOS\', \'SYS_PHOTOS_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'GUESTBOOK\'), 1, 0, 6, 1, \'guestbook\', \'' . FOLDER_MODULES . '/guestbook/guestbook.php\', \'guestbook.png\', \'GBO_GUESTBOOK\', \'GBO_GUESTBOOK_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'DATES\'), 1, 0, 8, 1, \'dates\', \'' . FOLDER_MODULES . '/events/events.php\', \'dates.png\', \'SYS_EVENTS\', \'SYS_EVENTS_DESC\')
-                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \'' . FOLDER_MODULES . '/links/links.php\', \'weblinks.png\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
+                     , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'LINKS\'), 1, 0, 9, 1, \'weblinks\', \'' . FOLDER_MODULES . '/weblinks.php\', \'weblinks.png\', \'SYS_WEBLINKS\', \'SYS_WEBLINKS_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'BACKUP\'), 2, 0, 4, 1, \'dbback\', \'' . FOLDER_MODULES . '/backup/backup.php\', \'backup.png\', \'SYS_DATABASE_BACKUP\', \'SYS_DATABASE_BACKUP_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'PREFERENCES\'), 2, 0, 6, 1, \'orgprop\', \'' . FOLDER_MODULES . '/preferences.php\', \'options.png\', \'SYS_SETTINGS\', \'ORG_ORGANIZATION_PROPERTIES_DESC\')
                      , ((SELECT com_id FROM ' . TBL_COMPONENTS . ' WHERE com_name_intern = \'MESSAGES\'), 1, 0, 4, 1, \'mail\', \'' . FOLDER_MODULES . '/messages/messages_write.php\', \'email.png\', \'SYS_EMAIL\', \'SYS_EMAIL_DESC\')
@@ -1050,7 +1605,7 @@ final class UpdateStepsCode
      * This method set the approval states for all members of an event in the past to confirmed.
      * @throws Exception
      */
-    public static function updateStep33SetParticipantsApprovalStates()
+    public static function updateStep33SetParticipantsApprovalStates(): void
     {
         $sql = 'UPDATE ' . TBL_MEMBERS . '
                            SET mem_approved = 2
@@ -1072,7 +1627,7 @@ final class UpdateStepsCode
      * This method add all roles to the role right category_view if the role had set the flag cat_hidden = 1
      * @throws Exception
      */
-    public static function updateStep33VisibleCategories()
+    public static function updateStep33VisibleCategories(): void
     {
         $sql = 'SELECT cat_id, cat_org_id
                   FROM ' . TBL_CATEGORIES . '
@@ -1106,7 +1661,7 @@ final class UpdateStepsCode
      * This method renames the download folders of the different organizations to the new secure filename pattern
      * @throws Exception
      */
-    public static function updateStep33DownloadOrgFolderName()
+    public static function updateStep33DownloadOrgFolderName(): void
     {
         global $gLogger;
 
@@ -1130,10 +1685,10 @@ final class UpdateStepsCode
     }
 
     /**
-     * This method removes expired messengers like GooglePlus, AOL Messenger and Yahoo. Messenger from the system.
+     * This method removes expired messengers like Google Plus, AOL Messenger and Yahoo. Messenger from the system.
      * @throws Exception
      */
-    public static function updateStep33RemoveExpiredMessengers()
+    public static function updateStep33RemoveExpiredMessengers(): void
     {
         $sql = 'SELECT usf_id
                   FROM ' . TBL_USER_FIELDS . '
@@ -1151,7 +1706,7 @@ final class UpdateStepsCode
      * This method add new categories for announcements to the database.
      * @throws Exception
      */
-    public static function updateStep32AddAnnouncementsCategories()
+    public static function updateStep32AddAnnouncementsCategories(): void
     {
         global $gL10n;
 
@@ -1193,21 +1748,19 @@ final class UpdateStepsCode
      * This method installs the default user relation types
      * @throws Exception
      */
-    public static function updateStep32InstallDefaultUserRelationTypes()
+    public static function updateStep32InstallDefaultUserRelationTypes(): void
     {
-        global $gL10n;
-
         $sql = 'INSERT INTO ' . TBL_USER_RELATION_TYPES . '
                        (urt_id, urt_name, urt_name_male, urt_name_female, urt_id_inverse, urt_usr_id_create, urt_timestamp_create)
-                VALUES (1, \'' . $gL10n->get('INS_PARENT') . '\',      \'' . $gL10n->get('INS_FATHER') . '\',           \'' . $gL10n->get('INS_MOTHER') . '\',             2, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (2, \'' . $gL10n->get('INS_CHILD') . '\',       \'' . $gL10n->get('INS_SON') . '\',              \'' . $gL10n->get('INS_DAUGHTER') . '\',           1, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (3, \'' . $gL10n->get('INS_SIBLING') . '\',     \'' . $gL10n->get('INS_BROTHER') . '\',          \'' . $gL10n->get('INS_SISTER') . '\',             3, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (4, \'' . $gL10n->get('INS_SPOUSE') . '\',      \'' . $gL10n->get('INS_HUSBAND') . '\',          \'' . $gL10n->get('INS_WIFE') . '\',               4, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (5, \'' . $gL10n->get('INS_COHABITANT') . '\',  \'' . $gL10n->get('INS_COHABITANT_MALE') . '\',  \'' . $gL10n->get('INS_COHABITANT_FEMALE') . '\',  5, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (6, \'' . $gL10n->get('SYS_COMPANION') . '\',   \'' . $gL10n->get('SYS_BOYFRIEND') . '\',        \'' . $gL10n->get('SYS_GIRLFRIEND') . '\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (7, \'' . $gL10n->get('SYS_SUPERIOR') . '\',    \'' . $gL10n->get('SYS_SUPERIOR_MALE') . '\',    \'' . $gL10n->get('SYS_SUPERIOR_FEMALE') . '\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
-                     , (8, \'' . $gL10n->get('INS_SUBORDINATE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_MALE') . '\', \'' . $gL10n->get('INS_SUBORDINATE_FEMALE') . '\', 7, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')';
-        self::$db->query($sql); // TODO add more params
+                VALUES (1, \'SYS_PARENT\',      \'SYS_FATHER\',           \'SYS_MOTHER\',             2, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (2, \'SYS_CHILD\',       \'SYS_SON\',              \'SYS_DAUGHTER\',           1, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (3, \'SYS_SIBLING\',     \'SYS_BROTHER\',          \'SYS_SISTER\',             3, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (4, \'SYS_SPOUSE\',      \'SYS_HUSBAND\',          \'SYS_WIFE\',               4, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (5, \'SYS_COHABITANT\',  \'SYS_COHABITANT_MALE\',  \'SYS_COHABITANT_FEMALE\',  5, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (6, \'SYS_COMPANION\',   \'SYS_BOYFRIEND\',        \'SYS_GIRLFRIEND\',         6, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (7, \'SYS_SUPERIOR\',    \'SYS_SUPERIOR_MALE\',    \'SYS_SUPERIOR_FEMALE\',    8, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')
+                     , (8, \'SYS_SUBORDINATE\', \'SYS_SUBORDINATE_MALE\', \'SYS_SUBORDINATE_FEMALE\', 7, ' . $GLOBALS['gCurrentUserId'] . ', \'' . DATETIME_NOW . '\')';
+        self::$db->query($sql);
     }
 
     /**
@@ -1215,7 +1768,7 @@ final class UpdateStepsCode
      * new table adm_roles_rights_data.
      * @throws Exception
      */
-    public static function updateStep32MigrateToFolderRights()
+    public static function updateStep32MigrateToFolderRights(): void
     {
         global $g_organization;
 
@@ -1265,7 +1818,7 @@ final class UpdateStepsCode
      * the shortname of the current organization
      * @throws Exception
      */
-    public static function updateStep32NewDownloadRootFolderName()
+    public static function updateStep32NewDownloadRootFolderName(): void
     {
         global $gLogger, $g_organization;
 
@@ -1321,7 +1874,7 @@ final class UpdateStepsCode
      * This method renames the role 'webmaster' to 'administrator'.
      * @throws Exception
      */
-    public static function updateStep32RenameWebmasterToAdministrator()
+    public static function updateStep32RenameWebmasterToAdministrator(): void
     {
         global $gL10n;
 
@@ -1364,7 +1917,7 @@ final class UpdateStepsCode
      * This method set the default configuration for all organizations
      * @throws Exception
      */
-    public static function updateStep31SetDefaultConfiguration()
+    public static function updateStep31SetDefaultConfiguration(): void
     {
         $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
         $organizationsStatement = self::$db->queryPrepared($sql);
@@ -1393,7 +1946,7 @@ final class UpdateStepsCode
      * This method deletes all roles that belongs to still deleted events.
      * @throws Exception
      */
-    public static function updateStep30DeleteDateRoles()
+    public static function updateStep30DeleteDateRoles(): void
     {
         $sql = 'SELECT rol_id
                   FROM ' . TBL_ROLES . '

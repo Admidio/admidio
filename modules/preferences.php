@@ -10,7 +10,7 @@
  * Parameters:
  *
  * mode     : html           - (default) Show page with all preferences panels
- *            html_form      - Returns the html of the requested form
+ *            html_form      - Returns the HTML of the requested form
  *            save           - Save organization preferences
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
@@ -20,6 +20,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\DatabaseDump;
 use Admidio\Infrastructure\Exception;
@@ -35,9 +36,9 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check', 'changelog_purge')
         ));
-    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string');
+    $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
 
     // only administrators are allowed to view, edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
@@ -46,7 +47,7 @@ try {
 
     switch ($getMode) {
         case 'html':
-            // create html page object
+            // create HTML page object
             $page = new PreferencesPresenter($getPanel);
 
             if ($getPanel === '') {
@@ -64,15 +65,24 @@ try {
             echo json_encode(array('status' => 'success', 'message' => $gL10n->get('SYS_SAVE_DATA'), 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => strtolower($getPanel)))));
             break;
 
-        // Returns the html of the requested form
+        // Returns the HTML of the requested form
         case 'html_form':
             $preferencesUI = new PreferencesPresenter('adm_preferences_form');
-            $methodName = 'create' . str_replace('_', '', ucwords($getPanel, '_')) . 'Form';
-            echo $preferencesUI->{$methodName}();
+            echo $preferencesUI->createPanel($getPanel);
+            break;
+
+        // delete the entries of the change history that are older than the retention period
+        case 'changelog_purge':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $deletedEntries = ChangelogService::purgeOldEntries();
+            echo $gL10n->get('SYS_CHANGELOG_PURGE_RESULT', array($deletedEntries));
             break;
 
         // set directory protection, write htaccess
         case 'htaccess':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $preferences = new PreferencesService();
             if ($preferences->setHtaccessProtection()) {
                 echo $gL10n->get('SYS_ON');
@@ -83,6 +93,8 @@ try {
 
         // send test email
         case 'test_email':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $debugOutput = '';
             $preferences = new PreferencesService();
             $sendResult = $preferences->sendTestEmail();
@@ -93,7 +105,7 @@ try {
 
             // message if send/save is OK
             if ($sendResult === true) { // don't remove check === true. ($sendResult) won't work
-                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('show_option' => 'email_dispatch')));
+                $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
                 $gMessage->show($gL10n->get('SYS_EMAIL_SEND') . $debugOutput);
                 // => EXIT
             } else {
@@ -105,27 +117,24 @@ try {
         // create backup of Admidio database
         case 'backup':
             // function not available for other databases except MySQL
-            if (DB_ENGINE !== Database::PDO_ENGINE_MYSQL) {
+            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
                 throw new Exception('SYS_MODULE_DISABLED');
             }
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
             $dump = new DatabaseDump($gDb);
-            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gzip');
+            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gz');
             $dump->export();
             $dump->deleteDumpFile();
             break;
 
         case 'update_check':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
             $preferences = new PreferencesService();
             echo $preferences->showUpdateInfo();
             break;
     }
-} catch (Throwable $exception) {
-    if (in_array($getMode, array('save', 'new_org_create'))) {
-        echo json_encode(array('status' => 'error', 'message' => $exception->getMessage()));
-    } elseif ($getMode === 'html_form') {
-        echo $exception->getMessage();
-    } else {
-        $gMessage->show($exception->getMessage());
-    }
+} catch (Throwable $e) {
+    handleException($e, in_array($getMode, array('save', 'update_check')));
 }

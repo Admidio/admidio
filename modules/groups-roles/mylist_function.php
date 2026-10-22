@@ -25,6 +25,7 @@ use Admidio\Roles\Entity\ListConfiguration;
 try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
+    header('Content-Type: application/json; charset=utf-8');
 
     // Initialize and check the parameters
     $getListUuid = admFuncVariableIsValid($_GET, 'list_uuid', 'uuid');
@@ -38,8 +39,20 @@ try {
         throw new Exception('SYS_MODULE_DISABLED');
     }
 
-    // At least one field should be assigned
-    if (!isset($_POST['column1']) || strlen($_POST['column1']) === 0) {
+    // check the CSRF token of the form against the session token
+    $myListForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+    if ($_POST['adm_csrf_token'] !== $myListForm->getCsrfToken()) {
+        throw new Exception('Invalid or missing CSRF token!');
+    }
+
+    // At least one field should be assigned (has a non-empty value)
+    if (
+        empty($_POST['column']) ||
+        !is_array($_POST['column']) ||
+        count(array_filter($_POST['column'], static function ($v) {
+            return trim((string)$v) !== '';
+        })) === 0
+    ) {
         throw new Exception('SYS_FIELD_EMPTY', array('1. ' . $gL10n->get('SYS_COLUMN')));
     }
 
@@ -54,44 +67,55 @@ try {
     }
 
     $list = new ListConfiguration($gDb);
-    if ($getListUuid !== '') {
+    if ($getListUuid !== '' && $getMode !== 'save_temporary') {
         $list->readDataByUuid($getListUuid);
     }
 
     // check if user has the rights to edit this list
-    if ($getMode !== 'save_temporary') {
-        // global lists can only be edited by administrator
-        if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
-            throw new Exception('SYS_NO_RIGHTS');
-        } elseif ((int)$list->getValue('lst_usr_id') !== $gCurrentUserId
-            && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+    // global lists can only be edited by administrator
+    if ($list->getValue('lst_global') == 1 && !$gCurrentUser->isAdministrator()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    } elseif ((int)$list->getValue('lst_usr_id') !== $gCurrentUserId
+        && $list->getValue('lst_global') == 0 && $list->getValue('lst_id') > 0) {
+        throw new Exception('SYS_NO_RIGHTS');
     }
 
     // save list
     if (in_array($getMode, array('save', 'save_as', 'save_temporary'))) {
-        // check the CSRF token of the form against the session token
-        $categoryReportConfigForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
-        if ($_POST['adm_csrf_token'] !== $categoryReportConfigForm->getCsrfToken()) {
-            throw new Exception('Invalid or missing CSRF token!');
-        }
-
         $globalConfiguration = admFuncVariableIsValid($_POST, 'cbx_global_configuration', 'bool', array('defaultValue' => false));
 
         // go through all existing columns
-        for ($columnNumber = 1; isset($_POST['column' . $columnNumber]); ++$columnNumber) {
-            if (strlen($_POST['column' . $columnNumber]) > 0) {
-                // add column to list and check if it's a profile field or another column
-                if (StringUtils::strStartsWith($_POST['column' . $columnNumber], 'usr_') || StringUtils::strStartsWith($_POST['column' . $columnNumber], 'mem_')) {
-                    $list->addColumn($_POST['column' . $columnNumber], $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
-                } else {
-                    $list->addColumn($gProfileFields->getProperty($_POST['column' . $columnNumber], 'usf_id'), $columnNumber, $_POST['sort' . $columnNumber], $_POST['condition' . $columnNumber]);
-                }
-            } else {
-                $list->deleteColumn($columnNumber, true);
+        $columns    = array_values($_POST['column']    ?? []);
+        $sorts      = array_values($_POST['sort']      ?? []);
+        $conditions = array_values($_POST['condition'] ?? []);
+
+        $columnNumber = 1;
+        foreach ($columns as $index => $column) {
+            // if column is empty, delete that position
+            if (empty($column)) {
+                $list->deleteColumn($columnNumber, false);
+                continue;
             }
+
+            // Add column (profile fields usr_/mem_ stay as-is, others map to usf_id)
+            $field = StringUtils::strStartsWith($column, 'usr_') || StringUtils::strStartsWith($column, 'mem_')
+                ? $column
+                : $gProfileFields->getProperty($column, 'usf_id');
+            $columnAdded = $list->addColumn(
+                $field,
+                $columnNumber,
+                (string)($sorts[$index] ?? ''),
+                (string)($conditions[$index] ?? '')
+            );
+            if (!$columnAdded) {
+                throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_COLUMN'));
+            }
+
+            ++$columnNumber;
         }
+
+        // Remove potentially deleted columns at the end
+        $list->deleteColumn($columnNumber, true);
 
         if ($getName !== '') {
             $list->setValue('lst_name', $getName);
@@ -140,6 +164,6 @@ try {
         echo json_encode(array('status' => 'success', 'url' => ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/mylist.php'));
         exit();
     }
-} catch (Exception $e) {
-    echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+} catch (Throwable $e) {
+    handleException($e, true);
 }

@@ -1,0 +1,40 @@
+{
+    "name": "PLG_HELLO_WORLD_NAME",
+    "description": "PLG_HELLO_WORLD_DESCRIPTION",
+    "version": "1.1.0",
+    "author": "The Admidio Team",
+    "url": "https://www.admidio.org",
+    "icon": "bi-globe-americas",
+    "requires": {
+        "admidio": ">=5.1",
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "AdmidioPlugin\\HelloWorld\\": "src/"
+    },
+    "settings": {
+        "hello_world_greeting": {
+            "type": "string",
+            "default": "Hello world",
+            "label": "PLG_HELLO_WORLD_GREETING",
+            "description": "PLG_HELLO_WORLD_GREETING_DESC"
+        },
+        "hello_world_address": {
+            "type": "enum",
+            "default": "first_name",
+            "values": {
+                "first_name": "PLG_HELLO_WORLD_ADDRESS_FIRST_NAME",
+                "full_name": "PLG_HELLO_WORLD_ADDRESS_FULL_NAME",
+                "login_name": "PLG_HELLO_WORLD_ADDRESS_LOGIN_NAME"
+            },
+            "label": "PLG_HELLO_WORLD_ADDRESS",
+            "description": "PLG_HELLO_WORLD_ADDRESS_DESC"
+        },
+        "hello_world_decorate_headline": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_HELLO_WORLD_DECORATE_HEADLINE",
+            "description": "PLG_HELLO_WORLD_DECORATE_HEADLINE_DESC"
+        }
+    }
+}

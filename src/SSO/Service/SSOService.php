@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\SSO\Service;
 
+use Admidio\Session\Service\LoginService;
 use Admidio\SSO\Entity\SSOClient;
 
 use Exception;
@@ -12,7 +13,7 @@ use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Presenter\PagePresenter;
 
 
-class SSOService {
+abstract class SSOService {
     protected Database $db;
     protected User $currentUser;
 
@@ -25,17 +26,27 @@ class SSOService {
         $this->currentUser  = $currentUser;
     }
 
-    public function initializeClientObject($database): ?SSOClient {
-        return new SSOClient($database, null, 'sso');
-    }
+    abstract public function initializeClientObject(Database $database): ?SSOClient;
 
     public function createClientObject($clientUUID = null, $clientID = null): ?SSOClient {
+        global $gCurrentOrgId;
+
         $client = $this->initializeClientObject($this->db);
+
+        $columns = array(
+            $this->columnPrefix . '_org_id' => $gCurrentOrgId
+        );
+
         if (!empty($clientUUID)) {
-            $client->readDataByUuid($clientUUID);
+            $columns[$this->columnPrefix . '_uuid'] = $clientUUID;
         } elseif (!empty($clientID)) {
-            $client->readDatabyEntityId($clientID);
+            $columns[$this->columnPrefix . '_client_id'] = $clientID;
+        } else {
+            return $client;
         }
+
+        $client->readDataByColumns($columns);
+
         return $client;
     }
 
@@ -53,6 +64,31 @@ class SSOService {
             throw new Exception("SSO client with UUID '$clientUUID' not found in database. Please check the SSO client settings and configure the client in Admidio.");
         }
         return $client;
+    }
+
+    /**
+     * Return organization-scoped values from the SSO client table.
+     *
+     * @return array<int,mixed>
+     * @throws Exception
+     */
+    private function getOrganizationClientValues(string $columnSuffix): array
+    {
+        global $gCurrentOrgId;
+
+        $column = $this->columnPrefix . '_' . $columnSuffix;
+
+        $sql = 'SELECT ' . $column . '
+                FROM ' . $this->table . '
+                WHERE ' . $this->columnPrefix . '_org_id = ?';
+        $statement = $this->db->queryPrepared($sql, array($gCurrentOrgId));
+
+        $values = array();
+        while ($row = $statement->fetch()) {
+            $values[] = $row[$column];
+        }
+
+        return $values;
     }
 
     /**
@@ -77,30 +113,75 @@ class SSOService {
         // check form field input and sanitized it from malicious content
         $clientEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $clientEditForm->validate($_POST);
-        $client = $this->createClientObject($getClientUUID);
+
+        if (isset($_POST['sso_roles_access'])) {
+            $accessRoles = array_map('intval', $_POST['sso_roles_access']);
+        } else {
+            $accessRoles = array();
+        }
+
+        $this->saveData($getClientUUID, $formValues, $accessRoles);
+    }
+
+    /**
+     * Save already validated SSO client data.
+     *
+     * @param string|null $clientUUID UUID of an existing client or null for a new client.
+     * @param array $formValues Validated SSO client values.
+     * @param array<int,int|string> $accessRoles Roles that are allowed to use this client.
+     * @return SSOClient
+     * @throws Exception
+     */
+    public function saveData(?string $clientUUID, array $formValues, array $accessRoles = array()): SSOClient
+    {
+        $client = $this->createClientObject($clientUUID);
 
         $this->db->startTransaction();
         $this->saveCustomClientSettings($formValues, $client);
 
         // Collect all field mappings and the catch-all checkbox
         // If a SSO field is left empty, use the admidio name!
-        $ssoFields = $formValues['fieldsmap_sso']??[];
-        $admFields = $formValues['fieldsmap_Admidio']??[];
-        $ssoFields = array_map(function ($a, $b) { return (!empty($a)) ? $a : $b;}, $ssoFields, $admFields);
-        $client->setFieldMapping(array_combine($ssoFields, $admFields), $formValues['sso_fields_no_other']??false);
+        $ssoFields = $formValues['fieldsmap_sso'] ?? array();
+        $admFields = $formValues['fieldsmap_Admidio'] ?? array();
+        $ssoFields = array_map(
+            function ($ssoField, $admField) {
+                return !empty($ssoField) ? $ssoField : $admField;
+            },
+            $ssoFields,
+            $admFields
+        );
+        if ($this->columnPrefix === 'smc') {
+            // SAML: include all remaining Admidio fields with their internal field name. The SAML
+            // edit form names the checkbox sso_fields_all_other, the CLI sso_fields_no_other.
+            $fieldMappingCatchall = $formValues['sso_fields_all_other'] ?? $formValues['sso_fields_no_other'] ?? false;
+        } else {
+            // OIDC: suppress standard claims that are not explicitly mapped.
+            $fieldMappingCatchall = $formValues['sso_fields_no_other'] ?? false;
+        }
+        $client->setFieldMapping(
+            array_combine($ssoFields, $admFields),
+            (bool) $fieldMappingCatchall
+        );
         
-        // Collect all role mappings and the catch-all checkbox
-        $ssoRoles = $formValues['rolesmap_sso']??[];
-        $admRoles = $formValues['rolesmap_Admidio']??[];
-        $ssoRoles = array_map( function($s, $a) { 
-                if (empty($s)) {
-                    $role = new Role($this->db, $a);
-                    return $role->readableName();
-                } else { 
-                    return $s; 
-                }
-            }, $ssoRoles, $admRoles);
-        $client->setRoleMapping(array_combine($ssoRoles, $admRoles), $formValues['sso_roles_all_other']??false);
+        // Collect all role mappings and the catch-all checkbox. Several Admidio roles may be mapped
+        // to the same client role, so the assignments are passed on as a list of pairs. Combining
+        // them into an array keyed by the client role name would silently drop all but one of them.
+        // If a client role is left empty, use the Admidio role name!
+        $ssoRoles = array_values($formValues['rolesmap_sso'] ?? array());
+        $admRoles = array_values($formValues['rolesmap_Admidio'] ?? array());
+        $roleMapping = array();
+        foreach ($admRoles as $index => $admRole) {
+            $ssoRole = $ssoRoles[$index] ?? '';
+            if (empty($ssoRole)) {
+                $role = new Role($this->db, $admRole);
+                $ssoRole = $role->readableName();
+            }
+            $roleMapping[] = array($ssoRole, $admRole);
+        }
+        $client->setRoleMapping(
+            $roleMapping,
+            (bool) ($formValues['sso_roles_all_other'] ?? false)
+        );
 
         // write all other form values
         foreach ($formValues as $key => $value) {
@@ -111,23 +192,18 @@ class SSOService {
 
         $client->save();
 
-        // save changed roles rights of the menu
-        if (isset($_POST['sso_roles_access'])) {
-            $accessRoles = array_map('intval', $_POST['sso_roles_access']);
-        } else {
-            $accessRoles = array();
-        }
-
         $accessRolesRights = new RolesRights($this->db, $this->getRolesRightName(), $client->getValue($client->getKeyColumnName()));
-        $accessRolesRights->saveRoles($accessRoles);
-
+        $accessRolesRights->saveRoles(array_map('intval', $accessRoles));
+ 
         $this->db->endTransaction();
+
+        return $client;
     }
 
     /**
      * Let SSO implementation save further client settings (e.g. a hashed client secret for OIDC, etc.)
      * @param array $formValues
-     * @param \Admidio\SSO\Entity\SSOClient $client
+     * @param SSOClient $client
      * @return void
      */
     protected function saveCustomClientSettings(array &$formValues, SSOClient $client) {
@@ -147,17 +223,7 @@ class SSOService {
      */
     public function getClientIds(): array
     {
-        $sql = 'SELECT ' . $this->columnPrefix . '_client_id
-          FROM ' . $this->table . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row[
-                
-                
-                $this->columnPrefix . '_client_id'];
-        }
-        return $clients;
+        return $this->getOrganizationClientValues('client_id');
     }
     
     /**
@@ -167,14 +233,7 @@ class SSOService {
      */
     public function getIds(): array
     {
-        $sql = 'SELECT ' . $this->columnPrefix . '_id
-          FROM ' . $this->table . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row[$this->columnPrefix . '_id'];
-        }
-        return $clients;
+        return $this->getOrganizationClientValues('id');
     }
 
     /**
@@ -184,14 +243,7 @@ class SSOService {
      */
     public function getUUIDs(): array
     {
-        $sql = 'SELECT ' . $this->columnPrefix . '_uuid
-          FROM ' . $this->table . ' AS clients';
-        $clients = array();
-        $clientsStatement = $this->db->queryPrepared($sql, []);
-        while ($row = $clientsStatement->fetch()) {
-            $clients[] = $row[$this->columnPrefix . '_uuid'];
-        }
-        return $clients;
+        return $this->getOrganizationClientValues('uuid');
     }
 
 
@@ -211,16 +263,28 @@ class SSOService {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create html page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-login', $headline);
-        if (!empty($message)) {
-            $page->addHtml($message);
-        }
-        // Use javascript to hide the menu bar on the left and the registration 
-        $page->addJavascript('$("#adm_sidebar").hide()', true);
+        // Every other SSO page uses the adm_sso_* prefix (see SSOClientPresenter, SSOKeyPresenter);
+        // this one is not the ordinary module login page, so it does not share its adm_login ID.
+        // It also renders its own headline and message inside a custom card - see
+        // themes/simple/templates/modules/sso.login.tpl - and already hides the sidebar via CSS,
+        // so it does not use setHeadline()/addHtml() or the sidebar-hiding JS of the ordinary pages.
+        $page = new PagePresenter();
+        $page->setHtmlID('adm_sso_login');
+        $page->setTitle($headline);
+        $page->setContentFullWidth();
+        $page->hideBackLink();
+
+        $page->getSmartyTemplate()->assign('ssoLoginHeadline', $headline);
+        $page->getSmartyTemplate()->assign('ssoLoginMessage', $message ?? '');
+
 
         // TODO_RK: Add "Cancel / Return to SP without logging in" button with JS!
-        $loginModule = new \ModuleLogin();
-        $loginModule->addHtmlLogin($page, '');
+        $cancelUrl = CURRENT_URL . (str_contains(CURRENT_URL, '?') ? '&' : '?') . 'sso_cancel=1';
+        $cancelPostData = !empty($_POST) ? $_POST : null;
+
+        $loginModule = new LoginService();
+        $loginModule->addHtmlLogin($page, '', 'modules/sso.login.tpl', $cancelUrl, $cancelPostData);
+
         $page->show();
         exit;
     }

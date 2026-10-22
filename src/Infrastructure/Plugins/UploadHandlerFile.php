@@ -1,4 +1,5 @@
 <?php
+
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Documents\Entity\File;
@@ -46,55 +47,68 @@ class UploadHandlerFile extends UploadHandler
      */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error, $index = null, $content_range = null): stdClass
     {
-        global $gSettingsManager, $gDb, $gLogger;
+        global $gSettingsManager, $gDb, $gLogger, $gDisableFileUpload;
 
-        $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+        try {
+            $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
+            if (isset($file->error)) {
+                throw new Exception($file->error);
+            }
 
-        if (!isset($file->error)) {
-            try {
-                // check filesize against module settings
-                if ($file->size > $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024) {
-                    throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('documents_files_max_upload_size')));
-                }
+            if ($gDisableFileUpload) {
+                throw new Exception('File upload disabled in global config file!');
+            }
 
-                // check filename and throw exception if something is wrong
-                StringUtils::strIsValidFileName($file->name, false);
+            // check filename and throw exception if something is wrong
+            StringUtils::strIsValidFileName($name, false);
 
-                // replace invalid characters in filename
-                $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
+            if (!FileSystemUtils::allowedFileExtension($name)) {
+                throw new Exception('SYS_FILE_EXTENSION_INVALID');
+            }
 
-                // get recordset of current folder from database and throw exception if necessary
-                $targetFolder = new Folder($gDb);
-                $targetFolder->getFolderForDownload($GLOBALS['getUuid']);
+            // check filesize against module settings (check total size if content-range is used)
+            $totalSize = ($content_range && isset($content_range[3])) ? (int)$content_range[3] : $file->size;
+            if ($totalSize > $gSettingsManager->getInt('documents_files_max_upload_size') * 1024 * 1024) {
+                throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($gSettingsManager->getInt('documents_files_max_upload_size')));
+            }
 
-                // now add new file to database
-                $newFile = new File($gDb);
-                $newFile->setValue('fil_fol_id', (int) $targetFolder->getValue('fol_id'));
-                $newFile->setValue('fil_name', $file->name);
-                $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
-                $newFile->setValue('fil_counter', 0);
-
-                if (!$newFile->allowedFileExtension()) {
-                    throw new Exception('SYS_FILE_EXTENSION_INVALID');
-                }
-
-                if($newFile->save()) {
-                    // Notification an email for new or changed entries to all members of the notification role
-                    $newFile->sendNotification();
-                }
-            } catch (Exception $e) {
-                try {
-                    FileSystemUtils::deleteFileIfExists($this->options['upload_dir'].$file->name);
-                } catch (\RuntimeException $exception) {
-                    $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'].$file->name));
-                    // TODO
-                }
-                // remove XSS from filename before the name will be shown in the error message
-                $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
-                $file->error = $e->getMessage();
-
+            // If a chunked upload is still in progress, return without creating a database entry yet
+            if ($content_range && empty($file->url)) {
                 return $file;
             }
+
+            // replace invalid characters in filename
+            $file->name = FileSystemUtils::removeInvalidCharsInFilename($file->name);
+
+            // get recordset of current folder from database and throw exception if necessary
+            $targetFolder = new Folder($gDb);
+            $targetFolder->getFolderForDownload($GLOBALS['getUuid']);
+
+            // now add new file to database
+            $newFile = new File($gDb);
+            $newFile->setValue('fil_fol_id', (int)$targetFolder->getValue('fol_id'));
+            $newFile->setValue('fil_name', $file->name);
+            $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+            $newFile->setValue('fil_counter', 0);
+
+            if ($newFile->save()) {
+                // Notification an email for new or changed entries to all members of the notification role
+                $newFile->sendNotification();
+            }
+        } catch (Exception $e) {
+            try {
+                FileSystemUtils::deleteFileIfExists($this->options['upload_dir'] . $file->name);
+            } catch (\RuntimeException $exception) {
+                $gLogger->error('Could not delete file!', array('filePath' => $this->options['upload_dir'] . $file->name));
+                // TODO
+            }
+            // remove XSS from filename before the name will be shown in the error message
+            $file->name = SecurityUtils::encodeHTML(StringUtils::strStripTags($file->name));
+            $file->error = $e->getMessage();
+            // the uploaded part was deleted, so the client must not continue a chunked upload after this size
+            $file->size = 0;
+
+            return $file;
         }
 
         return $file;
@@ -105,7 +119,7 @@ class UploadHandlerFile extends UploadHandler
      * file upload object. Here we validate the CSRF token that will be set. If the check failed an error will
      * be set and the file upload will be canceled.
      * @param string $file
-     * @param int    $index
+     * @param int $index
      */
     protected function handle_form_data($file, $index)
     {

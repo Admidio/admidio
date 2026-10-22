@@ -17,3 +17,4 @@
 {/if}
 
 <script type="text/javascript" src="{$urlAdmidio}/system/js/common_functions.js"></script>
+<script type="text/javascript" src="{$urlAdmidio}/system/js/page-load.js"></script>

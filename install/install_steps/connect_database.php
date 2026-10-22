@@ -9,10 +9,11 @@
  ***********************************************************************************************
  */
 
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\InstallationUpdate\Service\Installation;
+use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 
@@ -30,7 +31,7 @@ if ($mode === 'html') {
 
     // initialize form data
     if (isset($_SESSION['db_host'])) {
-        $dbEngine = $_SESSION['db_engine'];
+        $dbEngine = $_SESSION['db_type'];
         $dbHost = $_SESSION['db_host'];
         $dbPort = $_SESSION['db_port'];
         $dbName = $_SESSION['db_name'];
@@ -46,7 +47,7 @@ if ($mode === 'html') {
     }
 
     // create a page to enter all necessary database connection information
-    $page = new InstallationPresenter('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION'));
+    $page = new InstallationPresenter('adm_installation_connect_database', $gL10n->get('INS_INSTALLATION_VERSION', array(ADMIDIO_VERSION_TEXT)));
     $page->addTemplateFile('installation.tpl');
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $page->assignSmartyVariable('text', $gL10n->get('INS_DATABASE_LOGIN_DESC'));
@@ -58,7 +59,7 @@ if ($mode === 'html') {
         $page
     );
     $form->addSelectBoxFromXml(
-        'adm_db_engine',
+        'adm_db_type',
         $gL10n->get('INS_DATABASE_SYSTEM'),
         ADMIDIO_PATH . FOLDER_SYSTEM . '/databases.xml',
         'identifier',
@@ -120,84 +121,38 @@ if ($mode === 'html') {
         throw new Exception('SYS_INVALID_PAGE_VIEW');
     }
 
-    // PHP-Check Regex-Patterns
-    $sqlIdentifiersRegex = '/^[a-zA-Z0-9_$@-]+$/';
-
-    // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-    $_SESSION['db_engine']    = $formValues['adm_db_engine'];
+    // Store database access data filtered in session variables
+    $_SESSION['db_type']      = $formValues['adm_db_type'];
     $_SESSION['db_host']      = $formValues['adm_db_host'];
-    $_SESSION['db_port']      = $formValues['adm_db_port'];
+    $_SESSION['db_port']      = InstallationConfig::normalizePort($formValues['adm_db_port']);
     $_SESSION['db_name']      = $formValues['adm_db_name'];
     $_SESSION['db_username']  = $formValues['adm_db_username'];
     $_SESSION['db_password']  = $formValues['adm_db_password'];
     $_SESSION['table_prefix'] = $formValues['adm_table_prefix'];
 
-    // Check DB-type
-    if (!in_array($_SESSION['db_engine'], array(Database::PDO_ENGINE_MYSQL, Database::PDO_ENGINE_PGSQL), true)) {
-        throw new Exception('INS_DATABASE_TYPE_INVALID');
-    }
+    // check the entered values with the same rules that a headless installation uses
+    Installation::validateDatabaseInput(
+        $_SESSION['db_type'],
+        $_SESSION['db_host'],
+        $_SESSION['db_port'],
+        $_SESSION['db_name'],
+        $_SESSION['db_username'],
+        $_SESSION['table_prefix']
+    );
 
-    // Check host
-    // TODO: unix_server is currently not supported
-    if (filter_var($_SESSION['db_host'], FILTER_VALIDATE_DOMAIN) === false && filter_var($_SESSION['db_host'], FILTER_VALIDATE_IP) === false) {
-        throw new Exception('INS_HOST_INVALID');
-    }
-
-    // Check port
-    if ($_SESSION['db_port'] === '' || $_SESSION['db_port'] === null) {
-        $_SESSION['db_port'] = null;
-    } elseif (is_numeric($_SESSION['db_port']) && (int) $_SESSION['db_port'] > 0 && (int) $_SESSION['db_port'] <= 65535) {
-        $_SESSION['db_port'] = (int) $_SESSION['db_port'];
-    } else {
-        throw new Exception('INS_DATABASE_PORT_INVALID');
-    }
-
-    // Check database
-    if (strlen($_SESSION['db_name']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_name']) !== 1) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_DATABASE'));
-    }
-
-    // Check user
-    if (strlen($_SESSION['db_username']) > 64 || preg_match($sqlIdentifiersRegex, $_SESSION['db_username']) !== 1) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('SYS_USERNAME'));
-    }
-
-    // Check password
+    // a weak database password is not an error of the installation, but it should be logged
     $zxcvbnScore = PasswordUtils::passwordStrength($_SESSION['db_password']);
     if ($zxcvbnScore <= 2) {
         $gLogger->warning('Database password is weak! (zxcvbn lib)', array('score' => $zxcvbnScore));
     }
 
-    // Check prefix
-    if (strlen($_SESSION['table_prefix']) > 10 || preg_match($sqlIdentifiersRegex, $_SESSION['table_prefix']) !== 1) {
-        throw new Exception('SYS_FIELD_INVALID_INPUT', array('INS_TABLE_PREFIX'));
-    }
-
     // for security reasons only check database connection if no config file exists
     if (!is_file($configPath)) {
-        // check database connections
+        $gDebug = true;
         try {
-            $gDebug = true;
-            $db = new Database($_SESSION['db_engine'], $_SESSION['db_host'], $_SESSION['db_port'], $_SESSION['db_name'], $_SESSION['db_username'], $_SESSION['db_password']);
-            $db->checkWriteAccess();
+            Installation::connectDatabase(InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL));
+        } finally {
             $gDebug = false;
-        } catch (Exception $e) {
-            throw new Exception('SYS_DATABASE_NO_LOGIN', array($e->getMessage()));
-        }
-
-        // check database version
-        $message = \Admidio\InstallationUpdate\Service\Installation::checkDatabaseVersion($db);
-        if ($message !== '') {
-            throw new Exception($message);
-        }
-
-        // now check if a valid installation exists.
-        $sql = 'SELECT org_id FROM ' . $_SESSION['table_prefix'] . '_organizations';
-        $pdoStatement = $db->queryPrepared($sql, array(), false);
-
-        if ($pdoStatement !== false && $pdoStatement->rowCount() > 0) {
-            // valid installation exists -> exit installation
-            throw new Exception('INS_INSTALLATION_EXISTS');
         }
     }
 

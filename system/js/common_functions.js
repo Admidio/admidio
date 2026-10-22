@@ -27,6 +27,21 @@ function showHideBlock(element) {
 }
 
 /**
+ * This function can be used to consistently show or hide a message block with the given message.
+ * The HTML element must exist and will not be created.
+ * @param {string} id The HTML id of the message block
+ * @param {string} message The message to show (optionally with HTML markup), or empty string to
+ *                       hide the message block.
+ */
+function showMessageDiv(id, message) {
+    if (message.trim() !== '') {
+        $('#' + id).html(message).show();
+    } else {
+        $('#' + id).hide();
+    }
+}
+
+/**
  * The function can be used to show or hide a text block that is longer than the
  * visible area. Therefore, a small caret is used that will change his orientation
  * if the text block is hidden.
@@ -54,6 +69,10 @@ function showHideMoreText(element, butonTexts) {
  * @returns {boolean}                   True if the tbody element is empty, false otherwise.
  */
 function isTbodyEmpty(tbodyElement) {
+    if (!tbodyElement) {
+        return false;
+    }
+
     rows = tbodyElement.querySelectorAll("tr");
     count = 0;
 
@@ -127,6 +146,11 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                             $(entryDeleted).fadeOut("slow", callbackFutureRoles);
                         } else if (callback === "callbackProfilePhoto") {
                             callbackProfilePhoto();
+                        } else if (callback === "callbackItemPicture") {
+                            callbackItemPicture();
+                        } else if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                            // call the custom callback function
+                            window[callback]();
                         } else {
                             $(entryDeleted).fadeOut("slow");
                         }
@@ -142,16 +166,25 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
                     $(entryDeleted).fadeOut("slow", callbackFutureRoles);
                 } else if (callback === 'callbackProfilePhoto') {
                     callbackProfilePhoto();
+                } else if (callback === "callbackItemPicture") {
+                    callbackItemPicture();
+                } else if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                    // call the custom callback function
+                    window[callback]();
                 } else {
                     $(entryDeleted).fadeOut("slow");
                 }
             }
 
-            var tbodyElement = entryDeleted.closest("tbody");
-            if (isTbodyEmpty(tbodyElement)) {
-                $(tbodyElement).fadeOut("slow");
-                var tbodyElement2 = tbodyElement.previousElementSibling;
-                $(tbodyElement2).fadeOut("slow");
+            if (entryDeleted) {
+                var tbodyElement = entryDeleted.closest("tbody");
+                if (isTbodyEmpty(tbodyElement)) {
+                    $(tbodyElement).fadeOut("slow");
+                    var tbodyElement2 = tbodyElement.previousElementSibling;
+                    if (isTbodyEmpty(tbodyElement2)) {
+                        $(tbodyElement2).fadeOut("slow");
+                    }
+                }
             }
         } else {
             // entry could not be deleted, then show content of data or a common error message
@@ -171,8 +204,9 @@ function callUrlHideElement(elementId, url, csrfToken, callback) {
  * @param {array}   elementId  This is the array of ids of the html elements that should be hidden.
  * @param {string}   url        This is the url that will be called.
  * @param {string}   csrfToken  If this is set than it will be added to the post request.
+ * @param {function} [callback] A name of a function that should be called if the return was positive.
  */
-function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
+function callUrlHideElements(elementPrefix, elementIds, url, csrfToken, callback) {
     // 1) normalize to an array
     var rawIds = Array.isArray(elementIds)
         ? elementIds.slice()         // clone the array if it already is one
@@ -193,10 +227,13 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
         $(entry).fadeOut("slow");
 
         // then check if its <tbody> is now empty
-        var tb = entry.closest("tbody");
-        if (tb && tb.children.length === 0) {
-            $(tb).fadeOut("slow");
-            $(tb.previousElementSibling).fadeOut("slow");
+        var tbodyElement = entry.closest("tbody");
+        if (isTbodyEmpty(tbodyElement)) {
+            $(tbodyElement).fadeOut("slow");
+            var tbodyElement2 = tbodyElement.previousElementSibling;
+            if (isTbodyEmpty(tbodyElement2)) {
+                $(tbodyElement2).fadeOut("slow");
+            }
         }
     }
 
@@ -225,35 +262,64 @@ function callUrlHideElements(elementPrefix, elementIds, url, csrfToken) {
             if (msg) {
                 $modalMsg.html('<div class="alert alert-success"><i class="bi bi-check-lg"></i> '+msg+'</div>');
                 setTimeout(function(){
+                    if (document.activeElement) {
+                        document.activeElement.blur();
+                    }
                     $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                    // fade out each
-                    ids.forEach(_fadeOutById);
+
+                    // fade out each if no custom callback is set
+                    if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                        // call the custom callback function
+                        window[callback]();
+                    } else {
+                        ids.forEach(_fadeOutById);
+                    }
                 }, 1500);
             } else {
+                if (document.activeElement) {
+                    document.activeElement.blur();
+                }
                 $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                ids.forEach(_fadeOutById);
+                // fade out each if no custom callback is set
+                if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                    // call the custom callback function
+                    window[callback]();
+                } else {
+                    ids.forEach(_fadeOutById);
+                }
             }
         } else if(status === "warning") {
             if (msg) {
                 $modalMsg.html('<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i> '+msg+'</div>');
                 setTimeout(function(){
                     $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                    // fade out each
-                    ids.forEach(function(id){
+                    // fade out each if no custom callback is set
+                    if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                        // call the custom callback function
+                        window[callback]();
+                    } else {
+                        ids.forEach(function (id) {
+                            var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
+                            if (statusData[pureId] === "success") {
+                                _fadeOutById(id);
+                            }
+                        });
+                    }
+                }, 1500);
+            } else {
+                $("#adm_modal, #adm_modal_messagebox").modal("hide");
+                // fade out each if no custom callback is set
+                if (callback !== "" && callback !== undefined && typeof window[callback] === "function") {
+                    // call the custom callback function
+                    window[callback]();
+                } else {
+                    ids.forEach(function (id) {
                         var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
                         if (statusData[pureId] === "success") {
                             _fadeOutById(id);
                         }
                     });
-                }, 1500);
-            } else {
-                $("#adm_modal, #adm_modal_messagebox").modal("hide");
-                ids.forEach(function(id){
-                    var pureId = id.startsWith(elementPrefix) ? id.substring(elementPrefix.length) : id;
-                    if (statusData[pureId] === "success") {
-                        _fadeOutById(id);
-                    }
-                });
+                }
             }
         } else {
             if (!msg) {
@@ -367,7 +433,7 @@ function updateMoveActions($scope, rowIdPrefix, moveActionClass) {
     $($scope).each(function() {
         // If the scope is ".card-body", we search for divs with IDs starting with rowIdPrefix.
         // Otherwise, we search for table rows with IDs starting with rowIdPrefix.
-        if ($scope === ".card-body") {
+        if ($scope === ".card-body" || $scope === ".accordion") {
             var $rows = $(this).find("div[id^=" + rowIdPrefix + "]").has("." + moveActionClass).filter(function() {
                 return $(this).css("display") !== "none";
             });
@@ -459,6 +525,87 @@ function moveTableRow(element, updateSequenceUrl, csrfToken) {
 }
 
 /**
+ * Copies the text to the clipboard. The clipboard API is only available in secure contexts (https),
+ * otherwise the older execCommand is used.
+ * @param {string} text The text that should be copied to the clipboard.
+ * @returns {Promise<boolean>} Resolves with true if the text was copied.
+ */
+function copyToClipboard(text) {
+    const copyWithExecCommand = function () {
+        // within an open modal the textarea must be part of the modal, otherwise the focus trap of the
+        // modal doesn't allow to select its text
+        const activeElement = document.activeElement;
+        const container = (activeElement && activeElement.closest(".modal")) || document.body;
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.cssText = "position: fixed; top: 0; left: 0; opacity: 0;";
+        container.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        let copied = false;
+        try {
+            copied = document.execCommand("copy");
+        } catch (error) {
+            copied = false;
+        }
+        textarea.remove();
+        if (activeElement && typeof activeElement.focus === "function") {
+            activeElement.focus();
+        }
+        return copied;
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).then(function () {
+            return true;
+        }, copyWithExecCommand);
+    }
+    return Promise.resolve(copyWithExecCommand());
+}
+
+/**
+ * Checks if the browser can share a link with the share dialog of the system (Web Share API).
+ * @returns {boolean} Returns true if the share dialog is available.
+ */
+function canShareLink() {
+    return typeof navigator.share === "function";
+}
+
+/**
+ * Shares a link with the share dialog of the system. If the browser can't share links, the link is
+ * copied to the clipboard, and if this also fails, the link is shown in a prompt to copy it manually.
+ * @param {string} url         The link that should be shared.
+ * @param {string} title       The title of the shared link, e.g. the name of the file.
+ * @param {string} promptLabel The text of the prompt that shows the link.
+ * @returns {Promise<string>} Resolves with "shared", "cancelled", "copied" or "prompt".
+ */
+function shareOrCopyLink(url, title, promptLabel) {
+    const copyLink = function () {
+        return copyToClipboard(url).then(function (copied) {
+            if (copied) {
+                return "copied";
+            }
+            window.prompt(promptLabel, url);
+            return "prompt";
+        });
+    };
+
+    if (canShareLink()) {
+        return navigator.share({title: title, url: url}).then(function () {
+            return "shared";
+        }, function (error) {
+            // the user closed the share dialog
+            if (error && error.name === "AbortError") {
+                return "cancelled";
+            }
+            return copyLink();
+        });
+    }
+    return copyLink();
+}
+
+/**
  * The function will show a modal window in bootstrap style with a message.
  * @param {string} message Text of the message that should be shown.
  * @param {string} title   Optional a title for the modal. If not set the default "notice" will be shown.
@@ -484,6 +631,9 @@ function messageBox(message, title, type, buttons, href) {
     if (typeof buttons === 'undefined') {
         $("#adm_modal_messagebox .modal-footer").hide();
     } else if (buttons === 'yes-no') {
+        // A message shown before this one without buttons has hidden the footer, and the buttons
+        // are in it, so the dialog would have nothing to confirm with.
+        $("#adm_modal_messagebox .modal-footer").show();
         $("#adm_messagebox_button_yes").attr('onClick', href);
     }
 
@@ -493,7 +643,8 @@ function messageBox(message, title, type, buttons, href) {
 
 /**
  * This function will redirect the user's browser to the given URL. If post data is provided,
- * a hidden form is submitted to achieve a html POST, otherwise self.location.href is set to load the URL.
+ * a hidden form is submitted to achieve a html POST. Also, the target is set to top to load the target
+ * url within the complete browser window. Otherwise, self.location.href is set to load the URL.
  */
 function redirectToURL(url, args = null) {
     if (!args) {
@@ -502,6 +653,7 @@ function redirectToURL(url, args = null) {
         // Simulate a POST redirect
         const form = document.createElement("form");
         form.method = "POST";
+        form.target = "_top";
         form.action = url;
         form.style.display = "none";
 
@@ -518,6 +670,23 @@ function redirectToURL(url, args = null) {
         form.submit();
     }
 }
+/**
+ * Returns the message that is shown if an AJAX request failed, e.g. because of a timeout, a lost
+ * connection or an error of the server. The HTTP status is added if the server answered.
+ * @param {object} jqXHR The jqXHR object of the failed request.
+ * @returns {string}
+ */
+function getRequestFailedMessage(jqXHR) {
+    var message = "The request could not be completed. Please check your internet connection and try again.";
+    if (typeof gTranslations !== "undefined" && gTranslations.requestFailed) {
+        message = gTranslations.requestFailed;
+    }
+    if (jqXHR && jqXHR.status > 0) {
+        message += " (HTTP " + jqXHR.status + ")";
+    }
+    return message;
+}
+
 /**
  * The function will override the submitting of a form. It will call the action url and handle the response
  * of that url. Therefore, a json with status and message key is expected. Also a url key must be provided to
@@ -542,13 +711,13 @@ function formSubmit(event) {
         contentType: false,
         success: function(data) {
             try {
-                var returnData = JSON.parse(data);
+                var returnData = typeof data === "object" ? data : JSON.parse(data);
                 var returnStatus = returnData.status;
                 var returnMessage = returnData.message || "";
                 var forwardUrl = returnData.url || "";
                 var forwardPost = returnData.url_post || null;
             } catch (e) {
-                if (typeof $(".modal-body") !== "undefined") {
+                if ($(".modal-body").length > 0) {
                     $(".modal-body").html(data);
                 }
                 // no expected JSON response
@@ -574,7 +743,12 @@ function formSubmit(event) {
                         }, 2500);
                     }
                 } else {
-                    redirectToURL(forwardUrl, forwardPost);
+                    if (forwardUrl !== "") {
+                        redirectToURL(forwardUrl, forwardPost);
+                    } else {
+                        $("#" + submitButtonID).attr("disabled", false);
+                        submitButtonIcon.attr("class", iconClass);
+                    }
                 }
             } else {
                 if ($("#adm_captcha").length > 0) {
@@ -590,6 +764,14 @@ function formSubmit(event) {
                 formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + returnMessage);
                 formAlert.fadeIn();
             }
+        },
+        error: function(jqXHR) {
+            // the request failed or the server didn't answer, so the form could be sent again
+            $("#" + submitButtonID).attr("disabled", false);
+            submitButtonIcon.attr("class", iconClass);
+            formAlert.attr("class", "alert alert-danger form-alert");
+            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + getRequestFailedMessage(jqXHR));
+            formAlert.fadeIn();
         }
     });
 }

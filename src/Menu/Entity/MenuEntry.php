@@ -35,6 +35,15 @@ class MenuEntry extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'menu_entry';
+    }
+
+    /**
      * Deletes the selected menu entries.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
@@ -71,7 +80,7 @@ class MenuEntry extends Entity
 
         $sql = 'SELECT men_id
                   FROM '.TBL_MENU.'
-                 WHERE men_name_intern = ? -- $newNameIntern';
+                 WHERE UPPER(men_name_intern) = UPPER(?) -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if ($userFieldsStatement->rowCount() > 0) {
@@ -88,11 +97,11 @@ class MenuEntry extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gL10n;
 
@@ -242,15 +251,15 @@ class MenuEntry extends Entity
      * Set a new value for a column of the database table.
      * The value is only saved in the object. You must call the method **save** to store the new value to the database
      * @param string $columnName The name of the database column whose value should get a new value
-     * @param mixed  $newValue The new value that should be stored in the database field
+     * @param mixed $newValue The new value that should be stored in the database field
      * @param bool $checkValue The value will be checked if it's valid. If set to **false** than the value will not be checked.
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        if ($newValue !== parent::getValue($columnName) && $checkValue) {
-            if ($columnName === 'men_icon' && $newValue !== '') {
+        if ($newValue !== parent::getValue($columnName)) {
+            if ($checkValue && $columnName === 'men_icon' && $newValue !== '') {
                 // check if bootstrap icons syntax is used
                 if (preg_match('/[^a-z0-9-]/', $newValue)) {
                     throw new Exception('SYS_INVALID_ICON_NAME');
@@ -263,12 +272,12 @@ class MenuEntry extends Entity
     }
     /**
      * Adjust the changelog entry for this db record: Add the parent Menu / section as a related object
-     * 
+     *
      * @param LogChanges $logEntry The log entry to adjust
-     * 
+     *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry) {
+    protected function adjustLogEntry(LogChanges $logEntry): void {
         if (!empty($this->getValue('men_men_id_parent'))) {
             $folEntry = new MenuEntry($this->db, $this->getValue('men_men_id_parent'));
             $logEntry->setLogRelated($folEntry->getValue('men_uuid'), $folEntry->getValue('men_name'));

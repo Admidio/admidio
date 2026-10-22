@@ -14,6 +14,24 @@ class Key extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'sso_key';
+    }
+
+    /**
+     * @return array Returns the columns whose value must not be handed to a hook callback.
+     * @see Entity::getSensitiveHookColumns()
+     */
+    public function getSensitiveHookColumns(): array
+    {
+        return array('key_private');
+    }
+
+    /**
      * Retrieve the list of database fields that are ignored for the changelog.
      * In addition to the default ignored columns, don't log fot_views
      *
@@ -21,7 +39,10 @@ class Key extends Entity
      */
     public function getIgnoredLogColumns(): array
     {
-        return array_merge(parent::getIgnoredLogColumns(),
-        ($this->newRecord)?[$this->columnPrefix.'_name']:[]);
+        return array_merge(
+            parent::getIgnoredLogColumns(),
+            ($this->newRecord)?[$this->columnPrefix.'_name']:[],
+            [$this->columnPrefix . '_private']   // never expose the private key in the changelog
+        );
     }
 }

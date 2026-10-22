@@ -11,6 +11,7 @@ use Admidio\SSO\Service\OIDCService;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Roles\Entity\RolesRights;
+use Admidio\UI\Component\DataTables;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -33,7 +34,7 @@ class SSOClientPresenter extends PagePresenter
 {
     /**
      * Constructor creates the page object and initialized all parameters.
-     * @param string $clientId Id of the SAML or OIDC client.
+     * @param string $objectUUID UUID of the SAML or OIDC client.
      * @throws Exception
      */
     public function __construct(string $objectUUID = '')
@@ -74,7 +75,7 @@ class SSOClientPresenter extends PagePresenter
             {
                 var category = "";
                 var table = document.getElementById("' . $type . '_tbody");
-                var newTableRow = table.insertRow(fieldNumberIntern_' . $type . ');
+                var newTableRow = table.insertRow(-1);
                 newTableRow.setAttribute("id", "row" + (fieldNumberIntern_' . $type . '))
 
                 // New column for selecting the field
@@ -124,11 +125,16 @@ class SSOClientPresenter extends PagePresenter
             }
             ';
 
-        // Add a row for each configured field / role
+        // Add a row for each configured field / role. The field mapping is passed in as an array
+        // keyed by the SSO field name, the role mapping as a list of [SSO role, Admidio role] pairs,
+        // because the same SSO role name may be assigned to several Admidio roles.
         $js .= '';
         foreach ($config as $ssoField => $admidioField) {
+            if (is_array($admidioField)) {
+                list($ssoField, $admidioField) = $admidioField;
+            }
             $js .= '
-            addColumn_' . $type . '("' . $ssoField . '", "' . $admidioField . '");';
+            addColumn_' . $type . '(' . json_encode((string) $ssoField) . ', ' . json_encode((string) $admidioField) . ');';
         }
 
         return array('js' => $js, 'jsInit' => $jsInit);
@@ -153,13 +159,13 @@ class SSOClientPresenter extends PagePresenter
             // Each role is now added to this array
             $allRolesSet[] = array(
                 $rowViewRoles['rol_id'], // ID
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ')', // Value
                 $rowViewRoles['cat_name'] // Group
             );
             // Leader has the role ID with negative sign!
             $allRolesSet[] = array(
                 -$rowViewRoles['rol_id'], // ID
-                $rowViewRoles['rol_name'] . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ') - ' . $gL10n->get('SYS_LEADER'), // Value
                 $rowViewRoles['cat_name'] // Group
             );
         }
@@ -174,19 +180,21 @@ class SSOClientPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
-        // create SAML client object
-        $client = new SAMLClient($gDb);
+        // create organization-scoped SAML client object
+        $SAMLService = new SAMLService($gDb, $gCurrentUser);
+        $client = $SAMLService->createClientObject($this->objectUUID);
         if ($this->objectUUID !== '') {
             $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_SSO_CLIENT_SAML'))));
         } else {
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_SAML'))));
         }
-        $this->setHtmlID('admidio-saml-client-edit');
+        $this->setHtmlID('adm_sso_client_saml_edit');
 
         $roleAccessSet = array();
-        if ($this->objectUUID !== '') {
-            $client->readDataByUUID($this->objectUUID);
+        if ($this->objectUUID !== '' && $client->isNewRecord()) {
+            throw new Exception('SYS_SSO_INVALID_CLIENT');
         }
+        $this->assignSmartyVariable('isNewClient', $this->objectUUID === '');
 
         $allRolesSet = $this->getAvailableRoles();
 
@@ -195,12 +203,11 @@ class SSOClientPresenter extends PagePresenter
         // show form
         $form = new FormPresenter(
             'adm_saml_client_edit_form',
-            'modules/saml_client.edit.tpl',
+            'modules/sso_saml_client.edit.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('uuid' => $this->objectUUID, 'mode' => 'save_saml')),
             $this
         );
 
-        $SAMLService = new SAMLService($gDb, $gCurrentUser);
         $form->addCustomContent(
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
@@ -211,7 +218,7 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'smc_enabled',
             $gL10n->get('SYS_ENABLED'),
-            $client->getValue('smc_enabled'),
+            boolval($client->getValue('smc_enabled')),
             array()
         );
         $form->addInput(
@@ -231,6 +238,20 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_METADATA_URL'),
             $client->getValue('smc_metadata_url'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
+        );
+        // NEW: scratch field, deliberately not prefixed smc_/ocl_ so SSOService::save() never
+        // tries to persist it as a client column (same convention as sso_fields_all_other etc.)
+        $form->addMultilineTextInput(
+            'sso_saml_metadata_paste',
+            $gL10n->get('SYS_SSO_METADATA_PASTE'),
+            '',
+            4,
+            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_PASTE_DESC'))
+        );
+        $form->addButton(
+            'adm_button_metadata_paste_setup',
+            $gL10n->get('SYS_SSO_METADATA_PASTE_BUTTON'),
+            array('icon' => 'bi-clipboard-check', 'class' => 'btn btn-secondary')
         );
         $form->addInput(
             'smc_acs_url',
@@ -260,26 +281,39 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'smc_require_auth_signed',
             $gL10n->get('SYS_SSO_REQUIRE_AUTHN_SIGNED'),
-            $client->getValue('smc_require_auth_signed'),
+            boolval($client->getValue('smc_require_auth_signed')),
             array()
         );
         $form->addCheckbox(
             'smc_sign_assertions',
             $gL10n->get('SYS_SSO_SIGN_ASSERTIONS'),
-            $client->getValue('smc_sign_assertions'),
+            boolval($client->getValue('smc_sign_assertions')),
             array()
         );
         $form->addCheckbox(
             'smc_encrypt_assertions',
             $gL10n->get('SYS_SSO_ENCRYPT_ASSERTIONS'),
-            $client->getValue('smc_encrypt_assertions'),
+            boolval($client->getValue('smc_encrypt_assertions')),
             array()
         );
         $form->addCheckbox(
             'smc_validate_signatures',
             $gL10n->get('SYS_SSO_VALIDATE_SIGNATURES'),
-            $client->getValue('smc_validate_signatures'),
+            boolval($client->getValue('smc_validate_signatures')),
             array()
+        );
+
+        $form->addInput(
+            'smc_request_lifetime',
+            $gL10n->get('SYS_SSO_SAML_REQUEST_LIFETIME'),
+            $client->getValue('smc_request_lifetime') ?? '300',
+            array(
+                'type' => 'number',
+                'minNumber' => 1,
+                'maxNumber' => 9999,
+                'step' => 1,
+                'helpTextId' => 'SYS_SSO_SAML_REQUEST_LIFETIME_DESC'
+            )
         );
 
         $form->addInput(
@@ -312,7 +346,7 @@ class SSOClientPresenter extends PagePresenter
                 'property' => FormPresenter::FIELD_REQUIRED,
                 'defaultValue' => $client->getValue('smc_userid_field'),
                 'multiselect' => false,
-                'helpTextId' => 'SYS_SSO_USERID_FIELD_DESC'
+                'helpTextId' => 'SYS_SSO_SAML_USERID_FIELD_DESC'
                 )
             );
 
@@ -346,7 +380,7 @@ class SSOClientPresenter extends PagePresenter
         );
 
 
-        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
+        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMappingList(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
         $this->addJavascript('$("#rolesmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
@@ -411,100 +445,130 @@ class SSOClientPresenter extends PagePresenter
      * Button to load metadata from the URL
      */
     $form->addButton('adm_button_metadata_setup', $gL10n->get('SYS_SSO_LOAD_METADATA'), array('icon' => 'bi-gear-fill', 'class' => 'btn btn-primary'));
+    $metadataFetchUrl = json_encode(ADMIDIO_URL . FOLDER_MODULES . '/sso/fetch_metadata.php', JSON_THROW_ON_ERROR);
+    $metadataCsrfToken = json_encode($gCurrentSession->getCsrfToken(), JSON_THROW_ON_ERROR);
+    $metadataUrlRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_URL_REQUIRED'), JSON_THROW_ON_ERROR);
+    $metadataLoadFailedMessage = json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR);
+    $metadataInvalidMessage = json_encode($gL10n->get('SYS_SSO_METADATA_INVALID'), JSON_THROW_ON_ERROR);
+    $metadataPasteRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_PASTE_REQUIRED'), JSON_THROW_ON_ERROR);
+
     $this->addJavascript('
     $("#adm_button_metadata_setup").click(function () {
         const metadataUrl = $("#smc_metadata_url").val().trim();
-        if (!metadataUrl) { alert("Please enter a metadata URL."); return;}
+        if (!metadataUrl) {
+            alert(' . $metadataUrlRequiredMessage . ');
+            return;
+        }
 
-        // First try to load the metadata directly from the client. If we run into CORS error (loading from a different server
-        // than the one hosting Admidio is often not permitted), we use the admidio server\'s CORS proxy script.
-        $.get(metadataUrl)
-            .done(function (metadataXml) {
-                handleClientMetadataXML(metadataXml);
-            })
-            .fail(function () {
-                // Loading directly from the client failed, try using the CORS proxy script in admidio\'s source tree
-                const currentDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf(\'/\'));
-                const proxyUrl = `${window.location.origin}${currentDir}/fetch_metadata.php?url=${encodeURIComponent(metadataUrl)}`;
-                $.get(proxyUrl)
-                    .done(function (metadataXml) {
-                        handleClientMetadataXML(metadataXml);
-                    })
-                    .fail(function () {
-                        alert("Error loading metadata. Please check the URL and try again.");
-                    });
-            });
+        $.ajax({
+            url: ' . $metadataFetchUrl . ',
+            method: "POST",
+            dataType: "text",
+            data: {
+                url: metadataUrl,
+                adm_csrf_token: ' . $metadataCsrfToken . '
+            }
+        })
+        .done(function (metadataXml) {
+            handleClientMetadataXML(metadataXml);
+        })
+        .fail(function () {
+            alert(' . $metadataLoadFailedMessage . ');
+        });
+    });
+
+    // parse pasted metadata directly, no network request
+    $("#adm_button_metadata_paste_setup").click(function () {
+        const pastedXml = $("#sso_saml_metadata_paste").val().trim();
+        if (!pastedXml) {
+            alert(' . $metadataPasteRequiredMessage . ');
+            return;
+        }
+        handleClientMetadataXML(pastedXml);
     });
 
     function handleClientMetadataXML(metadataXml) {
         let xmlDoc;
-        // If response is already an XML Document, use it directly
-        if (metadataXml instanceof Document) {
-            xmlDoc = metadataXml;
-        } else if (typeof metadataXml === "string") {
-            // If response is a string, attempt to parse it as XML
-            xmlDoc = $.parseXML(metadataXml);
-        } else {
-            alert("Unexpected response format.");
+
+        try {
+            if (metadataXml instanceof Document) {
+                xmlDoc = metadataXml;
+            } else if (typeof metadataXml === "string") {
+                xmlDoc = $.parseXML(metadataXml);
+            } else {
+                alert(' . $metadataInvalidMessage . ');
+                return false;
+            }
+        } catch (error) {
+            alert(' . $metadataInvalidMessage . ');
             return false;
         }
-        const $xml = $(xmlDoc);
 
-        // Use native JavaScript methods to handle XML namespaces
         const entityDescriptor = xmlDoc.querySelector("EntityDescriptor");
-        const entityId = entityDescriptor ? entityDescriptor.getAttribute("entityID") : "";
+        if (!entityDescriptor) {
+            alert(' . $metadataInvalidMessage . ');
+            return false;
+        }
 
-        // Extract Assertion Consumer Service (ACS) URL
-        const acsElement = xmlDoc.querySelector("AssertionConsumerService");
-        const acsUrl = acsElement ? acsElement.getAttribute("Location") : "";
+        const entityId = entityDescriptor.getAttribute("entityID") || "";
 
-        const sloElement = xmlDoc.querySelector("SingleLogoutService");
-        const sloUrl = sloElement ? sloElement.getAttribute("Location") : "";
+        // Prefer the default ACS and otherwise an HTTP-POST ACS, which is the
+        // binding used by Admidio for SAML responses.
+        const acsElements = Array.from(xmlDoc.querySelectorAll("AssertionConsumerService"));
+        const acsElement =
+            acsElements.find((element) => element.getAttribute("isDefault") === "true")
+            || acsElements.find((element) =>
+                element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST")
+            || acsElements[0];
+        const acsUrl = acsElement ? acsElement.getAttribute("Location") || "" : "";
 
-        // Extract X.509 Certificate
-        const x509Element = xmlDoc.querySelector("KeyDescriptor[use=\'signing\'] X509Certificate");
+        // Admidio currently sends SLO messages with HTTP-Redirect, so prefer
+        // the matching SP endpoint when metadata offers multiple bindings.
+        const sloElements = Array.from(xmlDoc.querySelectorAll("SingleLogoutService"));
+        const sloElement =
+            sloElements.find((element) =>
+                element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect")
+            || sloElements[0];
+        const sloUrl = sloElement ? sloElement.getAttribute("Location") || "" : "";
+
+        // A KeyDescriptor without a use attribute can be used for signing too.
+        const x509Element = xmlDoc.querySelector(
+            "KeyDescriptor[use=\'signing\'] X509Certificate, KeyDescriptor:not([use]) X509Certificate"
+        );
         const x509Cert = x509Element ? x509Element.textContent.trim() : "";
 
-        // signing flags
-        // XPath-Abfrage zum Finden des SPSSODescriptor-Elements
-        //const spDescriptor = xmlDoc.evaluate("//md:SPSSODescriptor", xmlDoc, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         const spDescriptor = xmlDoc.querySelector("SPSSODescriptor");
-
         if (spDescriptor) {
-            // Werte der Attribute auslesen
-            const authnRequestsSigned = spDescriptor.getAttribute("AuthnRequestsSigned") === "true";
-            const wantAssertionsSigned = spDescriptor.getAttribute("WantAssertionsSigned") === "true";
-
-            // Checkboxen anhand der Werte setzen
-            document.getElementById("smc_require_auth_signed").checked = authnRequestsSigned;
-            document.getElementById("smc_sign_assertions").checked = wantAssertionsSigned;
+            document.getElementById("smc_require_auth_signed").checked =
+                spDescriptor.getAttribute("AuthnRequestsSigned") === "true";
         }
 
-        // Populate input fields
-        if (entityId !="") {
+        if (entityId !== "") {
             $("#smc_client_id").val(entityId);
         }
-        if (acsUrl !="") {
+        if (acsUrl !== "") {
             $("#smc_acs_url").val(acsUrl);
         }
-        if (sloUrl !="") {
+        if (sloUrl !== "") {
             $("#smc_slo_url").val(sloUrl);
         }
-        if (x509Cert !="") {
+        if (x509Cert !== "") {
             $("#smc_x509_certificate").val(formatCertificate(x509Cert));
         }
     }
-    // Helper function to format X.509 certificate with proper line breaks
+
     function formatCertificate(cert) {
-        if (!cert) return "";
+        if (!cert) {
+            return "";
+        }
         return `-----BEGIN CERTIFICATE-----\n${cert.match(/.{1,64}/g).join("\n")}\n-----END CERTIFICATE-----`;
     }
         ', true);
 
-        $this->smarty->assign('nameUserCreated', $client->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $client->getValue('smc_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $client->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $client->getValue('smc_timestamp_change'));
+        $this->smarty->assign('userCreatedName', $client->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $client->getValue('smc_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $client->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $client->getValue('smc_timestamp_change'));
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -519,18 +583,19 @@ class SSOClientPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentSession, $gProfileFields, $gCurrentUser;
 
-        // create OIDC client object
-        $client = new OIDCClient($gDb);
+        // create organization-scoped OIDC client object
+        $OIDCService = new OIDCService($gDb, $gCurrentUser);
+        $client = $OIDCService->createClientObject($this->objectUUID);
         if ($this->objectUUID !== '') {
             $this->setHeadline($gL10n->get('SYS_EDIT_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
         } else {
             $this->setHeadline($gL10n->get('SYS_CREATE_VAR', array($gL10n->get('SYS_SSO_CLIENT_OIDC'))));
         }
-        $this->setHtmlID('admidio-oidc-client-edit');
+        $this->setHtmlID('adm_sso_client_oidc_edit');
 
         $allRolesSet = $this->getAvailableRoles();
-        if ($this->objectUUID !== '') {
-            $client->readDataByUUID($this->objectUUID);
+        if ($this->objectUUID !== '' && $client->isNewRecord()) {
+            throw new Exception('SYS_SSO_INVALID_CLIENT');
         }
 
         ChangelogService::displayHistoryButton($this, 'oidc-client', 'oidc_clients', !empty($this->objectUUID), array('uuid' => $this->objectUUID));
@@ -543,7 +608,6 @@ class SSOClientPresenter extends PagePresenter
             $this
         );
 
-        $OIDCService = new OIDCService($gDb, $gCurrentUser);
         $form->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
@@ -554,8 +618,20 @@ class SSOClientPresenter extends PagePresenter
         $form->addCheckbox(
             'ocl_enabled',
             $gL10n->get('SYS_ENABLED'),
-            $client->getValue('ocl_enabled'),
+            $client->getValue('ocl_enabled') ?? false,
             array()
+        );
+        $form->addCheckbox(
+            'ocl_trusted',
+            $gL10n->get('SYS_SSO_OIDC_TRUSTED_CLIENT'),
+            $client->getValue('ocl_trusted') ?? false,
+            array('helpTextId' => 'SYS_SSO_OIDC_TRUSTED_CLIENT_DESC')
+        );
+        $form->addCheckbox(
+            'ocl_require_pkce',
+            $gL10n->get('SYS_SSO_OIDC_REQUIRE_PKCE'),
+            $client->isNewRecord() ? true : (bool) $client->getValue('ocl_require_pkce'),
+            array('helpTextId' => 'SYS_SSO_OIDC_REQUIRE_PKCE_DESC')
         );
         $form->addInput(
             'ocl_client_name',
@@ -578,7 +654,7 @@ class SSOClientPresenter extends PagePresenter
             '</button>';
         $clientSecretContent = '<div style="display: flex; align-items: center; gap: 8px;" id="client_secret_not_shown">' .
                 '<span style="flex: 1" id="client_passwd_label"><em>' .
-                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDE') .
+                    $gL10n->get('SYS_SSO_CLIENT_SECRET_HIDDEN') .
                     '</em></span>' .
                 '<button id="recreate_client_secret" name="recreate_client_secret" type="button" class="btn focus-ring btn-secondary" style="padding: 0px 4px; flex-shrink: 0;">' .
                     '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title=""></i>' .
@@ -586,7 +662,7 @@ class SSOClientPresenter extends PagePresenter
                 '</button>' .
             '</div>' .
             '<div style="display:flex; align-itens: center; gap: 8px;" id="client_secret_shown">' .
-            '<input id="new_ocl_client_secret" name="new_ocl_client_secret" class="form-control focus-ring hidden copy-container" type="text" value="" maxlength="250" style="flex: 1" >' .
+            '<input id="new_ocl_client_secret" name="new_ocl_client_secret" class="form-control focus-ring hidden copy-container" type="text" value="" maxlength="250" style="flex: 1" ' . ($noClientSecretYet?'required':'') . '>' .
                 ($noClientSecretYet ? '' : $cancelRecreateButton) .
             '</div>';
         $this->addJavascript('
@@ -629,6 +705,40 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('ocl_redirect_uri'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_REDIRECT_URI_DESC'))
         );
+        $form->addMultilineTextInput(
+            'ocl_post_logout_redirect_uris',
+            $gL10n->get('SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS'),
+            (string) $client->getValue('ocl_post_logout_redirect_uris', 'database'),
+            3,
+            array(
+                'maxLength' => 8000,
+                'helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC'
+            )
+        );
+        $form->addInput(
+            'ocl_frontchannel_logout_uri',
+            $gL10n->get('SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI'),
+            $client->getValue('ocl_frontchannel_logout_uri', 'database'),
+            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC')
+        );
+        $form->addCheckbox(
+            'ocl_frontchannel_logout_session_required',
+            $gL10n->get('SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED'),
+            (bool) $client->getValue('ocl_frontchannel_logout_session_required'),
+            array('helpTextId' => 'SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC')
+        );
+        $form->addInput(
+            'ocl_backchannel_logout_uri',
+            $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI'),
+            $client->getValue('ocl_backchannel_logout_uri', 'database'),
+            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC')
+        );
+        $form->addCheckbox(
+            'ocl_backchannel_logout_session_required',
+            $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED'),
+            (bool) $client->getValue('ocl_backchannel_logout_session_required'),
+            array('helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC')
+        );
         // TODO: Grant Types, Scopes
 
 
@@ -641,29 +751,55 @@ class SSOClientPresenter extends PagePresenter
             ['usr_login_name', $gL10n->get('SYS_SSO_USERID_LOGIN') . ' - usr_login_name', $gL10n->get('SYS_SSO_USERID_FIELDS')],
             ['EMAIL', $gL10n->get('SYS_EMAIL') . ' - EMAIL', $gL10n->get('SYS_SSO_USERID_FIELDS')],
         ];
+
+        /*
+        * The subject of an OIDC client must be unique and must never be reassigned to
+        * another person (OpenID Connect Core, section 2), so only the two immutable
+        * identifiers can be chosen. A client that still uses a login name or an e-mail
+        * address keeps its value in the list, marked as no longer supported: dropping it
+        * would silently change the subject on the next save and break the accounts that
+        * the relying party has bound to the old one.
+        */
+        $subjectFields = array();
+        foreach ($useridFields as $useridField) {
+            if (in_array($useridField[0], OIDCClient::getSupportedSubjectFields(), true)) {
+                $subjectFields[] = $useridField;
+            }
+        }
+
+        $configuredSubjectField = (string) $client->getValue('ocl_userid_field');
+        if ($configuredSubjectField !== ''
+            && !in_array($configuredSubjectField, OIDCClient::getSupportedSubjectFields(), true)
+        ) {
+            $subjectFields[] = array(
+                $configuredSubjectField,
+                $configuredSubjectField . ' - ' . $gL10n->get('SYS_SSO_USERID_FIELD_UNSUPPORTED'),
+                $gL10n->get('SYS_SSO_USERID_FIELDS')
+            );
+        }
+
         $form->addSelectBox(
             'ocl_userid_field',
             $gL10n->get('SYS_SSO_USERID_FIELD'),
-            $useridFields,
+            $subjectFields,
             array(
                 'property' => FormPresenter::FIELD_REQUIRED,
-                'defaultValue' => $client->getValue('ocl_userid_field'),
+                'defaultValue' => $configuredSubjectField,
                 'multiselect' => false,
                 'helpTextId' => 'SYS_SSO_USERID_FIELD_DESC'
             )
         );
         // Make sure the 'openid' scope is always selected (required by the OIDC standard)
-        $scopes = ['profile', 'email', 'address', 'phone', 'groups', 'custom'];
-        $dbvalue = $client->getValue('ocl_scope');
-        $defaultValue = explode(' ', $client->getValue('ocl_scope'));
-        $defaultValue = preg_split('/[,;\s]+/', trim($client->getValue('ocl_scope')));
+        $scopes = OIDCClient::getOptionalScopes();
         $form->addSelectBox(
             'ocl_scope',
             $gL10n->get('SYS_SSO_CLIENT_SCOPES'),
             array_combine($scopes, $scopes),
             array(
                 'property' => FormPresenter::FIELD_DEFAULT,
-                'defaultValue' => array_merge(explode(' ', $client->getValue('ocl_scope'))),
+                'defaultValue' => array_values(
+                    array_intersect($scopes, $client->getAllowedScopes())
+                ),
                 'multiselect' => true,
                 'helpTextId' => 'SYS_SSO_CLIENT_SCOPES_DESC'
             )
@@ -687,6 +823,38 @@ class SSOClientPresenter extends PagePresenter
         $this->addJavascript($js['js'], true);
         $this->addJavascript('$("#fieldsmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
 
+        // one-click suggestion of the standard OIDC claims, skipping fields that
+        // either don't exist on this installation or already have a mapping row.
+        $this->addJavascript('
+        function addStandardOidcClaims() {
+            const standardClaims = [
+                ["given_name", "FIRST_NAME"],
+                ["family_name", "LAST_NAME"],
+                ["name", "fullname"],
+                ["preferred_username", "usr_login_name"],
+                ["email", "EMAIL"],
+                ["phone_number", "PHONE"],
+                ["groups", "roles"]
+            ];
+
+            const availableFields = new Set(arr_fieldsmap.map(function (entry) { return entry.id; }));
+            const alreadyMapped = new Set(
+                $("#fieldsmap_tbody select.admidio-field-select")
+                    .map(function () { return $(this).val(); })
+                    .get()
+            );
+
+            standardClaims.forEach(function (claim) {
+                const admidioField = claim[1];
+                const claimName = claim[0];
+                if (availableFields.has(admidioField) && !alreadyMapped.has(admidioField)) {
+                    addColumn_fieldsmap(claimName, admidioField);
+                    alreadyMapped.add(admidioField);
+                }
+            });
+        }
+        ');
+
         // Add dummy elements for the mapping arrays, otherwise the form processing function will complain!!!
         $form->addCustomContent("fieldsmap_Admidio", '', '');
         $form->addCustomContent("fieldsmap_sso", '', '');
@@ -699,7 +867,7 @@ class SSOClientPresenter extends PagePresenter
         );
 
 
-        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMapping(), "rolesmap");
+        $js = $this->createSSOEditFormJS($allRolesSet, $client->getRoleMappingList(), "rolesmap");
         $this->addJavascript($js['jsInit'], false);
         $this->addJavascript($js['js'], true);
         $this->addJavascript('$("#rolesmap_tbody").sortable({cancel: ".nosort, input, select, .admidio-move-row-up, .admidio-move-row-down"});', true);
@@ -761,21 +929,25 @@ class SSOClientPresenter extends PagePresenter
 
 
 
-        $this->smarty->assign('nameUserCreated', $client->getNameOfCreatingUser());
-        $this->smarty->assign('timestampUserCreated', $client->getValue('ocl_timestamp_create'));
-        $this->smarty->assign('nameLastUserEdited', $client->getNameOfLastEditingUser());
-        $this->smarty->assign('timestampLastUserEdited', $client->getValue('ocl_timestamp_change'));
-        $form->addToHtmlPage();
+        $this->smarty->assign('userCreatedName', $client->getNameOfCreatingUser());
+        $this->smarty->assign('userCreatedTimestamp', $client->getValue('ocl_timestamp_create'));
+        $this->smarty->assign('lastUserEditedName', $client->getNameOfLastEditingUser());
+        $this->smarty->assign('lastUserEditedTimestamp', $client->getValue('ocl_timestamp_change'));
+
+    $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
 
 
     /**
-     * Display a toggle to enable/disable a client (via a json call).
-     * @param  $name
+     * Display a toggle to enable/disable a client (via a JSON call).
+     * @param SSOClient $client
+     * @return string
+     * @throws Exception
      */
-    protected function generateEnableLink(SSOClient $client) {
-        global $gL10n;
+    protected function generateEnableLink(SSOClient $client): string
+    {
+        global $gL10n, $gCurrentSession;
         $enabled = $client->isEnabled();
         $uuid = $client->getValue($client->getColumnPrefix() . '_uuid');
 
@@ -837,30 +1009,28 @@ class SSOClientPresenter extends PagePresenter
         /* ****************************************************/
         $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_SAML') . '</h3>');
 
-        $table = new \HtmlTable('adm_saml_clients_table', $this, true, false);
-
-        $table->addRowHeadingByArray(array(
+        $table = new DataTables($this, 'adm_saml_clients_table');
+        $columnHeading = array(
             $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
             $gL10n->get('SYS_SSO_ACS_URL'),
             $gL10n->get('SYS_SSO_ROLES'),
             ''
-        ));
+        );
 
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_SAML_CLIENTS_FOUND');
 
-        $table->disableDatatablesColumnsSort(array(3, 6));
-        $table->setDatatablesColumnsNotHideResponsive(array(6));
+        $table->disableColumnsSort(array(3, 6));
+        $table->setColumnsNotHideResponsive(array(6));
         // special settings for the table
 
-
+        $columnValues = array();
         $SAMLService = new SAMLService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($SAMLService->getUUIDs() as $clientUUID) {
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
-            $client = new SAMLClient($gDb);
-            $client->readDataByUuid($clientUUID);
+            $client = $SAMLService->getClientFromUUID($clientUUID);
             $templateClient = array();
             $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';
@@ -882,11 +1052,16 @@ class SSOClientPresenter extends PagePresenter
                 </a>';
             $templateClient[] = $actions;
 
-            $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
+            $columnValues[] = array('id' => 'adm_saml_client_' . $clientUUID, 'data' => $templateClient);
         }
 
         // add table to the form
-        $this->addHtml(html: $table->show());
+        $table->createJavascript(count($columnValues), count($columnHeading));
+
+        $this->assignSmartyVariable('headers', $columnHeading);
+        $this->assignSmartyVariable('rows', $columnValues);
+        // add table to the page
+        $this->addHtmlByTemplate('modules/sso_saml_clients.list.tpl');
 
 
 
@@ -896,30 +1071,29 @@ class SSOClientPresenter extends PagePresenter
         /* ****************************************************/
         $this->addHtml('<h3 class="admidio-content-subheader">' . $gL10n->get('SYS_SSO_CLIENTS_OIDC') . '</h3>');
 
-        $table = new \HtmlTable('adm_oidc_clients_table', $this, true, false);
-
-        $table->addRowHeadingByArray(array(
+        $table = new DataTables($this, 'adm_oidc_clients_table');
+        $columnHeading = array(
             $gL10n->get('SYS_ENABLED'),
             $gL10n->get('SYS_SSO_CLIENT_NAME'),
             $gL10n->get('SYS_SSO_CLIENT_ID'),
             $gL10n->get('SYS_SSO_REDIRECT_URI'),
             $gL10n->get('SYS_SSO_ROLES'),
             ''
-        ));
+        );
 
         $table->setMessageIfNoRowsFound('SYS_SSO_NO_OIDC_CLIENTS_FOUND');
 
-        $table->disableDatatablesColumnsSort(array(3, 6));
-        $table->setDatatablesColumnsNotHideResponsive(array(6));
+        $table->disableColumnsSort(array(3, 6));
+        $table->setColumnsNotHideResponsive(array(6));
         // special settings for the table
 
 
+        $columnValues = array();
         $OIDCService = new OIDCService($gDb, $gCurrentUser);
         $templateClientNodes = array();
         foreach ($OIDCService->getUUIDs() as $clientUUID) {
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $clientUUID));
             $client = $OIDCService->createClientObject($clientUUID);
-            $client->readDataByUuid($clientUUID);
             $templateClient = array();
             $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';
@@ -929,11 +1103,11 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = '';
-            // add link to edit SAML client
+            // add link to edit OIDC client
             $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT') . '"></i></a>';
 
-            // add link to delete SAML client
+            // add link to delete OIDC client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($client->readableName())) . '"
                     data-href="callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
@@ -941,7 +1115,7 @@ class SSOClientPresenter extends PagePresenter
                 </a>';
             $templateClient[] = $actions;
 
-            $table->addRowByArray($templateClient, 'adm_saml_client_' . $clientUUID, array('nobr' => 'true'));
+            $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
         }
 
         // Add JS for toggling clients (enabled/disabled)
@@ -954,9 +1128,10 @@ class SSOClientPresenter extends PagePresenter
               var currentlyEnabled = \$link.data('enabled') === 1 || \$link.data('enabled') === '1';
               var newEnabled = currentlyEnabled ? 0 : 1;
 
-              $.get('clients.php?mode=enable', {
+              $.post('clients.php?mode=enable', {
                 uuid: \$link.data('uuid'),
-                enabled: newEnabled
+                enabled: newEnabled,
+                adm_csrf_token: '" . $gCurrentSession->getCSRFToken() . "'
               })
               .done(function (response) {
                 var data = typeof response === 'string' ? JSON.parse(response) : response;
@@ -983,7 +1158,11 @@ class SSOClientPresenter extends PagePresenter
           ", true);
 
         // add table to the form
-        $this->addHtml(html: $table->show());
+        $table->createJavascript(count($columnValues), count($columnHeading));
 
+        $this->assignSmartyVariable('headers', $columnHeading);
+        $this->assignSmartyVariable('rows', $columnValues);
+        // add table to the page
+        $this->addHtmlByTemplate('modules/sso_oidc_clients.list.tpl');
     }
 }

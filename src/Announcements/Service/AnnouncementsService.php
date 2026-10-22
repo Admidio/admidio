@@ -6,8 +6,8 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 use DateTime;
 
 /**
@@ -30,15 +30,21 @@ class AnnouncementsService
      * @var string UUID of the category for which the announcements should be filtered.
      */
     protected string $categoryUUID = '';
+    /**
+     * @var string UUID of the announcement that should be filtered.
+     */
+    protected string $announcementUUID = '';
 
     /**
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param string $categoryUUID UUID of the category for which the announcements should be filtered.
+     * @param string $announcementUUID UUID of the announcement that should be filtered.
      */
-    public function __construct(Database $database, string $categoryUUID = '')
+    public function __construct(Database $database, string $categoryUUID = '', string $announcementUUID = '')
     {
         $this->db = $database;
         $this->categoryUUID = $categoryUUID;
+        $this->announcementUUID = $announcementUUID;
     }
 
     /**
@@ -52,13 +58,22 @@ class AnnouncementsService
 
         $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('ANN'));
 
+        $sqlConditions = '';
+        $queryParameters = $visibleCategoryIDs;
+
+        if ($this->announcementUUID !== '') {
+            $sqlConditions .= ' AND ann_uuid = ?';
+            $queryParameters[] = $this->announcementUUID;
+        }
+
         $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_ANNOUNCEMENTS . '
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = ann_cat_id
-                 WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ') ';
+                 WHERE cat_id IN (' . Database::getQmForValues($visibleCategoryIDs) . ')
+                       ' . $sqlConditions;
 
-        $pdoStatement = $this->db->queryPrepared($sql, $visibleCategoryIDs);
+        $pdoStatement = $this->db->queryPrepared($sql, $queryParameters);
 
         return (int)$pdoStatement->fetchColumn();
     }
@@ -107,6 +122,11 @@ class AnnouncementsService
         if ($this->categoryUUID !== '') {
             $sqlConditions .= ' AND cat_uuid = ?';
             $sqlQueryParameters[] = $this->categoryUUID;
+        }
+
+        if ($this->announcementUUID !== '') {
+            $sqlConditions .= ' AND ann_uuid = ?';
+            $sqlQueryParameters[] = $this->announcementUUID;
         }
 
         // Check if limit was set
@@ -166,30 +186,33 @@ class AnnouncementsService
      */
     public function rssFeed(string $organizationShortName): void
     {
-        global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gL10n, $gCurrentOrgId;
+        header('Content-type: application/xml');
+        echo $this->getRssFeedContent($organizationShortName);
+    }
 
-        // Check if RSS is active...
-        if (!$gSettingsManager->getBool('enable_rss')) {
-            throw new Exception('SYS_RSS_DISABLED');
-        }
+    public function getRssFeedContent(string $organizationShortName): string
+    {
+        global $gCurrentUser, $gCurrentOrganization, $gL10n, $gValidLogin;
 
-        if ($organizationShortName !== '') {
-            $organization = new Organization($this->db, $organizationShortName);
-            $organizationName = $organization->getValue('org_longname');
-            $gCurrentUser->setOrganization($organization->getValue('org_id'));
-        } else {
-            $organizationName = $gCurrentOrganization->getValue('org_longname');
-        }
+        $organization = RssFeedAccess::resolveOrganization($this->db, $gCurrentOrganization, $organizationShortName);
+        RssFeedAccess::assertAccessible($organization, 'announcements_module_enabled', $gValidLogin);
+        $organizationName = $organization->getValue('org_longname');
 
         // create RSS feed object with channel information
         $rss = new RssFeed(
             $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
-            $gCurrentOrganization->getValue('org_homepage'),
+            $organization->getValue('org_homepage'),
             $gL10n->get('SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION', array($organizationName)),
             $organizationName
         );
 
-        $announcements = $this->findAll(0, 50);
+        $previousUserOrganizationID = $gCurrentUser->getOrganization();
+        try {
+            $gCurrentUser->setOrganization((int)$organization->getValue('org_id'));
+            $announcements = $this->findAll(0, 50);
+        } finally {
+            $gCurrentUser->setOrganization($previousUserOrganizationID);
+        }
 
         if (count($announcements) > 0) {
             foreach ($announcements as $announcement) {
@@ -206,8 +229,7 @@ class AnnouncementsService
             }
         }
 
-        $gCurrentUser->setOrganization($gCurrentOrgId);
-        $rss->getRssFeed();
+        return $rss->getRssFeedContent();
     }
 
     /**

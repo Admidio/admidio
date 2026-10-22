@@ -120,7 +120,7 @@ try {
         $gNavigation->addUrl(CURRENT_URL, $headline);
 
         // create an HTML page object
-        $page = PagePresenter::withHtmlIDAndHeadline('admidio-file-upload', $headline);
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_file_upload', $headline);
 
         $fileUpload = new FileUpload($page, $getModule, $getUuid);
         $fileUpload->setHeaderData();
@@ -149,6 +149,6 @@ try {
             ));
         }
     }
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

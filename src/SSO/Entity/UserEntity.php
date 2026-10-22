@@ -19,7 +19,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
     /**
      * Create a UserEntity from an Admidio user ID.
      */
-    public function __construct(Database $database, ProfileFields $profileFields = null, ?OIDCClient $client = null, int $userId = 0)
+    public function __construct(Database $database, ?ProfileFields $profileFields = null, ?OIDCClient $client = null, int $userId = 0)
     {
         parent::__construct($database, $profileFields, $userId);
         $this->client = $client;
@@ -98,7 +98,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
                 return false;
             }
             $this->readDataById($usr_id);
-            return $this->isNewRecord();
+            return !$this->isNewRecord();
         }
 
     }
@@ -109,8 +109,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
     public function getRoles(): array
     {
         if (!$this->isNewRecord()) {
-            $roles = $this->getRoleMemberships();
-            return array_keys($roles);
+            return $this->getRoleMemberships();
         } else {
             return [];
         }
@@ -124,8 +123,8 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         $roleNames = [];
         if (!$this->isNewRecord()) {
             $roles = $this->getRoleMemberships();
-            foreach ($roles as $roleId => $roleRights) {
-                $role = new Role($this->db, $roleId );
+            foreach ($roles as $roleId) {
+                $role = new Role($this->db, $roleId);
                 if (!$role->isNewRecord()) {
                     $roleNames[$roleId] = $role->getValue('rol_name');
                 }
@@ -145,6 +144,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         }
 
         $groups =  $this->client->getMappedRoleMemberships($this);
+        $userInfo = array();
         if (!$client->getFieldMappingNoDefault()) {
 
             $userInfo = [

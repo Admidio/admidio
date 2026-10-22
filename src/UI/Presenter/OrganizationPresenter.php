@@ -98,7 +98,11 @@ class OrganizationPresenter extends PagePresenter
                     $gL10n->get('SYS_PARENT_ORGANIZATION'),
                     $gDb,
                     $sqlData,
-                    array('defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'), 'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC')
+                    array(
+                        'defaultValue' => $gCurrentOrganization->getValue('org_org_id_parent'),
+                        'firstEntry' => array('', $gL10n->get('SYS_NONE')),
+                        'helpTextId' => 'SYS_PARENT_ORGANIZATION_DESC'
+                    )
                 );
             }
 
@@ -108,6 +112,14 @@ class OrganizationPresenter extends PagePresenter
                 $gCurrentOrganization->getValue('org_show_org_select'),
                 array('helpTextId' => 'SYS_SHOW_ORGANIZATION_SELECT_DESC')
             );
+            if (!$gCurrentOrganization->isChildOrganization() && $gCurrentOrganization->isParentOrganization()) {
+                $formOrganization->addCheckbox(
+                    'org_suborg_use_same_members',
+                    $gL10n->get('ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS'),
+                    $gCurrentOrganization->getValue('org_suborg_use_same_members'),
+                    array('helpTextId' => 'ORG_ENABLE_SUBORGANIZATION_USE_SAME_MEMBERS_DESC')
+                );
+            }
         }
         $formOrganization->addSubmitButton(
             'adm_button_save',

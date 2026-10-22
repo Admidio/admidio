@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 {/if}
-            {elseif {$profileField.id} == 'STREET' || {$profileField.id} == 'POSTCODE' || {$profileField.id} == 'CITY' || {$profileField.id} == 'COUNTRY'}
+            {elseif {$profileField.id} == 'STREET' || {$profileField.id} == 'POSTCODE' || {$profileField.id} == 'CITY' || {$profileField.id} == 'postcodeCity' || {$profileField.id} == 'COUNTRY'}
                     {if $showAddress}
                         {$showAddress = false}
                         <div class="admidio-form-group row mb-3">
@@ -49,18 +49,11 @@
                                 {if $masterData.STREET.value !== ''}
                                     {$masterData.STREET.value}<br />
                                 {/if}
-                                {if $masterData.POSTCODE.value !== '' || $masterData.CITY.value !== ''}
-                                    {if $masterData.POSTCODE.value !== ''}
-                                        {$masterData.POSTCODE.value}
-                                    {/if}
-                                    {if $masterData.POSTCODE.value !== '' && $masterData.CITY.value !== ''}
-                                        &nbsp;
-                                    {/if}
-                                    {if $masterData.CITY.value !== ''}
-                                        {$masterData.CITY.value}
-                                    {/if}
-                                    <br />
+
+                                {if $masterData.postcodeCity.value !== ''}
+                                    {$masterData.postcodeCity.value}<br />
                                 {/if}
+
                                 {if $masterData.COUNTRY.value !== ''}
                                     {$masterData.COUNTRY.value}
                                 {/if}
@@ -78,6 +71,15 @@
                             </div>
                         </div>
                     {/if}
+            {elseif {$profileField.id} == 'BIRTHDAY'}
+                <div class="admidio-form-group row mb-3">
+                    <div class="col-sm-3">
+                        {$profileField.label}
+                    </div>
+                    <div class="col-sm-9">
+                        <strong>{$profileField.value}</strong>{if $profileField.value !== ''} ({$age} {$l10n->get('SYS_YEARS')}){/if}
+                    </div>
+                </div>
             {else}
                 <div class="admidio-form-group row mb-3">
                     <div class="col-sm-3">

@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Roles\Entity;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
@@ -75,6 +76,15 @@ class RolesRights extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'role_right';
+    }
+
+    /**
      * Add all roles of the parameter array to the current roles rights object.
      * @param array<int,int> $roleIds Array with all role ids that should be added.
      * @throws Exception
@@ -99,7 +109,7 @@ class RolesRights extends Entity
      * Initializes all class parameters and deletes all read data.
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         $this->rolesRightsDataObjects = array();
         $this->rolesIds = array();
@@ -153,7 +163,7 @@ class RolesRights extends Entity
             $rolesStatement = $this->db->queryPrepared($sql, $this->rolesIds);
 
             while ($rowRole = $rolesStatement->fetch()) {
-                $arrRolesNames[] = $rowRole['rol_name'];
+                $arrRolesNames[] = Language::translateIfTranslationStrId($rowRole['rol_name']);
             }
         }
 

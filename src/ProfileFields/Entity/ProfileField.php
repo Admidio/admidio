@@ -1,7 +1,11 @@
 <?php
 namespace Admidio\ProfileFields\Entity;
 
+use Admidio\CategoryReport\Entity\CategoryReportColumn;
 use Admidio\ProfileFields\Entity\SelectOptions;
+use Admidio\Changelog\Entity\LogChanges;
+use Admidio\Roles\Entity\ListColumns;
+use Admidio\Users\Entity\UserData;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Image;
@@ -52,10 +56,19 @@ class ProfileField extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'profile_field';
+    }
+
+    /**
      * Additional to the parent method visible roles array and flag will be initialized.
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
 
@@ -79,6 +92,10 @@ class ProfileField extends Entity
         }
 
         $this->db->startTransaction();
+
+        // Deleting a profile field is one action of the user, so the field and every value that is
+        // removed with it belong into one change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
         // close gap in sequence
         $sql = 'UPDATE ' . TBL_USER_FIELDS . '
@@ -104,21 +121,39 @@ class ProfileField extends Entity
         }
 
         // delete all dependencies in other tables, except for the changelog (which needs to be audit proof)
-        $sql = 'DELETE FROM ' . TBL_USER_DATA . '
-                 WHERE usd_usf_id = ? -- $usfId';
-        $this->db->queryPrepared($sql, array($usfId));
+        $this->deleteDependentRecords(
+            new UserData($this->db),
+            array('usd_id'),
+            'usd_usf_id = ?',
+            array($usfId)
+        );
 
-        $sql = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
-                 WHERE lsc_usf_id = ? -- $usfId';
-        $this->db->queryPrepared($sql, array($usfId));
+        $this->deleteDependentRecords(
+            new ListColumns($this->db),
+            array('lsc_id'),
+            'lsc_usf_id = ?',
+            array($usfId)
+        );
 
-        $sql = 'DELETE FROM ' . TBL_USER_FIELD_OPTIONS . '
-                 WHERE ufo_usf_id = ? -- $usfId';
-        $this->db->queryPrepared($sql, array($usfId));
+        $this->deleteDependentRecords(
+            new SelectOptions($this->db, $usfId),
+            array('ufo_id'),
+            'ufo_usf_id = ?',
+            array($usfId)
+        );
+
+        $this->deleteDependentRecords(
+            new CategoryReportColumn($this->db),
+            array('crc_id'),
+            'crc_usf_id = ?',
+            array($usfId)
+        );
 
         $return = parent::delete();
 
-        if (is_object($gCurrentSession)) {
+        LogChanges::endChangeSet($previousChangeSet);
+
+        if (isset($gCurrentSession) && is_object($gCurrentSession)) {
             // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->reloadAllSessions();
         }
@@ -147,7 +182,7 @@ class ProfileField extends Entity
 
         $sql = 'SELECT usf_id
                   FROM ' . TBL_USER_FIELDS . '
-                 WHERE usf_name_intern = ? -- $newNameIntern';
+                 WHERE UPPER(usf_name_intern) = UPPER(?) -- $newNameIntern';
         $userFieldsStatement = $this->db->queryPrepared($sql, array($newNameIntern));
 
         if ($userFieldsStatement->rowCount() > 0) {
@@ -171,7 +206,7 @@ class ProfileField extends Entity
      *               If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '', bool $withObsoleteEnries = true)
+    public function getValue(string $columnName, string $format = '', bool $withObsoleteEnries = true): mixed
     {
         if ($columnName === 'usf_description') {
             if (!isset($this->dbColumns['usf_description'])) {
@@ -192,12 +227,13 @@ class ProfileField extends Entity
             $value = parent::getValue($columnName, $format);
         }
 
-        if ((is_array($value) && empty($value)) || (!is_array($value) && (strlen((string)$value) === 0 || $value === null))) {
+        if ((is_array($value) && empty($value)) || (!is_array($value) && $value === null)) {
             return '';
         }
 
         if ($format !== 'database') {
             switch ($columnName) {
+                case 'usf_description': // fallthrough
                 case 'usf_name': // fallthrough
                 case 'cat_name':
                     // if text is a translation-id then translate it
@@ -274,7 +310,7 @@ class ProfileField extends Entity
     {
         global $gCurrentUserId;
 
-        $requiredInput = $this->getValue('usf_required_input');
+        $requiredInput = (int)$this->getValue('usf_required_input');
 
         if ($requiredInput === ProfileField::USER_FIELD_REQUIRED_INPUT_YES) {
             return true;
@@ -419,7 +455,7 @@ class ProfileField extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gL10n;
 
@@ -428,6 +464,9 @@ class ProfileField extends Entity
                 if ($columnName === 'usf_description') {
                     // don't check value because it contains expected html tags
                     $checkValue = false;
+                } elseif ($columnName === 'usf_default_value' && is_array($newValue)) {
+                    // if default value is an array (for multiselect) then convert it to a string for database storage
+                    $newValue = implode(',', $newValue);
                 } elseif ($columnName === 'usf_cat_id') {
                     $category = new Category($this->db);
                     if (is_int($newValue)) {

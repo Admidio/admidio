@@ -150,5 +150,5 @@ try {
         echo '</div></div>';
     }
 } catch (Throwable $e) {
-    $gMessage->show($e->getMessage());
+    handleException($e);
 }

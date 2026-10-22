@@ -1,0 +1,169 @@
+{* The whole list content, so the state toggle of a plugin without its own menu entry can replace
+   it after an AJAX enable/disable without reloading the page. A plugin with a menu entry reloads
+   the page outright instead, since the menu is not part of this fragment. *}
+<div id="adm_plugins_list">
+{* The plugins that threw while they were loaded. Without this they would merely be absent. *}
+{if count($failures) > 0}
+    <div class="alert alert-danger" id="adm_plugins_failures">
+        <i class="bi bi-exclamation-circle-fill"></i> {$l10n->get('SYS_PLUGIN_LOAD_FAILED')}
+        <ul class="mb-0">
+            {foreach $failures as $failedPlugin => $failureReason}
+                <li><strong>{$failedPlugin}</strong>: {$failureReason}</li>
+            {/foreach}
+        </ul>
+    </div>
+{/if}
+
+<!-- for big screens: Table -->
+<div class="d-none d-md-block">
+    <div class="table-responsive" id="adm_plugins_table">
+        <table id="adm_table_plugins" class="table table-condensed table-hover" style="max-width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 1%;">&nbsp;</th> {* the enabled switch *}
+                    <th style="width: 20%; white-space: nowrap;">{$l10n->get('SYS_NAME')}</th>
+                    <th>{$l10n->get('SYS_DESCRIPTION')}</th>
+                    <th>{$l10n->get('SYS_PLUGIN_VERSION')}</th>
+                    <th>{$l10n->get('SYS_INSTALLED_VERSION')}</th>
+                    <th>&nbsp;</th> {* actions *}
+                </tr>
+            </thead>
+            {foreach $list as $pluginNode}
+                <tbody>
+                    <tr class="admidio-group-heading">
+                        <td id="adm_plugin_group_{$pluginNode.id}" colspan="6">
+                            <a id="adm_plugin_caret_{$pluginNode.id}" class="admidio-icon-link admidio-open-close-caret" data-target="adm_plugin_entries_{$pluginNode.id}">
+                                <i class="bi bi-caret-down-fill"></i>
+                            </a> {$pluginNode.name}
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody id="adm_plugin_entries_{$pluginNode.id}">
+                    {foreach $pluginNode.entries as $pluginEntry}
+                        <tr id="adm_plugin_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
+                            {* The switch shows the state the plugin is in and flips it when clicked. *}
+                            <td class="text-center">
+                                {if $pluginEntry.toggle}
+                                    {* Enabling or disabling is not destructive, so it acts on click without a
+                                       confirmation dialog - the administrator switches several plugins in a row. *}
+                                    <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                       onclick="{$pluginEntry.toggle.dataHref}"
+                                       data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip}"
+                                       aria-label="{$pluginEntry.toggle.label}">
+                                        <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
+                                {/if}
+                            </td>
+                            <td style="white-space: nowrap;">
+                                {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if}
+                                <strong>{$pluginEntry.name}</strong>
+                            </td>
+                            <td>
+                                {$pluginEntry.description}
+                                {include 'modules/plugins.author.tpl' data=$pluginEntry}
+                                {* Nothing is wrong with the plugin here, so this is not a diagnostic. *}
+                                {foreach $pluginEntry.notes as $note}
+                                    <div class="text-warning-emphasis"><small><i class="bi bi-info-circle"></i> {$note}</small></div>
+                                {/foreach}
+                                {* Developer diagnostics in English, not a translated message. *}
+                                {foreach $pluginEntry.diagnostics as $diagnostic}
+                                    <div class="text-danger"><small><code>{$diagnostic}</code></small></div>
+                                {/foreach}
+                            </td>
+                            <td>{$pluginEntry.version}</td>
+                            <td data-bs-toggle="tooltip"
+                                {if $pluginEntry.versionState === 'update'}
+                                    style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                {elseif $pluginEntry.versionState === 'current'}
+                                    style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE')}"
+                                {/if}
+                                >{if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}</td>
+                            <td class="text-end">
+                                {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
+                            </td>
+                        </tr>
+                    {/foreach}
+                </tbody>
+            {/foreach}
+        </table>
+    </div>
+</div>
+
+<!-- for small screens: Cards -->
+<div class="d-block d-md-none admidio-margin-bottom">
+    <div class="accordion" id="adm_plugins_accordion">
+    {foreach $list as $pluginNode name=outer}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading_{$pluginNode.id}">
+                <button class="accordion-button{if not ($smarty.foreach.outer.first)} collapsed{/if}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{$pluginNode.id}" aria-expanded="{if $smarty.foreach.outer.first}true{else}false{/if}" aria-controls="collapse_{$pluginNode.id}">
+                    {$pluginNode.name}
+                </button>
+            </h2>
+            <div class="accordion-collapse collapse{if $smarty.foreach.outer.first} show{/if}" id="collapse_{$pluginNode.id}" aria-labelledby="heading_{$pluginNode.id}" data-bs-parent="#adm_plugins_accordion">
+                <div class="accordion-body">
+                {foreach $pluginNode.entries as $pluginEntry}
+                    <div class="card admidio-accordion-field-group" id="adm_plugin_card_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
+                        <div class="card-header">
+                            {if $pluginEntry.toggle}
+                                <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                   onclick="{$pluginEntry.toggle.dataHref}"
+                                   aria-label="{$pluginEntry.toggle.label}">
+                                    <i class="{$pluginEntry.toggle.icon}"></i></a>
+                            {/if}
+                            {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
+                            <div class="dropdown float-end d-flex">
+                                <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
+                                {if count($pluginEntry.actions) > 0}
+                                    <ul class="dropdown-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
+                                        {foreach $pluginEntry.actions as $actionItem}
+                                            <li>
+                                                <a {if isset($actionItem.popup)} class="dropdown-item openPopup" href="javascript:void(0);"
+                                                    data-class="modal-lg" data-href="{$actionItem.dataHref}"
+                                                        {elseif isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
+                                                    data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                                        {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
+                                                    <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
+                                            </li>
+                                        {/foreach}
+                                    </ul>
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="adm_plugin_card_entry_{$pluginEntry.id}_description">
+                                <strong>{$l10n->get('SYS_DESCRIPTION')}:</strong>
+                                <p>{$pluginEntry.description}</p>
+                                {include 'modules/plugins.author.tpl' data=$pluginEntry}
+                                {foreach $pluginEntry.notes as $note}
+                                    <p class="text-warning-emphasis"><small><i class="bi bi-info-circle"></i> {$note}</small></p>
+                                {/foreach}
+                                {foreach $pluginEntry.diagnostics as $diagnostic}
+                                    <p class="text-danger"><small><code>{$diagnostic}</code></small></p>
+                                {/foreach}
+                            </div>
+                            <div id="adm_plugin_card_entry_{$pluginEntry.id}_version">
+                                <strong>{$l10n->get('SYS_PLUGIN_VERSION')}:</strong>
+                                <p>{$pluginEntry.version}</p>
+                            </div>
+                            <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
+                                <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong>
+                                {if $pluginEntry.versionState === 'not_installed'}
+                                    <p>&ndash;</p>
+                                {elseif $pluginEntry.versionState === 'update'}
+                                    <p><span style="color: var(--bs-warning);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
+                                {elseif $pluginEntry.versionState === 'current'}
+                                    <p><span style="color: var(--bs-success);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
+                                {else}
+                                    <p>{$pluginEntry.installedVersion}</p>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                {/foreach}
+                </div>
+            </div>
+        </div>
+    {/foreach}
+    </div>
+</div>
+</div>

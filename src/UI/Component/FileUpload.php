@@ -2,6 +2,7 @@
 namespace Admidio\UI\Component;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\PagePresenter;
 
@@ -69,7 +70,7 @@ class FileUpload
 
         <span class="btn btn-primary fileinput-button mb-3">
             <i class="bi bi-upload"></i>'.$textSelectFiles.'
-            <input id="fileupload" type="file" name="files[]" multiple>
+            <input id="fileupload" class="btn-secondary" type="file" name="files[]" multiple>
         </span>
         <div id="progress" class="progress mb-5" style="max-width: 600px;">
             <div class="progress-bar progress-bar-success"></div>
@@ -98,6 +99,10 @@ class FileUpload
         $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
         $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/jquery.fileupload.js');
 
+        $serverMaxUpload = PhpIniUtils::getUploadMaxSize();
+        // Capped at 10 MB, minimum 1 MB, leaving 100 KB headroom for multipart form headers
+        $maxChunkSize = min(10000000, max(1000000, $serverMaxUpload - 102400));
+
         $this->page->addJavascript(
             '
             var countErrorFiles = 0;
@@ -110,6 +115,7 @@ class FileUpload
             $("#fileupload").fileupload({
                 url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
                 sequentialUploads: true,
+                maxChunkSize: ' . $maxChunkSize . ',
                 dataType: "json",
                 formData: [{
                     name: "adm_csrf_token",
@@ -135,6 +141,33 @@ class FileUpload
                             countFiles++
                         }
                     });
+                },
+                chunkdone: function(e, data) {
+                    // remember if the server rejected a chunk, so the remaining chunks will not be sent
+                    if (data.result && data.result.files && data.result.files.length > 0
+                        && typeof data.result.files[0].error !== "undefined") {
+                        data.files[0].uploadError = data.result.files[0];
+                    }
+                },
+                chunksend: function(e, data) {
+                    if (typeof data.files[0].uploadError !== "undefined") {
+                        return false;
+                    }
+                },
+                fail: function(e, data) {
+                    $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
+                    let fileName, fileError;
+                    if (typeof data.files[0].uploadError !== "undefined") {
+                        // name and error were already encoded by the server
+                        fileName = data.files[0].uploadError.name;
+                        fileError = data.files[0].uploadError.error;
+                    } else {
+                        fileName = $("<div/>").text(data.files[0].name).html();
+                        fileError = $("<div/>").text(data.errorThrown || data.textStatus).html();
+                    }
+                    $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
+                        + fileName + " - <strong>" + fileError + "</strong></div>").appendTo("#files");
+                    countErrorFiles++;
                 },
                 progressall: function(e, data) {
                     const progress = parseInt(data.loaded / data.total * 100, 10);

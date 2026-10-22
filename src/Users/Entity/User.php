@@ -7,12 +7,17 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\SystemMail;
 use Admidio\Messages\Entity\Message;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Roles\Entity\ListColumns;
+use Admidio\Roles\Entity\ListConfiguration;
+use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Session\Entity\Session;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Changelog\Entity\LogChanges;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\Providers\Qr\QRServerProvider;
@@ -80,13 +85,9 @@ class User extends Entity
      */
     protected array $rolesMembershipNoLeader = array();
     /**
-     * @var int the organization for which the rights are read, could be changed with method **setOrganization**
+     * @var int the organization for which the rights are read could be changed with method **setOrganization**
      */
     protected int $organizationId;
-    /**
-     * @var bool Flag if the user has the right to assign at least one role
-     */
-    protected bool $assignRoles;
     /**
      * @var array<int,bool> Array with all user ids where the current user is allowed to edit the profile.
      */
@@ -105,8 +106,8 @@ class User extends Entity
     protected bool $changeNotificationEnabled;
 
     /**
-     * Constructor that will create an object of a recordset of the users table.
-     * If the id is set than this recordset will be loaded.
+     * Constructor that will create an object of a recordset from the user's table.
+     * If the id is set, then this recordset will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
      * @param ProfileFields|null $userFields An object of the ProfileFields class with the profile field structure
      *                                  of the current organization. This could be the default object **$gProfileFields**.
@@ -119,19 +120,58 @@ class User extends Entity
         $this->changeNotificationEnabled = true;
 
         if ($userFields !== null) {
-            $this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData = clone $userFields; // create an explicit copy of the object (param is in PHP5 a reference)
         } else {
             global $gProfileFields;
-            $this->mProfileFieldsData = clone $gProfileFields; // create explicit a copy of the object (param is in PHP5 a reference)
+            $this->mProfileFieldsData = clone $gProfileFields; // create an explicit copy of the object (param is in PHP5 a reference)
         }
 
         $this->organizationId = $GLOBALS['gCurrentOrgId'];
 
         parent::__construct($database, TBL_USERS, 'usr', $userId);
+
+        if ($this->newRecord) {
+            $this->initializeNewRecord();
+        }
     }
 
     /**
-     * Checks if the current user is allowed to edit a profile field of the user of the parameter.
+     * The values a user record gets because it is being created. An account is active; the one
+     * exception is a registration, which sets **usr_valid** itself in UserRegistration::save() and
+     * is activated later by UserRegistration::acceptRegistration().
+     *
+     * This deliberately does not happen in clear(). clear() is also the step that empties the object
+     * before an existing record is read into it, and a value that is set there stays marked as
+     * changed, so every user that was read from the database carried a pending change of
+     * **usr_valid** that nobody asked for; see finding 86.
+     * @return void
+     * @throws Exception
+     */
+    protected function initializeNewRecord(): void
+    {
+        $this->setValue('usr_valid', 1);
+    }
+
+    /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'user';
+    }
+
+    /**
+     * @return array Returns the columns whose value must not be handed to a hook callback.
+     * @see Entity::getSensitiveHookColumns()
+     */
+    public function getSensitiveHookColumns(): array
+    {
+        return array('usr_password', 'usr_tfa_secret', 'usr_photo');
+    }
+
+    /**
+     * Checks if the current user is allowed to edit a profile field of the user from the parameter.
      * @param User $user User object of the user that should be checked if the current user can view his profile field.
      * @param string $fieldNameIntern Expects the **usf_name_intern** of the field that should be checked.
      * @return bool Return true if the current user is allowed to view this profile field of **$user**.
@@ -252,7 +292,6 @@ class User extends Entity
         }
 
         if (count($this->rolesRights) === 0) {
-            $this->assignRoles = false;
             $tmpRolesRights = array(
                 'rol_all_lists_view' => false,
                 'rol_announcements' => false,
@@ -297,14 +336,6 @@ class User extends Entity
                         // if user is leader in this role than add role id and leader rights to array
                         $this->rolesMembershipLeader[$roleId] = $rolLeaderRights;
 
-                        // if role leader could assign new members then remember this setting
-                        // roles for confirmation of events should be ignored
-                        if (
-                            $row['cat_name_intern'] !== 'EVENTS'
-                            && ($rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN || $rolLeaderRights === Role::ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-                        ) {
-                            $this->assignRoles = true;
-                        }
                     } else {
                         $this->rolesMembershipNoLeader[] = $roleId;
                     }
@@ -319,11 +350,6 @@ class User extends Entity
                         }
                     }
                     unset($value);
-
-                    // set flag assignRoles of user can manage roles
-                    if ((int)$row['rol_assign_roles'] === 1) {
-                        $this->assignRoles = true;
-                    }
 
                     // set administrator flag
                     if ((int)$row['rol_administrator'] === 1) {
@@ -426,7 +452,12 @@ class User extends Entity
     public function checkLogin(string $password, bool $setAutoLogin = false, bool $updateSessionCookies = true, bool $updateHash = true, bool $isAdministrator = false, ?string $totpCode = null): bool
     {
         if ($this->checkPassword($password) && $this->checkMembership($isAdministrator) && $this->checkTotp($totpCode)) {
-            $this->updateSession($setAutoLogin, $updateSessionCookies);
+            $authenticationMethods = array('pwd');
+            if ($this->isTotpAuthenticationRequired()) {
+                $authenticationMethods[] = 'otp';
+            }
+
+            $this->updateSession($setAutoLogin, $updateSessionCookies, $authenticationMethods);        
             if ($updateHash) {
                 $this->rehashIfNecessary($password);
             }
@@ -471,6 +502,21 @@ class User extends Entity
     }
 
     /**
+     * Check whether the current user must authenticate with a TOTP code.
+     * @return bool Returns **true** if TOTP authentication is required.
+     */
+    private function isTotpAuthenticationRequired(): bool
+    {
+        global $gSettingsManager;
+
+        if ($gSettingsManager->has('two_factor_authentication_enabled') && !$gSettingsManager->getBool('two_factor_authentication_enabled')) {
+            return false;
+        }
+
+        return $this->getValue('usr_tfa_secret') !== '';
+    }
+
+    /**
      * Check the totp code of the current user. If the code is correct the session will be updated
      * @param string|null $totpCode The current totp code for the current user.
      * @return true Return true if totp code was correct
@@ -512,12 +558,15 @@ class User extends Entity
         return false;
     }
 
-    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true): bool
+    private function updateSession(bool $setAutoLogin = false, bool $updateSessionCookies = true, array $authenticationMethods = array('pwd')): bool
     {
         global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
             $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
+            $gCurrentSession->setValue('ses_authentication_time', DATETIME_NOW);
+            $gCurrentSession->setValue('ses_authentication_methods', implode(' ', $authenticationMethods));
+            $gCurrentSession->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
             $gCurrentSession->save();
         }
 
@@ -547,13 +596,9 @@ class User extends Entity
      * @return void
      * @throws Exception
      */
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
-
-        // new user should be valid (except registration)
-        $this->setValue('usr_valid', 1);
-        $this->columnsValueChanged = false;
 
         if (isset($this->mProfileFieldsData)) {
             // data of all profile fields will be deleted, the internal structure will not be destroyed
@@ -570,22 +615,13 @@ class User extends Entity
 
     /**
      * Deletes the selected user of the table and all the many references in other tables.
-     * Also, a notification that the user was deleted will be sent if notification is enabled.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
      * @throws Exception
      */
     public function delete(): bool
     {
-        global $gChangeNotification;
-
         $usrId = $this->getValue('usr_id');
-
-        // only send notification if a valid user will be deleted
-        if (is_object($gChangeNotification) && $this->getValue('usr_valid')) {
-            // Register all non-empty fields for the notification
-            $gChangeNotification->logUserDeletion($usrId, $this);
-        }
 
         // first delete send messages from the user
         $sql = 'SELECT msg_id FROM ' . TBL_MESSAGES . ' WHERE msg_usr_id_sender = ? -- $usrId';
@@ -676,40 +712,32 @@ class User extends Entity
                             SET usr_usr_id_change = NULL
                             WHERE usr_usr_id_change = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LIST_COLUMNS . '
-                          WHERE lsc_lst_id IN (SELECT lst_id
-                                                 FROM ' . TBL_LISTS . '
-                                                WHERE lst_usr_id = ' . $usrId . '
-                                                AND lst_global = false)';
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_LISTS . '
-                          WHERE lst_global = false
-                          AND lst_usr_id = ' . $usrId;
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_GUESTBOOK_COMMENTS . '
-        WHERE gbc_usr_id_create = ' . $usrId;
-
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MEMBERS . '
-                          WHERE mem_usr_id = ' . $usrId;
-
-        // MySQL couldn't create delete statement with same table in a sub query.
-        // Therefore, we fill a temporary table with all ids that should be deleted and reference on this table
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
                           WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
+        // delete all PM messages where the user is sender or recipient
         $sqlQueries[] = 'INSERT INTO ' . TBL_IDS . '
                                 (ids_usr_id, ids_reference_id)
-                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msc_msg_id
-                           FROM ' . TBL_MESSAGES_CONTENT . '
-                          WHERE msc_usr_id = ' . $usrId;
+                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msr_msg_id
+                           FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          INNER JOIN ' . TBL_MESSAGES . ' ON msg_id = msr_msg_id
+                          WHERE msr_usr_id = ' . $usrId . '
+                            AND msg_type = \'PM\'';
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
-                          WHERE msc_msg_id IN (SELECT ids_reference_id
-                                                 FROM ' . TBL_IDS . '
-                                                WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
+        $sqlQueries[] = 'INSERT INTO ' . TBL_IDS . '
+                                (ids_usr_id, ids_reference_id)
+                         SELECT ' . $GLOBALS['gCurrentUserId'] . ', msg_id
+                           FROM ' . TBL_MESSAGES . '
+                          WHERE msg_usr_id_sender = ' . $usrId . '
+                            AND msg_type = \'PM\' ';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
                           WHERE msr_msg_id IN (SELECT ids_reference_id
+                                                 FROM ' . TBL_IDS . '
+                                                WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
+
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
+                          WHERE msc_msg_id IN (SELECT ids_reference_id
                                                  FROM ' . TBL_IDS . '
                                                 WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'] . ')';
 
@@ -721,16 +749,27 @@ class User extends Entity
         $sqlQueries[] = 'DELETE FROM ' . TBL_IDS . '
                           WHERE ids_usr_id = ' . $GLOBALS['gCurrentUserId'];
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_usr_id = ' . $usrId;
-
+        // delete all messages that were sent by the user
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_CONTENT . '
-                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_msg_id = msc_msg_id)';
+                          WHERE msc_msg_id IN (SELECT msg_id
+                                                 FROM ' . TBL_MESSAGES . '
+                                                WHERE msg_usr_id_sender = ' . $usrId . ')';
+
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          WHERE msr_msg_id IN (SELECT msg_id
+                                                 FROM ' . TBL_MESSAGES . '
+                                                WHERE msg_usr_id_sender = ' . $usrId . ')';
+
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_ATTACHMENTS . '
+                          WHERE msa_msg_id IN (SELECT msg_id
+                                                 FROM ' . TBL_MESSAGES . '
+                                                WHERE msg_usr_id_sender = ' . $usrId . ')';
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES . '
-                          WHERE NOT EXISTS (SELECT 1 FROM ' . TBL_MESSAGES_RECIPIENTS . '
-                          WHERE msr_msg_id = msg_id)';
+                          WHERE msg_usr_id_sender = ' . $usrId;
+
+        $sqlQueries[] = 'DELETE FROM ' . TBL_MESSAGES_RECIPIENTS . '
+                          WHERE msr_usr_id = ' . $usrId;
 
         $sqlQueries[] = 'DELETE FROM ' . TBL_REGISTRATIONS . '
                           WHERE reg_usr_id = ' . $usrId;
@@ -741,16 +780,48 @@ class User extends Entity
         $sqlQueries[] = 'DELETE FROM ' . TBL_SESSIONS . '
                           WHERE ses_usr_id = ' . $usrId;
 
-        $sqlQueries[] = 'DELETE FROM ' . TBL_USER_DATA . '
-                          WHERE usd_usr_id = ' . $usrId;
-
         $this->db->startTransaction();
+
+        // Deleting a user is one action of the user, so everything that is removed together with
+        // the user belongs into one change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
 
         foreach ($sqlQueries as $sqlQuery) {
             $this->db->query($sqlQuery); // TODO add more params
         }
 
+        // The columns of a list must be removed before the list itself, they are selected through it.
+        $this->deleteDependentRecords(
+            new ListColumns($this->db),
+            array('lsc_id'),
+            'lsc_lst_id IN (SELECT lst_id FROM ' . TBL_LISTS . ' WHERE lst_usr_id = ? AND lst_global = false)',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new ListConfiguration($this->db),
+            array('lst_id'),
+            'lst_global = false AND lst_usr_id = ?',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new Membership($this->db),
+            array('mem_id'),
+            'mem_usr_id = ?',
+            array($usrId)
+        );
+
+        $this->deleteDependentRecords(
+            new UserData($this->db),
+            array('usd_id'),
+            'usd_usr_id = ?',
+            array($usrId)
+        );
+
         $returnValue = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->db->endTransaction();
 
@@ -770,8 +841,9 @@ class User extends Entity
     /**
      * Changes to user data could be sent as a notification email to a specific role if this
      * function is enabled in the settings. If you want to suppress this logic you can
-     * explicit disable it with this method for this user. So no changes to this user object will
-     * result in a notification email.
+     * explicit disable it with this method for this user. So no change of this user will result in
+     * a notification email, whether it is made through this object or not: save() names the user to
+     * ChangeNotification::suppressUser() as soon as the record has an id.
      * @return void
      */
     public function disableChangeNotification()
@@ -926,6 +998,8 @@ class User extends Entity
      */
     public function getRolesViewProfiles(): array
     {
+        $this->checkRolesRight();
+
         return $this->rolesViewProfilesUUID;
     }
 
@@ -935,6 +1009,8 @@ class User extends Entity
      */
     public function getRolesViewMemberships(): array
     {
+        $this->checkRolesRight();
+
         return $this->rolesViewMembershipsUUID;
     }
 
@@ -944,6 +1020,8 @@ class User extends Entity
      */
     public function getRolesWriteMails(): array
     {
+        $this->checkRolesRight();
+
         return $this->rolesWriteMailsUUID;
     }
 
@@ -1020,12 +1098,24 @@ class User extends Entity
      * ```
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = '')
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         global $gSettingsManager;
 
         if (!str_starts_with($columnName, 'usr_')) {
-            return $this->mProfileFieldsData->getValue($columnName, $format);
+            $value = $this->mProfileFieldsData->getValue($columnName, $format);
+            if ($columnName === 'LAST_NAME' && $format !== 'database' && $value === 'SYS_SYSTEM'
+                && parent::getValue('usr_login_name', 'database') === 'SYS_SYSTEM'
+                && !parent::getValue('usr_valid', 'database')) {
+                return $GLOBALS['gL10n']->get('SYS_SYSTEM');
+            }
+            return $value;
+        }
+
+        if ($columnName === 'usr_login_name' && $format !== 'database'
+            && parent::getValue($columnName, 'database') === 'SYS_SYSTEM'
+            && !parent::getValue('usr_valid', 'database')) {
+            return $GLOBALS['gL10n']->get('SYS_SYSTEM');
         }
 
         if ($columnName === 'usr_photo' && (int)$gSettingsManager->get('profile_photo_storage') === 0) {
@@ -1528,15 +1618,33 @@ class User extends Entity
         return $this->checkRolesRight('rol_documents_files');
     }
 
-        /**
-     * This method checks if the current user is allowed to administrate documents and files. With this right he can
-     * create and edit folders, upload new files and set rights for other users in this module
+    /**
+     * This method checks if the current user is allowed to administrate the inventory. With this right he can
+     * administrate all inventory functionalities
      * @return bool Return **true** if the user is admin of the module otherwise **false**
      * @throws Exception
      */
     public function isAdministratorInventory(): bool
     {
         return $this->checkRolesRight('rol_inventory_admin');
+    }
+
+    /**
+     * This method checks if the current user is allowed to see the inventory.
+     * @return bool Return **true** if the user is admin of the module otherwise **false**
+     * @throws Exception
+     */
+    public function isAllowedToViewInventory() : bool
+    {
+        global $gSettingsManager;
+        $allowedRoles = explode(',', $gSettingsManager->get('inventory_visible_for'));
+        $roleMemberships = $this->getRoleMemberships();
+        foreach($roleMemberships as $roleId) {
+            if(in_array($roleId, $allowedRoles)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1645,12 +1753,24 @@ class User extends Entity
     }
 
     /**
+     * This method checks if the current user is allowed to view all user profile.
+     * @return bool Return **true** if the user is allowed to view all user profile otherwise **false**
+     * @throws Exception
+     */
+    public function isAllowedToViewUsers() : bool
+    {
+        return $this->checkRolesRight('rol_all_lists_view');
+    }
+
+    /**
      * check if user is leader of a role
      * @param int $roleId
      * @return bool
      */
     public function isLeaderOfRole(int $roleId): bool
     {
+        $this->checkRolesRight();
+
         return array_key_exists($roleId, $this->rolesMembershipLeader);
     }
 
@@ -1691,6 +1811,8 @@ class User extends Entity
      */
     public function isMemberOfRole(int $roleId): bool
     {
+        $this->checkRolesRight();
+
         return in_array($roleId, $this->rolesMembership, true);
     }
 
@@ -1720,34 +1842,76 @@ class User extends Entity
     {
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             if (isset($this->mProfileFieldsData)) {
-                // read data of all user fields from current user
+                // read data of all user fields from the current user
                 $this->mProfileFieldsData->readUserData($this->getValue('usr_id'), $this->organizationId);
             }
             return true;
-        } else {
-            $this->setDefaultValues();
         }
 
         return false;
     }
 
     /**
+     * Reads a record out of the table in the database selected by the unique id column in the table.
+     * Per default, all columns of the default table will be read and stored in the object.
+     * @param int $id Unique id of id column of the table.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataByUuid
+     */
+    public function readDataById(int $id): bool
+    {
+        $returnValue = parent::readDataById($id);
+
+        if ($id === 0) {
+            $this->initializeNewRecord();
+            $this->setDefaultValues();
+        }
+
+        return $returnValue;
+    }
+
+    /**
+     * Reads a record out of the table in the database selected by the unique uuid column in the table.
+     * The name of the column must have the syntax table_prefix, underscore and uuid. E.g., usr_uuid.
+     * Per default, all columns of the default table will be read and stored in the object.
+     * Not every Admidio table has a UUID. Please check the database structure before you use this method.
+     * @param string $uuid Unique uuid that should be searched.
+     * @return bool Returns **true** if one record is found
+     * @throws Exception
+     * @see Entity#readDataByColumns
+     * @see Entity#readData
+     * @see Entity#readDataById
+     */
+    public function readDataByUuid(string $uuid): bool
+    {
+        $returnValue = parent::readDataByUuid($uuid);
+
+        if ($uuid === '') {
+            $this->initializeNewRecord();
+            $this->setDefaultValues();
+        }
+
+        return $returnValue;
+    }
+
+    /**
      * Rehashes the password of the user if necessary.
      * @param string $password The password for the current user. This should not be encoded.
-     * @return bool Returns true if password was rehashed.
+     * @return void Returns true if password was rehashed.
      * @throws Exception
      */
-    private function rehashIfNecessary(string $password): bool
+    private function rehashIfNecessary(string $password): void
     {
         if (!PasswordUtils::needsRehash($this->getValue('usr_password'))) {
-            return false;
+            return;
         }
 
         $this->saveChangesWithoutRights();
         $this->setPassword($password);
-        $this->save(); // TODO Exception handling
-
-        return true;
+        $this->save();
     }
 
     /**
@@ -1807,6 +1971,11 @@ class User extends Entity
 
         $this->db->startTransaction();
 
+        // The user record and the records of its profile fields are saved one by one, but they are
+        // one single change of the user. Open a change set around all of them, so that the change
+        // history can show the profile fields that one save has modified together.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         // if new user then set create id and the uuid
         $updateCreateUserId = false;
         if ($usrId === 0) {
@@ -1820,8 +1989,6 @@ class User extends Entity
         if (isset($this->mProfileFieldsData) && $this->mProfileFieldsData->hasColumnsValueChanged()) {
             $this->columnsValueChanged = true;
         }
-
-        $newRecord = $this->newRecord;
 
         $returnValue = parent::save($updateFingerPrint);
         $usrId = (int)$this->getValue('usr_id'); // if a new user was created get the new id
@@ -1843,13 +2010,13 @@ class User extends Entity
             // because he has new data and maybe new rights
             $gCurrentSession->reload($usrId);
         }
-        // The record is a new record, which was just stored to the database
-        // for the first time => record it as a user creation now
-        if ($newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
-            // Register all non-empty fields for the notification
-            $gChangeNotification->logUserCreation($usrId, $this);
+        // The change notification listens to the hooks of adm_users, adm_user_data and adm_members,
+        // so a user whose notification is switched off has to be named once, now that the record has
+        // an id. Everything else about that user follows from the hooks alone.
+        if (!$this->changeNotificationEnabled && is_object($gChangeNotification)) {
+            $gChangeNotification->suppressUser($usrId);
         }
-
+        LogChanges::endChangeSet($previousChangeSet);
         $this->db->endTransaction();
 
         return $returnValue;
@@ -1873,9 +2040,15 @@ class User extends Entity
         $foundUserIds = array();
         $lastName = $this->db->escapeString($this->getValue('LAST_NAME', 'database'));
         $firstName = $this->db->escapeString($this->getValue('FIRST_NAME', 'database'));
+        $organization = new Organization($this->db, $this->organizationId);
+        $sharedOrganizationIds = $organization->getSharedUsersOrganizationIds();
 
-        // search for users with similar names (SQL function SOUNDEX only available in MySQL)
-        if (DB_ENGINE === Database::PDO_ENGINE_MYSQL && $gSettingsManager->getBool('system_search_similar')) {
+        if (count($sharedOrganizationIds) === 0) {
+            return $foundUserIds;
+        }
+
+        // search for users with similar names (SQL function SOUNDEX only available in MySQL or MariaDB)
+        if (DB_TYPE !== Database::PDO_ENGINE_PGSQL && $gSettingsManager->getBool('system_search_similar')) {
             $sqlSimilarName =
                 '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) = SUBSTRING(SOUNDEX(' . $lastName . '), 1, 4)
                 AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) = SUBSTRING(SOUNDEX(' . $firstName . '), 1, 4) )
@@ -1907,11 +2080,23 @@ class User extends Entity
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = ? -- $gProfileFields->getProperty(\'FIRST_NAME\', \'usf_id\')
                  WHERE usr_valid = true
+               AND EXISTS (
+                SELECT 1
+                  FROM ' . TBL_MEMBERS . '
+                INNER JOIN ' . TBL_ROLES . '
+                    ON rol_id = mem_rol_id
+                INNER JOIN ' . TBL_CATEGORIES . '
+                    ON cat_id = rol_cat_id
+                 WHERE mem_usr_id = usr_id
+                   AND rol_valid = true
+                   AND cat_org_id IN (' . Database::getQmForValues($sharedOrganizationIds) . ')
+                   )
                    AND ' . $sqlSimilarName;
         $queryParams = array(
             $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'),
             $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id')
         );
+        $queryParams = array_merge($queryParams, $sharedOrganizationIds);
         $usrStatement = $this->db->queryPrepared($sql, $queryParams);
 
         while ($row = $usrStatement->fetch()) {
@@ -1946,7 +2131,7 @@ class User extends Entity
             $sysMail = new SystemMail($this->db);
             $sysMail->addRecipientsByUser($this->getValue('usr_uuid'));
             $sysMail->setVariable(1, $password);
-            $sysMail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $this);
+            $sysMail->sendSystemMail('SYSMAIL_LOGIN_INFORMATION', $this);
         } else {
             throw new Exception('SYS_NO_RIGHTS');
         }
@@ -1958,7 +2143,7 @@ class User extends Entity
      * @return void
      * @throws Exception
      */
-    public function setDefaultValues()
+    public function setDefaultValues(): void
     {
         foreach ($this->mProfileFieldsData->getProfileFields() as $profileField) {
             $defaultValue = $profileField->getValue('usf_default_value');
@@ -1975,7 +2160,7 @@ class User extends Entity
      * @param int $organizationId ID of the organization
      * @return void
      */
-    public function setOrganization(int $organizationId)
+    public function setOrganization(int $organizationId): void
     {
         if ($organizationId !== $this->organizationId) {
             $this->organizationId = $organizationId;
@@ -1993,19 +2178,9 @@ class User extends Entity
      */
     public function setPassword(string $newPassword, bool $doHashing = true): bool
     {
-        global $gSettingsManager, $gPasswordHashAlgorithm, $gChangeNotification;
+        global $gSettingsManager, $gPasswordHashAlgorithm;
 
         if (!$doHashing) {
-            if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
-                $gChangeNotification->logUserChange(
-                    (int)$this->getValue('usr_id'),
-                    'usr_password',
-                    $this->getValue('usr_password'),
-                    $newPassword,
-                    "MODIFIED",
-                    $this
-                );
-            }
             return parent::setValue('usr_password', $newPassword, false);
         }
 
@@ -2021,16 +2196,6 @@ class User extends Entity
             return false;
         }
 
-        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
-            $gChangeNotification->logUserChange(
-                (int)$this->getValue('usr_id'),
-                'usr_password',
-                $this->getValue('usr_password'),
-                $newPasswordHash,
-                "MODIFIED",
-                $this
-            );
-        }
         if (parent::setValue('usr_password', $newPasswordHash, false)) {
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
@@ -2048,18 +2213,6 @@ class User extends Entity
      */
     public function setSecondFactorSecret(string|null $newSecret): bool
     {
-        global $gChangeNotification;
-
-        if ($this->changeNotificationEnabled && is_object($gChangeNotification)) {
-            $gChangeNotification->logUserChange(
-                (int)$this->getValue('usr_id'),
-                'usr_tfa_secret',
-                $this->getValue('usr_tfa_secret'),
-                $newSecret || 'null',
-                "MODIFIED",
-                $this
-            );
-        }
         if (parent::setValue('usr_tfa_secret', $newSecret, false)) {
             // for security reasons remove all sessions and auto login of the user
             return $this->invalidateAllOtherLogins();
@@ -2105,9 +2258,9 @@ class User extends Entity
      * ```
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
-        global $gSettingsManager, $gChangeNotification;
+        global $gSettingsManager;
 
         // users data from adm_users table
         if (str_starts_with($columnName, 'usr_')) {
@@ -2126,21 +2279,6 @@ class User extends Entity
                 return true;
             }
 
-            // For new records, do not immediately queue all changes for notification,
-            // as the record might never be saved to the database (e.g. when
-            // doing a check for an existing user)! => For new records,
-            // log the changes only when $this->save is called!
-            if (!$this->newRecord && $this->changeNotificationEnabled && is_object($gChangeNotification)) {
-                $gChangeNotification->logUserChange(
-                    $this->getValue('usr_id'),
-                    $columnName,
-                    (string)$this->getValue($columnName),
-                    (string)$newValue,
-                    "MODIFIED",
-                    $this
-                );
-            }
-
             return parent::setValue($columnName, $newValue, $checkValue);
         }
 
@@ -2157,9 +2295,9 @@ class User extends Entity
 
         // format of date will be local but database hase stored Y-m-d format must be changed for compare
         if ($this->mProfileFieldsData->getProperty($columnName, 'usf_type') === 'DATE') {
-            $date = \DateTime::createFromFormat($gSettingsManager->getString('system_date'), $newValue);
+            $date = DateTimeUtils::parseDate($newValue);
 
-            if ($date !== false) {
+            if ($date !== null) {
                 $newValue = $date->format('Y-m-d');
             }
         } elseif (
@@ -2188,27 +2326,6 @@ class User extends Entity
             || $this->saveChangesWithoutRights === true
         ) {
             $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
-        }
-
-        // Not all changes are logged. Exceptions:
-        // Fields starting with usr_ (special case above)
-        // Fields that have not changed (check above)
-        // If usr_id is 0 (the user is newly created; this is already documented) (check in logProfileChange)
-
-        if ($returnCode && !$this->newRecord && is_object($gChangeNotification)) {
-            $gChangeNotification->logProfileChange(
-                $this->getValue('usr_id'),
-                $this->mProfileFieldsData->getProperty($columnName, 'usf_id'),
-                $columnName, // TODO: is $columnName the internal name or the human-readable?
-                // Old and new values in human-readable version:
-                (string)$oldFieldValue,
-                (string)$this->mProfileFieldsData->getValue($columnName),
-                // Old and new values in raw database:
-                (string)$oldFieldValue_db,
-                (string)$newValue,
-                "MODIFIED",
-                $this
-            );
         }
 
         return $returnCode;
@@ -2247,12 +2364,12 @@ class User extends Entity
      */
     public function readableName(): string
     {
-        return $this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME');
+        return $this->filterReadableName($this->mProfileFieldsData->getValue('LAST_NAME') . ', ' . $this->mProfileFieldsData->getValue('FIRST_NAME'));
     }
 
     /**
      * Retrieve the list of database fields that are ignored for the changelog.
-     * For the users table, we also ignore usr_valid, usr_*_login, etc.
+     * For the users table, we also ignore the login counters, the password reset token, etc.
      *
      * @return array Returns the list of database columns to be ignored for logging.
      */
@@ -2267,23 +2384,22 @@ class User extends Entity
         $ignored[] = 'usr_number_login';
         $ignored[] = 'usr_date_invalid';
         $ignored[] = 'usr_number_invalid';
-        $ignored[] = 'usr_valid';
         return $ignored;
     }
 
     /**
-     * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stores, so indicate this by '[...]', too.
+     * Adjust the changelog entry for this db record: Don't store the actual password, just '********'. Also, the photo cannot be stored, so indicate this by '[...]', too.
      *
      * @param LogChanges $logEntry The log entry to adjust
      *
      * @return void
      */
-    protected function adjustLogEntry(LogChanges $logEntry)
+    protected function adjustLogEntry(LogChanges $logEntry): void
     {
-        if ($logEntry->getValue('log_field') == 'usr_password') {
+        if (in_array($logEntry->getValue('log_field'), array('usr_password', 'usr_tfa_secret'))) {
             $logEntry->setValue('log_value_old', '********');
             $logEntry->setValue('log_value_new', '********');
-        } elseif ($logEntry->getValue('log_field') == 'usr_photo') {
+        } elseif ($logEntry->getValue('log_field') === 'usr_photo') {
             $logEntry->setValue('log_value_old', '[...]');
             $logEntry->setValue('log_value_new', '[...]');
         }

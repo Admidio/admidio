@@ -1,8 +1,10 @@
 <?php
 namespace Admidio\Infrastructure;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Reads language specific texts that are identified with text ids out of language xml files
@@ -85,19 +87,42 @@ class Language
             $this->setLanguage($language);
         }
 
+        $customLanguageFolderPath = ADMIDIO_PATH . FOLDER_DATA . FOLDER_LANGUAGES;
+
+        if (is_dir($customLanguageFolderPath)) {
+            $this->addLanguageFolderPath($customLanguageFolderPath);
+        }
+
         $this->addLanguageFolderPath(ADMIDIO_PATH . FOLDER_LANGUAGES);
 
         $this->addPluginLanguageFolderPaths();
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Exclude SimpleXMLElement objects while retaining the legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
-        return array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0" . self::class . "\0" . $name,
+            array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
+        $this->__wakeup();
+    }
+
+    /** Normalize legacy language codes when restoring an existing session. */
+    public function __wakeup(): void
+    {
+        $this->languages = array();
+        $this->setLanguage($this->language);
     }
 
     /**
@@ -123,10 +148,10 @@ class Language
     }
 
     /**
-     * Read language folder of each plugin in adm_plugins and add this folder to the language folder
+     * Read language folder of each plugin in plugins and add this folder to the language folder
      * array of this class.
      */
-    public function addPluginLanguageFolderPaths()
+    public function addPluginLanguageFolderPaths(): void
     {
         global $gLogger;
 
@@ -182,6 +207,9 @@ class Language
             }
         }
 
+        require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
+        $languageSelected = self::resolveLanguageCode($languageSelected, $gSupportedLanguages);
+
         // special case for the german language code
         if ($languageSelected === 'de' && $defaultLanguage === 'de-DE') {
             $languageSelected = 'de-DE';
@@ -228,11 +256,55 @@ class Language
             // Read language folders of the plugins. Maybe there was a new plugin installed.
             $this->addPluginLanguageFolderPaths();
 
-            // no text found then write #undefined text#
-            return '#' . $textId . '#';
+            $text = $this->resolveMissingText($textId);
+
+            if ($text === null) {
+                // no text found then write #undefined text#
+                return '#' . $textId . '#';
+            }
+        }
+
+        // The filter runs on every text and after the cache, because it is the only one of the
+        // translation hooks that may depend on more than the text id and the language - the page
+        // that is being built, or who is looking at it. It is skipped entirely while nobody listens,
+        // which is one array lookup per text.
+        if (Hooks::hasFilter('translation_text')) {
+            $text = Hooks::applyTypedFilters('translation_text', $text, $textId, $this->language);
         }
 
         return self::prepareTextPlaceholders($text, $params);
+    }
+
+    /**
+     * Ask the **translation_missing** resolver for a text that neither the language of the
+     * installation nor the reference language has, so that a plugin can supply the texts of its own
+     * without shipping an XML file for every language.
+     *
+     * The answer is put into the text cache, which lives in the session, so it is asked once per text
+     * and session and not once per request. A plugin whose texts change - because it was switched off,
+     * or because someone edited them - tells Admidio the same way the profile fields do, with
+     * Session::reloadAllSessions(); the next request of every session then rebuilds this object and
+     * its cache.
+     *
+     * When nobody has an answer, **translation_unresolved** is dispatched as a diagnostic. It is a
+     * diagnostic and must not be able to break the page, so it is dispatched with
+     * doActionCatchErrors().
+     *
+     * @param string $textId Unique text id of the text that was not found.
+     * @return string|null Returns the text, or **null** if nobody has one.
+     */
+    private function resolveMissingText(string $textId): ?string
+    {
+        $text = Hooks::resolve('translation_missing', null, $textId, $this->language);
+
+        if (is_string($text)) {
+            $this->textCache[$textId] = $text;
+            return $text;
+        }
+
+        Hooks::doActionCatchErrors('translation_unresolved', $textId, $this->language);
+
+        return null;
     }
 
     /**
@@ -352,7 +424,7 @@ class Language
     }
 
     /**
-     * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
+     * Returns the language code needed by libraries such as the datepicker.
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguageLibs(): string
@@ -385,16 +457,27 @@ class Language
         // first search text id in text-cache
         try {
             return $this->getTextCache($textId);
-        } catch (\OutOfBoundsException $exception) {
+        } catch (\OutOfBoundsException) {
             // if text id wasn't found than search for it in language
             try {
                 // search for text id in every \SimpleXMLElement (language file) of the object array
                 return $this->searchTextIdInLangObject($this->xmlLanguageObjects, $this->language, $textId);
-            } catch (\OutOfBoundsException $exception) {
+            } catch (\OutOfBoundsException) {
                 // if text id wasn't found than search for it in reference language
                 try {
                     // search for text id in every \SimpleXMLElement (language file) of the object array
-                    return $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this::REFERENCE_LANGUAGE, $textId);
+                    $text = $this->searchTextIdInLangObject($this->xmlRefLanguageObjects, $this::REFERENCE_LANGUAGE, $textId);
+
+                    // The text exists, but not in the language that was asked for. This is the only
+                    // place that knows it: searchLanguageText() writes the text into the cache without
+                    // its provenance, so every later request of the session is answered from the cache
+                    // and cannot tell the two apart. Once per text and session is what a translator
+                    // needs to collect what is missing.
+                    if ($this->language !== $this::REFERENCE_LANGUAGE) {
+                        Hooks::doActionCatchErrors('translation_fallback_used', $textId, $this->language, $this::REFERENCE_LANGUAGE);
+                    }
+
+                    return $text;
                 } catch (\OutOfBoundsException $exception) {
                     throw new \OutOfBoundsException($exception->getMessage());
                 }
@@ -480,8 +563,7 @@ class Language
             $text = StringUtils::strMultiReplace($text, $replaces);
         }
 
-        // replace square brackets with html tags
-        return strtr($text, '[]', '<>');
+        return $text;
     }
 
     /**
@@ -490,7 +572,7 @@ class Language
      */
     private static function prepareXmlText(string $text): string
     {
-        // set line break with html
+        // set line break with HTML
         // Within Android string resource all apostrophe are escaped, so we must remove the escape char
         // replace highly comma, so there are no problems in the code later
         $replaces = array(
@@ -527,18 +609,17 @@ class Language
             }
         }
 
-        // text not in cache -> read from xml file in "Android Resource String" format
+        // text not in cache -> read from XML file in "Android Resource String" format
         $xmlNodes = $xmlLanguageObjects[$languageFilePath]->xpath('/resources/string[@name="'.$textId.'"]');
 
         if ($xmlNodes === false || count($xmlNodes) === 0) {
-            throw new \OutOfBoundsException('Could not found text-id!');
+            throw new \OutOfBoundsException('Could not find text-id!');
         }
 
-        $text = self::prepareXmlText((string) $xmlNodes[0]);
+        // replace square brackets with HTML tags
+        $this->textCache[$textId] = strtr(self::prepareXmlText((string) $xmlNodes[0]), '[]', '<>');
 
-        $this->textCache[$textId] = $text;
-
-        return $text;
+        return $this->textCache[$textId];
     }
 
     /**
@@ -556,12 +637,39 @@ class Language
                 $languageFilePath = $languageFolderPath . '/' . $language . '.xml';
 
                 return $this->searchLanguageText($xmlLanguageObjects, $languageFilePath, $textId);
-            } catch (\OutOfBoundsException $exception) {
+            } catch (\OutOfBoundsException) {
                 // continue searching, no debug output because this will be default way if you have several language path through plugins
             }
         }
 
-        throw new \OutOfBoundsException('Could not found text-id!');
+        throw new \OutOfBoundsException('Could not find text-id!');
+    }
+
+    /**
+     * Resolve supported locales and legacy codes while retaining the base-language fallback.
+     * @param string $language Requested language code.
+     * @param array<string,array<string,string>> $supportedLanguages Supported language definitions.
+     * @return string|false The supported language code, or false if no matching language exists.
+     */
+    private static function resolveLanguageCode(string $language, array $supportedLanguages): string|false
+    {
+        $parts = explode('-', $language, 2);
+        $language = strtolower($parts[0]);
+        if (isset($parts[1])) {
+            $language .= '-' . strtoupper($parts[1]);
+        }
+
+        foreach (array($language, substr($language, 0, 2)) as $candidate) {
+            // Older preferences and browser headers use pt for Portuguese as spoken in Portugal.
+            if ($candidate === 'pt') {
+                $candidate = 'pt-PT';
+            }
+            if (array_key_exists($candidate, $supportedLanguages)) {
+                return $candidate;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -573,7 +681,8 @@ class Language
     {
         require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
-        if (!array_key_exists($language, $gSupportedLanguages)) {
+        $language = self::resolveLanguageCode($language, $gSupportedLanguages);
+        if ($language === false) {
             return false;
         }
 
@@ -608,4 +717,22 @@ class Language
 
         return $string;
     }
+
+    /** Return a name and matching translation IDs for lookups accepting localized names.
+     * @param string $text Displayed name to look up.
+     * @param array<string> $textIds IDs which are valid in the calling context.
+     * @return array<string>
+     */
+    public static function getTranslationCandidates(string $text, array $textIds): array
+    {
+        $candidates = array($text);
+        foreach ($textIds as $id) {
+            $translated = html_entity_decode(self::translateIfTranslationStrId($id), ENT_QUOTES, 'UTF-8');
+            if (StringUtils::strToUpper($translated) === StringUtils::strToUpper($text)) {
+                $candidates[] = $id;
+            }
+        }
+        return array_values(array_unique($candidates));
+    }
+
 }

@@ -7,6 +7,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\Entity\RolesRights;
 use DateTime;
 use RuntimeException;
@@ -58,34 +59,25 @@ class DocumentsService
 
     /**
      * Send the file to the user for download. Optional the parameter inline could be set and then the file will
-     * be shown in the browser.
+     * be shown in the browser if its file type allows it.
      * @param string $fileUUID The UUID of the file that should be downloaded.
-     * @param bool $inline If set to **true** than the output will be sent inline otherwise as attachment.
+     * @param bool $inline Request inline output for viewable file types, otherwise send an attachment.
      * @return void
      * @throws Exception
      */
     public function downloadFile(string $fileUUID, bool $inline = false): void
     {
-        // get recordset of current file from database
-        $file = new File($this->db);
-        $file->getFileForDownload($fileUUID);
+        $file = $this->prepareFileDownload($fileUUID);
 
         // get complete path with filename of the file
         $completePath = $file->getFullFilePath();
 
-        // check if the file already exists
-        if (!is_file($completePath)) {
-            throw new Exception('SYS_FILE_NOT_EXIST');
-        }
-
-        // Increment download counter
-        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
-        $file->save();
-
         // determine filesize
         $fileSize = filesize($completePath);
 
-        if ($inline) {
+        // Only explicitly viewable types may be rendered on the Admidio origin.
+        // Other types, such as SVG, can contain active content and must be downloaded.
+        if ($inline && $file->isViewableInBrowser()) {
             $content = 'inline';
         } else {
             $content = 'attachment';
@@ -93,6 +85,7 @@ class DocumentsService
 
         // Create appropriate header information of the file
         header('Content-Type: ' . $file->getMimeType());
+        header('X-Content-Type-Options: nosniff');
         header('Content-Length: ' . $fileSize);
         header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
 
@@ -116,6 +109,123 @@ class DocumentsService
             // file output for small files (< 10MB)
             readfile($completePath);
         }
+    }
+
+    /**
+     * Check download permissions, verify the file and increment its download counter.
+     *
+     * @throws Exception
+     */
+    public function prepareFileDownload(string $fileUUID): File
+    {
+        // get recordset of current file from database
+        $file = new File($this->db);
+        $file->getFileForDownload($fileUUID);
+
+        // get complete path with filename of the file
+        $completePath = $file->getFullFilePath();
+
+        // check if the file already exists
+        if (!is_file($completePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        // Increment download counter only once per file and session, so a preview followed by a download
+        // or the repeated requests of a media player are not counted several times
+        $hasSession = session_status() === PHP_SESSION_ACTIVE;
+        if (!$hasSession || !in_array($fileUUID, $_SESSION['documents_files_counted'] ?? array(), true)) {
+            $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+            $file->save();
+
+            if ($hasSession) {
+                $_SESSION['documents_files_counted'][] = $fileUUID;
+            }
+        }
+
+        return $file;
+    }
+
+    /**
+     * Copy a local file into a managed documents folder and register it in the database.
+     *
+     * @param string $sourcePath Path to a readable local source file.
+     * @param string $filename Optional target filename. The source basename is used if omitted.
+     * @return File The newly registered file entity.
+     * @throws Exception
+     */
+    public function uploadFile(string $sourcePath, string $filename = ''): File
+    {
+        global $gSettingsManager;
+
+        if ($this->folderUUID === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $targetFolder = new Folder($this->db);
+        $targetFolder->getFolderForDownload($this->folderUUID);
+
+        if (!$targetFolder->hasUploadRight()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $maxUploadSize = $gSettingsManager->getInt('documents_files_max_upload_size');
+        if ($maxUploadSize === 0) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        if (!is_file($sourcePath) || !is_readable($sourcePath)) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $fileSize = filesize($sourcePath);
+        if ($fileSize === false) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+        if ($fileSize > $maxUploadSize * 1024 * 1024) {
+            throw new Exception('SYS_FILE_TO_LARGE_SERVER', array($maxUploadSize));
+        }
+
+        if ($filename === '') {
+            $filename = basename($sourcePath);
+        }
+
+        StringUtils::strIsValidFileName($filename, false);
+        if (!FileSystemUtils::allowedFileExtension($filename)) {
+            throw new Exception('SYS_FILE_EXTENSION_INVALID');
+        }
+
+        $filename = FileSystemUtils::removeInvalidCharsInFilename($filename);
+        $targetPath = $targetFolder->getFullFolderPath() . '/' . $filename;
+
+        if (is_file($targetPath)) {
+            throw new Exception('SYS_FILE_EXIST', array($filename));
+        }
+
+        try {
+            FileSystemUtils::copyFile($sourcePath, $targetPath);
+        } catch (RuntimeException $exception) {
+            throw new Exception('SYS_FOLDER_NOT_WRITABLE', array($targetFolder->getFullFolderPath()));
+        }
+
+        $newFile = new File($this->db);
+        $newFile->setValue('fil_fol_id', (int)$targetFolder->getValue('fol_id'));
+        $newFile->setValue('fil_name', $filename);
+        $newFile->setValue('fil_locked', $targetFolder->getValue('fol_locked'));
+        $newFile->setValue('fil_counter', 0);
+
+        try {
+            if ($newFile->save()) {
+                $newFile->sendNotification();
+            }
+        } catch (\Throwable $exception) {
+            try {
+                FileSystemUtils::deleteFileIfExists($targetPath);
+            } catch (RuntimeException) {
+            }
+            throw $exception;
+        }
+
+        return $newFile;
     }
 
     /**
@@ -229,9 +339,16 @@ class DocumentsService
         while ($row = $filesStatement->fetch()) {
             $folder = new Folder($this->db, $row['fol_id']);
 
-            if ($folder->hasUploadRight()) {
-                $arrAllUploadableFolders[$folder->getValue('fol_uuid')] = $indent . '- ' . $folder->getValue('fol_name');
+            $hasUploadRight = $folder->hasUploadRight();
 
+            if ($hasUploadRight) {
+                $arrAllUploadableFolders[$folder->getValue('fol_uuid')] = $indent . '- ' . $folder->getValue('fol_name');
+            }
+
+            $isVisible = $folder->hasViewRight()
+                || ($folder->getValue('fol_public') && !$folder->getValue('fol_locked'));
+
+            if ($hasUploadRight || $isVisible) {
                 $arrAllUploadableFolders = $this->findFoldersWithUploadRights($row['fol_id'], $arrAllUploadableFolders, $indent . '&nbsp;&nbsp;&nbsp;');
             }
         }
@@ -259,7 +376,12 @@ class DocumentsService
 
         $row = $filesStatement->fetch();
 
-        $arrAllUploadableFolders = array($row['fol_uuid'] => $gL10n->get('SYS_DOCUMENTS_FILES'));
+        $arrAllUploadableFolders = array();
+        $folder = new Folder($this->db, $row['fol_id']);
+
+        if ($folder->hasUploadRight()) {
+            $arrAllUploadableFolders[$row['fol_uuid']] = $gL10n->get('SYS_DOCUMENTS_FILES');
+        }
 
         return $this->findFoldersWithUploadRights($row['fol_id'], $arrAllUploadableFolders);
     }
@@ -338,6 +460,9 @@ class DocumentsService
 
             $oldFolder = $this->folder->getFullFolderPath();
 
+            // check if the folder name is valid
+            StringUtils::strIsValidFolderName($formValues['adm_new_name']);
+
             // check if folder already exists in filesystem
             if ($formValues['adm_new_name'] !== $this->folder->getValue('fol_name')
                 && is_dir(ADMIDIO_PATH . $this->folder->getValue('fol_path') . '/' . $formValues['adm_new_name'])) {
@@ -364,9 +489,6 @@ class DocumentsService
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
                 throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NEW_NAME')));
             }
-            if ($e->getMessage() === 'SYS_FILENAME_INVALID' && $this->folderUUID !== '') {
-                throw new Exception('SYS_FOLDER_NAME_INVALID');
-            }
             throw new Exception($e->getMessage());
         }
     }
@@ -384,6 +506,9 @@ class DocumentsService
             // check form field input and sanitized it from malicious content
             $documentsFilesFolderNewForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesFolderNewForm->validate($_POST);
+
+            // check if the folder name is valid
+            StringUtils::strIsValidFolderName($formValues['adm_folder_name']);
 
             // Test if the folder already exists in the file system
             if (is_dir($this->folder->getFullFolderPath() . '/' . $formValues['adm_folder_name'])) {
@@ -422,9 +547,6 @@ class DocumentsService
         } catch (Exception $e) {
             if ($e->getMessage() === 'SYS_FILENAME_EMPTY') {
                 throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_NAME')));
-            }
-            if ($e->getMessage() === 'SYS_FILENAME_INVALID') {
-                throw new Exception('SYS_FOLDER_NAME_INVALID');
             }
             throw new Exception($e->getMessage());
         }

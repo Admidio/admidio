@@ -36,8 +36,26 @@
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
+                {if isset($data.values.notSortable) && count($data.values.notSortable) > 0}
+                    <tbody class="admidio-not-sortable">
+                        {foreach $data.values.notSortable as $option}
+                            <tr id="{$data.id}_option_{$option.id}" data-uuid="{$option.id}">
+                                <td>
+                                    <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][value]" value="{$option.value|escape}" disabled="disabled" {foreach $data.attributes as $itemvar}{$itemvar@key}="{$itemvar}"{/foreach}>
+                                </td>
+                                <td class="align-middle" style="display: none;">
+                                    <div class="admidio-form-group d-flex justify-content-center">
+                                        <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][obsolete]" value="{$option.obsolete}" disabled="disabled">
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                {/if}
                 <tbody class="admidio-sortable">
-                    {foreach $data.values as $option}
+                    {foreach $data.values.sortable as $option}
                         <tr id="{$data.id}_option_{$option.id}" data-uuid="{$option.id}">
                             <td>
                                 <input class="form-control focus-ring" type="text" name="{$data.id}[{$option.id}][value]" value="{$option.value|escape}" {if $option.obsolete}disabled="disabled"{/if} {foreach $data.attributes as $itemvar}{$itemvar@key}="{$itemvar}"{/foreach}>

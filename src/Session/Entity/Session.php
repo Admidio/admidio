@@ -36,6 +36,17 @@ use Admidio\Infrastructure\Database;
 class Session extends Entity
 {
     /**
+     * Value stored in ses_authentication_methods for a session that was established from
+     * an auto login token instead of an interactive login.
+     */
+    public const AUTHENTICATION_METHOD_AUTO_LOGIN = 'auto';
+
+    /**
+     * Key of the PHP session that holds the Admidio version that wrote the session data.
+     */
+    public const SESSION_VERSION_KEY = 'admidioVersion';
+
+    /**
      * @var array<string,mixed> Array with all objects of this session object.
      */
     protected array $mObjectArray = array();
@@ -67,6 +78,11 @@ class Session extends Entity
     public function __construct(Database $database, string $cookiePrefix = '')
     {
         parent::__construct($database, TBL_SESSIONS, 'ses');
+
+        // NOTE: Changes to the session table must not be logged, but this must NOT be done by
+        // setting Entity::$loggingEnabled, which is a static and would switch off the changelog
+        // for every other entity for the rest of the request. The table 'sessions' is listed in
+        // ChangelogService::$noLogTables, which already prevents any log entry for it.
 
         // determine session id
         if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
@@ -104,12 +120,16 @@ class Session extends Entity
      * The key of the array will be the csrf-token of the form.
      * @param FormPresenter $form The form that should be stored in this class.
      * @return bool Return false if object isn't type object or objectName already exists
-     * @throws Exception
+     * @throws Exception|\Exception
      */
-    public function addFormObject(FormPresenter &$form): bool
+    public function addFormObject(FormPresenter $form): bool
     {
+        // the form that is stored has to be the one that was rendered, so that validate() judges the
+        // POST against the elements the browser was shown
+        $form->finalize();
+
         if (!array_key_exists($form->getCsrfToken(), $this->mFormObjects)) {
-            $this->mFormObjects[$form->getCsrfToken()] = &$form;
+            $this->mFormObjects[$form->getCsrfToken()] = $form;
             return true;
         }
         return false;
@@ -146,13 +166,21 @@ class Session extends Entity
     }
 
     /**
+     * Return the opaque session identifier that may be exposed to external SSO clients.
+     */
+    public function getExternalSessionId(): string
+    {
+        return (string) $this->getValue('ses_external_session_id', 'database');
+    }
+
+    /**
      * Returns a CSRF token from the session. If no CSRF token exists a new one will be
-     * generated and stored within the session. The next call of the method will than
+     * generated and stored within the session. The next call of the method will then
      * return the existing token. The CSRF token has 30 characters. A new token could
      * be forced by the parameter **$newToken**
      * @param bool $newToken If set to true, always a new token will be generated.
      * @return string Returns the CSRF token
-     * @throws Exception
+     * @throws \Exception
      */
     public function getCsrfToken(bool $newToken = false): string
     {
@@ -297,6 +325,31 @@ class Session extends Entity
     }
 
     /**
+     * Record that the user of this session was authenticated by an auto login token.
+     *
+     * Presenting the token is an authentication event, so the session must carry everything
+     * that a login records: without the time the SSO services cannot state when the user
+     * authenticated, and without the external session identifier they cannot address the
+     * session when a client asks for a logout. Values that are already stored are kept, so
+     * that an interactive login is never overwritten and the authentication time does not
+     * creep forward with every request of an auto login session.
+     * @throws Exception
+     */
+    private function markAutoLoginAuthentication()
+    {
+        if ((int)$this->getValue('ses_authentication_time', 'U') > 0) {
+            return;
+        }
+
+        $this->setValue('ses_authentication_time', DATETIME_NOW);
+        $this->setValue('ses_authentication_methods', self::AUTHENTICATION_METHOD_AUTO_LOGIN);
+
+        if ($this->getExternalSessionId() === '') {
+            $this->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
+        }
+    }
+
+    /**
      * Reload auto login data from database table adm_auto_login. if cookie PREFIX_AUTO_LOGIN_ID
      * is set then there could be an auto login the auto login must be done here because after
      * that the corresponding organization must be set.
@@ -316,6 +369,7 @@ class Session extends Entity
                 $this->mAutoLogin->save();
 
                 $this->setValue('ses_usr_id', (int)$this->mAutoLogin->getValue('atl_usr_id'));
+                $this->markAutoLoginAuthentication();
 
                 // save cookie for autologin
                 $currDateTime = new \DateTime();
@@ -384,6 +438,7 @@ class Session extends Entity
         if (isset($this->mAutoLogin)) {
             if ((int)$this->getValue('ses_usr_id') === 0) {
                 $this->setValue('ses_usr_id', (int)$this->mAutoLogin->getValue('atl_usr_id'));
+                $this->markAutoLoginAuthentication();
             }
         } elseif (array_key_exists($this->cookieAutoLoginId, $_COOKIE)) {
             $this->refreshAutoLogin();
@@ -527,20 +582,16 @@ class Session extends Entity
             $secure = HTTPS;
         }
 
-        $gLogger->info('Set Cookie!', array('name' => $name, 'value' => $value, 'expire' => $expire, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax'));
+        $gLogger->info('Set Cookie!', array('name' => $name, 'expire' => $expire, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax'));
 
-        if (PHP_VERSION_ID < 70300) {
-            return setcookie($name, $value, $expire, $path . ';samesite=lax', $domain, $secure, $httpOnly);
-        } else {
-            return setcookie($name, $value, array(
-                'expires' => $expire,
-                'path' => $path,
-                'domain' => $domain,
-                'secure' => $secure,
-                'httponly' => $httpOnly,
-                'samesite' => 'lax'
-            ));
-        }
+        return setcookie($name, $value, array(
+            'expires' => $expire,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => $httpOnly,
+            'samesite' => 'lax'
+        ));
     }
 
     /**
@@ -591,27 +642,62 @@ class Session extends Entity
             $secure = HTTPS;
         }
 
-        if (PHP_VERSION_ID < 70300) {
-            session_set_cookie_params($limit, $path . ';samesite=lax', $domain, $secure, $httpOnly);
-        } else {
-            session_set_cookie_params(array(
-                'lifetime' => $limit,
-                'path' => $path,
-                'domain' => $domain,
-                'secure' => $secure,
-                'httponly' => $httpOnly,
-                'samesite' => 'lax'
-            ));
-        }
+        session_set_cookie_params(array(
+            'lifetime' => $limit,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure,
+            'httponly' => $httpOnly,
+            'samesite' => 'lax'
+        ));
 
         if (session_status() === PHP_SESSION_ACTIVE) {
-            $gLogger->notice('Session is already started!', array('sessionId' => session_id()));
+            $gLogger->notice('Session is already started!');
         }
 
-        // Start session
-        session_start();
+        self::startReadableSession();
 
-        $gLogger->info('Session Started!', array('name' => $sessionName, 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax', 'sessionId' => session_id()));
+        $gLogger->info('Session Started!', array('name' => $sessionName, 'limit' => $limit, 'path' => $path, 'domain' => $domain, 'secure' => $secure, 'httpOnly' => $httpOnly, 'sameSite' => 'lax'));
+    }
+
+    /**
+     * Starts the PHP session and keeps its data only if this version of Admidio can read it.
+     *
+     * Data written by another Admidio version (before an update) or damaged data may not fit the
+     * current classes. PHP then reports deprecations while it restores the objects, or stops with an
+     * error and discards the data. In both cases, and whenever the data was written by another
+     * version, the data is emptied, but the session ID stays: adm_sessions keeps the user of that
+     * ID, so a logged-in user stays logged in and Admidio builds all objects anew.
+     */
+    private static function startReadableSession(): void
+    {
+        global $gLogger;
+
+        $unreadable = false;
+        set_error_handler(static function () use (&$unreadable): bool {
+            $unreadable = true;
+            return true;
+        }, E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_WARNING);
+        try {
+            $started = session_start();
+        } catch (\Throwable) {
+            $started = false;
+            $unreadable = true;
+        } finally {
+            restore_error_handler();
+        }
+
+        if (!$started) {
+            // PHP has discarded the data it could not read; the browser keeps its session ID.
+            session_start();
+        }
+
+        if ($unreadable || ($_SESSION[self::SESSION_VERSION_KEY] ?? ADMIDIO_VERSION_TEXT) !== ADMIDIO_VERSION_TEXT
+            || ($_SESSION !== array() && !isset($_SESSION[self::SESSION_VERSION_KEY]))) {
+            $gLogger->notice('Session data discarded, because it could not be read or was written by another Admidio version.');
+            $_SESSION = array();
+        }
+        $_SESSION[self::SESSION_VERSION_KEY] = ADMIDIO_VERSION_TEXT;
     }
 
     /**

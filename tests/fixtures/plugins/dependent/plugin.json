@@ -1,0 +1,9 @@
+{
+    "name": "Dependent",
+    "version": "1.0.0",
+    "requires": {
+        "plugins": {
+            "hello": ">=1.0"
+        }
+    }
+}

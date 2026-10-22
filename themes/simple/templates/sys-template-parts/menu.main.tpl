@@ -1,8 +1,8 @@
 {* Create the sidebar menu out of the navigation menu array *}
-<div class="admidio-headline-mobile-menu d-md-none p-2">
+<div class="admidio-headline-mobile-menu d-flex align-items-center justify-content-between d-md-none py-2 px-3">
     <span class="text-uppercase">{$l10n->get("SYS_MENU")}</span>
-    <button class="btn btn-link d-md-none collapsed float-end" type="button" data-bs-toggle="collapse"
-            data-bs-target="#adm_main_menu" aria-controls="adm_main_menu" aria-expanded="false">
+    <button class="btn btn-link collapsed p-0 text-decoration-none" type="button" data-bs-toggle="collapse"
+            data-bs-target="#adm_main_menu" aria-controls="adm_main_menu" aria-expanded="false" aria-label="{$l10n->get('SYS_MENU')}">
         <i class="bi bi-list"></i>
     </button>
 </div>

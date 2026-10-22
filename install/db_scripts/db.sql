@@ -13,9 +13,11 @@
 /*==============================================================*/
 DROP TABLE IF EXISTS %PREFIX%_announcements                     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_auto_login                        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_category_report_columns           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components                        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_events                            CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_event_recurrences                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_files                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_folders                           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_guestbook_comments                CASCADE;
@@ -54,8 +56,16 @@ DROP TABLE IF EXISTS %PREFIX%_menu                              CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
-DROP TABLE IF EXISTS %PREFIX%_inventory_item_lend_data          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_access_tokens                CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_auth_codes                   CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_refresh_tokens               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_consents                     CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_session_participants         CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_oidc_clients                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_logout_transactions          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_saml_session_participants         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
 
@@ -79,8 +89,8 @@ CREATE TABLE %PREFIX%_announcements
     PRIMARY KEY (ann_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ann_uuid ON %PREFIX%_announcements (ann_uuid);
 
@@ -99,8 +109,8 @@ CREATE TABLE %PREFIX%_auto_login
     PRIMARY KEY (atl_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_categories                                        */
@@ -123,8 +133,8 @@ CREATE TABLE %PREFIX%_categories
     PRIMARY KEY (cat_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_cat_uuid ON %PREFIX%_categories (cat_uuid);
 
@@ -136,15 +146,37 @@ CREATE TABLE %PREFIX%_category_report
     crt_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     crt_org_id                  integer unsigned,
     crt_name                    varchar(100)        NOT NULL,
-    crt_col_fields              text,
+    crt_description             varchar(4000),
     crt_selection_role          varchar(100),
     crt_selection_cat           varchar(100),
     crt_number_col              boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (crt_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+/*==============================================================*/
+/* Table: adm_category_report_columns                           */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_category_report_columns
+(
+    crc_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    crc_crt_id                  integer unsigned    NOT NULL,
+    crc_number                  smallint            NOT NULL,
+    crc_field_type              varchar(50)         NOT NULL,
+    crc_usf_id                  integer unsigned,
+    crc_rol_id                  integer unsigned,
+    crc_cat_id                  integer unsigned,
+    crc_special_field           varchar(50),
+    crc_condition               varchar(255),
+    PRIMARY KEY (crc_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_crc_report_number ON %PREFIX%_category_report_columns (crc_crt_id, crc_number);
 
 /*==============================================================*/
 /* Table: adm_components                                        */
@@ -152,6 +184,7 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_components
 (
     com_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    com_uuid                    varchar(36)         NOT NULL,
     com_type                    varchar(10)         NOT NULL,
     com_name                    varchar(255)        NOT NULL,
     com_name_intern             varchar(255)        NOT NULL,
@@ -163,8 +196,10 @@ CREATE TABLE %PREFIX%_components
     PRIMARY KEY (com_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_com_uuid ON %PREFIX%_components (com_uuid);
 
 /*==============================================================*/
 /* Table: adm_events                                            */
@@ -175,10 +210,14 @@ CREATE TABLE %PREFIX%_events
     dat_cat_id                  integer unsigned    NOT NULL,
     dat_rol_id                  integer unsigned,
     dat_room_id                 integer unsigned,
+    dat_evr_id                  integer unsigned,
     dat_uuid                    varchar(36)         NOT NULL,
     dat_begin                   timestamp           NULL        DEFAULT NULL,
     dat_end                     timestamp           NULL        DEFAULT NULL,
+    dat_recurrence_original_begin timestamp          NULL        DEFAULT NULL,
     dat_all_day                 boolean             NOT NULL    DEFAULT false,
+    dat_recurrence_status       varchar(20),
+    dat_recurrence_scope        varchar(20),
     dat_headline                varchar(100)        NOT NULL,
     dat_description             text,
     dat_highlight               boolean             NOT NULL    DEFAULT false,
@@ -195,10 +234,44 @@ CREATE TABLE %PREFIX%_events
     PRIMARY KEY (dat_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_events (dat_uuid);
+CREATE INDEX %PREFIX%_idx_dat_evr_original_begin ON %PREFIX%_events (dat_evr_id, dat_recurrence_original_begin);
+CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status);
+
+/*==============================================================*/
+/* Table: adm_event_recurrences                                 */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_event_recurrences
+(
+    evr_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    evr_uuid                    varchar(36)         NOT NULL,
+    evr_dat_id_master           integer unsigned    NOT NULL,
+    evr_frequency               varchar(20)         NOT NULL,
+    evr_interval                integer             NOT NULL    DEFAULT 1,
+    evr_byday                   varchar(50),
+    evr_bymonthday              integer,
+    evr_monthly_mode            varchar(20),
+    evr_end_type                varchar(20)         NOT NULL    DEFAULT 'never',
+    evr_until                   timestamp           NULL        DEFAULT NULL,
+    evr_count                   integer,
+    evr_timezone                varchar(100),
+    evr_generated_until         timestamp           NULL        DEFAULT NULL,
+    evr_usr_id_create           integer unsigned,
+    evr_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    evr_usr_id_change           integer unsigned,
+    evr_timestamp_change        timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (evr_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_evr_uuid ON %PREFIX%_event_recurrences (evr_uuid);
+CREATE INDEX %PREFIX%_idx_evr_dat_id_master ON %PREFIX%_event_recurrences (evr_dat_id_master);
+CREATE INDEX %PREFIX%_idx_evr_generated_until ON %PREFIX%_event_recurrences (evr_generated_until);
 
 /*==============================================================*/
 /* Table: adm_files                                             */
@@ -217,8 +290,8 @@ CREATE TABLE %PREFIX%_files
     PRIMARY KEY (fil_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fil_uuid ON %PREFIX%_files (fil_uuid);
 
@@ -242,8 +315,8 @@ CREATE TABLE %PREFIX%_folders
     PRIMARY KEY (fol_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fol_uuid ON %PREFIX%_folders (fol_uuid);
 
@@ -261,10 +334,10 @@ CREATE TABLE %PREFIX%_forum_topics
     fot_usr_id_create           integer unsigned,
     fot_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (fot_id)
-    )
-    ENGINE = InnoDB
-    DEFAULT character SET = utf8
-    COLLATE = utf8_unicode_ci;
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fot_uuid ON %PREFIX%_forum_topics (fot_uuid);
 
@@ -282,10 +355,10 @@ CREATE TABLE %PREFIX%_forum_posts
     fop_usr_id_change           integer unsigned,
     fop_timestamp_change        timestamp           NULL        DEFAULT NULL,
     PRIMARY KEY (fop_id)
-    )
-    ENGINE = InnoDB
-    DEFAULT character SET = utf8
-    COLLATE = utf8_unicode_ci;
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_fop_uuid ON %PREFIX%_forum_posts (fop_uuid);
 
@@ -298,8 +371,8 @@ CREATE TABLE %PREFIX%_ids
     ids_reference_id            integer unsigned    NOT NULL
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_links                                             */
@@ -321,8 +394,8 @@ CREATE TABLE %PREFIX%_links
     PRIMARY KEY (lnk_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_lnk_uuid ON %PREFIX%_links (lnk_uuid);
 
@@ -341,8 +414,8 @@ CREATE TABLE %PREFIX%_lists
     PRIMARY KEY (lst_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_lst_uuid ON %PREFIX%_lists (lst_uuid);
 
@@ -361,8 +434,8 @@ CREATE TABLE %PREFIX%_list_columns
     PRIMARY KEY (lsc_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_members                                           */
@@ -386,8 +459,8 @@ CREATE TABLE %PREFIX%_members
     PRIMARY KEY (mem_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_mem_rol_usr_id ON %PREFIX%_members (mem_rol_id, mem_usr_id);
 CREATE UNIQUE INDEX %PREFIX%_idx_mem_uuid ON %PREFIX%_members (mem_uuid);
@@ -412,8 +485,8 @@ CREATE TABLE %PREFIX%_menu
     PRIMARY KEY (men_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_men_men_id_parent ON %PREFIX%_menu (men_men_id_parent);
 CREATE UNIQUE INDEX %PREFIX%_idx_men_uuid ON %PREFIX%_menu (men_uuid);
@@ -433,8 +506,8 @@ CREATE TABLE %PREFIX%_messages
     PRIMARY KEY (msg_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_msg_uuid ON %PREFIX%_messages (msg_uuid);
 
@@ -451,8 +524,8 @@ CREATE TABLE %PREFIX%_messages_attachments
     PRIMARY KEY (msa_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_msa_uuid ON %PREFIX%_messages_attachments (msa_uuid);
 
@@ -469,8 +542,8 @@ CREATE TABLE %PREFIX%_messages_content
     PRIMARY KEY (msc_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_messages_recipients                                */
@@ -485,8 +558,8 @@ CREATE TABLE %PREFIX%_messages_recipients
     PRIMARY KEY (msr_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 
 /*==============================================================*/
@@ -499,14 +572,22 @@ COLLATE = utf8_unicode_ci;
 CREATE TABLE %PREFIX%_oidc_clients (
     ocl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     ocl_uuid                    varchar(36)         NOT NULL,
+    ocl_org_id                  integer unsigned    NOT NULL,
     ocl_client_id               varchar(64)         NOT NULL,
     ocl_client_name             varchar(255)        NOT NULL,
     ocl_enabled                 bool                DEFAULT true,
+    ocl_trusted                 bool                NOT NULL DEFAULT false,
     ocl_client_secret           varchar(255)        NOT NULL,
+    ocl_require_pkce            bool                NOT NULL DEFAULT true,
     ocl_redirect_uri            text                NOT NULL,
-    ocl_grant_types             varchar(255)        NOT NULL,
+    ocl_post_logout_redirect_uris text              NULL,
+    ocl_frontchannel_logout_uri varchar(2000)       NULL,
+    ocl_frontchannel_logout_session_required bool   NOT NULL DEFAULT false,
+    ocl_backchannel_logout_uri  varchar(2000)       NULL,
+    ocl_backchannel_logout_session_required bool    NOT NULL DEFAULT false,
+    ocl_grant_types             varchar(255)        NOT NULL    DEFAULT 'authorization_code refresh_token',
     ocl_scope                   varchar(255)        DEFAULT NULL,
-    ocl_userid_field            varchar(50)         NOT NULL    default 'usr_id',
+    ocl_userid_field            varchar(50)         NOT NULL    DEFAULT 'usr_uuid',
     ocl_field_mapping           text                NULL,
     ocl_role_mapping            text                NULL,
     ocl_usr_id_create           integer unsigned,
@@ -516,8 +597,8 @@ CREATE TABLE %PREFIX%_oidc_clients (
     PRIMARY KEY (ocl_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE %PREFIX%_oidc_access_tokens (
     oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
@@ -525,15 +606,37 @@ CREATE TABLE %PREFIX%_oidc_access_tokens (
     oat_ocl_id                  integer unsigned    NOT NULL,
     oat_token                   text,
     oat_scope                   text,
-    oat_expires_at              timestamp           NOT NULL,
+    oat_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     oat_revoked                 boolean             DEFAULT FALSE,
     oat_usr_id_create           integer unsigned,
     oat_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (oat_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+CREATE INDEX %PREFIX%_idx_oat_expires_at ON %PREFIX%_oidc_access_tokens (oat_expires_at);
+
+CREATE TABLE %PREFIX%_oidc_session_participants (
+    osp_id                      integer unsigned    AUTO_INCREMENT,
+    osp_org_id                  integer unsigned    NOT NULL,
+    osp_usr_id                  integer unsigned    NOT NULL,
+    osp_client_id               integer unsigned    NOT NULL,
+    osp_external_session_id     varchar(64)         NOT NULL,
+    osp_subject                 varchar(255)        NOT NULL,
+    osp_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    osp_timestamp_create        timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (osp_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_osp_session_client
+    ON %PREFIX%_oidc_session_participants (osp_external_session_id, osp_client_id);
+CREATE INDEX %PREFIX%_idx_osp_expires_at
+    ON %PREFIX%_oidc_session_participants (osp_expires_at);
+
 
 CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_id                      integer unsigned    AUTO_INCREMENT,
@@ -541,15 +644,16 @@ CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_usr_id                  integer unsigned    NULL,
     ort_token                   text,
     ort_scope                   text,
-    ort_expires_at              timestamp           NOT NULL,
+    ort_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ort_revoked                 boolean             DEFAULT FALSE,
     ort_usr_id_create           integer unsigned,
     ort_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (ort_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+CREATE INDEX %PREFIX%_idx_ort_expires_at ON %PREFIX%_oidc_refresh_tokens (ort_expires_at);
 
 CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_id                      integer unsigned    AUTO_INCREMENT,
@@ -558,7 +662,11 @@ CREATE TABLE %PREFIX%_oidc_auth_codes (
     oac_token                   text,
     oac_scope                   text,
     oac_nonce                   varchar(2550)       NULL,
-    oac_expires_at              timestamp           NOT NULL,
+    oac_auth_time               timestamp           NULL,
+    oac_external_session_id     varchar(64)         NULL,
+    oac_authentication_methods  varchar(255)        NULL,
+    oac_authentication_context  varchar(255)        NULL,
+    oac_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     oac_revoked                 boolean             DEFAULT FALSE,
     oac_redirect_uri            text                NOT NULL,
     oac_used                    boolean             DEFAULT FALSE,
@@ -567,9 +675,25 @@ CREATE TABLE %PREFIX%_oidc_auth_codes (
     PRIMARY KEY (oac_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+CREATE INDEX %PREFIX%_idx_oac_expires_at ON %PREFIX%_oidc_auth_codes (oac_expires_at);
 
+CREATE TABLE %PREFIX%_oidc_consents (
+    oco_id                      integer unsigned    AUTO_INCREMENT,
+    oco_org_id                  integer unsigned    NOT NULL,
+    oco_usr_id                  integer unsigned    NOT NULL,
+    oco_ocl_id                  integer unsigned    NOT NULL,
+    oco_scopes                  text                NOT NULL,
+    oco_policy_hash             varchar(64)         NULL,
+    oco_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    oco_timestamp_change        timestamp           NULL,
+    PRIMARY KEY (oco_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+CREATE UNIQUE INDEX %PREFIX%_idx_oco_user_client ON %PREFIX%_oidc_consents (oco_org_id, oco_usr_id, oco_ocl_id);
 
 
 /*==============================================================*/
@@ -593,6 +717,7 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_role_mapping            text                NULL,
 
     smc_allowed_clock_skew      integer unsigned    NULL,
+    smc_request_lifetime        integer unsigned    NULL,
     smc_assertion_lifetime      integer unsigned    NULL,
     smc_sign_assertions         bool                DEFAULT true,
     smc_encrypt_assertions      bool                DEFAULT false,
@@ -606,10 +731,55 @@ CREATE TABLE %PREFIX%_saml_clients (
     PRIMARY KEY (smc_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 
+/*==============================================================*/
+/* Table: adm_saml_logout_transactions                           */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_saml_logout_transactions (
+    slt_id                      integer unsigned    AUTO_INCREMENT,
+    slt_token                   varchar(64)         NOT NULL,
+    slt_org_id                  integer unsigned    NOT NULL,
+    slt_data                    text                NOT NULL,
+    slt_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (slt_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_slt_token ON %PREFIX%_saml_logout_transactions (slt_token);
+CREATE INDEX %PREFIX%_idx_slt_expires_at ON %PREFIX%_saml_logout_transactions (slt_expires_at);
+
+
+/*==============================================================*/
+/* Table: adm_saml_session_participants                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_saml_session_participants (
+    ssp_id                      integer unsigned    AUTO_INCREMENT,
+    ssp_org_id                  integer unsigned    NOT NULL,
+    ssp_usr_id                  integer unsigned    NOT NULL,
+    ssp_client_id               integer unsigned    NOT NULL,
+    ssp_name_id                 text                NOT NULL,
+    ssp_name_id_format          varchar(255)        NOT NULL,
+    ssp_name_id_sp_name_qualifier varchar(255)      NULL,
+    ssp_external_session_id     varchar(64)         NOT NULL,
+    ssp_session_index           varchar(255)        NOT NULL,
+    ssp_authn_instant           timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ssp_expires_at              timestamp           NOT NULL,
+    PRIMARY KEY (ssp_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id);
+CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id);
+CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at);
+
+ 
 /*==============================================================*/
 /* Table: adm_sso_keys                                               */
 /*==============================================================*/
@@ -618,7 +788,7 @@ CREATE TABLE %PREFIX%_sso_keys (
     key_uuid                    varchar(36)         NOT NULL,
     key_org_id                  integer unsigned    NOT NULL,
     key_name                    text                NOT NULL,
--- TODO: Add key_type ENUM ('RSA', 'EC') or key_algorithm varchar(16) for signing algorithm e.g. RS256, ES256, etc.    
+-- TODO: Add key_type ENUM ('RSA', 'EC') or key_algorithm varchar(16) for signing algorithm e.g. RS256, ES256, etc.
     key_algorithm               varchar(50)         NOT NULL    DEFAULT 'RSA',
     key_private                 text                NOT NULL,
     key_public                  text                NOT NULL,
@@ -632,8 +802,8 @@ CREATE TABLE %PREFIX%_sso_keys (
     PRIMARY KEY (key_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -648,11 +818,12 @@ CREATE TABLE %PREFIX%_organizations
     org_homepage                varchar(255)        NOT NULL,
     org_email_administrator     varchar(254)        NOT NULL,
     org_show_org_select         boolean             NOT NULL    DEFAULT false,
+    org_suborg_use_same_members  boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (org_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_org_shortname ON %PREFIX%_organizations (org_shortname);
 CREATE UNIQUE INDEX %PREFIX%_idx_org_uuid ON %PREFIX%_organizations (org_uuid);
@@ -680,8 +851,8 @@ CREATE TABLE %PREFIX%_photos
     PRIMARY KEY (pho_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_pho_uuid ON %PREFIX%_photos (pho_uuid);
 
@@ -693,12 +864,12 @@ CREATE TABLE %PREFIX%_preferences
     prf_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     prf_org_id                  integer unsigned    NOT NULL,
     prf_name                    varchar(50)         NOT NULL,
-    prf_value                   varchar(255),
+    prf_value                   varchar(255)        NOT NULL,
     PRIMARY KEY (prf_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_prf_org_id_name ON %PREFIX%_preferences (prf_org_id, prf_name);
 
@@ -715,8 +886,8 @@ CREATE TABLE %PREFIX%_registrations
     PRIMARY KEY (reg_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_role_dependencies                                 */
@@ -731,8 +902,8 @@ CREATE TABLE %PREFIX%_role_dependencies
     PRIMARY KEY (rld_rol_id_parent, rld_rol_id_child)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_roles                                             */
@@ -782,8 +953,8 @@ CREATE TABLE %PREFIX%_roles
     PRIMARY KEY (rol_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_rol_uuid ON %PREFIX%_roles (rol_uuid);
 
@@ -799,8 +970,8 @@ CREATE TABLE %PREFIX%_roles_rights
     PRIMARY KEY (ror_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_roles_rights_data                                 */
@@ -816,8 +987,8 @@ CREATE TABLE %PREFIX%_roles_rights_data
     PRIMARY KEY (rrd_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_rrd_ror_rol_object_id ON %PREFIX%_roles_rights_data (rrd_ror_id, rrd_rol_id, rrd_object_id);
 
@@ -839,8 +1010,8 @@ CREATE TABLE %PREFIX%_rooms
     PRIMARY KEY (room_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_room_uuid ON %PREFIX%_rooms (room_uuid);
 
@@ -855,14 +1026,17 @@ CREATE TABLE %PREFIX%_sessions
     ses_session_id              varchar(255)        NOT NULL,
     ses_begin                   timestamp           NULL        DEFAULT NULL,
     ses_timestamp               timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    ses_authentication_time     timestamp           NULL,
+    ses_authentication_methods  varchar(255)        NULL,
+    ses_external_session_id     varchar(64)         NULL,
     ses_ip_address              varchar(39)         NOT NULL,
-    ses_binary                  blob,
+    ses_binary                  mediumblob,
     ses_reload                  boolean             NOT NULL    DEFAULT false,
     PRIMARY KEY (ses_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX %PREFIX%_idx_session_id ON %PREFIX%_sessions (ses_session_id);
 
@@ -875,11 +1049,12 @@ CREATE TABLE %PREFIX%_texts
     txt_org_id                  integer unsigned    NOT NULL,
     txt_name                    varchar(100)        NOT NULL,
     txt_text                    text,
+    txt_custom_text             text,
     PRIMARY KEY (txt_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_user_fields                                       */
@@ -910,11 +1085,28 @@ CREATE TABLE %PREFIX%_user_fields
     PRIMARY KEY (usf_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_usf_name_intern ON %PREFIX%_user_fields (usf_name_intern);
 CREATE UNIQUE INDEX %PREFIX%_idx_usf_uuid ON %PREFIX%_user_fields (usf_uuid);
+
+/*==============================================================*/
+/* Table: adm_user_field_select_options                         */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_field_select_options
+(
+    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
+    ufo_value       varchar(255)        NOT NULL,                   -- option value
+    ufo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ufo_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
@@ -928,8 +1120,8 @@ CREATE TABLE %PREFIX%_user_data
     PRIMARY KEY (usd_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_usd_usr_usf_id ON %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
@@ -943,7 +1135,7 @@ CREATE TABLE %PREFIX%_users
     usr_login_name              varchar(254),
     usr_password                varchar(255),
     usr_tfa_secret              varchar(255),
-    usr_photo                   blob,
+    usr_photo                   mediumblob,
     usr_text                    text,
     usr_pw_reset_id             varchar(50),
     usr_pw_reset_timestamp      timestamp           NULL        DEFAULT NULL,
@@ -960,8 +1152,8 @@ CREATE TABLE %PREFIX%_users
     PRIMARY KEY (usr_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_usr_login_name ON %PREFIX%_users (usr_login_name);
 CREATE UNIQUE INDEX %PREFIX%_idx_usr_uuid ON %PREFIX%_users (usr_uuid);
@@ -985,8 +1177,8 @@ CREATE TABLE %PREFIX%_user_relation_types
     PRIMARY KEY (urt_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_name ON %PREFIX%_user_relation_types (urt_name);
 CREATE UNIQUE INDEX %PREFIX%_idx_urt_uuid ON %PREFIX%_user_relation_types (urt_uuid);
@@ -1008,8 +1200,8 @@ CREATE TABLE %PREFIX%_user_relations
     PRIMARY KEY (ure_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_urt_usr ON %PREFIX%_user_relations (ure_urt_id, ure_usr_id1, ure_usr_id2);
 CREATE UNIQUE INDEX %PREFIX%_idx_ure_uuid ON %PREFIX%_user_relations (ure_uuid);
@@ -1029,6 +1221,7 @@ CREATE TABLE %PREFIX%_inventory_fields
     inf_system                  boolean             NOT NULL    DEFAULT false,
     inf_required_input          smallint            NOT NULL    DEFAULT 0,
     inf_sequence                smallint            NOT NULL,
+    inf_inf_uuid_connected      varchar(36)         NULL        DEFAULT NULL,
     inf_usr_id_create           integer unsigned,
     inf_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     inf_usr_id_change           integer unsigned,
@@ -1036,11 +1229,28 @@ CREATE TABLE %PREFIX%_inventory_fields
     PRIMARY KEY (inf_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_inf_name_intern ON %PREFIX%_inventory_fields (inf_org_id, inf_name_intern);
 CREATE UNIQUE INDEX %PREFIX%_idx_inf_uuid ON %PREFIX%_inventory_fields (inf_uuid);
+
+/*==============================================================*/
+/* Table: adm_inventory_field_select_options                    */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_inventory_field_select_options
+(
+    ifo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
+    ifo_inf_id      integer unsigned    NOT NULL,                   -- Connected inventory field id
+    ifo_value       varchar(255)        NOT NULL,                   -- option value
+    ifo_system      boolean             NOT NULL DEFAULT false,     -- If true, the option is a system option an not editable
+    ifo_sequence    smallint            NOT NULL,                   -- Position in the list
+    ifo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
+    PRIMARY KEY (ifo_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_inventory_item_data                               */
@@ -1054,27 +1264,28 @@ CREATE TABLE %PREFIX%_inventory_item_data
     PRIMARY KEY (ind_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
 
 /*==============================================================*/
-/* Table: adm_inventory_item_lend_data                          */
+/* Table: adm_inventory_item_borrow_data                          */
 /*==============================================================*/
-CREATE TABLE %PREFIX%_inventory_item_lend_data
+CREATE TABLE %PREFIX%_inventory_item_borrow_data
 (
-    inl_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
-    inl_inf_id                  integer unsigned    NOT NULL,
-    inl_ini_id                  integer unsigned    NOT NULL,
-    inl_value                   varchar(4000),
-    PRIMARY KEY (inl_id)
+    inb_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    inb_ini_id                  integer unsigned    NOT NULL,
+    inb_last_receiver           varchar(255)        NULL        DEFAULT NULL,
+    inb_borrow_date             timestamp           NULL        DEFAULT NULL,
+    inb_return_date             timestamp           NULL        DEFAULT NULL,
+    PRIMARY KEY (inb_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_inl_inf_ini_id ON %PREFIX%_inventory_item_lend_data (inl_inf_id, inl_ini_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_inb_ini_id ON %PREFIX%_inventory_item_borrow_data (inb_ini_id);
 
 /*==============================================================*/
 /* Table: adm_inventory_items                                   */
@@ -1085,7 +1296,8 @@ CREATE TABLE %PREFIX%_inventory_items
     ini_uuid                    varchar(36)         NOT NULL,
     ini_cat_id                  integer unsigned    NOT NULL,
     ini_org_id                  integer unsigned    NOT NULL,
-    ini_former                  boolean             NOT NULL    DEFAULT false,
+    ini_status                  integer unsigned    NOT NULL,
+    ini_picture                 blob                NULL        DEFAULT NULL,
     ini_usr_id_create           integer unsigned,
     ini_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     ini_usr_id_change           integer unsigned,
@@ -1093,8 +1305,8 @@ CREATE TABLE %PREFIX%_inventory_items
     PRIMARY KEY (ini_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
 
@@ -1112,18 +1324,24 @@ CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid)
 CREATE TABLE %PREFIX%_log_changes
 (
     log_id                      integer             NOT NULL    AUTO_INCREMENT,
+    log_org_id                  integer unsigned    NULL,     -- Organization in whose context the change was made.
+                                                              -- NULL for changes outside an organization context and
+                                                              -- for entries written before this column existed.
+    log_change_uuid             varchar(36)         NULL,     -- Groups all entries that were written by the same
+                                                              -- change, e.g. every field that one save has modified.
+                                                              -- NULL for entries written before this column existed.
     log_table                   varchar(255)        NOT NULL, -- SQL table name without prefix
 
     log_record_id               integer unsigned    NOT NULL, -- The record id in the original table
     log_record_uuid             varchar(36)         NULL,     -- The record uuid in the original table
-    log_record_name             text                NULL,     -- Textual representation in case the original record 
+    log_record_name             text                NULL,     -- Textual representation in case the original record
                                                               -- no longer exists (e.g. group membership was deleted)
-    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id 
-                                                              -- is mem_id, but the link should point to the group 
+    log_record_linkid           text                NULL,     -- Record id for links (e.g. for memberships, the record_id
+                                                              -- is mem_id, but the link should point to the group
                                                               -- (since the membership does not have its own page in admidio!)
 
     log_related_id              text                NULL,     -- Optional Secondary object linked to the record id
-    log_related_name            text                NULL,     -- Textual representation in case the original record 
+    log_related_name            text                NULL,     -- Textual representation in case the original record
                                                               -- no longer exists (e.g. group membership was deleted)
 
     log_field                   varchar(255)        NULL,     -- The id of the modified/affected field
@@ -1139,24 +1357,13 @@ CREATE TABLE %PREFIX%_log_changes
     PRIMARY KEY (log_id)
 )
 ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
-/*==============================================================*/
-/* Table: adm_user_field_select_options                         */
-/*==============================================================*/
-CREATE TABLE %PREFIX%_user_field_select_options
-(
-    ufo_id          integer unsigned    NOT NULL AUTO_INCREMENT,
-    ufo_usf_id      integer unsigned    NOT NULL,                   -- Connected user field id
-    ufo_value       varchar(255)        NOT NULL,                   -- option value
-    ufo_sequence    smallint            NOT NULL,                   -- Position in the list
-    ufo_obsolete    boolean             NOT NULL DEFAULT false,     -- If true, the option is not available for new entries, but still exists in the database
-    PRIMARY KEY (ufo_id)
-)
-ENGINE = InnoDB
-DEFAULT character SET = utf8
-COLLATE = utf8_unicode_ci;
+CREATE INDEX %PREFIX%_idx_log_org_timestamp ON %PREFIX%_log_changes (log_org_id, log_timestamp_create);
+CREATE INDEX %PREFIX%_idx_log_table_record ON %PREFIX%_log_changes (log_table, log_record_id);
+CREATE INDEX %PREFIX%_idx_log_record_uuid ON %PREFIX%_log_changes (log_record_uuid);
+CREATE INDEX %PREFIX%_idx_log_change_uuid ON %PREFIX%_log_changes (log_change_uuid);
 
 /*==============================================================*/
 /* Foreign Key Constraints                                      */
@@ -1178,12 +1385,24 @@ ALTER TABLE %PREFIX%_categories
 ALTER TABLE %PREFIX%_category_report
     ADD CONSTRAINT %PREFIX%_fk_crt_org         FOREIGN KEY (crt_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_category_report_columns
+    ADD CONSTRAINT %PREFIX%_fk_crc_crt         FOREIGN KEY (crc_crt_id)         REFERENCES %PREFIX%_category_report (crt_id)      ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_usf         FOREIGN KEY (crc_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_rol         FOREIGN KEY (crc_rol_id)         REFERENCES %PREFIX%_roles (rol_id)                ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_crc_cat         FOREIGN KEY (crc_cat_id)         REFERENCES %PREFIX%_categories (cat_id)           ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_events
     ADD CONSTRAINT %PREFIX%_fk_dat_cat         FOREIGN KEY (dat_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_rol         FOREIGN KEY (dat_rol_id)         REFERENCES %PREFIX%_roles (rol_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_room        FOREIGN KEY (dat_room_id)        REFERENCES %PREFIX%_rooms (room_id)              ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_dat_evr         FOREIGN KEY (dat_evr_id)         REFERENCES %PREFIX%_event_recurrences (evr_id)   ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_usr_create  FOREIGN KEY (dat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_usr_change  FOREIGN KEY (dat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_event_recurrences
+    ADD CONSTRAINT %PREFIX%_fk_evr_dat_master  FOREIGN KEY (evr_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_evr_usr_create  FOREIGN KEY (evr_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_evr_usr_change  FOREIGN KEY (evr_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_files
     ADD CONSTRAINT %PREFIX%_fk_fil_fol         FOREIGN KEY (fil_fol_id)         REFERENCES %PREFIX%_folders (fol_id)             ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -1324,6 +1543,9 @@ ALTER TABLE %PREFIX%_user_fields
     ADD CONSTRAINT %PREFIX%_fk_usf_usr_create  FOREIGN KEY (usf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usf_usr_change  FOREIGN KEY (usf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_user_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_user_data
     ADD CONSTRAINT %PREFIX%_fk_usd_usf         FOREIGN KEY (usd_usf_id)         REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_usd_usr         FOREIGN KEY (usd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -1344,23 +1566,23 @@ ALTER TABLE %PREFIX%_user_relations
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_change  FOREIGN KEY (ure_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ure_usr_create  FOREIGN KEY (ure_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_user_field_select_options
-    ADD CONSTRAINT %PREFIX%_fk_ufo_usf          FOREIGN KEY (ufo_usf_id)        REFERENCES %PREFIX%_user_fields (usf_id)         ON DELETE RESTRICT ON UPDATE RESTRICT;
-
 ALTER TABLE %PREFIX%_inventory_fields
     ADD CONSTRAINT %PREFIX%_fk_inf_org         FOREIGN KEY (inf_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_create  FOREIGN KEY (inf_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_inf_usr_change  FOREIGN KEY (inf_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
+ALTER TABLE %PREFIX%_inventory_field_select_options
+    ADD CONSTRAINT %PREFIX%_fk_ifo_inf FOREIGN KEY (ifo_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)   ON DELETE CASCADE ON UPDATE RESTRICT;
+
 ALTER TABLE %PREFIX%_inventory_item_data
     ADD CONSTRAINT %PREFIX%_fk_ind_inf         FOREIGN KEY (ind_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ind_ini         FOREIGN KEY (ind_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE %PREFIX%_inventory_item_lend_data
-    ADD CONSTRAINT %PREFIX%_fk_inl_inf         FOREIGN KEY (inl_inf_id)         REFERENCES %PREFIX%_inventory_fields (inf_id)    ON DELETE RESTRICT ON UPDATE RESTRICT,
-    ADD CONSTRAINT %PREFIX%_fk_inl_ini         FOREIGN KEY (inl_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE %PREFIX%_inventory_item_borrow_data
+    ADD CONSTRAINT %PREFIX%_fk_inb_ini         FOREIGN KEY (inb_ini_id)         REFERENCES %PREFIX%_inventory_items (ini_id)     ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_inventory_items
     ADD CONSTRAINT %PREFIX%_fk_ini_cat         FOREIGN KEY (ini_cat_id)         REFERENCES %PREFIX%_categories (cat_id)          ON DELETE RESTRICT ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ini_status      FOREIGN KEY (ini_status)         REFERENCES %PREFIX%_inventory_field_select_options (ifo_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_create  FOREIGN KEY (ini_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ini_usr_change  FOREIGN KEY (ini_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;

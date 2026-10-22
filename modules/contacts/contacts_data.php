@@ -47,8 +47,8 @@
  ***********************************************************************************************
  */
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 
@@ -56,19 +56,34 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require_once(__DIR__ . '/../../system/login_valid.php');
 
+    enum ShowMembers: int
+    {
+        case ActiveContacts = 0;
+        case FormerContacts = 1;
+        case AllContactsThisOrganization = 2;
+        case AllContactsAllOrganizations = 3;
+    }
+
     // Initialize and check the parameters
-    $getMembersShowFilter = admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0));
+    $getMembersShowFilter = ShowMembers::from(admFuncVariableIsValid($_GET, 'mem_show_filter', 'int', array('defaultValue' => 0)));
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
     $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
 
+    $sharedOrganizationIds = $gCurrentOrganization->getSharedUsersOrganizationIds();
+    $sharedOrganizationIdsSql = implode(',', $sharedOrganizationIds);
+    $showAllOrganizationsFilter = $gCurrentUser->isAdministrator()
+        && $gSettingsManager->getBool('contacts_show_all')
+        && count($sharedOrganizationIds) > 1;
+
+    if ($getMembersShowFilter === ShowMembers::AllContactsAllOrganizations && !$showAllOrganizationsFilter) {
+        $getMembersShowFilter = ShowMembers::AllContactsThisOrganization;
+    }
+
     $jsonArray = array('draw' => $getDraw);
 
     header('Content-Type: application/json');
-
-    // show all members of all organizations
-    $getMembersAllOrgs = $gSettingsManager->getBool('contacts_show_all');
 
     if (isset($_SESSION['contacts_list_configuration'])) {
         $contactsListConfig = $_SESSION['contacts_list_configuration'];
@@ -78,7 +93,7 @@ try {
     $useOrderBy = false;
     $orderCondition = '';
     $orderColumns = array_merge(array('no', 'member_this_orga'), $contactsListConfig->getColumnNamesSql());
-    if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+    if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
         array_unshift($orderColumns, 'checkbox');
     }
 
@@ -110,7 +125,7 @@ try {
     if ($getSearch !== '' && count($searchColumns) > 0) {
         $searchString = explode(' ', $getSearch);
 
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $searchValue = ' ?::text ';
         } else {
             // mysql
@@ -118,7 +133,7 @@ try {
         }
 
         foreach ($searchString as $searchWord) {
-            $searchCondition .= ' AND CONCAT(' . implode(', \' \', ', $searchColumns) . ') LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
+            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', \' \', ', $searchColumns) . ')) LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
             $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
         }
 
@@ -155,22 +170,22 @@ try {
                 AND (  cat_org_id   = ' . $gCurrentOrgId . '
                          OR cat_org_id IS NULL ))';
 
-    if ($getMembersShowFilter === 0) {
+    if ($getMembersShowFilter === ShowMembers::ActiveContacts) {
         // show only active members of the current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = ' 0 '; // no former members of the current organization should be shown
-    } elseif ($getMembersShowFilter === 1) {
+    } elseif ($getMembersShowFilter === ShowMembers::FormerContacts) {
         // show only former members of the current organization
         $contactsOfThisOrganizationSelect = ' 0 '; // no current members of the current organization should be shown
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
-    } elseif ($getMembersShowFilter === 2 || $getMembersShowFilter === 3) {
+    } elseif ($getMembersShowFilter === ShowMembers::AllContactsThisOrganization || $getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) {
         // show all members of current organization
         $contactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderCurrentThisOrg);
         $formerContactsOfThisOrganizationSelect = '(SELECT COUNT(*) AS count_this_former' . sprintf($contactsOfThisOrganizationSelectPlaceholder, $placeholderFormerThisOrg);
     }
 
     // create a subselect to check if the user is also an active member of another organization
-    if ($gCurrentOrganization->countAllRecords() > 1  && $gCurrentUser->isAdministrator() && $getMembersShowFilter === 3) {
+    if ($showAllOrganizationsFilter && $getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) {
         $contactsOfOtherOrganizationSelectPlaceholder = '
             FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
@@ -182,6 +197,7 @@ try {
                 %s    -- logic placeholder for mem_end
                 AND rol_valid = true
                 AND cat_name_intern <> \'EVENTS\'
+                AND cat_org_id IN (' . $sharedOrganizationIdsSql . ')
                 AND cat_org_id <> ' . $gCurrentOrgId . ')';
 
         $placeholderCurrentOtherOrg = "AND mem_end > '" . DATE_NOW . "'";
@@ -196,6 +212,7 @@ try {
                 AND mem_end      > '" . DATE_NOW . "'
                 AND rol_valid    = true
                 AND cat_name_intern <> 'EVENTS'
+                AND cat_org_id   IN (" . $sharedOrganizationIdsSql . ")
                 AND cat_org_id   <> " . $gCurrentOrgId . ")";
 
         // show all members of other organizations
@@ -207,8 +224,9 @@ try {
         $formerContactsOfOtherOrganizationSelect = ' 0 ';
     }
 
-    // create main sql statement
-    if (($getMembersShowFilter === 0) && $gCurrentUser->isAdministratorUsers()) {
+    // create main SQL statement
+    if (($getMembersShowFilter === ShowMembers::ActiveContacts) &&
+        ($gCurrentUser->isAdministratorUsers() || $gCurrentUser->isAllowedToViewUsers())) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersThisOrga' => true,
@@ -217,7 +235,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 1) && $gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === ShowMembers::FormerContacts) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showFormerMembers' => true,
@@ -226,7 +244,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 2) && $gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === ShowMembers::AllContactsThisOrganization) && $gCurrentUser->isAdministratorUsers()) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersThisOrga' => true,
@@ -236,7 +254,7 @@ try {
                 'useOrderBy' => $useOrderBy
             )
         );
-    } elseif (($getMembersShowFilter === 3) && $gCurrentUser->isAdministratorUsers()) {
+    } elseif (($getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) && $gCurrentUser->isAdministrator() && $gSettingsManager->getBool('contacts_show_all')) {
         $mainSql = $contactsListConfig->getSql(
             array(
                 'showAllMembersDatabase' => true,
@@ -256,23 +274,52 @@ try {
         );
     }
 
-    $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $formerContactsOfThisOrganizationSelect . ' AS former_member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, ' . $formerContactsOfOtherOrganizationSelect . ' AS former_member_other_orga, 
-                (SELECT GROUP_CONCAT(DISTINCT cat_org.cat_org_id
-                        ORDER BY cat_org.cat_org_id
-                        SEPARATOR \',\')
+    if ($gDbType === 'pgsql') {
+        $sqlOrganizationConcat = ' STRING_AGG(CAST(cat_org.cat_org_id AS text), \',\' ORDER BY cat_org.cat_org_id) ';
+    } else {
+        $sqlOrganizationConcat = ' GROUP_CONCAT(DISTINCT cat_org.cat_org_id ORDER BY cat_org.cat_org_id SEPARATOR \',\') ';
+    }
+
+    $memberOrganizationsScopeCondition = '';
+    if ($getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) {
+        $memberOrganizationsScopeCondition = ' AND cat_org.cat_org_id IN (' . $sharedOrganizationIdsSql . ')';
+    }
+
+    $mainSql = 'SELECT DISTINCT ' . $contactsOfThisOrganizationSelect . ' AS member_this_orga, ' . $formerContactsOfThisOrganizationSelect . ' AS former_member_this_orga, ' . $contactsOfOtherOrganizationSelect . ' AS member_other_orga, ' . $formerContactsOfOtherOrganizationSelect . ' AS former_member_other_orga,
+                (SELECT ' . $sqlOrganizationConcat . '
                     FROM ' . TBL_MEMBERS . ' AS mem_org
                     INNER JOIN ' . TBL_ROLES . ' AS rol_org
                         ON rol_org.rol_id = mem_org.mem_rol_id
                     INNER JOIN ' . TBL_CATEGORIES . ' AS cat_org
                         ON cat_org.cat_id = rol_org.rol_cat_id
                     WHERE mem_org.mem_usr_id = usr_id
+                      ' . $memberOrganizationsScopeCondition . '
                 ) AS member_org_ids,
-                usr_login_name as loginname,
+                usr_login_name as login_name,
                 (SELECT email.usd_value FROM ' . TBL_USER_DATA . ' email
                   WHERE  email.usd_usr_id = usr_id
                     AND email.usd_usf_id = ? /* $gProfileFields->getProperty(\'email\', \'usf_id\') */
                  ) AS member_email, ' .
         substr($mainSql, 15);
+
+    if ($getMembersShowFilter === ShowMembers::AllContactsAllOrganizations) {
+        $mainSql = 'SELECT scope_contacts.*
+                      FROM (' . $mainSql . ') AS scope_contacts
+                     WHERE EXISTS (
+                           SELECT 1
+                             FROM ' . TBL_USERS . ' AS usr_scope
+                       INNER JOIN ' . TBL_MEMBERS . ' AS mem_scope
+                               ON mem_scope.mem_usr_id = usr_scope.usr_id
+                       INNER JOIN ' . TBL_ROLES . ' AS rol_scope
+                               ON rol_scope.rol_id = mem_scope.mem_rol_id
+                       INNER JOIN ' . TBL_CATEGORIES . ' AS cat_scope
+                               ON cat_scope.cat_id = rol_scope.rol_cat_id
+                            WHERE usr_scope.usr_uuid = scope_contacts.usr_uuid
+                              AND rol_scope.rol_valid = true
+                              AND cat_scope.cat_org_id IN (' . $sharedOrganizationIdsSql . ')
+                       )';
+    }
+
     $queryParamsEmail = array(
         $gProfileFields->getProperty('EMAIL', 'usf_id')
     ); // TODO add more params
@@ -306,8 +353,13 @@ try {
     $jsonArray['data'] = array();
 
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
+        // Filter the raw row before anything is formatted from it. FETCH_BOTH is kept, not FETCH_ASSOC:
+        // the list-configuration loop below reads $row[$ColumnNumberSql] by numeric position, so a
+        // plugin sees the same duplicated numeric/string keys the rest of this function always has.
+        $row = Hooks::applyTypedFilters('list_data', $row, 'contacts');
+
         ++$rowNumber;
-        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberJson = 3;
         } else {
             $columnNumberJson = 2;
@@ -334,7 +386,7 @@ try {
         }
 
         // Create row and add first column
-        if (($getMembersShowFilter < 3) && $gCurrentUser->isAdministratorUsers()) {
+        if (($getMembersShowFilter->value < ShowMembers::AllContactsAllOrganizations->value) && $gCurrentUser->isAdministratorUsers()) {
             $columnNumberValues = '2';
             $columnValues = array('DT_RowId' => 'row_members_' . $row['usr_uuid'], '0' => '<input type="checkbox"/>', '1' => $rowNumber);
         } else {
@@ -363,7 +415,7 @@ try {
         // add icon link to user profile
         $columnValues[$columnNumberValues] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $row['usr_uuid'])) . '">
         <i class="bi ' . $icon . '" data-bs-toggle="tooltip" title="' . $iconText . '"></i></a>';
-        
+
         // add all columns of the list configuration to the json array
         // start columnNumber with 4 because the first 2 columns are not of the list configuration
         for ($columnNumber = 1; $columnNumber <= $contactsListConfig->countColumns(); $columnNumber++) {
@@ -382,12 +434,12 @@ try {
 
         // Administrators can change or send password if login is configured and user is member of current organization
         if ($contactsOfThisOrganization && $gCurrentUser->isAdministrator()
-            && !empty($row['loginname']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
+            && !empty($row['login_name']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
             if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
                 // if email is set and systemmails are activated then administrators can send a new password to user
                 $userAdministration = '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                        data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_SEND_NEW_LOGIN', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name'])))) . '"
                         data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
             } else {
@@ -425,14 +477,14 @@ try {
                     // User is ONLY member of this organization -> ask if user should make to former member or delete completely
                     $userAdministration .= '
                         <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg')) . '">
+                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= ShowMembers::AllContactsThisOrganization ))) . '">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                         </a>';
                 } else {
                     // User is not member of any organization -> ask if delete completely
                     $userAdministration .= '
                         <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="' . $gL10n->get('SYS_USER_DELETE_DESC', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'])) . '"
+                            data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_USER_DELETE_DESC', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name'])))) . '"
                             data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                             <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                         </a>';
@@ -441,17 +493,18 @@ try {
                 // User could only be removed from this organization -> ask so
                 $userAdministration .= '
                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array($row['FIRST_NAME'] . ' ' . $row['LAST_NAME'], $gCurrentOrganization->getValue('org_longname'))) . '"
+                        data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']), $gCurrentOrganization->getValue('org_longname')))) . '"
                         data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                         <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
                     </a>';
             }
         }
 
+        $userAdministration = Hooks::applyTypedFilters('list_row_actions', $userAdministration, 'contacts', $row);
         $columnValues[(string)$columnNumberJson] = $userAdministration;
 
         // add current row to json array
-        $jsonArray['data'][] = $columnValues;
+        $jsonArray['data'][] = Hooks::applyTypedFilters('list_rendered_data', $columnValues, 'contacts', $row);
     }
 
 // set count of filtered records
@@ -472,7 +525,8 @@ try {
     }
 
     echo json_encode($jsonArray);
-} catch (Exception $e) {
+} catch (Throwable $e) {
+    // NOTE: DataTables expects the form {'error' => 'message'}, so we can't use the default handleException($e, true); call!
     $jsonArray['error'] = $e->getMessage();
     echo json_encode($jsonArray);
     exit();

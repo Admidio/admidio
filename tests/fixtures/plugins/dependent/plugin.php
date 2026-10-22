@@ -1,0 +1,3 @@
+<?php
+
+$GLOBALS['pluginLoadOrder'][] = 'dependent';

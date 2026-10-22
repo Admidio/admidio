@@ -3,7 +3,6 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Forum\Entity\Post;
 use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Service\ForumTopicService;
 use Admidio\Infrastructure\Exception;
@@ -116,7 +115,6 @@ class ForumTopicPresenter extends PagePresenter
         global $gDb, $gL10n, $gCurrentSession, $gCurrentUser;
 
         // create menu object
-        $post = new Post($gDb);
         $categoryService = new CategoryService($gDb, 'FOT');
 
         if ($this->topicUUID === '') {
@@ -125,10 +123,7 @@ class ForumTopicPresenter extends PagePresenter
                 throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
             }
         } else {
-            $post->readDataById($this->topic->getValue('fot_fop_id_first_post'));
-
-            if (!$gCurrentUser->isAdministratorForum()
-                && $gCurrentUser->getValue('usr_id') !== $post->getValue('fop_usr_id_create')) {
+            if (!$this->topic->isEditable()) {
                 throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
             }
         }

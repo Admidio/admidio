@@ -3,15 +3,25 @@ namespace Admidio\UI\Presenter;
 
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Infrastructure\Cli\CliApplication;
+use Admidio\Infrastructure\Cli\CliPolicy;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\OIDCService;
+
+use Admidio\Infrastructure\Plugins\PluginPages;
+use Admidio\Infrastructure\Plugins\PluginPanel;
+use Admidio\Infrastructure\Plugins\PluginWidget;
+
 use RuntimeException;
 
 /**
@@ -51,6 +61,103 @@ class PreferencesPresenter extends PagePresenter
     protected string $preferencesPanelToShow = '';
 
     /**
+     * Add browser/form validation attributes from the canonical preference definition.
+     * Presentation-only options such as labels, help texts and CSS classes stay at the call site.
+     *
+     * @param array<string,mixed> $presentationOptions
+     * @return array<string,mixed>
+     */
+    private static function preferenceInputOptions(string $name, array $presentationOptions = array()): array
+    {
+        $rules = PreferenceDefinitions::validationRules($name);
+        $validationOptions = self::preferenceRequiredOptions($rules);
+
+        if ($rules['type'] === 'int') {
+            $validationOptions['type'] = 'number';
+            $validationOptions['step'] = 1;
+            if ($rules['minimum'] !== null) {
+                $validationOptions['minNumber'] = $rules['minimum'];
+            }
+            if ($rules['maximum'] !== null) {
+                $validationOptions['maxNumber'] = $rules['maximum'];
+            }
+        }
+        if ($rules['maxLength'] !== null) {
+            $validationOptions['maxLength'] = $rules['maxLength'];
+        }
+
+        return self::mergePreferenceFormOptions($name, $validationOptions, $presentationOptions);
+    }
+
+    /**
+     * Add canonical requiredness to select-box options without moving presentation choices into the domain registry.
+     *
+     * @param array<string,mixed> $presentationOptions
+     * @return array<string,mixed>
+     */
+    private static function preferenceSelectOptions(string $name, array $presentationOptions = array()): array
+    {
+        return self::mergePreferenceFormOptions(
+            $name,
+            self::preferenceRequiredOptions(PreferenceDefinitions::validationRules($name)),
+            $presentationOptions
+        );
+    }
+
+    /**
+     * Determine the entry a signing key select box should be preselected with.
+     *
+     * A protocol cannot be used without a signing key, so a configuration that has no key yet
+     * offers the first usable key, or the creation of a default key if no usable key exists.
+     * This way enabling SAML or OIDC on a fresh installation never saves an empty key selection.
+     *
+     * @param string $configuredKeyId Key ID that is currently stored in the preferences.
+     * @param array<int|string,string> $usableKeys Usable keys, without the "create default key" entry.
+     * @return string Value that should be preselected in the select box.
+     */
+    private static function preselectedSigningKey(string $configuredKeyId, array $usableKeys): string
+    {
+        if ((int) $configuredKeyId > 0) {
+            return $configuredKeyId;
+        }
+
+        if (count($usableKeys) > 0) {
+            return (string) array_key_first($usableKeys);
+        }
+
+        return KeyService::CREATE_DEFAULT_KEY_VALUE;
+    }
+
+    /**
+     * @param array{required:bool} $rules
+     * @return array<string,mixed>
+     */
+    private static function preferenceRequiredOptions(array $rules): array
+    {
+        return $rules['required']
+            ? array('property' => FormPresenter::FIELD_REQUIRED)
+            : array();
+    }
+
+    /**
+     * @param array<string,mixed> $validationOptions
+     * @param array<string,mixed> $presentationOptions
+     * @return array<string,mixed>
+     */
+    private static function mergePreferenceFormOptions(string $name, array $validationOptions, array $presentationOptions): array
+    {
+        $duplicates = array_intersect_key($presentationOptions, $validationOptions);
+        if (count($duplicates) > 0) {
+            throw new \LogicException(
+                'Preference form options for "' . $name . '" duplicate canonical validation keys: '
+                . implode(', ', array_keys($duplicates)) . '.'
+            );
+        }
+
+        return array_merge($validationOptions, $presentationOptions);
+    }
+
+    /**
      * Constructor that initializes the class member parameters
      * @throws Exception
      */
@@ -73,70 +180,162 @@ class PreferencesPresenter extends PagePresenter
     private function initialize(): void
     {
         global $gL10n;
+
         $this->preferenceTabs = array(
             // === 1) System ===
             array(
-                'key'    => 'system',
+                'key'    => PluginPanel::SECTION_SYSTEM,
                 'label'  => $gL10n->get('SYS_SYSTEM'),
                 'panels' => array(
-                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false),
-                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false),
-                    array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false),
-                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false),
-                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true),
+                    array('id'=>'system_information',   'title'=>$gL10n->get('SYS_INFORMATIONS'),           'icon'=>'bi-info-circle-fill',              'subcards'=>true,  'sequence'=>10),
+                    array('id'=>'common',               'title'=>$gL10n->get('SYS_COMMON'),                 'icon'=>'bi-gear-fill',                     'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'overview',             'title'=>$gL10n->get('SYS_OVERVIEW'),               'icon'=>'bi-house-door-fill',               'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'design',               'title'=>$gL10n->get('SYS_DESIGN'),                 'icon'=>'bi-palette',                       'subcards'=>false, 'sequence'=>40),
+                    array('id'=>'regional_settings',    'title'=>$gL10n->get('ORG_REGIONAL_SETTINGS'),      'icon'=>'bi-globe2',                        'subcards'=>false, 'sequence'=>50),
+                    array('id'=>'changelog',            'title'=>$gL10n->get('SYS_CHANGE_HISTORY'),         'icon'=>'bi-clock-history',                 'subcards'=>false, 'sequence'=>60),
                 ),
             ),
 
             // === 2) Login and Security ===
             array(
-                'key'    => 'login_security',
+                'key'    => PluginPanel::SECTION_LOGIN_SECURITY,
                 'label'  =>  $gL10n->get('SYS_LOGIN') . ' & ' . $gL10n->get('SYS_SECURITY'),
                 'panels' => array(
-                    array('id'=>'security',             'title'=>$gL10n->get('SYS_SECURITY'),               'icon'=>'bi-shield-fill',                   'subcards'=>false),
-                    array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false),
-                    array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false),
-                    array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false),
-                ),
+                    array('id'=>'security',             'title'=>$gL10n->get('SYS_SECURITY'),               'icon'=>'bi-shield-fill',                   'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'registration',         'title'=>$gL10n->get('SYS_REGISTRATION'),           'icon'=>'bi-card-checklist',                'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'captcha',              'title'=>$gL10n->get('SYS_CAPTCHA'),                'icon'=>'bi-fonts',                         'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'sso',                  'title'=>$gL10n->get('SYS_SSO'),                    'icon'=>'bi-key',                           'subcards'=>false, 'sequence'=>40),
+                )
             ),
 
             // === 3) User Management ===
             array(
-                'key'    => 'user_management',
+                'key'    => PluginPanel::SECTION_USER_MANAGEMENT,
                 'label'  => $gL10n->get('SYS_USERS'),
                 'panels' => array(
-                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false),
-                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false),
-                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false),
-                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false),
-                ),
+                    array('id'=>'contacts',             'title'=>$gL10n->get('SYS_CONTACTS'),               'icon'=>'bi-person-vcard-fill',             'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'profile',              'title'=>$gL10n->get('SYS_PROFILE'),                'icon'=>'bi-person-fill',                   'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'groups_roles',         'title'=>$gL10n->get('SYS_GROUPS_ROLES'),           'icon'=>'bi-people-fill',                   'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'category_report',      'title'=>$gL10n->get('SYS_CATEGORY_REPORT'),        'icon'=>'bi-list-stars',                    'subcards'=>false, 'sequence'=>40),
+                )
             ),
 
             // === 4) Communication ===
             array(
-                'key'    => 'communication',
+                'key'    => PluginPanel::SECTION_COMMUNICATION,
                 'label'  => $gL10n->get('SYS_COMMUNICATION'),
                 'panels' => array(
-                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),           'icon'=>'bi-broadcast-pin',                 'subcards'=>false),
-                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),          'icon'=>'bi-envelope-open-fill',            'subcards'=>false),
-                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false),
-                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false),
-                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false),
-                ),
+                    array('id'=>'system_notifications', 'title'=>$gL10n->get('SYS_SYSTEM_MAILS'),           'icon'=>'bi-broadcast-pin',                 'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'email_dispatch',       'title'=>$gL10n->get('SYS_MAIL_DISPATCH'),          'icon'=>'bi-envelope-open-fill',            'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'messages',             'title'=>$gL10n->get('SYS_MESSAGES'),               'icon'=>'bi-envelope-fill',                 'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'announcements',        'title'=>$gL10n->get('SYS_ANNOUNCEMENTS'),          'icon'=>'bi-newspaper',                     'subcards'=>false, 'sequence'=>40),
+                    array('id'=>'forum',                'title'=>$gL10n->get('SYS_FORUM'),                  'icon'=>'bi-chat-dots-fill',                'subcards'=>false, 'sequence'=>50),
+                )
             ),
 
             // === 5) Contents ===
             array(
-                'key'    => 'content_management',
+                'key'    => PluginPanel::SECTION_CONTENT,
                 'label'  => $gL10n->get('SYS_CONTENTS'),
                 'panels' => array(
-                    array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false),
-                    array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false),
-                    array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false),
-                    array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false),
-                    array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false),
-                ),
+                    array('id'=>'events',               'title'=>$gL10n->get('SYS_EVENTS'),                 'icon'=>'bi-calendar-week-fill',            'subcards'=>false, 'sequence'=>10),
+                    array('id'=>'documents_files',      'title'=>$gL10n->get('SYS_DOCUMENTS_FILES'),        'icon'=>'bi-file-earmark-arrow-down-fill',  'subcards'=>false, 'sequence'=>20),
+                    array('id'=>'inventory',            'title'=>$gL10n->get('SYS_INVENTORY'),              'icon'=>'bi-box-seam-fill',                 'subcards'=>false, 'sequence'=>30),
+                    array('id'=>'photos',               'title'=>$gL10n->get('SYS_PHOTOS'),                 'icon'=>'bi-image-fill',                    'subcards'=>false, 'sequence'=>40),
+                    array('id'=>'links',                'title'=>$gL10n->get('SYS_WEBLINKS'),               'icon'=>'bi-link-45deg',                    'subcards'=>false, 'sequence'=>50),
+                )
             ),
+
+            // === 6) Overview Extensions ===
+            array(
+                'key'    => PluginPanel::SECTION_OVERVIEW,
+                'label'  => $gL10n->get('SYS_OVERVIEW_EXTENSIONS'),
+                'panels' => array()
+            ),
+
+            // === 7) Extensions ===
+            array(
+                'key'    => PluginPanel::SECTION_DEFAULT,
+                'label'  => $gL10n->get('SYS_EXTENSIONS'),
+                'panels' => array()
+            )
         );
+
+        $this->addPluginPanels();
+    }
+
+    /**
+     * Put the panels the plugins declared into the tab each of them named.
+     *
+     * Every tab can receive them, not only the two that carry no core panels: a module that used to
+     * be part of the core stays in its own tab once it becomes a plugin. That is also why the core
+     * panels carry a sequence - a converted module has to be able to take the place it had, instead
+     * of being appended after the panels that are still core.
+     * @return void
+     */
+    private function addPluginPanels(): void
+    {
+        foreach ($this->preferenceTabs as $index => $tab) {
+            $panels = array_merge($tab['panels'], self::pluginPanels($tab['key']));
+
+            usort($panels, static function (array $first, array $second): int {
+                return array($first['sequence'], $first['id']) <=> array($second['sequence'], $second['id']);
+            });
+
+            $this->preferenceTabs[$index]['panels'] = $panels;
+        }
+    }
+
+    /**
+     * The panels the plugins declared for one tab.
+     *
+     * A plugin names the tab in its manifest, and declares the panel itself with the PluginPanel
+     * hook unless its settings form is generated.
+     * @param string $section One of the PluginPanel SECTION_* constants.
+     * @return array<int,array{id: string, title: string, icon: string, subcards: bool, sequence: int}>
+     */
+    private static function pluginPanels(string $section): array
+    {
+        $panels = array();
+
+        foreach (PluginPanel::inSection($section) as $panel) {
+            $panels[] = array(
+                'id'       => $panel['id'],
+                'title'    => $panel['title'],
+                'icon'     => $panel['icon'] ?? 'bi-puzzle',
+                'subcards' => $panel['subcards'] ?? false,
+                'sequence' => $panel['sequence'] ?? PluginPanel::DEFAULT_SEQUENCE
+            );
+        }
+
+        return $panels;
+    }
+
+    /**
+     * Build the HTML of one preferences panel. This is what the page requests once the
+     * administrator opens a panel.
+     *
+     * A panel of the core is a method of this class, named after it - the panel **email_dispatch**
+     * is createEmailDispatchForm(). Every other panel was declared by a plugin and is built by that
+     * plugin. The core is asked first, so that a plugin cannot take a panel of the core over.
+     * @param string $panel ID of the panel.
+     * @return string
+     * @throws Exception
+     */
+    public function createPanel(string $panel): string
+    {
+        $method = 'create' . str_replace('_', '', ucwords($panel, '_')) . 'Form';
+
+        if (!method_exists($this, $method)) {
+            if (PluginPanel::get($panel) !== null) {
+                return PluginPanel::create($panel, $this);
+            }
+
+            // The panel is a request parameter, so a name nobody declared is an invalid page view.
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        return $this->{$method}();
     }
 
     /**
@@ -172,13 +371,13 @@ class PreferencesPresenter extends PagePresenter
             'announcements_per_page',
             $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
             $formValues['announcements_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+            self::preferenceInputOptions('announcements_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10))))
         );
          $formAnnouncements->addInput(
-            'announcements_clamp_text_lines',
-            $gL10n->get('SYS_CLAMP_TEXT_LINES'),
-            $formValues['announcements_clamp_text_lines'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_ANNOUNCEMENT')))
+            'announcements_preview_characters',
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
+            $formValues['announcements_preview_characters'],
+            self::preferenceInputOptions('announcements_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(0))))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'ANN')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -220,6 +419,12 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
 
+        $formCaptcha->addCheckbox(
+            'captcha_enabled',
+            $gL10n->get('ORG_ENABLE_CAPTCHA'),
+            (bool) $formValues['captcha_enabled'],
+            array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
+        );
         // search all available themes in the theme folder
         $themes = array_keys(FileSystemUtils::getDirectoryContent(ADMIDIO_PATH . FOLDER_THEMES, false, false, array(FileSystemUtils::CONTENT_TYPE_DIRECTORY)));
         if (count($themes) === 0) {
@@ -249,13 +454,13 @@ class PreferencesPresenter extends PagePresenter
             'captcha_width',
             $gL10n->get('SYS_WIDTH') . ' (' . $gL10n->get('ORG_PIXEL') . ')',
             $formValues['captcha_width'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_WIDTH_DESC')
+            self::preferenceInputOptions('captcha_width', array('helpTextId' => 'ORG_CAPTCHA_WIDTH_DESC'))
         );
         $formCaptcha->addInput(
             'captcha_lines_numbers',
             $gL10n->get('ORG_CAPTCHA_LINES_NUMBERS'),
             $formValues['captcha_lines_numbers'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 25, 'step' => 1, 'helpTextId' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC')
+            self::preferenceInputOptions('captcha_lines_numbers', array('helpTextId' => 'ORG_CAPTCHA_LINES_NUMBERS_DESC'))
         );
         $formCaptcha->addInput(
             'captcha_perturbation',
@@ -275,31 +480,31 @@ class PreferencesPresenter extends PagePresenter
             'captcha_background_color',
             $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'),
             $formValues['captcha_background_color'],
-            array('maxLength' => 7, 'class' => 'form-control-small')
+            self::preferenceInputOptions('captcha_background_color', array('class' => 'form-control-small'))
         );
         $formCaptcha->addInput(
             'captcha_text_color',
             $gL10n->get('ORG_CAPTCHA_CHARACTERS_COLOR'),
             $formValues['captcha_text_color'],
-            array('maxLength' => 7, 'class' => 'form-control-small')
+            self::preferenceInputOptions('captcha_text_color', array('class' => 'form-control-small'))
         );
         $formCaptcha->addInput(
             'captcha_line_color',
             $gL10n->get('ORG_CAPTCHA_LINE_COLOR'),
             $formValues['captcha_line_color'],
-            array('maxLength' => 7, 'helpTextId' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small')
+            self::preferenceInputOptions('captcha_line_color', array('helpTextId' => array('ORG_CAPTCHA_COLOR_DESC', array('<a href="https://en.wikipedia.org/wiki/Web_colors">', '</a>')), 'class' => 'form-control-small'))
         );
         $formCaptcha->addInput(
             'captcha_charset',
             $gL10n->get('ORG_CAPTCHA_SIGNS'),
             $formValues['captcha_charset'],
-            array('maxLength' => 80, 'helpTextId' => 'ORG_CAPTCHA_SIGNS_TEXT')
+            self::preferenceInputOptions('captcha_charset', array('helpTextId' => 'ORG_CAPTCHA_SIGNS_TEXT'))
         );
         $formCaptcha->addInput(
             'captcha_signature',
             $gL10n->get('ORG_CAPTCHA_SIGNATURE'),
             $formValues['captcha_signature'],
-            array('maxLength' => 60, 'helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT')
+            self::preferenceInputOptions('captcha_signature', array('helpTextId' => 'ORG_CAPTCHA_SIGNATURE_TEXT'))
         );
         $html = '<img id="adm_captcha" src="' . ADMIDIO_URL . FOLDER_LIBS . '/securimage/securimage_show.php" alt="CAPTCHA Image" />
          <a id="adm_captcha_refresh" class="admidio-icon-link" href="javascript:void(0)">
@@ -356,10 +561,10 @@ class PreferencesPresenter extends PagePresenter
         $sqlData['params'] = array($gCurrentOrgId);
         $formCategoryReport->addSelectBoxFromSql(
             'category_report_default_configuration',
-            $gL10n->get('SYS_DEFAULT_CONFIGURATION'),
+            $gL10n->get('SYS_DEFAULT_REPORT'),
             $gDb,
             $sqlData,
-            array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_CONFIGURATION_CAT_REP_DESC')
+            array('defaultValue' => $formValues['category_report_default_configuration'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_DEFAULT_REPORT_DESC')
         );
 
         $formCategoryReport->addSubmitButton(
@@ -406,52 +611,84 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['changelog_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_ENABLE_CHANGELOG_DESC')
         );
 
-        $tablesMap = array_map([$gL10n, 'translateIfTranslationStrId'], ChangelogService::getTableLabel());
-        // $selectedTables = explode(',', $formValues['changelog_tables']??'');
-        $formChangelog->addCustomContent(
-            'changelog_tables',
-            $gL10n->get('SYS_LOGGED_TABLES'),
-            $gL10n->get('SYS_LOGGED_TABLES_DESC'),
-            array(
-                'tables' => array(
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_DATA'),
-                        'id' => 'user_role_data',
-                        'tables' => array('users', 'user_data', 'members', 'user_relations', 'roles', 'role_dependencies', 'category_report')
-                    ),
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_USER_ROLE_SETTINGS'),
-                        'id' => 'user_role_settings',
-                        'tables' => array('user_fields', 'user_field_select_options', 'user_relation_types', 'roles_rights', 'roles_rights_data')
-                    ),
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_CONTENT_MODULES'),
-                        'id' => 'content_modules',
-                        'tables' => array('files', 'folders', 'photos', 'announcements', 'events', 'rooms', 'forum_topics', 'forum_posts', 'inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_lend_data', 'links', 'others')
-                    ),
-                    array(
-                        'title' => $gL10n->get('SYS_HEADER_PREFERENCES'),
-                        'id' => 'preferences',
-                        'tables' => array('organizations', 'menu', 'preferences', 'texts', 'lists', 'list_columns', 'categories', 'saml_clients', 'oidc_clients', 'sso_keys')
-                    )
-                )
-            )
+        $formChangelog->addInput(
+            'changelog_default_days',
+            $gL10n->get('SYS_CHANGELOG_DEFAULT_DAYS'),
+            $formValues['changelog_default_days'] ?? '365',
+            self::preferenceInputOptions('changelog_default_days', array('helpTextId' => 'SYS_CHANGELOG_DEFAULT_DAYS_DESC'))
         );
 
-        foreach ($tablesMap as $tableName => $tableLabel) {
-            $formChangelog->addCheckbox(
-                'changelog_table_' . $tableName,
-                "$tableLabel ($tableName)",
-                $formValues['changelog_table_' . $tableName] ?? false
+        $formChangelog->addInput(
+            'changelog_retention_days',
+            $gL10n->get('SYS_CHANGELOG_RETENTION_DAYS'),
+            $formValues['changelog_retention_days'] ?? '0',
+            self::preferenceInputOptions('changelog_retention_days', array('helpTextId' => 'SYS_CHANGELOG_RETENTION_DAYS_DESC'))
+        );
+
+        // The purge is not part of the form, it is a separate action that deletes data immediately.
+        $formChangelog->addCustomContent(
+            'changelog_purge',
+            '',
+            '<a id="adm_link_changelog_purge" href="#adm_link_changelog_purge" class="btn btn-secondary">
+                <i class="bi bi-trash"></i>' . $gL10n->get('SYS_CHANGELOG_PURGE') . '</a>
+             <div id="adm_changelog_purge_result" class="form-text"></div>'
+        );
+
+        // The change history is configured in areas, but the preferences store one flag per
+        // database table. An area whose tables are only partly logged therefore starts in the
+        // state "mixed" and leaves those flags untouched until the user switches it on or off.
+        $sections = array();
+        foreach (ChangelogService::getAreaSections() as $sectionId => $sectionLabel) {
+            $sections[$sectionId] = array(
+                'id' => 'adm_changelog_section_' . $sectionId,
+                'title' => ($sectionLabel === '' ? '' : $gL10n->get($sectionLabel)),
+                'areas' => array()
             );
         }
 
-        // $formChangelog->addCheckbox(
-        //     'changelog_allow_deletion',
-        //     $gL10n->get('SYS_LOG_ALLOW_DELETION'),
-        //     (bool)($formValues['changelog_allow_deletion']??false),
-        //     array('helpTextId' => 'SYS_LOG_ALLOW_DELETION_DESC')
-        // );
+        foreach (ChangelogService::getVisibleAreas() as $areaId => $area) {
+            $loggedTables = 0;
+            foreach ($area['tables'] as $tableName) {
+                if (!empty($formValues['changelog_table_' . $tableName])) {
+                    $loggedTables++;
+                }
+            }
+
+            if ($loggedTables === 0) {
+                $areaState = 'off';
+            } elseif ($loggedTables === count($area['tables'])) {
+                $areaState = 'on';
+            } else {
+                $areaState = 'mixed';
+            }
+
+            $elementId = 'changelog_area_' . $areaId;
+            $formChangelog->addCheckbox(
+                $elementId,
+                $gL10n->translateIfTranslationStrId($area['label']),
+                $areaState !== 'off',
+                array('value' => ($areaState === 'mixed' ? 'mixed' : '1'), 'state' => $areaState)
+            );
+
+            if (!isset($sections[$area['section']])) {
+                $sections[$area['section']] = array(
+                    'id' => 'adm_changelog_section_' . $area['section'],
+                    'title' => '',
+                    'areas' => array()
+                );
+            }
+            $sections[$area['section']]['areas'][] = $elementId;
+        }
+
+        // A section without a single area of an enabled module is not displayed at all.
+        $formChangelog->addCustomContent(
+            'changelog_areas',
+            $gL10n->get('SYS_LOGGED_AREAS'),
+            $gL10n->get('SYS_LOGGED_AREAS_DESC'),
+            array('sections' => array_filter($sections, function (array $section) {
+                return count($section['areas']) > 0;
+            }))
+        );
 
         $formChangelog->addSubmitButton(
             'adm_button_save_changelog',
@@ -489,13 +726,13 @@ class PreferencesPresenter extends PagePresenter
             'homepage_logout',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('SYS_VISITORS') . ')',
             $formValues['homepage_logout'],
-            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_VISITORS')
+            self::preferenceInputOptions('homepage_logout', array('helpTextId' => 'ORG_HOMEPAGE_VISITORS'))
         );
         $formCommon->addInput(
             'homepage_login',
             $gL10n->get('SYS_HOMEPAGE') . ' (' . $gL10n->get('ORG_REGISTERED_USERS') . ')',
             $formValues['homepage_login'],
-            array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS')
+            self::preferenceInputOptions('homepage_login', array('helpTextId' => 'ORG_HOMEPAGE_REGISTERED_USERS'))
         );
         $formCommon->addCheckbox(
             'enable_rss',
@@ -526,13 +763,28 @@ class PreferencesPresenter extends PagePresenter
             'system_url_data_protection',
             $gL10n->get('SYS_DATA_PROTECTION'),
             $formValues['system_url_data_protection'],
-            array('type' => 'url', 'maxLength' => 250, 'helpTextId' => 'SYS_DATA_PROTECTION_DESC')
+            self::preferenceInputOptions('system_url_data_protection', array('type' => 'url', 'helpTextId' => 'SYS_DATA_PROTECTION_DESC'))
         );
         $formCommon->addInput(
             'system_url_imprint',
             $gL10n->get('SYS_IMPRINT'),
             $formValues['system_url_imprint'],
-            array('type' => 'url', 'maxLength' => 250, 'helpTextId' => 'SYS_IMPRINT_DESC')
+            self::preferenceInputOptions('system_url_imprint', array('type' => 'url', 'helpTextId' => 'SYS_IMPRINT_DESC'))
+        );
+        /*
+         * Publishing writes into the program directory, which a read-only deployment cannot do.
+         * That is a supported situation, so the option is shown but says why it cannot be used.
+         */
+        $modulePagesWritable = PluginPages::isWritable();
+        $formCommon->addCheckbox(
+            PluginPages::SETTING,
+            $gL10n->get('SYS_PLUGIN_MODULE_PAGES'),
+            PluginPages::isAllowed(),
+            array(
+                'helpTextId' => $modulePagesWritable
+                    ? 'SYS_PLUGIN_MODULE_PAGES_DESC' : 'SYS_PLUGIN_MODULE_PAGES_NOT_WRITABLE',
+                'property' => $modulePagesWritable ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED
+            )
         );
         $formCommon->addCheckbox(
             'system_js_editor_enabled',
@@ -546,6 +798,18 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['system_browser_update_check'],
             array('helpTextId' => 'ORG_BROWSER_UPDATE_CHECK_DESC')
         );
+        $formCommon->addCheckbox(
+            'system_pwa_enabled',
+            $gL10n->get('SYS_PWA_ENABLED'),
+            (bool) ($formValues['system_pwa_enabled'] ?? true),
+            array('helpTextId' => 'SYS_PWA_ENABLED_DESC')
+        );
+        $formCommon->addInput(
+            'path_for_calculating_disk_usage',
+            $gL10n->get('ORG_PATH_FOR_CALCULATING_DISK_USAGE'),
+            $formValues['path_for_calculating_disk_usage'],
+            self::preferenceInputOptions('path_for_calculating_disk_usage', array('helpTextId' => 'ORG_PATH_FOR_CALCULATING_DISK_USAGE_DESC'))
+        );
         $formCommon->addSubmitButton(
             'adm_button_save_common',
             $gL10n->get('SYS_SAVE'),
@@ -556,6 +820,96 @@ class PreferencesPresenter extends PagePresenter
         $formCommon->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formCommon);
         return $smarty->fetch('preferences/preferences.common.tpl');
+    }
+
+    /**
+     * Generates the HTML of the form from the plugin overview preferences and will return the complete HTML.
+     * @return string Returns the complete HTML of the form from the contact preferences.
+     * @throws Exception
+     * @throws \Smarty\Exception
+     */
+    public function createOverviewForm(): string
+    {
+        global $gL10n, $gCurrentSession;
+
+        // A widget whose plugin does not store its position cannot be ordered in this form.
+        $overviewPlugins = array_values(array_filter(
+            $this->overviewWidgets(),
+            static fn(array $overviewPlugin): bool => $overviewPlugin['sequence']['key'] !== ''
+        ));
+
+        // The position the visitor sees is the position the form has to offer, so the widgets are
+        // ordered here and then numbered from one - which is what the page does again as soon as the
+        // administrator drags a card.
+        usort($overviewPlugins, static function (array $first, array $second): int {
+            return array($first['sequence']['value'], $first['id']) <=> array($second['sequence']['value'], $second['id']);
+        });
+        foreach ($overviewPlugins as $position => $overviewPlugin) {
+            $overviewPlugins[$position]['sequence']['value'] = $position + 1;
+        }
+
+        $formOverview = new FormPresenter(
+            'adm_preferences_form_overview',
+            'preferences/preferences.overview.tpl',
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'overview')),
+            null,
+            array('class' => 'form-preferences')
+        );
+
+        $formOverview->addDescription(
+            'adm_overview_description',
+            $gL10n->get('SYS_OVERVIEW_EXTENSIONS_SEQUENCE_DESC')
+        );
+
+        // add hidden inputs for the plugin sequence
+        foreach ($overviewPlugins as $overviewPlugin) {
+            $formOverview->addInput(
+                $overviewPlugin['sequence']['key'],
+                '',
+                $overviewPlugin['sequence']['value'],
+                array('type' => 'number', 'property' => FormPresenter::FIELD_HIDDEN)
+            );
+        }
+
+        $formOverview->addSubmitButton(
+            'adm_button_save_overview',
+            $gL10n->get('SYS_SAVE'),
+            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+        );
+
+        $smarty = $this->getSmartyTemplate();
+        $smarty->assign('overviewPlugins', $overviewPlugins);
+        $formOverview->addToSmarty($smarty);
+        $gCurrentSession->addFormObject($formOverview);
+        return $smarty->fetch('preferences/preferences.overview.tpl');
+    }
+
+    /**
+     * The overview widgets that the loaded plugins declared, for the overview form.
+     *
+     * A declaration exists whether the widget is visible in this request or not, so a widget an
+     * administrator switched off is listed here as well and can be switched on again.
+     * @return array<int,array{id: string, name: string, icon: string, enabled: bool, sequence: array{key: string, value: int}}>
+     * @throws Exception
+     */
+    private function overviewWidgets(): array
+    {
+        $widgets = array();
+
+        foreach (PluginWidget::getDeclarations() as $declaration) {
+            $widgets[] = array(
+                'id' => $declaration['id'],
+                'name' => $declaration['name'],
+                'icon' => $declaration['icon'],
+                'enabled' => PluginWidget::getAccess($declaration['enabledPreference']) !== PluginWidget::ACCESS_NOBODY,
+                'sequence' => array(
+                    'key' => $declaration['sequencePreference'],
+                    'value' => PluginWidget::getSequence($declaration['sequencePreference'], $declaration['sequence'])
+                )
+            );
+        }
+
+        return $widgets;
     }
 
     /**
@@ -603,12 +957,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_CONTACTS_PER_PAGE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['contacts_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_SELECT_DESC', array(25)))
-        );
-        $formContacts->addInput(
-            'contacts_field_history_days',
-            $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
-            $formValues['contacts_field_history_days'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
         );
         $formContacts->addCheckbox(
             'contacts_show_all',
@@ -673,43 +1021,72 @@ class PreferencesPresenter extends PagePresenter
             'theme',
             $gL10n->get('ORG_ADMIDIO_THEME'),
             $themes,
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC')
+            self::preferenceSelectOptions('theme', array('defaultValue' => $formValues['theme'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_DESC'))
         );
         $formDesign->addSelectBox(
             'theme_fallback',
             $gL10n->get('ORG_ADMIDIO_THEME_FALLBACK'),
             $themes,
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC')
+            self::preferenceSelectOptions('theme_fallback', array('defaultValue' => $formValues['theme_fallback'], 'arrayKeyIsNotValue' => true, 'helpTextId' => 'ORG_ADMIDIO_THEME_FALLBACK_DESC'))
         );
         $formDesign->addInput(
-            'color_primary',
+            'theme_color_primary',
             $gL10n->get('SYS_COLOR_PRIMARY'),
-            $formValues['color_primary']??'#349aaa',
+            $formValues['theme_color_primary']??'#349aaa',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_PRIMARY_DESC')
         );
         $formDesign->addInput(
-            'color_secondary',
+            'theme_color_secondary',
             $gL10n->get('SYS_COLOR_SECONDARY'),
-            $formValues['color_secondary']??'#263340',
+            $formValues['theme_color_secondary']??'#263340',
             array('type' => 'color', 'helpTextId' => 'SYS_COLOR_SECONDARY_DESC')
         );
-
         $formDesign->addInput(
-            'additional_styles_file',
+            'theme_color_tertiary',
+            $gL10n->get('SYS_COLOR_TERTIARY'),
+            $formValues['theme_color_tertiary']??'#e9ecef',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_TERTIARY_DESC')
+        );
+        $formDesign->addInput(
+            'theme_color_background',
+            $gL10n->get('SYS_COLOR_BACKGROUND'),
+            $formValues['theme_color_background']??'#ffffff',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_BACKGROUND_DESC')
+        );
+        $formDesign->addInput(
+            'theme_color_text',
+            $gL10n->get('SYS_COLOR_TEXT'),
+            $formValues['theme_color_text']??'#263340',
+            array('type' => 'color', 'helpTextId' => 'SYS_COLOR_TEXT_DESC')
+        );
+        $formDesign->addInput(
+            'theme_additional_styles_file',
             $gL10n->get('SYS_ADDITIONAL_CSS_FILE'),
-            $formValues['additional_styles_file']??'',
+            $formValues['theme_additional_styles_file']??'',
             array('helpTextId' => 'SYS_ADDITIONAL_CSS_FILE_DESC')
         );
         $formDesign->addInput(
-            'logo_file',
+            'theme_logo_file',
             $gL10n->get('SYS_LOGO_FILE'),
-            $formValues['logo_file']??'',
+            $formValues['theme_logo_file']??'',
             array('helpTextId' => 'SYS_LOGO_FILE_DESC')
         );
         $formDesign->addInput(
-            'favicon_file',
+            'theme_logo_file_max_height',
+            $gL10n->get('SYS_LOGO_FILE_MAX_HEIGHT'),
+            $formValues['theme_logo_file_max_height']??'',
+            self::preferenceInputOptions('theme_logo_file_max_height', array('helpTextId' => 'SYS_LOGO_FILE_MAX_HEIGHT_DESC'))
+        );
+        $formDesign->addInput(
+            'theme_admidio_headline',
+            $gL10n->get('SYS_HEADLINE'),
+            $formValues['theme_admidio_headline']??'',
+            array('helpTextId' => 'SYS_ADMIDIO_HEADLINE_DESC')
+        );
+        $formDesign->addInput(
+            'theme_favicon_file',
             $gL10n->get('SYS_FAVICON_FILE'),
-            $formValues['favicon_file']??'',
+            $formValues['theme_favicon_file']??'',
             array('helpTextId' => 'SYS_FAVICON_FILE_DESC')
         );
         $formDesign->addSubmitButton(
@@ -758,7 +1135,7 @@ class PreferencesPresenter extends PagePresenter
             'documents_files_max_upload_size',
             $gL10n->get('SYS_MAXIMUM_FILE_SIZE') . ' (MB)',
             $formValues['documents_files_max_upload_size'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999999, 'step' => 1, 'helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC')
+            self::preferenceInputOptions('documents_files_max_upload_size', array('helpTextId' => 'SYS_MAXIMUM_FILE_SIZE_DESC'))
         );
         $formDocumentsFiles->addSubmitButton(
             'adm_button_save_documents_files',
@@ -782,8 +1159,7 @@ class PreferencesPresenter extends PagePresenter
     {
         global $gL10n, $gSettingsManager, $gDb, $gCurrentOrgId, $gCurrentSession, $gCurrentUser;
         $formValues = $gSettingsManager->getAll();
-        //array with the internal field names of the lend fields
-        $lendFieldNames = array('IN_INVENTORY', 'LAST_RECEIVER', 'RECEIVED_ON', 'RECEIVED_BACK_ON');
+        $items = new ItemsData($gDb, $gCurrentOrgId);
 
         $formInventory = new FormPresenter(
             'adm_preferences_form_inventory',
@@ -798,13 +1174,44 @@ class PreferencesPresenter extends PagePresenter
             '0' => $gL10n->get('SYS_DISABLED'),
             '1' => $gL10n->get('SYS_ENABLED'),
             '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
-            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR')
+            '3' => $gL10n->get('ORG_ONLY_FOR_MODULE_ADMINISTRATOR'),
+            '4' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_KEEPERS'),
+            '5' => $gL10n->get('SYS_INVENTORY_ONLY_FOR_ADMINS_AND_ROLES')
         );
         $formInventory->addSelectBox(
             'inventory_module_enabled',
             $gL10n->get('ORG_ACCESS_TO_MODULE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['inventory_module_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ACCESS_TO_MODULE_DESC')
+        );
+
+        // read all roles from db
+        $sqlRoles = 'SELECT rol_id, rol_name, org_shortname, cat_name
+                       FROM ' . TBL_ROLES . '
+                 INNER JOIN ' . TBL_CATEGORIES . '
+                         ON cat_id = rol_cat_id
+                 INNER JOIN ' . TBL_ORGANIZATIONS . '
+                         ON org_id = cat_org_id
+                      WHERE rol_valid  = true
+                        AND rol_system = false
+                        AND cat_name_intern <> \'EVENTS\'
+                   ORDER BY cat_name, rol_name';
+        $rolesViewStatement = $gDb->queryPrepared($sqlRoles);
+
+        $selectBoxEntries = array();
+        while ($rowViewRoles = $rolesViewStatement->fetch()) {
+            // Each role is now added to this array
+            $selectBoxEntries[] = array(
+                $rowViewRoles['rol_id'],
+                Language::translateIfTranslationStrId($rowViewRoles['rol_name']) . ' (' . $rowViewRoles['org_shortname'] . ')',
+                $rowViewRoles['cat_name']
+            );
+        }
+        $formInventory->addSelectBox(
+            'inventory_visible_for',
+            $gL10n->get('SYS_VISIBLE_FOR'),
+            $selectBoxEntries,
+            array('defaultValue' => explode(',', $formValues['inventory_visible_for']), 'multiselect' => true)
         );
 
         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100', '-1' => $gL10n->get('SYS_ALL'));
@@ -819,13 +1226,42 @@ class PreferencesPresenter extends PagePresenter
             'inventory_field_history_days',
             $gL10n->get('SYS_DAYS_FIELD_HISTORY'),
             $formValues['inventory_field_history_days'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999999999, 'step' => 1, 'helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC')
+            self::preferenceInputOptions('inventory_field_history_days', array('helpTextId' => 'SYS_DAYS_FIELD_HISTORY_DESC'))
         );
 
         // general settings
-        $formInventory->addSeperator(
-            'inventory_seperator_general_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_general_settings',
             $gL10n->get('SYS_COMMON')
+        );
+
+        $formInventory->addCheckbox(
+            'inventory_item_picture_enabled',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURE_ENABLED'),
+            (bool) $formValues['inventory_item_picture_enabled'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEM_PICTURE_ENABLED_DESC')
+        );
+
+        $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+        $formInventory->addSelectBox(
+            'inventory_item_picture_storage',
+            $gL10n->get('SYS_INVENTORY_ITEM_PICTURES_LOCATION'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['inventory_item_picture_storage'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_INVENTORY_ITEM_PICTURES_LOCATION_DESC')
+        );
+
+        $formInventory->addInput(
+            'inventory_item_picture_width',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
+            $formValues['inventory_item_picture_width'],
+            self::preferenceInputOptions('inventory_item_picture_width')
+        );
+
+        $formInventory->addInput(
+            'inventory_item_picture_height',
+            $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
+            $formValues['inventory_item_picture_height'],
+            self::preferenceInputOptions('inventory_item_picture_height', array('helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(130, 170))))
         );
 
         $formInventory->addCheckbox(
@@ -836,34 +1272,37 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $formInventory->addCheckbox(
-            'inventory_items_disable_lending',
-            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_LENDING'),
-            (bool) $formValues['inventory_items_disable_lending'],
-            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_LENDING_DESC')
+            'inventory_items_disable_borrowing',
+            $gL10n->get('SYS_INVENTORY_ITEMS_DISABLE_BORROWING'),
+            (bool) $formValues['inventory_items_disable_borrowing'],
+            array('helpTextId' => 'SYS_INVENTORY_ITEMS_DISABLE_BORROWING_DESC')
         );
 
         $formInventory->addCheckbox(
             'inventory_system_field_names_editable',
             $gL10n->get('SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT'),
-            $formValues['inventory_system_field_names_editable'],
+            (bool) $formValues['inventory_system_field_names_editable'],
             array('helpTextId' => 'SYS_INVENTORY_SYSTEM_FIELDNAME_EDIT_DESC')
         );
 
-        if ($formValues['inventory_module_enabled'] !== 3  || ($formValues['inventory_module_enabled'] === 3 && $gCurrentUser->isAdministratorInventory())) {
+        if ($formValues['inventory_module_enabled'] !== '3'  || ($formValues['inventory_module_enabled'] === '3' && $gCurrentUser->isAdministratorInventory())) {
             $formInventory->addCheckbox(
                 'inventory_allow_keeper_edit',
                 $gL10n->get('SYS_INVENTORY_ACCESS_EDIT'),
-                $formValues['inventory_allow_keeper_edit'],
+                (bool) $formValues['inventory_allow_keeper_edit'],
                 array('helpTextId' => 'SYS_INVENTORY_ACCESS_EDIT_DESC')
             );
 
             // create array of possible fields for keeper edit
-            $items = new ItemsData($gDb, $gCurrentOrgId);
             $selectBoxEntries = array();
+            // add pseudo field 'ITEM_PICTURE' if item pictures are enabled
+            if ($formValues['inventory_item_picture_enabled']) {
+                $selectBoxEntries['ITEM_PICTURE'] = $gL10n->get('SYS_INVENTORY_ITEM_PICTURE');
+            }
             foreach ($items->getItemFields() as $itemField) {
                 $infNameIntern = $itemField->getValue('inf_name_intern');
-                if($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames)) {
-                    continue; // skip lending fields if lending is disabled
+                if($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames)) {
+                    continue; // skip borrowing fields if borrowing is disabled
                 }
                 $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
             }
@@ -894,7 +1333,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_decimal_places',
             $gL10n->get('SYS_INVENTORY_DECIMAL_PLACES'),
             $formValues['inventory_decimal_places'],
-            array('type' => 'number','minNumber' => 0, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC')
+            self::preferenceInputOptions('inventory_decimal_places', array('helpTextId' => 'SYS_INVENTORY_DECIMAL_PLACES_DESC'))
         );
 
         $selectBoxEntries = array('date' => $gL10n->get('SYS_DATE'), 'datetime' => $gL10n->get('SYS_DATE') .' & ' .$gL10n->get('SYS_TIME'));
@@ -906,8 +1345,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // profile view settings
-        $formInventory->addSeperator(
-            'inventory_seperator_profile_view_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_profile_view_settings',
             $gL10n->get('SYS_INVENTORY_PROFILE_VIEW')
         );
 
@@ -921,7 +1360,7 @@ class PreferencesPresenter extends PagePresenter
         $selectBoxEntries = array();
         foreach ($items->getItemFields() as $itemField) {
             $infNameIntern = $itemField->getValue('inf_name_intern');
-            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_lending') && in_array($infNameIntern, $lendFieldNames))) {
+            if ($itemField->getValue('inf_name_intern') == 'ITEMNAME' || ($gSettingsManager->GetBool('inventory_items_disable_borrowing') && in_array($infNameIntern, $items->borrowFieldNames))) {
                 continue;
             }
             $selectBoxEntries[$infNameIntern] = $itemField->getValue('inf_name');
@@ -935,8 +1374,8 @@ class PreferencesPresenter extends PagePresenter
         );
 
         // export settings
-        $formInventory->addSeperator(
-            'inventory_seperator_export_settings',
+        $formInventory->addSeparator(
+            'inventory_separator_export_settings',
             $gL10n->get('SYS_INVENTORY_EXPORT')
         );
 
@@ -944,7 +1383,7 @@ class PreferencesPresenter extends PagePresenter
             'inventory_export_filename',
             $gL10n->get('SYS_INVENTORY_FILENAME'),
             $formValues['inventory_export_filename'],
-            array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => 'SYS_INVENTORY_FILENAME_DESC')
+            self::preferenceInputOptions('inventory_export_filename', array('helpTextId' => 'SYS_INVENTORY_FILENAME_DESC'))
         );
 
         $formInventory->addCheckbox(
@@ -986,23 +1425,36 @@ class PreferencesPresenter extends PagePresenter
             array('class' => 'form-preferences')
         );
         $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
-        $formEmailDispatch->addSelectBox(
+        $formEmailDispatch->addRadioButton(
             'mail_send_method',
             $gL10n->get('SYS_SEND_METHOD'),
             $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_send_method'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SEND_METHOD_DESC')
+            array('defaultValue' => $formValues['mail_send_method'], 'helpTextId' => 'SYS_SEND_METHOD_DESC')
+        );
+        $selectBoxEntries = array('1' => $gL10n->get('SYS_SYSTEM_EMAIL_WITH_REPLY_TO'), '2' => $gL10n->get('SYS_SYSTEM_EMAIL'), '3' => $gL10n->get('SYS_USER_EMAIL'));
+        $formEmailDispatch->addSelectBox(
+            'mail_sender_mode',
+            $gL10n->get('SYS_SENDER'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_sender_mode'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SENDER_MODE_DESC', array('SYS_SYSTEM_EMAIL_WITH_REPLY_TO')))
         );
         $formEmailDispatch->addInput(
-            'mail_sendmail_address',
+            'mail_sender_email',
             $gL10n->get('SYS_SENDER_EMAIL'),
-            $formValues['mail_sendmail_address'],
-            array('type' => 'email', 'maxLength' => 50, 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN)))
+            $formValues['mail_sender_email'],
+            self::preferenceInputOptions('mail_sender_email', array('type' => 'email', 'helpTextId' => array('SYS_SENDER_EMAIL_ADDRESS_DESC', array(DOMAIN))))
         );
         $formEmailDispatch->addInput(
-            'mail_sendmail_name',
+            'mail_sender_name',
             $gL10n->get('SYS_SENDER_NAME'),
-            $formValues['mail_sendmail_name'],
-            array('maxLength' => 50, 'helpTextId' => 'SYS_SENDER_NAME_DESC')
+            $formValues['mail_sender_name'],
+            self::preferenceInputOptions('mail_sender_name', array('helpTextId' => 'SYS_SENDER_NAME_DESC'))
+        );
+        $formEmailDispatch->addCheckbox(
+            'mail_send_to_all_addresses',
+            $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
+            (bool) $formValues['mail_send_to_all_addresses'],
+            array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
         );
 
         $selectBoxEntries = array(0 => $gL10n->get('SYS_MAIL_BULK'), 1 => $gL10n->get('SYS_MAIL_SINGLE'));
@@ -1030,44 +1482,36 @@ class PreferencesPresenter extends PagePresenter
             'mail_number_recipients',
             $gL10n->get('SYS_NUMBER_RECIPIENTS'),
             $formValues['mail_number_recipients'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC')
-        );
-
-        $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-        $formEmailDispatch->addSelectBox(
-            'mail_character_encoding',
-            $gL10n->get('SYS_CHARACTER_ENCODING'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_character_encoding'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_CHARACTER_ENCODING_DESC')
+            self::preferenceInputOptions('mail_number_recipients', array('helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC'))
         );
         $formEmailDispatch->addInput(
             'mail_smtp_host',
             $gL10n->get('SYS_SMTP_HOST'),
             $formValues['mail_smtp_host'],
-            array('maxLength' => 50, 'helpTextId' => 'SYS_SMTP_HOST_DESC')
+            self::preferenceInputOptions('mail_smtp_host', array('helpTextId' => 'SYS_SMTP_HOST_DESC'))
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_port',
+            $gL10n->get('SYS_SMTP_PORT'),
+            $formValues['mail_smtp_port'],
+            self::preferenceInputOptions('mail_smtp_port', array('helpTextId' => 'SYS_SMTP_PORT_DESC'))
+        );
+        $selectBoxEntries = array(
+            '' => $gL10n->get('SYS_SMTP_SECURE_NO'),
+            'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS'),
+            'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL')
+        );
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_secure',
+            $gL10n->get('SYS_SMTP_SECURE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_SMTP_SECURE_DESC', array($gL10n->get('SYS_SMTP_SECURE_TLS'))))
         );
         $formEmailDispatch->addCheckbox(
             'mail_smtp_auth',
             $gL10n->get('SYS_SMTP_AUTH'),
             (bool) $formValues['mail_smtp_auth'],
             array('helpTextId' => 'SYS_SMTP_AUTH_DESC')
-        );
-        $formEmailDispatch->addInput(
-            'mail_smtp_port',
-            $gL10n->get('SYS_SMTP_PORT'),
-            $formValues['mail_smtp_port'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SMTP_PORT_DESC')
-        );
-        $selectBoxEntries = array(
-            '' => $gL10n->get('SYS_SMTP_SECURE_NO'),
-            'ssl' => $gL10n->get('SYS_SMTP_SECURE_SSL'),
-            'tls' => $gL10n->get('SYS_SMTP_SECURE_TLS')
-        );
-        $formEmailDispatch->addSelectBox(
-            'mail_smtp_secure',
-            $gL10n->get('SYS_SMTP_SECURE'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_smtp_secure'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SMTP_SECURE_DESC')
         );
         $selectBoxEntries = array(
             '' => $gL10n->get('SYS_AUTO_DETECT'),
@@ -1085,15 +1529,15 @@ class PreferencesPresenter extends PagePresenter
             'mail_smtp_user',
             $gL10n->get('SYS_SMTP_USER'),
             $formValues['mail_smtp_user'],
-            array('maxLength' => 100, 'helpTextId' => 'SYS_SMTP_USER_DESC')
+            self::preferenceInputOptions('mail_smtp_user', array('helpTextId' => 'SYS_SMTP_USER_DESC'))
         );
         $formEmailDispatch->addInput(
             'mail_smtp_password',
             $gL10n->get('SYS_SMTP_PASSWORD'),
             $formValues['mail_smtp_password'],
-            array('type' => 'password', 'maxLength' => 100, 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC')
+            self::preferenceInputOptions('mail_smtp_password', array('type' => 'password', 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC'))
         );
-        $html = '<a class="btn btn-secondary" id="send_test_mail" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '">
+        $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
@@ -1171,7 +1615,7 @@ class PreferencesPresenter extends PagePresenter
             'events_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES', array($gL10n->get('SYS_DESCRIPTION'))),
             $formValues['events_clamp_text_lines'],
-            array('type' => 'number', 'minNumber' => 0, 'step' => 1, 'helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_DESCRIPTION')))
+            self::preferenceInputOptions('events_clamp_text_lines', array('helpTextId' => array('SYS_CLAMP_TEXT_LINES_DESC', array('SYS_DESCRIPTION'))))
         );
         $formEvents->addCheckbox(
             'events_ical_export_enabled',
@@ -1276,6 +1720,12 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_MEMBERS_PER_PAGE'),
             $selectBoxEntries,
             array('defaultValue' => $formValues['groups_roles_members_per_page'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_MEMBERS_PER_PAGE_DESC')
+        );
+        $formGroupsRoles->addInput(
+            'groups_roles_preview_characters',
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
+            $formValues['groups_roles_preview_characters'],
+            self::preferenceInputOptions('groups_roles_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(200))))
         );
         // read all global lists
         $sqlData = array();
@@ -1389,13 +1839,13 @@ class PreferencesPresenter extends PagePresenter
             'forum_topics_per_page',
             $gL10n->get('SYS_NUMBER_OF_TOPICS_PER_PAGE'),
             $formValues['forum_topics_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10)))
+            self::preferenceInputOptions('forum_topics_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(10))))
         );
         $formForum->addInput(
             'forum_posts_per_page',
             $gL10n->get('SYS_NUMBER_OF_POSTS_PER_PAGE'),
             $formValues['forum_posts_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15)))
+            self::preferenceInputOptions('forum_posts_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(15))))
         );
         $formForum->addSubmitButton(
             'adm_button_save_forum',
@@ -1423,7 +1873,7 @@ class PreferencesPresenter extends PagePresenter
 
         $formWeblinks = new FormPresenter(
             'adm_preferences_form_links',
-            'preferences/preferences.links.tpl',
+            'preferences/preferences.weblinks.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'links')),
             null,
             array('class' => 'form-preferences')
@@ -1443,7 +1893,13 @@ class PreferencesPresenter extends PagePresenter
             'weblinks_per_page',
             $gL10n->get('SYS_NUMBER_OF_ENTRIES_PER_PAGE'),
             $formValues['weblinks_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0)))
+            self::preferenceInputOptions('weblinks_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(0))))
+        );
+        $formWeblinks->addInput(
+            'weblinks_preview_characters',
+            $gL10n->get('SYS_PREVIEW_CHARACTERS'),
+            $formValues['weblinks_preview_characters'],
+            self::preferenceInputOptions('weblinks_preview_characters', array('helpTextId' => array('SYS_PREVIEW_CHARACTERS_DESC', array(200))))
         );
         $selectBoxEntries = array('_self' => $gL10n->get('SYS_SAME_WINDOW'), '_blank' => $gL10n->get('SYS_NEW_WINDOW'));
         $formWeblinks->addSelectBox(
@@ -1456,7 +1912,7 @@ class PreferencesPresenter extends PagePresenter
             'weblinks_redirect_seconds',
             $gL10n->get('SYS_DISPLAY_REDIRECT'),
             $formValues['weblinks_redirect_seconds'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_DISPLAY_REDIRECT_DESC')
+            self::preferenceInputOptions('weblinks_redirect_seconds', array('helpTextId' => 'SYS_DISPLAY_REDIRECT_DESC'))
         );
         $html = '<a class="btn btn-secondary" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('type' => 'LNK')) . '">
             <i class="bi bi-hdd-stack-fill"></i>' . $gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION') . '</a>';
@@ -1475,7 +1931,7 @@ class PreferencesPresenter extends PagePresenter
         $smarty = $this->getSmartyTemplate();
         $formWeblinks->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formWeblinks);
-        return $smarty->fetch('preferences/preferences.links.tpl');
+        return $smarty->fetch('preferences/preferences.weblinks.tpl');
     }
 
     /**
@@ -1514,13 +1970,6 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['pm_module_enabled'],
             array('helpTextId' => 'SYS_ENABLE_PM_MODULE_DESC')
         );
-        $formMessages->addCheckbox(
-            'mail_captcha_enabled',
-            $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool) $formValues['mail_captcha_enabled'],
-            array('helpTextId' => 'SYS_SHOW_CAPTCHA_DESC')
-        );
-
         $formMessages->addSelectBox(
             'mail_template',
             $gL10n->get('SYS_EMAIL_TEMPLATE'),
@@ -1537,13 +1986,7 @@ class PreferencesPresenter extends PagePresenter
             'mail_max_receiver',
             $gL10n->get('SYS_MAX_RECEIVER'),
             $formValues['mail_max_receiver'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_MAX_RECEIVER_DESC')
-        );
-        $formMessages->addCheckbox(
-            'mail_send_to_all_addresses',
-            $gL10n->get('SYS_SEND_EMAIL_TO_ALL_ADDRESSES'),
-            (bool) $formValues['mail_send_to_all_addresses'],
-            array('helpTextId' => 'SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC')
+            self::preferenceInputOptions('mail_max_receiver', array('helpTextId' => 'SYS_MAX_RECEIVER_DESC'))
         );
         $formMessages->addCheckbox(
             'mail_show_former',
@@ -1555,7 +1998,7 @@ class PreferencesPresenter extends PagePresenter
             'max_email_attachment_size',
             $gL10n->get('SYS_ATTACHMENT_SIZE') . ' (MB)',
             $formValues['max_email_attachment_size'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 999999, 'step' => 1, 'helpTextId' => 'SYS_ATTACHMENT_SIZE_DESC')
+            self::preferenceInputOptions('max_email_attachment_size', array('helpTextId' => 'SYS_ATTACHMENT_SIZE_DESC'))
         );
         $formMessages->addCheckbox(
             'mail_save_attachments',
@@ -1636,43 +2079,43 @@ class PreferencesPresenter extends PagePresenter
             'photo_albums_per_page',
             $gL10n->get('SYS_NUMBER_OF_ALBUMS_PER_PAGE'),
             $formValues['photo_albums_per_page'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24)))
+            self::preferenceInputOptions('photo_albums_per_page', array('helpTextId' => array('SYS_NUMBER_OF_ENTRIES_PER_PAGE_DESC', array(24))))
         );
         $formPhotos->addInput(
             'photo_thumbs_page',
             $gL10n->get('SYS_THUMBNAILS_PER_PAGE'),
             $formValues['photo_thumbs_page'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24)))
+            self::preferenceInputOptions('photo_thumbs_page', array('helpTextId' => array('SYS_THUMBNAILS_PER_PAGE_DESC', array(24))))
         );
         $formPhotos->addInput(
             'photo_thumbs_scale',
             $gL10n->get('SYS_THUMBNAIL_SCALING'),
             $formValues['photo_thumbs_scale'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500)))
+            self::preferenceInputOptions('photo_thumbs_scale', array('helpTextId' => array('SYS_THUMBNAIL_SCALING_DESC', array(500))))
         );
         $formPhotos->addInput(
             'photo_show_width',
             $gL10n->get('SYS_MAX_PHOTO_SIZE_WIDTH'),
             $formValues['photo_show_width'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1)
+            self::preferenceInputOptions('photo_show_width')
         );
         $formPhotos->addInput(
             'photo_show_height',
             $gL10n->get('SYS_MAX_PHOTO_SIZE_HEIGHT'),
             $formValues['photo_show_height'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200)))
+            self::preferenceInputOptions('photo_show_height', array('helpTextId' => array('SYS_MAX_PHOTO_SIZE_DESC', array(1200, 1200))))
         );
         $formPhotos->addInput(
             'photo_image_text',
             $gL10n->get('SYS_SHOW_WATERMARK'),
             $formValues['photo_image_text'],
-            array('maxLength' => 60, 'helpTextId' => array('SYS_SHOW_WATERMARK_DESC', array('© ' . DOMAIN)))
+            self::preferenceInputOptions('photo_image_text', array('helpTextId' => array('SYS_SHOW_WATERMARK_DESC', array('© ' . DOMAIN))))
         );
         $formPhotos->addInput(
             'photo_image_text_size',
             $gL10n->get('SYS_CAPTION_SIZE'),
             $formValues['photo_image_text_size'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_CAPTION_SIZE_DESC')
+            self::preferenceInputOptions('photo_image_text_size', array('helpTextId' => 'SYS_CAPTION_SIZE_DESC'))
         );
         $formPhotos->addCheckbox(
             'photo_download_enabled',
@@ -1696,7 +2139,7 @@ class PreferencesPresenter extends PagePresenter
             'photo_ecard_scale',
             $gL10n->get('SYS_THUMBNAIL_SCALING'),
             $formValues['photo_ecard_scale'],
-            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500)))
+            self::preferenceInputOptions('photo_ecard_scale', array('helpTextId' => array('SYS_ECARD_MAX_PHOTO_SIZE_DESC', array(500))))
         );
         $formPhotos->addSelectBox(
             'photo_ecard_template',
@@ -1779,6 +2222,11 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['profile_show_former_roles'],
             array('helpTextId' => 'SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC')
         );
+        $formProfile->addCheckbox(
+            'profile_membership_duration_exact',
+            $gL10n->get('SYS_MEMBERSHIP_DURATION') . ' (' . $gL10n->get('SYS_DETAILED') . ')',
+            (bool) ($formValues['profile_membership_duration_exact'] ?? true)
+        );
 
         if ($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->isParentOrganization()) {
             $formProfile->addCheckbox(
@@ -1837,7 +2285,7 @@ class PreferencesPresenter extends PagePresenter
             'system_language',
             $gL10n->get('SYS_LANGUAGE'),
             $gL10n->getAvailableLanguages(),
-            array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>')))
+            self::preferenceSelectOptions('system_language', array('defaultValue' => $formValues['system_language'], 'helpTextId' => array('SYS_LANGUAGE_HELP_TRANSLATION', array('<a href="https://www.admidio.org/dokuwiki/doku.php?id=en:entwickler:uebersetzen">', '</a>'))))
         );
         $formRegionalSettings->addSelectBox(
             'default_country',
@@ -1849,19 +2297,19 @@ class PreferencesPresenter extends PagePresenter
             'system_date',
             $gL10n->get('ORG_DATE_FORMAT'),
             $formValues['system_date'],
-            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            self::preferenceInputOptions('system_date', array('helpTextId' => array('ORG_DATE_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small'))
         );
         $formRegionalSettings->addInput(
             'system_time',
             $gL10n->get('ORG_TIME_FORMAT'),
             $formValues['system_time'],
-            array('property' => FormPresenter::FIELD_REQUIRED, 'maxLength' => 20, 'helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small')
+            self::preferenceInputOptions('system_time', array('helpTextId' => array('ORG_TIME_FORMAT_DESC', array('<a href="https://www.php.net/manual/en/function.date.php">date()</a>')), 'class' => 'form-control-small'))
         );
         $formRegionalSettings->addInput(
             'system_currency',
             $gL10n->get('ORG_CURRENCY'),
             $formValues['system_currency'],
-            array('maxLength' => 20, 'helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small')
+            self::preferenceInputOptions('system_currency', array('helpTextId' => 'ORG_CURRENCY_DESC', 'class' => 'form-control-small'))
         );
         $formRegionalSettings->addSubmitButton(
             'adm_button_save_regional_settings',
@@ -1905,12 +2353,6 @@ class PreferencesPresenter extends PagePresenter
             $gL10n->get('SYS_MANUAL_APPROVAL'),
             (bool) $formValues['registration_manual_approval'],
             array('helpTextId' => array('SYS_MANUAL_APPROVAL_DESC', array('SYS_RIGHT_APPROVE_USERS')))
-        );
-        $formRegistration->addCheckbox(
-            'registration_enable_captcha',
-            $gL10n->get('ORG_ENABLE_CAPTCHA'),
-            (bool) $formValues['registration_enable_captcha'],
-            array('helpTextId' => 'ORG_CAPTCHA_REGISTRATION')
         );
         $formRegistration->addCheckbox(
             'registration_adopt_all_data',
@@ -1959,10 +2401,10 @@ class PreferencesPresenter extends PagePresenter
             'logout_minutes',
             $gL10n->get('ORG_AUTOMATIC_LOGOUT_AFTER'),
             $formValues['logout_minutes'],
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME')))
+            self::preferenceInputOptions('logout_minutes', array('helpTextId' => array('ORG_AUTOMATIC_LOGOUT_AFTER_DESC', array('SYS_REMEMBER_ME'))))
         );
         $selectBoxEntries = array(
-            0 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_NO'),
+            0 => $gL10n->get('SYS_NONE'),
             1 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_LOW'),
             2 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_MID'),
             3 => $gL10n->get('ORG_PASSWORD_MIN_STRENGTH_HIGH'),
@@ -2029,35 +2471,38 @@ class PreferencesPresenter extends PagePresenter
             null,
             array('class' => 'form-preferences')
         );
-
-
-        // Link to Key administration
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php');
-        $html = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
-            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
-            data-href="window.location.href=\'' . $url . '\'">
-            <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_KEY_ADMIN') . '</a>';
-        $formSSO->addCustomContent(
-            'sso_keys',
-            $gL10n->get('SYS_SSO_KEYS'),
-            $html,
-            array()
+        // Template button that links to the key administration, will be cloned an inserted by JS
+        $formSSO->addButton(
+            'sso_key_admin_button_template',
+            '',
+            array(
+                'icon' => 'bi-key',
+                'class' => 'btn-secondary sso-key-admin-button'
+            )
         );
+
+        // Explanation text about the SSO capabilities
+        $formSSO->addDescription(
+            'sso_explanation',
+            $gL10n->get('SYS_SSO_EXPLANATION')
+        );
+
+
+
+
+        /* *******************************************************************************
+         * SAML 2.0 Settings
+         */
 
         $samlService = new \Admidio\SSO\Service\SAMLService($gDb, $gCurrentUser);
 
-        $formSSO->addCustomContent(
-            'sso_saml_settings',
-            '',
-            '<h5>' . $gL10n->get('SYS_SSO_SAML') . '</h5>',
-            array()
-        );
+        $formSSO->addSeparator('sso_saml_settings', $gL10n->get('SYS_SSO_SAML'));
+
         $formSSO->addCheckbox(
             'sso_saml_enabled',
             $gL10n->get('SYS_SSO_SAML_ENABLED'),
             (bool)$formValues['sso_saml_enabled'],
-            array('helpTextId' => 'SYS_SSO_SAML_ENABLED_DESC')
+            array(/* 'helpTextId' => 'SYS_SSO_SAML_ENABLED_DESC' */)
         );
         $formSSO->addInput(
             'sso_saml_entity_id',
@@ -2067,8 +2512,117 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $keyService = new KeyService($gDb);
-        $keyArray = $keyService->getKeysData(true);
-        // $keys = array('0' => $gL10n->get('SYS_NONE'));
+
+        // Retrieve and offer only keys that are suitable for SAML signing or encryption!
+        $samlSigningKeys = array();
+        $samlSigningValueAttributes = array();
+        foreach ($keyService->getKeysData(true, KeyService::USAGE_SAML_SIGNING) as $key) {
+            $samlSigningKeys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
+            // We can add the certificates as additional value attributes to the select entries
+            $samlSigningValueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
+        }
+        $samlSigningKeyPreselection = self::preselectedSigningKey($formValues['sso_saml_signing_key'], $samlSigningKeys);
+        $samlSigningKeys[KeyService::CREATE_DEFAULT_KEY_VALUE] = $gL10n->get('SYS_SSO_KEY_CREATE_DEFAULT');
+
+        $samlEncryptionKeys = array();
+        $samlEncryptionValueAttributes = array();
+        foreach ($keyService->getKeysData(true, KeyService::USAGE_SAML_ENCRYPTION) as $key) {
+            $samlEncryptionKeys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
+            $samlEncryptionValueAttributes[$key['key_id']] = array('data-global' => $key['key_certificate']);
+        }
+        $samlEncryptionKeys[KeyService::CREATE_DEFAULT_KEY_VALUE] = $gL10n->get('SYS_SSO_KEY_CREATE_DEFAULT');
+
+        // Add current signing and/or encryption keys, even if they are invalid, but indicate them as invalid!
+        $currentSamlSigningKeyId = (int) $formValues['sso_saml_signing_key'];
+        if ($currentSamlSigningKeyId > 0 && !array_key_exists($currentSamlSigningKeyId, $samlSigningKeys)) {
+            $samlSigningKeys[$currentSamlSigningKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
+        }
+        $currentSamlEncryptionKeyId =(int) $formValues['sso_saml_encryption_key'];
+        if ($currentSamlEncryptionKeyId > 0 && !array_key_exists($currentSamlEncryptionKeyId, $samlEncryptionKeys)) {
+            $samlEncryptionKeys[$currentSamlEncryptionKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
+        }
+
+        $formSSO->addSelectBox(
+            'sso_saml_signing_key',
+            $gL10n->get('SYS_SSO_SIGNING_KEY'),
+            $samlSigningKeys,
+            array('defaultValue' => $samlSigningKeyPreselection, 'firstEntry' => $gL10n->get('SYS_NONE'),
+                'valueAttributes' => $samlSigningValueAttributes, 'class' => 'if-saml-enabled sso-key-select')
+        );
+
+        $formSSO->addSelectBox(
+            'sso_saml_encryption_key',
+            $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
+            $samlEncryptionKeys,
+            array('defaultValue' => $formValues['sso_saml_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
+                'valueAttributes' => $samlEncryptionValueAttributes, 'class' => 'if-saml-enabled sso-key-select')
+        );
+
+        $formSSO->addCheckbox(
+            'sso_saml_want_requests_signed',
+            $gL10n->get('SYS_SSO_SAML_WANT_REQUESTS_SIGNED'),
+            (bool)$formValues['sso_saml_want_requests_signed'],
+            array('class' => 'if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_WANT_REQUESTS_SIGNED_DESC')
+        );
+
+        $formSSO->addCustomContent(
+            'sso_saml_sso_staticsettings',
+            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
+            '',
+            array('data' => $samlService->getStaticSettings(), 'class' => 'if-saml-enabled')
+        );
+
+        // Link to SAML Client administration
+        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
+        // The warning about unsaved changes is attached by the SSO template, which shows
+        // it only if the form was actually modified.
+        $html = '<a class="btn btn-secondary sso-client-admin-button if-saml-enabled" href="javascript:void(0);"
+            data-href="' . $url . '">
+            <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
+        $formSSO->addCustomContent(
+            'sso_saml_clients',
+            $gL10n->get('SYS_SSO_CLIENTS_SAML'),
+            $html,
+            array('class' => 'if-saml-enabled')
+        );
+
+        $formSSO->addSeparator(
+            'sso_saml_advanced_settings',
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
+            array('collapse' => "sso_saml_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-saml-enabled')
+        );
+
+
+
+        /* *******************************************************************************
+         * OIDC Settings
+         */
+        $oidcService = new OIDCService($gDb, $gCurrentUser);
+
+        $formSSO->addSeparator('sso_oidc_settings', $gL10n->get('SYS_SSO_OIDC'));
+
+        $formSSO->addCheckbox(
+            'sso_oidc_enabled',
+            $gL10n->get('SYS_SSO_OIDC_ENABLED'),
+            (bool)$formValues['sso_oidc_enabled'],
+            array(/* 'helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC' */)
+        );
+
+        // An empty IssuerURL indicates the use of the default admidio base URL
+        // Leave the input box exmpty, but show the default value as
+        // placeholder/hint and copy that value when the copy icon is clicked!
+        $defaultIssuerURL = OIDCService::getDefaultIssuerURL();
+        $formSSO->addInput(
+            'sso_oidc_issuer_url',
+            $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
+            (string)$formValues['sso_oidc_issuer_url'],
+            array('class' => 'copy-container if-oidc-enabled',
+                  'placeholder' => $defaultIssuerURL,
+                  'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
+        );
+
+        $keyService = new KeyService($gDb);
+        $keyArray = $keyService->getKeysData(true, KeyService::USAGE_OIDC_SIGNING);
         $keys = array();
         $valueAttributes = array();
         foreach ($keyArray as $key) {
@@ -2076,128 +2630,106 @@ class PreferencesPresenter extends PagePresenter
             // We can add the certificates as additional value attributes to the select entries
             $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
         }
+        $oidcSigningKeyPreselection = self::preselectedSigningKey($formValues['sso_oidc_signing_key'], $keys);
+        $keys[KeyService::CREATE_DEFAULT_KEY_VALUE] = $gL10n->get('SYS_SSO_KEY_CREATE_DEFAULT');
 
-        $formSSO->addSelectBox(
-            'sso_saml_signing_key',
-            $gL10n->get('SYS_SSO_SIGNING_KEY'),
-            $keys,
-            array('defaultValue' => $formValues['sso_saml_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-                'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
-        );
-        $formSSO->addSelectBox(
-            'sso_saml_encryption_key',
-            $gL10n->get('SYS_SSO_ENCRYPTION_KEY'),
-            $keys,
-            array('defaultValue' => $formValues['sso_saml_encryption_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-                'valueAttributes' => $valueAttributes, 'class' => 'if-saml-enabled')
-        );
-
-        $formSSO->addCheckbox(
-            'sso_saml_want_requests_signed',
-            $gL10n->get('SYS_SSO_SAML_WANT_REQUESTS_SIGNED'),
-            (bool)$formValues['sso_saml_want_requests_signed'],
-            array('class' => 'if-saml-enabled')
-        );
-
-        $formSSO->addCustomContent(
-            'sso_saml_sso_staticsettings',
-            $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
-            '',
-            array('data' => $samlService->getStaticSettings())
-        );
-
-        // Link to SAML Client administration
-        $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox if-saml-enabled" href="javascript:void(0);" data-buttons="yes-no"
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
-            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
-            data-href="window.location.href=\'' . $url . '\'">
-            <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
-        $formSSO->addCustomContent(
-            'sso_saml_clients',
-            $gL10n->get('SYS_SSO_CLIENTS_SAML'),
-            $html,
-            array()
-        );
-
-
-
-
-        /* *******************************************************************************
-         * OIDC Settings
-         */
-        $oidcService = new \Admidio\SSO\Service\OIDCService($gDb, $gCurrentUser);
-
-        $formSSO->addCustomContent(
-            'sso_oidc_settings',
-            '',
-            '<h5>' . $gL10n->get('SYS_SSO_OIDC') . '</h5>',
-            array()
-        );
-        $formSSO->addCheckbox(
-            'sso_oidc_enabled',
-            $gL10n->get('SYS_SSO_OIDC_ENABLED'),
-            (bool)$formValues['sso_oidc_enabled'],
-            array('helpTextId' => 'SYS_SSO_OIDC_ENABLED_DESC')
-        );
-
-        if (empty($formValues['sso_oidc_issuer_url'])) {
-            $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
-        }
-        if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
-            $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
-        }
-        $formSSO->addInput(
-            'sso_oidc_issuer_url',
-            $gL10n->get('SYS_SSO_OIDC_ISSUER_URL'),
-            (string)$formValues['sso_oidc_issuer_url'],
-            array('class' => 'copy-container if-oidc-enabled', 'helpTextId' => 'SYS_SSO_OIDC_ISSUER_URL_DESC')
-        );
-
-        $keyService = new KeyService($gDb);
-        $keyArray = $keyService->getKeysData(true);
-        // $keys = array('0' => $gL10n->get('SYS_NONE'));
-        $keys = array();
-        $valueAttributes = array();
-        foreach ($keyArray as $key) {
-            // OIDC supports only RSA keys!
-            if (str_starts_with($key['key_algorithm'], 'RSA')) {
-                $keys[$key['key_id']] = $key['key_name'] . ' (' . $key['key_algorithm'] . ', ' . $key['key_expires_at'] . ')';
-                // We can add the certificates as additional value attributes to the select entries
-                $valueAttributes[$key['key_id']] = ['data-global' => $key['key_certificate']];
-            }
+        // Add current signing and/or encryption keys, even if they are invalid, but indicate them as invalid!
+        $currentOidcKeyId = (int) $formValues['sso_oidc_signing_key'];
+        if ($currentOidcKeyId > 0 && !array_key_exists($currentOidcKeyId, $keys)) {
+            $keys[$currentOidcKeyId] = $gL10n->get('SYS_SSO_SELECTED_KEY_INVALID');
         }
 
         $formSSO->addSelectBox(
             'sso_oidc_signing_key',
             $gL10n->get('SYS_SSO_SIGNING_KEY'),
             $keys,
-            array('defaultValue' => $formValues['sso_oidc_signing_key'], 'firstEntry' => $gL10n->get('SYS_NONE'),
-                'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled')
+            array('defaultValue' => $oidcSigningKeyPreselection, 'firstEntry' => $gL10n->get('SYS_NONE'),
+                'valueAttributes' => $valueAttributes, 'class' => 'if-oidc-enabled sso-key-select')
+        );
+
+        $formSSO->addInput(
+            'sso_oidc_auth_code_lifetime',
+            $gL10n->get('SYS_SSO_OIDC_AUTH_CODE_LIFETIME'),
+            $formValues['sso_oidc_auth_code_lifetime'],
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'type' => 'number',
+                'minNumber' => 1,
+                'step' => 1,
+                'class' => 'if-oidc-enabled',
+                'helpTextId' => 'SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC'
+            )
+        );
+        $formSSO->addInput(
+            'sso_oidc_access_token_lifetime',
+            $gL10n->get('SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME'),
+            $formValues['sso_oidc_access_token_lifetime'],
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'type' => 'number',
+                'minNumber' => 1,
+                'step' => 1,
+                'class' => 'if-oidc-enabled',
+                'helpTextId' => 'SYS_SSO_OIDC_ACCESS_TOKEN_LIFETIME_DESC'
+            )
+        );
+        $formSSO->addInput(
+            'sso_oidc_refresh_token_lifetime',
+            $gL10n->get('SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME'),
+            $formValues['sso_oidc_refresh_token_lifetime'],
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'type' => 'number',
+                'minNumber' => 1,
+                'step' => 1,
+                'class' => 'if-oidc-enabled',
+                'helpTextId' => 'SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC'
+            )
         );
 
         $formSSO->addCustomContent(
             'sso_oidc_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '',
-            array('data' => $oidcService->getStaticSettings())
+            array('data' => $oidcService->getStaticSettings(), 'class' => 'if-oidc-enabled')
         );
 
         // Link to OIDC Client administration
         $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array());
-        $html = '<a class="btn btn-secondary admidio-messagebox if-oidc-enabled" href="javascript:void(0);" data-buttons="yes-no"
-            data-message="' . $gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST') . '</br>' .
-            $gL10n->get('ORG_NOT_SAVED_SETTINGS_CONTINUE') . '"
-            data-href="window.location.href=\'' . $url . '\'">
+        // The warning about unsaved changes is attached by the SSO template, which shows
+        // it only if the form was actually modified.
+        $html = '<a class="btn btn-secondary sso-client-admin-button if-oidc-enabled" href="javascript:void(0);"
+            data-href="' . $url . '">
             <i class="bi bi-key"></i>' . $gL10n->get('SYS_SSO_CLIENT_ADMIN') . '</a>';
         $formSSO->addCustomContent(
             'sso_oidc_clients',
             $gL10n->get('SYS_SSO_CLIENTS_OIDC'),
             $html,
-            array()
+            array('class' => 'if-oidc-enabled')
         );
 
 
+        $formSSO->addSeparator(
+            'sso_oidc_advanced_settings',
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
+            array('collapse' => "sso_oidc_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-oidc-enabled')
+        );
+
+
+
+        $formSSO->addSeparator(
+            'sso_advanced_settings',
+            $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
+            array('collapse' => "sso_advanced_settings_contents", 'collapsed' => true)
+        );
+        // Applies to both protocols: the metadata request and the OIDC back-channel logout
+        // are the two requests that Admidio sends from the server to a configured address.
+        $formSSO->addCheckbox(
+            'sso_allow_private_network',
+            $gL10n->get('SYS_SSO_ALLOW_PRIVATE_NETWORK'),
+            (bool)$formValues['sso_allow_private_network'],
+            array('helpTextId' => 'SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC')
+        );
 
 
         $formSSO->addSubmitButton(
@@ -2207,6 +2739,7 @@ class PreferencesPresenter extends PagePresenter
         );
 
         $smarty = $this->getSmartyTemplate();
+        $smarty->assign('ssoKeyAdminUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php'));
         $formSSO->addToSmarty($smarty);
         $gCurrentSession->addFormObject($formSSO);
         return $smarty->fetch('preferences/preferences.sso.tpl');
@@ -2220,7 +2753,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createSystemInformationForm(): string
     {
-        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData, $gSystemComponent;
+        global $gL10n, $gDb, $gLogger, $gDebug, $gImportDemoData, $gSystemComponent, $gSettingsManager;
 
         // Admidio Version and Update
         $component = new ComponentUpdate($gDb);
@@ -2239,7 +2772,7 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('admidioVersion', ADMIDIO_VERSION_TEXT);
         $this->assignSmartyVariable('updateStepColorClass', $updateStepColorClass);
         $this->assignSmartyVariable('updateStepText', $updateStepText);
-        $this->assignSmartyVariable('databaseEngine', DB_ENGINE);
+        $this->assignSmartyVariable('databaseType', DB_TYPE);
         $this->assignSmartyVariable('backupUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'backup')));
         $this->assignSmartyVariable('admidioHomepage', ADMIDIO_HOMEPAGE);
 
@@ -2268,7 +2801,7 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('pathSeparator', SystemInfoUtils::getPathSeparator());
         $this->assignSmartyVariable('maxPathLength', SystemInfoUtils::getMaxPathLength());
 
-        if (version_compare($gDb->getVersion(), $gDb->getMinimumRequiredVersion(), '<')) {
+        if (!$gDb->checkMinimumRequiredVersion()) {
             $databaseVersionColorClass = 'text-danger';
             $databaseVersionText = $gDb->getVersion();
             $databaseVersionInfo = ' &rarr; ' . $gL10n->get('SYS_DATABASE_VERSION_REQUIRED', array($gDb->getMinimumRequiredVersion()));
@@ -2318,7 +2851,18 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('importModeText', $importModeText);
 
         try {
-            $diskSpace = FileSystemUtils::getDiskSpace();
+            if ($gSettingsManager->has('path_for_calculating_disk_usage') && !empty($gSettingsManager->get('path_for_calculating_disk_usage'))) {
+                $pathForCalculatingDiskUsage = $gSettingsManager->get('path_for_calculating_disk_usage');
+                // if it's a relative path, we have to add the Admidio base path, otherwise we would calculate the disk usage for the whole system root if the relative path is empty or just the wrong path if its not empty
+                if (!str_starts_with($pathForCalculatingDiskUsage, '/') && !str_starts_with($pathForCalculatingDiskUsage, '\\')) {
+                    $pathForCalculatingDiskUsage = ADMIDIO_PATH . DIRECTORY_SEPARATOR . $pathForCalculatingDiskUsage;
+                }
+                if (is_dir($pathForCalculatingDiskUsage)) {
+                    $diskSpace = FileSystemUtils::getDiskSpace($pathForCalculatingDiskUsage);
+                }
+            } else {
+                $diskSpace = FileSystemUtils::getDiskSpace();
+            }
             $progressBarClass = '';
 
             $diskUsagePercent = round(($diskSpace['used'] / $diskSpace['total']) * 100, 1);
@@ -2413,9 +2957,12 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('prnGeneratorInfo', $prnGeneratorInfo);
         $this->assignSmartyVariable('admidioUrl', ADMIDIO_URL);
 
+        $this->assignCommandLineVariables();
+
         //assign card titles and corresponding template files
         $cards = array(
-            array('title'=>$gL10n->get('SYS_ADMIDIO_VERSION_BACKUP'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_ADMIDIO'), 'icon'=>'bi-cloud-arrow-down-fill', 'templateFile'=>'preferences/preferences.admidio-update.tpl'),
+            array('title'=>$gL10n->get('SYS_COMMAND_LINE'),        'icon'=>'bi-terminal-fill', 'templateFile'=>'preferences/preferences.command-line.tpl'),
             array('title'=>$gL10n->get('SYS_SYSTEM_INFORMATION'),        'icon'=>'bi-info-circle-fill', 'templateFile'=>'preferences/preferences.system-information.tpl'),
             array('title'=>$gL10n->get('SYS_PHP'),                 'icon'=>'bi-filetype-php', 'templateFile'=>'preferences/preferences.php.tpl'),
         );
@@ -2423,6 +2970,100 @@ class PreferencesPresenter extends PagePresenter
         $this->assignSmartyVariable('cards', $cards);
         $smarty = $this->getSmartyTemplate();
         return $smarty->fetch('preferences/preferences.system-informations.tpl');
+    }
+
+    /**
+     * Describe the configuration of the command line, adm_my_files/cli-config.php.
+     *
+     * The panel only reports. The browser must not be able to change these settings: the command
+     * line is disabled by default, and a switch that everything holding the credentials of the
+     * database could turn on again would restrict nobody. What the panel can do is make the file
+     * discoverable and show the state an administrator would otherwise have to read on the server.
+     *
+     * @throws Exception
+     */
+    private function assignCommandLineVariables(): void
+    {
+        global $gL10n;
+
+        /*
+         * Reading the file means executing it, and a file that an administrator edits by hand can
+         * contain a syntax error. The panel reports on that file and must not be taken down by it.
+         */
+        try {
+            $policy = CliPolicy::read(ADMIDIO_PATH);
+            $description = $policy->describe(false);
+        } catch (\Throwable) {
+            $policy = CliPolicy::fromValues(array(), ADMIDIO_PATH . FOLDER_DATA . '/' . CliPolicy::FILE_NAME);
+            $description = $policy->describe(false);
+        }
+
+        $this->assignSmartyVariable('cliEnabledColorClass', $description['enabled'] ? 'text-success' : 'text-danger');
+        $this->assignSmartyVariable('cliEnabledText', $gL10n->get($description['enabled'] ? 'SYS_ON' : 'SYS_OFF'));
+        $this->assignSmartyVariable('cliFile', $description['file']);
+        $this->assignSmartyVariable(
+            'cliFileInfo',
+            $description['exists'] ? '' : ' &rarr; ' . $gL10n->get('SYS_COMMAND_LINE_FILE_MISSING')
+        );
+        $this->assignSmartyVariable(
+            'cliAccounts',
+            $description['allowed_users'] === ''
+                ? $gL10n->get('SYS_COMMAND_LINE_EVERY_ACCOUNT')
+                : $description['allowed_users']
+        );
+        $this->assignSmartyVariable(
+            'cliAllowedCommands',
+            $description['allowed_commands'] === '' ? $gL10n->get('SYS_ALL') : $description['allowed_commands']
+        );
+        $this->assignSmartyVariable(
+            'cliDeniedCommands',
+            $description['denied_commands'] === '' ? $gL10n->get('SYS_NONE') : $description['denied_commands']
+        );
+        $this->assignSmartyVariable(
+            'cliActors',
+            $description['allowed_actors'] === '' ? $gL10n->get('SYS_ALL') : $description['allowed_actors']
+        );
+
+        /*
+         * The account is configured as a login name, an id or a UUID. Resolving it here is what
+         * turns a typo into something visible: in the command line the same mistake only appears
+         * when a scheduled command fails.
+         */
+        $actor = $policy->optionDefault('', 'as');
+        $actorColorClass = '';
+
+        if ($actor === null || $actor === '') {
+            $actorText = $gL10n->get('SYS_NOT_SET');
+        } else {
+            try {
+                $user = CliApplication::resolveUser($actor);
+                $actorText = $user->readableName() . ' (' . $actor . ')';
+            } catch (\Throwable) {
+                $actorText = $actor . ' &rarr; ' . $gL10n->get('SYS_COMMAND_LINE_UNKNOWN_ACCOUNT');
+                $actorColorClass = 'text-danger';
+            }
+        }
+
+        $this->assignSmartyVariable('cliActor', $actorText);
+        $this->assignSmartyVariable('cliActorColorClass', $actorColorClass);
+
+        $logFile = (string)$description['log_file'];
+        $this->assignSmartyVariable(
+            'cliLogFile',
+            $logFile === ''
+                ? $gL10n->get('SYS_NONE')
+                : $logFile . ($description['log_writable'] === false
+                    ? ' &rarr; ' . $gL10n->get('SYS_COMMAND_LINE_NOT_WRITABLE')
+                    : '')
+        );
+        $this->assignSmartyVariable(
+            'cliLogFileColorClass',
+            $description['log_writable'] === false ? 'text-danger' : ''
+        );
+        $this->assignSmartyVariable(
+            'cliDescription',
+            $gL10n->get('SYS_COMMAND_LINE_DESC', array($description['file']))
+        );
     }
 
     /**
@@ -2462,6 +3103,12 @@ class PreferencesPresenter extends PagePresenter
             (bool) $formValues['system_notifications_profile_changes'],
             array('helpTextId' => 'SYS_NOTIFICATION_PROFILE_CHANGES_DESC')
         );
+        $formSystemNotifications->addCheckbox(
+            'system_notifications_inventory_changes',
+            $gL10n->get('SYS_NOTIFICATION_INVENTORY_CHANGES'),
+            (bool) $formValues['system_notifications_inventory_changes'],
+            array('helpTextId' => 'SYS_NOTIFICATION_INVENTORY_CHANGES_DESC')
+        );
 
         // read all roles of the organization
         $sqlData = array();
@@ -2486,33 +3133,29 @@ class PreferencesPresenter extends PagePresenter
             array('defaultValue' => $formValues['system_notifications_role'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
         );
 
-        $text = new Text($gDb);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_CONFIRMATION', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_CONFIRMATION', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_CONFIRMATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_NEW', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_NEW', $gL10n->get('SYS_NOTIFICATION_NEW_REGISTRATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_APPROVED', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_APPROVED', $gL10n->get('SYS_NOTIFICATION_REGISTRATION_APPROVAL'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_REFUSED', 'txt_org_id' => $gCurrentOrgId));
-        $formSystemNotifications->addMultilineTextInput('SYSMAIL_REGISTRATION_REFUSED', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrgId));
-        $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_NEW_PASSWORD');
-        $formSystemNotifications->addMultilineTextInput(
-            'SYSMAIL_NEW_PASSWORD',
-            $gL10n->get('ORG_SEND_NEW_PASSWORD'),
-            $text->getValue('txt_text'),
-            7,
-            array('helpTextId' => $htmlDesc)
-        );
-        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_PASSWORD_RESET', 'txt_org_id' => $gCurrentOrgId));
-        $htmlDesc = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get('ORG_VARIABLE_ACTIVATION_LINK');
-        $formSystemNotifications->addMultilineTextInput(
-            'SYSMAIL_PASSWORD_RESET',
-            $gL10n->get('SYS_PASSWORD_FORGOTTEN'),
-            $text->getValue('txt_text'),
-            7,
-            array('helpTextId' => $htmlDesc)
-        );
+        $systemMailModes = array();
+        foreach (Text::SYSTEM_MAIL_DEFAULTS as $name => $defaultId) {
+            $text = new Text($gDb);
+            $text->readDataByColumns(array('txt_name' => $name, 'txt_org_id' => $gCurrentOrgId));
+            $useDefault = Language::isTranslationStringId($text->getValue('txt_text', 'database'));
+            $systemMailModes[$name] = $useDefault;
+            $label = Language::translateIfTranslationStrId($text->readableName());
+            $defaultText = new Text($gDb);
+            $defaultText->setValue('txt_text', $defaultId);
+            $savedCustom = $text->getSystemMailCustomText();
+            $customText = $savedCustom === null ? $defaultText->getValue('txt_text') : SecurityUtils::encodeHTML($savedCustom);
+            $formSystemNotifications->addCheckbox($name . '_USE_DEFAULT', $gL10n->get('SYS_SYSTEM_MAIL_USE_DEFAULT'), $useDefault,
+                array('helpTextId' => 'SYS_SYSTEM_MAIL_USE_DEFAULT_DESC', 'class' => 'admidio-system-mail-default'));
+            $options = array();
+            if ($name === 'SYSMAIL_LOGIN_INFORMATION' || $name === 'SYSMAIL_PASSWORD_RESET') {
+                $variable = $name === 'SYSMAIL_LOGIN_INFORMATION' ? 'ORG_VARIABLE_NEW_PASSWORD' : 'ORG_VARIABLE_ACTIVATION_LINK';
+                $options['helpTextId'] = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get($variable);
+            }
+            $formSystemNotifications->addMultilineTextInput($name, $label, $customText, 7, $options);
+            $formSystemNotifications->addMultilineTextInput($name . '_DEFAULT', $label, $defaultText->getValue('txt_text'), 7,
+                array_merge($options, array('property' => FormPresenter::FIELD_DISABLED)));
+        }
+        $this->getSmartyTemplate()->assign('systemMailModes', $systemMailModes);
         $formSystemNotifications->addSubmitButton(
             'adm_button_save_system_notification',
             $gL10n->get('SYS_SAVE'),
@@ -2539,10 +3182,11 @@ class PreferencesPresenter extends PagePresenter
      * Read all available registrations from the database and create the HTML content of this
      * page with the Smarty template engine and write the HTML output to the internal
      * parameter **$pageContent**. If no registration is found, then show a message to the user.
+     * @throws Exception
      */
     public function show(): void
     {
-        global $gL10n;
+        global $gL10n, $gCurrentSession;
 
         if ($this->preferencesPanelToShow !== '') {
             // open the selected panel
@@ -2574,8 +3218,6 @@ class PreferencesPresenter extends PagePresenter
                         // Mobile mode
                         $("#collapse_' . $this->preferencesPanelToShow . '").addClass("show").attr("aria-expanded", "true");
                         $("#heading_' . $this->preferencesPanelToShow . ' .accordion-button").removeClass("collapsed").attr("aria-expanded", "true");
-                        // --- Hash setzen, damit Bookmark/Scroll stimmt und zum Element scrollen
-                        location.hash = "#heading_' . $this->preferencesPanelToShow . '";
                     }
                 ', true);
             }
@@ -2584,7 +3226,10 @@ class PreferencesPresenter extends PagePresenter
         $this->addJavascript('
             // === 1) Panel laden und Events binden ===
             function loadPreferencesPanel(panelId) {
-                var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+                var panelContainers = $("[data-preferences-panel=\"" + panelId + "\"]");
+                // only load the panel to the container that is currently visible
+                var panelContainer = panelContainers.filter(":visible").first();
+
                 if (!panelContainer.length) return;
 
                 // Schritt 1: Spinner einfügen
@@ -2596,6 +3241,7 @@ class PreferencesPresenter extends PagePresenter
                 }, function(htmlContent) {
                     panelContainer.html(htmlContent);
                     initializePanelInteractions(panelId);
+                    initializeEvents();
                 }).fail(function() {
                     panelContainer.html("<div class=\"text-danger\">Fehler beim Laden</div>");
                 });
@@ -2604,6 +3250,14 @@ class PreferencesPresenter extends PagePresenter
             // === 2) Innerhalb eines Panels die Klick-Handler anmelden ===
             function initializePanelInteractions(panelId) {
                 var panelContainer = $("[data-preferences-panel=\"" + panelId + "\"]");
+
+                // System-mail templates: bind after loading the preferences panel via AJAX.
+                panelContainer.off("change", ".admidio-system-mail-default")
+                    .on("change", ".admidio-system-mail-default", function() {
+                        const name = this.id.replace(/_USE_DEFAULT$/, "");
+                        this.form.querySelector("#" + name + "_standard_panel").hidden = !this.checked;
+                        this.form.querySelector("#" + name + "_custom_panel").hidden = this.checked;
+                    });
 
                 // Captcha-Refresh
                 panelContainer.off("click", "#adm_captcha_refresh").on("click", "#adm_captcha_refresh", function(event) {
@@ -2619,9 +3273,68 @@ class PreferencesPresenter extends PagePresenter
                     event.preventDefault();
                     var versionInfoContainer = panelContainer.find("#adm_version_content");
                     versionInfoContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "update_check" }, function(htmlVersion) {
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=update_check", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(htmlVersion) {
                         versionInfoContainer.html(htmlVersion);
                     });
+                });
+
+                // The purge deletes with the retention period that is stored in the preferences and
+                // not with the one that is currently shown in the form. As long as the two differ,
+                // the button is disabled: a period that was raised but not saved yet would otherwise
+                // delete far more than the value on the screen suggests.
+                function updateChangelogPurgeState() {
+                    var retentionInput = panelContainer.find("#changelog_retention_days");
+                    if (retentionInput.length === 0) {
+                        return;
+                    }
+
+                    var unsavedPeriod = (retentionInput.val() !== retentionInput.prop("defaultValue"));
+                    panelContainer.find("#adm_link_changelog_purge")
+                        .toggleClass("disabled", unsavedPeriod)
+                        .attr("aria-disabled", unsavedPeriod ? "true" : "false");
+                    panelContainer.find("#adm_changelog_purge_result")
+                        .text(unsavedPeriod ? "' . $gL10n->get('SYS_CHANGELOG_PURGE_SAVE_FIRST') . '" : "");
+                }
+
+                panelContainer.off("input", "#changelog_retention_days")
+                    .on("input", "#changelog_retention_days", updateChangelogPurgeState);
+                updateChangelogPurgeState();
+
+                // Delete the entries of the change history that are older than the retention period
+                panelContainer.off("click", "#adm_link_changelog_purge").on("click", "#adm_link_changelog_purge", function(event) {
+                    event.preventDefault();
+                    if ($(this).hasClass("disabled")) {
+                        return;
+                    }
+                    if (!confirm("' . $gL10n->get('SYS_CHANGELOG_PURGE_CONFIRM') . '")) {
+                        return;
+                    }
+                    var resultContainer = panelContainer.find("#adm_changelog_purge_result");
+                    resultContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>");
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=changelog_purge", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(resultText) {
+                        resultContainer.text(resultText);
+                    });
+                });
+
+                // The area checkboxes of the change history have three states. An area whose tables
+                // are only partly logged starts out indeterminate and keeps that state until it is
+                // clicked, so a configuration that the area cannot represent is never overwritten.
+                function applyChangelogAreaState(areaCheckbox, state) {
+                    areaCheckbox.data("state", state);
+                    areaCheckbox.prop("indeterminate", state === "mixed");
+                    areaCheckbox.prop("checked", state !== "off");
+                    areaCheckbox.val(state === "mixed" ? "mixed" : "1");
+                }
+
+                panelContainer.find("input[data-changelog-area]").each(function() {
+                    applyChangelogAreaState($(this), $(this).data("state"));
+                });
+
+                panelContainer.off("click", "input[data-changelog-area]").on("click", "input[data-changelog-area]", function() {
+                    var areaCheckbox = $(this);
+                    // Only an area that was mixed to begin with can be set back to mixed.
+                    var states = (areaCheckbox.data("initialState") === "mixed") ? ["mixed", "on", "off"] : ["off", "on"];
+                    applyChangelogAreaState(areaCheckbox, states[(states.indexOf(areaCheckbox.data("state")) + 1) % states.length]);
                 });
 
                 // Verzeichnis-Schutz prüfen
@@ -2629,7 +3342,7 @@ class PreferencesPresenter extends PagePresenter
                     event.preventDefault();
                     var statusContainer = panelContainer.find("#directory_protection_status");
                     statusContainer.html("<i class=\"spinner-border spinner-border-sm\"></i>").show();
-                    $.get("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php", { mode: "htaccess" }, function(statusText) {
+                    $.post("' . ADMIDIO_URL . FOLDER_MODULES . '/preferences.php?mode=htaccess", { adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '" }, function(statusText) {
                         var directoryProtection = panelContainer.find("#directoryProtection");
                         directoryProtection.html("<span class=\"text-success\"><strong>" + statusText + "</strong></span>");
                     });
@@ -2640,8 +3353,8 @@ class PreferencesPresenter extends PagePresenter
 
                 // define additional ids that should also be considered for visibility toggling
                 var additionalIds = [\'#system_notifications_enabled\'];
-                // Look for any input whose id ends with "_module_enabled"
-                var selectors = ["[id$=\'_module_enabled\']"].concat(additionalIds);
+                // Look for any input whose id ends with "_module_enabled" or "_plugin_enabled"
+                var selectors = ["[id$=\'_module_enabled\']", "[id$=\'_plugin_enabled\']"].concat(additionalIds);
 
                 var moduleEnabledField = panelContainer.find(selectors.join(", ")).filter(":visible");
                 if (moduleEnabledField.length > 0) {
@@ -2706,6 +3419,16 @@ class PreferencesPresenter extends PagePresenter
             $(document).on("shown.bs.collapse", "#adm_preferences_accordion .accordion-collapse", function() {
                 var panelId = this.id.replace(/^collapse_/, "");
                 loadPreferencesPanel(panelId);
+
+                // scroll to the top of the accordion panel header
+                var checkLoaded = setInterval(function(){
+                    if ($("#collapse_" + panelId).find(".spinner-border").length === 0) {
+                        clearInterval(checkLoaded);
+                        $("html, body").animate({
+                            scrollTop: $("#heading_" + panelId).offset().top
+                        }, 500);
+                    }
+                }, 100);
             });
             // initial: geöffnetes Accordion-Panel laden
             $("#adm_preferences_accordion .accordion-collapse.show").each(function() {
@@ -2725,13 +3448,20 @@ class PreferencesPresenter extends PagePresenter
         // so we need to do it here, even when no selectbox will be used...
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/page-load.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
 
         $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/css/bootstrap-tabs-x-admidio.css');
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
 
+        // remove the plugins array from preferenceTabs if there are no panels defined
+        $this->preferenceTabs = array_filter($this->preferenceTabs, function ($tab) {
+            return !empty($tab['panels']);
+        });
+
         $this->assignSmartyVariable('preferenceTabs', $this->preferenceTabs);
+        $this->assignSmartyVariable('csrfToken ', $gCurrentSession->getCsrfToken());
         $this->addTemplateFile('preferences/preferences.tpl');
 
         parent::show();

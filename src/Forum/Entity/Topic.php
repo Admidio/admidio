@@ -49,6 +49,15 @@ class Topic extends Entity
     }
 
     /**
+     * @return string|null Returns the hook ID of this entity.
+     * @see Entity::getHookId()
+     */
+    public function getHookId(): ?string
+    {
+        return 'forum_topic';
+    }
+
+    /**
      * Deletes the selected guestbook entry and all comments.
      * After that the class will be initialized.
      * @return bool **true** if no error occurred
@@ -58,16 +67,25 @@ class Topic extends Entity
     {
         $this->db->startTransaction();
 
+        // Deleting a topic is one action of the user, so the topic and its posts belong into one
+        // change set of the changelog.
+        $previousChangeSet = LogChanges::startChangeSet();
+
         // delete reference to first post
         $this->setValue('fot_fop_id_first_post', 0);
         $this->save();
 
         // Delete all available posts to this forum entry
-        $sql = 'DELETE FROM ' . TBL_FORUM_POSTS . '
-                      WHERE fop_fot_id = ? -- $this->getValue(\'fot_id\')';
-        $this->db->queryPrepared($sql, array((int)$this->getValue('fot_id')));
+        $this->deleteDependentRecords(
+            new Post($this->db),
+            array('fop_id'),
+            'fop_fot_id = ?',
+            array((int)$this->getValue('fot_id'))
+        );
 
         $return = parent::delete();
+
+        LogChanges::endChangeSet($previousChangeSet);
 
         $this->db->endTransaction();
 
@@ -120,11 +138,11 @@ class Topic extends Entity
      * @param string $columnName The name of the database column whose value should be read
      * @param string $format For date or timestamp columns the format should be the date/time format e.g. **d.m.Y = '02.04.2011'**.
      *                           For text columns the format can be **database** that would return the original database value without any transformations
-     * @return int|string|bool Returns the value of the database column.
+     * @return mixed Returns the value of the database column.
      *                         If the value was manipulated before with **setValue** than the manipulated value is returned.
      * @throws Exception
      */
-    public function getValue(string $columnName, string $format = ''): bool|int|string
+    public function getValue(string $columnName, string $format = ''): mixed
     {
         if (str_starts_with($columnName, 'fop_')) {
             return $this->firstPost->getValue($columnName, $format);
@@ -134,14 +152,14 @@ class Topic extends Entity
     }
 
     /**
-     * This method checks if the current user is allowed to edit this topic. Therefore,
-     * the topic must be visible to the user and must be of the current organization.
-     * The user must be a member of at least one role that have the right to manage topic.
-     * Global topic could be only edited by the parent organization.
-     * @return bool Return true if the current user is allowed to edit this topic
+     * This method checks if the current user is allowed to work in the category of this topic.
+     * Therefore, the topic must be visible to the user and must be of the current organization.
+     * The user must be a member of at least one role that has the right to manage topics.
+     * Global topics can only be edited by the parent organization.
+     * @return bool Return **true** if the current user may work in this topic's category
      * @throws Exception
      */
-    public function isEditable(): bool
+    public function isCategoryEditable(): bool
     {
         global $gCurrentOrganization, $gCurrentUser, $gCurrentOrgId;
 
@@ -161,6 +179,23 @@ class Topic extends Entity
         }
 
         return false;
+    }
+
+    /**
+     * Check whether the current user may change or delete this topic.
+     *
+     * In addition to category and organization access, only the creator of
+     * the first post or a forum administrator may modify an existing topic.
+     * @return bool Return **true** if the current user may modify this topic
+     * @throws Exception
+     */
+    public function isEditable(): bool
+    {
+        global $gCurrentUser;
+
+        return $this->isCategoryEditable()
+            && ($gCurrentUser->isAdministratorForum()
+                || (int)$this->getValue('fop_usr_id_create') === (int)$gCurrentUser->getValue('usr_id'));
     }
 
     /**
@@ -193,7 +228,7 @@ class Topic extends Entity
         if ($gSettingsManager->getBool('system_notifications_new_entries')) {
             $notification = new Email();
 
-            if ($this->isNewRecord()) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_FORUM_TOPIC_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
@@ -283,9 +318,11 @@ class Topic extends Entity
         }
 
         $this->db->startTransaction();
+        // parent::save() clears the new-record state, so the answer has to be kept before it
+        $newTopic = $this->newRecord;
         $returnCode = parent::save($updateFingerPrint);
 
-        if ($this->newRecord) {
+        if ($newTopic) {
             $this->firstPost->setValue('fop_fot_id', $this->getValue('fot_id'));
             $this->firstPost->save();
             $this->setValue('fot_fop_id_first_post', $this->firstPost->getValue('fop_id'));
@@ -307,7 +344,7 @@ class Topic extends Entity
      * @return bool Returns **true** if the value is stored in the current object and **false** if a check failed
      * @throws Exception
      */
-    public function setValue(string $columnName, $newValue, bool $checkValue = true): bool
+    public function setValue(string $columnName, mixed $newValue, bool $checkValue = true): bool
     {
         global $gCurrentUser;
 

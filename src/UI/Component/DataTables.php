@@ -2,6 +2,7 @@
 namespace Admidio\UI\Component;
 
 use Admidio\UI\Presenter\PagePresenter;
+use HtmlPage;
 
 /**
  * @brief Creates the Javascript output for the jQuery DataTables plugin
@@ -52,6 +53,10 @@ class DataTables
         100 => '100'
     );
     /**
+     * @var bool Flag if the page length menu should offer an entry that shows all rows at once.
+     */
+    protected bool $showAllEntries = true;
+    /**
      * @var array<int,string> Array with the column number as key and the 'asc' or 'desc' as value.
      */
     protected array $columnsOrder = array();
@@ -79,6 +84,11 @@ class DataTables
      * @var string The script that should be called when using server-side processing.
      */
     protected string $serverSideFile = '';
+
+    /**
+     * @var string A message that should be shown if the table has no rows.
+     */
+    protected string $emptyTableMessage = '';
 
     /**
      * Constructor creates the table element
@@ -115,6 +125,12 @@ class DataTables
     {
         global $gSettingsManager, $gL10n;
 
+        // the print view loads no additional javascript files and should show the whole table without paging,
+        // so the table stays a normal HTML table
+        if ($this->htmlPage instanceof PagePresenter && $this->htmlPage->isPrintMode()) {
+            return;
+        }
+
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.js');
         $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.css');
         if (!$this->serverSideProcessing) {
@@ -122,14 +138,26 @@ class DataTables
             $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datetime-luxon.js');
         }
 
-        $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $gL10n->getLanguageIsoCode() . '.json"}';
+        $langCode = strtolower($gL10n->getLanguage());
+        if (!is_file(ADMIDIO_PATH . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json')) {
+            $langCode = $gL10n->getLanguageIsoCode();
+        }
+        if (empty($langCode)) {
+            $langCode = 'en';
+        }
+
+        if (!empty($this->emptyTableMessage)) {
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json", "emptyTable": "' . $this->emptyTableMessage . '"}';
+        } else {
+            $this->datatablesInitParameters[] = '"language": {"url": "' . ADMIDIO_URL . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json"}';
+        }
 
         if ($rowCount > 10 || $this->serverSideProcessing) {
             // set default page length of the table
             $this->datatablesInitParameters[] = '"pageLength": ' . $this->rowsPerPage;
             // set page length menu entries
-            // check if there is a entry with the value of -1, if not then add it
-            if (!array_key_exists(-1, $this->rowsPerPageMenuEntries)) {
+            // check if there is an entry with the value of -1, if not then add it
+            if ($this->showAllEntries && !array_key_exists(-1, $this->rowsPerPageMenuEntries)) {
                 $this->rowsPerPageMenuEntries[-1] = $gL10n->get('SYS_ALL');
             }
             $this->datatablesInitParameters[] = '"lengthMenu": [' . json_encode(array_keys($this->rowsPerPageMenuEntries)) . ', ' . json_encode(array_values($this->rowsPerPageMenuEntries)) . ']';
@@ -174,13 +202,7 @@ class DataTables
                     });
 
                     if (settings.json && settings.json.notice) {
-                        $.each(settings.json.notice, function (key, value) {
-                            if (value.trim() !== \'\') {
-                                $(\'#\' + key).text(value).show();
-                            } else {
-                                $(\'#\' + key).hide();
-                            }
-                        });
+                        $.each(settings.json.notice, showMessageDiv);
                     }
                 }';
             $javascriptGroupFunction = '
@@ -197,13 +219,7 @@ class DataTables
             $this->datatablesInitParameters[] = '"drawCallback": function(settings) {
                     if (settings.json && settings.json.notice) {
                         // Iterate through the notice object
-                        $.each(settings.json.notice, function (key, value) {
-                            if (value.trim() !== \'\') {
-                                $(\'#\' + key).html(value).show();
-                            } else {
-                                $(\'#\' + key).hide();
-                            }
-                        });
+                        $.each(settings.json.notice, showMessageDiv);
                     }
                 }';
 
@@ -238,6 +254,17 @@ class DataTables
                 });
                 ', true
             );
+            // Use Admidio's error <div> rather than DataTable's _fnLog function in Javascript, which would display a modal popup box:
+            // Intercept errors before DataTables shows the alert (turn off default error handling and use our own handler!)
+            $this->htmlPage->addJavascript(
+                '
+                $.fn.dataTable.ext.errMode = \'none\';
+                $("#' . $this->id . '").on("dt-error.dt", function (e, settings, techNote, message) {
+                    e.preventDefault(); // stops the built-in alert/modal
+                    showMessageDiv("DT_notice", message);
+                });
+                ', true
+            );
         }
         $this->htmlPage->addJavascript(
             '
@@ -251,6 +278,18 @@ class DataTables
     }
 
     /**
+     * Set a text id of the translation files that should be shown if table has no rows.
+     * @param string $messageId Text id of the translation file.
+     * @throws Exception
+     */
+    public function setMessageIfNoRowsFound(string $messageId)
+    {
+        global $gL10n;
+
+        $this->emptyTableMessage = $gL10n->get($messageId);
+    }
+
+    /**
      * Set the align for each column of the current table. This method must be called
      * before a row is added to the table. Each entry of the array represents a column.
      * @param array<int,string> $columnsAlign An array which contains the align for each column of the table.
@@ -259,6 +298,13 @@ class DataTables
     public function setColumnAlignByArray(array $columnsAlign)
     {
         foreach ($columnsAlign as $columnNumber => $align) {
+            // replace left/right (style tags) with start/end (datatables classes)
+            if ($align === 'left') {
+                $align = 'start';
+            } elseif ($align === 'right') {
+                $align = 'end';
+            }
+
             $this->datatablesColumnDefs[] = '{ targets: ' . $columnNumber . ', className: \'text-' . $align . '\' }';
         }
     }
@@ -381,6 +427,16 @@ class DataTables
     public function setRowsPerPageMenuEntries(array $menuEntries)
     {
         $this->rowsPerPageMenuEntries = $menuEntries;
+    }
+
+    /**
+     * Remove the entry that shows all rows at once from the page length menu. Use this for tables
+     * whose number of rows is not bounded, where reading the complete table in one request would
+     * be too expensive. The server side script must limit the page length accordingly.
+     */
+    public function disableShowAllEntries()
+    {
+        $this->showAllEntries = false;
     }
 
     /**

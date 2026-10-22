@@ -32,7 +32,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'cards',
-            'validValues' => array('cards', 'list', 'edit', 'save', 'delete')
+            'validValues' => array('cards', 'edit', 'save', 'delete')
         )
     );
     $getAnnouncementUUID = admFuncVariableIsValid($_GET, 'announcement_uuid', 'uuid');
@@ -44,23 +44,16 @@ try {
     if ($gSettingsManager->getInt('announcements_module_enabled') === 0) {
         throw new Exception('SYS_MODULE_DISABLED');
     } elseif ($gSettingsManager->getInt('announcements_module_enabled') === 1
-        && !in_array($getMode, array('cards', 'list')) && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
+        && !in_array($getMode, array('cards')) && !$gValidLogin) {
+        require(__DIR__ . '/../system/login_valid.php');
     } elseif ($gSettingsManager->getInt('announcements_module_enabled') === 2 && !$gValidLogin) {
-        throw new Exception('SYS_NO_RIGHTS');
+        require(__DIR__ . '/../system/login_valid.php');
     }
 
     switch ($getMode) {
         case 'cards':
-            $page = new AnnouncementsPresenter($getCategoryUUID);
+            $page = new AnnouncementsPresenter($getCategoryUUID, $getAnnouncementUUID);
             $page->createCards($getOffset);
-            $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
-            $page->show();
-            break;
-
-        case 'list':
-            $page = new AnnouncementsPresenter($getCategoryUUID);
-            $page->createList();
             $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-chat-dots-fill');
             $page->show();
             break;
@@ -88,9 +81,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('save', 'delete'))) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
-    } else {
-        $gMessage->show($e->getMessage());
-    }
+    handleException($e, in_array($getMode, array('save', 'delete')));
 }

@@ -17,7 +17,7 @@ namespace Admidio\Infrastructure;
  *        throw new Exception('SYS_NOT_VALID_DATE_FORMAT');
  *    }
  *    ...
- * } catch(Exception $e) {
+ * } catch(Throwable $e) {
  *    // show translated message
  *    echo $e->getMessage();
  * }
@@ -29,24 +29,26 @@ namespace Admidio\Infrastructure;
  */
 class Exception extends \Exception
 {
+    /** Original translation id when the exception was constructed from a language key. */
+    private ?string $translationId = null;
     /**
-     * Constructor saves the parameters to the class and will call the parent constructor. Also, a **rollback**
-     * of open database translation will be done.
+     * Constructor saves the parameters to the class and will call the parent constructor.
+     *
+     * Creating the exception does not touch the database. A request that really ends because of an
+     * exception is rolled back by handleException(); an exception that is caught and handled leaves
+     * the transaction of its caller intact.
      * @param string $message Translation **id** or simple text that should be shown when exception is caught
      * @param array<int,string> $params Optional parameter for language string of translation id
      * @throws Exception
      */
     public function __construct($message, $params = array())
     {
-        global $gLogger, $gDb, $gL10n;
+        global $gLogger, $gL10n;
 
-        if ($gDb instanceof Database) {
-            // if there is an open transaction we should perform a rollback
-            $gDb->rollback();
-        }
-
-        // if text is a translation-id then translate it
+        // Keep the stable translation id for machine-readable interfaces, while the normal
+        // exception message remains the translated human-readable text.
         if (Language::isTranslationStringId($message)) {
+            $this->translationId = (string)$message;
             $message = $gL10n->get($message, $params);
         }
 
@@ -54,4 +56,12 @@ class Exception extends \Exception
 
         parent::__construct($message);
     }
+    /**
+     * Return the original Admidio translation id, if one was supplied.
+     */
+    public function getTranslationId(): ?string
+    {
+        return $this->translationId;
+    }
+
 }

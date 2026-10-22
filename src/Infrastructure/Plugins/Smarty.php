@@ -118,51 +118,6 @@ class Smarty
     }
 
     /**
-     * Function for the Smarty template engine that could be used within the templates to load
-     * the html of Admidio plugins. The Admidio plugins must generate the output directly in the php
-     * code with the function **echo**.
-     * @param array                    $params   Array with all the variables that are set within the template file.
-     * @param Template $template The Smarty template object that could be used within the function.
-     * @return string Returns the html code of the called Admidio plugin.
-     *
-     * **Code example**
-     * ```
-     * // example of this function within a template file
-     * // load the content of the Admidio plugin login_form
-     * <h1>Some html code</h1>
-     * {load_admidio_plugin plugin="login_form" file="login_form.php"}
-     * <span>Some other html code</span>
-     * ```
-     */
-    public static function loadAdmidioPlugin(array $params, Template $template): string
-    {
-        global $gLogger, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser;
-        global $gValidLogin, $gProfileFields, $gHomepage, $gDbType, $gSettingsManager;
-        global $g_root_path, $gPreferences, $gCurrentOrgId, $gCurrentUserId, $gMessage, $page;
-
-        if (empty($params['plugin'])) {
-            throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "plugin" parameter');
-        }
-
-        if (empty($params['file'])) {
-            throw new \UnexpectedValueException('Smarty function load_admidio_plugin: missing "file" parameter');
-        }
-
-        $filename = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $params['plugin'] . '/' . $params['file'];
-
-        if (!is_file($filename)) {
-            throw new \UnexpectedValueException('Invalid plugin file ' . $filename . ' !');
-        }
-
-        ob_start();
-        require($filename);
-        $fileContent = ob_get_contents();
-        ob_end_clean();
-
-        return $fileContent;
-    }
-    
-    /**
      * Function for the Smarty template engine to resolve resource files (css, js, images) within the theme
      * directory structure. Admidio allows a primary and a fallback theme, where the primary theme is basically
      * an override for the fallback theme and does not have to be a complete theme with all files available.
@@ -200,4 +155,32 @@ class Smarty
         return THEME_URL . $filepath;
     }
     
+    /**
+     * Function for the Smarty template engine to compare two version strings.
+     * @param array $params   Array with all the variables that are set within the template file.
+     * @param Template $template The Smarty template object that could be used within the function.
+     * @return bool Returns **true** if the first version is greater than or equal to the second version, otherwise **false**.
+     *
+     * **Code example**
+     * ```
+     * // example of this function within a template file
+     * {if {version_compare firstVersion='1.0.0' secondVersion='1.0.1'}}
+     *    ...
+     * {else}
+     *    ...
+     * {/if}
+     * ```
+     */
+    public static function versionCompare(array $params, Template $template): bool
+    {
+        if (empty($params['firstVersion']) || empty($params['secondVersion'])) {
+            throw new \UnexpectedValueException('Smarty function version_compare: missing "firstVersion" or "secondVersion" parameter');
+        }
+
+        if (empty($params['operator'])) {
+            $params['operator'] = '==';
+        }
+
+        return version_compare($params['firstVersion'], $params['secondVersion'], $params['operator']);
+    }
 }

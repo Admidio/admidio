@@ -10,6 +10,7 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 
 
 use Admidio\SSO\Entity\AccessTokenEntity;
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\TokenEntity;
 
 // use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
@@ -24,14 +25,6 @@ use Admidio\Infrastructure\Database;
 
  class AccessTokenRepository extends TokenRepository implements AccessTokenRepositoryInterface {
     private $inactivityTimeout = 1800;
-
-    /**
-     *  Dummy implementation since the TokenRepository class declares the method abstract, so we MUST implement it, even though we don't need it...
-     * @return TokenEntity
-     */
-    public function newToken(): TokenEntity {
-        return new TokenEntity($this->db);
-    }
 
     public function getToken(string $tokenId) : TokenEntity {
         return new AccessTokenEntity($this->db,  $tokenId);
@@ -58,18 +51,29 @@ use Admidio\Infrastructure\Database;
     public function revokeAccessToken(string $tokenId): void {
         $this->revokeToken($tokenId);
     }
+
     public function isAccessTokenRevoked(string $tokenId): bool {
-        return $this->isTokenRevoked($tokenId);
+        $token = $this->getToken($tokenId);
+
+        if ($token->isNewRecord() || $this->isTokenRevoked($tokenId)) {
+            return true;
+        }
+
+        $client = $token->getClient();
+        return !$client instanceof OIDCClient || !$client->isEnabled();
     }
 
     private function getUserClaims(?UserEntityInterface $user): array {
-        return $user instanceof UserEntity ? $user->getClaims() : [];
+        return ($user instanceof \Admidio\SSO\Entity\UserEntity ) ? $user->getClaims() : [];
     }
 
     public function getUserIdByAccessToken(string $accessToken): ?string {
         $token = $this->getToken($accessToken);
         $now = new \DateTime();
-        if (!$token->isNewRecord() && ($token->getExpiryDateTime() > $now)) {
+        if (!$token->isNewRecord()
+            && !$this->isAccessTokenRevoked($accessToken)
+            && ($token->getExpiryDateTime() > $now)
+        ) {
             return $token->getUserIdentifier();
         } else {
             return null;

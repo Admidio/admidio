@@ -2,12 +2,18 @@
 
 namespace Admidio\Preferences\Service;
 
+use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Email;
+use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\SSO\Service\OIDCService;
+use Admidio\SSO\Service\KeyService;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -21,6 +27,9 @@ use Admidio\Infrastructure\Email;
  */
 class PreferencesService
 {
+    private const CONFIG_DOCUMENT_SCHEMA = 'admidio-preferences';
+    private const CONFIG_DOCUMENT_VERSION = 1;
+
     /**
      * Function to check an update
      * @param string $currentVersion
@@ -92,34 +101,84 @@ class PreferencesService
     }
 
     /**
-     * Function to determine the update version
-     * @param string $updateInfo
-     * @param string $search
-     * @return string
+     * Parse the update information of the Admidio server into its key/value pairs.
+     *
+     * The file holds one "name=value" pair per line. Keys are compared exactly, so a new key can
+     * be added to the file without colliding with the name of an existing one.
+     *
+     * @param string $updateInfo Content of the update information file.
+     * @return array<string,string> Named array with the value of every key of the file.
      */
-    function getUpdateVersion(string $updateInfo, string $search): string
+    private function parseUpdateInformation(string $updateInfo): array
     {
-        // Variablen festlegen
-        $i = 0;
-        $pointer = '';
-        $updateVersion = '';
-        $currentVersionStart = strpos($updateInfo, $search);
-        $adding = strlen($search) - 1;
-
-        // Version auslesen
-        while ($pointer !== "\n") {
-            ++$i;
-            $updateVersion .= $pointer;
-            $pointer = $updateInfo[$currentVersionStart + $adding + $i];
+        // a UTF-8 BOM would otherwise become part of the first key
+        if (str_starts_with($updateInfo, "\xEF\xBB\xBF")) {
+            $updateInfo = substr($updateInfo, 3);
         }
 
-        return trim($updateVersion, "\n\r");
+        $information = array();
+
+        foreach (preg_split('/\R/', $updateInfo) as $line) {
+            if (!str_contains($line, '=')) {
+                continue;
+            }
+
+            list($name, $value) = explode('=', $line, 2);
+            $name = trim($name);
+
+            // the first occurrence wins, so a duplicate line cannot override the published value
+            if ($name !== '' && !array_key_exists($name, $information)) {
+                $information[$name] = trim($value);
+            }
+        }
+
+        return $information;
     }
 
     /**
-     * check availability of update information and if connected
-     * read available Admidio versions from server (text file)
-     * @return string Returns the html of the update check
+     * Read the available Admidio versions and determine the update state.
+     *
+     * A version that the update server does not provide is returned as an empty string. How an
+     * unknown version should be presented is up to the caller.
+     *
+     * @return array{stableVersion:string,betaVersion:string,betaRelease:string,versionUpdate:int}
+     */
+    public function getUpdateInformation(): array
+    {
+        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
+        $updateInfo = @file_get_contents($updateInfoUrl);
+
+        if ($updateInfo === false) {
+            return array(
+                'stableVersion' => '',
+                'betaVersion' => '',
+                'betaRelease' => '',
+                'versionUpdate' => 99
+            );
+        }
+
+        $information = $this->parseUpdateInformation($updateInfo);
+        $stableVersion = $information['Version'] ?? '';
+        $betaVersion = $information['Beta-Version'] ?? '';
+        $betaRelease = $information['Beta-Release'] ?? '';
+
+        return array(
+            'stableVersion' => $stableVersion,
+            'betaVersion' => $betaVersion,
+            'betaRelease' => $betaRelease,
+            'versionUpdate' => $this->checkVersion(
+                ADMIDIO_VERSION,
+                $stableVersion,
+                $betaVersion,
+                $betaRelease,
+                ADMIDIO_VERSION_BETA
+            )
+        );
+    }
+
+    /**
+     * check availability of update information and render it for the preferences UI.
+     * @return string Returns the HTML of the update check
      * @throws Exception
      */
     function showUpdateInfo(): string
@@ -127,44 +186,22 @@ class PreferencesService
         global $gL10n;
         $html = '';
 
-        // check availability of update information and if connected
-        // read available Admidio versions from server (text file)
-        // First select the method (CURL preferred)
-        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
-        if (@file_get_contents($updateInfoUrl) === false) {
-            // Admidio Versionen nicht auslesbar
-            $stableVersion = 'n/a';
-            $betaVersion = 'n/a';
-            $betaRelease = '';
+        $updateInformation = $this->getUpdateInformation();
+        $stableVersion = $updateInformation['stableVersion'];
+        $betaVersion = $updateInformation['betaVersion'];
+        $betaRelease = $updateInformation['betaRelease'];
+        $versionUpdate = $updateInformation['versionUpdate'];
 
-            $versionUpdate = 99;
-        } else {
-            $updateInfo = file_get_contents($updateInfoUrl);
+        /*
+         * A version that the update server doesn't provide is displayed as "n/a". The values are
+         * read from a file on the Admidio server and are encoded here, so that the HTML below
+         * cannot be manipulated through that file.
+         */
+        $stableVersionText = SecurityUtils::encodeHTML(($stableVersion === '') ? 'n/a' : $stableVersion);
+        $betaVersionText = SecurityUtils::encodeHTML(($betaVersion === '') ? 'n/a' : $betaVersion);
+        $betaReleaseText = SecurityUtils::encodeHTML($betaRelease);
 
-            // Admidio versions passed from server
-            $stableVersion = $this->getUpdateVersion($updateInfo, 'Version=');
-            $betaVersion = $this->getUpdateVersion($updateInfo, 'Beta-Version=');
-            $betaRelease = $this->getUpdateVersion($updateInfo, 'Beta-Release=');
-
-            // No stable version available (actually impossible)
-            if ($stableVersion === '') {
-                $stableVersion = 'n/a';
-            }
-
-            // No beat version available
-            if ($betaVersion === '') {
-                $betaVersion = 'n/a';
-                $betaRelease = '';
-            }
-
-            // check for update
-            $versionUpdate = $this->checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
-        }
-
-        // Only continues in display mode, otherwise the current update state can be
-        // queried in the $versionUpdate variable.
         // $versionUpdate (0 = No update, 1 = New stable version, 2 = New beta version, 3 = New stable + beta version, 99 = No connection)
-        // show update result
         if ($versionUpdate === 1) {
             $versionsText = $gL10n->get('SYS_NEW_VERSION_AVAILABLE');
         } elseif ($versionUpdate === 2) {
@@ -186,19 +223,19 @@ class PreferencesService
         $html .= '
         <p>' . $gL10n->get('SYS_INSTALLED') . ':&nbsp;' . ADMIDIO_VERSION_TEXT . '</p>
         <p>' . $gL10n->get('SYS_AVAILABLE') . ':&nbsp;
-            <a href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
-            '<i class="bi bi-link"></i>' . $stableVersion . '
+            <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
+            '<i class="bi bi-link"></i>' . $stableVersionText . '
             </a>
             <br />
             ' . $gL10n->get('SYS_AVAILABLE_BETA') . ': &nbsp;';
 
-        if ($versionUpdate !== 99 && $betaVersion !== 'n/a') {
+        if ($versionUpdate !== 99 && $betaVersion !== '') {
             $html .= '
-                <a href="' . ADMIDIO_HOMEPAGE . 'download.php" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
-                '<i class="bi bi-link"></i>' . $betaVersion . ' Beta ' . $betaRelease . '
+                <a class="icon-link" href="' . ADMIDIO_HOMEPAGE . 'intern/adm_program/modules/announcements/announcements.php?cat_uuid=e2be424d-dd72-4c01-99ad-f8f91ec8830f" title="' . $gL10n->get('SYS_ADMIDIO_DOWNLOAD_PAGE') . '" target="_blank">' .
+                '<i class="bi bi-link"></i>' . $betaVersionText . ' Beta ' . $betaReleaseText . '
                 </a>';
         } else {
-            $html .= $betaVersion;
+            $html .= $betaVersionText;
         }
         $html .= '
         </p>
@@ -213,92 +250,142 @@ class PreferencesService
      * @return void
      * @throws Exception
      */
-    public function save(string $panel, array $formData)
+    public function save(string $panel, array $formData): void
     {
-        global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
+        global $gSettingsManager, $gCurrentSession, $gDb, $gCurrentOrgId;
 
         // check form field input and sanitized it from malicious content
         $preferencesForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
         $formValues = $preferencesForm->validate($formData);
 
-        // first check the fields of the submitted form
+        // Adapt presentation-specific values before canonical preference validation.
         switch ($panel) {
-            case 'design':
-                if (!StringUtils::strIsValidFolderName($formData['theme'])
-                    || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme'] . '/index.html')) {
-                    throw new Exception('ORG_INVALID_THEME');
-                }
-                if (!empty($formData['theme_fallback'])) {
-                    if (!StringUtils::strIsValidFolderName($formData['theme_fallback'])
-                        || !is_file(ADMIDIO_PATH . FOLDER_THEMES . '/' . $formData['theme_fallback'] . '/index.html')) {
-                        throw new Exception('ORG_INVALID_THEME_FALLBACK');
-                    }
-                }
-                break;
-
-            case 'security':
-                if (!isset($formData['enable_auto_login']) && $gSettingsManager->getBool('enable_auto_login')) {
-                    // if auto login was deactivated than delete all saved logins
-                    $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
-                    $gDb->queryPrepared($sql);
-                }
-                break;
-
-            case 'regional_settings':
-                if (!StringUtils::strIsValidFolderName($formData['system_language'])
-                    || !is_file(ADMIDIO_PATH . FOLDER_LANGUAGES . '/' . $formData['system_language'] . '.xml')) {
-                    throw new Exception('SYS_FIELD_EMPTY', array('SYS_LANGUAGE'));
-                }
-                break;
-
             case 'messages':
-                // get real filename of the template file
+                // The select box uses a readable template name; store the real filename.
                 if ($formData['mail_template'] !== $gSettingsManager->getString('mail_template')) {
-                    $formValues['mail_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/mail_templates', $formData['mail_template']);
+                    $formValues['mail_template'] = $this->getTemplateFileName(
+                        ADMIDIO_PATH . FOLDER_DATA . '/mail_templates',
+                        $formData['mail_template']
+                    );
                 }
                 break;
 
             case 'photos':
-                // get real filename of the template file
+                // The select box uses a readable template name; store the real filename.
                 if ($formData['photo_ecard_template'] !== $gSettingsManager->getString('photo_ecard_template')) {
-                    $formValues['photo_ecard_template'] = $this->getTemplateFileName(ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates', $formData['photo_ecard_template']);
+                    $formValues['photo_ecard_template'] = $this->getTemplateFileName(
+                        ADMIDIO_PATH . FOLDER_DATA . '/ecard_templates',
+                        $formData['photo_ecard_template']
+                    );
                 }
                 break;
 
-            case 'sso':
-                if (empty($formData['sso_oidc_issuer_url'])) {
-                    $formValues['sso_oidc_issuer_url'] = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+            case 'changelog':
+                // The form offers one checkbox per area, the preferences store one flag per
+                // database table. An area that is still in its mixed state was not touched by the
+                // user, so the flags of its tables have to be left exactly as they are.
+                foreach (ChangelogService::getVisibleAreas() as $areaId => $area) {
+                    $areaValue = $formValues['changelog_area_' . $areaId] ?? 'mixed';
+                    unset($formValues['changelog_area_' . $areaId]);
+
+                    if ($areaValue !== '1' && $areaValue !== '0') {
+                        continue;
+                    }
+
+                    foreach ($area['tables'] as $tableName) {
+                        $formValues['changelog_table_' . $tableName] = $areaValue;
+                    }
                 }
-                if (str_ends_with($formValues['sso_oidc_issuer_url'], '/')) {
-                    $formValues['sso_oidc_issuer_url'] = substr($formValues['sso_oidc_issuer_url'], 0, -1);
+                break;
+
+            case 'sso': 
+                // empty issuerURL means "Use the default URL from the admidio installation's URL"
+                $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
+                if ($issuerURL !== '') {
+                    $issuerURL = rtrim($issuerURL, '/');
                 }
+
+                // Do not persist the installation-derived default. An empty setting
+                // allows the issuer URL to follow later changes to ADMIDIO_URL.
+                if ($issuerURL === OIDCService::getDefaultIssuerURL()) {
+                    $issuerURL = '';
+                }
+                $formValues['sso_oidc_issuer_url'] = $issuerURL;
+
+                // if any key selection dropdown is set to "Create new key", create one default key and assign
+                $keySettingNames = array('sso_saml_signing_key', 'sso_saml_encryption_key', 'sso_oidc_signing_key');
+
+                // A protocol cannot be used without a signing key, so enabling it without any key
+                // selected creates the default key instead of rejecting the configuration. A key that
+                // is selected but unusable is still reported, so a broken setup is not silently replaced.
+                $signingKeySettings = array(
+                    'sso_saml_signing_key' => 'sso_saml_enabled',
+                    'sso_oidc_signing_key' => 'sso_oidc_enabled'
+                );
+
+                $settingsNeedingDefaultKey = array();
+
+                foreach ($keySettingNames as $settingName) {
+                    if (($formValues[$settingName] ?? '') === KeyService::CREATE_DEFAULT_KEY_VALUE) {
+                        $settingsNeedingDefaultKey[] = $settingName;
+                    } elseif (array_key_exists($settingName, $signingKeySettings)
+                        && (bool) ($formValues[$signingKeySettings[$settingName]] ?? false)
+                        && (int) ($formValues[$settingName] ?? 0) <= 0) {
+                        $settingsNeedingDefaultKey[] = $settingName;
+                    }
+                }
+
+                // One generated RSA key serves SAML signing/encryption as well as OIDC signing,
+                // so all requests within this save share a single new key.
+                if (count($settingsNeedingDefaultKey) > 0) {
+                    $keyService = new KeyService($gDb);
+                    $newKeyId = $keyService->createDefaultKey();
+
+                    foreach ($settingsNeedingDefaultKey as $settingName) {
+                        $formValues[$settingName] = $newKeyId;
+                    }
+                }
+
+                $this->validateSSOSettings($formValues);
                 break;
         }
 
-        // then update the database with the new values
+        // Separate the described preferences from the texts. They are normalized as one target
+        // set so cross-preference rules see all changes from this panel at once.
+        $corePreferences = array();
 
         foreach ($formValues as $key => $value) {
-            // Sort out elements that are not stored in adm_preferences here
-            if (!in_array($key, array('save', 'adm_csrf_token'))) {
-                if (str_starts_with($key, 'SYSMAIL_')) {
-                    $text = new Text($gDb);
-                    $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
-                    $text->setValue('txt_text', $value);
-                    $text->save();
-                } elseif ($key === 'enable_auto_login' && $value == 0 && $gSettingsManager->getBool('enable_auto_login')) {
-                    // if deactivate auto login than delete all saved logins
-                    $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN;
-                    $gDb->queryPrepared($sql);
-                    $gSettingsManager->set($key, $value);
-                } else {
-                    $gSettingsManager->set($key, $value);
-                }
+            if (in_array($key, array('save', 'adm_csrf_token'), true)) {
+                continue;
             }
+
+            if (str_starts_with($key, 'SYSMAIL_')) {
+                if (!isset(Text::SYSTEM_MAIL_DEFAULTS[$key])) {
+                    continue; // Switches and read-only previews are not separate templates.
+                }
+                $text = new Text($gDb);
+                $text->readDataByColumns(array('txt_org_id' => $gCurrentOrgId, 'txt_name' => $key));
+                $text->setSystemMailTemplate((bool)($formValues[$key . '_USE_DEFAULT'] ?? false), (string)$value);
+                $text->save();
+                continue;
+            }
+
+            if (is_string($value) && str_starts_with($value, '["') && str_ends_with($value, '"]')) {
+                $value = implode(',', json_decode($value, true));
+            }
+
+            if (PreferenceDefinitions::isSupported($key)) {
+                $corePreferences[$key] = $value;
+                continue;
+            }
+
+            // Everything a module or a plugin registered is supported above, so what is left is
+            // a preference nothing describes. It is stored as it is submitted.
+            $gSettingsManager->set($key, $value);
         }
 
-        // refresh language if necessary
-        if ($gL10n->getLanguage() !== $gSettingsManager->getString('system_language')) {
-            $gL10n->setLanguage($gSettingsManager->getString('system_language'));
+        if (count($corePreferences) > 0) {
+            $this->persistCorePreferences(PreferenceDefinitions::normalizeValues($corePreferences));
         }
 
         // clean up
@@ -306,9 +393,282 @@ class PreferencesService
     }
 
     /**
+     * Return the administrator-editable organization preferences with their schema metadata.
+     *
+     * @param bool $includeSecrets Include sensitive values such as the SMTP password.
+     * @return array<string,array{value:string,type:string,sensitive:bool}>
+     * @throws Exception
+     */
+    public function getEditablePreferences(bool $includeSecrets = false): array
+    {
+        global $gSettingsManager;
+
+        $settings = $gSettingsManager->getAll(true);
+        $result = array();
+
+        foreach (PreferenceDefinitions::supportedNames() as $name) {
+            if (!array_key_exists($name, $settings)) {
+                continue;
+            }
+
+            $definition = PreferenceDefinitions::definition($name);
+            if ($definition['sensitive'] && !$includeSecrets) {
+                continue;
+            }
+
+            $result[$name] = array(
+                'value' => (string)$settings[$name],
+                'type' => $definition['type'],
+                'sensitive' => $definition['sensitive']
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Read one administrator-editable preference.
+     *
+     * @return array{value:string,type:string,sensitive:bool}
+     * @throws Exception
+     */
+    public function getEditablePreference(string $name, bool $includeSecrets = false): array
+    {
+        global $gSettingsManager;
+
+        $definition = PreferenceDefinitions::definition($name);
+        if ($definition['sensitive'] && !$includeSecrets) {
+            return array(
+                'value' => '********',
+                'type' => $definition['type'],
+                'sensitive' => true
+            );
+        }
+
+        /*
+         * A preference that was added after the last update of this installation has no row yet -
+         * updateOrgPreferences() writes it, and until then the declared default is what the
+         * installation actually behaves like. Reporting that is more useful than refusing the name.
+         */
+        $value = $gSettingsManager->has($name, true)
+            ? $gSettingsManager->get($name)
+            : (string)PreferenceDefinitions::defaults()[$name];
+
+        return array(
+            'value' => $value,
+            'type' => $definition['type'],
+            'sensitive' => $definition['sensitive']
+        );
+    }
+
+    /**
+     * Validate and persist one administrator-editable organization preference.
+     *
+     * @throws Exception
+     */
+    public function setEditablePreference(string $name, mixed $value): string
+    {
+        $normalized = PreferenceDefinitions::normalize($name, $value);
+        $this->persistCorePreferences(array($name => $normalized));
+        return $normalized;
+    }
+
+    /**
+     * Create the versioned configuration document used by headless export/import.
+     * Sensitive settings are omitted unless explicitly requested.
+     *
+     * @return array<string,mixed>
+     * @throws Exception
+     */
+    public function exportConfiguration(bool $includeSecrets = false): array
+    {
+        global $gCurrentOrganization;
+
+        $preferences = array();
+        foreach ($this->getEditablePreferences($includeSecrets) as $name => $entry) {
+            $preferences[$name] = $entry['value'];
+        }
+
+        $document = array(
+            'schema' => self::CONFIG_DOCUMENT_SCHEMA,
+            'version' => self::CONFIG_DOCUMENT_VERSION,
+            'admidioVersion' => defined('ADMIDIO_VERSION') ? ADMIDIO_VERSION : null,
+            'secretsIncluded' => $includeSecrets,
+            'preferences' => $preferences
+        );
+
+        if (isset($gCurrentOrganization) && is_object($gCurrentOrganization)) {
+            $document['organization'] = array(
+                'uuid' => (string)$gCurrentOrganization->getValue('org_uuid'),
+                'shortName' => (string)$gCurrentOrganization->getValue('org_shortname')
+            );
+        }
+
+        return $document;
+    }
+
+    /**
+     * Validate a versioned configuration document without changing state.
+     *
+     * @param array<string,mixed> $document
+     * @return array<string,string> Normalized preference values.
+     */
+    public function validateConfigurationImport(array $document, bool $includeSecrets = false): array
+    {
+        if (($document['schema'] ?? null) !== self::CONFIG_DOCUMENT_SCHEMA) {
+            throw new \InvalidArgumentException('Configuration document has an unsupported schema.');
+        }
+        if (($document['version'] ?? null) !== self::CONFIG_DOCUMENT_VERSION) {
+            throw new \InvalidArgumentException('Configuration document has an unsupported version.');
+        }
+        if (!isset($document['preferences']) || !is_array($document['preferences'])) {
+            throw new \InvalidArgumentException('Configuration document must contain a preferences object.');
+        }
+
+        $values = array();
+        foreach ($document['preferences'] as $name => $value) {
+            if (!is_string($name)) {
+                throw new \InvalidArgumentException('Configuration preference names must be strings.');
+            }
+            if (PreferenceDefinitions::isSensitive($name) && !$includeSecrets) {
+                throw new \InvalidArgumentException(
+                    'Configuration document contains sensitive preference "' . $name
+                    . '". Use --include-secrets to import it explicitly.'
+                );
+            }
+            $values[$name] = $value;
+        }
+
+        $normalized = PreferenceDefinitions::normalizeValues($values);
+        ksort($normalized);
+        return $normalized;
+    }
+
+    /**
+     * Validate and atomically import a versioned configuration document.
+     *
+     * @param array<string,mixed> $document
+     * @return array<string,string> Normalized values that were applied.
+     * @throws Exception
+     */
+    public function importConfiguration(array $document, bool $includeSecrets = false): array
+    {
+        $normalized = $this->validateConfigurationImport($document, $includeSecrets);
+        $this->persistCorePreferences($normalized);
+        return $normalized;
+    }
+
+    /**
+     * Persist already-normalized core preferences and apply side effects shared by web and CLI.
+     *
+     * @param array<string,string> $normalized
+     * @throws Exception
+     */
+    /**
+     * Write the registry default of the named preferences into every organization.
+     *
+     * A preference exists for an organization as soon as it has a row, and it gets that row here.
+     * An organization that already stores a value keeps it, so seeding the same names again is
+     * what an update does when a new version brought new preferences.
+     *
+     * The names are always explicit: a definition that is registered in this request does not
+     * necessarily belong to something that is installed, and only what is installed gets rows.
+     *
+     * @param array<int,string> $names The preferences to seed.
+     * @throws Exception
+     */
+    public static function seedDefaults(array $names): void
+    {
+        global $gDb, $gSettingsManager;
+
+        $defaults = array_intersect_key(PreferenceDefinitions::defaults(), array_flip($names));
+        if ($defaults === array()) {
+            return;
+        }
+
+        $statement = $gDb->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS);
+        while ($organizationId = $statement->fetchColumn()) {
+            $organization = new Organization($gDb, (int)$organizationId);
+            $settingsManager =& $organization->getSettingsManager();
+            // false: an organization that already decided about a preference is not overwritten.
+            $settingsManager->setMulti($defaults, false);
+        }
+
+        if (isset($gSettingsManager) && $gSettingsManager instanceof SettingsManager) {
+            $gSettingsManager->resetAll();
+        }
+    }
+
+    /**
+     * Remove the named preferences from every organization.
+     *
+     * The counterpart of seedDefaults(), for a module or plugin that is uninstalled. A preference
+     * that an organization never stored is silently skipped.
+     *
+     * @param array<int,string> $names
+     * @throws Exception
+     */
+    public static function removePreferences(array $names): void
+    {
+        global $gDb, $gSettingsManager;
+
+        if ($names === array()) {
+            return;
+        }
+
+        $statement = $gDb->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS);
+        while ($organizationId = $statement->fetchColumn()) {
+            $organization = new Organization($gDb, (int)$organizationId);
+            $settingsManager =& $organization->getSettingsManager();
+            foreach ($names as $name) {
+                if ($settingsManager->has($name)) {
+                    $settingsManager->del($name);
+                }
+            }
+        }
+
+        if (isset($gSettingsManager) && $gSettingsManager instanceof SettingsManager) {
+            $gSettingsManager->resetAll();
+        }
+    }
+
+    private function persistCorePreferences(array $normalized): void
+    {
+        global $gDb, $gL10n, $gSettingsManager;
+
+        if (count($normalized) === 0) {
+            return;
+        }
+
+        $disableAutoLogin = isset($normalized['enable_auto_login'])
+            && $normalized['enable_auto_login'] === '0'
+            && $gSettingsManager->getBool('enable_auto_login');
+
+        $gDb->startTransaction();
+        try {
+            if ($disableAutoLogin) {
+                $gDb->queryPrepared('DELETE FROM ' . TBL_AUTO_LOGIN);
+            }
+
+            $gSettingsManager->setMulti($normalized);
+            $gDb->endTransaction();
+        } catch (\Throwable $exception) {
+            $gDb->rollback();
+            $gSettingsManager->resetAll();
+            throw $exception;
+        }
+
+        if (isset($normalized['system_language'])
+            && isset($gL10n)
+            && $gL10n->getLanguage() !== $normalized['system_language']) {
+            $gL10n->setLanguage($normalized['system_language']);
+        }
+    }
+
+    /**
      * Sends a test email to the email address of the organization.
      * @return bool Returns **true** if the email could be sent successfully otherwise **false**.
-     * @throws Exception
+     * @throws Exception|\PHPMailer\PHPMailer\Exception
      */
     public function sendTestEmail(): bool
     {
@@ -322,7 +682,7 @@ class PreferencesService
         }
 
         // set email data
-        $email->setSender($gCurrentOrganization->getValue('org_email_administrator'), $gL10n->get('SYS_ADMINISTRATOR'));
+        $email->setSender($gSettingsManager->getString('mail_sender_email'), $gSettingsManager->getString('mail_sender_name'));
         $email->addRecipientsByUser($gCurrentUser->getValue('usr_uuid'));
         $email->setSubject($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname', 'database'))));
         $email->setTemplateText(
@@ -335,6 +695,42 @@ class PreferencesService
 
         // finally send the mail
         return $email->sendEmail();
+    }
+
+    /**
+     * Validate the keys selected for the enabled SSO protocols.
+     *
+     * Disabled protocols are not validated so that an administrator can
+     * deactivate a protocol or repair an invalid configuration.
+     *
+     * @param array $formValues Validated values of the SSO preferences form.
+     * @return void
+     * @throws Exception
+     */
+    private function validateSSOSettings(array $formValues): void
+    {
+        global $gDb;
+
+        $keyService = new KeyService($gDb);
+
+        $oidcEnabled = (bool) ($formValues['sso_oidc_enabled'] ?? false);
+        if ($oidcEnabled) {
+            // will trigger an exception on an issuer that is no OIDC issuer identifier
+            OIDCService::assertValidIssuerURL((string) ($formValues['sso_oidc_issuer_url'] ?? ''));
+
+            // will trigger an exception on illegal keys
+            $keyService->getUsableKey((int) ($formValues['sso_oidc_signing_key'] ?? 0), KeyService::USAGE_OIDC_SIGNING);
+        }
+
+        $samlEnabled = (bool) ($formValues['sso_saml_enabled'] ?? false);
+        if ($samlEnabled) {
+            $keyService->getUsableKey((int) ($formValues['sso_saml_signing_key'] ?? 0), KeyService::USAGE_SAML_SIGNING);
+
+            $samlEncryptionKeyId = (int) ($formValues['sso_saml_encryption_key'] ?? 0);
+            if ($samlEncryptionKeyId > 0) {
+                $keyService->getUsableKey($samlEncryptionKeyId, KeyService::USAGE_SAML_ENCRYPTION);
+            }
+        }
     }
 
     /**

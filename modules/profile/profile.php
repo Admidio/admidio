@@ -13,6 +13,7 @@
  *             the profile of the current user will be shown.
  ***********************************************************************************************
  */
+
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
@@ -24,6 +25,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\UI\Component\DataTables;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Inventory\Service\InventoryAccessService;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -40,43 +42,6 @@ try {
     // check if right to view profile exists
     if (!$gCurrentUser->hasRightViewProfile($user)) {
         throw new Exception('SYS_NO_RIGHTS');
-    }
-
-    /**
-     * this function returns the html code for a field with description, formatting the content correctly
-     * @param string $fieldNameIntern
-     * @param User $user
-     * @return false|array<string,string>
-     */
-    function getFieldCode(string $fieldNameIntern, User $user)
-    {
-        global $gCurrentUser, $gProfileFields, $gL10n, $gSettingsManager;
-
-        if (!$gCurrentUser->allowedViewProfileField($user, $fieldNameIntern)) {
-            return false;
-        }
-
-        $html = array('label' => '', 'value' => '');
-
-        // get value of field in html format
-        $value = $user->getValue($fieldNameIntern, 'html');
-
-        // if birthday then show age
-        if ($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') === 'BIRTHDAY' && $value !== '') {
-            $birthday = DateTime::createFromFormat('Y-m-d', $user->getValue($fieldNameIntern, 'Y-m-d'));
-            $now = new DateTime('now');
-            $value = $value . '&nbsp;&nbsp;&nbsp;(' . $birthday->diff($now)->y . ' ' . $gL10n->get('SYS_YEARS') . ')';
-        } elseif (strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0) {
-            $value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon') . $value;
-        }
-
-        // show html of field, if user has a value for that field, or it's a checkbox field
-        if (strlen($user->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') === 'CHECKBOX') {
-            $html['label'] = $gProfileFields->getProperty($fieldNameIntern, 'usf_name');
-            $html['value'] = $value;
-        }
-
-        return $html;
     }
 
     $userId = $user->getValue('usr_id');
@@ -96,7 +61,7 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-profile', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_profile', $headline);
     $page->addTemplateFile('modules/profile.view.tpl');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/zxcvbn/dist/zxcvbn.js');
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.js');
@@ -145,18 +110,34 @@ try {
 
         function formSubmitEvent(rolesAreaId = "") {
             $(rolesAreaId + " .admidio-form-membership-period").submit(function(event) {
-                var memberUuid = $(this).attr("data-admidio");
-                var formAlert  = $("#adm_membership_period_form_" + memberUuid + " .form-alert");
+                var form = $(this);
+                var submitButton = form.find("button[type=submit]");
+                var memberUuid = submitButton.attr("data-admidio");
+                var formAlert  = form.find(".form-alert");
 
                 event.preventDefault(); // avoid to execute the actual submit of the form.
                 formAlert.hide();
 
+                // show that the data is saved, a slow server could otherwise look like nothing happens
+                submitButton.prop("disabled", true);
+                submitButton.prepend("<span class=\"spinner-border spinner-border-sm me-1\" role=\"status\" aria-hidden=\"true\"></span>");
+
                 $.post({
-                    url: $(this).attr("action"),
-                    data: $(this).serialize(),
+                    url: form.attr("action"),
+                    data: form.serialize(),
                     success: function(data)
                     {
-                        if (data === "success") {
+                        // errors are returned as JSON with status and message
+                        var returnData = data;
+                        if (typeof data === "string" && data.charAt(0) === "{") {
+                            try {
+                                returnData = JSON.parse(data);
+                            } catch (exception) {
+                                returnData = data;
+                            }
+                        }
+
+                        if (data === "success" || returnData.status === "success") {
                             formAlert.attr("class", "alert alert-success form-alert");
                             formAlert.html("<i class=\"bi bi-check-lg\"></i><strong>' . $gL10n->get('SYS_SAVE_DATA') . '</strong>");
                             formAlert.fadeIn("slow");
@@ -167,17 +148,37 @@ try {
                             membershipPeriod.animate({opacity: 1.0}, 5000);
                             membershipPeriod.fadeOut("slow");
 
+                            // the reloaded sections bind this event to their new forms
                             profileJS.reloadRoleMemberships();
                             profileJS.reloadFormerRoleMemberships();
                             profileJS.reloadFutureRoleMemberships();
-                            formSubmitEvent();
                         } else {
+                            var message = data;
+                            if (typeof returnData === "object" && returnData.message) {
+                                message = returnData.message;
+                            }
                             formAlert.attr("class", "alert alert-danger form-alert");
                             formAlert.fadeIn();
-                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + data);
+                            formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + message);
                         }
+                    },
+                    error: function(jqXHR)
+                    {
+                        // the request failed or the server didn\'t answer, e.g. because of a timeout
+                        var message = "' . $gL10n->get('SYS_REQUEST_FAILED') . '";
+                        if (jqXHR.status > 0) {
+                            message += " (HTTP " + jqXHR.status + ")";
+                        }
+                        formAlert.attr("class", "alert alert-danger form-alert");
+                        formAlert.html("<i class=\"bi bi-exclamation-circle-fill\"></i>" + message);
+                        formAlert.fadeIn();
+                    },
+                    complete: function()
+                    {
+                        submitButton.prop("disabled", false);
+                        submitButton.find(".spinner-border").remove();
                     }
-                 });
+                });
                 return false;
             });
         }
@@ -186,18 +187,20 @@ try {
         $(document).on("click", ".admidio-create-edit-info", function() {
             /* Tabs */
             editInfoElement = $(
-                "#adm_profile_role_memberships_current_accordion_content, " +
-                "#adm_profile_role_memberships_former_accordion_content, " +
-                "#adm_profile_role_memberships_future_accordion_content"
-            ).find("#" + $(this).attr("id") + "_Content").first();
+                "#adm_profile_role_memberships_current_pane_content, " +
+                "#adm_profile_role_memberships_former_pane_content, " +
+                "#adm_profile_role_memberships_future_pane_content, " +
+                "#adm_profile_user_relations_pane_content"
+            ).find("#" + $(this).attr("id") + "_content").first();
             editInfoElement.toggle("fast");
 
             /* Accordions */
             editInfoElement = $(
-                "#adm_profile_role_memberships_current_pane_content, " +
-                "#adm_profile_role_memberships_former_pane_content, " +
-                "#adm_profile_role_memberships_future_pane_content"
-            ).find("#" + $(this).attr("id") + "_Content").first();
+                "#adm_profile_role_memberships_current_accordion_content, " +
+                "#adm_profile_role_memberships_former_accordion_content, " +
+                "#adm_profile_role_memberships_future_accordion_content, " +
+                "#adm_profile_user_relations_accordion_content"
+            ).find("#" + $(this).attr("id") + "_content").first();
             editInfoElement.toggle("fast");
         });
 
@@ -220,7 +223,7 @@ try {
         true
     );
 
-    // show link to TFA settings if Two Factor authentication activated in global settings AND
+    // show link to TFA settings if Two-Factor authentication activated in global settings AND
     // - user is current user OR
     // - user is administrator and user is member of current organization and user has a login name
     if (
@@ -257,6 +260,7 @@ try {
     $masterData = array();
     $profileData = array();
     $categoryData = array();
+    $postcodeCityData = array();
     $category = '';
 
     // Loop over all fields of the master data
@@ -291,19 +295,19 @@ try {
                     // pseudo password field
                     $value = '';
                     if ($userId === $gCurrentUserId) {
-                            $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
+                        $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
                             '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
-                    } elseif ($gCurrentUser->isAdministrator() && isMember($userId) &&  strlen($user->getValue('usr_login_name')) > 0) {
+                    } elseif ($gCurrentUser->isAdministrator() && isMember($userId) && strlen($user->getValue('usr_login_name')) > 0) {
                         // Administrators can change or send password if login is configured and user is member of current organization
                         if (strlen($user->getValue('EMAIL')) > 0 && $gSettingsManager->getBool('system_notifications_enabled')) {
                             $value = '<a class="btn btn-secondary admidio-messagebox" href="javascript:void(0)" data-buttons="yes-no"
                                 data-message="' . $gL10n->get('SYS_SEND_NEW_LOGIN', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME'))) . '"
                                 data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">' .
-                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('ORG_SEND_NEW_PASSWORD') . '</a>';
+                                '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_SEND_LOGIN_INFORMATION') . '</a>';
                         } else {
-                            // if user has no email or send email is disabled then administrator could set a new password       
+                            // if user has no email or send email is disabled then administrator could set a new password
                             $value = '<a class="btn btn-secondary openPopup" href="javascript:void(0)" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $getUserUuid)) . '">' .
-                            '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
+                                '<i class="bi bi-key-fill"></i>' . $gL10n->get('SYS_CHANGE_PASSWORD') . '</a>';
                         }
                     }
                     if ($value !== '') {
@@ -316,6 +320,8 @@ try {
                     ) {
                         $masterData['usr_actual_login'] = array('id' => 'usr_actual_login', 'label' => '', 'value' => $user->getValue('usr_actual_login'));
                     }
+                } elseif ($field->getValue('usf_name_intern') === 'POSTCODE' || $field->getValue('usf_name_intern') === 'CITY') {
+                    $postcodeCityData[] = $user->getValue($field->getValue('usf_name_intern'), 'html');
                 }
             } else {
                 if ($category !== $field->getValue('cat_name')) {
@@ -339,6 +345,13 @@ try {
         $profileData[$category] = $categoryData;
     }
 
+    // if birthday is set than add age to the Smarty params
+    if (isset($masterData['BIRTHDAY'])) {
+        $birthday = new \DateTime($masterData['BIRTHDAY']['value']);
+        $age = $birthday->diff(new \DateTime())->y;
+        $page->assignSmartyVariable('age', $age);
+    }
+
     // add missing address fields to masterData so that there is less logic in template necessary
     if (isset($masterData['STREET']) || isset($masterData['POSTCODE']) || isset($masterData['CITY']) || isset($masterData['COUNTRY'])) {
         if (!isset($masterData['STREET'])) {
@@ -354,25 +367,32 @@ try {
             $masterData['COUNTRY'] = array('id' => 'COUNTRY', 'label' => '', 'value' => '');
         }
 
-        // set urls for map and route
-        $destination = array_filter(array(
-            $masterData['STREET']['value'],
-            $masterData['POSTCODE']['value'],
-            $masterData['CITY']['value'],
-            $masterData['COUNTRY']['value']
-        ));
-        $origin = array_filter(array(
-            $gCurrentUser->getValue('STREET'),
-            $gCurrentUser->getValue('POSTCODE'),
-            $gCurrentUser->getValue('CITY'),
-            $gCurrentUser->getValue('COUNTRY')
-        ));
+        if ($gSettingsManager->getBool('profile_show_map_link')) {
+            // set urls for map and route
+            $destination = array_filter(array(
+                $masterData['STREET']['value'],
+                $masterData['POSTCODE']['value'],
+                $masterData['CITY']['value'],
+                $masterData['COUNTRY']['value']
+            ));
+            $origin = array_filter(array(
+                $gCurrentUser->getValue('STREET'),
+                $gCurrentUser->getValue('POSTCODE'),
+                $gCurrentUser->getValue('CITY'),
+                $gCurrentUser->getValue('COUNTRY')
+            ));
 
-        $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
-        if ($userId !== $gCurrentUserId) {
-            $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+            if ((string)$masterData['CITY']['value'] !== '') {
+                $page->assignSmartyVariable('urlMapAddress', SecurityUtils::encodeUrl('https://www.google.com/maps/search/', array('api' => 1, 'query' => implode(',', $destination))));
+                if ($userId !== $gCurrentUserId) {
+                    $page->assignSmartyVariable('urlMapRoute', SecurityUtils::encodeUrl('https://www.google.com/maps/dir/', array('api' => 1, 'origin' => implode(',', $origin), 'destination' => implode(',', $destination))));
+                }
+            }
         }
     }
+
+    // combine postcode and city to display them in one line and the correct order depending on the country
+    $masterData['postcodeCity'] = array('id' => 'postcodeCity', 'label' => '', 'value' => $postcodeCityData[0] . ($postcodeCityData[1] !== '' ? ' ' : '') . $postcodeCityData[1]);
 
     $page->assignSmartyVariable('showCurrentRoles', $gSettingsManager->getBool('profile_show_roles'));
     $page->assignSmartyVariable('showFormerRoles', $gSettingsManager->getBool('profile_show_former_roles'));
@@ -388,39 +408,39 @@ try {
         $page->assignSmartyVariable('urlProfilePhotoUpload', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('user_uuid' => $getUserUuid)));
         // the image can only be deleted if corresponding rights exist
         if (
-            ((string) $user->getValue('usr_photo') !== '' && (int) $gSettingsManager->get('profile_photo_storage') === 0)
-            || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int) $gSettingsManager->get('profile_photo_storage') === 1
+            ((string)$user->getValue('usr_photo') !== '' && (int)$gSettingsManager->get('profile_photo_storage') === 0)
+            || is_file(ADMIDIO_PATH . FOLDER_DATA . '/user_profile_photos/' . $userId . '.jpg') && (int)$gSettingsManager->get('profile_photo_storage') === 1
         ) {
             $page->assignSmartyVariable('urlProfilePhotoDelete', 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_edit.php', array('mode' => 'delete', 'user_uuid' => $getUserUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'callbackProfilePhoto\')');
         }
     }
 
-    if ($gSettingsManager->getInt('inventory_module_enabled') > 0 && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
+    if (InventoryAccessService::canViewModule() && $gSettingsManager->getBool('inventory_profile_view_enabled')) {
         // ******************************************************************************
-        // Block with inventory items (optimized)
+        // Block with inventory items
         // ******************************************************************************
         $itemsKeeper = new ItemsData($gDb, $gCurrentOrgId);
         $itemsReceiver = new ItemsData($gDb, $gCurrentOrgId);
-        
+
         // Read items by user
         $itemsKeeper->readItemsByUser($user->getValue('usr_id'), array('KEEPER'));
         $itemsReceiver->readItemsByUser($user->getValue('usr_id'), array('LAST_RECEIVER'));
-        
+
         // Determine creation mode based on available items
         $creationMode = 'none';
-        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        if (!empty($itemsKeeper->getItems()) && (empty($itemsReceiver->getItems()) || $gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'keeper';
-        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        } elseif (empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'receiver';
-        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_lending'))) {
+        } elseif (!empty($itemsKeeper->getItems()) && (!empty($itemsReceiver->getItems()) && !$gSettingsManager->GetBool('inventory_items_disable_borrowing'))) {
             $creationMode = 'both';
         }
-        
+
         // Helper function to set up DataTables
-        function setupDataTable($page, $tableId, $templateData) 
+        function setupDataTable($page, $tableId, $templateData)
         {
             // create DataTable objects for tabs and accordions
-            foreach (['_tab','_accordion'] as $suffix) {
+            foreach (['_tab', '_accordion'] as $suffix) {
                 $dt = new DataTables($page, $tableId . $suffix);
                 $headerCount = count($templateData['headers']);
                 $dt->disableColumnsSort(array($headerCount));
@@ -430,51 +450,51 @@ try {
                 $dt->setRowsPerPage(10);
             }
         }
-        
+
         $inventoryPage = new InventoryPresenter();
-        switch($creationMode) {
+        switch ($creationMode) {
             case 'keeper':
                 $templateData = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
                 setupDataTable($page, 'adm_inventory_table_keeper', $templateData);
-            
+
                 $page->assignSmartyVariable('keeperList', $templateData);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
-                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));     
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3 || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));
                 }
                 break;
-        
+
             case 'receiver':
                 $templateData = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
                 setupDataTable($page, 'adm_inventory_table_receiver', $templateData);
-            
+
                 $page->assignSmartyVariable('receiverList', $templateData);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
-                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3 || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_last_receiver' => $user->getValue('usr_id'))));
                 }
                 break;
-        
+
             case 'both':
                 $templateDataKeeper = $inventoryPage->prepareDataProfile($itemsKeeper, 'KEEPER');
                 $templateDataReceiver = $inventoryPage->prepareDataProfile($itemsReceiver, 'LAST_RECEIVER');
-            
+
                 setupDataTable($page, 'adm_inventory_table_keeper', $templateDataKeeper);
                 setupDataTable($page, 'adm_inventory_table_receiver', $templateDataReceiver);
-            
+
                 $page->assignSmartyVariable('keeperList', $templateDataKeeper);
                 $page->assignSmartyVariable('keeperListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsKeeper->getProperty('KEEPER', 'inf_name') . ')');
-                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
-                }  
-            
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3 || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryKeeper', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                }
+
                 $page->assignSmartyVariable('receiverList', $templateDataReceiver);
                 $page->assignSmartyVariable('receiverListHeader', $gL10n->get('SYS_INVENTORY') . ' (' . $gL10n->get('SYS_VIEW') . ': ' . $itemsReceiver->getProperty('LAST_RECEIVER', 'inf_name') . ')');
-                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3  || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
-                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter' => 2, 'items_filter_keeper' => $user->getValue('usr_id'))));
+                if ($gSettingsManager->getInt('inventory_module_enabled') !== 3 || ($gSettingsManager->getInt('inventory_module_enabled') === 3 && $gCurrentUser->isAdministratorInventory())) {
+                    $page->assignSmartyVariable('urlInventoryReceiver', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('items_filter_status' => 0, 'items_filter_last_receiver' => $user->getValue('usr_id'))));
                 }
                 break;
-        
+
             default:
                 break;
         }
@@ -601,7 +621,7 @@ try {
                     'icon' => 'bi-file-earmark-arrow-down-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_inventory_admin') && (int) $gSettingsManager->getInt('inventory_module_enabled') > 0) {
+            if ($user->checkRolesRight('rol_inventory_admin') && (int)$gSettingsManager->getInt('inventory_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_inventory_admin'],
                     'right' => $gL10n->get('SYS_RIGHT_INVENTORY'),
@@ -669,7 +689,7 @@ try {
             $role = new Role($gDb);
 
             while ($row = $roleStatement->fetch()) {
-                $orgId = (int) $row['org_id'];
+                $orgId = (int)$row['org_id'];
 
                 // if roles of new organization than read the rights of this organization
                 if ($actualOrganization !== $orgId) {
@@ -693,7 +713,7 @@ try {
                         'category' => $role->getValue('cat_name'),
                         'role' => $role->getValue('rol_name'),
                         'leader' => $row['mem_leader'],
-                        'timestamp' => $gL10n->get('SYS_SINCE', array($startDate->format($gSettingsManager->getString('system_date'))))
+                        'timestamp' => $gL10n->get('SYS_SINCE_VAR', array($startDate->format($gSettingsManager->getString('system_date'))))
                     );
                 }
             }
@@ -709,19 +729,8 @@ try {
         // *******************************************************************************
         // user relations block
         // *******************************************************************************
-        $sql = 'SELECT COUNT(*) AS count
-              FROM ' . TBL_USER_RELATIONS . '
-        INNER JOIN ' . TBL_USER_RELATION_TYPES . '
-                ON ure_urt_id  = urt_id
-             WHERE ure_usr_id1 = ? -- $userId
-               AND urt_name        <> \'\'
-               AND urt_name_male   <> \'\'
-               AND urt_name_female <> \'\'';
-        $statement = $gDb->queryPrepared($sql, array($userId));
-        $count = (int) $statement->fetchColumn();
 
-        if ($count > 0) {
-            $sql = 'SELECT *
+        $sql = 'SELECT *
                   FROM ' . TBL_USER_RELATIONS . '
             INNER JOIN ' . TBL_USER_RELATION_TYPES . '
                     ON ure_urt_id  = urt_id
@@ -730,62 +739,61 @@ try {
                    AND urt_name_male   <> \'\'
                    AND urt_name_female <> \'\'
               ORDER BY urt_name';
-            $relationStatement = $gDb->queryPrepared($sql, array($userId));
+        $relationStatement = $gDb->queryPrepared($sql, array($userId));
 
-            $relationType = new UserRelationType($gDb);
-            $relation = new UserRelation($gDb);
-            $otherUser = new User($gDb, $gProfileFields);
-            $userRelations = array();
+        $relationType = new UserRelationType($gDb);
+        $relation = new UserRelation($gDb);
+        $otherUser = new User($gDb, $gProfileFields);
+        $userRelations = array();
 
-            while ($row = $relationStatement->fetch()) {
-                $editUserIcon = '';
-                $relationType->clear();
-                $relationType->setArray($row);
-                $relation->clear();
-                $relation->setArray($row);
-                $otherUser->clear();
-                $otherUser->readDataById($relation->getValue('ure_usr_id2'));
+        while ($row = $relationStatement->fetch()) {
+            $editUserIcon = '';
+            $relationType->clear();
+            $relationType->setArray($row);
+            $relation->clear();
+            $relation->setArray($row);
+            $otherUser->clear();
+            $otherUser->readDataById($relation->getValue('ure_usr_id2'));
 
-                $relationName = $relationType->getValue('urt_name');
-                if ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_MALE')) {
-                    $relationName = $relationType->getValue('urt_name_male');
-                } elseif ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_FEMALE')) {
-                    $relationName = $relationType->getValue('urt_name_female');
-                }
-
-                $userRelation = array(
-                    'uuid' => $relation->getValue('ure_uuid'),
-                    'relationName' => $relationName,
-                    'userFirstName' => $otherUser->getValue('FIRST_NAME'),
-                    'userLastName' => $otherUser->getValue('LAST_NAME'),
-                    'urlUserProfile' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $otherUser->getValue('usr_uuid')))
-                );
-
-                if ($gCurrentUser->hasRightEditProfile($otherUser)) {
-                    $userRelation['urlUserEdit'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid')));
-                }
-
-                if ($gCurrentUser->isAdministratorUsers()) {
-                    $userRelation['urlRelationDelete'] = 'callUrlHideElement(\'row_ure_' . $relation->getValue('ure_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $relation->getValue('ure_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
-                }
-
-                // only show info if system setting is activated
-                if ((int) $gSettingsManager->get('system_show_create_edit') > 0) {
-                    $userRelation['userCreatedName'] = $relation->getNameOfCreatingUser();
-                    $userRelation['userCreatedTimestamp'] = $relation->getValue('ure_timestamp_create');
-                    $userRelation['lastUserEditedName'] = $relation->getNameOfLastEditingUser();
-                    $userRelation['lastUserEditedTimestamp'] = $relation->getValue('ure_timestamp_change');
-                }
-                $userRelations[] = $userRelation;
+            $relationName = $relationType->getValue('urt_name');
+            if ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_MALE')) {
+                $relationName = $relationType->getValue('urt_name_male');
+            } elseif ($otherUser->getValue('GENDER', 'text') === $gL10n->get('SYS_FEMALE')) {
+                $relationName = $relationType->getValue('urt_name_female');
             }
-            $page->assignSmartyVariable('showRelations', true);
-            $page->assignSmartyVariable('showRelationsCreateEdit', $gSettingsManager->get('system_show_create_edit') > 0);
-            $page->assignSmartyVariable('userRelations', $userRelations);
+
+            $userRelation = array(
+                'uuid' => $relation->getValue('ure_uuid'),
+                'relationName' => $relationName,
+                'userFirstName' => $otherUser->getValue('FIRST_NAME'),
+                'userLastName' => $otherUser->getValue('LAST_NAME'),
+                'urlUserProfile' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $otherUser->getValue('usr_uuid')))
+            );
+
+            if ($gCurrentUser->hasRightEditProfile($otherUser)) {
+                $userRelation['urlUserEdit'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $otherUser->getValue('usr_uuid')));
+            }
+
+            if ($gCurrentUser->isAdministratorUsers()) {
+                $userRelation['urlRelationDelete'] = 'callUrlHideElement(\'row_ure_' . $relation->getValue('ure_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_function.php', array('mode' => 'delete', 'ure_uuid' => $relation->getValue('ure_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
+            }
+
+            // only show info if system setting is activated
+            if ((int)$gSettingsManager->get('system_show_create_edit') > 0) {
+                $userRelation['userCreatedName'] = $relation->getNameOfCreatingUser();
+                $userRelation['userCreatedTimestamp'] = $relation->getValue('ure_timestamp_create');
+                $userRelation['lastUserEditedName'] = $relation->getNameOfLastEditingUser();
+                $userRelation['lastUserEditedTimestamp'] = $relation->getValue('ure_timestamp_change');
+            }
+            $userRelations[] = $userRelation;
         }
+        $page->assignSmartyVariable('showRelations', true);
+        $page->assignSmartyVariable('showRelationsCreateEdit', $gSettingsManager->get('system_show_create_edit') > 0);
+        $page->assignSmartyVariable('userRelations', $userRelations);
+
         $page->assignSmartyVariable('urlAssignRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/roles.php', array('user_uuid' => $getUserUuid, 'inline' => true)));
         $page->assignSmartyVariable('urlAssignUserRelations', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/userrelations_new.php', array('user_uuid' => $getUserUuid)));
-    }
-    else {
+    } else {
         $page->assignSmartyVariable('showRelations', false);
     }
 
@@ -799,6 +807,6 @@ try {
     $page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/bootstrap-tabs-x/js/bootstrap-tabs-x-admidio.js');
 
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

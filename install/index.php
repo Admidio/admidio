@@ -12,7 +12,7 @@
 
 use Admidio\Infrastructure\Database;
 
-$rootPath = dirname(__DIR__, 2);
+$rootPath = dirname(__DIR__);
 
 // check if installation is necessary
 if (is_file($rootPath . '/adm_my_files/config.php')) {

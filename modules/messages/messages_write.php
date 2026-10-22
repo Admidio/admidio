@@ -13,7 +13,7 @@
  * Parameters:
  *
  * msg_type  - This could be EMAIL if you want to write an email or PM if you want to write a private Message
- * user_uuid - send message to the given user UUID
+ * user_uuid - Send message to the given user UUID
  * subject   - subject of the message
  * msg_uuid  - UUID of the message -> just for answers
  * role_uuid - UUID of a role to which an email should be sent
@@ -23,6 +23,7 @@
  *
  *****************************************************************************/
 
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
@@ -35,15 +36,16 @@ use Admidio\Roles\Entity\Role;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
+use Ramsey\Uuid\Uuid;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
 
     // Initialize and check the parameters
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => Message::MESSAGE_TYPE_EMAIL));
-    $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
+    $getUserUUID = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
     $getSubject = admFuncVariableIsValid($_GET, 'subject', 'string');
-    $getMsgUuid = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
+    $getMsgUUID = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
     $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'bool', array('defaultValue' => false));
     $getDeliveryConfirmation = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'bool');
@@ -55,12 +57,21 @@ try {
     if ($gValidLogin) {
         $postUserUuidList = admFuncVariableIsValid($_POST, 'userUuidList', 'string');
         $postListUuid = admFuncVariableIsValid($_POST, 'list_uuid', 'uuid');
+
+        if ($postUserUuidList !== '') {
+            $userUuidListArray = explode(',', $postUserUuidList);
+            foreach ($userUuidListArray as $key => $userUuid) {
+                if (!Uuid::isValid($userUuid)) {
+                    throw new Exception('SYS_INVALID_PAGE_VIEW');
+                }
+            }
+        }
     }
 
     $message = new Message($gDb);
-    $message->readDataByUuid($getMsgUuid);
+    $message->readDataByUuid($getMsgUUID);
 
-    if ($getMsgUuid !== '') {
+    if ($getMsgUUID !== '') {
         $getMsgType = $message->getValue('msg_type');
     }
 
@@ -82,7 +93,7 @@ try {
     }
 
     // Update the read status of the message
-    if ($getMsgUuid !== '') {
+    if ($getMsgUUID !== '') {
         // check if user is allowed to view message
         if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
@@ -92,7 +103,7 @@ try {
         $message->setReadValue();
 
         if ($getForward === true) {
-            $getMsgUuid = '';
+            $getMsgUUID = '';
         } else {
             $messageStatement = $message->getConversation($message->getValue('msg_id'));
             $message->addContent('');
@@ -104,11 +115,11 @@ try {
         } else {
             $user = new User($gDb, $gProfileFields, $message->getConversationPartner());
         }
-        $getUserUuid = $user->getValue('usr_uuid');
-    } elseif ($getUserUuid !== '') {
+        $getUserUUID = $user->getValue('usr_uuid');
+    } elseif ($getUserUUID !== '') {
         $message->setValue('msg_subject', $getSubject);
         $user = new User($gDb, $gProfileFields);
-        $user->readDataByUuid($getUserUuid);
+        $user->readDataByUuid($getUserUUID);
     }
 
     $maxNumberRecipients = 1;
@@ -119,7 +130,7 @@ try {
     $list = array();
 
     if ($gValidLogin && $getMsgType === Message::MESSAGE_TYPE_PM && count($gCurrentUser->getRolesWriteMails()) > 0) {
-        $sql = 'SELECT usr_id, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
+        $sql = 'SELECT usr_uuid, first_name.usd_value AS first_name, last_name.usd_value AS last_name, usr_login_name
               FROM ' . TBL_MEMBERS . '
         INNER JOIN ' . TBL_ROLES . '
                 ON rol_id = mem_rol_id
@@ -160,7 +171,7 @@ try {
         $dropStatement = $gDb->queryPrepared($sql, array_merge($queryParamsArr[0], $queryParamsArr[1], $queryParamsArr[2]));
 
         while ($row = $dropStatement->fetch()) {
-            $list[] = array($row['usr_id'], $row['last_name'] . ' ' . $row['first_name'] . ' (' . $row['usr_login_name'] . ')', '');
+            $list[] = array($row['usr_uuid'], $row['last_name'] . ' ' . $row['first_name'] . ' (' . $row['usr_login_name'] . ')', '');
         }
 
         // no roles or users found then show message
@@ -169,7 +180,7 @@ try {
         }
     }
 
-    if ($getUserUuid !== '') {
+    if ($getUserUUID !== '') {
         // if a user ID is given, we need to check if the actual user is allowed to contact this user
         if ((!$gCurrentUser->isAdministratorUsers() && !isMember((int)$user->getValue('usr_id'))) || $user->getValue('usr_id') === '') {
             throw new Exception('SYS_USER_ID_NOT_FOUND');
@@ -185,7 +196,7 @@ try {
         }
     }
 
-    if (!$gValidLogin && $getUserUuid === '' && $getRoleUuid === '') {
+    if (!$gValidLogin && $getUserUUID === '' && $getRoleUuid === '') {
         // visitors have no message modul and start the navigation here
         $gNavigation->addStartUrl(CURRENT_URL, $headline);
     } else {
@@ -193,19 +204,19 @@ try {
     }
 
     // create html page object
-    $page = PagePresenter::withHtmlIDAndHeadline('admidio-messages-write', $headline);
+    $page = PagePresenter::withHtmlIDAndHeadline('adm_messages_write', $headline);
 
     if ($getMsgType === Message::MESSAGE_TYPE_PM) {
         // show form
         $form = new FormPresenter(
             'adm_pm_send_form',
             'modules/messages.pm.send.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUuid)),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_send.php', array('msg_type' => 'PM', 'msg_uuid' => $getMsgUUID, 'user_uuid' => $getUserUUID)),
             $page,
             array('enableFileUpload' => true)
         );
 
-        if ($getUserUuid === '') {
+        if ($getMsgUUID === '' && $getUserUUID === '') {
             $form->addSelectBox(
                 'msg_to',
                 $gL10n->get('SYS_TO'),
@@ -217,15 +228,13 @@ try {
                     'helpTextId' => 'SYS_SEND_PRIVATE_MESSAGE_DESC'
                 )
             );
-            $sendTo = '';
         } else {
             $form->addInput(
                 'msg_to',
-                '',
-                $user->getValue('usr_id'),
-                array('property' => FormPresenter::FIELD_HIDDEN)
+                $gL10n->get('SYS_TO'),
+                $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')',
+                array('property' => FormPresenter::FIELD_DISABLED)
             );
-            $sendTo = ' ' . $gL10n->get('SYS_TO') . ' ' . $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME') . ' (' . $user->getValue('usr_login_name') . ')';
         }
 
         if ($getSubject === '') {
@@ -258,11 +267,12 @@ try {
         );
 
         // add form to html page
-        $page->assignSmartyVariable('userUuid', $getUserUuid);
+        $page->assignSmartyVariable('userUUID', $getUserUUID);
+        $page->assignSmartyVariable('messageUUID', $getMsgUUID);
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
-    } elseif ($getMsgType === Message::MESSAGE_TYPE_EMAIL && $getMsgUuid === '') {
-        if ($getUserUuid !== '') {
+    } elseif ($getMsgType === Message::MESSAGE_TYPE_EMAIL && $getMsgUUID === '') {
+        if ($getUserUUID !== '') {
             // check if the user has email address for receiving an email
             if (!$user->hasEmail()) {
                 throw new Exception('SYS_USER_NO_EMAIL', array($user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME')));
@@ -298,9 +308,9 @@ try {
         $sqlParticipationRoles = '';
         $possibleEmails = 0;
 
-        if ($getUserUuid !== '') {
+        if ($getUserUUID !== '') {
             // usr_id was committed then write email to this user
-            $preloadData = $getUserUuid;
+            $preloadData = $getUserUUID;
             $sqlUserIds = ' AND usr_id = ? -- $user->getValue(\'usr_id\')';
         } elseif ($getRoleUuid !== '') {
             // role id was committed then write email to this role
@@ -342,13 +352,13 @@ try {
                 foreach ($rolesArray as $roleArray) {
                     $role = new Role($gDb);
                     $role->setArray($roleArray);
-                    $list[] = array('groupID: ' . $roleArray['rol_uuid'], $roleArray['rol_name'], $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
+                    $list[] = array('groupID: ' . $roleArray['rol_uuid'], Language::translateIfTranslationStrId($roleArray['rol_name']), $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_MEMBERS') . ')');
                     $listRoleIdsArray[] = $roleArray['rol_uuid'];
                     if ($role->hasFormerMembers() > 0 && $gSettingsManager->getBool('mail_show_former')) {
                         // list role with former members
-                        $listFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+1', $roleArray['rol_name'] . ' ' . '(' . $gL10n->get('SYS_FORMER_PL') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')');
+                        $listFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+1', Language::translateIfTranslationStrId($roleArray['rol_name']) . ' ' . '(' . $gL10n->get('SYS_FORMER_PL') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_FORMER_MEMBERS') . ')');
                         // list role with active and former members
-                        $listActiveAndFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+2', $roleArray['rol_name'] . ' ' . '(' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
+                        $listActiveAndFormer[] = array('groupID: ' . $roleArray['rol_uuid'] . '+2', Language::translateIfTranslationStrId($roleArray['rol_name']) . ' ' . '(' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS_SHORT') . ')', $gL10n->get('SYS_ROLES') . ' (' . $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS') . ')');
                     }
                 }
 
@@ -431,7 +441,7 @@ try {
 
             $statement = $gDb->queryPrepared($sql, array($gCurrentOrgId));
             while ($row = $statement->fetch()) {
-                $list[] = array('groupID: ' . $row['rol_uuid'], $row['rol_name'], '');
+                $list[] = array('groupID: ' . $row['rol_uuid'], Language::translateIfTranslationStrId($row['rol_name']), '');
             }
         }
 
@@ -439,6 +449,9 @@ try {
             $preloadData = 'dummy';
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
+            if (!$showList->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
             $form->addInput('userUuidList', '', $postUserUuidList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('list_uuid', '', $postListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
@@ -463,7 +476,22 @@ try {
         );
 
         if ($gCurrentUserId > 0) {
-            $sql = 'SELECT COUNT(*) AS count
+            if ($gSettingsManager->getInt('mail_sender_mode') === 1 || $gSettingsManager->getInt('mail_sender_mode') === 2) {
+                $email = new Email();
+                $senderInfo = $email->getSender();
+            } else {
+                $senderInfo = array('name' => $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'), 'email' => '');
+            }
+
+            $form->addInput(
+                'sender_name',
+                $gL10n->get('SYS_FROM'),
+                $senderInfo['name'] . ($senderInfo['email'] !== '' ? ' <' . $senderInfo['email'] . '>' : ''),
+                array('maxLength' => 255, 'property' => FormPresenter::FIELD_DISABLED)
+            );
+
+            if ($gSettingsManager->getInt('mail_sender_mode') === 1 || $gSettingsManager->getInt('mail_sender_mode') === 3) {
+                $sql = 'SELECT COUNT(*) AS count
                   FROM ' . TBL_USER_FIELDS . '
             INNER JOIN ' . TBL_USER_DATA . '
                     ON usd_usf_id = usf_id
@@ -471,58 +499,64 @@ try {
                    AND usd_usr_id = ? -- $gCurrentUserId
                    AND usd_value IS NOT NULL';
 
-            $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUserId));
-            $possibleEmails = $pdoStatement->fetchColumn();
+                $pdoStatement = $gDb->queryPrepared($sql, array($gCurrentUserId));
+                $possibleEmails = $pdoStatement->fetchColumn();
 
-            $form->addInput(
-                'namefrom',
-                $gL10n->get('SYS_YOUR_NAME'),
-                $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
-                array('maxLength' => 50, 'property' => FormPresenter::FIELD_DISABLED)
-            );
+                if ($gSettingsManager->getInt('mail_sender_mode') === 1) {
+                    $label = 'SYS_REPLY_TO';
+                    $value = $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME') . ' <' . $gCurrentUser->getValue('EMAIL') .'>';
+                } else {
+                    $label = 'SYS_YOUR_EMAIL';
+                    $value = $gCurrentUser->getValue('EMAIL');
+                }
 
-            if ($possibleEmails > 1) {
-                $sqlData = array();
-                $sqlData['query'] = 'SELECT email.usd_value AS ID, email.usd_value AS email
+                if ($possibleEmails > 1) {
+                    // list all email addresses of the current user if there are more than one.
+                    // For security reasons send UUID instead of email address within the form and convert this UUID
+                    // to email address in the sending script. This prevents that users can manipulate the form and
+                    // send emails with an email address of another user of the system.
+                    $sqlData = array();
+                    $sqlData['query'] = 'SELECT usf_uuid AS ID, usd_value AS email
                                    FROM ' . TBL_USERS . '
-                             INNER JOIN ' . TBL_USER_DATA . ' AS email
-                                     ON email.usd_usr_id = usr_id
-                                    AND LENGTH(email.usd_value) > 0
-                             INNER JOIN ' . TBL_USER_FIELDS . ' AS field
-                                     ON field.usf_id = email.usd_usf_id
-                                    AND field.usf_type = \'EMAIL\'
+                             INNER JOIN ' . TBL_USER_DATA . '
+                                     ON usd_usr_id = usr_id
+                                    AND LENGTH(usd_value) > 0
+                             INNER JOIN ' . TBL_USER_FIELDS . '
+                                     ON usf_id = usd_usf_id
+                                    AND usf_type = \'EMAIL\'
                                   WHERE usr_id = ? -- $gCurrentUserId
                                     AND usr_valid = true
-                               GROUP BY email.usd_value, email.usd_value';
-                $sqlData['params'] = array($gCurrentUserId);
+                               GROUP BY usf_uuid, usd_value';
+                    $sqlData['params'] = array($gCurrentUserId);
 
-                $form->addSelectBoxFromSql(
-                    'mailfrom',
-                    $gL10n->get('SYS_YOUR_EMAIL'),
-                    $gDb,
-                    $sqlData,
-                    array('maxLength' => 100, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
-                );
-            } else {
-                $form->addInput(
-                    'mailfrom',
-                    $gL10n->get('SYS_YOUR_EMAIL'),
-                    $gCurrentUser->getValue('EMAIL'),
-                    array('type' => 'email', 'maxLength' => 100, 'property' => FormPresenter::FIELD_DISABLED)
-                );
+                    $form->addSelectBoxFromSql(
+                        'sender_email',
+                        $gL10n->get($label),
+                        $gDb,
+                        $sqlData,
+                        array('maxLength' => 100, 'defaultValue' => $gCurrentUser->getValue('EMAIL'), 'showContextDependentFirstEntry' => false)
+                    );
+                } else {
+                    $form->addInput(
+                        'sender_email',
+                        $gL10n->get($label),
+                        $value,
+                        array('maxLength' => 255, 'property' => FormPresenter::FIELD_DISABLED)
+                    );
+                }
             }
         } else {
             $form->addInput(
-                'namefrom',
+                'sender_name',
                 $gL10n->get('SYS_YOUR_NAME'),
                 '',
-                array('maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
+                array('maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
             $form->addInput(
-                'mailfrom',
+                'sender_email',
                 $gL10n->get('SYS_YOUR_EMAIL'),
                 '',
-                array('type' => 'email', 'maxLength' => 50, 'property' => FormPresenter::FIELD_REQUIRED)
+                array('type' => 'email', 'maxLength' => 100, 'property' => FormPresenter::FIELD_REQUIRED)
             );
         }
 
@@ -543,7 +577,7 @@ try {
             array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 
-        // add multiline text element or ckeditor to form
+        // add a multiline text field or rich-text editor to the form
         if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
             $form->addEditor(
                 'msg_body',
@@ -573,6 +607,7 @@ try {
                     'enableMultiUploads' => true,
                     'maxUploadSize' => Email::getMaxAttachmentSize(),
                     'multiUploadLabel' => $gL10n->get('SYS_ADD_ATTACHMENT'),
+                    'removeUploadLabel' => $gL10n->get('SYS_REMOVE'),
                     'hideUploadField' => true,
                     'helpTextId' => $gL10n->get('SYS_MAX_ATTACHMENT_SIZE', array(Email::getMaxAttachmentSize(Email::SIZE_UNIT_MEBIBYTE))),
                     'icon' => 'bi-paperclip'
@@ -581,7 +616,7 @@ try {
         }
 
         // if captchas are enabled then visitors of the website must resolve this
-        if (!$gValidLogin && $gSettingsManager->getBool('mail_captcha_enabled')) {
+        if (!$gValidLogin && $gSettingsManager->getBool('captcha_enabled')) {
             $form->addCaptcha('adm_captcha_code');
         }
 
@@ -615,18 +650,19 @@ try {
             } else {
                 $messageHeader = $messageContent->getValue('msc_timestamp', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />' . $gL10n->get('SYS_TO') . ': ' . $message->getRecipientsNamesString();
                 $messageIcon = 'bi-envelope-fill';
-                $attachments = $message->getAttachmentsInformations();
+                $attachments = $message->getAttachmentsInformation();
 
                 if (count($attachments) > 0) {
                     $messageFooter .= '<div class="card-footer"><span class="mr-3"><i class="bi bi-paperclip"></i> ' . $gL10n->get('SYS_ATTACHMENT') . '</span>';
                 }
 
                 foreach ($attachments as $attachment) {
-                    // get complete path with filename of the attachment
+                    // get a complete path with filename of the attachment
                     $attachmentPath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'];
 
                     if (file_exists($attachmentPath)) {
-                        $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '">' . $attachment['file_name'] . '</a></span>';
+                        $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '"
+                            data-adm-file-preview data-file-name="' . SecurityUtils::encodeHTML($attachment['file_name']) . '">' . $attachment['file_name'] . '</a></span>';
                     } else {
                         $messageFooter .= '<span class="admidio-attachment mr-3">' . $attachment['file_name'] . '</span>';
                     }
@@ -638,18 +674,17 @@ try {
             }
 
             $page->addHtml('
-        <div class="card admidio-blog">
-            <div class="card-header">
-                <i class="bi ' . $messageIcon . '"></i>' . $messageHeader . '
-            </div>
-            <div class="card-body">' . $messageContent->getValue('msc_message') . '</div>
-            ' . $messageFooter . '
-        </div>');
+            <div class="card admidio-blog">
+                <div class="card-header">
+                    <i class="bi ' . $messageIcon . '"></i>' . $messageHeader . '
+                </div>
+                <div class="card-body">' . $messageContent->getValue('msc_message') . '</div>
+                ' . $messageFooter . '
+            </div>');
         }
     }
 
-    // show page
     $page->show();
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e);
 }

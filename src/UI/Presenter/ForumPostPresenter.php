@@ -3,6 +3,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Forum\Entity\Post;
+use Admidio\Forum\Entity\Topic;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
@@ -51,11 +52,21 @@ class ForumPostPresenter extends PagePresenter
     {
         global $gDb, $gL10n, $gCurrentSession;
 
+        // check if the current user may create or edit a post in the topic's category
+        $topic = new Topic($gDb);
+        $topic->readDataByUuid($topicUUID);
+        if (!$topic->isCategoryEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         // create post object
         $post = new Post($gDb);
 
         if ($this->postUUID !== '') {
             $post->readDataByUuid($this->postUUID);
+            if (!$post->isEditableByCurrentUser()) {
+                throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
+            }
         }
 
         $this->setHtmlID('adm_forum_post_edit');

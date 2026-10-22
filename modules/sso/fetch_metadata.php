@@ -1,38 +1,76 @@
 <?php
 
+use Admidio\Infrastructure\Utils\SecurityUtils;
+
 try {
     require_once(__DIR__ . '/../../system/common.php');
+
     if (!$gCurrentUser->isAdministrator()) {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    if (!isset($_GET['url'])) {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        header('Allow: POST');
+        exit;
+    }
+
+    // metadata loading through this script must also have correct CSRF token, otherwise arbitrary l
+    $csrfToken = admFuncVariableIsValid($_POST, 'adm_csrf_token', 'string');
+    SecurityUtils::validateCsrfToken($csrfToken);
+
+    $url = trim(admFuncVariableIsValid($_POST, 'url', 'url'));
+
+    // The metadata URL is requested by the server, so it must be a public HTTPS target.
+    // The returned options pin cURL to the address that was validated here.
+    try {
+        $requestOptions = SecurityUtils::getOutboundRequestCurlOptions(
+            $url,
+            $gSettingsManager->getBool('sso_allow_private_network')
+        );
+    } catch (Exception $e) {
         http_response_code(400);
-        echo "Missing URL parameter";
         exit;
     }
 
-    $url = filter_var($_GET['url'], FILTER_VALIDATE_URL);
-    if (!$url) {
-        http_response_code(400);
-        echo "Invalid URL";
+    $metadata = '';
+    $responseTooLarge = false;
+    $maximumResponseSize = 2 * 1024 * 1024;
+
+    $curl = curl_init($url);
+    if ($curl === false) {
+        throw new RuntimeException('Could not initialize the metadata request.');
+    }
+
+    curl_setopt_array($curl, $requestOptions + array(
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_WRITEFUNCTION => static function ($curlHandle, string $chunk) use (
+            &$metadata,
+            &$responseTooLarge,
+            $maximumResponseSize
+        ): int {
+            if (strlen($metadata) + strlen($chunk) > $maximumResponseSize) {
+                $responseTooLarge = true;
+                return 0;
+            }
+
+            $metadata .= $chunk;
+            return strlen($chunk);
+        }
+    ));
+
+    $result = curl_exec($curl);
+    $statusCode = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+
+    if ($result === false || $responseTooLarge || $statusCode < 200 || $statusCode >= 300) {
+        http_response_code(502);
         exit;
     }
 
-    // Fetch metadata from external server
-    $metadata = file_get_contents($url);
-    if ($metadata === false) {
-        http_response_code(500);
-        echo "Failed to fetch metadata";
-        exit;
-    }
-
-    // Allow CORS only for your frontend
-    header("Access-Control-Allow-Origin: " . ADMIDIO_URL);
-    header("Content-Type: application/xml");
-
+    header('Content-Type: application/xml; charset=UTF-8');
+    header('Cache-Control: no-store');
     echo $metadata;
-
-} catch (Exception $e) {
-    $gMessage->show($e->getMessage());
+} catch (Throwable $e) {
+    handleException($e, true);
 }

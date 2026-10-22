@@ -116,7 +116,7 @@
             <!-- User Relations Tab -->
             {if $showRelations}
                 <div class="tab-pane fade" id="adm_profile_user_relations_pane" role="tabpanel" aria-labelledby="adm_profile_user_relations_tab">
-                    <div class="card admidio-tabbed-field-group">
+                    <div class="card admidio-tabbed-field-group" id="adm_profile_user_relations_pane_content">
                         <div class="card-header">
                             {if $isAdministratorUsers}
                                 <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">
@@ -253,7 +253,7 @@
                 </h2>
                 <div id="adm_profile_user_relations_accordion" class="accordion-collapse collapse" aria-labelledby="adm_profile_user_relations_accordion_heading" data-bs-parent="#adm_profile_accordion">
                     <div class="accordion-body">
-                        <div class="card admidio-accordion-field-group">
+                        <div class="card admidio-accordion-field-group" id="adm_profile_user_relations_accordion_content">
                             <div class="card-header">
                                 {if $isAdministratorUsers}
                                     <a class="btn btn-secondary float-end" id="adm_profile_relations_new_entry" href="{$urlAssignUserRelations}">

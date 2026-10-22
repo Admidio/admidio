@@ -118,17 +118,28 @@ try {
     $searchColumns = array(
         'COALESCE(last_name, \' \')',
         'COALESCE(first_name, \' \')',
-        'COALESCE(birthday, \' \')',
-        'COALESCE(street, \' \')',
-        'COALESCE(city, \' \')',
-        'COALESCE(zip_code, \' \')',
-        'COALESCE(country, \' \')'
     );
+
+    if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(birthday, \' \')';
+    }
+    if ($gProfileFields->isVisible('STREET', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(street, \' \')';
+    }
+    if ($gProfileFields->isVisible('CITY', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(city, \' \')';
+    }
+    if ($gProfileFields->isVisible('POSTCODE', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(zip_code, \' \')';
+    }
+    if ($gProfileFields->isVisible('COUNTRY', $gCurrentUser->isAdministratorUsers())) {
+        $searchColumns[] = 'COALESCE(country, \' \')';
+    }
 
     if ($getSearch !== '' && count($searchColumns) > 0) {
         $searchString = explode(' ', $getSearch);
 
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
+        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
             $searchValue = ' ?::text ';
         } else {
             // mysql
@@ -136,7 +147,7 @@ try {
         }
 
         foreach ($searchString as $searchWord) {
-            $searchCondition .= ' AND concat(' . implode(', ', $searchColumns) . ') LIKE CONCAT(\'%\', ' . $searchValue . ', \'%\') ';
+            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', ', $searchColumns) . ')) LIKE LOWER(CONCAT(\'%\', ' . $searchValue . ', \'%\')) ';
             $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
         }
 

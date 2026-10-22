@@ -20,14 +20,14 @@
         </div>
     </div>
 </div>
-{if $databaseEngine == 'mysql'}
+{if $databaseType == 'mysql' || $databaseType == 'mariadb'}
     <div class="admidio-form-group admidio-form-custom-content row mb-3">
         <label class="col-sm-3 col-form-label">
             {$l10n->get('SYS_DATABASE_BACKUP')}
         </label>
         <div class="col-sm-9">
             <div>
-                <a class="btn btn-secondary" id="add_another_organization" href="{$backupUrl}">
+                <a class="btn btn-secondary admidio-send-csrf-token" id="add_another_organization" data-url="{$backupUrl}" data-csrf-token="{$csrfToken}">
                     <i class="bi bi-download"></i>{$l10n->get('SYS_DOWNLOAD_DATABASE_BACKUP')}</a>
                 <div class="form-text">{$l10n->get('SYS_DATABASE_BACKUP_DESC')}</div>
             </div>
@@ -40,7 +40,7 @@
     </label>
     <div class="col-sm-9">
         <div>
-            <a id="donate" href="{$admidioHomepage}donate.php" target="_blank">
+            <a id="donate" class="icon-link" href="{$admidioHomepage}donate.php" target="_blank">
                 <i class="bi bi-heart-fill"></i>{$l10n->get('SYS_DONATE')}</a>
             <div class="form-text">{$l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT')}</div>
         </div>

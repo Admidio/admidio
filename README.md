@@ -4,7 +4,7 @@ Admidio empowers organizations and groups by providing a versatile and open-sour
 
 In addition to these core features, Admidio boasts a rich array of modules, including member lists, an event manager, messaging capabilities, photo albums, and a document and file repository.
 
-You can try out the [demo system](https://www.admidio.org/demo_en) to have a look to all the features Admidio offers.
+You can try out the [demo system](https://www.admidio.org/demo) to have a look to all the features Admidio offers.
 
 ![Admidio Logo](https://www.admidio.org/images/mainpage_flying_icons.png)
 
@@ -25,24 +25,21 @@ You can try out the [demo system](https://www.admidio.org/demo_en) to have a loo
 - **Event Management**: Easily publish events online and allow members to participate.
 - **Media Gallery**: Create and manage photo albums and enable users to send e-cards.
 - **Effective Communication**: Send HTML emails to users, roles, and groups.
-- **Data Export and Import**: Export lists to CSV, Excel, ODF or PDF, and import users from CSV.
+- **Progressive Web App (PWA)**: Install Admidio as a standalone app on Android, iOS, Windows, and macOS.
 - **And Much More**: Explore additional features and functionalities.
 
 ## Installation
 
-To install Admidio on your web server, ensure you have PHP 7.2 or higher and either a MySQL (version 5.0 or higher) or PostgreSQL (version 9.0 or higher) database available. Follow our [online installation instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation) for a successful setup.
+To install Admidio on your web server, ensure you have PHP 8.2 or higher and either a MariaDB (version 10 or higher), MySQL (version 5.0 or higher) or PostgreSQL (version 11.0 or higher) database available. Follow our [online installation instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:installation) for a successful setup.
 
 ## Update
 
-Keep your Admidio installation up to date by following our [online update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update). Here's a brief update overview:
+Keep your Admidio installation up to date by following our [online update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update). Here's a brief update overview if you don't have custom themes installed:
 
-1. Delete the folder "adm_program" and the "index.php" of the previous version.
-2. Copy the folder "adm_program" and the "index.php" from the new version.
+1. Delete all folders and files except "adm_my_files" and "adm_plugins" of the previous version.
+2. Copy all folders except "adm_my_files" from the new version.
 3. Update the "adm_plugins" folder with the newly delivered plugins.
 4. Access the "index.php" in your Admidio folder to initiate the update.
-5. Update or replace the theme in the "adm_theme" folder.
-
-If you're updating from version 2.x or 3.x to version 4.x, please review our [special update instructions](https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:update_to_version_4).
 
 ## Docker
 
