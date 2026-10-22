@@ -471,6 +471,9 @@ try {
             $preloadData = 'dummy';
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
+            if (!$showList->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
             $form->addInput('userUuidList', '', $postUserUuidList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('list_uuid', '', $postListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
@@ -685,7 +688,8 @@ try {
                     $attachmentPath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'];
 
                     if (file_exists($attachmentPath)) {
-                        $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '">' . $attachment['file_name'] . '</a></span>';
+                        $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '"
+                            data-adm-file-preview data-file-name="' . SecurityUtils::encodeHTML($attachment['file_name']) . '">' . $attachment['file_name'] . '</a></span>';
                     } else {
                         $messageFooter .= '<span class="admidio-attachment mr-3">' . $attachment['file_name'] . '</span>';
                     }

@@ -62,7 +62,6 @@ try {
 
     $result = curl_exec($curl);
     $statusCode = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-    curl_close($curl);
 
     if ($result === false || $responseTooLarge || $statusCode < 200 || $statusCode >= 300) {
         http_response_code(502);

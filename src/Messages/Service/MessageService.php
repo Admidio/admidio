@@ -218,6 +218,9 @@ class MessageService
             if ($listUuid !== '') {
                 $showList = new ListConfiguration($this->db);
                 $showList->readDataByUuid($listUuid);
+                if (!$showList->isVisible()) {
+                    throw new Exception('SYS_NO_RIGHTS');
+                }
                 $listName = $showList->getValue('lst_name');
                 $receiverName = $gL10n->get('SYS_LIST')
                     . ($listName === '' ? '' : ' - ' . $listName);

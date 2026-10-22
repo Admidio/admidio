@@ -5,7 +5,8 @@
         <ul class="list-group list-group-flush">
             {foreach $documentsFiles as $document}
                 <li class="list-group-item" style="word-break: break-word;">
-                    <a class="icon-link" data-bs-toggle="tooltip" data-bs-html="true" title="{$document.tooltip}" href="{$urlAdmidio}/modules/documents-files.php?mode=download&file_uuid={$document.uuid}">
+                    <a class="icon-link" data-bs-toggle="tooltip" data-bs-html="true" title="{$document.tooltip}" href="{$urlAdmidio}/modules/documents-files.php?mode=download&file_uuid={$document.uuid}"
+                        data-adm-file-preview data-file-name="{$document.fullFileName|escape}">
                         <i class="bi {$document.icon}"></i>{$document.fileName}.{$document.fileExtension}</a>
                 </li>
             {/foreach}
