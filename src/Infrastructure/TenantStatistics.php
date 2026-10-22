@@ -55,6 +55,7 @@ class TenantStatistics
             'admidio' => array(
                 'version' => TenantStatistics::getAdmidioVersion(),
                 'previous_version' => $this->previousVersion,
+                'language' => TenantStatistics::getAdmidioLanguage(),
                 'plugins' => TenantStatistics::getAdmidioPlugins()
             )
         );
@@ -123,6 +124,19 @@ class TenantStatistics
         return ADMIDIO_VERSION_TEXT;
     }
 
+    /** Return the configured system language code, including regional variants. */
+    private static function getAdmidioLanguage(): string
+    {
+        global $gSettingsManager, $gL10n;
+
+        if (isset($gSettingsManager) && $gSettingsManager->has('system_language')) {
+            return $gSettingsManager->getString('system_language');
+        }
+
+        // During a fresh installation the wizard language is not stored in preferences yet.
+        return isset($gL10n) ? $gL10n->getLanguage() : Language::REFERENCE_LANGUAGE;
+    }
+
     /**
      * @return array[]
      */
@@ -166,7 +180,7 @@ class TenantStatistics
     /** Encode the same complete payload for the preview and the HTTP request. */
     public function getJsonData(?array $infoData = null): string
     {
-        return json_encode(array($infoData ?? $this->getInfoData()),
+        return json_encode($infoData ?? $this->getInfoData(),
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
     }
 
@@ -178,6 +192,14 @@ class TenantStatistics
      */
     public function sent(?array $infoData = null): bool
     {
+        global $gDb;
+
+        $infoData ??= $this->getInfoData();
+        $tenantId = $gDb instanceof Database ? TenantIdentifier::get($gDb) : null;
+        if ($tenantId === null) {
+            throw new Exception('SYS_TENANT_ID_NOT_INITIALIZED');
+        }
+        $infoData['id'] = $tenantId;
         $client = $this->client ?? new Client(array('connect_timeout' => 2, 'timeout' => 5));
         $response = $client->request(
             'POST',

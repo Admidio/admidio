@@ -903,7 +903,8 @@ class Database
     /**
      * Replaces Admidio specific parameters within an SQL statement. The **%PREFIX%** parameter will be replaced
      * with the configured table prefix of this installation. The **%UUID%** parameter will be replaced with a
-     * unique UUID. Therefor each occurrence of %UUID% will get their own UUID.
+     * unique, SQL-quoted UUID. Each occurrence of %UUID% gets its own UUID; the placeholder must not
+     * be surrounded by quotes in the SQL script.
      * @param string $sql The SQL statement with the parameters that should be replaced.
      * @return string Returns the SQL statement with the replaced parameters.
      */
@@ -914,7 +915,7 @@ class Database
 
         // replace parameter %UUID% with an unique UUID at each occurrence
         while (($posUuid = strpos($sql, '%UUID%')) !== false) {
-            $sql = substr_replace($sql, Uuid::uuid4(), $posUuid, strlen('%UUID%'));
+            $sql = substr_replace($sql, '\'' . Uuid::uuid4() . '\'', $posUuid, strlen('%UUID%'));
         }
 
         return $sql;

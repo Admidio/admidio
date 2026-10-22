@@ -4,6 +4,7 @@ namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\TenantStatistics;
+use Admidio\Infrastructure\TenantIdentifier;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 use Ramsey\Uuid\Uuid;
@@ -16,11 +17,11 @@ final class InstallationStatistics
 
     public static function addToForm(FormPresenter $form, InstallationPresenter $page, ?string $previousVersion = null): void
     {
-        global $gSettingsManager, $gL10n;
+        global $gDb, $gL10n;
 
-        $tenantId = isset($gSettingsManager) && $gSettingsManager->has('system_tenant_id')
-            ? $gSettingsManager->getString('system_tenant_id') : '';
-        if ($tenantId === '') {
+        // Fresh installations have no organization/preferences tables yet.
+        $tenantId = $previousVersion !== null ? TenantIdentifier::get($gDb) : null;
+        if ($tenantId === null) {
             $tenantId = $_SESSION[self::SESSION_DATA]['id'] ?? Uuid::uuid4()->toString();
         }
         $statistics = new TenantStatistics($tenantId, $previousVersion);
@@ -32,6 +33,12 @@ final class InstallationStatistics
                 $("#adm_send_statistics_summary").prop("checked", this.checked);
             });
         ', true);
+    }
+
+    /** Pending identity is retained even if the user opted out of sending statistics. */
+    public static function tenantId(): ?string
+    {
+        return $_SESSION[self::SESSION_DATA]['id'] ?? null;
     }
 
     /** Copy the server-side snapshot before installation/update clears the session. */
@@ -48,16 +55,15 @@ final class InstallationStatistics
         return $data;
     }
 
-    /** Persist the ID and send only after the installation/update succeeded. */
+    /** Send only after the installation/update succeeded; ID creation belongs to its lifecycle. */
     public static function send(?array $data): void
     {
-        global $gSettingsManager, $gLogger;
+        global $gLogger;
 
         if ($data === null) {
             return;
         }
         try {
-            $gSettingsManager->set('system_tenant_id', $data['id']);
             $statistics = new TenantStatistics($data['id']);
             if (!$statistics->sent($data)) {
                 $gLogger->warning('Anonymous installation statistics could not be sent.');

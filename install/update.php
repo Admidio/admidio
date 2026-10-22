@@ -310,7 +310,7 @@ try {
 
         // Preserve consent and payload locally: doAdmidioUpdate destroys the session.
         $update = new Update();
-        $update->doAdmidioUpdate($installedDbVersion);
+        $update->doAdmidioUpdate($installedDbVersion, InstallationStatistics::tenantId());
 
         InstallationStatistics::send($statisticsData);
 

@@ -78,7 +78,7 @@ $formValues = $_SESSION['installationStartForm']->validate($_POST);
 $statisticsData = InstallationStatistics::selectedData($formValues);
 
 // Create the database and all its data, then send only the reviewed and selected snapshot.
-Installation::install($db, InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL));
+Installation::install($db, InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL), InstallationStatistics::tenantId());
 InstallationStatistics::send($statisticsData);
 
 // delete session data

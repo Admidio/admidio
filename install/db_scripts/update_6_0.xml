@@ -29,5 +29,6 @@
     <step id="90" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_photo mediumblob</step>
     <step id="100" database="mysql">ALTER TABLE %PREFIX%_sessions MODIFY COLUMN ses_binary mediumblob</step>
     <step id="110">UPDATE %PREFIX%_preferences SET prf_value = 'pt-PT' WHERE prf_name = 'system_language' AND prf_value = 'pt'</step>
+    <step id="120">UpdateStepsCode::updateStep60CreateTenantId</step>
     <step>stop</step>
 </update>

@@ -1958,6 +1958,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">The installation ID has not been initialized.</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Save all email settings before using this function.\nA test email with the subject #VAR1_BOLD# will be sent to the logged-in user\'s email address using the saved settings. When sending via SMTP, a delivery log is displayed to help diagnose problems.</string>
   <string name="SYS_TEXT">Text</string>
