@@ -10,6 +10,8 @@ use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -264,6 +266,15 @@ class EventSaveService
             $roomCheckEndDateTime->setTime(23, 59, 59);
         }
 
+        $reservationItemIds = $formValues['event_inventory_items'] ?? array();
+        if (!is_array($reservationItemIds)) {
+            $reservationItemIds = array($reservationItemIds);
+        }
+        $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int)$itemId > 0);
+        if (count($reservationItemIds) > 0 && $startDateTime >= $roomCheckEndDateTime) {
+            throw new Exception('SYS_RESERVATION_REQUIRES_TIME_PERIOD');
+        }
+
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
             $eventRoomId = (int)$formValues['dat_room_id'];
 
@@ -335,10 +346,18 @@ class EventSaveService
         $gDb->startTransaction();
         if ($event->save()) {
             // Notification an email for new or changed entries to all members of the notification role
-            $event->sendNotification();
+            $gDb->registerAfterCommit(static function () use ($event): void {
+                $event->sendNotification();
+            });
         }
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);
+        $reservationService = new ReservationService($gDb);
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
+            $reservationService->syncEventReservations((int)$event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
+        }
 
         if ($recurrenceRule !== null) {
             $generatedUntil = null;
@@ -363,6 +382,16 @@ class EventSaveService
                 $generatedEvent->save();
 
                 $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
+                if ($gSettingsManager->getBool('inventory_reservations_enabled')
+                    && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+                    && InventoryAccessService::canRequestReservation()) {
+                    $reservationService->syncEventReservations(
+                        (int)$generatedEvent->getValue('dat_id'),
+                        $reservationItemIds,
+                        $occurrence->getBegin(),
+                        $occurrence->getEnd()
+                    );
+                }
             }
         }
 
@@ -773,7 +802,7 @@ class EventSaveService
         array $eventParticipationRoles,
         User $user
     ): void {
-        global $gCurrentUserId, $gDb;
+        global $gCurrentUserId, $gDb, $gSettingsManager;
 
         $recurrenceId = $this->getEventRecurrenceId($editedEvent);
         if ($recurrenceId <= 0) {
@@ -805,9 +834,26 @@ class EventSaveService
 
         $this->setMasterEventValues($masterEvent, $formValues, $recurrenceBeginDateTime, $recurrenceEndDateTime, $recurrenceId);
         if ($masterEvent->save()) {
-            $masterEvent->sendNotification();
+            $gDb->registerAfterCommit(static function () use ($masterEvent): void {
+                $masterEvent->sendNotification();
+            });
         }
         $this->saveEventParticipation($masterEvent, $formValues, $eventParticipationRoles, $user);
+        $reservationService = new ReservationService($gDb);
+        $reservationItemIds = $formValues['event_inventory_items'] ?? array();
+        if (!is_array($reservationItemIds)) {
+            $reservationItemIds = array($reservationItemIds);
+        }
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
+            $reservationService->syncEventReservations(
+                (int)$masterEvent->getValue('dat_id'),
+                $reservationItemIds,
+                $recurrenceBeginDateTime,
+                $recurrenceEndDateTime
+            );
+        }
 
         foreach ($occurrences as $occurrence) {
             $originalBegin = $occurrence->getBegin()->format('Y-m-d H:i:s');
@@ -837,6 +883,16 @@ class EventSaveService
             $generatedEvent->save();
 
             $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
+            if ($gSettingsManager->getBool('inventory_reservations_enabled')
+                && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+                && InventoryAccessService::canRequestReservation()) {
+                $reservationService->syncEventReservations(
+                    (int)$generatedEvent->getValue('dat_id'),
+                    $reservationItemIds,
+                    $occurrence->getBegin(),
+                    $occurrence->getEnd()
+                );
+            }
             $processedOriginalBegins[] = $originalBegin;
         }
 

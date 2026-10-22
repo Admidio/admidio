@@ -14,11 +14,11 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
 
 require_once(__DIR__ . '/../../system/common.php');
-require(__DIR__ . '/../../system/login_valid.php');
 
 try {
     // Initialize and check the parameters
@@ -37,20 +37,25 @@ try {
     $jsonArray = array('draw' => $getDraw);
     header('Content-Type: application/json');
 
-    global $gDb, $gCurrentOrgId, $gSettingsManager, $gProfileFields, $gCurrentUser, $gCurrentSession, $gL10n;
+    global $gDb, $gCurrentOrgId, $gSettingsManager, $gProfileFields, $gCurrentUser, $gCurrentSession, $gL10n, $gValidLogin;
 
     // Apply the same module access restriction as the inventory page before reading any items.
     InventoryPresenter::checkModuleAccess();
+    $anonymizeUserNames = !$gValidLogin && $gSettingsManager->getBool('inventory_anonymize_user_names_for_guests');
 
     // read item fields to construct column order mapping (same as prepareData())
     $itemsData = new Admidio\Inventory\ValueObjects\ItemsData($gDb, $gCurrentOrgId);
     $itemFields = $itemsData->getItemFields();
+    $canUseBulkActions = $gCurrentUser->isAdministratorInventory()
+        || InventoryPresenter::isKeeperAuthorizedToEdit((int)$gCurrentUser->getValue('usr_id'));
+    $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
 
     // build headerColumns array to map DataTables column index to internal field names
     $headerColumns = array();
     $colIndex = 0;
-    // first column is checkbox in HTML mode
-    $headerColumns[$colIndex++] = 'select';
+    if ($canUseBulkActions) {
+        $headerColumns[$colIndex++] = 'select';
+    }
     // photo column if enabled
     if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
         $headerColumns[$colIndex++] = 'photo';
@@ -62,8 +67,9 @@ try {
         }
         $headerColumns[$colIndex++] = $infNameIntern;
     }
-    // actions column
-    $headerColumns[$colIndex++] = 'actions';
+    if ($hasActionsColumn) {
+        $headerColumns[$colIndex++] = 'actions';
+    }
 
     // prepare DB-specific aggregator (GROUP_CONCAT or string_agg)
     if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
@@ -276,7 +282,9 @@ try {
         // build row cells same as prepareData('html') for a single item
         $rowValues = array();
         // selection checkbox
-        $rowValues[] = ($itemsData->isEditable()) ? '<input type="checkbox" />' : '';
+        if ($canUseBulkActions) {
+            $rowValues[] = ($itemsData->isEditable()) ? '<input type="checkbox" />' : '';
+        }
         // photo
         if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
             $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $row['ini_uuid']));
@@ -302,17 +310,21 @@ try {
                 }
             }
 
-            // Process KEEPER and LAST_RECEIVER column
-            if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
-                $found = $user->readDataById($content);
-                if (!$found) {
-                    $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                    $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
-                } else {
-                    $content = '<a href="' . SecurityUtils::encodeUrl(
-                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                            ['user_uuid' => $user->getValue('usr_uuid')]
-                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+            // Do not reveal names of keepers or borrowers to anonymous guests when configured.
+            if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '') {
+                if ($anonymizeUserNames && $content !== '-1') {
+                    $content = SecurityUtils::encodeHTML($gL10n->get('SYS_MEMBER'));
+                } elseif (is_numeric($content)) {
+                    $found = $user->readDataById($content);
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                    } else {
+                        $content = '<a href="' . SecurityUtils::encodeUrl(
+                                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                                ['user_uuid' => $user->getValue('usr_uuid')]
+                            ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    }
                 }
             }
 
@@ -330,6 +342,14 @@ try {
         $historyButton = ChangelogService::displayHistoryButtonTable('inventory_items,inventory_item_data,inventory_item_borrow_data', $gCurrentUser->isAdministratorInventory(), array('uuid' => $row['ini_uuid']));
         if (is_array($historyButton) && !empty($historyButton)) {
             $actionsHtml .= '<a class="admidio-icon-link" href="' . $historyButton['url'] . '"><i class="' . $historyButton['icon'] . '" data-bs-toggle="tooltip" title="' . htmlspecialchars($historyButton['tooltip'], ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+        }
+
+        if (!$itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
+            $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
+                array('mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid'])
+            ) . '"><i class="bi bi-calendar-plus" data-bs-toggle="tooltip" title="'
+                . htmlspecialchars($gL10n->get('SYS_RESERVATION_REQUEST'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }
 
         $keeperDbId = (int)$itemsData->getValue('KEEPER', 'database');
@@ -374,7 +394,9 @@ try {
             $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_DELETE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }
 
-        $rowValues[] = $actionsHtml;
+        if ($hasActionsColumn) {
+            $rowValues[] = $actionsHtml;
+        }
 
         // Build associative row including DT_RowId so DataTables will keep the TR id
         // and client-side scripts can restore selection across paging.

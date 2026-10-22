@@ -13,16 +13,27 @@
 
 namespace Admidio\Tests\Integration\Inventory;
 
+use Admidio\Events\Entity\Event;
+use Admidio\Events\Service\EventService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
+use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\Session\Entity\Session;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
+use Admidio\UI\Presenter\EventFormPresenter;
+use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\InventoryItemPresenter;
+use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
+use DateTimeImmutable;
 
 class InventoryTest extends DatabaseTestCase
 {
@@ -57,6 +68,7 @@ class InventoryTest extends DatabaseTestCase
         $rights = ['rol_inventory_admin' => 1];
         if ($fullAdministrator) {
             $rights['rol_administrator'] = 1;
+            $rights['rol_events'] = 1;
         }
         $role = $fixture->createAndSaveRoleWithRights('Inventory ' . $login, self::ORG_ID, $rights);
         $user = $fixture->createAndSaveUser($login, $login . '@example.local');
@@ -104,6 +116,29 @@ class InventoryTest extends DatabaseTestCase
         $sql = 'SELECT ini_uuid FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?';
 
         return (string) $this->getDatabase()->queryPrepared($sql, [$itemId])->fetchColumn();
+    }
+
+    /** Create a minimal inventory item assigned to another organization. */
+    private function createForeignOrganizationItem(int $organizationId): int
+    {
+        $categoryId = (int)$this->getDatabase()->queryPrepared(
+            "SELECT cat_id FROM " . TBL_CATEGORIES . " WHERE cat_type = 'IVT' AND cat_org_id = ?",
+            [self::ORG_ID]
+        )->fetchColumn();
+        $statusId = (int)$this->getDatabase()->queryPrepared(
+            "SELECT ifo_id FROM " . TBL_INVENTORY_FIELD_OPTIONS . "\n"
+            . " INNER JOIN " . TBL_INVENTORY_FIELDS . " ON inf_id = ifo_inf_id\n"
+            . " WHERE inf_org_id = ? AND inf_name_intern = 'STATUS' ORDER BY ifo_sequence",
+            [self::ORG_ID]
+        )->fetchColumn();
+
+        $item = new Item($this->getDatabase());
+        $item->setValue('ini_org_id', $organizationId);
+        $item->setValue('ini_cat_id', $categoryId);
+        $item->setValue('ini_status', $statusId);
+        $item->save();
+
+        return (int)$item->getValue('ini_id');
     }
 
     /**
@@ -427,8 +462,8 @@ class InventoryTest extends DatabaseTestCase
             return $this->createItem($itemsData, array(
                 'ITEMNAME' => 'Projector',
                 'LAST_RECEIVER' => 'Alice',
-                'BORROW_DATE' => '2030-03-01',
-                'RETURN_DATE' => '2030-03-31'
+                'BORROW_DATE' => '2020-03-01',
+                'RETURN_DATE' => '2020-03-31'
             ));
         });
 
@@ -438,8 +473,8 @@ class InventoryTest extends DatabaseTestCase
 
         $this->assertCount(1, $rows);
         $this->assertEquals('Alice', $rows[0]['inb_last_receiver']);
-        $this->assertStringStartsWith('2030-03-01', $rows[0]['inb_borrow_date']);
-        $this->assertStringStartsWith('2030-03-31', $rows[0]['inb_return_date']);
+        $this->assertStringStartsWith('2020-03-01', $rows[0]['inb_borrow_date']);
+        $this->assertStringStartsWith('2020-03-31', $rows[0]['inb_return_date']);
 
         // the three borrow fields do not appear among the ordinary item data
         $sql = 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?';
@@ -474,6 +509,30 @@ class InventoryTest extends DatabaseTestCase
             $fresh = new ItemsData($this->getDatabase(), self::ORG_ID);
             $fresh->readItemData($this->uuidOfItem($itemId));
             $this->assertTrue($fresh->isBorrowed());
+        });
+    }
+
+    /**
+     * @testdox An actual return date cannot be in the future
+     */
+    public function testFutureReturnDateIsRejected(): void
+    {
+        $admin = $this->makeInventoryUser('invfuturedate', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+
+            try {
+                $this->createItem($itemsData, array(
+                    'ITEMNAME' => 'Projector with future return date',
+                    'LAST_RECEIVER' => 'Alice',
+                    'BORROW_DATE' => '2020-03-01',
+                    'RETURN_DATE' => (new DateTimeImmutable('tomorrow'))->format('Y-m-d')
+                ));
+                $this->fail('A future return date must be rejected.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE', $exception->getTranslationId());
+            }
         });
     }
 
@@ -715,6 +774,1076 @@ class InventoryTest extends DatabaseTestCase
 
             $this->expectException(Exception::class);
             $itemsData->setValue('ITEMNAME', 'Renamed by an outsider');
+        });
+    }
+
+    /**
+     * @testdox Reservation management is unavailable while reservations are disabled
+     */
+    public function testReservationManagementRequiresEnabledSetting(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationvisibility', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '0');
+            $this->assertFalse(InventoryAccessService::canManageReservations());
+            $this->assertFalse(InventoryAccessService::canRequestReservation());
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $this->assertTrue(InventoryAccessService::canManageReservations());
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'roles');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requester_roles', '');
+            $this->assertTrue(InventoryAccessService::canRequestReservation());
+        });
+    }
+
+    /**
+     * @testdox Reservation requesters receive an action column without inventory bulk selection
+     */
+    public function testReservationRequesterInventoryListContainsActionColumnWithoutSelection(): void
+    {
+        $memberData = $this->getFixture()->createAndSaveUser('invreservationrequester', 'invreservationrequester@example.local');
+        $member = $this->loadUserInOrganization($memberData['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($member, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+
+            $this->assertTrue(InventoryAccessService::canRequestReservation());
+            $tableDefinition = (new InventoryPresenter(false))->prepareTableDefinition();
+
+            $this->assertStringNotContainsString('<input type="checkbox"', implode('', $tableDefinition['headers']));
+            $this->assertSame('<span style="display:block; min-width:40px;">&nbsp;</span>', end($tableDefinition['headers']));
+        });
+    }
+
+    /**
+     * @testdox Guest reservation requests require separate first and last name fields
+     */
+    public function testGuestReservationRequestFormContainsSeparateNameFields(): void
+    {
+        $guestData = $this->getFixture()->createAndSaveUser('invreservationguest', 'invreservationguest@example.local');
+        $guest = $this->loadUserInOrganization($guestData['usr_id'], self::ORG_ID);
+
+        $this->withCurrentUser($guest, self::ORG_ID, false, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'guests');
+            $GLOBALS['gSettingsManager']->set('captcha_enabled', '1');
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $session = new class {
+                public ?FormPresenter $form = null;
+
+                public function getCsrfToken(): string
+                {
+                    return 'test-csrf-token';
+                }
+
+                public function addFormObject(FormPresenter $form): bool
+                {
+                    $this->form = $form;
+                    return true;
+                }
+            };
+            $GLOBALS['gCurrentSession'] = $session;
+            try {
+                (new InventoryItemPresenter())->createReservationRequestForm();
+                $form = $session->form;
+
+                $this->assertNotNull($form);
+                $this->assertTrue($form->hasElement('guest_first_name'));
+                $this->assertTrue($form->hasElement('guest_last_name'));
+                $this->assertTrue($form->hasElement('guest_email'));
+                $this->assertTrue($form->hasElement('adm_captcha_code'));
+                $this->assertFalse($form->hasElement('guest_name'));
+                $guestElementIds = array_values(array_filter(
+                    array_keys($form->getElements()),
+                    static fn (string $id): bool => str_starts_with($id, 'guest_')
+                ));
+                $this->assertSame(array('guest_last_name', 'guest_first_name', 'guest_email'), $guestElementIds);
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
+        });
+    }
+
+    /**
+     * @testdox Reservation notification roles accept multiple roles from the current organization
+     */
+    public function testReservationNotificationRolesAcceptMultipleRoles(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationnotificationroles', true);
+        $fixture = $this->getFixture();
+        $firstRole = $fixture->createAndSaveRoleWithRights('Reservation notifications one', self::ORG_ID, array('rol_all_lists_view' => 1));
+        $secondRole = $fixture->createAndSaveRoleWithRights('Reservation notifications two', self::ORG_ID, array('rol_all_lists_view' => 1));
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($firstRole, $secondRole) {
+            $this->assertSame(
+                $firstRole['rol_uuid'] . ',' . $secondRole['rol_uuid'],
+                PreferenceDefinitions::normalize(
+                    'inventory_reservation_notification_roles',
+                    $firstRole['rol_uuid'] . ',' . $secondRole['rol_uuid']
+                )
+            );
+            $this->assertSame(
+                'requested,approved,rejected,cancelled,borrowed,returned',
+                PreferenceDefinitions::normalize(
+                    'inventory_reservation_manager_statuses',
+                    'requested,approved,rejected,cancelled,borrowed,returned'
+                )
+            );
+        });
+    }
+
+    /**
+     * @testdox Disabled reservations cannot be managed through the service
+     */
+    public function testDisabledReservationsCannotBeManagedThroughTheService(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationdisabledservice', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Disabled reservation projector'));
+            $reservation = (new ReservationService($this->getDatabase()))->request(
+                $itemId,
+                new DateTimeImmutable('2031-01-01 10:00:00'),
+                new DateTimeImmutable('2031-01-01 12:00:00')
+            );
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '0');
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($itemId));
+            $this->expectException(Exception::class);
+            (new ReservationService($this->getDatabase()))->approve($reservation);
+        });
+    }
+
+    /**
+     * @testdox Reservation entities reject invalid periods before saving
+     */
+    public function testReservationEntityRejectsInvalidPeriod(): void
+    {
+        $reservation = new Reservation($this->getDatabase());
+        $reservation->setValue('ivr_ini_id', 1);
+        $reservation->setValue('ivr_begin', '2031-01-01 12:00:00');
+        $reservation->setValue('ivr_end', '2031-01-01 10:00:00');
+
+        $this->expectException(Exception::class);
+        $reservation->save();
+    }
+
+    /**
+     * @testdox Reservation services reject inventory items from another organization
+     */
+    public function testReservationServicesRejectItemsFromAnotherOrganization(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationforeignitem', true);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Inventory Organization', 'FRGITEM01');
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($organization) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $foreignItemId = $this->createForeignOrganizationItem((int)$organization['org_id']);
+            $service = new ReservationService($this->getDatabase());
+
+            try {
+                $service->isAvailable(
+                    $foreignItemId,
+                    new DateTimeImmutable('2030-04-01 10:00:00'),
+                    new DateTimeImmutable('2030-04-01 12:00:00')
+                );
+                $this->fail('Availability must not be readable for an item from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
+            try {
+                $service->request(
+                    $foreignItemId,
+                    new DateTimeImmutable('2030-04-01 10:00:00'),
+                    new DateTimeImmutable('2030-04-01 12:00:00')
+                );
+                $this->fail('A reservation request must not accept an item from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+        });
+    }
+
+    /**
+     * @testdox Event synchronization rejects inventory items from another organization
+     */
+    public function testEventReservationSynchronizationRejectsItemsFromAnotherOrganization(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationforeignitem', true);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Event Inventory Organization', 'FRGEVT01');
+        $category = $this->getFixture()->createAndSaveCategory('Foreign inventory event', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($organization, $category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $foreignItemId = $this->createForeignOrganizationItem((int)$organization['org_id']);
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with foreign inventory item');
+            $event->setValue('dat_begin', '2030-04-02 10:00:00');
+            $event->setValue('dat_end', '2030-04-02 12:00:00');
+            $event->save();
+
+            try {
+                (new ReservationService($this->getDatabase()))->syncEventReservations(
+                    (int)$event->getValue('dat_id'),
+                    [$foreignItemId],
+                    new DateTimeImmutable('2030-04-02 10:00:00'),
+                    new DateTimeImmutable('2030-04-02 12:00:00')
+                );
+                $this->fail('Event synchronization must not accept an item from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+        });
+    }
+
+    /**
+     * @testdox Reservation requests reject events from another organization
+     */
+    public function testReservationRequestRejectsEventFromAnotherOrganization(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationforeignevent', true);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Reservation Event Organization', 'FRGRES01');
+        $category = $this->getFixture()->createAndSaveCategory('Foreign reservation event', 'EVT', (int)$organization['org_id']);
+        $foreignRole = $this->getFixture()->createAndSaveRoleWithRights(
+            'Foreign reservation event administrators',
+            (int)$organization['org_id'],
+            array('rol_administrator' => 1, 'rol_events' => 1)
+        );
+        $foreignUserData = $this->getFixture()->createAndSaveUser('foreignreservationevent', 'foreignreservationevent@example.local');
+        $this->getFixture()->assignUserToRole($foreignUserData['usr_id'], $foreignRole['rol_id']);
+        $foreignAdmin = $this->loadUserInOrganization($foreignUserData['usr_id'], (int)$organization['org_id']);
+
+        $foreignEventId = $this->withCurrentUser($foreignAdmin, (int)$organization['org_id'], true, function () use ($category) {
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Foreign reservation event');
+            $event->setValue('dat_begin', '2030-04-03 10:00:00');
+            $event->setValue('dat_end', '2030-04-03 12:00:00');
+            $event->save();
+
+            return (int)$event->getValue('dat_id');
+        });
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($foreignEventId) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Local reservation item'));
+
+            try {
+                (new ReservationService($this->getDatabase()))->request(
+                    $itemId,
+                    new DateTimeImmutable('2030-04-03 10:00:00'),
+                    new DateTimeImmutable('2030-04-03 12:00:00'),
+                    '',
+                    '',
+                    $foreignEventId
+                );
+                $this->fail('A reservation request must not accept an event from another organization.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+        });
+    }
+
+    /**
+     * @testdox Item keepers may manage reservations when the organization permits it
+     */
+    public function testKeeperMayManageReservationsWhenEnabled(): void
+    {
+        $fixture = $this->getFixture();
+        $admin = $this->makeInventoryUser('invreservationkeeperadmin', true);
+        $keeperData = $fixture->createAndSaveUser('invreservationkeeper', 'invreservationkeeper@example.local');
+        $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
+
+        $itemIds = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeper) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemIds = array(
+                'own' => $this->createItem($itemsData, array(
+                    'ITEMNAME' => 'Reservation keeper item',
+                    'KEEPER' => (string)$keeper->getValue('usr_id')
+                )),
+                'foreign' => $this->createItem($itemsData, array(
+                    'ITEMNAME' => 'Reservation administrator item'
+                ))
+            );
+            $reservation = (new ReservationService($this->getDatabase()))->request(
+                $itemIds['foreign'],
+                new DateTimeImmutable('2030-05-01 10:00:00'),
+                new DateTimeImmutable('2030-05-01 12:00:00')
+            );
+            $itemIds['foreignReservation'] = (int)$reservation->getValue('ivr_id');
+
+            return $itemIds;
+        });
+
+        $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemIds) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '1');
+            $this->assertTrue(InventoryAccessService::canManageReservations());
+            $this->assertTrue(InventoryAccessService::canManageReservationItem($itemIds['own']));
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['foreign']));
+
+            $service = new ReservationService($this->getDatabase());
+            $foreignReservation = new Reservation($this->getDatabase(), $itemIds['foreignReservation']);
+            $actions = array(
+                'approve' => static fn () => $service->approve($foreignReservation),
+                'reject' => static fn () => $service->changeStatus($foreignReservation, Reservation::STATUS_REJECTED),
+                'cancel' => static fn () => $service->changeStatus($foreignReservation, Reservation::STATUS_CANCELLED),
+                'start borrowing' => static fn () => $service->startBorrowing($foreignReservation),
+                'finish borrowing' => static fn () => $service->finishBorrowing($foreignReservation),
+                'withdraw' => static fn () => $service->withdraw($foreignReservation)
+            );
+            foreach ($actions as $actionName => $action) {
+                try {
+                    $action();
+                    $this->fail('A keeper must not ' . $actionName . ' a reservation for another keeper\'s item.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+                }
+            }
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '0');
+            $this->assertFalse(InventoryAccessService::canManageReservations());
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '0');
+            $this->assertFalse(InventoryAccessService::canManageReservations());
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($itemIds['own']));
+        });
+    }
+
+    /**
+     * @testdox Automatic reservations immediately block an overlapping period
+     */
+    public function testAutomaticReservationBlocksOverlappingPeriod(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationauto', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Reservation projector'));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-06-01 10:00:00'),
+                new DateTimeImmutable('2030-06-01 12:00:00')
+            );
+
+            $this->assertSame(Reservation::STATUS_APPROVED, $reservation->getValue('ivr_status'));
+            $this->assertFalse($service->isAvailable(
+                $itemId,
+                new DateTimeImmutable('2030-06-01 11:00:00'),
+                new DateTimeImmutable('2030-06-01 13:00:00')
+            ));
+            $this->assertTrue($service->isAvailable(
+                $itemId,
+                new DateTimeImmutable('2030-06-01 12:00:00'),
+                new DateTimeImmutable('2030-06-01 13:00:00')
+            ));
+        });
+    }
+
+    /**
+     * @testdox Manual reservations block their period only after approval
+     */
+    public function testManualReservationBlocksPeriodAfterApproval(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationmanual', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Manual reservation projector'));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-01 10:00:00'),
+                new DateTimeImmutable('2030-07-01 12:00:00')
+            );
+
+            $this->assertSame(Reservation::STATUS_REQUESTED, $reservation->getValue('ivr_status'));
+            $this->assertTrue($service->isAvailable(
+                $itemId,
+                new DateTimeImmutable('2030-07-01 11:00:00'),
+                new DateTimeImmutable('2030-07-01 13:00:00')
+            ));
+
+            $service->approve($reservation);
+            $this->assertSame(Reservation::STATUS_APPROVED, $reservation->getValue('ivr_status'));
+            $this->assertFalse($service->isAvailable(
+                $itemId,
+                new DateTimeImmutable('2030-07-01 11:00:00'),
+                new DateTimeImmutable('2030-07-01 13:00:00')
+            ));
+        });
+    }
+
+    /**
+     * @testdox Reservations for a currently borrowed item may be requested and approved
+     */
+    public function testManualReservationCanBeRequestedWhileItemIsBorrowed(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationborrowedmanual', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Borrowed manual reservation projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-07-01'
+            ));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 10:00:00'),
+                new DateTimeImmutable('2030-07-15 12:00:00')
+            );
+
+            $this->assertSame(Reservation::STATUS_REQUESTED, $reservation->getValue('ivr_status'));
+            $service->approve($reservation);
+            $this->assertSame(Reservation::STATUS_APPROVED, $reservation->getValue('ivr_status'));
+
+            try {
+                $service->startBorrowing($reservation);
+                $this->fail('A borrowed item must not be handed over for another reservation.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_ITEM_NOT_AVAILABLE', $exception->getTranslationId());
+            }
+
+            $this->getDatabase()->queryPrepared(
+                'UPDATE ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' SET inb_return_date = ? WHERE inb_ini_id = ?',
+                array('2020-07-15', $itemId)
+            );
+            $service->assertCanStartBorrowing($reservation);
+            $this->getDatabase()->queryPrepared(
+                'UPDATE ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' SET inb_return_date = NULL WHERE inb_ini_id = ?',
+                array($itemId)
+            );
+            $service->startBorrowing($reservation, false);
+            $this->assertSame(Reservation::STATUS_BORROWED, $reservation->getValue('ivr_status'));
+        });
+    }
+
+    /**
+     * @testdox Automatic reservations can be created for an item that is currently borrowed
+     */
+    public function testAutomaticReservationAllowsBorrowedItem(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationborrowedauto', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Borrowed automatic reservation projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-07-01'
+            ));
+
+            $reservation = (new ReservationService($this->getDatabase()))->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 10:00:00'),
+                new DateTimeImmutable('2030-07-15 12:00:00')
+            );
+            $this->assertSame(Reservation::STATUS_APPROVED, $reservation->getValue('ivr_status'));
+        });
+    }
+
+    /**
+     * @testdox A manual request is rejected when its period is already confirmed
+     */
+    public function testManualReservationRequestRejectsConfirmedOverlappingPeriod(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationmanualconflict', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Confirmed manual reservation projector'));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 10:00:00'),
+                new DateTimeImmutable('2030-07-15 12:00:00')
+            );
+            $service->approve($reservation);
+
+            $this->expectException(Exception::class);
+            $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-07-15 11:00:00'),
+                new DateTimeImmutable('2030-07-15 13:00:00')
+            );
+        });
+    }
+
+    /**
+     * @testdox Reservations allow only the defined lifecycle transitions
+     */
+    public function testReservationLifecycleAllowsValidTransitions(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationtransitions', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Lifecycle projector'));
+            $service = new ReservationService($this->getDatabase());
+            $request = static fn (string $begin) => $service->request(
+                $itemId,
+                new DateTimeImmutable($begin),
+                new DateTimeImmutable($begin . ' +1 hour')
+            );
+
+            $approved = $request('2030-11-01 10:00:00');
+            $service->approve($approved);
+            $this->assertSame(Reservation::STATUS_APPROVED, $approved->getValue('ivr_status'));
+
+            $rejected = $request('2030-11-02 10:00:00');
+            $service->changeStatus($rejected, Reservation::STATUS_REJECTED);
+            $this->assertSame(Reservation::STATUS_REJECTED, $rejected->getValue('ivr_status'));
+
+            $cancelledRequest = $request('2030-11-03 10:00:00');
+            $service->withdraw($cancelledRequest);
+            $this->assertSame(Reservation::STATUS_CANCELLED, $cancelledRequest->getValue('ivr_status'));
+
+            $borrowed = $request('2030-11-04 10:00:00');
+            $service->approve($borrowed);
+            $service->startBorrowing($borrowed);
+            $this->assertSame(Reservation::STATUS_BORROWED, $borrowed->getValue('ivr_status'));
+            $service->finishBorrowing($borrowed);
+            $this->assertSame(Reservation::STATUS_RETURNED, $borrowed->getValue('ivr_status'));
+
+            $cancelledApproved = $request('2030-11-05 10:00:00');
+            $service->approve($cancelledApproved);
+            $service->changeStatus($cancelledApproved, Reservation::STATUS_CANCELLED);
+            $this->assertSame(Reservation::STATUS_CANCELLED, $cancelledApproved->getValue('ivr_status'));
+        });
+    }
+
+    /**
+     * @testdox Completed reservations cannot be changed through invalid lifecycle transitions
+     */
+    public function testReservationLifecycleRejectsInvalidTransitions(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationinvalidtransitions', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Invalid lifecycle projector'));
+            $service = new ReservationService($this->getDatabase());
+            $reservation = $service->request(
+                $itemId,
+                new DateTimeImmutable('2030-12-01 10:00:00'),
+                new DateTimeImmutable('2030-12-01 12:00:00')
+            );
+
+            foreach (array(
+                static fn () => $service->startBorrowing($reservation),
+                static fn () => $service->finishBorrowing($reservation)
+            ) as $transition) {
+                try {
+                    $transition();
+                    $this->fail('A requested reservation must reject invalid lifecycle transitions.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                }
+            }
+
+            $service->approve($reservation);
+            try {
+                $service->changeStatus($reservation, Reservation::STATUS_REJECTED);
+                $this->fail('An approved reservation must not be rejected.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
+            $service->startBorrowing($reservation);
+            try {
+                $service->changeStatus($reservation, Reservation::STATUS_CANCELLED);
+                $this->fail('A handed-over reservation must not be cancelled.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+            }
+
+            $service->finishBorrowing($reservation);
+            foreach (array(
+                static fn () => $service->approve($reservation),
+                static fn () => $service->changeStatus($reservation, Reservation::STATUS_CANCELLED)
+            ) as $transition) {
+                try {
+                    $transition();
+                    $this->fail('A returned reservation must not be changed again.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                }
+            }
+        });
+    }
+
+    /**
+     * @testdox Event reservations follow the configured manual approval workflow
+     */
+    public function testEventReservationIsRequestedWithManualApproval(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationmanual', true);
+        $category = $this->getFixture()->createAndSaveCategory('Reservation Events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Event reservation projector'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with equipment request');
+            $event->setValue('dat_begin', '2030-08-01 10:00:00');
+            $event->setValue('dat_end', '2030-08-01 12:00:00');
+            $event->save();
+
+            $service = new ReservationService($this->getDatabase());
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-08-01 10:00:00'),
+                new DateTimeImmutable('2030-08-01 12:00:00')
+            );
+
+            $status = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchColumn();
+            $this->assertSame(Reservation::STATUS_REQUESTED, $status);
+            $this->assertTrue($service->isAvailable(
+                $itemId,
+                new DateTimeImmutable('2030-08-01 11:00:00'),
+                new DateTimeImmutable('2030-08-01 13:00:00')
+            ));
+        });
+    }
+
+    /**
+     * @testdox Events may request a currently borrowed item with manual approval
+     */
+    public function testEventReservationCanBeRequestedForBorrowedItemWithManualApproval(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationborrowedmanual', true);
+        $category = $this->getFixture()->createAndSaveCategory('Borrowed reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Borrowed event reservation projector',
+                'LAST_RECEIVER' => 'Alice',
+                'BORROW_DATE' => '2030-08-01'
+            ));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with borrowed equipment request');
+            $event->setValue('dat_begin', '2030-08-15 10:00:00');
+            $event->setValue('dat_end', '2030-08-15 12:00:00');
+            $event->save();
+
+            (new ReservationService($this->getDatabase()))->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-08-15 10:00:00'),
+                new DateTimeImmutable('2030-08-15 12:00:00')
+            );
+
+            $this->assertSame(Reservation::STATUS_REQUESTED, $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchColumn());
+        });
+    }
+
+    /**
+     * @testdox A rejected event reservation can be requested again
+     */
+    public function testRejectedEventReservationCanBeRequestedAgain(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationagain', true);
+        $category = $this->getFixture()->createAndSaveCategory('Repeated reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Repeated event reservation projector'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event with repeated equipment request');
+            $event->setValue('dat_begin', '2030-08-15 10:00:00');
+            $event->setValue('dat_end', '2030-08-15 12:00:00');
+            $event->save();
+
+            $service = new ReservationService($this->getDatabase());
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-08-15 10:00:00'),
+                new DateTimeImmutable('2030-08-15 12:00:00')
+            );
+
+            $reservationId = (int)$this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchColumn();
+            $service->changeStatus(new Reservation($this->getDatabase(), $reservationId), Reservation::STATUS_REJECTED);
+
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $previousPost = $_POST;
+            $session = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $GLOBALS['gCurrentSession'] = $session;
+            $_POST = array('adm_csrf_token' => $session->getCsrfToken());
+            try {
+                $response = (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $itemId
+                );
+                $this->assertSame('success', $response['status']);
+                $this->assertSame(Reservation::STATUS_REQUESTED, $response['reservation_status']);
+
+                try {
+                    (new EventService($this->getDatabase()))->requestReservationAgain(
+                        (string)$event->getValue('dat_uuid'),
+                        $itemId
+                    );
+                    $this->fail('Only the latest rejected or cancelled reservation may be requested again.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                }
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+                $_POST = $previousPost;
+            }
+
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? ORDER BY ivr_id',
+                array((int)$event->getValue('dat_id'))
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $this->assertSame(array(Reservation::STATUS_REJECTED, Reservation::STATUS_REQUESTED), $statuses);
+
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '0');
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $previousPost = $_POST;
+            $session = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $GLOBALS['gCurrentSession'] = $session;
+            $_POST = array('adm_csrf_token' => $session->getCsrfToken());
+            try {
+                (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $itemId
+                );
+                $this->fail('Event reservation requests must respect the event reservation setting.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+                $_POST = $previousPost;
+            }
+        });
+    }
+
+    /**
+     * @testdox The event reservation status data contains only the current retry action and honors DataTables paging and sorting
+     */
+    public function testEventReservationStatusDataHonorsLatestReservationAndDataTablesParameters(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationstatus', true);
+        $category = $this->getFixture()->createAndSaveCategory('Reservation status events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $rejectedItemId = $this->createItem($itemsData, array('ITEMNAME' => 'A rejected event item'));
+            $requestedItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Z requested event item'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event reservation status');
+            $event->setValue('dat_begin', '2030-08-20 10:00:00');
+            $event->setValue('dat_end', '2030-08-20 12:00:00');
+            $event->save();
+
+            $reservationService = new ReservationService($this->getDatabase());
+            $reservationService->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($rejectedItemId, $requestedItemId),
+                new DateTimeImmutable('2030-08-20 10:00:00'),
+                new DateTimeImmutable('2030-08-20 12:00:00')
+            );
+            $rejectedReservationId = (int)$this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_ini_id = ?',
+                array((int)$event->getValue('dat_id'), $rejectedItemId)
+            )->fetchColumn();
+            $reservationService->changeStatus(new Reservation($this->getDatabase(), $rejectedReservationId), Reservation::STATUS_REJECTED);
+
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $previousPost = $_POST;
+            $session = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $GLOBALS['gCurrentSession'] = $session;
+            try {
+                $presenter = new EventFormPresenter();
+                $data = $presenter->getReservationStatusData(
+                    (string)$event->getValue('dat_uuid'),
+                    'this',
+                    7,
+                    0,
+                    1,
+                    '',
+                    1,
+                    'asc'
+                );
+
+                $this->assertSame(7, $data['draw']);
+                $this->assertSame(2, $data['recordsTotal']);
+                $this->assertSame(2, $data['recordsFiltered']);
+                $this->assertCount(1, $data['data']);
+                $this->assertStringContainsString('A rejected event item', $data['data'][0][1]);
+                $this->assertStringContainsString('event-inventory-reservation-request-again', $data['data'][0][3]);
+
+                $_POST = array('adm_csrf_token' => $session->getCsrfToken());
+                $response = (new EventService($this->getDatabase()))->requestReservationAgain(
+                    (string)$event->getValue('dat_uuid'),
+                    $rejectedItemId
+                );
+                $this->assertSame('success', $response['status']);
+                $dataAfterRequestAgain = $presenter->getReservationStatusData(
+                    (string)$event->getValue('dat_uuid'),
+                    'this',
+                    8,
+                    0,
+                    25,
+                    '',
+                    -1,
+                    'desc'
+                );
+                $this->assertSame(3, $dataAfterRequestAgain['recordsTotal']);
+                foreach ($dataAfterRequestAgain['data'] as $row) {
+                    $this->assertSame('', $row[3]);
+                }
+
+                $filteredData = $presenter->getReservationStatusData(
+                    (string)$event->getValue('dat_uuid'),
+                    'this',
+                    9,
+                    0,
+                    25,
+                    'requested',
+                    -1,
+                    'desc'
+                );
+
+                $this->assertSame(3, $filteredData['recordsTotal']);
+                $this->assertSame(2, $filteredData['recordsFiltered']);
+                $this->assertStringContainsString('A rejected event item', implode(' ', array_column($filteredData['data'], 1)));
+                $this->assertStringContainsString('Z requested event item', implode(' ', array_column($filteredData['data'], 1)));
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+                $_POST = $previousPost;
+            }
+        });
+    }
+
+    /**
+     * @testdox Event reservation status data requires the right to edit the event
+     */
+    public function testEventReservationStatusDataRequiresEventEditPermission(): void
+    {
+        $eventAdmin = $this->makeInventoryUser('inveventreservationstatusadmin', true);
+        $inventoryAdmin = $this->makeInventoryUser('inveventreservationstatusinventory', false);
+        $category = $this->getFixture()->createAndSaveCategory('Reservation status access events', 'EVT', self::ORG_ID);
+
+        $eventUuid = $this->withCurrentUser($eventAdmin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Protected event reservation status');
+            $event->setValue('dat_begin', '2030-08-21 10:00:00');
+            $event->setValue('dat_end', '2030-08-21 12:00:00');
+            $event->save();
+
+            return (string)$event->getValue('dat_uuid');
+        });
+
+        $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($eventUuid) {
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+            try {
+                (new EventFormPresenter())->getReservationStatusData($eventUuid, 'this', 1, 0, 25, '', -1, 'desc');
+                $this->fail('An inventory administrator must not read reservation data for an event they cannot edit.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
+        });
+    }
+
+    /**
+     * @testdox Moving an event keeps its approval and rejects conflicting periods
+     */
+    public function testMovingApprovedEventReservationRejectsConflictsWithoutChangingExistingReservation(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationmove', true);
+        $category = $this->getFixture()->createAndSaveCategory('Moving reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Moving event reservation projector'));
+            $service = new ReservationService($this->getDatabase());
+
+            $firstEvent = new Event($this->getDatabase());
+            $firstEvent->setValue('dat_cat_id', $category['cat_id']);
+            $firstEvent->setValue('dat_headline', 'First reservation event');
+            $firstEvent->setValue('dat_begin', '2030-09-01 10:00:00');
+            $firstEvent->setValue('dat_end', '2030-09-01 12:00:00');
+            $firstEvent->save();
+            $service->syncEventReservations(
+                (int)$firstEvent->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-09-01 10:00:00'),
+                new DateTimeImmutable('2030-09-01 12:00:00')
+            );
+
+            $secondEvent = new Event($this->getDatabase());
+            $secondEvent->setValue('dat_cat_id', $category['cat_id']);
+            $secondEvent->setValue('dat_headline', 'Second reservation event');
+            $secondEvent->setValue('dat_begin', '2030-09-01 13:00:00');
+            $secondEvent->setValue('dat_end', '2030-09-01 15:00:00');
+            $secondEvent->save();
+            $service->syncEventReservations(
+                (int)$secondEvent->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-09-01 13:00:00'),
+                new DateTimeImmutable('2030-09-01 15:00:00')
+            );
+
+            $secondReservation = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_id, ivr_status, ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$secondEvent->getValue('dat_id'))
+            )->fetch();
+            $this->assertSame(Reservation::STATUS_APPROVED, $secondReservation['ivr_status']);
+
+            try {
+                $service->syncEventReservations(
+                    (int)$secondEvent->getValue('dat_id'),
+                    array($itemId),
+                    new DateTimeImmutable('2030-09-01 11:00:00'),
+                    new DateTimeImmutable('2030-09-01 14:00:00')
+                );
+                $this->fail('Moving an event reservation into another approved reservation must fail.');
+            } catch (\Admidio\Infrastructure\Exception $exception) {
+                $this->assertSame('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', $exception->getTranslationId());
+                $this->assertStringContainsString('Moving event reservation projector', $exception->getMessage());
+            }
+
+            $unchangedReservation = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status, ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_id = ?',
+                array((int)$secondReservation['ivr_id'])
+            )->fetch();
+            $this->assertSame(Reservation::STATUS_APPROVED, $unchangedReservation['ivr_status']);
+            $this->assertSame('2030-09-01 13:00:00', $unchangedReservation['ivr_begin']);
+            $this->assertSame('2030-09-01 15:00:00', $unchangedReservation['ivr_end']);
+        });
+    }
+
+    /**
+     * @testdox Removing an event item cancels open reservations but retains a handed-over item
+     */
+    public function testRemovingEventItemsCancelsOnlyReservationsThatAreNotBorrowed(): void
+    {
+        $admin = $this->makeInventoryUser('inveventreservationremove', true);
+        $category = $this->getFixture()->createAndSaveCategory('Removing reservation events', 'EVT', self::ORG_ID);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $borrowedItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Handed over event projector'));
+            $openItemId = $this->createItem($itemsData, array('ITEMNAME' => 'Open event microphone'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event removing equipment');
+            $event->setValue('dat_begin', '2030-10-01 10:00:00');
+            $event->setValue('dat_end', '2030-10-01 12:00:00');
+            $event->save();
+
+            $service = new ReservationService($this->getDatabase());
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($borrowedItemId, $openItemId),
+                new DateTimeImmutable('2030-10-01 10:00:00'),
+                new DateTimeImmutable('2030-10-01 12:00:00')
+            );
+
+            $borrowedReservation = new Reservation($this->getDatabase(), (int)$this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_ini_id = ?',
+                array((int)$event->getValue('dat_id'), $borrowedItemId)
+            )->fetchColumn());
+            $service->startBorrowing($borrowedReservation);
+
+            $service->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array(),
+                new DateTimeImmutable('2030-10-01 10:00:00'),
+                new DateTimeImmutable('2030-10-01 12:00:00')
+            );
+
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                array((int)$event->getValue('dat_id'))
+            )->fetchAll(\PDO::FETCH_KEY_PAIR);
+            $this->assertSame(Reservation::STATUS_BORROWED, $statuses[$borrowedItemId]);
+            $this->assertSame(Reservation::STATUS_CANCELLED, $statuses[$openItemId]);
         });
     }
 }
