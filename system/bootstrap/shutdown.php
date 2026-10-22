@@ -10,6 +10,7 @@
  */
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Plugins\PluginCrashGuard;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 
 if (basename($_SERVER['SCRIPT_FILENAME']) === 'shutdown.php') {
@@ -34,4 +35,7 @@ function admShutdown()
     ));
 }
 
+// Registered first: the shutdown functions run in this order, and a warning in admShutdown() would
+// replace the fatal error of a plugin that the guard has to read.
+PluginCrashGuard::activate();
 register_shutdown_function('admShutdown');

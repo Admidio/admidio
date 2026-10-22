@@ -6,6 +6,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginCrashGuard;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginPanel;
@@ -99,6 +100,7 @@ class PluginsPresenter extends PagePresenter
 
         $this->smarty->assign('list', $this->getGroups());
         $this->smarty->assign('failures', PluginLoader::getFailures());
+        $this->smarty->assign('crashedPlugins', self::getCrashNotices());
         $this->smarty->assign('l10n', $gL10n);
 
         try {
@@ -106,6 +108,81 @@ class PluginsPresenter extends PagePresenter
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    /**
+     * What the administrators are told about the plugins that are kept out after a crash: one notice
+     * per crashed plugin, with the plugins that are kept out because they require it, and the
+     * address that tries it again. Template: sys-template-parts/plugins.crashed.tpl.
+     *
+     * The plugin administration and the overview show it. Nobody but an administrator can do
+     * anything about a crash, so everybody else gets nothing.
+     * @return array<int,array{message: string, dependants: string, location: string, time: string, retryUrl: string, csrfToken: string}>
+     * @throws Exception
+     */
+    public static function getCrashNotices(): array
+    {
+        global $gCurrentUser, $gCurrentSession, $gL10n, $gSettingsManager;
+
+        if (!isset($gCurrentUser) || !$gCurrentUser->isAdministrator()) {
+            return array();
+        }
+
+        $crashes = PluginCrashGuard::getActive();
+        if ($crashes === array()) {
+            return array();
+        }
+
+        $excluded = PluginRegistry::getExcluded();
+        $notices = array();
+
+        foreach ($crashes as $id => $crash) {
+            $dependants = array();
+            foreach ($excluded as $excludedId => $cause) {
+                if ($cause === $id && $excludedId !== $id) {
+                    $dependants[] = self::getPluginName((string)$excludedId);
+                }
+            }
+
+            $time = \DateTime::createFromFormat(DATE_ATOM, $crash['time']);
+
+            $notices[] = array(
+                'message' => $gL10n->get('SYS_PLUGIN_CRASHED', array(
+                    self::getPluginName($id),
+                    SecurityUtils::encodeHTML($crash['error'])
+                )),
+                'dependants' => $dependants === array() ? ''
+                    : $gL10n->get('SYS_PLUGIN_CRASHED_DEPENDANTS', array(implode(', ', $dependants))),
+                'location' => SecurityUtils::encodeHTML($crash['file'] . ($crash['line'] > 0 ? ':' . $crash['line'] : '')),
+                'time' => $time === false ? SecurityUtils::encodeHTML($crash['time'])
+                    : $time->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
+                'retryUrl' => SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+                    array('mode' => 'retry', 'plugin' => $id)
+                ),
+                'csrfToken' => $gCurrentSession->getCsrfToken()
+            );
+        }
+
+        return $notices;
+    }
+
+    /**
+     * The translated name of a plugin, encoded for HTML. A plugin that is kept out is not loaded,
+     * so its language file has to be put on the search path first.
+     * @param string $id
+     * @return string
+     */
+    private static function getPluginName(string $id): string
+    {
+        $plugin = PluginRegistry::get($id);
+        if ($plugin === null) {
+            return SecurityUtils::encodeHTML($id);
+        }
+
+        PluginLoader::registerLanguages($plugin);
+
+        return SecurityUtils::encodeHTML(Language::translateIfTranslationStrId($plugin->name));
     }
 
     /**
