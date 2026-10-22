@@ -376,14 +376,20 @@ class ComponentUpdate extends Component
         } else {
             $currentVersionArray = self::getVersionArrayFromVersion($installedVersion);
         }
-        $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
-        $initialMinorVersion = empty($installedVersion) ? 0 : $currentVersionArray[1] + 1;
-        $updateCompleted = $this->getValue('com_update_completed');
-        $resumeIncompleteUpdate = $updateCompleted !== true
-            && $updateCompleted !== 1
-            && $updateCompleted !== '1'
-            && $updateCompleted !== ''
-            && $updateCompleted !== null;
+        $installedMigrationVersion = $currentVersionArray[0] . '.' . $currentVersionArray[1] . '.0';
+        $targetVersionArray = self::getVersionArrayFromVersion($targetVersion);
+        $activeMigrationVersion = $this->getValue('com_update_version');
+
+        if ($activeMigrationVersion === '') {
+            // Re-run the migration of the installed minor version. This allows patch releases
+            // to add further steps to their existing update file.
+            $initialMinorVersion = $currentVersionArray[1];
+        } else {
+            // The checkpoint belongs to this migration, not necessarily to com_version.
+            $activeMigrationVersionArray = self::getVersionArrayFromVersion($activeMigrationVersion);
+            $currentVersionArray = $activeMigrationVersionArray;
+            $initialMinorVersion = $activeMigrationVersionArray[1];
+        }
         $this->setValue('com_update_completed', false);
         $this->save();
 
@@ -398,14 +404,16 @@ class ComponentUpdate extends Component
             for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion) {
                 $migrationVersion = $mainVersion . '.' . $minorVersion . '.0';
 
-                // The stored version is the last successfully completed migration. Therefore an
-                // incomplete update can only resume at the first following migration, whose
-                // checkpoint is kept. All later migrations start at step zero.
-                if (!$resumeIncompleteUpdate) {
-                    $this->setValue('com_update_step', 0);
+                // The checkpoint belongs to the active migration. A completed update keeps the
+                // checkpoint of its installed minor version so later patch releases can add steps.
+                if ($activeMigrationVersion !== $migrationVersion) {
+                    if ($activeMigrationVersion !== '' || $migrationVersion !== $installedMigrationVersion) {
+                        $this->setValue('com_update_step', 0);
+                    }
+                    $this->setValue('com_update_version', $migrationVersion);
                     $this->save();
                 }
-                $resumeIncompleteUpdate = false;
+                $activeMigrationVersion = $migrationVersion;
 
                 // output of the version number for better debugging
                 $gLogger->notice('UPDATE: Start executing update steps to version ' . $mainVersion . '.' . $minorVersion);
@@ -436,9 +444,12 @@ class ComponentUpdate extends Component
 
                 $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
 
-                // Only persist a version after all of its update steps succeeded.
-                $this->setValue('com_version', $migrationVersion);
-                $this->save();
+                // The current minor version may represent a patch update. Keep its exact patch
+                // version until the complete update reaches its target version.
+                if ($migrationVersion !== $installedMigrationVersion) {
+                    $this->setValue('com_version', $migrationVersion);
+                    $this->save();
+                }
             }
 
             // reset subversion because we want to start update for next main version with subversion 0
@@ -447,6 +458,7 @@ class ComponentUpdate extends Component
 
         // save the exact target version, including its patch version
         $this->setValue('com_version', $targetVersion);
+        $this->setValue('com_update_version', '');
         $this->setValue('com_update_completed', true);
         $this->save();
 
