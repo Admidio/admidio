@@ -507,7 +507,7 @@ final class PluginRegistry
                 );
             }
 
-            throw new Exception('SYS_PLUGIN_UPDATE_REQUIRED_NO_ACCESS', array($plugin->name));
+            throw new Exception('SYS_PLUGIN_UPDATE_REQUIRED_NO_ACCESS', array(SecurityUtils::encodeHTML($plugin->name)));
         }
 
         return $plugin;
