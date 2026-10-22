@@ -2092,7 +2092,6 @@
   <string name="SYS_BORROWINGS">Ausleihen</string>
   <string name="SYS_RESERVATION_BORROWINGS_READY">Freigegebene Reservierungen zur Ausgabe</string>
   <string name="SYS_BORROWINGS_ACTIVE">Aktive Ausleihen</string>
-  <string name="SYS_ITEM_RESERVATIONS">Gegenstandsreservierungen</string>
   <string name="SYS_RESERVATIONS">Reservierungen</string>
   <string name="SYS_RESERVATIONS_ENABLED">Reservierungsanfragen aktivieren</string>
   <string name="SYS_INVENTORY_RESERVATIONS_ENABLED_DESC">Wenn diese Option aktiviert ist, können Reservierungsanfragen für Gegenstände gestellt werden. (Voreinstellung: nein)</string>

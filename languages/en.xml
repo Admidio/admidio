@@ -997,7 +997,6 @@
   <string name="SYS_ITEM_ALREADY_BORROWED">This item cannot be borrowed because it is already borrowed.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE">The item is not available for the selected period.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">The item &quot;#VAR1#&quot; is not available for the selected period.</string>
-  <string name="SYS_ITEM_RESERVATIONS">Item reservations</string>
   <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Item reservation status per event</string>
   <string name="SYS_KEEP_ORIGINAL">Also save original files</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Save each photo at its original size as well as at the selected resolution. If #VAR1_BOLD# is enabled, downloads use the original photos. This option requires significantly more storage space and should only be enabled if enough space is available.</string>
