@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Entity\Preferences;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Class the manage the settings of an organization
@@ -49,21 +50,27 @@ class SettingsManager
     }
 
     /**
-     * Only safe db and orgId on serialization
-     * @return array<int,string> Returns the properties that should be serialized
+     * Save only the organization and settings using their legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
-        return array('orgId', 'settings');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array(
+            "\0" . self::class . "\0orgId",
+            "\0" . self::class . "\0settings"
+        ), true));
     }
 
     /**
-     * A wakeup add the current database object to this class
+     * Restore saved settings and reconnect to the current database object.
+     * @param array<string,mixed> $data
      */
-    public function __wakeup()
+    public function __unserialize(array $data): void
     {
         global $gDb;
 
+        SerializationUtils::restoreProperties($this, $data);
         if ($gDb instanceof Database) {
             $this->db = $gDb;
         }

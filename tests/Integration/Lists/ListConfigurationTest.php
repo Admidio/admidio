@@ -156,6 +156,112 @@ class ListConfigurationTest extends DatabaseTestCase
         $this->assertTrue((bool) $this->getDatabase()->queryPrepared($sql, [$lstId])->fetchColumn());
     }
 
+    public static function deniedPrivateListReads(): array
+    {
+        return array(
+            'UUID as member' => array('uuid', false),
+            'ID as member' => array('id', false),
+            'columns as member' => array('columns', false),
+            'constructor as member' => array('constructor', false),
+            'UUID as administrator' => array('uuid', true),
+            'ID as administrator' => array('id', true),
+            'columns as administrator' => array('columns', true),
+            'constructor as administrator' => array('constructor', true),
+        );
+    }
+
+    /**
+     * @dataProvider deniedPrivateListReads
+     * @testdox Private list configurations are not visible to other users
+     */
+    public function testPrivateListsAreNotVisibleToOtherUsers(string $readMethod, bool $administrator): void
+    {
+        $owner = $this->makeUserAdministrator('privateowner');
+        $fixture = $this->getFixture();
+        $user = $fixture->createAndSaveUser('privatereader', 'privatereader@example.local');
+        if ($administrator) {
+            $role = $fixture->createAndSaveRoleWithRights('List Administrators', self::ORG_ID, ['rol_administrator' => 1]);
+            $fixture->assignUserToRole($user['usr_id'], $role['rol_id']);
+        }
+        $reader = $this->loadUserInOrganization($user['usr_id'], self::ORG_ID);
+        $this->assertSame($administrator, $reader->isAdministrator());
+
+        $saved = $this->withCurrentUser($owner, self::ORG_ID, true, function () {
+            $list = new ListConfiguration($this->getDatabase());
+            $list->setValue('lst_name', 'Private selection');
+            $list->addColumn($this->profileField('LAST_NAME'), 0, 'DESC', 'IDOR_CANARY_7731');
+            $list->save();
+
+            return array('id' => (int)$list->getValue('lst_id'), 'uuid' => $list->getValue('lst_uuid'));
+        });
+
+        $this->withCurrentUser($reader, self::ORG_ID, true, function () use ($saved, $readMethod) {
+            $list = new ListConfiguration($this->getDatabase());
+
+            switch ($readMethod) {
+                case 'uuid':
+                    $this->assertTrue($list->readDataByUuid($saved['uuid']));
+                    break;
+                case 'id':
+                    $this->assertTrue($list->readDataById($saved['id']));
+                    break;
+                case 'columns':
+                    $this->assertTrue($list->readDataByColumns(array('lst_uuid' => $saved['uuid'])));
+                    break;
+                case 'constructor':
+                    $list = new ListConfiguration($this->getDatabase(), $saved['id']);
+                    break;
+            }
+
+            $this->assertFalse($list->isVisible());
+        });
+    }
+
+    /**
+     * @testdox Owners can read private configurations and other users can read shared configurations
+     */
+    public function testOwnPrivateAndSharedListsRemainReadable(): void
+    {
+        $owner = $this->makeUserAdministrator('allowedowner');
+        $user = $this->getFixture()->createAndSaveUser('allowedreader', 'allowedreader@example.local');
+        $reader = $this->loadUserInOrganization($user['usr_id'], self::ORG_ID);
+
+        foreach (array(false, true) as $global) {
+            $saved = $this->withCurrentUser($owner, self::ORG_ID, true, function () use ($global) {
+                $list = new ListConfiguration($this->getDatabase());
+                $list->setValue('lst_name', 'Allowed selection');
+                $list->setValue('lst_global', $global);
+                $list->addColumn($this->profileField('LAST_NAME'), 0, 'DESC', 'IDOR_CANARY_7731');
+                $list->save();
+
+                return array('id' => (int)$list->getValue('lst_id'), 'uuid' => $list->getValue('lst_uuid'));
+            });
+
+            $this->withCurrentUser($global ? $reader : $owner, self::ORG_ID, true, function () use ($saved) {
+                $list = new ListConfiguration($this->getDatabase());
+                $this->assertTrue($list->readDataByUuid($saved['uuid']));
+                $this->assertTrue($list->isVisible());
+                $this->assertSame('Allowed selection', $list->getValue('lst_name'));
+                $this->assertSame('IDOR_CANARY_7731', $list->getColumnObject(1)->getValue('lsc_filter'));
+                $this->assertSame('DESC', $list->getColumnObject(1)->getValue('lsc_sort'));
+
+                $byId = new ListConfiguration($this->getDatabase(), $saved['id']);
+                $this->assertTrue($byId->isVisible());
+                $this->assertSame(1, $byId->countColumns());
+                $this->assertSame('Allowed selection', $byId->getValue('lst_name'));
+            });
+        }
+    }
+
+    /**
+     * @testdox New list configurations remain accessible
+     */
+    public function testNewListConfigurationIsVisible(): void
+    {
+        $list = new ListConfiguration($this->getDatabase());
+        $this->assertTrue($list->isVisible());
+    }
+
     /**
      * Test that profile field columns are stored with their position
      *

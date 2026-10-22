@@ -137,9 +137,10 @@ class EventListPresenter extends PagePresenter
                         {"adm_csrf_token": "' . $gCurrentSession->getCsrfToken() . '"},
                         function(data) {
                             var returnData = JSON.parse(data);
-                            var groupID = "btn_group_" + $approvalStateElement.data("id");
+                            // the button that opens the dropdown of the clicked entry, in the cards and in the tables
+                            var $approvalButton = $approvalStateElement.closest(".admidio-event-approval").find("[data-bs-toggle=\"dropdown\"]");
                             if (returnData.status === "success") {
-                                ' . ($getView === 'detail' ? '$("#" + groupID + " .dropdown-toggle").html($approvalStateElement.html());' : '$("#" + groupID + " .dropdown-toggle").html($approvalStateElement.children("i").clone());') . '
+                                ' . ($getView === 'detail' ? '$approvalButton.html($approvalStateElement.html());' : '$approvalButton.html($approvalStateElement.children("i").clone());') . '
                                 messageBox(returnData.message);
                             } else {
                                 messageBox(returnData.message, "' . $gL10n->get('SYS_ERROR') . '", "error");

@@ -76,7 +76,7 @@ class HtmlNavbar
      * @throws Exception
      * @deprecated 5.0.0:5.1.0 Class "HtmlNavbar" is deprecated, use class "Form" instead.
      */
-    public function __construct(string $id, string $name = '', HtmlPage $htmlPage = null, string $type = 'default')
+    public function __construct(string $id, string $name = '', ?HtmlPage $htmlPage = null, string $type = 'default')
     {
         global $gL10n;
 

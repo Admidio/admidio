@@ -157,6 +157,7 @@ final class LatestDocumentsFiles
                         'icon' => $file->getIcon(),
                         'fileName' => $fileName,
                         'fileExtension' => $file->getFileExtension(),
+                        'fullFileName' => $rowFile['fil_name'],
                         'tooltip' => $tooltip
                     );
 
