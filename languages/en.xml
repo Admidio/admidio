@@ -1529,6 +1529,7 @@
   <string name="SYS_RESERVATION_PERIOD_FROM">Reserve from</string>
   <string name="SYS_RESERVATION_PERIOD_TO">Reserve until</string>
   <string name="SYS_RESERVATION_REQUEST">Request reservation</string>
+  <string name="SYS_RESERVATION_REQUIRES_TIME_PERIOD">Item reservations require a time period. Items cannot be reserved for a single point in time.</string>
   <string name="SYS_RESERVATION_REQUESTERS">Who may request reservations?</string>
   <string name="SYS_RESERVATION_REQUESTERS_DESC">Defines whether all visitors, only logged-in users, or users in selected roles may submit reservation requests. (Default: logged-in users)</string>
   <string name="SYS_RESERVATION_REQUESTER_ROLES">Roles allowed to request reservations</string>

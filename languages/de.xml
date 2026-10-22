@@ -2102,6 +2102,7 @@
   <string name="SYS_RESERVATION_ITEM_KEEPERS_MANAGE">Reservierungen durch Verwalter verwalten</string>
   <string name="SYS_RESERVATION_ITEM_KEEPERS_MANAGE_DESC">Wenn diese Option aktiviert ist, können Verwalter von Gegenständen deren Reservierungsanfragen verwalten. Voraussetzung ist, dass Verwalter Gegenstände bearbeiten dürfen. (Voreinstellung: ja)</string>
   <string name="SYS_RESERVATION_REQUEST">Reservierung anfragen</string>
+  <string name="SYS_RESERVATION_REQUIRES_TIME_PERIOD">Gegenstandsreservierungen benötigen zwingend einen Zeitraum. Gegenstände können nicht für einen einzelnen Zeitpunkt reserviert werden.</string>
   <string name="SYS_REQUEST_AGAIN">Erneut anfragen</string>
   <string name="SYS_ADD_ITEM">Gegenstand hinzufügen</string>
   <string name="SYS_ADD_ITEMS">Gegenstände hinzufügen</string>

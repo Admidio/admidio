@@ -266,6 +266,15 @@ class EventSaveService
             $roomCheckEndDateTime->setTime(23, 59, 59);
         }
 
+        $reservationItemIds = $formValues['event_inventory_items'] ?? array();
+        if (!is_array($reservationItemIds)) {
+            $reservationItemIds = array($reservationItemIds);
+        }
+        $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int)$itemId > 0);
+        if (count($reservationItemIds) > 0 && $startDateTime >= $roomCheckEndDateTime) {
+            throw new Exception('SYS_RESERVATION_REQUIRES_TIME_PERIOD');
+        }
+
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
             $eventRoomId = (int)$formValues['dat_room_id'];
 
@@ -344,10 +353,6 @@ class EventSaveService
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);
         $reservationService = new ReservationService($gDb);
-        $reservationItemIds = $formValues['event_inventory_items'] ?? array();
-        if (!is_array($reservationItemIds)) {
-            $reservationItemIds = array($reservationItemIds);
-        }
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
             && $gSettingsManager->getBool('inventory_reservations_events_enabled')
             && InventoryAccessService::canRequestReservation()) {
