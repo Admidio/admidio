@@ -168,7 +168,7 @@ class TenantStatistics
         $client = new Client();
         $response = $client->request(
             'POST',
-            'http://localhost/admidio_webseite_2/api/statistics.php',
+            ADMIDIO_URL . '/api/statistics.php',
             ['json' => [$this->getInfoData()]]
         );
 
