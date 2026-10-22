@@ -18,7 +18,7 @@ use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\TenantIdentifier;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -42,7 +42,7 @@ final class UpdateStepsCode
     /** Initialize the installation identity once when upgrading to 6.0, including headless updates. */
     public static function updateStep60CreateTenantId(): void
     {
-        TenantIdentifier::ensure(self::$db);
+        InstallationIdentifier::ensure(self::$db);
     }
 
     /**

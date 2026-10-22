@@ -14,7 +14,7 @@ use GuzzleHttp\Exception\GuzzleException;
  * @see https://www.admidio.org/
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
-class TenantStatistics
+class InstallationStatistics
 {
     /**
      * @var string Unique id of this tenant.
@@ -22,7 +22,7 @@ class TenantStatistics
     private string $tenantID;
 
     /**
-     * Constructor that will create an object of a TenantStatistics.
+     * Create a statistics collector for this installation.
      * @param string $tenantID Unique id of this tenant.
      * @param string|null $previousVersion Admidio version installed before this update.
      * @param ClientInterface|null $client HTTP client, optionally supplied for testing.
@@ -43,20 +43,20 @@ class TenantStatistics
     {
         return array(
             'id' => $this->tenantID,
-            'timestamp' => TenantStatistics::getDateTime(),
-            'php' => array(
-                'version' => TenantStatistics::getPHPVersion(),
-                'extensions' => TenantStatistics::getPHPExtensions()
-            ),
+            'timestamp' => InstallationStatistics::getDateTime(),
             'database' => array(
-                'type' => TenantStatistics::getDatabaseType(),
-                'version' => TenantStatistics::getDatabaseVersion()
+                'type' => InstallationStatistics::getDatabaseType(),
+                'version' => InstallationStatistics::getDatabaseVersion()
             ),
             'admidio' => array(
-                'version' => TenantStatistics::getAdmidioVersion(),
+                'version' => InstallationStatistics::getAdmidioVersion(),
                 'previous_version' => $this->previousVersion,
-                'language' => TenantStatistics::getAdmidioLanguage(),
-                'plugins' => TenantStatistics::getAdmidioPlugins()
+                'language' => InstallationStatistics::getAdmidioLanguage(),
+                'plugins' => InstallationStatistics::getAdmidioPlugins()
+            ),
+            'php' => array(
+                'version' => InstallationStatistics::getPHPVersion(),
+                'extensions' => InstallationStatistics::getPHPExtensions()
             )
         );
     }
@@ -195,7 +195,7 @@ class TenantStatistics
         global $gDb;
 
         $infoData ??= $this->getInfoData();
-        $tenantId = $gDb instanceof Database ? TenantIdentifier::get($gDb) : null;
+        $tenantId = $gDb instanceof Database ? InstallationIdentifier::get($gDb) : null;
         if ($tenantId === null) {
             throw new Exception('SYS_TENANT_ID_NOT_INITIALIZED');
         }

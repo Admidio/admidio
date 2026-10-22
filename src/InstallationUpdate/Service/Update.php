@@ -6,7 +6,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\TenantIdentifier;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\Service\PreferenceDefinitions;
@@ -79,7 +79,7 @@ class Update
         $this->checkLogin();
 
         // Keep the preview identity for the 6.0 migration, even when sending was declined.
-        TenantIdentifier::ensure($gDb, $tenantId);
+        InstallationIdentifier::ensure($gDb, $tenantId);
 
         $this->updateOrgPreferences();
 

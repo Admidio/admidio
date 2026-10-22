@@ -2,7 +2,7 @@
 
 namespace Admidio\Tests\Unit\Infrastructure;
 
-use Admidio\Infrastructure\TenantStatistics;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Database;
 use PDOStatement;
 use GuzzleHttp\Client;
@@ -12,7 +12,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
-class TenantStatisticsTest extends TestCase
+class InstallationStatisticsTest extends TestCase
 {
     private array $originalDatabase;
 
@@ -50,7 +50,7 @@ class TenantStatisticsTest extends TestCase
         $history = array();
         $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
         $handler->push(Middleware::history($history));
-        $statistics = new TenantStatistics('tenant', '5.0.0', new Client(array('handler' => $handler)));
+        $statistics = new InstallationStatistics('tenant', '5.0.0', new Client(array('handler' => $handler)));
         $snapshot = array(
             'id' => 'tenant', 'timestamp' => '2026-10-22 10:00:00',
             'php' => array('version' => '8.2.0', 'extensions' => array('PDO' => false)),

@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 use Throwable;
 
 /** Installation identity, stored with the organization with the smallest ID. */
-final class TenantIdentifier
+final class InstallationIdentifier
 {
     public static function get(Database $db): ?string
     {

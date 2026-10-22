@@ -2,7 +2,7 @@
 
 namespace Admidio\Tests\Unit\InstallationUpdate;
 
-use Admidio\InstallationUpdate\Service\InstallationStatistics;
+use Admidio\InstallationUpdate\Service\StatisticsConsent;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use PDOStatement;
@@ -11,7 +11,7 @@ use Admidio\UI\Presenter\InstallationPresenter;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class InstallationStatisticsTest extends TestCase
+class StatisticsConsentTest extends TestCase
 {
     private array $originalSession;
     private array $originalGlobals;
@@ -45,17 +45,17 @@ class InstallationStatisticsTest extends TestCase
     public function testOptOutDoesNotRequireAPreviewOrAccessStorageOrHttp(): void
     {
         unset($_SESSION['installationStatisticsData']);
-        $this->assertNull(InstallationStatistics::selectedData(array('adm_send_statistics' => '0')));
-        $this->assertNull(InstallationStatistics::selectedData(array()));
+        $this->assertNull(StatisticsConsent::selectedData(array('adm_send_statistics' => '0')));
+        $this->assertNull(StatisticsConsent::selectedData(array()));
         // No settings manager, database or HTTP client is needed for an opted-out request.
-        InstallationStatistics::send(null);
+        StatisticsConsent::send(null);
     }
 
     public function testSelectionUsesServerSnapshotAndSurvivesSessionCleanup(): void
     {
         $snapshot = array('id' => 'installation-tenant', 'admidio' => array('version' => '5.1.0', 'previous_version' => null));
         $_SESSION['installationStatisticsData'] = $snapshot;
-        $selected = InstallationStatistics::selectedData(array('adm_send_statistics' => '1', 'id' => 'tampered'));
+        $selected = StatisticsConsent::selectedData(array('adm_send_statistics' => '1', 'id' => 'tampered'));
         $_SESSION = array();
         $this->assertSame($snapshot, $selected);
     }
@@ -64,7 +64,7 @@ class InstallationStatisticsTest extends TestCase
     {
         unset($_SESSION['installationStatisticsData']);
         $this->expectException(Exception::class);
-        InstallationStatistics::selectedData(array('adm_send_statistics' => '1'));
+        StatisticsConsent::selectedData(array('adm_send_statistics' => '1'));
     }
 
     public static function previousVersions(): array
@@ -111,9 +111,9 @@ class InstallationStatisticsTest extends TestCase
                 return true;
             }));
         $form = new FormPresenter('confirmation', 'installation.install-admidio.tpl');
-        InstallationStatistics::addToForm($form, $page, $previousVersion);
+        StatisticsConsent::addToForm($form, $page, $previousVersion);
         $this->assertSame('checked', $form->getElements()['adm_send_statistics']['attributes']['checked']);
-        $this->assertSame($_SESSION['installationStatisticsData'], InstallationStatistics::selectedData(array('adm_send_statistics' => '1')));
-        $this->assertSame('stable-tenant', InstallationStatistics::tenantId());
+        $this->assertSame($_SESSION['installationStatisticsData'], StatisticsConsent::selectedData(array('adm_send_statistics' => '1')));
+        $this->assertSame('stable-tenant', StatisticsConsent::tenantId());
     }
 }

@@ -5,7 +5,7 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\TenantIdentifier;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Cli\CliPolicy;
@@ -568,7 +568,7 @@ class Installation
          */
         $gSettingsManager = $gCurrentOrganization->getSettingsManager();
         $gSettingsManager->setMulti(self::defaultOrganizationPreferences($config), false);
-        TenantIdentifier::ensure($db, $tenantId);
+        InstallationIdentifier::ensure($db, $tenantId);
         self::disableSoundexSearchIfPgSql($db);
         $gCurrentOrganization->createBasicData($administratorId);
 

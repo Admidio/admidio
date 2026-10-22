@@ -3,15 +3,15 @@
 namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\Infrastructure\Exception;
-use Admidio\Infrastructure\TenantStatistics;
-use Admidio\Infrastructure\TenantIdentifier;
+use Admidio\Infrastructure\InstallationStatistics;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 use Ramsey\Uuid\Uuid;
 use Throwable;
 
 /** Shared statistics preview, consent and delivery for the web installation and update. */
-final class InstallationStatistics
+final class StatisticsConsent
 {
     private const SESSION_DATA = 'installationStatisticsData';
 
@@ -20,11 +20,11 @@ final class InstallationStatistics
         global $gDb, $gL10n;
 
         // Fresh installations have no organization/preferences tables yet.
-        $tenantId = $previousVersion !== null ? TenantIdentifier::get($gDb) : null;
+        $tenantId = $previousVersion !== null ? InstallationIdentifier::get($gDb) : null;
         if ($tenantId === null) {
             $tenantId = $_SESSION[self::SESSION_DATA]['id'] ?? Uuid::uuid4()->toString();
         }
-        $statistics = new TenantStatistics($tenantId, $previousVersion);
+        $statistics = new InstallationStatistics($tenantId, $previousVersion);
         $_SESSION[self::SESSION_DATA] = $statistics->getInfoData();
         $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($_SESSION[self::SESSION_DATA]));
         $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_ANONYMOUS_STATISTICS'), true);
@@ -64,7 +64,7 @@ final class InstallationStatistics
             return;
         }
         try {
-            $statistics = new TenantStatistics($data['id']);
+            $statistics = new InstallationStatistics($data['id']);
             if (!$statistics->sent($data)) {
                 $gLogger->warning('Anonymous installation statistics could not be sent.');
             }

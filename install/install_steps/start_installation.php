@@ -12,7 +12,7 @@
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Installation;
-use Admidio\InstallationUpdate\Service\InstallationStatistics;
+use Admidio\InstallationUpdate\Service\StatisticsConsent;
 use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
@@ -63,7 +63,7 @@ if ($mode === 'html') {
         SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation', 'mode' => 'check')),
         $page
     );
-    InstallationStatistics::addToForm($form, $page);
+    StatisticsConsent::addToForm($form, $page);
     $form->addSubmitButton('adm_next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'bi-arrow-repeat'));
     $form->addToHtmlPage();
     $_SESSION['installationStartForm'] = $form;
@@ -75,11 +75,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST' || !isset($_SESSION['installat
     throw new Exception('SYS_INVALID_PAGE_VIEW');
 }
 $formValues = $_SESSION['installationStartForm']->validate($_POST);
-$statisticsData = InstallationStatistics::selectedData($formValues);
+$statisticsData = StatisticsConsent::selectedData($formValues);
 
 // Create the database and all its data, then send only the reviewed and selected snapshot.
-Installation::install($db, InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL), InstallationStatistics::tenantId());
-InstallationStatistics::send($statisticsData);
+Installation::install($db, InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL), StatisticsConsent::tenantId());
+StatisticsConsent::send($statisticsData);
 
 // delete session data
 session_unset();

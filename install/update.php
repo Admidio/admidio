@@ -7,7 +7,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Installation;
-use Admidio\InstallationUpdate\Service\InstallationStatistics;
+use Admidio\InstallationUpdate\Service\StatisticsConsent;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -257,7 +257,7 @@ try {
                     array('maxLength' => 6, 'class' => 'form-control-small')
                 );
             }
-            InstallationStatistics::addToForm($form, $page, $installedDbVersion);
+            StatisticsConsent::addToForm($form, $page, $installedDbVersion);
             $form->addSubmitButton(
                 'adm_next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
@@ -306,13 +306,13 @@ try {
             throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        $statisticsData = InstallationStatistics::selectedData($formValues);
+        $statisticsData = StatisticsConsent::selectedData($formValues);
 
         // Preserve consent and payload locally: doAdmidioUpdate destroys the session.
         $update = new Update();
-        $update->doAdmidioUpdate($installedDbVersion, InstallationStatistics::tenantId());
+        $update->doAdmidioUpdate($installedDbVersion, StatisticsConsent::tenantId());
 
-        InstallationStatistics::send($statisticsData);
+        StatisticsConsent::send($statisticsData);
 
         echo json_encode(array(
             'status' => 'success',
