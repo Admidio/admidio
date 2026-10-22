@@ -664,7 +664,9 @@ class EventFormPresenter extends PagePresenter
                 'pleaseChoose' => $gL10n->get('SYS_PLEASE_CHOOSE')
             ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
 
-            if ((int)$event->getValue('dat_id') > 0) {
+            // A copied event has no reservations yet. Keep the selected items, but do not show
+            // the source event's reservation statuses in the copy form.
+            if (!$getCopy && (int)$event->getValue('dat_id') > 0) {
                 $page->assignSmartyVariable('eventInventoryReservationStatusTable', true);
                 $reservationStatusTable = new DataTables($page, 'adm_event_inventory_reservation_statuses');
                 $reservationStatusTable->setServerSideProcessing(SecurityUtils::encodeUrl(
