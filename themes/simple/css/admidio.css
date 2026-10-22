@@ -901,6 +901,18 @@ tr.admidio-event-highlight {
     color: var(--bs-success);
 }
 
+.admidio-plugin-version-status {
+    margin-right: 0.25rem;
+}
+
+.admidio-plugin-version-status-current {
+    color: #198754;
+}
+
+.admidio-plugin-version-status-update {
+    color: #9a6700;
+}
+
 .admidio-event-approval-state-tentative {
     color: var(--bs-info);
 }

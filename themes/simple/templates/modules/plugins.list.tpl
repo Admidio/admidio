@@ -70,13 +70,18 @@
                                 {/foreach}
                             </td>
                             <td>{$pluginEntry.version}</td>
-                            <td data-bs-toggle="tooltip"
+                            <td>
                                 {if $pluginEntry.versionState === 'update'}
-                                    style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                    <i class="bi bi-exclamation-triangle-fill admidio-plugin-version-status admidio-plugin-version-status-update"
+                                       role="img" aria-label="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                       data-bs-toggle="tooltip" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"></i>
                                 {elseif $pluginEntry.versionState === 'current'}
-                                    style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE')}"
+                                    <i class="bi bi-check-circle-fill admidio-plugin-version-status admidio-plugin-version-status-current"
+                                       role="img" aria-label="{$l10n->get('SYS_UP_TO_DATE')}"
+                                       data-bs-toggle="tooltip" title="{$l10n->get('SYS_UP_TO_DATE')}"></i>
                                 {/if}
-                                >{if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}</td>
+                                {if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}
+                            </td>
                             <td class="text-end">
                                 {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
@@ -150,9 +155,15 @@
                                 {if $pluginEntry.versionState === 'not_installed'}
                                     <p>&ndash;</p>
                                 {elseif $pluginEntry.versionState === 'update'}
-                                    <p><span style="color: var(--bs-warning);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
+                                    <p><i class="bi bi-exclamation-triangle-fill admidio-plugin-version-status admidio-plugin-version-status-update"
+                                          role="img" aria-label="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                          data-bs-toggle="tooltip" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"></i>
+                                        {$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</p>
                                 {elseif $pluginEntry.versionState === 'current'}
-                                    <p><span style="color: var(--bs-success);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
+                                    <p><i class="bi bi-check-circle-fill admidio-plugin-version-status admidio-plugin-version-status-current"
+                                          role="img" aria-label="{$l10n->get('SYS_UP_TO_DATE')}"
+                                          data-bs-toggle="tooltip" title="{$l10n->get('SYS_UP_TO_DATE')}"></i>
+                                        {$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</p>
                                 {else}
                                     <p>{$pluginEntry.installedVersion}</p>
                                 {/if}
