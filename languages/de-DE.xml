@@ -2124,6 +2124,7 @@
   <string name="SYS_RESERVATION_NOTIFICATION_MESSAGE">Reservierungsstatus: #VAR1#&lt;br /&gt;&lt;br /&gt;Gegenstand: #VAR2#&lt;br /&gt;Reservieren von: #VAR3#&lt;br /&gt;Reservieren bis: #VAR4#&lt;br /&gt;Angefragt von: #VAR5#</string>
   <string name="SYS_ITEM_ALREADY_BORROWED">Dieser Gegenstand kann nicht ausgeliehen werden, weil er bereits ausgeliehen ist.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE">Der Gegenstand ist im gewählten Zeitraum nicht verfügbar.</string>
+  <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">Der Gegenstand „#VAR1#“ ist im gewählten Zeitraum nicht verfügbar.</string>
   <string name="SYS_APPROVE">Freigeben</string>
   <string name="SYS_REJECT">Ablehnen</string>
   <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Reservierungsstatus der Gegenstände je Termin</string>

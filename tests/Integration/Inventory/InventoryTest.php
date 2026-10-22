@@ -1781,7 +1781,8 @@ class InventoryTest extends DatabaseTestCase
                 );
                 $this->fail('Moving an event reservation into another approved reservation must fail.');
             } catch (\Admidio\Infrastructure\Exception $exception) {
-                $this->assertSame('SYS_ITEM_NOT_AVAILABLE', $exception->getTranslationId());
+                $this->assertSame('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', $exception->getTranslationId());
+                $this->assertStringContainsString('Moving event reservation projector', $exception->getMessage());
             }
 
             $unchangedReservation = $this->getDatabase()->queryPrepared(

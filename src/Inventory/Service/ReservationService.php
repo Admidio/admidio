@@ -282,12 +282,12 @@ class ReservationService
 
             $item = $this->getItemInCurrentOrganization($itemId);
             if ($item->isRetired()) {
-                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', array($item->readableName()));
             }
             $this->lockItemForReservation($itemId);
 
             if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
-                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', array($item->readableName()));
             }
         }
 
