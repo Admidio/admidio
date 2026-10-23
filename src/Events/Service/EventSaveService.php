@@ -790,9 +790,12 @@ class EventSaveService
         global $gDb;
 
         $sql = 'SELECT dat_id
-                  FROM ' . TBL_EVENTS . '
+                 FROM ' . TBL_EVENTS . '
                  WHERE dat_evr_id = ?
-                   AND dat_recurrence_original_begin = ?
+                   -- The scheduled time may change for the complete series. A generated
+                   -- occurrence is still the same occurrence as long as its original day stays
+                   -- the same, so retain its participants and item reservations.
+                   AND DATE(dat_recurrence_original_begin) = DATE(?)
                    AND dat_begin >= ?
                    AND dat_recurrence_status = ?';
         $eventStatement = $gDb->queryPrepared($sql, array($recurrenceId, $originalBegin, $seriesUpdateFrom, 'generated'));
@@ -867,9 +870,15 @@ class EventSaveService
         if (!is_array($reservationItemIds)) {
             $reservationItemIds = array($reservationItemIds);
         }
+        $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int)$itemId > 0);
+        $hasReservationItemSelection = array_key_exists('event_inventory_items', $formValues);
+        if (!$hasReservationItemSelection) {
+            $reservationItemIds = $this->getOpenEventReservationItemIds((int)$masterEvent->getValue('dat_id'));
+        }
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
-            && InventoryAccessService::canRequestReservation()) {
+            && (($gSettingsManager->getBool('inventory_reservations_events_enabled')
+                    && InventoryAccessService::canRequestReservation())
+                || count($reservationItemIds) > 0)) {
             $reservationService->syncEventReservations(
                 (int)$masterEvent->getValue('dat_id'),
                 $reservationItemIds,
@@ -906,12 +915,17 @@ class EventSaveService
             $generatedEvent->save();
 
             $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
+            $occurrenceReservationItemIds = $reservationItemIds;
+            if (!$hasReservationItemSelection) {
+                $occurrenceReservationItemIds = $this->getOpenEventReservationItemIds((int)$generatedEvent->getValue('dat_id'));
+            }
             if ($gSettingsManager->getBool('inventory_reservations_enabled')
-                && $gSettingsManager->getBool('inventory_reservations_events_enabled')
-                && InventoryAccessService::canRequestReservation()) {
+                && (($gSettingsManager->getBool('inventory_reservations_events_enabled')
+                        && InventoryAccessService::canRequestReservation())
+                    || count($occurrenceReservationItemIds) > 0)) {
                 $reservationService->syncEventReservations(
                     (int)$generatedEvent->getValue('dat_id'),
-                    $reservationItemIds,
+                    $occurrenceReservationItemIds,
                     $occurrence->getBegin(),
                     $occurrence->getEnd()
                 );

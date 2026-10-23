@@ -1626,6 +1626,83 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Event editors synchronize reservations of an event series without request permission
+     */
+    public function testEventEditorSynchronizesExistingSeriesReservationsWithoutRequestPermission(): void
+    {
+        $fixture = $this->getFixture();
+        $inventoryAdmin = $this->makeInventoryUser('inveventseriessyncinventoryadmin', true);
+        $eventRole = $fixture->createAndSaveRoleWithRights('Reservation series event editors', self::ORG_ID, array('rol_events' => 1));
+        $eventEditorData = $fixture->createAndSaveUser('inveventseriessynceditor', 'inveventseriessynceditor@example.local');
+        $fixture->assignUserToRole($eventEditorData['usr_id'], $eventRole['rol_id']);
+        $eventEditor = $this->loadUserInOrganization($eventEditorData['usr_id'], self::ORG_ID);
+        $category = $fixture->createAndSaveCategory('Reservation series synchronization events', 'EVT', self::ORG_ID);
+
+        $eventUuid = $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Synchronized series projector'));
+            $event = (new EventSaveService($this->getDatabase()))->saveData('', array(
+                'dat_headline' => 'Reservation synchronization series',
+                'dat_location' => '',
+                'dat_all_day' => '0',
+                'event_from' => '2030-12-01',
+                'event_from_time' => '10:00',
+                'event_to' => '2030-12-01',
+                'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'],
+                'dat_max_members' => 0,
+                'event_participation_possible' => 0,
+                'event_deadline' => '',
+                'event_deadline_time' => '',
+                'event_inventory_items' => array($itemId),
+                'event_recurrence_frequency' => 'daily',
+                'event_recurrence_interval' => 1,
+                'event_recurrence_end_type' => 'count',
+                'event_recurrence_count' => 2
+            ));
+
+            return (string)$event->getValue('dat_uuid');
+        });
+
+        $this->withCurrentUser($eventEditor, self::ORG_ID, true, function () use ($category, $eventUuid) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'roles');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requester_roles', '');
+            (new EventSaveService($this->getDatabase()))->saveData($eventUuid, array(
+                'dat_headline' => 'Reservation synchronization series',
+                'dat_location' => '',
+                'dat_all_day' => '0',
+                'event_from' => '2030-12-01',
+                'event_from_time' => '14:00',
+                'event_to' => '2030-12-01',
+                'event_to_time' => '16:00',
+                'cat_uuid' => $category['cat_uuid'],
+                'dat_max_members' => 0,
+                'event_participation_possible' => 0,
+                'event_deadline' => '',
+                'event_deadline_time' => '',
+                'event_recurrence_frequency' => 'daily',
+                'event_recurrence_interval' => 1,
+                'event_recurrence_end_type' => 'count',
+                'event_recurrence_count' => 2
+            ), '', false, 'series');
+
+            $periods = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS
+                . ' INNER JOIN ' . TBL_EVENTS . ' ON dat_id = ivr_dat_id'
+                . ' WHERE dat_headline = ? AND ivr_status = ? ORDER BY ivr_begin',
+                array('Reservation synchronization series', Reservation::STATUS_REQUESTED)
+            )->fetchAll();
+            $this->assertSame(array(
+                array('ivr_begin' => '2030-12-01 14:00:00', 'ivr_end' => '2030-12-01 16:00:00'),
+                array('ivr_begin' => '2030-12-02 14:00:00', 'ivr_end' => '2030-12-02 16:00:00')
+            ), $periods);
+        });
+    }
+
+    /**
      * @testdox A rejected event reservation can be requested again
      */
     public function testRejectedEventReservationCanBeRequestedAgain(): void
