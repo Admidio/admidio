@@ -42,6 +42,12 @@ try {
     // Apply the same module access restriction as the inventory page before reading any items.
     InventoryPresenter::checkModuleAccess();
     $anonymizeUserNames = !$gValidLogin && $gSettingsManager->getBool('inventory_anonymize_user_names_for_guests');
+    if ($anonymizeUserNames) {
+        // Do not let crafted data-table requests reveal keeper or borrower identities through
+        // matching result counts or result ordering.
+        $filterKeeper = 0;
+        $filterLastReceiver = '';
+    }
 
     // read item fields to construct column order mapping (same as prepareData())
     $itemsData = new Admidio\Inventory\ValueObjects\ItemsData($gDb, $gCurrentOrgId);
@@ -159,6 +165,9 @@ try {
         $orderColumns[$idx] = '';
         // use case-insensitive matching for special column names
         $colUpper = strtoupper((string)$colName);
+        if ($anonymizeUserNames && in_array($colUpper, array('KEEPER', 'LAST_RECEIVER'), true)) {
+            continue;
+        }
         switch ($colUpper) {
             case 'SELECT':
             case 'PHOTO':
