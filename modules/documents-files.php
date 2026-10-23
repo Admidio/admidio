@@ -23,6 +23,7 @@
  *     permissions_save - Save the data of the permissions form
  *     add              - Add unmanaged file or folder to database
  *     download         - Download a file
+ *     tree             - Return the visible subfolders of a folder as JSON for the folder tree
  * folder_uuid        : UUID of the folder that should be shown, edited or saved
  * file_uuid          : UUID of the file that should be edited
  * name               : Name of un unmanaged file or folder that should be added to the database
@@ -59,7 +60,8 @@ try {
                 'permissions',
                 'permissions_save',
                 'add',
-                'download')
+                'download',
+                'tree')
         )
     );
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
@@ -72,7 +74,7 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    if ($getMode != 'list' && $getMode != 'download') {
+    if (!in_array($getMode, array('list', 'download', 'tree'))) {
         if ($getFileUUID !== '') {
             // when file UUID is set then read the folder of that file from database and check the rights
             $file = new File($gDb);
@@ -240,6 +242,15 @@ try {
             // => EXIT
             break;
 
+        case 'tree':
+            // the user must be allowed to see the folder, otherwise an exception is thrown
+            $folder = new Folder($gDb);
+            $folder->getFolderForDownload($getFolderUUID);
+
+            $documentsService = new DocumentsService($gDb, $folder->getValue('fol_uuid'));
+            echo json_encode(array('status' => 'success', 'folders' => $documentsService->findFolderTreeNodes()));
+            break;
+
         case 'download':
             $getView = admFuncVariableIsValid($_GET, 'view', 'bool', array('defaultValue' => false));
 
@@ -260,6 +271,6 @@ try {
     if ($e->getMessage() === 'LOGIN') {
         require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {
-        handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save')));
+        handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save', 'tree')));
     }
 }
