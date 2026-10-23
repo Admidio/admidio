@@ -842,6 +842,18 @@ label {
     background: var(--bs-primary);
 }
 
+@media (max-width: 767.98px) {
+    #adm_plugins_accordion .dropdown-menu {
+        min-width: 0;
+        width: min(24rem, calc(100vw - 2rem));
+    }
+
+    #adm_plugins_accordion .dropdown-item {
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+}
+
 .popover {
     --bs-popover-bg: var(--bs-body-bg);
     --bs-popover-header-bg: var(--bs-secondary);

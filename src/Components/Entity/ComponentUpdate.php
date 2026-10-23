@@ -2,6 +2,7 @@
 namespace Admidio\Components\Entity;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\InstallationUpdate\Service\UpdateStepsCode;
 use Admidio\Infrastructure\Database;
 use SimpleXMLElement;
@@ -85,7 +86,8 @@ class ComponentUpdate extends Component
 
             throw new UnexpectedValueException($message);
         } elseif ($this->getValue('com_type') === 'PLUGIN') {
-            $updateFile = ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $this->getValue('com_name_intern') . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
+            $updateFile = PluginRegistry::getPluginsPath() . '/' . $this->getValue('com_name_intern')
+                . '/db_scripts/update_'.$mainVersion.'_'.$minorVersion.'.xml';
 
             if (is_file($updateFile)) {
                 try {
@@ -288,7 +290,7 @@ class ComponentUpdate extends Component
 
         // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
         // otherwise set the status to incomplete update
-        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
+        if (version_compare($this->getValue('com_version'), '4.2.0', '>=')) {
             $this->setValue('com_update_completed', false);
             $this->save();
         }
@@ -368,20 +370,28 @@ class ComponentUpdate extends Component
     {
         global $gLogger;
 
-        if (empty($this->getValue('com_version'))) {
+        $installedVersion = $this->getValue('com_version');
+        if (empty($installedVersion)) {
             $currentVersionArray = array(0, 0, 0);
         } else {
-            $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
+            $currentVersionArray = self::getVersionArrayFromVersion($installedVersion);
         }
-        $targetVersionArray  = self::getVersionArrayFromVersion($targetVersion);
-        $initialMinorVersion = $currentVersionArray[1];
+        $installedMigrationVersion = $currentVersionArray[0] . '.' . $currentVersionArray[1] . '.0';
+        $targetVersionArray = self::getVersionArrayFromVersion($targetVersion);
+        $activeMigrationVersion = $this->getValue('com_update_version');
 
-        // if the update is from a version lower than 4.2.0 than the field com_update_complete doesn't exist
-        // otherwise set the status to incomplete update
-        if(version_compare($this->getValue('com_update_version'), '4.2.0', '>')) {
-            $this->setValue('com_update_completed', false);
-            $this->save();
+        if ($activeMigrationVersion === '') {
+            // Re-run the migration of the installed minor version. This allows patch releases
+            // to add further steps to their existing update file.
+            $initialMinorVersion = $currentVersionArray[1];
+        } else {
+            // The checkpoint belongs to this migration, not necessarily to com_version.
+            $activeMigrationVersionArray = self::getVersionArrayFromVersion($activeMigrationVersion);
+            $currentVersionArray = $activeMigrationVersionArray;
+            $initialMinorVersion = $activeMigrationVersionArray[1];
         }
+        $this->setValue('com_update_completed', false);
+        $this->save();
 
         for ($mainVersion = $currentVersionArray[0]; $mainVersion <= $targetVersionArray[0]; ++$mainVersion) {
             // Set max subversion for iteration. If we are in the loop of the target main version
@@ -392,15 +402,18 @@ class ComponentUpdate extends Component
             }
 
             for ($minorVersion = $initialMinorVersion; $minorVersion <= $maxMinorVersion; ++$minorVersion) {
-                // if version is not equal to current version then start update step with 0
-                if ($mainVersion !== $currentVersionArray[0] || $minorVersion !== $currentVersionArray[1]) {
-                    $this->setValue('com_update_step', 0);
+                $migrationVersion = $mainVersion . '.' . $minorVersion . '.0';
+
+                // The checkpoint belongs to the active migration. A completed update keeps the
+                // checkpoint of its installed minor version so later patch releases can add steps.
+                if ($activeMigrationVersion !== $migrationVersion) {
+                    if ($activeMigrationVersion !== '' || $migrationVersion !== $installedMigrationVersion) {
+                        $this->setValue('com_update_step', 0);
+                    }
+                    $this->setValue('com_update_version', $migrationVersion);
                     $this->save();
                 }
-
-                // save current version to system component
-                $this->setValue('com_version', $mainVersion . '.' . $minorVersion . '.0');
-                $this->save();
+                $activeMigrationVersion = $migrationVersion;
 
                 // output of the version number for better debugging
                 $gLogger->notice('UPDATE: Start executing update steps to version ' . $mainVersion . '.' . $minorVersion);
@@ -418,7 +431,7 @@ class ComponentUpdate extends Component
                             if ($namespace === '') {
                                 $namespace = 'Admidio\\InstallationUpdate\\Service\\';
                             }
-                            $this->executeStep($updateStep, $mainVersion . '.' . $minorVersion . '.0', $namespace);
+                            $this->executeStep($updateStep, $migrationVersion, $namespace);
                         } else {
                             $gLogger->info('UPDATE: Skip update step Nr: ' . (int)$updateStep['id']);
                         }
@@ -430,17 +443,24 @@ class ComponentUpdate extends Component
                 }
 
                 $gLogger->notice('UPDATE: Finish executing update steps to version '.$mainVersion.'.'.$minorVersion);
+
+                // The current minor version may represent a patch update. Keep its exact patch
+                // version until the complete update reaches its target version.
+                if ($migrationVersion !== $installedMigrationVersion) {
+                    $this->setValue('com_version', $migrationVersion);
+                    $this->save();
+                }
             }
 
             // reset subversion because we want to start update for next main version with subversion 0
             $initialMinorVersion = 0;
         }
 
-        // save current version of plugin
-        $sql = 'UPDATE '.TBL_COMPONENTS.'
-                           SET com_version = ? -- $targetVersion
-                         WHERE com_id = ? -- :com_id';
-        $this->db->queryPrepared($sql, array($targetVersion, $this->getValue('com_id')));
+        // save the exact target version, including its patch version
+        $this->setValue('com_version', $targetVersion);
+        $this->setValue('com_update_version', '', false);
+        $this->setValue('com_update_completed', true);
+        $this->save();
 
     }
 }

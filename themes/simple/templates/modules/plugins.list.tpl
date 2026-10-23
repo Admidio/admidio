@@ -70,13 +70,18 @@
                                 {/foreach}
                             </td>
                             <td>{$pluginEntry.version}</td>
-                            <td data-bs-toggle="tooltip"
+                            <td>
                                 {if $pluginEntry.versionState === 'update'}
-                                    style="color: var(--bs-warning);" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                    <i class="bi bi-exclamation-triangle-fill me-1 text-warning"
+                                       role="img" aria-label="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                       data-bs-toggle="tooltip" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"></i>
                                 {elseif $pluginEntry.versionState === 'current'}
-                                    style="color: var(--bs-success);" title="{$l10n->get('SYS_UP_TO_DATE')}"
+                                    <i class="bi bi-check-circle-fill me-1 text-success"
+                                       role="img" aria-label="{$l10n->get('SYS_UP_TO_DATE')}"
+                                       data-bs-toggle="tooltip" title="{$l10n->get('SYS_UP_TO_DATE')}"></i>
                                 {/if}
-                                >{if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}</td>
+                                {if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}
+                            </td>
                             <td class="text-end">
                                 {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
@@ -111,10 +116,10 @@
                             {/if}
                             {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
                             <div class="dropdown float-end d-flex">
-                                <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="admidio-icon-link" href="#" role="button" id="adm_dropdown_menu_button_{$pluginEntry.id}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{$l10n->get('SYS_MORE')}">
                                     <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
                                 {if count($pluginEntry.actions) > 0}
-                                    <ul class="dropdown-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
+                                    <ul class="dropdown-menu dropdown-menu-end adm-plugin-actions-menu" aria-labelledby="adm_dropdown_menu_button_{$pluginEntry.id}">
                                         {foreach $pluginEntry.actions as $actionItem}
                                             <li>
                                                 <a {if isset($actionItem.popup)} class="dropdown-item openPopup" href="javascript:void(0);"
@@ -150,9 +155,15 @@
                                 {if $pluginEntry.versionState === 'not_installed'}
                                     <p>&ndash;</p>
                                 {elseif $pluginEntry.versionState === 'update'}
-                                    <p><span style="color: var(--bs-warning);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</span></p>
+                                    <p><i class="bi bi-exclamation-triangle-fill me-1 text-warning"
+                                          role="img" aria-label="{$l10n->get('SYS_UPDATE_AVAILABLE')}"
+                                          data-bs-toggle="tooltip" title="{$l10n->get('SYS_UPDATE_AVAILABLE')}"></i>
+                                        {$pluginEntry.installedVersion} ({$l10n->get('SYS_UPDATE_AVAILABLE')})</p>
                                 {elseif $pluginEntry.versionState === 'current'}
-                                    <p><span style="color: var(--bs-success);">{$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</span></p>
+                                    <p><i class="bi bi-check-circle-fill me-1 text-success"
+                                          role="img" aria-label="{$l10n->get('SYS_UP_TO_DATE')}"
+                                          data-bs-toggle="tooltip" title="{$l10n->get('SYS_UP_TO_DATE')}"></i>
+                                        {$pluginEntry.installedVersion} ({$l10n->get('SYS_UP_TO_DATE')})</p>
                                 {else}
                                     <p>{$pluginEntry.installedVersion}</p>
                                 {/if}
