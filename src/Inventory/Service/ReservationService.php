@@ -244,14 +244,17 @@ class ReservationService
         $this->assertValidPeriod($begin, $end);
         $this->getItemInCurrentOrganization($itemId);
 
-        $conflicts = (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
+        // This must be a locking read. The item lock serializes requests, and this current read
+        // then sees an approved reservation that a preceding transaction committed while this
+        // request was waiting for that lock (not a stale REPEATABLE READ snapshot).
+        $conflict = $this->database->queryPrepared(
+            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
               WHERE ivr_ini_id = ? AND ivr_status = ? AND ivr_id <> ?
-                AND ivr_begin < ? AND ivr_end > ?',
+                AND ivr_begin < ? AND ivr_end > ? FOR UPDATE',
             array($itemId, Reservation::STATUS_APPROVED, $ignoreReservationId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s'))
         )->fetchColumn();
 
-        return $conflicts === 0;
+        return $conflict === false;
     }
 
     /**
@@ -337,12 +340,12 @@ class ReservationService
 
     private function isAvailableForEvent(int $itemId, DateTimeInterface $begin, DateTimeInterface $end, int $eventId): bool
     {
-        return (int)$this->database->queryPrepared(
-            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
+        return $this->database->queryPrepared(
+            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
               WHERE ivr_ini_id = ? AND ivr_status = ? AND (ivr_dat_id IS NULL OR ivr_dat_id <> ?)
-                AND ivr_begin < ? AND ivr_end > ?',
+                AND ivr_begin < ? AND ivr_end > ? FOR UPDATE',
             array($itemId, Reservation::STATUS_APPROVED, $eventId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s'))
-        )->fetchColumn() === 0;
+        )->fetchColumn() === false;
     }
 
     private function assertValidPeriod(DateTimeInterface $begin, DateTimeInterface $end): void
