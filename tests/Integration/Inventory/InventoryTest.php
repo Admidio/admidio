@@ -747,6 +747,67 @@ class InventoryTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox Open reservations block retiring and deleting an item
+     */
+    public function testDeletingAnItemWithReservationsPreservesItsData(): void
+    {
+        $admin = $this->makeInventoryUser('invdeletereserveditem', true);
+
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'members');
+            $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($itemsData, array(
+                'ITEMNAME' => 'Reserved lamp',
+                'LAST_RECEIVER' => 'Carol',
+                'BORROW_DATE' => '2030-05-01'
+            ));
+            $reservationService = new ReservationService($this->getDatabase());
+            $reservation = $reservationService->request(
+                $itemId,
+                new DateTimeImmutable('2030-06-01 10:00:00'),
+                new DateTimeImmutable('2030-06-01 12:00:00')
+            );
+
+            try {
+                $itemsData->deleteItem();
+                $this->fail('An item with an open reservation must not be deleted.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_ITEM_HAS_OPEN_RESERVATIONS', $exception->getTranslationId());
+            }
+            try {
+                $itemsData->retireItem();
+                $this->fail('An item with an open reservation must not be retired.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_ITEM_HAS_OPEN_RESERVATIONS', $exception->getTranslationId());
+            }
+
+            $this->assertFalse($itemsData->isDeletedItem());
+            $this->assertSame(1, (int)$this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
+                array($itemId)
+            )->fetchColumn());
+            $this->assertGreaterThan(0, (int)$this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?',
+                array($itemId)
+            )->fetchColumn());
+            $this->assertSame(1, (int)$this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?',
+                array($itemId)
+            )->fetchColumn());
+
+            $reservationService->changeStatus($reservation, Reservation::STATUS_CANCELLED);
+            $itemsData->deleteItem();
+
+            $this->assertTrue($itemsData->isDeletedItem());
+            $this->assertSame(0, (int)$this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                array($itemId)
+            )->fetchColumn());
+        });
+    }
+
+    /**
      * Test that the inventory right is required
      *
      * @testdox A user without the inventory right may neither create nor edit an item

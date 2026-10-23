@@ -995,6 +995,7 @@
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ITALIC">Italic</string>
   <string name="SYS_ITEM_ALREADY_BORROWED">This item cannot be borrowed because it is already borrowed.</string>
+  <string name="SYS_ITEM_HAS_OPEN_RESERVATIONS">This item cannot be deleted or retired while open reservations exist.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE">The item is not available for the selected period.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">The item &quot;#VAR1#&quot; is not available for the selected period.</string>
   <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Item reservation status per event</string>
