@@ -753,6 +753,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You do not have permission to view the selected folder.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while renaming the folder #VAR1#.</string>
+  <string name="SYS_FOLDER_TREE">Folder tree</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">The folder #VAR1_BOLD# could not be created with the required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# to check the permissions (use FTP to set the permissions to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>

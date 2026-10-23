@@ -527,6 +527,16 @@ class DocumentsPresenter extends PagePresenter
 
         }
 
+        // The folder tree is built in the browser, so all folders from the root to the current folder are only
+        // needed to expand the tree to the current folder.
+        $treePath = array($currentFolder->getValue('fol_uuid'));
+        $parentFolderId = (int)$currentFolder->getValue('fol_fol_id_parent');
+        while ($parentFolderId > 0) {
+            $parentFolder = new Folder($gDb, $parentFolderId);
+            array_unshift($treePath, $parentFolder->getValue('fol_uuid'));
+            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
+        }
+
         $data = $documentService->findAll();
         $templateData = array();
         $infoAlert = '';
@@ -671,6 +681,10 @@ class DocumentsPresenter extends PagePresenter
         $dataTables->createJavascript(count($templateData), 6);
 
         $this->smarty->assign('infoAlert', $infoAlert);
+        $this->smarty->assign('treeUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'tree')));
+        $this->smarty->assign('treeRootUuid', $treePath[0]);
+        $this->smarty->assign('treeCurrentUuid', $currentFolder->getValue('fol_uuid'));
+        $this->smarty->assign('treePath', json_encode($treePath));
         $this->smarty->assign('list', $templateData);
         $this->smarty->assign('unregisteredList', $templateUnregisteredData);
         $this->smarty->assign('l10n', $gL10n);
