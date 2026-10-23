@@ -62,6 +62,17 @@ class DocumentsPresenter extends PagePresenter
     }
 
     /**
+     * Add the javascript file of the folder tree to the page. The modification time of the file is part of the
+     * URL, so a browser that has an older version of the file in its cache loads the new version.
+     * @return void
+     */
+    private function addFolderTreeJavascript(): void
+    {
+        $filePath = ADMIDIO_PATH . FOLDER_SYSTEM . '/js/folder-tree.js';
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/folder-tree.js?v=' . filemtime($filePath));
+    }
+
+    /**
      * Create form to edit the current folder or create a new folder.
      * @param string $fileUUID UUID of the file that should be renamed
      * @throws Exception
@@ -135,58 +146,128 @@ class DocumentsPresenter extends PagePresenter
     }
 
     /**
-     * Create form to move a folder or file to a new folder.
-     * @param string $fileUUID UUID of the file that should be moved. If a folder should be moved, this parameter is empty.
+     * Create form to move a folder or file to a new folder. A file can also be copied. Everybody who may see the
+     * file can copy it, but moving needs the right to upload files to the folder of the file. If the user may only
+     * copy, the form is only a copy form, otherwise the user can switch between moving and copying.
+     * @param string $fileUUID UUID of the file that should be moved or copied. If a folder should be moved, this parameter is empty.
+     * @param bool $copy Set to **true** if the form should start with the action to copy the file.
      * @throws Exception
      */
-    public function createFolderFileMoveForm(string $fileUUID = ''): void
+    public function createFolderFileMoveForm(string $fileUUID = '', bool $copy = false): void
     {
         global $gL10n, $gCurrentSession, $gDb;
 
         $this->setHtmlID('adm_documents_files_move_folder_file');
         $this->setHeadline($gL10n->get('SYS_EDIT_FOLDER'));
 
-        // check the rights of the current folder
-        // user must be administrator or must have the right to upload files
-        $targetFolder = new Folder($gDb);
-        $targetFolder->getFolderForDownload($this->folderUUID);
+        // The folder where the file or folder is now. The user must be allowed to see it, to move something out of
+        // it the user must be administrator or must have the right to upload files.
+        $sourceFolder = new Folder($gDb);
+        $sourceFolder->getFolderForDownload($this->folderUUID);
+        $isFile = $fileUUID !== '';
+        $canMove = $sourceFolder->hasUploadRight();
 
-        if (!$targetFolder->hasUploadRight()) {
+        if (!$isFile) {
+            // only files can be copied
+            $copy = false;
+        } elseif (!$canMove) {
+            $copy = true;
+        }
+        if (!$canMove && !$copy) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
         // set headline and description
-        if ($fileUUID !== '') {
+        if ($isFile) {
             $file = new File($gDb);
             $file->readDataByUuid($fileUUID);
-            $this->setHeadline($gL10n->get('SYS_MOVE_FILE'));
-            $this->assignSmartyVariable('description', $gL10n->get('SYS_MOVE_FILE_DESC', array($file->getValue('fil_name'))));
+            $headlines = array(
+                'move' => $gL10n->get('SYS_MOVE_FILE'),
+                'copy' => $gL10n->get('SYS_COPY_FILE')
+            );
+            $descriptions = array(
+                'move' => $gL10n->get('SYS_MOVE_FILE_DESC', array($file->getValue('fil_name'))),
+                'copy' => $gL10n->get('SYS_COPY_FILE_DESC', array($file->getValue('fil_name')))
+            );
         } else {
-            $folder = new Folder($gDb);
-            $folder->readDataByUuid($this->folderUUID);
-            $this->setHeadline($gL10n->get('SYS_MOVE_FOLDER'));
-            $this->assignSmartyVariable('description', $gL10n->get('SYS_MOVE_FOLDER_DESC', array($folder->getValue('fol_name'))));
+            $headlines = array('move' => $gL10n->get('SYS_MOVE_FOLDER'), 'copy' => '');
+            $descriptions = array('move' => $gL10n->get('SYS_MOVE_FOLDER_DESC', array($sourceFolder->getValue('fol_name'))), 'copy' => '');
+        }
+        $action = 'move';
+        if ($copy) {
+            $action = 'copy';
+        }
+        $this->setHeadline($headlines[$action]);
+        $this->assignSmartyVariable('description', $descriptions[$action]);
+        $this->assignSmartyVariable('headlines', $headlines);
+        $this->assignSmartyVariable('descriptions', $descriptions);
+        $this->assignSmartyVariable('canSwitch', $isFile && $canMove);
+        $this->assignSmartyVariable('startCopy', $copy);
+
+        // The folder where the file or folder is now, it can't be the destination of a move. A moved folder and all
+        // its subfolders can't be the destination either.
+        if ($isFile) {
+            $currentFolder = $sourceFolder;
+            $excludedFolderUUID = '';
+        } else {
+            $currentFolder = new Folder($gDb, (int)$sourceFolder->getValue('fol_fol_id_parent'));
+            $excludedFolderUUID = $this->folderUUID;
         }
 
-        $documentsService = new DocumentsService($gDb, $this->folderUUID);
-        $folders = $documentsService->getUploadableFolderStructure();
+        // the folders from the root to the current folder are expanded in the tree
+        $treePath = array($currentFolder->getValue('fol_uuid'));
+        $parentFolderId = (int)$currentFolder->getValue('fol_fol_id_parent');
+        while ($parentFolderId > 0) {
+            $parentFolder = new Folder($gDb, $parentFolderId);
+            array_unshift($treePath, $parentFolder->getValue('fol_uuid'));
+            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
+        }
+        $rootFolder = new Folder($gDb);
+        $rootFolder->readDataByUuid($treePath[0]);
 
-        // create html form
+        $this->addFolderTreeJavascript();
+        $this->assignSmartyVariable('treeUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'tree')));
+        $this->assignSmartyVariable('treeRootUuid', $treePath[0]);
+        $this->assignSmartyVariable('treeRootUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php'));
+        $this->assignSmartyVariable('treeRootCanUpload', $rootFolder->hasUploadRight());
+        $this->assignSmartyVariable('treeCurrentUuid', $currentFolder->getValue('fol_uuid'));
+        $this->assignSmartyVariable('treeExcludedUuid', $excludedFolderUUID);
+        $this->assignSmartyVariable('treePath', json_encode($treePath));
+
+        $formUrls = array();
+        foreach (array('move', 'copy') as $formAction) {
+            $formUrls[$formAction] = SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
+                array('mode' => $formAction . '_save', 'folder_uuid' => $this->folderUUID, 'file_uuid' => $fileUUID)
+            );
+        }
+        $this->assignSmartyVariable('formUrls', $formUrls);
+        $this->assignSmartyVariable('copyCheckUrl', SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
+            array('mode' => 'copy_check', 'file_uuid' => $fileUUID)
+        ));
+
+        // create html form, the destination folder is selected in the tree and saved in a hidden field. The form
+        // does not set the focus to its first field, that would be a button of the tree.
         $form = new FormPresenter(
             'adm_documents_files_move_file',
             'modules/documents-files.move.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move_save', 'folder_uuid' => $this->folderUUID, 'file_uuid' => $fileUUID)),
-            $this
+            $formUrls[$action],
+            $this,
+            array('setFocus' => false)
         );
-        $form->addSelectBox(
+        $form->addInput(
             'adm_destination_folder_uuid',
             $gL10n->get('SYS_MOVE_TO'),
-            $folders,
-            array(
-                'property' => FormPresenter::FIELD_REQUIRED,
-                'defaultValue' => $this->folderUUID,
-                'showContextDependentFirstEntry' => false
-            )
+            '',
+            array('property' => FormPresenter::FIELD_HIDDEN)
+        );
+        // is set to 1 when the user accepts that the copy gets a new name because the name is already used
+        $form->addInput(
+            'adm_accept_new_name',
+            '',
+            '0',
+            array('property' => FormPresenter::FIELD_HIDDEN)
         );
         $form->addSubmitButton(
             'adm_btn_move',
@@ -466,7 +547,7 @@ class DocumentsPresenter extends PagePresenter
      */
     public function createList(): void
     {
-        global $gCurrentUser, $gCurrentSession, $gL10n, $gDb, $gSettingsManager;
+        global $gCurrentUser, $gCurrentSession, $gL10n, $gDb, $gSettingsManager, $gValidLogin;
 
         // get recordset of current folder from database
         $currentFolder = new Folder($gDb);
@@ -474,6 +555,7 @@ class DocumentsPresenter extends PagePresenter
 
 
         $this->setHtmlID('adm_documents_files');
+        $this->addFolderTreeJavascript();
         // set headline of the script
         if ($currentFolder->getValue('fol_fol_id_parent') == null) {
             $this->setHeadline($gL10n->get('SYS_DOCUMENTS_FILES'));
@@ -525,6 +607,16 @@ class DocumentsPresenter extends PagePresenter
             }
             ChangelogService::displayHistoryButton($this, 'folder', 'folders,files,roles_rights_data', !empty($getAnnUuid), array('uuid' => $this->folderUUID));
 
+        }
+
+        // The folder tree is built in the browser, so all folders from the root to the current folder are only
+        // needed to expand the tree to the current folder.
+        $treePath = array($currentFolder->getValue('fol_uuid'));
+        $parentFolderId = (int)$currentFolder->getValue('fol_fol_id_parent');
+        while ($parentFolderId > 0) {
+            $parentFolder = new Folder($gDb, $parentFolderId);
+            array_unshift($treePath, $parentFolder->getValue('fol_uuid'));
+            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
         }
 
         $data = $documentService->findAll();
@@ -599,6 +691,16 @@ class DocumentsPresenter extends PagePresenter
                     'class' => 'admidio-share-link'
                 );
 
+                // Everybody who may see the file can copy it into a folder where the user may upload. Users who may
+                // also move the file use the action to move the file, its dialog can copy as well.
+                if ($gValidLogin && $row['existsInFileSystem'] && !$this->folder->hasUploadRight()) {
+                    $templateRow['actions'][] = array(
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'copy', 'file_uuid' => $row['uuid'])),
+                        'icon' => 'bi bi-copy',
+                        'tooltip' => $gL10n->get('SYS_COPY_FILE')
+                    );
+                }
+
                 if ($this->folder->hasUploadRight()) {
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(
@@ -613,7 +715,7 @@ class DocumentsPresenter extends PagePresenter
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'file_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-folder-symlink',
-                            'tooltip' => $gL10n->get('SYS_MOVE_FILE')
+                            'tooltip' => $gL10n->get('SYS_MOVE_OR_COPY_FILE')
                         );
                     }
                     $templateRow['actions'][] = array(
@@ -671,6 +773,10 @@ class DocumentsPresenter extends PagePresenter
         $dataTables->createJavascript(count($templateData), 6);
 
         $this->smarty->assign('infoAlert', $infoAlert);
+        $this->smarty->assign('treeUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'tree')));
+        $this->smarty->assign('treeRootUuid', $treePath[0]);
+        $this->smarty->assign('treeCurrentUuid', $currentFolder->getValue('fol_uuid'));
+        $this->smarty->assign('treePath', json_encode($treePath));
         $this->smarty->assign('list', $templateData);
         $this->smarty->assign('unregisteredList', $templateUnregisteredData);
         $this->smarty->assign('l10n', $gL10n);

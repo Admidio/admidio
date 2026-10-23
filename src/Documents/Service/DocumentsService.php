@@ -7,6 +7,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\Entity\RolesRights;
 use DateTime;
@@ -274,6 +275,52 @@ class DocumentsService
         }
 
         return $data;
+    }
+
+    /**
+     * Read the subfolders of the current folder that the current user is allowed to see. The result is used
+     * for the nodes of the folder tree. Each node knows whether it has visible subfolders itself, so the
+     * tree can show an expand button without loading the whole structure at once.
+     * @return array<int,array{uuid: string, name: string, url: string, hasChildren: bool, canUpload: bool}> Returns an array with an array for each visible subfolder.
+     * @throws Exception
+     */
+    public function findFolderTreeNodes(): array
+    {
+        $nodes = array();
+
+        foreach ($this->folder->getSubfoldersWithProperties() as $subfolder) {
+            $folder = new Folder($this->db, (int)$subfolder['fol_id']);
+
+            $nodes[] = array(
+                'uuid' => $subfolder['fol_uuid'],
+                'name' => html_entity_decode($subfolder['fol_name'], ENT_QUOTES, 'UTF-8'),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('folder_uuid' => $subfolder['fol_uuid'])),
+                'hasChildren' => count($folder->getSubfoldersWithProperties()) > 0,
+                'canUpload' => $folder->hasUploadRight()
+            );
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Returns the UUIDs of the folders from the root folder to the current folder, including the current folder.
+     * The folder tree opens these folders to show the current folder.
+     * @return array<int,string> Returns the folder UUIDs, the first is the root folder.
+     * @throws Exception
+     */
+    public function findFolderPath(): array
+    {
+        $path = array($this->folder->getValue('fol_uuid'));
+        $parentFolderId = (int)$this->folder->getValue('fol_fol_id_parent');
+
+        while ($parentFolderId > 0) {
+            $parentFolder = new Folder($this->db, $parentFolderId);
+            array_unshift($path, $parentFolder->getValue('fol_uuid'));
+            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
+        }
+
+        return $path;
     }
 
     /**

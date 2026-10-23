@@ -663,9 +663,11 @@ class Folder extends Entity
 
     /**
      * Move this folder to the folder that is set with the parameter $destFolderUUID. The method
-     * will check if the user has the right to upload files to that folder and then move the folder
-     * within the file system and the database structure. The role rights for viewing and uploading will then be
-     * adopted recursively from the destination folder.
+     * will check if the user has the right to upload files to that folder, that the destination is neither this
+     * folder nor one of its subfolders and not the current parent folder and that no folder with the same name
+     * exists there, and then move the folder within the file system and the database structure. Otherwise, an
+     * Exception is thrown. The role rights for viewing and uploading will then be adopted recursively from the
+     * destination folder.
      * @param string $destFolderUUID UUID of the destination folder to which this folder is to be moved.
      * @return void
      * @throws Exception
@@ -678,27 +680,47 @@ class Folder extends Entity
         $folder = new Folder($this->db);
         $folder->readDataByUuid($destFolderUUID);
 
-        if ($folder->hasUploadRight()) {
-            FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath() . '/' . $this->getValue('fol_name'));
-
-            $this->db->startTransaction();
-            // save the new parent folder
-            $this->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
-            $this->setValue('fol_path', $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
-            $this->setValue('fol_public', $folder->getValue('fol_public'));
-            $this->setValue('fol_locked', $folder->getValue('fol_locked'));
-            $this->save();
-
-            // set the new path to all subfolders
-            $this->rename($this->getValue('fol_name'), $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
-
-            // adopt the role rights of the new parent folder
-            $this->removeRolesOnFolder('folder_view', $this->getViewRolesIds());
-            $this->removeRolesOnFolder('folder_upload', $this->getUploadRolesIds());
-            $this->addRolesOnFolder('folder_view', $folder->getViewRolesIds());
-            $this->addRolesOnFolder('folder_upload', $folder->getUploadRolesIds());
-            $this->db->endTransaction();
+        if (!$folder->hasUploadRight()) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
+
+        // a folder can't be moved into itself or one of its subfolders
+        $ancestorId = (int)$folder->getValue('fol_id');
+        while ($ancestorId > 0) {
+            if ($ancestorId === (int)$this->getValue('fol_id')) {
+                throw new Exception('SYS_FOLDER_MOVE_INTO_ITSELF');
+            }
+            $ancestor = new Folder($this->db, $ancestorId);
+            $ancestorId = (int)$ancestor->getValue('fol_fol_id_parent');
+        }
+
+        if ((int)$folder->getValue('fol_id') === (int)$this->getValue('fol_fol_id_parent')) {
+            throw new Exception('SYS_MOVE_ALREADY_IN_FOLDER', array($this->getValue('fol_name')));
+        }
+
+        if (is_dir($folder->getFullFolderPath() . '/' . $this->getValue('fol_name'))) {
+            throw new Exception('SYS_FOLDER_EXISTS', array($this->getValue('fol_name')));
+        }
+
+        FileSystemUtils::moveDirectory($this->getFullFolderPath(), $folder->getFullFolderPath() . '/' . $this->getValue('fol_name'));
+
+        $this->db->startTransaction();
+        // save the new parent folder
+        $this->setValue('fol_fol_id_parent', $folder->getValue('fol_id'));
+        $this->setValue('fol_path', $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
+        $this->setValue('fol_public', $folder->getValue('fol_public'));
+        $this->setValue('fol_locked', $folder->getValue('fol_locked'));
+        $this->save();
+
+        // set the new path to all subfolders
+        $this->rename($this->getValue('fol_name'), $folder->getValue('fol_path') . '/' . $folder->getValue('fol_name'));
+
+        // adopt the role rights of the new parent folder
+        $this->removeRolesOnFolder('folder_view', $this->getViewRolesIds());
+        $this->removeRolesOnFolder('folder_upload', $this->getUploadRolesIds());
+        $this->addRolesOnFolder('folder_view', $folder->getViewRolesIds());
+        $this->addRolesOnFolder('folder_upload', $folder->getUploadRolesIds());
+        $this->db->endTransaction();
     }
 
     /**
