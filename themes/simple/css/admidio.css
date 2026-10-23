@@ -345,15 +345,34 @@ input[type="file"].btn-secondary:hover:not(:disabled):not([readonly])::file-sele
 }
 
 .admidio-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 1.75em;
+    height: 1.75em;
     padding: 3px;
+    border-radius: 50%;
+    line-height: 1;
+    vertical-align: middle;
+    text-decoration: none;
     cursor: pointer;
 }
 
+.admidio-icon-link > .bi {
+    margin: 0;
+    line-height: 1;
+}
+
 .admidio-icon-link:hover {
-    padding: 3px;
-    border-radius: 50%;
-    background-color: var(--bs-tertiary);
-    filter: brightness(92%);
+    color: var(--bs-link-color);
+    background-color: currentColor;
+}
+
+.admidio-icon-link:hover > i,
+.admidio-icon-link:hover > svg {
+    color: #fff;
 }
 
 .alert-info {
