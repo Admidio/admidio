@@ -124,8 +124,8 @@ class ReservationService
             $this->refreshReservation($reservation);
             if (!$this->isAvailable(
                 $itemId,
-                new \DateTimeImmutable((string)$reservation->getValue('ivr_begin')),
-                new \DateTimeImmutable((string)$reservation->getValue('ivr_end')),
+                new \DateTimeImmutable((string)$reservation->getValue('ivr_begin', 'database')),
+                new \DateTimeImmutable((string)$reservation->getValue('ivr_end', 'database')),
                 (int)$reservation->getValue('ivr_id')
             )) {
                 throw new Exception('SYS_ITEM_NOT_AVAILABLE');

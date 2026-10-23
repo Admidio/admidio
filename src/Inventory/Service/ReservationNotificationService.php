@@ -127,8 +127,8 @@ class ReservationNotificationService
         $message = $gL10n->get('SYS_RESERVATION_NOTIFICATION_MESSAGE', array(
             $format($status),
             $format($item->readableName()),
-            $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_begin')))->format($dateFormat)),
-            $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_end')))->format($dateFormat)),
+            $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_begin', 'database')))->format($dateFormat)),
+            $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_end', 'database')))->format($dateFormat)),
             $format(trim($requester['firstName'] . ' ' . $requester['lastName']))
         ));
         if (!$html) {

@@ -244,8 +244,8 @@ class EventService
 
         $reservation = (new ReservationService($this->database))->request(
             $itemId,
-            new DateTime((string)$event->getValue('dat_begin')),
-            new DateTime((string)$event->getValue('dat_end')),
+            new DateTime((string)$event->getValue('dat_begin', 'database')),
+            new DateTime((string)$event->getValue('dat_end', 'database')),
             '',
             '',
             (int)$event->getValue('dat_id')

@@ -1570,22 +1570,23 @@ class InventoryTest extends DatabaseTestCase
         $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $GLOBALS['gSettingsManager']->set('system_date', 'd/m/Y');
 
             $itemsData = new ItemsData($this->getDatabase(), self::ORG_ID);
             $itemId = $this->createItem($itemsData, array('ITEMNAME' => 'Repeated event reservation projector'));
             $event = new Event($this->getDatabase());
             $event->setValue('dat_cat_id', $category['cat_id']);
             $event->setValue('dat_headline', 'Event with repeated equipment request');
-            $event->setValue('dat_begin', '2030-08-15 10:00:00');
-            $event->setValue('dat_end', '2030-08-15 12:00:00');
+            $event->setValue('dat_begin', '2030-11-05 10:00:00');
+            $event->setValue('dat_end', '2030-11-05 12:00:00');
             $event->save();
 
             $service = new ReservationService($this->getDatabase());
             $service->syncEventReservations(
                 (int)$event->getValue('dat_id'),
                 array($itemId),
-                new DateTimeImmutable('2030-08-15 10:00:00'),
-                new DateTimeImmutable('2030-08-15 12:00:00')
+                new DateTimeImmutable('2030-11-05 10:00:00'),
+                new DateTimeImmutable('2030-11-05 12:00:00')
             );
 
             $reservationId = (int)$this->getDatabase()->queryPrepared(
@@ -1626,6 +1627,13 @@ class InventoryTest extends DatabaseTestCase
                 array((int)$event->getValue('dat_id'))
             )->fetchAll(\PDO::FETCH_COLUMN);
             $this->assertSame(array(Reservation::STATUS_REJECTED, Reservation::STATUS_REQUESTED), $statuses);
+            $newReservationPeriod = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                  WHERE ivr_dat_id = ? ORDER BY ivr_id DESC LIMIT 1',
+                array((int)$event->getValue('dat_id'))
+            )->fetch();
+            $this->assertSame('2030-11-05 10:00:00', $newReservationPeriod['ivr_begin']);
+            $this->assertSame('2030-11-05 12:00:00', $newReservationPeriod['ivr_end']);
 
             $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '0');
             $previousSession = $GLOBALS['gCurrentSession'];

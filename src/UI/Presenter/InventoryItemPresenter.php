@@ -827,7 +827,7 @@ class InventoryItemPresenter extends PagePresenter
             }
 
             if (!$returning) {
-                $borrowDateValue = (new DateTime($reservation->getValue('ivr_begin')))->format($dateFormat);
+                $borrowDateValue = (new DateTime($reservation->getValue('ivr_begin', 'database')))->format($dateFormat);
                 $returnDateValue = '';
             }
         }
