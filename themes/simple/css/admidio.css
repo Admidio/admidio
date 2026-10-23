@@ -1377,3 +1377,65 @@ div.adm-changelog-details-table {
     color: var(--bs-primary-text-emphasis);
     font-weight: bold;
 }
+
+/* Documents & Files: the tree to select the destination folder of a moved file or folder */
+.admidio-folder-picker {
+    max-height: 50vh;
+    overflow: auto;
+    padding: .4rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-body-bg);
+}
+
+.admidio-folder-picker-summary .bi {
+    color: var(--bs-secondary-color);
+}
+
+.admidio-folder-tree-link.selected {
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary-text-emphasis);
+    font-weight: bold;
+}
+
+.admidio-folder-tree-link[aria-disabled="true"] {
+    color: var(--bs-secondary-color);
+    cursor: not-allowed;
+}
+
+.admidio-folder-tree-link[aria-disabled="true"]:hover {
+    background-color: transparent;
+}
+
+.admidio-folder-tree-hint {
+    margin-left: .5rem;
+    font-size: .875em;
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* the selected action of the switch between moving and copying a file */
+.admidio-move-copy-switch .btn {
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+    --bs-btn-active-color: #fff;
+}
+
+.admidio-move-copy-switch .btn-check:checked + .btn {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+/* the buttons of the switch share the width on small screens, where buttons are as wide as the screen otherwise */
+@media (max-width: 767.98px) {
+    .admidio-move-copy-switch {
+        display: flex;
+    }
+
+    .admidio-move-copy-switch .btn {
+        flex: 1 1 0;
+        width: auto;
+    }
+}
+

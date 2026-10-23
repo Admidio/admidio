@@ -424,8 +424,13 @@
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
+  <string name="SYS_COPY_FILE">Copy file</string>
+  <string name="SYS_COPY_FILE_DESC">Select a folder to which you want to copy the #VAR1_BOLD# file. The copy is available in the target folder with the role permissions of that folder.</string>
+  <string name="SYS_COPY_FILE_NAME_EXISTS">A file with the name #VAR1# already exists in the selected folder.</string>
+  <string name="SYS_COPY_FILE_NEW_NAME">Copy the file with the name #VAR1# instead</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
+  <string name="SYS_COPY_TO">Copy to</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNTER">Counter</string>
   <string name="SYS_COUNTRY">Country</string>
@@ -744,6 +749,7 @@
   <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">The folder #VAR1# already exists.\n\nPlease choose a different folder name.</string>
+  <string name="SYS_FOLDER_MOVE_INTO_ITSELF">A folder cannot be moved into itself or into one of its subfolders.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Folder name is missing!</string>
   <string name="SYS_FOLDER_NAME_INVALID">The selected folder name #VAR1_BOLD# contains invalid characters. Please check the folder name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt; / \</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">The folder #VAR1_BOLD# could not be created.\n\nPlease ask an #VAR2#administrator#VAR3# to check the parent folder\'s write permissions.</string>
@@ -1125,13 +1131,19 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOTHER">Mother</string>
+  <string name="SYS_MOVE">Move</string>
+  <string name="SYS_MOVE_ALREADY_IN_FOLDER">#VAR1_BOLD# is already in the selected folder.</string>
+  <string name="SYS_MOVE_CURRENT_FOLDER">current folder</string>
   <string name="SYS_MOVE_DOWN">Move #VAR1# down</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
+  <string name="SYS_MOVE_LAST_FOLDER">last used</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Move or copy file</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
+  <string name="SYS_MOVE_SELECT_FOLDER">Select the destination folder in the tree.</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Move #VAR1# up</string>
   <string name="SYS_MOVE_VAR">Move #VAR1#</string>
