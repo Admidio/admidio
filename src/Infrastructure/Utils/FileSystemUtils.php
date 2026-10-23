@@ -97,7 +97,6 @@ final class FileSystemUtils
         'opus' => array('icon' => 'bi-file-earmark-music-fill', 'mime-type' => 'audio/opus', 'viewable' => true),
         '7z'   => array('icon' => 'bi-file-earmark-zip-fill', 'mime-type' => 'application/x-7z-compressed', 'viewable' => false),
         'rar'  => array('icon' => 'bi-file-earmark-zip-fill', 'mime-type' => 'application/vnd.rar', 'viewable' => false),
-        'svg'  => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/svg+xml', 'viewable' => false),
         'webp' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/webp', 'viewable' => true),
         'heic' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/heic', 'viewable' => true),
         'heif' => array('icon' => 'bi-file-earmark-image', 'mime-type' => 'image/heif', 'viewable' => true)
@@ -113,7 +112,21 @@ final class FileSystemUtils
     {
         $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
-        return array_key_exists($fileExtension, self::$iconFileExtension);
+        return !self::isBlockedFileExtension($filename)
+            && array_key_exists($fileExtension, self::$iconFileExtension);
+    }
+
+    /**
+     * Check the shared blocklist of file extensions that must not be uploaded.
+     */
+    public static function isBlockedFileExtension(string $filename): bool
+    {
+        $extensionBlocklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
+            'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
+            'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar', 'svg', 'svgz');
+        $fileExtension = strtolower(pathinfo(urldecode($filename), PATHINFO_EXTENSION));
+
+        return in_array($fileExtension, $extensionBlocklist, true);
     }
 
     /**
