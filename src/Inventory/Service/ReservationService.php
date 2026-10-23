@@ -111,6 +111,52 @@ class ReservationService
         });
     }
 
+    /** Create exactly one follow-up request for the latest rejected or cancelled event reservation. */
+    public function requestAgainForEvent(int $itemId, int $eventId, DateTimeInterface $begin, DateTimeInterface $end): Reservation
+    {
+        global $gCurrentUser, $gSettingsManager, $gValidLogin;
+
+        if (!InventoryAccessService::canRequestReservation()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        $this->assertValidPeriod($begin, $end);
+        $this->assertEventInCurrentOrganization($eventId);
+
+        return $this->withinReservationTransaction(function () use ($itemId, $eventId, $begin, $end, $gCurrentUser, $gSettingsManager, $gValidLogin): Reservation {
+            $item = $this->getItemInCurrentOrganization($itemId);
+            if ($item->isRetired()) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $this->lockItemForReservation($itemId);
+            $latestStatus = $this->database->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                  WHERE ivr_dat_id = ? AND ivr_ini_id = ?
+               ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC LIMIT 1 FOR UPDATE',
+                array($eventId, $itemId)
+            )->fetchColumn();
+            if (!in_array($latestStatus, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            if (!$this->isAvailable($itemId, $begin, $end)) {
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+            }
+
+            $reservation = new Reservation($this->database);
+            $reservation->setValue('ivr_ini_id', $itemId);
+            $reservation->setValue('ivr_dat_id', $eventId);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_status', $gSettingsManager->getString('inventory_reservation_approval') === 'automatic'
+                ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->save();
+            (new ReservationNotificationService($this->database))->notifyCreated($reservation);
+            $this->refreshMenuBadge();
+
+            return $reservation;
+        });
+    }
+
     /** Approve a pending request after an availability re-check. */
     public function approve(Reservation $reservation): void
     {

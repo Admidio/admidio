@@ -230,25 +230,11 @@ class EventService
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $latestStatus = $this->database->queryPrepared(
-            'SELECT ivr_status
-               FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_dat_id = ? AND ivr_ini_id = ?
-           ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC
-              LIMIT 1',
-            array((int)$event->getValue('dat_id'), $itemId)
-        )->fetchColumn();
-        if (!in_array($latestStatus, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
-            throw new Exception('SYS_INVALID_PAGE_VIEW');
-        }
-
-        $reservation = (new ReservationService($this->database))->request(
+        $reservation = (new ReservationService($this->database))->requestAgainForEvent(
             $itemId,
+            (int)$event->getValue('dat_id'),
             new DateTime((string)$event->getValue('dat_begin', 'database')),
             new DateTime((string)$event->getValue('dat_end', 'database')),
-            '',
-            '',
-            (int)$event->getValue('dat_id')
         );
 
         $status = (string)$reservation->getValue('ivr_status');
