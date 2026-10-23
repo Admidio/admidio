@@ -118,9 +118,21 @@ class InventoryAccessService
     /** Whether the current user may manage reservations for one specific item. */
     public static function canManageReservationItem(int $itemId): bool
     {
-        global $gCurrentUser;
+        global $gCurrentOrgId, $gCurrentUser, $gDb;
 
         if (!self::canManageReservations()) {
+            return false;
+        }
+
+        // Inventory administrators are administrators only within the active organization.
+        // Do not let a guessed reservation UUID expose guest contact data from another
+        // organization through the reservation mail workflow.
+        $itemOrganizationId = $gDb->queryPrepared(
+            'SELECT ini_org_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
+            array($itemId)
+        )->fetchColumn();
+        if ($itemOrganizationId === false
+            || ((int)$itemOrganizationId > 0 && (int)$itemOrganizationId !== (int)$gCurrentOrgId)) {
             return false;
         }
 

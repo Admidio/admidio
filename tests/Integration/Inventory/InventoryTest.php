@@ -947,6 +947,8 @@ class InventoryTest extends DatabaseTestCase
             $foreignItemId = $this->createForeignOrganizationItem((int)$organization['org_id']);
             $service = new ReservationService($this->getDatabase());
 
+            $this->assertFalse(InventoryAccessService::canManageReservationItem($foreignItemId));
+
             try {
                 $service->isAvailable(
                     $foreignItemId,
