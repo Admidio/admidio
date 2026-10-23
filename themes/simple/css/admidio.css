@@ -824,6 +824,15 @@ label {
     visibility: visible;
 }
 
+#adm_contacts_table tbody tr .admidio-icon-link {
+    color: color-mix(in srgb, var(--bs-body-color) 20%, transparent);
+}
+
+#adm_contacts_table tbody tr:hover .admidio-icon-link,
+#adm_contacts_table tbody tr:focus-within .admidio-icon-link {
+    color: var(--bs-link-color);
+}
+
 .admidio-category-report-scroll {
     width: 100%;
     min-height: 20rem;
