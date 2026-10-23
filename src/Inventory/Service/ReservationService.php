@@ -216,6 +216,36 @@ class ReservationService
         });
     }
 
+    /**
+     * Complete the active reservation for an item returned through the regular inventory flow.
+     *
+     * The regular return form does not carry a reservation UUID. Resolving the borrowed
+     * reservation here keeps the physical loan and reservation lifecycle in one transaction.
+     */
+    public function finishBorrowingForItem(int $itemId): void
+    {
+        $this->getItemInCurrentOrganization($itemId);
+        if (!InventoryAccessService::canManageReservationItem($itemId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->withinReservationTransaction(function () use ($itemId): void {
+            $this->lockItemForReservation($itemId);
+            $reservationId = $this->database->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                  WHERE ivr_ini_id = ? AND ivr_status = ?
+               ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC FOR UPDATE',
+                array($itemId, Reservation::STATUS_BORROWED)
+            )->fetchColumn();
+            if ($reservationId === false) {
+                return;
+            }
+
+            $reservation = new Reservation($this->database, (int)$reservationId);
+            $this->transition($reservation, Reservation::STATUS_RETURNED);
+        });
+    }
+
     /** Allow the signed-in requester to withdraw an open or approved reservation. */
     public function withdraw(Reservation $reservation): void
     {

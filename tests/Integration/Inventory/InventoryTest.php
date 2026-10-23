@@ -1404,8 +1404,11 @@ class InventoryTest extends DatabaseTestCase
             $service->approve($borrowed);
             $service->startBorrowing($borrowed);
             $this->assertSame(Reservation::STATUS_BORROWED, $borrowed->getValue('ivr_status'));
-            $service->finishBorrowing($borrowed);
-            $this->assertSame(Reservation::STATUS_RETURNED, $borrowed->getValue('ivr_status'));
+            $service->finishBorrowingForItem($itemId);
+            $this->assertSame(Reservation::STATUS_RETURNED, (new Reservation(
+                $this->getDatabase(),
+                (int)$borrowed->getValue('ivr_id')
+            ))->getValue('ivr_status'));
 
             $cancelledApproved = $request('2030-11-05 10:00:00');
             $service->approve($cancelledApproved);

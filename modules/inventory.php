@@ -384,6 +384,7 @@ try {
             }
 
             $reservation = null;
+            $itemId = 0;
             if ($getReservationUUID !== '') {
                 $reservation = new Reservation($gDb);
                 $item = new \Admidio\Inventory\Entity\Item($gDb);
@@ -398,11 +399,18 @@ try {
                     || $reservation->getValue('ivr_status') !== $expectedReservationStatus) {
                     throw new Exception('SYS_NO_RIGHTS');
                 }
+                $itemId = (int)$item->getValue('ini_id');
+            } elseif ($getBorrowed && $getiniUUID !== '') {
+                $item = new \Admidio\Inventory\Entity\Item($gDb);
+                if (!$item->readDataByUuid($getiniUUID)) {
+                    throw new Exception('SYS_INVALID_PAGE_VIEW');
+                }
+                $itemId = (int)$item->getValue('ini_id');
             }
 
             $gDb->startTransaction();
             try {
-                $reservationService = $reservation instanceof Reservation ? new ReservationService($gDb) : null;
+                $reservationService = ($reservation instanceof Reservation || $itemId > 0) ? new ReservationService($gDb) : null;
                 if ($reservationService !== null && !$getBorrowed) {
                     $reservationService->assertCanStartBorrowing($reservation);
                 }
@@ -419,7 +427,11 @@ try {
 
                 if ($reservationService !== null) {
                     if ($getBorrowed) {
-                        $reservationService->finishBorrowing($reservation);
+                        if ($reservation instanceof Reservation) {
+                            $reservationService->finishBorrowing($reservation);
+                        } else {
+                            $reservationService->finishBorrowingForItem($itemId);
+                        }
                     } else {
                         $reservationService->startBorrowing($reservation, false);
                     }
