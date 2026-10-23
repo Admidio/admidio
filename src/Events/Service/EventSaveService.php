@@ -271,6 +271,12 @@ class EventSaveService
             $reservationItemIds = array($reservationItemIds);
         }
         $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int)$itemId > 0);
+        // Editors without reservation-request permission do not receive the item controls. Keep
+        // the existing event reservations in that case, so changing an event period cannot leave
+        // their periods behind.
+        if (!array_key_exists('event_inventory_items', $formValues) && (int)$event->getValue('dat_id') > 0) {
+            $reservationItemIds = $this->getOpenEventReservationItemIds((int)$event->getValue('dat_id'));
+        }
         if (count($reservationItemIds) > 0 && $startDateTime >= $roomCheckEndDateTime) {
             throw new Exception('SYS_RESERVATION_REQUIRES_TIME_PERIOD');
         }
@@ -354,8 +360,9 @@ class EventSaveService
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);
         $reservationService = new ReservationService($gDb);
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
-            && InventoryAccessService::canRequestReservation()) {
+            && (($gSettingsManager->getBool('inventory_reservations_events_enabled')
+                    && InventoryAccessService::canRequestReservation())
+                || count($reservationItemIds) > 0)) {
             $reservationService->syncEventReservations((int)$event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
         }
 
@@ -577,6 +584,22 @@ class EventSaveService
 
             throw new Exception('SYS_RECURRENCE_ROOM_RESERVED', array(implode(', ', $shownConflictPeriods)));
         }
+    }
+
+    /** @return array<int,int> Item IDs of reservations that still belong to an event. */
+    private function getOpenEventReservationItemIds(int $eventId): array
+    {
+        $itemIds = array();
+        $statement = $this->database->queryPrepared(
+            'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+            array($eventId, 'requested', 'approved', 'borrowed')
+        );
+        while ($reservation = $statement->fetch()) {
+            $itemIds[] = (int)$reservation['ivr_ini_id'];
+        }
+
+        return $itemIds;
     }
 
     /**

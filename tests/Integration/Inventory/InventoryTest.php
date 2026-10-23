@@ -14,6 +14,7 @@
 namespace Admidio\Tests\Integration\Inventory;
 
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Service\EventSaveService;
 use Admidio\Events\Service\EventService;
 use Admidio\Infrastructure\Exception;
 use Admidio\Inventory\Entity\Item;
@@ -1559,6 +1560,68 @@ class InventoryTest extends DatabaseTestCase
                 'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
                 array((int)$event->getValue('dat_id'))
             )->fetchColumn());
+        });
+    }
+
+    /**
+     * @testdox Event editors synchronize existing item reservations without request permission
+     */
+    public function testEventEditorSynchronizesExistingReservationsWithoutRequestPermission(): void
+    {
+        $fixture = $this->getFixture();
+        $inventoryAdmin = $this->makeInventoryUser('inveventsyncinventoryadmin', true);
+        $eventRole = $fixture->createAndSaveRoleWithRights('Reservation event editors', self::ORG_ID, array('rol_events' => 1));
+        $eventEditorData = $fixture->createAndSaveUser('inveventsynceditor', 'inveventsynceditor@example.local');
+        $fixture->assignUserToRole($eventEditorData['usr_id'], $eventRole['rol_id']);
+        $eventEditor = $this->loadUserInOrganization($eventEditorData['usr_id'], self::ORG_ID);
+        $category = $fixture->createAndSaveCategory('Reservation synchronization events', 'EVT', self::ORG_ID);
+
+        [$eventId, $itemId] = $this->withCurrentUser($inventoryAdmin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), array('ITEMNAME' => 'Synchronized event projector'));
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Reservation synchronization event');
+            $event->setValue('dat_begin', '2030-12-01 10:00:00');
+            $event->setValue('dat_end', '2030-12-01 12:00:00');
+            $event->save();
+            (new ReservationService($this->getDatabase()))->syncEventReservations(
+                (int)$event->getValue('dat_id'),
+                array($itemId),
+                new DateTimeImmutable('2030-12-01 10:00:00'),
+                new DateTimeImmutable('2030-12-01 12:00:00')
+            );
+
+            return array((int)$event->getValue('dat_id'), $itemId);
+        });
+
+        $this->withCurrentUser($eventEditor, self::ORG_ID, true, function () use ($category, $eventId, $itemId) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requesters', 'roles');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_requester_roles', '');
+            $eventUuid = $this->getDatabase()->queryPrepared('SELECT dat_uuid FROM ' . TBL_EVENTS . ' WHERE dat_id = ?', array($eventId))->fetchColumn();
+            (new EventSaveService($this->getDatabase()))->saveData((string)$eventUuid, array(
+                'dat_headline' => 'Reservation synchronization event',
+                'dat_location' => '',
+                'dat_all_day' => '0',
+                'event_from' => '2030-12-02',
+                'event_from_time' => '14:00',
+                'event_to' => '2030-12-02',
+                'event_to_time' => '16:00',
+                'cat_uuid' => $category['cat_uuid'],
+                'dat_max_members' => 0,
+                'event_participation_possible' => 0,
+                'event_deadline' => '',
+                'event_deadline_time' => ''
+            ));
+
+            $period = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_ini_id = ?',
+                array($eventId, $itemId)
+            )->fetch();
+            $this->assertSame('2030-12-02 14:00:00', $period['ivr_begin']);
+            $this->assertSame('2030-12-02 16:00:00', $period['ivr_end']);
         });
     }
 
