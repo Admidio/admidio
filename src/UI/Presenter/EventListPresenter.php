@@ -753,29 +753,32 @@ class EventListPresenter extends PagePresenter
                     if ($outputButtonParticipation !== '' || $outputButtonParticipants !== '' || $outputButtonParticipantsEmail !== '' || $outputButtonParticipantsAssign !== '') {
                         $page->addHtml('<div id="btn_group_' . $eventUUID . '" class="btn-group">' . $outputButtonParticipation . $outputButtonParticipants . $outputButtonParticipantsEmail . $outputButtonParticipantsAssign . '</div>');
                     }
-                    $page->addHtml('
-                    </div>
-                    <div class="card-footer container">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <img class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="' . (!empty($row['create_uuid'])
-                                    ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $row['create_uuid'], 'timestamp' => $row['create_timestamp_change']))
-                                    : getThemedFile('/images/profile-photo-male.png')) . '" alt="" />
-                            </div>
-                            <div class="col admidio-info-category">
-                                <span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($event->getNameOfCreatingUser(), $event->getValue('dat_timestamp_create'))) . '</span>');
+                    $page->addHtml('</div>');
 
-                    if ($event->getNameOfLastEditingUser() !== '') {
-                        $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($event->getNameOfLastEditingUser(), $event->getValue('dat_timestamp_change'))) . '</span>');
+                    if ($outputMode === 'html') {
+                        $page->addHtml('
+                        <div class="card-footer container">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <img class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="' . (!empty($row['create_uuid'])
+                                        ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $row['create_uuid'], 'timestamp' => $row['create_timestamp_change']))
+                                        : getThemedFile('/images/profile-photo-male.png')) . '" alt="" />
+                                </div>
+                                <div class="col admidio-info-category">
+                                    <span class="admidio-info-created">' . $gL10n->get('SYS_CREATED_BY_AND_AT', array($event->getNameOfCreatingUser(), $event->getValue('dat_timestamp_create'))) . '</span>');
+
+                        if ($event->getNameOfLastEditingUser() !== '') {
+                            $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($event->getNameOfLastEditingUser(), $event->getValue('dat_timestamp_change'))) . '</span>');
+                        }
+                        $page->addHtml('</div>');
+                        if ($outputButtonICal !== '' || $outputButtonCopy !== '' || $outputButtonEdit !== '' || $outputButtonDelete !== '') {
+                            $page->addHtml('<div class="col-auto ms-auto text-nowrap">' . $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '</div>');
+                        }
+                        $page->addHtml('
+                            </div>
+                        </div>');
                     }
                     $page->addHtml('</div>');
-                    if ($outputButtonICal !== '' || $outputButtonCopy !== '' || $outputButtonEdit !== '' || $outputButtonDelete !== '') {
-                        $page->addHtml('<div class="col-auto ms-auto text-nowrap">' . $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '</div>');
-                    }
-                    $page->addHtml('
-                        </div>
-                    </div>
-                    </div>');
                 } else { // $getView = 'compact' or 'room' or 'participants' or 'description'
                     // show table view of events
 
