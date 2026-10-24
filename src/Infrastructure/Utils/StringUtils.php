@@ -254,16 +254,8 @@ final class StringUtils
             throw new Exception('SYS_FILENAME_INVALID', array(SecurityUtils::encodeHTML(self::strStripTags($filename))));
         }
 
-        if ($checkExtension) {
-            // check if the extension is not listed as blocked
-            $extensionBlocklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
-                'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
-                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar', 'svg');
-            $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-
-            if (in_array($fileExtension, $extensionBlocklist, true)) {
-                throw new Exception('SYS_FILE_EXTENSION_INVALID');
-            }
+        if ($checkExtension && FileSystemUtils::isBlockedFileExtension($filename)) {
+            throw new Exception('SYS_FILE_EXTENSION_INVALID');
         }
 
         return true;

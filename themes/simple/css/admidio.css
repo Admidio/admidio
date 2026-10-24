@@ -93,6 +93,7 @@
 
 .admidio-content-col {
     padding: 0;
+    min-width: 0;
 }
 
 .admidio-content, .admidio-reduced {
@@ -341,7 +342,8 @@ input[type="file"].btn-secondary:hover:not(:disabled):not([readonly])::file-sele
 
 .admidio-tabbed-field-group:has( > .list-group), .admidio-accordion-field-group:has( > .list-group),
 .admidio-tabbed-field-group .table-responsive, .admidio-accordion-field-group .table-responsive,
-.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container {
+.admidio-tabbed-field-group .table-responsive .dt-container, .admidio-accordion-field-group .table-responsive .dt-container,
+.admidio-events-table .dt-container {
     margin-bottom: 0;
 }
 
@@ -437,7 +439,7 @@ input[type=date], input[type=number] {
 }
 
 input[type=time] {
-    max-width: 100px;
+    max-width: 9em;
 }
 
 .form-switch .form-check-input:not(:checked) {
@@ -792,6 +794,27 @@ label {
     color: var(--bs-body-color);
 }
 
+#adm_events_table .admidio-event-approval .btn {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    max-width: 26px;
+}
+
+#adm_events_table .admidio-event-approval .btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+}
+
+#adm_events_table .admidio-event-approval .btn i::before {
+    vertical-align: 0;
+    line-height: 1;
+    margin: 0;
+}
+
 .table-hover tbody tr td .admidio-functions {
     visibility: hidden;
 }
@@ -835,6 +858,18 @@ label {
 .dropdown-item:hover {
     color: var(--bs-body-bg);
     background: var(--bs-primary);
+}
+
+@media (max-width: 767.98px) {
+    #adm_plugins_accordion .dropdown-menu {
+        min-width: 0;
+        width: min(24rem, calc(100vw - 2rem));
+    }
+
+    #adm_plugins_accordion .dropdown-item {
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
 }
 
 .popover {
@@ -1091,6 +1126,24 @@ div.adm-changelog-details-table {
   -webkit-line-clamp: unset;
   line-clamp: unset;
   overflow: visible;
+}
+
+/***********************************/
+/* Date field weekday prefix */
+/***********************************/
+.admidio-input-weekday {
+  min-width: 2.75rem;
+}
+
+#adm_events_table td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* same width as the breakpoint "desktop" of the DataTables responsive extension that shows the period columns */
+@media (min-width: 1025px) {
+  #adm_events_table .admidio-event-period-small {
+    display: none;
+  }
 }
 
 /***********************************/

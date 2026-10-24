@@ -99,11 +99,9 @@ final class PreferencesSectionTest extends PluginTestCase
         $presenter = (new ReflectionClass(PreferencesPresenter::class))->newInstanceWithoutConstructor();
 
         $property = new ReflectionProperty(PreferencesPresenter::class, 'preferenceTabs');
-        $property->setAccessible(true);
         $property->setValue($presenter, $tabs);
 
         $method = new ReflectionMethod(PreferencesPresenter::class, 'addPluginPanels');
-        $method->setAccessible(true);
         $method->invoke($presenter);
 
         return $property->getValue($presenter);

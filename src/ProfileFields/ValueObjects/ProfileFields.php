@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 use Admidio\ProfileFields\Entity\ProfileField;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
@@ -78,12 +79,23 @@ class ProfileFields
     }
 
     /**
-     * A wakeup add the current database object to this class
+     * Preserve the data stored in existing sessions.
+     * @return array<string,mixed>
      */
-    public function __wakeup()
+    public function __serialize(): array
+    {
+        return (array)$this;
+    }
+
+    /**
+     * Restore legacy session properties and attach the current database object.
+     * @param array<string,mixed> $data
+     */
+    public function __unserialize(array $data): void
     {
         global $gDb;
 
+        SerializationUtils::restoreProperties($this, $data);
         if ($gDb instanceof Database) {
             $this->db = $gDb;
         }

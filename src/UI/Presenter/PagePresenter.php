@@ -665,6 +665,15 @@ class PagePresenter
     }
 
     /**
+     * Returns true if the page is shown in print mode.
+     * @return bool Returns **true** if the print mode was set with **setPrintMode()**.
+     */
+    public function isPrintMode(): bool
+    {
+        return $this->printView;
+    }
+
+    /**
      * This method will set all variables for the Smarty engine and then send the whole HTML
      * content also to the template engine, which will generate the HTML page.
      * Call this method if you have finished your page layout.
