@@ -273,7 +273,8 @@ class EventRepository
                 'fields' => '
                     cre_firstname.usd_value || \' \' || cre_surname.usd_value AS create_name,
                     cha_firstname.usd_value || \' \' || cha_surname.usd_value AS change_name,
-                    cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ',
+                    cre_user.usr_uuid AS create_uuid, cre_user.usr_timestamp_change AS create_timestamp_change,
+                    cha_user.usr_uuid AS change_uuid ',
                 'tables' => '
                     LEFT JOIN ' . TBL_USERS . ' AS cre_user
                            ON cre_user.usr_id = dat_usr_id_create
@@ -299,7 +300,8 @@ class EventRepository
             'fields' => '
                 cre_user.usr_login_name AS create_name,
                 cha_user.usr_login_name AS change_name,
-                cre_user.usr_uuid AS create_uuid, cha_user.usr_uuid AS change_uuid ',
+                cre_user.usr_uuid AS create_uuid, cre_user.usr_timestamp_change AS create_timestamp_change,
+                cha_user.usr_uuid AS change_uuid ',
             'tables' => '
                 LEFT JOIN ' . TBL_USERS . ' AS cre_user
                        ON cre_user.usr_id = dat_usr_id_create
