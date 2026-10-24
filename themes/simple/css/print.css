@@ -111,11 +111,10 @@ h3, h5 {
 
 /* Highlight events */
 
-tr.admidio-event-highlight,
-.admidio-event-highlight .panel-heading {
-    color: #000000;
+.admidio-event-highlight .card-header {
+    background-color: var(--bs-secondary);
 }
 
-.panel-primary.admidio-event-highlight > .panel-heading {
-    border-bottom: 4px solid #000000;
+tr.admidio-event-highlight {
+    font-weight: bold;
 }
