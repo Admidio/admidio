@@ -243,6 +243,7 @@
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
   <string name="SYS_APPLY">Übernehmen</string>
+  <string name="SYS_APPLY_ALL_AND_UPLOAD">Alle übernehmen &amp; hochladen</string>
   <string name="SYS_APPOINTMENT">Termin</string>
   <string name="SYS_APPOINTMENTS">Termine</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Vergeben durch die Rollen</string>
@@ -289,6 +290,7 @@
   <string name="SYS_CALENDARS">Kalender</string>
   <string name="SYS_CANCEL">Absagen</string>
   <string name="SYS_CANCELLED">Abgesagt</string>
+  <string name="SYS_CANCEL_ALL">Alle verwerfen</string>
   <string name="SYS_CANCEL_EVENT">Sie haben die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# wieder abgesagt. </string>
   <string name="SYS_CANCEL_MEMBERSHIP">Mitgliedschaft beenden</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Beziehung löschen</string>
@@ -579,6 +581,8 @@
   <string name="SYS_DO_NOT_EDIT">Nicht bearbeiten</string>
   <string name="SYS_DO_NOT_SHOW_AGAIN">Nicht mehr anzeigen</string>
   <string name="SYS_DQUOTE">Anführungszeichen (\")</string>
+  <string name="SYS_DRAG_AND_DROP_FILES">Dateien per Drag &amp; Drop hier ablegen</string>
+  <string name="SYS_DRAG_AND_DROP_PHOTOS">Fotos per Drag &amp; Drop hier ablegen</string>
   <string name="SYS_DROPDOWN_DATE_INTERVAL_LISTBOX">Dropdown-Listenfeld (Datumsintervall)</string>
   <string name="SYS_DROPDOWN_LISTBOX">Dropdown-Listenfeld</string>
   <string name="SYS_DROPDOWN_MULTISELECT_LISTBOX">Dropdown-Listenfeld (Mehrfachauswahl)</string>
@@ -719,8 +723,9 @@
   <string name="SYS_FILE">Datei</string>
   <string name="SYS_FILENAME_EMPTY">Es wurde kein Dateiname angegeben!</string>
   <string name="SYS_FILENAME_INVALID">Der ausgewählte Dateiname #VAR1_BOLD# enthält ungültige Zeichen. Bitte prüfen Sie den Dateinamen.\n\n Die folgenden Sonderzeichen sind nicht erlaubt: ? * ~ ; : \" | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID_HINT">Der Dateiname muss eine Dateiendung haben, darf nicht mit einem Punkt beginnen und darf keines der folgenden Zeichen enthalten: / \ ? * ; : ~ \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">Die Datenbankversion #VAR1# ist höher als die Version der Admidio-Skripte #VAR2#.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server #VAR3#mit der aktuelleren Admidio-Version#VAR4#.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner #VAR1_BOLD# hochladen möchten.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Wählen Sie bitte alle Dateien aus, die Sie in den Ordner #VAR1_BOLD# hochladen möchten, oder ziehen Sie sie per Drag &amp; Drop hierher.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Dateien erfolgreich hochgeladen.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle Dateien wurden erfolgreich hochgeladen.</string>
   <string name="SYS_FILE_CREATED_TITLE">Eine neue Datei wurde hochgeladen auf #VAR1#</string>
@@ -843,6 +848,8 @@
   <string name="SYS_INTERVAL">Intervall</string>
   <string name="SYS_INTO_TO">Empfänger:innen im TO-Feld und nicht im BCC-Feld auflisten</string>
   <string name="SYS_INTO_TO_DESC">Wenn eine E-Mail an mehrere Personen gesendet wird, listet diese Einstellung alle empfangenden Personen im TO-Feld auf. Ihre Namen und E-Mail-Adressen sind dadurch für alle sichtbar, und eine Antwort an alle ist möglich. (Voreinstellung: nein)</string>
+  <string name="SYS_INVALID_FILENAMES_DESC">Passen Sie die vorgeschlagenen Dateinamen an oder übernehmen Sie sie vor dem Hochladen:</string>
+  <string name="SYS_INVALID_FILENAMES_DETECTED">Die folgenden Dateinamen enthalten ungültige Zeichen:</string>
   <string name="SYS_INVALID_ICON_NAME">Der eingegebene Icon-Name stimmt nicht mit der erwarteten Syntax überein. Ein Icon-Name von Bootstrap Icons sollte nur die Zeichen a-z, Zahlen und einen Bindestrich enthalten.</string>
   <string name="SYS_INVALID_PAGE_VIEW">Ungültiger Seitenaufruf</string>
   <string name="SYS_INVENTORY">Inventarverwaltung</string>
@@ -1228,6 +1235,7 @@
   <string name="SYS_OPERATING_SYSTEM">Betriebssystem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Entgegengesetzte Beziehung</string>
   <string name="SYS_OPTIONAL">Optional</string>
+  <string name="SYS_OR">oder</string>
   <string name="SYS_ORDER">Reihenfolge</string>
   <string name="SYS_ORDERED_LIST">Nummerierte Liste</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
@@ -1289,7 +1297,7 @@
   <string name="SYS_PHOTO_FORMAT_INVALID">Es können nur Fotos im JPG- oder PNG-Format hochgeladen und angezeigt werden.</string>
   <string name="SYS_PHOTO_PROCESSING_ERROR">Fehler bei der Bildverarbeitung</string>
   <string name="SYS_PHOTO_RESOLUTION_TO_LARGE">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von #VAR1# Megapixeln.</string>
-  <string name="SYS_PHOTO_UPLOAD_DESC">Wählen Sie bitte alle Fotos aus, die Sie in das Album #VAR1_BOLD# hochladen möchten.</string>
+  <string name="SYS_PHOTO_UPLOAD_DESC">Wählen Sie bitte alle Fotos aus, die Sie in das Album #VAR1_BOLD# hochladen möchten, oder ziehen Sie sie per Drag &amp; Drop hierher.</string>
   <string name="SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL">Es wurden nicht alle Fotos erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_UPLOAD_SUCCESSFUL">Alle Fotos wurden erfolgreich hochgeladen.</string>
   <string name="SYS_PHOTO_X_OF_Y">Foto #VAR1# von #VAR2#</string>
@@ -1483,6 +1491,7 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Wollen Sie die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
   <string name="SYS_REMOVE_FORMATTING">Formatierung entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
+  <string name="SYS_RENAMED_TO">umbenannt in #VAR1_BOLD#</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
   <string name="SYS_REPLACE">Ersetzen</string>
@@ -1997,6 +2006,10 @@
   <string name="SYS_UNMANAGED_FILES">Nicht verwaltete Dateien</string>
   <string name="SYS_UPDATE_AVAILABLE">Update verfügbar</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualisierung erfolgreich</string>
+  <string name="SYS_UPLOADING">Wird hochgeladen...</string>
+  <string name="SYS_UPLOAD_CANCEL">Upload abbrechen</string>
+  <string name="SYS_UPLOAD_CANCELLED">Upload abgebrochen.</string>
+  <string name="SYS_UPLOAD_CANCEL_CONFIRM">Es werden noch Dateien hochgeladen. Möchten Sie den Upload abbrechen?</string>
   <string name="SYS_UPLOAD_FILES">Dateien hochladen</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. Uploadgröße</string>
   <string name="SYS_UPLOAD_PHOTOS">Fotos hochladen</string>

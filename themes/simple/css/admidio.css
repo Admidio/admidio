@@ -281,6 +281,24 @@ a {
     border-color: var(--bs-primary) !important;
 }
 
+.btn-outline-secondary {
+    color: var(--bs-secondary) !important;
+    border-color: var(--bs-secondary) !important;
+}
+
+.btn-outline-secondary:hover, .btn-outline-secondary:active {
+    color: var(--bs-body-bg) !important;
+}
+
+.btn-outline-danger {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+}
+
+.btn-outline-danger:hover, .btn-outline-danger:active {
+    color: var(--bs-body-bg) !important;
+}
+
 /* Use the btn-secondary variables on file inputs for their native buttons. */
 input[type="file"].btn-secondary::file-selector-button {
     color: var(--bs-btn-color);
@@ -1126,4 +1144,187 @@ div.adm-changelog-details-table {
   #adm_events_table .admidio-event-period-small {
     display: none;
   }
+}
+
+/***********************************/
+/* File upload drop zone           */
+/***********************************/
+.admidio-dropzone {
+  border: 2px dashed var(--bs-border-color, #dee2e6);
+  border-radius: var(--bs-border-radius-lg, 0.5rem);
+  background-color: var(--bs-tertiary-bg, #f8f9fa);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out, transform 0.15s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.admidio-dropzone:hover {
+  border-color: var(--bs-primary, #0d6efd);
+  background-color: var(--bs-secondary-bg, #e9ecef);
+}
+
+.admidio-dropzone:focus-visible {
+  outline: none;
+  border-color: var(--bs-primary, #0d6efd);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.admidio-dropzone.dragover {
+  border-color: var(--bs-primary, #0d6efd);
+  border-style: solid;
+  background-color: var(--bs-primary-bg-subtle, rgba(13, 110, 253, 0.08));
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+  transform: scale(1.01);
+}
+
+.admidio-dropzone-content > *:not(.fileinput-button) {
+  pointer-events: none;
+}
+
+.admidio-dropzone-icon {
+  font-size: 3rem;
+  color: var(--bs-primary, #0d6efd);
+  margin-bottom: 0.75rem;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.admidio-dropzone:hover .admidio-dropzone-icon,
+.admidio-dropzone.dragover .admidio-dropzone-icon {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.admidio-dropzone-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--bs-body-color, #212529);
+  margin-bottom: 0.25rem;
+}
+
+.admidio-dropzone-or {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--bs-secondary-color, #6c757d);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0.75rem auto;
+  max-width: 200px;
+}
+
+.admidio-dropzone-or::before,
+.admidio-dropzone-or::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.admidio-dropzone-or:not(:empty)::before {
+  margin-right: 0.5em;
+}
+
+.admidio-dropzone-or:not(:empty)::after {
+  margin-left: 0.5em;
+}
+
+/***********************************/
+/* File upload validation & items  */
+/***********************************/
+#admidio-upload-invalid-container {
+  width: 100%;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: var(--bs-border-radius, 0.375rem);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+#admidio-upload-invalid-container .card-header {
+  background-color: var(--bs-tertiary-bg, #f8f9fa);
+  border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+  color: var(--bs-body-color, #212529);
+}
+
+#admidio-upload-invalid-list .list-group-item {
+  background: transparent;
+  color: var(--bs-body-color, #212529);
+}
+
+#admidio-upload-invalid-list .list-group-item:last-child {
+  border-bottom: none !important;
+}
+
+#progress-wrapper {
+  width: 100%;
+}
+
+.upload-item {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+#admidio-upload-invalid-container .card-footer {
+  background-color: var(--bs-tertiary-bg, #f8f9fa);
+  border-top: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.upload-action-group {
+  display: inline-flex !important;
+  vertical-align: middle;
+}
+
+.upload-action-group .btn {
+  width: 2.5rem !important;
+  height: 38px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  padding: 0;
+  float: none !important;
+}
+
+/* Full-window Drag & Drop Overlay on Folder Page */
+.admidio-folder-drop-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1060;
+  background-color: rgba(38, 51, 64, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.admidio-folder-drop-overlay-box {
+  background: var(--bs-body-bg, #ffffff);
+  border: 3px dashed var(--bs-primary, #e30513);
+  border-radius: var(--bs-border-radius-lg, 0.75rem);
+  padding: 3rem 4rem;
+  text-align: center;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  max-width: 90%;
+  color: var(--bs-body-color, #212529);
+}
+
+.admidio-folder-drop-overlay-icon {
+  font-size: 4rem;
+  color: var(--bs-primary, #e30513);
+  margin-bottom: 1rem;
+}
+
+.admidio-folder-drop-overlay-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--bs-body-color, #212529);
+}
+
+.admidio-folder-drop-overlay-desc {
+  font-size: 1.1rem;
+  color: var(--bs-secondary-color, #6c757d);
+  margin-bottom: 0;
 }
