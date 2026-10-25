@@ -1,10 +1,12 @@
-# Admidio: Your Open-Source User Management Solution
+# Admidio: Open-Source Membership Management
 
-Admidio empowers organizations and groups by providing a versatile and open-source user management system for their websites. With its flexible role model, Admidio allows you to precisely mirror your organization's structure and permissions. You can easily create and customize individual member profiles by adding or removing profile fields.
+Admidio is a free, open-source membership management system for clubs, associations, groups, and organizations. It provides a flexible and self-hosted solution for managing members, organizing groups and roles, and controlling access to information. With customizable profile fields and a powerful permissions system, Admidio adapts to the individual structure and needs of your organization.
 
-In addition to these core features, Admidio boasts a rich array of modules, including member lists, an event manager, messaging capabilities, photo albums, and a document and file repository.
+Beyond membership management, Admidio offers a wide range of features, including customizable member lists, event management, online registration, inventory management, messaging and email communication, discussion forums, photo galleries, and document and file management. As a Progressive Web App (PWA), Admidio can also be installed on mobile and desktop devices.
 
-You can try out the [demo system](https://www.admidio.org/demo) to have a look to all the features Admidio offers.
+Admidio is easy to integrate into existing websites or use as a standalone application. Since it is self-hosted, you retain full control over your data without licensing fees.
+
+Explore Admidio's features in our [online demo](https://www.admidio.org/demo) .
 
 ![Admidio Logo](https://www.admidio.org/images/mainpage_flying_icons.png)
 
@@ -14,19 +16,25 @@ You can try out the [demo system](https://www.admidio.org/demo) to have a look t
 ![GitHub top language](https://img.shields.io/github/languages/top/admidio/admidio)
 [![GitHub license](https://img.shields.io/github/license/Admidio/admidio)](https://github.com/Admidio/admidio/blob/master/LICENSE)
 
-**Supported Languages**: :gb: :de: :denmark: :netherlands: :poland: :estonia: :ukraine: :fr: :bulgaria: :finland: :greece: :sweden: :ru: :es: :brazil: :portugal: :it: :indonesia: :hungary: :norway: :cn:
+**Supported Languages:** Bulgarian, Chinese, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Indonesian, Italian, Norwegian Bokmål, Polish, Portuguese (Brazil), Portuguese (Portugal), Romanian, Russian, Spanish, Swedish, Tamil, Thai, Ukrainian.
 
-## Features
+## Key Features
 
-- **Flexible Roles and Groups**: Craft roles and groups that align seamlessly with your organization's structure.
-- **Customizable User Profiles**: Personalize user profiles by adding or removing profile fields.
-- **Relationship Management**: Establish connections between members, such as spouse or parent-child relationships.
-- **Membership Lists**: Create individual membership lists for your roles.
-- **Event Management**: Easily publish events online and allow members to participate.
-- **Media Gallery**: Create and manage photo albums and enable users to send e-cards.
-- **Effective Communication**: Send HTML emails to users, roles, and groups.
-- **Progressive Web App (PWA)**: Install Admidio as a standalone app on Android, iOS, Windows, and macOS.
-- **And Much More**: Explore additional features and functionalities.
+- **Flexible Roles and Groups**: Organize members into roles and groups that reflect your organization's structure.
+- **Powerful Permission Management**: Control access to member profiles, modules, and features through role-based permissions.
+- **Customizable Member Profiles**: Create and manage individual member profiles with customizable profile fields.
+- **Relationship Management**: Define relationships between members, such as spouses or parents and children.
+- **Custom Member Lists**: Create, filter, sort, and export member lists with configurable fields.
+- **Online Registration**: Allow new members to register online and manage their registration requests.
+- **Event Management**: Plan events, manage registrations and participants, and organize schedules and rooms.
+- **Inventory Management**: Manage your organization's inventory, lend items to members, and track borrowing history.
+- **Messaging and Email**: Send messages and HTML emails to individual members, roles, or groups.
+- **Announcements**: Publish news and important information to keep your members informed.
+- **Discussion Forum**: Create discussion topics, exchange comments, and organize conversations into categories.
+- **Document and File Management**: Organize and share documents and files with role-based access permissions.
+- **Photo Galleries and E-Cards**: Create photo albums, share images, and send personalized e-cards.
+- **Progressive Web App (PWA)**: Install Admidio on mobile and desktop devices for convenient access.
+- **And Much More**: Extend Admidio with plugins and customize it to meet your organization's needs.
 
 ## Installation
 
@@ -73,11 +81,14 @@ There are numerous ways to contribute to Admidio:
 
 If you identify with any of the above roles, we invite you to join our team and contribute to making Admidio one of the best free membership software solutions.
 
-## Changelog
+## Support Admidio
 
-Stay updated with the latest improvements and bug fixes by visiting our [changelog](https://www.admidio.org/changelog.php).
+Admidio is developed and maintained by dedicated volunteers and is completely free to use. We are committed to keeping Admidio free and open source for everyone.
 
-## Donation
+If you find Admidio useful, please consider supporting the project with a donation. Your contribution helps us cover hosting costs, provide development tools and software, and continue improving Admidio.
 
-If you appreciate Admidio, consider making a [donation](https://www.admidio.org/donate.php).
-Thanks for contributing!
+Every donation, no matter the amount, is greatly appreciated. You can also choose to support individual developers directly.
+
+**[Support Admidio with a donation](https://www.admidio.org/donate.php)**
+
+Thank you for supporting Admidio and helping us keep the project growing!
