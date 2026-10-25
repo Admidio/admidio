@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\Installation;
+use Admidio\InstallationUpdate\Service\StatisticsConsent;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -256,6 +257,7 @@ try {
                     array('maxLength' => 6, 'class' => 'form-control-small')
                 );
             }
+            StatisticsConsent::addToForm($form, $page, $installedDbVersion);
             $form->addSubmitButton(
                 'adm_next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
@@ -299,14 +301,19 @@ try {
     } elseif ($getMode === 'update') {
         // check form field input and sanitized it from malicious content
         if (isset($_SESSION['updateLoginForm'])) {
-            $_SESSION['updateLoginForm']->validate($_POST);
+            $formValues = $_SESSION['updateLoginForm']->validate($_POST);
         } else {
             throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
         }
 
-        // start the update
+        $statisticsData = StatisticsConsent::selectedData($formValues);
+
+        // Preserve consent and payload locally: doAdmidioUpdate destroys the session.
         $update = new Update();
-        $update->doAdmidioUpdate($installedDbVersion);
+        $update->doAdmidioUpdate($installedDbVersion, StatisticsConsent::tenantId());
+
+        StatisticsConsent::savePreference($statisticsData !== null);
+        StatisticsConsent::send($statisticsData);
 
         echo json_encode(array(
             'status' => 'success',

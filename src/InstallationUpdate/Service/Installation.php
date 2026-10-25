@@ -5,6 +5,7 @@ use Admidio\Components\Entity\ComponentUpdate;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Cli\CliPolicy;
@@ -509,10 +510,11 @@ class Installation
      *
      * @param Database $db Connection to the database of the new installation.
      * @param InstallationConfig $config Input values of the new installation.
+     * @param string|null $tenantId Identity already displayed by the web wizard, if available.
      * @return array<string,int> Returns the id of the created organization and of its administrator.
      * @throws Exception
      */
-    public static function install(Database $db, InstallationConfig $config): array
+    public static function install(Database $db, InstallationConfig $config, ?string $tenantId = null): array
     {
         global $gDb, $gL10n, $gLogger, $gCurrentUser, $gCurrentUserId, $gCurrentOrganization, $gCurrentOrgId;
         global $gProfileFields, $gSettingsManager;
@@ -566,6 +568,8 @@ class Installation
          */
         $gSettingsManager = $gCurrentOrganization->getSettingsManager();
         $gSettingsManager->setMulti(self::defaultOrganizationPreferences($config), false);
+        InstallationIdentifier::ensure($db, $tenantId);
+        $gSettingsManager->set('system_statistics_last_sent', '', false);
         self::disableSoundexSearchIfPgSql($db);
         $gCurrentOrganization->createBasicData($administratorId);
 
