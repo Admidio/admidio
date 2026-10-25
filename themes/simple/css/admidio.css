@@ -940,6 +940,11 @@ label {
     cursor: help;
 }
 
+.admidio-small-photo {
+    max-height: 40px;
+    max-width: 40px;
+}
+
 .admidio-event-highlight .card-header {
     background-color: var(--bs-secondary);
 }

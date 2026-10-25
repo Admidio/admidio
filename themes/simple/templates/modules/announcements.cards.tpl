@@ -14,7 +14,7 @@
             <div class="card-footer container">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <img class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="{$announcement.userCreatedProfilePhotoUrl}" />
+                        <img class="rounded-circle admidio-small-photo" src="{$announcement.userCreatedProfilePhotoUrl}" />
                     </div>
                     <div class="col admidio-info-category">
                         <span class="admidio-info-created">{$l10n->get('SYS_CREATED_BY_AND_AT', array($announcement.userCreatedName, $announcement.userCreatedTimestamp))}</span>

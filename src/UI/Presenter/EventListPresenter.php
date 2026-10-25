@@ -760,7 +760,7 @@ class EventListPresenter extends PagePresenter
                         <div class="card-footer container">
                             <div class="row align-items-center">
                                 <div class="col-auto">
-                                    <img class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="' . (!empty($row['create_uuid'])
+                                    <img class="rounded-circle admidio-small-photo" src="' . (!empty($row['create_uuid'])
                                         ? SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_photo_show.php', array('user_uuid' => $row['create_uuid'], 'timestamp' => $row['create_timestamp_change']))
                                         : getThemedFile('/images/profile-photo-male.png')) . '" alt="" />
                                 </div>
