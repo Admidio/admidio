@@ -2096,5 +2096,5 @@
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
   <string name="SYS_ANONYMOUS_STATISTICS_CONSENT_DESC">Uncheck the checkbox to continue without sending these data and disable monthly sending.</string>
-  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Send #VAR1#anonymous technical data#VAR2# to admidio.org once a month. Sending is checked when someone logs in to the main organization.</string>
+  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Send #VAR1#anonymous technical data#VAR2# to admidio.org once a month. Sending is checked when the organization data are loaded.</string>
 </resources>

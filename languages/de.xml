@@ -2097,5 +2097,5 @@
   <string name="SYS_YOUR_NAME">Dein Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
   <string name="SYS_ANONYMOUS_STATISTICS_CONSENT_DESC">Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
-  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#anonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird bei einer Anmeldung an der Hauptorganisation geprüft.</string>
+  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#anonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird beim Laden der Organisationsdaten geprüft.</string>
 </resources>

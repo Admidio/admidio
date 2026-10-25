@@ -5,6 +5,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Menu\ValueObject\Menu;
@@ -168,6 +169,9 @@ if (array_key_exists('gCurrentSession', $_SESSION)
 
     // delete the entries of the change history that are older than the configured retention period
     ChangelogService::purgeOldEntriesIfDue();
+
+    // Check monthly statistics only when the organization is rebuilt, not when restored from the session.
+    InstallationStatistics::sendIfDue($gDb, (int)$gCurrentOrgId);
 }
 
 // Check if reduced layout should be shown

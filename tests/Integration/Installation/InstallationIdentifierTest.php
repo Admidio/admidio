@@ -129,6 +129,27 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $this->assertFalse(InstallationStatistics::isDue($settings->getString('system_statistics_last_sent', true)));
     }
 
+    public function testMonthlySendRequiresBothPreferencesInTheCurrentOrganization(): void
+    {
+        $db = $this->getDatabase();
+        $mainId = InstallationIdentifier::getOrganizationId($db);
+        $settings = new SettingsManager($db, $mainId);
+        $history = array();
+        $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
+        $handler->push(Middleware::history($history));
+        $client = new Client(array('handler' => $handler));
+
+        foreach (array('system_statistics_last_sent', 'system_statistics_enabled') as $missingPreference) {
+            $settings->set('system_statistics_enabled', '1');
+            $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
+            $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ? AND prf_name = ?',
+                array($mainId, $missingPreference));
+
+            InstallationStatistics::sendIfDue($db, $mainId, $client);
+            $this->assertCount(0, $history, 'No send without ' . $missingPreference);
+        }
+    }
+
     public function testStatisticsMigrationSeedsDefaultsAndPreservesExistingPreferences(): void
     {
         $db = $this->getDatabase();
