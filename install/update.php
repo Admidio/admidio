@@ -312,6 +312,7 @@ try {
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion, StatisticsConsent::tenantId());
 
+        StatisticsConsent::savePreference($statisticsData !== null);
         StatisticsConsent::send($statisticsData);
 
         echo json_encode(array(

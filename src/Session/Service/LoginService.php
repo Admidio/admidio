@@ -3,6 +3,7 @@ namespace Admidio\Session\Service;
 
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Roles\Entity\Role;
@@ -274,6 +275,7 @@ class LoginService
 
         if ($loggedIn) {
             Hooks::doAction('login_succeeded', $gCurrentUser, $postOrgShortName);
+            InstallationStatistics::sendIfDue($gDb, (int)$gCurrentOrgId);
         } else {
             Hooks::doActionCatchErrors('login_failed', $postLoginName, 'SYS_LOGIN_USERNAME_PASSWORD_INCORRECT', $postOrgShortName);
         }

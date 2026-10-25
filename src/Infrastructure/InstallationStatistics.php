@@ -2,11 +2,14 @@
 namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Plugins\PluginRegistry;
+use Admidio\Preferences\ValueObject\SettingsManager;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use Throwable;
 
 /**
  * @brief Collect anonymous installation statistics and send the reviewed JSON payload.
@@ -188,8 +191,75 @@ class InstallationStatistics
         );
 
         if ($response->getStatusCode() === 200) {
+            $this->recordSuccessfulSend($gDb);
             return true;
         }
         return false;
+    }
+
+    /** All send paths share the installation-wide success timestamp. */
+    protected function recordSuccessfulSend(Database $db): void
+    {
+        $settings = new SettingsManager($db, InstallationIdentifier::getOrganizationId($db));
+        $settings->set('system_statistics_last_sent', self::getDateTime());
+    }
+
+    /** Whether a complete calendar month has passed since the last successful send (UTC). */
+    public static function isDue(string $lastSent, ?DateTimeImmutable $now = null): bool
+    {
+        if ($lastSent === '') {
+            return true;
+        }
+
+        $utc = new DateTimeZone('UTC');
+        $date = DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $lastSent, $utc);
+        if ($date === false || $date->format('Y-m-d H:i:s') !== $lastSent) {
+            return true;
+        }
+
+        // Clamp to the last day of shorter months (January 31 -> February 28/29).
+        $nextMonth = $date->modify('first day of next month');
+        $nextMonth = $nextMonth->setDate((int)$nextMonth->format('Y'), (int)$nextMonth->format('m'),
+            min((int)$date->format('d'), (int)$nextMonth->format('t')));
+
+        return $nextMonth < ($now ?? new DateTimeImmutable('now', $utc));
+    }
+
+    /** Check once on authentication; telemetry errors must never prevent a successful login. */
+    public static function sendIfDue(Database $db, int $organizationId, ?ClientInterface $client = null): void
+    {
+        global $gLogger;
+
+        $transactionStarted = false;
+        try {
+            if ($organizationId !== InstallationIdentifier::getOrganizationId($db)) {
+                return;
+            }
+
+            $db->startTransaction();
+            $transactionStarted = true;
+            // Serialize concurrent logins until the successful send and its timestamp are stored.
+            $db->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ? FOR UPDATE', array($organizationId));
+            $settings = new SettingsManager($db, $organizationId);
+            $enabled = !$settings->has('system_statistics_enabled') || $settings->getBool('system_statistics_enabled');
+            $lastSent = $settings->has('system_statistics_last_sent') ? $settings->getString('system_statistics_last_sent') : '';
+            if ($enabled && self::isDue($lastSent)) {
+                $tenantId = InstallationIdentifier::get($db);
+                try {
+                    if ($tenantId !== null && !(new self($tenantId, null, $client))->sent()) {
+                        $gLogger->warning('Monthly anonymous installation statistics could not be sent.');
+                    }
+                } catch (GuzzleException $exception) {
+                    // A network failure changes no data and must not roll back an enclosing login transaction.
+                    $gLogger->warning('Monthly anonymous installation statistics could not be sent.', array('exception' => $exception));
+                }
+            }
+            $db->endTransaction();
+        } catch (Throwable $exception) {
+            if ($transactionStarted) {
+                $db->rollback();
+            }
+            $gLogger->warning('Monthly anonymous installation statistics could not be sent.', array('exception' => $exception));
+        }
     }
 }

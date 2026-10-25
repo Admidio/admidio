@@ -8,6 +8,8 @@ use Admidio\Infrastructure\Cli\CliPolicy;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\InstallationIdentifier;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -710,7 +712,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createCommonForm(): string
     {
-        global $gL10n, $gSettingsManager, $gCurrentSession;
+        global $gDb, $gCurrentOrgId, $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -804,6 +806,21 @@ class PreferencesPresenter extends PagePresenter
             (bool) ($formValues['system_pwa_enabled'] ?? true),
             array('helpTextId' => 'SYS_PWA_ENABLED_DESC')
         );
+        // Only the first organization controls the installation-wide monthly send.
+        $isMainOrganization = (int)$gCurrentOrgId === InstallationIdentifier::getOrganizationId($gDb);
+        if ($isMainOrganization) {
+            $formCommon->addCheckbox(
+                'system_statistics_enabled',
+                $gL10n->get('SYS_SEND_ANONYMOUS_STATISTICS'),
+                (bool) ($formValues['system_statistics_enabled'] ?? true),
+                array('helpTextId' => array('SYS_SEND_ANONYMOUS_STATISTICS_DESC', array(
+                    '<a href="#adm_statistics_modal" data-bs-toggle="modal" aria-controls="adm_statistics_modal" aria-haspopup="dialog">',
+                    '</a>'
+                )))
+            );
+            $statistics = new InstallationStatistics(InstallationIdentifier::get($gDb) ?? '');
+            $this->assignSmartyVariable('statisticsJson', $statistics->getJsonData());
+        }
         $formCommon->addInput(
             'path_for_calculating_disk_usage',
             $gL10n->get('ORG_PATH_FOR_CALCULATING_DISK_USAGE'),

@@ -5,6 +5,7 @@ namespace Admidio\InstallationUpdate\Service;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\InstallationIdentifier;
+use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 use Ramsey\Uuid\Uuid;
@@ -17,7 +18,7 @@ final class StatisticsConsent
 
     public static function addToForm(FormPresenter $form, InstallationPresenter $page, ?string $previousVersion = null): void
     {
-        global $gDb, $gL10n;
+        global $gDb, $gL10n, $gSettingsManager;
 
         // Fresh installations have no organization/preferences tables yet.
         $tenantId = $previousVersion !== null ? InstallationIdentifier::get($gDb) : null;
@@ -27,7 +28,10 @@ final class StatisticsConsent
         $statistics = new InstallationStatistics($tenantId, $previousVersion);
         $_SESSION[self::SESSION_DATA] = $statistics->getInfoData();
         $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($_SESSION[self::SESSION_DATA]));
-        $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_ANONYMOUS_STATISTICS'), true);
+        $enabled = !isset($gSettingsManager) || !$gSettingsManager->has('system_statistics_enabled')
+            || $gSettingsManager->getBool('system_statistics_enabled');
+        $page->assignSmartyVariable('statisticsEnabled', $enabled);
+        $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_ANONYMOUS_STATISTICS'), $enabled);
         $page->addJavascript('
             $("#adm_send_statistics").on("change", function () {
                 $("#adm_send_statistics_summary").prop("checked", this.checked);
@@ -72,5 +76,14 @@ final class StatisticsConsent
             // Telemetry must never turn a completed installation/update into a failure.
             $gLogger->warning('Anonymous installation statistics could not be sent.', array('exception' => $exception));
         }
+    }
+
+    /** Persist the reviewed choice after installation/update has created the preferences. */
+    public static function savePreference(bool $enabled): void
+    {
+        global $gDb;
+
+        $settings = new SettingsManager($gDb, InstallationIdentifier::getOrganizationId($gDb));
+        $settings->set('system_statistics_enabled', $enabled ? '1' : '0');
     }
 }

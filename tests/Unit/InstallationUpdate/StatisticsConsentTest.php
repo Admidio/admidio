@@ -101,15 +101,20 @@ class StatisticsConsentTest extends TestCase
         $GLOBALS['gDbType'] = 'mysql';
         $_SESSION['installationStatisticsData'] = array('id' => 'stable-tenant');
         $page = $this->getMockBuilder(InstallationPresenter::class)->disableOriginalConstructor()->getMock();
-        $page->expects($this->once())->method('assignSmartyVariable')->with('statisticsJson',
-            $this->callback(function (string $json) use ($previousVersion): bool {
+        $page->expects($this->exactly(2))->method('assignSmartyVariable')
+            ->willReturnCallback(function (string $name, $value) use ($previousVersion): void {
+                if ($name === 'statisticsEnabled') {
+                    $this->assertTrue($value);
+                    return;
+                }
+                $this->assertSame('statisticsJson', $name);
+                $json = $value;
                 $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
                 $this->assertSame('stable-tenant', $data['id']);
                 $this->assertSame($previousVersion, $data['admidio']['previous_version']);
                 $this->assertSame($previousVersion === null ? 'de' : 'pt-BR', $data['admidio']['language']);
 
-                return true;
-            }));
+            });
         $form = new FormPresenter('confirmation', 'installation.install-admidio.tpl');
         StatisticsConsent::addToForm($form, $page, $previousVersion);
         $this->assertSame('checked', $form->getElements()['adm_send_statistics']['attributes']['checked']);

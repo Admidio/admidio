@@ -9,6 +9,12 @@ use Throwable;
 /** Installation identity, stored with the organization with the smallest ID. */
 final class InstallationIdentifier
 {
+    /** The first organization owns installation-wide preferences. */
+    public static function getOrganizationId(Database $db): int
+    {
+        return (int)$db->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();
+    }
+
     public static function get(Database $db): ?string
     {
         $value = $db->queryPrepared('SELECT prf_value FROM ' . TBL_PREFERENCES . '

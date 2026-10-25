@@ -3,6 +3,7 @@
 namespace Admidio\Tests\Unit\UI;
 
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\InstallationPresenter;
 use DOMDocument;
 use DOMXPath;
 use PHPUnit\Framework\TestCase;
@@ -43,10 +44,8 @@ class UpdateStatisticsDialogTest extends TestCase
         $form->addSubmitButton('adm_next_page', 'Update');
         $json = json_encode(array(array('id' => '</code><script>alert(1)</script>', 'timestamp' => '2026-10-22 10:00:00')),
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-        $smarty = new Smarty();
-        $smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
-        $smarty->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
-        $smarty->setTemplateDir(dirname(__DIR__, 3) . '/install/templates');
+        require_once dirname(__DIR__, 2) . '/constants.php';
+        $smarty = InstallationPresenter::createSmartyObject();
         $smarty->setCompileDir(sys_get_temp_dir());
         $smarty->assign(array(
             'l10n' => new class {
@@ -65,5 +64,29 @@ class UpdateStatisticsDialogTest extends TestCase
         $this->assertCount(0, $xpath->query('//script'));
         $this->assertCount(1, $xpath->query('//form[@id="' . $formId . '"]//input[@name="adm_send_statistics" and @checked and not(@disabled)]'));
         $this->assertCount(1, $xpath->query('//input[@id="adm_send_statistics_summary" and @checked and @disabled and not(@name)]'));
+    }
+
+    public function testSettingsPreviewContainsJsonWithoutConsentCheckbox(): void
+    {
+        $smarty = new Smarty();
+        $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
+        $smarty->setCompileDir(sys_get_temp_dir());
+        $json = '{"id":"</code><script>alert(1)</script>"}';
+        $smarty->assign(array(
+            'l10n' => new class {
+                public function get(string $key, array $arguments = array()): string { return $key; }
+            },
+            'statisticsJson' => $json, 'statisticsShowCheckbox' => false
+        ));
+        $document = new DOMDocument();
+        $previous = libxml_use_internal_errors(true);
+        $document->loadHTML($smarty->fetch('sys-template-parts/installation-statistics-modal.tpl'));
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+        $xpath = new DOMXPath($document);
+        $this->assertSame($json, $xpath->query('//pre/code')->item(0)->textContent);
+        $this->assertCount(0, $xpath->query('//input | //script | //div[contains(@class,"modal-footer")]'));
+        $this->assertStringNotContainsString('SYS_ANONYMOUS_STATISTICS_CONSENT_DESC', $document->textContent);
+        $this->assertCount(1, $xpath->query('//button[@data-bs-dismiss="modal"]'));
     }
 }

@@ -244,7 +244,7 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
-  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Nach der Installation oder einem Update werden anonyme technische Daten dieser Installation an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das vollständige JSON, das übermittelt wird, wird unten angezeigt. Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren.</string>
+  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Anonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das vollständige JSON, das übermittelt wird, wird unten angezeigt.</string>
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_APPOINTMENT">Termin</string>
   <string name="SYS_APPOINTMENTS">Termine</string>
@@ -2096,4 +2096,6 @@
   <string name="SYS_YOUR_LISTS">Deine Listen</string>
   <string name="SYS_YOUR_NAME">Dein Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
+  <string name="SYS_ANONYMOUS_STATISTICS_CONSENT_DESC">Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
+  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#anonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird bei einer Anmeldung an der Hauptorganisation geprüft.</string>
 </resources>

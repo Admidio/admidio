@@ -569,6 +569,7 @@ class Installation
         $gSettingsManager = $gCurrentOrganization->getSettingsManager();
         $gSettingsManager->setMulti(self::defaultOrganizationPreferences($config), false);
         InstallationIdentifier::ensure($db, $tenantId);
+        $gSettingsManager->set('system_statistics_last_sent', '', false);
         self::disableSoundexSearchIfPgSql($db);
         $gCurrentOrganization->createBasicData($administratorId);
 

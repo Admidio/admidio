@@ -244,7 +244,7 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNUALLY">Annually</string>
-  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Anonymous technical data about this installation is sent to admidio.org after installation or an update. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. The complete JSON data to be sent is shown below. Uncheck the checkbox to continue without sending these data.</string>
+  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Anonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. The complete JSON data to be sent is shown below.</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
@@ -2095,4 +2095,6 @@
   <string name="SYS_YOUR_LISTS">Your lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
+  <string name="SYS_ANONYMOUS_STATISTICS_CONSENT_DESC">Uncheck the checkbox to continue without sending these data and disable monthly sending.</string>
+  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Send #VAR1#anonymous technical data#VAR2# to admidio.org once a month. Sending is checked when someone logs in to the main organization.</string>
 </resources>

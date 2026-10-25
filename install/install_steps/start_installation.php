@@ -79,6 +79,7 @@ $statisticsData = StatisticsConsent::selectedData($formValues);
 
 // Create the database and all its data, then send only the reviewed and selected snapshot.
 Installation::install($db, InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL), StatisticsConsent::tenantId());
+StatisticsConsent::savePreference($statisticsData !== null);
 StatisticsConsent::send($statisticsData);
 
 // delete session data

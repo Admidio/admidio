@@ -31,5 +31,16 @@
     <step id="110">UPDATE %PREFIX%_preferences SET prf_value = 'pt-PT' WHERE prf_name = 'system_language' AND prf_value = 'pt'</step>
     <step id="120">ALTER TABLE %PREFIX%_components ADD COLUMN com_update_version varchar(10) NOT NULL DEFAULT ''</step>
     <step id="130">UpdateStepsCode::updateStep60CreateTenantId</step>
+    <step id="140">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
+        SELECT org_id, 'system_statistics_enabled', '1'
+          FROM %PREFIX%_organizations
+         WHERE NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
+                            WHERE prf_org_id = org_id AND prf_name = 'system_statistics_enabled')</step>
+    <step id="150">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
+        SELECT org_id, 'system_statistics_last_sent', ''
+          FROM %PREFIX%_organizations
+         WHERE org_id = (SELECT MIN(org_id) FROM %PREFIX%_organizations)
+           AND NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
+                            WHERE prf_org_id = org_id AND prf_name = 'system_statistics_last_sent')</step>
     <step>stop</step>
 </update>
