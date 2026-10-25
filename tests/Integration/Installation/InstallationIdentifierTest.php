@@ -88,7 +88,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $settings = new SettingsManager($db, $mainId);
         $settings->set('system_statistics_enabled', '1');
         $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
-        $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Monthly statistics child', 'monthlystats');
+        $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Monthly statistics child', 'monthstats');
         $history = array();
         $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
         $handler->push(Middleware::history($history));
