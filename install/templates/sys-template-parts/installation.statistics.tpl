@@ -18,9 +18,6 @@
                     <pre class="bg-body-tertiary border rounded p-3"><code>{$statisticsJson|escape:'html'}</code></pre>
                     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['adm_send_statistics']}
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$l10n->get('SYS_CLOSE')}</button>
-                </div>
             </div>
         </div>
     </div>

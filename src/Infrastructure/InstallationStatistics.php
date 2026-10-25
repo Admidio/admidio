@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Infrastructure;
 
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use DateTime;
 use DateTimeZone;
 use GuzzleHttp\Client;
@@ -138,43 +139,19 @@ class InstallationStatistics
     }
 
     /**
-     * @return array[]
+     * Versions declared by the plugins present in the plugins directory.
+     * @return array<string,string>
      */
-    private static function getAdmidioPlugins()
+    private static function getAdmidioPlugins(): array
     {
         $plugins = array();
-
-        $pluginsFolder = ADMIDIO_PATH . DIRECTORY_SEPARATOR . FOLDER_PLUGINS;
-
-        $dir = is_dir($pluginsFolder) ? scandir($pluginsFolder) : array();
-        if ($dir === false) {
-            return array($plugins);
-        }
-        foreach ($dir as $entry)
-        {
-            $pluginFolder = $pluginsFolder . DIRECTORY_SEPARATOR . $entry;
-            $pluginFile = $pluginFolder . DIRECTORY_SEPARATOR . $entry . '.php';
-
-            if (!in_array($entry, array('.', '..'), true) && is_dir($pluginFolder) && is_file($pluginFile))
-            {
-                $handle = fopen($pluginFile, 'r');
-                if ($handle === false) {
-                    continue;
-                }
-                while (($line = fgets($handle)) !== false)
-                {
-                    preg_match('/^ \* Version (\d+\.\d+\.\d+.*$)/', $line, $matches);
-
-                    if (count($matches) === 2)
-                    {
-                        $plugins[$entry] = $matches[1];
-                    }
-                }
-                fclose($handle);
+        foreach (PluginRegistry::all() as $id => $plugin) {
+            if ($plugin->isValid()) {
+                $plugins[$id] = $plugin->version;
             }
         }
 
-        return array($plugins);
+        return $plugins;
     }
 
     /** Encode the same complete payload for the preview and the HTTP request. */
