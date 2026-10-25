@@ -218,6 +218,38 @@ final class ReleaseBuilderTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox Version, Beta-Version and Beta-Release come first, which Admidio up to 5.0 needs
+     */
+    public function testLegacyLinesFirst(): void
+    {
+        $this->commit(array('system/bootstrap/constants.php' => $this->constants(5, 2, 0, 1)), 'v5.2-Beta.1');
+        file_put_contents($this->repository . '/empty.txt', '');
+
+        $result = $this->build(array('ref' => 'v5.2-Beta.1', 'update-txt' => $this->repository . '/empty.txt'));
+
+        $this->assertStringStartsWith("Version=\nBeta-Version=5.2.0\nBeta-Release=1\nBeta-Package-URL=",
+            (string)file_get_contents($result['updateTxt']));
+    }
+
+    /**
+     * @testdox A stable release empties the Beta lines of its own version, but keeps those of a newer beta
+     */
+    public function testStableEndsBeta(): void
+    {
+        $beta = "Version=5.0.17\nBeta-Version=%s\nBeta-Release=2\nBeta-Package-URL=https://example.org/beta.zip\n";
+        file_put_contents($this->repository . '/beta.txt', sprintf($beta, '5.1.0'));
+        $result = $this->build(array('update-txt' => $this->repository . '/beta.txt'));
+        $info = U\parseUpdateInfo((string)file_get_contents($result['updateTxt']));
+        $this->assertSame('5.1.0', $info['Version']);
+        $this->assertSame(array('', '', ''), array($info['Beta-Version'], $info['Beta-Release'], $info['Beta-Package-URL']));
+
+        file_put_contents($this->repository . '/beta.txt', sprintf($beta, '5.2.0'));
+        $result = $this->build(array('update-txt' => $this->repository . '/beta.txt'));
+        $info = U\parseUpdateInfo((string)file_get_contents($result['updateTxt']));
+        $this->assertSame(array('5.2.0', '2'), array($info['Beta-Version'], $info['Beta-Release']));
+    }
+
+    /**
      * @return array<string,array{0: callable(self): array<string,string|bool>, 1: string}>
      */
     public static function refusedReleases(): array

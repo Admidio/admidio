@@ -245,7 +245,7 @@ Phase B replaces every file: test it on a separate installation, never on a deve
 
 ```bash
 php build-release.php --key=/secure/path/release-private.pem --ref=v5.1.0 \
-    --update-txt=https://www.admidio.org/update.txt
+    --update-txt
 ```
 
 It runs `composer install --no-dev` in the export and takes what `archive.exclude` of the exported
@@ -275,6 +275,47 @@ The workflow `.github/workflows/release.yml` runs the builder for every `v*` tag
 environment `release` and creates a draft GitHub release with the three files. Publishing the
 release and copying `update.txt` and `update.txt.sig` to admidio.org are the final, deliberate
 steps.
+
+`php build-release.php --help` describes every option:
+
+| Option | Effect |
+|---|---|
+| `--key=<file>` | the private release key; else `ADMIDIO_RELEASE_KEY` (the PEM) or `ADMIDIO_RELEASE_KEY_FILE`, with `ADMIDIO_RELEASE_KEY_PASSPHRASE` |
+| `--ref=<tag, branch or commit>` | what is built (default `HEAD`); a tag must name the version of the constants |
+| `--out=<directory>` | where the files go (default `build/`) |
+| `--update-txt[=<file or URL>]` | the current `update.txt`, by default `https://www.admidio.org/update.txt`, whose lines stay; without the option `update.txt` has the lines of this release only |
+| `--package-url=<URL of a folder>` | where the package is downloaded from; default the asset of the GitHub release of the tag, required for a branch or a commit |
+| `--minimum-source-version=<x.y.z>` | the oldest version the package may update (default `4.0.0`) |
+| `--allow-dirty` | build the committed state although the working tree has changes |
+| `--key-rotation` | the release ships a new `release-key.pem`, signed with the old key |
+| `--test-release` | put the public part of `--key` into the package, for a test server |
+| `--no-composer` | leave `vendor/` out, for tests |
+
+### Stable and beta in one update.txt
+
+There is no option for the channel: `ADMIDIO_VERSION_BETA` in the constants of the release decides
+whether the builder writes the stable lines or the `Beta-` lines, and it replaces only those. Every
+other line comes from `--update-txt`, so a beta built with `--update-txt` (the published file on
+admidio.org, as the workflow does) keeps the stable release
+that is announced there, and the next stable release keeps the beta. A stable release that is not
+older than the announced beta empties the `Beta-` lines, as admidio.org has them without a beta.
+
+`Version=`, `Beta-Version=` and `Beta-Release=` are always the first three lines: Admidio up to 5.0
+takes the value after the first `Version=` in the file, and would otherwise read a `Beta-Version=`
+or `Minimum-Source-Version=` as the stable version. Unknown lines are ignored by every version.
+
+A stable release without package lines (a 5.0.x release, which has no updater) is announced as
+before and is not offered by the updater; the stable channel offers the first release that contains
+the updater. A release can only be built from a commit that contains `release-key.pem`, so a
+release before the updater cannot get package lines afterwards. An installation of Admidio 5.0 or 4.x
+gets the updater with the bootstrap ZIP of the release it updates to.
+
+`update.txt` on admidio.org is only valid with its signature: any edit by hand, also the version of
+a 5.0.x release, is followed by `php build-release.php sign`, or every updater refuses the file.
+The workflow reads the published `update.txt` when the tag is pushed. Two releases built before the
+first one's `update.txt` is on admidio.org (say 5.0.19 and 6.0 Beta 2 on the same day) each contain
+only their own lines, and the one copied last removes the other's. So the `update.txt` of a release is
+copied to admidio.org before the next tag is pushed; otherwise build the second one again.
 
 ### The release key
 

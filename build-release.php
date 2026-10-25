@@ -5,9 +5,10 @@
  * release key.
  *
  *   php build-release.php --key=<private key PEM> [--ref=v5.1.0] [--out=build]
- *       [--update-txt=<file or URL of the current update.txt>] [--package-url=<URL of the folder>]
+ *       [--update-txt[=<file or URL of the current update.txt>]] [--package-url=<URL of the folder>]
  *       [--minimum-source-version=4.0.0] [--allow-dirty] [--key-rotation] [--test-release] [--no-composer]
  *   php build-release.php sign --key=<private key PEM> --update-txt=<file>
+ *   php build-release.php --help      describes the options (USAGE)
  *
  * A release is built from a clean export of a commit, a tag or HEAD (git archive), never from the
  * working tree, which therefore has to be clean. composer install --no-dev runs in the export, and
@@ -52,6 +53,34 @@ const MIGRATION_PATHS_FILE = 'install/db_scripts/migration-paths.json';
 
 const RELEASE_KEY_FILE = 'install/core-update/release-key.pem';
 
+const USAGE = <<<'TEXT'
+    Build a release:  php build-release.php --key=<private key PEM> [options]
+    Sign update.txt:  php build-release.php sign --key=<private key PEM> --update-txt=<file>
+
+    --key=<file>                     the private release key; else ADMIDIO_RELEASE_KEY (the PEM) or
+                                     ADMIDIO_RELEASE_KEY_FILE, and ADMIDIO_RELEASE_KEY_PASSPHRASE
+    --ref=<tag, branch or commit>    what is built (default HEAD); a tag must name the version of
+                                     system/bootstrap/constants.php, e.g. v5.1.0 or v5.1-Beta.1
+    --out=<directory>                where the files go (default build/)
+    --update-txt[=<file or URL>]     the current update.txt, by default https://www.admidio.org/update.txt:
+                                     its lines stay, those of the channel of the release are replaced.
+                                     Without it update.txt has the lines of this release only.
+    --package-url=<URL of a folder>  where the package will be downloaded from; default the asset of
+                                     the GitHub release of the tag, required for a branch or a commit
+    --minimum-source-version=<x.y.z> the oldest version the package may update (default 4.0.0)
+    --allow-dirty                    build the committed state although the working tree has changes
+    --key-rotation                   the release ships a new release-key.pem, signed with the old key
+    --test-release                   put the public part of --key into the package, for a test server
+    --no-composer                    leave vendor/ out, for tests
+
+    Whether the stable lines (Version, Package-URL, ...) or the Beta- lines are written follows from
+    ADMIDIO_VERSION_BETA in system/bootstrap/constants.php of the release.
+
+    TEXT;
+
+/** The lines of update.txt that every Admidio reads for its update check, at the top of the file. */
+const LEGACY_UPDATE_INFO_LINES = array('Version', 'Beta-Version', 'Beta-Release');
+
 /**
  * The oldest release the package can update, unless --minimum-source-version says otherwise: the first
  * of Admidio 4.x, whose layout the updater knows (LEGACY_PATHS). Its database update starts earlier,
@@ -74,6 +103,11 @@ if (PHP_SAPI === 'cli' && realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? '')) 
 function main(array $arguments): int
 {
     $options = parseOptions($arguments);
+    if (!empty($options['help'])) {
+        echo USAGE;
+
+        return 0;
+    }
     $key = privateKey($options['key'] ?? null);
 
     if (($options[0] ?? '') === 'sign') {
@@ -197,7 +231,9 @@ function build(string $repository, OpenSSLAsymmetricKey $key, array $options): a
         $lines = updateInfoLines($version, packageUrl($options, $tag, basename($package)), (string)hash_file('sha256', $package), (int)filesize($package),
             is_string($options['minimum-source-version'] ?? null) ? $options['minimum-source-version'] : DEFAULT_MINIMUM_SOURCE_VERSION,
             minimumPhpVersion($composer));
-        $current = is_string($options['update-txt'] ?? null) ? readUpdateInfo($options['update-txt']) : '';
+        $source = $options['update-txt'] ?? null;
+        $current = $source === true ? readUpdateInfo(U\UPDATE_INFO_URL) : (is_string($source) ? readUpdateInfo($source) : '');
+        $lines += obsoleteBetaLines(U\parseUpdateInfo($current), $version);
         $updateTxt = $out . '/update.txt';
         U\writeFile($updateTxt, mergeUpdateInfo($current, $lines));
         U\writeFile($updateTxt . '.sig', U\signData((string)file_get_contents($updateTxt), $key));
@@ -481,6 +517,22 @@ function updateInfoLines(string $version, string $packageUrl, string $sha256, in
 }
 
 /**
+ * The Beta- lines emptied, when a stable release is not older than the beta they announce: Admidio
+ * would otherwise still offer the beta of a version that is released.
+ * @param array<string,string> $info The current update.txt.
+ * @return array<string,string>
+ */
+function obsoleteBetaLines(array $info, string $version): array
+{
+    $beta = $info['Beta-Version'] ?? '';
+    if ($beta === '' || str_contains($version, '-beta.') || version_compare($beta, $version, '>')) {
+        return array();
+    }
+
+    return array_fill_keys(array_filter(array_keys($info), static fn(string $name): bool => str_starts_with($name, 'Beta-')), '');
+}
+
+/**
  * The current update.txt, from a file or a URL.
  */
 function readUpdateInfo(string $source): string
@@ -497,15 +549,25 @@ function readUpdateInfo(string $source): string
 
 /**
  * update.txt with the lines of the release: a line that is there gets the new value in its place,
- * a new line is added at the end, and every other line stays as it is.
+ * a new line is added at the end, and every other line stays as it is. Version, Beta-Version and
+ * Beta-Release come first, in this order: Admidio up to 5.0 takes the value after the first
+ * "Version=" of the file, which Beta-Version= and Minimum-Source-Version= contain as well.
  * @param array<string,string> $lines
  */
 function mergeUpdateInfo(string $current, array $lines): string
 {
     $current = str_replace("\r\n", "\n", $current);
+    $info = U\parseUpdateInfo($current);
     $result = array();
+    foreach (LEGACY_UPDATE_INFO_LINES as $name) {
+        $result[] = $name . '=' . ($lines[$name] ?? $info[$name] ?? '');
+        unset($lines[$name]);
+    }
     foreach ($current === '' ? array() : explode("\n", rtrim($current, "\n")) as $line) {
         $name = str_contains($line, '=') ? trim(explode('=', $line, 2)[0]) : '';
+        if (in_array($name, LEGACY_UPDATE_INFO_LINES, true)) {
+            continue;
+        }
         if ($name !== '' && array_key_exists($name, $lines)) {
             $line = $name . '=' . $lines[$name];
             unset($lines[$name]);

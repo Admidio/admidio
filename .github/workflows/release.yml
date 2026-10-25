@@ -39,7 +39,7 @@ jobs:
         env:
           ADMIDIO_RELEASE_KEY: ${{ secrets.ADMIDIO_RELEASE_KEY }}
           ADMIDIO_RELEASE_KEY_PASSPHRASE: ${{ secrets.ADMIDIO_RELEASE_KEY_PASSPHRASE }}
-        run: php build-release.php --ref="$GITHUB_REF_NAME" --out=build --update-txt=https://www.admidio.org/update.txt
+        run: php build-release.php --ref="$GITHUB_REF_NAME" --out=build --update-txt
 
       - name: Create the draft release
         env:
