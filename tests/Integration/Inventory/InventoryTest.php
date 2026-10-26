@@ -2877,6 +2877,87 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    /** @testdox Concurrent equipment removal must preserve a reservation handed over after the initial read */
+    public function testConcurrentRemovalPreservesHandedOverReservation(): void
+    {
+        $category = $this->getFixture()->createAndSaveCategory('Concurrent equipment calendar', 'EVT', self::ORG_ID);
+        $role = $this->getFixture()->createAndSaveRoleWithRights('Concurrent equipment permissions', self::ORG_ID, ['rol_inventory_admin' => 1, 'rol_events' => 1]);
+        $this->getFixture()->assignUserToRole(1, $role['rol_id']);
+        $admin = $this->loadUserInOrganization(1, self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($admin, $category, $role): void {
+            $database = $this->getDatabase();
+            $settings = $GLOBALS['gSettingsManager'];
+            $previousEnabled = $settings->getString('inventory_reservations_enabled');
+            $readyFile = tempnam(sys_get_temp_dir(), 'admidio-sync-ready-');
+            $continueFile = tempnam(sys_get_temp_dir(), 'admidio-sync-continue-');
+            unlink($readyFile);
+            unlink($continueFile);
+            $process = null;
+            $event = null;
+            $itemId = 0;
+            try {
+                $settings->set('inventory_reservations_enabled', '1');
+                $itemId = $this->createForeignOrganizationItem(self::ORG_ID);
+                $event = new Event($database);
+                $event->setValue('dat_cat_id', $category['cat_id']);
+                $event->setValue('dat_headline', 'Concurrent handover event');
+                $event->setValue('dat_begin', '2031-01-10 10:00');
+                $event->setValue('dat_end', '2031-01-10 12:00');
+                $event->save();
+                $reservation = new Reservation($database);
+                $reservation->setValue('ivr_ini_id', $itemId);
+                $reservation->setValue('ivr_dat_id', $event->getValue('dat_id'));
+                $reservation->setValue('ivr_begin', '2031-01-10 10:00:00');
+                $reservation->setValue('ivr_end', '2031-01-10 12:00:00');
+                $reservation->setValue('ivr_status', Reservation::STATUS_APPROVED);
+                $reservation->save();
+                $database->endTransaction();
+                $process = new Process([PHP_BINARY, __DIR__ . '/reservation_sync_worker.php', (string) $event->getValue('dat_id'), (string) $admin->getValue('usr_id'), $readyFile, $continueFile]);
+                $process->start();
+                $deadline = microtime(true) + 10;
+                while (!file_exists($readyFile) && $process->isRunning() && microtime(true) < $deadline) {
+                    usleep(10000);
+                }
+                $this->assertFileExists($readyFile, $process->getErrorOutput());
+                $database->startTransaction();
+                $service = new ReservationService($database);
+                $service->startBorrowing($reservation);
+                (new ItemService($database, $this->uuidOfItem($itemId)))->saveData(['INF-LAST_RECEIVER' => 'Alice', 'INF-BORROW_DATE' => '2020-01-01']);
+                $database->endTransaction();
+                touch($continueFile);
+                $process->wait();
+                $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+                $this->assertSame(Reservation::STATUS_BORROWED, (new Reservation($database, (int) $reservation->getValue('ivr_id')))->getValue('ivr_status'));
+                $this->assertFalse($service->isAvailable($itemId, new DateTimeImmutable('2031-01-10 10:00'), new DateTimeImmutable('2031-01-10 12:00')));
+            } finally {
+                if ($process !== null && $process->isRunning()) {
+                    $process->stop();
+                }
+                if ($database->isInTransaction()) {
+                    $database->rollback();
+                }
+                if ($itemId > 0) {
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?', [$itemId]);
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?', [$itemId]);
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?', [$itemId]);
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?', [$itemId]);
+                }
+                if ($event !== null) {
+                    $database->queryPrepared('DELETE FROM ' . TBL_EVENTS . ' WHERE dat_id = ?', [$event->getValue('dat_id')]);
+                }
+                $database->queryPrepared('DELETE FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ?', [$category['cat_id']]);
+                $this->getFixture()->deleteRole($role['rol_id']);
+                $settings->set('inventory_reservations_enabled', $previousEnabled);
+                foreach ([$readyFile, $continueFile] as $file) {
+                    if (file_exists($file)) {
+                        unlink($file);
+                    }
+                }
+                $database->startTransaction();
+            }
+        });
+    }
+
     /** @testdox Global calendars remain protected against edits and reservation changes by child organizations */
     public function testChildOrganizationCannotChangeGlobalEventReservations(): void
     {

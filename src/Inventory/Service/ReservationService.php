@@ -385,13 +385,24 @@ class ReservationService
         sort($itemIds, SORT_NUMERIC);
         $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
+        // Include removed items in the same lock order. Their status may change to borrowed
+        // while an event edit waits, and an old snapshot must not cancel that physical loan.
+        $existingItemIds = $this->database->queryPrepared(
+            'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+             WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+            [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        $lockedItemIds = array_unique(array_merge($itemIds, array_map('intval', $existingItemIds)));
+        sort($lockedItemIds, SORT_NUMERIC);
+        foreach ($lockedItemIds as $itemId) {
+            $this->lockItemForReservation($itemId);
+        }
+
         foreach ($itemIds as $itemId) {
             $item = $this->getItemInCurrentOrganization($itemId);
             if ($item->isRetired()) {
                 throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', [$item->readableName()]);
             }
-            $this->lockItemForReservation($itemId);
-
             if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
                 throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', [$item->readableName()]);
             }
@@ -400,7 +411,7 @@ class ReservationService
         $existingReservations = [];
         $statement = $this->database->queryPrepared(
             'SELECT ivr_id, ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?) FOR UPDATE',
             [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
         );
         while ($existingReservation = $statement->fetch()) {
@@ -422,6 +433,7 @@ class ReservationService
             $requiresApproval = $requireApproval;
             if (isset($existingReservations[$itemId])) {
                 $reservation = new Reservation($this->database, $existingReservations[$itemId]['id']);
+                $this->refreshReservation($reservation);
                 unset($existingReservations[$itemId]);
                 $periodChanged = $reservation->getValue('ivr_begin', 'database') !== $begin->format('Y-m-d H:i:s')
                     || $reservation->getValue('ivr_end', 'database') !== $end->format('Y-m-d H:i:s');
@@ -450,11 +462,11 @@ class ReservationService
         }
 
         foreach ($existingReservations as $existingReservation) {
-            if ($existingReservation['status'] === Reservation::STATUS_BORROWED) {
-                continue;
-            }
             $reservation = new Reservation($this->database, $existingReservation['id']);
-            $this->transition($reservation, Reservation::STATUS_CANCELLED);
+            $this->refreshReservation($reservation);
+            if (in_array($reservation->getValue('ivr_status'), [Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED], true)) {
+                $this->transition($reservation, Reservation::STATUS_CANCELLED);
+            }
         }
         $this->refreshMenuBadge();
     }
