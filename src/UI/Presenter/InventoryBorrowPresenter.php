@@ -41,7 +41,7 @@ class InventoryBorrowPresenter extends PagePresenter
                 $readyReservationParameters[] = $gCurrentUserId;
             }
             $readyReservations = $gDb->queryPrepared(
-            'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ind_value AS item_name,
+            'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ' . TBL_INVENTORY_ITEM_DATA . '.ind_value AS item_name,
                     CASE WHEN inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
                               AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL
                          THEN 1 ELSE 0 END AS item_is_borrowed
@@ -90,7 +90,7 @@ class InventoryBorrowPresenter extends PagePresenter
         }
         $keeperCondition = !$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : '';
         $activeBorrowings = $gDb->queryPrepared(
-            'SELECT ini_uuid, ind_value AS item_name, inb_last_receiver, inb_borrow_date, ivr_uuid
+            'SELECT ini_uuid, ' . TBL_INVENTORY_ITEM_DATA . '.ind_value AS item_name, inb_last_receiver, inb_borrow_date, ivr_uuid
                FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
          INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = inb_ini_id
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id

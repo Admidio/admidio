@@ -34,6 +34,7 @@ use Admidio\UI\Presenter\EventFormPresenter;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
 use Admidio\UI\Presenter\InventoryPresenter;
+use Admidio\UI\Presenter\InventoryBorrowPresenter;
 use Admidio\Users\Entity\User;
 use DateTimeImmutable;
 use Symfony\Component\Process\Process;
@@ -1498,6 +1499,59 @@ class InventoryTest extends DatabaseTestCase
             $service->approve($cancelledApproved);
             $service->changeStatus($cancelledApproved, Reservation::STATUS_CANCELLED);
             $this->assertSame(Reservation::STATUS_CANCELLED, $cancelledApproved->getValue('ivr_status'));
+        });
+    }
+
+    /** @testdox Keepers can open the borrowing workspace and see only their own items */
+    public function testKeeperBorrowingWorkspaceRestrictsBothListsToOwnedItems(): void
+    {
+        $admin = $this->makeInventoryUser('invworkspaceadmin', true);
+        $keeperData = $this->getFixture()->createAndSaveUser('invworkspacekeeper', 'keeper@example.local');
+        $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
+        $itemUuids = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeperData, $admin) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $service = new ReservationService($this->getDatabase());
+            $itemUuids = [];
+            foreach (['owned ready', 'foreign ready', 'owned borrowed', 'foreign borrowed'] as $name) {
+                $itemId = $this->createItem($items, [
+                    'ITEMNAME' => $name,
+                    'KEEPER' => (string) (str_starts_with($name, 'owned') ? $keeperData['usr_id'] : $admin->getValue('usr_id')),
+                ]);
+                $itemUuids[$name] = $this->uuidOfItem($itemId);
+                $reservation = $service->request(
+                    $itemId,
+                    new DateTimeImmutable('+1 day'),
+                    new DateTimeImmutable('+2 days'),
+                );
+                $service->approve($reservation);
+                if (str_ends_with($name, 'borrowed')) {
+                    $service->startBorrowing($reservation);
+                    $items->setValue('LAST_RECEIVER', (string) $keeperData['usr_id']);
+                    $items->setValue('BORROW_DATE', date('Y-m-d'));
+                    $items->saveItemData();
+                }
+            }
+
+            return $itemUuids;
+        });
+
+        $this->withCurrentUser($keeper, self::ORG_ID, true, function () use ($itemUuids) {
+            $GLOBALS['gSettingsManager']->set('inventory_module_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '1');
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+            try {
+                $presenter = new InventoryBorrowPresenter();
+                $presenter->createList();
+                $smarty = $presenter->getSmartyTemplate();
+                $this->assertSame([$itemUuids['owned ready']], array_column($smarty->getTemplateVars('readyReservations'), 'ini_uuid'));
+                $this->assertSame([$itemUuids['owned borrowed']], array_column($smarty->getTemplateVars('activeBorrowings'), 'ini_uuid'));
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
         });
     }
 
