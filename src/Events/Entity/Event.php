@@ -185,10 +185,10 @@ class Event extends Entity
         // event reference, while the cancelled status ensures its former period is not blocked.
         $reservationIds = $this->db->queryPrepared(
             'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?)',
-            array($datId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED)
+            [$datId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED],
         )->fetchAll(\PDO::FETCH_COLUMN);
         foreach ($reservationIds as $reservationId) {
-            $reservation = new Reservation($this->db, (int)$reservationId);
+            $reservation = new Reservation($this->db, (int) $reservationId);
             $reservation->setValue('ivr_status', Reservation::STATUS_CANCELLED);
             $reservation->save();
             (new ReservationNotificationService($this->db))->notifyStatusChanged($reservation);

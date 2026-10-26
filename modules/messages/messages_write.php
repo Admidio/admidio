@@ -65,7 +65,7 @@ try {
 
         $reservation = new Reservation($gDb);
         if (!$reservation->readDataByUuid($getReservationUUID)
-            || !InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))
+            || !InventoryAccessService::canManageReservationItem((int) $reservation->getValue('ivr_ini_id'))
             || $reservation->getValue('ivr_guest_email') === '') {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
@@ -481,7 +481,7 @@ try {
 
         if ($reservationRecipient !== '') {
             $preloadData = $reservationRecipient;
-            $list = array(array($reservationRecipient, $reservationRecipientName, ''));
+            $list = [[$reservationRecipient, $reservationRecipientName, '']];
         }
 
         // no roles or users found then show message

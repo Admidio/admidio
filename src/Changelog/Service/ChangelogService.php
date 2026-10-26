@@ -424,7 +424,7 @@ class ChangelogService {
                 'label' => 'SYS_INVENTORY',
                 'section' => 'content_modules',
                 'enabledBy' => array('inventory_module_enabled'),
-                'tables' => array('inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations')
+                'tables' => ['inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations'],
             ),
             'weblinks' => array(
                 'label' => 'SYS_WEBLINKS',
@@ -863,21 +863,21 @@ class ChangelogService {
             'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
             'inb_borrow_date' =>           array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATETIME'),
             'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATETIME'),
-            'ivr_usr_id' =>                array('name' => 'SYS_REQUESTER', 'type' => 'USER'),
+            'ivr_usr_id' =>                ['name' => 'SYS_REQUESTER', 'type' => 'USER'],
             'ivr_guest_name' =>            'SYS_REQUESTER',
-            'ivr_guest_email' =>           array('name' => 'SYS_EMAIL', 'type' => 'EMAIL'),
+            'ivr_guest_email' =>           ['name' => 'SYS_EMAIL', 'type' => 'EMAIL'],
             'ivr_comment' =>               'SYS_COMMENT',
-            'ivr_begin' =>                 array('name' => 'SYS_START', 'type' => 'DATETIME'),
-            'ivr_end' =>                   array('name' => 'SYS_END', 'type' => 'DATETIME'),
-            'ivr_status' =>                array('name' => 'SYS_INVENTORY_STATUS', 'type' => 'CUSTOM_LIST', 'entries' => array(
+            'ivr_begin' =>                 ['name' => 'SYS_START', 'type' => 'DATETIME'],
+            'ivr_end' =>                   ['name' => 'SYS_END', 'type' => 'DATETIME'],
+            'ivr_status' =>                ['name' => 'SYS_INVENTORY_STATUS', 'type' => 'CUSTOM_LIST', 'entries' => [
                 'requested' => $gL10n->get('SYS_STATUS_REQUESTED'),
                 'approved' => $gL10n->get('SYS_STATUS_APPROVED'),
                 'rejected' => $gL10n->get('SYS_STATUS_REJECTED'),
                 'cancelled' => $gL10n->get('SYS_CANCELLED'),
                 'borrowed' => $gL10n->get('SYS_STATUS_BORROWED'),
-                'returned' => $gL10n->get('SYS_STATUS_RETURNED')
-            )),
-            'ivr_timestamp_create' =>      array('name' => 'SYS_REQUESTED_AT', 'type' => 'DATETIME'),
+                'returned' => $gL10n->get('SYS_STATUS_RETURNED'),
+            ]],
+            'ivr_timestamp_create' =>      ['name' => 'SYS_REQUESTED_AT', 'type' => 'DATETIME'],
             'ifo_value' =>                 'SYS_VALUE',
             'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
             'ifo_sequence' =>              'SYS_ORDER',
@@ -1095,8 +1095,9 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
                 case 'inventory_item_borrow_data' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
-                case 'inventory_reservations' :
-                    $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'reservation_list')); break;
+                case 'inventory_reservations':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_list']);
+                    break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
                 case 'lists' :

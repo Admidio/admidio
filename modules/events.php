@@ -55,7 +55,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'cards', 'validValues' => array('cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data')));
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', ['defaultValue' => 'cards', 'validValues' => ['cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data']]);
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
@@ -185,18 +185,18 @@ try {
 
         case 'reservation_status_data':
             require(__DIR__ . '/../system/login_valid.php');
-            $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid', array('requireValue' => true));
-            $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
-            $getDataStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
-            $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
+            $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid', ['requireValue' => true]);
+            $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', ['requireValue' => true]);
+            $getDataStart = admFuncVariableIsValid($_GET, 'start', 'int', ['requireValue' => true]);
+            $getLength = admFuncVariableIsValid($_GET, 'length', 'int', ['requireValue' => true]);
             $getSearch = isset($_GET['search']) && is_array($_GET['search'])
                 ? admFuncVariableIsValid($_GET['search'], 'value', 'string')
                 : '';
             $getOrderColumn = -1;
             $getOrderDirection = 'desc';
             if (isset($_GET['order'][0]) && is_array($_GET['order'][0])) {
-                $getOrderColumn = admFuncVariableIsValid($_GET['order'][0], 'column', 'int', array('defaultValue' => -1));
-                $getOrderDirection = admFuncVariableIsValid($_GET['order'][0], 'dir', 'string', array('defaultValue' => 'desc', 'validValues' => array('asc', 'desc')));
+                $getOrderColumn = admFuncVariableIsValid($_GET['order'][0], 'column', 'int', ['defaultValue' => -1]);
+                $getOrderDirection = admFuncVariableIsValid($_GET['order'][0], 'dir', 'string', ['defaultValue' => 'desc', 'validValues' => ['asc', 'desc']]);
             }
             header('Content-Type: application/json');
             echo json_encode($eventFormPresenter->getReservationStatusData(
@@ -207,7 +207,7 @@ try {
                 $getLength,
                 $getSearch,
                 $getOrderColumn,
-                $getOrderDirection
+                $getOrderDirection,
             ));
             break;
     }
@@ -216,6 +216,6 @@ try {
         $gMessage->showInModalWindow();
         handleException($e);
     } else {
-        handleException($e, in_array($getMode, array('save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data'), true));
+        handleException($e, in_array($getMode, ['save', 'delete', 'export', 'subscribe', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data'], true));
     }
 }

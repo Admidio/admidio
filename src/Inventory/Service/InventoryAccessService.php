@@ -92,7 +92,7 @@ class InventoryAccessService
             'guests' => true,
             'members' => $gValidLogin,
             'roles' => $gValidLogin && self::isMemberOfConfiguredReservationRole($gCurrentUser),
-            default => false
+            default => false,
         };
     }
 
@@ -129,15 +129,15 @@ class InventoryAccessService
         // organization through the reservation mail workflow.
         $itemOrganizationId = $gDb->queryPrepared(
             'SELECT ini_org_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
-            array($itemId)
+            [$itemId],
         )->fetchColumn();
         if ($itemOrganizationId === false
-            || ((int)$itemOrganizationId > 0 && (int)$itemOrganizationId !== (int)$gCurrentOrgId)) {
+            || ((int) $itemOrganizationId > 0 && (int) $itemOrganizationId !== (int) $gCurrentOrgId)) {
             return false;
         }
 
         return $gCurrentUser->isAdministratorInventory()
-            || (self::canManageReservations() && InventoryPresenter::isCurrentUserKeeper($itemId));
+            || InventoryPresenter::isCurrentUserKeeper($itemId);
     }
 
     /**
@@ -160,7 +160,7 @@ class InventoryAccessService
         global $gSettingsManager;
 
         foreach (explode(',', $gSettingsManager->getString('inventory_reservation_requester_roles')) as $roleId) {
-            if (is_numeric($roleId) && $user->isMemberOfRole((int)$roleId)) {
+            if (is_numeric($roleId) && $user->isMemberOfRole((int) $roleId)) {
                 return true;
             }
         }

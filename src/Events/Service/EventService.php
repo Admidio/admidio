@@ -232,21 +232,21 @@ class EventService
 
         $reservation = (new ReservationService($this->database))->requestAgainForEvent(
             $itemId,
-            (int)$event->getValue('dat_id'),
-            new DateTime((string)$event->getValue('dat_begin', 'database')),
-            new DateTime((string)$event->getValue('dat_end', 'database')),
+            (int) $event->getValue('dat_id'),
+            new DateTime((string) $event->getValue('dat_begin', 'database')),
+            new DateTime((string) $event->getValue('dat_end', 'database')),
         );
 
-        $status = (string)$reservation->getValue('ivr_status');
+        $status = (string) $reservation->getValue('ivr_status');
         $statusLabel = $status === Reservation::STATUS_APPROVED
             ? $gL10n->get('SYS_STATUS_APPROVED')
             : $gL10n->get('SYS_STATUS_REQUESTED');
 
-        return array(
+        return [
             'status' => 'success',
             'reservation_status' => $status,
-            'reservation_status_label' => $statusLabel
-        );
+            'reservation_status_label' => $statusLabel,
+        ];
     }
 
     /**

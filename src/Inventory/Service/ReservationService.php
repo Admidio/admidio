@@ -30,7 +30,7 @@ class ReservationService
         }
 
         $keeperJoin = '';
-        $queryParameters = array();
+        $queryParameters = [];
         if (!$gCurrentUser->isAdministratorInventory()) {
             $keeperJoin = '
              INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
@@ -45,13 +45,13 @@ class ReservationService
             $queryParameters[] = $gCurrentUserId;
         }
 
-        return (int)$database->queryPrepared(
+        return (int) $database->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
              INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
                     ' . $keeperJoin . '
                    WHERE ini_org_id = ? AND ivr_status = ?'
                     . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : ''),
-            $queryParameters
+            $queryParameters,
         )->fetchColumn();
     }
 
@@ -65,7 +65,7 @@ class ReservationService
         string $guestName = '',
         string $guestEmail = '',
         ?int $eventId = null,
-        string $comment = ''
+        string $comment = '',
     ): Reservation {
         global $gCurrentUser, $gValidLogin, $gSettingsManager;
 
@@ -96,7 +96,7 @@ class ReservationService
             $reservation = new Reservation($this->database);
             $reservation->setValue('ivr_ini_id', $itemId);
             $reservation->setValue('ivr_dat_id', $eventId);
-            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
             $reservation->setValue('ivr_guest_name', $gValidLogin ? null : $guestName);
             $reservation->setValue('ivr_guest_email', $gValidLogin ? null : $guestEmail);
             $reservation->setValue('ivr_comment', $comment);
@@ -132,9 +132,9 @@ class ReservationService
                 'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
                   WHERE ivr_dat_id = ? AND ivr_ini_id = ?
                ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC LIMIT 1 FOR UPDATE',
-                array($eventId, $itemId)
+                [$eventId, $itemId],
             )->fetchColumn();
-            if (!in_array($latestStatus, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
+            if (!in_array($latestStatus, [Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED], true)) {
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
             if (!$this->isAvailable($itemId, $begin, $end)) {
@@ -144,7 +144,7 @@ class ReservationService
             $reservation = new Reservation($this->database);
             $reservation->setValue('ivr_ini_id', $itemId);
             $reservation->setValue('ivr_dat_id', $eventId);
-            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
             $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_status', $gSettingsManager->getString('inventory_reservation_approval') === 'automatic'
@@ -160,7 +160,7 @@ class ReservationService
     /** Approve a pending request after an availability re-check. */
     public function approve(Reservation $reservation): void
     {
-        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
         $this->getItemInCurrentOrganization($itemId);
         if (!InventoryAccessService::canManageReservationItem($itemId)) {
             throw new Exception('SYS_NO_RIGHTS');
@@ -170,9 +170,9 @@ class ReservationService
             $this->refreshReservation($reservation);
             if (!$this->isAvailable(
                 $itemId,
-                new \DateTimeImmutable((string)$reservation->getValue('ivr_begin', 'database')),
-                new \DateTimeImmutable((string)$reservation->getValue('ivr_end', 'database')),
-                (int)$reservation->getValue('ivr_id')
+                new \DateTimeImmutable((string) $reservation->getValue('ivr_begin', 'database')),
+                new \DateTimeImmutable((string) $reservation->getValue('ivr_end', 'database')),
+                (int) $reservation->getValue('ivr_id'),
             )) {
                 throw new Exception('SYS_ITEM_NOT_AVAILABLE');
             }
@@ -185,12 +185,12 @@ class ReservationService
     /** Reject or cancel a reservation from the administrator queue. */
     public function changeStatus(Reservation $reservation, string $status): void
     {
-        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
         $this->getItemInCurrentOrganization($itemId);
         if (!InventoryAccessService::canManageReservationItem($itemId)) {
             throw new Exception('SYS_NO_RIGHTS');
         }
-        if (!in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
+        if (!in_array($status, [Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED], true)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
         $this->withinReservationTransaction(function () use ($reservation, $itemId, $status): void {
@@ -209,7 +209,7 @@ class ReservationService
      */
     public function startBorrowing(Reservation $reservation, bool $checkActiveBorrowing = true): void
     {
-        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
         $this->getItemInCurrentOrganization($itemId);
         if (!InventoryAccessService::canManageReservationItem($itemId)) {
             throw new Exception('SYS_NO_RIGHTS');
@@ -233,7 +233,7 @@ class ReservationService
      */
     public function assertCanStartBorrowing(Reservation $reservation): void
     {
-        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
         $this->getItemInCurrentOrganization($itemId);
         if (!InventoryAccessService::canManageReservationItem($itemId)) {
             throw new Exception('SYS_NO_RIGHTS');
@@ -291,12 +291,12 @@ class ReservationService
     {
         global $gCurrentUser, $gValidLogin;
 
-        $this->getItemInCurrentOrganization((int)$reservation->getValue('ivr_ini_id'));
-        if (!$gValidLogin || (int)$reservation->getValue('ivr_usr_id') !== (int)$gCurrentUser->getValue('usr_id')) {
+        $this->getItemInCurrentOrganization((int) $reservation->getValue('ivr_ini_id'));
+        if (!$gValidLogin || (int) $reservation->getValue('ivr_usr_id') !== (int) $gCurrentUser->getValue('usr_id')) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $itemId = (int)$reservation->getValue('ivr_ini_id');
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
         $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
             $this->lockItemForReservation($itemId);
             $this->refreshReservation($reservation);
@@ -437,7 +437,7 @@ class ReservationService
     {
         $this->database->queryPrepared(
             'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
-            array($itemId)
+            [$itemId],
         );
     }
 
@@ -452,7 +452,7 @@ class ReservationService
             'SELECT inb_id FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
               WHERE inb_ini_id = ? AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
                 AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL FOR UPDATE',
-            array($itemId)
+            [$itemId],
         )->fetchColumn();
         if ($activeBorrowing !== false) {
             throw new Exception('SYS_ITEM_NOT_AVAILABLE');
@@ -471,7 +471,7 @@ class ReservationService
     /** Reload a reservation after acquiring its item lock to avoid acting on stale lifecycle state. */
     private function refreshReservation(Reservation $reservation): void
     {
-        $reservationId = (int)$reservation->getValue('ivr_id');
+        $reservationId = (int) $reservation->getValue('ivr_id');
         if ($reservationId <= 0 || !$reservation->readDataById($reservationId)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
@@ -510,10 +510,10 @@ class ReservationService
 
         $organizationId = $this->database->queryPrepared(
             'SELECT ini_org_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
-            array($itemId)
+            [$itemId],
         )->fetchColumn();
         if ($organizationId === false
-            || ((int)$organizationId > 0 && (int)$organizationId !== (int)$gCurrentOrgId)) {
+            || ((int) $organizationId > 0 && (int) $organizationId !== (int) $gCurrentOrgId)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
@@ -530,11 +530,11 @@ class ReservationService
     {
         global $gCurrentOrgId;
 
-        $eventExists = (int)$this->database->queryPrepared(
+        $eventExists = (int) $this->database->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_EVENTS . '
              INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = dat_cat_id
              WHERE dat_id = ? AND cat_org_id = ?',
-            array($eventId, $gCurrentOrgId)
+            [$eventId, $gCurrentOrgId],
         )->fetchColumn();
         if ($eventExists !== 1) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
@@ -544,20 +544,20 @@ class ReservationService
     /** Persist only transitions that belong to the reservation lifecycle. */
     private function transition(Reservation $reservation, string $targetStatus): void
     {
-        $allowedTransitions = array(
-            Reservation::STATUS_REQUESTED => array(
+        $allowedTransitions = [
+            Reservation::STATUS_REQUESTED => [
                 Reservation::STATUS_APPROVED,
                 Reservation::STATUS_REJECTED,
-                Reservation::STATUS_CANCELLED
-            ),
-            Reservation::STATUS_APPROVED => array(
+                Reservation::STATUS_CANCELLED,
+            ],
+            Reservation::STATUS_APPROVED => [
                 Reservation::STATUS_BORROWED,
-                Reservation::STATUS_CANCELLED
-            ),
-            Reservation::STATUS_BORROWED => array(Reservation::STATUS_RETURNED)
-        );
-        $currentStatus = (string)$reservation->getValue('ivr_status');
-        if (!in_array($targetStatus, $allowedTransitions[$currentStatus] ?? array(), true)) {
+                Reservation::STATUS_CANCELLED,
+            ],
+            Reservation::STATUS_BORROWED => [Reservation::STATUS_RETURNED],
+        ];
+        $currentStatus = (string) $reservation->getValue('ivr_status');
+        if (!in_array($targetStatus, $allowedTransitions[$currentStatus] ?? [], true)) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 

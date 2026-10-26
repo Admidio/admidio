@@ -24,23 +24,23 @@ class ReservationNotificationService
     {
         $this->notifyAfterCommit(
             $reservation,
-            $this->shouldNotifyManagers((string)$reservation->getValue('ivr_status')),
-            (string)$reservation->getValue('ivr_status') === Reservation::STATUS_APPROVED
+            $this->shouldNotifyManagers((string) $reservation->getValue('ivr_status')),
+            (string) $reservation->getValue('ivr_status') === Reservation::STATUS_APPROVED,
         );
     }
 
     /** Notify the requester of a decision and managers when an open reservation is cancelled. */
     public function notifyStatusChanged(Reservation $reservation): void
     {
-        $status = (string)$reservation->getValue('ivr_status');
+        $status = (string) $reservation->getValue('ivr_status');
         $this->notifyAfterCommit(
             $reservation,
             $this->shouldNotifyManagers($status),
-            in_array($status, array(
+            in_array($status, [
                 Reservation::STATUS_APPROVED,
                 Reservation::STATUS_REJECTED,
-                Reservation::STATUS_CANCELLED
-            ), true)
+                Reservation::STATUS_CANCELLED,
+            ], true),
         );
     }
 
@@ -51,7 +51,7 @@ class ReservationNotificationService
         return in_array(
             $status,
             array_filter(explode(',', $gSettingsManager->getString('inventory_reservation_manager_statuses'))),
-            true
+            true,
         );
     }
 
@@ -79,7 +79,7 @@ class ReservationNotificationService
         global $gSettingsManager;
 
         $roleUuids = array_filter(explode(',', $gSettingsManager->getString('inventory_reservation_notification_roles')));
-        if ($roleUuids === array()) {
+        if ($roleUuids === []) {
             return;
         }
 
@@ -152,20 +152,20 @@ class ReservationNotificationService
     /** @return array{email:string,firstName:string,lastName:string} */
     private function getRequester(Reservation $reservation): array
     {
-        $userId = (int)$reservation->getValue('ivr_usr_id');
+        $userId = (int) $reservation->getValue('ivr_usr_id');
         if ($userId > 0) {
             $user = new User($this->database, null, $userId);
-            return array(
-                'email' => (string)$user->getValue('EMAIL'),
-                'firstName' => (string)$user->getValue('FIRST_NAME'),
-                'lastName' => (string)$user->getValue('LAST_NAME')
-            );
+            return [
+                'email' => (string) $user->getValue('EMAIL'),
+                'firstName' => (string) $user->getValue('FIRST_NAME'),
+                'lastName' => (string) $user->getValue('LAST_NAME'),
+            ];
         }
 
-        return array(
-            'email' => (string)$reservation->getValue('ivr_guest_email'),
-            'firstName' => (string)$reservation->getValue('ivr_guest_name'),
-            'lastName' => ''
-        );
+        return [
+            'email' => (string) $reservation->getValue('ivr_guest_email'),
+            'firstName' => (string) $reservation->getValue('ivr_guest_name'),
+            'lastName' => '',
+        ];
     }
 }

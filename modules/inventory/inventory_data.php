@@ -53,7 +53,7 @@ try {
     $itemsData = new Admidio\Inventory\ValueObjects\ItemsData($gDb, $gCurrentOrgId);
     $itemFields = $itemsData->getItemFields();
     $canUseBulkActions = $gCurrentUser->isAdministratorInventory()
-        || InventoryPresenter::isKeeperAuthorizedToEdit((int)$gCurrentUser->getValue('usr_id'));
+        || InventoryPresenter::isKeeperAuthorizedToEdit((int) $gCurrentUser->getValue('usr_id'));
     $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
 
     // build headerColumns array to map DataTables column index to internal field names
@@ -165,7 +165,7 @@ try {
         $orderColumns[$idx] = '';
         // use case-insensitive matching for special column names
         $colUpper = strtoupper((string)$colName);
-        if ($anonymizeUserNames && in_array($colUpper, array('KEEPER', 'LAST_RECEIVER'), true)) {
+        if ($anonymizeUserNames && in_array($colUpper, ['KEEPER', 'LAST_RECEIVER'], true)) {
             continue;
         }
         switch ($colUpper) {
@@ -330,9 +330,9 @@ try {
                         $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
                     } else {
                         $content = '<a href="' . SecurityUtils::encodeUrl(
-                                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                                ['user_uuid' => $user->getValue('usr_uuid')]
-                            ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                            ['user_uuid' => $user->getValue('usr_uuid')],
+                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                     }
                 }
             }
@@ -354,9 +354,9 @@ try {
         }
 
         if (!$itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
-            $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(
+            $actionsHtml .= '<a class="admidio-icon-link" aria-label="' . SecurityUtils::encodeHTML($gL10n->get('SYS_RESERVATION_REQUEST')) . '" href="' . SecurityUtils::encodeUrl(
                 ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
-                array('mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid'])
+                ['mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid']],
             ) . '"><i class="bi bi-calendar-plus" data-bs-toggle="tooltip" title="'
                 . htmlspecialchars($gL10n->get('SYS_RESERVATION_REQUEST'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
         }

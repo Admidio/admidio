@@ -4,6 +4,7 @@ namespace Admidio\Inventory\Entity;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Exception;
 
 /**
  * A time-bound request or confirmed reservation for an inventory item.
@@ -33,21 +34,21 @@ class Reservation extends Entity
     public function getIgnoredLogColumns(): array
     {
         return array_merge(
-            array_diff(parent::getIgnoredLogColumns(), array('ivr_usr_id', 'ivr_timestamp_create')),
-            array('ivr_id', 'ivr_ini_id', 'ivr_dat_id')
+            array_diff(parent::getIgnoredLogColumns(), ['ivr_usr_id', 'ivr_timestamp_create']),
+            ['ivr_id', 'ivr_ini_id', 'ivr_dat_id'],
         );
     }
 
     /** Always persist the system request time, including for guest requests. */
     public function save(bool $updateFingerPrint = true): bool
     {
-        if ($this->isNewRecord() && (string)$this->getValue('ivr_timestamp_create') === '') {
+        if ($this->isNewRecord() && (string) $this->getValue('ivr_timestamp_create') === '') {
             $this->setValue('ivr_timestamp_create', DATETIME_NOW);
         }
-        if ((string)$this->getValue('ivr_begin', 'database') !== ''
-            && (string)$this->getValue('ivr_end', 'database') !== ''
-            && new \DateTimeImmutable((string)$this->getValue('ivr_begin', 'database')) >= new \DateTimeImmutable((string)$this->getValue('ivr_end', 'database'))) {
-            throw new \Admidio\Infrastructure\Exception('SYS_DATE_END_BEFORE_BEGIN');
+        if ((string) $this->getValue('ivr_begin', 'database') !== ''
+            && (string) $this->getValue('ivr_end', 'database') !== ''
+            && new \DateTimeImmutable((string) $this->getValue('ivr_begin', 'database')) >= new \DateTimeImmutable((string) $this->getValue('ivr_end', 'database'))) {
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
         }
 
         return parent::save($updateFingerPrint);
@@ -56,7 +57,7 @@ class Reservation extends Entity
     /** Name the history entry after its item instead of its numeric record id. */
     public function readableName(): string
     {
-        $item = new Item($this->db, null, (int)$this->getValue('ivr_ini_id'));
+        $item = new Item($this->db, null, (int) $this->getValue('ivr_ini_id'));
 
         return $this->filterReadableName($item->readableName());
     }

@@ -8,8 +8,8 @@ use Admidio\Users\Entity\User;
 
 require dirname(__DIR__, 2) . '/bootstrap-admidio.php';
 
-$itemId = (int)$argv[1];
-$userId = (int)$argv[2];
+$itemId = (int) $argv[1];
+$userId = (int) $argv[2];
 $startFile = $argv[3];
 $resultFile = $argv[4];
 $database = $GLOBALS['gDb'];
@@ -33,7 +33,7 @@ try {
     (new ReservationService($database))->request(
         $itemId,
         new DateTimeImmutable('2031-01-10 10:00:00'),
-        new DateTimeImmutable('2031-01-10 12:00:00')
+        new DateTimeImmutable('2031-01-10 12:00:00'),
     );
     file_put_contents($resultFile, 'approved');
 } catch (Exception $exception) {

@@ -1330,7 +1330,7 @@ class ItemsData
             // completed reservation history together with all other item-related records.
             $this->mDb->queryPrepared(
                 'DELETE FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
-                array($this->mItemId)
+                [$this->mItemId],
             );
 
             // delete all item data. The values are logged and reported to the persistence hooks before
@@ -1339,17 +1339,17 @@ class ItemsData
             // This class is not an Entity subclass, so it calls logBulkDeletion() and hookBulkDeletion()
             // itself instead of going through that helper.
             $itemData = new ItemData($this->mDb, $this);
-            $itemData->logBulkDeletion(array('ind_id'), 'ind_ini_id = ?', array($this->mItemId));
-            $itemData->hookBulkDeletion('ind_ini_id = ?', array($this->mItemId), $item);
+            $itemData->logBulkDeletion(['ind_id'], 'ind_ini_id = ?', [$this->mItemId]);
+            $itemData->hookBulkDeletion('ind_ini_id = ?', [$this->mItemId], $item);
             $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
-            $this->mDb->queryPrepared($sql, array($this->mItemId));
+            $this->mDb->queryPrepared($sql, [$this->mItemId]);
 
             // delete all item borrow data
             $itemBorrowData = new ItemBorrowData($this->mDb, $this);
-            $itemBorrowData->logBulkDeletion(array('inb_id'), 'inb_ini_id = ?', array($this->mItemId));
-            $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', array($this->mItemId), $item);
+            $itemBorrowData->logBulkDeletion(['inb_id'], 'inb_ini_id = ?', [$this->mItemId]);
+            $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', [$this->mItemId], $item);
             $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
-            $this->mDb->queryPrepared($sql, array($this->mItemId));
+            $this->mDb->queryPrepared($sql, [$this->mItemId]);
 
             // Log and delete the item itself last. The change history shows a change with the record it
             // is about, and it recognizes that record as the entry that a deletion logs last.
@@ -1357,10 +1357,10 @@ class ItemsData
             // including the organization guard - is the one that decides what is actually deleted; it
             // dispatches the same inventory_item_deleting / inventory_item_deleted as delete() would.
             $item->logDeletion();
-            $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', array($this->mItemId, $this->organizationId));
+            $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', [$this->mItemId, $this->organizationId]);
 
             $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-            $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
+            $this->mDb->queryPrepared($sql, [$this->mItemId, $this->organizationId]);
 
             if ($ownsTransaction) {
                 $this->mDb->endTransaction();
@@ -1461,12 +1461,12 @@ class ItemsData
     {
         $this->mDb->queryPrepared(
             'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
-            array($this->mItemId)
+            [$this->mItemId],
         );
         $openReservation = $this->mDb->queryPrepared(
             'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
               WHERE ivr_ini_id = ? AND ivr_status IN (?, ?, ?) FOR UPDATE',
-            array($this->mItemId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED)
+            [$this->mItemId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
         )->fetchColumn();
         if ($openReservation !== false) {
             throw new Exception('SYS_ITEM_HAS_OPEN_RESERVATIONS');

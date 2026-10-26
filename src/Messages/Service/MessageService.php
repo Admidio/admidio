@@ -86,7 +86,7 @@ class MessageService
 
         if ($messageType === Message::MESSAGE_TYPE_EMAIL) {
             $email = new Email();
-            $externalRecipientNames = array();
+            $externalRecipientNames = [];
 
             foreach ($recipients as $recipient) {
                 if (str_starts_with($recipient, 'reservation:')) {
@@ -94,13 +94,13 @@ class MessageService
                     $reservation = new Reservation($this->db);
                     if (!Uuid::isValid($reservationUuid)
                         || !$reservation->readDataByUuid($reservationUuid)
-                        || !InventoryAccessService::canManageReservationItem((int)$reservation->getValue('ivr_ini_id'))
+                        || !InventoryAccessService::canManageReservationItem((int) $reservation->getValue('ivr_ini_id'))
                         || $reservation->getValue('ivr_guest_email') === '') {
                         throw new Exception('SYS_INVALID_PAGE_VIEW');
                     }
 
-                    $guestName = (string)$reservation->getValue('ivr_guest_name');
-                    $guestEmail = (string)$reservation->getValue('ivr_guest_email');
+                    $guestName = (string) $reservation->getValue('ivr_guest_name');
+                    $guestEmail = (string) $reservation->getValue('ivr_guest_email');
                     $email->addRecipient($guestEmail, $guestName);
                     $externalRecipientNames[] = trim($guestName . ' <' . $guestEmail . '>');
                 } elseif (str_contains($recipient, ':')) {
