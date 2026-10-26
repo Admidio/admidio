@@ -11,6 +11,8 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Users\Entity\User;
 use DateInterval;
@@ -65,9 +67,12 @@ class EventService
             } else {
                 // Recurring occurrences are cancelled, not physically deleted. The participation role stays untouched
                 // so existing participation data remains available for a later series management workflow.
+                $this->database->startTransaction();
+                (new ReservationService($this->database))->cancelEventReservations((int) $event->getValue('dat_id'));
                 $event->setValue('dat_recurrence_status', 'cancelled');
                 $event->setValue('dat_recurrence_scope', 'this');
                 $event->save();
+                $this->database->endTransaction();
             }
         } else {
             $event->delete();
@@ -208,6 +213,46 @@ class EventService
     }
 
     /**
+     * Create a new request for a rejected or cancelled event reservation.
+     * @return array<string,string>
+     * @throws Exception
+     */
+    public function requestReservationAgain(string $eventUUID, int $itemId): array
+    {
+        global $gL10n, $gSettingsManager;
+
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')
+            || !$gSettingsManager->getBool('inventory_reservations_events_enabled')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $event = new Event($this->database);
+        if ($eventUUID === '' || !$event->readDataByUuid($eventUUID) || !$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $reservation = (new ReservationService($this->database))->requestAgainForEvent(
+            $itemId,
+            (int) $event->getValue('dat_id'),
+            new DateTime((string) $event->getValue('dat_begin', 'database')),
+            new DateTime((string) $event->getValue('dat_end', 'database')),
+        );
+
+        $status = (string) $reservation->getValue('ivr_status');
+        $statusLabel = $status === Reservation::STATUS_APPROVED
+            ? $gL10n->get('SYS_STATUS_APPROVED')
+            : $gL10n->get('SYS_STATUS_REQUESTED');
+
+        return [
+            'status' => 'success',
+            'reservation_status' => $status,
+            'reservation_status_label' => $statusLabel,
+        ];
+    }
+
+    /**
      * Save already validated event values without depending on a session or HTTP form request.
      * @param array<string,mixed> $formValues
      * @throws Exception
@@ -322,6 +367,17 @@ class EventService
         $seriesCancelFrom = DATE_NOW . ' 00:00:00';
 
         $this->database->startTransaction();
+
+        $eventIds = $this->database->queryPrepared(
+            'SELECT dat_id FROM ' . TBL_EVENTS . '
+             WHERE (dat_evr_id = ? OR dat_id = ?) AND dat_begin >= ?
+               AND dat_recurrence_status IN (?, ?, ?) ORDER BY dat_id',
+            [$recurrenceId, $masterEventId, $seriesCancelFrom, 'master', 'generated', 'modified'],
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        $reservationService = new ReservationService($this->database);
+        foreach ($eventIds as $eventId) {
+            $reservationService->cancelEventReservations((int) $eventId);
+        }
 
         $sql = 'UPDATE ' . TBL_EVENTS . '
                    SET dat_recurrence_status = ?

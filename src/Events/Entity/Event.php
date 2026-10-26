@@ -6,6 +6,7 @@ use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
@@ -178,6 +179,10 @@ class Event extends Entity
             $eventRole = new Role($this->db, $datRoleId);
             $eventRole->delete(); // TODO Exception handling
         }
+
+        // Keep the reservation audit trail when an event disappears. The FK then clears the
+        // event reference, while the cancelled status ensures its former period is not blocked.
+        (new ReservationService($this->db))->cancelEventReservations($datId);
 
         // now delete event
         parent::delete();
