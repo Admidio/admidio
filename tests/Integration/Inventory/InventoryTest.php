@@ -2472,6 +2472,79 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function historicalReservationPeriods(): array
+    {
+        return [
+            'timed event' => [false, '2030-12-03'],
+            'multi-day event' => [false, '2030-12-04'],
+            'all-day event changed to timed event' => [true, '2030-12-03'],
+        ];
+    }
+
+    /**
+     * @dataProvider historicalReservationPeriods
+     * @testdox Reservation history displays and sorts each entry by its own period after an event moves
+     */
+    public function testEventReservationHistoryRetainsOriginalPeriods(bool $allDay, string $originalEnd): void
+    {
+        $admin = $this->makeInventoryUser('invhistoryperiods', true);
+        $category = $this->getFixture()->createAndSaveCategory('Reservation history periods', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $allDay, $originalEnd) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+            $GLOBALS['gSettingsManager']->set('system_date', 'd.m.Y');
+            $GLOBALS['gSettingsManager']->set('system_time', 'H:i');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'History projector']);
+            $values = [
+                'dat_headline' => 'Reservation period history', 'dat_location' => '', 'dat_all_day' => $allDay ? '1' : '0',
+                'event_from' => '2030-12-03', 'event_from_time' => '10:00',
+                'event_to' => $originalEnd, 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [$itemId],
+            ];
+            $service = new EventSaveService($this->getDatabase());
+            $event = $service->saveData('', $values);
+            // Move backwards so sorting by the current event time cannot accidentally pass.
+            $values['event_from'] = '2030-12-01';
+            $values['dat_all_day'] = '0';
+            $values['event_to'] = '2030-12-01';
+            $values['event_from_time'] = '15:00';
+            $values['event_to_time'] = '16:00';
+            $service->saveData((string) $event->getValue('dat_uuid'), $values);
+
+            $previousSession = $GLOBALS['gCurrentSession'];
+            $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+            try {
+                $presenter = new EventFormPresenter();
+                $data = $presenter->getReservationStatusData((string) $event->getValue('dat_uuid'), 'this', 1, 0, 25, '', 0, 'desc');
+                $this->assertCount(2, $data['data']);
+                $this->assertStringContainsString('03.12.2030', $data['data'][0][0]);
+                if ($allDay) {
+                    $this->assertStringNotContainsString('00:00', $data['data'][0][0]);
+                    $this->assertStringNotContainsString('23:59', $data['data'][0][0]);
+                } else {
+                    $this->assertStringContainsString('10:00', $data['data'][0][0]);
+                    $this->assertStringContainsString('12:00', $data['data'][0][0]);
+                }
+                if ($originalEnd !== '2030-12-03') {
+                    $this->assertStringContainsString('04.12.2030', $data['data'][0][0]);
+                }
+                $this->assertStringContainsString($GLOBALS['gL10n']->get('SYS_CANCELLED'), $data['data'][0][2]);
+                $this->assertStringContainsString('01.12.2030', $data['data'][1][0]);
+                $this->assertStringContainsString('15:00 - 16:00', $data['data'][1][0]);
+                $this->assertStringContainsString($GLOBALS['gL10n']->get('SYS_STATUS_REQUESTED'), $data['data'][1][2]);
+                $ascending = $presenter->getReservationStatusData((string) $event->getValue('dat_uuid'), 'this', 2, 0, 25, '', 0, 'asc');
+                $this->assertSame($data['data'][1][0], $ascending['data'][0][0]);
+                $this->assertSame($data['data'][0][0], $ascending['data'][1][0]);
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
+        });
+    }
+
     /**
      * @testdox Event reservation status data requires the right to edit the event
      */

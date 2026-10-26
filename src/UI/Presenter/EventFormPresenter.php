@@ -235,11 +235,11 @@ class EventFormPresenter extends PagePresenter
             'data' => [],
         ];
 
-        $orderColumns = ['dat_begin', 'ind_value', 'ivr_status'];
+        $orderColumns = ['ivr_begin', 'ind_value', 'ivr_status'];
         $orderBy = $orderColumns[$orderColumn] ?? 'COALESCE(ivr_timestamp_change, ivr_timestamp_create)';
         $orderDirection = $orderDirection === 'asc' ? 'ASC' : 'DESC';
 
-        $sql = 'SELECT ivr_id, ivr_dat_id, ivr_ini_id, ind_value, ivr_status, dat_headline, dat_begin, dat_end
+        $sql = 'SELECT ivr_id, ivr_dat_id, ivr_ini_id, ind_value, ivr_status, dat_headline, ivr_begin, ivr_end
                   ' . $sqlFrom . '
               ORDER BY ' . $orderBy . ' ' . $orderDirection . ', ivr_id DESC';
         if ($length !== -1) {
@@ -279,7 +279,12 @@ class EventFormPresenter extends PagePresenter
 
         foreach ($gDb->queryPrepared($sql, $params)->fetchAll() as $reservation) {
             $status = $reservation['ivr_status'];
-            $eventDate = new Event($gDb, (int) $reservation['ivr_dat_id']);
+            // Format the reservation's saved period, not the event's potentially changed dates.
+            $eventDate = new Event($gDb);
+            $eventDate->setValue('dat_begin', $reservation['ivr_begin']);
+            $eventDate->setValue('dat_end', $reservation['ivr_end']);
+            $eventDate->setValue('dat_all_day', substr($reservation['ivr_begin'], 11) === '00:00:00'
+                && substr($reservation['ivr_end'], 11) === '23:59:59');
             $action = '';
             if ((int) $reservation['ivr_dat_id'] === (int) $event->getValue('dat_id')
                 && ($latestReservationIds[(int) $reservation['ivr_ini_id']] ?? 0) === (int) $reservation['ivr_id']
