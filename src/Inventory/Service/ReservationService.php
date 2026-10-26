@@ -319,9 +319,9 @@ class ReservationService
         // request was waiting for that lock (not a stale REPEATABLE READ snapshot).
         $conflict = $this->database->queryPrepared(
             'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_ini_id = ? AND ivr_status = ? AND ivr_id <> ?
+              WHERE ivr_ini_id = ? AND ivr_status IN (?, ?) AND ivr_id <> ?
                 AND ivr_begin < ? AND ivr_end > ? FOR UPDATE',
-            array($itemId, Reservation::STATUS_APPROVED, $ignoreReservationId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s'))
+            [$itemId, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED, $ignoreReservationId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s')],
         )->fetchColumn();
 
         return $conflict === false;
@@ -412,9 +412,9 @@ class ReservationService
     {
         return $this->database->queryPrepared(
             'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_ini_id = ? AND ivr_status = ? AND (ivr_dat_id IS NULL OR ivr_dat_id <> ?)
+              WHERE ivr_ini_id = ? AND ivr_status IN (?, ?) AND (ivr_dat_id IS NULL OR ivr_dat_id <> ?)
                 AND ivr_begin < ? AND ivr_end > ? FOR UPDATE',
-            array($itemId, Reservation::STATUS_APPROVED, $eventId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s'))
+            [$itemId, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED, $eventId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s')],
         )->fetchColumn() === false;
     }
 

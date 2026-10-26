@@ -1592,6 +1592,47 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    /** @testdox A handed-over reservation blocks its period until it is returned */
+    public function testBorrowedReservationPreventsOverlappingRequestsAndEventReservations(): void
+    {
+        $admin = $this->makeInventoryUser('invborrowedoverlap', true);
+        $category = $this->getFixture()->createAndSaveCategory('Borrowed overlap events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Borrowed overlap item']);
+            $service = new ReservationService($this->getDatabase());
+            $begin = new DateTimeImmutable('2030-11-05 10:00:00');
+            $end = new DateTimeImmutable('2030-11-05 12:00:00');
+            $reservation = $service->request($itemId, $begin, $end);
+            $service->startBorrowing($reservation);
+            $this->assertFalse($service->isAvailable($itemId, $begin, $end));
+            $this->assertTrue($service->isAvailable($itemId, $end, $end->modify('+1 hour')));
+
+            try {
+                $service->request($itemId, $begin, $end);
+                $this->fail('A handed-over reservation must still block overlapping requests.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_ITEM_NOT_AVAILABLE', $exception->getTranslationId());
+            }
+
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Overlapping borrowed item');
+            $event->setValue('dat_begin', $begin->format('Y-m-d H:i:s'));
+            $event->setValue('dat_end', $end->format('Y-m-d H:i:s'));
+            $event->save();
+            try {
+                $service->syncEventReservations((int) $event->getValue('dat_id'), [$itemId], $begin, $end);
+                $this->fail('A handed-over reservation must still block overlapping event reservations.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', $exception->getTranslationId());
+            }
+            $service->finishBorrowing($reservation);
+            $this->assertTrue($service->isAvailable($itemId, $begin, $end));
+        });
+    }
+
     /**
      * @testdox Completed reservations cannot be changed through invalid lifecycle transitions
      */
