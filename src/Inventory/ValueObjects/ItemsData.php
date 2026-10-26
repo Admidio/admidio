@@ -15,7 +15,6 @@ use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\ItemData;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\ItemBorrowData;
-use Admidio\Inventory\Entity\Reservation;
 use Admidio\Categories\Entity\Category;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
@@ -1459,18 +1458,7 @@ class ItemsData
     /** Lock the item and reject mutations while a reservation still requires action. */
     private function lockItemAndAssertNoOpenReservations(): void
     {
-        $this->mDb->queryPrepared(
-            'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
-            [$this->mItemId],
-        );
-        $openReservation = $this->mDb->queryPrepared(
-            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
-              WHERE ivr_ini_id = ? AND ivr_status IN (?, ?, ?) FOR UPDATE',
-            [$this->mItemId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
-        )->fetchColumn();
-        if ($openReservation !== false) {
-            throw new Exception('SYS_ITEM_HAS_OPEN_RESERVATIONS');
-        }
+        (new Item($this->mDb, $this, $this->mItemId))->assertNoOpenReservations();
     }
 
     /**
@@ -1487,6 +1475,34 @@ class ItemsData
         }
 
         $this->assertReturnDateIsNotInFuture();
+
+        // Validate a submitted retirement before writing any of the other form fields.
+        foreach ($this->mItemData as $value) {
+            if ($value instanceof ItemData && (int) $value->getValue('ind_inf_id') === (int) $this->getProperty('STATUS', 'inf_id')) {
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                if ((int) $item->getStatus() === (int) $value->getValue('ind_value')) {
+                    continue;
+                }
+                $item->setValue('ini_status', $value->getValue('ind_value'));
+                if ($item->isRetired()) {
+                    $ownsTransaction = !$this->mDb->isInTransaction();
+                    if ($ownsTransaction) {
+                        $this->mDb->startTransaction();
+                    }
+                    try {
+                        $item->assertNoOpenReservations();
+                        if ($ownsTransaction) {
+                            $this->mDb->endTransaction();
+                        }
+                    } catch (\Throwable $exception) {
+                        if ($ownsTransaction) {
+                            $this->mDb->rollback();
+                        }
+                        throw $exception;
+                    }
+                }
+            }
+        }
 
         global $gCurrentUser;
         $this->mDb->startTransaction();

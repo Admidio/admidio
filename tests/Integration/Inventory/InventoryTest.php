@@ -2877,6 +2877,70 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function retireItemEditCases(): array
+    {
+        $cases = [];
+        foreach (['form', 'entity', 'action'] as $path) {
+            foreach (['none', Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED, Reservation::STATUS_CANCELLED, Reservation::STATUS_RETURNED] as $status) {
+                $cases[$path . ', ' . $status] = [$path, $status];
+            }
+        }
+        return $cases;
+    }
+
+    /**
+     * @dataProvider retireItemEditCases
+     * @testdox Every retirement path protects open reservations while completed history permits retirement
+     */
+    public function testEveryRetirementPathProtectsReservations(string $path, string $status): void
+    {
+        $admin = $this->makeInventoryUser('invretirementpaths', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($path, $status): void {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($items, ['ITEMNAME' => 'Retirement guard item']);
+            $uuid = $this->uuidOfItem($itemId);
+            if ($status !== 'none') {
+                $reservation = new Reservation($this->getDatabase());
+                $reservation->setValue('ivr_ini_id', $itemId);
+                $reservation->setValue('ivr_begin', '2030-12-01 10:00:00');
+                $reservation->setValue('ivr_end', '2030-12-01 12:00:00');
+                $reservation->setValue('ivr_status', $status);
+                $reservation->save();
+            }
+            $retiredId = (int) $this->getDatabase()->queryPrepared(
+                'SELECT ifo_id FROM ' . TBL_INVENTORY_FIELD_OPTIONS . ' WHERE ifo_inf_id = ? AND ifo_value = ?',
+                [$items->getProperty('STATUS', 'inf_id'), 'SYS_INVENTORY_FILTER_RETIRED_ITEMS'],
+            )->fetchColumn();
+            $blocked = in_array($status, [Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED], true);
+            try {
+                if ($path === 'form') {
+                    (new ItemService($this->getDatabase(), $uuid))->saveData(['INF-ITEMNAME' => 'Edited retired item', 'INF-STATUS' => $retiredId]);
+                } elseif ($path === 'entity') {
+                    $item = new Item($this->getDatabase(), null, $itemId);
+                    $item->setValue('ini_status', $retiredId);
+                    $item->save();
+                } else {
+                    $items->retireItem();
+                }
+                $this->assertFalse($blocked, 'Open reservations must block retirement through every entry point.');
+            } catch (Exception $exception) {
+                $this->assertTrue($blocked);
+                $this->assertSame('SYS_ITEM_HAS_OPEN_RESERVATIONS', $exception->getTranslationId());
+            }
+            $fresh = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $fresh->readItemData($uuid);
+            $this->assertSame(!$blocked, (new Item($this->getDatabase(), null, $itemId))->isRetired());
+            if ($blocked) {
+                $this->assertSame('Retirement guard item', $fresh->getValue('ITEMNAME'));
+                // Unrelated edits must remain possible while reservations are open.
+                (new ItemService($this->getDatabase(), $uuid))->saveData(['INF-ITEMNAME' => 'Allowed item edit']);
+                $fresh->readItemData($uuid);
+                $this->assertSame('Allowed item edit', $fresh->getValue('ITEMNAME'));
+            }
+        });
+    }
+
     /** @testdox Concurrent equipment removal must preserve a reservation handed over after the initial read */
     public function testConcurrentRemovalPreservesHandedOverReservation(): void
     {
