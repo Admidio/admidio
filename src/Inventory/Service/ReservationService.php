@@ -335,8 +335,9 @@ class ReservationService
      * approves them. Call this inside the event save transaction.
      *
      * @param array<int,mixed> $itemIds
+     * @param bool $requireApproval Require a decision for new occurrences of a rescheduled series.
      */
-    public function syncEventReservations(int $eventId, array $itemIds, DateTimeInterface $begin, DateTimeInterface $end): void
+    public function syncEventReservations(int $eventId, array $itemIds, DateTimeInterface $begin, DateTimeInterface $end, bool $requireApproval = false): void
     {
         global $gCurrentUser, $gSettingsManager, $gValidLogin;
 
@@ -385,7 +386,7 @@ class ReservationService
         }
 
         foreach ($itemIds as $itemId) {
-            $requiresApproval = false;
+            $requiresApproval = $requireApproval;
             if (isset($existingReservations[$itemId])) {
                 $reservation = new Reservation($this->database, $existingReservations[$itemId]['id']);
                 unset($existingReservations[$itemId]);

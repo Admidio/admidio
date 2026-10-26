@@ -783,7 +783,7 @@ class EventSaveService
         $eventStatement = $gDb->queryPrepared($sql, array($recurrenceId, $seriesUpdateFrom, 'modified', 'cancelled'));
 
         while ($row = $eventStatement->fetch()) {
-            $manualStatuses[(string)$row['dat_recurrence_original_begin']] = (string)$row['dat_recurrence_status'];
+            $manualStatuses[substr((string) $row['dat_recurrence_original_begin'], 0, 10)] = (string) $row['dat_recurrence_status'];
         }
 
         return $manualStatuses;
@@ -861,10 +861,48 @@ class EventSaveService
 
         $seriesUpdateFrom = DATE_NOW . ' 00:00:00';
         $manualStatuses = $this->getFutureManualRecurrenceStatuses($recurrenceId, $seriesUpdateFrom);
-        $processedOriginalBegins = array();
         $generatedUntil = null;
 
         $gDb->startTransaction();
+
+        $seriesPeriodChanged = $masterEvent->getValue('dat_begin', 'database') !== $recurrenceBeginDateTime->format('Y-m-d H:i:s')
+            || $masterEvent->getValue('dat_end', 'database') !== $recurrenceEndDateTime->format('Y-m-d H:i:s');
+        $reservationService = new ReservationService($gDb);
+        // Release obsolete occurrences before checking the new periods: a moved series may
+        // otherwise conflict with its own previous reservations. Keep borrowed items intact.
+        $generatedDays = [];
+        $seriesUpdateBegin = new DateTimeImmutable($seriesUpdateFrom);
+        foreach ($occurrences as $occurrence) {
+            if ($occurrence->getBegin() >= $seriesUpdateBegin
+                && $occurrence->getBegin() != $recurrenceBeginDateTime) {
+                $generatedDays[] = $occurrence->getBegin()->format('Y-m-d');
+            }
+        }
+        $staleParams = [$recurrenceId, $seriesUpdateFrom, 'generated'];
+        $staleCondition = '';
+        if ($generatedDays !== []) {
+            $staleCondition = ' AND DATE(dat_recurrence_original_begin) NOT IN (' . Database::getQmForValues($generatedDays) . ')';
+            $staleParams = array_merge($staleParams, $generatedDays);
+        }
+        $staleEvents = $gDb->queryPrepared(
+            'SELECT dat_id, dat_begin, dat_end FROM ' . TBL_EVENTS . '
+             WHERE dat_evr_id = ? AND dat_begin >= ? AND dat_recurrence_status = ?' . $staleCondition,
+            $staleParams,
+        )->fetchAll();
+        foreach ($staleEvents as $staleEvent) {
+            $reservationService->syncEventReservations(
+                (int) $staleEvent['dat_id'],
+                [],
+                new DateTimeImmutable($staleEvent['dat_begin']),
+                new DateTimeImmutable($staleEvent['dat_end']),
+            );
+            $gDb->queryPrepared(
+                'UPDATE ' . TBL_EVENTS . '
+                 SET dat_recurrence_status = ?, dat_recurrence_scope = ?, dat_usr_id_change = ?, dat_timestamp_change = ?
+                 WHERE dat_id = ?',
+                ['cancelled', 'series', $gCurrentUserId, DATETIME_NOW, $staleEvent['dat_id']],
+            );
+        }
 
         $this->setMasterEventValues($masterEvent, $formValues, $recurrenceBeginDateTime, $recurrenceEndDateTime, $recurrenceId);
         if ($masterEvent->save()) {
@@ -873,7 +911,6 @@ class EventSaveService
             });
         }
         $this->saveEventParticipation($masterEvent, $formValues, $eventParticipationRoles, $user);
-        $reservationService = new ReservationService($gDb);
         $reservationItemIds = $formValues['event_inventory_items'] ?? [];
         if (!is_array($reservationItemIds)) {
             $reservationItemIds = [$reservationItemIds];
@@ -900,7 +937,6 @@ class EventSaveService
             $generatedUntil = $occurrence->getBegin();
 
             if ($originalBegin === $recurrenceBeginDateTime->format('Y-m-d H:i:s')) {
-                $processedOriginalBegins[] = $originalBegin;
                 continue;
             }
 
@@ -908,8 +944,7 @@ class EventSaveService
                 continue;
             }
 
-            if (isset($manualStatuses[$originalBegin])) {
-                $processedOriginalBegins[] = $originalBegin;
+            if (isset($manualStatuses[substr($originalBegin, 0, 10)])) {
                 continue;
             }
 
@@ -936,36 +971,10 @@ class EventSaveService
                     $occurrenceReservationItemIds,
                     $occurrence->getBegin(),
                     $occurrence->getEnd(),
+                    $seriesPeriodChanged || $staleEvents !== [],
                 );
             }
-            $processedOriginalBegins[] = $originalBegin;
         }
-
-        $cancelParams = array(
-            'cancelled',
-            'series',
-            $gCurrentUserId,
-            DATETIME_NOW,
-            $recurrenceId,
-            $seriesUpdateFrom,
-            'generated'
-        );
-        $processedCondition = '';
-        if (count($processedOriginalBegins) > 0) {
-            $processedCondition = '
-                   AND dat_recurrence_original_begin NOT IN (' . Database::getQmForValues($processedOriginalBegins) . ')';
-            $cancelParams = array_merge($cancelParams, $processedOriginalBegins);
-        }
-
-        $sql = 'UPDATE ' . TBL_EVENTS . '
-                   SET dat_recurrence_status = ?
-                     , dat_recurrence_scope  = ?
-                     , dat_usr_id_change     = ?
-                     , dat_timestamp_change  = ?
-                 WHERE dat_evr_id = ?
-                   AND dat_begin >= ?
-                   AND dat_recurrence_status = ?' . $processedCondition;
-        $gDb->queryPrepared($sql, $cancelParams);
 
         $recurrenceRepository->update($recurrenceId, $recurrenceRule, $eventTimezone, $generatedUntil);
 

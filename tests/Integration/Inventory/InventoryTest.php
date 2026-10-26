@@ -2669,18 +2669,28 @@ class InventoryTest extends DatabaseTestCase
             'single event, automatic approval' => ['this', 'automatic'],
             'event series, manual approval' => ['series', 'manual'],
             'event series, automatic approval' => ['series', 'automatic'],
+            'moved series, manual approval' => ['moved-series', 'manual'],
+            'moved series, automatic approval' => ['moved-series', 'automatic'],
+            'overlapping series, automatic approval' => ['overlapping-series', 'automatic'],
+            'shortened series, automatic approval' => ['shortened-series', 'automatic'],
+            'changed interval, automatic approval' => ['interval-series', 'automatic'],
         ];
     }
 
     /**
      * @dataProvider eventReapprovalScopes
-     * @testdox Saving an event or series with a changed time requires renewed equipment approval
+     * @testdox Event and recurrence changes retain only approvals for unchanged periods
      */
     public function testEventSaveRequestsEquipmentApprovalAgain(string $scope, string $approval): void
     {
+        $moveSeries = in_array($scope, ['moved-series', 'overlapping-series'], true);
+        $overlap = $scope === 'overlapping-series';
+        $shorten = $scope === 'shortened-series';
+        $changeInterval = $scope === 'interval-series';
+        $scope = $scope === 'this' ? 'this' : 'series';
         $admin = $this->makeInventoryUser('invsaveeventreapproval', true);
         $category = $this->getFixture()->createAndSaveCategory('Saved reapproval events', 'EVT', self::ORG_ID);
-        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $scope, $approval) {
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $scope, $approval, $moveSeries, $overlap, $shorten, $changeInterval) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', $approval);
@@ -2717,20 +2727,87 @@ class InventoryTest extends DatabaseTestCase
                 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
                 [$itemId, Reservation::STATUS_APPROVED],
             )->fetchColumn());
-            $values['event_from_time'] = '14:00';
-            $values['event_to_time'] = '16:00';
+            $unchangedTime = $overlap || $shorten || $changeInterval;
+            $values['event_from_time'] = $unchangedTime ? '10:00' : '14:00';
+            $values['event_to_time'] = $unchangedTime ? '12:00' : '16:00';
+            if ($moveSeries) {
+                $values['event_from'] = $overlap ? '2030-12-02' : '2030-12-04';
+                $values['event_to'] = $values['event_from'];
+            }
+            if ($shorten) {
+                $values['event_recurrence_count'] = 1;
+            }
+            if ($changeInterval) {
+                $values['event_recurrence_interval'] = 2;
+            }
             $service->saveData((string) $event->getValue('dat_uuid'), $values, '', false, $scope);
-            $this->assertSame(0, (int) $this->getDatabase()->queryPrepared(
+            $expectedApproved = $shorten || $changeInterval ? 1 : 0;
+            $expectedCancelled = count($reservationIds) - $expectedApproved;
+            $expectedRequested = $shorten ? 0 : $expectedCancelled;
+            $this->assertSame($expectedApproved, (int) $this->getDatabase()->queryPrepared(
                 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
                 [$itemId, Reservation::STATUS_APPROVED],
             )->fetchColumn());
-            $this->assertSame(count($reservationIds), (int) $this->getDatabase()->queryPrepared(
+            $this->assertSame($expectedRequested, (int) $this->getDatabase()->queryPrepared(
                 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
                 [$itemId, Reservation::STATUS_REQUESTED],
             )->fetchColumn());
-            $this->assertSame(count($reservationIds), (int) $this->getDatabase()->queryPrepared(
+            $this->assertSame($expectedCancelled, (int) $this->getDatabase()->queryPrepared(
                 'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
                 [$itemId, Reservation::STATUS_CANCELLED],
+            )->fetchColumn());
+        });
+    }
+
+    /** @testdox Series time changes preserve modified and cancelled occurrences */
+    public function testSeriesTimeChangesPreserveManualExceptions(): void
+    {
+        $admin = $this->makeInventoryUser('invseriesexceptions', true);
+        $category = $this->getFixture()->createAndSaveCategory('Series exceptions', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category): void {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Series exception projector']);
+            $values = [
+                'dat_headline' => 'Series exceptions', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [$itemId],
+                'event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1,
+                'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 3,
+            ];
+            $service = new EventSaveService($this->getDatabase());
+            $event = $service->saveData('', $values);
+            $exceptions = $this->getDatabase()->queryPrepared(
+                'SELECT dat_id FROM ' . TBL_EVENTS . ' WHERE dat_evr_id = ? AND dat_recurrence_status = ? ORDER BY dat_begin',
+                [$event->getValue('dat_evr_id'), 'generated'],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            foreach (['modified', 'cancelled'] as $index => $status) {
+                $this->getDatabase()->queryPrepared(
+                    'UPDATE ' . TBL_EVENTS . ' SET dat_recurrence_status = ? WHERE dat_id = ?',
+                    [$status, $exceptions[$index]],
+                );
+            }
+            (new ReservationService($this->getDatabase()))->syncEventReservations(
+                (int) $exceptions[1],
+                [],
+                new DateTimeImmutable('2030-12-03 10:00'),
+                new DateTimeImmutable('2030-12-03 12:00'),
+            );
+            $values['event_from_time'] = '14:00';
+            $values['event_to_time'] = '16:00';
+            $service->saveData((string) $event->getValue('dat_uuid'), $values, '', false, 'series');
+            $this->assertSame(3, (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_EVENTS . ' WHERE dat_evr_id = ?',
+                [$event->getValue('dat_evr_id')],
+            )->fetchColumn(), 'Manual exceptions must not be recreated at the new series time.');
+            $this->assertSame('2030-12-02 10:00:00', $this->getDatabase()->queryPrepared(
+                'SELECT ivr_begin FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status = ?',
+                [$exceptions[0], Reservation::STATUS_APPROVED],
             )->fetchColumn());
         });
     }
