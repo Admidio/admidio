@@ -889,7 +889,7 @@
   <string name="SYS_INVENTORY_ITEMFIELD_DELETE_DESC">Soll das Eigenschaftsfeld #VAR1_BOLD# und die dazugehörigen Gegenstandsdaten gelöscht werden?</string>
   <string name="SYS_INVENTORY_ITEMFIELD_EDIT">Eigenschaftsfeld ändern</string>
   <string name="SYS_INVENTORY_ITEMFIELD_SELECT_OPTIONS">Auswahloptionen für Eigenschaftsfelder</string>
-  <string name="SYS_INVENTORY_ITEMNAME">Artikelname</string>
+  <string name="SYS_INVENTORY_ITEMNAME">Gegenstandsname</string>
   <string name="SYS_INVENTORY_ITEMNAME_DESC">Der Name des Gegenstandes</string>
   <string name="SYS_INVENTORY_ITEMS">Gegenstände</string>
   <string name="SYS_INVENTORY_ITEMS_DISABLE_BORROWING">Ausleih-Funktionalität deaktivieren</string>
