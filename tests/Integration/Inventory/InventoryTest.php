@@ -1229,7 +1229,7 @@ class InventoryTest extends DatabaseTestCase
      */
     public function testConcurrentAutomaticReservationsCreateOnlyOneConfirmedReservation(): void
     {
-        $admin = $this->makeInventoryUser('invreservationconcurrent', true);
+        $admin = $this->loadUserInOrganization(1, self::ORG_ID);
         $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($admin) {
             $database = $this->getDatabase();
             $settings = $GLOBALS['gSettingsManager'];
@@ -1249,7 +1249,7 @@ class InventoryTest extends DatabaseTestCase
                 $settings->set('inventory_reservations_enabled', '1');
                 $settings->set('inventory_reservation_requesters', 'members');
                 $settings->set('inventory_reservation_approval', 'automatic');
-                $itemId = $this->createItem(new ItemsData($database, self::ORG_ID), array('ITEMNAME' => 'Concurrent reservation projector'));
+                $itemId = $this->createForeignOrganizationItem(self::ORG_ID);
 
                 // Child processes need to see the item and the temporary settings.
                 $database->endTransaction();

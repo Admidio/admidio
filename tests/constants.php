@@ -75,6 +75,10 @@ if (!defined('CURRENT_URL')) {
     define('CURRENT_URL', ADMIDIO_URL . '/');
 }
 
+if (!defined('TBL_EVENT_RECURRENCES')) {
+    define('TBL_EVENT_RECURRENCES', TABLE_PREFIX . '_event_recurrences');
+}
+
 // Installation::install() creates ecard_templates, logs, mail_templates and temp below this folder,
 // so it has to be the directory of the test run and not the adm_my_files of the checkout, which on
 // a developer machine is a real installation.
