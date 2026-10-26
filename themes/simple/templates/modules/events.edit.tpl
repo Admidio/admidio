@@ -131,13 +131,13 @@
             return;
         }
 
-        const $select = $('<select>', {class: 'form-select', name: 'event_inventory_items[]'});
+        const $select = $('<select>', {class: 'form-select', name: 'event_inventory_items[]', 'aria-label': reservationData.itemLabel});
         $select.append($('<option>').val('').text('- ' + reservationData.pleaseChoose + ' -'));
         reservationData.items.forEach(function (item) {
             $select.append($('<option>').val(item.id).text(item.name));
         });
         $select.val(itemId ? String(itemId) : '');
-        const $remove = $('<button>', {type: 'button', class: 'btn btn-link text-danger p-0 event-inventory-reservation-remove', title: reservationData.deleteLabel})
+        const $remove = $('<button>', {type: 'button', class: 'admidio-icon-link border-0 bg-transparent text-danger event-inventory-reservation-remove', title: reservationData.deleteLabel, 'aria-label': reservationData.deleteLabel})
             .append($('<i>', {class: 'bi bi-trash'}));
         $rows.append($('<tr>').append($('<td>').append($select), $('<td>', {class: 'text-end'}).append($remove)));
     }

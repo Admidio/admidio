@@ -46,7 +46,7 @@ class InventoryItemPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $formUrlParameters = array('mode' => 'reservation_request_save');
+        $formUrlParameters = ['mode' => 'reservation_request_save'];
         if ($itemUUID !== '') {
             $item = new Item($gDb);
             if (!$item->readDataByUuid($itemUUID) || $item->isRetired()) {
@@ -59,10 +59,10 @@ class InventoryItemPresenter extends PagePresenter
             'adm_inventory_reservation_request_form',
             'modules/inventory.reservation.request.tpl',
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', $formUrlParameters),
-            $this
+            $this,
         );
         if ($itemUUID !== '') {
-            $form->addInput('item_name', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $item->readableName(), array('property' => FormPresenter::FIELD_DISABLED));
+            $form->addInput('item_name', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $item->readableName(), ['property' => FormPresenter::FIELD_DISABLED]);
         } else {
             $availableItems = $gDb->queryPrepared(
                 'SELECT ini_uuid, ind_value
@@ -72,28 +72,29 @@ class InventoryItemPresenter extends PagePresenter
              INNER JOIN ' . TBL_INVENTORY_FIELD_OPTIONS . ' ON ifo_id = ini_status
                   WHERE ini_org_id = ? AND ifo_value <> ?
                ORDER BY ind_value',
-                array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
+                [$gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS'],
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
-            $form->addSelectBox('reservation_item_uuid', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $availableItems, array('property' => FormPresenter::FIELD_REQUIRED));
+            $form->addSelectBox('reservation_item_uuid', $gL10n->get('SYS_INVENTORY_ITEMNAME'), $availableItems, ['property' => FormPresenter::FIELD_REQUIRED]);
         }
         $reservationBegin = new DateTime('next hour');
         $reservationBegin->setTime((int) $reservationBegin->format('H'), 0);
         $reservationEnd = (clone $reservationBegin)->modify('+1 hour');
-        $form->addInput('reservation_begin', $gL10n->get('SYS_START'), $reservationBegin->format('Y-m-d H:i:s'), array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
-        $form->addInput('reservation_end', $gL10n->get('SYS_END'), $reservationEnd->format('Y-m-d H:i:s'), array('type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED));
+        $form->addInput('reservation_begin', $gL10n->get('SYS_START'), $reservationBegin->format('Y-m-d H:i:s'), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
+        $form->addInput('reservation_end', $gL10n->get('SYS_END'), $reservationEnd->format('Y-m-d H:i:s'), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
         if (!$gValidLogin) {
-            $form->addInput('guest_last_name', $gL10n->get('SYS_LASTNAME'), '', array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
-            $form->addInput('guest_first_name', $gL10n->get('SYS_FIRSTNAME'), '', array('maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
-            $form->addInput('guest_email', $gL10n->get('SYS_EMAIL'), '', array('type' => 'email', 'maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED));
+            $form->addInput('guest_last_name', $gL10n->get('SYS_LASTNAME'), '', ['maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED]);
+            $form->addInput('guest_first_name', $gL10n->get('SYS_FIRSTNAME'), '', ['maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED]);
+            $form->addInput('guest_email', $gL10n->get('SYS_EMAIL'), '', ['type' => 'email', 'maxLength' => 255, 'property' => FormPresenter::FIELD_REQUIRED]);
             if ($gSettingsManager->getBool('captcha_enabled')) {
                 $form->addCaptcha('adm_captcha_code');
             }
         }
-        $form->addInput('reservation_comment', $gL10n->get('SYS_COMMENT'), '', array('type' => 'text', 'maxLength' => 4000));
-        $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SEND'), array('icon' => 'bi-send'));
+        $form->addInput('reservation_comment', $gL10n->get('SYS_COMMENT'), '', ['type' => 'text', 'maxLength' => 4000]);
+        $form->addSubmitButton('adm_button_save', $gL10n->get('SYS_SEND'), ['icon' => 'bi-send']);
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
+
     /**
      * Create the data for the edit form of an item field.
      * @param string $itemUUID UUID of the item that should be edited.
@@ -812,15 +813,15 @@ class InventoryItemPresenter extends PagePresenter
         if ($reservationUuid !== '') {
             $reservation = new Reservation($gDb);
             if (!$reservation->readDataByUuid($reservationUuid)
-                || (int)$reservation->getValue('ivr_ini_id') !== $items->getItemId()
+                || (int) $reservation->getValue('ivr_ini_id') !== $items->getItemId()
                 || $reservation->getValue('ivr_status') !== ($returning ? Reservation::STATUS_BORROWED : Reservation::STATUS_APPROVED)) {
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
 
-            if (!$returning && (int)$reservation->getValue('ivr_dat_id') > 0) {
-                $event = new Event($gDb, (int)$reservation->getValue('ivr_dat_id'));
+            if (!$returning && (int) $reservation->getValue('ivr_dat_id') > 0) {
+                $event = new Event($gDb, (int) $reservation->getValue('ivr_dat_id'));
                 $lastReceiverValue = $event->getValue('dat_usr_id_create');
-            } elseif (!$returning && (int)$reservation->getValue('ivr_usr_id') > 0) {
+            } elseif (!$returning && (int) $reservation->getValue('ivr_usr_id') > 0) {
                 $lastReceiverValue = $reservation->getValue('ivr_usr_id');
             } elseif (!$returning) {
                 $lastReceiverValue = $reservation->getValue('ivr_guest_name');
@@ -839,12 +840,12 @@ class InventoryItemPresenter extends PagePresenter
         $form = new FormPresenter(
             'adm_item_edit_borrow_form',
             'modules/inventory.item.edit.borrow.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter([
                 'item_uuid' => $itemUUID,
                 'mode' => 'item_save',
                 'reservation_uuid' => $reservationUuid,
-                'item_borrowed' => $returning ? 1 : null
-            ))),
+                'item_borrowed' => $returning ? 1 : null,
+            ])),
             $this
         );
 
@@ -966,7 +967,7 @@ class InventoryItemPresenter extends PagePresenter
 
                             var clearButton = $("<button>", {
                                 type: "button",
-                                class: "btn btn-outline-secondary",
+                                class: "admidio-icon-link border-0 bg-transparent",
                                 title: ' . json_encode($gL10n->get('SYS_EMPTY')) . ',
                                 "aria-label": ' . json_encode($gL10n->get('SYS_EMPTY')) . '
                             }).append($("<i>", {class: "bi bi-x-lg"}));
@@ -1071,8 +1072,8 @@ class InventoryItemPresenter extends PagePresenter
                         $this->addJavascript('
                             var selectIdLastReceiver = "#INF-' . $ivtLastReceiver . '";
         
-                            var defaultValue = ' . json_encode((string)$lastReceiverValue) . ';
-                            var defaultText = ' . json_encode((string)$lastReceiverValue) . '; // Der Text für den Default-Wert
+                            var defaultValue = ' . json_encode((string) $lastReceiverValue) . ';
+                            var defaultText = ' . json_encode((string) $lastReceiverValue) . '; // Der Text für den Default-Wert
         
                             function isSelect2Empty(selectId) {
                                 // Hole den aktuellen Wert des Select2-Feldes
@@ -1125,7 +1126,7 @@ class InventoryItemPresenter extends PagePresenter
                         $defaultValue = match ($infNameIntern) {
                             'BORROW_DATE' => $borrowDateValue,
                             'RETURN_DATE' => $returnDateValue,
-                            default => $items->getValue($infNameIntern)
+                            default => $items->getValue($infNameIntern),
                         };
                         if ($defaultValue === '' && $infNameIntern === 'BORROW_DATE') {
                             $defaultValue = $defaultDate;

@@ -1187,8 +1187,8 @@ class PreferencesPresenter extends PagePresenter
         $formInventory->addCheckbox(
             'inventory_anonymize_user_names_for_guests',
             $gL10n->get('SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS'),
-            (bool)$formValues['inventory_anonymize_user_names_for_guests'],
-            array('helpTextId' => 'SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC')
+            (bool) $formValues['inventory_anonymize_user_names_for_guests'],
+            ['helpTextId' => 'SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC'],
         );
 
         // read all roles from db
@@ -1353,55 +1353,55 @@ class PreferencesPresenter extends PagePresenter
         // reservation settings
         $formInventory->addSeparator(
             'inventory_separator_reservations',
-            $gL10n->get('SYS_RESERVATIONS')
+            $gL10n->get('SYS_RESERVATIONS'),
         );
         $formInventory->addCheckbox(
             'inventory_reservations_enabled',
             $gL10n->get('SYS_RESERVATIONS_ENABLED'),
-            (bool)$formValues['inventory_reservations_enabled'],
-            array('helpTextId' => 'SYS_INVENTORY_RESERVATIONS_ENABLED_DESC')
+            (bool) $formValues['inventory_reservations_enabled'],
+            ['helpTextId' => 'SYS_INVENTORY_RESERVATIONS_ENABLED_DESC'],
         );
         $formInventory->addCheckbox(
             'inventory_reservations_events_enabled',
             $gL10n->get('SYS_RESERVATIONS_EVENTS_ENABLED'),
-            (bool)$formValues['inventory_reservations_events_enabled'],
-            array('helpTextId' => 'SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED_DESC')
+            (bool) $formValues['inventory_reservations_events_enabled'],
+            ['helpTextId' => 'SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED_DESC'],
         );
         $formInventory->addCheckbox(
             'inventory_reservation_keepers_manage',
             $gL10n->get('SYS_RESERVATION_ITEM_KEEPERS_MANAGE'),
-            (bool)$formValues['inventory_reservation_keepers_manage'],
-            array('helpTextId' => 'SYS_RESERVATION_ITEM_KEEPERS_MANAGE_DESC')
+            (bool) $formValues['inventory_reservation_keepers_manage'],
+            ['helpTextId' => 'SYS_RESERVATION_ITEM_KEEPERS_MANAGE_DESC'],
         );
         $formInventory->addSelectBox(
             'inventory_reservation_approval',
             $gL10n->get('SYS_RESERVATION_APPROVAL'),
-            array(
+            [
                 'automatic' => $gL10n->get('SYS_AUTOMATIC_APPROVAL'),
-                'manual' => $gL10n->get('SYS_MANUAL_APPROVAL')
-            ),
-            array(
+                'manual' => $gL10n->get('SYS_MANUAL_APPROVAL'),
+            ],
+            [
                 'defaultValue' => $formValues['inventory_reservation_approval'],
                 'showContextDependentFirstEntry' => false,
-                'helpTextId' => 'SYS_RESERVATION_APPROVAL_DESC'
-            )
+                'helpTextId' => 'SYS_RESERVATION_APPROVAL_DESC',
+            ],
         );
         $formInventory->addSelectBox(
             'inventory_reservation_requesters',
             $gL10n->get('SYS_RESERVATION_REQUESTERS'),
-            array(
+            [
                 'guests' => $gL10n->get('SYS_ALL'),
                 'members' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'),
-                'roles' => $gL10n->get('SYS_ROLES')
-            ),
-            array(
+                'roles' => $gL10n->get('SYS_ROLES'),
+            ],
+            [
                 'defaultValue' => $formValues['inventory_reservation_requesters'],
                 'showContextDependentFirstEntry' => false,
-                'helpTextId' => 'SYS_RESERVATION_REQUESTERS_DESC'
-            )
+                'helpTextId' => 'SYS_RESERVATION_REQUESTERS_DESC',
+            ],
         );
 
-        $reservationRoleEntries = array();
+        $reservationRoleEntries = [];
         $reservationRolesStatement = $gDb->queryPrepared(
             'SELECT rol_id, rol_name, cat_name
                FROM ' . TBL_ROLES . '
@@ -1409,69 +1409,69 @@ class PreferencesPresenter extends PagePresenter
               WHERE rol_valid = true AND rol_system = false
                 AND cat_name_intern <> \'EVENTS\' AND cat_org_id = ?
            ORDER BY cat_sequence, rol_name',
-            array($gCurrentOrgId)
+            [$gCurrentOrgId],
         );
         while ($reservationRole = $reservationRolesStatement->fetch()) {
-            $reservationRoleEntries[] = array(
+            $reservationRoleEntries[] = [
                 $reservationRole['rol_id'],
                 $reservationRole['rol_name'],
-                $reservationRole['cat_name']
-            );
+                $reservationRole['cat_name'],
+            ];
         }
         $formInventory->addSelectBox(
             'inventory_reservation_requester_roles',
             $gL10n->get('SYS_RESERVATION_REQUESTER_ROLES'),
             $reservationRoleEntries,
-            array(
+            [
                 'defaultValue' => explode(',', $formValues['inventory_reservation_requester_roles']),
                 'multiselect' => true,
-                'helpTextId' => 'SYS_RESERVATION_REQUESTER_ROLES_DESC'
-            )
+                'helpTextId' => 'SYS_RESERVATION_REQUESTER_ROLES_DESC',
+            ],
         );
         $formInventory->addCheckbox(
             'inventory_reservation_notifications_enabled',
             $gL10n->get('SYS_RESERVATION_NOTIFICATIONS_ENABLED'),
-            (bool)$formValues['inventory_reservation_notifications_enabled'],
-            array('helpTextId' => 'SYS_RESERVATION_NOTIFICATIONS_ENABLED_DESC')
+            (bool) $formValues['inventory_reservation_notifications_enabled'],
+            ['helpTextId' => 'SYS_RESERVATION_NOTIFICATIONS_ENABLED_DESC'],
         );
 
-        $notificationRoleSqlData = array();
+        $notificationRoleSqlData = [];
         $notificationRoleSqlData['query'] = 'SELECT rol_uuid, rol_name, cat_name
                FROM ' . TBL_ROLES . '
          INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = rol_cat_id
               WHERE rol_valid = true AND rol_system = false AND rol_all_lists_view = true
                 AND cat_org_id = ? AND cat_name_intern <> \'EVENTS\'
            ORDER BY cat_name, rol_name';
-        $notificationRoleSqlData['params'] = array($gCurrentOrgId);
+        $notificationRoleSqlData['params'] = [$gCurrentOrgId];
         $formInventory->addSelectBoxFromSql(
             'inventory_reservation_notification_roles',
             $gL10n->get('SYS_RESERVATION_NOTIFICATION_ROLE'),
             $gDb,
             $notificationRoleSqlData,
-            array('defaultValue' => explode(',', $formValues['inventory_reservation_notification_roles']), 'multiselect' => true, 'helpTextId' => array('SYS_RESERVATION_NOTIFICATION_ROLE_DESC', array('SYS_RIGHT_ALL_LISTS_VIEW')))
+            ['defaultValue' => explode(',', $formValues['inventory_reservation_notification_roles']), 'multiselect' => true, 'helpTextId' => ['SYS_RESERVATION_NOTIFICATION_ROLE_DESC', ['SYS_RIGHT_ALL_LISTS_VIEW']]],
         );
         $formInventory->addSelectBox(
             'inventory_reservation_manager_statuses',
             $gL10n->get('SYS_NOTIFICATION_MANAGER_STATUSES'),
-            array(
+            [
                 'requested' => $gL10n->get('SYS_STATUS_REQUESTED'),
                 'approved' => $gL10n->get('SYS_STATUS_APPROVED'),
                 'rejected' => $gL10n->get('SYS_STATUS_REJECTED'),
                 'cancelled' => $gL10n->get('SYS_CANCELLED'),
                 'borrowed' => $gL10n->get('SYS_STATUS_BORROWED'),
-                'returned' => $gL10n->get('SYS_STATUS_RETURNED')
-            ),
-            array(
+                'returned' => $gL10n->get('SYS_STATUS_RETURNED'),
+            ],
+            [
                 'defaultValue' => explode(',', $formValues['inventory_reservation_manager_statuses']),
                 'multiselect' => true,
-                'helpTextId' => 'SYS_RESERVATION_NOTIFICATION_MANAGER_STATUSES_DESC'
-            )
+                'helpTextId' => 'SYS_RESERVATION_NOTIFICATION_MANAGER_STATUSES_DESC',
+            ],
         );
         $formInventory->addCheckbox(
             'inventory_reservation_notify_requester',
             $gL10n->get('SYS_NOTIFY_REQUESTER'),
-            (bool)$formValues['inventory_reservation_notify_requester'],
-            array('helpTextId' => 'SYS_RESERVATION_NOTIFY_REQUESTER_DESC')
+            (bool) $formValues['inventory_reservation_notify_requester'],
+            ['helpTextId' => 'SYS_RESERVATION_NOTIFY_REQUESTER_DESC'],
         );
 
         // profile view settings

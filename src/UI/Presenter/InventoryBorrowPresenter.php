@@ -15,7 +15,7 @@ class InventoryBorrowPresenter extends PagePresenter
     /** @throws Exception */
     public function createList(): void
     {
-        global $gCurrentOrgId, $gCurrentUser, $gCurrentUserId, $gDb, $gL10n, $gProfileFields, $gSettingsManager;
+        global $gCurrentOrgId, $gCurrentUser, $gCurrentUserId, $gDb, $gProfileFields, $gSettingsManager;
 
         if (!InventoryAccessService::canManageBorrowings() || $gSettingsManager->getBool('inventory_items_disable_borrowing')) {
             throw new Exception('SYS_NO_RIGHTS');
@@ -25,7 +25,7 @@ class InventoryBorrowPresenter extends PagePresenter
         $dateTimeFormat = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
         if ($canManageReservations) {
             $readyKeeperJoin = '';
-            $readyReservationParameters = array();
+            $readyReservationParameters = [];
             if (!$gCurrentUser->isAdministratorInventory()) {
                 $readyKeeperJoin = '
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
@@ -41,7 +41,7 @@ class InventoryBorrowPresenter extends PagePresenter
                 $readyReservationParameters[] = $gCurrentUserId;
             }
             $readyReservations = $gDb->queryPrepared(
-            'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ' . TBL_INVENTORY_ITEM_DATA . '.ind_value AS item_name,
+                'SELECT ivr_uuid, ivr_begin, ivr_end, dat_headline, ini_uuid, ' . TBL_INVENTORY_ITEM_DATA . '.ind_value AS item_name,
                     CASE WHEN inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
                               AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL
                          THEN 1 ELSE 0 END AS item_is_borrowed
@@ -57,7 +57,7 @@ class InventoryBorrowPresenter extends PagePresenter
                 AND ivr_end >= ?
                 ' . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : '') . '
            ORDER BY ivr_begin',
-                $readyReservationParameters
+                $readyReservationParameters,
             )->fetchAll();
 
             foreach ($readyReservations as &$reservation) {
@@ -65,17 +65,17 @@ class InventoryBorrowPresenter extends PagePresenter
                 $reservation['ivr_end_iso'] = $reservation['ivr_end'];
                 $reservation['ivr_begin'] = (new \DateTimeImmutable($reservation['ivr_begin']))->format($dateTimeFormat);
                 $reservation['ivr_end'] = (new \DateTimeImmutable($reservation['ivr_end']))->format($dateTimeFormat);
-                $reservation['borrowUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array(
+                $reservation['borrowUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', [
                     'mode' => 'item_edit_borrow',
                     'item_uuid' => $reservation['ini_uuid'],
-                    'reservation_uuid' => $reservation['ivr_uuid']
-                ));
+                    'reservation_uuid' => $reservation['ivr_uuid'],
+                ]);
             }
             unset($reservation);
         }
 
         $keeperRestriction = '';
-        $activeBorrowingParameters = array();
+        $activeBorrowingParameters = [];
         if (!$gCurrentUser->isAdministratorInventory()) {
             $keeperRestriction = '
          INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
@@ -102,40 +102,40 @@ class InventoryBorrowPresenter extends PagePresenter
                 AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL
                 ' . $keeperCondition . '
            ORDER BY inb_borrow_date',
-            $activeBorrowingParameters
+            $activeBorrowingParameters,
         )->fetchAll();
 
         $user = new User($gDb, $gProfileFields);
         foreach ($activeBorrowings as &$borrowing) {
-            $receiver = (string)$borrowing['inb_last_receiver'];
-            if (is_numeric($receiver) && $user->readDataById((int)$receiver)) {
+            $receiver = (string) $borrowing['inb_last_receiver'];
+            if (is_numeric($receiver) && $user->readDataById((int) $receiver)) {
                 $receiver = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
             }
             $borrowing['receiver'] = $receiver;
             $borrowing['inb_borrow_date_iso'] = $borrowing['inb_borrow_date'];
             $borrowing['inb_borrow_date'] = (new \DateTimeImmutable($borrowing['inb_borrow_date']))->format($dateTimeFormat);
-            $borrowing['returnUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter(array(
-                    'mode' => 'item_edit_borrow',
-                    'item_uuid' => $borrowing['ini_uuid'],
-                    'item_borrowed' => 1,
-                    'reservation_uuid' => $borrowing['ivr_uuid']
-                )));
+            $borrowing['returnUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array_filter([
+                'mode' => 'item_edit_borrow',
+                'item_uuid' => $borrowing['ini_uuid'],
+                'item_borrowed' => 1,
+                'reservation_uuid' => $borrowing['ivr_uuid'],
+            ]));
         }
         unset($borrowing);
-        $this->assignSmartyVariable('readyReservations', $readyReservations ?? array());
+        $this->assignSmartyVariable('readyReservations', $readyReservations ?? []);
         $this->assignSmartyVariable('activeBorrowings', $activeBorrowings);
         $this->assignSmartyVariable('canManageReservations', $canManageReservations);
         $this->addHtmlByTemplate('modules/inventory.borrow.list.tpl');
 
         if ($canManageReservations) {
             $readyTable = new DataTables($this, 'adm_inventory_borrow_ready_table');
-            $readyTable->disableColumnsSort(array(4));
-            $readyTable->setColumnsNotHideResponsive(array(1, 4));
+            $readyTable->disableColumnsSort([4]);
+            $readyTable->setColumnsNotHideResponsive([1, 4]);
             $readyTable->createJavascript(count($readyReservations), 4);
         }
         $activeTable = new DataTables($this, 'adm_inventory_borrow_active_table');
-        $activeTable->disableColumnsSort(array(4));
-        $activeTable->setColumnsNotHideResponsive(array(1, 4));
+        $activeTable->disableColumnsSort([4]);
+        $activeTable->setColumnsNotHideResponsive([1, 4]);
         $activeTable->createJavascript(count($activeBorrowings), 4);
     }
 }

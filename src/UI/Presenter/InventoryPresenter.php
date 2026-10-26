@@ -370,7 +370,7 @@ class InventoryPresenter extends PagePresenter
             $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
             $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
             $itemNameColumn = array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'], true) + 1;
-            $columnsWithoutSort = array();
+            $columnsWithoutSort = [];
             if ($canUseBulkActions) {
                 $columnsWithoutSort[] = 1;
             }
@@ -381,7 +381,7 @@ class InventoryPresenter extends PagePresenter
                 $columnsWithoutSort[] = count($templateData['headers']);
             }
             $dataTables->disableColumnsSort($columnsWithoutSort);
-            $columnsNotHideResponsive = array($itemNameColumn);
+            $columnsNotHideResponsive = [$itemNameColumn];
             if ($hasActionsColumn) {
                 $columnsNotHideResponsive[] = count($templateData['headers']);
             }
@@ -422,17 +422,17 @@ class InventoryPresenter extends PagePresenter
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservations',
                 $gL10n->get('SYS_RESERVATIONS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_list')),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_list']),
                 'bi-calendar-check',
                 '',
-                ReservationService::countPendingReservations($gDb)
+                ReservationService::countPendingReservations($gDb),
             );
         } elseif (InventoryAccessService::canRequestReservation()) {
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_reservation_request',
                 $gL10n->get('SYS_RESERVATION_REQUEST'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request')),
-                'bi-calendar-plus'
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_request']),
+                'bi-calendar-plus',
             );
         }
 
@@ -440,8 +440,8 @@ class InventoryPresenter extends PagePresenter
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_borrowings',
                 $gL10n->get('SYS_BORROWINGS'),
-                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'borrow_list')),
-                'bi-box-arrow-up-right'
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'borrow_list']),
+                'bi-box-arrow-up-right',
             );
         }
 
@@ -591,117 +591,117 @@ class InventoryPresenter extends PagePresenter
 
         // Do not expose names in filter options to guests when anonymization is enabled.
         if ($gValidLogin || !$gSettingsManager->getBool('inventory_anonymize_user_names_for_guests')) {
-        // read all keeper
-        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT DISTINCT ind_value,
-            CASE
-                WHEN ind_value = \'-1\' THEN \'n/a\'
-                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-            END as keeper_name
-            FROM ' . TBL_INVENTORY_ITEM_DATA . '
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                ON inf_id = ind_inf_id
-            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = ind_value
+            // read all keeper
+            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
+                $sql = 'SELECT DISTINCT ind_value,
+                CASE
+                    WHEN ind_value = \'-1\' THEN \'n/a\'
+                    ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                END as keeper_name
+                FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                    ON inf_id = ind_inf_id
+                LEFT JOIN ' . TBL_USER_DATA . ' as last_name
+                    ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = ind_value
+                    AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+                LEFT JOIN ' . TBL_USER_DATA . ' as first_name
+                    ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = ind_value
+                    AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+                WHERE (inf_org_id  = ' . $gCurrentOrgId . '
+                    OR inf_org_id IS NULL)
+                AND inf_name_intern = \'KEEPER\'
+                ORDER BY keeper_name;';
+            } else {
+                $sql = 'SELECT DISTINCT ind_value,
+                CASE
+                    WHEN ind_value = \'-1\' THEN \'n/a\'
+                    ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                END as keeper_name
+                FROM ' . TBL_INVENTORY_ITEM_DATA . '
+                INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                    ON inf_id = ind_inf_id
+                LEFT JOIN ' . TBL_USER_DATA . ' as last_name
+                    ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
+                    AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+                LEFT JOIN ' . TBL_USER_DATA . ' as first_name
+                    ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
+                    AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+                WHERE (inf_org_id  = ' . $gCurrentOrgId . '
+                    OR inf_org_id IS NULL)
+                AND inf_name_intern = \'KEEPER\'
+                ORDER BY keeper_name;';
+            }
+
+            // filter keeper
+            $form->addSelectBoxFromSql(
+                'items_filter_keeper',
+                $gL10n->get('SYS_INVENTORY_KEEPER'),
+                $gDb,
+                $sql,
+                [
+                    'defaultValue' => $this->getFilterKeeper,
+                    'showContextDependentFirstEntry' => true,
+                ],
+            );
+
+            // get all last receivers
+            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
+                $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+                CASE
+                    WHEN borrowData.inb_last_receiver = \'-1\'
+                        THEN \'n/a\'
+                    WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                        THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                    ELSE
+                        borrowData.inb_last_receiver
+                END AS receiver_name
+                FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+                INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+                    ON fields.inf_name_intern = \'LAST_RECEIVER\'
+                AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+                LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                    ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
                 AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = ind_value
+                LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                    ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
                 AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                OR inf_org_id IS NULL)
-            AND inf_name_intern = \'KEEPER\'
-            ORDER BY keeper_name;';
-        } else {
-            $sql = 'SELECT DISTINCT ind_value,
-            CASE
-                WHEN ind_value = \'-1\' THEN \'n/a\'
-                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-            END as keeper_name
-            FROM ' . TBL_INVENTORY_ITEM_DATA . '
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                ON inf_id = ind_inf_id
-            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
+                WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+                ORDER BY receiver_name;';
+            } else {
+                $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+                CASE
+                    WHEN borrowData.inb_last_receiver = \'-1\'
+                        THEN \'n/a\'
+                    WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                        THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                    ELSE
+                        borrowData.inb_last_receiver
+                END AS receiver_name
+                FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+                INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+                    ON fields.inf_name_intern = \'LAST_RECEIVER\'
+                AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+                LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                    ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
                 AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
+                LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                    ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
                 AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                OR inf_org_id IS NULL)
-            AND inf_name_intern = \'KEEPER\'
-            ORDER BY keeper_name;';
-        }
+                WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+                ORDER BY receiver_name;';
+            }
 
-        // filter keeper
-        $form->addSelectBoxFromSql(
-            'items_filter_keeper',
-            $gL10n->get('SYS_INVENTORY_KEEPER'),
-            $gDb,
-            $sql,
-            array(
-                'defaultValue' => $this->getFilterKeeper,
-                'showContextDependentFirstEntry' => true
-            )
-        );
-
-        // get all last receivers
-        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-            CASE
-                WHEN borrowData.inb_last_receiver = \'-1\'
-                    THEN \'n/a\'
-                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                ELSE
-                    borrowData.inb_last_receiver
-            END AS receiver_name
-            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                ON fields.inf_name_intern = \'LAST_RECEIVER\'
-            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
-            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
-            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-            ORDER BY receiver_name;';
-        } else {
-            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-            CASE
-                WHEN borrowData.inb_last_receiver = \'-1\'
-                    THEN \'n/a\'
-                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                ELSE
-                    borrowData.inb_last_receiver
-            END AS receiver_name
-            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                ON fields.inf_name_intern = \'LAST_RECEIVER\'
-            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-            ORDER BY receiver_name;';
-        }
-
-        // filter last receiver
-        $form->addSelectBoxFromSql(
-            'items_filter_last_receiver',
-            $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
-            $gDb,
-            $sql,
-            array(
-                'defaultValue' => $this->getFilterLastReceiver,
-                'showContextDependentFirstEntry' => true
-            )
-        );
+            // filter last receiver
+            $form->addSelectBoxFromSql(
+                'items_filter_last_receiver',
+                $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
+                $gDb,
+                $sql,
+                [
+                    'defaultValue' => $this->getFilterLastReceiver,
+                    'showContextDependentFirstEntry' => true,
+                ],
+            );
         }
 
         // get the status options for the filter
@@ -1183,11 +1183,11 @@ class InventoryPresenter extends PagePresenter
                 }
 
                 if (!$this->itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
-                    $rowValues['actions'][] = array(
-                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid'])),
+                    $rowValues['actions'][] = [
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid']]),
                         'icon' => 'bi bi-calendar-plus',
-                        'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST')
-                    );
+                        'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST'),
+                    ];
                 }
 
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {

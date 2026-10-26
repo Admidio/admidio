@@ -172,7 +172,7 @@ class EventFormPresenter extends PagePresenter
         int $length,
         string $search,
         int $orderColumn,
-        string $orderDirection
+        string $orderDirection,
     ): array {
         global $gDb, $gL10n, $gSettingsManager;
 
@@ -187,25 +187,25 @@ class EventFormPresenter extends PagePresenter
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $eventIds = array((int)$event->getValue('dat_id'));
+        $eventIds = [(int) $event->getValue('dat_id')];
         if ($recurrenceScope === 'series') {
             $recurrenceRepository = new EventRecurrenceRepository($gDb);
-            $recurrence = (int)$event->getValue('dat_evr_id') > 0
-                ? $recurrenceRepository->readById((int)$event->getValue('dat_evr_id'))
-                : $recurrenceRepository->readByMasterEventId((int)$event->getValue('dat_id'));
+            $recurrence = (int) $event->getValue('dat_evr_id') > 0
+                ? $recurrenceRepository->readById((int) $event->getValue('dat_evr_id'))
+                : $recurrenceRepository->readByMasterEventId((int) $event->getValue('dat_id'));
 
             if ($recurrence !== null) {
-                $eventIds = array();
+                $eventIds = [];
                 $eventStatement = $gDb->queryPrepared(
                     'SELECT dat_id
                        FROM ' . TBL_EVENTS . '
                       WHERE dat_evr_id = ?
                          OR dat_id = ?
                    ORDER BY dat_begin',
-                    array((int)$recurrence->getValue('evr_id'), (int)$recurrence->getValue('evr_dat_id_master'))
+                    [(int) $recurrence->getValue('evr_id'), (int) $recurrence->getValue('evr_dat_id_master')],
                 );
                 while ($eventRow = $eventStatement->fetch()) {
-                    $eventIds[] = (int)$eventRow['dat_id'];
+                    $eventIds[] = (int) $eventRow['dat_id'];
                 }
             }
         }
@@ -225,17 +225,17 @@ class EventFormPresenter extends PagePresenter
              INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
             WHERE ivr_dat_id IN (' . Database::getQmForValues($eventIds) . ')' . $whereSearch;
 
-        $jsonArray = array(
+        $jsonArray = [
             'draw' => $draw,
-            'recordsTotal' => (int)$gDb->queryPrepared(
+            'recordsTotal' => (int) $gDb->queryPrepared(
                 'SELECT COUNT(*)' . str_replace($whereSearch, '', $sqlFrom),
-                $eventIds
+                $eventIds,
             )->fetchColumn(),
-            'recordsFiltered' => (int)$gDb->queryPrepared('SELECT COUNT(*)' . $sqlFrom, $params)->fetchColumn(),
-            'data' => array()
-        );
+            'recordsFiltered' => (int) $gDb->queryPrepared('SELECT COUNT(*)' . $sqlFrom, $params)->fetchColumn(),
+            'data' => [],
+        ];
 
-        $orderColumns = array('dat_begin', 'ind_value', 'ivr_status');
+        $orderColumns = ['dat_begin', 'ind_value', 'ivr_status'];
         $orderBy = $orderColumns[$orderColumn] ?? 'COALESCE(ivr_timestamp_change, ivr_timestamp_create)';
         $orderDirection = $orderDirection === 'asc' ? 'ASC' : 'DESC';
 
@@ -246,61 +246,61 @@ class EventFormPresenter extends PagePresenter
             $sql .= ' LIMIT ' . max($length, 0) . ' OFFSET ' . max($start, 0);
         }
 
-        $statusLabels = array(
+        $statusLabels = [
             Reservation::STATUS_REQUESTED => $gL10n->get('SYS_STATUS_REQUESTED'),
             Reservation::STATUS_APPROVED => $gL10n->get('SYS_STATUS_APPROVED'),
             Reservation::STATUS_REJECTED => $gL10n->get('SYS_STATUS_REJECTED'),
             Reservation::STATUS_CANCELLED => $gL10n->get('SYS_CANCELLED'),
             Reservation::STATUS_BORROWED => $gL10n->get('SYS_STATUS_BORROWED'),
-            Reservation::STATUS_RETURNED => $gL10n->get('SYS_STATUS_RETURNED')
-        );
-        $statusIcons = array(
+            Reservation::STATUS_RETURNED => $gL10n->get('SYS_STATUS_RETURNED'),
+        ];
+        $statusIcons = [
             Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
             Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
             Reservation::STATUS_REJECTED => 'bi-x-circle-fill text-danger',
             Reservation::STATUS_CANCELLED => 'bi-x-circle-fill text-danger',
             Reservation::STATUS_BORROWED => 'bi-box-arrow-up-right text-primary',
-            Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success'
-        );
+            Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success',
+        ];
 
-        $latestReservationIds = array();
+        $latestReservationIds = [];
         $latestStatement = $gDb->queryPrepared(
             'SELECT ivr_id, ivr_ini_id
                FROM ' . TBL_INVENTORY_RESERVATIONS . '
               WHERE ivr_dat_id = ?
            ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC',
-            array((int)$event->getValue('dat_id'))
+            [(int) $event->getValue('dat_id')],
         );
         while ($latestReservation = $latestStatement->fetch()) {
-            if (!isset($latestReservationIds[(int)$latestReservation['ivr_ini_id']])) {
-                $latestReservationIds[(int)$latestReservation['ivr_ini_id']] = (int)$latestReservation['ivr_id'];
+            if (!isset($latestReservationIds[(int) $latestReservation['ivr_ini_id']])) {
+                $latestReservationIds[(int) $latestReservation['ivr_ini_id']] = (int) $latestReservation['ivr_id'];
             }
         }
 
         foreach ($gDb->queryPrepared($sql, $params)->fetchAll() as $reservation) {
             $status = $reservation['ivr_status'];
-            $eventDate = new Event($gDb, (int)$reservation['ivr_dat_id']);
+            $eventDate = new Event($gDb, (int) $reservation['ivr_dat_id']);
             $action = '';
-            if ((int)$reservation['ivr_dat_id'] === (int)$event->getValue('dat_id')
-                && ($latestReservationIds[(int)$reservation['ivr_ini_id']] ?? 0) === (int)$reservation['ivr_id']
-                && in_array($status, array(Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED), true)) {
-                $requestAgainUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array(
+            if ((int) $reservation['ivr_dat_id'] === (int) $event->getValue('dat_id')
+                && ($latestReservationIds[(int) $reservation['ivr_ini_id']] ?? 0) === (int) $reservation['ivr_id']
+                && in_array($status, [Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED], true)) {
+                $requestAgainUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', [
                     'mode' => 'reservation_request_again',
                     'dat_uuid' => $eventUuid,
-                    'reservation_item_id' => (int)$reservation['ivr_ini_id']
-                ));
+                    'reservation_item_id' => (int) $reservation['ivr_ini_id'],
+                ]);
                 $action = '<button type="button" class="btn btn-sm btn-outline-primary event-inventory-reservation-request-again" data-url="'
-                    . SecurityUtils::encodeHTML($requestAgainUrl) . '" data-item-id="' . (int)$reservation['ivr_ini_id'] . '">'
+                    . SecurityUtils::encodeHTML($requestAgainUrl) . '" data-item-id="' . (int) $reservation['ivr_ini_id'] . '">'
                     . SecurityUtils::encodeHTML($gL10n->get('SYS_REQUEST_AGAIN')) . '</button>';
             }
 
-            $jsonArray['data'][] = array(
+            $jsonArray['data'][] = [
                 SecurityUtils::encodeHTML($reservation['dat_headline']) . '<br><small>' . SecurityUtils::encodeHTML($eventDate->getDateTimePeriod()) . '</small>',
                 SecurityUtils::encodeHTML($reservation['ind_value']),
                 '<span class="event-inventory-reservation-status"><i class="bi ' . ($statusIcons[$status] ?? 'bi-question-circle-fill text-secondary') . ' me-1"></i>'
                     . SecurityUtils::encodeHTML($statusLabels[$status] ?? $status) . '</span>',
-                $action
-            );
+                $action,
+            ];
         }
 
         return $jsonArray;
@@ -626,14 +626,14 @@ class EventFormPresenter extends PagePresenter
         if ($gSettingsManager->getBool('inventory_reservations_enabled')
             && $gSettingsManager->getBool('inventory_reservations_events_enabled')
             && InventoryAccessService::canRequestReservation()) {
-            $selectedItems = array();
-            if ((int)$event->getValue('dat_id') > 0) {
+            $selectedItems = [];
+            if ((int) $event->getValue('dat_id') > 0) {
                 $eventReservations = $gDb->queryPrepared(
                     'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
-                    array((int)$event->getValue('dat_id'), 'requested', 'approved', 'borrowed')
+                    [(int) $event->getValue('dat_id'), Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
                 );
                 while ($eventReservation = $eventReservations->fetch()) {
-                    $selectedItems[] = (int)$eventReservation['ivr_ini_id'];
+                    $selectedItems[] = (int) $eventReservation['ivr_ini_id'];
                 }
             }
             $availableItems = $gDb->queryPrepared(
@@ -644,39 +644,48 @@ class EventFormPresenter extends PagePresenter
              INNER JOIN ' . TBL_INVENTORY_FIELD_OPTIONS . ' ON ifo_id = ini_status
                   WHERE ini_org_id = ? AND ifo_value <> ?
                ORDER BY ind_value',
-                array($gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS')
+                [$gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS'],
             )->fetchAll(\PDO::FETCH_KEY_PAIR);
             // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
-            $form->addSelectBox('event_inventory_items', $gL10n->get('SYS_INVENTORY_ITEMS'), $availableItems,
-                array('defaultValue' => $selectedItems, 'multiselect' => true));
-            $reservationItems = array();
+            $form->addSelectBox(
+                'event_inventory_items',
+                $gL10n->get('SYS_INVENTORY_ITEMS'),
+                $availableItems,
+                ['defaultValue' => $selectedItems, 'multiselect' => true],
+            );
+            $reservationItems = [];
             foreach ($availableItems as $itemId => $itemName) {
-                $reservationItems[] = array('id' => (int)$itemId, 'name' => $itemName);
+                $reservationItems[] = ['id' => (int) $itemId, 'name' => $itemName];
             }
-            $form->addButton('event_inventory_reservation_add', $gL10n->get('SYS_ADD_ITEM'),
-                array('icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'));
+            $form->addButton(
+                'event_inventory_reservation_add',
+                $gL10n->get('SYS_ADD_ITEM'),
+                ['icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'],
+            );
             $page->assignSmartyVariable('eventInventoryReservationsEnabled', true);
             $page->assignSmartyVariable('eventInventoryReservationItems', $reservationItems);
             $page->assignSmartyVariable('eventInventoryReservationRows', array_map(
-                static fn(int $itemId): array => array('itemId' => $itemId), $selectedItems
+                static fn(int $itemId): array => ['itemId' => $itemId],
+                $selectedItems,
             ));
-            $page->assignSmartyVariable('eventInventoryReservationDataJson', json_encode(array(
+            $page->assignSmartyVariable('eventInventoryReservationDataJson', json_encode([
                 'items' => $reservationItems,
+                'itemLabel' => $gL10n->get('SYS_INVENTORY_ITEMNAME'),
                 'deleteLabel' => $gL10n->get('SYS_DELETE'),
-                'pleaseChoose' => $gL10n->get('SYS_PLEASE_CHOOSE')
-            ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
+                'pleaseChoose' => $gL10n->get('SYS_PLEASE_CHOOSE'),
+            ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
 
             // A copied event has no reservations yet. Keep the selected items, but do not show
             // the source event's reservation statuses in the copy form.
-            if (!$getCopy && (int)$event->getValue('dat_id') > 0) {
+            if (!$getCopy && (int) $event->getValue('dat_id') > 0) {
                 $page->assignSmartyVariable('eventInventoryReservationStatusTable', true);
                 $reservationStatusTable = new DataTables($page, 'adm_event_inventory_reservation_statuses');
                 $reservationStatusTable->setServerSideProcessing(SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/events.php',
-                    array('mode' => 'reservation_status_data', 'dat_uuid' => $getEventUuid, 'recurrence_scope' => $getRecurrenceScope)
+                    ['mode' => 'reservation_status_data', 'dat_uuid' => $getEventUuid, 'recurrence_scope' => $getRecurrenceScope],
                 ));
-                $reservationStatusTable->disableColumnsSort(array(4));
-                $reservationStatusTable->setColumnsNotHideResponsive(array(2, 4));
+                $reservationStatusTable->disableColumnsSort([4]);
+                $reservationStatusTable->setColumnsNotHideResponsive([2, 4]);
                 $reservationStatusTable->createJavascript(0, 4);
                 $page->addJavascript('$(document).on("shown.bs.tab shown.bs.collapse", "#adm_event_reservations_tab, #adm_event_reservations_collapse", function() {
                     var table = $("#adm_event_inventory_reservation_statuses").DataTable();
