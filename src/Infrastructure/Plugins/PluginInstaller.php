@@ -65,13 +65,16 @@ final class PluginInstaller
 
         self::executeSqlFile($plugin, 'install.sql');
 
-        $component = new Component($gDb);
+        $component = new ComponentUpdate($gDb);
         $component->setValue('com_type', PluginRegistry::COMPONENT_TYPE);
         $component->setValue('com_name', $plugin->name);
         // The update mechanism resolves db_scripts/update_x_y.xml through com_name_intern, so it
         // has to be the directory name and nothing else.
         $component->setValue('com_name_intern', $plugin->id);
         $component->setValue('com_version', $plugin->version);
+        // install.sql already creates the schema of this version, so the steps of its update file
+        // count as done. Otherwise the next update would run them again on that schema.
+        $component->setValue('com_update_step', $component->getMaxUpdateStep());
         $component->save();
 
         PluginRegistry::reset();
