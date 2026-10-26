@@ -678,6 +678,47 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that an installation counts the update steps of its own version as done
+     *
+     * install.sql already creates the schema of the version it ships with. Without the steps of
+     * that version recorded, the next update ran its update file again on that schema - and a step
+     * that adds a column failed on the column install.sql had already created.
+     *
+     * @testdox Installing a plugin records the steps of its version, so the next update skips them
+     */
+    public function testAnUpdateDoesNotRepeatTheStepsOfTheInstalledVersion(): void
+    {
+        $this->writeUpdateScript('1.2', "UPDATE %PREFIX%_components SET com_name = 'step of 1.2 ran' WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+        $this->writeUpdateScript('1.3', "UPDATE %PREFIX%_components SET com_beta = 13 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+
+        PluginInstaller::enable($this->plugin());
+        $this->assertSame(10, (int)$this->component()['com_update_step']);
+
+        $this->writeManifestVersion('1.3.0');
+        PluginInstaller::update($this->plugin());
+
+        $this->assertNotSame('step of 1.2 ran', $this->component()['com_name']);
+        $this->assertSame(13, (int)$this->component()['com_beta'], 'The steps of the new version did run.');
+        $this->assertSame('1.3.0', $this->component()['com_version']);
+    }
+
+    /**
+     * Test that a plugin below version 2 has update steps at all
+     *
+     * @testdox The update steps of a plugin with a version below 2.0 are recorded too
+     */
+    public function testTheStepsOfAVersionBelowTwoAreRecorded(): void
+    {
+        $this->writeManifestVersion('0.4.0');
+        $this->writeUpdateScript('0.4', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame(10, (int)$this->component()['com_update_step']);
+        $this->assertSame(0, (int)$this->component()['com_beta'], 'Installing runs no update step.');
+    }
+
+    /**
      * Test that removing takes everything away
      *
      * @testdox Removing a plugin takes its files, its component, its menu entry and its preferences
@@ -894,6 +935,27 @@ class PluginInstallerTest extends FilesystemTestCase
         }
 
         return $files;
+    }
+
+    /**
+     * Give the copied plugin an update file for one version, with the statement as its step 10.
+     */
+    private function writeUpdateScript(string $version, string $statement): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        if (!is_dir($directory)) {
+            mkdir($directory);
+        }
+
+        file_put_contents(
+            $directory . '/update_' . str_replace('.', '_', $version) . '.xml',
+            '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+            . '<update>' . "\n"
+            . '    <step id="10">' . htmlspecialchars($statement, ENT_XML1) . '</step>' . "\n"
+            . '    <step>stop</step>' . "\n"
+            . '</update>' . "\n"
+        );
+        PluginRegistry::reset();
     }
 
     /**
