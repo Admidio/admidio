@@ -47,8 +47,10 @@ $GLOBALS['gCurrentOrganization'] = $organization;
 $GLOBALS['gSettingsManager'] = $organization->getSettingsManager();
 $GLOBALS['gValidLogin'] = true;
 
+// Use each engine's default isolation. PostgreSQL REPEATABLE READ intentionally rejects
+// this interleaving with a serialization failure instead of reading the newly committed row.
 $database->queryPrepared(DB_TYPE === Database::PDO_ENGINE_PGSQL
-    ? 'SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL REPEATABLE READ'
+    ? 'SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL READ COMMITTED'
     : 'SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
 $database->startTransaction();
 (new ReservationService($database))->syncEventReservations(
