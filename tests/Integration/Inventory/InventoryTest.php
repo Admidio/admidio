@@ -2508,8 +2508,162 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function synchronizedReservationPeriods(): array
+    {
+        $cases = [];
+        foreach (['manual', 'automatic'] as $approval) {
+            foreach ([Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED] as $status) {
+                foreach ([
+                    'unchanged' => ['2030-09-01 10:00:00', '2030-09-01 12:00:00'],
+                    'begin changed' => ['2030-09-01 10:30:00', '2030-09-01 12:00:00'],
+                    'end changed' => ['2030-09-01 10:00:00', '2030-09-01 12:30:00'],
+                    'date changed' => ['2030-09-02 10:00:00', '2030-09-02 12:00:00'],
+                ] as $change => [$begin, $end]) {
+                    $cases[$approval . ', ' . $status . ', ' . $change] = [$approval, $status, $begin, $end, $change !== 'unchanged'];
+                }
+            }
+        }
+
+        return $cases;
+    }
+
     /**
-     * @testdox Moving an event keeps its approval and rejects conflicting periods
+     * @dataProvider synchronizedReservationPeriods
+     * @testdox Moving an approved event reservation creates one new request and retains its approval history
+     */
+    public function testEventReservationTimeChangesRequireNewApproval(string $approval, string $status, string $begin, string $end, bool $changed): void
+    {
+        $admin = $this->makeInventoryUser('inveventreapproval', true);
+        $category = $this->getFixture()->createAndSaveCategory('Reapproval events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $approval, $status, $begin, $end, $changed) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Reapproval projector']);
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Event requiring renewed approval');
+            $event->setValue('dat_begin', '2030-09-01 10:00:00');
+            $event->setValue('dat_end', '2030-09-01 12:00:00');
+            $event->save();
+            $eventId = (int) $event->getValue('dat_id');
+            $service = new ReservationService($this->getDatabase());
+            $service->syncEventReservations($eventId, [$itemId], new DateTimeImmutable('2030-09-01 10:00:00'), new DateTimeImmutable('2030-09-01 12:00:00'));
+            $original = new Reservation($this->getDatabase(), (int) $this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                [$eventId],
+            )->fetchColumn());
+            if ($status !== Reservation::STATUS_REQUESTED) {
+                $service->approve($original);
+            }
+            if ($status === Reservation::STATUS_BORROWED) {
+                $service->startBorrowing($original);
+            }
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', $approval);
+            $service->syncEventReservations($eventId, [$itemId], new DateTimeImmutable($begin), new DateTimeImmutable($end));
+            $rows = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_uuid, ivr_status, ivr_begin, ivr_end FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? ORDER BY ivr_id',
+                [$eventId],
+            )->fetchAll();
+            $requiresApproval = $changed && $status === Reservation::STATUS_APPROVED;
+            $this->assertCount($requiresApproval ? 2 : 1, $rows);
+            if ($requiresApproval) {
+                $this->assertSame(Reservation::STATUS_CANCELLED, $rows[0]['ivr_status']);
+                $this->assertSame('2030-09-01 10:00:00', $rows[0]['ivr_begin']);
+                $this->assertSame('2030-09-01 12:00:00', $rows[0]['ivr_end']);
+                $this->assertNotSame($rows[0]['ivr_uuid'], $rows[1]['ivr_uuid']);
+            }
+            $latest = $rows[array_key_last($rows)];
+            $this->assertSame($requiresApproval ? Reservation::STATUS_REQUESTED : $status, $latest['ivr_status']);
+            $this->assertSame($begin, $latest['ivr_begin']);
+            $this->assertSame($end, $latest['ivr_end']);
+            // Saving the same time again must neither duplicate nor approve the new request.
+            $service->syncEventReservations($eventId, [$itemId], new DateTimeImmutable($begin), new DateTimeImmutable($end));
+            $this->assertSame(count($rows), (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                [$eventId],
+            )->fetchColumn());
+            $this->assertSame($latest['ivr_status'], $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_uuid = ?',
+                [$latest['ivr_uuid']],
+            )->fetchColumn());
+        });
+    }
+
+    public static function eventReapprovalScopes(): array
+    {
+        return [
+            'single event, manual approval' => ['this', 'manual'],
+            'single event, automatic approval' => ['this', 'automatic'],
+            'event series, manual approval' => ['series', 'manual'],
+            'event series, automatic approval' => ['series', 'automatic'],
+        ];
+    }
+
+    /**
+     * @dataProvider eventReapprovalScopes
+     * @testdox Saving an event or series with a changed time requires renewed equipment approval
+     */
+    public function testEventSaveRequestsEquipmentApprovalAgain(string $scope, string $approval): void
+    {
+        $admin = $this->makeInventoryUser('invsaveeventreapproval', true);
+        $category = $this->getFixture()->createAndSaveCategory('Saved reapproval events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $scope, $approval) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', $approval);
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Rescheduled event projector']);
+            $values = [
+                'dat_headline' => 'Rescheduled event approval', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [$itemId],
+            ];
+            if ($scope === 'series') {
+                $values += ['event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1, 'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 2];
+            }
+            $service = new EventSaveService($this->getDatabase());
+            $event = $service->saveData('', $values);
+            $reservationIds = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$itemId],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $reservationService = new ReservationService($this->getDatabase());
+            foreach ($reservationIds as $id) {
+                $reservation = new Reservation($this->getDatabase(), (int) $id);
+                if ($reservation->getValue('ivr_status') === Reservation::STATUS_REQUESTED) {
+                    $reservationService->approve($reservation);
+                }
+            }
+            // Only changing other event details must not invalidate approvals.
+            $values['dat_location'] = 'Updated venue';
+            $service->saveData((string) $event->getValue('dat_uuid'), $values, '', false, $scope);
+            $this->assertSame(count($reservationIds), (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
+                [$itemId, Reservation::STATUS_APPROVED],
+            )->fetchColumn());
+            $values['event_from_time'] = '14:00';
+            $values['event_to_time'] = '16:00';
+            $service->saveData((string) $event->getValue('dat_uuid'), $values, '', false, $scope);
+            $this->assertSame(0, (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
+                [$itemId, Reservation::STATUS_APPROVED],
+            )->fetchColumn());
+            $this->assertSame(count($reservationIds), (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
+                [$itemId, Reservation::STATUS_REQUESTED],
+            )->fetchColumn());
+            $this->assertSame(count($reservationIds), (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
+                [$itemId, Reservation::STATUS_CANCELLED],
+            )->fetchColumn());
+        });
+    }
+
+    /**
+     * @testdox A conflicting event move preserves its existing approval and period
      */
     public function testMovingApprovedEventReservationRejectsConflictsWithoutChangingExistingReservation(): void
     {

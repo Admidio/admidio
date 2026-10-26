@@ -385,13 +385,23 @@ class ReservationService
         }
 
         foreach ($itemIds as $itemId) {
+            $requiresApproval = false;
             if (isset($existingReservations[$itemId])) {
                 $reservation = new Reservation($this->database, $existingReservations[$itemId]['id']);
-                $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
-                $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
-                $reservation->save();
                 unset($existingReservations[$itemId]);
-                continue;
+                $periodChanged = $reservation->getValue('ivr_begin', 'database') !== $begin->format('Y-m-d H:i:s')
+                    || $reservation->getValue('ivr_end', 'database') !== $end->format('Y-m-d H:i:s');
+                if ($reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED || !$periodChanged) {
+                    $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+                    $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+                    $reservation->save();
+                    continue;
+                }
+
+                // Approval belongs to the original period. Retain it as cancelled history and
+                // request a new decision, even when new reservations are normally auto-approved.
+                $this->transition($reservation, Reservation::STATUS_CANCELLED);
+                $requiresApproval = true;
             }
 
             $reservation = new Reservation($this->database);
@@ -400,7 +410,7 @@ class ReservationService
             $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
             $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
-            $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->setValue('ivr_status', $isAutomatic && !$requiresApproval ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
             $reservation->save();
             (new ReservationNotificationService($this->database))->notifyCreated($reservation);
         }
