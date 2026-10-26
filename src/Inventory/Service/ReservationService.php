@@ -586,15 +586,19 @@ class ReservationService
         return $item;
     }
 
-    /** Reject event IDs that do not belong to the active organization. */
+    /** Accept local events and the global calendars editable by parent organizations. */
     private function assertEventInCurrentOrganization(int $eventId): void
     {
-        global $gCurrentOrgId;
+        global $gCurrentOrgId, $gCurrentOrganization;
+
+        $organizationCondition = $gCurrentOrganization->isChildOrganization()
+            ? 'cat_org_id = ?'
+            : '(cat_org_id = ? OR cat_org_id IS NULL)';
 
         $eventExists = (int) $this->database->queryPrepared(
             'SELECT COUNT(*) FROM ' . TBL_EVENTS . '
              INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = dat_cat_id
-             WHERE dat_id = ? AND cat_org_id = ?',
+             WHERE dat_id = ? AND ' . $organizationCondition,
             [$eventId, $gCurrentOrgId],
         )->fetchColumn();
         if ($eventExists !== 1) {

@@ -2823,6 +2823,104 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function globalCalendarCases(): array
+    {
+        return [
+            'disabled, single event' => [false, false, 'this'],
+            'enabled without items, single event' => [true, false, 'this'],
+            'enabled with items, single event' => [true, true, 'this'],
+            'disabled, series' => [false, false, 'series'],
+            'enabled without items, series' => [true, false, 'series'],
+            'enabled with items, series' => [true, true, 'series'],
+        ];
+    }
+
+    /**
+     * @dataProvider globalCalendarCases
+     * @testdox Parent organizations can save, edit and delete events in global calendars
+     */
+    public function testGlobalCalendarEventsRemainEditable(bool $enabled, bool $withItems, string $scope): void
+    {
+        $admin = $this->makeInventoryUser('invglobalcalendar', true);
+        $category = $this->getFixture()->createAndSaveCategory('Global inventory calendar', 'EVT', self::ORG_ID);
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_CATEGORIES . ' SET cat_org_id = NULL WHERE cat_id = ?', [$category['cat_id']]);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $enabled, $withItems, $scope): void {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', $enabled ? '1' : '0');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Global calendar projector']);
+            $values = [
+                'dat_headline' => 'Global calendar event', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+            ];
+            if ($withItems) {
+                $values['event_inventory_items'] = [$itemId];
+            }
+            if ($scope === 'series') {
+                $values += ['event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1, 'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 2];
+            }
+            $service = new EventSaveService($this->getDatabase());
+            $event = $service->saveData('', $values);
+            $uuid = (string) $event->getValue('dat_uuid');
+            $this->assertTrue((new Event($this->getDatabase(), (int) $event->getValue('dat_id')))->isEditable());
+            $values['event_from_time'] = '14:00';
+            $values['event_to_time'] = '16:00';
+            $service->saveData($uuid, $values, '', false, $scope);
+            (new EventService($this->getDatabase()))->deleteData($uuid, $scope);
+            $this->assertSame(0, (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status IN (?, ?)',
+                [$itemId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED],
+            )->fetchColumn());
+        });
+    }
+
+    /** @testdox Global calendars remain protected against edits and reservation changes by child organizations */
+    public function testChildOrganizationCannotChangeGlobalEventReservations(): void
+    {
+        $admin = $this->makeInventoryUser('invglobalchild', true);
+        $parent = $this->getFixture()->createAndSaveOrganization('Global calendar parent', 'GLBPARENT');
+        $category = $this->getFixture()->createAndSaveCategory('Protected global calendar', 'EVT', self::ORG_ID);
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_CATEGORIES . ' SET cat_org_id = NULL WHERE cat_id = ?', [$category['cat_id']]);
+        $eventId = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category): int {
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Protected global event');
+            $event->setValue('dat_begin', '2030-12-01 10:00');
+            $event->setValue('dat_end', '2030-12-01 12:00');
+            $event->save();
+            return (int) $event->getValue('dat_id');
+        });
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_ORGANIZATIONS . ' SET org_org_id_parent = ? WHERE org_id = ?', [$parent['org_id'], self::ORG_ID]);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($eventId): void {
+            $event = new Event($this->getDatabase(), $eventId);
+            $this->assertFalse($event->isEditable());
+            $service = new ReservationService($this->getDatabase());
+            foreach ([false, true] as $enabled) {
+                $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', $enabled ? '1' : '0');
+                foreach ([
+                    static fn() => $service->syncEventReservations($eventId, [], new DateTimeImmutable('2030-12-01 10:00'), new DateTimeImmutable('2030-12-01 12:00')),
+                    static fn() => $service->cancelEventReservations($eventId),
+                ] as $change) {
+                    try {
+                        $change();
+                        $this->fail('Child organizations must not mutate global event reservations.');
+                    } catch (Exception $exception) {
+                        $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                    }
+                }
+            }
+            try {
+                (new EventService($this->getDatabase()))->deleteData((string) $event->getValue('dat_uuid'));
+                $this->fail('Child organizations must not delete global events.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            }
+        });
+    }
+
     public static function eventReapprovalScopes(): array
     {
         return [
