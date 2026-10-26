@@ -300,11 +300,11 @@ try {
         }
 
         if ($gProfileFields->isVisible('LAST_NAME', $gCurrentUser->isAdministratorUsers())) {
-            $arrContent[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user['usr_uuid'])) . '">' . $user['last_name'] . '</a>';
+            $arrContent[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user['usr_uuid'])) . '">' . SecurityUtils::encodeHTML($user['last_name']) . '</a>';
         }
 
         if ($gProfileFields->isVisible('FIRST_NAME', $gCurrentUser->isAdministratorUsers())) {
-            $arrContent[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user['usr_uuid'])) . '">' . $user['first_name'] . '</a>';
+            $arrContent[] = '<a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php', array('user_uuid' => $user['usr_uuid'])) . '">' . SecurityUtils::encodeHTML($user['first_name']) . '</a>';
         }
 
         // create string with user address
@@ -329,7 +329,7 @@ try {
             || $gProfileFields->isVisible('CITY', $gCurrentUser->isAdministratorUsers())
             || $gProfileFields->isVisible('STREET', $gCurrentUser->isAdministratorUsers())) {
             if ($addressText !== '') {
-                $arrContent[] = '<i class="bi bi-geo-fill" data-bs-toggle="tooltip" title="' . trim($addressText, ' -') . '"></i>';
+                $arrContent[] = '<i class="bi bi-geo-fill" data-bs-toggle="tooltip" title="' . SecurityUtils::encodeHTML(trim($addressText, ' -')) . '"></i>';
             } else {
                 $arrContent[] = '&nbsp;';
             }

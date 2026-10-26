@@ -300,7 +300,7 @@ class ProfileFields
                                 list($optionValueImage, $optionValueText) = explode('|', $values['value']);
                             } else {
                                 $optionValueImage = $values['value'];
-                                $optionValueText = $this->getValue('usf_name');
+                                $optionValueText = $this->mProfileFields[$fieldNameIntern]->getValue('usf_name', 'database');
                             }
 
                             // if a text is a translation-ID, then translate it
