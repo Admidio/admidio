@@ -1778,6 +1778,129 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function revokedReservationPolicies(): array
+    {
+        $cases = [];
+        foreach (['requester', 'events', 'reservations'] as $policy) {
+            foreach (['new', 'this', 'series'] as $scope) {
+                $cases[$policy . ' revoked for ' . $scope] = [$policy, $scope];
+            }
+        }
+        return $cases;
+    }
+
+    /**
+     * @dataProvider revokedReservationPolicies
+     * @testdox Stored event forms cannot request items after reservation permissions are revoked
+     */
+    public function testEventFormRechecksCurrentReservationPermission(string $policy, string $scope): void
+    {
+        $fixture = $this->getFixture();
+        $admin = $this->makeInventoryUser('invrevokedadmin', true);
+        $role = $fixture->createAndSaveRoleWithRights('Revoked reservation event editors', self::ORG_ID, ['rol_events' => 1]);
+        $editorData = $fixture->createAndSaveUser('invrevokededitor', 'invrevokededitor@example.local');
+        $fixture->assignUserToRole($editorData['usr_id'], $role['rol_id']);
+        $editor = $this->loadUserInOrganization($editorData['usr_id'], self::ORG_ID);
+        $category = $fixture->createAndSaveCategory('Revoked reservation events', 'EVT', self::ORG_ID);
+        $itemId = $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            return $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Restricted event item']);
+        });
+
+        $this->withCurrentUser($editor, self::ORG_ID, true, function () use ($category, $itemId, $policy, $scope) {
+            $settings = $GLOBALS['gSettingsManager'];
+            $settings->set('inventory_reservations_enabled', '1');
+            $settings->set('inventory_reservations_events_enabled', '1');
+            $settings->set('inventory_reservation_requesters', 'members');
+            $settings->set('inventory_reservation_approval', 'automatic');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $values = [
+                'dat_headline' => 'Event before revoked request', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+            ];
+            if ($scope === 'series') {
+                $values += [
+                    'event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1,
+                    'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 2,
+                ];
+            }
+            $service = new EventSaveService($this->getDatabase());
+            $eventUuid = $scope === 'new' ? '' : (string) $service->saveData('', $values)->getValue('dat_uuid');
+            $this->assertTrue(InventoryAccessService::canRequestReservation());
+            $form = new FormPresenter('revoked_event_request', 'modules/events.edit.tpl');
+            $form->addSelectBox('event_inventory_items', 'Items', [$itemId => 'Restricted event item'], ['multiselect' => true]);
+
+            if ($policy === 'requester') {
+                $settings->set('inventory_reservation_requesters', 'roles');
+                $settings->set('inventory_reservation_requester_roles', '');
+                $this->assertFalse(InventoryAccessService::canRequestReservation());
+            } else {
+                $settings->set('inventory_reservations_' . ($policy === 'events' ? 'events_enabled' : 'enabled'), '0');
+            }
+            $validated = $form->validate([
+                'adm_csrf_token' => $form->getCsrfToken(), 'event_inventory_items' => [$itemId],
+            ]);
+            $values['dat_headline'] = 'Forbidden reservation change';
+            try {
+                $service->saveData($eventUuid, array_merge($values, $validated), '', false, $scope === 'series' ? 'series' : 'this');
+                $this->fail('A stored form must not bypass current reservation permissions.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            }
+            $this->assertSame(0, (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$itemId],
+            )->fetchColumn());
+            $this->assertSame(0, (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_EVENTS . ' WHERE dat_headline = ?',
+                ['Forbidden reservation change'],
+            )->fetchColumn());
+        });
+    }
+
+    /** @testdox Event synchronization may update existing items but cannot add items without request rights */
+    public function testEventSynchronizationRequiresPermissionForAdditionalItems(): void
+    {
+        $admin = $this->makeInventoryUser('invsyncpermission', true);
+        $category = $this->getFixture()->createAndSaveCategory('Synchronization permission events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category) {
+            $settings = $GLOBALS['gSettingsManager'];
+            $settings->set('inventory_reservations_enabled', '1');
+            $settings->set('inventory_reservations_events_enabled', '1');
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $existingItemId = $this->createItem($items, ['ITEMNAME' => 'Existing reservation item']);
+            $additionalItemId = $this->createItem($items, ['ITEMNAME' => 'Additional reservation item']);
+            $event = new Event($this->getDatabase());
+            $event->setValue('dat_cat_id', $category['cat_id']);
+            $event->setValue('dat_headline', 'Existing synchronization event');
+            $event->setValue('dat_begin', '2030-12-01 10:00:00');
+            $event->setValue('dat_end', '2030-12-01 12:00:00');
+            $event->save();
+            $eventId = (int) $event->getValue('dat_id');
+            $service = new ReservationService($this->getDatabase());
+            $begin = new DateTimeImmutable('2030-12-01 10:00:00');
+            $end = new DateTimeImmutable('2030-12-01 12:00:00');
+            $service->syncEventReservations($eventId, [$existingItemId], $begin, $end);
+            $settings->set('inventory_reservations_events_enabled', '0');
+            $service->syncEventReservations($eventId, [$existingItemId], $begin->modify('+1 day'), $end->modify('+1 day'));
+            try {
+                $service->syncEventReservations($eventId, [$existingItemId, $additionalItemId], $begin, $end);
+                $this->fail('Synchronization must not add new items when event reservations are disabled.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+            }
+            $periods = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_ini_id, ivr_begin FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ?',
+                [$eventId],
+            )->fetchAll();
+            $this->assertCount(1, $periods);
+            $this->assertSame($existingItemId, (int) $periods[0]['ivr_ini_id']);
+            $this->assertSame('2030-12-02 10:00:00', $periods[0]['ivr_begin']);
+        });
+    }
+
     /**
      * @testdox Event editors synchronize existing item reservations without request permission
      */

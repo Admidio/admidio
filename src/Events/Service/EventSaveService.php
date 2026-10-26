@@ -271,6 +271,13 @@ class EventSaveService
             $reservationItemIds = array($reservationItemIds);
         }
         $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int)$itemId > 0);
+        // A session-stored form may still offer items after its user's permission or the
+        // event reservation setting has changed. Recheck before writing any event data.
+        if (count($reservationItemIds) > 0
+            && (!$gSettingsManager->getBool('inventory_reservations_events_enabled')
+                || !InventoryAccessService::canRequestReservation())) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
         // Editors without reservation-request permission do not receive the item controls. Keep
         // the existing event reservations in that case, so changing an event period cannot leave
         // their periods behind.

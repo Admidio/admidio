@@ -377,6 +377,14 @@ class ReservationService
             );
         }
 
+        // Updating an existing event's periods must remain possible without request rights,
+        // but adding items (including previously rejected/cancelled requests) requires them.
+        if (count(array_diff($itemIds, array_keys($existingReservations))) > 0
+            && (!$gSettingsManager->getBool('inventory_reservations_events_enabled')
+                || !InventoryAccessService::canRequestReservation())) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         foreach ($itemIds as $itemId) {
             if (isset($existingReservations[$itemId])) {
                 $reservation = new Reservation($this->database, $existingReservations[$itemId]['id']);
