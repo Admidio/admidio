@@ -2045,6 +2045,73 @@ class InventoryTest extends DatabaseTestCase
         return ['single event' => ['this'], 'event series' => ['series']];
     }
 
+    public static function zeroDurationEventCases(): array
+    {
+        return [
+            'new event' => [false],
+            'existing event after removing all items' => [true],
+        ];
+    }
+
+    /**
+     * @dataProvider zeroDurationEventCases
+     * @testdox Events without items allow zero duration while actual reservations still require a period
+     */
+    public function testZeroDurationEventsWithoutItems(bool $removeItems): void
+    {
+        $admin = $this->makeInventoryUser('invzeroduration', true);
+        $category = $this->getFixture()->createAndSaveCategory('Zero duration events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $removeItems) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Zero duration item']);
+            $values = [
+                'dat_headline' => 'Zero duration event', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '10:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [''],
+            ];
+            $service = new EventSaveService($this->getDatabase());
+            $eventUuid = '';
+            if ($removeItems) {
+                $initialValues = array_replace($values, ['event_to_time' => '12:00', 'event_inventory_items' => [$itemId]]);
+                $eventUuid = (string) $service->saveData('', $initialValues)->getValue('dat_uuid');
+            }
+            $event = $service->saveData($eventUuid, $values);
+            $this->assertGreaterThan(0, (int) $event->getValue('dat_id'));
+            $periods = $this->getDatabase()->queryPrepared(
+                'SELECT dat_begin, dat_end FROM ' . TBL_EVENTS . ' WHERE dat_headline = ?',
+                [$values['dat_headline']],
+            )->fetchAll();
+            $this->assertCount(1, $periods);
+            foreach ($periods as $period) {
+                $this->assertSame($period['dat_begin'], $period['dat_end']);
+            }
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$itemId],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $this->assertSame($removeItems ? array_fill(0, count($periods), Reservation::STATUS_CANCELLED) : [], $statuses);
+
+            // Empty selections must not weaken the period requirement for actual reservations.
+            try {
+                (new ReservationService($this->getDatabase()))->syncEventReservations(
+                    (int) $event->getValue('dat_id'),
+                    [$itemId],
+                    new DateTimeImmutable('2030-12-01 10:00:00'),
+                    new DateTimeImmutable('2030-12-01 10:00:00'),
+                );
+                $this->fail('An item reservation must require a positive duration.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_DATE_END_BEFORE_BEGIN', $exception->getTranslationId());
+            }
+        });
+    }
+
     /**
      * @dataProvider eventReservationScopes
      * @testdox Removing every item row explicitly cancels event reservations

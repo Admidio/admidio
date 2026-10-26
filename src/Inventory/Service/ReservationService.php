@@ -340,41 +340,40 @@ class ReservationService
     {
         global $gCurrentUser, $gSettingsManager, $gValidLogin;
 
-        $this->assertValidPeriod($begin, $end);
         $this->assertEventInCurrentOrganization($eventId);
         $itemIds = array_values(array_unique(array_filter(array_map('intval', $itemIds), static function (int $itemId): bool {
             return $itemId > 0;
         })));
+        // Empty selections still cancel existing reservations, but need no reservation period.
+        if ($itemIds !== []) {
+            $this->assertValidPeriod($begin, $end);
+        }
         sort($itemIds, SORT_NUMERIC);
         $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
 
         foreach ($itemIds as $itemId) {
-            if ($itemId <= 0) {
-                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
-            }
-
             $item = $this->getItemInCurrentOrganization($itemId);
             if ($item->isRetired()) {
-                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', array($item->readableName()));
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', [$item->readableName()]);
             }
             $this->lockItemForReservation($itemId);
 
             if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
-                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', array($item->readableName()));
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', [$item->readableName()]);
             }
         }
 
-        $existingReservations = array();
+        $existingReservations = [];
         $statement = $this->database->queryPrepared(
             'SELECT ivr_id, ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
               WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
-            array($eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED)
+            [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
         );
         while ($existingReservation = $statement->fetch()) {
-            $existingReservations[(int)$existingReservation['ivr_ini_id']] = array(
-                'id' => (int)$existingReservation['ivr_id'],
-                'status' => (string)$existingReservation['ivr_status']
-            );
+            $existingReservations[(int) $existingReservation['ivr_ini_id']] = [
+                'id' => (int) $existingReservation['ivr_id'],
+                'status' => (string) $existingReservation['ivr_status'],
+            ];
         }
 
         // Updating an existing event's periods must remain possible without request rights,
@@ -398,7 +397,7 @@ class ReservationService
             $reservation = new Reservation($this->database);
             $reservation->setValue('ivr_ini_id', $itemId);
             $reservation->setValue('ivr_dat_id', $eventId);
-            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int)$gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
             $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
             $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
