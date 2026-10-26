@@ -1,4 +1,6 @@
 <p class="form-text">{$l10n->get('SYS_INVENTORY_EVENT_RESERVATIONS_DESC')}</p>
+{* Preserve an explicitly empty selection when every item row has been removed. *}
+<input type="hidden" name="event_inventory_items[]" value="">
 <table class="table table-hover" style="width: 100%;">
     <thead><tr><th>{$l10n->get('SYS_INVENTORY_ITEMNAME')}</th><th></th></tr></thead>
     <tbody id="event_inventory_reservations_rows">

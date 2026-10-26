@@ -2040,6 +2040,75 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function eventReservationScopes(): array
+    {
+        return ['single event' => ['this'], 'event series' => ['series']];
+    }
+
+    /**
+     * @dataProvider eventReservationScopes
+     * @testdox Removing every item row explicitly cancels event reservations
+     */
+    public function testRemovingAllEventItemRowsCancelsReservations(string $scope): void
+    {
+        $admin = $this->makeInventoryUser('invremoveallitems', true);
+        $category = $this->getFixture()->createAndSaveCategory('Remove all item events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $scope) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'manual');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Removed event item']);
+            $values = [
+                'dat_headline' => 'Remove every item', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [$itemId],
+            ];
+            if ($scope === 'series') {
+                $values += [
+                    'event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1,
+                    'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 2,
+                ];
+            }
+            $service = new EventSaveService($this->getDatabase());
+            $event = $service->saveData('', $values);
+            $previousSession = $GLOBALS['gCurrentSession'];
+            try {
+                $GLOBALS['gCurrentSession'] = new Session($this->getDatabase(), COOKIE_PREFIX);
+                $form = new FormPresenter('remove_all_items', 'modules/events.edit.tpl');
+                $form->addSelectBox('event_inventory_items', 'Items', [$itemId => 'Removed event item'], ['multiselect' => true]);
+                $form->addButton('event_inventory_reservation_add', 'Add');
+                $smarty = new \Smarty\Smarty();
+                $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
+                $smarty->setCompileDir(sys_get_temp_dir());
+                $smarty->assign([
+                    'l10n' => $GLOBALS['gL10n'], 'elements' => $form->getElements(),
+                    'eventInventoryReservationRows' => [], 'eventInventoryReservationItems' => [],
+                ]);
+                $document = new \DOMDocument();
+                $document->loadHTML($smarty->fetch('modules/events.edit.inventory-reservations.tpl'));
+                $emptySelection = (new \DOMXPath($document))->query('//input[@type="hidden" and @name="event_inventory_items[]"]');
+                $this->assertCount(1, $emptySelection);
+                $validated = $form->validate([
+                    'adm_csrf_token' => $form->getCsrfToken(),
+                    'event_inventory_items' => [$emptySelection->item(0)->getAttribute('value')],
+                ]);
+                unset($values['event_inventory_items']);
+                $service->saveData((string) $event->getValue('dat_uuid'), array_merge($values, $validated), '', false, $scope);
+            } finally {
+                $GLOBALS['gCurrentSession'] = $previousSession;
+            }
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$itemId],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $this->assertSame(array_fill(0, $scope === 'series' ? 2 : 1, Reservation::STATUS_CANCELLED), $statuses);
+        });
+    }
+
     /**
      * @testdox A rejected event reservation can be requested again
      */
