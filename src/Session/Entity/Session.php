@@ -382,6 +382,13 @@ class Session extends Entity
             exit('The IP address does not match with the IP address the current session was started! For safety reasons the current session was closed.');
         }
 
+        // Cached auto login data can outlive its database record, e.g. after a password reset.
+        // Only a token that still exists may restore a user or keep a session from expiring.
+        if (isset($this->mAutoLogin)
+            && !$this->mAutoLogin->readDataById((int)$this->mAutoLogin->getValue('atl_id'))) {
+            $this->mAutoLogin = null;
+        }
+
         // session in database could be deleted if user was some time inactive and another user
         // clears the table. Therefor we must reset the user id
         if (isset($this->mAutoLogin)) {

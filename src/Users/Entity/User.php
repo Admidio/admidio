@@ -1466,34 +1466,40 @@ class User extends Entity
     }
 
     /**
-     * Deletes all other sessions of the current user except the current session if there is already a current
-     * session. All auto logins of the user will be removed. This method is useful if the user changed his
+     * Deletes all other sessions of this user except the current session if it belongs to this user.
+     * All auto logins of the user will be removed. This method is useful if the user changed his
      * password or if unusual activities within the user account are noticed.
      * @return bool Returns true if all things could be done. Otherwise, false is returned.
      * @throws Exception
      */
     public function invalidateAllOtherLogins(): bool
     {
-        global $gCurrentUserId, $gCurrentSession;
+        global $gCurrentSession;
 
-        if (isset($gCurrentSession)) {
-            // remove all sessions of the current user except the current session
+        $userId = (int)$this->getValue('usr_id');
+        if ($userId === 0) {
+            // A user that has not been saved cannot have any logins to invalidate.
+            return true;
+        }
+
+        if (isset($gCurrentSession) && (int)$gCurrentSession->getValue('ses_usr_id') === $userId) {
+            // remove all sessions of this user except the current session
             $sql = 'DELETE FROM ' . TBL_SESSIONS . '
-                     WHERE ses_usr_id = ? -- $gCurrentUserId
+                     WHERE ses_usr_id = ? -- $userId
                        AND ses_id    <> ? -- $gCurrentSession->getValue(\'ses_id\') ';
-            $queryParams = array($gCurrentUserId, $gCurrentSession->getValue('ses_id'));
+            $queryParams = array($userId, $gCurrentSession->getValue('ses_id'));
         } else {
-            // remove all sessions of the current user
+            // remove all sessions of this user
             $sql = 'DELETE FROM ' . TBL_SESSIONS . '
-                     WHERE ses_usr_id = ? -- $gCurrentUserId ';
-            $queryParams = array($gCurrentUserId);
+                     WHERE ses_usr_id = ? -- $userId ';
+            $queryParams = array($userId);
         }
         $this->db->queryPrepared($sql, $queryParams);
 
-        // remove all auto logins of the current user
+        // remove all auto logins of this user
         $sql = 'DELETE FROM ' . TBL_AUTO_LOGIN . '
-                 WHERE atl_usr_id = ? -- $gCurrentUserId ';
-        $queryParams = array($gCurrentUserId);
+                 WHERE atl_usr_id = ? -- $userId ';
+        $queryParams = array($userId);
         $this->db->queryPrepared($sql, $queryParams);
 
         return true;
