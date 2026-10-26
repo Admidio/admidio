@@ -35,6 +35,7 @@ use Admidio\UI\Presenter\InventoryItemPresenter;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
 use DateTimeImmutable;
+use Symfony\Component\Process\Process;
 
 class InventoryTest extends DatabaseTestCase
 {
@@ -1220,6 +1221,87 @@ class InventoryTest extends DatabaseTestCase
                 new DateTimeImmutable('2030-06-01 12:00:00'),
                 new DateTimeImmutable('2030-06-01 13:00:00')
             ));
+        });
+    }
+
+    /**
+     * @testdox Concurrent automatic reservations create only one confirmed reservation
+     */
+    public function testConcurrentAutomaticReservationsCreateOnlyOneConfirmedReservation(): void
+    {
+        $admin = $this->makeInventoryUser('invreservationconcurrent', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($admin) {
+            $database = $this->getDatabase();
+            $settings = $GLOBALS['gSettingsManager'];
+            $previousApproval = $settings->getString('inventory_reservation_approval');
+            $previousEnabled = $settings->getString('inventory_reservations_enabled');
+            $previousRequesters = $settings->getString('inventory_reservation_requesters');
+            $itemId = 0;
+            $startFile = tempnam(sys_get_temp_dir(), 'admidio-reservation-start-');
+            $resultFiles = array(
+                tempnam(sys_get_temp_dir(), 'admidio-reservation-result-'),
+                tempnam(sys_get_temp_dir(), 'admidio-reservation-result-')
+            );
+            $processes = array();
+
+            try {
+                unlink($startFile);
+                $settings->set('inventory_reservations_enabled', '1');
+                $settings->set('inventory_reservation_requesters', 'members');
+                $settings->set('inventory_reservation_approval', 'automatic');
+                $itemId = $this->createItem(new ItemsData($database, self::ORG_ID), array('ITEMNAME' => 'Concurrent reservation projector'));
+
+                // Child processes need to see the item and the temporary settings.
+                $database->endTransaction();
+
+                foreach ($resultFiles as $resultFile) {
+                    $process = new Process(array(
+                        PHP_BINARY,
+                        __DIR__ . '/reservation_request_worker.php',
+                        (string)$itemId,
+                        (string)$admin->getValue('usr_id'),
+                        $startFile,
+                        $resultFile
+                    ));
+                    $process->start();
+                    $processes[] = $process;
+                }
+
+                touch($startFile);
+                foreach ($processes as $process) {
+                    $process->wait();
+                    $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+                }
+
+                $results = array_map(static fn(string $file): string => trim((string)file_get_contents($file)), $resultFiles);
+                sort($results);
+                $this->assertSame(array('SYS_ITEM_NOT_AVAILABLE', 'approved'), $results);
+                $this->assertSame(1, (int)$database->queryPrepared(
+                    'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? AND ivr_status = ?',
+                    array($itemId, Reservation::STATUS_APPROVED)
+                )->fetchColumn());
+            } finally {
+                foreach ($processes as $process) {
+                    if ($process->isRunning()) {
+                        $process->stop();
+                    }
+                }
+                if ($itemId > 0) {
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?', array($itemId));
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?', array($itemId));
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?', array($itemId));
+                    $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?', array($itemId));
+                }
+                $settings->set('inventory_reservation_approval', $previousApproval);
+                $settings->set('inventory_reservations_enabled', $previousEnabled);
+                $settings->set('inventory_reservation_requesters', $previousRequesters);
+                foreach (array_merge(array($startFile), $resultFiles) as $file) {
+                    if (is_string($file) && file_exists($file)) {
+                        unlink($file);
+                    }
+                }
+                $database->startTransaction();
+            }
         });
     }
 
