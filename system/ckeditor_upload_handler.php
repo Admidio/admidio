@@ -21,7 +21,65 @@ try {
     require_once(__DIR__ . '/common.php');
     require(__DIR__ . '/login_valid.php');
 
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Allow: POST');
+        http_response_code(405);
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
+    }
+
+    SecurityUtils::validateCsrfToken($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+
     $getCKEditorID = admFuncVariableIsValid($_GET, 'id', 'string', array('requireValue' => true));
+
+    // Authorize access to the selected module before processing files or creating
+    // directories. These images are shared assets, so no existing entry is required.
+    switch ($getCKEditorID) {
+        case 'ann_description':
+            $folderName = 'announcements';
+            $uploadAllowed = $gSettingsManager->getInt('announcements_module_enabled') > 0
+                && count($gCurrentUser->getAllEditableCategories('ANN')) > 0;
+            break;
+        case 'dat_description':
+            $folderName = 'events';
+            $uploadAllowed = $gSettingsManager->getInt('events_module_enabled') > 0
+                && count($gCurrentUser->getAllEditableCategories('EVT')) > 0;
+            break;
+        case 'fop_text':
+            $folderName = 'forum';
+            $uploadAllowed = $gSettingsManager->getInt('forum_module_enabled') > 0
+                && ($gCurrentUser->isAdministratorForum()
+                    || count($gCurrentUser->getAllEditableCategories('FOT')) > 0);
+            break;
+        case 'lnk_description':
+            $folderName = 'weblinks';
+            $uploadAllowed = $gSettingsManager->getInt('weblinks_module_enabled') > 0
+                && count($gCurrentUser->getAllEditableCategories('LNK')) > 0;
+            break;
+        case 'msg_body':
+            $folderName = 'mail';
+            // Private messages use a plain textarea; only HTML email uses CKEditor.
+            $uploadAllowed = in_array($gSettingsManager->getInt('mail_module_enabled'), array(1, 2), true)
+                && $gSettingsManager->getBool('mail_html_registered_users')
+                && $gCurrentUser->hasEmail();
+            break;
+        case 'room_description':
+            $folderName = 'rooms';
+            $uploadAllowed = $gCurrentUser->isAdministrator();
+            break;
+        case 'usf_description':
+            $folderName = 'user_fields';
+            $uploadAllowed = $gCurrentUser->isAdministrator();
+            break;
+        default:
+            $folderName = 'plugins';
+            // Unknown editor IDs must not bypass the module permission checks.
+            $uploadAllowed = $gCurrentUser->isAdministrator();
+            break;
+    }
+
+    if (!$uploadAllowed) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
 
     if (isset($gDisableFileUpload) && $gDisableFileUpload === true) {
         throw new Exception('File upload disabled in global config file!');
@@ -39,34 +97,6 @@ try {
 
     if (!FileSystemUtils::allowedFileExtension($_FILES['upload']['name'])) {
         throw new Exception('SYS_FILE_EXTENSION_INVALID');
-    }
-
-    // if necessary create the module folders in adm_my_files
-    switch ($getCKEditorID) {
-        case 'ann_description':
-            $folderName = 'announcements';
-            break;
-        case 'dat_description':
-            $folderName = 'events';
-            break;
-        case 'fop_text':
-            $folderName = 'forum';
-            break;
-        case 'lnk_description':
-            $folderName = 'weblinks';
-            break;
-        case 'msg_body':
-            $folderName = 'mail';
-            break;
-        case 'room_description':
-            $folderName = 'rooms';
-            break;
-        case 'usf_description':
-            $folderName = 'user_fields';
-            break;
-        default:
-            $folderName = 'plugins';
-            break;
     }
 
     $imagesPath = ADMIDIO_PATH . FOLDER_DATA . '/' . $folderName . '/images';

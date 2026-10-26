@@ -501,7 +501,7 @@ class FormPresenter
      */
     public function addEditor(string $id, string $label, string $value, array $options = array()): void
     {
-        global $gSettingsManager, $gL10n;
+        global $gSettingsManager, $gL10n, $gCurrentSession;
 
         $flagLabelVertical = $this->type;
 
@@ -540,7 +540,10 @@ class FormPresenter
             ' . $toolbarJS . '
             language: "' . $gL10n->getLanguageLibs() . '",
             simpleUpload: {
-                uploadUrl: "' . ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php?id=' . $id . '"
+                uploadUrl: "' . ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php?id=' . $id . '",
+                headers: {
+                    "X-CSRF-Token": ' . json_encode($gCurrentSession->getCsrfToken()) . '
+                }
             }
         } )
         .then( newEditor => {
