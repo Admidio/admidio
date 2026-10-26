@@ -799,7 +799,7 @@ class InventoryItemPresenter extends PagePresenter
         // A borrow form changes the item state. Do not merely disable its inputs for a forged
         // direct URL: reject callers who are not entitled to process this specific item.
         if (!$items->isEditable()
-            || ($reservationUuid !== '' && !InventoryAccessService::canManageReservationItem($items->getItemId()))) {
+            || ($reservationUuid !== '' && !$returning && !InventoryAccessService::canManageReservationItem($items->getItemId()))) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 

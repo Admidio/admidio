@@ -395,7 +395,7 @@ try {
                 }
 
                 $expectedReservationStatus = $getBorrowed ? Reservation::STATUS_BORROWED : Reservation::STATUS_APPROVED;
-                if (!InventoryAccessService::canManageReservationItem((int)$item->getValue('ini_id'))
+                if ((!$getBorrowed && !InventoryAccessService::canManageReservationItem((int) $item->getValue('ini_id')))
                     || $reservation->getValue('ivr_status') !== $expectedReservationStatus) {
                     throw new Exception('SYS_NO_RIGHTS');
                 }

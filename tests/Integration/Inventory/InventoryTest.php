@@ -1500,6 +1500,98 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function regularReturnCases(): array
+    {
+        return [
+            'administrator without reservations' => [false, false, false],
+            'administrator with disabled reservation' => [false, true, false],
+            'keeper without reservations' => [true, false, false],
+            'keeper with disabled reservation' => [true, true, false],
+            'keeper without reservation management' => [true, true, true],
+            'administrator returning disabled reservation by UUID' => [false, true, false, true],
+            'keeper returning disabled reservation by UUID' => [true, true, false, true],
+            'keeper returning reservation by UUID without management' => [true, true, true, true],
+        ];
+    }
+
+    /**
+     * @dataProvider regularReturnCases
+     * @testdox Regular returns use item permissions independently of reservation settings
+     */
+    public function testRegularReturnDoesNotRequireReservationManagement(bool $asKeeper, bool $hasReservation, bool $reservationsEnabled, bool $withReservationUuid = false): void
+    {
+        $admin = $this->makeInventoryUser('invregularreturnadmin', true);
+        $keeperData = $this->getFixture()->createAndSaveUser('invregularreturnkeeper', 'invregularreturnkeeper@example.local');
+        $keeper = $this->loadUserInOrganization($keeperData['usr_id'], self::ORG_ID);
+        $itemId = $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($keeperData, $hasReservation) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', 'automatic');
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $itemId = $this->createItem($items, ['ITEMNAME' => 'Regular return item', 'KEEPER' => (string) $keeperData['usr_id']]);
+            if ($hasReservation) {
+                $service = new ReservationService($this->getDatabase());
+                $reservation = $service->request($itemId, new DateTimeImmutable('2020-01-01 10:00:00'), new DateTimeImmutable('2020-01-01 12:00:00'));
+                $service->startBorrowing($reservation);
+            }
+            $items->setValue('LAST_RECEIVER', 'Alice');
+            $items->setValue('BORROW_DATE', '2020-01-01');
+            $items->saveItemData();
+            return $itemId;
+        });
+
+        $this->withCurrentUser($asKeeper ? $keeper : $admin, self::ORG_ID, true, function () use ($itemId, $hasReservation, $reservationsEnabled, $withReservationUuid) {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', $reservationsEnabled ? '1' : '0');
+            $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '0');
+            $GLOBALS['gSettingsManager']->set('inventory_allowed_keeper_edit_fields', 'LAST_RECEIVER,BORROW_DATE,RETURN_DATE');
+            $uuid = $this->uuidOfItem($itemId);
+            $reservationService = new ReservationService($this->getDatabase());
+            if ($withReservationUuid) {
+                $reservationId = (int) $this->getDatabase()->queryPrepared(
+                    'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                    [$itemId],
+                )->fetchColumn();
+                $reservation = new Reservation($this->getDatabase(), $reservationId);
+                $previousSession = $GLOBALS['gCurrentSession'];
+                $session = new class {
+                    public ?FormPresenter $form = null;
+
+                    public function getCsrfToken(): string
+                    {
+                        return 'return-test-token';
+                    }
+
+                    public function addFormObject(FormPresenter $form): bool
+                    {
+                        $this->form = $form;
+                        return true;
+                    }
+                };
+                try {
+                    $GLOBALS['gCurrentSession'] = $session;
+                    (new InventoryItemPresenter())->createEditBorrowForm($uuid, (string) $reservation->getValue('ivr_uuid'), true);
+                    $this->assertNotNull($session->form);
+                } finally {
+                    $GLOBALS['gCurrentSession'] = $previousSession;
+                }
+            }
+            (new ItemService($this->getDatabase(), $uuid))->saveData(['INF-RETURN_DATE' => date('Y-m-d')]);
+            if ($withReservationUuid) {
+                $reservationService->finishBorrowing($reservation);
+            } else {
+                $reservationService->finishBorrowingForItem($itemId);
+            }
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $items->readItemData($uuid);
+            $this->assertFalse($items->isBorrowed());
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$itemId],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $this->assertSame($hasReservation ? [Reservation::STATUS_RETURNED] : [], $statuses);
+        });
+    }
+
     /**
      * @testdox Completed reservations cannot be changed through invalid lifecycle transitions
      */

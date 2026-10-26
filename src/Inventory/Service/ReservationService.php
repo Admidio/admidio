@@ -249,11 +249,8 @@ class ReservationService
     /** Mark a handed-over reservation as returned. */
     public function finishBorrowing(Reservation $reservation): void
     {
-        $itemId = (int)$reservation->getValue('ivr_ini_id');
-        $this->getItemInCurrentOrganization($itemId);
-        if (!InventoryAccessService::canManageReservationItem($itemId)) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->assertCanReturnItem($itemId);
 
         $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
             $this->lockItemForReservation($itemId);
@@ -270,10 +267,7 @@ class ReservationService
      */
     public function finishBorrowingForItem(int $itemId): void
     {
-        $this->getItemInCurrentOrganization($itemId);
-        if (!InventoryAccessService::canManageReservationItem($itemId)) {
-            throw new Exception('SYS_NO_RIGHTS');
-        }
+        $this->assertCanReturnItem($itemId);
 
         $this->withinReservationTransaction(function () use ($itemId): void {
             $this->lockItemForReservation($itemId);
@@ -281,13 +275,13 @@ class ReservationService
                 'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
                   WHERE ivr_ini_id = ? AND ivr_status = ?
                ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC FOR UPDATE',
-                array($itemId, Reservation::STATUS_BORROWED)
+                [$itemId, Reservation::STATUS_BORROWED],
             )->fetchColumn();
             if ($reservationId === false) {
                 return;
             }
 
-            $reservation = new Reservation($this->database, (int)$reservationId);
+            $reservation = new Reservation($this->database, (int) $reservationId);
             $this->transition($reservation, Reservation::STATUS_RETURNED);
         });
     }
@@ -455,6 +449,15 @@ class ReservationService
         )->fetchColumn();
         if ($activeBorrowing !== false) {
             throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+        }
+    }
+
+    /** Physical returns use item edit rights, independently of reservation management settings. */
+    private function assertCanReturnItem(int $itemId): void
+    {
+        $item = $this->getItemInCurrentOrganization($itemId);
+        if (!(new ItemService($this->database, (string) $item->getValue('ini_uuid')))->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
     }
 
