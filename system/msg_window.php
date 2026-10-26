@@ -10,11 +10,13 @@
  * message_id    - ID of language text, that should be shown
  * message_title - (optional) title of window (Default: Note)
  * message_var1  - (optional) text, that should be shown in the message
+ * dat_uuid      - (required for room_detail) UUID of the event associated with the room
+ * room_uuid     - (required for room_detail) UUID of the room
  * inline        - true : message should not be shown in separate window
  ***********************************************************************************************
  */
 
-use Admidio\Events\Entity\Room;
+use Admidio\Events\Service\EventService;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -24,6 +26,12 @@ try {
     $getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string', array('directOutput' => true, 'defaultValue' => 'SYS_NOTE'));
     $getMessageVar1 = admFuncVariableIsValid($_GET, 'message_var1', 'string', array('directOutput' => true));
     $getInlineView = admFuncVariableIsValid($_GET, 'inline', 'bool', array('directOutput' => true));
+
+    if ($getMessageId === 'room_detail') {
+        $getRoomUUID = admFuncVariableIsValid($_GET, 'room_uuid', 'uuid', array('directOutput' => true, 'requireValue' => true));
+        $getEventUUID = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid', array('directOutput' => true, 'requireValue' => true));
+        $room = (new EventService($gDb))->getRoomForEvent($getEventUUID, $getRoomUUID);
+    }
 
     header('Content-type: text/html; charset=utf-8');
 
@@ -40,26 +48,23 @@ try {
     switch ($getMessageId) {
         // room help text
         case 'room_detail':
-            if (is_numeric($getMessageVar1)) {
-                $room = new Room($gDb, $getMessageVar1);
-                echo '
-                <div class="row">
-                    <div class="col-4"><strong>' . $gL10n->get('SYS_ROOM') . ':</strong></div>
-                    <div class="col-8">' . $room->getValue('room_name') . '</div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><strong>' . $gL10n->get('SYS_CAPACITY') . ':</strong></div>
-                    <div class="col-8">' . (int)$room->getValue('room_capacity') . '</div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><strong>' . $gL10n->get('SYS_OVERHANG') . ':</strong></div>
-                    <div class="col-8">' . (int)$room->getValue('room_overhang') . '</div>
-                </div>
-                <div class="row">
-                    <div class="col-4"><strong>' . $gL10n->get('SYS_DESCRIPTION') . ':</strong></div>
-                    <div class="col-8">' . $room->getValue('room_description') . '</div>
-                </div>';
-            }
+            echo '
+            <div class="row">
+                <div class="col-4"><strong>' . $gL10n->get('SYS_ROOM') . ':</strong></div>
+                <div class="col-8">' . $room->getValue('room_name') . '</div>
+            </div>
+            <div class="row">
+                <div class="col-4"><strong>' . $gL10n->get('SYS_CAPACITY') . ':</strong></div>
+                <div class="col-8">' . (int)$room->getValue('room_capacity') . '</div>
+            </div>
+            <div class="row">
+                <div class="col-4"><strong>' . $gL10n->get('SYS_OVERHANG') . ':</strong></div>
+                <div class="col-8">' . (int)$room->getValue('room_overhang') . '</div>
+            </div>
+            <div class="row">
+                <div class="col-4"><strong>' . $gL10n->get('SYS_DESCRIPTION') . ':</strong></div>
+                <div class="col-8">' . $room->getValue('room_description') . '</div>
+            </div>';
             break;
 
         // mylist condition description

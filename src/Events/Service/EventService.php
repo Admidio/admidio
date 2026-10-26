@@ -2,8 +2,10 @@
 namespace Admidio\Events\Service;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Components\Entity\Component;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\EventRecurrence;
+use Admidio\Events\Entity\Room;
 use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\ValueObject\Participants;
@@ -27,6 +29,30 @@ class EventService
 {
     public function __construct(private readonly Database $database)
     {
+    }
+
+    /**
+     * Read room details only in the context of an event the current visitor may view.
+     * @throws Exception
+     */
+    public function getRoomForEvent(string $eventUUID, string $roomUUID): Room
+    {
+        if ($eventUUID === '' || $roomUUID === '' || !Component::isVisible('EVENTS')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $event = new Event($this->database);
+        if (!$event->readDataByUuid($eventUUID) || !$event->isVisible()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $room = new Room($this->database);
+        if (!$room->readDataByUuid($roomUUID)
+            || (int) $event->getValue('dat_room_id') !== (int) $room->getValue('room_id')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        return $room;
     }
 
     /**
