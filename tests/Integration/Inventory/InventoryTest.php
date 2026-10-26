@@ -22,6 +22,7 @@ use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Service\ItemService;
 use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Inventory\Service\ReservationService;
+use Admidio\Inventory\Service\ReservationNotificationService;
 use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Preferences\Service\PreferenceDefinitions;
@@ -1630,6 +1631,46 @@ class InventoryTest extends DatabaseTestCase
             }
             $service->finishBorrowing($reservation);
             $this->assertTrue($service->isAvailable($itemId, $begin, $end));
+        });
+    }
+
+    public static function notificationStatuses(): array
+    {
+        $cases = [];
+        foreach (['requested', 'approved', 'rejected', 'cancelled', 'borrowed', 'returned'] as $status) {
+            foreach ([false, true] as $html) {
+                $cases[$status . ($html ? ' HTML' : ' plain')] = [$status, $html];
+            }
+        }
+        return $cases;
+    }
+
+    /**
+     * @dataProvider notificationStatuses
+     * @testdox Reservation email subjects and bodies use translated statuses
+     */
+    public function testReservationNotificationUsesTranslatedStatus(string $status, bool $html): void
+    {
+        $admin = $this->makeInventoryUser('invnotificationstatus', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($status, $html) {
+            $GLOBALS['gSettingsManager']->set('mail_html_registered_users', $html ? '1' : '0');
+            $GLOBALS['gSettingsManager']->set('mail_sender_mode', '2');
+            $GLOBALS['gSettingsManager']->set('mail_sender_email', 'inventory@example.test');
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Notification item']);
+            $reservation = new Reservation($this->getDatabase());
+            $reservation->setValue('ivr_ini_id', $itemId);
+            $reservation->setValue('ivr_guest_name', 'Guest');
+            $reservation->setValue('ivr_status', $status);
+            $reservation->setValue('ivr_begin', '2030-11-05 10:00:00');
+            $reservation->setValue('ivr_end', '2030-11-05 12:00:00');
+            $service = new ReservationNotificationService($this->getDatabase());
+            $email = (new \ReflectionMethod($service, 'createEmail'))->invoke($service, $reservation);
+            $text = (new \ReflectionProperty($email, 'emText'))->getValue($email);
+            $statusId = $status === 'cancelled' ? 'SYS_CANCELLED' : 'SYS_STATUS_' . strtoupper($status);
+            $label = $GLOBALS['gL10n']->get($statusId);
+            $this->assertStringContainsString($label, $email->Subject);
+            $this->assertStringContainsString($label, $text);
+            $this->assertStringNotContainsString('#SYS_', $email->Subject . $text);
         });
     }
 

@@ -117,20 +117,23 @@ class ReservationNotificationService
         global $gCurrentOrganization, $gL10n, $gSettingsManager;
 
         $html = $gSettingsManager->getBool('mail_html_registered_users');
-        $item = new Item($this->database, null, (int)$reservation->getValue('ivr_ini_id'));
+        $item = new Item($this->database, null, (int) $reservation->getValue('ivr_ini_id'));
         $requester = $this->getRequester($reservation);
         $format = static function (string $value) use ($html): string {
             return $html ? SecurityUtils::encodeHTML($value) : $value;
         };
         $dateFormat = $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time');
-        $status = $gL10n->get('SYS_INVENTORY_RESERVATION_STATUS_' . strtoupper((string)$reservation->getValue('ivr_status')));
-        $message = $gL10n->get('SYS_RESERVATION_NOTIFICATION_MESSAGE', array(
+        $statusId = $reservation->getValue('ivr_status') === Reservation::STATUS_CANCELLED
+            ? 'SYS_CANCELLED'
+            : 'SYS_STATUS_' . strtoupper((string) $reservation->getValue('ivr_status'));
+        $status = $gL10n->get($statusId);
+        $message = $gL10n->get('SYS_RESERVATION_NOTIFICATION_MESSAGE', [
             $format($status),
             $format($item->readableName()),
-            $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_begin', 'database')))->format($dateFormat)),
-            $format((new \DateTimeImmutable((string)$reservation->getValue('ivr_end', 'database')))->format($dateFormat)),
-            $format(trim($requester['firstName'] . ' ' . $requester['lastName']))
-        ));
+            $format((new \DateTimeImmutable((string) $reservation->getValue('ivr_begin', 'database')))->format($dateFormat)),
+            $format((new \DateTimeImmutable((string) $reservation->getValue('ivr_end', 'database')))->format($dateFormat)),
+            $format(trim($requester['firstName'] . ' ' . $requester['lastName'])),
+        ]);
         if (!$html) {
             $message = str_replace('<br />', "\n", $message);
         }
@@ -140,7 +143,7 @@ class ReservationNotificationService
             $email->setHtmlMail();
         }
         $email->setSubject($gCurrentOrganization->getValue('org_shortname') . ': '
-            . $gL10n->get('SYS_RESERVATION_NOTIFICATION_SUBJECT', array($item->readableName(), $status)));
+            . $gL10n->get('SYS_RESERVATION_NOTIFICATION_SUBJECT', [$item->readableName(), $status]));
         $email->setText($message);
 
         return $email;
