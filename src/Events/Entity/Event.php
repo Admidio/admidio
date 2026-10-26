@@ -389,7 +389,7 @@ class Event extends Entity
         if (parent::readData($sqlWhereCondition, $queryParams)) {
             // check if event belongs to this organization
             if ($this->getValue('cat_org_id') > 0 && $this->getValue('cat_org_id') !== $GLOBALS['gCurrentOrgId']) {
-                throw new Exception('Event ' . $this->getValue('dat_uuid') . ' belongs to another organization.');
+                throw new Exception('SYS_NO_RIGHTS');
             }
             return true;
         }

@@ -32,6 +32,8 @@ class RoomDetailAccessTest extends DatabaseTestCase
             'missing room UUID' => [1, false, false, false, 'missingRoom', false],
             'nonexistent room UUID' => [1, false, false, false, 'unknownRoom', false],
             'numeric room ID rejected' => [1, false, false, false, 'numericRoom', false],
+            'cancelled event for guest' => [1, false, false, false, 'cancelled', false],
+            'cancelled event for member' => [1, true, false, true, 'cancelled', false],
             'event of another organization' => [1, false, false, false, 'otherOrg', false]
         );
     }
@@ -67,13 +69,16 @@ class RoomDetailAccessTest extends DatabaseTestCase
         $roomId = (int) $room->getValue('room_id');
         $roomUUID = $room->getValue('room_uuid');
 
-        $eventUUID = $this->withCurrentUser($adminUser, $org['org_id'], true, function () use ($category, $roomId) {
+        $eventUUID = $this->withCurrentUser($adminUser, $org['org_id'], true, function () use ($category, $roomId, $request) {
             $event = new Event($this->getDatabase());
             $event->setValue('dat_cat_id', $category['cat_id']);
             $event->setValue('dat_headline', 'Room meeting');
             $event->setValue('dat_begin', '2030-04-01 18:00:00');
             $event->setValue('dat_end', '2030-04-01 20:00:00');
             $event->setValue('dat_room_id', $roomId);
+            if ($request === 'cancelled') {
+                $event->setValue('dat_recurrence_status', 'cancelled');
+            }
             $event->save();
             return $event->getValue('dat_uuid');
         });
@@ -108,13 +113,19 @@ class RoomDetailAccessTest extends DatabaseTestCase
             $visitor = $this->withOrganization($org['org_id'], fn () => new User($this->getDatabase()));
         }
 
-        if (!$allowed) {
-            $this->expectException(Exception::class);
-        }
-
-        $this->withCurrentUser($visitor, $org['org_id'], $loggedIn, function () use ($moduleAccess, $eventUUID, $roomUUID) {
+        $this->withCurrentUser($visitor, $org['org_id'], $loggedIn, function () use ($moduleAccess, $eventUUID, $roomUUID, $allowed) {
             $GLOBALS['gSettingsManager']->set('events_module_enabled', (string) $moduleAccess);
-            $room = (new EventService($this->getDatabase()))->getRoomForEvent($eventUUID, $roomUUID);
+            try {
+                $room = (new EventService($this->getDatabase()))->getRoomForEvent($eventUUID, $roomUUID);
+            } catch (Exception $exception) {
+                $this->assertFalse($allowed, 'An authorized visitor must be able to read the room.');
+                $this->assertSame('SYS_NO_RIGHTS', $exception->getTranslationId());
+                if ($eventUUID !== '') {
+                    $this->assertStringNotContainsString($eventUUID, $exception->getMessage());
+                }
+                return;
+            }
+            $this->assertTrue($allowed, 'An unauthorized visitor must not receive room details.');
             $this->assertSame('Confidential room details', $room->getValue('room_description'));
         });
     }

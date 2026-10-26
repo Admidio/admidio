@@ -42,7 +42,8 @@ class EventService
         }
 
         $event = new Event($this->database);
-        if (!$event->readDataByUuid($eventUUID) || !$event->isVisible()) {
+        if (!$event->readDataByUuid($eventUUID) || !$event->isVisible()
+            || $event->getValue('dat_recurrence_status') === 'cancelled') {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
