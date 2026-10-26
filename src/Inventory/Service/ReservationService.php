@@ -286,6 +286,29 @@ class ReservationService
         });
     }
 
+    /** Cancel an event's open requests and approvals, retaining history and physical loans. */
+    public function cancelEventReservations(int $eventId): void
+    {
+        $this->assertEventInCurrentOrganization($eventId);
+        $this->withinReservationTransaction(function () use ($eventId): void {
+            $reservations = $this->database->queryPrepared(
+                'SELECT ivr_id, ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                 WHERE ivr_dat_id = ? AND ivr_status IN (?, ?) ORDER BY ivr_ini_id, ivr_id',
+                [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED],
+            )->fetchAll();
+            foreach ($reservations as $row) {
+                $this->lockItemForReservation((int) $row['ivr_ini_id']);
+                $reservation = new Reservation($this->database);
+                $reservation->setArray(['ivr_id' => (int) $row['ivr_id']]);
+                $this->refreshReservation($reservation);
+                if (in_array($reservation->getValue('ivr_status'), [Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED], true)) {
+                    $this->transition($reservation, Reservation::STATUS_CANCELLED);
+                }
+            }
+        });
+        $this->refreshMenuBadge();
+    }
+
     /** Allow the signed-in requester to withdraw an open or approved reservation. */
     public function withdraw(Reservation $reservation): void
     {
@@ -483,9 +506,14 @@ class ReservationService
     private function refreshReservation(Reservation $reservation): void
     {
         $reservationId = (int) $reservation->getValue('ivr_id');
-        if ($reservationId <= 0 || !$reservation->readDataById($reservationId)) {
+        $row = $this->database->queryPrepared(
+            'SELECT * FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_id = ? FOR UPDATE',
+            [$reservationId],
+        )->fetch();
+        if ($reservationId <= 0 || $row === false) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
+        $reservation->setArray($row);
     }
 
     /** Run a reservation mutation in a transaction without disturbing an enclosing event save. */

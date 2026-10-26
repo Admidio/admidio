@@ -67,9 +67,12 @@ class EventService
             } else {
                 // Recurring occurrences are cancelled, not physically deleted. The participation role stays untouched
                 // so existing participation data remains available for a later series management workflow.
+                $this->database->startTransaction();
+                (new ReservationService($this->database))->cancelEventReservations((int) $event->getValue('dat_id'));
                 $event->setValue('dat_recurrence_status', 'cancelled');
                 $event->setValue('dat_recurrence_scope', 'this');
                 $event->save();
+                $this->database->endTransaction();
             }
         } else {
             $event->delete();
@@ -364,6 +367,17 @@ class EventService
         $seriesCancelFrom = DATE_NOW . ' 00:00:00';
 
         $this->database->startTransaction();
+
+        $eventIds = $this->database->queryPrepared(
+            'SELECT dat_id FROM ' . TBL_EVENTS . '
+             WHERE (dat_evr_id = ? OR dat_id = ?) AND dat_begin >= ?
+               AND dat_recurrence_status IN (?, ?, ?) ORDER BY dat_id',
+            [$recurrenceId, $masterEventId, $seriesCancelFrom, 'master', 'generated', 'modified'],
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        $reservationService = new ReservationService($this->database);
+        foreach ($eventIds as $eventId) {
+            $reservationService->cancelEventReservations((int) $eventId);
+        }
 
         $sql = 'UPDATE ' . TBL_EVENTS . '
                    SET dat_recurrence_status = ?

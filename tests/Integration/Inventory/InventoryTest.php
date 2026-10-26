@@ -2662,6 +2662,82 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function cancelledEventReservationCases(): array
+    {
+        $cases = [];
+        foreach (['this', 'series'] as $scope) {
+            foreach ([Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED] as $status) {
+                foreach ([false, true] as $enabled) {
+                    $cases[$scope . ', ' . $status . ', enabled=' . (int) $enabled] = [$scope, $status, $enabled];
+                }
+            }
+        }
+        return $cases;
+    }
+
+    /**
+     * @dataProvider cancelledEventReservationCases
+     * @testdox Recurrence cancellation releases requests and approvals while preserving physical loans and past occurrences
+     */
+    public function testCancellingRecurringEventsReleasesReservations(string $scope, string $status, bool $enabled): void
+    {
+        $admin = $this->makeInventoryUser('invcancelrecurrence', true);
+        $category = $this->getFixture()->createAndSaveCategory('Cancelled recurrence items', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $scope, $status, $enabled): void {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', $status === Reservation::STATUS_REQUESTED ? 'manual' : 'automatic');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Cancelled recurrence projector']);
+            $event = (new EventSaveService($this->getDatabase()))->saveData('', [
+                'dat_headline' => 'Cancelled recurrence', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [$itemId],
+                'event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1,
+                'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 3,
+            ]);
+            $rows = $this->getDatabase()->queryPrepared(
+                'SELECT dat_id, dat_uuid, ivr_id FROM ' . TBL_EVENTS . '
+                 INNER JOIN ' . TBL_INVENTORY_RESERVATIONS . ' ON ivr_dat_id = dat_id
+                 WHERE dat_evr_id = ? ORDER BY dat_begin',
+                [$event->getValue('dat_evr_id')],
+            )->fetchAll();
+            $reservationService = new ReservationService($this->getDatabase());
+            if ($status === Reservation::STATUS_BORROWED) {
+                foreach ($rows as $row) {
+                    $reservationService->startBorrowing(new Reservation($this->getDatabase(), (int) $row['ivr_id']));
+                }
+            }
+            $this->getDatabase()->queryPrepared(
+                'UPDATE ' . TBL_EVENTS . ' SET dat_recurrence_status = ? WHERE dat_id = ?',
+                ['modified', $rows[1]['dat_id']],
+            );
+            $this->getDatabase()->queryPrepared(
+                'UPDATE ' . TBL_EVENTS . ' SET dat_begin = ?, dat_end = ? WHERE dat_id = ?',
+                ['2020-12-01 10:00:00', '2020-12-01 12:00:00', $rows[2]['dat_id']],
+            );
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', $enabled ? '1' : '0');
+            (new EventService($this->getDatabase()))->deleteData($rows[1]['dat_uuid'], $scope);
+            foreach ($rows as $index => $row) {
+                $cancelled = $index === 1 || ($scope === 'series' && $index === 0);
+                $reservation = new Reservation($this->getDatabase(), (int) $row['ivr_id']);
+                $expected = $cancelled && $status !== Reservation::STATUS_BORROWED ? Reservation::STATUS_CANCELLED : $status;
+                $this->assertSame($expected, $reservation->getValue('ivr_status'));
+                if ($cancelled && $status === Reservation::STATUS_REQUESTED && $enabled) {
+                    try {
+                        $reservationService->approve($reservation);
+                        $this->fail('Requests for cancelled occurrences must no longer be approvable.');
+                    } catch (Exception $exception) {
+                        $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
+                    }
+                }
+            }
+        });
+    }
+
     public static function eventReapprovalScopes(): array
     {
         return [
