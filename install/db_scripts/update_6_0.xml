@@ -29,7 +29,8 @@
     <step id="90" database="mysql">ALTER TABLE %PREFIX%_users MODIFY COLUMN usr_photo mediumblob</step>
     <step id="100" database="mysql">ALTER TABLE %PREFIX%_sessions MODIFY COLUMN ses_binary mediumblob</step>
     <step id="110">UPDATE %PREFIX%_preferences SET prf_value = 'pt-PT' WHERE prf_name = 'system_language' AND prf_value = 'pt'</step>
-    <step id="120">CREATE TABLE %PREFIX%_inventory_reservations (
+    <step id="120">ALTER TABLE %PREFIX%_components ADD COLUMN com_update_version varchar(10) NOT NULL DEFAULT ''</step>
+    <step id="130">CREATE TABLE %PREFIX%_inventory_reservations (
         ivr_id integer unsigned NOT NULL AUTO_INCREMENT,
         ivr_uuid varchar(36) NOT NULL,
         ivr_ini_id integer unsigned NOT NULL,
@@ -47,11 +48,11 @@
         ivr_timestamp_change timestamp NULL DEFAULT NULL,
         PRIMARY KEY (ivr_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci</step>
-    <step id="130">CREATE UNIQUE INDEX %PREFIX%_idx_ivr_uuid ON %PREFIX%_inventory_reservations (ivr_uuid)</step>
-    <step id="140">CREATE INDEX %PREFIX%_idx_ivr_item_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_begin, ivr_end)</step>
-    <step id="150">CREATE INDEX %PREFIX%_idx_ivr_event ON %PREFIX%_inventory_reservations (ivr_dat_id)</step>
-    <step id="160">ALTER TABLE %PREFIX%_inventory_reservations ADD CONSTRAINT %PREFIX%_fk_ivr_ini FOREIGN KEY (ivr_ini_id) REFERENCES %PREFIX%_inventory_items (ini_id) ON DELETE RESTRICT ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_dat FOREIGN KEY (ivr_dat_id) REFERENCES %PREFIX%_events (dat_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr FOREIGN KEY (ivr_usr_id) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr_create FOREIGN KEY (ivr_usr_id_create) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr_change FOREIGN KEY (ivr_usr_id_change) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
-    <step id="170" database="mysql">UPDATE %PREFIX%_preferences reservation INNER JOIN %PREFIX%_preferences inventory ON inventory.prf_org_id = reservation.prf_org_id AND inventory.prf_name = 'changelog_table_inventory_items' SET reservation.prf_value = inventory.prf_value WHERE reservation.prf_name = 'changelog_table_inventory_reservations'</step>
-    <step id="180" database="pgsql">UPDATE %PREFIX%_preferences reservation SET prf_value = inventory.prf_value FROM %PREFIX%_preferences inventory WHERE inventory.prf_org_id = reservation.prf_org_id AND inventory.prf_name = 'changelog_table_inventory_items' AND reservation.prf_name = 'changelog_table_inventory_reservations'</step>
+    <step id="140">CREATE UNIQUE INDEX %PREFIX%_idx_ivr_uuid ON %PREFIX%_inventory_reservations (ivr_uuid)</step>
+    <step id="150">CREATE INDEX %PREFIX%_idx_ivr_item_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_begin, ivr_end)</step>
+    <step id="160">CREATE INDEX %PREFIX%_idx_ivr_event ON %PREFIX%_inventory_reservations (ivr_dat_id)</step>
+    <step id="170">ALTER TABLE %PREFIX%_inventory_reservations ADD CONSTRAINT %PREFIX%_fk_ivr_ini FOREIGN KEY (ivr_ini_id) REFERENCES %PREFIX%_inventory_items (ini_id) ON DELETE RESTRICT ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_dat FOREIGN KEY (ivr_dat_id) REFERENCES %PREFIX%_events (dat_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr FOREIGN KEY (ivr_usr_id) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr_create FOREIGN KEY (ivr_usr_id_create) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT, ADD CONSTRAINT %PREFIX%_fk_ivr_usr_change FOREIGN KEY (ivr_usr_id_change) REFERENCES %PREFIX%_users (usr_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="180" database="mysql">UPDATE %PREFIX%_preferences reservation INNER JOIN %PREFIX%_preferences inventory ON inventory.prf_org_id = reservation.prf_org_id AND inventory.prf_name = 'changelog_table_inventory_items' SET reservation.prf_value = inventory.prf_value WHERE reservation.prf_name = 'changelog_table_inventory_reservations'</step>
+    <step id="190" database="pgsql">UPDATE %PREFIX%_preferences reservation SET prf_value = inventory.prf_value FROM %PREFIX%_preferences inventory WHERE inventory.prf_org_id = reservation.prf_org_id AND inventory.prf_name = 'changelog_table_inventory_items' AND reservation.prf_name = 'changelog_table_inventory_reservations'</step>
     <step>stop</step>
 </update>

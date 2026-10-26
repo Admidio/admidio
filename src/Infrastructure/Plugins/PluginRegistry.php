@@ -3,6 +3,7 @@
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * Knows which plugins exist and in which state they are.
@@ -488,9 +489,25 @@ final class PluginRegistry
      */
     public static function requireEnabled(string $id): Plugin
     {
+        global $gCurrentUser;
+
         $plugin = self::get($id);
         if ($plugin === null || !$plugin->isValid() || !self::isEnabled($id)) {
             throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        if (version_compare(self::getInstalledVersion($id), $plugin->version, '<')) {
+            if (isset($gCurrentUser) && $gCurrentUser->isAdministrator()) {
+                $pluginManagerUrl = SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'
+                );
+                throw new Exception(
+                    'SYS_PLUGIN_UPDATE_REQUIRED',
+                    array(SecurityUtils::encodeHTML($plugin->name), '<a href="' . $pluginManagerUrl . '">', '</a>')
+                );
+            }
+
+            throw new Exception('SYS_PLUGIN_UPDATE_REQUIRED_NO_ACCESS', array(SecurityUtils::encodeHTML($plugin->name)));
         }
 
         return $plugin;
