@@ -40,7 +40,9 @@ const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
 const TBL_CATEGORY_REPORT_COLUMNS = TABLE_PREFIX . '_category_report_columns';
 const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
-const TBL_EVENT_RECURRENCES = TABLE_PREFIX . '_event_recurrences';
+if (!defined('TBL_EVENT_RECURRENCES')) {
+    define('TBL_EVENT_RECURRENCES', TABLE_PREFIX . '_event_recurrences');
+}
 const TBL_FILES = TABLE_PREFIX . '_files';
 const TBL_FOLDERS = TABLE_PREFIX . '_folders';
 const TBL_FORUM_TOPICS = TABLE_PREFIX . '_forum_topics';
