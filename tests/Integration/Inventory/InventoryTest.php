@@ -2754,6 +2754,75 @@ class InventoryTest extends DatabaseTestCase
         });
     }
 
+    public static function disabledEventReservationCases(): array
+    {
+        return [
+            'single pending request' => ['this', Reservation::STATUS_REQUESTED, false],
+            'single approval' => ['this', Reservation::STATUS_APPROVED, false],
+            'single physical loan' => ['this', Reservation::STATUS_BORROWED, false],
+            'series pending requests' => ['series', Reservation::STATUS_REQUESTED, false],
+            'series approvals' => ['series', Reservation::STATUS_APPROVED, false],
+            'series physical loans' => ['series', Reservation::STATUS_BORROWED, false],
+            'single zero-duration event' => ['this', Reservation::STATUS_APPROVED, true],
+        ];
+    }
+
+    /**
+     * @dataProvider disabledEventReservationCases
+     * @testdox Editing events with reservations disabled cancels their requests and approvals without returning borrowed items
+     */
+    public function testMovingEventsWithReservationsDisabled(string $scope, string $status, bool $zeroDuration): void
+    {
+        $admin = $this->makeInventoryUser('invdisabledmove', true);
+        $category = $this->getFixture()->createAndSaveCategory('Disabled reservation events', 'EVT', self::ORG_ID);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($category, $scope, $status, $zeroDuration): void {
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_events_enabled', '1');
+            $GLOBALS['gSettingsManager']->set('inventory_reservation_approval', $status === Reservation::STATUS_REQUESTED ? 'manual' : 'automatic');
+            $GLOBALS['gTimezone'] = 'UTC';
+            $itemId = $this->createItem(new ItemsData($this->getDatabase(), self::ORG_ID), ['ITEMNAME' => 'Disabled reservation projector']);
+            $values = [
+                'dat_headline' => 'Disabled reservation event', 'dat_location' => '', 'dat_all_day' => '0',
+                'event_from' => '2030-12-01', 'event_from_time' => '10:00',
+                'event_to' => '2030-12-01', 'event_to_time' => '12:00',
+                'cat_uuid' => $category['cat_uuid'], 'dat_max_members' => 0,
+                'event_participation_possible' => 0, 'event_deadline' => '', 'event_deadline_time' => '',
+                'event_inventory_items' => [$itemId],
+            ];
+            if ($scope === 'series') {
+                $values += ['event_recurrence_frequency' => 'daily', 'event_recurrence_interval' => 1, 'event_recurrence_end_type' => 'count', 'event_recurrence_count' => 2];
+            }
+            $eventService = new EventSaveService($this->getDatabase());
+            $event = $eventService->saveData('', $values);
+            $rows = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$itemId],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            if ($status === Reservation::STATUS_BORROWED) {
+                foreach ($rows as $reservationId) {
+                    (new ReservationService($this->getDatabase()))->startBorrowing(new Reservation($this->getDatabase(), (int) $reservationId));
+                }
+            }
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '0');
+            unset($values['event_inventory_items']);
+            $values['event_from_time'] = '14:00';
+            $values['event_to_time'] = $zeroDuration ? '14:00' : '16:00';
+            $eventService->saveData((string) $event->getValue('dat_uuid'), $values, '', false, $scope);
+            $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', '1');
+            $statuses = $this->getDatabase()->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ? ORDER BY ivr_id',
+                [$itemId],
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            $expected = $status === Reservation::STATUS_BORROWED ? $status : Reservation::STATUS_CANCELLED;
+            $this->assertSame(array_fill(0, count($rows), $expected), $statuses);
+            $this->assertSame($expected === Reservation::STATUS_CANCELLED, (new ReservationService($this->getDatabase()))->isAvailable(
+                $itemId,
+                new DateTimeImmutable('2030-12-01 10:00'),
+                new DateTimeImmutable('2030-12-01 12:00'),
+            ));
+        });
+    }
+
     public static function eventReapprovalScopes(): array
     {
         return [

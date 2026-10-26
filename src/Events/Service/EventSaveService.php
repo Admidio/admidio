@@ -285,7 +285,8 @@ class EventSaveService
         if (!array_key_exists('event_inventory_items', $formValues) && (int) $event->getValue('dat_id') > 0) {
             $reservationItemIds = $this->getOpenEventReservationItemIds((int) $event->getValue('dat_id'));
         }
-        if (count($reservationItemIds) > 0 && $startDateTime >= $roomCheckEndDateTime) {
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && count($reservationItemIds) > 0 && $startDateTime >= $roomCheckEndDateTime) {
             throw new Exception('SYS_RESERVATION_REQUIRES_TIME_PERIOD');
         }
 
@@ -367,12 +368,7 @@ class EventSaveService
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);
         $reservationService = new ReservationService($gDb);
-        if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && (($gSettingsManager->getBool('inventory_reservations_events_enabled')
-                    && InventoryAccessService::canRequestReservation())
-                || count($reservationItemIds) > 0)) {
-            $reservationService->syncEventReservations((int) $event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
-        }
+        $reservationService->syncEventReservations((int) $event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
 
         if ($recurrenceRule !== null) {
             $generatedUntil = null;
@@ -397,16 +393,12 @@ class EventSaveService
                 $generatedEvent->save();
 
                 $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
-                if ($gSettingsManager->getBool('inventory_reservations_enabled')
-                    && $gSettingsManager->getBool('inventory_reservations_events_enabled')
-                    && InventoryAccessService::canRequestReservation()) {
-                    $reservationService->syncEventReservations(
-                        (int) $generatedEvent->getValue('dat_id'),
-                        $reservationItemIds,
-                        $occurrence->getBegin(),
-                        $occurrence->getEnd(),
-                    );
-                }
+                $reservationService->syncEventReservations(
+                    (int) $generatedEvent->getValue('dat_id'),
+                    $reservationItemIds,
+                    $occurrence->getBegin(),
+                    $occurrence->getEnd(),
+                );
             }
         }
 
@@ -920,17 +912,12 @@ class EventSaveService
         if (!$hasReservationItemSelection) {
             $reservationItemIds = $this->getOpenEventReservationItemIds((int) $masterEvent->getValue('dat_id'));
         }
-        if ($gSettingsManager->getBool('inventory_reservations_enabled')
-            && (($gSettingsManager->getBool('inventory_reservations_events_enabled')
-                    && InventoryAccessService::canRequestReservation())
-                || count($reservationItemIds) > 0)) {
-            $reservationService->syncEventReservations(
-                (int) $masterEvent->getValue('dat_id'),
-                $reservationItemIds,
-                $recurrenceBeginDateTime,
-                $recurrenceEndDateTime,
-            );
-        }
+        $reservationService->syncEventReservations(
+            (int) $masterEvent->getValue('dat_id'),
+            $reservationItemIds,
+            $recurrenceBeginDateTime,
+            $recurrenceEndDateTime,
+        );
 
         foreach ($occurrences as $occurrence) {
             $originalBegin = $occurrence->getBegin()->format('Y-m-d H:i:s');
@@ -962,18 +949,13 @@ class EventSaveService
             if (!$hasReservationItemSelection) {
                 $occurrenceReservationItemIds = $this->getOpenEventReservationItemIds((int) $generatedEvent->getValue('dat_id'));
             }
-            if ($gSettingsManager->getBool('inventory_reservations_enabled')
-                && (($gSettingsManager->getBool('inventory_reservations_events_enabled')
-                        && InventoryAccessService::canRequestReservation())
-                    || count($occurrenceReservationItemIds) > 0)) {
-                $reservationService->syncEventReservations(
-                    (int) $generatedEvent->getValue('dat_id'),
-                    $occurrenceReservationItemIds,
-                    $occurrence->getBegin(),
-                    $occurrence->getEnd(),
-                    $seriesPeriodChanged || $staleEvents !== [],
-                );
-            }
+            $reservationService->syncEventReservations(
+                (int) $generatedEvent->getValue('dat_id'),
+                $occurrenceReservationItemIds,
+                $occurrence->getBegin(),
+                $occurrence->getEnd(),
+                $seriesPeriodChanged || $staleEvents !== [],
+            );
         }
 
         $recurrenceRepository->update($recurrenceId, $recurrenceRule, $eventTimezone, $generatedUntil);

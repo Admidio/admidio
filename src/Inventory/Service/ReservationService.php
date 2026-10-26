@@ -369,6 +369,11 @@ class ReservationService
     {
         global $gCurrentUser, $gSettingsManager, $gValidLogin;
 
+        // Disabling new requests must not leave old event approvals active after an edit.
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')) {
+            $this->cancelEventReservations($eventId);
+            return;
+        }
         $this->assertEventInCurrentOrganization($eventId);
         $itemIds = array_values(array_unique(array_filter(array_map('intval', $itemIds), static function (int $itemId): bool {
             return $itemId > 0;
