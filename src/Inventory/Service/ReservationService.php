@@ -255,7 +255,12 @@ class ReservationService
         $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
             $this->lockItemForReservation($itemId);
             $this->refreshReservation($reservation);
-            $this->transition($reservation, Reservation::STATUS_RETURNED);
+            if ($reservation->getValue('ivr_status') !== Reservation::STATUS_BORROWED) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            if ($this->hasRecordedReturn($itemId)) {
+                $this->transition($reservation, Reservation::STATUS_RETURNED);
+            }
         });
     }
 
@@ -277,7 +282,7 @@ class ReservationService
                ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC FOR UPDATE',
                 [$itemId, Reservation::STATUS_BORROWED],
             )->fetchColumn();
-            if ($reservationId === false) {
+            if ($reservationId === false || !$this->hasRecordedReturn($itemId)) {
                 return;
             }
 
@@ -491,6 +496,18 @@ class ReservationService
         if ($activeBorrowing !== false) {
             throw new Exception('SYS_ITEM_NOT_AVAILABLE');
         }
+    }
+
+    /** Only a saved, completed physical loan can release a borrowed reservation. */
+    private function hasRecordedReturn(int $itemId): bool
+    {
+        $returnDate = $this->database->queryPrepared(
+            'SELECT inb_return_date FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+             WHERE inb_ini_id = ? ORDER BY inb_id DESC LIMIT 1 FOR UPDATE',
+            [$itemId],
+        )->fetchColumn();
+
+        return is_string($returnDate) && $returnDate !== '' && $returnDate <= DATETIME_NOW;
     }
 
     /** Physical returns use item edit rights, independently of reservation management settings. */

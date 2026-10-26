@@ -1490,6 +1490,9 @@ class InventoryTest extends DatabaseTestCase
             $service->approve($borrowed);
             $service->startBorrowing($borrowed);
             $this->assertSame(Reservation::STATUS_BORROWED, $borrowed->getValue('ivr_status'));
+            (new ItemService($this->getDatabase(), $this->uuidOfItem($itemId)))->saveData([
+                'INF-LAST_RECEIVER' => 'Alice', 'INF-BORROW_DATE' => '2020-01-01', 'INF-RETURN_DATE' => date('Y-m-d'),
+            ]);
             $service->finishBorrowingForItem($itemId);
             $this->assertSame(Reservation::STATUS_RETURNED, (new Reservation(
                 $this->getDatabase(),
@@ -1567,6 +1570,10 @@ class InventoryTest extends DatabaseTestCase
             'administrator returning disabled reservation by UUID' => [false, true, false, true],
             'keeper returning disabled reservation by UUID' => [true, true, false, true],
             'keeper returning reservation by UUID without management' => [true, true, true, true],
+            'regular return with cleared date' => [false, true, true, false, true],
+            'UUID return with cleared date' => [false, true, true, true, true],
+            'keeper regular return with cleared date and disabled reservations' => [true, true, false, false, true],
+            'keeper UUID return with cleared date and disabled reservations' => [true, true, false, true, true],
         ];
     }
 
@@ -1574,7 +1581,7 @@ class InventoryTest extends DatabaseTestCase
      * @dataProvider regularReturnCases
      * @testdox Regular returns use item permissions independently of reservation settings
      */
-    public function testRegularReturnDoesNotRequireReservationManagement(bool $asKeeper, bool $hasReservation, bool $reservationsEnabled, bool $withReservationUuid = false): void
+    public function testRegularReturnDoesNotRequireReservationManagement(bool $asKeeper, bool $hasReservation, bool $reservationsEnabled, bool $withReservationUuid = false, bool $clearReturnDate = false): void
     {
         $admin = $this->makeInventoryUser('invregularreturnadmin', true);
         $keeperData = $this->getFixture()->createAndSaveUser('invregularreturnkeeper', 'invregularreturnkeeper@example.local');
@@ -1595,7 +1602,7 @@ class InventoryTest extends DatabaseTestCase
             return $itemId;
         });
 
-        $this->withCurrentUser($asKeeper ? $keeper : $admin, self::ORG_ID, true, function () use ($itemId, $hasReservation, $reservationsEnabled, $withReservationUuid) {
+        $this->withCurrentUser($asKeeper ? $keeper : $admin, self::ORG_ID, true, function () use ($itemId, $hasReservation, $reservationsEnabled, $withReservationUuid, $clearReturnDate) {
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', $reservationsEnabled ? '1' : '0');
             $GLOBALS['gSettingsManager']->set('inventory_allow_keeper_edit', '1');
             $GLOBALS['gSettingsManager']->set('inventory_reservation_keepers_manage', '0');
@@ -1631,7 +1638,7 @@ class InventoryTest extends DatabaseTestCase
                     $GLOBALS['gCurrentSession'] = $previousSession;
                 }
             }
-            (new ItemService($this->getDatabase(), $uuid))->saveData(['INF-RETURN_DATE' => date('Y-m-d')]);
+            (new ItemService($this->getDatabase(), $uuid))->saveData(['INF-RETURN_DATE' => $clearReturnDate ? '' : date('Y-m-d')]);
             if ($withReservationUuid) {
                 $reservationService->finishBorrowing($reservation);
             } else {
@@ -1639,12 +1646,13 @@ class InventoryTest extends DatabaseTestCase
             }
             $items = new ItemsData($this->getDatabase(), self::ORG_ID);
             $items->readItemData($uuid);
-            $this->assertFalse($items->isBorrowed());
+            $this->assertSame($clearReturnDate, $items->isBorrowed());
             $statuses = $this->getDatabase()->queryPrepared(
                 'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
                 [$itemId],
             )->fetchAll(\PDO::FETCH_COLUMN);
-            $this->assertSame($hasReservation ? [Reservation::STATUS_RETURNED] : [], $statuses);
+            $expectedStatus = $clearReturnDate ? Reservation::STATUS_BORROWED : Reservation::STATUS_RETURNED;
+            $this->assertSame($hasReservation ? [$expectedStatus] : [], $statuses);
         });
     }
 
@@ -1684,6 +1692,11 @@ class InventoryTest extends DatabaseTestCase
             } catch (Exception $exception) {
                 $this->assertSame('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', $exception->getTranslationId());
             }
+            $service->finishBorrowing($reservation);
+            $this->assertSame(Reservation::STATUS_BORROWED, $reservation->getValue('ivr_status'), 'A reservation without a saved physical return must stay borrowed.');
+            (new ItemService($this->getDatabase(), $this->uuidOfItem($itemId)))->saveData([
+                'INF-LAST_RECEIVER' => 'Alice', 'INF-BORROW_DATE' => '2020-01-01', 'INF-RETURN_DATE' => date('Y-m-d'),
+            ]);
             $service->finishBorrowing($reservation);
             $this->assertTrue($service->isAvailable($itemId, $begin, $end));
         });
@@ -1776,6 +1789,9 @@ class InventoryTest extends DatabaseTestCase
                 $this->assertSame('SYS_INVALID_PAGE_VIEW', $exception->getTranslationId());
             }
 
+            (new ItemService($this->getDatabase(), $this->uuidOfItem($itemId)))->saveData([
+                'INF-LAST_RECEIVER' => 'Alice', 'INF-BORROW_DATE' => '2020-01-01', 'INF-RETURN_DATE' => date('Y-m-d'),
+            ]);
             $service->finishBorrowing($reservation);
             foreach ([
                 static fn() => $service->approve($reservation),
