@@ -1227,7 +1227,7 @@ class InventoryPresenter extends PagePresenter
                     $filterColumnValues = array_map(function ($value) {
                         $parts = explode(',', $value);
                         return count($parts) > 1 ? implode(',', array_slice($parts, 0, 2)) : $value;
-                    }, $rowValues);
+                    }, $rowValues['data']);
 
                     foreach ($filterArray as $filterString) {
                         if (str_contains($filterString, '-')) {

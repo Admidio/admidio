@@ -6,13 +6,115 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Language;
 use Admidio\Inventory\Service\ExportService;
 use Admidio\Inventory\Service\ImportService;
+use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Tests\Support\FilesystemTestCase;
+use Admidio\UI\Presenter\InventoryPresenter;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use PhpOffice\PhpSpreadsheet\Reader\Ods;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 /**
  * Regression coverage for the inventory file-import/export service boundary.
  */
 class InventoryImportExportFilesystemTest extends FilesystemTestCase
 {
+    public static function filteredExports(): array
+    {
+        $cases = [];
+        foreach (['csv-oo', 'xlsx', 'ods', 'pdf', 'pdfl'] as $mode) {
+            $cases[$mode . ' matching search'] = [$mode, 'kamera', ['Kamera ÄÖÜ']];
+        }
+        return $cases;
+    }
+
+    /** @dataProvider filteredExports */
+    public function testFilteredExportsContainOnlyMatchingItems(string $mode, string $search, array $expectedNames): void
+    {
+        $this->createExportItems();
+        $previousGet = $_GET;
+        try {
+            $_GET = ['items_filter_string' => $search];
+            $export = (new ExportService())->createExportFile($mode);
+            $this->registerCleanupPath($export['path']);
+            $this->assertFileExists($export['path']);
+
+            if (in_array($mode, ['pdf', 'pdfl'], true)) {
+                $this->assertSame('application/pdf', $export['contentType']);
+                $this->assertStringStartsWith('%PDF-', file_get_contents($export['path']));
+                return;
+            }
+
+            $reader = match ($mode) {
+                'xlsx' => new Xlsx(),
+                'ods' => new Ods(),
+                default => new Csv(),
+            };
+            if ($reader instanceof Csv) {
+                $encoding = 'UTF-8';
+                $reader->setInputEncoding($encoding);
+                $this->assertSame('text/csv; charset=' . strtolower($encoding), $export['contentType']);
+                if ($expectedNames !== []) {
+                    $this->assertStringContainsString(
+                        mb_convert_encoding($expectedNames[0], $encoding, 'UTF-8'),
+                        file_get_contents($export['path'])
+                    );
+                }
+            }
+
+            $spreadsheet = $reader->load($export['path']);
+            $rows = $spreadsheet->getActiveSheet()->toArray();
+            $spreadsheet->disconnectWorksheets();
+            array_shift($rows);
+            $this->assertSame($expectedNames, array_column($rows, 0));
+        } finally {
+            $_GET = $previousGet;
+        }
+    }
+
+    public static function printSearches(): array
+    {
+        return [
+            'case insensitive field search' => ['kamera', ['Kamera ÄÖÜ']],
+            'comma separated alternatives' => ['kamera,stativ', ['Kamera ÄÖÜ', 'Stativ']],
+            'excluded term' => ['kamera,-ÄÖÜ', []],
+            'no matches' => ['missing', []],
+        ];
+    }
+
+    /** @dataProvider printSearches */
+    public function testPrintSearchFiltersVisibleFieldValues(string $search, array $expectedNames): void
+    {
+        $this->createExportItems();
+        $previousGet = $_GET;
+        try {
+            $_GET = ['items_filter_string' => $search];
+            $data = (new InventoryPresenter(false))->prepareData('print');
+            $names = array_map(static fn(array $row): string => $row['data'][0], $data['rows']);
+            sort($names);
+            $this->assertSame($expectedNames, $names);
+        } finally {
+            $_GET = $previousGet;
+        }
+    }
+
+    private function createExportItems(): void
+    {
+        global $gCurrentOrgId, $gCurrentUserId;
+
+        $categoryUuid = $this->getDatabase()->queryPrepared(
+            'SELECT cat_uuid FROM ' . TBL_CATEGORIES . ' WHERE cat_type = ? AND cat_org_id = ? LIMIT 1',
+            ['IVT', $gCurrentOrgId]
+        )->fetchColumn();
+        $items = new ItemsData($this->getDatabase(), $gCurrentOrgId);
+        foreach (['Kamera ÄÖÜ', 'Stativ'] as $name) {
+            $items->readItemData('');
+            $items->createNewItem($categoryUuid);
+            $items->setValue('ITEMNAME', $name);
+            $items->setValue('KEEPER', (string) $gCurrentUserId);
+            $items->saveItemData();
+        }
+    }
+
     /**
      * @testdox A real CSV is parsed and imported and the persisted item appears in a production CSV export
      */
