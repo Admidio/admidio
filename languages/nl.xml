@@ -2069,6 +2069,10 @@
   <string name="SYS_WEDNESDAY">Woensdag</string>
   <string name="SYS_WEEKDAY">Doordeweeks</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Weergave van de weekdag</string>
+  <string name="SYS_WEEKDAY_FORMAT_DESC">Geef aan of en in welke vorm de weekdag bij evenementen wordt weergegeven.</string>
+  <string name="SYS_WEEKDAY_LONG">Volledige naam (bijv. dinsdag)</string>
+  <string name="SYS_WEEKDAY_SHORT">Afgekort (bijv. di)</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Breedte</string>
   <string name="SYS_WIFE">Echtgenote</string>
