@@ -309,6 +309,7 @@ class User extends Entity
             );
 
             // read all roles of the organization and join the membership if user is member of that role
+            $validMembership = Membership::getSqlValidCondition();
             $sql = 'SELECT *
                       FROM ' . TBL_ROLES . '
                 INNER JOIN ' . TBL_CATEGORIES . '
@@ -316,12 +317,11 @@ class User extends Entity
                  LEFT JOIN ' . TBL_MEMBERS . '
                         ON mem_rol_id = rol_id
                        AND mem_usr_id = ? -- $this->getValue(\'usr_id\')
-                       AND mem_begin <= ? -- DATE_NOW
-                       AND mem_end    > ? -- DATE_NOW
+                       AND ' . $validMembership['sql'] . '
                      WHERE rol_valid  = true
                        AND (  cat_org_id = ? -- $this->organizationId
                            OR cat_org_id IS NULL )';
-            $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+            $queryParams = array((int)$this->getValue('usr_id'), ...$validMembership['params'], $this->organizationId);
             $rolesStatement = $this->db->queryPrepared($sql, $queryParams);
 
             while ($row = $rolesStatement->fetch()) {
@@ -1444,6 +1444,7 @@ class User extends Entity
             return true;
         }
 
+        $validMembership = Membership::getSqlValidCondition();
         $sql = 'SELECT rol_id, rol_view_members_profiles
                   FROM ' . TBL_MEMBERS . '
             INNER JOIN ' . TBL_ROLES . '
@@ -1452,11 +1453,10 @@ class User extends Entity
                     ON cat_id = rol_cat_id
                  WHERE rol_valid  = true
                    AND mem_usr_id = ? -- $user->getValue(\'usr_id\')
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
+                   AND ' . $validMembership['sql'] . '
                    AND (  cat_org_id = ? -- $this->organizationId
                        OR cat_org_id IS NULL ) ';
-        $queryParams = array((int)$user->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$user->getValue('usr_id'), ...$validMembership['params'], $this->organizationId);
         $listViewStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($listViewStatement->rowCount() > 0) {
@@ -1736,6 +1736,7 @@ class User extends Entity
         }
 
         // Check if user is currently member of a role of an organisation
+        $validMembership = Membership::getSqlValidCondition();
         $sql = 'SELECT mem_usr_id
                   FROM ' . TBL_MEMBERS . '
             INNER JOIN ' . TBL_ROLES . '
@@ -1744,11 +1745,10 @@ class User extends Entity
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
                    AND rol_valid  = true
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
+                   AND ' . $validMembership['sql'] . '
                    AND cat_org_id = ? -- $this->organizationId
                    AND ' . $administratorColumn . ' = true ';
-        $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$this->getValue('usr_id'), ...$validMembership['params'], $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($pdoStatement->rowCount() > 0) {
@@ -1789,6 +1789,7 @@ class User extends Entity
     public function isMemberOfOrganization(): bool
     {
         // Check if user is currently member of a role of an organisation
+        $validMembership = Membership::getSqlValidCondition();
         $sql = 'SELECT mem_usr_id
                   FROM ' . TBL_MEMBERS . '
             INNER JOIN ' . TBL_ROLES . '
@@ -1797,10 +1798,9 @@ class User extends Entity
                     ON cat_id = rol_cat_id
                  WHERE mem_usr_id = ? -- $this->getValue(\'usr_id\')
                    AND rol_valid  = true
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW
+                   AND ' . $validMembership['sql'] . '
                    AND cat_org_id = ? -- $this->organizationId';
-        $queryParams = array((int)$this->getValue('usr_id'), DATE_NOW, DATE_NOW, $this->organizationId);
+        $queryParams = array((int)$this->getValue('usr_id'), ...$validMembership['params'], $this->organizationId);
         $pdoStatement = $this->db->queryPrepared($sql, $queryParams);
 
         if ($pdoStatement->rowCount() > 0) {

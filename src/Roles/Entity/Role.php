@@ -153,13 +153,13 @@ class Role extends Entity
     public function countLeaders(): int
     {
         if ($this->countLeaders === -1) {
+            $validMembership = Membership::getSqlValidCondition();
             $sql = 'SELECT COUNT(*) AS count
                       FROM ' . TBL_MEMBERS . '
                      WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
                        AND mem_leader = false
-                       AND mem_begin <= ? -- DATE_NOW
-                       AND mem_end    > ? -- DATE_NOW';
-            $pdoStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('rol_id'), DATE_NOW, DATE_NOW));
+                       AND ' . $validMembership['sql'];
+            $pdoStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('rol_id'), ...$validMembership['params']));
 
             $this->countLeaders = (int)$pdoStatement->fetchColumn();
         }
@@ -208,16 +208,16 @@ class Role extends Entity
             return INF;
         }
 
+        $validMembership = Membership::getSqlValidCondition();
         $sql = 'SELECT mem_usr_id
                   FROM ' . TBL_MEMBERS . '
                  WHERE mem_rol_id = ? -- $this->getValue(\'rol_id\')
-                   AND mem_begin <= ? -- DATE_NOW
-                   AND mem_end    > ? -- DATE_NOW';
+                   AND ' . $validMembership['sql'];
         if (!$countLeaders) {
             $sql .= '
                 AND mem_leader = false ';
         }
-        $pdoStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('rol_id'), DATE_NOW, DATE_NOW));
+        $pdoStatement = $this->db->queryPrepared($sql, array((int)$this->getValue('rol_id'), ...$validMembership['params']));
 
         return $rolMaxMembers - $pdoStatement->rowCount();
     }
