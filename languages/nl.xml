@@ -134,8 +134,8 @@
   <string name="ORG_FIELD_NOT_REGISTRATION">Veld is niet zichtbaar tijdens registratie</string>
   <string name="ORG_FIELD_REGISTRATION">Veld is zichtbaar tijdens registratie</string>
   <string name="ORG_FIELD_URL_DESC">De ingevoerde URL koppelt later in het profiel de inhoud die de gebruiker in dit veld heeft ingevoerd. Optioneel kan de placeholder #user_content# aan de URL worden toegevoegd. Dit is de inhoud die de gebruiker in het veld heeft ingevoerd.\n\nVoorbeeld:\nURL: https://www.google.de/search?q=#user_content#\nVeldinhoud: Admidio\nLink in profiel: https://www.google.de/search?q=Admidio</string>
-  <string name="ORG_HOMEPAGE_REGISTERED_USERS">Deze pagina verschijnt wanneer een gebruiker is ingelogd. Pad moet worden opgegeven als verwant pad van de Admidio-hoofdmap.\n(v.b.: adm_program/overview.php)</string>
-  <string name="ORG_HOMEPAGE_VISITORS">Deze pagina is de standaardpagina van Admidio voor gasten. Pad moet worden opgegeven als verwant pad van de Admidio-hoofdmap.\n(v.b.: adm_program/overview.php)</string>
+  <string name="ORG_HOMEPAGE_REGISTERED_USERS">Deze pagina verschijnt nadat een gebruiker is ingelogd. Geef een pad op relatief ten opzichte van de hoofdmap van Admidio.\n(bijv. modules/overview.php)</string>
+  <string name="ORG_HOMEPAGE_VISITORS">Dit is de standaardpagina van Admidio voor gasten. Geef een pad op relatief ten opzichte van de hoofdmap van Admidio.\n(bijv. modules/overview.php)</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE">JavaScript editor gebruiken</string>
   <string name="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC">Een uitgebreide JavaScript-editor maakt het eenvoudiger om beschrijvingen voor mededelingen, evenementen en andere inhoud in te voeren. Als de editor is uitgeschakeld, wordt een eenvoudig tekstveld met meerdere regels weergegeven.</string>
   <string name="ORG_LAST_UPDATE_STEP">Laatste update-stap</string>
@@ -509,7 +509,7 @@
   <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen. Indien de maker de rechten heeft om rollen toe te wijzen, worden alle beschikbare rollen weergegeven kunnen overeenkomstig worden aangepast.</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen wanneer een nieuwe gebruiker wordt aangemaakt of een registratie wordt goedgekeurd. Als degene die de gebruiker aanmaakt rollen mag toewijzen, worden alle roltoewijzingen getoond en kunnen ze worden aangepast.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standaard configuratie</string>
   <string name="SYS_DEFAULT_CONFIGURATION_LISTS_DESC">Een van de hier gespecificeerde configuraties kan de standaardconfiguratie worden voor lijsten van deze organisatie. Ledenlijsten van rollen waarvoor geen lijstconfiguratie is opgeslagen, worden met deze configuratie weergegeven.</string>
@@ -1007,7 +1007,7 @@
   <string name="SYS_KEEP_ORIGINAL_DESC">Bewaar elke foto, niet alleen in de opgegeven resolutie maar ook in het originele formaat. Indien optie #VAR1_BOLD# actief is zullen alle originele foto\'s worden gedownload. Deze optie vereist beduidend meer website ruimte en dient daarom alleen geselecteerd te worden indien u over voldoende ruimte beschikt.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landschap</string>
   <string name="SYS_LANGUAGE">Taal</string>
-  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Ontbreekt uw taal of wilt u meer teksten vertalen of bestaande vertalingen verbeteren? Kijk dan eens op de #VAR1#Wiki pagina van Admidio#VAR2# om te kijken hoe u kunt helpen met de vertaling.</string>
+  <string name="SYS_LANGUAGE_HELP_TRANSLATION">Admidio gebruikt de voorkeurstaal van uw browser. Is die taal niet beschikbaar, dan wordt de hier gekozen taal gebruikt.\nOntbreekt uw taal of wilt u vertalingen toevoegen of verbeteren? Op de #VAR1#wikipagina van Admidio#VAR2# leest u hoe u kunt helpen.</string>
   <string name="SYS_LARGE">Large</string>
   <string name="SYS_LASTNAME">Achternaam</string>
   <string name="SYS_LAST_EDITED_AT">Last edited at #VAR1#</string>
@@ -1556,7 +1556,7 @@
   <string name="SYS_RIGHT_DOCUMENTS_FILES">Beheer documenten en bestanden</string>
   <string name="SYS_RIGHT_DOCUMENTS_FILES_DESC">Rollen met deze rechten kunnen rechten toewijzen in de documenten en bestanden module. Dit omvat wie mappen kan zien en bestanden kan uploaden.</string>
   <string name="SYS_RIGHT_EDIT_USER">Profiel van alle leden bewerken</string>
-  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen met deze rechten kunnen de gegevens van andere leden bewerken (behalve wachtwoorden).\n Daarnaast hebben ze toegang tot de ledenadministratie en kunnen ze leden toevoegen of verwijderen.</string>
+  <string name="SYS_RIGHT_EDIT_USER_DESC">Rollen met dit recht kunnen de gegevens van andere contacten bewerken (behalve wachtwoorden). Daarnaast kunnen ze contacten toevoegen of verwijderen.</string>
   <string name="SYS_RIGHT_FORUM">Manage forum</string>
   <string name="SYS_RIGHT_FORUM_DESC">Members of roles with this permission can manage the forum module. They can view, edit, and delete all forum topics and posts.</string>
   <string name="SYS_RIGHT_INVENTORY">Manage inventory</string>
@@ -1982,7 +1982,7 @@
   <string name="SYS_SUBORDINATE_ORGANIZATIONS_DESC">Sub-organizations can share contact profile data. Some modules, such as Announcements and Events, can display entries from the parent organization in its sub-organizations. Each sub-organization is administered independently and can have its own permissions. See the #VAR1#Admidio wiki#VAR2# for more information.</string>
   <string name="SYS_SUBSCRIBE">Subscribe</string>
   <string name="SYS_SUMMARY_ROW">Summary row</string>
-  <string name="SYS_SUMMARY_ROW_DESC">Het betreffende selectievakje moet worden geactiveerd als u aan het einde van het rapport een regel met het aantal lidmaatschappen wilt weergeven.</string>
+  <string name="SYS_SUMMARY_ROW_DESC">Toont aan het einde van het rapport een totaalregel met het aantal lidmaatschappen per kolom.</string>
   <string name="SYS_SUNDAY">Zondag</string>
   <string name="SYS_SUPERIOR">Superior</string>
   <string name="SYS_SUPERIOR_FEMALE">Female superior</string>
