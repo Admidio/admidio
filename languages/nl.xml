@@ -92,7 +92,7 @@
   <string name="ORG_CAPTCHA_CHARACTERS_COLOR">Tekenkleur</string>
   <string name="ORG_CAPTCHA_COLOR_DESC">De achtergrondkleur moet verschillen van de tekstkleur. Als lijnkleur en tekstkleur identiek zijn, is het moeilijker voor scripts en bots om de captcha op te lossen. De afzonderlijke kleuren moeten worden opgegeven als #VAR1#hexadecimale waarde#VAR2#.</string>
   <string name="ORG_CAPTCHA_DISTORTION">Vertekening</string>
-  <string name="ORG_CAPTCHA_DISTORTION_DESC">Deze waarde geeft aan hoe sterk de karakters vertekend moeten worden. 0 betekent geen vertekening, bij 3 zullen sommige tekens niet meer herkend kunnen worden. (Standaard: 0.75)</string>
+  <string name="ORG_CAPTCHA_DISTORTION_DESC">Deze waarde bepaalt hoe sterk de tekens worden vervormd. 0 betekent geen vervorming; bij 3 zijn sommige tekens niet meer te herkennen. (Standaard: 0.75)</string>
   <string name="ORG_CAPTCHA_FONT">Kies lettertype voor captcha-code. (Standaard: AHGBold.tff)</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS">Aantal lijnen</string>
   <string name="ORG_CAPTCHA_LINES_NUMBERS_DESC">De lijnen op de captcha zouden het voor scripts en bots moeilijker moeten maken om het op te lossen. Hoe meer lijnen, hoe moeilijker het is om het op te lossen. Helaas is dit ook van toepassing op mensen. (Standaard: 5)</string>
@@ -101,11 +101,11 @@
   <string name="ORG_CAPTCHA_PREVIEW_TEXT">De Captcha-preview houdt alleen rekening met de al opgeslagen instellingen.</string>
   <string name="ORG_CAPTCHA_SIGNATURE">Captcha ondertitel</string>
   <string name="ORG_CAPTCHA_SIGNATURE_TEXT">Hier kan de ondertitel van de captcha worden ingevuld. Standaard lettertype van het huidige thema wordt gebruikt.</string>
-  <string name="ORG_CAPTCHA_SIGNS">Geaccepteerde karakters</string>
+  <string name="ORG_CAPTCHA_SIGNS">Toegestane tekens</string>
   <string name="ORG_CAPTCHA_SIGNS_TEXT">Hier kunt u de te gebruiken captcha-tekens opgeven. Tekens die gemakkelijk kunnen worden verward moeten vermeden worden, zoals l en I.</string>
   <string name="ORG_CAPTCHA_TYPE">Captcha-type</string>
   <string name="ORG_CAPTCHA_TYPE_CALC">Berekening</string>
-  <string name="ORG_CAPTCHA_TYPE_PIC">Willekeurige karakters</string>
+  <string name="ORG_CAPTCHA_TYPE_PIC">Willekeurige tekens</string>
   <string name="ORG_CAPTCHA_TYPE_TEXT">Hier kunt u het captcha-type kiezen. De captcha wordt weergegeven als een afbeelding en kan bestaan uit willekeurige tekens, een kleine rekenopgave of 2 woorden. Met de andere instellingen kan de afbeelding worden aangepast. (Standaard: willekeurige tekens)</string>
   <string name="ORG_CAPTCHA_TYPE_WORDS">Woorden (Engels)</string>
   <string name="ORG_CAPTCHA_WIDTH_DESC">De breedte van de captcha-afbeelding in pixels. De hoogte wordt berekend in verhouding tot de breedte. Deze instelling bepaalt ook de grootte van de tekens. (Standaard: 215)</string>
@@ -349,7 +349,7 @@
   <string name="SYS_CHARACTERS">Tekens</string>
   <string name="SYS_CHECKBOX">Selectievakje</string>
   <string name="SYS_CHECKBOX_AUTOSAVE">Status van selectievakje wordt automatisch opgeslagen na aanvinken.</string>
-  <string name="SYS_CHECK_FOR_UPDATE">Check voor update</string>
+  <string name="SYS_CHECK_FOR_UPDATE">Controleren op updates</string>
   <string name="SYS_CHILD">Kind</string>
   <string name="SYS_CHOOSE_FILE">Kies bestand</string>
   <string name="SYS_CITY">Plaats</string>
@@ -435,7 +435,7 @@
   <string name="SYS_COUNTER">Teller</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">DUI</string>
-  <string name="SYS_COUNTRY_ISO">Het land moet in de ISO 3166 ALPHA-3 (3 karakters) code worden geschreven</string>
+  <string name="SYS_COUNTRY_ISO">Geef het land op met een ISO 3166 alpha-3-code van drie letters.</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENT" description="Singular">#VAR1# individuele ontvanger</string>
   <string name="SYS_COUNT_INDIVIDUAL_RECIPIENTS" description="Plural">#VAR1# individuele ontvangers</string>
   <string name="SYS_CP1252">CP1252</string>
@@ -640,7 +640,7 @@
   <string name="SYS_EMAIL_DELETE_NOTIFICATION_TITLE">Gebruiker #VAR1# #VAR2# (login: #VAR3#) is verwijderd</string>
   <string name="SYS_EMAIL_FUNCTION_TEST">#VAR1# functie test e-mail</string>
   <string name="SYS_EMAIL_FUNCTION_TEST_CONTENT">Deze e-mail is verzonden via de website #VAR1# van de organisatie #VAR2# met de e-mail instellingen hier opgeslagen.</string>
-  <string name="SYS_EMAIL_INVALID">Het e-mailadres in veld #VAR1_BOLD# bevat onjuiste karakters of is niet compleet.</string>
+  <string name="SYS_EMAIL_INVALID">Het e-mailadres in veld #VAR1_BOLD# bevat ongeldige tekens of is onvolledig.</string>
   <string name="SYS_EMAIL_NOT_SEND">De e-mail kon niet worden verzonden naar #VAR1_BOLD#.\n\nDe volgende fout heeft plaatsgevonden:\n#VAR2#</string>
   <string name="SYS_EMAIL_NOT_SEND_TO_RECIPIENTS">#VAR1#\n\nIt was not possible to send an email to:\n#VAR2#</string>
   <string name="SYS_EMAIL_PARAMETERS_DESC">U kunt de volgende placeholders in de tekst van de e-mail gebruiken om de ontvanger van de e-mail rechtstreeks aan te spreken. #VAR1# voor de voornaam, #VAR2# voor de achternaam, #VAR3# voor de voor- en achternaam, en #VAR4# voor het e-mailadres.</string>
@@ -719,9 +719,9 @@
   <string name="SYS_FIELD">Veld</string>
   <string name="SYS_FIELD_EMPTY">Veld #VAR1_BOLD# is leeg.</string>
   <string name="SYS_FIELD_ENCLOSURE">Aanhalingsteken voor de velden</string>
-  <string name="SYS_FIELD_INVALID_CHAR">De ingevoerde waarde in het veld #VAR1_BOLD# bevat ongeldige karakters.\n\nToegestane karakters zijn letters van \'a\' tot \'z\' en van \'A\' tot \'Z\', nummers vanaf 0 tot 9 en speciale karakters zoals  .-_+@ .</string>
+  <string name="SYS_FIELD_INVALID_CHAR">De ingevoerde waarde in het veld #VAR1_BOLD# bevat ongeldige tekens.\n\nToegestaan zijn de letters \'a\' tot \'z\' en \'A\' tot \'Z\', de cijfers 0 tot 9 en speciale tekens zoals .-_+@ .</string>
   <string name="SYS_FIELD_INVALID_INPUT">Veld #VAR1_BOLD# bevat ongeldige invoer.</string>
-  <string name="SYS_FIELD_INVALID_REGEX">De ingevoerde waarde in het veld #VAR1_BOLD# bevat tekens die niet overeenkomen met de corresponderende reguliere expressie van het veld. Controleer de veldbeschrijving voor welke karakters zijn toegestaan.</string>
+  <string name="SYS_FIELD_INVALID_REGEX">De ingevoerde waarde in het veld #VAR1_BOLD# komt niet overeen met de reguliere expressie van het veld. Raadpleeg de veldbeschrijving voor de toegestane tekens.</string>
   <string name="SYS_FIELD_NUMERIC">In veld #VAR1_BOLD# zijn alleen cijfers toegestaan.\nPas uw gegevens aan.</string>
   <string name="SYS_FILE">Bestand</string>
   <string name="SYS_FILENAME_EMPTY">Er is geen bestandsnaam opgegeven!</string>
@@ -790,7 +790,7 @@
   <string name="SYS_GENERAL_LISTS">Algemene lijsten</string>
   <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Algemene roltoewijzing</string>
   <string name="SYS_GEN_RANDOM_ERROR">Er is een onverwachte fout opgetreden bij het genereren van een willekeurig nummer.\nFoutcode: #VAR1#\nFoutmelding: #VAR2#</string>
-  <string name="SYS_GEN_RANDOM_EXCEPTION">Het programma kan geen willekeurige nummers genereren.\nFoutcode: #VAR1#\nFoutmelding: #VAR2#</string>
+  <string name="SYS_GEN_RANDOM_EXCEPTION">Het programma kan geen willekeurige getallen genereren.\nFoutcode: #VAR1#\nFoutmelding: #VAR2#</string>
   <string name="SYS_GIRLFRIEND">Girlfriend</string>
   <string name="SYS_GREETING_CARD">Ecard </string>
   <string name="SYS_GROUPS_ROLES">Groepen &amp; rollen</string>
@@ -1048,7 +1048,7 @@
   <string name="SYS_LOGIN_CANCEL">Cancel</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">U heeft meerdere keren binnen korte tijd geprobeerd in te loggen met een fout wachtwoord.\nUit veiligheidsoverwegingen is uw toegang 15 minuten geblokkeerd.</string>
   <string name="SYS_LOGIN_NAME_EXIST">Deze gebruikersnaam bestaat al.\n\nKies een andere gebruikersnaam.</string>
-  <string name="SYS_LOGIN_NOT_ACTIVATED">Uw account is nog niet geactiveerd.\n\nU wordt geinformeerd zodra u toegang heeft.</string>
+  <string name="SYS_LOGIN_NOT_ACTIVATED">Uw account is nog niet geactiveerd.\n\nU wordt geïnformeerd zodra u toegang hebt.</string>
   <string name="SYS_LOGIN_PROBLEMS">Inlog problemen</string>
   <string name="SYS_LOGIN_TO">Log in to #VAR1_BOLD#</string>
   <string name="SYS_LOGIN_TO_VIEW_PAGE">Please log in to view the requested page. You will then be forwarded to it automatically.</string>
@@ -1154,7 +1154,7 @@
   <string name="SYS_MOVE_VAR">Verplaats #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Meerdere ontvangers</string>
   <string name="SYS_MULTIPLE_RECIPIENTS_DESC">E-mails naar meerdere ontvangers bevatten alle ontvangers in het BCC-veld. Dit zorgt ervoor dat niemand de e-mailadressen van de andere ontvangers ziet. Echter, het TO-veld moet ook worden ingevuld. Deze instelling kan worden gebruikt om te bepalen wat er in het ontvangerveld (TO) is ingevoerd. Dit kan een verborgen waarde zijn \"Undisclosed Recipients\", maar dit veroorzaakt problemen bij sommige providers. Als alternatief kan het ontvangerveld (TO) worden gevuld met het afzenderadres of het beheerdersadres van de systeemnotificaties. Let op: alle e-mails naar meerdere ontvangers worden dan ook naar het e-mailadres in het ontvangerveld (TO) gestuurd. (Standaard: afzender)</string>
-  <string name="SYS_MUST_HAVE_ADMINISTRATOR">De rol van beheerder moet tenminste één lid hebben!</string>
+  <string name="SYS_MUST_HAVE_ADMINISTRATOR">De rol \'beheerder\' moet ten minste één lid hebben!</string>
   <string name="SYS_MYLIST_CONDITION_DESC">Hier kunt u voorwaarden definiëren voor elk veld in uw lijst. Deze voorwaarden zullen bepaalde leden van de geselecteerde rol verder beperken.</string>
   <string name="SYS_MY_PROFILE">Mijn profiel</string>
   <string name="SYS_NAME">Naam</string>
@@ -1282,11 +1282,11 @@
   <string name="SYS_PASSWORD">Wachtwoord</string>
   <string name="SYS_PASSWORDS_NOT_EQUAL">De ingevoerde wachtwoorden zijn niet gelijk.</string>
   <string name="SYS_PASSWORD_CHANGED">Wachtwoord is succesvol gewijzigd.</string>
-  <string name="SYS_PASSWORD_DESCRIPTION">Wachtwoord moet tenminste uit 8 karakters bestaan. Het moet zowel cijfers, letters als speciale tekens bevatten.\n\nDe sterkte van het door u gekozen wachtwoord wordt in kleur in een balk weergegeven. De minimale sterkte wordt aangegeven door de pijl in de balk.</string>
+  <string name="SYS_PASSWORD_DESCRIPTION">Het wachtwoord moet uit ten minste 8 tekens bestaan en zowel cijfers en letters als speciale tekens bevatten.\n\nDe sterkte van het gekozen wachtwoord wordt in kleur in een balk weergegeven. De minimale sterkte wordt aangegeven door de pijl in de balk.</string>
   <string name="SYS_PASSWORD_FORGOTTEN">Wachtwoord vergeten?</string>
   <string name="SYS_PASSWORD_FORGOTTEN_DESCRIPTION">Voer het e-mailadres in waarmee u zich heeft geregistreerd. We sturen u dan een link waarmee u uw wachtwoord opnieuw kunt instellen en vervolgens een nieuw wachtwoord kunt instellen.</string>
   <string name="SYS_PASSWORD_FORGOTTEN_PREF_DESC">Als de gebruiker zijn wachtwoord is vergeten, kan hij zich een link laten toesturen waarmee hij een nieuw wachtwoord voor zijn account op deze website kan instellen. Als deze optie is gedeactiveerd, kan de gebruiker alleen een verzoek per e-mail naar de beheerder sturen, zodat die een nieuw wachtwoord kan instellen. Om het wachtwoord te verzenden, moet ook de instelling #VAR1_BOLD# worden ingesteld. (Standaard: ja)</string>
-  <string name="SYS_PASSWORD_LENGTH">Wachtwoord moet tenminste uit 8 karakters bestaan.</string>
+  <string name="SYS_PASSWORD_LENGTH">Het wachtwoord moet uit ten minste 8 tekens bestaan.</string>
   <string name="SYS_PASSWORD_NOT_STRONG_ENOUGH">Het wachtwoord is niet sterk genoeg.</string>
   <string name="SYS_PASSWORD_OLD_WRONG">Oude wachtwoord is onjuist.</string>
   <string name="SYS_PASSWORD_RESET_INVALID">U heeft een ongeldige link voor het opnieuw instellen van uw wachtwoord aangevraagd. Als u uw wachtwoord nog niet heeft gereset, vraag dan een nieuwe link aan met de #VAR1# functie.</string>
@@ -1298,7 +1298,7 @@
   <string name="SYS_PERIOD_FROM_TO">Tijdsperiode van #VAR1# tot #VAR2#</string>
   <string name="SYS_PERMISSIONS">Rechten</string>
   <string name="SYS_PHONE">Telefoon</string>
-  <string name="SYS_PHONE_INVALID_CHAR">Het telefoonnummer in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen nummers van 0-9 en de tekens +-/() kunnen gebruikt worden.</string>
+  <string name="SYS_PHONE_INVALID_CHAR">Het telefoonnummer in veld #VAR1_BOLD# bevat ongeldige tekens.\n\nAlleen de cijfers 0-9 en de tekens +-/() zijn toegestaan.</string>
   <string name="SYS_PHOTO">Foto</string>
   <string name="SYS_PHOTOS">Foto\'s</string>
   <string name="SYS_PHOTOS_BY">Photos by</string>
@@ -1409,7 +1409,7 @@
   <string name="SYS_PRIVATE_MESSAGES">Privéberichten</string>
   <string name="SYS_PRIVATE_MESSAGE_SEND">Het privébericht is verstuurd naar #VAR1_BOLD#.</string>
   <string name="SYS_PRNG">Pseudo-willekeurige nummergenerator</string>
-  <string name="SYS_PRNG_INSECURE">Admidio / PHP kan geen veilige pseudo-willekeurige nummers genereren! Neem contact op met het Admidio-team met de volgende informatie:</string>
+  <string name="SYS_PRNG_INSECURE">Admidio/PHP kan geen veilige pseudowillekeurige getallen genereren! Neem contact op met het Admidio-team en vermeld de volgende informatie:</string>
   <string name="SYS_PROCESSING_ERROR_DESC">Het volgende probleem is opgetreden bij het verwerken van de gegevens.</string>
   <string name="SYS_PROCESS_CANCELED">Proces geannuleerd.</string>
   <string name="SYS_PROFILE">Profiel</string>
@@ -2061,7 +2061,7 @@
   <string name="SYS_UPLOAD_PROFILE_PICTURE">Profielfoto uploaden</string>
   <string name="SYS_UP_TO_DATE">Up to date</string>
   <string name="SYS_URL">URL</string>
-  <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers 0-9 en speciale karakters .-+_:/#?= zijn toegestaan.</string>
+  <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige tekens.\n\nAlleen letters, umlauts, de cijfers 0-9 en de speciale tekens .-+_:/#?= zijn toegestaan.</string>
   <string name="SYS_USERNAME">Gebruikersnaam</string>
   <string name="SYS_USERNAME_DESCRIPTION">Met deze gebruikersnaam kunt u inloggen.\n\nAls de gewenste gebruikersnaam niet meer beschikbaar is, probeer dan een alternatief zoals Andi78 of SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Gebruikersnaam of e-mailadres</string>
