@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Plaats evenement op kalender</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Item toevoegen</string>
+  <string name="SYS_ADD_ITEMS">Items toevoegen</string>
   <string name="SYS_ADD_ORGANIZATION">Voeg organisatie toe</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Voeg toe in database</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Overnemen</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
+  <string name="SYS_APPROVE">Goedkeuren</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Ingesteld door de rollen</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Leden toewijzen en bewerken</string>
   <string name="SYS_ASSIGN_FIELDS">Wijs velden toe</string>
@@ -272,6 +275,7 @@
   <string name="SYS_ATTEND_EVENT">U heeft zich aangemeld voor het evenement #VAR1_BOLD# op #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">U heeft uw deelname voor evenement #VAR1_BOLD# op #VAR2# onder voorbehoud toegezegd.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automatische goedkeuring</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AVAILABLE">Beschikbaar</string>
   <string name="SYS_AVAILABLE_BETA">Beschikbare beta</string>
@@ -283,6 +287,8 @@
   <string name="SYS_BIRTHDAY">Geboortedatum</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Uitleningen</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Lopende uitleningen</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Broer</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -790,6 +796,7 @@
   <string name="SYS_GROUPS_ROLES">Groepen &amp; rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overzicht en beheer van alle groepen en rollen van de organisatie. Er kunnen verschillende ledenlijsten worden weergegeven, geëxporteerd en eigen lijsten kunnen worden aangemaakt.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Aanvraag van gast</string>
   <string name="SYS_HALF_YEARLY">Halfjaarlijks</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-headers zijn al verzonden!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -868,6 +875,7 @@
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
+  <string name="SYS_INVENTORY_EVENT_RESERVATIONS_DESC">Voeg de inventarisitems toe die nodig zijn voor dit evenement. Voor elk item wordt een reserveringsaanvraag voor de periode van het evenement aangemaakt. Verwijderde items worden geannuleerd en blijven zichtbaar in de wijzigingsgeschiedenis.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
   <string name="SYS_INVENTORY_FIELD">Sequential number field</string>
   <string name="SYS_INVENTORY_FIELD_DESC">Select a field containing a sequential number. For the selected items, the current number is read and increased by the specified amount.\n\nNote: The inventory manager can only check whether a field has the type "Number". It cannot determine whether that field contains a serial number.</string>
@@ -965,6 +973,7 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items you have borrowed:</string>
   <string name="SYS_INVENTORY_RETURN_DATE">Return date</string>
   <string name="SYS_INVENTORY_RETURN_DATE_DESC">The date the item was returned to the keeper</string>
+  <string name="SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE">De datum van teruggave mag niet in de toekomst liggen.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selected items</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
@@ -985,6 +994,11 @@
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# van</string>
   <string name="SYS_ITALIC">Italic</string>
+  <string name="SYS_ITEM_ALREADY_BORROWED">Dit item kan niet worden uitgeleend, omdat het al is uitgeleend.</string>
+  <string name="SYS_ITEM_HAS_OPEN_RESERVATIONS">Dit item kan niet worden verwijderd of buiten gebruik worden gesteld zolang er openstaande reserveringen zijn.</string>
+  <string name="SYS_ITEM_NOT_AVAILABLE">Het item is niet beschikbaar in de gekozen periode.</string>
+  <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">Het item "#VAR1#" is niet beschikbaar in de gekozen periode.</string>
+  <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Reserveringsstatus van items per evenement</string>
   <string name="SYS_KEEP_ORIGINAL">Bewaar bovendien de originele foto\'s</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Bewaar elke foto, niet alleen in de opgegeven resolutie maar ook in het originele formaat. Indien optie #VAR1_BOLD# actief is zullen alle originele foto\'s worden gedownload. Deze optie vereist beduidend meer website ruimte en dient daarom alleen geselecteerd te worden indien u over voldoende ruimte beschikt.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landschap</string>
@@ -1099,6 +1113,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Leden toewijzen</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Lid van organisatie #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Aanvraag van lid</string>
   <string name="SYS_MEMORY_LIMIT">Geheugenlimiet</string>
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">Het menu kan hier worden ingesteld. Naast de URL kunnen een beschrijving en een pictogram worden ingesteld. Bovendien kan worden bepaald wie het menu-item mag zien.</string>
@@ -1234,6 +1249,7 @@
   <string name="SYS_ORGANIZATION">Organisatie</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Herkomst</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overzicht</string>
@@ -1467,6 +1483,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
   <string name="SYS_REGULAR_EXPRESSION">Reguliere expressie</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Elke reguliere expressie kan worden opgeslagen, die wordt toegepast op inhoud die gebruiker in dit profielveld invoert. De inhoud moet overeenkomen met de voorwaarden van de reguliere expressie om de ingevoerde waarde in het veld op te slaan. Naast de algemene voorwaarden van het type veld wordt de reguliere expressie gecontroleerd.</string>
+  <string name="SYS_REJECT">Afwijzen</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relatie configuratie</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relatie configuraties</string>
@@ -1489,8 +1506,19 @@
   <string name="SYS_REPLACE">Herplaats</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Aangevraagd op</string>
+  <string name="SYS_REQUESTER">Aangevraagd door</string>
+  <string name="SYS_REQUEST_AGAIN">Opnieuw aanvragen</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Verplichte invoer</string>
+  <string name="SYS_RESERVATIONS">Reserveringen</string>
+  <string name="SYS_RESERVATION_BORROWINGS_READY">Goedgekeurde reserveringen klaar voor afgifte</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Reserveren vanaf</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Reserveren tot</string>
+  <string name="SYS_RESERVATION_REQUEST">Reservering aanvragen</string>
+  <string name="SYS_RESERVATION_REQUEST_APPROVED">De reservering is goedgekeurd.</string>
+  <string name="SYS_RESERVATION_REQUEST_SUBMITTED">De reservering is ter goedkeuring ingediend.</string>
+  <string name="SYS_RESERVATION_REQUIRES_TIME_PERIOD">Voor een reservering is een periode nodig. Items kunnen niet voor één tijdstip worden gereserveerd.</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">U bent al ingelogd op het systeem. Het is niet nodig om een nieuw wachtwoord aan te vragen.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
@@ -1914,7 +1942,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Vanaf</string>
+  <string name="SYS_STATUS_APPROVED">Goedgekeurd</string>
+  <string name="SYS_STATUS_BORROWED">Uitgeleend</string>
   <string name="SYS_STATUS_CODE_INVALID">Ongeldige status-code!</string>
+  <string name="SYS_STATUS_REJECTED">Afgewezen</string>
+  <string name="SYS_STATUS_REQUESTED">Aangevraagd</string>
+  <string name="SYS_STATUS_RETURNED">Teruggebracht</string>
   <string name="SYS_STILL_X_CHARACTERS">nog #VAR1# tekens</string>
   <string name="SYS_STREET">Straat</string>
   <string name="SYS_SUBJECT">Onderwerp</string>
@@ -2078,6 +2111,7 @@
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Breedte</string>
   <string name="SYS_WIFE">Echtgenote</string>
+  <string name="SYS_WITHDRAW">Intrekken</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Werkblad (index of naam)</string>
   <string name="SYS_WRITE_EMAIL">Schrijf e-mail</string>
   <string name="SYS_WRITE_PM">Schrijf privébericht</string>
