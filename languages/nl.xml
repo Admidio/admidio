@@ -507,7 +507,7 @@
   <string name="SYS_DEADLINE_AFTER_START">The deadline for registration is after the start of the event.</string>
   <string name="SYS_DEADLINE_ATTENTION">Deze aanmelding kan niet meer worden gewijzigd, omdat de einddatum voor aanmelden is verstreken of het evenement al voorbij is. Neem contact op met een leider van het evenement of met een beheerder!</string>
   <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
-  <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
+  <string name="SYS_DECIMAL_NUMBER">Decimaal getal</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen wanneer een nieuwe gebruiker wordt aangemaakt of een registratie wordt goedgekeurd. Als degene die de gebruiker aanmaakt rollen mag toewijzen, worden alle roltoewijzingen getoond en kunnen ze worden aangepast.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
@@ -1224,7 +1224,7 @@
   <string name="SYS_NO_TEMPLATE">Geen sjabloon</string>
   <string name="SYS_NO_USER_FOUND">Er is geen lid gevonden die aan uw criteria voldoet.</string>
   <string name="SYS_NO_VALID_RECIPIENTS">De e-mail kan niet verzonden worden omdat de geselecteerde rollen en/of gebruikers niet over een geldig e-mailadres beschikken.</string>
-  <string name="SYS_NUMBER">Aantal</string>
+  <string name="SYS_NUMBER">Getal</string>
   <string name="SYS_NUMBER_OF_ALBUMS_PER_PAGE">Aantal albums per pagina</string>
   <string name="SYS_NUMBER_OF_COLUMNS">Number of columns</string>
   <string name="SYS_NUMBER_OF_ENTRIES_PER_PAGE">Number of entries per page</string>
