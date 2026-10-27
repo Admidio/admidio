@@ -11,7 +11,7 @@
                     aria-label="{$l10n->get('SYS_FOLDER_TREE')}"><i class="bi bi-chevron-bar-left"></i><span class="admidio-folder-sidebar-collapse-label">{$l10n->get('SYS_FOLDER_TREE')}</span></button>
         </div>
         <nav id="adm_documents_files_tree_nav" class="admidio-folder-tree-pane" aria-label="{$l10n->get('SYS_FOLDER_TREE')}">
-            <ul id="adm_documents_files_tree" class="admidio-folder-tree" role="tree" aria-label="{$l10n->get('SYS_FOLDER_TREE')}" data-url="{$treeUrl}"
+            <ul id="adm_documents_files_tree" class="admidio-tree" role="tree" aria-label="{$l10n->get('SYS_FOLDER_TREE')}" data-url="{$treeUrl}"
                 data-root-uuid="{$treeRootUuid}" data-current-uuid="{$treeCurrentUuid}" data-path="{$treePath|escape}"
                 data-root-label="{$l10n->get('SYS_DOCUMENTS_FILES')}"></ul>
         </nav>
@@ -178,7 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const storageKey = "admidio.documents_files.folder_tree";
     const currentUuid = tree.dataset.currentUuid;
-    let treeBuilt = false;
 
     const collapseButton = document.getElementById("adm_documents_files_tree_collapse");
     if (!collapseButton) return;
@@ -200,201 +199,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // fetch the visible subfolders of a folder
-    const loadFolders = function (uuid) {
-        const url = new URL(tree.dataset.url, window.location.href);
-        url.searchParams.set("folder_uuid", uuid);
-        return fetch(url, {credentials: "same-origin"})
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                return data.status === "success" ? data.folders : [];
-            })
-            .catch(function () {
-                return [];
-            });
-    };
-
-    // The tree is a WAI-ARIA tree: only one folder is in the tab order and the arrow keys move within the tree.
-    const getLink = function (item) {
-        return item.querySelector(":scope > .admidio-folder-tree-line > a");
-    };
-
-    const setTabStop = function (link) {
-        const current = tree.querySelector("a[tabindex=\"0\"]");
-        if (current && current !== link) {
-            current.tabIndex = -1;
-        }
-        link.tabIndex = 0;
-    };
-
-    // create the list item of a folder, the subfolders are added when the item is expanded
-    const createNode = function (uuid, name, url, hasChildren, level) {
-        const item = document.createElement("li");
-        item.className = "admidio-folder-tree-node";
-        item.setAttribute("role", "none");
-        item.dataset.uuid = uuid;
-
-        const line = document.createElement("div");
-        line.className = "admidio-folder-tree-line";
-
-        // the button is only for the mouse, the keyboard uses the arrow keys of the folder
-        if (hasChildren) {
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = "admidio-folder-tree-toggle";
-            button.tabIndex = -1;
-            button.setAttribute("aria-hidden", "true");
-            button.innerHTML = "<i class=\"bi bi-chevron-right\"></i>";
-            button.addEventListener("click", function () {
-                setExpanded(item, !item.classList.contains("expanded"));
-            });
-            line.appendChild(button);
-        } else {
-            const spacer = document.createElement("span");
-            spacer.className = "admidio-folder-tree-toggle";
-            line.appendChild(spacer);
-        }
-
-        const link = document.createElement("a");
-        link.className = "admidio-folder-tree-link";
-        link.href = url;
-        link.title = name;
-        link.tabIndex = -1;
-        link.setAttribute("role", "treeitem");
-        link.setAttribute("aria-level", level);
-        if (hasChildren) {
-            link.setAttribute("aria-expanded", "false");
-        }
-        link.innerHTML = "<i class=\"bi bi-folder-fill\"></i> ";
-        link.appendChild(document.createTextNode(name));
-        if (uuid === currentUuid) {
-            link.classList.add("active");
-            link.setAttribute("aria-current", "page");
-        }
-        line.appendChild(link);
-        item.appendChild(line);
-
-        return item;
-    };
-
-    // expand or collapse a folder, returns a promise that is resolved when the subfolders are shown
-    const setExpanded = function (item, expanded) {
-        const link = getLink(item);
-        if (!link.hasAttribute("aria-expanded")) return Promise.resolve();
-
-        let group = item.querySelector(":scope > ul");
-        link.setAttribute("aria-expanded", expanded ? "true" : "false");
-        item.classList.toggle("expanded", expanded);
-        if (group) {
-            group.hidden = !expanded;
-        }
-        if (!expanded || group) return Promise.resolve();
-
-        group = document.createElement("ul");
-        group.className = "admidio-folder-tree-group";
-        group.setAttribute("role", "group");
-        group.id = "adm_documents_files_tree_group_" + item.dataset.uuid;
-        link.setAttribute("aria-owns", group.id);
-        item.appendChild(group);
-        const level = parseInt(link.getAttribute("aria-level"), 10) + 1;
-        item.loading = loadFolders(item.dataset.uuid).then(function (folders) {
-            folders.forEach(function (folder) {
-                group.appendChild(createNode(folder.uuid, folder.name, folder.url, folder.hasChildren, level));
-            });
-        });
-        return item.loading;
-    };
-
-    // keyboard support like in a file explorer
-    tree.addEventListener("focusin", function (e) {
-        const link = e.target.closest("a.admidio-folder-tree-link");
-        if (link) {
-            setTabStop(link);
-        }
+    const rootUrl = new URL(window.location.href);
+    rootUrl.search = "";
+    rootUrl.hash = "";
+    const folderTree = new AdmTreeView(tree, {
+        url: tree.dataset.url,
+        idParam: "folder_uuid",
+        root: {id: tree.dataset.rootUuid, name: tree.dataset.rootLabel, url: rootUrl.href},
+        currentId: currentUuid,
+        path: JSON.parse(tree.dataset.path)
     });
-
-    tree.addEventListener("keydown", function (e) {
-        const link = e.target.closest("a.admidio-folder-tree-link");
-        if (!link || e.altKey || e.ctrlKey || e.metaKey) return;
-
-        const item = link.closest("li");
-        const links = Array.from(tree.querySelectorAll("a.admidio-folder-tree-link")).filter(function (entry) {
-            return !entry.closest("ul[hidden]");
-        });
-        const index = links.indexOf(link);
-        let target = null;
-
-        switch (e.key) {
-            case "ArrowDown":
-                target = links[index + 1];
-                break;
-            case "ArrowUp":
-                target = links[index - 1];
-                break;
-            case "Home":
-                target = links[0];
-                break;
-            case "End":
-                target = links[links.length - 1];
-                break;
-            case "ArrowRight":
-                if (link.getAttribute("aria-expanded") === "false") {
-                    setExpanded(item, true);
-                } else if (link.getAttribute("aria-expanded") === "true") {
-                    // the subfolders may still be loading
-                    (item.loading || Promise.resolve()).then(function () {
-                        const child = item.querySelector(":scope > ul > li");
-                        if (child) {
-                            getLink(child).focus();
-                        }
-                    });
-                }
-                break;
-            case "ArrowLeft":
-                if (link.getAttribute("aria-expanded") === "true") {
-                    setExpanded(item, false);
-                } else {
-                    const parent = item.parentElement.closest("li");
-                    target = parent ? getLink(parent) : null;
-                }
-                break;
-            default:
-                return;
-        }
-
-        e.preventDefault();
-        if (target) {
-            target.focus();
-        }
-    });
-
-    // build the tree with the root folder and expand all folders on the way to the current folder
-    const buildTree = function () {
-        treeBuilt = true;
-        const rootUrl = new URL(window.location.href);
-        rootUrl.search = "";
-        rootUrl.hash = "";
-        const root = createNode(tree.dataset.rootUuid, tree.dataset.rootLabel, rootUrl.href, true, 1);
-        tree.appendChild(root);
-        getLink(root).tabIndex = 0;
-
-        let chain = setExpanded(root, true);
-        JSON.parse(tree.dataset.path).slice(1).forEach(function (uuid) {
-            chain = chain.then(function () {
-                const parent = tree.querySelector("li[data-uuid=\"" + uuid + "\"]");
-                return parent ? setExpanded(parent, true) : null;
-            });
-        });
-        // Tab enters the tree at the current folder, unless the focus is already within the tree
-        chain.then(function () {
-            const active = tree.querySelector("a.active");
-            if (active && !tree.contains(document.activeElement)) {
-                setTabStop(active);
-            }
-        });
-    };
 
     // the width of the list changes, so DataTables must calculate the visible columns again
     const adjustTable = function () {
@@ -467,8 +281,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const open = state === "1";
         pane.classList.toggle("collapsed", !open);
         collapseButton.setAttribute("aria-expanded", open ? "true" : "false");
-        if (open && !treeBuilt) {
-            buildTree();
+        if (open) {
+            folderTree.build();
         }
         saveState(state);
         adjustTable();

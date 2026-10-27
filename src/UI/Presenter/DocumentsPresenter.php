@@ -474,6 +474,7 @@ class DocumentsPresenter extends PagePresenter
 
 
         $this->setHtmlID('adm_documents_files');
+        $this->addTreeViewFiles();
         // set headline of the script
         if ($currentFolder->getValue('fol_fol_id_parent') == null) {
             $this->setHeadline($gL10n->get('SYS_DOCUMENTS_FILES'));

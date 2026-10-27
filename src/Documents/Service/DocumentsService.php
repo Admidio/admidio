@@ -281,7 +281,8 @@ class DocumentsService
      * Read the subfolders of the current folder that the current user is allowed to see. The result is used
      * for the nodes of the folder tree. Each node knows whether it has visible subfolders itself, so the
      * tree can show an expand button without loading the whole structure at once.
-     * @return array<int,array{uuid: string, name: string, url: string, hasChildren: bool}> Returns an array with an array for each visible subfolder.
+     * @return array<int,array{id: string, name: string, url: string, hasChildren: bool}> Returns an array with an array
+     *         for each visible subfolder in the format of the tree view.
      * @throws Exception
      */
     public function findFolderTreeNodes(): array
@@ -292,7 +293,7 @@ class DocumentsService
             $folder = new Folder($this->db, (int)$subfolder['fol_id']);
 
             $nodes[] = array(
-                'uuid' => $subfolder['fol_uuid'],
+                'id' => $subfolder['fol_uuid'],
                 'name' => html_entity_decode($subfolder['fol_name'], ENT_QUOTES, 'UTF-8'),
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('folder_uuid' => $subfolder['fol_uuid'])),
                 'hasChildren' => count($folder->getSubfoldersWithProperties()) > 0
