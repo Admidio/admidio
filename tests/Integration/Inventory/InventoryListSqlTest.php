@@ -96,6 +96,28 @@ class InventoryListSqlTest extends DatabaseTestCase
         }
     }
 
+    public static function tiedSorts(): array
+    {
+        return [
+            'equal numeric values ascending' => ['AUDIT_QUANTITY', 'asc'],
+            'equal numeric values descending' => ['AUDIT_QUANTITY', 'desc'],
+            'equal categories' => ['CATEGORY', 'asc'],
+            'equal keepers' => ['KEEPER', 'desc'],
+        ];
+    }
+
+    /** @dataProvider tiedSorts */
+    public function testPaginationBreaksSortTiesByItemId(string $field, string $direction): void
+    {
+        $result = $this->requestList(['sameNumber' => true, 'orderField' => $field, 'dir' => $direction, 'checkPages' => true]);
+        $pages = $result['testPages'];
+        $names = array_map(static fn(array $page): string => html_entity_decode(strip_tags($page[0][1]), ENT_QUOTES | ENT_HTML5), $pages);
+        $this->assertSame(['Camera', 'Camera spare', 'Tripod', 'Camera'], $names);
+        $ids = array_map(static fn(array $page): string => $page[0]['DT_RowId'], $pages);
+        $this->assertCount(3, array_unique(array_slice($ids, 0, 3)));
+        $this->assertSame($ids[0], $ids[3]);
+    }
+
     private function requestList(array $request): array
     {
         $root = tempnam(sys_get_temp_dir(), 'admidio-inventory-list-');

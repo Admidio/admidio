@@ -250,7 +250,10 @@ try {
     }
 
     if ($orderCondition === '') {
-        $orderCondition = ' ORDER BY ini_id ASC ';
+        $orderCondition = ' ORDER BY i.ini_id ASC ';
+    } else {
+        // Keep page boundaries stable when the requested columns contain equal values.
+        $orderCondition .= ', i.ini_id ASC';
     }
 
     // limit

@@ -144,6 +144,16 @@ if ($request['compareExports'] ?? false) {
         $result['testExportNames'][$mode] = $names;
     }
 }
+if ($request['checkPages'] ?? false) {
+    foreach ([0, 1, 2, 0] as $start) {
+        $_GET['start'] = $start;
+        $_GET['length'] = 1;
+        ob_start();
+        require $argv[2];
+        $page = json_decode(ob_get_clean(), true, 512, JSON_THROW_ON_ERROR);
+        $result['testPages'][] = $page['data'];
+    }
+}
 echo json_encode($result, JSON_THROW_ON_ERROR);
 
 $gDb->rollback();
