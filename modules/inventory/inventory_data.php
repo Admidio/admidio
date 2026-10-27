@@ -77,13 +77,6 @@ try {
         $headerColumns[$colIndex++] = 'actions';
     }
 
-    // prepare DB-specific aggregator (GROUP_CONCAT or string_agg)
-    if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-        $agg = "string_agg(COALESCE(ind_value, ' '), ' ')";
-    } else {
-        $agg = "GROUP_CONCAT(COALESCE(ind_value, ' ') SEPARATOR ' ')";
-    }
-
     // determine status filter
     // Behavior: items_filter_status == 0 => show all; otherwise show only items with ini_status == items_filter_status
     $sqlWhereStatus = '';
@@ -92,8 +85,9 @@ try {
     }
 
     // basic FROM and WHERE parts
-    $baseFromTables = ' FROM ' . TBL_INVENTORY_ITEMS . ' i ' . 'INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' d ON d.ind_ini_id = i.ini_id ';
-    $baseWhere = ' WHERE (i.ini_org_id IS NULL OR i.ini_org_id = ?) ' . $sqlWhereStatus;
+    $baseFromTables = ' FROM ' . TBL_INVENTORY_ITEMS . ' i ';
+    $baseWhere = ' WHERE (i.ini_org_id IS NULL OR i.ini_org_id = ?) ' . $sqlWhereStatus
+        . ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' d WHERE d.ind_ini_id = i.ini_id)';
     $baseParams = array($gCurrentOrgId);
     if ($filterStatus !== 0) {
         // append status parameter corresponding to the placeholder in $sqlWhereStatus
@@ -125,40 +119,30 @@ try {
     $countStmt = $gDb->queryPrepared($sqlCount, $baseParams);
     $jsonArray['recordsTotal'] = (int)$countStmt->fetchColumn();
 
-    // build main select with aggregated searchable text
-    // Simple LEFT JOIN to the borrow table. If there is at most one borrow row per item
+    // The borrow table has a unique index on inb_ini_id, so the join keeps one row per item.
     $borrowLatestJoin = ' LEFT JOIN ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' lb ON lb.inb_ini_id = i.ini_id';
 
-    $sqlMain = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, ' . $agg . ' AS search_text, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ' . $baseFromTables . $borrowLatestJoin . $baseWhere . ' GROUP BY i.ini_id';
+    $sqlMain = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ' . $baseFromTables . $borrowLatestJoin . $baseWhere;
 
     $queryParams = $baseParams;
 
-    // apply global search (on aggregated item values)
+    // Each search word may match a different field of the same item.
     if ($getSearch !== '') {
         $searchWords = preg_split('/\s+/', trim($getSearch));
-        $searchConditions = '';
         foreach ($searchWords as $word) {
             if ($word === '') {
                 continue;
             }
-            if ($searchConditions !== '') $searchConditions .= ' AND ';
-            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-                $searchConditions .= ' ' . $agg . ' ILIKE ? ';
-            } else {
-                $searchConditions .= ' ' . $agg . ' LIKE ? ';
-            }
+            $searchOperator = DB_TYPE === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
+            $sqlMain .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
+                . ' WHERE search_data.ind_ini_id = i.ini_id AND search_data.ind_value ' . $searchOperator . ' ?)';
             $queryParams[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
-        }
-        if ($searchConditions !== '') {
-            $sqlMain = 'SELECT * FROM (' . $sqlMain . ') AS sub WHERE ' . $searchConditions;
         }
     }
 
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';
     $orderColumns = array();
-    // If we wrapped the select in a derived table for searching, the outer alias is 'sub'.
-    $outerPrefix = ($getSearch !== '') ? 'sub.' : '';
     // When using the joined latest-borrow table, its columns are projected as inb_borrow_date etc.
     foreach ($headerColumns as $idx => $colName) {
         // default: no ordering
@@ -212,23 +196,21 @@ try {
                         // Use the joined latest-borrow table columns (projected as inb_borrow_date etc.)
                         switch ($colUpperName) {
                             case 'BORROW_DATE':
-                                $subSel = $outerPrefix . 'inb_borrow_date';
+                                $subSel = 'lb.inb_borrow_date';
                                 break;
                             case 'RETURN_DATE':
-                                $subSel = $outerPrefix . 'inb_return_date';
+                                $subSel = 'lb.inb_return_date';
                                 break;
                             case 'LAST_RECEIVER':
-                                $subSel = $outerPrefix . 'inb_last_receiver';
+                                $subSel = 'lb.inb_last_receiver';
                                 break;
                             default:
                                 // fallback to item_data
-                                $iniIdRef = ($getSearch !== '') ? $outerPrefix . 'ini_id' : 'ini_id';
-                                $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = ' . $iniIdRef . ' AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
+                                $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = i.ini_id AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
                                 break;
                         }
                     } else {
-                        $iniIdRef = ($getSearch !== '') ? $outerPrefix . 'ini_id' : 'ini_id';
-                        $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = ' . $iniIdRef . ' AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
+                        $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = i.ini_id AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
                     }
                     // type-aware ordering: numbers should be cast to numeric types so DB sorts them correctly
                     if (in_array($infType, array('NUMBER', 'DECIMAL'), true)) {
