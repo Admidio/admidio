@@ -1552,6 +1552,7 @@
   <string name="SYS_PLUGIN_PACKAGE_UNREADABLE">Die Datei konnte nicht gelesen werden.</string>
   <string name="SYS_PLUGIN_PACKAGE_UNSAFE_ENTRY">Das Archiv enthält den Eintrag #VAR1#, der außerhalb des Plugin-Ordners schreiben würde. Die Datei wurde abgelehnt.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-Einstellungen</string>
+  <string name="SYS_PLUGIN_REMOVAL_WARNINGS">Das Plugin meldet:</string>
   <string name="SYS_PLUGIN_REMOVE">Plugin entfernen</string>
   <string name="SYS_PLUGIN_REMOVED">Das Plugin wurde erfolgreich entfernt.</string>
   <string name="SYS_PLUGIN_REMOVED_FILES_KEPT">Das Plugin wurde entfernt, sein Ordner konnte jedoch nicht gelöscht werden, weil Admidio nicht in den Plugin-Ordner schreiben darf. Das Plugin wird wieder als verfügbar aufgeführt. Lösche seinen Ordner auf dem Server, um es vollständig zu entfernen.</string>

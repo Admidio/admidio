@@ -6,6 +6,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginPanel;
@@ -798,7 +799,7 @@ class PluginsPresenter extends PagePresenter
              */
             $organizations = PluginRegistry::getEnabledOrganizations($id);
 
-            $actions[] = $this->action(
+            $action = $this->action(
                 $id,
                 'remove',
                 'bi bi-trash',
@@ -807,6 +808,14 @@ class PluginsPresenter extends PagePresenter
                 array(),
                 $organizations === array() ? array($id) : array($id, implode(', ', $organizations))
             );
+
+            // what the plugin itself says removal leaves behind, for example data in other systems
+            $warnings = PluginInstaller::getRemovalWarnings($plugin ?? $id);
+            if ($warnings !== array()) {
+                $action['dataMessage'] .= '<br /><br />' . $gL10n->get('SYS_PLUGIN_REMOVAL_WARNINGS') . '<br />'
+                    . implode('<br />', array_map(static fn (string $warning): string => '&bull; ' . SecurityUtils::encodeHTML($warning), $warnings));
+            }
+            $actions[] = $action;
         }
 
         return $actions;
