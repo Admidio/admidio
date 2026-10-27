@@ -7,7 +7,7 @@
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Een update van de database mag alleen worden uitgevoerd door een beheerder. Voer hier de inloggegevens van een beheerder in.</string>
   <string name="INS_BOARD">Bestuur</string>
   <string name="INS_CONFERENCE_ROOM">Vergaderzaal</string>
-  <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Bestand #VAR1_BOLD# niet gevonden in hoofdmap van Admidio!\n\nDownload het bestand svp opnieuw en plaats het in de vermelde map.</string>
+  <string name="INS_CONFIGURATION_FILE_NOT_FOUND">Bestand #VAR1_BOLD# niet gevonden in de hoofdmap van Admidio!\n\nDownload het bestand opnieuw en plaats het in de vermelde map.</string>
   <string name="INS_CONTINUE_INSTALLATION">Installatie voortzetten</string>
   <string name="INS_COURSES">Opleidingen</string>
   <string name="INS_CREATE_ADMINISTRATOR">Beheerder aanmaken</string>
@@ -25,7 +25,7 @@
   <string name="INS_DATA_OF_ADMINISTRATOR">Gegevens beheerder</string>
   <string name="INS_DATA_OF_ADMINISTRATOR_DESC">Vermeld hier naam, e-mail en toegangsinformatie van beheerder. Log in als dezelfde gebruiker na installatie.</string>
   <string name="INS_DATA_OF_ORGANIZATION">Gegevens van de organisatie</string>
-  <string name="INS_DELETE_CONFIG_FILE">In de hoofdmap van Admidio #VAR1_BOLD# bestaat al een bestand config.php. Dit bestand is verplaatst naar de map adm_my_files. Verwijder svp het bestand in de hoofdmap.</string>
+  <string name="INS_DELETE_CONFIG_FILE">In de hoofdmap van Admidio #VAR1_BOLD# bestaat al een bestand config.php. Dit bestand is verplaatst naar de map adm_my_files. Verwijder het bestand in de hoofdmap.</string>
   <string name="INS_DESCRIPTION_ADMINISTRATOR">Groep beheerders</string>
   <string name="INS_DESCRIPTION_BOARD">Bestuur van de organisatie</string>
   <string name="INS_DESCRIPTION_CONFERENCE_ROOM">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden. Beamer is beschikbaar.</string>
@@ -45,9 +45,9 @@
   <string name="INS_LANGUAGE_NOT_CHOSEN">Geen taal geselecteerd.</string>
   <string name="INS_MEMBERSHIP">Lidmaatschap</string>
   <string name="INS_NO_INSTALLED_VERSION_FOUND">De reeds geïnstalleerde versie kon niet worden bepaald. Als u versie 1.x van Admidio gebruikt, voer eerst een update uit naar versie 2.x en daarna kunt u updaten naar versie #VAR1#. Als u versie 2.x of nieuwer al hebt geïnstalleerd, controleer de consistentie van uw database.</string>
-  <string name="INS_ORGA_SHORTNAME_EXISTS">Organisatie #VAR1_BOLD# bestaat reeds. Gelieve een andere naam te gebruiken.</string>
+  <string name="INS_ORGA_SHORTNAME_EXISTS">Organisatie #VAR1_BOLD# bestaat al. Gebruik een andere naam.</string>
   <string name="INS_PHONE_LIST">Telefoonlijst</string>
-  <string name="INS_PLEASE_CHOOSE_LANGUAGE">Kies svp een taal</string>
+  <string name="INS_PLEASE_CHOOSE_LANGUAGE">Kies een taal</string>
   <string name="INS_ROOT_URL_INVALID">The URL of the Admidio installation is not valid. Enter the complete URL of the installation, for example https://www.example.org/admidio</string>
   <string name="INS_SETUP_WAS_SUCCESSFUL">Configuratie succesvol</string>
   <string name="INS_SET_ORGANIZATION">Maak organisatie</string>
@@ -63,7 +63,7 @@
   <string name="INS_UPDATE_VERSION">Update naar versie #VAR1#</string>
   <string name="INS_UPDATING_WAS_SUCCESSFUL">Update proces gelukt</string>
   <string name="INS_WARNING_3RD_PARTY_PLUGINS_COULD_NOT_BE_MOVED">Some third-party plugin folders could not be moved to the new plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# in your Admidio installation, move the third-party plugin folders manually, and then delete the old adm_plugins folder.</string>
-  <string name="INS_WARNING_BETA_VERSION">U gebruikt een BETA versie van Admidio.\n\nProblemen zoals instabiliteit en verlies van gegevens kunnen voorkomen. Gebruik deze versie svp alleen voor testdoeleinden!</string>
+  <string name="INS_WARNING_BETA_VERSION">U gebruikt een bètaversie van Admidio.\n\nProblemen zoals instabiliteit en gegevensverlies kunnen voorkomen. Gebruik deze versie alleen om te testen!</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_COULD_NOT_BE_DELETED">Some old Admidio plugin folders could not be deleted from the old plugin folder #VAR1_BOLD#.\nPlease check the folder #VAR2_BOLD# in your Admidio installation, delete the old plugin folders manually, and then delete the old adm_plugins folder.</string>
   <string name="INS_WARNING_OLD_ADM_PLUGINS_FOLDER_COULD_NOT_BE_DELETED">The old plugin folder #VAR1_BOLD# could not be deleted.\nPlease check the folder #VAR2_BOLD# within your Admidio installation and delete the old adm_plugins folder manually.</string>
   <string name="INS_WARNING_SSO_OIDC_MUTABLE_SUBJECT">These OpenID Connect clients identify the user by a value that can change or be given to another person: #VAR1_BOLD#.\nOpen each client and set the user identifier to the user UUID. The application will then see the user as a new account, so the existing accounts must be reconnected there.</string>
@@ -71,7 +71,7 @@
   <string name="INS_WELCOME_TEXT_UPDATE">U hebt de mappen van Admidio al bijgewerkt naar een nieuwe versie. Nu moet de database worden bijgewerkt van de huidige versie #VAR2# naar de versie #VAR1#, zodat Admidio de nieuwe versie kan gebruiken.\n\nAls u vragen of problemen met deze update hebt, bekijk #VAR3#onze update handleiding#VAR4# of bezoek #VAR5#ons support forum#VAR6#.</string>
   <string name="INS_WELCOME_TO_INSTALLATION">Welkom bij de installatie van Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Welkom bij de update van Admidio</string>
-  <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# heeft minimaal MySQL versie #VAR2# nodig. Probeer svp uw MySQL database te updaten of gebruik een #VAR3#oudere Admidio versie#VAR4# die compatibel is.</string>
+  <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# heeft minimaal MySQL-versie #VAR2# nodig. Werk uw MySQL-database bij of gebruik een #VAR3#oudere Admidio-versie#VAR4# die compatibel is.</string>
   <!--Phrases only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module toegang</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">Module kan in- of uitgeschakeld worden voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het worden verborgen voor niet-ingelogde gebruikers. De webfeed is dan volledig uitgeschakeld voor beide gebruikersgroepen. (Standaard: actief)</string>
@@ -305,7 +305,7 @@
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Het resultaat van de berekening is onjuist.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">De identificatiecode is ongeldig.</string>
   <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Identificatiecode</string>
-  <string name="SYS_CAPTCHA_DESCRIPTION">De authenticatiecode is onderdeel van captcha. Een captcha wordt gebruikt voor spam preventie. De afbeelding wordt gebruikt om vast te stellen of een gebruiker of script (of spambot) het formulier heeft ingevuld.\nVoer svp de uitkomst van de authenticatiecode in het formulierveld in.</string>
+  <string name="SYS_CAPTCHA_DESCRIPTION">De authenticatiecode is onderdeel van een captcha. Een captcha wordt gebruikt om spam te voorkomen. De afbeelding wordt gebruikt om vast te stellen of een persoon of een script (bijvoorbeeld een spambot) het formulier heeft ingevuld.\nVoer de uitkomst van de authenticatiecode in het formulierveld in.</string>
   <string name="SYS_CAPTION_SIZE">Caption grootte</string>
   <string name="SYS_CAPTION_SIZE_DESC">De afmeting van de afbeeldingstekst wordt proportioneel berekend aan de hand van de afbeeldingsgrootte, volgens de formule \"Beeldformaat / Deler\". Door de deler te verhogen, neemt de lettergrootte af. (Standaard: 40)</string>
   <string name="SYS_CARBON_COPY">Kopie (CC)</string>
@@ -408,7 +408,7 @@
   <string name="SYS_CONFIRMATION_OF_INPUT">Bevestig waarde</string>
   <string name="SYS_CONFIRM_PASSWORD">Bevestig wachtwoord</string>
   <string name="SYS_CONFIRM_REGISTRATION">Registratie bevestigen</string>
-  <string name="SYS_CONNECTION_ERROR">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de #VAR1# website bezoeken voor een handmatige update.</string>
+  <string name="SYS_CONNECTION_ERROR">Kan geen verbinding maken met de updatepagina van Admidio. Controleer uw internetverbinding of probeer het later opnieuw. U kunt ook de website #VAR1# bezoeken voor een handmatige update.</string>
   <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
   <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>
@@ -470,7 +470,7 @@
   <string name="SYS_CURRENT_PASSWORD">Huidig wachtwoord</string>
   <string name="SYS_CURRENT_PROFILE_PICTURE">Huidige profielfoto</string>
   <string name="SYS_CURRENT_ROLE_MEMBERSHIP">Current role memberships</string>
-  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mailadres doorgegeven!\n\nGeef svp een e-mailadres door in uw #VAR1#profiel#VAR2#.</string>
+  <string name="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link">Ongeldig e-mailadres!\n\nVul een e-mailadres in uw #VAR1#profiel#VAR2# in.</string>
   <string name="SYS_DAILY">Daily</string>
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Backup database</string>
@@ -481,7 +481,7 @@
   <string name="SYS_DATABASE_NO_LOGIN_CONFIG_FILE">Er kan geen verbinding met de database worden gemaakt!\n\nControleer de toegangsgegevens in het bestand config.php in de map adm_my_files. Als het bestand nog steeds van een andere installatie is, verwijder config.php uit de map, omdat een nieuw bestand wordt gemaakt via de installatiewizard. Vervolgens kan de installatie worden voortgezet.\n\nDe volgende fout is opgetreden:\n #VAR1#.</string>
   <string name="SYS_DATABASE_VERSION">Database versie</string>
   <string name="SYS_DATABASE_VERSION_AFTER_UPDATE">Database-versie na bijwerken</string>
-  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nMaak svp een #VAR3# database update naar versie #VAR4#.</string>
+  <string name="SYS_DATABASE_VERSION_INVALID" description="Var3 and Var4 create link to update">De databaseversie #VAR1# is lager dan de versie van de Admidio-scripts #VAR2#.\n\nVoer een #VAR3#databaseupdate#VAR4# uit naar versie #VAR2#.</string>
   <string name="SYS_DATABASE_VERSION_REQUIRED">Admidio heeft #VAR1# of hoger nodig</string>
   <string name="SYS_DATA_AREA">Data area</string>
   <string name="SYS_DATA_CATEGORY_GLOBAL">Als deze optie is geactiveerd, zijn de objecten (evenementen, mededelingen, weblinks ...) van deze categorie ook zichtbaar op de websites van de volgende organisaties:\n #VAR1_BOLD#</string>
@@ -505,7 +505,7 @@
   <string name="SYS_DEACTIVATE_ROLE_DESC">Als u rol #VAR1_BOLD# deactiveert, kan de rol niet langer worden gebruikt en toegewezen worden aan objecten. Ook zijn alle rechten van deze rol niet langer effectief. De rol met zijn instellingen en lid toewijzingen blijft echter bestaan en kan later opnieuw worden geactiveerd.</string>
   <string name="SYS_DEADLINE">Uiterste datum</string>
   <string name="SYS_DEADLINE_AFTER_START">The deadline for registration is after the start of the event.</string>
-  <string name="SYS_DEADLINE_ATTENTION">Deze aanmelding kan niet meer gewijzigd worden omdat de einddatum voor aanmelden verstreken is of het evenement in het verleden ligt. Neem svp contact op met een evenement leider of een beheerder!</string>
+  <string name="SYS_DEADLINE_ATTENTION">Deze aanmelding kan niet meer worden gewijzigd, omdat de einddatum voor aanmelden is verstreken of het evenement al voorbij is. Neem contact op met een leider van het evenement of met een beheerder!</string>
   <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal cijfer</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
@@ -690,7 +690,7 @@
   <string name="SYS_EVENTS">Evenementen</string>
   <string name="SYS_EVENTS_CONFIRMATION_OF_PARTICIPATION">Evenementen - bevestiging van deelname</string>
   <string name="SYS_EVENTS_DESC">Hier kunt u evenementen maken en bewerken. Gebruikers kunnen zich aanmelden voor deze evenementen.</string>
-  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">U heeft een rol aan deelnemers toegekend, die geen toestemming hebben om de data in de geselecteerde categorie te zien. Kies svp één van de volgende rollen voor de deelnemers: #VAR1_BOLD#.</string>
+  <string name="SYS_EVENT_CATEGORIES_ROLES_DIFFERENT">U hebt een rol aan deelnemers toegekend die geen toestemming heeft om de gegevens in de geselecteerde categorie te zien. Kies een van de volgende rollen voor de deelnemers: #VAR1_BOLD#.</string>
   <string name="SYS_EVENT_CHANGED_TITLE">An event was changed at #VAR1#</string>
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Participants can register for the event until this date. After the deadline, leaders and members with permission to edit events can still add participants. If no date is specified, registration closes when the event starts.</string>
@@ -722,16 +722,16 @@
   <string name="SYS_FIELD_INVALID_CHAR">De ingevoerde waarde in het veld #VAR1_BOLD# bevat ongeldige karakters.\n\nToegestane karakters zijn letters van \'a\' tot \'z\' en van \'A\' tot \'Z\', nummers vanaf 0 tot 9 en speciale karakters zoals  .-_+@ .</string>
   <string name="SYS_FIELD_INVALID_INPUT">Veld #VAR1_BOLD# bevat ongeldige invoer.</string>
   <string name="SYS_FIELD_INVALID_REGEX">De ingevoerde waarde in het veld #VAR1_BOLD# bevat tekens die niet overeenkomen met de corresponderende reguliere expressie van het veld. Controleer de veldbeschrijving voor welke karakters zijn toegestaan.</string>
-  <string name="SYS_FIELD_NUMERIC">In veld #VAR1_BOLD# zijn alleen nummers toegestaan.\nPas svp uw gegevens aan.</string>
+  <string name="SYS_FIELD_NUMERIC">In veld #VAR1_BOLD# zijn alleen cijfers toegestaan.\nPas uw gegevens aan.</string>
   <string name="SYS_FILE">Bestand</string>
   <string name="SYS_FILENAME_EMPTY">Er is geen bestandsnaam opgegeven!</string>
-  <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer svp de bestandsnaam.\n\n De volgende tekens zijn niet toegestaan: ? * ~ ; : \" | &lt; &gt;</string>
+  <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer de bestandsnaam.\n\nDe volgende tekens zijn niet toegestaan: ? * ~ ; : \" | &lt; &gt;</string>
   <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nUpdate uw Admidio-bestanden op de server #VAR3# met de meer recente Admidio-versie #VAR4#.</string>
-  <string name="SYS_FILES_UPLOAD_DESC">Selecteer svp alle bestanden die u naar de map #VAR1_BOLD# wilt uploaden.</string>
+  <string name="SYS_FILES_UPLOAD_DESC">Selecteer alle bestanden die u naar de map #VAR1_BOLD# wilt uploaden.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Niet alle bestanden werden succesvol geüpload.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle bestanden werden succesvol geüpload.\n\nDit venster kan nu gesloten worden.</string>
   <string name="SYS_FILE_CREATED_TITLE">A new file was uploaded at #VAR1#</string>
-  <string name="SYS_FILE_EXIST">Bestand #VAR1# bestaat al!\n\nKies svp andere bestandsnaam.</string>
+  <string name="SYS_FILE_EXIST">Bestand #VAR1# bestaat al!\n\nKies een andere bestandsnaam.</string>
   <string name="SYS_FILE_EXTENSION_INVALID">Type bestand is niet toegestaan op deze server.</string>
   <string name="SYS_FILE_NAME_RULES">Bestandsnaam moet een indicatie van de inhoud geven. Bestandsnaam is van invloed op de volgorde in het overzicht. In een map waarin bijvoorbeeld notulen worden opgeslagen, moeten de bestandsnamen beginnen met de datum (jjjj-mm-dd).</string>
   <string name="SYS_FILE_NOT_CREATED">File #VAR1_BOLD# could not be created.</string>
@@ -748,17 +748,17 @@
   <string name="SYS_FIRSTNAME_LASTNAME">Voornaam en achternaam</string>
   <string name="SYS_FIRST_LINE_COLUMN_NAME">Eerste regel bevat naam van kolom</string>
   <string name="SYS_FOLDER">Map</string>
-  <string name="SYS_FOLDER_EXISTS">Map #VAR1# bestaat al!\n\nKies svp andere naam.</string>
+  <string name="SYS_FOLDER_EXISTS">Map #VAR1# bestaat al!\n\nKies een andere naam.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Folder name is missing!</string>
   <string name="SYS_FOLDER_NAME_INVALID">The selected folder name #VAR1_BOLD# contains invalid characters. Please check the folder name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt; / \</string>
-  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een #VAR2#beheerder#VAR3# om de schrijfrechten van de hoofdmap na te kijken.</string>
+  <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet worden aangemaakt.\n\nVraag een #VAR2#beheerder#VAR3# om de schrijfrechten van de hoofdmap te controleren.</string>
   <string name="SYS_FOLDER_NOT_EXISTS">De map is niet meer beschikbaar op de server. Het moet uit de database verwijderd worden.</string>
   <string name="SYS_FOLDER_NOT_FOUND">Map (ID #VAR1#) is niet gevonden.</string>
   <string name="SYS_FOLDER_NOT_WRITABLE">De map #VAR1_BOLD# heeft geen schrijfrechten. De vereiste rechten konden niet automatisch worden ingesteld. Geef de map #VAR1_BOLD# schrijfrechten (stel via FTP de bestandsrechten in op 0777 of drwxrwxrwx).</string>
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Er zijn geen documenten of bestanden beschikbaar voor bezoekers.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">U heeft geen toegang tot de geselecteerde map.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Foutmelding tijdens hernoemen van map #VAR1#.</string>
-  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet gemaakt worden.\n\nVraag svp hulp bij een #VAR2#beheerder#VAR3# om de schrijfrechten na te kijken (via FTP rechten veranderen naar 0777 of drwxrwxrwx).</string>
+  <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Map #VAR1_BOLD# kan niet worden aangemaakt.\n\nVraag een #VAR2#beheerder#VAR3# om de schrijfrechten te controleren (via FTP de rechten wijzigen naar 0777 of drwxrwxrwx).</string>
   <string name="SYS_FONT">Lettertype</string>
   <string name="SYS_FONT_SIZE">Font size</string>
   <string name="SYS_FORMAT">Formaat</string>
@@ -828,7 +828,7 @@
   <string name="SYS_INACTIVE_GROUPS_ROLES">Inactieve groepen en rollen</string>
   <string name="SYS_INFOBOX" description="A small html box that will show additional informations">Infoveld</string>
   <string name="SYS_INFORMATIONS">informatie</string>
-  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Vul svp de voor- en achternaam van het nieuwe lid in. Voordat het record wordt aangemaakt, wordt gecontroleerd of er al een persoon met dezelfde naam in de database staat.</string>
+  <string name="SYS_INPUT_FIRSTNAME_LASTNAME">Vul de voor- en achternaam van het nieuwe lid in. Voordat het record wordt aangemaakt, wordt gecontroleerd of er al een persoon met dezelfde naam in de database staat.</string>
   <string name="SYS_INSERT_COLUMN_LEFT">Insert column to the left</string>
   <string name="SYS_INSERT_COLUMN_RIGHT">Insert column to the right</string>
   <string name="SYS_INSERT_IMAGE">Insert image</string>
@@ -1037,7 +1037,7 @@
   <string name="SYS_LIST">Lijst</string>
   <string name="SYS_LIST_COLUMNS">List columns</string>
   <string name="SYS_LOCATION_PROFILE_PICTURES">Locatie waar profielfoto\'s opgeslagen worden</string>
-  <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Kies svp de locatie waar profielfoto\'s opgeslagen worden (in de database of in map adm_my_files). Wanneer dit wijzigt, zullen huidige foto\'s niet verplaatst worden naar de nieuwe locatie. (Standaard: database)</string>
+  <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Kies waar profielfoto\'s worden opgeslagen (in de database of in de map adm_my_files). Bij een wijziging worden bestaande foto\'s niet naar de nieuwe locatie verplaatst. (Standaard: database)</string>
   <string name="SYS_LOCKED">Geblokkeerd</string>
   <string name="SYS_LOCK_ALBUM">Album vergrendelen</string>
   <string name="SYS_LOCK_ALBUM_DESC">Leden en bezoekers kunnen gesloten albums niet inzien. U kunt bijvoorbeeld een album tijdelijk sluiten tijdens het uploaden van foto\'s.</string>
@@ -1047,7 +1047,7 @@
   <string name="SYS_LOGIN">Inloggen</string>
   <string name="SYS_LOGIN_CANCEL">Cancel</string>
   <string name="SYS_LOGIN_MAX_INVALID_LOGIN">U heeft meerdere keren binnen korte tijd geprobeerd in te loggen met een fout wachtwoord.\nUit veiligheidsoverwegingen is uw toegang 15 minuten geblokkeerd.</string>
-  <string name="SYS_LOGIN_NAME_EXIST">Deze gebruikersnaam bestaat al.\n\nKies svp een andere gebruikersnaam.</string>
+  <string name="SYS_LOGIN_NAME_EXIST">Deze gebruikersnaam bestaat al.\n\nKies een andere gebruikersnaam.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Uw account is nog niet geactiveerd.\n\nU wordt geinformeerd zodra u toegang heeft.</string>
   <string name="SYS_LOGIN_PROBLEMS">Inlog problemen</string>
   <string name="SYS_LOGIN_TO">Log in to #VAR1_BOLD#</string>
@@ -1195,15 +1195,15 @@
   <string name="SYS_NOT_EMPTY">Niet leeg</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not a member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">U bent geen lid van organisatie #VAR1#</string>
-  <string name="SYS_NOT_NUMERIC">Gelieve een geldig nummer te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
+  <string name="SYS_NOT_NUMERIC">Gebruik een geldig getal als voorwaarde voor het veld #VAR1_BOLD#.</string>
   <string name="SYS_NOT_REGISTERED">Niet geregistreerd</string>
   <string name="SYS_NOT_SET">Niet ingesteld</string>
-  <string name="SYS_NOT_VALID_DATE_FORMAT">Gelieve een geldig datum te gebruiken als voorwaarde voor het veld #VAR1_BOLD#.</string>
+  <string name="SYS_NOT_VALID_DATE_FORMAT">Gebruik een geldige datum als voorwaarde voor het veld #VAR1_BOLD#.</string>
   <string name="SYS_NO_ADDITIONAL_PERMISSIONS_SET">Geen bijkomstige rechten ingesteld</string>
   <string name="SYS_NO_ADDITIONAL_RIGHTS">Geen bijkomstige rechten</string>
   <string name="SYS_NO_DATA_FOUND">Er werden geen bestanden gevonden!</string>
   <string name="SYS_NO_DEFAULT_ROLE">De instelling #VAR1_BOLD# kan niet worden verwijderd omdat ten minste één rol als standaard toewijzing moet worden opgeslagen.</string>
-  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Het rolbeheer bevat geen standaard rol voor nieuwe gebruikers. Gelieve contact op te nemen met een beheerder die deze instelling kan aanpassen.</string>
+  <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Het rolbeheer bevat geen standaardrol voor nieuwe gebruikers. Neem contact op met een beheerder die deze instelling kan aanpassen.</string>
   <string name="SYS_NO_ENTRIES">Er zijn geen items beschikbaar.</string>
   <string name="SYS_NO_ENTRY">Gevraagde item bestaat niet in database.</string>
   <string name="SYS_NO_LEADER">Geen leider</string>
@@ -1266,7 +1266,7 @@
   <string name="SYS_PARAMETER1_AND_PARAMETER2" description="Two parameters are connected with an and">#VAR1# en #VAR2#</string>
   <string name="SYS_PARENT">Ouder</string>
   <string name="SYS_PARENT_ALBUM">Hoofdalbum</string>
-  <string name="SYS_PARENT_ALBUM_DESC">Een album kan onderdeel van een ander album zijn. Selecteer svp het hoofdalbum in de selectielijst. Als u het album op het hoogste niveau wilt weergeven, selecteer #VAR1_BOLD#.</string>
+  <string name="SYS_PARENT_ALBUM_DESC">Een album kan onderdeel zijn van een ander album. Selecteer het bovenliggende album in de lijst. Kies #VAR1_BOLD# als u het album op het hoogste niveau wilt weergeven.</string>
   <string name="SYS_PARENT_ORGANIZATION">Hoofdorganisatie</string>
   <string name="SYS_PARENT_ORGANIZATION_DESC">Bepaal hier de hoofdorganisatie. Hoofdorganisaties kunnen bijvoorbeeld evenementen en mededelingen aanmaken, die ook worden getoond in de geselecteerde (onderliggende) organisatie.</string>
   <string name="SYS_PARTICIPANTS">Leden</string>
@@ -1588,7 +1588,7 @@
   <string name="SYS_ROLE_PAST">Past role</string>
   <string name="SYS_ROLE_RIGHTS">Role rights</string>
   <string name="SYS_ROLE_SELECTION">Rolselectie</string>
-  <string name="SYS_ROLE_SELECT_RIGHT">U heeft geen toestemming om rol #VAR1# te selecteren.\nKies svp een andere rol.</string>
+  <string name="SYS_ROLE_SELECT_RIGHT">U hebt geen toestemming om rol #VAR1# te selecteren.\nKies een andere rol.</string>
   <string name="SYS_ROLE_TYPES">Roltypes</string>
   <string name="SYS_ROLE_WITHOUT_LEADER">Rol zonder leider</string>
   <string name="SYS_ROOM">Zaal</string>
@@ -1995,7 +1995,7 @@
   <string name="SYS_SYMMETRICAL">Symmetrisch</string>
   <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Login information for #organization_long_name#\n#content# Hello #user_first_name#,\n\nHere is your login information for #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThis password was generated automatically.\nPlease change it in your profile after logging in to #organization_homepage#.\n\nRegards,\nThe #organization_long_name# team</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Wachtwoord opnieuw instellen voor #organization_long_name#\n#content# Hallo #user_first_name#,\n\nWij hebben een verzoek ontvangen om uw wachtwoord opnieuw in te stellen op #organization_homepage#.\n\nAls het verzoek van u afkomstig is, kunt u de volgende link gebruiken om een nieuw wachtwoord in te stellen:\n#variable1#\n\nHartelijke groeten\nHet team van #organization_long_name#</string>
-  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registratie bij #organization_long_name# geweigerd.\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# werd afgewezen.\n\nRegistraties worden alleen geaccepteerd voor leden. Als u lid bent maar uw registratie werd toch geweigerd, is het mogelijk dat u niet werd herkend als lid.\nVoor meer info omtrent de weigering, gelieve contact op te nemen met de beheerder #administrator_email# van #organization_homepage#.\n\nHartelijke groeten,\nHet team van #organization_long_name#</string>
+  <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registratie bij #organization_long_name# geweigerd.\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# is afgewezen.\n\nRegistraties worden alleen geaccepteerd voor leden. Als u lid bent maar uw registratie toch is geweigerd, bent u mogelijk niet als lid herkend.\nVoor meer informatie over de weigering kunt u contact opnemen met de beheerder #administrator_email# van #organization_homepage#.\n\nMet vriendelijke groet,\nHet team van #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REGISTRATION_ADMINISTRATOR">#subject# Nieuwe registratie op de #organization_long_name# website\n#content# Een nieuwe gebruiker heeft zich geregistreerd op  #organization_homepage#.\n\nAchternaam: #user_last_name#\nVoornaam: #user_first_name#\nE-mailadres: #user_email#\n\n\nDit bericht is automatisch gegenereerd.</string>
   <string name="SYS_SYSMAIL_REGISTRATION_CONFIRMATION">#subject# Your registration with #organization_long_name#\n#content# Hello #user_first_name#,\n\nThank you for registering on our website, #organization_homepage#.\n\nTo complete your registration, please open this link: #variable1#\nYou will be redirected to our website, and your registration will be confirmed.\n\nWe will then review your registration. Within a few hours, you will receive an email letting you know whether it has been accepted or rejected. If accepted, you can log in with your credentials.\n\nBest regards,\nThe #organization_long_name# team</string>
   <string name="SYS_SYSMAIL_REGISTRATION_USER">#subject# Registratie voor #organization_long_name# bevestigd\n#content# Hallo #user_first_name#,\n\nUw registratie bij #organization_homepage# is goedgekeurd.\n\nU kunt nu inloggen met gebruikersnaam #user_login_name# en uw wachtwoord.\n\nAls u vragen heeft, neem gerust contact op met de beheerder via #administrator_email#.\n\nHartelijke groeten,\nHet team van #organization_long_name#</string>
@@ -2063,7 +2063,7 @@
   <string name="SYS_URL">URL</string>
   <string name="SYS_URL_INVALID_CHAR">De URL in veld #VAR1_BOLD# bevat ongeldige karakters.\n\nAlleen alfabetische karakters, umlauts, nummers 0-9 en speciale karakters .-+_:/#?= zijn toegestaan.</string>
   <string name="SYS_USERNAME">Gebruikersnaam</string>
-  <string name="SYS_USERNAME_DESCRIPTION">Middels deze gebruikersnaam kunt u inloggen.\n\nAls de gewenste gebruikersnaam niet meer beschikbaar is, probeer svp een alternatief zoals Andi78 of SteveT.</string>
+  <string name="SYS_USERNAME_DESCRIPTION">Met deze gebruikersnaam kunt u inloggen.\n\nAls de gewenste gebruikersnaam niet meer beschikbaar is, probeer dan een alternatief zoals Andi78 of SteveT.</string>
   <string name="SYS_USERNAME_OR_EMAIL">Gebruikersnaam of e-mailadres</string>
   <string name="SYS_USERNAME_WITH_TIMESTAMP">#VAR1# op #VAR2# om #VAR3#</string>
   <string name="SYS_USERS">Users</string>
@@ -2096,7 +2096,7 @@
   <string name="SYS_VENUE">Venue</string>
   <string name="SYS_VENUE_LINK">If enough information (city, street, location) about the venue is entered, a link or route can be created via Google Maps.</string>
   <string name="SYS_VERSION">Versie</string>
-  <string name="SYS_VERSION_TO_OLD">Uw huidige database versie is #VAR1#. Helaas kunt u met deze versie niet updaten naar #VAR2#.\n\nInstalleer svp eerst Admidio 4.1 en update dan naar Admidio #VAR2#.</string>
+  <string name="SYS_VERSION_TO_OLD">Uw huidige databaseversie is #VAR1#. Met deze versie kunt u helaas niet bijwerken naar #VAR2#.\n\nInstalleer eerst Admidio 4.1 en werk daarna bij naar Admidio #VAR2#.</string>
   <string name="SYS_VERY_LARGE">Very large</string>
   <string name="SYS_VIDEO_URL">YouTube or Vimeo URL</string>
   <string name="SYS_VIDEO_URL_INVALID">Please enter a valid YouTube or Vimeo URL.</string>
