@@ -1,0 +1,655 @@
+<?php
+
+namespace Admidio\Inventory\Service;
+
+use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
+use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\Reservation;
+use DateTimeInterface;
+
+/**
+ * Handles reservation lifecycle and availability checks for inventory items.
+ */
+class ReservationService
+{
+    private Database $database;
+
+    public function __construct(Database $database)
+    {
+        $this->database = $database;
+    }
+
+    /** Return the number of pending requests visible to reservation managers. */
+    public static function countPendingReservations(Database $database): int
+    {
+        global $gCurrentOrgId, $gCurrentUser, $gCurrentUserId;
+
+        if (!InventoryAccessService::canManageReservations()) {
+            return 0;
+        }
+
+        $keeperJoin = '';
+        $queryParameters = [];
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            $keeperJoin = '
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' AS keeper_data ON keeper_data.ind_ini_id = ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS keeper_field ON keeper_field.inf_id = keeper_data.ind_inf_id
+                    AND keeper_field.inf_name_intern = \'KEEPER\'
+                    AND (keeper_field.inf_org_id = ? OR keeper_field.inf_org_id IS NULL)';
+            $queryParameters[] = $gCurrentOrgId;
+        }
+        $queryParameters[] = $gCurrentOrgId;
+        $queryParameters[] = Reservation::STATUS_REQUESTED;
+        if (!$gCurrentUser->isAdministratorInventory()) {
+            $queryParameters[] = $gCurrentUserId;
+        }
+
+        return (int) $database->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_INVENTORY_RESERVATIONS . '
+             INNER JOIN ' . TBL_INVENTORY_ITEMS . ' ON ini_id = ivr_ini_id
+                    ' . $keeperJoin . '
+                   WHERE ini_org_id = ? AND ivr_status = ?'
+                    . (!$gCurrentUser->isAdministratorInventory() ? ' AND keeper_data.ind_value = ?' : ''),
+            $queryParameters,
+        )->fetchColumn();
+    }
+
+    /**
+     * Creates a request only when no confirmed reservation overlaps the requested period.
+     */
+    public function request(
+        int $itemId,
+        DateTimeInterface $begin,
+        DateTimeInterface $end,
+        string $guestName = '',
+        string $guestEmail = '',
+        ?int $eventId = null,
+        string $comment = '',
+    ): Reservation {
+        global $gCurrentUser, $gValidLogin, $gSettingsManager;
+
+        if (!InventoryAccessService::canRequestReservation()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        $this->assertValidPeriod($begin, $end);
+        if ($eventId !== null) {
+            $this->assertEventInCurrentOrganization($eventId);
+        }
+
+        return $this->withinReservationTransaction(function () use ($itemId, $begin, $end, $guestName, $guestEmail, $eventId, $comment, $gCurrentUser, $gSettingsManager, $gValidLogin): Reservation {
+            $item = $this->getItemInCurrentOrganization($itemId);
+            if ($item->isRetired()) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $this->lockItemForReservation($itemId);
+
+            if (!$this->isAvailable($itemId, $begin, $end)) {
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+            }
+            $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
+
+            if (!$gValidLogin && ($guestName === '' || $guestEmail === '')) {
+                throw new Exception('SYS_FIELD_EMPTY');
+            }
+
+            $reservation = new Reservation($this->database);
+            $reservation->setValue('ivr_ini_id', $itemId);
+            $reservation->setValue('ivr_dat_id', $eventId);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_guest_name', $gValidLogin ? null : $guestName);
+            $reservation->setValue('ivr_guest_email', $gValidLogin ? null : $guestEmail);
+            $reservation->setValue('ivr_comment', $comment);
+            $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_status', $isAutomatic ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->save();
+            (new ReservationNotificationService($this->database))->notifyCreated($reservation);
+            $this->refreshMenuBadge();
+
+            return $reservation;
+        });
+    }
+
+    /** Create exactly one follow-up request for the latest rejected or cancelled event reservation. */
+    public function requestAgainForEvent(int $itemId, int $eventId, DateTimeInterface $begin, DateTimeInterface $end): Reservation
+    {
+        global $gCurrentUser, $gSettingsManager, $gValidLogin;
+
+        if (!InventoryAccessService::canRequestReservation()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        $this->assertValidPeriod($begin, $end);
+        $this->assertEventInCurrentOrganization($eventId);
+
+        return $this->withinReservationTransaction(function () use ($itemId, $eventId, $begin, $end, $gCurrentUser, $gSettingsManager, $gValidLogin): Reservation {
+            $item = $this->getItemInCurrentOrganization($itemId);
+            if ($item->isRetired()) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            $this->lockItemForReservation($itemId);
+            $latestStatus = $this->database->queryPrepared(
+                'SELECT ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                  WHERE ivr_dat_id = ? AND ivr_ini_id = ?
+               ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC LIMIT 1 FOR UPDATE',
+                [$eventId, $itemId],
+            )->fetchColumn();
+            if (!in_array($latestStatus, [Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED], true)) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            if (!$this->isAvailable($itemId, $begin, $end)) {
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+            }
+
+            $reservation = new Reservation($this->database);
+            $reservation->setValue('ivr_ini_id', $itemId);
+            $reservation->setValue('ivr_dat_id', $eventId);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_status', $gSettingsManager->getString('inventory_reservation_approval') === 'automatic'
+                ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->save();
+            (new ReservationNotificationService($this->database))->notifyCreated($reservation);
+            $this->refreshMenuBadge();
+
+            return $reservation;
+        });
+    }
+
+    /** Approve a pending request after an availability re-check. */
+    public function approve(Reservation $reservation): void
+    {
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->getItemInCurrentOrganization($itemId);
+        if (!InventoryAccessService::canManageReservationItem($itemId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            if (!$this->isAvailable(
+                $itemId,
+                new \DateTimeImmutable((string) $reservation->getValue('ivr_begin', 'database')),
+                new \DateTimeImmutable((string) $reservation->getValue('ivr_end', 'database')),
+                (int) $reservation->getValue('ivr_id'),
+            )) {
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+            }
+
+            $this->transition($reservation, Reservation::STATUS_APPROVED);
+        });
+        $this->refreshMenuBadge();
+    }
+
+    /** Reject or cancel a reservation from the administrator queue. */
+    public function changeStatus(Reservation $reservation, string $status): void
+    {
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->getItemInCurrentOrganization($itemId);
+        if (!InventoryAccessService::canManageReservationItem($itemId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        if (!in_array($status, [Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED], true)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+        $this->withinReservationTransaction(function () use ($reservation, $itemId, $status): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->transition($reservation, $status);
+        });
+        $this->refreshMenuBadge();
+    }
+
+    /**
+     * Mark an approved reservation as physically handed over.
+     *
+     * @param bool $checkActiveBorrowing Set to false only after assertCanStartBorrowing() has
+     *                                   checked and locked the item in the same transaction.
+     */
+    public function startBorrowing(Reservation $reservation, bool $checkActiveBorrowing = true): void
+    {
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->getItemInCurrentOrganization($itemId);
+        if (!InventoryAccessService::canManageReservationItem($itemId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->withinReservationTransaction(function () use ($reservation, $itemId, $checkActiveBorrowing): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            if ($checkActiveBorrowing) {
+                $this->assertReservationCanBeBorrowed($reservation, $itemId);
+            }
+            $this->transition($reservation, Reservation::STATUS_BORROWED);
+        });
+    }
+
+    /**
+     * Lock and validate an approved reservation before its borrowing data is saved.
+     *
+     * Call this in the same transaction as saving the borrowing data so another active loan
+     * cannot be overwritten between this check and the status transition.
+     */
+    public function assertCanStartBorrowing(Reservation $reservation): void
+    {
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->getItemInCurrentOrganization($itemId);
+        if (!InventoryAccessService::canManageReservationItem($itemId)) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->assertReservationCanBeBorrowed($reservation, $itemId);
+        });
+    }
+
+    /** Mark a handed-over reservation as returned. */
+    public function finishBorrowing(Reservation $reservation): void
+    {
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->assertCanReturnItem($itemId);
+
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            if ($reservation->getValue('ivr_status') !== Reservation::STATUS_BORROWED) {
+                throw new Exception('SYS_INVALID_PAGE_VIEW');
+            }
+            if ($this->hasRecordedReturn($itemId)) {
+                $this->transition($reservation, Reservation::STATUS_RETURNED);
+            }
+        });
+    }
+
+    /**
+     * Complete the active reservation for an item returned through the regular inventory flow.
+     *
+     * The regular return form does not carry a reservation UUID. Resolving the borrowed
+     * reservation here keeps the physical loan and reservation lifecycle in one transaction.
+     */
+    public function finishBorrowingForItem(int $itemId): void
+    {
+        $this->assertCanReturnItem($itemId);
+
+        $this->withinReservationTransaction(function () use ($itemId): void {
+            $this->lockItemForReservation($itemId);
+            $reservationId = $this->database->queryPrepared(
+                'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                  WHERE ivr_ini_id = ? AND ivr_status = ?
+               ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC FOR UPDATE',
+                [$itemId, Reservation::STATUS_BORROWED],
+            )->fetchColumn();
+            if ($reservationId === false || !$this->hasRecordedReturn($itemId)) {
+                return;
+            }
+
+            $reservation = new Reservation($this->database, (int) $reservationId);
+            $this->transition($reservation, Reservation::STATUS_RETURNED);
+        });
+    }
+
+    /** Cancel an event's open requests and approvals, retaining history and physical loans. */
+    public function cancelEventReservations(int $eventId): void
+    {
+        $this->assertEventInCurrentOrganization($eventId);
+        $this->withinReservationTransaction(function () use ($eventId): void {
+            $reservations = $this->database->queryPrepared(
+                'SELECT ivr_id, ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+                 WHERE ivr_dat_id = ? AND ivr_status IN (?, ?) ORDER BY ivr_ini_id, ivr_id',
+                [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED],
+            )->fetchAll();
+            foreach ($reservations as $row) {
+                $this->lockItemForReservation((int) $row['ivr_ini_id']);
+                $reservation = new Reservation($this->database);
+                $reservation->setArray(['ivr_id' => (int) $row['ivr_id']]);
+                $this->refreshReservation($reservation);
+                if (in_array($reservation->getValue('ivr_status'), [Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED], true)) {
+                    $this->transition($reservation, Reservation::STATUS_CANCELLED);
+                }
+            }
+        });
+        $this->refreshMenuBadge();
+    }
+
+    /** Allow the signed-in requester to withdraw an open or approved reservation. */
+    public function withdraw(Reservation $reservation): void
+    {
+        global $gCurrentUser, $gValidLogin;
+
+        $this->getItemInCurrentOrganization((int) $reservation->getValue('ivr_ini_id'));
+        if (!$gValidLogin || (int) $reservation->getValue('ivr_usr_id') !== (int) $gCurrentUser->getValue('usr_id')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $itemId = (int) $reservation->getValue('ivr_ini_id');
+        $this->withinReservationTransaction(function () use ($reservation, $itemId): void {
+            $this->lockItemForReservation($itemId);
+            $this->refreshReservation($reservation);
+            $this->transition($reservation, Reservation::STATUS_CANCELLED);
+        });
+        $this->refreshMenuBadge();
+    }
+
+    /**
+     * Checks confirmed reservations.
+     * The end is exclusive, so a return and a new reservation may meet at the same instant.
+     */
+    public function isAvailable(int $itemId, DateTimeInterface $begin, DateTimeInterface $end, int $ignoreReservationId = 0): bool
+    {
+        $this->assertValidPeriod($begin, $end);
+        $this->getItemInCurrentOrganization($itemId);
+
+        // This must be a locking read. The item lock serializes requests, and this current read
+        // then sees an approved reservation that a preceding transaction committed while this
+        // request was waiting for that lock (not a stale REPEATABLE READ snapshot).
+        $conflict = $this->database->queryPrepared(
+            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_ini_id = ? AND ivr_status IN (?, ?) AND ivr_id <> ?
+                AND ivr_begin < ? AND ivr_end > ? FOR UPDATE',
+            [$itemId, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED, $ignoreReservationId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s')],
+        )->fetchColumn();
+
+        return $conflict === false;
+    }
+
+    /**
+     * Replace the reservation requests owned by one event.
+     *
+     * The event form uses the same approval workflow as the inventory request form: with
+     * manual approval, the reservations remain requested until an inventory administrator
+     * approves them. Call this inside the event save transaction.
+     *
+     * @param array<int,mixed> $itemIds
+     * @param bool $requireApproval Require a decision for new occurrences of a rescheduled series.
+     */
+    public function syncEventReservations(int $eventId, array $itemIds, DateTimeInterface $begin, DateTimeInterface $end, bool $requireApproval = false): void
+    {
+        global $gCurrentUser, $gSettingsManager, $gValidLogin;
+
+        // Disabling new requests must not leave old event approvals active after an edit.
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')) {
+            $this->cancelEventReservations($eventId);
+            return;
+        }
+        $this->assertEventInCurrentOrganization($eventId);
+        $itemIds = array_values(array_unique(array_filter(array_map('intval', $itemIds), static function (int $itemId): bool {
+            return $itemId > 0;
+        })));
+        // Empty selections still cancel existing reservations, but need no reservation period.
+        if ($itemIds !== []) {
+            $this->assertValidPeriod($begin, $end);
+        }
+        sort($itemIds, SORT_NUMERIC);
+        $isAutomatic = $gSettingsManager->getString('inventory_reservation_approval') === 'automatic';
+
+        // Include removed items in the same lock order. Their status may change to borrowed
+        // while an event edit waits, and an old snapshot must not cancel that physical loan.
+        $existingItemIds = $this->database->queryPrepared(
+            'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+             WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+            [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
+        )->fetchAll(\PDO::FETCH_COLUMN);
+        $lockedItemIds = array_unique(array_merge($itemIds, array_map('intval', $existingItemIds)));
+        sort($lockedItemIds, SORT_NUMERIC);
+        foreach ($lockedItemIds as $itemId) {
+            $this->lockItemForReservation($itemId);
+        }
+
+        foreach ($itemIds as $itemId) {
+            $item = $this->getItemInCurrentOrganization($itemId);
+            if ($item->isRetired()) {
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', [$item->readableName()]);
+            }
+            if (!$this->isAvailableForEvent($itemId, $begin, $end, $eventId)) {
+                throw new Exception('SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD', [$item->readableName()]);
+            }
+        }
+
+        $existingReservations = [];
+        $statement = $this->database->queryPrepared(
+            'SELECT ivr_id, ivr_ini_id, ivr_status FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?) FOR UPDATE',
+            [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
+        );
+        while ($existingReservation = $statement->fetch()) {
+            $existingReservations[(int) $existingReservation['ivr_ini_id']] = [
+                'id' => (int) $existingReservation['ivr_id'],
+                'status' => (string) $existingReservation['ivr_status'],
+            ];
+        }
+
+        // Updating an existing event's periods must remain possible without request rights,
+        // but adding items (including previously rejected/cancelled requests) requires them.
+        if (count(array_diff($itemIds, array_keys($existingReservations))) > 0
+            && (!$gSettingsManager->getBool('inventory_reservations_events_enabled')
+                || !InventoryAccessService::canRequestReservation())) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        foreach ($itemIds as $itemId) {
+            $requiresApproval = $requireApproval;
+            if (isset($existingReservations[$itemId])) {
+                $reservation = new Reservation($this->database, $existingReservations[$itemId]['id']);
+                $this->refreshReservation($reservation);
+                unset($existingReservations[$itemId]);
+                $periodChanged = $reservation->getValue('ivr_begin', 'database') !== $begin->format('Y-m-d H:i:s')
+                    || $reservation->getValue('ivr_end', 'database') !== $end->format('Y-m-d H:i:s');
+                if ($reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED || !$periodChanged) {
+                    $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+                    $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+                    $reservation->save();
+                    continue;
+                }
+
+                // Approval belongs to the original period. Retain it as cancelled history and
+                // request a new decision, even when new reservations are normally auto-approved.
+                $this->transition($reservation, Reservation::STATUS_CANCELLED);
+                $requiresApproval = true;
+            }
+
+            $reservation = new Reservation($this->database);
+            $reservation->setValue('ivr_ini_id', $itemId);
+            $reservation->setValue('ivr_dat_id', $eventId);
+            $reservation->setValue('ivr_usr_id', $gValidLogin ? (int) $gCurrentUser->getValue('usr_id') : null);
+            $reservation->setValue('ivr_begin', $begin->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_end', $end->format('Y-m-d H:i:s'));
+            $reservation->setValue('ivr_status', $isAutomatic && !$requiresApproval ? Reservation::STATUS_APPROVED : Reservation::STATUS_REQUESTED);
+            $reservation->save();
+            (new ReservationNotificationService($this->database))->notifyCreated($reservation);
+        }
+
+        foreach ($existingReservations as $existingReservation) {
+            $reservation = new Reservation($this->database, $existingReservation['id']);
+            $this->refreshReservation($reservation);
+            if (in_array($reservation->getValue('ivr_status'), [Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED], true)) {
+                $this->transition($reservation, Reservation::STATUS_CANCELLED);
+            }
+        }
+        $this->refreshMenuBadge();
+    }
+
+    private function isAvailableForEvent(int $itemId, DateTimeInterface $begin, DateTimeInterface $end, int $eventId): bool
+    {
+        return $this->database->queryPrepared(
+            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_ini_id = ? AND ivr_status IN (?, ?) AND (ivr_dat_id IS NULL OR ivr_dat_id <> ?)
+                AND ivr_begin < ? AND ivr_end > ? FOR UPDATE',
+            [$itemId, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED, $eventId, $end->format('Y-m-d H:i:s'), $begin->format('Y-m-d H:i:s')],
+        )->fetchColumn() === false;
+    }
+
+    private function assertValidPeriod(DateTimeInterface $begin, DateTimeInterface $end): void
+    {
+        if ($begin >= $end) {
+            throw new Exception('SYS_DATE_END_BEFORE_BEGIN');
+        }
+    }
+
+    /** Serialize reservation changes for one inventory item. */
+    private function lockItemForReservation(int $itemId): void
+    {
+        $this->database->queryPrepared(
+            'SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE',
+            [$itemId],
+        );
+    }
+
+    /** Reject a handover while another physical borrowing record is still open. */
+    private function assertReservationCanBeBorrowed(Reservation $reservation, int $itemId): void
+    {
+        if ($reservation->getValue('ivr_status') !== Reservation::STATUS_APPROVED) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $activeBorrowing = $this->database->queryPrepared(
+            'SELECT inb_id FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+              WHERE inb_ini_id = ? AND inb_last_receiver IS NOT NULL AND inb_last_receiver <> \'\'
+                AND inb_borrow_date IS NOT NULL AND inb_return_date IS NULL FOR UPDATE',
+            [$itemId],
+        )->fetchColumn();
+        if ($activeBorrowing !== false) {
+            throw new Exception('SYS_ITEM_NOT_AVAILABLE');
+        }
+    }
+
+    /** Only a saved, completed physical loan can release a borrowed reservation. */
+    private function hasRecordedReturn(int $itemId): bool
+    {
+        $returnDate = $this->database->queryPrepared(
+            'SELECT inb_return_date FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
+             WHERE inb_ini_id = ? ORDER BY inb_id DESC LIMIT 1 FOR UPDATE',
+            [$itemId],
+        )->fetchColumn();
+
+        return is_string($returnDate) && $returnDate !== '' && $returnDate <= DATETIME_NOW;
+    }
+
+    /** Physical returns use item edit rights, independently of reservation management settings. */
+    private function assertCanReturnItem(int $itemId): void
+    {
+        $item = $this->getItemInCurrentOrganization($itemId);
+        if (!(new ItemService($this->database, (string) $item->getValue('ini_uuid')))->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+    }
+
+    /** Reload a reservation after acquiring its item lock to avoid acting on stale lifecycle state. */
+    private function refreshReservation(Reservation $reservation): void
+    {
+        $reservationId = (int) $reservation->getValue('ivr_id');
+        $row = $this->database->queryPrepared(
+            'SELECT * FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_id = ? FOR UPDATE',
+            [$reservationId],
+        )->fetch();
+        if ($reservationId <= 0 || $row === false) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+        $reservation->setArray($row);
+    }
+
+    /** Run a reservation mutation in a transaction without disturbing an enclosing event save. */
+    private function withinReservationTransaction(callable $callback): mixed
+    {
+        $ownsTransaction = !$this->database->isInTransaction();
+        if ($ownsTransaction) {
+            $this->database->startTransaction();
+        }
+
+        try {
+            $result = $callback();
+            if ($ownsTransaction) {
+                $this->database->endTransaction();
+            }
+            return $result;
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->database->rollback();
+            }
+            throw $exception;
+        }
+    }
+
+    /**
+     * Read an inventory item and reject records outside the active organization.
+     * Item::readDataById() deliberately bypasses its generic organization guard, so service
+     * entry points must apply the established inventory organization rule themselves.
+     */
+    private function getItemInCurrentOrganization(int $itemId): Item
+    {
+        global $gCurrentOrgId;
+
+        $organizationId = $this->database->queryPrepared(
+            'SELECT ini_org_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
+            [$itemId],
+        )->fetchColumn();
+        if ($organizationId === false
+            || ((int) $organizationId > 0 && (int) $organizationId !== (int) $gCurrentOrgId)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $item = new Item($this->database, null, $itemId);
+        if (!$item->readDataById($itemId)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        return $item;
+    }
+
+    /** Accept local events and the global calendars editable by parent organizations. */
+    private function assertEventInCurrentOrganization(int $eventId): void
+    {
+        global $gCurrentOrgId, $gCurrentOrganization;
+
+        $organizationCondition = $gCurrentOrganization->isChildOrganization()
+            ? 'cat_org_id = ?'
+            : '(cat_org_id = ? OR cat_org_id IS NULL)';
+
+        $eventExists = (int) $this->database->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_EVENTS . '
+             INNER JOIN ' . TBL_CATEGORIES . ' ON cat_id = dat_cat_id
+             WHERE dat_id = ? AND ' . $organizationCondition,
+            [$eventId, $gCurrentOrgId],
+        )->fetchColumn();
+        if ($eventExists !== 1) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+    }
+
+    /** Persist only transitions that belong to the reservation lifecycle. */
+    private function transition(Reservation $reservation, string $targetStatus): void
+    {
+        $allowedTransitions = [
+            Reservation::STATUS_REQUESTED => [
+                Reservation::STATUS_APPROVED,
+                Reservation::STATUS_REJECTED,
+                Reservation::STATUS_CANCELLED,
+            ],
+            Reservation::STATUS_APPROVED => [
+                Reservation::STATUS_BORROWED,
+                Reservation::STATUS_CANCELLED,
+            ],
+            Reservation::STATUS_BORROWED => [Reservation::STATUS_RETURNED],
+        ];
+        $currentStatus = (string) $reservation->getValue('ivr_status');
+        if (!in_array($targetStatus, $allowedTransitions[$currentStatus] ?? [], true)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation->setValue('ivr_status', $targetStatus);
+        $reservation->save();
+        (new ReservationNotificationService($this->database))->notifyStatusChanged($reservation);
+    }
+
+    /** Ensure the session-cached main menu reloads its pending reservation badge. */
+    private function refreshMenuBadge(): void
+    {
+        global $gMenu;
+
+        if (isset($gMenu)) {
+            $gMenu->initialize();
+        }
+    }
+}

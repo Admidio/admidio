@@ -28,6 +28,7 @@ DROP TABLE IF EXISTS %PREFIX%_guestbook                         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_fields                  CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_field_select_options    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_data               CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_inventory_reservations            CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_items                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_inventory_item_borrow_data        CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_log_changes                       CASCADE;
