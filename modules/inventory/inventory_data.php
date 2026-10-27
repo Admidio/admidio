@@ -119,7 +119,7 @@ try {
     // The borrow table has a unique index on inb_ini_id, so the join keeps one row per item.
     $borrowLatestJoin = ' LEFT JOIN ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' lb ON lb.inb_ini_id = i.ini_id';
 
-    $sqlMain = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ' . $baseFromTables . $borrowLatestJoin . $baseWhere;
+    $sqlSelect = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ';
 
     $queryParams = $baseParams;
     $searchWhere = '';
@@ -138,16 +138,24 @@ try {
         }
     }
 
-    $sqlMain .= $searchWhere;
-
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';
     $orderColumns = array();
     $numericOrderColumns = array();
+    $sortJoins = array();
+    $requestedOrderColumns = array();
+    foreach (isset($_GET['order']) && is_array($_GET['order']) ? $_GET['order'] : [] as $order) {
+        if (isset($order['column']) && is_numeric($order['column'])) {
+            $requestedOrderColumns[(int) $order['column']] = true;
+        }
+    }
     // When using the joined latest-borrow table, its columns are projected as inb_borrow_date etc.
     foreach ($headerColumns as $idx => $colName) {
         // default: no ordering
         $orderColumns[$idx] = '';
+        if (!isset($requestedOrderColumns[$idx])) {
+            continue;
+        }
         // use case-insensitive matching for special column names
         $colUpper = strtoupper((string)$colName);
         if ($anonymizeUserNames && in_array($colUpper, ['KEEPER', 'LAST_RECEIVER'], true)) {
@@ -160,7 +168,7 @@ try {
                 // not sortable
                 break;
             case 'CATEGORY':
-                $orderColumns[$idx] = '(SELECT cat_name FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ini_cat_id)';
+                $orderColumns[$idx] = '(SELECT cat_name FROM ' . TBL_CATEGORIES . ' WHERE cat_id = i.ini_cat_id)';
                 break;
             case 'STATUS':
                 $orderColumns[$idx] = 'ini_status';
@@ -189,7 +197,6 @@ try {
                 }
 
                 if ($infId > 0) {
-                    // base subselect returning the raw stored value
                     // If this is a borrow-related field (LAST_RECEIVER, BORROW_DATE, RETURN_DATE)
                     // the values are stored in the borrow table, not in inventory_item_data.
                     $colUpperName = strtoupper((string)$colName);
@@ -205,11 +212,14 @@ try {
                             case 'LAST_RECEIVER':
                                 $subSel = 'lb.inb_last_receiver';
                                 break;
-                            default:
-                                // fallback to item_data
-                                $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = i.ini_id AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
-                                break;
                         }
+                    } elseif (in_array($infType, array('NUMBER', 'DECIMAL'), true)) {
+                        // The unique (ind_inf_id, ind_ini_id) index keeps one row per item.
+                        // Numeric ordering uses the value more than once; read it with one join.
+                        $sortAlias = 'sort_data_' . $idx;
+                        $sortJoins[] = ' LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ' . $sortAlias
+                            . ' ON ' . $sortAlias . '.ind_ini_id = i.ini_id AND ' . $sortAlias . '.ind_inf_id = ' . $infId;
+                        $subSel = $sortAlias . '.ind_value';
                     } else {
                         $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = i.ini_id AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
                     }
@@ -263,6 +273,7 @@ try {
     }
 
     // final SQL
+    $sqlMain = $sqlSelect . $baseFromTables . $borrowLatestJoin . implode('', $sortJoins) . $baseWhere . $searchWhere;
     $sql = $sqlMain . $orderCondition . $limitCondition;
 
     $statement = $gDb->queryPrepared($sql, $queryParams);

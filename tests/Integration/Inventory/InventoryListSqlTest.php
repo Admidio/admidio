@@ -12,6 +12,9 @@ class InventoryListSqlTest extends DatabaseTestCase
     {
         return [
             'plain list' => [[], ['Camera', 'Camera spare', 'Tripod']],
+            'default ordering without sort joins' => [['defaultOrder' => true], ['Camera', 'Camera spare', 'Tripod']],
+            'category ordering with a secondary field' => [['orderFields' => [['CATEGORY', 'asc'], ['ITEMNAME', 'desc']]], ['Tripod', 'Camera spare', 'Camera']],
+            'numeric ordering with ties and a secondary field' => [['sameNumber' => true, 'orderFields' => [['AUDIT_QUANTITY', 'asc'], ['ITEMNAME', 'desc']]], ['Tripod', 'Camera spare', 'Camera']],
             'strict grouping' => [['strict' => true], ['Camera', 'Camera spare', 'Tripod']],
             'search with strict SQL mode' => [['strict' => true, 'search' => 'camera'], ['Camera', 'Camera spare']],
             'UTF-8 connection' => [['charset' => 'utf8'], ['Camera', 'Camera spare', 'Tripod']],

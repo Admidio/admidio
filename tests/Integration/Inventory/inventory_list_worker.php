@@ -71,6 +71,9 @@ foreach (['Camera' => '10', 'Camera spare' => '2', 'Tripod' => '20'] as $name =>
     $items->setValue('ITEMNAME', $name);
     $items->setValue('KEEPER', (string) $gCurrentUserId);
     $numericValue = ($request['scientificNumber'] ?? false) ? $quantity . 'e0' : $quantity;
+    if ($request['sameNumber'] ?? false) {
+        $numericValue = '10';
+    }
     if ($name === 'Camera' && ($request['missingNumber'] ?? false)) {
         $numericValue = '';
     }
@@ -98,11 +101,22 @@ $_GET = [
     'items_filter_last_receiver' => $request['filterReceiver'] ?? '',
 ];
 $column = 1; // Inventory administrators have a selection checkbox before the item fields.
+$fieldColumns = [];
 foreach ($items->getItemFields() as $itemField) {
+    $fieldColumns[$itemField->getValue('inf_name_intern')] = $column;
     if ($itemField->getValue('inf_name_intern') === ($request['orderField'] ?? 'ITEMNAME')) {
         $_GET['order'] = [['column' => $column, 'dir' => $request['dir'] ?? 'asc']];
     }
     ++$column;
+}
+if (isset($request['orderFields'])) {
+    $_GET['order'] = [];
+    foreach ($request['orderFields'] as [$name, $direction]) {
+        $_GET['order'][] = ['column' => $fieldColumns[$name], 'dir' => $direction];
+    }
+}
+if ($request['defaultOrder'] ?? false) {
+    unset($_GET['order']);
 }
 
 if (DB_TYPE === Database::PDO_ENGINE_MYSQL) {
