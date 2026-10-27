@@ -383,10 +383,11 @@ class ItemsData
      * Reads the items out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
      *
+     * @param string $search Optional search whose words may match different stored fields.
      * @return void
      * @throws Exception
      */
-    public function readItems(): void
+    public function readItems(string $search = ''): void
     {
         // first initialize existing data
         $this->mItems = array();
@@ -406,17 +407,41 @@ class ItemsData
             $sqlWhereCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
+        $searchCondition = $this->getSqlSearchCondition($search, TBL_INVENTORY_ITEMS . '.ini_id');
         $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
                     ON ind_ini_id = ini_id
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
-                ' . $sqlWhereCondition . ';';
-        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
+                ' . $sqlWhereCondition . $searchCondition['sql'] . ';';
+        $statement = $this->mDb->queryPrepared($sql, array_merge([$this->organizationId], $searchCondition['params']));
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
         }
+    }
+
+    /**
+     * Build the same word search for the paginated list, exports and print views.
+     * Every word must occur in a stored item field, using the database's case-insensitive
+     * search operator. Commas and hyphens retain their ordinary meaning within a word.
+     *
+     * @param string $search Search text as validated by the request helper.
+     * @param string $itemIdColumn Trusted, qualified outer item ID column; never request input.
+     * @return array{sql:string,params:array<int,string>}
+     */
+    public function getSqlSearchCondition(string $search, string $itemIdColumn): array
+    {
+        $sql = '';
+        $params = [];
+        $operator = $this->mDb->getEngine() === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
+        foreach (preg_split('/\s+/', trim($search), -1, PREG_SPLIT_NO_EMPTY) as $word) {
+            $sql .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
+                . ' WHERE search_data.ind_ini_id = ' . $itemIdColumn . ' AND search_data.ind_value ' . $operator . ' ?)';
+            $params[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
+        }
+
+        return ['sql' => $sql, 'params' => $params];
     }
 
     /**

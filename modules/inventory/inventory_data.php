@@ -121,22 +121,9 @@ try {
 
     $sqlSelect = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ';
 
-    $queryParams = $baseParams;
-    $searchWhere = '';
-
-    // Each search word may match a different field of the same item.
-    if ($getSearch !== '') {
-        $searchWords = preg_split('/\s+/', trim($getSearch));
-        foreach ($searchWords as $word) {
-            if ($word === '') {
-                continue;
-            }
-            $searchOperator = DB_TYPE === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
-            $searchWhere .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
-                . ' WHERE search_data.ind_ini_id = i.ini_id AND search_data.ind_value ' . $searchOperator . ' ?)';
-            $queryParams[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
-        }
-    }
+    $searchCondition = $itemsData->getSqlSearchCondition($getSearch, 'i.ini_id');
+    $searchWhere = $searchCondition['sql'];
+    $queryParams = array_merge($baseParams, $searchCondition['params']);
 
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';

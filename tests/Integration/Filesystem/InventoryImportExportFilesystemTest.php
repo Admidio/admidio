@@ -6,6 +6,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Language;
 use Admidio\Inventory\Service\ExportService;
 use Admidio\Inventory\Service\ImportService;
+use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Tests\Support\FilesystemTestCase;
 use Admidio\UI\Presenter\InventoryPresenter;
@@ -24,6 +25,7 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
         foreach (['csv-oo', 'csv-ms', 'xlsx', 'ods', 'pdf', 'pdfl'] as $mode) {
             $cases[$mode . ' matching search'] = [$mode, 'kamera', ['Kamera ÄÖÜ']];
             $cases[$mode . ' empty search result'] = [$mode, 'missing', []];
+            $cases[$mode . ' words in different fields'] = [$mode, 'kamera optics', ['Kamera ÄÖÜ']];
         }
         return $cases;
     }
@@ -76,14 +78,18 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
     {
         return [
             'case insensitive field search' => ['kamera', ['Kamera ÄÖÜ']],
-            'comma separated alternatives' => ['kamera,stativ', ['Kamera ÄÖÜ', 'Stativ']],
-            'excluded term' => ['kamera,-ÄÖÜ', []],
+            'words in different fields' => ['kamera optics', ['Kamera ÄÖÜ']],
+            'literal comma' => ['kamera,stativ', []],
+            'literal minus' => ['kamera -ÄÖÜ', []],
+            'hyphenated term' => ['tripod-kit', ['Stativ']],
+            'case insensitive umlauts' => ['äöü', ['Kamera ÄÖÜ']],
+            'whitespace only' => ['   ', ['Kamera ÄÖÜ', 'Stativ']],
             'no matches' => ['missing', []],
         ];
     }
 
     /** @dataProvider printSearches */
-    public function testPrintSearchFiltersVisibleFieldValues(string $search, array $expectedNames): void
+    public function testPrintSearchFiltersStoredFieldValues(string $search, array $expectedNames): void
     {
         $this->createExportItems();
         $previousGet = $_GET;
@@ -106,12 +112,19 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
             'SELECT cat_uuid FROM ' . TBL_CATEGORIES . ' WHERE cat_type = ? AND cat_org_id = ? LIMIT 1',
             ['IVT', $gCurrentOrgId]
         )->fetchColumn();
+        $field = new ItemField($this->getDatabase());
+        $field->setValue('inf_org_id', $gCurrentOrgId);
+        $field->setValue('inf_name', 'Export description');
+        $field->setValue('inf_type', 'TEXT');
+        $field->save();
+        $fieldName = $field->getValue('inf_name_intern');
         $items = new ItemsData($this->getDatabase(), $gCurrentOrgId);
         foreach (['Kamera ÄÖÜ', 'Stativ'] as $name) {
             $items->readItemData('');
             $items->createNewItem($categoryUuid);
             $items->setValue('ITEMNAME', $name);
             $items->setValue('KEEPER', (string) $gCurrentUserId);
+            $items->setValue($fieldName, $name === 'Stativ' ? 'tripod-kit' : 'optics');
             $items->saveItemData();
         }
     }

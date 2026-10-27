@@ -65,6 +65,37 @@ class InventoryListSqlTest extends DatabaseTestCase
         $this->assertSame($plain['testQueryCount'], $whitespace['testQueryCount']);
     }
 
+    public static function sharedSearches(): array
+    {
+        return [
+            'multiple words in different fields' => ['camera optics', ['Camera', 'Camera spare']],
+            'multiple words in one field' => ['camera spare', ['Camera spare']],
+            'mixed whitespace' => ["  CAMERA\toptics\n", ['Camera', 'Camera spare']],
+            'whitespace only' => ['   ', ['Camera', 'Camera spare', 'Tripod']],
+            'literal comma' => ['optics,kit', ['Camera']],
+            'comma is not an alternative operator' => ['camera,tripod', []],
+            'hyphen in a word' => ['camera-kit', ['Camera']],
+            'minus is not an exclusion operator' => ['camera -spare', []],
+            'case insensitive umlauts' => ['äöü', ['Camera']],
+            'apostrophe' => ["O'Reilly", ['Camera']],
+            'SQL pattern characters' => ['50% Model_A', ['Camera']],
+            'long field contents' => ['longneedle', ['Tripod']],
+            'no matches' => ['missing', []],
+        ];
+    }
+
+    /** @dataProvider sharedSearches */
+    public function testListExportAndPrintUseTheSameSearch(string $search, array $expectedNames): void
+    {
+        $result = $this->requestList(['search' => $search, 'compareExports' => true]);
+        $names = array_map(static fn(array $row): string => html_entity_decode(strip_tags($row[1]), ENT_QUOTES | ENT_HTML5), $result['data']);
+        sort($names);
+        $this->assertSame($expectedNames, $names);
+        foreach ($result['testExportNames'] as $mode => $exportNames) {
+            $this->assertSame($names, $exportNames, $mode);
+        }
+    }
+
     private function requestList(array $request): array
     {
         $root = tempnam(sys_get_temp_dir(), 'admidio-inventory-list-');

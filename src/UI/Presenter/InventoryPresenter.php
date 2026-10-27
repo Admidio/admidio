@@ -1010,7 +1010,7 @@ class InventoryPresenter extends PagePresenter
 
         // The paginated HTML list only needs field definitions. Load all items for exports
         // and print views here, when their rows are actually requested.
-        $this->itemsData->readItems();
+        $this->itemsData->readItems($this->getFilterString);
 
         // Initialize the result array
         $preparedData = array(
@@ -1216,41 +1216,9 @@ class InventoryPresenter extends PagePresenter
                 }
             }
 
-            // Filter rows based on filter string
-            $showRow = true;
-
-            if ($mode !== 'html') {
-                $showRow = ($this->getFilterString === '');
-                if ($this->getFilterString !== '') {
-                    $showRowException = false;
-                    $filterArray = array_map('trim', explode(',', $this->getFilterString));
-                    $filterColumnValues = array_map(function ($value) {
-                        $parts = explode(',', $value);
-                        return count($parts) > 1 ? implode(',', array_slice($parts, 0, 2)) : $value;
-                    }, $rowValues['data']);
-
-                    foreach ($filterArray as $filterString) {
-                        if (str_contains($filterString, '-')) {
-                            $cleanFilter = substr($filterString, 1);
-                            if (stripos(implode('', $filterColumnValues), $cleanFilter) !== false) {
-                                $showRowException = true;
-                            }
-                        }
-                        if (stripos(implode(' ', $filterColumnValues), $filterString) !== false) {
-                            $showRow = true;
-                        }
-                    }
-                    if ($showRowException) {
-                        $showRow = false;
-                    }
-                }
-            }
-
-            if ($showRow) {
-                $rows[] = $rowValues;
-                if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                    $strikethroughs[] = $strikethrough;
-                }
+            $rows[] = $rowValues;
+            if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                $strikethroughs[] = $strikethrough;
             }
         }
 

@@ -79,7 +79,11 @@ foreach (['Camera' => '10', 'Camera spare' => '2', 'Tripod' => '20'] as $name =>
     }
     $items->setValue($quantityField, $name === 'Tripod' && ($request['invalidNumber'] ?? false) ? 'not-a-number' : $numericValue);
     $items->setValue($decimalField, ['Camera' => '1.000002', 'Camera spare' => '1.000001', 'Tripod' => '1.000003'][$name]);
-    $items->setValue($descriptionField, $name === 'Tripod' ? str_repeat('x', 2000) . ' longneedle' : 'optics');
+    $description = $name === 'Tripod' ? str_repeat('x', 2000) . ' longneedle' : 'optics';
+    if ($name === 'Camera') {
+        $description .= ",kit camera-kit ÄÖÜ O'Reilly 50% Model_A";
+    }
+    $items->setValue($descriptionField, $description);
     $items->setValue('LAST_RECEIVER', $name === 'Camera' ? (string) $gCurrentUserId : $name);
     $items->setValue('BORROW_DATE', '2020-01-01');
     $items->saveItemData();
@@ -131,6 +135,15 @@ ob_start();
 require $argv[2];
 $result = json_decode(ob_get_clean(), true, 512, JSON_THROW_ON_ERROR);
 $result['testQueryCount'] = $gLogger->getQueryCount();
+if ($request['compareExports'] ?? false) {
+    $_GET['items_filter_string'] = $request['search'] ?? '';
+    foreach (['csv', 'xlsx', 'ods', 'pdf', 'print'] as $mode) {
+        $data = (new InventoryPresenter(false))->prepareData($mode);
+        $names = array_map(static fn(array $row): string => $row['data'][0], $data['rows']);
+        sort($names);
+        $result['testExportNames'][$mode] = $names;
+    }
+}
 echo json_encode($result, JSON_THROW_ON_ERROR);
 
 $gDb->rollback();
