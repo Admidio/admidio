@@ -143,6 +143,7 @@ try {
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';
     $orderColumns = array();
+    $numericOrderColumns = array();
     // When using the joined latest-borrow table, its columns are projected as inb_borrow_date etc.
     foreach ($headerColumns as $idx => $colName) {
         // default: no ordering
@@ -214,11 +215,14 @@ try {
                     }
                     // type-aware ordering: numbers should be cast to numeric types so DB sorts them correctly
                     if (in_array($infType, array('NUMBER', 'DECIMAL'), true)) {
-                        if (DB_TYPE === Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL) {
-                            $orderColumns[$idx] = "(CAST(" . $subSel . " AS NUMERIC))";
-                        } else {
-                            $orderColumns[$idx] = "(CAST(" . $subSel . " AS DECIMAL(20,4)))";
-                        }
+                        // Changing a text field to a numeric field can leave non-numeric values.
+                        // Only cast numbers, and avoid rounding to four decimal places on MySQL/MariaDB.
+                        $numericOperator = DB_TYPE === Database::PDO_ENGINE_PGSQL ? '~' : 'REGEXP';
+                        $numericType = DB_TYPE === Database::PDO_ENGINE_PGSQL ? 'NUMERIC' : 'DECIMAL(65,30)';
+                        $numericPattern = "'^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?$'";
+                        $orderColumns[$idx] = 'CASE WHEN TRIM(' . $subSel . ') ' . $numericOperator . ' ' . $numericPattern
+                            . ' THEN CAST(' . $subSel . ' AS ' . $numericType . ') ELSE NULL END';
+                        $numericOrderColumns[$idx] = true;
                     } else {
                         // default:ORDER BY raw string value
                         $orderColumns[$idx] = $subSel;
@@ -235,10 +239,13 @@ try {
                 $col = (int)$order['column'];
                 $dir = (isset($order['dir']) && strtolower($order['dir']) === 'asc') ? 'ASC' : 'DESC';
                 if (array_key_exists($col, $orderColumns) && $orderColumns[$col] !== '') {
+                    // MariaDB/MySQL and PostgreSQL have different default ordering of NULLs.
+                    $columnOrder = isset($numericOrderColumns[$col]) ? '(' . $orderColumns[$col] . ' IS NULL) ASC, ' : '';
+                    $columnOrder .= $orderColumns[$col] . ' ' . $dir;
                     if ($orderCondition === '') {
-                        $orderCondition = ' ORDER BY ' . $orderColumns[$col] . ' ' . $dir;
+                        $orderCondition = ' ORDER BY ' . $columnOrder;
                     } else {
-                        $orderCondition .= ', ' . $orderColumns[$col] . ' ' . $dir;
+                        $orderCondition .= ', ' . $columnOrder;
                     }
                 }
             }
