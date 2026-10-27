@@ -726,7 +726,7 @@
   <string name="SYS_FILE">Bestand</string>
   <string name="SYS_FILENAME_EMPTY">Er is geen bestandsnaam opgegeven!</string>
   <string name="SYS_FILENAME_INVALID">De geselecteerde bestandsnaam #VAR1_BOLD# bevat ongeldige tekens. Controleer de bestandsnaam.\n\nDe volgende tekens zijn niet toegestaan: ? * ~ ; : \" | &lt; &gt;</string>
-  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De database versie #VAR1# is lager dan de versie van Admidio scripts #VAR2#.\n\nUpdate uw Admidio-bestanden op de server #VAR3# met de meer recente Admidio-versie #VAR4#.</string>
+  <string name="SYS_FILESYSTEM_VERSION_INVALID" description="Var3 and Var4 create link to download">De databaseversie #VAR1# is nieuwer dan de versie van de Admidio-scripts #VAR2#.\n\nWerk de Admidio-bestanden op de server bij met een #VAR3#nieuwere versie van Admidio#VAR4#.</string>
   <string name="SYS_FILES_UPLOAD_DESC">Selecteer alle bestanden die u naar de map #VAR1_BOLD# wilt uploaden.</string>
   <string name="SYS_FILES_UPLOAD_NOT_SUCCESSFUL">Niet alle bestanden werden succesvol geüpload.</string>
   <string name="SYS_FILES_UPLOAD_SUCCESSFUL">Alle bestanden werden succesvol geüpload.\n\nDit venster kan nu gesloten worden.</string>
