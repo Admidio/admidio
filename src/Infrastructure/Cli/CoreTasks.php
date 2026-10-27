@@ -9160,6 +9160,10 @@ final class CoreTasks
         }
 
         $organizations = PluginRegistry::getEnabledOrganizations($id);
+        // the warnings are written before the question, so that --yes shows them too
+        foreach (PluginInstaller::getRemovalWarnings($plugin ?? $id) as $warning) {
+            CliApplication::writeWarning('PLUGIN_REMOVAL_WARNING', $warning, $options);
+        }
         CliApplication::confirm(
             'Remove plugin "' . ($plugin?->name ?? $id) . '"'
                 . ($organizations === array()
