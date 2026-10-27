@@ -2472,7 +2472,7 @@ class InventoryTest extends DatabaseTestCase
                     9,
                     0,
                     25,
-                    'requested',
+                    'REQUESTED',
                     -1,
                     'desc',
                 );
