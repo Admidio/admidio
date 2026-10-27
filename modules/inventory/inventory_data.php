@@ -237,8 +237,14 @@ try {
                 $dir = (isset($order['dir']) && strtolower($order['dir']) === 'asc') ? 'ASC' : 'DESC';
                 if (array_key_exists($col, $orderColumns) && $orderColumns[$col] !== '') {
                     // MariaDB/MySQL and PostgreSQL have different default ordering of NULLs.
-                    $columnOrder = isset($numericOrderColumns[$col]) ? '(' . $orderColumns[$col] . ' IS NULL) ASC, ' : '';
-                    $columnOrder .= $orderColumns[$col] . ' ' . $dir;
+                    $columnOrder = $orderColumns[$col] . ' ' . $dir;
+                    if (isset($numericOrderColumns[$col])) {
+                        // PostgreSQL can place NULLs last without evaluating the numeric
+                        // conversion a second time for a separate IS NULL sort key.
+                        $columnOrder = DB_TYPE === Database::PDO_ENGINE_PGSQL
+                            ? $columnOrder . ' NULLS LAST'
+                            : '(' . $orderColumns[$col] . ' IS NULL) ASC, ' . $columnOrder;
+                    }
                     if ($orderCondition === '') {
                         $orderCondition = ' ORDER BY ' . $columnOrder;
                     } else {
