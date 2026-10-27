@@ -13,6 +13,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
  * @brief Class manages access to database table adm_user_fields
@@ -254,14 +255,14 @@ class ProfileField extends Entity
                                         list($optionValueImage, $optionValueText) = explode('|', $option['value']);
                                     } else {
                                         $optionValueImage = $option['value'];
-                                        $optionValueText = $this->getValue('usf_name');
+                                        $optionValueText = $this->getValue('usf_name', 'database');
                                     }
 
                                     // if text is a translation-id then translate it
                                     $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                                     if ($format === 'html') {
-                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . $optionValueText;
+                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . SecurityUtils::encodeHTML($optionValueText);
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
                                         if (str_contains($option['value'], '|')) {
