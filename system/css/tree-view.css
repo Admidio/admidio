@@ -1,0 +1,68 @@
+/**
+ ***********************************************************************************************
+ * Styles of the tree view (system/js/tree-view.js), e.g. the folder tree of the documents and files module
+ * The file is only loaded on pages with a tree.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+.admidio-tree, .admidio-tree-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.admidio-tree-group {
+    padding-left: 1rem;
+}
+
+.admidio-tree-line {
+    display: flex;
+    align-items: center;
+}
+
+.admidio-tree-toggle {
+    flex: 0 0 1.5rem;
+    width: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+}
+
+.admidio-tree-toggle .bi {
+    display: inline-block;
+    transition: transform .15s;
+}
+
+.admidio-tree-node.expanded > .admidio-tree-line > .admidio-tree-toggle .bi {
+    transform: rotate(90deg);
+}
+
+.admidio-tree-link {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: .15rem .4rem;
+    border-radius: var(--bs-border-radius);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.admidio-tree-link:focus-visible {
+    outline-offset: -2px;
+}
+
+.admidio-tree-link:hover {
+    background-color: var(--bs-tertiary-bg);
+}
+
+.admidio-tree-link.active {
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary-text-emphasis);
+    font-weight: bold;
+}

@@ -197,6 +197,17 @@ class PagePresenter
     }
 
     /**
+     * Adds the script and the styles of the tree view (system/js/tree-view.js) to the page, e.g. for the folder
+     * tree of the documents and files module or a tree select field of a form. The modification time is part of
+     * the url, so the browser loads a changed file at once.
+     */
+    public function addTreeViewFiles(): void
+    {
+        $this->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/tree-view.css?v=' . filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/css/tree-view.css'));
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/tree-view.js?v=' . filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/js/tree-view.js'));
+    }
+
+    /**
      * Adds any JavaScript content to the page. The JavaScript will be added in the order you call this method.
      * @param string $javascriptCode       A valid JavaScript code that will be added to the header of the page.
      * @param bool $executeAfterPageLoad (optional) If set to **true**, the JavaScript code will be executed after
