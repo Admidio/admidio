@@ -174,6 +174,29 @@ class InventoryTest extends DatabaseTestCase
         );
     }
 
+    public function testPresenterLoadsItemsOnlyWhenPreparingRows(): void
+    {
+        $admin = $this->makeInventoryUser('invlazyrows', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $this->createItem($items, ['ITEMNAME' => 'Lazy camera']);
+            $this->createItem($items, ['ITEMNAME' => 'Lazy tripod']);
+
+            $presenter = new class(false) extends InventoryPresenter {
+                public function loadedItemCount(): int
+                {
+                    return count($this->itemsData->getItems());
+                }
+            };
+
+            $this->assertSame(0, $presenter->loadedItemCount());
+            $this->assertNotEmpty($presenter->prepareTableDefinition('csv')['export_headers']);
+            $this->assertSame(0, $presenter->loadedItemCount());
+            $this->assertCount(2, $presenter->prepareData('csv')['rows']);
+            $this->assertSame(2, $presenter->loadedItemCount());
+        });
+    }
+
     /**
      * Test that item fields belong to one organization
      *

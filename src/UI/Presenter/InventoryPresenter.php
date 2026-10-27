@@ -95,7 +95,6 @@ class InventoryPresenter extends PagePresenter
         // check if the user has selected to show retired items
         $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2);
         $this->itemsData->showRetiredItems($this->showRetiredItems);
-        $this->itemsData->readItems();
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
 
@@ -1008,6 +1007,10 @@ class InventoryPresenter extends PagePresenter
     public function prepareData(string $mode = 'html'): array
     {
         global $gCurrentUser, $gCurrentUserId, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+
+        // The paginated HTML list only needs field definitions. Load all items for exports
+        // and print views here, when their rows are actually requested.
+        $this->itemsData->readItems();
 
         // Initialize the result array
         $preparedData = array(
