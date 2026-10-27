@@ -2,6 +2,7 @@
     data-headline-move="{$headlines.move|escape}" data-headline-copy="{$headlines.copy|escape}"
     data-description-move="{$descriptions.move|escape}" data-description-copy="{$descriptions.copy|escape}"
     data-label-move="{$l10n->get('SYS_MOVE_TO')|escape}" data-label-copy="{$l10n->get('SYS_COPY_TO')|escape}"
+    data-button-move="{$l10n->get('SYS_MOVE')|escape}" data-button-copy="{$l10n->get('SYS_COPY')|escape}"
     data-action-url-move="{$formUrls.move}" data-action-url-copy="{$formUrls.copy}" data-copy-check-url="{$copyCheckUrl}">
 
 <p id="adm_move_copy_description" class="lead" aria-live="polite">{$description}</p>
@@ -214,6 +215,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const label = data.dataset["label" + action];
         document.getElementById("adm_destination_folder_label").textContent = label;
         treeElement.setAttribute("aria-label", label);
+        // the button names the action with the icon of the switch
+        const buttonIcon = button.querySelector("i");
+        if (buttonIcon) {
+            buttonIcon.className = "bi " + (copy ? "bi-copy" : "bi-folder-symlink");
+        }
+        Array.from(button.childNodes).forEach(function (node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                node.remove();
+            }
+        });
+        button.appendChild(document.createTextNode(data.dataset["button" + action]));
         folderTree.setCurrentSelectable(copy);
         checkName();
     };

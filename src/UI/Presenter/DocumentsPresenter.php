@@ -269,10 +269,11 @@ class DocumentsPresenter extends PagePresenter
             '0',
             array('property' => FormPresenter::FIELD_HIDDEN)
         );
+        // the button names the action, the script changes it when the user switches between moving and copying
         $form->addSubmitButton(
             'adm_btn_move',
-            $gL10n->get('SYS_SAVE'),
-            array('icon' => 'bi-check-lg', 'class' => 'offset-sm-3')
+            $gL10n->get($copy ? 'SYS_COPY' : 'SYS_MOVE'),
+            array('icon' => $copy ? 'bi-copy' : 'bi-folder-symlink', 'class' => 'offset-sm-3')
         );
 
         $form->addToHtmlPage();
