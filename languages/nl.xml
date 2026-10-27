@@ -407,7 +407,7 @@
   <string name="SYS_CONFIGURE_LISTS_DESC">Gebruikers kunnen hun eigen lijsten maken met geselecteerde profielvelden en deze vervolgens toepassen op groepen en rollen. Alleen profielvelden en groepen of rollen die de huidige gebruiker mag zien, zijn beschikbaar. Deze instelling kan worden gebruikt om te bepalen wie dergelijke lijsten kan maken. (Standaard: Alle)</string>
   <string name="SYS_CONFIRMATION_OF_INPUT">Bevestig waarde</string>
   <string name="SYS_CONFIRM_PASSWORD">Bevestig wachtwoord</string>
-  <string name="SYS_CONFIRM_REGISTRATION">Bevestiging registratie na handmatige goedkeuring</string>
+  <string name="SYS_CONFIRM_REGISTRATION">Registratie bevestigen</string>
   <string name="SYS_CONNECTION_ERROR">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de #VAR1# website bezoeken voor een handmatige update.</string>
   <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
@@ -664,7 +664,7 @@
   <string name="SYS_ENABLE_GROUPS_ROLES">Groepen &amp; rollen inschakelen</string>
   <string name="SYS_ENABLE_GROUPS_ROLES_DESC">Toont de groepen en rollen van de organisatie en maakt vrije configuratie van groepen en rollen mogelijk. Eigen lijst kan worden geconfigureerd en toegepast. Deze module is over het algemeen alleen beschikbaar voor ingelogde gebruikers. (Standaard: ja)</string>
   <string name="SYS_ENABLE_ICAL_EXPORT">iCal inschakelen</string>
-  <string name="SYS_ENABLE_ICAL_EXPORT_DESC">Als iCal ingeschakeld is kunnen evenementen binnen een opgegeven tijdsperiode gedownload worden. Ook kunnen gebruikers zich opgeven voor evenementen via hun eigen kalender software. (Standaard: ja)</string>
+  <string name="SYS_ENABLE_ICAL_EXPORT_DESC">Gebruikers kunnen afzonderlijke evenementen of alle evenementen binnen een bepaalde periode in iCal-formaat downloaden. Ze kunnen zich ook in hun agenda-app op de evenementen abonneren. (Standaard: ja)</string>
   <string name="SYS_ENABLE_NOTIFICATIONS">Systeemnotificaties inschakelen</string>
   <string name="SYS_ENABLE_NOTIFICATIONS_DESC">Hier kunt u de systeemnotificaties van Admidio in- en uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker zich heeft geregistreerd. Registratie bevestigingen worden ook verzonden als systeemnotificaties. Normaal gesproken moet deze functie niet worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie. (Standaard: ja)</string>
   <string name="SYS_ENABLE_PM_MODULE">Privéberichten inschakelen</string>
@@ -1204,7 +1204,7 @@
   <string name="SYS_NO_DATA_FOUND">Er werden geen bestanden gevonden!</string>
   <string name="SYS_NO_DEFAULT_ROLE">De instelling #VAR1_BOLD# kan niet worden verwijderd omdat ten minste één rol als standaard toewijzing moet worden opgeslagen.</string>
   <string name="SYS_NO_DEFAULT_ROLE_FOR_USER">Het rolbeheer bevat geen standaard rol voor nieuwe gebruikers. Gelieve contact op te nemen met een beheerder die deze instelling kan aanpassen.</string>
-  <string name="SYS_NO_ENTRIES">Er zijn geen berichten beschikbaar.</string>
+  <string name="SYS_NO_ENTRIES">Er zijn geen items beschikbaar.</string>
   <string name="SYS_NO_ENTRY">Gevraagde item bestaat niet in database.</string>
   <string name="SYS_NO_LEADER">Geen leider</string>
   <string name="SYS_NO_LOGIN_DATA">Don't have a login name and password?</string>
@@ -2126,8 +2126,8 @@
   <string name="SYS_WEBMASTER">Beheerder</string>
   <string name="SYS_WEBSITE">Website</string>
   <string name="SYS_WEDNESDAY">Woensdag</string>
-  <string name="SYS_WEEKDAY">Doordeweeks</string>
-  <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY">Weekdag</string>
+  <string name="SYS_WEEKDAYS">Weekdagen</string>
   <string name="SYS_WEEKDAY_FORMAT">Weergave van de weekdag</string>
   <string name="SYS_WEEKDAY_FORMAT_DESC">Geef aan of en in welke vorm de weekdag bij evenementen wordt weergegeven.</string>
   <string name="SYS_WEEKDAY_LONG">Volledige naam (bijv. dinsdag)</string>
