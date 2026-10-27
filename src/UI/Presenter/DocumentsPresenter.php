@@ -62,17 +62,6 @@ class DocumentsPresenter extends PagePresenter
     }
 
     /**
-     * Add the javascript file of the folder tree to the page. The modification time of the file is part of the
-     * URL, so a browser that has an older version of the file in its cache loads the new version.
-     * @return void
-     */
-    private function addFolderTreeJavascript(): void
-    {
-        $filePath = ADMIDIO_PATH . FOLDER_SYSTEM . '/js/folder-tree.js';
-        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/folder-tree.js?v=' . filemtime($filePath));
-    }
-
-    /**
      * Create form to edit the current folder or create a new folder.
      * @param string $fileUUID UUID of the file that should be renamed
      * @throws Exception
@@ -225,15 +214,6 @@ class DocumentsPresenter extends PagePresenter
         $rootFolder = new Folder($gDb);
         $rootFolder->readDataByUuid($treePath[0]);
 
-        $this->addFolderTreeJavascript();
-        $this->assignSmartyVariable('treeUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'tree')));
-        $this->assignSmartyVariable('treeRootUuid', $treePath[0]);
-        $this->assignSmartyVariable('treeRootUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php'));
-        $this->assignSmartyVariable('treeRootCanUpload', $rootFolder->hasUploadRight());
-        $this->assignSmartyVariable('treeCurrentUuid', $currentFolder->getValue('fol_uuid'));
-        $this->assignSmartyVariable('treeExcludedUuid', $excludedFolderUUID);
-        $this->assignSmartyVariable('treePath', json_encode($treePath));
-
         $formUrls = array();
         foreach (array('move', 'copy') as $formAction) {
             $formUrls[$formAction] = SecurityUtils::encodeUrl(
@@ -256,11 +236,24 @@ class DocumentsPresenter extends PagePresenter
             $this,
             array('setFocus' => false)
         );
-        $form->addInput(
+        $form->addTreeSelect(
             'adm_destination_folder_uuid',
-            $gL10n->get('SYS_MOVE_TO'),
-            '',
-            array('property' => FormPresenter::FIELD_HIDDEN)
+            $gL10n->get($copy ? 'SYS_COPY_TO' : 'SYS_MOVE_TO'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'tree')),
+            array('id' => $treePath[0], 'name' => $gL10n->get('SYS_DOCUMENTS_FILES'), 'selectable' => $rootFolder->hasUploadRight()),
+            array(
+                'property' => FormPresenter::FIELD_REQUIRED,
+                'idParam' => 'folder_uuid',
+                'currentId' => $currentFolder->getValue('fol_uuid'),
+                'currentLabel' => $gL10n->get('SYS_MOVE_CURRENT_FOLDER'),
+                'currentSelectable' => $copy,
+                'path' => $treePath,
+                'excludedId' => $excludedFolderUUID,
+                // when many files are moved, the tree opens at the destination that was used last
+                'rememberKey' => 'admidio.documents_files.move_destination',
+                'rememberLabel' => $gL10n->get('SYS_MOVE_LAST_FOLDER'),
+                'emptyText' => $gL10n->get('SYS_MOVE_SELECT_FOLDER')
+            )
         );
         // is set to 1 when the user accepts that the copy gets a new name because the name is already used
         $form->addInput(
@@ -556,7 +549,7 @@ class DocumentsPresenter extends PagePresenter
 
 
         $this->setHtmlID('adm_documents_files');
-        $this->addFolderTreeJavascript();
+        $this->addTreeViewFiles();
         // set headline of the script
         if ($currentFolder->getValue('fol_fol_id_parent') == null) {
             $this->setHeadline($gL10n->get('SYS_DOCUMENTS_FILES'));

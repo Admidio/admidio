@@ -282,10 +282,10 @@ class FolderMoveTest extends DatabaseTestCase
         }
 
         $this->assertEquals(array('archive', 'minutes'), array_keys($byName));
-        $this->assertEquals($this->folderUuid($leafId), $byName['archive']['uuid']);
+        $this->assertEquals($this->folderUuid($leafId), $byName['archive']['id']);
         $this->assertFalse($byName['archive']['hasChildren']);
         $this->assertTrue($byName['minutes']['hasChildren']);
-        $this->assertTrue($byName['minutes']['canUpload']);
+        $this->assertTrue($byName['minutes']['selectable']);
         $this->assertStringContainsString('folder_uuid=' . $this->folderUuid($withChildId), $byName['minutes']['url']);
     }
 }

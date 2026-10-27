@@ -23,24 +23,9 @@
     <div class="admidio-form-required-notice"><span>{$l10n->get('SYS_REQUIRED_INPUT')}</span></div>
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
-    {include 'sys-template-parts/form.input.tpl' data=$elements['adm_destination_folder_uuid']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_accept_new_name']}
 
-    <div id="adm_destination_folder_group" class="admidio-form-group admidio-form-group-required row mb-3">
-        <label id="adm_destination_folder_label" for="adm_destination_folder_tree" class="col-sm-3 col-form-label">{if $startCopy}{$l10n->get('SYS_COPY_TO')}{else}{$l10n->get('SYS_MOVE_TO')}{/if}</label>
-        <div class="col-sm-9">
-            <div class="admidio-folder-picker">
-                <ul id="adm_destination_folder_tree" class="admidio-folder-tree" role="tree" aria-label="{if $startCopy}{$l10n->get('SYS_COPY_TO')}{else}{$l10n->get('SYS_MOVE_TO')}{/if}"
-                    aria-required="true" data-url="{$treeUrl}" data-root-uuid="{$treeRootUuid}" data-root-url="{$treeRootUrl}"
-                    data-root-can-upload="{if $treeRootCanUpload}1{else}0{/if}" data-current-uuid="{$treeCurrentUuid}"
-                    data-excluded-uuid="{$treeExcludedUuid}" data-path="{$treePath|escape}"
-                    data-root-label="{$l10n->get('SYS_DOCUMENTS_FILES')}" data-current-label="{$l10n->get('SYS_MOVE_CURRENT_FOLDER')}"
-                    data-last-label="{$l10n->get('SYS_MOVE_LAST_FOLDER')}"></ul>
-            </div>
-            <div id="adm_destination_folder_summary" class="form-text admidio-folder-picker-summary" aria-live="polite"
-                data-text-empty="{$l10n->get('SYS_MOVE_SELECT_FOLDER')}">{$l10n->get('SYS_MOVE_SELECT_FOLDER')}</div>
-        </div>
-    </div>
+    {include 'sys-template-parts/form.tree-select.tpl' data=$elements['adm_destination_folder_uuid']}
 
     {* A file with the name exists in the destination folder: the user may accept that the copy gets a new name *}
     <div id="adm_copy_conflict" class="row mb-3" hidden>
@@ -68,18 +53,17 @@
 // would get the name of an existing file, the user must accept that the copy gets a new name.
 document.addEventListener("DOMContentLoaded", function () {
     const data = document.getElementById("adm_move_copy");
-    const treeElement = document.getElementById("adm_destination_folder_tree");
+    const treeSelect = document.querySelector("#adm_destination_folder_uuid_group .admidio-tree-select");
     const field = document.getElementById("adm_destination_folder_uuid");
     const acceptField = document.getElementById("adm_accept_new_name");
-    const summary = document.getElementById("adm_destination_folder_summary");
     const button = document.getElementById("adm_btn_move");
     const conflict = document.getElementById("adm_copy_conflict");
     const conflictText = document.getElementById("adm_copy_conflict_text");
     const acceptBox = document.getElementById("adm_copy_accept_name");
     const acceptLabel = document.getElementById("adm_copy_accept_label");
-    if (!data || !treeElement || !field || !summary || !button) return;
+    if (!data || !treeSelect || !field || !button) return;
 
-    const form = treeElement.closest("form");
+    const form = treeSelect.closest("form");
     let copying = data.dataset.startCopy === "1";
     let nameConflict = false;
     let checking = false;
@@ -135,65 +119,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     };
 
-    const folderTree = new AdmFolderTree(treeElement, {
-        url: treeElement.dataset.url,
-        rootUuid: treeElement.dataset.rootUuid,
-        rootLabel: treeElement.dataset.rootLabel,
-        rootUrl: treeElement.dataset.rootUrl,
-        rootCanUpload: treeElement.dataset.rootCanUpload === "1",
-        currentUuid: treeElement.dataset.currentUuid,
-        currentLabel: treeElement.dataset.currentLabel,
-        currentSelectable: copying,
-        excludedUuid: treeElement.dataset.excludedUuid,
-        path: JSON.parse(treeElement.dataset.path),
-        select: true,
-        onSelect: function (folder) {
-            if (folder === null) {
-                field.value = "";
-                summary.textContent = summary.dataset.textEmpty;
-            } else {
-                field.value = folder.uuid;
-                summary.textContent = "";
-                const icon = document.createElement("i");
-                icon.className = "bi bi-folder-fill me-1";
-                summary.append(icon, folder.path.join(" / "));
-            }
-            checkName();
-        }
-    });
-
-    // When many files are moved, the tree is opened at the destination that was used last, so the user does not
-    // have to work through the tree again. The folder is only marked, the user selects it.
-    const lastDestinationKey = "admidio.documents_files.move_destination";
-    folderTree.build().then(function () {
-        let lastDestination = "";
-        try {
-            lastDestination = window.localStorage.getItem(lastDestinationKey) || "";
-        } catch (e) {
-            // without the storage of the browser the tree opens at the current folder
-        }
-        if (lastDestination === "") return;
-
-        folderTree.openFolder(lastDestination, treeElement.dataset.lastLabel).then(function (shown) {
-            if (!shown) {
-                // the folder is deleted or the user can't see it
-                try {
-                    window.localStorage.removeItem(lastDestinationKey);
-                } catch (e) {
-                    // nothing to do
-                }
-            }
-        });
-    });
-
-    button.addEventListener("click", function () {
-        if (field.value === "") return;
-        try {
-            window.localStorage.setItem(lastDestinationKey, field.value);
-        } catch (e) {
-            // the destination is only not remembered
-        }
-    });
+    // the tree of system/js/tree-view.js writes the selected folder into the field
+    field.addEventListener("change", checkName);
 
     acceptBox.addEventListener("change", function () {
         acceptField.value = acceptBox.checked ? "1" : "0";
@@ -213,8 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         // the label of the tree names the action
         const label = data.dataset["label" + action];
-        document.getElementById("adm_destination_folder_label").textContent = label;
-        treeElement.setAttribute("aria-label", label);
+        document.getElementById("adm_destination_folder_uuid_label").textContent = label;
         // the button names the action with the icon of the switch
         const buttonIcon = button.querySelector("i");
         if (buttonIcon) {
@@ -226,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
         button.appendChild(document.createTextNode(data.dataset["button" + action]));
-        folderTree.setCurrentSelectable(copy);
+        treeSelect.admTreeView.setCurrentSelectable(copy);
         checkName();
     };
 

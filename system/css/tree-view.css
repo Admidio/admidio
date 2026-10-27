@@ -1,7 +1,7 @@
 /**
  ***********************************************************************************************
  * Styles of the tree view (system/js/tree-view.js), e.g. the folder tree of the documents and files module
- * The file is only loaded on pages with a tree.
+ * and the tree select field of forms. The file is only loaded on pages with a tree.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -61,8 +61,38 @@
     background-color: var(--bs-tertiary-bg);
 }
 
-.admidio-tree-link.active {
+.admidio-tree-link.active, .admidio-tree-link.selected {
     background-color: var(--bs-primary-bg-subtle);
     color: var(--bs-primary-text-emphasis);
     font-weight: bold;
+}
+
+.admidio-tree-link[aria-disabled="true"] {
+    color: var(--bs-secondary-color);
+    cursor: not-allowed;
+}
+
+.admidio-tree-link[aria-disabled="true"]:hover {
+    background-color: transparent;
+}
+
+.admidio-tree-hint {
+    margin-left: .5rem;
+    font-size: .875em;
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* tree select field of a form */
+.admidio-tree-select {
+    max-height: 50vh;
+    overflow: auto;
+    padding: .4rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-body-bg);
+}
+
+.admidio-tree-select-summary .bi {
+    color: var(--bs-secondary-color);
 }

@@ -315,7 +315,7 @@ try {
             $folder->getFolderForDownload($getFolderUUID);
 
             $documentsService = new DocumentsService($gDb, $folder->getValue('fol_uuid'));
-            $response = array('status' => 'success', 'folders' => $documentsService->findFolderTreeNodes());
+            $response = array('status' => 'success', 'nodes' => $documentsService->findFolderTreeNodes());
             if ($getWithPath) {
                 // the tree can open the folders down to this folder
                 $response['path'] = $documentsService->findFolderPath();

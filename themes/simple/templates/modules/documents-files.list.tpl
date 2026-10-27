@@ -11,7 +11,7 @@
                     aria-label="{$l10n->get('SYS_FOLDER_TREE')}"><i class="bi bi-chevron-bar-left"></i><span class="admidio-folder-sidebar-collapse-label">{$l10n->get('SYS_FOLDER_TREE')}</span></button>
         </div>
         <nav id="adm_documents_files_tree_nav" class="admidio-folder-tree-pane" aria-label="{$l10n->get('SYS_FOLDER_TREE')}">
-            <ul id="adm_documents_files_tree" class="admidio-folder-tree" role="tree" aria-label="{$l10n->get('SYS_FOLDER_TREE')}" data-url="{$treeUrl}"
+            <ul id="adm_documents_files_tree" class="admidio-tree" role="tree" aria-label="{$l10n->get('SYS_FOLDER_TREE')}" data-url="{$treeUrl}"
                 data-root-uuid="{$treeRootUuid}" data-current-uuid="{$treeCurrentUuid}" data-path="{$treePath|escape}"
                 data-root-label="{$l10n->get('SYS_DOCUMENTS_FILES')}"></ul>
         </nav>
@@ -202,12 +202,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const rootUrl = new URL(window.location.href);
     rootUrl.search = "";
     rootUrl.hash = "";
-    const folderTree = new AdmFolderTree(tree, {
+    const folderTree = new AdmTreeView(tree, {
         url: tree.dataset.url,
-        rootUuid: tree.dataset.rootUuid,
-        rootLabel: tree.dataset.rootLabel,
-        rootUrl: rootUrl.href,
-        currentUuid: currentUuid,
+        idParam: "folder_uuid",
+        root: {id: tree.dataset.rootUuid, name: tree.dataset.rootLabel, url: rootUrl.href},
+        currentId: currentUuid,
         path: JSON.parse(tree.dataset.path)
     });
 
