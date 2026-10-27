@@ -225,7 +225,7 @@
   <string name="SYS_ALIGNMENT">Uitlijning</string>
   <string name="SYS_ALIGN_CENTER">Gecentreerd</string>
   <string name="SYS_ALIGN_JUSTIFY">Uitgevuld</string>
-  <string name="SYS_ALIGN_LEFT">Left</string>
+  <string name="SYS_ALIGN_LEFT">Links</string>
   <string name="SYS_ALIGN_RIGHT">Rechts</string>
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Deelnemers kunnen anonieme gasten aanmelden</string>
@@ -233,7 +233,7 @@
   <string name="SYS_ALLOW_USER_COMMENTS">Opmerkingen tijdens aanmelding toestaan</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Deelnemers kunnen opmerkingen maken over hun deelname. De opmerkingen kunnen worden bekeken via de deelnemerslijst</string>
   <string name="SYS_ALL_CONTACTS">Alle contacten</string>
-  <string name="SYS_ALL_DAY">All day</string>
+  <string name="SYS_ALL_DAY">Hele dag</string>
   <string name="SYS_ALL_MEMBERS">Alle leden</string>
   <string name="SYS_ALL_ORGANIZATIONS">Alle organisaties</string>
   <string name="SYS_ALL_ORGANIZATIONS_DESC">De geselecteerde categorie wordt gedeeld met alle organisaties.\nHet object dat wordt bewerkt (afspraak, mededeling, profielveld, weblink ...) is niet alleen zichtbaar in deze organisatie, maar wordt ook weergegeven in alle volgende organisaties: #VAR1#.</string>
@@ -286,7 +286,7 @@
   <string name="SYS_BASIC_DATA">Basisgegevens</string>
   <string name="SYS_BIRTHDAY">Geboortedatum</string>
   <string name="SYS_BLUESKY">Bluesky</string>
-  <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BOLD">Vet</string>
   <string name="SYS_BORROWINGS">Uitleningen</string>
   <string name="SYS_BORROWINGS_ACTIVE">Lopende uitleningen</string>
   <string name="SYS_BOYFRIEND">Vriend</string>
@@ -497,8 +497,8 @@
   <string name="SYS_DATE_MODIFIED">Aangepast op datum</string>
   <string name="SYS_DATE_TO">tot</string>
   <string name="SYS_DAUGHTER">Dochter</string>
-  <string name="SYS_DAY">Day</string>
-  <string name="SYS_DAYS">Days</string>
+  <string name="SYS_DAY">Dag</string>
+  <string name="SYS_DAYS">Dagen</string>
   <string name="SYS_DAYS_FIELD_HISTORY">Standaard tijdsperiode voor wijzigingsgeschiedenis (dagen)</string>
   <string name="SYS_DAYS_FIELD_HISTORY_DESC">Wijzigingen in profielvelden worden weergegeven voor dit aantal dagen. Dit is een standaard instelling die later door de gebruiker zelf kan worden gewijzigd. In het geval van grote databases dient dit om de hoeveelheid gegevens te beperken wanneer de wijzigingsgeschiedenis wordt aangeroepen. (Standaard: 365)</string>
   <string name="SYS_DEACTIVATE_ROLE">Rol deactiveren</string>
@@ -675,7 +675,7 @@
   <string name="SYS_ENABLE_USER_RELATIONS_DESC">Als deze instelling actief is, kunnen relaties tussen gebruikers worden onderhouden en weergegeven. (Standaard: ja)</string>
   <string name="SYS_ENCODING_GUESS">Probeer de codering te detecteren</string>
   <string name="SYS_END" description="End of a date">Einde</string>
-  <string name="SYS_ENDS">Ends</string>
+  <string name="SYS_ENDS">Eindigt</string>
   <string name="SYS_END_DATE">Einddatum</string>
   <string name="SYS_END_MEMBERSHIP_OF_USER">Wilt u lidmaatschap van gebruiker #VAR1# beëindigen op #VAR2#?</string>
   <string name="SYS_END_MEMBERSHIP_OF_USERS_OK">De lidmaatschappen van de geselecteerde gebruikers bij #VAR1_BOLD# zijn beëindigd.</string>
@@ -883,7 +883,7 @@
   <string name="SYS_INVENTORY_FIELD_DESC">Kies een veld dat een volgnummer bevat. Voor de geselecteerde items wordt het huidige nummer gelezen en met de opgegeven waarde verhoogd.\n\nLet op: het inventarisbeheer kan alleen controleren of een veld van het type "Getal" is. Het kan niet vaststellen of dat veld een volgnummer bevat.</string>
   <string name="SYS_INVENTORY_FILENAME">Bestandsnaam</string>
   <string name="SYS_INVENTORY_FILENAME_DESC">De naam van het exportbestand (zonder extensie). De extensie van het exportformaat wordt automatisch toegevoegd. (Standaard: "Inventarisbeheer")</string>
-  <string name="SYS_INVENTORY_FILTER_IN_USE_ITEMS">In use</string>
+  <string name="SYS_INVENTORY_FILTER_IN_USE_ITEMS">In gebruik</string>
   <string name="SYS_INVENTORY_FILTER_RETIRED_ITEMS">Buiten gebruik</string>
   <string name="SYS_INVENTORY_IMPORT_ASSIGN_FIELDS_DESC">De linkerkolom toont alle itemvelden. Gebruik de keuzelijsten in de rechterkolom om elke kolom van het importbestand aan een itemveld te koppelen.</string>
   <string name="SYS_INVENTORY_IMPORT_DESC">Hier kunt u items importeren uit een eerder exportbestand of uit een eigen bestand.</string>
@@ -1041,7 +1041,7 @@
   <string name="SYS_LOCKED">Geblokkeerd</string>
   <string name="SYS_LOCK_ALBUM">Album vergrendelen</string>
   <string name="SYS_LOCK_ALBUM_DESC">Leden en bezoekers kunnen gesloten albums niet inzien. U kunt bijvoorbeeld een album tijdelijk sluiten tijdens het uploaden van foto\'s.</string>
-  <string name="SYS_LOG">Log</string>
+  <string name="SYS_LOG">Logboek</string>
   <string name="SYS_LOGGED_AREAS">Geregistreerde gebieden</string>
   <string name="SYS_LOGGED_AREAS_DESC">Kies de gebieden waarvoor de wijzigingsgeschiedenis wordt bijgehouden. Elke wijziging van een object in een gekozen gebied wordt geregistreerd met de oude en nieuwe waarde, het tijdstip en de gebruiker. Gebieden van uitgeschakelde modules worden niet getoond. Als u een gebied uitschakelt, worden bestaande registraties niet verwijderd; dat kan op de pagina met de wijzigingsgeschiedenis. Een gebied waarvan de objecten maar gedeeltelijk worden geregistreerd, wordt in een derde, onbepaalde toestand getoond en blijft ongewijzigd tot het wordt in- of uitgeschakeld.</string>
   <string name="SYS_LOGIN">Inloggen</string>
@@ -1050,7 +1050,7 @@
   <string name="SYS_LOGIN_NAME_EXIST">Deze gebruikersnaam bestaat al.\n\nKies een andere gebruikersnaam.</string>
   <string name="SYS_LOGIN_NOT_ACTIVATED">Uw account is nog niet geactiveerd.\n\nU wordt geïnformeerd zodra u toegang hebt.</string>
   <string name="SYS_LOGIN_PROBLEMS">Inlog problemen</string>
-  <string name="SYS_LOGIN_TO">Log in to #VAR1_BOLD#</string>
+  <string name="SYS_LOGIN_TO">Inloggen bij #VAR1_BOLD#</string>
   <string name="SYS_LOGIN_TO_VIEW_PAGE">Log in om de gevraagde pagina te bekijken. U wordt daarna automatisch doorgestuurd.</string>
   <string name="SYS_LOGIN_USERNAME_PASSWORD_INCORRECT">De opgegeven gebruikersnaam en/of het opgegeven wachtwoord is foutief.</string>
   <string name="SYS_LOGIN_USER_NO_ADMINISTRATOR">De inloggegevens zijn correct ingevoerd, maar het updateproces is alleen geactiveerd voor beheerders van de organisatie #VAR1_BOLD#.</string>
@@ -1149,7 +1149,7 @@
   <string name="SYS_MOVE_FOLDER_DESC">Kies de map waarnaar u de map #VAR1_BOLD# wilt verplaatsen. De rolrechten van de doelmap voor het bekijken en uploaden van bestanden worden toegepast op deze map en alle submappen.</string>
   <string name="SYS_MOVE_LEFT">#VAR1# naar links verplaatsen</string>
   <string name="SYS_MOVE_RIGHT">#VAR1# naar rechts verplaatsen</string>
-  <string name="SYS_MOVE_TO">Move to</string>
+  <string name="SYS_MOVE_TO">Verplaatsen naar</string>
   <string name="SYS_MOVE_UP">Plaats #VAR1# omhoog</string>
   <string name="SYS_MOVE_VAR">Verplaats #VAR1#</string>
   <string name="SYS_MULTIPLE_RECIPIENTS">Meerdere ontvangers</string>
@@ -1291,7 +1291,7 @@
   <string name="SYS_PASSWORD_OLD_WRONG">Oude wachtwoord is onjuist.</string>
   <string name="SYS_PASSWORD_RESET_INVALID">U heeft een ongeldige link voor het opnieuw instellen van uw wachtwoord aangevraagd. Als u uw wachtwoord nog niet heeft gereset, vraag dan een nieuwe link aan met de #VAR1# functie.</string>
   <string name="SYS_PASSWORD_RESET_SAVED">Het nieuwe wachtwoord is nu doorgevoerd!</string>
-  <string name="SYS_PATH">Path</string>
+  <string name="SYS_PATH">Pad</string>
   <string name="SYS_PATH_SEPARATOR">Pad scheidingsteken</string>
   <string name="SYS_PDF">PDF</string>
   <string name="SYS_PERIOD">Tijdsperiode</string>
@@ -1392,7 +1392,7 @@
   <string name="SYS_PORT">Poort</string>
   <string name="SYS_PORTRAIT" description="Format for printing">Portret</string>
   <string name="SYS_POSSIBLE_FIELDNAMES">Kolomnamen voor automatische detectie: #VAR1#</string>
-  <string name="SYS_POST">Post</string>
+  <string name="SYS_POST">Bericht</string>
   <string name="SYS_POSTCODE">Postcode</string>
   <string name="SYS_POSTS">Berichten</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST grootte</string>
@@ -1799,11 +1799,11 @@
   <string name="SYS_SSO_EXPORT_PASSWORD">Wachtwoord voor de sleutelexport</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Beveilig de geëxporteerde privésleutel met een wachtwoord. Dit wachtwoord is nodig om het bestand later te importeren. Zonder wachtwoord is de export onbeveiligd; dat wordt sterk afgeraden.</string>
   <string name="SYS_SSO_INVALID_CLIENT">Ongeldige client</string>
-  <string name="SYS_SSO_KEY">SSO key</string>
+  <string name="SYS_SSO_KEY">SSO-sleutel</string>
   <string name="SYS_SSO_KEYS">SSO-sleutels</string>
   <string name="SYS_SSO_KEY_ACTIVE">Actief</string>
   <string name="SYS_SSO_KEY_ACTIVE_DESC">Bepaalt of deze sleutel mag worden gebruikt voor ondertekening of versleuteling.</string>
-  <string name="SYS_SSO_KEY_ADD">New key</string>
+  <string name="SYS_SSO_KEY_ADD">Nieuwe sleutel</string>
   <string name="SYS_SSO_KEY_ADMIN">Cryptografische sleutels beheren</string>
   <string name="SYS_SSO_KEY_ALGORITHM">Cryptografisch algoritme</string>
   <string name="SYS_SSO_KEY_ALGORITHM_DESC">Het cryptografische algoritme waarop de sleutel is gebaseerd.</string>
@@ -1811,7 +1811,7 @@
   <string name="SYS_SSO_KEY_CERTIFICATE">X.509-certificaat</string>
   <string name="SYS_SSO_KEY_CREATE_DEFAULT">Nieuwe sleutel met standaardinstellingen aanmaken</string>
   <string name="SYS_SSO_KEY_DELETE">Sleutel verwijderen</string>
-  <string name="SYS_SSO_KEY_EDIT">Edit key</string>
+  <string name="SYS_SSO_KEY_EDIT">Sleutel bewerken</string>
   <string name="SYS_SSO_KEY_EXPIRATION_INVALID">De gekozen sleutel heeft een ongeldige vervaldatum.</string>
   <string name="SYS_SSO_KEY_EXPIRED">De gekozen sleutel is verlopen.</string>
   <string name="SYS_SSO_KEY_EXPIRES">Vervaldatum</string>
@@ -1895,7 +1895,7 @@
   <string name="SYS_SSO_OIDC_SCOPE_EMAIL_DESC">Geeft toegang tot uw opgeslagen e-mailadres.</string>
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS">Uw groeps- en rollidmaatschappen bekijken</string>
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS_DESC">Geeft toegang tot uw groeps- en rollidmaatschappen.</string>
-  <string name="SYS_SSO_OIDC_SCOPE_OPENID">Sign you in</string>
+  <string name="SYS_SSO_OIDC_SCOPE_OPENID">U laten inloggen</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID_DESC">Nodig om u via OpenID Connect te laten inloggen.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Het recht #VAR1# gebruiken</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER_DESC">Geeft toegang tot extra gegevens of functies die deze client opvraagt.</string>
@@ -1961,7 +1961,7 @@
   <string name="SYS_SSO_USERID_FIELD_UNSUPPORTED">niet meer ondersteund</string>
   <string name="SYS_SSO_USERID_ID">Gebruikers-ID (numeriek)</string>
   <string name="SYS_SSO_USERID_LOGIN">Gebruikersnaam</string>
-  <string name="SYS_SSO_USERID_UUID">User UUID</string>
+  <string name="SYS_SSO_USERID_UUID">Gebruikers-UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Handtekeningen van de service provider controleren</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509-certificaat van de client</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Clientcertificaat waarmee ondertekende SAML-berichten worden gecontroleerd en assertions worden versleuteld.</string>
@@ -2140,7 +2140,7 @@
   <string name="SYS_WRITE_EMAIL">Schrijf e-mail</string>
   <string name="SYS_WRITE_PM">Schrijf privébericht</string>
   <string name="SYS_XING">Xing</string>
-  <string name="SYS_YEAR">Year</string>
+  <string name="SYS_YEAR">Jaar</string>
   <string name="SYS_YEARS">Jaren</string>
   <string name="SYS_YES">Ja</string>
   <string name="SYS_YOUR_CONFIGURATION">Uw configuratie</string>
