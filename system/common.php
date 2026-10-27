@@ -11,6 +11,7 @@ use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Roles\Service\MembershipPeriodService;
 use Admidio\Session\Entity\Session;
 use Admidio\UI\Component\Message;
 use Admidio\Users\Entity\User;
@@ -311,3 +312,7 @@ if ($gValidLogin) {
 
 // the plugins of this organization extend the fully initialized request, and only then
 PluginLoader::loadEnabled();
+
+// once per day: report the memberships whose start or end date was reached, after the plugins are
+// loaded so that their listeners are called
+MembershipPeriodService::runIfDueSilently($gDb);
