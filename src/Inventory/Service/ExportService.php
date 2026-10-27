@@ -246,6 +246,9 @@ class ExportService
                 }
 
                 $writer = new $writerClass($spreadsheet);
+                if ($writer instanceof Csv) {
+                    $writer->setOutputEncoding($charset);
+                }
                 $writer->save($file);
                 break;
 

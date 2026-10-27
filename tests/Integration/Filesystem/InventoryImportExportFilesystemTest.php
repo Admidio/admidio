@@ -21,7 +21,7 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
     public static function filteredExports(): array
     {
         $cases = [];
-        foreach (['csv-oo', 'xlsx', 'ods', 'pdf', 'pdfl'] as $mode) {
+        foreach (['csv-oo', 'csv-ms', 'xlsx', 'ods', 'pdf', 'pdfl'] as $mode) {
             $cases[$mode . ' matching search'] = [$mode, 'kamera', ['Kamera ÄÖÜ']];
             $cases[$mode . ' empty search result'] = [$mode, 'missing', []];
         }
@@ -51,7 +51,7 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
                 default => new Csv(),
             };
             if ($reader instanceof Csv) {
-                $encoding = 'UTF-8';
+                $encoding = $mode === 'csv-ms' ? 'ISO-8859-1' : 'UTF-8';
                 $reader->setInputEncoding($encoding);
                 $this->assertSame('text/csv; charset=' . strtolower($encoding), $export['contentType']);
                 if ($expectedNames !== []) {
