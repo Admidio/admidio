@@ -84,7 +84,7 @@
   <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallback theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (Default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatisch uitloggen na</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogt. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker #VAR1_BOLD# gekozen heeft. (Standaard: 20 minuten)</string>
-  <string name="ORG_BROWSER_UPDATE_CHECK">Update melding voor verouderde browser</string>
+  <string name="ORG_BROWSER_UPDATE_CHECK">Updatemelding voor verouderde browsers</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Na activering worden gebruikers met verouderde browsers geadviseerd om een browser-update uit te voeren. Nieuwere browsers bieden betere bescherming tegen fraude, virussen, Trojaanse paarden, gegevensdiefstal en andere bedreigingen van uw privacy en veiligheid. Elke nieuwe generatie browsers verbetert de snelheid en ondersteuning van nieuwe webtechnologieën die webpagina\'s beter kunnen visualiseren. Hiervoor wordt de service van https://browser-update.org/ gebruikt.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Achtergrondkleur</string>
   <string name="ORG_CAPTCHA_BACKGROUND_IMAGE">Achtergrondafbeelding</string>
@@ -768,7 +768,7 @@
   <string name="SYS_FORMER_MEMBERS">Voormalige leden</string>
   <string name="SYS_FORMER_MEMBER_OF_ROLE_GROUP">Former member of role/group #VAR1#</string>
   <string name="SYS_FORMER_PL">Voormalig</string>
-  <string name="SYS_FORMER_ROLE_MEMBERSHIP">Voormalige rol lidmaatschappen</string>
+  <string name="SYS_FORMER_ROLE_MEMBERSHIP">Voormalige rollidmaatschappen</string>
   <string name="SYS_FORMER_SELECTION">Mark selected contacts as former</string>
   <string name="SYS_FORM_USE_FOR_EDIT">If this checkbox is activated, the corresponding field value will be used for editing the selection.</string>
   <string name="SYS_FORUM">Forum</string>
@@ -785,7 +785,7 @@
   <string name="SYS_FROM_TO">van #VAR1# tot #VAR2#</string>
   <string name="SYS_FROM_VAR">from #VAR1#</string>
   <string name="SYS_FURTHER_INFORMATIONS">Verdere informatie</string>
-  <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Toekomstige rol lidmaatschappen</string>
+  <string name="SYS_FUTURE_ROLE_MEMBERSHIP">Toekomstige rollidmaatschappen</string>
   <string name="SYS_GENDER">Geslacht</string>
   <string name="SYS_GENERAL_LISTS">Algemene lijsten</string>
   <string name="SYS_GENERAL_ROLE_ASSIGNMENT">Algemene roltoewijzing</string>
@@ -1446,7 +1446,7 @@
   <string name="SYS_QUARTERLY">Driemaandelijks</string>
   <string name="SYS_QUOTE">Enkel aanhalingsteken (\')</string>
   <string name="SYS_RADIO_BUTTON">Optieveld</string>
-  <string name="SYS_RECENT_ALBUMS_OF_ORGA">Nieuwste foto album van organisatie #VAR1#</string>
+  <string name="SYS_RECENT_ALBUMS_OF_ORGA">Nieuwste fotoalbum van organisatie #VAR1#</string>
   <string name="SYS_RECIPIENT">Ontvanger</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail ontvanger</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
@@ -1579,10 +1579,10 @@
   <string name="SYS_ROLE_INFORMATION">Rolinformatie</string>
   <string name="SYS_ROLE_MAX_MEMBERS">Opslaan is niet mogelijk. Voor rol #VAR1_BOLD# wordt het maximale aantal leden overschreden.</string>
   <string name="SYS_ROLE_MEMBERS">Rolleden</string>
-  <string name="SYS_ROLE_MEMBERSHIPS">Rol lidmaatschappen</string>
-  <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Verander rol lidmaatschappen</string>
+  <string name="SYS_ROLE_MEMBERSHIPS">Rollidmaatschappen</string>
+  <string name="SYS_ROLE_MEMBERSHIPS_CHANGE">Rollidmaatschappen wijzigen</string>
   <string name="SYS_ROLE_MEMBERSHIP_IN_PERIOD">Leden in de periode:</string>
-  <string name="SYS_ROLE_MEMBERSHIP_OTHER_ORG">Rol lidmaatschappen van andere organisaties</string>
+  <string name="SYS_ROLE_MEMBERSHIP_OTHER_ORG">Rollidmaatschappen bij andere organisaties</string>
   <string name="SYS_ROLE_MEMBERSHIP_TO">tot</string>
   <string name="SYS_ROLE_NAME_EXISTS">Rol met dezelfde naam bestaat al in deze categorie.</string>
   <string name="SYS_ROLE_PAST">Past role</string>
@@ -1692,7 +1692,7 @@
   <string name="SYS_SHOW_FORMER_MEMBERS">Toon voormalige leden</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_DESC">Deze instelling kan worden gebruikt om te bepalen wie eerdere rollen kan bekijken. De gebruiker moet echter ook het recht hebben om de rol zelf te zien. Leiders van een rol kunnen ook voormalige leden van hun rol bekijken, als ze toestemming hebben om hier te worden ingesteld. (Standaard: #VAR1#)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS_RIGHT">Gebruiker met recht #VAR1_BOLD#</string>
-  <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Toon voormalige rol lidmaatschappen</string>
+  <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP">Voormalige rollidmaatschappen tonen</string>
   <string name="SYS_SHOW_FORMER_ROLE_MEMBERSHIP_DESC">Er wordt een veld getoond met alle rollen van gebruiker in de huidige organisatie. Begin- en einddatum van lidmaatschap worden getoond. (Standaard: ja)</string>
   <string name="SYS_SHOW_LESS">Show less</string>
   <string name="SYS_SHOW_LIST">Toon lijst</string>
@@ -1710,7 +1710,7 @@
   <string name="SYS_SHOW_PROFILE">Toon profiel</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS">Toon rol van andere organisaties</string>
   <string name="SYS_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC">Als gebruiker een rol in een andere organisatie heeft, wordt een veld getoond met alle rollen en de registratie datum. (Standaard: ja)</string>
-  <string name="SYS_SHOW_ROLE_MEMBERSHIP">Toon rol lidmaatschappen</string>
+  <string name="SYS_SHOW_ROLE_MEMBERSHIP">Rollidmaatschappen tonen</string>
   <string name="SYS_SHOW_ROLE_MEMBERSHIP_DESC">Er wordt een veld getoond met alle rollen van gebruiker in de huidige organisatie. Rechten en registratie datum worden getoond. (Standaard: ja)</string>
   <string name="SYS_SHOW_ROUTE">Toon route</string>
   <string name="SYS_SHOW_WATERMARK">Show watermark</string>
@@ -2107,8 +2107,8 @@
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS">Bekijk profielen van rolleden</string>
   <string name="SYS_VIEW_PROFILES_OF_ROLE_MEMBERS_DESC">Deze instelling kan worden gebruikt om te definiëren wie de profielen van de leden van deze rol kan zien. De gebruiker kan het profiel van de betreffende persoon oproepen en alle opgeslagen kolommen in lijsten voor de rol zien. Het rolrecht #VAR1_BOLD# overschrijft deze instelling.</string>
   <string name="SYS_VIEW_ROLES_OTHER_ORGAS">Er worden hier alleen rollen van andere organisaties weergegeven, die voor alle geregistreerd gebruikers zichtbaar zijn. Als u lid bent van deze organisatie, zullen ook de rollen getoond worden die u kunt zien met uw rechten binnen de organisatie.</string>
-  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Bekijk rol lidmaatschappen</string>
-  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Met deze instelling kunt u bepalen wie de leden van deze rol kan zien. De gebruiker kan het rol lidmaatschap zien in het profiel van de betreffende persoon en in lijsten voor de rol. Deze instelling staat geen toegang toe tot het profiel van de de rolleden. In lijsten worden alleen naam en voornaam weergegeven. Het rolrecht #VAR1_BOLD# overschrijft deze instelling.</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS">Rollidmaatschappen bekijken</string>
+  <string name="SYS_VIEW_ROLE_MEMBERSHIPS_DESC">Hiermee bepaalt u wie de leden van deze rol kan zien. Het rollidmaatschap is dan zichtbaar in het profiel van de betreffende persoon en in de lijsten van de rol. Deze instelling geeft geen toegang tot de profielen van de rolleden; in lijsten worden alleen achternaam en voornaam getoond. Het rolrecht #VAR1_BOLD# heeft voorrang op deze instelling.</string>
   <string name="SYS_VISIBLE">Zichtbaar</string>
   <string name="SYS_VISIBLE_FOR">Zichtbaar voor</string>
   <string name="SYS_VISITORS">Bezoekers</string>
