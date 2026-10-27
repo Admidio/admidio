@@ -2079,7 +2079,7 @@
   <string name="SYS_USER_RELATIONS">Relaties</string>
   <string name="SYS_USER_RELATION_TYPE">Relatie type</string>
   <string name="SYS_USER_VALID_LOGIN">Gebruiker heeft al geldige inloginformatie.</string>
-  <string name="SYS_USING_CURRENT_VERSION">U gebruikt momenteel een #VAR1#versie van Admidio!</string>
+  <string name="SYS_USING_CURRENT_VERSION">U gebruikt een actuele #VAR1#versie van Admidio.</string>
   <string name="SYS_UTF16BE">UTF-16BE</string>
   <string name="SYS_UTF16LE">UTF-16LE</string>
   <string name="SYS_UTF32BE">UTF-32BE</string>
