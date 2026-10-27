@@ -36,6 +36,7 @@ use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
+use Admidio\Roles\Service\MembershipPeriodService;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
@@ -118,6 +119,7 @@ final class CoreTasks
 
         self::registerGeneralTasks();
         self::registerSystemTasks();
+        self::registerMaintenanceJobs();
         self::registerConfigTasks();
         self::registerOrganizationTasks();
         self::registerUserTasks();
@@ -455,13 +457,37 @@ final class CoreTasks
     }
 
     /**
-     * The jobs of maintenance:run, in the order in which they are executed.
-     *
-     * @var array<int,string>
+     * Register the maintenance jobs of Admidio core, in the order in which maintenance:run executes
+     * them. Modules and plugins add theirs with CliTaskRegistry::registerMaintenanceJob().
      */
-    private const MAINTENANCE_JOBS = array(
-        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'saml-metadata', 'update-check'
-    );
+    private static function registerMaintenanceJobs(): void
+    {
+        CliTaskRegistry::registerCoreMaintenanceJob('categories', static function (): void {
+            (new Maintenance($GLOBALS['gDb']))->reorganizeCategories();
+        }, 'Reorganize the sequence of the categories.');
+        CliTaskRegistry::registerCoreMaintenanceJob('documents', static function (): void {
+            (new Maintenance($GLOBALS['gDb']))->repairDocumentsFilesPath();
+        }, 'Repair the paths of the documents and files folders.');
+        CliTaskRegistry::registerCoreMaintenanceJob('sessions', static function (): void {
+            self::cleanupSessions(30);
+        }, 'Remove sessions that were inactive for 30 days.');
+        CliTaskRegistry::registerCoreMaintenanceJob('auto-logins', static function (): void {
+            self::cleanupAutoLogins();
+        }, 'Remove expired automatic logins.');
+        CliTaskRegistry::registerCoreMaintenanceJob('sso-tokens', static function (): void {
+            self::cleanupSsoTokens();
+        }, 'Remove expired, revoked and used OIDC tokens and codes.');
+        CliTaskRegistry::registerCoreMaintenanceJob('saml-metadata', static function (): string {
+            return self::refreshSamlMetadata();
+        }, 'Refresh the metadata of the SAML clients that are due for it.');
+        CliTaskRegistry::registerCoreMaintenanceJob('update-check', static function (): string {
+            return self::checkForUpdate();
+        }, 'Look for a new release of Admidio, unless the update check is switched off.');
+        CliTaskRegistry::registerCoreMaintenanceJob('memberships', static function (): string {
+            $count = (new MembershipPeriodService($GLOBALS['gDb']))->runIfDue();
+            return $count === null ? 'already done today' : $count . ' memberships started or ended';
+        }, 'Report the memberships that started or ended since the last run, once per day.');
+    }
 
     private static function registerSystemTasks(): void
     {
@@ -647,13 +673,19 @@ final class CoreTasks
         self::task('maintenance:repair-documents', 'repairDocuments', 'Run the native documents/files path repair operation.',
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
-        self::task('maintenance:run', 'maintenanceRun', 'Run the available native maintenance jobs and report each result.',
+        self::task('maintenance:run', 'maintenanceRun', 'Run the maintenance jobs of core, modules and plugins and report each result.',
             'maintenance:run [--job=JOB]... [--yes] [--format=table|json|json-api|csv|md|dokuwiki]',
             'CORE', true, array(), array(
-                self::opt('job', 'Maintenance job to run; repeat to select more than one. Without the option every job runs.', 'JOB', false, true, false, self::MAINTENANCE_JOBS),
+                // no list of values: modules and plugins register their jobs after the core commands
+                self::opt('job', 'Maintenance job to run, see maintenance:jobs; repeat to select more than one. Without the option every job runs.', 'JOB', false, true, false),
                 self::opt('yes', 'Confirm maintenance execution.', '', false, false, true),
                 self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
+        self::task('maintenance:jobs', 'maintenanceJobs', 'List the maintenance jobs that maintenance:run executes.',
+            'maintenance:jobs [--format=table|json|json-api|csv|md|dokuwiki]',
+            'CORE', true, array(), array(
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
+            ), array(), null, CliTaskRegistry::ACCESS_VISIBLE);
         self::task(
             'maintenance:mode',
             'maintenanceMode',
@@ -3342,34 +3374,28 @@ final class CoreTasks
 
     public static function maintenanceRun(array $arguments, array $options): int
     {
-        global $gDb;
+        $jobs = CliTaskRegistry::getMaintenanceJobs();
+        $requested = CliApplication::optionValues($options, 'job');
+        foreach ($requested as $jobName) {
+            if (!isset($jobs[$jobName])) {
+                throw new InvalidArgumentException('--job expects one of: ' . implode(', ', array_keys($jobs)) . '.');
+            }
+        }
 
         CliApplication::confirm('Run the selected Admidio maintenance jobs?', $options);
-        $requested = CliApplication::optionValues($options, 'job');
         if (count($requested) === 0) {
             // One crontab entry is supposed to cover the recurring work of an installation.
-            $requested = self::MAINTENANCE_JOBS;
+            $requested = array_keys($jobs);
         }
         $requested = array_values(array_unique($requested));
 
-        $maintenance = new Maintenance($gDb);
-        $jobs = array(
-            'categories' => static fn (): mixed => $maintenance->reorganizeCategories(),
-            'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath(),
-            'sessions' => static fn (): mixed => self::cleanupSessions(30),
-            'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
-            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens(),
-            'saml-metadata' => static fn (): mixed => self::refreshSamlMetadata(),
-            'update-check' => static fn (): mixed => self::checkForUpdate()
-        );
         $rows = array();
         $failures = 0;
 
         foreach ($requested as $jobName) {
             try {
-                // A job that has something to report returns it as text.
-                $result = $jobs[$jobName]();
-                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => is_string($result) ? $result : '');
+                $message = ($jobs[$jobName]['callback'])();
+                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => is_string($message) ? $message : '');
             } catch (\Throwable $exception) {
                 ++$failures;
                 $rows[] = array(
@@ -3387,6 +3413,21 @@ final class CoreTasks
         );
 
         return $failures === 0 ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_FAILED;
+    }
+
+    public static function maintenanceJobs(array $arguments, array $options): int
+    {
+        $rows = array();
+        foreach (CliTaskRegistry::getMaintenanceJobs() as $job) {
+            $rows[] = array(
+                'job' => $job['name'],
+                'origin' => $job['core'] ? 'core' : 'extension',
+                'description' => $job['description']
+            );
+        }
+
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function maintenanceMode(array $arguments, array $options): int
@@ -9482,11 +9523,6 @@ final class CoreTasks
     }
 
     /**
-     * Look for a new release of Admidio for the notice of the administrators, as the requests of
-     * administrators do twice a day - unless the check is switched off in the preferences. The time
-     * of the check is recorded, so that a request does not repeat it.
-     */
-    /**
      * Check the metadata of the SAML clients that are due for it (see SAMLMetadataRefreshService).
      * A client whose metadata cannot be fetched or is not valid is reported; the job fails only
      * for an error that keeps it from running at all.
@@ -9503,6 +9539,11 @@ final class CoreTasks
         return count($rows) === 0 ? 'No SAML metadata is due.' : implode('; ', $summary);
     }
 
+    /**
+     * Look for a new release of Admidio for the notice of the administrators, as the requests of
+     * administrators do twice a day - unless the check is switched off in the preferences. The time
+     * of the check is recorded, so that a request does not repeat it.
+     */
     private static function checkForUpdate(): string
     {
         global $gSettingsManager;

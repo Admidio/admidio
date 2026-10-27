@@ -74,6 +74,14 @@ final class CliTaskRegistry
     private static ?array $sortedTasks = null;
 
     /**
+     * The jobs of maintenance:run, in registration order: the core jobs first, then those of the
+     * modules and plugins.
+     *
+     * @var array<string,array{name:string,callback:callable,description:string,core:bool}>
+     */
+    private static array $maintenanceJobs = array();
+
+    /**
      * Core namespaces cannot be extended or shadowed by module registration.
      *
      * @var array<string,bool>
@@ -235,6 +243,81 @@ final class CliTaskRegistry
     }
 
     /**
+     * Register a maintenance job of Admidio core.
+     */
+    public static function registerCoreMaintenanceJob(string $jobName, callable $callback, string $description): void
+    {
+        self::registerJob($jobName, $callback, $description, true);
+    }
+
+    /**
+     * Register a maintenance job of a module or plugin. `admidio maintenance:run` runs every
+     * registered job, so one crontab entry covers core, modules and plugins.
+     *
+     * A module provides its jobs in modules/<module>/cli.php and a plugin in plugins/<plugin>/cli.php,
+     * next to its commands. The name uses the namespace of the module or plugin, like a command. The
+     * job runs in the organization and as the acting user of maintenance:run. It is run every time
+     * maintenance:run runs - typically hourly - and has to decide itself whether there is anything
+     * to do, cheaply when there is not. It may return a short message for the result table and
+     * throws when it fails; the other jobs run anyway.
+     *
+     * **Example** plugins/example/cli.php
+     * ```
+     * CliTaskRegistry::registerMaintenanceJob(
+     *     'example:cleanup',
+     *     static function (): ?string {
+     *         return ExampleCleanup::runIfDue() . ' entries removed';
+     *     },
+     *     'Remove expired example entries.'
+     * );
+     * ```
+     *
+     * @param callable(): (string|null|void) $callback
+     */
+    public static function registerMaintenanceJob(string $jobName, callable $callback, string $description): void
+    {
+        if (!str_contains($jobName, ':')) {
+            throw new InvalidArgumentException('Extension maintenance jobs must use the form extension:job.');
+        }
+
+        self::registerJob($jobName, $callback, $description, false);
+    }
+
+    /**
+     * The registered maintenance jobs, in the order in which maintenance:run executes them.
+     *
+     * @return array<string,array{name:string,callback:callable,description:string,core:bool}>
+     */
+    public static function getMaintenanceJobs(): array
+    {
+        return self::$maintenanceJobs;
+    }
+
+    private static function registerJob(string $jobName, callable $callback, string $description, bool $core): void
+    {
+        if (!preg_match('/^[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)?$/', $jobName)) {
+            throw new InvalidArgumentException(
+                'Maintenance job names must use lowercase letters, digits and hyphens with at most one namespace separator.'
+            );
+        }
+
+        if (!$core) {
+            self::assertOwnNamespace($jobName, 'maintenance jobs');
+        }
+
+        if (isset(self::$maintenanceJobs[$jobName])) {
+            throw new InvalidArgumentException('Maintenance job "' . $jobName . '" is already registered.');
+        }
+
+        self::$maintenanceJobs[$jobName] = array(
+            'name' => $jobName,
+            'callback' => $callback,
+            'description' => trim($description),
+            'core' => $core
+        );
+    }
+
+    /**
      * @return array{
      *     name:string,
      *     component:?string,
@@ -345,33 +428,8 @@ final class CliTaskRegistry
         if (str_contains($taskName, ':')) {
             $namespace = strstr($taskName, ':', true);
 
-            if (!$core && isset(self::$coreNamespaces[$namespace])) {
-                throw new InvalidArgumentException(
-                    'CLI namespace "' . $namespace . '" is reserved by Admidio core.'
-                );
-            }
-
-            if (!$core && self::$moduleContext !== null) {
-                /*
-                 * A module owns the namespace named after its directory. Module directories are
-                 * plural where the command namespace is singular - modules/events supplies
-                 * "event:list" - so the singular form belongs to the module as well.
-                 */
-                $ownNamespaces = array(self::$moduleContext);
-                $singular = preg_replace('/s$/', '', self::$moduleContext);
-                if ($singular !== self::$moduleContext) {
-                    $ownNamespaces[] = $singular;
-                }
-                // A plugin directory may use hyphens, which a command namespace cannot.
-                $ownNamespaces[] = str_replace('-', '', self::$moduleContext);
-
-                if (!in_array($namespace, $ownNamespaces, true)) {
-                    throw new InvalidArgumentException(
-                        self::$moduleContextKind . ' "' . self::$moduleContext . '" may only register commands of the "'
-                        . implode(':" or "', $ownNamespaces) . ':" namespace, but tried to register "'
-                        . $taskName . '".'
-                    );
-                }
+            if (!$core) {
+                self::assertOwnNamespace($taskName, 'commands');
             }
 
             if ($core) {
@@ -431,5 +489,41 @@ final class CliTaskRegistry
             'supportsDryRun' => $supportsDryRun,
             'core' => $core
         );
+    }
+
+    /**
+     * An extension may not use a namespace of Admidio core, and a module or plugin only its own: the
+     * namespace named after its directory. Module directories are plural where the namespace is
+     * singular - modules/events supplies "event:list" - so the singular form belongs to the module
+     * as well, and a plugin directory may use hyphens, which a namespace may also leave out.
+     *
+     * @param string $kind "commands" or "maintenance jobs", for the message.
+     */
+    private static function assertOwnNamespace(string $name, string $kind): void
+    {
+        $namespace = strstr($name, ':', true);
+
+        if (isset(self::$coreNamespaces[$namespace])) {
+            throw new InvalidArgumentException('CLI namespace "' . $namespace . '" is reserved by Admidio core.');
+        }
+
+        if (self::$moduleContext === null) {
+            return;
+        }
+
+        $ownNamespaces = array(self::$moduleContext);
+        $singular = preg_replace('/s$/', '', self::$moduleContext);
+        if ($singular !== self::$moduleContext) {
+            $ownNamespaces[] = $singular;
+        }
+        $ownNamespaces[] = str_replace('-', '', self::$moduleContext);
+
+        if (!in_array($namespace, $ownNamespaces, true)) {
+            throw new InvalidArgumentException(
+                self::$moduleContextKind . ' "' . self::$moduleContext . '" may only register ' . $kind . ' of the "'
+                . implode(':" or "', array_unique($ownNamespaces)) . ':" namespace, but tried to register "'
+                . $name . '".'
+            );
+        }
     }
 }
