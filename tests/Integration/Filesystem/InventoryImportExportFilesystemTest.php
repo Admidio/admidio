@@ -23,6 +23,7 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
         $cases = [];
         foreach (['csv-oo', 'xlsx', 'ods', 'pdf', 'pdfl'] as $mode) {
             $cases[$mode . ' matching search'] = [$mode, 'kamera', ['Kamera ÄÖÜ']];
+            $cases[$mode . ' empty search result'] = [$mode, 'missing', []];
         }
         return $cases;
     }
