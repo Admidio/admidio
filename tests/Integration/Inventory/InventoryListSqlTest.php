@@ -39,6 +39,31 @@ class InventoryListSqlTest extends DatabaseTestCase
     /** @dataProvider listRequests */
     public function testInventoryListQueries(array $request, array $expectedNames, int $expectedTotal = 3, ?int $expectedFiltered = null): void
     {
+        $result = $this->requestList($request);
+        $this->assertSame($expectedTotal, $result['recordsTotal']);
+        $this->assertSame($expectedFiltered ?? count($expectedNames), $result['recordsFiltered']);
+        $names = array_map(static fn(array $row): string => html_entity_decode(strip_tags($row[1]), ENT_QUOTES | ENT_HTML5), $result['data']);
+        $this->assertSame($expectedNames, $names);
+    }
+
+    public function testKeeperFilterReusesLoadedFieldDefinition(): void
+    {
+        $plain = $this->requestList([]);
+        $filtered = $this->requestList(['filterKeeper' => true]);
+        $this->assertSame($plain['recordsTotal'], $filtered['recordsTotal']);
+        $this->assertSame($plain['testQueryCount'], $filtered['testQueryCount']);
+    }
+
+    public function testWhitespaceSearchDoesNotRunAnotherCountQuery(): void
+    {
+        $plain = $this->requestList([]);
+        $whitespace = $this->requestList(['search' => '   ']);
+        $this->assertSame($plain['recordsFiltered'], $whitespace['recordsFiltered']);
+        $this->assertSame($plain['testQueryCount'], $whitespace['testQueryCount']);
+    }
+
+    private function requestList(array $request): array
+    {
         $root = tempnam(sys_get_temp_dir(), 'admidio-inventory-list-');
         unlink($root);
         mkdir($root . '/modules/inventory', 0777, true);
@@ -54,10 +79,7 @@ class InventoryListSqlTest extends DatabaseTestCase
             $result = json_decode($process->getOutput(), true, 512, JSON_THROW_ON_ERROR);
 
             $this->assertArrayNotHasKey('error', $result, $result['error'] ?? '');
-            $this->assertSame($expectedTotal, $result['recordsTotal']);
-            $this->assertSame($expectedFiltered ?? count($expectedNames), $result['recordsFiltered']);
-            $names = array_map(static fn(array $row): string => html_entity_decode(strip_tags($row[1]), ENT_QUOTES | ENT_HTML5), $result['data']);
-            $this->assertSame($expectedNames, $names);
+            return $result;
         } finally {
             unlink($endpoint);
             unlink($common);

@@ -112,6 +112,11 @@ if (DB_TYPE === Database::PDO_ENGINE_MYSQL) {
 
 // The copied endpoint is unchanged. Its common.php symlink resolves to the integration
 // bootstrap already loaded above, so require_once retains this isolated test context.
+$gLogger->resetQueryCount();
+ob_start();
 require $argv[2];
+$result = json_decode(ob_get_clean(), true, 512, JSON_THROW_ON_ERROR);
+$result['testQueryCount'] = $gLogger->getQueryCount();
+echo json_encode($result, JSON_THROW_ON_ERROR);
 
 $gDb->rollback();

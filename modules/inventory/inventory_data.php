@@ -25,7 +25,7 @@ try {
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-    $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+    $getSearch = trim(admFuncVariableIsValid($_GET['search'], 'value', 'string'));
 
     // additional filters from navbar
     $filterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
@@ -100,11 +100,8 @@ try {
         $baseParams[] = $filterCategory;
     }
     if ($filterKeeper !== 0) {
-        $sqlKeeperField = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . " WHERE inf_name_intern = 'KEEPER' AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1";
-        $stmtK = $gDb->queryPrepared($sqlKeeperField, array($gCurrentOrgId));
-        $rowK = $stmtK->fetch();
-        if ($rowK) {
-            $keeperFieldId = $rowK['inf_id'];
+        $keeperFieldId = (int) $itemsData->getProperty('KEEPER', 'inf_id');
+        if ($keeperFieldId > 0) {
             $baseWhere .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' kd WHERE kd.ind_ini_id = i.ini_id AND kd.ind_inf_id = ' . $keeperFieldId . ' AND kd.ind_value = ?)';
             $baseParams[] = (string)$filterKeeper;
         }
@@ -115,7 +112,7 @@ try {
     }
 
     // count total records (without global search)
-    $sqlCount = 'SELECT COUNT(DISTINCT i.ini_id) as count ' . $baseFromTables . $baseWhere . ';';
+    $sqlCount = 'SELECT COUNT(*) as count ' . $baseFromTables . $baseWhere . ';';
     $countStmt = $gDb->queryPrepared($sqlCount, $baseParams);
     $jsonArray['recordsTotal'] = (int)$countStmt->fetchColumn();
 
@@ -125,6 +122,7 @@ try {
     $sqlMain = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ' . $baseFromTables . $borrowLatestJoin . $baseWhere;
 
     $queryParams = $baseParams;
+    $searchWhere = '';
 
     // Each search word may match a different field of the same item.
     if ($getSearch !== '') {
@@ -134,11 +132,13 @@ try {
                 continue;
             }
             $searchOperator = DB_TYPE === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
-            $sqlMain .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
+            $searchWhere .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
                 . ' WHERE search_data.ind_ini_id = i.ini_id AND search_data.ind_value ' . $searchOperator . ' ?)';
             $queryParams[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
         }
     }
+
+    $sqlMain .= $searchWhere;
 
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';
@@ -409,7 +409,7 @@ try {
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
     // if search was applied, count filtered rows
     if ($getSearch !== '') {
-        $countSql = 'SELECT COUNT(*) FROM (' . $sqlMain . ') AS sub2';
+        $countSql = 'SELECT COUNT(*)' . $baseFromTables . $baseWhere . $searchWhere;
         $countStmt = $gDb->queryPrepared($countSql, $queryParams);
         $jsonArray['recordsFiltered'] = (int)$countStmt->fetchColumn();
     }
