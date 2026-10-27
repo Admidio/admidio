@@ -40,6 +40,9 @@ const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
 const TBL_CATEGORY_REPORT_COLUMNS = TABLE_PREFIX . '_category_report_columns';
 const TBL_COMPONENTS = TABLE_PREFIX . '_components';
 const TBL_EVENTS = TABLE_PREFIX . '_events';
+if (!defined('TBL_EVENT_RECURRENCES')) {
+    define('TBL_EVENT_RECURRENCES', TABLE_PREFIX . '_event_recurrences');
+}
 const TBL_FILES = TABLE_PREFIX . '_files';
 const TBL_FOLDERS = TABLE_PREFIX . '_folders';
 const TBL_FORUM_TOPICS = TABLE_PREFIX . '_forum_topics';
@@ -85,6 +88,7 @@ const TBL_INVENTORY_FIELDS = TABLE_PREFIX . '_inventory_fields';
 const TBL_INVENTORY_FIELD_OPTIONS = TABLE_PREFIX . '_inventory_field_select_options';
 const TBL_INVENTORY_ITEMS = TABLE_PREFIX . '_inventory_items';
 const TBL_INVENTORY_ITEM_BORROW_DATA = TABLE_PREFIX . '_inventory_item_borrow_data';
+const TBL_INVENTORY_RESERVATIONS = TABLE_PREFIX . '_inventory_reservations';
 
 // The Hooks unit tests (tests/Unit/Hooks) declare these same table constants when they run first in
 // composer test:all, so they are guarded rather than declared with const.

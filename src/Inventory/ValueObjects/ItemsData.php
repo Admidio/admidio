@@ -1316,41 +1316,63 @@ class ItemsData
         // Deleting an item is one action of the user, so the item and its data belong into one
         // change set of the changelog.
         $previousChangeSet = LogChanges::startChangeSet();
+        $ownsTransaction = !$this->mDb->isInTransaction();
+        if ($ownsTransaction) {
+            $this->mDb->startTransaction();
+        }
 
-        $item = new Item($this->mDb, $this, $this->mItemId);
+        try {
+            $this->lockItemAndAssertNoOpenReservations();
+            $item = new Item($this->mDb, $this, $this->mItemId);
 
-        // delete all item data. The values are logged and reported to the persistence hooks before
-        // they are removed, a plain DELETE would take them out of the change history and out of the
-        // hook API without a trace - the same reason Entity::deleteDependentRecords() calls both.
-        // This class is not an Entity subclass, so it calls logBulkDeletion() and hookBulkDeletion()
-        // itself instead of going through that helper.
-        $itemData = new ItemData($this->mDb, $this);
-        $itemData->logBulkDeletion(array('ind_id'), 'ind_ini_id = ?', array($this->mItemId));
-        $itemData->hookBulkDeletion('ind_ini_id = ?', array($this->mItemId), $item);
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
-        $this->mDb->queryPrepared($sql, array($this->mItemId));
+            // Deleting an item is irreversible. Once no reservation is still actionable, remove
+            // completed reservation history together with all other item-related records.
+            $this->mDb->queryPrepared(
+                'DELETE FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$this->mItemId],
+            );
 
-        // delete all item borrow data
-        $itemBorrowData = new ItemBorrowData($this->mDb, $this);
-        $itemBorrowData->logBulkDeletion(array('inb_id'), 'inb_ini_id = ?', array($this->mItemId));
-        $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', array($this->mItemId), $item);
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
-        $this->mDb->queryPrepared($sql, array($this->mItemId));
+            // delete all item data. The values are logged and reported to the persistence hooks before
+            // they are removed, a plain DELETE would take them out of the change history and out of the
+            // hook API without a trace - the same reason Entity::deleteDependentRecords() calls both.
+            // This class is not an Entity subclass, so it calls logBulkDeletion() and hookBulkDeletion()
+            // itself instead of going through that helper.
+            $itemData = new ItemData($this->mDb, $this);
+            $itemData->logBulkDeletion(['ind_id'], 'ind_ini_id = ?', [$this->mItemId]);
+            $itemData->hookBulkDeletion('ind_ini_id = ?', [$this->mItemId], $item);
+            $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
+            $this->mDb->queryPrepared($sql, [$this->mItemId]);
 
-        // Log and delete the item itself last. The change history shows a change with the record it
-        // is about, and it recognizes that record as the entry that a deletion logs last.
-        // hookBulkDeletion() is used instead of $item->delete() so that the exact WHERE condition -
-        // including the organization guard - is the one that decides what is actually deleted; it
-        // dispatches the same inventory_item_deleting / inventory_item_deleted as delete() would.
-        $item->logDeletion();
-        $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', array($this->mItemId, $this->organizationId));
+            // delete all item borrow data
+            $itemBorrowData = new ItemBorrowData($this->mDb, $this);
+            $itemBorrowData->logBulkDeletion(['inb_id'], 'inb_ini_id = ?', [$this->mItemId]);
+            $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', [$this->mItemId], $item);
+            $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
+            $this->mDb->queryPrepared($sql, [$this->mItemId]);
 
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
+            // Log and delete the item itself last. The change history shows a change with the record it
+            // is about, and it recognizes that record as the entry that a deletion logs last.
+            // hookBulkDeletion() is used instead of $item->delete() so that the exact WHERE condition -
+            // including the organization guard - is the one that decides what is actually deleted; it
+            // dispatches the same inventory_item_deleting / inventory_item_deleted as delete() would.
+            $item->logDeletion();
+            $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', [$this->mItemId, $this->organizationId]);
 
-        LogChanges::endChangeSet($previousChangeSet);
+            $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
+            $this->mDb->queryPrepared($sql, [$this->mItemId, $this->organizationId]);
 
-        $this->mItemDeleted = true;
+            if ($ownsTransaction) {
+                $this->mDb->endTransaction();
+            }
+            $this->mItemDeleted = true;
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->mDb->rollback();
+            }
+            throw $exception;
+        } finally {
+            LogChanges::endChangeSet($previousChangeSet);
+        }
     }
 
     /**
@@ -1377,9 +1399,25 @@ class ItemsData
             }
         }
 
-        $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->setValue('ini_status', $retiredId);
-        $item->save();
+        $ownsTransaction = !$this->mDb->isInTransaction();
+        if ($ownsTransaction) {
+            $this->mDb->startTransaction();
+        }
+
+        try {
+            $this->lockItemAndAssertNoOpenReservations();
+            $item = new Item($this->mDb, $this, $this->mItemId);
+            $item->setValue('ini_status', $retiredId);
+            $item->save();
+            if ($ownsTransaction) {
+                $this->mDb->endTransaction();
+            }
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->mDb->rollback();
+            }
+            throw $exception;
+        }
 
         $this->mItemRetired = true;
         $this->mItemReinstated = false;
@@ -1417,6 +1455,12 @@ class ItemsData
         $this->mItemReinstated = true;
     }
 
+    /** Lock the item and reject mutations while a reservation still requires action. */
+    private function lockItemAndAssertNoOpenReservations(): void
+    {
+        (new Item($this->mDb, $this, $this->mItemId))->assertNoOpenReservations();
+    }
+
     /**
      * Save data of every item data field
      *
@@ -1428,6 +1472,36 @@ class ItemsData
         // check if the current user is authorized to edit the item
         if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->assertReturnDateIsNotInFuture();
+
+        // Validate a submitted retirement before writing any of the other form fields.
+        foreach ($this->mItemData as $value) {
+            if ($value instanceof ItemData && (int) $value->getValue('ind_inf_id') === (int) $this->getProperty('STATUS', 'inf_id')) {
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                if ((int) $item->getStatus() === (int) $value->getValue('ind_value')) {
+                    continue;
+                }
+                $item->setValue('ini_status', $value->getValue('ind_value'));
+                if ($item->isRetired()) {
+                    $ownsTransaction = !$this->mDb->isInTransaction();
+                    if ($ownsTransaction) {
+                        $this->mDb->startTransaction();
+                    }
+                    try {
+                        $item->assertNoOpenReservations();
+                        if ($ownsTransaction) {
+                            $this->mDb->endTransaction();
+                        }
+                    } catch (\Throwable $exception) {
+                        if ($ownsTransaction) {
+                            $this->mDb->rollback();
+                        }
+                        throw $exception;
+                    }
+                }
+            }
         }
 
         global $gCurrentUser;
@@ -1502,6 +1576,29 @@ class ItemsData
         $this->readItemData($this->mItemUUID);
         $this->mDb->endTransaction();
         LogChanges::endChangeSet($previousChangeSet);
+    }
+
+    /** A return date records an actual return and therefore cannot be in the future. */
+    private function assertReturnDateIsNotInFuture(): void
+    {
+        global $gSettingsManager;
+
+        $returnDateValue = $this->getValue('RETURN_DATE', 'database');
+        if ($returnDateValue === '') {
+            return;
+        }
+
+        $returnDate = new DateTime($returnDateValue);
+        $now = new DateTime();
+        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+            $isInFuture = $returnDate > $now;
+        } else {
+            $isInFuture = $returnDate->format('Y-m-d') > $now->format('Y-m-d');
+        }
+
+        if ($isInFuture) {
+            throw new Exception('SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE');
+        }
     }
 
     /**
