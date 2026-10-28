@@ -135,6 +135,7 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
             'swapped values belong to different fields' => ['Tripod', 'Camera', 2],
             'same values in the same fields are a duplicate' => ['Camera', 'Tripod', 1],
             'changed description is a new item' => ['Camera', 'Stand', 2],
+            'duplicate in a later preload batch' => ['Camera', 'Tripod', 205, 205],
             'new value in a previously empty field' => ['Camera', 'Tripod', 2, 1, ''],
             'unchanged empty field is a duplicate' => ['Camera', '', 1, 1, ''],
         ];

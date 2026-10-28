@@ -15,7 +15,6 @@ use Admidio\Categories\Service\CategoryService;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
 
@@ -301,35 +300,35 @@ class ImportService
             }
         }
 
-        // check if the item already exists
-        foreach ($items->getItems() as $fieldId => $value) {
-            $items->readItemData($value['ini_uuid']);
-            $itemValues = array_fill_keys($comparisonFieldIds, '');
-            foreach ($items->getItemData() as $key => $itemData) {
-                $itemValue = $itemData->getValue('ind_value');
-                if ($itemData->getValue('inf_name_intern') === 'KEEPER' || $itemData->getValue('inf_name_intern') === 'LAST_RECEIVER' ||
-                    $itemData->getValue('inf_name_intern') === 'BORROW_DATE' || $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
-                    continue;
-                }
-
-                $itemValues[$key] = $itemValue;
-            }
-            // also add a column with the category if it exists
-            $item = new Item($gDb, $items, $items->getItemId());
-            $catID = $item->getValue('ini_cat_id');
-            $category = new Category($gDb);
-            if ($category->readDataById($catID)) {
-                $itemValues[$items->getProperty('CATEGORY', 'inf_id')] = $category->getValue('cat_name');
-            }
-
+        // Reuse the list preloader in bounded batches, including its category cache.
+        foreach (array_chunk($items->getItems(), 200) as $batch) {
             if (count($assignedFieldColumn) === 0) {
                 break;
             }
+            $items = new ItemsData($gDb, $gCurrentOrgId);
+            $items->preloadItemData(array_column($batch, 'ini_uuid'));
+            foreach ($batch as $value) {
+                $items->readItemData($value['ini_uuid']);
+                $itemValues = array_fill_keys($comparisonFieldIds, '');
+                foreach ($items->getItemData() as $key => $itemData) {
+                    if ($itemData->getValue('inf_name_intern') === 'KEEPER'
+                        || in_array($itemData->getValue('inf_name_intern'), $items->borrowFieldNames, true)) {
+                        continue;
+                    }
+                    $itemValues[$key] = $itemData->getValue('ind_value');
+                }
+                $categoryName = $items->getValue('CATEGORY');
+                if ($categoryName !== '') {
+                    $itemValues[$items->getProperty('CATEGORY', 'inf_id')] = Language::translateIfTranslationStrId($categoryName);
+                }
 
-            foreach ($assignedFieldColumn as $key => $colValue) {
-                $ret = $this->compareArrays($itemValues, $colValue);
-                if (!$ret) {
-                    unset($assignedFieldColumn[$key]);
+                foreach ($assignedFieldColumn as $key => $colValue) {
+                    if (!$this->compareArrays($itemValues, $colValue)) {
+                        unset($assignedFieldColumn[$key]);
+                    }
+                }
+                if (count($assignedFieldColumn) === 0) {
+                    break;
                 }
             }
         }
