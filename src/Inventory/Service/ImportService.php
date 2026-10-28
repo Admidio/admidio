@@ -265,14 +265,11 @@ class ImportService
         for ($i = $startRow, $iMax = count($importData); $i < $iMax; ++$i) {
             $row = array();
             foreach ($line as $columnKey => $columnValue) {
-                if (empty($columnValue)) {
-                    $columnValue = '';
-                }
-
                 // get usf id or database column name
                 $fieldId = array_search($columnKey, $importItemFields);
                 if ($fieldId !== false) {
-                    $row[$fieldId] = trim(strip_tags($columnValue));
+                    // CSV readers may return numeric zero or null; preserve zero as text.
+                    $row[$fieldId] = trim(strip_tags((string)$columnValue));
                 }
             }
             $assignedFieldColumn[] = $row;

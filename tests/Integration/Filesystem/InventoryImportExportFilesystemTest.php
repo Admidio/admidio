@@ -129,6 +129,58 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
         }
     }
 
+    public static function zeroValueImports(): array
+    {
+        return [
+            'integer zero' => ['NUMBER', '0', '0'],
+            'decimal zero' => ['DECIMAL', '0', '0'],
+            'text zero' => ['TEXT', '0', '0'],
+            'required item name zero' => ['ITEMNAME', '0', '0'],
+            'empty number remains empty' => ['NUMBER', '', ''],
+            'empty text remains empty' => ['TEXT', '', ''],
+        ];
+    }
+
+    /** @dataProvider zeroValueImports */
+    public function testCsvImportPreservesZeroValues(string $type, string $value, string $expected): void
+    {
+        global $gCurrentOrgId;
+
+        $db = $this->getDatabase();
+        $fieldName = 'ITEMNAME';
+        if ($type !== 'ITEMNAME') {
+            $field = new ItemField($db);
+            $field->setValue('inf_org_id', $gCurrentOrgId);
+            $field->setValue('inf_name', 'CSV zero value');
+            $field->setValue('inf_type', $type);
+            $field->save();
+            $fieldName = $field->getValue('inf_name_intern');
+        }
+        $items = new ItemsData($db, $gCurrentOrgId);
+        $category = $db->queryPrepared('SELECT cat_name FROM ' . TBL_CATEGORIES
+            . " WHERE cat_type = 'IVT' AND cat_org_id = ? LIMIT 1", [$gCurrentOrgId])->fetchColumn();
+        $status = $db->queryPrepared('SELECT ifo_value FROM ' . TBL_INVENTORY_FIELD_OPTIONS
+            . ' WHERE ifo_inf_id = ? ORDER BY ifo_sequence, ifo_id LIMIT 1', [$items->getProperty('STATUS', 'inf_id')])->fetchColumn();
+        $row = [$type === 'ITEMNAME' ? $value : 'Zero value item',
+            Language::translateIfTranslationStrId($category), Language::translateIfTranslationStrId($status)];
+        $mapping = [$items->getProperty('ITEMNAME', 'inf_id') => 0,
+            $items->getProperty('CATEGORY', 'inf_id') => 1, $items->getProperty('STATUS', 'inf_id') => 2];
+        if ($type !== 'ITEMNAME') {
+            $row[] = $value;
+            $mapping[$items->getProperty($fieldName, 'inf_id')] = 3;
+        }
+        $path = $this->createIsolatedDirectory('inventory-zero') . '/items.csv';
+        $handle = fopen($path, 'wb');
+        fputcsv($handle, $row, ',', '"', '');
+        fclose($handle);
+        $service = new ImportService();
+        $service->importData($service->readImportFileData($path, 'CSV', 'UTF-8', ',', '"'), $mapping);
+        $this->assertSame(1, (int) $db->queryPrepared('SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEMS)->fetchColumn());
+        $stored = $db->queryPrepared('SELECT ind_value FROM ' . TBL_INVENTORY_ITEM_DATA
+            . ' WHERE ind_inf_id = ?', [$items->getProperty($fieldName, 'inf_id')])->fetchColumn();
+        $this->assertSame($expected === '' ? false : $expected, $stored);
+    }
+
     public static function duplicateImports(): array
     {
         return [
