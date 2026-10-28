@@ -240,20 +240,15 @@ class ItemsData
 
             while ($row = $itemDataStatement->fetch()) {
                 if (!array_key_exists($row['ind_inf_id'], $this->mItemData)) {
-                    // The entities are indexed by the item field, but they are loaded by their own
-                    // key column ind_id. Passing ind_inf_id here reads an unrelated data row.
-                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, (int)$row['ind_id']);
+                    // The query already contains the complete entity, as in the preload path.
+                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this);
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
 
             // read all item borrow data
-            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
-                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                        ON inf_name_intern IN ( ?, ?, ? )
-                    WHERE inb_ini_id = ?;';
-            $params = array_merge($this->borrowFieldNames, array($itemId));
-            $itemBorrowStatement = $this->mDb->queryPrepared($sql, $params);
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
+            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array($itemId));
 
             while ($row = $itemBorrowStatement->fetch()) {
                 foreach ($this->getItemFields() as $itemField) {
@@ -263,13 +258,10 @@ class ItemsData
                     }
                     $fieldId = $itemField->getValue('inf_id');
                     if (!array_key_exists($fieldId, $this->mItemData)) {
-                        // Same as above: the entity is loaded by its own key column inb_id.
-                        // inb_ini_id is the item the borrow data belongs to and would read an
-                        // unrelated row. The object is only built for the borrow fields and only
-                        // when it is really needed, because the constructor clones this object
-                        // and reads from the database.
-                        $this->mItemData[$fieldId] = new ItemBorrowData($this->mDb, $this, (int)$row['inb_id']);
+                        $this->mItemData[$fieldId] = new ItemBorrowData($this->mDb, $this);
                     }
+                    $row['inf_id'] = $fieldId;
+                    $row['inf_name_intern'] = $fieldNameIntern;
                     $this->mItemData[$fieldId]->setArray($row);
                 }
             }
@@ -334,6 +326,7 @@ class ItemsData
                 $fieldName = $itemField->getValue('inf_name_intern');
                 if (in_array($fieldName, $this->borrowFieldNames, true)) {
                     $row['inf_id'] = $itemField->getValue('inf_id');
+                    $row['inf_name_intern'] = $fieldName;
                     $this->preloadedItems[$itemsById[(int) $row['inb_ini_id']]]['data'][(int) $row['inf_id']] = $row;
                 }
             }

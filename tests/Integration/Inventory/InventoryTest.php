@@ -783,6 +783,45 @@ class InventoryTest extends DatabaseTestCase
      *
      * @testdox A preloaded inventory list returns the same item, category, status and borrow values
      */
+    public function testSingleItemLoadingDoesNotQueryEachFieldAgain(): void
+    {
+        $admin = $this->makeInventoryUser('invhydration', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $extraValues = [];
+            for ($i = 0; $i < 4; ++$i) {
+                $field = new ItemField($this->getDatabase());
+                $field->setValue('inf_org_id', self::ORG_ID);
+                $field->setValue('inf_name', 'Hydrated value ' . $i);
+                $field->setValue('inf_type', 'TEXT');
+                $field->save();
+                $extraValues[$field->getValue('inf_name_intern')] = 'Value ' . $i;
+            }
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $simple = $this->createItem($items, ['ITEMNAME' => 'Simple item', 'LAST_RECEIVER' => 'Alice', 'BORROW_DATE' => '2020-01-01']);
+            $detailed = $this->createItem($items, array_merge($extraValues,
+                ['ITEMNAME' => 'Detailed item', 'LAST_RECEIVER' => 'Bob', 'BORROW_DATE' => '2020-01-01']));
+            $simpleUuid = $this->uuidOfItem($simple);
+            $detailedUuid = $this->uuidOfItem($detailed);
+            $loaded = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $before = $GLOBALS['gLogger']->getQueryCount();
+            $loaded->readItemData($simpleUuid);
+            $simpleQueries = $GLOBALS['gLogger']->getQueryCount() - $before;
+            $before = $GLOBALS['gLogger']->getQueryCount();
+            $loaded->readItemData($detailedUuid);
+            $this->assertSame($simpleQueries, $GLOBALS['gLogger']->getQueryCount() - $before);
+            foreach ($extraValues as $name => $value) {
+                $this->assertSame($value, $loaded->getValue($name));
+            }
+            $this->assertSame('Bob', $loaded->getValue('LAST_RECEIVER'));
+            $fieldName = array_key_first($extraValues);
+            $loaded->setValue($fieldName, 'Updated value');
+            $loaded->saveItemData();
+            $this->assertSame('Updated value', $loaded->getValue($fieldName));
+            $this->assertSame(1, (int) $this->getDatabase()->queryPrepared('SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEM_DATA
+                . ' WHERE ind_ini_id = ? AND ind_inf_id = ?', [$detailed, $loaded->getProperty($fieldName, 'inf_id')])->fetchColumn());
+        });
+    }
+
     public function testPreloadedItemDataMatchesSingleItemLoading(): void
     {
         $admin = $this->makeInventoryUser('invpreload', true);
