@@ -225,6 +225,25 @@ class InventoryTest extends DatabaseTestCase
         }
     }
 
+    public function testItemListExcludesIncompleteItemsWithoutDuplicatingRows(): void
+    {
+        $admin = $this->makeInventoryUser('invlistcomplete', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () use ($admin) {
+            $items = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $id = $this->createItem($items, ['ITEMNAME' => 'Complete camera', 'KEEPER' => (string) $admin->getValue('usr_id')]);
+            $incomplete = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $incomplete->readItemData('');
+            $incomplete->createNewItem($this->inventoryCategoryUuid());
+
+            foreach (['', '   ', 'complete camera'] as $search) {
+                $items->readItems($search);
+                $this->assertSame([$id], array_map('intval', array_column($items->getItems(), 'ini_id')));
+            }
+            $items->readItems('missing');
+            $this->assertSame([], $items->getItems());
+        });
+    }
+
     public function testFailedNewItemDoesNotLeaveAnIncompleteRecord(): void
     {
         foreach (['required-field', 'return-date'] as $failure) {

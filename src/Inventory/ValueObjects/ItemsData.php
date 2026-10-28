@@ -408,12 +408,15 @@ class ItemsData
         }
 
         $searchCondition = $this->getSqlSearchCondition($search, TBL_INVENTORY_ITEMS . '.ini_id');
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
-                INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
-                    ON ind_ini_id = ini_id
+        // A word search already requires a stored field value. Without a search,
+        // exclude incomplete items with EXISTS rather than duplicating item rows.
+        $dataCondition = $searchCondition['sql'] !== '' ? $searchCondition['sql']
+            : ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA
+                . ' WHERE ind_ini_id = ' . TBL_INVENTORY_ITEMS . '.ini_id)';
+        $sql = 'SELECT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
-                ' . $sqlWhereCondition . $searchCondition['sql'] . ';';
+                ' . $sqlWhereCondition . $dataCondition . ';';
         $statement = $this->mDb->queryPrepared($sql, array_merge([$this->organizationId], $searchCondition['params']));
 
         while ($row = $statement->fetch()) {
