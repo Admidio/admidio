@@ -1282,19 +1282,6 @@ class ItemsData
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // If an error occurred while generating an item, there is an ItemId but no data for that item.
-        // the following routine deletes these unused ItemIds
-        $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
-                LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . '
-                    ON ind_ini_id = ini_id
-                WHERE ind_ini_id is NULL;';
-        $statement = $this->mDb->queryPrepared($sql);
-
-        while ($row = $statement->fetch()) {
-            $delItem = new Item($this->mDb, $this, $row['ini_id']);
-            $delItem->delete();
-        }
-
         // generate a new ItemId
         if ($this->mItemCreated) {
             $category = new Category($this->mDb);

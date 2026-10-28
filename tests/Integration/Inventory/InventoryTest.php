@@ -174,6 +174,105 @@ class InventoryTest extends DatabaseTestCase
         );
     }
 
+    public function testParallelServiceCreationsCommitBothItems(): void
+    {
+        $database = $this->getDatabase();
+        $names = ['Parallel camera ' . bin2hex(random_bytes(8)), 'Parallel tripod ' . bin2hex(random_bytes(8))];
+        $startFile = tempnam(sys_get_temp_dir(), 'admidio-item-creation-');
+        $processes = [];
+        unlink($startFile);
+        // The workers use their own connections and transactions, like real requests.
+        $database->endTransaction();
+        try {
+            foreach ($names as $name) {
+                $process = new Process([PHP_BINARY, __DIR__ . '/item_creation_worker.php', 'parallel', $name, $startFile]);
+                $process->setTimeout(30);
+                $process->start();
+                $processes[] = $process;
+            }
+            touch($startFile);
+            foreach ($processes as $index => $process) {
+                $process->wait();
+                $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+                $result = json_decode($process->getOutput(), true, 512, JSON_THROW_ON_ERROR);
+                $this->assertSame('', $result['error']);
+                $this->assertFalse($result['transactionOpen']);
+                $this->assertGreaterThan(0, $result['itemId']);
+                $this->assertSame($names[$index], $database->queryPrepared(
+                    'SELECT ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ? AND ind_value = ?',
+                    [$result['itemId'], $names[$index]]
+                )->fetchColumn());
+            }
+        } finally {
+            foreach ($processes as $process) {
+                if ($process->isRunning()) {
+                    $process->stop();
+                }
+            }
+            $ids = $database->queryPrepared('SELECT ind_ini_id FROM ' . TBL_INVENTORY_ITEM_DATA
+                . ' WHERE ind_value IN (?, ?)', $names)->fetchAll(\PDO::FETCH_COLUMN);
+            foreach ($ids as $id) {
+                $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?', [$id]);
+                $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?', [$id]);
+                $database->queryPrepared('DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?', [$id]);
+            }
+            $database->queryPrepared('DELETE FROM ' . TBL_LOG_CHANGES
+                . " WHERE log_table IN ('inventory_items', 'inventory_item_data') AND log_record_name IN (?, ?)", $names);
+            if (file_exists($startFile)) {
+                unlink($startFile);
+            }
+            $database->startTransaction();
+        }
+    }
+
+    public function testFailedNewItemDoesNotLeaveAnIncompleteRecord(): void
+    {
+        foreach (['required-field', 'return-date'] as $failure) {
+            $process = new Process([PHP_BINARY, __DIR__ . '/item_creation_worker.php', $failure]);
+            $process->setTimeout(30);
+            $process->mustRun();
+            $result = json_decode($process->getOutput(), true, 512, JSON_THROW_ON_ERROR);
+            $this->assertNotSame('', $result['error'], $failure);
+            if ($failure === 'return-date') {
+                $this->assertSame('SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE', $result['errorId']);
+            } else {
+                $this->assertStringContainsString('empty', strtolower($result['error']));
+            }
+            $this->assertSame($result['before'], $result['after'], $failure);
+            $this->assertFalse($result['transactionOpen'], $failure);
+        }
+    }
+
+    public function testInterleavedItemCreationPreservesBothItems(): void
+    {
+        $admin = $this->makeInventoryUser('invinterleaved', true);
+        $this->withCurrentUser($admin, self::ORG_ID, true, function () {
+            $first = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $first->readItemData('');
+            $first->createNewItem($this->inventoryCategoryUuid());
+            $firstId = $first->getItemId();
+
+            // Pause the first creation before its field values are saved, as can
+            // happen while a second request creates another item.
+            $second = new ItemsData($this->getDatabase(), self::ORG_ID);
+            $second->readItemData('');
+            $second->createNewItem($this->inventoryCategoryUuid());
+            $this->assertSame(1, (int) $this->getDatabase()->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?', [$firstId]
+            )->fetchColumn());
+
+            $first->setValue('ITEMNAME', 'First interleaved item');
+            $first->saveItemData();
+            $second->setValue('ITEMNAME', 'Second interleaved item');
+            $second->saveItemData();
+            $loaded = new ItemsData($this->getDatabase(), self::ORG_ID);
+            foreach ([$first, $second] as $created) {
+                $loaded->readItemData($this->uuidOfItem($created->getItemId()));
+                $this->assertSame($created->getValue('ITEMNAME'), $loaded->getValue('ITEMNAME'));
+            }
+        });
+    }
+
     public function testPresenterLoadsItemsOnlyWhenPreparingRows(): void
     {
         $admin = $this->makeInventoryUser('invlazyrows', true);
