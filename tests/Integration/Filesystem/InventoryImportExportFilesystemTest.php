@@ -129,6 +129,67 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
         }
     }
 
+    public static function duplicateImports(): array
+    {
+        return [
+            'swapped values belong to different fields' => ['Tripod', 'Camera', 2],
+            'same values in the same fields are a duplicate' => ['Camera', 'Tripod', 1],
+            'changed description is a new item' => ['Camera', 'Stand', 2],
+            'new value in a previously empty field' => ['Camera', 'Tripod', 2, 1, ''],
+            'unchanged empty field is a duplicate' => ['Camera', '', 1, 1, ''],
+        ];
+    }
+
+    /** @dataProvider duplicateImports */
+    public function testImportDuplicatesRespectFieldAssignments(string $name, string $description, int $expectedCount, int $existingCount = 1, string $existingDescription = 'Tripod'): void
+    {
+        global $gCurrentOrgId;
+
+        $db = $this->getDatabase();
+        $field = new ItemField($db);
+        $field->setValue('inf_org_id', $gCurrentOrgId);
+        $field->setValue('inf_name', 'Import description');
+        $field->setValue('inf_type', 'TEXT');
+        $field->save();
+        $category = $db->queryPrepared('SELECT cat_uuid, cat_name FROM ' . TBL_CATEGORIES
+            . " WHERE cat_type = 'IVT' AND cat_org_id = ? LIMIT 1", [$gCurrentOrgId])->fetch();
+        $items = new ItemsData($db, $gCurrentOrgId);
+        for ($i = 1; $i < $existingCount; ++$i) {
+            $items->readItemData('');
+            $items->createNewItem($category['cat_uuid']);
+            $items->setValue('ITEMNAME', 'Other import item ' . $i);
+            $items->saveItemData();
+        }
+        $items->readItemData('');
+        $items->createNewItem($category['cat_uuid']);
+        $items->setValue('ITEMNAME', 'Camera');
+        $items->setValue($field->getValue('inf_name_intern'), $existingDescription);
+        $items->setValue('LAST_RECEIVER', 'Alice');
+        $items->setValue('BORROW_DATE', '2020-01-01');
+        $items->saveItemData();
+        $status = $db->queryPrepared('SELECT ifo_value FROM ' . TBL_INVENTORY_FIELD_OPTIONS
+            . ' WHERE ifo_inf_id = ? ORDER BY ifo_sequence, ifo_id LIMIT 1', [$items->getProperty('STATUS', 'inf_id')])->fetchColumn();
+        $path = $this->createIsolatedDirectory('inventory-duplicates') . '/items.csv';
+        $handle = fopen($path, 'wb');
+        fputcsv($handle, [$name, $description, Language::translateIfTranslationStrId($category['cat_name']), Language::translateIfTranslationStrId($status), 'Bob', '2020-01-01'], ',', '"', '');
+        fclose($handle);
+        $service = new ImportService();
+        $service->importData($service->readImportFileData($path, 'CSV', 'UTF-8', ',', '"'), [
+            $items->getProperty('ITEMNAME', 'inf_id') => 0,
+            $field->getValue('inf_id') => 1,
+            $items->getProperty('CATEGORY', 'inf_id') => 2,
+            $items->getProperty('STATUS', 'inf_id') => 3,
+            $items->getProperty('LAST_RECEIVER', 'inf_id') => 4,
+            $items->getProperty('BORROW_DATE', 'inf_id') => 5,
+        ]);
+        $this->assertSame($expectedCount, (int) $db->queryPrepared('SELECT COUNT(*) FROM ' . TBL_INVENTORY_ITEMS)->fetchColumn());
+        $matches = $db->queryPrepared('SELECT n.ind_ini_id FROM ' . TBL_INVENTORY_ITEM_DATA . ' n
+            LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . ' d ON d.ind_ini_id = n.ind_ini_id AND d.ind_inf_id = ?
+            WHERE n.ind_inf_id = ? AND n.ind_value = ? AND COALESCE(d.ind_value, \'\') = ?',
+            [$field->getValue('inf_id'), $items->getProperty('ITEMNAME', 'inf_id'), $name, $description])->fetchAll();
+        $this->assertCount(1, $matches);
+    }
+
     /**
      * @testdox A real CSV is parsed and imported and the persisted item appears in a production CSV export
      */
