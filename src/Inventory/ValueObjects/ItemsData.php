@@ -1306,9 +1306,6 @@ class ItemsData
 
             $this->mItemId = $newItem->getValue('ini_id');
             $this->mItemUUID = $newItem->getValue('ini_uuid');
-
-            // update item table
-            $this->readItems();
         }
     }
 
