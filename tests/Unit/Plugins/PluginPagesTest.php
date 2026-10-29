@@ -77,7 +77,7 @@ final class PluginPagesTest extends PluginTestCase
 
         $this->assertStringContainsString("require_once(__DIR__ . '/../../system/common.php');", $stub);
         $this->assertStringContainsString(
-            "require Admidio\\Infrastructure\\Plugins\\PluginRegistry::resolvePage('hello', 'list.php');",
+            "require Admidio\\Infrastructure\\Plugins\\PluginPages::resolve('hello', 'list.php');",
             $stub
         );
 
@@ -220,6 +220,29 @@ final class PluginPagesTest extends PluginTestCase
     }
 
     /**
+     * @testdox Stubs of an older format are rewritten once, on the first request after the update
+     *
+     * The stubs of format 1 required PluginRegistry::resolvePage() directly, so a page of a plugin
+     * waiting for its update ended with an uncaught exception. Waiting for the next plugin update to
+     * rewrite them would keep exactly that page broken.
+     */
+    public function testReconcileRewritesStubsOfAnOlderFormat(): void
+    {
+        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+        $settings = $GLOBALS['gSettingsManager'];
+        $settings->set(PluginPages::SETTING_APPLIED, '1');
+        mkdir($this->modulesPath . '/hello');
+        file_put_contents($this->modulesPath . '/hello/' . PluginPages::MARKER_FILE, "hello\n");
+        file_put_contents($this->modulesPath . '/hello/list.php', '<?php // format 1');
+
+        $this->assertSame(array('hello' => 'published'), PluginPages::reconcile());
+        $this->assertStringContainsString('PluginPages::resolve(', (string)file_get_contents($this->modulesPath . '/hello/list.php'));
+        $this->assertSame((string)PluginPages::STUB_FORMAT, $settings->values[PluginPages::SETTING_FORMAT]);
+
+        $this->assertSame(array(), PluginPages::reconcile(), 'the stubs are current now, so nothing is written again');
+    }
+
+    /**
      * @testdox An obstacle is reported once and not retried on every request
      */
     public function testReconcileDoesNotRetryAnObstacle(): void
@@ -285,6 +308,20 @@ final class PluginPagesTest extends PluginTestCase
         $pluginPageScopeProbe = 'bootstrap-global';
 
         require PluginRegistry::resolvePage('hello', 'list.php');
+
+        $this->assertSame(array('list.php'), $GLOBALS['helloPageRuns']);
+        $this->assertSame('bootstrap-global', $GLOBALS['helloPageScopeProbe']);
+    }
+
+    /**
+     * @testdox The stub's resolve() returns the page for the caller to require in its own scope
+     */
+    public function testResolveForTheStubUsesCallerScope(): void
+    {
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.2.0')));
+        $pluginPageScopeProbe = 'bootstrap-global';
+
+        require PluginPages::resolve('hello', 'list.php');
 
         $this->assertSame(array('list.php'), $GLOBALS['helloPageRuns']);
         $this->assertSame('bootstrap-global', $GLOBALS['helloPageScopeProbe']);
@@ -362,6 +399,11 @@ final class PluginPagesSettingsDouble
     public function getBool(string $name, bool $update = false): bool
     {
         return $this->get($name) === '1';
+    }
+
+    public function getInt(string $name, bool $update = false): int
+    {
+        return (int)$this->get($name);
     }
 
     public function has(string $name, bool $update = false): bool

@@ -3,7 +3,10 @@
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\UI\Presenter\PagePresenter;
+use Throwable;
 
 /**
  * Publishes the pages of a plugin under the ordinary module URL.
@@ -55,6 +58,18 @@ final class PluginPages
      * exactly once after the administrator changed the setting.
      */
     public const SETTING_APPLIED = 'plugin_module_pages_applied';
+
+    /**
+     * The format of the stubs on disk, against STUB_FORMAT. A core that writes its stubs
+     * differently raises STUB_FORMAT, and the next request rewrites every stub once.
+     */
+    public const SETTING_FORMAT = 'plugin_module_pages_format';
+
+    /**
+     * The format getStubSource() writes. 1 required PluginRegistry::resolvePage() directly, 2 goes
+     * through resolve(), which answers a page that may not run instead of failing with a PHP error.
+     */
+    public const STUB_FORMAT = 2;
 
     /**
      * Marks a directory below modules/ as generated, and names its owner. Only a directory that
@@ -143,15 +158,33 @@ final class PluginPages
         }
 
         $wanted = self::readFlag(self::SETTING);
-        if (self::readFlag(self::SETTING_APPLIED) === $wanted) {
+        $formatCurrent = !$wanted || self::readFormat() === self::STUB_FORMAT;
+        if (self::readFlag(self::SETTING_APPLIED) === $wanted && $formatCurrent) {
             // Nothing changed. On an installation that has neither preference yet, both are false,
             // so a plain request writes nothing.
             return array();
         }
 
         $gSettingsManager->set(self::SETTING_APPLIED, $wanted ? '1' : '0');
+        $gSettingsManager->set(self::SETTING_FORMAT, (string)self::STUB_FORMAT);
 
         return self::syncAll();
+    }
+
+    /**
+     * The format of the stubs on disk. An installation without the preference has the stubs of
+     * the format before it was introduced, which is what the declared default says.
+     * @return int
+     */
+    private static function readFormat(): int
+    {
+        global $gSettingsManager;
+
+        if (!isset($gSettingsManager) || !$gSettingsManager->has(self::SETTING_FORMAT)) {
+            return (int)(PreferenceDefinitions::all()[self::SETTING_FORMAT]['default'] ?? 1);
+        }
+
+        return $gSettingsManager->getInt(self::SETTING_FORMAT);
     }
 
     /**
@@ -320,6 +353,111 @@ final class PluginPages
     }
 
     /**
+     * Resolve one page of a plugin for a generated stub, and answer a page that may not run.
+     *
+     * This is PluginRegistry::resolvePage() for the one caller that has nobody to catch its
+     * exception: the stub is the entry point of the request, so a refusal there - a disabled plugin,
+     * a plugin waiting for its update - ended as an uncaught PHP error. It is answered by refuse().
+     * @param string $id Plugin ID.
+     * @param string $page File name of the page, e.g. **list.php**.
+     * @return string Absolute file name of the page.
+     */
+    public static function resolve(string $id, string $page): string
+    {
+        try {
+            return PluginRegistry::resolvePage($id, $page);
+        } catch (Throwable $exception) {
+            self::refuse($id, $exception);
+        }
+    }
+
+    /**
+     * Answer a request for a page of a plugin that may not run, and end the request.
+     *
+     * An administrator who opens a page of a plugin that waits for its update gets a page that can
+     * run the update and then loads the page that was asked for, instead of only being told to go to
+     * the plugin manager. Everybody else, and every other refusal, gets the message the exception
+     * carries: as JSON for a request of a script, as a message page otherwise.
+     * @param string $id Plugin ID.
+     * @param Throwable $exception Why the page may not run.
+     * @return never
+     */
+    public static function refuse(string $id, Throwable $exception): never
+    {
+        global $gCurrentUser;
+
+        $ajax = strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest';
+        $get = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET';
+
+        if (!$ajax && $get && isset($gCurrentUser) && $gCurrentUser->isAdministrator()
+            && PluginRegistry::isEnabled($id)
+            && PluginRegistry::getState($id) === PluginRegistry::STATE_UPDATE) {
+            try {
+                self::showUpdatePage(PluginRegistry::get($id));
+            } catch (Throwable $pageException) {
+                handleException($pageException);
+            }
+            exit();
+        }
+
+        handleException($exception, $ajax);
+        exit();
+    }
+
+    /**
+     * The page that tells an administrator that a plugin must be updated and lets them do it here.
+     * The button runs the update of the plugin manager and loads this page again, which is then the
+     * page that was asked for.
+     * @param Plugin $plugin
+     * @return void
+     * @throws Exception|\Smarty\Exception
+     */
+    private static function showUpdatePage(Plugin $plugin): void
+    {
+        global $gL10n, $gCurrentSession;
+
+        $managerUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/plugins.php');
+        $updateUrl = SecurityUtils::encodeUrl(
+            ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+            array('mode' => 'update', 'plugin' => $plugin->id)
+        );
+
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_plugin_update_required', $gL10n->get('SYS_PLUGIN_UPDATE'));
+        $page->hideBackLink();
+        $page->assignSmartyVariable('message', $gL10n->get('SYS_PLUGIN_UPDATE_REQUIRED', array(
+            SecurityUtils::encodeHTML($gL10n->get($plugin->name)),
+            '<a href="' . $managerUrl . '">',
+            '</a>'
+        )));
+        $page->assignSmartyVariable('installedVersion', SecurityUtils::encodeHTML(PluginRegistry::getInstalledVersion($plugin->id)));
+        $page->assignSmartyVariable('fileVersion', SecurityUtils::encodeHTML($plugin->version));
+        $page->addTemplateFile('system/plugin-update-required.tpl');
+        $page->addJavascript('
+            $("#adm_button_plugin_update").on("click", function() {
+                const $button = $(this).prop("disabled", true);
+                $.post(' . json_encode($updateUrl) . ', { "adm_csrf_token": ' . json_encode($gCurrentSession->getCsrfToken()) . ' }, function(data) {
+                    let result;
+                    try {
+                        result = typeof data === "string" ? JSON.parse(data) : data;
+                    } catch (e) {
+                        result = { status: "error", message: data };
+                    }
+                    const success = result.status === "success";
+                    $("#adm_plugin_update_result")
+                        .removeClass("d-none alert-success alert-danger")
+                        .addClass(success ? "alert-success" : "alert-danger")
+                        .html(result.message);
+                    if (success) {
+                        setTimeout(function() { location.reload(); }, 1500);
+                    } else {
+                        $button.prop("disabled", false);
+                    }
+                });
+            });', true);
+        $page->show();
+    }
+
+    /**
      * The source of one generated stub.
      * @param string $id
      * @param string $page
@@ -335,7 +473,7 @@ final class PluginPages
             . " * " . self::SETTING . " is switched off.\n"
             . " */\n\n"
             . "require_once(__DIR__ . '/../../system/common.php');\n\n"
-            . "require Admidio\\Infrastructure\\Plugins\\PluginRegistry::resolvePage('" . $id . "', '" . $page . "');\n";
+            . "require Admidio\\Infrastructure\\Plugins\\PluginPages::resolve('" . $id . "', '" . $page . "');\n";
     }
 
     /**
