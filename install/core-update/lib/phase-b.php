@@ -98,8 +98,9 @@ function phaseBRollback(array $ctx, string $updateId): array
     return withLock($root, static function () use ($root, $updateId): array {
         $state = readState($root, $updateId);
         $before = (string)$state['state'];
+        // A migration that holds its lock but has not yet recorded its start may be about to.
         if (!in_array($state['state'], array('installing', 'archiving', 'verifying', 'rollback_required', 'files_installed'), true)
-            || !empty($state['databaseStarted'])) {
+            || !empty($state['databaseStarted']) || isDatabaseUpdateRunning($root, $updateId)) {
             throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID');
         }
 

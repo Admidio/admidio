@@ -314,6 +314,32 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox Restoring is refused while a migration holds its lock, even before it has recorded its start
+     */
+    public function testNoRollbackWhileTheMigrationStarts(): void
+    {
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->runToDecision($context, $updateId);
+        $this->assertSame('files_installed', U\readState($this->root, $updateId)['state']);
+
+        $migration = U\lockDatabaseUpdate($this->root, $updateId);
+        $this->assertNotNull($migration);
+        try {
+            U\phaseBRollback($context, $updateId);
+            $this->fail('the rollback was accepted');
+        } catch (UpdaterException $exception) {
+            $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage());
+        }
+        $this->assertSame('files_installed', U\readState($this->root, $updateId)['state']);
+
+        flock($migration, LOCK_UN);
+        fclose($migration);
+        $this->assertSame('rolling_back', U\phaseBRollback($context, $updateId)['state'], 'possible again once the lock has ended');
+    }
+
+    /**
      * @testdox An operation cut off halfway is undone and repeated
      */
     public function testResumeAfterAnInterruptedOperation(): void

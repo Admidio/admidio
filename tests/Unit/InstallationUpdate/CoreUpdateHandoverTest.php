@@ -262,6 +262,25 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox The migration does not start once the old files are being restored, also if this request read the state before
+     */
+    public function testDatabaseRunningRereadsTheState(): void
+    {
+        $this->writeState('files_installed');
+        $handover = CoreUpdateHandover::load(self::UPDATE_ID);
+        $this->writeState('rolling_back');
+
+        try {
+            $handover->markDatabaseRunning();
+            $this->fail('the migration was started');
+        } catch (Exception $exception) {
+            $this->assertSame('SYS_CORE_UPDATE_IN_PROGRESS', $exception->getMessage());
+        }
+        $this->assertSame('rolling_back', $this->readState()['state']);
+        $this->assertArrayNotHasKey('databaseStarted', $this->readState());
+    }
+
+    /**
      * @testdox A failed migration is recorded and leaves the maintenance mode on
      */
     public function testDatabaseFailed(): void

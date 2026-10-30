@@ -203,11 +203,22 @@ final class CoreUpdateHandover
     /**
      * Record that the database update starts. From here on the files of the old release can no
      * longer be put back, because the database may already be ahead of them.
+     *
+     * The state is read again under the lock of the updater: since this request read it, the
+     * administrator may have started to restore the old files, which the updater only refuses once
+     * this state is written.
      * @return void
+     * @throws Exception The files are no longer, or not yet, those of the new release.
      */
     public function markDatabaseRunning(): void
     {
-        $this->update(array('state' => self::STATE_DATABASE_RUNNING, 'databaseStarted' => true, 'lastError' => ''));
+        $this->state = Updater\updateState($this->rootPath, $this->updateId, static function (array $state): array {
+            if (!in_array($state['state'] ?? '', array(self::STATE_FILES_INSTALLED, self::STATE_DATABASE_RUNNING, self::STATE_DATABASE_FAILED), true)) {
+                throw new Exception('SYS_CORE_UPDATE_IN_PROGRESS');
+            }
+
+            return array_merge($state, array('state' => self::STATE_DATABASE_RUNNING, 'databaseStarted' => true, 'lastError' => ''));
+        });
         Updater\updateLog($this->rootPath, $this->updateId, 'state database_running');
     }
 
