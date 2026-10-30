@@ -190,6 +190,7 @@ class PluginsPresenter extends PagePresenter
                 'url' => (string)($entry['url'] ?? ''),
                 'icon' => (string)($entry['icon'] ?? 'bi-puzzle'),
                 'version' => (string)$entry['release']['version'],
+                'isBeta' => PluginStore::getReleaseStatus($entry['release']) === 'beta',
                 'installed' => (bool)$entry['installed'],
                 'installedVersion' => (string)$entry['installedVersion']
             );
@@ -200,10 +201,17 @@ class PluginsPresenter extends PagePresenter
                 // The same action shape the plugin list uses, so list.functions.tpl renders it.
                 $row['actions'] = array(array(
                     'dataHref' => $this->actionScript((string)$entry['id'], 'store_install'),
-                    'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
+                    'dataMessage' => $row['isBeta'] ? $gL10n->get('SYS_BETA_VERSION_WARNING')
+                        : $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
                     'icon' => 'bi bi-plus-circle-fill',
                     'tooltip' => $gL10n->get('SYS_PLUGIN_STORE_INSTALL')
                 ));
+                if ($row['isBeta']) {
+                    $row['actions'][0]['messageType'] = 'warning';
+                    $row['actions'][0]['messageTitle'] = $gL10n->get('SYS_WARNING');
+                    $row['actions'][0]['confirmLabel'] = $gL10n->get('SYS_INSTALL');
+                    $row['actions'][0]['cancelLabel'] = $gL10n->get('SYS_CANCEL');
+                }
             }
 
             $store[] = $row;
@@ -328,8 +336,8 @@ class PluginsPresenter extends PagePresenter
      *
      * Installing, updating and removing all change what the other rows may offer, so those still
      * reload the whole page rather than one row being patched. Enabling and disabling is different:
-     * an administrator switches several plugins in a row, so it neither asks for confirmation - there
-     * is nothing destructive about it - nor reloads the page: the toggle flips its own icon and dims
+     * an administrator switches several plugins in a row, so stable plugins do not ask for
+     * confirmation or reload the page: the toggle flips its own icon and dims
      * its row before the request even answers, so the click itself already looks like something
      * happened, and once the answer arrives it re-fetches the list content and replaces it, which
      * still lets a plugin move to another group or change its actions.
@@ -348,8 +356,77 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
 
         $errorTitle = json_encode($gL10n->get('SYS_ERROR'), JSON_THROW_ON_ERROR);
+        $betaWarning = json_encode($gL10n->get('SYS_BETA_VERSION_WARNING'), JSON_THROW_ON_ERROR);
+        $warningTitle = json_encode($gL10n->get('SYS_WARNING'), JSON_THROW_ON_ERROR);
+        $enableButtons = json_encode(array($gL10n->get('SYS_ENABLE'), $gL10n->get('SYS_CANCEL')), JSON_THROW_ON_ERROR);
+        $installButtons = json_encode(array($gL10n->get('SYS_INSTALL'), $gL10n->get('SYS_CANCEL')), JSON_THROW_ON_ERROR);
 
         $this->addJavascript('
+            function confirmBetaPlugin(link) {
+                if (link.dataset.betaConfirmed === "1") {
+                    delete link.dataset.betaConfirmed;
+                    return false;
+                }
+                if (link.dataset.betaConfirmation !== "1") {
+                    return false;
+                }
+
+                const target = "document.getElementById(" + JSON.stringify(link.id) + ")";
+                messageBox(' . $betaWarning . ', ' . $warningTitle . ', "warning", "yes-no",
+                    "$(\"#adm_modal_messagebox\").modal(\"hide\");"
+                    + target + ".dataset.betaConfirmed = \"1\";" + target + ".click();", ' . $enableButtons . ');
+                return true;
+            }
+
+            function submitPluginUpload() {
+                const form = document.getElementById("adm_plugin_upload_form");
+                $("#adm_modal_messagebox").modal("hide");
+                form.dataset.betaConfirmed = "1";
+                form.requestSubmit();
+            }
+
+            $(function() {
+                const pluginUploadForm = document.getElementById("adm_plugin_upload_form");
+                if (!pluginUploadForm) {
+                    return;
+                }
+                pluginUploadForm.addEventListener("submit", function(event) {
+                    if (this.dataset.betaConfirmed === "1") {
+                        delete this.dataset.betaConfirmed;
+                        return;
+                    }
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (this.dataset.betaChecking === "1") {
+                        return;
+                    }
+                    this.dataset.betaChecking = "1";
+                    const form = this;
+                    const url = new URL(this.action, window.location.href);
+                    url.searchParams.set("mode", "upload_check");
+                    $.ajax({
+                        url: url.toString(),
+                        method: "POST",
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false
+                    }).done(function(data) {
+                        const result = parsePluginResponse(data);
+                        if (result.status === "beta") {
+                            messageBox(' . $betaWarning . ', ' . $warningTitle . ', "warning", "yes-no", "submitPluginUpload();", ' . $installButtons . ');
+                        } else if (result.status === "success") {
+                            submitPluginUpload();
+                        } else {
+                            showPluginActionError(result.message);
+                        }
+                    }).fail(function(jqXHR) {
+                        showPluginActionError(jqXHR.status === 0 ? "" : "HTTP " + jqXHR.status + " " + jqXHR.statusText);
+                    }).always(function() {
+                        delete form.dataset.betaChecking;
+                    });
+                }, true);
+            });
+
             function parsePluginResponse(data) {
                 let status = "error";
                 let message = "";
@@ -419,6 +496,9 @@ class PluginsPresenter extends PagePresenter
                 }
 
                 const $icon = $link.find("i");
+                if (confirmBetaPlugin(link)) {
+                    return;
+                }
 
                 // Optimistic update: flip the icon and dim the row right away, so the click gives
                 // immediate feedback instead of looking unresponsive until the request comes back.
@@ -460,6 +540,9 @@ class PluginsPresenter extends PagePresenter
                 // A row already mid-flight ignores a second click; the page is about to navigate
                 // away anyway once the request lands.
                 if ($row.css("pointer-events") === "none") {
+                    return;
+                }
+                if (confirmBetaPlugin(link)) {
                     return;
                 }
 
@@ -504,6 +587,7 @@ class PluginsPresenter extends PagePresenter
             'url' => $homepage,
             'urlHost' => $homepage === '' ? '' : (string)(parse_url($homepage, PHP_URL_HOST) ?? $homepage),
             'version' => $plugin?->version ?? '',
+            'isBeta' => ($plugin?->beta ?? 0) > 0,
             'installedVersion' => PluginRegistry::getInstalledVersion($id),
             'versionState' => $this->getVersionState($id, $plugin, $state),
             'toggle' => $this->getStateToggle($id, $plugin, $state),
@@ -549,6 +633,7 @@ class PluginsPresenter extends PagePresenter
             'class' => $enabled ? 'text-success' : 'text-secondary',
             'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
             'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
+            'betaConfirmation' => !$enabled && $plugin->beta > 0 ? '1' : '0',
             'dataHref' => $this->toggleScript($id, $enabled, $plugin->wantsMenuEntry())
         );
     }
@@ -719,9 +804,17 @@ class PluginsPresenter extends PagePresenter
          * database, or the store offers newer files - and an administrator should not have to
          * know which. One action covers both, and the route does whatever is actually needed.
          */
-        if ($state === PluginRegistry::STATE_UPDATE
-            || (PluginRegistry::isInstalled($id) && PluginStore::getNewerRelease($id) !== null)) {
-            $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
+        $release = PluginRegistry::isInstalled($id) ? PluginStore::getNewerRelease($id) : null;
+        if ($state === PluginRegistry::STATE_UPDATE || $release !== null) {
+            $action = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
+            if ($release !== null ? PluginStore::getReleaseStatus($release) === 'beta' : ($plugin?->beta ?? 0) > 0) {
+                $action['dataMessage'] = $gL10n->get('SYS_BETA_VERSION_WARNING');
+                $action['messageType'] = 'warning';
+                $action['messageTitle'] = $gL10n->get('SYS_WARNING');
+                $action['confirmLabel'] = $gL10n->get('SYS_PLUGIN_UPDATE');
+                $action['cancelLabel'] = $gL10n->get('SYS_CANCEL');
+            }
+            $actions[] = $action;
         }
 
 

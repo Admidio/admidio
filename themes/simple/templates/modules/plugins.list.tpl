@@ -44,9 +44,9 @@
                             {* The switch shows the state the plugin is in and flips it when clicked. *}
                             <td class="text-center">
                                 {if $pluginEntry.toggle}
-                                    {* Enabling or disabling is not destructive, so it acts on click without a
-                                       confirmation dialog - the administrator switches several plugins in a row. *}
-                                    <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                    {* Only enabling a beta plugin needs confirmation before the toggle acts. *}
+                                    <a id="adm_plugin_toggle_table_{$pluginEntry.id}" class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                       data-beta-confirmation="{$pluginEntry.toggle.betaConfirmation}"
                                        onclick="{$pluginEntry.toggle.dataHref}"
                                        data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip}"
                                        aria-label="{$pluginEntry.toggle.label}">
@@ -69,7 +69,10 @@
                                     <div class="text-danger"><small><code>{$diagnostic}</code></small></div>
                                 {/foreach}
                             </td>
-                            <td>{$pluginEntry.version}</td>
+                            <td>
+                                {$pluginEntry.version}
+                                {if $pluginEntry.isBeta}<span class="badge bg-warning text-dark ms-1">{$l10n->get('SYS_BETA')}</span>{/if}
+                            </td>
                             <td>
                                 {if $pluginEntry.versionState === 'update'}
                                     <i class="bi bi-exclamation-triangle-fill me-1 text-warning"
@@ -109,7 +112,8 @@
                     <div class="card admidio-accordion-field-group" id="adm_plugin_card_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
                         <div class="card-header">
                             {if $pluginEntry.toggle}
-                                <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                <a id="adm_plugin_toggle_card_{$pluginEntry.id}" class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                   data-beta-confirmation="{$pluginEntry.toggle.betaConfirmation}"
                                    onclick="{$pluginEntry.toggle.dataHref}"
                                    aria-label="{$pluginEntry.toggle.label}">
                                     <i class="{$pluginEntry.toggle.icon}"></i></a>
@@ -126,6 +130,8 @@
                                                     data-class="modal-lg" data-href="{$actionItem.dataHref}"
                                                         {elseif isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
                                                     data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
+                                                    {if isset($actionItem.messageType)}data-type="{$actionItem.messageType|escape:'html'}" data-title="{$actionItem.messageTitle|escape:'html'}"{/if}
+                                                    {if isset($actionItem.confirmLabel)}data-confirm-label="{$actionItem.confirmLabel|escape:'html'}" data-cancel-label="{$actionItem.cancelLabel|escape:'html'}"{/if}
                                                         {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
                                                     <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
                                             </li>
@@ -148,7 +154,9 @@
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_version">
                                 <strong>{$l10n->get('SYS_PLUGIN_VERSION')}:</strong>
-                                <p>{$pluginEntry.version}</p>
+                                <p>{$pluginEntry.version}
+                                    {if $pluginEntry.isBeta}<span class="badge bg-warning text-dark ms-1">{$l10n->get('SYS_BETA')}</span>{/if}
+                                </p>
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
                                 <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong>
