@@ -13,7 +13,7 @@
         <nav id="adm_documents_files_tree_nav" class="admidio-folder-tree-pane" aria-label="{$l10n->get('SYS_FOLDER_TREE')}">
             <ul id="adm_documents_files_tree" class="admidio-tree" role="tree" aria-label="{$l10n->get('SYS_FOLDER_TREE')}" data-url="{$treeUrl}"
                 data-root-uuid="{$treeRootUuid}" data-current-uuid="{$treeCurrentUuid}" data-path="{$treePath|escape}"
-                data-root-label="{$l10n->get('SYS_DOCUMENTS_FILES')}"></ul>
+                data-root-label="{$l10n->get('SYS_DOCUMENTS_FILES')}" data-error-text="{$l10n->get('SYS_REQUEST_FAILED')}"></ul>
         </nav>
     </aside>
     <div id="adm_documents_files_list_pane" class="admidio-documents-list">
@@ -207,7 +207,8 @@ document.addEventListener("DOMContentLoaded", function () {
         idParam: "folder_uuid",
         root: {id: tree.dataset.rootUuid, name: tree.dataset.rootLabel, url: rootUrl.href},
         currentId: currentUuid,
-        path: JSON.parse(tree.dataset.path)
+        path: JSON.parse(tree.dataset.path),
+        errorText: tree.dataset.errorText
     });
 
     // the width of the list changes, so DataTables must calculate the visible columns again

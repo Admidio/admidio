@@ -605,13 +605,7 @@ class DocumentsPresenter extends PagePresenter
 
         // The folder tree is built in the browser, so all folders from the root to the current folder are only
         // needed to expand the tree to the current folder.
-        $treePath = array($currentFolder->getValue('fol_uuid'));
-        $parentFolderId = (int)$currentFolder->getValue('fol_fol_id_parent');
-        while ($parentFolderId > 0) {
-            $parentFolder = new Folder($gDb, $parentFolderId);
-            array_unshift($treePath, $parentFolder->getValue('fol_uuid'));
-            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
-        }
+        $treePath = $documentService->findFolderPath();
 
         $data = $documentService->findAll();
         $templateData = array();

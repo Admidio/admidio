@@ -27,6 +27,7 @@
  * @param {string}      options.icon         Bootstrap icon of the nodes. Default "bi-folder-fill".
  * @param {string}      options.currentId    Id of the current node. It is highlighted in the tree.
  * @param {string[]}    options.path         Ids of the nodes from the root to the current node.
+ * @param {string}      options.errorText    Text that is shown at a node whose child nodes could not be loaded.
  * @param {boolean}     options.select       If true the nodes are selected and not opened. Default false.
  * @param {string}      options.excludedId   Select mode only: this node and all its child nodes can't be selected.
  * @param {string}      options.currentLabel Select mode only: text for the current node.
@@ -42,6 +43,7 @@ class AdmTreeView {
             icon: "bi-folder-fill",
             currentId: "",
             path: [],
+            errorText: "",
             select: false,
             excludedId: "",
             currentLabel: "",
@@ -166,14 +168,48 @@ class AdmTreeView {
         link.tabIndex = 0;
     }
 
-    // fetch the child nodes of a node
+    // fetch the child nodes of a node, the promise is rejected if the request fails
     loadNodes(id) {
         const url = new URL(this.options.url, window.location.href);
         url.searchParams.set(this.options.idParam, id);
         return fetch(url, {credentials: "same-origin"})
-            .then((response) => response.json())
-            .then((data) => (data.status === "success" && Array.isArray(data.nodes) ? data.nodes : []))
-            .catch(() => []);
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.status !== "success" || !Array.isArray(data.nodes)) {
+                    throw new Error("Invalid response");
+                }
+                return data.nodes;
+            });
+    }
+
+    // the parent node of a node within this tree, null for the root node
+    getParentItem(item) {
+        const parent = item.parentElement.closest("li.admidio-tree-node");
+        return parent !== null && this.tree.contains(parent) ? parent : null;
+    }
+
+    // show or remove the notice that the child nodes of a node could not be loaded
+    setLoadError(item, failed) {
+        const line = item.querySelector(":scope > .admidio-tree-line");
+        const notice = line.querySelector(".admidio-tree-error");
+        if (!failed) {
+            if (notice !== null) {
+                notice.remove();
+            }
+            return;
+        }
+        if (notice === null && this.options.errorText !== "") {
+            const element = document.createElement("span");
+            element.className = "admidio-tree-error";
+            element.setAttribute("role", "alert");
+            element.textContent = this.options.errorText;
+            line.appendChild(element);
+        }
     }
 
     /**
@@ -307,9 +343,17 @@ class AdmTreeView {
         const level = parseInt(link.getAttribute("aria-level"), 10) + 1;
         const excluded = item.dataset.excluded === "1";
         item.loading = this.loadNodes(item.dataset.id).then((nodes) => {
+            this.setLoadError(item, false);
             nodes.forEach((node) => {
                 group.appendChild(this.createNode(node, level, excluded));
             });
+        }, () => {
+            // the node is closed again, so the next expansion loads its child nodes again
+            group.remove();
+            link.removeAttribute("aria-owns");
+            link.setAttribute("aria-expanded", "false");
+            item.classList.remove("expanded");
+            this.setLoadError(item, true);
         });
         return item.loading;
     }
@@ -395,7 +439,7 @@ class AdmTreeView {
                 if (link.getAttribute("aria-expanded") === "true") {
                     this.setExpanded(item, false);
                 } else {
-                    const parent = item.parentElement.closest("li");
+                    const parent = this.getParentItem(item);
                     target = parent ? this.getLink(parent) : null;
                 }
                 break;

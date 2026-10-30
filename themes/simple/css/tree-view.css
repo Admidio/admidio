@@ -1,7 +1,8 @@
 /**
  ***********************************************************************************************
  * Styles of the tree view (system/js/tree-view.js), e.g. the folder tree of the documents and files module
- * and the tree select field of forms. The file is only loaded on pages with a tree.
+ * and the tree select field of forms. The file is only loaded on pages with a tree. A theme can replace it with
+ * its own css/tree-view.css.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -95,4 +96,11 @@
 
 .admidio-tree-select-summary .bi {
     color: var(--bs-secondary-color);
+}
+
+/* the child nodes could not be loaded, the node can be expanded again */
+.admidio-tree-error {
+    margin-left: .5rem;
+    font-size: .875em;
+    color: var(--bs-danger-text-emphasis);
 }
