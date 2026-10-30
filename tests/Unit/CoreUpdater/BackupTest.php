@@ -88,6 +88,36 @@ final class BackupTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox A table file is restored statement by statement, and a cut-off or damaged one is an error
+     */
+    public function testRunSqlFile(): void
+    {
+        $pdo = new \PDO('sqlite::memory:', null, null, array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+        $file = $this->root . '/001_adm_roles.sql.gz';
+        $write = static fn(string $sql) => file_put_contents($file, gzencode($sql));
+
+        $write("-- MySQL dump\n\nDROP TABLE IF EXISTS adm_roles;\nCREATE TABLE adm_roles (\n  rol_id integer,\n  rol_name text\n);\n"
+            . "INSERT INTO adm_roles VALUES (1,'a;'),(2,'b');\nINSERT INTO adm_roles VALUES (3,'c\\nd;');\n");
+        U\runSqlFile($pdo, $file, 'roles');
+        $this->assertSame(array('a;', 'b', 'c\\nd;'), $pdo->query('SELECT rol_name FROM adm_roles ORDER BY rol_id')->fetchAll(\PDO::FETCH_COLUMN));
+
+        foreach (array('cut off' => "CREATE TABLE adm_x (a integer);\nINSERT INTO adm_x VALUES (1),\n",
+            'without its table' => "INSERT INTO adm_roles VALUES (4,'e');\n") as $case => $sql) {
+            $write($sql);
+            try {
+                U\runSqlFile($pdo, $file, 'roles');
+                $this->fail('accepted a file ' . $case);
+            } catch (UpdaterException $exception) {
+                $this->assertStringContainsString('roles is incomplete', $exception->getDetail(), $case);
+            }
+        }
+
+        file_put_contents($file, 'NOT GZIP');
+        $this->expectException(UpdaterException::class);
+        U\runSqlFile($pdo, $file, 'roles');
+    }
+
+    /**
      * @testdox The backups are in adm_my_files/backups, or in the directory of the preferences
      */
     public function testDirectory(): void

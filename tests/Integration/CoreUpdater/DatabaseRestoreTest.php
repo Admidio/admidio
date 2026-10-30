@@ -96,10 +96,19 @@ final class DatabaseRestoreTest extends AdmidioTestCase
      */
     private function backUpAndFail(array $context): array
     {
-        $this->pdo->exec('CREATE TABLE ' . self::PREFIX . '_roles (rol_id integer PRIMARY KEY, rol_name varchar(50))');
+        $this->pdo->exec('CREATE TABLE ' . self::PREFIX . '_roles (rol_id integer PRIMARY KEY, rol_name varchar(600))');
         $this->pdo->exec('CREATE TABLE ' . self::PREFIX . '_members (mem_id integer PRIMARY KEY, mem_rol_id integer,
             FOREIGN KEY (mem_rol_id) REFERENCES ' . self::PREFIX . '_roles (rol_id))');
-        $this->pdo->exec("INSERT INTO " . self::PREFIX . "_roles VALUES (1, 'Administrator'), (2, 'Mitglied; mit Semikolon')");
+        // A value with a line break that ends in a semicolon, and enough data for several INSERT
+        // statements of mysqldump-php, which the restore runs one by one.
+        $this->pdo->exec("INSERT INTO " . self::PREFIX . "_roles VALUES (1, 'Administrator'), (2, 'Mitglied; mit Semikolon;\nzweite Zeile;')");
+        for ($chunk = 0; $chunk < 6; $chunk++) {
+            $rows = array();
+            for ($row = 0; $row < 500; $row++) {
+                $rows[] = '(' . (100 + $chunk * 500 + $row) . ", '" . str_repeat(chr(65 + $chunk), 500) . "')";
+            }
+            $this->pdo->exec('INSERT INTO ' . self::PREFIX . '_roles VALUES ' . implode(', ', $rows));
+        }
         $this->pdo->exec('INSERT INTO ' . self::PREFIX . '_members VALUES (10, 1), (11, 2)');
         $before = array('roles' => $this->rows('roles'), 'members' => $this->rows('members'));
 

@@ -1256,6 +1256,9 @@ function restoreDatabasePart(array $ctx, array $state): array
         $zip->setPassword(dumpPassword($ctx));
     }
 
+    // Each file of the backup is unpacked and run line by line, so that neither a large table nor
+    // the dump of pg_dump has to fit into the memory of PHP or into one packet of the database.
+    $directory = workspace($root, $state['updateId']) . '/restore';
     try {
         $names = array();
         for ($index = 0; $index < $zip->numFiles; $index++) {
@@ -1264,29 +1267,14 @@ function restoreDatabasePart(array $ctx, array $state): array
         sort($names, SORT_STRING);
         $tables = array();
 
-        // An entry that cannot be read - a wrong password - must never count as an empty table.
-        $read = static function (string $name) use ($zip, $state): string {
-            $content = $zip->getFromName($name);
-            $sql = $content === false ? false : gzdecode($content);
-            if ($sql === false) {
-                throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $name . ' of ' . $state['dumpFile'] . ' cannot be read.');
-            }
-
-            return $sql;
-        };
-
         if (($state['restoreMethod'] ?? '') === 'psql') {
-            $file = workspace($root, $state['updateId']) . '/restore.sql';
-            $sql = $read($names[0]);
-            writeFile($file, $sql);
-            preg_match_all('/^CREATE TABLE (?:\w+\.)?"?(' . preg_quote($config['tablePrefix'], '/') . '_\w+)"?/m', $sql, $matches);
-            $tables = $matches[1];
+            $file = $directory . '/restore.sql';
+            $tables = unpackSqlFile(extractBackupEntry($zip, $names[0] ?? '', $directory, $state['dumpFile']), $file, $config['tablePrefix']);
             putenv('PGPASSWORD=' . $config['dbPassword']);
             exec('psql --host=' . escapeshellarg($config['dbHost']) . ($config['dbPort'] !== null ? ' --port=' . (int)$config['dbPort'] : '')
                 . ' --username=' . escapeshellarg($config['dbUser']) . ' --dbname=' . escapeshellarg($config['dbName'])
                 . ' --set=ON_ERROR_STOP=1 --quiet --file=' . escapeshellarg($file) . ' 2>&1', $output, $status);
             putenv('PGPASSWORD');
-            @unlink($file);
             if ($status !== 0) {
                 throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', 'psql failed: ' . implode(' ', $output));
             }
@@ -1298,7 +1286,7 @@ function restoreDatabasePart(array $ctx, array $state): array
                 if ($name === null) {
                     break;
                 }
-                runSqlScript($pdo, $read($name));
+                runSqlFile($pdo, extractBackupEntry($zip, $name, $directory, $state['dumpFile']), $name . ' of ' . $state['dumpFile']);
                 $cursor++;
             } while (microtime(true) < $deadline);
             $state['cursor'] = $cursor;
@@ -1310,6 +1298,7 @@ function restoreDatabasePart(array $ctx, array $state): array
         }
     } finally {
         $zip->close();
+        deleteDirectory($directory);
     }
 
     dropTablesExcept($pdo, $config, $tables);
@@ -1319,21 +1308,91 @@ function restoreDatabasePart(array $ctx, array $state): array
 }
 
 /**
- * Run a script of SQL statements, as a table file of the backup is, and report an error of any of
- * them. Several statements in one query need emulated prepares.
+ * Unpack one file of a backup into $directory, without reading it into memory. A file that cannot
+ * be unpacked - a wrong password - is an error, never an empty table.
+ * @return string The unpacked file.
  */
-function runSqlScript(PDO $pdo, string $sql): void
+function extractBackupEntry(\ZipArchive $zip, string $name, string $directory, string $backup): string
 {
-    $emulated = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+    if (preg_match('/^[A-Za-z0-9._-]+\.sql\.gz$/', $name) !== 1) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $backup . ' contains no table file "' . $name . '".');
+    }
+    ensureDirectory($directory);
+    $file = $directory . '/' . $name;
+    @unlink($file);
+    if (!$zip->extractTo($directory, $name) || !is_file($file)) {
+        @unlink($file);
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $name . ' of ' . $backup . ' cannot be read.');
+    }
+
+    return $file;
+}
+
+/**
+ * Run the statements of a table file of the backup one after the other, as mysqldump-php writes
+ * them: a statement ends with a line that ends with ";", and a value never spans lines, because its
+ * line breaks are escaped. Only one statement is in memory at a time. A file without the table, a
+ * damaged one for example, is an error.
+ */
+function runSqlFile(PDO $pdo, string $file, string $description): void
+{
+    $handle = @gzopen($file, 'rb');
+    if ($handle === false) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $description . ' cannot be read.');
+    }
+
+    $statement = '';
+    $created = false;
     try {
-        $statement = $pdo->query($sql);
-        while ($statement !== false && $statement->nextRowset()) {
-            // every result is read, so that the error of a later statement is reported
+        while (($line = gzgets($handle)) !== false) {
+            if ($statement === '' && (trim($line) === '' || str_starts_with($line, '--'))) {
+                continue;
+            }
+            $statement .= $line;
+            if (str_ends_with(rtrim($line), ';')) {
+                $created = $created || str_starts_with($statement, 'CREATE TABLE');
+                $pdo->exec($statement);
+                $statement = '';
+            }
         }
     } finally {
-        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $emulated);
+        gzclose($handle);
     }
+
+    if (!$created || trim($statement) !== '') {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $description . ' is incomplete.');
+    }
+}
+
+/**
+ * Unpack the backup of pg_dump into a file for psql, line by line, and find the tables of the
+ * installation it creates.
+ * @return array<int,string> The tables.
+ */
+function unpackSqlFile(string $file, string $target, string $tablePrefix): array
+{
+    $source = @gzopen($file, 'rb');
+    $output = @fopen($target, 'wb');
+    if ($source === false || $output === false) {
+        throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', basename($file) . ' cannot be unpacked.');
+    }
+
+    $tables = array();
+    try {
+        while (($line = gzgets($source)) !== false) {
+            if (fwrite($output, $line) !== strlen($line)) {
+                throw new UpdaterException('SYS_CORE_UPDATE_FILES_NOT_WRITABLE');
+            }
+            if (preg_match('/^CREATE TABLE (?:\w+\.)?"?(' . preg_quote($tablePrefix, '/') . '_\w+)"?/', $line, $matches) === 1) {
+                $tables[] = $matches[1];
+            }
+        }
+    } finally {
+        gzclose($source);
+        fclose($output);
+    }
+
+    return $tables;
 }
 
 /**
