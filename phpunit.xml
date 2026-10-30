@@ -19,6 +19,9 @@
             <directory>tests/Cli</directory>
             <directory>plugins/*/tests/Cli</directory>
         </testsuite>
+        <testsuite name="HTTP Tests">
+            <directory>tests/Http</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">
