@@ -544,5 +544,8 @@ WHERE usf_fn.usf_name_intern = 'FIRST_NAME' AND usf_ln.usf_name_intern = 'LAST_N
     <step id="1950">UpdateStepsCode::updateStep50AddCategoryReportConditions</step>
     <step id="1960" database="mysql">ALTER TABLE %PREFIX%_category_report MODIFY COLUMN crt_col_fields text</step>
     <step id="1970" database="pgsql">ALTER TABLE %PREFIX%_category_report ALTER COLUMN crt_col_fields TYPE text</step>
+    <!-- MySQL/MariaDB already create the item-data index for the existing foreign key. -->
+    <step id="1980" database="pgsql">CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id)</step>
+    <step id="1990">CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status)</step>
     <step>stop</step>
 </update>

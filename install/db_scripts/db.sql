@@ -1094,6 +1094,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
+CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id);
 
 /*==============================================================*/
 /* Table: adm_inventory_item_borrow_data                          */
@@ -1135,6 +1136,7 @@ DEFAULT character SET = utf8
 COLLATE = utf8_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
+CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status);
 
 /*==============================================================*/
 /* Table: adm_log_changes                                       */
