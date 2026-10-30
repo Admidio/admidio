@@ -538,18 +538,57 @@ class EventFormPresenter extends PagePresenter
             });
         });
 
-        // Reveal invalid fields before the browser tries to focus them.
+        var eventValidationReportedField = null;
+
+        function reportEventValidationError(field) {
+            requestAnimationFrame(function() {
+                field.focus({preventScroll: true});
+                field.scrollIntoView({block: "center", behavior: "instant"});
+                // Let the scroll and accordion layout settle before showing the native popup.
+                requestAnimationFrame(function() {
+                    eventValidationReportedField = field;
+                    field.reportValidity();
+                    eventValidationReportedField = null;
+                });
+            });
+        }
+
+        // Reveal invalid fields and use the same native feedback as normal inputs.
         document.getElementById("adm_events_edit_form").addEventListener("invalid", function(event) {
-            var pane = event.target.closest(".tab-pane");
-            if (!pane || this.querySelector(":invalid") !== event.target) {
+            // reportValidity() dispatches invalid again; let the browser show that popup.
+            if (event.target === eventValidationReportedField) {
                 return;
             }
-            if (window.matchMedia("(min-width: 768px)").matches) {
+            var pane = event.target.closest(".tab-pane");
+            if (!pane) {
+                return;
+            }
+            var isMobile = !window.matchMedia("(min-width: 768px)").matches;
+            var isMobileSelect = isMobile && event.target.tagName === "SELECT";
+            if (isMobileSelect) {
+                // Avoid native focus changes competing with the accordion animation.
+                event.preventDefault();
+            }
+            if (this.querySelector(":invalid") !== event.target) {
+                return;
+            }
+            if (!isMobile) {
                 bootstrap.Tab.getOrCreateInstance(document.getElementById(pane.getAttribute("aria-labelledby"))).show();
             } else {
                 var collapse = pane.querySelector(".accordion-collapse");
+                if (collapse.classList.contains("show")) {
+                    if (isMobileSelect) {
+                        reportEventValidationError(event.target);
+                    }
+                    return;
+                }
+                event.preventDefault();
                 collapse.addEventListener("shown.bs.collapse", function() {
-                    event.target.focus();
+                    if (isMobileSelect) {
+                        reportEventValidationError(event.target);
+                    } else {
+                        event.target.reportValidity();
+                    }
                 }, {once: true});
                 bootstrap.Collapse.getOrCreateInstance(collapse, {toggle: false}).show();
             }
