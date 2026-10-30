@@ -1270,6 +1270,7 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ind_inf_ini_id ON %PREFIX%_inventory_item_data (ind_inf_id, ind_ini_id);
+CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id);
 
 /*==============================================================*/
 /* Table: adm_inventory_item_borrow_data                          */
@@ -1317,6 +1318,7 @@ COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ivr_uuid ON %PREFIX%_inventory_reservations (ivr_uuid);
 CREATE INDEX %PREFIX%_idx_ivr_item_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_begin, ivr_end);
+CREATE INDEX %PREFIX%_idx_ivr_item_status_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_status, ivr_begin);
 CREATE INDEX %PREFIX%_idx_ivr_event ON %PREFIX%_inventory_reservations (ivr_dat_id);
 
 /*==============================================================*/
@@ -1341,6 +1343,7 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_ini_uuid ON %PREFIX%_inventory_items (ini_uuid);
+CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status);
 
 /*==============================================================*/
 /* Table: adm_log_changes                                       */
