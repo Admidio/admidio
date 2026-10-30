@@ -897,6 +897,12 @@ class Database
         return implode(',', array_fill(0, count($valuesArray), '?'));
     }
 
+    /** Whether a transaction is currently open, including nested transaction markers. */
+    public function isInTransaction(): bool
+    {
+        return $this->transactions > 0;
+    }
+
     /**
      * If there is an open transaction than this method sends a rollback
      * to the database and will set the transaction counter to zero.

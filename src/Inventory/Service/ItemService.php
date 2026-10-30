@@ -156,42 +156,58 @@ class ItemService
                 $formValues['INF-' . $itemCopyFieldName] = $i;
             }
 
-            $this->itemRessource->readItemData($this->itemUUID);
-
-            if ($this->itemUUID === '') {
-                $this->itemRessource->createNewItem($formValues['INF-CATEGORY']);
+            // Keep a new item and its field values atomic. Incomplete items must
+            // never be cleaned up by a different request that is creating an item.
+            $ownsTransaction = $this->itemUUID === '' && !$this->db->isInTransaction();
+            if ($ownsTransaction) {
+                $this->db->startTransaction();
             }
+            try {
+                $this->itemRessource->readItemData($this->itemUUID);
 
-            // check all item fields
-            foreach ($this->itemRessource->getItemFields() as $itemField) {
-                $infNameIntern = $itemField->getValue('inf_name_intern');
-                $postKey = 'INF-' . $infNameIntern;
-
-                if (isset($formValues[$postKey])) {
-                    if (is_array($formValues[$postKey]) && empty($formValues[$postKey])) {
-                        throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
-                    } elseif (is_string($formValues[$postKey]) && (strlen($formValues[$postKey]) === 0 && $itemField->getValue('inf_required_input') == 1)) {
-                        throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
-                    }
-
-                    if ($itemField->getValue('inf_type') === 'DATE' && $gSettingsManager->get('inventory_field_date_time_format') == 'datetime') {
-                        // Check if time is set separately
-                        isset($formValues[$postKey . '_time']) ? $dateValue = $formValues[$postKey] . ' ' . $formValues[$postKey . '_time'] : $dateValue = $formValues[$postKey];
-
-                        // Write value from field to the item class object with time
-                        $this->itemRessource->setValue($infNameIntern, $dateValue);
-                    } else {
-                        // Write value from field to the item class object
-                        $this->itemRessource->setValue($infNameIntern, $formValues[$postKey]);
-                    }
-                } elseif ($itemField->getValue('inf_type') === 'CHECKBOX' && !$multiEdit) {
-                    // Set value to '0' for unchecked checkboxes
-                    $this->itemRessource->setValue($itemField->getValue('inf_name_intern'), '0');
+                if ($this->itemUUID === '') {
+                    $this->itemRessource->createNewItem($formValues['INF-CATEGORY']);
                 }
-            }
 
-            // save item data
-            $this->itemRessource->saveItemData();
+                // check all item fields
+                foreach ($this->itemRessource->getItemFields() as $itemField) {
+                    $infNameIntern = $itemField->getValue('inf_name_intern');
+                    $postKey = 'INF-' . $infNameIntern;
+
+                    if (isset($formValues[$postKey])) {
+                        if (is_array($formValues[$postKey]) && empty($formValues[$postKey])) {
+                            throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
+                        } elseif (is_string($formValues[$postKey]) && (strlen($formValues[$postKey]) === 0 && $itemField->getValue('inf_required_input') == 1)) {
+                            throw new Exception($gL10n->get('SYS_FIELD_EMPTY', array($itemField->getValue('inf_name'))));
+                        }
+
+                        if ($itemField->getValue('inf_type') === 'DATE' && $gSettingsManager->get('inventory_field_date_time_format') == 'datetime') {
+                            // Check if time is set separately
+                            isset($formValues[$postKey . '_time']) ? $dateValue = $formValues[$postKey] . ' ' . $formValues[$postKey . '_time'] : $dateValue = $formValues[$postKey];
+
+                            // Write value from field to the item class object with time
+                            $this->itemRessource->setValue($infNameIntern, $dateValue);
+                        } else {
+                            // Write value from field to the item class object
+                            $this->itemRessource->setValue($infNameIntern, $formValues[$postKey]);
+                        }
+                    } elseif ($itemField->getValue('inf_type') === 'CHECKBOX' && !$multiEdit) {
+                        // Set value to '0' for unchecked checkboxes
+                        $this->itemRessource->setValue($infNameIntern, '0');
+                    }
+                }
+
+                // save item data
+                $this->itemRessource->saveItemData();
+                if ($ownsTransaction) {
+                    $this->db->endTransaction();
+                }
+            } catch (\Throwable $exception) {
+                if ($ownsTransaction) {
+                    $this->db->rollback();
+                }
+                throw $exception;
+            }
         }
 
         //mark item as imported to prevent notification

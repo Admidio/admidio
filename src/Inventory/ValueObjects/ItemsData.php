@@ -226,30 +226,29 @@ class ItemsData
 
             while ($row = $itemDataStatement->fetch()) {
                 if (!array_key_exists($row['ind_inf_id'], $this->mItemData)) {
-                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, $row['ind_inf_id']);
+                    // The query already contains the complete entity, as in the preload path.
+                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this);
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
 
             // read all item borrow data
-            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
-                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                        ON inf_name_intern IN ( ?, ?, ? )
-                    WHERE inb_ini_id = ?;';
-            $params = array_merge($this->borrowFieldNames, array($itemId));
-            $itemBorrowStatement = $this->mDb->queryPrepared($sql, $params);
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
+            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array($itemId));
 
             while ($row = $itemBorrowStatement->fetch()) {
                 foreach ($this->getItemFields() as $itemField) {
-                    $itemBorrowData = new ItemBorrowData($this->mDb, $this, $row['inb_ini_id']);
                     $fieldNameIntern = $itemField->getValue('inf_name_intern');
-                    $fieldId = $itemField->getValue('inf_id');
-                    if (in_array($fieldNameIntern, $this->borrowFieldNames)) {
-                        if (!array_key_exists($fieldId, $this->mItemData)) {
-                            $this->mItemData[$fieldId] = $itemBorrowData;
-                        }
-                        $this->mItemData[$fieldId]->setArray($row);
+                    if (!in_array($fieldNameIntern, $this->borrowFieldNames)) {
+                        continue;
                     }
+                    $fieldId = $itemField->getValue('inf_id');
+                    if (!array_key_exists($fieldId, $this->mItemData)) {
+                        $this->mItemData[$fieldId] = new ItemBorrowData($this->mDb, $this);
+                    }
+                    $row['inf_id'] = $fieldId;
+                    $row['inf_name_intern'] = $fieldNameIntern;
+                    $this->mItemData[$fieldId]->setArray($row);
                 }
             }
         } else {
@@ -313,6 +312,7 @@ class ItemsData
                 $fieldName = $itemField->getValue('inf_name_intern');
                 if (in_array($fieldName, $this->borrowFieldNames, true)) {
                     $row['inf_id'] = $itemField->getValue('inf_id');
+                    $row['inf_name_intern'] = $fieldName;
                     $this->preloadedItems[$itemsById[(int) $row['inb_ini_id']]]['data'][(int) $row['inf_id']] = $row;
                 }
             }
@@ -362,10 +362,11 @@ class ItemsData
      * Reads the items out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
      *
+     * @param string $search Optional search whose words may match different stored fields.
      * @return void
      * @throws Exception
      */
-    public function readItems(): void
+    public function readItems(string $search = ''): void
     {
         // first initialize existing data
         $this->mItems = array();
@@ -385,17 +386,44 @@ class ItemsData
             $sqlWhereCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
-                INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
-                    ON ind_ini_id = ini_id
+        $searchCondition = $this->getSqlSearchCondition($search, TBL_INVENTORY_ITEMS . '.ini_id');
+        // A word search already requires a stored field value. Without a search,
+        // exclude incomplete items with EXISTS rather than duplicating item rows.
+        $dataCondition = $searchCondition['sql'] !== '' ? $searchCondition['sql']
+            : ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA
+                . ' WHERE ind_ini_id = ' . TBL_INVENTORY_ITEMS . '.ini_id)';
+        $sql = 'SELECT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
-                ' . $sqlWhereCondition . ';';
-        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
+                ' . $sqlWhereCondition . $dataCondition . ';';
+        $statement = $this->mDb->queryPrepared($sql, array_merge([$this->organizationId], $searchCondition['params']));
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
         }
+    }
+
+    /**
+     * Build a word search across stored item values for inventory queries.
+     * Every word must occur in a stored item field, using the database's case-insensitive
+     * search operator. Commas and hyphens retain their ordinary meaning within a word.
+     *
+     * @param string $search Search text as validated by the request helper.
+     * @param string $itemIdColumn Trusted, qualified outer item ID column; never request input.
+     * @return array{sql:string,params:array<int,string>}
+     */
+    public function getSqlSearchCondition(string $search, string $itemIdColumn): array
+    {
+        $sql = '';
+        $params = [];
+        $operator = DB_ENGINE === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
+        foreach (preg_split('/\s+/', trim($search), -1, PREG_SPLIT_NO_EMPTY) as $word) {
+            $sql .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
+                . ' WHERE search_data.ind_ini_id = ' . $itemIdColumn . ' AND search_data.ind_value ' . $operator . ' ?)';
+            $params[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
+        }
+
+        return ['sql' => $sql, 'params' => $params];
     }
 
     /**
@@ -1197,19 +1225,6 @@ class ItemsData
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // If an error occurred while generating an item, there is an ItemId but no data for that item.
-        // the following routine deletes these unused ItemIds
-        $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
-                LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . '
-                    ON ind_ini_id = ini_id
-                WHERE ind_ini_id is NULL;';
-        $statement = $this->mDb->queryPrepared($sql);
-
-        while ($row = $statement->fetch()) {
-            $delItem = new Item($this->mDb, $this, $row['ini_id']);
-            $delItem->delete();
-        }
-
         // generate a new ItemId
         if ($this->mItemCreated) {
             $category = new Category($this->mDb);
@@ -1234,9 +1249,6 @@ class ItemsData
 
             $this->mItemId = $newItem->getValue('ini_id');
             $this->mItemUUID = $newItem->getValue('ini_uuid');
-
-            // update item table
-            $this->readItems();
         }
     }
 
