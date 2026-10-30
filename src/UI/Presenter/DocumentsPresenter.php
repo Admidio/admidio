@@ -204,13 +204,7 @@ class DocumentsPresenter extends PagePresenter
         }
 
         // the folders from the root to the current folder are expanded in the tree
-        $treePath = array($currentFolder->getValue('fol_uuid'));
-        $parentFolderId = (int)$currentFolder->getValue('fol_fol_id_parent');
-        while ($parentFolderId > 0) {
-            $parentFolder = new Folder($gDb, $parentFolderId);
-            array_unshift($treePath, $parentFolder->getValue('fol_uuid'));
-            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
-        }
+        $treePath = (new DocumentsService($gDb, $currentFolder->getValue('fol_uuid')))->findFolderPath();
         $rootFolder = new Folder($gDb);
         $rootFolder->readDataByUuid($treePath[0]);
 

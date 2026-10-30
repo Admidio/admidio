@@ -383,7 +383,7 @@ class AdmTreeView {
         let item = link.closest("li");
         while (item) {
             names.unshift(this.getLink(item).title);
-            item = item.parentElement.closest("li");
+            item = this.getParentItem(item);
         }
         return names;
     }

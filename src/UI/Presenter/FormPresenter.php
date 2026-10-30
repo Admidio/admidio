@@ -1971,6 +1971,8 @@ class FormPresenter
      * The url must return JSON: {"status": "success", "nodes": [{"id": "...", "name": "...", "url": "...",
      * "hasChildren": true, "selectable": true}]} and with the parameter **with_path=1** also "path" with the ids
      * of the nodes from the root to the requested node.
+     * The restrictions of the selection (selectable, excludedId, currentSelectable) are only shown to the user. The
+     * script that receives the form must check again that the user may use the selected node.
      * @param string $id ID of the tree and name of the hidden field that contains the selected node.
      * @param string $label The label of the tree.
      * @param string $url Url that returns the child nodes of a node as JSON.
@@ -1999,6 +2001,8 @@ class FormPresenter
      */
     public function addTreeSelect(string $id, string $label, string $url, array $root, array $options = array()): void
     {
+        global $gL10n;
+
         $optionsAll = $this->buildOptionsArray(array_replace(array(
             'type' => 'tree-select',
             'id' => $id,
@@ -2035,7 +2039,8 @@ class FormPresenter
             'path' => array_values($optionsAll['path']),
             'excludedId' => $optionsAll['excludedId'],
             'rememberKey' => $optionsAll['rememberKey'],
-            'rememberLabel' => $optionsAll['rememberLabel']
+            'rememberLabel' => $optionsAll['rememberLabel'],
+            'errorText' => $gL10n->get('SYS_REQUEST_FAILED')
         ));
 
         if (isset($this->htmlPage)) {
