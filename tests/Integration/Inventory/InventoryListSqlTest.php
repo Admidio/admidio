@@ -36,6 +36,17 @@ class InventoryListSqlTest extends DatabaseTestCase
             'category and keeper filters with search' => [['filterCategory' => true, 'filterKeeper' => true, 'search' => 'camera'], ['Camera', 'Camera spare']],
             'receiver filter' => [['filterReceiver' => 'Camera spare'], ['Camera spare'], 1],
             'pagination with search' => [['search' => 'camera', 'start' => 1, 'length' => 1], ['Camera spare'], 3, 2],
+            'category label as in the UI' => [['displayValues' => true, 'search' => 'Audio'], ['Camera', 'Tripod']],
+            'category and stored value' => [['displayValues' => true, 'search' => 'Audio camera'], ['Camera']],
+            'category search with pagination' => [['displayValues' => true, 'search' => 'Audio', 'start' => 1, 'length' => 1], ['Tripod'], 3, 2],
+            'category search past last page' => [['displayValues' => true, 'search' => 'Audio', 'start' => 2, 'length' => 1], [], 3, 2],
+            'category search sorted numerically' => [['displayValues' => true, 'search' => 'Audio', 'orderField' => 'AUDIT_QUANTITY', 'dir' => 'desc'], ['Tripod', 'Camera']],
+            'dropdown label' => [['displayValues' => true, 'search' => 'Transportlabel'], ['Camera']],
+            'keeper name' => [['search' => 'Keeperlabel'], ['Camera', 'Camera spare', 'Tripod']],
+            'borrower name' => [['displayValues' => true, 'search' => 'Borrowerlabel'], ['Camera']],
+            'formatted borrow date' => [['displayValues' => true, 'search' => '01.01.2020'], ['Camera', 'Camera spare', 'Tripod']],
+            'hidden borrow date is not searchable' => [['displayValues' => true, 'disableBorrowing' => true, 'search' => '01.01.2020'], []],
+            'link URL is not searchable' => [['search' => 'profile.php'], []],
         ];
     }
 
@@ -85,7 +96,7 @@ class InventoryListSqlTest extends DatabaseTestCase
     }
 
     /** @dataProvider sharedSearches */
-    public function testListExportAndPrintUseTheSameSearch(string $search, array $expectedNames): void
+    public function testListExportAndPrintMatchStoredTextSearches(string $search, array $expectedNames): void
     {
         $result = $this->requestList(['search' => $search, 'compareExports' => true]);
         $names = array_map(static fn(array $row): string => html_entity_decode(strip_tags($row[1]), ENT_QUOTES | ENT_HTML5), $result['data']);
@@ -104,6 +115,34 @@ class InventoryListSqlTest extends DatabaseTestCase
             'equal categories' => ['CATEGORY', 'asc'],
             'equal keepers' => ['KEEPER', 'desc'],
         ];
+    }
+
+    public function testDisplayedSearchMatchesExportsAndPrint(): void
+    {
+        foreach (['Audio', 'Audio camera', 'äöü Zubehör', 'Transportlabel', 'Keeperlabel', 'Borrowerlabel', '01.01.2020'] as $search) {
+            $result = $this->requestList(['displayValues' => true, 'search' => $search, 'compareExports' => true]);
+            $names = array_map(static fn(array $row): string => html_entity_decode(strip_tags($row[1]), ENT_QUOTES | ENT_HTML5), $result['data']);
+            sort($names);
+            foreach ($result['testExportNames'] as $mode => $exportNames) {
+                $this->assertSame($names, $exportNames, $search . ': ' . $mode);
+            }
+        }
+    }
+
+    public function testGuestCannotSearchAnonymizedNames(): void
+    {
+        $plain = $this->requestList(['guest' => true]);
+        $this->assertCount(3, $plain['data']);
+        $this->assertStringNotContainsString('Keeperlabel', json_encode($plain['data']));
+        $filtered = $this->requestList(['guest' => true, 'search' => 'Keeperlabel']);
+        $this->assertSame(0, $filtered['recordsFiltered']);
+        $this->assertSame([], $filtered['data']);
+        $borrower = $this->requestList(['guest' => true, 'displayValues' => true, 'search' => 'Borrowerlabel']);
+        $this->assertSame(0, $borrower['recordsFiltered']);
+        $this->assertSame([], $borrower['data']);
+        $category = $this->requestList(['guest' => true, 'displayValues' => true, 'search' => 'Audio']);
+        $this->assertSame(2, $category['recordsFiltered']);
+        $this->assertCount(2, $category['data']);
     }
 
     /** @dataProvider tiedSorts */

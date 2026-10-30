@@ -3,10 +3,8 @@
  ***********************************************************************************************
  * Server side script for Datatables to return the requested inventory list
  *
- * This script is modeled after modules/messages/messages_data.php and returns
- * JSON data for the inventory DataTable. It relies on the InventoryPresenter to
- * prepare the full table data and then performs ordering, searching and paging
- * on that dataset.
+ * Returns JSON data for the inventory DataTable. SQL applies module filters and
+ * ordering; text searches match formatted cells before pagination.
  ***********************************************************************************************
  */
 
@@ -120,10 +118,6 @@ try {
     $borrowLatestJoin = ' LEFT JOIN ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' lb ON lb.inb_ini_id = i.ini_id';
 
     $sqlSelect = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ';
-
-    $searchCondition = $itemsData->getSqlSearchCondition($getSearch, 'i.ini_id');
-    $searchWhere = $searchCondition['sql'];
-    $queryParams = array_merge($baseParams, $searchCondition['params']);
 
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';
@@ -264,23 +258,27 @@ try {
 
     // limit
     $limitCondition = '';
-    if ($getLength > 0) {
+    if ($getLength > 0 && $getSearch === '') {
         $limitCondition = ' LIMIT ' . (int)$getLength . ' OFFSET ' . (int)$getStart;
     }
 
     // final SQL
-    $sqlMain = $sqlSelect . $baseFromTables . $borrowLatestJoin . implode('', $sortJoins) . $baseWhere . $searchWhere;
+    // Display labels and anonymized names cannot be searched as raw stored IDs.
+    // With a search, filter the formatted rows before applying pagination below.
+    $sqlMain = $sqlSelect . $baseFromTables . $borrowLatestJoin . implode('', $sortJoins) . $baseWhere;
     $sql = $sqlMain . $orderCondition . $limitCondition;
 
-    $statement = $gDb->queryPrepared($sql, $queryParams);
+    $statement = $gDb->queryPrepared($sql, $baseParams);
 
     // Create a user object for later use
     $user = new User($gDb, $gProfileFields);
+    $userNames = array();
 
     $itemRows = $statement->fetchAll();
     $itemsData->preloadItemData(array_column($itemRows, 'ini_uuid'));
 
     $data = array();
+    $matchedRows = 0;
     foreach ($itemRows as $row) {
         // Activates the preloaded data without additional queries for this row.
         $itemsData->readItemData($row['ini_uuid']);
@@ -320,16 +318,20 @@ try {
                 if ($anonymizeUserNames && $content !== '-1') {
                     $content = SecurityUtils::encodeHTML($gL10n->get('SYS_MEMBER'));
                 } elseif (is_numeric($content)) {
-                    $found = $user->readDataById($content);
-                    if (!$found) {
-                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                        $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
-                    } else {
-                        $content = '<a href="' . SecurityUtils::encodeUrl(
-                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                            ['user_uuid' => $user->getValue('usr_uuid')],
-                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                    $userId = (int)$content;
+                    if (!array_key_exists($userId, $userNames)) {
+                        $found = $user->readDataById($userId);
+                        if (!$found) {
+                            $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                            $userNames[$userId] = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
+                        } else {
+                            $userNames[$userId] = '<a href="' . SecurityUtils::encodeUrl(
+                                ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                                ['user_uuid' => $user->getValue('usr_uuid')],
+                            ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
+                        }
                     }
+                    $content = $userNames[$userId];
                 }
             }
 
@@ -338,6 +340,16 @@ try {
                 $content = '<s>' . $content . '</s>';
             }
             $rowValues[] = $content;
+        }
+
+        if ($getSearch !== '') {
+            if (!InventoryPresenter::matchesSearch($rowValues, $getSearch)) {
+                continue;
+            }
+            ++$matchedRows;
+            if ($getLength > 0 && ($matchedRows <= $getStart || $matchedRows > $getStart + $getLength)) {
+                continue;
+            }
         }
 
         // actions
@@ -414,11 +426,8 @@ try {
     }
 
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-    // if search was applied, count filtered rows
     if ($getSearch !== '') {
-        $countSql = 'SELECT COUNT(*)' . $baseFromTables . $baseWhere . $searchWhere;
-        $countStmt = $gDb->queryPrepared($countSql, $queryParams);
-        $jsonArray['recordsFiltered'] = (int)$countStmt->fetchColumn();
+        $jsonArray['recordsFiltered'] = $matchedRows;
     }
 
     $jsonArray['data'] = $data;

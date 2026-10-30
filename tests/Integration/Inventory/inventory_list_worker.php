@@ -2,6 +2,7 @@
 
 use Admidio\Infrastructure\Database;
 use Admidio\Inventory\Entity\ItemField;
+use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -31,6 +32,11 @@ $fixture = new AdmidioTestFixture($gDb);
 $role = $fixture->createAndSaveRoleWithRights('Inventory SQL audit', $gCurrentOrgId, ['rol_administrator' => 1, 'rol_inventory_admin' => 1]);
 $user = $fixture->createAndSaveUser('inventorysqlaudit', 'inventorysqlaudit@example.local');
 $fixture->assignUserToRole($user['usr_id'], $role['rol_id']);
+$keeper = new User($gDb, $gProfileFields, $user['usr_id']);
+$keeper->saveChangesWithoutRights();
+$keeper->setValue('FIRST_NAME', 'Review');
+$keeper->setValue('LAST_NAME', 'Keeperlabel');
+$keeper->save();
 $gCurrentUser = new User($gDb, $gProfileFields);
 $gCurrentUser->readDataById($user['usr_id']);
 $gCurrentUserId = $user['usr_id'];
@@ -64,10 +70,32 @@ $field->save();
 $decimalField = $field->getValue('inf_name_intern');
 
 $categoryUuid = $gDb->queryPrepared("SELECT cat_uuid FROM " . TBL_CATEGORIES . " WHERE cat_type = 'IVT' AND cat_org_id = ?", [$gCurrentOrgId])->fetchColumn();
+if ($request['displayValues'] ?? false) {
+    $borrowerData = $fixture->createAndSaveUser('inventoryborrower', 'borrower@example.local');
+    $fixture->assignUserToRole($borrowerData['usr_id'], $role['rol_id']);
+    $borrower = new User($gDb, $gProfileFields, $borrowerData['usr_id']);
+    $borrower->saveChangesWithoutRights();
+    $borrower->setValue('FIRST_NAME', 'Review');
+    $borrower->setValue('LAST_NAME', 'Borrowerlabel');
+    $borrower->save();
+    $category = $fixture->createAndSaveCategory('Audio Equipment ÄÖÜ & Zubehör', 'IVT', $gCurrentOrgId);
+    $audioCategoryUuid = $category['cat_uuid'];
+    $field = new ItemField($gDb);
+    $field->setValue('inf_org_id', $gCurrentOrgId);
+    $field->setValue('inf_name', 'Audit transport');
+    $field->setValue('inf_type', 'DROPDOWN');
+    $field->save();
+    $transportField = $field->getValue('inf_name_intern');
+    $option = new SelectOptions($gDb, (int)$field->getValue('inf_id'));
+    $option->setValue('ifo_inf_id', $field->getValue('inf_id'));
+    $option->setValue('ifo_value', 'Transportlabel');
+    $option->save();
+    $gSettingsManager->set('system_date', 'd.m.Y');
+}
 $items = new ItemsData($gDb, $gCurrentOrgId);
 foreach (['Camera' => '10', 'Camera spare' => '2', 'Tripod' => '20'] as $name => $quantity) {
     $items->readItemData('');
-    $items->createNewItem($categoryUuid);
+    $items->createNewItem(isset($audioCategoryUuid) && $name !== 'Camera spare' ? $audioCategoryUuid : $categoryUuid);
     $items->setValue('ITEMNAME', $name);
     $items->setValue('KEEPER', (string) $gCurrentUserId);
     $numericValue = ($request['scientificNumber'] ?? false) ? $quantity . 'e0' : $quantity;
@@ -86,6 +114,10 @@ foreach (['Camera' => '10', 'Camera spare' => '2', 'Tripod' => '20'] as $name =>
     $items->setValue($descriptionField, $description);
     $items->setValue('LAST_RECEIVER', $name === 'Camera' ? (string) $gCurrentUserId : $name);
     $items->setValue('BORROW_DATE', '2020-01-01');
+    if (isset($transportField) && $name === 'Camera') {
+        $items->setValue($transportField, (string)$option->getValue('ifo_id'));
+        $items->setValue('LAST_RECEIVER', (string)$borrowerData['usr_id']);
+    }
     $items->saveItemData();
 }
 if ($request['invalidNumber'] ?? false) {
@@ -127,6 +159,15 @@ if (DB_TYPE === Database::PDO_ENGINE_MYSQL) {
     $gDb->queryPrepared('SET NAMES ' . (($request['charset'] ?? '') === 'utf8' ? 'utf8' : 'utf8mb4'));
 }
 (new InventoryPresenter())->createList();
+if ($request['guest'] ?? false) {
+    $gValidLogin = false;
+    $gCurrentUser = new User($gDb, $gProfileFields);
+    $gCurrentUserId = 0;
+    $gSettingsManager->set('inventory_anonymize_user_names_for_guests', '1');
+}
+if ($request['disableBorrowing'] ?? false) {
+    $gSettingsManager->set('inventory_items_disable_borrowing', '1');
+}
 
 // The copied endpoint is unchanged. Its common.php symlink resolves to the integration
 // bootstrap already loaded above, so require_once retains this isolated test context.
