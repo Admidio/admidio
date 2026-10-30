@@ -198,12 +198,18 @@ class PagePresenter
 
     /**
      * Adds the script and the styles of the tree view (system/js/tree-view.js) to the page, e.g. for the folder
-     * tree of the documents and files module or a tree select field of a form. The modification time is part of
-     * the url, so the browser loads a changed file at once.
+     * tree of the documents and files module or a tree select field of a form. The styles are taken from the
+     * current theme or, if the theme has no file css/tree-view.css, from the fallback theme. The modification time is
+     * part of the url, so the browser loads a changed file at once.
      */
     public function addTreeViewFiles(): void
     {
-        $this->addCssFile(ADMIDIO_URL . FOLDER_SYSTEM . '/css/tree-view.css?v=' . filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/css/tree-view.css'));
+        $cssFile = '/css/tree-view.css';
+        $cssUrl = THEME_URL . $cssFile;
+        if (!file_exists(THEME_PATH . $cssFile) && defined('THEME_FALLBACK_PATH')) {
+            $cssUrl = THEME_FALLBACK_URL . $cssFile;
+        }
+        $this->addCssFile($cssUrl . '?v=' . filemtime(getThemedFile($cssFile)));
         $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/tree-view.js?v=' . filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/js/tree-view.js'));
     }
 

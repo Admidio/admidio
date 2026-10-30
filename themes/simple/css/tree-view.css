@@ -66,3 +66,10 @@
     color: var(--bs-primary-text-emphasis);
     font-weight: bold;
 }
+
+/* the child nodes could not be loaded, the node can be expanded again */
+.admidio-tree-error {
+    margin-left: .5rem;
+    font-size: .875em;
+    color: var(--bs-danger-text-emphasis);
+}
