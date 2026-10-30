@@ -14,6 +14,7 @@ use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
+use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\SSO\Service\KeyService;
@@ -3079,7 +3080,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createUpdateBackupForm(): string
     {
-        global $gL10n, $gSettingsManager, $gCurrentSession;
+        global $gL10n, $gSettingsManager, $gCurrentSession, $gDb;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -3097,14 +3098,25 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'ORG_UPDATE_CHECK_DESC')
         );
 
+        // The directory and the password of the backups belong to the whole installation: the other
+        // organizations see those of the first organization.
+        $editable = Backups::areSettingsEditable();
+        $readOnly = array();
+        if (!$editable) {
+            $firstOrganization = new Organization($gDb, Backups::getFirstOrganizationId());
+            $readOnly = array(
+                'property' => FormPresenter::FIELD_DISABLED,
+                'helpTextId' => array('ORG_BACKUP_SETTINGS_FIRST_ORGANIZATION', array($firstOrganization->getValue('org_longname')))
+            );
+        }
         $formUpdateBackup->addInput(
             'system_backup_path',
             $gL10n->get('ORG_BACKUP_PATH'),
-            $formValues['system_backup_path'],
-            self::preferenceInputOptions('system_backup_path', array(
+            $editable ? $formValues['system_backup_path'] : Backups::getDirectory(),
+            self::preferenceInputOptions('system_backup_path', array_merge(array(
                 'placeholder' => ADMIDIO_PATH . FOLDER_DATA . '/backups',
                 'helpTextId' => 'ORG_BACKUP_PATH_DESC'
-            ))
+            ), $readOnly))
         );
 
         // The password of the backups is never shown again: an empty field keeps it, and the
@@ -3113,14 +3125,14 @@ class PreferencesPresenter extends PagePresenter
             'system_update_dump_password',
             $gL10n->get('ORG_UPDATE_DUMP_PASSWORD'),
             '',
-            self::preferenceInputOptions('system_update_dump_password', array(
+            self::preferenceInputOptions('system_update_dump_password', array_merge(array(
                 'type' => 'password',
                 'autocomplete' => 'new-password',
-                'placeholder' => $formValues['system_update_dump_password'] !== '' ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : '',
+                'placeholder' => Backups::hasPassword() ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : '',
                 'helpTextId' => 'ORG_UPDATE_DUMP_PASSWORD_DESC'
-            ))
+            ), $readOnly))
         );
-        if ($formValues['system_update_dump_password'] !== '') {
+        if ($editable && Backups::hasPassword()) {
             $formUpdateBackup->addCheckbox(
                 'system_update_dump_password_remove',
                 $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_REMOVE'),

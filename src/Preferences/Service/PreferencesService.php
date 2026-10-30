@@ -3,6 +3,7 @@
 namespace Admidio\Preferences\Service;
 
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -410,6 +411,13 @@ class PreferencesService
                 break;
 
             case 'update_backup':
+                // The directory and the password of the backups belong to the whole installation
+                // and are only set in the first organization; elsewhere they are shown without
+                // being editable.
+                if (!Backups::areSettingsEditable()) {
+                    unset($formValues['system_backup_path'], $formValues['system_update_dump_password'], $formValues['system_update_dump_password_remove']);
+                    break;
+                }
                 // The password of the database backups is never shown, so an empty field keeps
                 // the stored one; only the checkbox removes it.
                 if (!empty($formValues['system_update_dump_password_remove'])) {
@@ -418,7 +426,9 @@ class PreferencesService
                     unset($formValues['system_update_dump_password']);
                 }
                 unset($formValues['system_update_dump_password_remove']);
-                $formValues['system_backup_path'] = $this->validateBackupPath((string) ($formValues['system_backup_path'] ?? ''));
+                if (array_key_exists('system_backup_path', $formValues)) {
+                    $formValues['system_backup_path'] = $this->validateBackupPath((string) $formValues['system_backup_path']);
+                }
                 break;
 
             case 'sso':

@@ -7,6 +7,7 @@
 
 namespace Admidio\Tests\Integration\Preferences;
 
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Tests\Support\AdministratorTestCase;
@@ -65,6 +66,22 @@ final class BackupPathTest extends AdministratorTestCase
     {
         $this->assertRefused('backups', 'ORG_BACKUP_PATH_INVALID');
         $this->assertRefused($this->outside . '/missing', 'ORG_BACKUP_PATH_INVALID');
+    }
+
+    /**
+     * @testdox Only the first organization can change the directory and the password, which apply to the whole installation
+     */
+    public function testOnlyTheFirstOrganization(): void
+    {
+        $previous = $GLOBALS['gCurrentOrgId'];
+        try {
+            $GLOBALS['gCurrentOrgId'] = Backups::getFirstOrganizationId();
+            $this->assertTrue(Backups::areSettingsEditable());
+            $GLOBALS['gCurrentOrgId'] = Backups::getFirstOrganizationId() + 1;
+            $this->assertFalse(Backups::areSettingsEditable());
+        } finally {
+            $GLOBALS['gCurrentOrgId'] = $previous;
+        }
     }
 
     /**

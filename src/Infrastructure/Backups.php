@@ -67,15 +67,61 @@ final class Backups
      */
     public static function getDirectory(): string
     {
+        return Updater\backupsDirectory(ADMIDIO_PATH, self::getSetting('system_backup_path'));
+    }
+
+    /**
+     * Whether a password for the backups is set.
+     * @return bool
+     * @throws Exception
+     */
+    public static function hasPassword(): bool
+    {
+        return self::getSetting('system_update_dump_password') !== '';
+    }
+
+    /**
+     * Whether the settings of the backups, their directory and their password, can be changed in the
+     * current organization: only in the first one, which holds the settings of the whole
+     * installation.
+     * @return bool
+     * @throws Exception
+     */
+    public static function areSettingsEditable(): bool
+    {
+        global $gCurrentOrgId;
+
+        return (int)$gCurrentOrgId === self::getFirstOrganizationId();
+    }
+
+    /**
+     * A setting of the backups, which the core updater reads from the first organization.
+     * @param string $name
+     * @return string
+     * @throws Exception
+     */
+    private static function getSetting(string $name): string
+    {
         global $gDb;
 
         $sql = 'SELECT prf_value
                   FROM ' . TBL_PREFERENCES . '
                  WHERE prf_name = ?
-                   AND prf_org_id = (SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS . ')';
-        $configured = $gDb->queryPrepared($sql, array('system_backup_path'))->fetchColumn();
+                   AND prf_org_id = ?';
 
-        return Updater\backupsDirectory(ADMIDIO_PATH, (string)$configured);
+        return (string)$gDb->queryPrepared($sql, array($name, self::getFirstOrganizationId()))->fetchColumn();
+    }
+
+    /**
+     * The ID of the first organization, whose preferences the core updater reads.
+     * @return int
+     * @throws Exception
+     */
+    public static function getFirstOrganizationId(): int
+    {
+        global $gDb;
+
+        return (int)$gDb->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();
     }
 
     /**
