@@ -226,8 +226,10 @@ composer test:http -- --log-junit tests/reports/http/junit.xml
 Failing route tests and setup/cleanup failures also save diagnostics under `tests/reports/http/`.
 These contain phase, private runtime path, recovery command and server request statuses/paths.
 They omit query strings, cookies, response bodies, raw PHP logs and configuration contents.
-GitHub Actions uploads this report directory as a separate artifact per database, retained for
-seven days. It never uploads the private installation, sessions or database configuration.
+GitHub Actions prints the sanitized diagnostic files directly in the workflow log when the
+HTTP suite fails. It does not upload artifacts or generate JUnit reports automatically;
+the command above remains available for local use. Test output and failure diagnostics can
+be read in the Actions logs without downloading additional files.
 
 The development-server router supplies normal file-based 404 responses instead of falling back
 to the application's index.php. Tests assert current Admidio behavior: application permission
