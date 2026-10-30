@@ -989,6 +989,28 @@ class InventoryPresenter extends PagePresenter
         return (string) $content;
     }
 
+    /** Match all search words against the displayed cells of an inventory row. */
+    public static function matchesSearch(array $values, string $search): bool
+    {
+        $words = preg_split('/\s+/', trim(StringUtils::strToLower(
+            htmlspecialchars_decode($search, ENT_QUOTES | ENT_HTML5)
+        )), -1, PREG_SPLIT_NO_EMPTY);
+        if ($words === []) {
+            return true;
+        }
+
+        // Match visible cell text, excluding links, UUIDs and action metadata.
+        $text = StringUtils::strToLower(html_entity_decode(
+            implode(' ', StringUtils::strStripTags($values)), ENT_QUOTES | ENT_HTML5, 'UTF-8'
+        ));
+        foreach ($words as $word) {
+            if (!StringUtils::strContains($text, $word)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Populate the inventory table with the data of the inventory items.
      * This method supports various output formats and fills the table based on the
@@ -1009,8 +1031,9 @@ class InventoryPresenter extends PagePresenter
         global $gCurrentUser, $gCurrentUserId, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
 
         // The paginated HTML list only needs field definitions. Load all items for exports
-        // and print views here, when their rows are actually requested.
-        $this->itemsData->readItems($this->getFilterString);
+        // and print views here. Their search must also match formatted field values, which
+        // cannot be excluded by a search over raw database values before formatting.
+        $this->itemsData->readItems();
 
         // Initialize the result array
         $preparedData = array(
@@ -1125,6 +1148,10 @@ class InventoryPresenter extends PagePresenter
                     ? '<s>' . $content . '</s>'
                     : $content;
                 $columnNumber++;
+            }
+
+            if (!self::matchesSearch($rowValues['data'], $this->getFilterString)) {
+                continue;
             }
 
             // Append admin action column for HTML mode

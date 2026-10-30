@@ -26,6 +26,8 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
             $cases[$mode . ' matching search'] = [$mode, 'kamera', ['Kamera ÄÖÜ']];
             $cases[$mode . ' empty search result'] = [$mode, 'missing', []];
             $cases[$mode . ' words in different fields'] = [$mode, 'kamera optics', ['Kamera ÄÖÜ']];
+            $cases[$mode . ' displayed category'] = [$mode, 'equipment', ['Kamera ÄÖÜ', 'Stativ']];
+            $cases[$mode . ' displayed borrower'] = [$mode, 'borrower', ['Kamera ÄÖÜ']];
         }
         return $cases;
     }
@@ -83,6 +85,8 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
             'literal minus' => ['kamera -ÄÖÜ', []],
             'hyphenated term' => ['tripod-kit', ['Stativ']],
             'case insensitive umlauts' => ['äöü', ['Kamera ÄÖÜ']],
+            'displayed category' => ['equipment', ['Kamera ÄÖÜ', 'Stativ']],
+            'displayed borrower' => ['borrower', ['Kamera ÄÖÜ']],
             'whitespace only' => ['   ', ['Kamera ÄÖÜ', 'Stativ']],
             'no matches' => ['missing', []],
         ];
@@ -108,10 +112,12 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
     {
         global $gCurrentOrgId, $gCurrentUserId;
 
-        $categoryUuid = $this->getDatabase()->queryPrepared(
-            'SELECT cat_uuid FROM ' . TBL_CATEGORIES . ' WHERE cat_type = ? AND cat_org_id = ? LIMIT 1',
-            ['IVT', $gCurrentOrgId]
-        )->fetchColumn();
+        $category = new Category($this->getDatabase());
+        $category->setValue('cat_org_id', $gCurrentOrgId);
+        $category->setValue('cat_type', 'IVT');
+        $category->setValue('cat_name', 'Export equipment');
+        $category->save();
+        $categoryUuid = $category->getValue('cat_uuid');
         $field = new ItemField($this->getDatabase());
         $field->setValue('inf_org_id', $gCurrentOrgId);
         $field->setValue('inf_name', 'Export description');
@@ -125,6 +131,11 @@ class InventoryImportExportFilesystemTest extends FilesystemTestCase
             $items->setValue('ITEMNAME', $name);
             $items->setValue('KEEPER', (string) $gCurrentUserId);
             $items->setValue($fieldName, $name === 'Stativ' ? 'tripod-kit' : 'optics');
+            if ($name !== 'Stativ') {
+                $items->setValue('LAST_RECEIVER', 'Export borrower');
+                $items->setValue('BORROW_DATE', '2020-01-01');
+                $items->setValue('RETURN_DATE', '2020-01-02');
+            }
             $items->saveItemData();
         }
     }

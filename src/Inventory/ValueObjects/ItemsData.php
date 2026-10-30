@@ -418,7 +418,7 @@ class ItemsData
     }
 
     /**
-     * Build the same word search for the paginated list, exports and print views.
+     * Build a word search across stored item values for inventory queries.
      * Every word must occur in a stored item field, using the database's case-insensitive
      * search operator. Commas and hyphens retain their ordinary meaning within a word.
      *
