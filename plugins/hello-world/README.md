@@ -26,6 +26,9 @@ else.
 The directory name is the plugin ID and the only identity the plugin has. `name` and `description`
 may be language keys, which is what this plugin uses. Everything else is optional:
 
+* `beta` — a beta number from 1 to 32767 beside the base `version`, e.g. `"version": "2.0.0", "beta": 1`.
+  Omit it or use `0` for a stable release. Admidio displays and compares the example as `2.0.0-beta.1`.
+  The `version` field contains only the base version, without a prerelease suffix.
 * `requires` — version constraints for `admidio` and `php`, plus `extensions` and `plugins`. A
   constraint is a space separated list of terms that all have to match, e.g. `>=5.1 <6.0`; a term
   without an operator means `>=`.

@@ -549,6 +549,39 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * @testdox Beta installation, beta updates and the stable release keep separate version fields
+     */
+    public function testBetaVersionsAreInstalledAndUpdated(): void
+    {
+        $this->writeManifestVersion('2.0.0', 1);
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame('2.0.0', $this->component()['com_version']);
+        $this->assertSame(1, (int)$this->component()['com_beta']);
+        $this->assertSame('2.0.0-beta.1', PluginRegistry::getInstalledVersion(self::PLUGIN_ID));
+        $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState(self::PLUGIN_ID));
+        $this->assertFalse(Plugin::versionMatches(PluginRegistry::getInstalledVersion(self::PLUGIN_ID), '>=2.0.0'));
+
+        $this->writeManifestVersion('2.0.0', 2);
+        $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState(self::PLUGIN_ID));
+        PluginInstaller::update($this->plugin());
+
+        $this->assertSame('2.0.0', $this->component()['com_version']);
+        $this->assertSame(2, (int)$this->component()['com_beta']);
+        $this->assertSame('2.0.0-beta.2', PluginRegistry::getInstalledVersion(self::PLUGIN_ID));
+        $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState(self::PLUGIN_ID));
+
+        $this->writeManifestVersion('2.0.0');
+        $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState(self::PLUGIN_ID));
+        PluginInstaller::update($this->plugin());
+
+        $this->assertSame('2.0.0', $this->component()['com_version']);
+        $this->assertSame(0, (int)$this->component()['com_beta']);
+        $this->assertSame('2.0.0', PluginRegistry::getInstalledVersion(self::PLUGIN_ID));
+        $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState(self::PLUGIN_ID));
+    }
+
+    /**
      * @testdox A patch update runs new steps of its current minor migration
      */
     public function testPatchUpdateRunsNewStepsOfTheCurrentMinorMigration(): void
@@ -899,11 +932,15 @@ class PluginInstallerTest extends FilesystemTestCase
     /**
      * Rewrite the version in the manifest of the copied plugin, as a new release of it would.
      */
-    private function writeManifestVersion(string $version): void
+    private function writeManifestVersion(string $version, ?int $beta = null): void
     {
         $file = $this->pluginsPath . '/' . self::PLUGIN_ID . '/plugin.json';
         $manifest = json_decode((string)file_get_contents($file), true);
         $manifest['version'] = $version;
+        unset($manifest['beta']);
+        if ($beta !== null) {
+            $manifest['beta'] = $beta;
+        }
 
         file_put_contents($file, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 

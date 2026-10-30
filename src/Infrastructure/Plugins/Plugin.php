@@ -106,9 +106,19 @@ final class Plugin
     public readonly string $description;
 
     /**
-     * Version of the files, as declared in the manifest.
+     * Complete version of the files, including the optional beta number.
      */
     public readonly string $version;
+
+    /**
+     * Base version declared in the manifest, stored separately from the beta number.
+     */
+    public readonly string $versionBase;
+
+    /**
+     * Beta number, or zero for a stable release.
+     */
+    public readonly int $beta;
 
     /**
      * Bootstrap icon name, e.g. **bi-cake2**.
@@ -184,7 +194,9 @@ final class Plugin
         $this->manifest = $manifest;
         $this->name = (string)($manifest['name'] ?? $id);
         $this->description = (string)($manifest['description'] ?? '');
-        $this->version = (string)($manifest['version'] ?? '0.0.0');
+        $this->versionBase = (string)($manifest['version'] ?? '0.0.0');
+        $this->beta = is_int($manifest['beta'] ?? null) ? $manifest['beta'] : 0;
+        $this->version = $this->versionBase . ($this->beta > 0 ? '-beta.' . $this->beta : '');
         $this->icon = (string)($manifest['icon'] ?? 'bi-puzzle-fill');
         $this->author = (string)($manifest['author'] ?? '');
         $this->homepage = (string)($manifest['url'] ?? '');
@@ -245,6 +257,15 @@ final class Plugin
         if (!isset($manifest['version']) || !is_string($manifest['version']) || $manifest['version'] === '') {
             return new self($id, $path, $manifest, array(), array(), $empty,
                 'The manifest does not declare a version.', self::ERROR_BROKEN_MANIFEST);
+        }
+
+        if (strlen($manifest['version']) > 10
+            || preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/D', $manifest['version']) !== 1
+            || (array_key_exists('beta', $manifest)
+                && (!is_int($manifest['beta']) || $manifest['beta'] < 0 || $manifest['beta'] > 32767))) {
+            return new self($id, $path, $manifest, array(), array(), $empty,
+                'The manifest version must be a base version such as 1.2.0 (at most 10 characters), with an optional beta integer between 0 and 32767.',
+                self::ERROR_BROKEN_MANIFEST);
         }
 
         $error = null;
