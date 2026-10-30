@@ -8,6 +8,13 @@ on:
       - 'system/**'
       - 'modules/**'
       - 'install/**'
+      - 'index.php'
+      - 'themes/**'
+      - 'languages/**'
+      - 'plugins/**'
+      - 'libs/**'
+      - 'hooks/**'
+      - 'rss/**'
       - 'tests/**'
       - 'admidio'
       - 'composer.json'
@@ -66,7 +73,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: curl, gd, iconv, json, pdo, posix, simplexml, zip
+          extensions: curl, dom, gd, iconv, json, pdo, posix, simplexml, zip
           coverage: none
 
       - name: Check PHP syntax
@@ -127,7 +134,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: curl, gd, iconv, json, pdo, pdo_mysql, posix, simplexml, zip
+          extensions: curl, dom, gd, iconv, json, pdo, pdo_mysql, posix, simplexml, zip
           coverage: none
 
       - name: Install dependencies
@@ -145,6 +152,7 @@ jobs:
           exit 1
 
       - name: Prepare test environment
+        id: test-environment
         run: php tests/bin/setup-test-env.php
 
       - name: Run integration tests
@@ -152,6 +160,20 @@ jobs:
 
       - name: Run CLI tests
         run: composer test:cli
+
+      - name: Run HTTP route tests
+        id: http-tests
+        if: ${{ !cancelled() && steps.test-environment.outcome == 'success' }}
+        run: composer test:http -- --log-junit tests/reports/http/junit.xml
+
+      - name: Upload HTTP test results
+        if: ${{ !cancelled() && (steps.http-tests.outcome == 'success' || steps.http-tests.outcome == 'failure') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: http-tests-mariadb
+          path: tests/reports/http/
+          if-no-files-found: ignore
+          retention-days: 7
 
   postgres:
     name: PostgreSQL 15
@@ -193,7 +215,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: curl, gd, iconv, json, pdo, pdo_pgsql, posix, simplexml, zip
+          extensions: curl, dom, gd, iconv, json, pdo, pdo_pgsql, posix, simplexml, zip
           coverage: none
 
       - name: Install dependencies
@@ -211,6 +233,7 @@ jobs:
           exit 1
 
       - name: Prepare test environment
+        id: test-environment
         run: php tests/bin/setup-test-env.php
 
       - name: Run integration tests
@@ -218,6 +241,20 @@ jobs:
 
       - name: Run CLI tests
         run: composer test:cli
+
+      - name: Run HTTP route tests
+        id: http-tests
+        if: ${{ !cancelled() && steps.test-environment.outcome == 'success' }}
+        run: composer test:http -- --log-junit tests/reports/http/junit.xml
+
+      - name: Upload HTTP test results
+        if: ${{ !cancelled() && (steps.http-tests.outcome == 'success' || steps.http-tests.outcome == 'failure') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: http-tests-postgres
+          path: tests/reports/http/
+          if-no-files-found: ignore
+          retention-days: 7
 
   mysql:
     name: MySQL 8.0
@@ -260,7 +297,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
-          extensions: curl, gd, iconv, json, pdo, pdo_mysql, posix, simplexml, zip
+          extensions: curl, dom, gd, iconv, json, pdo, pdo_mysql, posix, simplexml, zip
           coverage: none
 
       - name: Install dependencies
@@ -278,6 +315,7 @@ jobs:
           exit 1
 
       - name: Prepare test environment
+        id: test-environment
         run: php tests/bin/setup-test-env.php
 
       - name: Run integration tests
@@ -285,3 +323,17 @@ jobs:
 
       - name: Run CLI tests
         run: composer test:cli
+
+      - name: Run HTTP route tests
+        id: http-tests
+        if: ${{ !cancelled() && steps.test-environment.outcome == 'success' }}
+        run: composer test:http -- --log-junit tests/reports/http/junit.xml
+
+      - name: Upload HTTP test results
+        if: ${{ !cancelled() && (steps.http-tests.outcome == 'success' || steps.http-tests.outcome == 'failure') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: http-tests-mysql
+          path: tests/reports/http/
+          if-no-files-found: ignore
+          retention-days: 7
