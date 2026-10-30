@@ -313,6 +313,10 @@ class PagePresenter
         $this->smarty->assign('currentOrganization', $gCurrentOrganization);
         $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
+        $this->smarty->assign('coreJavascriptVersion', max(
+            filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/js/common_functions.js'),
+            filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/js/page-load.js')
+        ));
         $this->smarty->assign('urlTheme', THEME_URL);
         if (defined('THEME_FALLBACK_URL')) {
             $this->smarty->assign('urlThemeFallback', THEME_FALLBACK_URL);
