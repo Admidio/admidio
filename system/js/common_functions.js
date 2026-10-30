@@ -615,8 +615,9 @@ function shareOrCopyLink(url, title, promptLabel) {
  * @param {string} buttons Optional the setting of the buttons that should be shown.
  *                         "yes-no" - A primary "Yes" button with a secondary "No" button.
  * @param {string} href    Optional a link that will be called by a click of the "Yes" button..
+ * @param {Array} buttonTexts Optional confirm and cancel labels; defaults to "Yes" and "No".
  */
-function messageBox(message, title, type, buttons, href) {
+function messageBox(message, title, type, buttons, href, buttonTexts) {
     $("#adm_status_message").html('');
     if (typeof title !== 'undefined') {
         $("#adm_modal_messagebox .modal-title").html(title);
@@ -634,6 +635,10 @@ function messageBox(message, title, type, buttons, href) {
         // A message shown before this one without buttons has hidden the footer, and the buttons
         // are in it, so the dialog would have nothing to confirm with.
         $("#adm_modal_messagebox .modal-footer").show();
+        $("#adm_messagebox_button_yes").text(buttonTexts && buttonTexts[0]
+            ? buttonTexts[0] : $("#adm_messagebox_button_yes").data("default-label"));
+        $("#adm_messagebox_button_no").text(buttonTexts && buttonTexts[1]
+            ? buttonTexts[1] : $("#adm_messagebox_button_no").data("default-label"));
         $("#adm_messagebox_button_yes").attr('onClick', href);
     }
 
