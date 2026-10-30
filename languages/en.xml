@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
@@ -999,7 +999,7 @@
   <string name="SYS_ITEM_ALREADY_BORROWED">This item cannot be borrowed because it is already borrowed.</string>
   <string name="SYS_ITEM_HAS_OPEN_RESERVATIONS">This item cannot be deleted or retired while open reservations exist.</string>
   <string name="SYS_ITEM_NOT_AVAILABLE">The item is not available for the selected period.</string>
-  <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">The item &quot;#VAR1#&quot; is not available for the selected period.</string>
+  <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">The item "#VAR1#" is not available for the selected period.</string>
   <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Item reservation status per event</string>
   <string name="SYS_KEEP_ORIGINAL">Also save original files</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Save each photo at its original size as well as at the selected resolution. If #VAR1_BOLD# is enabled, downloads use the original photos. This option requires significantly more storage space and should only be enabled if enough space is available.</string>
@@ -1534,13 +1534,13 @@
   <string name="SYS_RESERVATION_PERIOD_FROM">Reserve from</string>
   <string name="SYS_RESERVATION_PERIOD_TO">Reserve until</string>
   <string name="SYS_RESERVATION_REQUEST">Request reservation</string>
-  <string name="SYS_RESERVATION_REQUIRES_TIME_PERIOD">Item reservations require a time period. Items cannot be reserved for a single point in time.</string>
   <string name="SYS_RESERVATION_REQUESTERS">Who may request reservations?</string>
   <string name="SYS_RESERVATION_REQUESTERS_DESC">Defines whether all visitors, only logged-in users, or users in selected roles may submit reservation requests. (Default: logged-in users)</string>
   <string name="SYS_RESERVATION_REQUESTER_ROLES">Roles allowed to request reservations</string>
   <string name="SYS_RESERVATION_REQUESTER_ROLES_DESC">Select the roles whose members may submit reservation requests. This setting is used only when “Roles” is selected under “Who may request reservations?”.</string>
   <string name="SYS_RESERVATION_REQUEST_APPROVED">The reservation has been approved.</string>
   <string name="SYS_RESERVATION_REQUEST_SUBMITTED">The reservation has been submitted for approval.</string>
+  <string name="SYS_RESERVATION_REQUIRES_TIME_PERIOD">Item reservations require a time period. Items cannot be reserved for a single point in time.</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
