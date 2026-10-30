@@ -7,28 +7,61 @@ working while `src/`, `vendor/`, `system/`, `modules/` and the themes are replac
 ## Files
 
 ```text
-index.php          the pages and requests of the browser
-cli.php            the command line: status, apply, rollback
+index.php          entry point of the browser: loads updater.php of the updater that entry.php chooses
+cli.php            entry point of the command line: loads updater-cli.php the same way
+entry.php          chooses the updater: the installed one, or the unpacked updater of a running update
+updater.php        the pages and requests of the browser
+updater-cli.php    the command line: status, apply, rollback
 release-key.pem    the public key that signs update.txt (shipped with every release)
 texts/             the texts of the updater per language (written by the release builder)
 lib/bootstrap.php  loads the files below
 lib/common.php     configuration, texts, state and lock of an update, cookie, versions, pages
 lib/login.php      the updater's own login (fallback during maintenance mode)
 lib/download.php   HTTPS, signature of update.txt, release information, manifest, ZIP reading
-lib/phase-a.php    phase A and the checks P1-P9
-lib/phase-b.php    phase B: extraction, plan, installation, verification, rollback
+lib/phase-a.php    phase A and the checks P1-P9: check, download, verification, extraction
+lib/phase-b.php    phase B: plan, installation, verification, rollback
 lib/process.php    runStep(): the next piece of work of an update, state by state
-lib/cli.php        the command line: apply and rollback from one decision to the next (loaded by cli.php only)
+lib/cli.php        the command line: apply and rollback from one decision to the next (loaded by updater-cli.php only)
 ```
 
 Everything in `lib/` is plain functions in the namespace `AdmidioCoreUpdater`. It reads
 `adm_my_files/config.php`, connects with plain PDO and needs nothing else.
 `install/update.php` loads `lib/common.php`, so the state of an update and the updater cookie
-have one implementation.
+have one implementation; Admidio skips that where the unpacked updater (see below) has loaded it
+already.
 
 `runStep()` in `lib/process.php` names every state in the order an update passes through them and
 does the next piece of work of the current one; the page and the command line call it until the
-administrator has to decide. `coreUpdateShowPage()` in `index.php` shows the page of each state.
+administrator has to decide. `coreUpdateShowPage()` in `updater.php` shows the page of each state.
+
+## Which updater runs
+
+An updater never overwrites its own files. Instead, two updaters take turns:
+
+1. **The installed updater** (`install/core-update/`) runs phase A: check, download, verify, and
+   unpack the complete new version to `adm_my_files/core-update/<update id>/extracted/`. It
+   changes nothing in the installation.
+2. **The unpacked updater**, the updater of the new version in
+   `adm_my_files/core-update/<update id>/extracted/install/core-update/`, runs everything after
+   that until the update is over. It installs every file of the new version, `install/core-update/`
+   included, with the same journal and rollback copy as all other files.
+
+So an interrupted update can always be continued or rolled back, and a rollback also restores the
+old updater. As a side effect, OPcache never serves an old updater file, because the unpacked
+updater has paths of its own.
+
+The browser cannot reach `adm_my_files/`, so every request goes to `index.php` (or `cli.php` on
+the command line). They ask `entry.php` which updater to load and then load its `updater.php`
+(or `updater-cli.php`). `entry.php` picks the unpacked updater when `active.json` names an update
+whose `state.json` has `runUnpackedUpdater` set and whose unpacked updater exists; otherwise the
+installed one. Phase A sets the flag when it has finished unpacking. The unpacked updater gets the
+Admidio directory from the constant `ADMIDIO_CORE_UPDATE_ROOT`, because its own location is
+inside `adm_my_files/`.
+
+`index.php`, `cli.php` and `entry.php` are the contract between the releases: an update starts
+with the old ones and ends with the new ones, so these three files, the flag and the paths above
+must stay compatible in every release. A source archive of a version without the unpacked updater
+is installed by the installed updater.
 
 ## State and access
 
@@ -37,7 +70,7 @@ administrator has to decide. `coreUpdateShowPage()` in `index.php` shows the pag
   `state.json.previous`). `active.json` names the unfinished update; `update.lock` serialises
   the requests.
 - Only an administrator gets in. As long as no Admidio file has been changed, that is the
-  Admidio login: `index.php` includes `system/common.php` of the installed release, and the
+  Admidio login: `updater.php` includes `system/common.php` of the installed release, and the
   settings page simply links to `install/core-update/`. From maintenance mode on Admidio cannot
   be used: the browser that started the installation carries the updater cookie
   `<cookie prefix>_CORE_UPDATE`, and the updater's own login (password, security code when
@@ -96,17 +129,17 @@ with path, link, collision and size checks.
 Phase A runs in the installed updater: the channel choice (only with `$gDebug`, otherwise the
 check starts at once), `update.txt` and its signature, the version rule and the checks P1-P10,
 then the confirmation, the download in range requests of a few seconds each, the verification
-of package and manifest, and the copy of the updater of the new release over this one. It ends
-in state `prepared`; phase B continues there.
+of package and manifest, and the extraction of every file into the workspace, each checked
+against the manifest (`extracting`). It ends in state `prepared`; phase B continues there, in the
+unpacked updater.
 
 A failed check or a network error can be fixed and tried again. A failed verification ends the
 update and removes its workspace.
 
 ## Phase B
 
-Phase B runs in the updater of the new release. It unpacks the package into the workspace and
-checks every file against the manifest (`extracting`), then compares the installation with the
-release (`planning`): a file that is already right gets no operation, files in the managed
+Phase B runs in the unpacked updater. It compares the installation with the extracted release
+(`planning`): a file that is already right gets no operation, files in the managed
 directories that the release does not have are removed, root files only if the installed manifest
 lists them. A file that is replaced or removed and differs from the original file of the installed
 release, or that the release does not know (every such file when the installed release has no
@@ -200,7 +233,7 @@ same `state.json`: an update started in the browser can be continued on the comm
 other way round. It asks before the download and before the installation, as the page does;
 `--yes` answers both, and without a terminal or with `--no-interaction` it stops before it changes
 anything. Where the page loads a new page, the command line starts a new process: after phase A
-`cli.php apply --resume`, which runs the updater of the new release, and after the files
+`cli.php apply --resume`, which runs the unpacked updater, and after the files
 `cli.php database`, which loads `system/bootstrap/cli.php` of the new release (no plugins, no
 session) and has `CoreUpdateHandover::updateDatabase()` do what `install/update.php` does for the
 page. If PHP may not start processes, `cli.php` prints the command to run next.
@@ -210,7 +243,7 @@ page. If PHP may not start processes, `cli.php` prints the command to run next.
 | `--channel=`, `--ref=` | the channel and its branch, tag or pull request, as on the page (`$gDebug` for all but stable) |
 | `--backup=dump\|own` | the updater backs up the database (the default where it can), or an own backup is confirmed |
 | `--on-changed=archive\|cancel` | changed and unknown files are kept in the archive and replaced (default), or the update is cancelled at the review |
-| `--dry-run` | the update is checked and planned, then cancelled; the updater of the new release stays, as after a cancel on the page |
+| `--dry-run` | the update is checked and planned, then cancelled, as after a cancel on the page |
 | `--skip-database` | the update ends after the files; maintenance mode stays on until `apply --resume` or `install/update.php` updates the database |
 | `--resume` | continue the unfinished update, also to retry a failed database update |
 | `--dump-password-env=VAR` | the password of the backup is in the environment variable `VAR` (also for `rollback`), never on the command line itself |
@@ -235,9 +268,8 @@ $gCoreUpdateArchiveUrl = 'http://host.docker.internal:8090/archive/'; // instead
 Plain HTTP is only accepted below `$gCoreUpdateServerUrl`. The settings are ignored without
 `$gDebug`.
 
-Because phase A replaces `install/core-update/` with the updater of the release it installs, a
-test release must be built from the current working tree, or it overwrites newer code there.
-Phase B replaces every file: test it on a separate installation, never on a development tree.
+Phase B replaces every file, `install/core-update/` included: test it on a separate installation,
+never on a development tree.
 
 ## Building a release
 

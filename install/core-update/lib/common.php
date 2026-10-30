@@ -1181,8 +1181,8 @@ function js(mixed $value): string
  */
 const UPDATE_STEPS = array(
     'check' => array('new', 'checking', 'checked'),
-    'download' => array('downloading', 'downloaded'),
-    'prepare' => array('prepared', 'extracting', 'planning'),
+    'download' => array('downloading', 'downloaded', 'extracting'),
+    'prepare' => array('prepared', 'planning'),
     'review' => array('review'),
     'backup' => array('ready', 'dumping'),
     'install' => array('installing', 'archiving', 'verifying', 'rollback_required'),

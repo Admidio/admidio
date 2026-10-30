@@ -6,9 +6,12 @@ use AdmidioCoreUpdater as Updater;
 use AdmidioCoreUpdater\UpdaterException;
 
 // The backups of Admidio and of the core updater have one implementation, the updater's own: it has
-// to back up the database while src/ and vendor/ are being replaced.
-require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
-require_once ADMIDIO_PATH . '/install/core-update/lib/backup.php';
+// to back up the database while src/ and vendor/ are being replaced. The unpacked updater of a running
+// update (see install/core-update/entry.php) may have loaded it already.
+if (!function_exists('AdmidioCoreUpdater\\backupsDirectory')) {
+    require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
+    require_once ADMIDIO_PATH . '/install/core-update/lib/backup.php';
+}
 
 /**
  * The backups of the installation in the directory of the preference system_backup_path, by default

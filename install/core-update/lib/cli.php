@@ -5,7 +5,8 @@
  * and asks; the functions here decide what happens next.
  *
  * Where the page loads a new page, the command line needs a new process: after phase A the updater
- * of the new release continues ("restart"), because this process has the old one loaded, and the
+ * of the new release, which phase A unpacked, continues ("restart"), because this process has the
+ * installed one loaded, and the
  * database is updated by the code of the new release ("database"). A function asks for such a
  * process by returning it as "next", and cli.php starts it.
  *
@@ -129,6 +130,7 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
 
             case 'downloading':
             case 'downloaded':
+            case 'extracting':
                 $phaseA = true;
                 $result = runStep($ctx, $updateId);
                 commandProgress($result, $out, $progress);
@@ -177,11 +179,10 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
 
             case 'prepared':
                 if ($phaseA) {
-                    // Phase B runs in the updater that phase A has just installed.
+                    // Phase B runs in the updater of the new release, which phase A has just extracted.
                     return commandResult(EXIT_SUCCESS, '', $state, 'restart');
                 }
                 // no break: phase B starts
-            case 'extracting':
             case 'planning':
             case 'ready':
             case 'dumping':

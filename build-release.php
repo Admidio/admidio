@@ -46,7 +46,7 @@ use ZipArchive;
 require_once __DIR__ . '/install/core-update/lib/bootstrap.php';
 
 /** The paths that no update writes, in the manifest of every release. */
-const PRESERVE_PATHS = array('adm_my_files', 'install/core-update', 'custom_css.css', 'custom_favicon.png', 'custom_logo.png');
+const PRESERVE_PATHS = array('adm_my_files', 'custom_css.css', 'custom_favicon.png', 'custom_logo.png');
 
 /** The paths the database update of a release moves or removes itself, kept in the repository. */
 const MIGRATION_PATHS_FILE = 'install/db_scripts/migration-paths.json';

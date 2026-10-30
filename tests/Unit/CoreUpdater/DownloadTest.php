@@ -377,7 +377,7 @@ final class DownloadTest extends AdmidioTestCase
             'version' => '5.1.0',
             'managedDirectories' => array('src', 'system', 'themes/simple'),
             'managedRootFiles' => array('index.php', 'composer.json'),
-            'preservePaths' => array('adm_my_files', 'install/core-update'),
+            'preservePaths' => array('adm_my_files', 'custom_logo.png'),
             'requirements' => array('php' => '>=8.2', 'extensions' => array('pdo', 'zip')),
             'totalSize' => 1000,
             'files' => array('index.php' => str_repeat('c', 64), 'src/Foo.php' => str_repeat('d', 64))

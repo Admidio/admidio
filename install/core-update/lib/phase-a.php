@@ -1,7 +1,7 @@
 <?php
 /**
- * Phase A of an update: from the choice of the channel to a verified package with the updater of
- * the new release in place. Nothing outside install/core-update/ and the workspace is changed.
+ * Phase A of an update: from the choice of the channel to the verified package, extracted into the
+ * workspace. It runs in the installed updater and changes nothing outside the workspace.
  *
  * new         - the administrator chooses the channel (only with $gDebug, else it is stable)
  * checking    - update.txt, its signature, the version rule and the checks P1-P9 before the download;
@@ -9,8 +9,9 @@
  * checked     - the administrator sees the offered version and the results and confirms
  * downloading - the package arrives in parts, a few seconds per request
  * downloaded  - size and SHA-256 match update.txt
- * prepared    - the manifest is read and the updater of the new release replaced this one;
- *               phase B, which that updater runs, starts here
+ * extracting  - the manifest is read and checked; every file of the package is unpacked into the
+ *               workspace and checked against it
+ * prepared    - phase B starts here, in the unpacked updater of the new release (see entry.php)
  *
  * runStep() in process.php does the work of each of these states, one request after the other.
  *
@@ -535,13 +536,12 @@ function downloadPart(array $ctx, array $state): array
 }
 
 /**
- * Read the manifest of the package, check its requirements and replace this updater with the one
- * of the new release.
+ * Read the manifest of the package and check its requirements. Then the extraction starts.
  * @param array<string,mixed> $ctx
  * @param array<string,mixed> $state
  * @return array<string,mixed>
  */
-function verifyAndInstallUpdater(array $ctx, array $state): array
+function verifyPackage(array $ctx, array $state): array
 {
     $root = $ctx['config']['rootPath'];
     $workspace = workspace($root, $state['updateId']);
@@ -555,10 +555,20 @@ function verifyAndInstallUpdater(array $ctx, array $state): array
         throw new VerificationFailure($exception);
     }
 
+    $texts = array();
     try {
         try {
             if (isDeveloperChannel((string)$state['channel'])) {
                 $manifest = developerManifest($package, (string)$state['targetVersion']);
+                // A source archive has no texts of the updater; they are added as files of the release.
+                if (empty($state['withoutUpdater'])) {
+                    foreach (developerTexts($package) as $language => $json) {
+                        $texts['install/core-update/texts/' . $language . '.json'] = $json;
+                        $manifest['files']['install/core-update/texts/' . $language . '.json'] = hash('sha256', $json);
+                        $manifest['totalSize'] += strlen($json);
+                    }
+                    ksort($manifest['files'], SORT_STRING);
+                }
                 $manifestJson = json_encode($manifest, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR);
             } else {
                 $index = packageFind($package, 'install/update-manifest.json');
@@ -567,97 +577,110 @@ function verifyAndInstallUpdater(array $ctx, array $state): array
                 }
                 $manifestJson = packageRead($package, $index, MAX_MANIFEST_SIZE);
                 $manifest = readManifest($manifestJson, workspaceRelease($workspace, $state)['version']);
+                foreach (array('index.php', 'cli.php', 'entry.php', 'updater.php', 'updater-cli.php', 'lib/bootstrap.php') as $file) {
+                    if (!isset($manifest['files']['install/core-update/' . $file])) {
+                        throw UpdaterException::withDetail('SYS_CORE_UPDATE_UPDATER_MISSING', 'The package contains no install/core-update/' . $file . '.');
+                    }
+                }
             }
         } catch (UpdaterException $exception) {
             throw new VerificationFailure($exception);
-        }
-
-        $freeSpace = @disk_free_space(updatesDirectory($root));
-        $checks = manifestChecks($manifest, $freeSpace === false ? -1 : (int)$freeSpace);
-        $state['checks'] = array_merge((array)($state['checks'] ?? array()), $checks);
-        foreach ($checks as $check) {
-            if ($check['status'] === 'error') {
-                throw new UpdaterException($check['text'], $check['params']);
-            }
-        }
-
-        writeFile($workspace . '/update-manifest.json', $manifestJson);
-        // A source archive without the updater leaves the installed one, and its texts, in place.
-        if (empty($state['withoutUpdater'])) {
-            installUpdater($package, $manifest, $workspace . '/updater', $root);
-        }
-        if ($manifest['developer'] && empty($state['withoutUpdater'])) {
-            ensureDirectory($root . '/install/core-update/texts');
-            foreach (developerTexts($package) as $language => $json) {
-                writeFile($root . '/install/core-update/texts/' . $language . '.json', $json);
-            }
         }
     } finally {
         $package['zip']->close();
     }
 
-    $state['state'] = 'prepared';
+    $freeSpace = @disk_free_space(updatesDirectory($root));
+    $checks = manifestChecks($manifest, $freeSpace === false ? -1 : (int)$freeSpace);
+    $state['checks'] = array_merge((array)($state['checks'] ?? array()), $checks);
+    foreach ($checks as $check) {
+        if ($check['status'] === 'error') {
+            throw new UpdaterException($check['text'], $check['params']);
+        }
+    }
 
-    return $state;
+    writeFile($workspace . '/update-manifest.json', $manifestJson);
+    deleteDirectory($workspace . '/extracted');
+    ensureDirectory($workspace . '/extracted');
+    foreach ($texts as $path => $json) {
+        ensureDirectory(dirname($workspace . '/extracted/' . $path));
+        writeFile($workspace . '/extracted/' . $path, $json);
+    }
+
+    return array_merge($state, array('state' => 'extracting', 'cursor' => 0, 'cursorTotal' => 0));
 }
 
 /**
- * Replace install/core-update/ with the updater of the new release. Every file is extracted into
- * the workspace and checked against the manifest first, so that a broken package never leaves half
- * an updater behind. Files of the old updater the new one does not have are removed, and OPcache is
- * told about each file, so that the next request runs the new code.
- * @param array{zip: \ZipArchive, entries: array<int,string>} $package
- * @param array<string,mixed> $manifest
+ * Unpack the next files of the package into the workspace and check each against the manifest. At
+ * the end the updater of the new release is ready to run there.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
  */
-function installUpdater(array $package, array $manifest, string $staging, string $root): void
+function extractPart(array $ctx, array $state): array
 {
-    deleteDirectory($staging);
-    $files = array();
+    $workspace = workspace($ctx['config']['rootPath'], $state['updateId']);
+    $manifest = workspaceManifest($workspace, $state);
+    $deadline = startTimeBudget(TIME_BUDGET);
 
-    foreach ($package['entries'] as $index => $path) {
-        if (!str_starts_with($path, 'install/core-update/')) {
-            continue;
-        }
-        if (!isset($manifest['files'][$path])) {
-            throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_MANIFEST_INVALID', 'The manifest does not list ' . $path . '.'));
-        }
-
-        $relative = substr($path, strlen('install/core-update/'));
-        ensureDirectory(dirname($staging . '/' . $relative));
-        if (!hash_equals($manifest['files'][$path], packageExtract($package, $index, $staging . '/' . $relative, MAX_MANIFEST_SIZE))) {
-            throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', $path . ' does not match the manifest.'));
-        }
-        $files[] = $relative;
+    try {
+        $package = openPackage($workspace . '/package.zip', MAX_EXTRACTED_SIZE);
+    } catch (UpdaterException $exception) {
+        throw new VerificationFailure($exception);
     }
 
-    if (!in_array('index.php', $files, true) || !in_array('lib/bootstrap.php', $files, true)) {
-        throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_UPDATER_MISSING', 'The package contains no updater.'));
+    try {
+        $indexes = array_keys($package['entries']);
+        $state['cursorTotal'] = count($indexes);
+        $cursor = (int)$state['cursor'];
+        $directories = array();
+        for ($done = 0; $cursor < count($indexes) && $done < filesPerRequest() && microtime(true) < $deadline; $cursor++, $done++) {
+            $path = $package['entries'][$indexes[$cursor]];
+            // A source archive also has what no installation needs: tests, the files of GitHub.
+            if ($path === INSTALLED_MANIFEST || isPreserved($path, $manifest) || ($manifest['developer'] && !isset($manifest['files'][$path]))) {
+                continue;
+            }
+            if (!isset($manifest['files'][$path])) {
+                throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_MANIFEST_INVALID', 'The manifest does not list ' . $path . '.'));
+            }
+
+            $target = $workspace . '/extracted/' . $path;
+            knownDirectory(dirname($target), $directories);
+            try {
+                $hash = packageExtract($package, $indexes[$cursor], $target, MAX_EXTRACTED_SIZE);
+            } catch (UpdaterException $exception) {
+                throw $exception->getMessage() === 'SYS_CORE_UPDATE_PACKAGE_INVALID' ? new VerificationFailure($exception) : $exception;
+            }
+            if (!hash_equals($manifest['files'][$path], $hash)) {
+                throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', $path . ' does not match the manifest.'));
+            }
+        }
+        $state['cursor'] = $cursor;
+        // Every file the package has is extracted now, so the index of the package tells whether a
+        // file of the release is missing.
+        $packaged = $cursor < count($indexes) ? array() : array_flip($package['entries']);
+    } finally {
+        $package['zip']->close();
     }
 
-    $target = $root . '/install/core-update';
-    foreach ($files as $relative) {
-        ensureDirectory(dirname($target . '/' . $relative));
-        $temporary = $target . '/' . $relative . '.' . bin2hex(random_bytes(4)) . '.new';
-        if (!@copy($staging . '/' . $relative, $temporary) || !@rename($temporary, $target . '/' . $relative)) {
-            @unlink($temporary);
-            throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', 'install/core-update/' . $relative . ' cannot be replaced.');
-        }
-        if (function_exists('opcache_invalidate')) {
-            @opcache_invalidate($target . '/' . $relative, true);
+    if ($state['cursor'] < $state['cursorTotal']) {
+        return $state;
+    }
+
+    foreach (releaseFiles($manifest) as $path) {
+        // The texts of a source archive are not packaged, verifyPackage() has written them.
+        if (!isset($packaged[$path]) && !is_file($workspace . '/extracted/' . $path)) {
+            throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The package lacks ' . $path . '.'));
         }
     }
 
-    $entries = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($target, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST);
-    foreach ($entries as $entry) {
-        $relative = substr(str_replace('\\', '/', $entry->getPathname()), strlen($target) + 1);
-        if ($entry->isFile() && !in_array($relative, $files, true)) {
-            @unlink($entry->getPathname());
-        } elseif ($entry->isDir()) {
-            @rmdir($entry->getPathname()); // only succeeds for a directory that is empty now
-        }
-    }
+    // From the next request on the unpacked updater of the new release runs (see entry.php). A
+    // source archive of a version without one is installed by this updater.
+    $updater = $workspace . '/extracted/install/core-update/';
+    $state['runUnpackedUpdater'] = empty($state['withoutUpdater'])
+        && is_file($updater . 'entry.php') && is_file($updater . 'updater.php') && is_file($updater . 'updater-cli.php');
 
-    deleteDirectory($staging);
+    return array_merge($state, array('state' => 'prepared', 'cursor' => 0, 'cursorTotal' => 0));
 }
 
 /**

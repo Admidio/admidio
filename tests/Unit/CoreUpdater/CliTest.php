@@ -20,6 +20,9 @@ final class CliTest extends AdmidioTestCase
     /** @var array<int,string> */
     private array $questions = array();
 
+    /** How often apply started the updater of the new release in a new process. */
+    private int $restarts = 0;
+
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -35,6 +38,7 @@ final class CliTest extends AdmidioTestCase
         $this->createInstallation();
         $this->output = array();
         $this->questions = array();
+        $this->restarts = 0;
     }
 
     protected function tearDown(): void
@@ -45,27 +49,36 @@ final class CliTest extends AdmidioTestCase
     }
 
     /**
-     * Continue the prepared update with the options of update:apply --resume.
+     * Continue the prepared update with the options of update:apply --resume. After the extraction
+     * cli.php starts the updater of the new release with --resume; here the same process goes on.
      * @param array<string,mixed> $context
      * @param array<string,mixed> $options
      * @return array{exit: int, next: string, message: string, updateId: string, state: array<string,mixed>}
      */
     private function apply(array $context, array $options = array(), bool $answer = true, ?string $updateId = null): array
     {
-        return U\commandApply(
-            $context,
-            array_merge(array('channel' => 'stable', 'ref' => '', 'backup' => 'own', 'onChanged' => 'archive', 'dryRun' => false,
-                'skipDatabase' => false, 'resume' => true, 'databaseTried' => false), $options),
-            function (string $line): void {
-                $this->output[] = $line;
-            },
-            function (string $question) use ($answer): bool {
-                $this->questions[] = $question;
+        $options = array_merge(array('channel' => 'stable', 'ref' => '', 'backup' => 'own', 'onChanged' => 'archive', 'dryRun' => false,
+            'skipDatabase' => false, 'resume' => true, 'databaseTried' => false), $options);
+        while (true) {
+            $result = U\commandApply(
+                $context,
+                $options,
+                function (string $line): void {
+                    $this->output[] = $line;
+                },
+                function (string $question) use ($answer): bool {
+                    $this->questions[] = $question;
 
-                return $answer;
-            },
-            $updateId
-        );
+                    return $answer;
+                },
+                $updateId
+            );
+            if ($result['next'] !== 'restart') {
+                return $result;
+            }
+            $this->restarts++;
+            $options['resume'] = true;
+        }
     }
 
     /**
@@ -105,6 +118,7 @@ final class CliTest extends AdmidioTestCase
         $this->assertSame($updateId, $result['updateId']);
         $this->assertSame('files_installed', $this->state($updateId));
         $this->assertSame('NEW INDEX', $this->read('index.php'));
+        $this->assertSame(1, $this->restarts, 'after the extraction the updater of the new release continues in a new process');
         $this->assertCount(1, $this->questions, 'asked once, before the installation');
         $this->assertStringContainsString('Install Admidio 5.1.0 now?', $this->questions[0]);
         $output = implode("\n", $this->output);
@@ -123,7 +137,8 @@ final class CliTest extends AdmidioTestCase
             'index.php' => hash('sha256', 'OLD INDEX'),
             'system/bootstrap/bootstrap.php' => hash('sha256', 'ORIGINAL BOOTSTRAP'),
             'src/Old/Gone.php' => hash('sha256', 'REMOVED BY THE RELEASE'),
-            'src/Same.php' => hash('sha256', 'SAME')
+            'src/Same.php' => hash('sha256', 'SAME'),
+            'install/core-update/index.php' => hash('sha256', 'OLD UPDATER')
         )))));
         [$context] = $this->prepared();
 

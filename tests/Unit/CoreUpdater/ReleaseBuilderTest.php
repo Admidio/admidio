@@ -156,7 +156,7 @@ final class ReleaseBuilderTest extends AdmidioTestCase
         $this->assertSame(array('SYS_CORE_UPDATE_TITLE' => 'Admidio update'), json_decode($entries['admidio-5.1.0/install/core-update/texts/en.json'], true));
 
         $manifest = U\readManifest($entries['admidio-5.1.0/install/update-manifest.json'], '5.1.0');
-        $this->assertSame(array('adm_my_files', 'install/core-update', 'custom_css.css', 'custom_favicon.png', 'custom_logo.png'), $manifest['preservePaths']);
+        $this->assertSame(array('adm_my_files', 'custom_css.css', 'custom_favicon.png', 'custom_logo.png'), $manifest['preservePaths']);
         $this->assertSame(array('install', 'languages', 'plugins/birthday', 'src', 'system'), $manifest['managedDirectories']);
         $this->assertSame(array('composer.json', 'index.php'), $manifest['managedRootFiles']);
         $this->assertSame(array('adm_plugins'), $manifest['migrationPaths']);

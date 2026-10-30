@@ -1,7 +1,8 @@
 <?php
 /**
  * An installation of 5.0.14 in a temporary directory and the workspace that phase A leaves for an
- * update to 5.1.0, for the tests of phase B and of the command line.
+ * update to 5.1.0 once the package is verified, for the tests of the extraction, of phase B and of
+ * the command line.
  */
 
 namespace Admidio\Tests\Unit\CoreUpdater;
@@ -36,7 +37,7 @@ trait PreparedUpdate
             'src/Same.php' => 'SAME',
             'src/Old/Gone.php' => 'REMOVED BY THE RELEASE',
             'src/Unknown.php' => 'UNKNOWN',
-            'install/core-update/index.php' => 'NEW UPDATER',
+            'install/core-update/index.php' => 'OLD UPDATER',
             'custom_logo.png' => 'MY LOGO',
             'my-notes.txt' => 'MY NOTES',
             'old_plugins/birthday/index.php' => 'OLD PLUGIN'
@@ -67,8 +68,8 @@ trait PreparedUpdate
     }
 
     /**
-     * The workspace as phase A leaves it: a verified package of 5.1.0, its manifest and the signed
-     * update.txt, in state prepared.
+     * The workspace as the verification of phase A leaves it: a verified package of 5.1.0, its
+     * manifest and the signed update.txt, in state extracting.
      * @param array<string,string> $tamper path => content packaged instead of what the manifest names
      * @return array{0: array<string,mixed>, 1: string} context and update ID
      */
@@ -86,7 +87,7 @@ trait PreparedUpdate
             'version' => '5.1.0',
             'managedDirectories' => array('src', 'system', 'install'),
             'managedRootFiles' => array('index.php'),
-            'preservePaths' => array('adm_my_files', 'install/core-update', 'custom_logo.png'),
+            'preservePaths' => array('adm_my_files', 'custom_logo.png'),
             'migrationPaths' => array('old_plugins'),
             'requirements' => array('php' => '>=8.2', 'extensions' => array()),
             'totalSize' => 100,
@@ -109,8 +110,9 @@ trait PreparedUpdate
         file_put_contents($workspace . '/update.txt.sig', U\signData($text, self::$key));
         file_put_contents($workspace . '/release-key.pem', openssl_pkey_get_details(self::$key)['key']);
         file_put_contents($workspace . '/update-manifest.json', $manifest);
+        mkdir($workspace . '/extracted');
         U\updateState($this->root, $state['updateId'], static fn(array $s): array => array_merge($s, array(
-            'state' => 'prepared', 'channel' => 'stable', 'targetVersion' => '5.1.0', 'targetVersionText' => '5.1.0')));
+            'state' => 'extracting', 'cursor' => 0, 'cursorTotal' => 0, 'channel' => 'stable', 'targetVersion' => '5.1.0', 'targetVersionText' => '5.1.0')));
 
         $context = array(
             'config' => U\loadConfig($this->root),

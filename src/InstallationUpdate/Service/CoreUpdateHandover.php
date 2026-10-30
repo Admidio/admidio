@@ -13,8 +13,11 @@ use AdmidioCoreUpdater\UpdaterException;
 use RuntimeException;
 use Throwable;
 
-// The state of an update and the updater cookie have one implementation, the updater's own.
-require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
+// The state of an update and the updater cookie have one implementation, the updater's own. The
+// unpacked updater of a running update (see install/core-update/entry.php) may have loaded it already.
+if (!function_exists('AdmidioCoreUpdater\\readState')) {
+    require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
+}
 
 /**
  * The side of an automatic core update that install/update.php sees.
@@ -39,7 +42,8 @@ require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
  *   manual update, and the migration then finishes the core update as well.
  *
  * The state and the cookie belong to the updater, so they are read and written with its functions,
- * which this file loads directly from install/core-update/lib/common.php.
+ * which this file loads directly from install/core-update/lib/common.php, unless the unpacked
+ * updater of a running update has loaded them already.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/

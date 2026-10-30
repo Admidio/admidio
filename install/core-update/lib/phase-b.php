@@ -1,10 +1,11 @@
 <?php
 /**
  * Phase B of an update: from the verified package to installed and verified files. It runs in the
- * updater of the new release, which phase A copied over the old one.
+ * unpacked updater of the new release, which phase A extracted (see entry.php), and
+ * installs every file of the release, this updater included, so that a rollback restores the old
+ * updater as well.
  *
- * extracting   - every file of the package is unpacked into the workspace and checked against the
- *                manifest
+ * prepared     - phase A has extracted and checked the package
  * planning     - every file of the installation is compared with the new release: what is created,
  *                replaced and removed; checks D1-D3 and D5
  * review       - the administrator sees the plan and starts the installation
@@ -52,7 +53,7 @@ function filesPerRequest(int $factor = 1): int
 }
 
 /** Never written, scanned or removed, whatever a manifest says. */
-const ALWAYS_PRESERVED = array('adm_my_files', 'install/core-update', 'config.php', 'custom_css.css', 'custom_favicon.png',
+const ALWAYS_PRESERVED = array('adm_my_files', 'config.php', 'custom_css.css', 'custom_favicon.png',
     'custom_logo.png', '.htaccess', '.user.ini', 'robots.txt');
 
 /** The inventory of an installation: the manifest of its release. */
@@ -241,7 +242,7 @@ function phaseBFinish(array $ctx, string $updateId): void
 }
 
 // ------------------------------------------------------------------------------------------------
-// Extracting
+// The release
 // ------------------------------------------------------------------------------------------------
 
 /**
@@ -277,7 +278,7 @@ function isPreserved(string $path, array $manifest): bool
 
 /**
  * The files of the new release that phase B installs, sorted: everything in the manifest except
- * the preserved paths (the updater itself was installed by phase A).
+ * the preserved paths.
  * @param array<string,mixed> $manifest
  * @return array<int,string>
  */
@@ -289,93 +290,24 @@ function releaseFiles(array $manifest): array
     return $files;
 }
 
-/**
- * @param array<string,mixed> $ctx
- * @param array<string,mixed> $state
- * @return array<string,mixed>
- */
-function startExtraction(array $ctx, array $state): array
-{
-    $workspace = workspace($ctx['config']['rootPath'], $state['updateId']);
-    if (!hash_equals(confirmedPackageHash($workspace, $state), (string)hash_file('sha256', $workspace . '/package.zip'))) {
-        throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The package in the workspace has changed.'));
-    }
-
-    deleteDirectory($workspace . '/extracted');
-    ensureDirectory($workspace . '/extracted');
-
-    return array_merge($state, array('state' => 'extracting', 'cursor' => 0, 'cursorTotal' => 0));
-}
-
-/**
- * Unpack the next files of the package into the workspace and check each against the manifest.
- * @param array<string,mixed> $ctx
- * @param array<string,mixed> $state
- * @return array<string,mixed>
- */
-function extractPart(array $ctx, array $state): array
-{
-    $workspace = workspace($ctx['config']['rootPath'], $state['updateId']);
-    $manifest = workspaceManifest($workspace, $state);
-    $deadline = startTimeBudget(TIME_BUDGET);
-
-    try {
-        $package = openPackage($workspace . '/package.zip', MAX_EXTRACTED_SIZE);
-    } catch (UpdaterException $exception) {
-        throw new VerificationFailure($exception);
-    }
-
-    try {
-        $indexes = array_keys($package['entries']);
-        $state['cursorTotal'] = count($indexes);
-        $cursor = (int)$state['cursor'];
-        $directories = array();
-        for ($done = 0; $cursor < count($indexes) && $done < filesPerRequest() && microtime(true) < $deadline; $cursor++, $done++) {
-            $path = $package['entries'][$indexes[$cursor]];
-            // A source archive also has what no installation needs: tests, the files of GitHub.
-            if ($path === INSTALLED_MANIFEST || isPreserved($path, $manifest) || ($manifest['developer'] && !isset($manifest['files'][$path]))) {
-                continue;
-            }
-            if (!isset($manifest['files'][$path])) {
-                throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_MANIFEST_INVALID', 'The manifest does not list ' . $path . '.'));
-            }
-
-            $target = $workspace . '/extracted/' . $path;
-            knownDirectory(dirname($target), $directories);
-            try {
-                $hash = packageExtract($package, $indexes[$cursor], $target, MAX_EXTRACTED_SIZE);
-            } catch (UpdaterException $exception) {
-                throw $exception->getMessage() === 'SYS_CORE_UPDATE_PACKAGE_INVALID' ? new VerificationFailure($exception) : $exception;
-            }
-            if (!hash_equals($manifest['files'][$path], $hash)) {
-                throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', $path . ' does not match the manifest.'));
-            }
-        }
-        $state['cursor'] = $cursor;
-        // Every file the package has is extracted now, so the index of the package tells whether a
-        // file of the release is missing.
-        $packaged = $cursor < count($indexes) ? array() : array_flip($package['entries']);
-    } finally {
-        $package['zip']->close();
-    }
-
-    if ($state['cursor'] < $state['cursorTotal']) {
-        return $state;
-    }
-
-    foreach (releaseFiles($manifest) as $path) {
-        if (!isset($packaged[$path])) {
-            throw new VerificationFailure(UpdaterException::withDetail('SYS_CORE_UPDATE_PACKAGE_INVALID', 'The package lacks ' . $path . '.'));
-        }
-    }
-    @unlink($workspace . '/plan.jsonl');
-
-    return array_merge($state, array('state' => 'planning', 'planStep' => 'files', 'cursor' => 0, 'cursorTotal' => count(releaseFiles($manifest))));
-}
-
 // ------------------------------------------------------------------------------------------------
 // Planning
 // ------------------------------------------------------------------------------------------------
+
+/**
+ * Start the plan of the installation with the package that phase A has extracted.
+ * @param array<string,mixed> $ctx
+ * @param array<string,mixed> $state
+ * @return array<string,mixed>
+ */
+function startPlanning(array $ctx, array $state): array
+{
+    $workspace = workspace($ctx['config']['rootPath'], $state['updateId']);
+    @unlink($workspace . '/plan.jsonl');
+
+    return array_merge($state, array('state' => 'planning', 'planStep' => 'files', 'cursor' => 0,
+        'cursorTotal' => count(releaseFiles(workspaceManifest($workspace, $state)))));
+}
 
 /**
  * Compare the next files of the installation with the new release. The files of the release are

@@ -129,6 +129,10 @@ final class PhaseATest extends AdmidioTestCase
         $files = array_merge(array(
             'index.php' => 'NEW INDEX',
             'install/core-update/index.php' => 'NEW UPDATER',
+            'install/core-update/cli.php' => 'NEW CLI',
+            'install/core-update/entry.php' => 'NEW ENTRY',
+            'install/core-update/updater.php' => 'NEW PAGES',
+            'install/core-update/updater-cli.php' => 'NEW COMMAND LINE',
             'install/core-update/lib/bootstrap.php' => 'NEW BOOTSTRAP',
             'src/Foo.php' => random_bytes(250000)
         ), $files);
@@ -143,7 +147,7 @@ final class PhaseATest extends AdmidioTestCase
             'version' => $manifestVersion,
             'managedDirectories' => array('src', 'install'),
             'managedRootFiles' => array('index.php'),
-            'preservePaths' => array('adm_my_files', 'install/core-update'),
+            'preservePaths' => array('adm_my_files'),
             'requirements' => array('php' => '>=8.2', 'extensions' => array('zip')),
             'totalSize' => array_sum(array_map('strlen', $files)),
             'files' => $hashes
@@ -238,7 +242,7 @@ final class PhaseATest extends AdmidioTestCase
     }
 
     /**
-     * @testdox Phase A checks, downloads, verifies and replaces the updater, and nothing else
+     * @testdox Phase A checks, downloads, verifies and extracts the package, and changes nothing outside the workspace
      */
     public function testPhaseA(): void
     {
@@ -261,11 +265,15 @@ final class PhaseATest extends AdmidioTestCase
         $result = $this->runToTheEnd($context, $updateId);
 
         $this->assertSame('prepared', $result['status'], $result['message']);
-        $this->assertSame('prepared', U\readState($this->root, $updateId)['state']);
-        $this->assertSame('NEW UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
-        $this->assertSame('NEW BOOTSTRAP', file_get_contents($this->root . '/install/core-update/lib/bootstrap.php'));
-        $this->assertFileDoesNotExist($this->root . '/install/core-update/obsolete.php', 'a file the new updater does not have is removed');
-        $this->assertSame('OLD INDEX', file_get_contents($this->root . '/index.php'), 'phase A touches nothing outside the updater');
+        $state = U\readState($this->root, $updateId);
+        $this->assertSame('prepared', $state['state']);
+        $this->assertTrue($state['runUnpackedUpdater'], 'from now on the updater of the new release runs');
+        $this->assertSame('NEW UPDATER', file_get_contents($workspace . '/extracted/install/core-update/index.php'));
+        $this->assertSame('NEW INDEX', file_get_contents($workspace . '/extracted/index.php'));
+        $this->assertSame('OLD UPDATER', file_get_contents($this->root . '/install/core-update/index.php'), 'the running updater is not replaced');
+        $this->assertSame('OLD BOOTSTRAP', file_get_contents($this->root . '/install/core-update/lib/bootstrap.php'));
+        $this->assertFileExists($this->root . '/install/core-update/obsolete.php');
+        $this->assertSame('OLD INDEX', file_get_contents($this->root . '/index.php'));
         $this->assertFileExists($workspace . '/update-manifest.json');
 
         $log = (string)file_get_contents(self::$serverDirectory . '/requests.log');
@@ -361,7 +369,7 @@ final class PhaseATest extends AdmidioTestCase
             'manifest of another version' => array(static function (self $test): void {
                 $test->publish($test->buildPackage(array(), array(), '5.0.99'));
             }, 'SYS_CORE_UPDATE_MANIFEST_INVALID'),
-            'updater file not in the manifest' => array(static function (self $test): void {
+            'file not in the manifest' => array(static function (self $test): void {
                 $test->publish($test->buildPackage(array('install/core-update/lib/Extra.php' => 'EXTRA'), array('install/core-update/lib/Extra.php')));
             }, 'SYS_CORE_UPDATE_MANIFEST_INVALID'),
             'no updater in the package' => array(static function (self $test): void {
@@ -371,7 +379,7 @@ final class PhaseATest extends AdmidioTestCase
     }
 
     /**
-     * A package whose manifest is valid but which contains no updater.
+     * A package whose manifest is valid but which contains no complete updater.
      */
     private function buildPackageWithoutUpdater(): string
     {
@@ -380,7 +388,10 @@ final class PhaseATest extends AdmidioTestCase
         file_put_contents($file, $package);
         $zip = new ZipArchive();
         $zip->open($file);
-        $zip->deleteName('admidio-5.1.0/install/core-update/index.php');
+        $zip->deleteName('admidio-5.1.0/install/core-update/updater.php');
+        $manifest = json_decode((string)$zip->getFromName('admidio-5.1.0/install/update-manifest.json'), true);
+        unset($manifest['files']['install/core-update/updater.php']);
+        $zip->addFromString('admidio-5.1.0/install/update-manifest.json', (string)json_encode($manifest));
         $zip->close();
         $bytes = (string)file_get_contents($file);
         unlink($file);
@@ -462,6 +473,10 @@ final class PhaseATest extends AdmidioTestCase
             'plugins/my-own/index.php' => 'NOT A PART OF THE RELEASE',
             'composer.lock' => '{"packages": []}',
             'install/core-update/index.php' => 'DEV UPDATER',
+            'install/core-update/cli.php' => 'DEV CLI',
+            'install/core-update/entry.php' => 'DEV ENTRY',
+            'install/core-update/updater.php' => 'DEV PAGES',
+            'install/core-update/updater-cli.php' => 'DEV COMMAND LINE',
             'install/core-update/lib/bootstrap.php' => 'DEV BOOTSTRAP',
             'src/Dev.php' => 'DEV FILE',
             'tests/DevTest.php' => 'A TEST',
@@ -506,9 +521,12 @@ final class PhaseATest extends AdmidioTestCase
         $result = $this->runToTheEnd($context, $updateId);
 
         $this->assertSame('prepared', $result['status'], $result['message']);
-        $this->assertSame('DEV UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
+        $workspace = U\workspace($this->root, $updateId);
+        $this->assertTrue(U\readState($this->root, $updateId)['runUnpackedUpdater']);
+        $this->assertSame('DEV UPDATER', file_get_contents($workspace . '/extracted/install/core-update/index.php'));
+        $this->assertSame('OLD UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
         $this->assertSame('OLD INDEX', file_get_contents($this->root . '/index.php'));
-        $manifest = json_decode((string)file_get_contents(U\workspace($this->root, $updateId) . '/update-manifest.json'), true);
+        $manifest = json_decode((string)file_get_contents($workspace . '/update-manifest.json'), true);
         $this->assertTrue($manifest['developer']);
         $this->assertSame('5.1.0', $manifest['version']);
         $this->assertSame(hash('sha256', 'DEV FILE'), $manifest['files']['src/Dev.php']);
@@ -519,9 +537,10 @@ final class PhaseATest extends AdmidioTestCase
         $this->assertArrayNotHasKey('plugins/my-own/index.php', $manifest['files']);
         $this->assertSame(array('install', 'languages', 'plugins/birthday', 'src', 'system'), $manifest['managedDirectories']);
         $this->assertNotContains('vendor', $manifest['managedDirectories']);
-        $this->assertSame(array('SYS_CORE_UPDATE_TITLE' => 'Admidio\'s update'),
-            json_decode((string)file_get_contents($this->root . '/install/core-update/texts/en.json'), true),
+        $texts = (string)file_get_contents($workspace . '/extracted/install/core-update/texts/en.json');
+        $this->assertSame(array('SYS_CORE_UPDATE_TITLE' => 'Admidio\'s update'), json_decode($texts, true),
             'the texts of the new updater, which the installed language files lack');
+        $this->assertSame(hash('sha256', $texts), $manifest['files']['install/core-update/texts/en.json'], 'and which are installed with it');
         $this->assertSame(array('php' => '>=8.2', 'extensions' => array('zip', 'json')), $manifest['requirements']);
         $this->assertStringContainsString('/archive/refs/heads/feature/new-login.zip',
             (string)file_get_contents(self::$serverDirectory . '/requests.log'));
@@ -567,7 +586,7 @@ final class PhaseATest extends AdmidioTestCase
     }
 
     /**
-     * @testdox A source archive without the updater is installed by the installed updater, which stays
+     * @testdox A source archive without the updater is installed by the installed updater, which it leaves alone
      */
     public function testDeveloperWithoutUpdater(): void
     {
@@ -575,7 +594,9 @@ final class PhaseATest extends AdmidioTestCase
         $file = self::$serverDirectory . '/files/archive/refs/heads/master.zip';
         $zip = new ZipArchive();
         $zip->open($file);
-        $zip->deleteName('admidio-dev/install/core-update/index.php');
+        foreach (array('index.php', 'cli.php', 'entry.php', 'updater.php', 'updater-cli.php', 'lib/bootstrap.php') as $updaterFile) {
+            $zip->deleteName('admidio-dev/install/core-update/' . $updaterFile);
+        }
         $zip->close();
         $context = $this->context();
         $updateId = $this->createUpdate();
@@ -587,9 +608,12 @@ final class PhaseATest extends AdmidioTestCase
 
         U\phaseAConfirm($context, $updateId);
         $this->assertSame('prepared', $this->runToTheEnd($context, $updateId)['status']);
+        $state = U\readState($this->root, $updateId);
+        $this->assertFalse($state['runUnpackedUpdater'], 'the installed updater goes on');
+        $manifest = json_decode((string)file_get_contents(U\workspace($this->root, $updateId) . '/update-manifest.json'), true);
+        $this->assertSame(array(), preg_grep('#^install/core-update/#', array_keys($manifest['files'])), 'the release installs nothing of an updater');
         $this->assertSame('OLD UPDATER', file_get_contents($this->root . '/install/core-update/index.php'));
         $this->assertFileExists($this->root . '/install/core-update/obsolete.php');
-        $this->assertDirectoryDoesNotExist($this->root . '/install/core-update/texts', 'the texts of the installed updater stay');
     }
 
     /**

@@ -38,7 +38,8 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
-     * Run until the update needs a decision.
+     * Run until the update needs a decision. After the extraction the page loads the updater of the
+     * new release, the test goes on.
      * @param array<string,mixed> $context
      * @return array<string,mixed> The last answer.
      */
@@ -46,7 +47,7 @@ final class PhaseBTest extends AdmidioTestCase
     {
         for ($request = 0; $request < 50; $request++) {
             $result = U\runStep($context, $updateId);
-            if ($result['status'] !== 'success') {
+            if ($result['status'] !== 'success' && $result['status'] !== 'prepared') {
                 return $result;
             }
         }
@@ -64,14 +65,15 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('review', $this->runToDecision($context, $updateId)['status']);
 
         $state = U\readState($this->root, $updateId);
-        $this->assertSame(array('create' => 1, 'replace' => 2, 'delete' => 2, 'kept' => 4, 'unchanged' => 1, 'inventory' => false), $state['plan'],
+        $this->assertSame(array('create' => 1, 'replace' => 3, 'delete' => 2, 'kept' => 5, 'unchanged' => 1, 'inventory' => false), $state['plan'],
             'the manifest of the release, which is installed as well, is not counted; without an inventory every replaced or removed file is kept');
         $this->assertFalse(U\checksHaveErrors($state['planChecks']));
         $this->assertSame($this->root . '/adm_my_files/backups', $state['backupsDirectory'], 'without a preference the default directory');
 
         $plan = U\readPlan(U\workspace($this->root, $updateId));
-        $this->assertSame(array('system/bootstrap/bootstrap.php', 'index.php', 'src/New/Fresh.php', 'src/Old/Gone.php', 'src/Unknown.php',
-            'install/update-manifest.json'), array_column($plan, 'path'), 'system/bootstrap/ first, removals after, the manifest last');
+        $this->assertSame(array('system/bootstrap/bootstrap.php', 'index.php', 'install/core-update/index.php', 'src/New/Fresh.php', 'src/Old/Gone.php',
+            'src/Unknown.php', 'install/update-manifest.json'), array_column($plan, 'path'),
+            'system/bootstrap/ first, removals after, the manifest last; the updater is installed like every other file');
         $this->assertSame('OLD INDEX', $this->read('index.php'), 'nothing is changed before the confirmation');
         $this->assertFileDoesNotExist($this->root . '/adm_my_files/maintenance.json');
     }
@@ -93,6 +95,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('NEW INDEX', $this->read('index.php'));
         $this->assertSame('NEW BOOTSTRAP', $this->read('system/bootstrap/bootstrap.php'));
         $this->assertSame('NEW FILE', $this->read('src/New/Fresh.php'));
+        $this->assertSame('NEW UPDATER', $this->read('install/core-update/index.php'));
         $this->assertFileDoesNotExist($this->root . '/src/Old/Gone.php');
         $this->assertDirectoryDoesNotExist($this->root . '/src/Old', 'a directory the removals emptied is removed');
         $this->assertDirectoryExists($this->root . '/src/Empty', 'a directory that was empty before stays');
@@ -109,7 +112,7 @@ final class PhaseBTest extends AdmidioTestCase
             'the format of MaintenanceMode::enable()');
 
         $log = (string)file_get_contents(U\workspace($this->root, $updateId) . '/update.log');
-        foreach (array('state extracting', 'state review {"create":1', 'confirmed by the administrator, database backup: own', 'state installing',
+        foreach (array('state prepared', 'state review {"create":1', 'confirmed by the administrator, database backup: own', 'state installing',
             'state archiving', 'state verifying', 'state files_installed') as $line) {
             $this->assertStringContainsString($line, $log);
         }
@@ -122,10 +125,12 @@ final class PhaseBTest extends AdmidioTestCase
     {
         [$context, $updateId, $workspace] = $this->preparedDeveloper(array());
 
-        $this->assertSame('review', $this->runToDecision($context, $updateId)['status']);
+        $result = $this->runToDecision($context, $updateId);
+        $this->assertSame('review', $result['status'], $result['message']);
         $plan = U\readPlan($workspace);
-        $this->assertSame(array('composer.json', 'index.php', 'src/New/Fresh.php', 'install/update-manifest.json'), array_column($plan, 'path'));
-        $this->assertSame('delete', $plan[3]['action'], 'the inventory of the installed release goes');
+        $this->assertSame(array('composer.json', 'index.php', 'install/core-update/index.php', 'src/New/Fresh.php', 'install/update-manifest.json'),
+            array_column($plan, 'path'));
+        $this->assertSame('delete', $plan[4]['action'], 'the inventory of the installed release goes');
 
         U\phaseBConfirm($context, $updateId, 'own');
         $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
@@ -186,7 +191,8 @@ final class PhaseBTest extends AdmidioTestCase
         $package = U\openPackage($workspace . '/package.zip', U\MAX_EXTRACTED_SIZE);
         file_put_contents($workspace . '/update-manifest.json', json_encode(U\developerManifest($package, '5.1.0')));
         $package['zip']->close();
-        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'prepared', 'channel' => 'branch',
+        mkdir($workspace . '/extracted');
+        U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('state' => 'extracting', 'cursor' => 0, 'cursorTotal' => 0, 'channel' => 'branch',
             'ref' => 'feature/x', 'commit' => str_repeat('ab', 20), 'packageSha256' => hash_file('sha256', $workspace . '/package.zip'),
             'targetVersion' => '5.1.0', 'targetVersionText' => '5.1.0 (feature/x ababab)') + $fields));
         $context = array('config' => U\loadConfig($this->root), 'pdo' => null, 'texts' => array('language' => 'en', 'texts' => array()),
@@ -213,6 +219,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('OLD BOOTSTRAP', $this->read('system/bootstrap/bootstrap.php'));
         $this->assertSame('REMOVED BY THE RELEASE', $this->read('src/Old/Gone.php'));
         $this->assertSame('UNKNOWN', $this->read('src/Unknown.php'));
+        $this->assertSame('OLD UPDATER', $this->read('install/core-update/index.php'), 'the installed updater comes back as well');
         $this->assertFileDoesNotExist($this->root . '/src/New/Fresh.php');
         $this->assertDirectoryDoesNotExist($this->root . '/src/New', 'a directory the update created is removed again');
         $this->assertFileDoesNotExist($this->root . '/install/update-manifest.json');
@@ -259,15 +266,13 @@ final class PhaseBTest extends AdmidioTestCase
     public function testExtractionContinuesAtItsCursor(): void
     {
         [$context, $updateId] = $this->prepared();
-        U\runStep($context, $updateId);
-        $this->assertSame('extracting', U\readState($this->root, $updateId)['state']);
 
         // The package lists index.php, bootstrap.php, Same.php, then Fresh.php: a piece did the first three.
         U\updateState($this->root, $updateId, static fn(array $s): array => array_merge($s, array('cursor' => 3)));
         U\runStep($context, $updateId);
 
         $workspace = U\workspace($this->root, $updateId);
-        $this->assertSame('planning', U\readState($this->root, $updateId)['state']);
+        $this->assertSame('prepared', U\readState($this->root, $updateId)['state']);
         $this->assertFileExists($workspace . '/extracted/src/New/Fresh.php');
         $this->assertFileDoesNotExist($workspace . '/extracted/index.php', 'what the cursor has passed is not extracted again');
     }
@@ -544,7 +549,7 @@ final class PhaseBTest extends AdmidioTestCase
         U\cancelUpdate($context, $updateId);
         $this->assertNull(U\activeUpdateId($this->root));
         $this->assertDirectoryDoesNotExist(U\workspace($this->root, $updateId));
-        $this->assertSame('NEW UPDATER', $this->read('install/core-update/index.php'), 'the updater of the new release stays');
+        $this->assertSame('OLD UPDATER', $this->read('install/core-update/index.php'), 'the installed updater is untouched');
     }
 
     /**
@@ -578,7 +583,8 @@ final class PhaseBTest extends AdmidioTestCase
             'index.php' => hash('sha256', 'OLD INDEX'),
             'system/bootstrap/bootstrap.php' => hash('sha256', 'ORIGINAL BOOTSTRAP'),
             'src/Old/Gone.php' => hash('sha256', 'REMOVED BY THE RELEASE'),
-            'src/Same.php' => hash('sha256', 'SAME')
+            'src/Same.php' => hash('sha256', 'SAME'),
+            'install/core-update/index.php' => hash('sha256', 'OLD UPDATER')
         )))));
         [$context, $updateId] = $this->prepared();
         $this->runToDecision($context, $updateId);

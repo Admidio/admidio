@@ -36,11 +36,11 @@ function runStep(array $ctx, string $updateId): array
                 // Phase A, in the installed updater
                 'new', 'checking', 'checked' => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID'), // the administrator chooses and confirms
                 'downloading' => downloadPart($ctx, $state),
-                'downloaded' => verifyAndInstallUpdater($ctx, $state),
-
-                // Phase B, in the updater of the new release, which phase A has installed
-                'prepared' => startExtraction($ctx, $state),
+                'downloaded' => verifyPackage($ctx, $state),
                 'extracting' => extractPart($ctx, $state),
+
+                // Phase B, in the unpacked updater of the new release (see entry.php)
+                'prepared' => startPlanning($ctx, $state),
                 'planning' => planPart($ctx, $state),
                 'review' => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID'), // the administrator confirms the plan
                 'ready' => enterMaintenance($ctx, $state),
@@ -96,7 +96,7 @@ function runStep(array $ctx, string $updateId): array
         writeState($root, $state);
         if ($state['state'] !== $before) {
             updateLog($root, $updateId, 'state ' . $state['state']
-                . ($state['state'] === 'prepared' ? ': package verified, updater of ' . $state['targetVersion'] . ' installed' : '')
+                . ($state['state'] === 'prepared' ? ': package of ' . $state['targetVersion'] . ' verified and extracted' : '')
                 . ($state['state'] === 'review' ? ' ' . json_encode($state['plan']) : '')
                 . (($state['dumpFile'] ?? '') !== '' && $before === 'dumping' ? ' ' . $state['dumpFile'] : '')
                 . (($state['keptArchive'] ?? '') !== '' && $before === 'archiving' ? ' ' . $state['keptArchive'] : ''));
@@ -120,7 +120,7 @@ function stepResult(array $ctx, array $state): array
 
     return array(
         'status' => match ((string)$state['state']) {
-            // The updater of the new release takes over.
+            // The updater of the new release takes over (see entry.php).
             'prepared' => 'prepared',
             'review' => 'review',
             // The page of the database update, or of the result.
@@ -130,8 +130,8 @@ function stepResult(array $ctx, array $state): array
         },
         'message' => match ((string)$state['state']) {
             'downloading', 'downloaded' => text($texts, 'SYS_CORE_UPDATE_DOWNLOADING', $version),
-            'prepared' => text($texts, 'SYS_CORE_UPDATE_PREPARED', $version),
             'extracting' => text($texts, 'SYS_CORE_UPDATE_EXTRACTING'),
+            'prepared' => text($texts, 'SYS_CORE_UPDATE_PREPARED', $version),
             'planning' => text($texts, 'SYS_CORE_UPDATE_PLANNING'),
             'ready' => text($texts, 'SYS_CORE_UPDATE_MAINTENANCE_ACTIVE'),
             'dumping' => text($texts, 'SYS_CORE_UPDATE_DUMPING'),
@@ -158,12 +158,12 @@ function updateProgress(array $state): int
 
     return match ((string)$state['state']) {
         // Phase A: the download is the long part.
-        'downloading' => 5 + (int)floor(80 * (int)($state['downloadedBytes'] ?? 0) / max(1, (int)($state['packageSize'] ?? 1))),
-        'downloaded' => 85,
+        'downloading' => 5 + (int)floor(70 * (int)($state['downloadedBytes'] ?? 0) / max(1, (int)($state['packageSize'] ?? 1))),
+        'downloaded' => 75,
+        'extracting' => $part(75, 100),
         // Phase B
         'prepared' => 0,
-        'extracting' => $part(0, 15),
-        'planning' => $part(15, 30),
+        'planning' => $part(0, 30),
         'review', 'ready' => 30,
         'dumping' => $part(30, 40),
         'installing' => $part(40, 80),
@@ -180,8 +180,8 @@ function updateProgress(array $state): int
 }
 
 /**
- * Give up an update before it changed anything: its workspace is removed. The updater of the new
- * release, which phase A may have installed, stays: it works with the old release as well.
+ * Give up an update before it changed anything: its workspace is removed, with the unpacked
+ * updater of the new release.
  * @param array<string,mixed> $ctx
  */
 function cancelUpdate(array $ctx, string $updateId): void
