@@ -4,7 +4,6 @@ namespace Admidio\UI\Presenter;
 
 // Admidio namespaces
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -96,7 +95,6 @@ class InventoryPresenter extends PagePresenter
         // check if the user has selected to show retired items
         $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2);
         $this->itemsData->showRetiredItems($this->showRetiredItems);
-        $this->itemsData->readItems();
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
 
@@ -592,45 +590,24 @@ class InventoryPresenter extends PagePresenter
         // Do not expose names in filter options to guests when anonymization is enabled.
         if ($gValidLogin || !$gSettingsManager->getBool('inventory_anonymize_user_names_for_guests')) {
             // read all keeper
-            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-                $sql = 'SELECT DISTINCT ind_value,
-                CASE
-                    WHEN ind_value = \'-1\' THEN \'n/a\'
-                    ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                END as keeper_name
-                FROM ' . TBL_INVENTORY_ITEM_DATA . '
-                INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                    ON inf_id = ind_inf_id
-                LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                    ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = ind_value
-                    AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                    ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = ind_value
-                    AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                    OR inf_org_id IS NULL)
-                AND inf_name_intern = \'KEEPER\'
-                ORDER BY keeper_name;';
-            } else {
-                $sql = 'SELECT DISTINCT ind_value,
-                CASE
-                    WHEN ind_value = \'-1\' THEN \'n/a\'
-                    ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                END as keeper_name
-                FROM ' . TBL_INVENTORY_ITEM_DATA . '
-                INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                    ON inf_id = ind_inf_id
-                LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                    ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
-                    AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                    ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
-                    AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                    OR inf_org_id IS NULL)
-                AND inf_name_intern = \'KEEPER\'
-                ORDER BY keeper_name;';
-            }
+            $sql = 'SELECT DISTINCT ind_value,
+            CASE
+                WHEN ind_value = \'-1\' THEN \'n/a\'
+                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+            END as keeper_name
+            FROM ' . TBL_INVENTORY_ITEM_DATA . '
+            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+                ON inf_id = ind_inf_id
+            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
+                ON CONCAT(last_name.usd_usr_id, \'\') = ind_value
+                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
+                ON CONCAT(first_name.usd_usr_id, \'\') = ind_value
+                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
+                OR inf_org_id IS NULL)
+            AND inf_name_intern = \'KEEPER\'
+            ORDER BY keeper_name;';
 
             // filter keeper
             $form->addSelectBoxFromSql(
@@ -645,51 +622,27 @@ class InventoryPresenter extends PagePresenter
             );
 
             // get all last receivers
-            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-                $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-                CASE
-                    WHEN borrowData.inb_last_receiver = \'-1\'
-                        THEN \'n/a\'
-                    WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                        THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                    ELSE
-                        borrowData.inb_last_receiver
-                END AS receiver_name
-                FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-                INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                    ON fields.inf_name_intern = \'LAST_RECEIVER\'
-                AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-                LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                    ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
-                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                    ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
-                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-                ORDER BY receiver_name;';
-            } else {
-                $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-                CASE
-                    WHEN borrowData.inb_last_receiver = \'-1\'
-                        THEN \'n/a\'
-                    WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                        THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                    ELSE
-                        borrowData.inb_last_receiver
-                END AS receiver_name
-                FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-                INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                    ON fields.inf_name_intern = \'LAST_RECEIVER\'
-                AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-                LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                    ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-                LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                    ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-                WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-                ORDER BY receiver_name;';
-            }
+            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+            CASE
+                WHEN borrowData.inb_last_receiver = \'-1\'
+                    THEN \'n/a\'
+                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+                ELSE
+                    borrowData.inb_last_receiver
+            END AS receiver_name
+            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+                ON fields.inf_name_intern = \'LAST_RECEIVER\'
+            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+                ON CONCAT(last_name.usd_usr_id, \'\') = borrowData.inb_last_receiver
+            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+                ON CONCAT(first_name.usd_usr_id, \'\') = borrowData.inb_last_receiver
+            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+            ORDER BY receiver_name;';
 
             // filter last receiver
             $form->addSelectBoxFromSql(
@@ -1036,6 +989,28 @@ class InventoryPresenter extends PagePresenter
         return (string) $content;
     }
 
+    /** Match all search words against the displayed cells of an inventory row. */
+    public static function matchesSearch(array $values, string $search): bool
+    {
+        $words = preg_split('/\s+/', trim(StringUtils::strToLower(
+            htmlspecialchars_decode($search, ENT_QUOTES | ENT_HTML5)
+        )), -1, PREG_SPLIT_NO_EMPTY);
+        if ($words === []) {
+            return true;
+        }
+
+        // Match visible cell text, excluding links, UUIDs and action metadata.
+        $text = StringUtils::strToLower(html_entity_decode(
+            implode(' ', StringUtils::strStripTags($values)), ENT_QUOTES | ENT_HTML5, 'UTF-8'
+        ));
+        foreach ($words as $word) {
+            if (!StringUtils::strContains($text, $word)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Populate the inventory table with the data of the inventory items.
      * This method supports various output formats and fills the table based on the
@@ -1054,6 +1029,11 @@ class InventoryPresenter extends PagePresenter
     public function prepareData(string $mode = 'html'): array
     {
         global $gCurrentUser, $gCurrentUserId, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+
+        // The paginated HTML list only needs field definitions. Load all items for exports
+        // and print views here. Their search must also match formatted field values, which
+        // cannot be excluded by a search over raw database values before formatting.
+        $this->itemsData->readItems();
 
         // Initialize the result array
         $preparedData = array(
@@ -1170,6 +1150,10 @@ class InventoryPresenter extends PagePresenter
                 $columnNumber++;
             }
 
+            if (!self::matchesSearch($rowValues['data'], $this->getFilterString)) {
+                continue;
+            }
+
             // Append admin action column for HTML mode
             if ($mode === 'html') {
                 $historyButton = ChangelogService::displayHistoryButtonTable(
@@ -1259,41 +1243,9 @@ class InventoryPresenter extends PagePresenter
                 }
             }
 
-            // Filter rows based on filter string
-            $showRow = true;
-
-            if ($mode !== 'html') {
-                $showRow = ($this->getFilterString === '');
-                if ($this->getFilterString !== '') {
-                    $showRowException = false;
-                    $filterArray = array_map('trim', explode(',', $this->getFilterString));
-                    $filterColumnValues = array_map(function ($value) {
-                        $parts = explode(',', $value);
-                        return count($parts) > 1 ? implode(',', array_slice($parts, 0, 2)) : $value;
-                    }, $rowValues);
-
-                    foreach ($filterArray as $filterString) {
-                        if (str_contains($filterString, '-')) {
-                            $cleanFilter = substr($filterString, 1);
-                            if (stripos(implode('', $filterColumnValues), $cleanFilter) !== false) {
-                                $showRowException = true;
-                            }
-                        }
-                        if (stripos(implode(' ', $filterColumnValues), $filterString) !== false) {
-                            $showRow = true;
-                        }
-                    }
-                    if ($showRowException) {
-                        $showRow = false;
-                    }
-                }
-            }
-
-            if ($showRow) {
-                $rows[] = $rowValues;
-                if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                    $strikethroughs[] = $strikethrough;
-                }
+            $rows[] = $rowValues;
+            if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                $strikethroughs[] = $strikethrough;
             }
         }
 

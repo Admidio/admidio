@@ -214,7 +214,8 @@ class EventFormPresenter extends PagePresenter
         $params = $eventIds;
         $whereSearch = '';
         if ($search !== '') {
-            $whereSearch = ' AND (dat_headline LIKE ? OR ind_value LIKE ? OR ivr_status LIKE ?)';
+            $searchOperator = DB_TYPE === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
+            $whereSearch = ' AND (dat_headline ' . $searchOperator . ' ? OR ind_value ' . $searchOperator . ' ? OR ivr_status ' . $searchOperator . ' ?)';
             $searchValue = '%' . htmlspecialchars_decode($search, ENT_QUOTES | ENT_HTML5) . '%';
             array_push($params, $searchValue, $searchValue, $searchValue);
         }
