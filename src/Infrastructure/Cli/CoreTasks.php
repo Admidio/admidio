@@ -611,7 +611,7 @@ final class CoreTasks
         self::task(
             'database:backup',
             'databaseBackup',
-            'Back up the database into adm_my_files/backups/, as the preferences and every core update do: a ZIP with one file per'
+            'Back up the database into the directory of the backups, as the preferences and every core update do: a ZIP with one file per'
                 . ' table, encrypted with the password for the backups if one is set. --output copies it, for the invoking user only.',
             'database:backup [--output=FILE]',
             'PREFERENCES',

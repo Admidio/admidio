@@ -14,9 +14,9 @@
  *            save           - Save organization preferences
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
- *            backup         - back up the database into adm_my_files/backups/
- *            backup_download - send a backup of adm_my_files/backups/
- *            backup_delete  - remove a backup of adm_my_files/backups/
+ *            backup         - back up the database into the directory of the backups
+ *            backup_download - send a backup from the directory of the backups
+ *            backup_delete  - remove a backup from the directory of the backups
  *            update_check   - Check for a new version of Admidio
  * panel    : The name of the preferences panel that should be shown or saved.
  * name     : The name of the backup to send or remove.
@@ -118,7 +118,7 @@ try {
             }
             break;
 
-        // back up the database into adm_my_files/backups/, then show the list of the backups
+        // back up the database into the directory of the backups, then show the list of the backups
         case 'backup':
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 

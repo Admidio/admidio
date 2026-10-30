@@ -88,13 +88,13 @@ final class DatabaseDumpTest extends DatabaseTestCase
         }
 
         $this->assertSame('installing', $state['state']);
-        $this->assertMatchesRegularExpression('#^database_\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_[a-f0-9]{6}\.zip$#', $state['dumpFile']);
+        $this->assertMatchesRegularExpression('#^database_\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_[a-f0-9]{32}\.zip$#', $state['dumpFile']);
         $this->assertDirectoryDoesNotExist($workspace . '/dump', 'the table files are packed and removed');
 
         $tables = $context['pdo']->query('SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()
             AND table_type = \'BASE TABLE\' AND table_name LIKE \'' . TABLE_PREFIX . '\\_%\'')->fetchAll(PDO::FETCH_COLUMN);
         $zip = new ZipArchive();
-        $zip->open(U\backupFile($this->root, $state['dumpFile']));
+        $zip->open(U\updateBackupFile($this->root, $state, $state['dumpFile']));
         $this->assertSame(count($tables), $zip->numFiles, 'one file per table');
         $users = '';
         for ($index = 0; $index < $zip->numFiles; $index++) {
@@ -108,17 +108,33 @@ final class DatabaseDumpTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox The directory of the backups is the preference of the first organization
+     */
+    public function testBackupsDirectoryFromThePreferences(): void
+    {
+        $context = $this->context();
+        $this->assertSame($this->root . '/adm_my_files/backups', U\configuredBackupsDirectory($context), 'without the preference');
+
+        $orgId = (int)$context['pdo']->query('SELECT MIN(org_id) FROM ' . TABLE_PREFIX . '_organizations')->fetchColumn();
+        $context['pdo']->prepare('DELETE FROM ' . TABLE_PREFIX . '_preferences WHERE prf_name = ?')->execute(array('system_backup_path'));
+        $context['pdo']->prepare('INSERT INTO ' . TABLE_PREFIX . '_preferences (prf_org_id, prf_name, prf_value) VALUES (?, ?, ?)')
+            ->execute(array($orgId, 'system_backup_path', $this->root . '/outside/'));
+        $this->assertSame($this->root . '/outside', U\configuredBackupsDirectory($context));
+    }
+
+    /**
      * @testdox A backup that an administrator asks for is the same kind of backup, made in one go
      */
     public function testBackupInOneGo(): void
     {
-        $backup = U\createDatabaseBackup($this->context(), $this->root . self::LIBRARY, '6.0.0-beta.1');
+        $directory = U\backupsDirectory($this->root, '');
+        $backup = U\createDatabaseBackup($this->context(), $this->root . self::LIBRARY, $directory, '6.0.0-beta.1');
 
-        $this->assertMatchesRegularExpression('#^database_\d{4}-\d{2}-\d{2}_\d{6}_6\.0\.0-beta\.1_[a-f0-9]{6}\.zip$#', $backup['file']);
+        $this->assertMatchesRegularExpression('#^database_\d{4}-\d{2}-\d{2}_\d{6}_6\.0\.0-beta\.1_[a-f0-9]{32}\.zip$#', $backup['file']);
         $this->assertFalse($backup['encrypted'], 'no password for the backups is set');
-        $this->assertSame(array($backup['file']), array_column(U\listBackups($this->root), 'name'), 'nothing else is left in the directory');
+        $this->assertSame(array($backup['file']), array_column(U\listBackups($directory), 'name'), 'nothing else is left in the directory');
         $zip = new ZipArchive();
-        $zip->open(U\backupFile($this->root, $backup['file']));
+        $zip->open(U\backupFile($directory, $backup['file']));
         $this->assertGreaterThan(10, $zip->numFiles, 'one file per table');
         $zip->close();
     }

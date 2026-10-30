@@ -418,6 +418,7 @@ class PreferencesService
                     unset($formValues['system_update_dump_password']);
                 }
                 unset($formValues['system_update_dump_password_remove']);
+                $formValues['system_backup_path'] = $this->validateBackupPath((string) ($formValues['system_backup_path'] ?? ''));
                 break;
 
             case 'sso':
@@ -817,6 +818,48 @@ class PreferencesService
 
         // finally send the mail
         return $email->sendEmail();
+    }
+
+    /**
+     * The directory of the backups as it is stored: empty for adm_my_files/backups, else the real
+     * path of an existing directory the web server can write to. It must not be in the program
+     * files of Admidio, which an update replaces, and must not contain the installation.
+     * @param string $path The path the administrator entered.
+     * @return string
+     * @throws Exception
+     */
+    private function validateBackupPath(string $path): string
+    {
+        $path = trim($path);
+        // The default directory is only created with the first backup.
+        if ($path === '' || rtrim(str_replace('\\', '/', $path), '/') === str_replace('\\', '/', ADMIDIO_PATH . FOLDER_DATA . '/backups')) {
+            return '';
+        }
+
+        $directory = preg_match('#^(/|[A-Za-z]:[\\\\/])#', $path) === 1 ? @realpath($path) : false;
+        if ($directory === false || !is_dir($directory)) {
+            throw new Exception('ORG_BACKUP_PATH_INVALID', array($path));
+        }
+
+        $directory = str_replace('\\', '/', $directory);
+        $root = str_replace('\\', '/', (string) realpath(ADMIDIO_PATH));
+        $data = $root . FOLDER_DATA;
+        if ($directory === $data . '/backups') {
+            return '';
+        }
+        // A root directory such as / ends with its slash already.
+        $prefix = rtrim($directory, '/') . '/';
+        $inData = str_starts_with($prefix, $data . '/');
+        $inInstallation = str_starts_with($prefix, $root . '/');
+        $containsInstallation = str_starts_with($root . '/', $prefix);
+        if ($containsInstallation || ($inInstallation && !$inData)) {
+            throw new Exception('ORG_BACKUP_PATH_IN_INSTALLATION', array($path));
+        }
+        if (!is_writable($directory)) {
+            throw new Exception('ORG_BACKUP_PATH_INVALID', array($path));
+        }
+
+        return $directory;
     }
 
     /**

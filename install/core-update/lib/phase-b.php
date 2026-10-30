@@ -6,14 +6,14 @@
  * extracting   - every file of the package is unpacked into the workspace and checked against the
  *                manifest
  * planning     - every file of the installation is compared with the new release: what is created,
- *                replaced and removed; checks D1-D3
+ *                replaced and removed; checks D1-D3 and D5
  * review       - the administrator sees the plan and starts the installation
  * ready        - the plan is confirmed, with the choice of the database backup
- * dumping      - maintenance mode on; the database is backed up into adm_my_files/backups/
+ * dumping      - maintenance mode on; the database is backed up into the directory of the backups
  * installing   - system/bootstrap/ first, then the rest; every replaced or
  *                removed file is copied to the workspace first and every step is journaled
  * archiving    - the replaced and removed files that were changed or unknown go into the kept-files
- *                archive in adm_my_files/backups/, which is never removed automatically
+ *                archive in the directory of the backups, which is never removed automatically
  * verifying    - every installed file is hashed again; then OPcache is reset
  * files_installed - install/update.php takes over and updates the database (phase C)
  *
@@ -132,7 +132,7 @@ function rolledBackMessage(array $ctx, array $state): string
  */
 function restoreMethod(array $ctx, array $state): string
 {
-    if (($state['dumpFile'] ?? '') === '' || !is_file($file = backupFile($ctx['config']['rootPath'], (string)$state['dumpFile']))) {
+    if (($state['dumpFile'] ?? '') === '' || !is_file($file = updateBackupFile($ctx['config']['rootPath'], $state, (string)$state['dumpFile']))) {
         return '';
     }
     // An encrypted backup needs its password, which may have been changed or removed since.
@@ -379,7 +379,7 @@ function extractPart(array $ctx, array $state): array
 /**
  * Compare the next files of the installation with the new release. The files of the release are
  * compared by hash; a file that is already right gets no operation. When all are done, the managed
- * directories are scanned for files the release does not have, and the plan is checked (D1-D3).
+ * directories are scanned for files the release does not have, and the plan is checked (D1-D3, D5).
  * @param array<string,mixed> $ctx
  * @param array<string,mixed> $state
  * @return array<string,mixed>
@@ -457,12 +457,20 @@ function planPart(array $ctx, array $state): array
     if ($dumpMethod !== '' && !canEncryptZip() && dumpPassword($ctx) !== '') {
         $checks[] = array('check' => 'D4', 'status' => 'warning', 'text' => 'SYS_CORE_UPDATE_CHECK_DUMP_UNENCRYPTED', 'params' => array());
     }
+    // D5: the backups can be written. The update keeps this directory, also if the preference is
+    // changed before it ends, so that its backup is found for a restore.
+    $backupsDirectory = configuredBackupsDirectory($ctx);
+    if (!canCreateAndRename($backupsDirectory)) {
+        $checks[] = array('check' => 'D5', 'status' => 'error', 'text' => 'SYS_CORE_UPDATE_CHECK_BACKUPS_NOT_WRITABLE',
+            'params' => array(displayPath($root, $backupsDirectory)));
+    }
 
     return array_merge($state, array(
         'state' => 'review',
         'plan' => $counts + array('unchanged' => count($files) - $counts['create'] - $counts['replace'], 'inventory' => $inventory !== null),
         'planChecks' => $checks,
         'dumpMethod' => $dumpMethod,
+        'backupsDirectory' => $backupsDirectory,
         'cursor' => 0,
         'cursorTotal' => 0
     ));
@@ -760,6 +768,34 @@ function enterMaintenance(array $ctx, array $state): array
 // ------------------------------------------------------------------------------------------------
 
 /**
+ * The directory of the backups of an update, which its plan has recorded.
+ * @param array<string,mixed> $state
+ */
+function updateBackupsDirectory(string $root, array $state): string
+{
+    return backupsDirectory($root, (string)($state['backupsDirectory'] ?? ''));
+}
+
+/**
+ * The path of a backup of an update.
+ * @param array<string,mixed> $state
+ * @throws UpdaterException The name is not the name of a backup.
+ */
+function updateBackupFile(string $root, array $state, string $name): string
+{
+    return backupFile(updateBackupsDirectory($root, $state), $name);
+}
+
+/**
+ * Where a backup of an update is, as the administrator is shown it.
+ * @param array<string,mixed> $state
+ */
+function updateBackupDisplayPath(string $root, array $state, string $name): string
+{
+    return displayPath($root, updateBackupsDirectory($root, $state) . '/' . $name);
+}
+
+/**
  * How this installation's database can be backed up (see databaseBackupMethod()), with mysqldump-php
  * from the verified package or else from the installed release.
  * @param array<string,mixed> $ctx
@@ -784,7 +820,7 @@ function mysqldumpLibrary(string $root, string $workspace): string
 
 /**
  * Back up the next tables of the installation, one file per table, and pack them into one backup
- * in adm_my_files/backups/ at the end (see lib/backup.php).
+ * in the directory of the backups at the end (see lib/backup.php).
  * @param array<string,mixed> $ctx
  * @param array<string,mixed> $state
  * @return array<string,mixed>
@@ -808,7 +844,7 @@ function dumpPart(array $ctx, array $state): array
     }
 
     // Without support for encryption the review has warned that the backup stays unencrypted.
-    $backup = packDatabaseBackup($ctx, $workspace . '/dump', (string)$state['installedVersion']);
+    $backup = packDatabaseBackup($ctx, $workspace . '/dump', updateBackupsDirectory($root, $state), (string)$state['installedVersion']);
     unset($state['dumpTables']);
 
     return array_merge($state, array('state' => 'installing', 'dumpFile' => $backup['file'], 'dumpEncrypted' => $backup['encrypted'],
@@ -894,9 +930,9 @@ function archivePart(array $ctx, array $state): array
             $state['keptArchive'] = backupName('files', $state['installedVersion'] . '_to_' . $state['targetVersion']
                 . (isDeveloperChannel((string)$state['channel']) ? '-' . developerSource($state)
                     . (($state['commit'] ?? '') !== '' ? '-' . substr((string)$state['commit'], 0, 7) : '') : ''));
-            ensureDirectory(backupsDirectory($root));
+            ensureDirectory(updateBackupsDirectory($root, $state));
         }
-        $file = backupFile($root, $state['keptArchive']);
+        $file = updateBackupFile($root, $state, $state['keptArchive']);
         $zip = new \ZipArchive();
         if ($zip->open($file, \ZipArchive::CREATE) !== true) {
             throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $file . ' cannot be created.');
@@ -1175,7 +1211,7 @@ function rollbackPart(array $ctx, array $state): array
     }
     // The files are back where they were, so the archive of them is not needed.
     if (($state['keptArchive'] ?? '') !== '') {
-        @unlink(backupFile($root, $state['keptArchive']));
+        @unlink(updateBackupFile($root, $state, $state['keptArchive']));
         $state['keptArchive'] = '';
     }
     leaveMaintenance($root, $state['updateId']);
@@ -1212,7 +1248,7 @@ function restoreDatabasePart(array $ctx, array $state): array
     $deadline = microtime(true) + TIME_BUDGET;
 
     $zip = new \ZipArchive();
-    if ($zip->open(backupFile($root, $state['dumpFile']), \ZipArchive::RDONLY) !== true) {
+    if ($zip->open(updateBackupFile($root, $state, $state['dumpFile']), \ZipArchive::RDONLY) !== true) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_FAILED', $state['dumpFile'] . ' cannot be opened.');
     }
     if (!empty($state['dumpEncrypted'])) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * The backups in adm_my_files/backups/ (install/core-update/lib/backup.php): their names, the
- * list, and that no other file can be reached through a name.
+ * The backups (install/core-update/lib/backup.php): their directory, their names, the list, and
+ * that no other file can be reached through a name.
  */
 
 namespace Admidio\Tests\Unit\CoreUpdater;
@@ -41,8 +41,8 @@ final class BackupTest extends AdmidioTestCase
      */
     public function testNames(): void
     {
-        $this->assertMatchesRegularExpression('/^database_\d{4}-\d{2}-\d{2}_\d{6}_6\.0\.0-beta\.1_[a-f0-9]{6}\.zip$/', U\backupName('database', '6.0.0-beta.1'));
-        $this->assertMatchesRegularExpression('/^files_[0-9_-]+_5\.0\.17_to_6\.0\.0-feature-x_[a-f0-9]{6}\.zip$/',
+        $this->assertMatchesRegularExpression('/^database_\d{4}-\d{2}-\d{2}_\d{6}_6\.0\.0-beta\.1_[a-f0-9]{32}\.zip$/', U\backupName('database', '6.0.0-beta.1'));
+        $this->assertMatchesRegularExpression('/^files_[0-9_-]+_5\.0\.17_to_6\.0\.0-feature-x_[a-f0-9]{32}\.zip$/',
             U\backupName('files', '5.0.17_to_6.0.0-feature/x'), 'a branch name becomes a plain part of the name');
         $this->assertNotSame(U\backupName('database', '6.0.0'), U\backupName('database', '6.0.0'));
     }
@@ -52,13 +52,14 @@ final class BackupTest extends AdmidioTestCase
      */
     public function testOnlyBackupsCanBeReached(): void
     {
+        $directory = U\backupsDirectory($this->root, '');
         $name = U\backupName('database', '6.0.0');
-        $this->assertSame($this->root . '/adm_my_files/backups/' . $name, U\backupFile($this->root, $name));
+        $this->assertSame($this->root . '/adm_my_files/backups/' . $name, U\backupFile($directory, $name));
 
         foreach (array('../config.php', 'database_x.zip', 'config.php', '/etc/passwd', 'files_2026-10-13_120000_6.0.0_abcdef.zip/../../config.php',
-            'database_2026-10-13_120000_6.0.0_abcdef.zip.php') as $name) {
+            'database_2026-10-13_120000_6.0.0_abcdef.zip.php', 'database_2026-10-13_120000_6.0.0_abcdef.zip') as $name) {
             try {
-                U\backupFile($this->root, $name);
+                U\backupFile($directory, $name);
                 $this->fail('accepted: ' . $name);
             } catch (UpdaterException $exception) {
                 $this->assertSame('SYS_CORE_UPDATE_REQUEST_INVALID', $exception->getMessage(), $name);
@@ -71,8 +72,8 @@ final class BackupTest extends AdmidioTestCase
      */
     public function testList(): void
     {
-        $older = 'database_2026-10-01_120000_5.0.17_aaaaaa.zip';
-        $newer = 'files_2026-10-02_120000_5.0.17_to_6.0.0_bbbbbb.zip';
+        $older = 'database_2026-10-01_120000_5.0.17_' . str_repeat('a', 32) . '.zip';
+        $newer = 'files_2026-10-02_120000_5.0.17_to_6.0.0_' . str_repeat('b', 32) . '.zip';
         file_put_contents($this->root . '/adm_my_files/backups/' . $older, 'OLDER');
         file_put_contents($this->root . '/adm_my_files/backups/' . $newer, 'NEWER BACKUP');
         touch($this->root . '/adm_my_files/backups/' . $older, 1_000_000);
@@ -83,6 +84,19 @@ final class BackupTest extends AdmidioTestCase
         $this->assertSame(array(
             array('name' => $newer, 'kind' => 'files', 'size' => 12, 'time' => 2_000_000),
             array('name' => $older, 'kind' => 'database', 'size' => 5, 'time' => 1_000_000)
-        ), U\listBackups($this->root));
+        ), U\listBackups(U\backupsDirectory($this->root, '')));
+    }
+
+    /**
+     * @testdox The backups are in adm_my_files/backups, or in the directory of the preferences
+     */
+    public function testDirectory(): void
+    {
+        $this->assertSame($this->root . '/adm_my_files/backups', U\backupsDirectory($this->root, ''));
+        $this->assertSame('/srv/admidio-backups', U\backupsDirectory($this->root, '/srv/admidio-backups/'));
+        $this->assertSame('C:/Backups/Admidio', U\backupsDirectory($this->root, 'C:\\Backups\\Admidio'));
+
+        $this->assertSame('adm_my_files/backups/x.zip', U\displayPath($this->root, $this->root . '/adm_my_files/backups/x.zip'));
+        $this->assertSame('/srv/admidio-backups/x.zip', U\displayPath($this->root, '/srv/admidio-backups/x.zip'));
     }
 }

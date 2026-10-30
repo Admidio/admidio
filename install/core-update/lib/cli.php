@@ -425,7 +425,7 @@ function commandCheckReport(array $state, array $texts): string
 }
 
 /**
- * What the plan of phase B changes and keeps, and the checks D1-D3 that did not pass.
+ * What the plan of phase B changes and keeps, and the checks D1-D5 that did not pass.
  * @param array<string,mixed> $ctx
  * @param array<string,mixed> $state
  */
@@ -483,13 +483,14 @@ function commandCompletedReport(array $state, array $texts, string $rootPath): s
         $lines[] = text($texts, 'SYS_CORE_UPDATE_COMPOSER_REQUIRED');
     }
     if ((string)($state['dumpFile'] ?? '') !== '') {
-        $lines[] = text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array('adm_my_files/backups/' . $state['dumpFile']));
+        $lines[] = text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array(updateBackupDisplayPath($rootPath, $state, (string)$state['dumpFile'])));
+        $lines[] = text($texts, 'SYS_CORE_UPDATE_DUMP_DELETE_HINT');
     }
     foreach ((array)($state['databaseNotes'] ?? array()) as $note) {
         $lines[] = (string)$note['text'];
     }
     if ((string)($state['keptArchive'] ?? '') !== '') {
-        $lines[] = text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/backups/' . $state['keptArchive']));
+        $lines[] = text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array(updateBackupDisplayPath($rootPath, $state, (string)$state['keptArchive'])));
     }
     if (!empty($state['legacyLayout']) && ownLegacyThemes($rootPath) !== array()) {
         $lines[] = text($texts, 'SYS_CORE_UPDATE_OWN_THEMES', array(implode(', ', ownLegacyThemes($rootPath))));

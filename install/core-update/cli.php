@@ -92,8 +92,7 @@ if (!in_array($command, array('status', 'apply', 'rollback', 'database'), true) 
         . '  --yes, -y                   do not ask before the download and before the installation' . PHP_EOL
         . '  --no-interaction            never ask; without --yes the update stops before it changes anything' . PHP_EOL
         . '  --dump-password-env=VAR     encrypt the backup of the database with the password in the environment' . PHP_EOL
-        . '                              variable VAR, instead of $gCoreUpdateDumpPassword of config.php or the' . PHP_EOL
-        . '                              password of the preferences' . PHP_EOL
+        . '                              variable VAR, instead of the password of the preferences' . PHP_EOL
         . PHP_EOL
         . 'Options of rollback:' . PHP_EOL
         . '  --database-restored         after a failed database update without a backup of the updater: you' . PHP_EOL

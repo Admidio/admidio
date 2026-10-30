@@ -157,7 +157,7 @@ final class DatabaseRestoreTest extends AdmidioTestCase
         $this->assertTrue($state['dumpEncrypted']);
         $this->assertStringNotContainsString('Backup-Passw0rd', (string)file_get_contents(U\workspace($this->root, $state['updateId']) . '/state.json'));
         $zip = new \ZipArchive();
-        $zip->open(U\backupFile($this->root, $state['dumpFile']));
+        $zip->open(U\updateBackupFile($this->root, $state, $state['dumpFile']));
         for ($index = 0; $index < $zip->numFiles; $index++) {
             $this->assertSame(\ZipArchive::EM_AES_256, $zip->statIndex($index)['encryption_method'], $zip->getNameIndex($index));
         }

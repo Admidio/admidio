@@ -157,6 +157,7 @@ final class PreferenceDefinitions
             'homepage_login' => array('default' => 'modules/overview.php', 'maxLength' => 250, 'required' => true),
             'enable_password_recovery' => array('default' => '1', 'type' => 'bool'),
             'two_factor_authentication_enabled' => array('default' => '0', 'type' => 'bool'),
+            'system_backup_path' => array('default' => '', 'maxLength' => 250),
             'system_browser_update_check' => array('default' => '0', 'type' => 'bool'),
             'system_pwa_enabled' => array('default' => '1', 'type' => 'bool'),
             'system_cookie_note' => array('default' => '1', 'type' => 'bool'),

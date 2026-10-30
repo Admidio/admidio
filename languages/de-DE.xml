@@ -111,6 +111,10 @@
   <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">Das Theme, das als Fallback verwendet wird, wenn das ausgewählte Theme eine gewünschte Vorlage nicht enthält. Wenn ein Fallback-Theme ausgewählt wird, muss das Haupt-Theme nur die Vorlagen enthalten, die es wirklich außer Kraft setzen will. Alle anderen Vorlagen können aus dem Fallback-Theme übernommen werden, das in den meisten Fällen das Standard-Theme \'simple\' sein kann. (Standard: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatischer Logout nach</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">Dieser Wert gibt an, nach wie vielen Minuten ohne Seitenaufruf eine angemeldete Person automatisch abgemeldet wird. Diese Einstellung wird ignoriert, wenn die Option #VAR1_BOLD# ausgewählt wurde. (Voreinstellung: 20 Minuten)</string>
+  <string name="ORG_BACKUP_PATH">Verzeichnis der Sicherungen</string>
+  <string name="ORG_BACKUP_PATH_DESC">In diesem Verzeichnis werden die Sicherungen der Datenbank und die Dateien aufbewahrt, die Updates ersetzt oder entfernt haben; leer bedeutet adm_my_files/backups. Ein Verzeichnis außerhalb des Dokumentenverzeichnisses des Webservers ist über keine URL erreichbar, auch wenn der Webserver adm_my_files nicht schützt. Geben Sie den absoluten Pfad eines vorhandenen Verzeichnisses an, in das der Webserver schreiben darf, außerhalb der Admidio-Installation oder innerhalb von adm_my_files. Sicherungen von vor einer Änderung bleiben im bisherigen Verzeichnis.</string>
+  <string name="ORG_BACKUP_PATH_IN_INSTALLATION">Die Sicherungen können nicht in #VAR1# aufbewahrt werden, weil ein Update die Programmdateien von Admidio ersetzt. Wählen Sie ein Verzeichnis außerhalb der Admidio-Installation oder innerhalb von adm_my_files.</string>
+  <string name="ORG_BACKUP_PATH_INVALID">#VAR1# ist nicht der absolute Pfad eines vorhandenen Verzeichnisses, in das der Webserver schreiben darf.</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update Meldung für veraltete Browser</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">Nach Aktivierung wird Personen mit veraltetem Browser zu einem Browserupdate geraten. Neuere Browser schützen besser vor Betrug, Viren, Trojanern, Datendiebstahl und anderen Bedrohungen Ihrer Privatsphäre und Sicherheit. Jede neue Browsergeneration verbessert die Geschwindigkeit und die Unterstützung neuer Webtechniken, mit denen Webseiten besser dargestellt werden können. Hierzu wird der Dienst von https://browser-update.org/ verwendet.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Hintergrundfarbe</string>
@@ -202,8 +206,7 @@
   <string name="ORG_UPDATE_CHECK">Über neue Admidio-Versionen informieren</string>
   <string name="ORG_UPDATE_CHECK_DESC">Admidio fragt höchstens zweimal am Tag beim Admidio-Server nach, ob eine neue Version verfügbar ist, und nur während ein Administrator Admidio verwendet. Administratoren sehen dann oben auf jeder Seite einen Hinweis.</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD">Passwort für die Datenbanksicherungen von Updates</string>
-  <string name="ORG_UPDATE_DUMP_PASSWORD_CONFIG">In adm_my_files/config.php festgelegt</string>
-  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Bevor ein Update von Admidio etwas ändert, sichert es die Datenbank in eine ZIP-Datei in adm_my_files/backups. Mit einem Passwort wird diese Datei verschlüsselt (AES-256), damit sie auch geschützt ist, wenn sie den Server verlässt. Das Passwort wird nie wieder angezeigt, ein leeres Feld behält es bei. Es wird in der Datenbank gespeichert; sicherer ist es in adm_my_files/config.php als $gCoreUpdateDumpPassword, das Vorrang hat. Ohne das Passwort kann die Sicherung nicht wiederhergestellt werden, es muss also sicher aufbewahrt werden.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Bevor ein Update von Admidio etwas ändert, sichert es die Datenbank in eine ZIP-Datei im Verzeichnis der Sicherungen. Mit einem Passwort wird diese Datei verschlüsselt (AES-256), damit sie auch geschützt ist, wenn sie den Server verlässt. Das Passwort wird nie wieder angezeigt, ein leeres Feld behält es bei. Ohne das Passwort kann die Sicherung nicht wiederhergestellt werden, es muss also sicher aufbewahrt werden.</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD_REMOVE">Gespeichertes Passwort entfernen</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD_STORED">Ein Passwort ist gespeichert</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Aktivierungslink für das neue Passwort</string>
@@ -315,7 +318,7 @@
   <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
   <string name="SYS_BACKUP_REPLACED_FILES">Durch ein Update ersetzte Dateien</string>
   <string name="SYS_BACKUPS">Sicherungen</string>
-  <string name="SYS_BACKUPS_DESC">Die Sicherungen der Datenbank und die Dateien, die Updates ersetzt oder entfernt haben, in adm_my_files/backups. Sie werden nie automatisch entfernt und enthalten alle Daten der Organisation; sie sollten also bei Bedarf heruntergeladen und danach gelöscht werden.</string>
+  <string name="SYS_BACKUPS_DESC">Die Sicherungen der Datenbank und die Dateien, die Updates ersetzt oder entfernt haben, im Verzeichnis der Sicherungen. Sie werden nie automatisch entfernt und enthalten alle Daten der Organisation; sie sollten also bei Bedarf heruntergeladen und danach gelöscht werden.</string>
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
@@ -461,6 +464,7 @@
   <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stabile Version</string>
   <string name="SYS_CORE_UPDATE_CHANNEL_TAG">Tag</string>
   <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Erneut prüfen</string>
+  <string name="SYS_CORE_UPDATE_CHECK_BACKUPS_NOT_WRITABLE">Der Webserver kann die Sicherungen nicht in #VAR1# schreiben. Prüfen Sie die Dateiberechtigungen oder ändern Sie das Verzeichnis der Sicherungen in den Einstellungen.</string>
   <string name="SYS_CORE_UPDATE_CHECK_COMPOSER">Die composer.lock dieser Version unterscheidet sich von der installierten, aber vendor/ wird nicht aktualisiert. Führen Sie nach dem Update composer install --no-dev auf dem Server aus.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DATA_DIRECTORY">Der Ordner adm_my_files ist beschreibbar.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DATABASE">Die Datenbank ist aktuell.</string>
@@ -507,6 +511,7 @@
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">Das Update-Paket konnte nicht heruntergeladen werden. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">Die Download-Adresse des Updates ist ungültig oder nicht erlaubt.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOADING">Version #VAR1# wird heruntergeladen ...</string>
+  <string name="SYS_CORE_UPDATE_DUMP_DELETE_HINT">Sie enthält alle Daten der Organisation: Laden Sie sie herunter, wenn Sie sie behalten wollen, und löschen Sie sie danach vom Server.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FAILED">Die Sicherung der Datenbank ist fehlgeschlagen, daher wurde das Update nicht gestartet und nichts verändert. #VAR1# Sie können es erneut versuchen oder mit Ihrer eigenen Sicherung der Datenbank fortfahren.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FILE">Die Sicherung der Datenbank liegt in #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED">Die Sicherung der Datenbank liegt in #VAR1#, verschlüsselt mit dem Passwort für die Sicherungen.</string>
@@ -524,7 +529,7 @@
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installierte Version</string>
   <string name="SYS_CORE_UPDATE_INTERRUPTED">Die Installation der Dateien wurde unterbrochen</string>
   <string name="SYS_CORE_UPDATE_KEPT_ARCHIVE">Die geänderten und unbekannten Dateien der bisherigen Version sind in #VAR1# aufbewahrt.</string>
-  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# dieser Dateien wurden geändert oder gehören nicht zur installierten Version. Sie werden dauerhaft in einem ZIP-Archiv in adm_my_files/backups aufbewahrt.</string>
+  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# dieser Dateien wurden geändert oder gehören nicht zur installierten Version. Sie werden dauerhaft in einem ZIP-Archiv im Verzeichnis der Sicherungen aufbewahrt.</string>
   <string name="SYS_CORE_UPDATE_LOG_FILE">Das Protokoll dieses Updates liegt in #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Anmelden</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Zu viele fehlgeschlagene Anmeldungen. Die Anmeldung beim Updater ist für 15 Minuten gesperrt.</string>
@@ -535,6 +540,7 @@
   <string name="SYS_CORE_UPDATE_MAINTENANCE_ACTIVE">Der Wartungsmodus ist aktiv. Besucher sehen eine Wartungsseite, bis das Update abgeschlossen ist.</string>
   <string name="SYS_CORE_UPDATE_MAINTENANCE_MESSAGE">Admidio wird gerade aktualisiert. Bitte versuchen Sie es in ein paar Minuten erneut.</string>
   <string name="SYS_CORE_UPDATE_MAINTENANCE_OTHER">Admidio ist bereits wegen einer anderen Aufgabe im Wartungsmodus. Warten Sie, bis sie abgeschlossen ist, und versuchen Sie es dann erneut.</string>
+  <string name="SYS_CORE_UPDATE_MANAGE_BACKUPS">Sicherungen herunterladen oder löschen</string>
   <string name="SYS_CORE_UPDATE_MANIFEST_INVALID">Die Dateiliste des Update-Pakets ist ungültig. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_MASTER_WARNING">Sie sind dabei, die Entwicklungsversion von Admidio zu installieren. Sie kann fehlerhaft sein, und eine ältere stabile Version kann danach nicht mehr installiert werden.</string>
   <string name="SYS_CORE_UPDATE_NO_INVENTORY">Die installierte Version hat keine Liste ihrer Originaldateien, daher wird jede Datei aufbewahrt, die ersetzt oder entfernt wird.</string>
@@ -652,7 +658,7 @@
   <string name="SYS_DATABASE">Datenbank</string>
   <string name="SYS_DATABASE_BACKUP">Datenbank-Backup</string>
   <string name="SYS_DATABASE_BACKUP_CREATE">Datenbank jetzt sichern</string>
-  <string name="SYS_DATABASE_BACKUP_CREATE_DESC">Sichert alle Daten von Admidio in eine ZIP-Datei in adm_my_files/backups, eine Datei pro Tabelle mit ihrer Struktur und ihren Daten. Mit einem Passwort für die Sicherungen wird die Datei verschlüsselt. Die Sicherung erscheint in der Liste darunter.</string>
+  <string name="SYS_DATABASE_BACKUP_CREATE_DESC">Sichert alle Daten von Admidio in eine ZIP-Datei im Verzeichnis der Sicherungen, eine Datei pro Tabelle mit ihrer Struktur und ihren Daten. Mit einem Passwort für die Sicherungen wird die Datei verschlüsselt. Die Sicherung erscheint in der Liste darunter.</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Erstellt ein Backup aller Admidio-Daten in einer gzip-Datei. Neben den Daten enthält die Datei auch die Struktur der Tabellen, die Indizes und die Verknüpfungen zwischen den Tabellen. Das Backup enthält sensible Mitgliederdaten und sollte daher sicher aufbewahrt werden. Es sollte nicht möglich sein, dass Dritte auf die Datei zugreifen können.</string>
   <string name="SYS_DATABASE_BACKUP_FAILED">Die Sicherung der Datenbank konnte nicht erstellt werden.</string>
   <string name="SYS_DATABASE_BACKUP_NOT_POSSIBLE">Die Datenbank kann hier nicht gesichert werden: Für PostgreSQL wird das Programm pg_dump benötigt, das auf diesem Server nicht verfügbar ist.</string>

@@ -126,6 +126,10 @@
   <string name="ORG_ADMIDIO_THEME_FALLBACK_DESC">The theme that is used as a fallback if the selected theme does not contain a requested template. If a fallback theme is selected, the main theme only has to contain those templates that it really wants to override. All other templates can be taken from the fallback theme, which in most cases can be the default 'simple' theme. (default: simple)</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER">Automatic logout after</string>
   <string name="ORG_AUTOMATIC_LOGOUT_AFTER_DESC">This value indicates after how many minutes an inactive user is automatically logged out. Inactive is a user as long as he does not call any page of the Admidio system. This setting is ignored if the user has selected #VAR1_BOLD#. (Default: 20 minutes)</string>
+  <string name="ORG_BACKUP_PATH">Directory of the backups</string>
+  <string name="ORG_BACKUP_PATH_DESC">The backups of the database and the files that updates have replaced or removed are kept in this directory; empty means adm_my_files/backups. A directory outside the document root of the web server cannot be reached through a URL, even if the web server does not protect adm_my_files. Enter the absolute path of an existing directory that the web server can write to, outside the Admidio installation or inside adm_my_files. Backups made before a change stay in the previous directory.</string>
+  <string name="ORG_BACKUP_PATH_IN_INSTALLATION">The backups cannot be kept in #VAR1#, because an update replaces the program files of Admidio. Choose a directory outside the Admidio installation or inside adm_my_files.</string>
+  <string name="ORG_BACKUP_PATH_INVALID">#VAR1# is not the absolute path of an existing directory that the web server can write to.</string>
   <string name="ORG_BROWSER_UPDATE_CHECK">Update message for outdated browsers</string>
   <string name="ORG_BROWSER_UPDATE_CHECK_DESC">After activation users with outdated browsers are advised to run a browserupdate. Newer browsers guarantee a better protection against fraud, viruses, Trojans, identity theft and other threats to your privacy and security. Every new browser generation improves speed and supports more and more new web technologies, which leads to a better web experience. For this purpose, the service of https://browser-update.org/ is used.</string>
   <string name="ORG_CAPTCHA_BACKGROUND_COLOR">Background color</string>
@@ -214,8 +218,7 @@
   <string name="ORG_UPDATE_CHECK">Notify about new Admidio versions</string>
   <string name="ORG_UPDATE_CHECK_DESC">Admidio asks the Admidio server at most twice a day whether a new version is available, and only while an administrator is using Admidio. Administrators then see a notice at the top of every page.</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD">Password for the database backups of updates</string>
-  <string name="ORG_UPDATE_DUMP_PASSWORD_CONFIG">Set in adm_my_files/config.php</string>
-  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Before an update of Admidio changes anything, it backs up the database into a ZIP file in adm_my_files/backups. With a password this file is encrypted (AES-256), so that it stays protected once it leaves the server. The password is never shown again, and an empty field keeps it. It is stored in the database; it is safer in adm_my_files/config.php as $gCoreUpdateDumpPassword, which takes precedence. Without the password the backup cannot be restored, so it has to be kept safe.</string>
+  <string name="ORG_UPDATE_DUMP_PASSWORD_DESC">Before an update of Admidio changes anything, it backs up the database into a ZIP file in the directory of the backups. With a password this file is encrypted (AES-256), so that it stays protected once it leaves the server. The password is never shown again, and an empty field keeps it. Without the password the backup cannot be restored, so it has to be kept safe.</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD_REMOVE">Remove the stored password</string>
   <string name="ORG_UPDATE_DUMP_PASSWORD_STORED">A password is stored</string>
   <string name="ORG_VARIABLE_ACTIVATION_LINK">Activation link for the new password</string>
@@ -326,7 +329,7 @@
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
   <string name="SYS_BACKUP_REPLACED_FILES">Files replaced by an update</string>
   <string name="SYS_BACKUPS">Backups</string>
-  <string name="SYS_BACKUPS_DESC">The backups of the database and the files that updates have replaced or removed, in adm_my_files/backups. They are never removed automatically and contain all data of the organization, so they should be downloaded where needed and then deleted.</string>
+  <string name="SYS_BACKUPS_DESC">The backups of the database and the files that updates have replaced or removed, in the directory of the backups. They are never removed automatically and contain all data of the organization, so they should be downloaded where needed and then deleted.</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_BLUESKY">Bluesky</string>
@@ -468,6 +471,7 @@
   <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stable release</string>
   <string name="SYS_CORE_UPDATE_CHANNEL_TAG">Tag</string>
   <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Check again</string>
+  <string name="SYS_CORE_UPDATE_CHECK_BACKUPS_NOT_WRITABLE">The web server cannot write the backups to #VAR1#. Check the file permissions, or change the directory of the backups in the preferences.</string>
   <string name="SYS_CORE_UPDATE_CHECK_COMPOSER">The composer.lock of this version differs from the installed one, but vendor/ is not updated. Run composer install --no-dev on the server after the update.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DATA_DIRECTORY">The folder adm_my_files is writable.</string>
   <string name="SYS_CORE_UPDATE_CHECK_DATABASE">The database is up to date.</string>
@@ -514,6 +518,7 @@
   <string name="SYS_CORE_UPDATE_DOWNLOAD_FAILED">The update package could not be downloaded. #VAR1#</string>
   <string name="SYS_CORE_UPDATE_DOWNLOAD_URL_INVALID">The download address of the update is invalid or not allowed.</string>
   <string name="SYS_CORE_UPDATE_DOWNLOADING">Downloading version #VAR1# ...</string>
+  <string name="SYS_CORE_UPDATE_DUMP_DELETE_HINT">It contains all data of the organization: download it if you want to keep it, and then delete it from the server.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FAILED">The backup of the database failed, so the update has not started and nothing was changed. #VAR1# You can try again, or continue with your own backup of the database.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FILE">The backup of the database is in #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED">The backup of the database is in #VAR1#, encrypted with the password for the backups.</string>
@@ -531,7 +536,7 @@
   <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installed version</string>
   <string name="SYS_CORE_UPDATE_INTERRUPTED">The installation of the files was interrupted</string>
   <string name="SYS_CORE_UPDATE_KEPT_ARCHIVE">The changed and unknown files of the previous version are kept in #VAR1#.</string>
-  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# of these files were changed or do not belong to the installed version. They are kept permanently in a ZIP archive in adm_my_files/backups.</string>
+  <string name="SYS_CORE_UPDATE_KEPT_DESC">#VAR1# of these files were changed or do not belong to the installed version. They are kept permanently in a ZIP archive in the directory of the backups.</string>
   <string name="SYS_CORE_UPDATE_LOG_FILE">The log of this update is in #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_LOGIN">Log in</string>
   <string name="SYS_CORE_UPDATE_LOGIN_BLOCKED">Too many failed logins. The login of the updater is blocked for 15 minutes.</string>
@@ -542,6 +547,7 @@
   <string name="SYS_CORE_UPDATE_MAINTENANCE_ACTIVE">Maintenance mode is on. Visitors see a maintenance page until the update has finished.</string>
   <string name="SYS_CORE_UPDATE_MAINTENANCE_MESSAGE">Admidio is being updated. Please try again in a few minutes.</string>
   <string name="SYS_CORE_UPDATE_MAINTENANCE_OTHER">Admidio is already in maintenance mode for another task. Wait until it has finished and try again.</string>
+  <string name="SYS_CORE_UPDATE_MANAGE_BACKUPS">Download or delete backups</string>
   <string name="SYS_CORE_UPDATE_MANIFEST_INVALID">The file list of the update package is invalid. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_MASTER_WARNING">You are about to install the development version of Admidio. It may be broken, and an older stable release cannot be installed afterwards.</string>
   <string name="SYS_CORE_UPDATE_NO_INVENTORY">The installed version has no list of its original files, so every file that is replaced or removed is kept.</string>
@@ -659,7 +665,7 @@
   <string name="SYS_DATABASE">Database</string>
   <string name="SYS_DATABASE_BACKUP">Database backup</string>
   <string name="SYS_DATABASE_BACKUP_CREATE">Back up the database now</string>
-  <string name="SYS_DATABASE_BACKUP_CREATE_DESC">Backs up all data of Admidio into a ZIP file in adm_my_files/backups, one file per table with its structure and data. With a password for the backups the file is encrypted. The backup appears in the list below.</string>
+  <string name="SYS_DATABASE_BACKUP_CREATE_DESC">Backs up all data of Admidio into a ZIP file in the directory of the backups, one file per table with its structure and data. With a password for the backups the file is encrypted. The backup appears in the list below.</string>
   <string name="SYS_DATABASE_BACKUP_DESC">Creates a backup of all Admidio data in a gzip file. In addition to the data, the file also contains the structure of the tables, the indices and the links between the tables. The backup contains sensitive member data and should therefore be stored securely. It should not be possible for third parties to access the file.</string>
   <string name="SYS_DATABASE_BACKUP_FAILED">The backup of the database could not be created.</string>
   <string name="SYS_DATABASE_BACKUP_NOT_POSSIBLE">The database cannot be backed up here: for PostgreSQL the program pg_dump is needed, which is not available on this server.</string>

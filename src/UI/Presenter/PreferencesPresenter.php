@@ -3073,13 +3073,13 @@ class PreferencesPresenter extends PagePresenter
     /**
      * Generates the HTML of the panel with the update of Admidio and the backups: the installed
      * version and the check for a new one, the start of the updater, the settings of both, the
-     * backup of the database and the list of the backups in adm_my_files/backups/.
+     * backup of the database and the list of the backups.
      * @return string
      * @throws Exception|\Smarty\Exception
      */
     public function createUpdateBackupForm(): string
     {
-        global $gL10n, $gSettingsManager, $gCurrentSession, $gCoreUpdateDumpPassword;
+        global $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -3097,26 +3097,30 @@ class PreferencesPresenter extends PagePresenter
             array('helpTextId' => 'ORG_UPDATE_CHECK_DESC')
         );
 
-        // The password of the backups is never shown again: an empty field keeps it, and the
-        // browser must not fill in the password of the login. One in config.php takes precedence.
-        $passwordInConfig = (string) ($gCoreUpdateDumpPassword ?? '') !== '';
-        $passwordOptions = array(
-            'type' => 'password',
-            'autocomplete' => 'new-password',
-            'placeholder' => $passwordInConfig ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_CONFIG')
-                : ($formValues['system_update_dump_password'] !== '' ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : ''),
-            'helpTextId' => 'ORG_UPDATE_DUMP_PASSWORD_DESC'
+        $formUpdateBackup->addInput(
+            'system_backup_path',
+            $gL10n->get('ORG_BACKUP_PATH'),
+            $formValues['system_backup_path'],
+            self::preferenceInputOptions('system_backup_path', array(
+                'placeholder' => ADMIDIO_PATH . FOLDER_DATA . '/backups',
+                'helpTextId' => 'ORG_BACKUP_PATH_DESC'
+            ))
         );
-        if ($passwordInConfig) {
-            $passwordOptions['property'] = FormPresenter::FIELD_DISABLED;
-        }
+
+        // The password of the backups is never shown again: an empty field keeps it, and the
+        // browser must not fill in the password of the login.
         $formUpdateBackup->addInput(
             'system_update_dump_password',
             $gL10n->get('ORG_UPDATE_DUMP_PASSWORD'),
             '',
-            self::preferenceInputOptions('system_update_dump_password', $passwordOptions)
+            self::preferenceInputOptions('system_update_dump_password', array(
+                'type' => 'password',
+                'autocomplete' => 'new-password',
+                'placeholder' => $formValues['system_update_dump_password'] !== '' ? $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_STORED') : '',
+                'helpTextId' => 'ORG_UPDATE_DUMP_PASSWORD_DESC'
+            ))
         );
-        if ($formValues['system_update_dump_password'] !== '' && !$passwordInConfig) {
+        if ($formValues['system_update_dump_password'] !== '') {
             $formUpdateBackup->addCheckbox(
                 'system_update_dump_password_remove',
                 $gL10n->get('ORG_UPDATE_DUMP_PASSWORD_REMOVE'),

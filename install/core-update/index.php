@@ -586,7 +586,7 @@ function coreUpdatePageInterrupted(array $context, array $state): void
                 U\text($texts, 'SYS_CORE_UPDATE_CONTINUE_UPDATE') => U\text($texts, 'SYS_CORE_UPDATE_CONTINUE_DESC'),
                 U\text($texts, 'SYS_CORE_UPDATE_RESTORE_VERSION', array($previous)) => U\text($texts, 'SYS_CORE_UPDATE_RESTORE_FILES_DESC', array($previous))
             ))
-            . coreUpdateErrorDetails($state, $texts, false),
+            . coreUpdateErrorDetails($context, $state, false),
         coreUpdateRunScript($state, $texts, false)
     );
 }
@@ -652,7 +652,7 @@ function coreUpdatePageDatabaseFailed(array $context, array $state): void
                     => U\text($texts, 'SYS_CORE_UPDATE_RESTORE_AND_UPDATE_DESC', array($previous)),
                 U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY') => U\text($texts, 'SYS_CORE_UPDATE_DATABASE_RETRY_DESC')
             ))
-            . coreUpdateErrorDetails($state, $texts, true),
+            . coreUpdateErrorDetails($context, $state, true),
         coreUpdateDatabaseScript($state, $texts, '')
     );
 }
@@ -677,16 +677,22 @@ function coreUpdatePageCompleted(array $context, array $state): void
             : coreUpdateAlert('success', U\h(U\text($texts, 'SYS_CORE_UPDATE_SUCCESSFUL', array((string)($state['targetVersionText'] ?? $state['targetVersion']))))))
             . (!empty($state['composerChanged']) ? coreUpdateAlert('warning', U\h(U\text($texts, 'SYS_CORE_UPDATE_COMPOSER_REQUIRED'))) : '')
             . ((string)($state['dumpFile'] ?? '') !== ''
-                ? '<p>' . U\h(U\text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array('adm_my_files/backups/' . $state['dumpFile']))) . '</p>' : '')
+                ? coreUpdateAlert('warning', U\h(U\text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED',
+                    array(U\updateBackupDisplayPath($config['rootPath'], $state, (string)$state['dumpFile'])))
+                    . ' ' . U\text($texts, 'SYS_CORE_UPDATE_DUMP_DELETE_HINT'))) : '')
             . implode('', array_map(static fn(array $note): string => coreUpdateAlert($note['type'] === 'info' ? 'info' : 'warning',
                 nl2br(U\h((string)$note['text']))), (array)($state['databaseNotes'] ?? array())))
             . ((string)($state['keptArchive'] ?? '') !== ''
-                ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array('adm_my_files/backups/' . $state['keptArchive']))) . '</p>' : '')
+                ? '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_KEPT_ARCHIVE', array(U\updateBackupDisplayPath($config['rootPath'], $state, (string)$state['keptArchive'])))) . '</p>' : '')
             . (!empty($state['legacyLayout']) && U\ownLegacyThemes($config['rootPath']) !== array()
                 ? coreUpdateAlert('info', U\h(U\text($texts, 'SYS_CORE_UPDATE_OWN_THEMES', array(implode(', ', U\ownLegacyThemes($config['rootPath'])))))) : ''),
         !empty($state['databaseManual'])
             ? coreUpdateLink($config['baseUrl'] . '/install/update.php', 'bi-database', U\text($texts, 'SYS_CORE_UPDATE_DATABASE_MANUAL'))
             : coreUpdateOpenAdmidio($config, $texts)
+                // The backups are downloaded and deleted in the preferences of the new release.
+                . ((string)($state['dumpFile'] ?? '') !== '' || (string)($state['keptArchive'] ?? '') !== ''
+                    ? coreUpdateLink($config['baseUrl'] . '/modules/preferences.php?panel=update_backup', 'bi-archive',
+                        U\text($texts, 'SYS_CORE_UPDATE_MANAGE_BACKUPS'), true) : '')
     );
 }
 
@@ -854,16 +860,19 @@ function coreUpdateChoices(array $texts, array $choices): string
 
 /**
  * The error and where the log and the backup are, folded away for a bug report.
+ * @param array<string,mixed> $context
  * @param array<string,mixed> $state
- * @param array{language: string, texts: array<string,string>} $texts
  */
-function coreUpdateErrorDetails(array $state, array $texts, bool $withError): string
+function coreUpdateErrorDetails(array $context, array $state, bool $withError): string
 {
+    $texts = $context['texts'];
+
     return '<details class="mb-4"><summary>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_ERROR_DETAILS')) . '</summary>'
         . ($withError && (string)($state['lastError'] ?? '') !== '' ? '<pre class="core-update-error mt-2">' . U\h((string)$state['lastError']) . '</pre>' : '')
         . '<p class="mt-2">' . U\h(U\text($texts, 'SYS_CORE_UPDATE_LOG_FILE', array('adm_my_files/core-update/' . $state['updateId'] . '/update.log'))) . '</p>'
         . ((string)($state['dumpFile'] ?? '') !== ''
-            ? '<p>' . U\h(U\text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED', array('adm_my_files/backups/' . $state['dumpFile']))) . '</p>' : '')
+            ? '<p>' . U\h(U\text($texts, empty($state['dumpEncrypted']) ? 'SYS_CORE_UPDATE_DUMP_FILE' : 'SYS_CORE_UPDATE_DUMP_FILE_ENCRYPTED',
+                array(U\updateBackupDisplayPath($context['config']['rootPath'], $state, (string)$state['dumpFile'])))) . '</p>' : '')
         . '</details>';
 }
 

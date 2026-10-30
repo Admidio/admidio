@@ -67,6 +67,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame(array('create' => 1, 'replace' => 2, 'delete' => 2, 'kept' => 4, 'unchanged' => 1, 'inventory' => false), $state['plan'],
             'the manifest of the release, which is installed as well, is not counted; without an inventory every replaced or removed file is kept');
         $this->assertFalse(U\checksHaveErrors($state['planChecks']));
+        $this->assertSame($this->root . '/adm_my_files/backups', $state['backupsDirectory'], 'without a preference the default directory');
 
         $plan = U\readPlan(U\workspace($this->root, $updateId));
         $this->assertSame(array('system/bootstrap/bootstrap.php', 'index.php', 'src/New/Fresh.php', 'src/Old/Gone.php', 'src/Unknown.php',
@@ -136,7 +137,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertFileDoesNotExist($this->root . '/tests/DevTest.php', 'only what a release would contain is installed');
         $this->assertFileDoesNotExist($this->root . '/install/update-manifest.json');
         $this->assertNull(U\installedInventory($this->root), 'the next update keeps every file it replaces');
-        $this->assertMatchesRegularExpression('#^files_[0-9_-]+_5\.0\.14_to_5\.1\.0-feature-x-ababab[a-f0-9]_[a-f0-9]{6}\.zip$#',
+        $this->assertMatchesRegularExpression('#^files_[0-9_-]+_5\.0\.14_to_5\.1\.0-feature-x-ababab[a-f0-9]_[a-f0-9]{32}\.zip$#',
             (string)U\readState($this->root, $updateId)['keptArchive']);
     }
 
@@ -286,16 +287,15 @@ final class PhaseBTest extends AdmidioTestCase
     }
 
     /**
-     * @testdox The password of the backup comes from the command line, else from config.php, else from the preferences
+     * @testdox The password of the backup comes from the command line, else from the preferences, never from config.php
      *
      * The preference needs the database, which this test does not have; DatabaseRestoreTest uses it.
      */
     public function testDumpPasswordOrder(): void
     {
         $context = array('config' => U\configFromValues($this->root, array('gCoreUpdateDumpPassword' => 'from-config')), 'pdo' => null);
-        $this->assertSame('from-config', U\dumpPassword($context), 'also without debug mode');
+        $this->assertSame('', U\dumpPassword($context));
         $this->assertSame('from-command-line', U\dumpPassword(array_merge($context, array('dumpPassword' => 'from-command-line'))));
-        $this->assertSame('', U\dumpPassword(array('config' => U\configFromValues($this->root, array()), 'pdo' => null)));
     }
 
     /**
@@ -566,8 +566,8 @@ final class PhaseBTest extends AdmidioTestCase
         U\phaseBConfirm($context, $updateId, 'own');
         $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
 
-        $archive = U\backupFile($this->root, U\readState($this->root, $updateId)['keptArchive']);
-        $this->assertMatchesRegularExpression('#/adm_my_files/backups/files_\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_to_5\.1\.0_[a-f0-9]{6}\.zip$#', $archive);
+        $archive = U\updateBackupFile($this->root, U\readState($this->root, $updateId), U\readState($this->root, $updateId)['keptArchive']);
+        $this->assertMatchesRegularExpression('#/adm_my_files/backups/files_\d{4}-\d{2}-\d{2}_\d{6}_5\.0\.14_to_5\.1\.0_[a-f0-9]{32}\.zip$#', $archive);
         $zip = new ZipArchive();
         $zip->open($archive);
         $this->assertSame('OLD BOOTSTRAP', $zip->getFromName('system/bootstrap/bootstrap.php'), 'the file as it was before the update');
@@ -581,6 +581,45 @@ final class PhaseBTest extends AdmidioTestCase
         U\phaseBRollback($context, $updateId);
         $this->runToDecision($context, $updateId);
         $this->assertFileDoesNotExist($archive, 'after a rollback the files are back, the archive is not needed');
+    }
+
+    /**
+     * @testdox A directory of the backups that cannot be written stops the update at the review (D5)
+     */
+    public function testUnwritableBackupsDirectory(): void
+    {
+        $this->write(array('adm_my_files/backups' => 'A FILE, NOT A DIRECTORY'));
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+
+        $checks = array_column(U\readState($this->root, $updateId)['planChecks'], null, 'check');
+        $this->assertSame('error', $checks['D5']['status']);
+        $this->assertSame(array('adm_my_files/backups'), $checks['D5']['params'], 'shown relative to the installation');
+        $this->expectException(UpdaterException::class);
+        U\phaseBConfirm($context, $updateId, 'own');
+    }
+
+    /**
+     * @testdox The backups of an update go to the directory its plan recorded
+     */
+    public function testBackupsGoToTheRecordedDirectory(): void
+    {
+        $this->write(array('install/update-manifest.json' => json_encode(array('version' => '5.0.14', 'files' => array(
+            'index.php' => hash('sha256', 'OLD INDEX')
+        )))));
+        [$context, $updateId] = $this->prepared();
+        $this->runToDecision($context, $updateId);
+        $directory = $this->root . '/elsewhere/backups';
+        mkdir($directory, 0777, true);
+        U\updateState($this->root, $updateId, static fn(array $state): array => array_merge($state, array('backupsDirectory' => $directory)));
+
+        U\phaseBConfirm($context, $updateId, 'own');
+        $this->assertSame('reload', $this->runToDecision($context, $updateId)['status']);
+
+        $state = U\readState($this->root, $updateId);
+        $this->assertFileExists($directory . '/' . $state['keptArchive']);
+        $this->assertSame('elsewhere/backups/' . $state['keptArchive'], U\updateBackupDisplayPath($this->root, $state, $state['keptArchive']));
+        $this->assertSame(array(), glob($this->root . '/adm_my_files/backups/*.zip'));
     }
 
     /**
@@ -674,7 +713,7 @@ final class PhaseBTest extends AdmidioTestCase
         $this->assertSame('NEW INDEX', $this->read('index.php'));
 
         $archive = new ZipArchive();
-        $archive->open(U\backupFile($this->root, U\readState($this->root, $updateId)['keptArchive']));
+        $archive->open(U\updateBackupFile($this->root, U\readState($this->root, $updateId), U\readState($this->root, $updateId)['keptArchive']));
         $this->assertSame('OLD CONTACTS', $archive->getFromName('adm_program/modules/contacts/contacts.php'));
         $this->assertSame('OLD STANDARD THEME', $archive->getFromName('adm_themes/simple/theme.css'));
         $archive->close();

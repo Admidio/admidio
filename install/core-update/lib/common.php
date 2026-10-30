@@ -147,7 +147,7 @@ function loadConfig(string $rootPath): array
  * @param array<string,mixed> $values
  * @return array{rootPath: string, dbType: string, dbHost: string, dbPort: int|null, dbName: string, dbUser: string,
  *               dbPassword: string, tablePrefix: string, baseUrl: string, debug: bool, serverUrl: string,
- *               publicKeyFile: string, archiveUrl: string, timezone: string, dumpPassword: string}
+ *               publicKeyFile: string, archiveUrl: string, timezone: string}
  */
 function configFromValues(string $rootPath, array $values): array
 {
@@ -169,9 +169,7 @@ function configFromValues(string $rootPath, array $values): array
         'serverUrl' => $debug ? (string)($values['gCoreUpdateServerUrl'] ?? '') : '',
         'publicKeyFile' => $debug ? (string)($values['gCoreUpdatePublicKeyFile'] ?? '') : '',
         'archiveUrl' => $debug ? (string)($values['gCoreUpdateArchiveUrl'] ?? '') : '',
-        'timezone' => (string)($values['gTimezone'] ?? 'Europe/Berlin'),
-        // The password of the database backups; it overrides the one of the preferences.
-        'dumpPassword' => (string)($values['gCoreUpdateDumpPassword'] ?? '')
+        'timezone' => (string)($values['gTimezone'] ?? 'Europe/Berlin')
     );
 }
 

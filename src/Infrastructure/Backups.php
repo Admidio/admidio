@@ -11,9 +11,10 @@ require_once ADMIDIO_PATH . '/install/core-update/lib/common.php';
 require_once ADMIDIO_PATH . '/install/core-update/lib/backup.php';
 
 /**
- * The backups of the installation in adm_my_files/backups/: backups of the database, which an
- * administrator makes and every core update makes before it changes anything, and the archives of
- * the files an update has replaced or removed. A backup of the database is a ZIP with one
+ * The backups of the installation in the directory of the preference system_backup_path, by default
+ * adm_my_files/backups/: backups of the database, which an administrator makes and every core
+ * update makes before it changes anything, and the archives of the files an update has replaced or
+ * removed. A backup of the database is a ZIP with one
  * compressed file per table (PostgreSQL: the output of pg_dump), encrypted with AES-256 when a
  * password for the backups is set. Nothing is removed automatically.
  *
@@ -41,7 +42,8 @@ final class Backups
     public static function createDatabaseBackup(): string
     {
         try {
-            return Updater\createDatabaseBackup(self::context(true), self::library(), Updater\filesVersion(ADMIDIO_PATH))['file'];
+            return Updater\createDatabaseBackup(self::context(true), self::library(), self::getDirectory(),
+                Updater\filesVersion(ADMIDIO_PATH))['file'];
         } catch (UpdaterException $exception) {
             throw new Exception(Updater\isTextKey($exception->getMessage()) ? $exception->getMessage() : 'SYS_DATABASE_BACKUP_FAILED',
                 $exception->getParams());
@@ -54,7 +56,26 @@ final class Backups
      */
     public static function getList(): array
     {
-        return Updater\listBackups(ADMIDIO_PATH);
+        return Updater\listBackups(self::getDirectory());
+    }
+
+    /**
+     * The directory of the backups. The setting belongs to the whole installation, so it is read
+     * from the first organization, as the core updater reads it.
+     * @return string
+     * @throws Exception
+     */
+    public static function getDirectory(): string
+    {
+        global $gDb;
+
+        $sql = 'SELECT prf_value
+                  FROM ' . TBL_PREFERENCES . '
+                 WHERE prf_name = ?
+                   AND prf_org_id = (SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS . ')';
+        $configured = $gDb->queryPrepared($sql, array('system_backup_path'))->fetchColumn();
+
+        return Updater\backupsDirectory(ADMIDIO_PATH, (string)$configured);
     }
 
     /**
@@ -66,7 +87,7 @@ final class Backups
     public static function getFile(string $name): string
     {
         try {
-            $file = Updater\backupFile(ADMIDIO_PATH, $name);
+            $file = Updater\backupFile(self::getDirectory(), $name);
         } catch (UpdaterException) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
@@ -100,7 +121,7 @@ final class Backups
     {
         $values = array();
         foreach (array('gDbType', 'g_adm_srv', 'g_adm_port', 'g_adm_db', 'g_adm_usr', 'g_adm_pw', 'g_tbl_praefix', 'g_root_path',
-            'gCoreUpdateDumpPassword', 'gTimezone') as $name) {
+            'gTimezone') as $name) {
             if (isset($GLOBALS[$name])) {
                 $values[$name] = $GLOBALS[$name];
             }

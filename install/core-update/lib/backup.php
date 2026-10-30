@@ -1,9 +1,10 @@
 <?php
 /**
- * The backups of an installation in adm_my_files/backups/: the backups of the database, which an
- * update makes before it changes anything and an administrator makes in the preferences or with
- * "admidio database:backup", and the archives of the files an update has replaced or removed
- * (kept-files archives). They are never removed automatically.
+ * The backups of an installation: the backups of the database, which an update makes before it
+ * changes anything and an administrator makes in the preferences or with "admidio database:backup",
+ * and the archives of the files an update has replaced or removed (kept-files archives). They are
+ * kept in the directory of the preference system_backup_path, by default in adm_my_files/backups/,
+ * and never removed automatically.
  *
  * A backup of the database is a ZIP with one compressed file per table (mysqldump-php) or the
  * output of pg_dump, encrypted with AES-256 when a password for the backups is set. Admidio uses
@@ -22,30 +23,73 @@ use PDO;
 use Throwable;
 
 /** The name of a backup: what it holds, the time it was made, versions, and a random part. */
-const BACKUP_NAME_PATTERN = '/^(database|files)_\d{4}-\d{2}-\d{2}_\d{6}_[A-Za-z0-9._-]+_[a-f0-9]{6}\.zip$/';
+const BACKUP_NAME_PATTERN = '/^(database|files)_\d{4}-\d{2}-\d{2}_\d{6}_[A-Za-z0-9._-]+_[a-f0-9]{32}\.zip$/';
 
-function backupsDirectory(string $root): string
+/**
+ * The directory of the backups: the one of the preference system_backup_path, or else
+ * adm_my_files/backups. The preferences only accept an absolute path to a directory that exists.
+ */
+function backupsDirectory(string $root, string $configured): string
 {
-    return $root . '/adm_my_files/backups';
+    return $configured !== '' ? rtrim(str_replace('\\', '/', $configured), '/') : $root . '/adm_my_files/backups';
 }
 
 /**
- * The path of a backup in the directory of the backups.
+ * The directory of the backups, with the preference read from the database.
+ * @param array<string,mixed> $ctx
+ */
+function configuredBackupsDirectory(array $ctx): string
+{
+    return backupsDirectory($ctx['config']['rootPath'], installationPreference($ctx, 'system_backup_path'));
+}
+
+/**
+ * A preference of the first organization, which holds the settings of the whole installation; ""
+ * if it is not set or the database cannot be read.
+ * @param array<string,mixed> $ctx
+ */
+function installationPreference(array $ctx, string $name): string
+{
+    if (!($ctx['pdo'] ?? null) instanceof PDO) {
+        return '';
+    }
+
+    try {
+        $tablePrefix = $ctx['config']['tablePrefix'];
+        $row = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $tablePrefix . '_preferences WHERE prf_name = ?
+            AND prf_org_id = (SELECT MIN(org_id) FROM ' . $tablePrefix . '_organizations)', array($name));
+    } catch (Throwable) {
+        return '';
+    }
+
+    return (string)($row['prf_value'] ?? '');
+}
+
+/**
+ * The path of a backup in a directory of backups.
  * @throws UpdaterException The name is not the name of a backup.
  */
-function backupFile(string $root, string $name): string
+function backupFile(string $directory, string $name): string
 {
     if (preg_match(BACKUP_NAME_PATTERN, $name) !== 1) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_REQUEST_INVALID', '"' . $name . '" is not the name of a backup.');
     }
 
-    return backupsDirectory($root) . '/' . $name;
+    return $directory . '/' . $name;
+}
+
+/**
+ * A path as the administrator is shown it: relative to the installation if it is in there.
+ */
+function displayPath(string $root, string $path): string
+{
+    return str_starts_with($path, $root . '/') ? substr($path, strlen($root) + 1) : $path;
 }
 
 /** A new name for a backup of the database or of the kept files, with the given versions. */
 function backupName(string $kind, string $versions): string
 {
-    return $kind . '_' . date('Y-m-d_His') . '_' . preg_replace('/[^A-Za-z0-9._-]+/', '-', $versions) . '_' . bin2hex(random_bytes(3)) . '.zip';
+    return $kind . '_' . date('Y-m-d_His') . '_' . preg_replace('/[^A-Za-z0-9._-]+/', '-', $versions) . '_' . bin2hex(random_bytes(16)) . '.zip';
 }
 
 /**
@@ -70,10 +114,9 @@ function databaseBackupMethod(array $config, string $library): string
 
 /**
  * The password that protects a backup of the database once it leaves the server: the one given
- * to the command line (--dump-password-env), else $gCoreUpdateDumpPassword of config.php, else the
- * preference system_update_dump_password of the first organization; "" for none. It is read anew
- * whenever it is needed, also to restore the backup, because it is never written to the state or
- * the log.
+ * to the command line (--dump-password-env), else the preference system_update_dump_password;
+ * "" for none. It is read anew whenever it is needed, also to restore the backup, because it is
+ * never written to the state or the log.
  * @param array<string,mixed> $ctx
  */
 function dumpPassword(array $ctx): string
@@ -81,22 +124,8 @@ function dumpPassword(array $ctx): string
     if ((string)($ctx['dumpPassword'] ?? '') !== '') {
         return (string)$ctx['dumpPassword'];
     }
-    if ($ctx['config']['dumpPassword'] !== '') {
-        return $ctx['config']['dumpPassword'];
-    }
-    if (!($ctx['pdo'] ?? null) instanceof PDO) {
-        return '';
-    }
 
-    try {
-        $tablePrefix = $ctx['config']['tablePrefix'];
-        $row = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $tablePrefix . '_preferences WHERE prf_name = ?
-            AND prf_org_id = (SELECT MIN(org_id) FROM ' . $tablePrefix . '_organizations)', array('system_update_dump_password'));
-    } catch (Throwable) {
-        return '';
-    }
-
-    return (string)($row['prf_value'] ?? '');
+    return installationPreference($ctx, 'system_update_dump_password');
 }
 
 /** Whether the ZIP extension of this PHP can encrypt with AES-256. */
@@ -165,20 +194,19 @@ function backUpTables(array $ctx, string $method, string $library, string $direc
 }
 
 /**
- * Pack the table files of $directory into a new backup in the directory of the backups, encrypted
- * with AES-256 when a password for the backups is set and this PHP can, and remove $directory.
+ * Pack the table files of $directory into a new backup in $backupsDirectory, encrypted with
+ * AES-256 when a password for the backups is set and this PHP can, and remove $directory.
  * @param array<string,mixed> $ctx
  * @return array{file: string, encrypted: bool} The name of the backup.
  */
-function packDatabaseBackup(array $ctx, string $directory, string $version): array
+function packDatabaseBackup(array $ctx, string $directory, string $backupsDirectory, string $version): array
 {
-    $root = $ctx['config']['rootPath'];
-    ensureDirectory(backupsDirectory($root));
+    ensureDirectory($backupsDirectory);
     $name = backupName('database', $version);
     $password = canEncryptZip() ? dumpPassword($ctx) : '';
 
     $zip = new \ZipArchive();
-    if ($zip->open(backupFile($root, $name), \ZipArchive::CREATE) !== true) {
+    if ($zip->open(backupFile($backupsDirectory, $name), \ZipArchive::CREATE) !== true) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_FILES_NOT_WRITABLE', $name . ' cannot be created.');
     }
     // The table files are compressed already.
@@ -198,39 +226,40 @@ function packDatabaseBackup(array $ctx, string $directory, string $version): arr
 }
 
 /**
- * Back up the database in one go, for the administrator who asks for a backup.
+ * Back up the database in one go into $backupsDirectory, for the administrator who asks for a
+ * backup.
  * @param array<string,mixed> $ctx
  * @return array{file: string, encrypted: bool} The name of the backup.
  * @throws UpdaterException The database cannot be backed up here, or the backup failed.
  */
-function createDatabaseBackup(array $ctx, string $library, string $version): array
+function createDatabaseBackup(array $ctx, string $library, string $backupsDirectory, string $version): array
 {
     $method = databaseBackupMethod($ctx['config'], $library);
     if ($method === '') {
         throw new UpdaterException('SYS_CORE_UPDATE_BACKUP_NOT_POSSIBLE');
     }
 
-    $directory = backupsDirectory($ctx['config']['rootPath']) . '/.tables-' . bin2hex(random_bytes(6));
+    $directory = $backupsDirectory . '/.tables-' . bin2hex(random_bytes(6));
     try {
         $progress = array();
         while (!backUpTables($ctx, $method, $library, $directory, $progress, microtime(true) + 60)) {
             // a large database takes several rounds
         }
 
-        return packDatabaseBackup($ctx, $directory, $version);
+        return packDatabaseBackup($ctx, $directory, $backupsDirectory, $version);
     } finally {
         deleteDirectory($directory);
     }
 }
 
 /**
- * The backups in the directory of the backups, the newest first.
+ * The backups in a directory of backups, the newest first.
  * @return array<int,array{name: string, kind: string, size: int, time: int}>
  */
-function listBackups(string $root): array
+function listBackups(string $directory): array
 {
     $backups = array();
-    foreach (glob(backupsDirectory($root) . '/*.zip') ?: array() as $file) {
+    foreach (glob($directory . '/*.zip') ?: array() as $file) {
         $name = basename($file);
         if (preg_match(BACKUP_NAME_PATTERN, $name, $matches) === 1) {
             $backups[] = array('name' => $name, 'kind' => $matches[1], 'size' => (int)filesize($file), 'time' => (int)filemtime($file));

@@ -29,6 +29,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_update_check']}
+    {include 'sys-template-parts/form.input.tpl' data=$elements['system_backup_path']}
     {include 'sys-template-parts/form.input.tpl' data=$elements['system_update_dump_password']}
     {if isset($elements['system_update_dump_password_remove'])}
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['system_update_dump_password_remove']}
