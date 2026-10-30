@@ -357,9 +357,20 @@ try {
             $page->show();
         } // if versions are equal > no update
         elseif (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '==') && $maxUpdateStep === $currentUpdateStep) {
-            // There is nothing to migrate, so this request finishes the core update.
+            // Only the updater finishes a core update, under the lock of its migration: the version
+            // is recorded before the last steps of the migration, which may still be running.
             if ($coreUpdate !== null) {
-                $coreUpdate->complete();
+                $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
+                $page->setUpdateModus();
+                $page->showMessage(
+                    'warning',
+                    $gL10n->get('SYS_NOTE'),
+                    $gL10n->get('SYS_CORE_UPDATE_FINISH_IN_UPDATER'),
+                    $gL10n->get('SYS_CORE_UPDATE_OPEN_UPDATER'),
+                    'bi-arrow-repeat',
+                    ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php'
+                );
+                // => EXIT
             }
 
             $page = new InstallationPresenter('adm_update_message', $gL10n->get('INS_UPDATE'));
@@ -441,10 +452,10 @@ try {
         $coreUpdate->markDatabaseRunning();
         $databaseUpdateStarted = true;
 
-        if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<') || $maxUpdateStep > $currentUpdateStep) {
-            $update = new Update();
-            $update->doAdmidioUpdate($installedDbVersion);
-        }
+        // Also with the version of the files already recorded: a migration that failed or was cut
+        // off in its last steps has to run them again. The update steps that are done are skipped.
+        $update = new Update();
+        $update->doAdmidioUpdate($installedDbVersion);
         $databaseUpdateStarted = false;
 
         // The notes about plugins go to the updater, which shows them with the result. The update

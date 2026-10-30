@@ -526,6 +526,7 @@
   <string name="SYS_CORE_UPDATE_FILES_NOT_WRITABLE">Admidio kann seine eigenen Dateien oder adm_my_files nicht schreiben. Prüfe die Dateiberechtigungen auf dem Server.</string>
   <string name="SYS_CORE_UPDATE_FILES_ONLY">Die Dateien der Version #VAR1# sind installiert. Diese Version enthält das automatische Update nicht, daher wurde ihre Datenbank noch nicht aktualisiert: Aktualisiere sie jetzt mit install/update.php.</string>
   <string name="SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK">Die Dateien wurden auf die vorherige Version zurückgesetzt. Die Datenbank wurde nicht verändert.</string>
+  <string name="SYS_CORE_UPDATE_FINISH_IN_UPDATER">Die Datenbank ist aktuell, aber das automatische Update von Admidio ist noch nicht abgeschlossen. Öffne den Updater: Er schließt das Update ab und beendet den Wartungsmodus.</string>
   <string name="SYS_CORE_UPDATE_IN_PROGRESS">Ein automatisches Update von Admidio läuft und installiert noch Dateien. Die Datenbank kann erst danach aktualisiert werden. Bitte warte, bis das Update abgeschlossen ist.</string>
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">Die Update-Informationen des Admidio-Servers konnten nicht gelesen werden.</string>
   <string name="SYS_CORE_UPDATE_INSTALL">Update installieren</string>
@@ -550,6 +551,7 @@
   <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatische Updates sind für diese Installation nicht verfügbar. Lade die neue Version von der Admidio-Webseite herunter und installiere sie manuell.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">Das Update wurde nicht gefunden. Starte es erneut über die Admidio-Einstellungen.</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Admidio öffnen</string>
+  <string name="SYS_CORE_UPDATE_OPEN_UPDATER">Updater öffnen</string>
   <string name="SYS_CORE_UPDATE_OWN_THEMES">Die eigenen Themes im Ordner adm_themes (#VAR1#) können mit dieser Version von Admidio nicht verwendet werden. Sie wurden nicht verändert und können gelöscht werden, sobald sie nicht mehr gebraucht werden.</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_INVALID">Das Update-Paket ist ungültig oder beschädigt. Das Update wurde nicht installiert.</string>
   <string name="SYS_CORE_UPDATE_PASSWORD">Passwort</string>

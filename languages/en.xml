@@ -531,6 +531,7 @@
   <string name="SYS_CORE_UPDATE_FILES_NOT_WRITABLE">Admidio cannot write to its own files or to adm_my_files. Check the file permissions on the server.</string>
   <string name="SYS_CORE_UPDATE_FILES_ONLY">The files of version #VAR1# are installed. This version does not contain the automatic update, so its database has not been updated yet: update it now with install/update.php.</string>
   <string name="SYS_CORE_UPDATE_FILESYSTEM_ROLLED_BACK">The files have been restored to the previous version. The database was not changed.</string>
+  <string name="SYS_CORE_UPDATE_FINISH_IN_UPDATER">The database is up to date, but the automatic update of Admidio has not finished yet. Open the updater: it finishes the update and switches maintenance mode off.</string>
   <string name="SYS_CORE_UPDATE_IN_PROGRESS">An automatic update of Admidio is in progress and is still installing files. The database can only be updated afterwards. Please wait until the update has finished.</string>
   <string name="SYS_CORE_UPDATE_INFORMATION_INVALID">The update information of the Admidio server could not be read.</string>
   <string name="SYS_CORE_UPDATE_INSTALL">Install update</string>
@@ -555,6 +556,7 @@
   <string name="SYS_CORE_UPDATE_NOT_AVAILABLE">Automatic updates are not available for this installation. Download the new version from the Admidio website and install it manually.</string>
   <string name="SYS_CORE_UPDATE_NOT_FOUND">The update could not be found. Start it again from the Admidio settings.</string>
   <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Open Admidio</string>
+  <string name="SYS_CORE_UPDATE_OPEN_UPDATER">Open the updater</string>
   <string name="SYS_CORE_UPDATE_OWN_THEMES">The themes of your own in the folder adm_themes (#VAR1#) cannot be used by this version of Admidio. They were not changed and can be deleted once they are no longer needed.</string>
   <string name="SYS_CORE_UPDATE_PACKAGE_INVALID">The update package is invalid or damaged. The update was not installed.</string>
   <string name="SYS_CORE_UPDATE_PASSWORD">Password</string>

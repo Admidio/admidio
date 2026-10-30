@@ -293,10 +293,9 @@ final class CoreUpdateHandover
 
         $this->markDatabaseRunning();
         try {
-            if (version_compare($installedDbVersion, ADMIDIO_VERSION_TEXT, '<')
-                || $component->getMaxUpdateStep() > (int)$component->getValue('com_update_step')) {
-                (new Update())->doAdmidioUpdate($installedDbVersion);
-            }
+            // Also with the version of the files already recorded: a migration that failed or was
+            // cut off in its last steps has to run them again. The steps that are done are skipped.
+            (new Update())->doAdmidioUpdate($installedDbVersion);
         } catch (Throwable $exception) {
             $gDb->rollback();
             $this->markDatabaseFailed($exception->getMessage());
