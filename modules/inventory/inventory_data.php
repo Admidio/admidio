@@ -3,10 +3,8 @@
  ***********************************************************************************************
  * Server side script for Datatables to return the requested inventory list
  *
- * This script is modeled after modules/messages/messages_data.php and returns
- * JSON data for the inventory DataTable. It relies on the InventoryPresenter to
- * prepare the full table data and then performs ordering, searching and paging
- * on that dataset.
+ * Returns JSON data for the inventory DataTable. SQL applies module filters and
+ * ordering; text searches match formatted cells before pagination.
  ***********************************************************************************************
  */
 
@@ -14,8 +12,6 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\StringUtils;
-use Admidio\Inventory\Entity\ItemField;
-use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\UI\Presenter\InventoryPresenter;
 use Admidio\Users\Entity\User;
 
@@ -27,7 +23,7 @@ try {
     $getDraw = admFuncVariableIsValid($_GET, 'draw', 'int', array('requireValue' => true));
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int', array('requireValue' => true));
     $getLength = admFuncVariableIsValid($_GET, 'length', 'int', array('requireValue' => true));
-    $getSearch = admFuncVariableIsValid($_GET['search'], 'value', 'string');
+    $getSearch = trim(admFuncVariableIsValid($_GET['search'], 'value', 'string'));
 
     // additional filters from navbar
     $filterString = admFuncVariableIsValid($_GET, 'items_filter_string', 'string', array('defaultValue' => ''));
@@ -67,13 +63,6 @@ try {
     // actions column
     $headerColumns[$colIndex++] = 'actions';
 
-    // prepare DB-specific aggregator (GROUP_CONCAT or string_agg)
-    if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-        $agg = "string_agg(COALESCE(ind_value, ' '), ' ')";
-    } else {
-        $agg = "GROUP_CONCAT(COALESCE(ind_value, ' ') SEPARATOR ' ')";
-    }
-
     // determine status filter
     // Behavior: items_filter_status == 0 => show all; otherwise show only items with ini_status == items_filter_status
     $sqlWhereStatus = '';
@@ -82,8 +71,9 @@ try {
     }
 
     // basic FROM and WHERE parts
-    $baseFromTables = ' FROM ' . TBL_INVENTORY_ITEMS . ' i ' . 'INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' d ON d.ind_ini_id = i.ini_id ';
-    $baseWhere = ' WHERE (i.ini_org_id IS NULL OR i.ini_org_id = ?) ' . $sqlWhereStatus;
+    $baseFromTables = ' FROM ' . TBL_INVENTORY_ITEMS . ' i ';
+    $baseWhere = ' WHERE (i.ini_org_id IS NULL OR i.ini_org_id = ?) ' . $sqlWhereStatus
+        . ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' d WHERE d.ind_ini_id = i.ini_id)';
     $baseParams = array($gCurrentOrgId);
     if ($filterStatus !== 0) {
         // append status parameter corresponding to the placeholder in $sqlWhereStatus
@@ -96,11 +86,8 @@ try {
         $baseParams[] = $filterCategory;
     }
     if ($filterKeeper !== 0) {
-        $sqlKeeperField = 'SELECT inf_id FROM ' . TBL_INVENTORY_FIELDS . " WHERE inf_name_intern = 'KEEPER' AND (inf_org_id = ? OR inf_org_id IS NULL) LIMIT 1";
-        $stmtK = $gDb->queryPrepared($sqlKeeperField, array($gCurrentOrgId));
-        $rowK = $stmtK->fetch();
-        if ($rowK) {
-            $keeperFieldId = $rowK['inf_id'];
+        $keeperFieldId = (int) $itemsData->getProperty('KEEPER', 'inf_id');
+        if ($keeperFieldId > 0) {
             $baseWhere .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' kd WHERE kd.ind_ini_id = i.ini_id AND kd.ind_inf_id = ' . $keeperFieldId . ' AND kd.ind_value = ?)';
             $baseParams[] = (string)$filterKeeper;
         }
@@ -111,48 +98,33 @@ try {
     }
 
     // count total records (without global search)
-    $sqlCount = 'SELECT COUNT(DISTINCT i.ini_id) as count ' . $baseFromTables . $baseWhere . ';';
+    $sqlCount = 'SELECT COUNT(*) as count ' . $baseFromTables . $baseWhere . ';';
     $countStmt = $gDb->queryPrepared($sqlCount, $baseParams);
     $jsonArray['recordsTotal'] = (int)$countStmt->fetchColumn();
 
-    // build main select with aggregated searchable text
-    // Simple LEFT JOIN to the borrow table. If there is at most one borrow row per item
+    // The borrow table has a unique index on inb_ini_id, so the join keeps one row per item.
     $borrowLatestJoin = ' LEFT JOIN ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' lb ON lb.inb_ini_id = i.ini_id';
 
-    $sqlMain = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, ' . $agg . ' AS search_text, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ' . $baseFromTables . $borrowLatestJoin . $baseWhere . ' GROUP BY i.ini_id';
-
-    $queryParams = $baseParams;
-
-    // apply global search (on aggregated item values)
-    if ($getSearch !== '') {
-        $searchWords = preg_split('/\s+/', trim($getSearch));
-        $searchConditions = '';
-        foreach ($searchWords as $word) {
-            if ($word === '') {
-                continue;
-            }
-            if ($searchConditions !== '') $searchConditions .= ' AND ';
-            if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-                $searchConditions .= ' ' . $agg . ' ILIKE ? ';
-            } else {
-                $searchConditions .= ' ' . $agg . ' LIKE ? ';
-            }
-            $queryParams[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
-        }
-        if ($searchConditions !== '') {
-            $sqlMain = 'SELECT * FROM (' . $sqlMain . ') AS sub WHERE ' . $searchConditions;
-        }
-    }
+    $sqlSelect = 'SELECT i.ini_id, i.ini_uuid, i.ini_cat_id, i.ini_status, lb.inb_borrow_date AS inb_borrow_date, lb.inb_return_date AS inb_return_date, lb.inb_last_receiver AS inb_last_receiver ';
 
     // ordering - build an array of SQL expressions mapped to DataTables column indexes
     $orderCondition = '';
     $orderColumns = array();
-    // If we wrapped the select in a derived table for searching, the outer alias is 'sub'.
-    $outerPrefix = ($getSearch !== '') ? 'sub.' : '';
+    $numericOrderColumns = array();
+    $sortJoins = array();
+    $requestedOrderColumns = array();
+    foreach (isset($_GET['order']) && is_array($_GET['order']) ? $_GET['order'] : [] as $order) {
+        if (isset($order['column']) && is_numeric($order['column'])) {
+            $requestedOrderColumns[(int) $order['column']] = true;
+        }
+    }
     // When using the joined latest-borrow table, its columns are projected as inb_borrow_date etc.
     foreach ($headerColumns as $idx => $colName) {
         // default: no ordering
         $orderColumns[$idx] = '';
+        if (!isset($requestedOrderColumns[$idx])) {
+            continue;
+        }
         // use case-insensitive matching for special column names
         $colUpper = strtoupper((string)$colName);
         switch ($colUpper) {
@@ -162,7 +134,7 @@ try {
                 // not sortable
                 break;
             case 'CATEGORY':
-                $orderColumns[$idx] = '(SELECT cat_name FROM ' . TBL_CATEGORIES . ' WHERE cat_id = ini_cat_id)';
+                $orderColumns[$idx] = '(SELECT cat_name FROM ' . TBL_CATEGORIES . ' WHERE cat_id = i.ini_cat_id)';
                 break;
             case 'STATUS':
                 $orderColumns[$idx] = 'ini_status';
@@ -194,7 +166,6 @@ try {
                 }
 
                 if ($infId > 0) {
-                    // base subselect returning the raw stored value
                     // If this is a borrow-related field (LAST_RECEIVER, BORROW_DATE, RETURN_DATE)
                     // the values are stored in the borrow table, not in inventory_item_data.
                     $colUpperName = strtoupper((string)$colName);
@@ -202,31 +173,35 @@ try {
                         // Use the joined latest-borrow table columns (projected as inb_borrow_date etc.)
                         switch ($colUpperName) {
                             case 'BORROW_DATE':
-                                $subSel = $outerPrefix . 'inb_borrow_date';
+                                $subSel = 'lb.inb_borrow_date';
                                 break;
                             case 'RETURN_DATE':
-                                $subSel = $outerPrefix . 'inb_return_date';
+                                $subSel = 'lb.inb_return_date';
                                 break;
                             case 'LAST_RECEIVER':
-                                $subSel = $outerPrefix . 'inb_last_receiver';
-                                break;
-                            default:
-                                // fallback to item_data
-                                $iniIdRef = ($getSearch !== '') ? $outerPrefix . 'ini_id' : 'ini_id';
-                                $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = ' . $iniIdRef . ' AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
+                                $subSel = 'lb.inb_last_receiver';
                                 break;
                         }
+                    } elseif (in_array($infType, array('NUMBER', 'DECIMAL'), true)) {
+                        // The unique (ind_inf_id, ind_ini_id) index keeps one row per item.
+                        // Numeric ordering uses the value more than once; read it with one join.
+                        $sortAlias = 'sort_data_' . $idx;
+                        $sortJoins[] = ' LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ' . $sortAlias
+                            . ' ON ' . $sortAlias . '.ind_ini_id = i.ini_id AND ' . $sortAlias . '.ind_inf_id = ' . $infId;
+                        $subSel = $sortAlias . '.ind_value';
                     } else {
-                        $iniIdRef = ($getSearch !== '') ? $outerPrefix . 'ini_id' : 'ini_id';
-                        $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = ' . $iniIdRef . ' AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
+                        $subSel = '(SELECT od.ind_value FROM ' . TBL_INVENTORY_ITEM_DATA . ' od WHERE od.ind_ini_id = i.ini_id AND od.ind_inf_id = ' . $infId . ' LIMIT 1)';
                     }
                     // type-aware ordering: numbers should be cast to numeric types so DB sorts them correctly
                     if (in_array($infType, array('NUMBER', 'DECIMAL'), true)) {
-                        if (DB_ENGINE === Admidio\Infrastructure\Database::PDO_ENGINE_PGSQL) {
-                            $orderColumns[$idx] = "(CAST(" . $subSel . " AS NUMERIC))";
-                        } else {
-                            $orderColumns[$idx] = "(CAST(" . $subSel . " AS DECIMAL(20,4)))";
-                        }
+                        // Changing a text field to a numeric field can leave non-numeric values.
+                        // Only cast numbers, and avoid rounding to four decimal places on MySQL/MariaDB.
+                        $numericOperator = DB_ENGINE === Database::PDO_ENGINE_PGSQL ? '~' : 'REGEXP';
+                        $numericType = DB_ENGINE === Database::PDO_ENGINE_PGSQL ? 'NUMERIC' : 'DECIMAL(65,30)';
+                        $numericPattern = "'^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?$'";
+                        $orderColumns[$idx] = 'CASE WHEN TRIM(' . $subSel . ') ' . $numericOperator . ' ' . $numericPattern
+                            . ' THEN CAST(' . $subSel . ' AS ' . $numericType . ') ELSE NULL END';
+                        $numericOrderColumns[$idx] = true;
                     } else {
                         // default:ORDER BY raw string value
                         $orderColumns[$idx] = $subSel;
@@ -243,10 +218,19 @@ try {
                 $col = (int)$order['column'];
                 $dir = (isset($order['dir']) && strtolower($order['dir']) === 'asc') ? 'ASC' : 'DESC';
                 if (array_key_exists($col, $orderColumns) && $orderColumns[$col] !== '') {
+                    // MariaDB/MySQL and PostgreSQL have different default ordering of NULLs.
+                    $columnOrder = $orderColumns[$col] . ' ' . $dir;
+                    if (isset($numericOrderColumns[$col])) {
+                        // PostgreSQL can place NULLs last without evaluating the numeric
+                        // conversion a second time for a separate IS NULL sort key.
+                        $columnOrder = DB_ENGINE === Database::PDO_ENGINE_PGSQL
+                            ? $columnOrder . ' NULLS LAST'
+                            : '(' . $orderColumns[$col] . ' IS NULL) ASC, ' . $columnOrder;
+                    }
                     if ($orderCondition === '') {
-                        $orderCondition = ' ORDER BY ' . $orderColumns[$col] . ' ' . $dir;
+                        $orderCondition = ' ORDER BY ' . $columnOrder;
                     } else {
-                        $orderCondition .= ', ' . $orderColumns[$col] . ' ' . $dir;
+                        $orderCondition .= ', ' . $columnOrder;
                     }
                 }
             }
@@ -254,27 +238,35 @@ try {
     }
 
     if ($orderCondition === '') {
-        $orderCondition = ' ORDER BY ini_id ASC ';
+        $orderCondition = ' ORDER BY i.ini_id ASC ';
+    } else {
+        // Keep page boundaries stable when the requested columns contain equal values.
+        $orderCondition .= ', i.ini_id ASC';
     }
 
     // limit
     $limitCondition = '';
-    if ($getLength > 0) {
+    if ($getLength > 0 && $getSearch === '') {
         $limitCondition = ' LIMIT ' . (int)$getLength . ' OFFSET ' . (int)$getStart;
     }
 
     // final SQL
+    // Display labels and anonymized names cannot be searched as raw stored IDs.
+    // With a search, filter the formatted rows before applying pagination below.
+    $sqlMain = $sqlSelect . $baseFromTables . $borrowLatestJoin . implode('', $sortJoins) . $baseWhere;
     $sql = $sqlMain . $orderCondition . $limitCondition;
 
-    $statement = $gDb->queryPrepared($sql, $queryParams);
+    $statement = $gDb->queryPrepared($sql, $baseParams);
 
     // Create a user object for later use
     $user = new User($gDb, $gProfileFields);
+    $userNames = array();
 
     $itemRows = $statement->fetchAll();
     $itemsData->preloadItemData(array_column($itemRows, 'ini_uuid'));
 
     $data = array();
+    $matchedRows = 0;
     foreach ($itemRows as $row) {
         // Activates the preloaded data without additional queries for this row.
         $itemsData->readItemData($row['ini_uuid']);
@@ -296,8 +288,7 @@ try {
                 continue;
             }
 
-            $content = $itemsData->getValue($infNameIntern, 'database');
-            $infType = $itemsData->getProperty($infNameIntern, 'inf_type');
+            $content = InventoryPresenter::formatItemFieldValue($itemsData, $itemField);
 
             // Process ITEMNAME column
             if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
@@ -308,95 +299,22 @@ try {
                 }
             }
 
-            // Process KEEPER and LAST_RECEIVER column
+            // Resolve keeper and borrower names once per user in this request.
             if (($infNameIntern === 'KEEPER' || $infNameIntern === 'LAST_RECEIVER') && $content !== '' && is_numeric($content)) {
-                $found = $user->readDataById($content);
-                if (!$found) {
-                    $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
-                    $content = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
-                } else {
-                    $content = '<a href="' . SecurityUtils::encodeUrl(
-                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
-                            ['user_uuid' => $user->getValue('usr_uuid')]
-                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
-                }
-            }
-
-            // Format content based on the field type
-            if ($infType === 'CHECKBOX') {
-                $content = ($content != 1) ? 0 : 1;
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
-                $content = $itemsData->getValue($infNameIntern, 'database');
-                if (isset($content) && is_numeric($content)) {
-                    $selectedOption = $content;
-                    $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-                    $selectOptions = $option->getAllOptions();
-
-                    // Calculate days remaining based on selected date field value and selected interval
-                    $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
-                    $connectedField = new ItemField($gDb);
-                    $connectedField->readDataByUuid($connectedFieldUuid);
-                    $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
-                    $filteredSelectOptions = array();
-
-                    foreach ($selectOptions as $option) {
-                        $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
-                    }
-
-                    if (!empty($itemsData->getValue($connectedFieldNameIntern, 'database'))) {
-                        try {
-                            $compDate1 = date_create($itemsData->getValue($connectedFieldNameIntern, 'database'));
-                            $compDate2 = date_create();
-
-                            //Calculate future test date
-                            $dateAdditionSplit = array();
-                            preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
-
-                            if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
-                                switch ($dateAdditionSplit[2]) {
-                                    case 'w':
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
-                                        break;
-                                    case 'm':
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
-                                        break;
-                                    case 'y':
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
-                                        break;
-                                    case 'd':
-                                    default:
-                                        date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
-                                        break;
-                                }
-                            }
-
-                            //Compare last test date with future date and output days
-                            $dateDiff = date_diff($compDate2, $compDate1);
-                            $daysRemaining = $dateDiff->format('%R%a');
-
-                            // check if days remaining is only one day
-                            if ($daysRemaining === '1' || $daysRemaining === '-1') {
-                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
-                            } elseif ($daysRemaining === '-0') {
-                                $content = '0 ' . $gL10n->get('SYS_DAYS');
-                            } else {
-                                $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
-                            }
-                        } catch (\Exception $e) {
-                            // in case of error set content to empty
-                            $content = '';
-                        }
+                $userId = (int)$content;
+                if (!array_key_exists($userId, $userNames)) {
+                    $found = $user->readDataById($userId);
+                    if (!$found) {
+                        $orgName = '"' . $gCurrentOrganization->getValue('org_longname') . '"';
+                        $userNames[$userId] = '<i>' . SecurityUtils::encodeHTML(StringUtils::strStripTags($gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', [$orgName]))) . '</i>';
                     } else {
-                        $content = '';
+                        $userNames[$userId] = '<a href="' . SecurityUtils::encodeUrl(
+                            ADMIDIO_URL . FOLDER_MODULES . '/profile/profile.php',
+                            ['user_uuid' => $user->getValue('usr_uuid')],
+                        ) . '">' . $user->getValue('LAST_NAME') . ', ' . $user->getValue('FIRST_NAME') . '</a>';
                     }
                 }
-            } elseif ($infType === 'RADIO_BUTTON') {
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
-            } elseif ($infType === 'CATEGORY') {
-                $content = $itemsData->getHtmlValue($infNameIntern, $content);
+                $content = $userNames[$userId];
             }
 
             // If the item is retired then show the field value as struck-through
@@ -404,6 +322,16 @@ try {
                 $content = '<s>' . $content . '</s>';
             }
             $rowValues[] = $content;
+        }
+
+        if ($getSearch !== '') {
+            if (!InventoryPresenter::matchesSearch($rowValues, $getSearch)) {
+                continue;
+            }
+            ++$matchedRows;
+            if ($getLength > 0 && ($matchedRows <= $getStart || $matchedRows > $getStart + $getLength)) {
+                continue;
+            }
         }
 
         // actions
@@ -470,11 +398,8 @@ try {
     }
 
     $jsonArray['recordsFiltered'] = $jsonArray['recordsTotal'];
-    // if search was applied, count filtered rows
     if ($getSearch !== '') {
-        $countSql = 'SELECT COUNT(*) FROM (' . $sqlMain . ') AS sub2';
-        $countStmt = $gDb->queryPrepared($countSql, $queryParams);
-        $jsonArray['recordsFiltered'] = (int)$countStmt->fetchColumn();
+        $jsonArray['recordsFiltered'] = $matchedRows;
     }
 
     $jsonArray['data'] = $data;

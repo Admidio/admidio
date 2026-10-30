@@ -4,7 +4,6 @@ namespace Admidio\UI\Presenter;
 
 // Admidio namespaces
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -91,7 +90,6 @@ class InventoryPresenter extends PagePresenter
         // check if the user has selected to show retired items
         $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2);
         $this->itemsData->showRetiredItems($this->showRetiredItems);
-        $this->itemsData->readItems();
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
 
@@ -544,45 +542,24 @@ class InventoryPresenter extends PagePresenter
         );
 
         // read all keeper
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT DISTINCT ind_value,
-            CASE
-                WHEN ind_value = \'-1\' THEN \'n/a\'
-                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-            END as keeper_name
-            FROM ' . TBL_INVENTORY_ITEM_DATA . '
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                ON inf_id = ind_inf_id
-            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = ind_value
-                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = ind_value
-                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                OR inf_org_id IS NULL)
-            AND inf_name_intern = \'KEEPER\'
-            ORDER BY keeper_name;';
-        } else {
-            $sql = 'SELECT DISTINCT ind_value,
-            CASE
-                WHEN ind_value = \'-1\' THEN \'n/a\'
-                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-            END as keeper_name
-            FROM ' . TBL_INVENTORY_ITEM_DATA . '
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                ON inf_id = ind_inf_id
-            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
-                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
-                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                OR inf_org_id IS NULL)
-            AND inf_name_intern = \'KEEPER\'
-            ORDER BY keeper_name;';
-        }
+        $sql = 'SELECT DISTINCT ind_value,
+        CASE
+            WHEN ind_value = \'-1\' THEN \'n/a\'
+            ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+        END as keeper_name
+        FROM ' . TBL_INVENTORY_ITEM_DATA . '
+        INNER JOIN ' . TBL_INVENTORY_FIELDS . '
+            ON inf_id = ind_inf_id
+        LEFT JOIN ' . TBL_USER_DATA . ' as last_name
+            ON CONCAT(last_name.usd_usr_id, \'\') = ind_value
+            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+        LEFT JOIN ' . TBL_USER_DATA . ' as first_name
+            ON CONCAT(first_name.usd_usr_id, \'\') = ind_value
+            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+        WHERE (inf_org_id  = ' . $gCurrentOrgId . '
+            OR inf_org_id IS NULL)
+        AND inf_name_intern = \'KEEPER\'
+        ORDER BY keeper_name;';
 
         // filter keeper
         $form->addSelectBoxFromSql(
@@ -590,58 +567,34 @@ class InventoryPresenter extends PagePresenter
             $gL10n->get('SYS_INVENTORY_KEEPER'),
             $gDb,
             $sql,
-            array(
+            [
                 'defaultValue' => $this->getFilterKeeper,
-                'showContextDependentFirstEntry' => true
-            )
+                'showContextDependentFirstEntry' => true,
+            ],
         );
 
         // get all last receivers
-        if (DB_ENGINE === Database::PDO_ENGINE_PGSQL) {
-            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-            CASE
-                WHEN borrowData.inb_last_receiver = \'-1\'
-                    THEN \'n/a\'
-                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                ELSE
-                    borrowData.inb_last_receiver
-            END AS receiver_name
-            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                ON fields.inf_name_intern = \'LAST_RECEIVER\'
-            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
-            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
-            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-            ORDER BY receiver_name;';
-        } else {
-            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-            CASE
-                WHEN borrowData.inb_last_receiver = \'-1\'
-                    THEN \'n/a\'
-                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                ELSE
-                    borrowData.inb_last_receiver
-            END AS receiver_name
-            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                ON fields.inf_name_intern = \'LAST_RECEIVER\'
-            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-            ORDER BY receiver_name;';
-        }
+        $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
+        CASE
+            WHEN borrowData.inb_last_receiver = \'-1\'
+                THEN \'n/a\'
+            WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
+                THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
+            ELSE
+                borrowData.inb_last_receiver
+        END AS receiver_name
+        FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
+        INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
+            ON fields.inf_name_intern = \'LAST_RECEIVER\'
+        AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
+        LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
+            ON CONCAT(last_name.usd_usr_id, \'\') = borrowData.inb_last_receiver
+        AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
+        LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
+            ON CONCAT(first_name.usd_usr_id, \'\') = borrowData.inb_last_receiver
+        AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
+        WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
+        ORDER BY receiver_name;';
 
         // filter last receiver
         $form->addSelectBoxFromSql(
@@ -649,10 +602,10 @@ class InventoryPresenter extends PagePresenter
             $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
             $gDb,
             $sql,
-            array(
+            [
                 'defaultValue' => $this->getFilterLastReceiver,
-                'showContextDependentFirstEntry' => true
-            )
+                'showContextDependentFirstEntry' => true,
+            ],
         );
 
         // get the status options for the filter
@@ -896,6 +849,119 @@ class InventoryPresenter extends PagePresenter
     }
 
     /**
+     * Format one inventory field for a list or an export.
+     *
+     * Both the server-side DataTable and the regular inventory presenter use this method so
+     * field types keep the same representation in every inventory list.
+     *
+     * @param ItemsData $itemsData Loaded item data
+     * @param ItemField $itemField Definition of the field to format
+     * @param string $mode Output mode (html, csv, pdf, xlsx or ods)
+     * @return string Formatted field value
+     * @throws Exception
+     */
+    public static function formatItemFieldValue(ItemsData $itemsData, ItemField $itemField, string $mode = 'html'): string
+    {
+        global $gDb, $gL10n;
+
+        $fieldName = $itemField->getValue('inf_name_intern');
+        $fieldType = $itemsData->getProperty($fieldName, 'inf_type');
+        $content = $itemsData->getValue($fieldName, 'database');
+
+        if ($fieldType === 'CHECKBOX') {
+            $content = ($content != 1) ? 0 : 1;
+            return in_array($mode, array('csv', 'pdf', 'xlsx', 'ods'), true)
+                ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
+                : $itemsData->getHtmlValue($fieldName, $content);
+        }
+
+        if (in_array($fieldType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'), true)) {
+            return $itemsData->getHtmlValue($fieldName, $content);
+        }
+
+        if ($fieldType === 'DROPDOWN_DATE_INTERVAL') {
+            $selectedOption = $content;
+            if (!isset($selectedOption) || !is_numeric($selectedOption)) {
+                return '';
+            }
+
+            $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
+            $intervals = array();
+            foreach ($option->getAllOptions() as $optionValue) {
+                $intervals[$optionValue['id']] = trim(explode('|', $optionValue['value'])[1]);
+            }
+
+            $connectedField = new ItemField($gDb);
+            $connectedField->readDataByUuid($itemField->getValue('inf_inf_uuid_connected'));
+            $connectedFieldName = $connectedField->getValue('inf_name_intern');
+            $connectedValue = $itemsData->getValue($connectedFieldName, 'database');
+            if (empty($connectedValue)) {
+                return '';
+            }
+
+            try {
+                $comparisonDate = date_create($connectedValue);
+                $today = date_create();
+                $dateAdditionSplit = array();
+                preg_match('/^\s*(\d*)([wymd])\s*$/', $intervals[$selectedOption], $dateAdditionSplit);
+
+                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
+                    $units = array('w' => 'W', 'm' => 'M', 'y' => 'Y', 'd' => 'D');
+                    date_add($comparisonDate, new DateInterval('P' . $dateAdditionSplit[1] . ($units[$dateAdditionSplit[2]] ?? 'D')));
+                }
+
+                $daysRemaining = date_diff($today, $comparisonDate)->format('%R%a');
+                $content = ($daysRemaining === '1' || $daysRemaining === '-1')
+                    ? $daysRemaining . ' ' . $gL10n->get('SYS_DAY')
+                    : (($daysRemaining === '-0' ? '0' : $daysRemaining) . ' ' . $gL10n->get('SYS_DAYS'));
+            } catch (\Exception) {
+                return '';
+            }
+
+            if (in_array($mode, array('csv', 'xlsx', 'ods'), true)) {
+                $content .= ' [' . $itemsData->getHtmlValue($fieldName, $selectedOption) . ']';
+            }
+            return $content;
+        }
+
+        if ($fieldType === 'RADIO_BUTTON') {
+            return $mode === 'html'
+                ? $itemsData->getHtmlValue($fieldName, $content)
+                : $itemsData->getValue($fieldName, 'database');
+        }
+
+        if ($fieldType === 'CATEGORY') {
+            return $mode === 'database'
+                ? $itemsData->getValue($fieldName, 'database')
+                : $itemsData->getHtmlValue($fieldName, $content);
+        }
+
+        return (string) $content;
+    }
+
+    /** Match all search words against the displayed cells of an inventory row. */
+    public static function matchesSearch(array $values, string $search): bool
+    {
+        $words = preg_split('/\s+/', trim(StringUtils::strToLower(
+            htmlspecialchars_decode($search, ENT_QUOTES | ENT_HTML5)
+        )), -1, PREG_SPLIT_NO_EMPTY);
+        if ($words === []) {
+            return true;
+        }
+
+        // Match visible cell text, excluding links, UUIDs and action metadata.
+        $text = StringUtils::strToLower(html_entity_decode(
+            implode(' ', StringUtils::strStripTags($values)), ENT_QUOTES | ENT_HTML5, 'UTF-8'
+        ));
+        foreach ($words as $word) {
+            if (!StringUtils::strContains($text, $word)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Populate the inventory table with the data of the inventory items.
      * This method supports various output formats and fills the table based on the
      * provided display mode. The mode parameter allows selecting different table
@@ -913,6 +979,11 @@ class InventoryPresenter extends PagePresenter
     public function prepareData(string $mode = 'html'): array
     {
         global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+
+        // The paginated HTML list only needs field definitions. Load all items for exports
+        // and print views here. Their search must also match formatted field values, which
+        // cannot be excluded by a search over raw database values before formatting.
+        $this->itemsData->readItems();
 
         // Initialize the result array
         $preparedData = array(
@@ -977,8 +1048,7 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                $content = $this->itemsData->getValue($infNameIntern, 'database');
-                $infType = $this->itemsData->getProperty($infNameIntern, 'inf_type');
+                $content = self::formatItemFieldValue($this->itemsData, $itemField, $mode);
 
                 // Process ITEMNAME column
                 if ($infNameIntern === 'ITEMNAME' && !empty($content)) {
@@ -1020,98 +1090,14 @@ class InventoryPresenter extends PagePresenter
                     }
                 }
 
-                // Format content based on the field type
-                if ($infType === 'CHECKBOX') {
-                    $content = ($content != 1) ? 0 : 1;
-                    $content = in_array($mode, ['csv', 'pdf', 'xlsx', 'ods'])
-                        ? ($content == 1 ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO'))
-                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif (in_array($infType, array('DATE', 'DROPDOWN', 'DROPDOWN_MULTISELECT'))) {
-                    $content = $this->itemsData->getHtmlValue($infNameIntern, $content);
-                } elseif ($infType === 'DROPDOWN_DATE_INTERVAL') {
-                    $content = $this->itemsData->getValue($infNameIntern, 'database');
-                    if (isset($content) && is_numeric($content)) {
-                        $selectedOption = $content;
-                        $option = new SelectOptions($gDb, $itemField->getValue('inf_id'));
-                        $selectOptions = $option->getAllOptions();
-
-                        // Calculate days remaining based on selected date field value and selected interval
-                        $connectedFieldUuid = $itemField->getValue('inf_inf_uuid_connected');
-                        $connectedField = new ItemField($gDb);
-                        $connectedField->readDataByUuid($connectedFieldUuid);
-                        $connectedFieldNameIntern = $connectedField->getValue('inf_name_intern');
-                        $filteredSelectOptions = array();
-
-                        foreach ($selectOptions as $option) {
-                            $filteredSelectOptions[$option['id']] = trim(explode('|', $option['value'])[1]);
-                        }
-
-                        if (!empty($this->itemsData->getValue($connectedFieldNameIntern, 'database'))) {
-                            try {
-                                $compDate1 = date_create($this->itemsData->getValue($connectedFieldNameIntern, 'database'));
-                                $compDate2 = date_create();
-
-                                //Calculate future test date
-                                $dateAdditionSplit = array();
-                                preg_match("/^\s*(\d*)([wymd])\s*$/", $filteredSelectOptions[$selectedOption], $dateAdditionSplit);
-
-                                if (is_numeric($dateAdditionSplit[1]) && !empty($dateAdditionSplit[2])) {
-                                    switch ($dateAdditionSplit[2]) {
-                                        case 'w':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'W'));
-                                            break;
-                                        case 'm':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'M'));
-                                            break;
-                                        case 'y':
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'Y'));
-                                            break;
-                                        case 'd':
-                                        default:
-                                            date_add($compDate1, new DateInterval('P' . $dateAdditionSplit[1] . 'D'));
-                                            break;
-                                    }
-                                }
-
-                                //Compare last test date with future date and output days
-                                $dateDiff = date_diff($compDate2, $compDate1);
-                                $daysRemaining = $dateDiff->format('%R%a');
-
-                                // check if days remaining is only one day
-                                if ($daysRemaining === '1' || $daysRemaining === '-1') {
-                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAY');
-                                } elseif ($daysRemaining === '-0') {
-                                    $content = '0 ' . $gL10n->get('SYS_DAYS');
-                                } else {
-                                    $content = $daysRemaining . ' ' . $gL10n->get('SYS_DAYS');
-                                }
-                            } catch (\Exception $e) {
-                                // in case of error set content to empty
-                                $content = '';
-                            }
-                        } else {
-                            $content = '';
-                        }
-
-                        // in export modes append the stored value for possible later import
-                        if (!empty($content) && in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                            $content .= " [" . $this->itemsData->getHtmlValue($infNameIntern, $selectedOption) . "]";
-                        }
-                    }
-                } elseif ($infType === 'RADIO_BUTTON') {
-                    $content = $mode === 'html'
-                        ? $this->itemsData->getHtmlValue($infNameIntern, $content)
-                        : $this->itemsData->getValue($infNameIntern, 'database');
-                } elseif ($infType === 'CATEGORY') {
-                    $content = $mode === 'database'
-                        ? $this->itemsData->getValue($infNameIntern, 'database')
-                        : $this->itemsData->getHtmlValue($infNameIntern, $content);
-                }
-
                 $rowValues['data'][] = ($strikethrough && !in_array($mode, ['csv', 'ods', 'xlsx']))
                     ? '<s>' . $content . '</s>'
                     : $content;
                 $columnNumber++;
+            }
+
+            if (!self::matchesSearch($rowValues['data'], $this->getFilterString)) {
+                continue;
             }
 
             // Append admin action column for HTML mode
@@ -1200,41 +1186,9 @@ class InventoryPresenter extends PagePresenter
                 }
             }
 
-            // Filter rows based on filter string
-            $showRow = true;
-
-            if ($mode !== 'html') {
-                $showRow = ($this->getFilterString === '');
-                if ($this->getFilterString !== '') {
-                    $showRowException = false;
-                    $filterArray = array_map('trim', explode(',', $this->getFilterString));
-                    $filterColumnValues = array_map(function ($value) {
-                        $parts = explode(',', $value);
-                        return count($parts) > 1 ? implode(',', array_slice($parts, 0, 2)) : $value;
-                    }, $rowValues);
-
-                    foreach ($filterArray as $filterString) {
-                        if (str_contains($filterString, '-')) {
-                            $cleanFilter = substr($filterString, 1);
-                            if (stripos(implode('', $filterColumnValues), $cleanFilter) !== false) {
-                                $showRowException = true;
-                            }
-                        }
-                        if (stripos(implode(' ', $filterColumnValues), $filterString) !== false) {
-                            $showRow = true;
-                        }
-                    }
-                    if ($showRowException) {
-                        $showRow = false;
-                    }
-                }
-            }
-
-            if ($showRow) {
-                $rows[] = $rowValues;
-                if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                    $strikethroughs[] = $strikethrough;
-                }
+            $rows[] = $rowValues;
+            if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                $strikethroughs[] = $strikethrough;
             }
         }
 
