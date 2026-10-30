@@ -203,10 +203,13 @@ class ExportService
                                 ->getFont()->setStrikethrough(true);
                         }
                     }
-                    $this->formatSpreadsheet($spreadsheet, count($data['rows'][0]['data']), true);
+                    $this->formatSpreadsheet($spreadsheet, count($data['export_headers']), true);
                 }
 
                 $writer = new $writerClass($spreadsheet);
+                if ($writer instanceof Csv) {
+                    $writer->setOutputEncoding($charset);
+                }
                 $writer->save('php://output');
                 break;
 
