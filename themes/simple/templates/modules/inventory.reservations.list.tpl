@@ -1,8 +1,8 @@
 <table id="adm_inventory_reservations_table" class="table table-condensed table-hover w-100">
     <thead>
         <tr>
-            {foreach $reservationList.headers as $header}
-                <th>{$header}</th>
+            {foreach $reservationList.headers as $headerIndex => $header}
+                <th{if $headerIndex === 6} class="d-none"{/if}>{$header}</th>
             {/foreach}
         </tr>
     </thead>
@@ -15,12 +15,7 @@
                     {if $row.email}
                         <br><small>{$row.email|escape:'htmlall':'UTF-8'}</small>
                     {/if}
-                    {if $row.mailUrl}
-                        <a class="admidio-icon-link" href="{$row.mailUrl|escape:'htmlall':'UTF-8'}"
-                           aria-label="{$l10n->get('SYS_SEND_EMAIL')}">
-                            <i class="bi bi-envelope"></i>
-                        </a>
-                    {/if}
+
                 </td>
                 <td data-order="{$row.timestampIso}">{$row.timestamp|escape:'htmlall':'UTF-8'}</td>
                 <td data-order="{$row.beginDateTimeIso}">{$row.begin|escape:'htmlall':'UTF-8'}</td>
@@ -32,35 +27,20 @@
                         {$row.origin|escape:'htmlall':'UTF-8'}
                     {/if}
                 </td>
-                <td>
-                    {if $row.comment}
-                        <button type="button" class="admidio-icon-link border-0 bg-transparent admidio-inventory-reservation-comment"
-                                aria-label="{$l10n->get('SYS_COMMENT')}" data-comment="{$row.comment|escape:'htmlall':'UTF-8'}">
-                            <i class="bi bi-chat-left-text-fill"></i>
-                        </button>
-                    {/if}
-                </td>
+                <td class="d-none"></td>
                 <td class="text-end">
-                    {if $row.actions}
-                        <div class="btn-group admidio-inventory-reservation-action">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi {$row.statusIcon}"></i>{$row.statusLabel}
-                            </button>
-                            <ul class="dropdown-menu">
-                                {foreach $row.actions as $action}
-                                    <li>
-                                        <button type="button" class="icon-link dropdown-item" data-url="{$action.url|escape:'htmlall':'UTF-8'}" data-row-id="{$row.id}">
-                                            <i class="bi {$action.icon}"></i>{$action.label}
-                                        </button>
-                                    </li>
-                                {/foreach}
-                            </ul>
-                        </div>
-                    {else}
-                        <span class="admidio-inventory-reservation-action">
-                            <i class="bi {$row.statusIcon}"></i>{$row.statusLabel}
-                        </span>
+                    <span class="me-2"><i class="bi {$row.statusIcon}"></i>{$row.statusLabel}</span>
+                    {assign var=reservationActions value=[]}
+                    {foreach $row.actions as $action}
+                        {$reservationActions[] = ['icon' => "bi {$action.icon}", 'tooltip' => $action.label, 'class' => 'admidio-inventory-reservation-update', 'attributes' => ['data-url' => $action.url, 'data-row-id' => $row.id]]}
+                    {/foreach}
+                    {if $row.mailUrl}
+                        {$reservationActions[] = ['url' => $row.mailUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_EMAIL')]}
                     {/if}
+                    {if $row.comment}
+                        {$reservationActions[] = ['class' => 'admidio-inventory-reservation-comment', 'attributes' => ['data-comment' => $row.comment], 'icon' => 'bi bi-chat-left-text-fill', 'tooltip' => $l10n->get('SYS_COMMENT')]}
+                    {/if}
+                    {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $row.id, 'actions' => $reservationActions]}
                 </td>
             </tr>
         {/foreach}

@@ -617,6 +617,13 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['url'] = SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/documents-files.php', array('folder_uuid' => $row['uuid']));
                 $templateRow['icon'] = 'bi bi-folder-fill';
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
+                if ($this->folder->hasUploadRight() && $gCurrentUser->isAdministratorDocumentsFiles()) {
+                    $templateRow['actions'][] = array(
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'permissions', 'folder_uuid' => $row['uuid'])),
+                        'icon' => 'bi bi-shield-lock',
+                        'tooltip' => $gL10n->get('SYS_PERMISSIONS')
+                    );
+                }
                 $templateRow['actions'][] = array(
                     'url' => $templateRow['url'],
                     'icon' => 'bi bi-link-45deg',
@@ -625,13 +632,6 @@ class DocumentsPresenter extends PagePresenter
                 );
 
                 if ($this->folder->hasUploadRight()) {
-                    if ($gCurrentUser->isAdministratorDocumentsFiles()) {
-                        $templateRow['actions'][] = array(
-                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'permissions', 'folder_uuid' => $row['uuid'])),
-                            'icon' => 'bi bi-shield-lock',
-                            'tooltip' => $gL10n->get('SYS_PERMISSIONS')
-                        );
-                    }
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',

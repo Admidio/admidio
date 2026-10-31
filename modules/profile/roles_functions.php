@@ -183,15 +183,16 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 $membership['period'] = $gL10n->get('SYS_SINCE_VAR', array($member->getValue('mem_begin', $gSettingsManager->getString('system_date'))));
             }
 
+            $membership['actions'] = array();
             if ($role->allowedToAssignMembers($gCurrentUser)) {
                 // do not edit administrator role
                 if ($row['rol_administrator'] == 0) {
-                    $linkMembershipEdit = '<a class="admidio-icon-link" style="cursor:pointer;" href="javascript:profileJS.toggleDetailsOn(\''.$memberUuid.'\')"><i
-                                        class="bi bi-pencil-square" data-bs-toggle="tooltip" title="'.$gL10n->get('SYS_CHANGE_DATE').'"></i></a>';
-                } else {
-                    $linkMembershipEdit = '<a style="padding: 3px;"><i class="bi bi-pencil-square invisible"></i></a>';
+                    $membership['actions'][] = array(
+                        'url' => 'javascript:profileJS.toggleDetailsOn(\'' . $memberUuid . '\')',
+                        'icon' => 'bi bi-pencil-square',
+                        'tooltip' => $gL10n->get('SYS_CHANGE_DATE')
+                    );
                 }
-                $membership['linkMembershipEdit'] = $linkMembershipEdit;
 
                 // You are not allowed to delete your own administrator membership, other roles could be deleted
                 if ((!$formerMembership || $gCurrentUser->isAdministrator())
@@ -204,16 +205,13 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                         $icon = 'bi bi-box-arrow-right';
                         $description = $gL10n->get('SYS_CANCEL_MEMBERSHIP');
                     }
-                    // Escape the role name for the dialog HTML and the complete message for the attribute.
-                    $linkMembershipDelete = '
-                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . SecurityUtils::encodeHTML($gL10n->get($deleteMessage, array($role->getValue('rol_name')))) . '"
-                        data-href="callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')">
-                        <i class="' . $icon . '" data-bs-toggle="tooltip" title="'.$description.'"></i></a>';
-                } else {
-                    $linkMembershipDelete = '<a style="padding: 3px;"><i class="bi bi-trash invisible"></i></a>';
+                    $membership['actions'][] = array(
+                        'dataMessage' => $gL10n->get($deleteMessage, array($role->getValue('rol_name'))),
+                        'dataHref' => 'callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')',
+                        'icon' => $icon,
+                        'tooltip' => $description
+                    );
                 }
-                $membership['linkMembershipDelete'] = $linkMembershipDelete;
             }
 
             $form = new FormPresenter(

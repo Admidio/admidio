@@ -1065,6 +1065,7 @@ class InventoryPresenter extends PagePresenter
             $this->itemsData->readItemData($item['ini_uuid']);
             $rowValues = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
+            $rowValues['uuid'] = $item['ini_uuid'];
             $strikethrough = $this->itemsData->isRetired();
             $columnNumber = 1;
 
@@ -1195,11 +1196,11 @@ class InventoryPresenter extends PagePresenter
                                 $icon = 'bi bi-box-arrow-in-left';
                                 $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                             }
-                            $rowValues['actions'][] = array(
+                            array_unshift($rowValues['actions'], array(
                                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                                 'icon' => $icon,
                                 'tooltip' => $tooltip
-                            );
+                            ));
                         }
 
                         // Add copy action
@@ -1419,11 +1420,11 @@ class InventoryPresenter extends PagePresenter
                             $icon = 'bi bi-box-arrow-in-left';
                             $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                         }
-                        $rowValues['actions'][] = array(
+                        array_unshift($rowValues['actions'], array(
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                             'icon' => $icon,
                             'tooltip' => $tooltip
-                        );
+                        ));
                     }
 
                     // Add copy action

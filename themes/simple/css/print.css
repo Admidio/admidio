@@ -39,10 +39,10 @@ h3, h5 {
 }
 
 /* add 5px distance to all icons within a icon text combination */
-.admidio-icon-chain, .nav-link .fas, .btn .fas, .alert .fas,
-.admidio-profile-user-right .fas, .checkbox .fas, input[type="radio"],
-label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
-    margin-right: 5px;
+.admidio-icon-chain, .nav-link .bi, .btn .bi, .alert .bi,
+.admidio-profile-user-right .bi, .checkbox .bi, input[type="radio"],
+.accordion .bi, .form-control-static > .bi {
+    margin-right: 0.5rem;
 }
 
 /***********************************/
@@ -93,16 +93,12 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
     font-size: 150%;
 }
 
-.card-header .fas, .card-header .fab {
-    margin-right: 10px;
+.card-header .bi {
+    margin-right: 0.5rem;
 }
 
-.card-header .float-end .fas {
-    margin-right: 0px;
-}
-
-.card-header .dropdown .fas, .card-header .dropdown .fab {
-    margin-right: 0px;
+.card-header .float-end .bi {
+    margin-right: 0;
 }
 
 .admidio-blog .card-footer {
@@ -115,11 +111,10 @@ label img, .form-control-static img, .admidio-icon-link .fas, a .fas {
 
 /* Highlight events */
 
-tr.admidio-event-highlight,
-.admidio-event-highlight .panel-heading {
-    color: #000000;
+.admidio-event-highlight .card-header {
+    background-color: var(--bs-secondary);
 }
 
-.panel-primary.admidio-event-highlight > .panel-heading {
-    border-bottom: 4px solid #000000;
+tr.admidio-event-highlight {
+    font-weight: bold;
 }

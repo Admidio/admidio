@@ -260,7 +260,7 @@ class InventoryReservationPresenter extends PagePresenter
                     $("<p>", {class: "mb-0 text-break"}).css("white-space", "pre-wrap").text($(this).attr("data-comment"))
                 );
             });
-            $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-action .dropdown-item", function(event) {
+            $("#adm_inventory_reservations_table").on("click", ".admidio-inventory-reservation-update", function(event) {
                 event.preventDefault();
 
                 var action = $(this);

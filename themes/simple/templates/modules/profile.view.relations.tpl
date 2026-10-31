@@ -4,21 +4,19 @@
             <li id="row_ure_{$userRelation.uuid}" class="list-group-item">
                 <div>
                     <span>{$userRelation.relationName} - <a href="{$userRelation.urlUserProfile}">{$userRelation.userFirstName} {$userRelation.userLastName}</a>
-                        {if isset($userRelation.urlUserEdit)}
-                            <a class="admidio-icon-link" href="{$userRelation.urlUserEdit}"><i
-                                class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT_USER_IN_RELATION')}"></i></a>
-                        {/if}
                     </span>
                     <span class="float-end text-end">
+                        {assign var=relationActions value=[]}
+                        {if isset($userRelation.urlUserEdit)}
+                            {$relationActions[] = ['url' => $userRelation.urlUserEdit, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT_USER_IN_RELATION')]}
+                        {/if}
                         {if $isAdministratorUsers}
-                            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($userRelation.relationName))|escape:'html'}" data-href="{$userRelation.urlRelationDelete}"><i
-                                class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_CANCEL_RELATIONSHIP')}"></i></a>
+                            {$relationActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', array($userRelation.relationName)), 'dataHref' => $userRelation.urlRelationDelete, 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_CANCEL_RELATIONSHIP')]}
                         {/if}
                         {if $showRelationsCreateEdit}
-                            <a class="admidio-icon-link admidio-create-edit-info" id="relation_info_{$userRelation.uuid}" href="javascript:void(0)"><i
-                                class="bi bi-info-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INFORMATIONS')}"></i></a>
+                            {$relationActions[] = ['class' => 'admidio-create-edit-info', 'attributes' => ['data-info-id' => "relation_info_{$userRelation.uuid}"], 'icon' => 'bi bi-info-circle', 'tooltip' => $l10n->get('SYS_INFORMATIONS')]}
                         {/if}
+                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $userRelation.uuid, 'actions' => $relationActions]}
                     </span>
                 </div>
                 {if $showRelationsCreateEdit}

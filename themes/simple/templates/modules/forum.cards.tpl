@@ -9,29 +9,12 @@
                 <div class="col d-flex flex-column">
                     <div class="card-header">
                         <i class="bi bi-chat-dots-fill"></i> <a href="{$forumTopic.url}">{$forumTopic.title}</a>
-
-                        {if $forumTopic.editable}
-                            <div class="dropdown float-end">
-                                <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                                {if {array_key_exists array=$forumTopic key="actions"} && count($forumTopic.actions) > 0}
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {foreach $forumTopic.actions as $actionItem}
-                                            <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                                                data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                                    {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
-                                                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
-                                        {/foreach}
-                                    </ul>
-                                {/if}
-                            </div>
-                        {/if}
                     </div>
                     <div class="card-body flex-grow-1">
                         {$forumTopic.text}
                     </div>
                     <div class="card-footer container">
-                        <div class="row">
+                        <div class="row align-items-center">
                             {if $forumTopic.repliesCount > 0}
                                 <div class="col-lg-6 col-12 text-bg-secondary bg-opacity-25 text-dark rounded">
                                     <span class="d-block">{$l10n->get('SYS_REPLIES_VAR', array($forumTopic.repliesCount))}</span>
@@ -44,6 +27,11 @@
                                     <span class="d-block">{$l10n->get('SYS_CATEGORY')} <span class="fw-bold">{$forumTopic.category}</span></span>
                                 {/if}
                             </div>
+                            {if $forumTopic.editable && {array_key_exists array=$forumTopic key="actions"} && count($forumTopic.actions) > 0}
+                                <div class="col-auto ms-auto text-nowrap">
+                                    {include 'sys-template-parts/list.functions.tpl' cardActions=true data=$forumTopic}
+                                </div>
+                            {/if}
                         </div>
                     </div>
                 </div>

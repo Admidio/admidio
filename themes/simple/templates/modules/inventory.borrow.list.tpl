@@ -21,18 +21,11 @@
                             <td>{$reservation.dat_headline|default:''|escape:'htmlall':'UTF-8'}</td>
                             <td class="text-end text-nowrap">
                                 {if $reservation.item_is_borrowed}
-                                    <button type="button" class="admidio-icon-link border-0 bg-transparent admidio-messagebox"
-                                            aria-label="{$l10n->get('SYS_ITEM_ALREADY_BORROWED')}"
-                                            data-message="{$l10n->get('SYS_ITEM_ALREADY_BORROWED')}"
-                                            data-title="{$l10n->get('SYS_WARNING')}" data-type="warning">
-                                        <i class="bi bi-box-arrow-up-right" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ITEM_ALREADY_BORROWED')}"></i>
-                                    </button>
+                                    {assign var=borrowAction value=['icon' => 'bi bi-box-arrow-up-right', 'tooltip' => $l10n->get('SYS_ITEM_ALREADY_BORROWED'), 'dataMessage' => $l10n->get('SYS_ITEM_ALREADY_BORROWED'), 'attributes' => ['data-title' => $l10n->get('SYS_WARNING'), 'data-type' => 'warning']]}
                                 {else}
-                                    <a class="admidio-icon-link" href="{$reservation.borrowUrl|escape:'htmlall':'UTF-8'}"
-                                       aria-label="{$l10n->get('SYS_INVENTORY_ITEM_BORROW')}">
-                                        <i class="bi bi-box-arrow-up-right" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INVENTORY_ITEM_BORROW')}"></i>
-                                    </a>
+                                    {assign var=borrowAction value=['url' => $reservation.borrowUrl, 'icon' => 'bi bi-box-arrow-up-right', 'tooltip' => $l10n->get('SYS_INVENTORY_ITEM_BORROW')]}
                                 {/if}
+                                {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $reservation.ivr_uuid, 'actions' => [$borrowAction]]}
                             </td>
                         </tr>
                     {/foreach}
@@ -60,10 +53,7 @@
                         <td>{$borrowing.receiver|escape:'htmlall':'UTF-8'}</td>
                         <td data-order="{$borrowing.inb_borrow_date_iso|escape:'htmlall':'UTF-8'}">{$borrowing.inb_borrow_date|escape:'htmlall':'UTF-8'}</td>
                         <td class="text-end text-nowrap">
-                            <a class="admidio-icon-link" href="{$borrowing.returnUrl|escape:'htmlall':'UTF-8'}"
-                               aria-label="{$l10n->get('SYS_INVENTORY_ITEM_RETURN')}">
-                                <i class="bi bi-box-arrow-in-down-left" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INVENTORY_ITEM_RETURN')}"></i>
-                            </a>
+                            {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $borrowing.ini_uuid, 'actions' => [['url' => $borrowing.returnUrl, 'icon' => 'bi bi-box-arrow-in-down-left', 'tooltip' => $l10n->get('SYS_INVENTORY_ITEM_RETURN')]]]}
                         </td>
                     </tr>
                 {/foreach}

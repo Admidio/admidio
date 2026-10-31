@@ -345,15 +345,34 @@ input[type="file"].btn-secondary:hover:not(:disabled):not([readonly])::file-sele
 }
 
 .admidio-icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 1.75em;
+    height: 1.75em;
     padding: 3px;
+    border-radius: 50%;
+    line-height: 1;
+    vertical-align: middle;
+    text-decoration: none;
     cursor: pointer;
 }
 
+.admidio-icon-link > .bi {
+    margin: 0;
+    line-height: 1;
+}
+
 .admidio-icon-link:hover {
-    padding: 3px;
-    border-radius: 50%;
-    background-color: var(--bs-tertiary);
-    filter: brightness(92%);
+    color: var(--bs-link-color);
+    background-color: currentColor;
+}
+
+.admidio-icon-link:hover > i,
+.admidio-icon-link:hover > svg {
+    color: #fff;
 }
 
 .alert-info {
@@ -797,12 +816,8 @@ label {
     margin: 0;
 }
 
-.table-hover tbody tr td .admidio-functions {
-    visibility: hidden;
-}
-
-.table-hover tbody tr:hover td .admidio-functions {
-    visibility: visible;
+.admidio-functions .admidio-icon-link {
+    color: var(--bs-link-color);
 }
 
 .admidio-category-report-scroll {
@@ -912,6 +927,11 @@ label {
     cursor: help;
 }
 
+.admidio-small-photo {
+    max-height: 40px;
+    max-width: 40px;
+}
+
 .admidio-event-highlight .card-header {
     background-color: var(--bs-secondary);
 }
@@ -930,15 +950,6 @@ tr.admidio-event-highlight {
 
 .admidio-event-approval-state-cancel {
     color: var(--bs-danger);
-}
-
-.admidio-inventory-reservation-action {
-    width: 165px;
-}
-
-.admidio-inventory-reservation-action > .dropdown-toggle {
-    width: 100%;
-    white-space: nowrap;
 }
 
 .card-img, .card-img-top {
