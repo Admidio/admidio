@@ -173,11 +173,37 @@ class Session extends Entity
     }
 
     /**
-     * Return the opaque session identifier that may be exposed to external SSO clients.
+     * Return the external identifier of the session: an opaque value that identifies the session
+     * to other systems, e.g. single sign-on clients, without revealing the session id, which is
+     * the secret of the session cookie. It is empty until the session is authenticated.
      */
     public function getExternalSessionId(): string
     {
         return (string) $this->getValue('ses_external_session_id', 'database');
+    }
+
+    /**
+     * Record that a user has just authenticated in this session. A new authentication gets a new
+     * external identifier, so that the clients of an earlier login cannot address this one. The
+     * session is not saved.
+     * @param int $userId The user who authenticated.
+     * @param array<int,string> $authenticationMethods The methods used, e.g. **pwd** and **otp** (RFC 8176).
+     * @throws Exception
+     */
+    public function setAuthentication(int $userId, array $authenticationMethods): void
+    {
+        $this->setValue('ses_usr_id', $userId);
+        $this->setValue('ses_authentication_time', DATETIME_NOW);
+        $this->setValue('ses_authentication_methods', implode(' ', $authenticationMethods));
+        $this->setValue('ses_external_session_id', self::createExternalSessionId());
+    }
+
+    /**
+     * Create a new external identifier of a session.
+     */
+    private static function createExternalSessionId(): string
+    {
+        return bin2hex(random_bytes(32));
     }
 
     /**
@@ -352,7 +378,7 @@ class Session extends Entity
         $this->setValue('ses_authentication_methods', self::AUTHENTICATION_METHOD_AUTO_LOGIN);
 
         if ($this->getExternalSessionId() === '') {
-            $this->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
+            $this->setValue('ses_external_session_id', self::createExternalSessionId());
         }
 
         // The counterpart of login_succeeded for a user who was logged in by the auto login token
