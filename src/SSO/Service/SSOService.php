@@ -28,6 +28,29 @@ abstract class SSOService {
 
     abstract public function initializeClientObject(Database $database): ?SSOClient;
 
+    /**
+     * Return the query and form parameters of the current request as the client sent them.
+     *
+     * Admidio strips HTML from $_GET and $_POST (global_request_params.php). Protocol values
+     * such as the OIDC state or the SAML RelayState are opaque and must reach the client
+     * unchanged, so the SSO endpoints read the raw request. Whoever shows such a value on a
+     * page has to encode it.
+     * @return array{0:array<string,mixed>,1:array<string,mixed>} The query and the form parameters.
+     */
+    protected static function getRawRequestParameters(): array
+    {
+        parse_str((string) ($_SERVER['QUERY_STRING'] ?? ''), $query);
+
+        $body = $_POST;
+        if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? '')) === 'POST'
+            && str_starts_with(strtolower((string) ($_SERVER['CONTENT_TYPE'] ?? '')), 'application/x-www-form-urlencoded')
+        ) {
+            parse_str((string) file_get_contents('php://input'), $body);
+        }
+
+        return array($query, $body);
+    }
+
     public function createClientObject($clientUUID = null, $clientID = null): ?SSOClient {
         global $gCurrentOrgId;
 

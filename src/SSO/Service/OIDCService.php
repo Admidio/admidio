@@ -406,8 +406,9 @@ class OIDCService extends SSOService {
      * Returns a PSR-7 request for the OAuth2 server while ensuring Admidio compatibility
      */
     private function getRequest() {
-        // Ensure Admidio’s global request variables are used for internal logic
-        $serverRequest = ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        // The protocol parameters as sent, not stripped of HTML like $_GET and $_POST
+        [$query, $body] = self::getRawRequestParameters();
+        $serverRequest = ServerRequestFactory::fromGlobals($_SERVER, $query, $body, $_COOKIE, $_FILES);
 
         // Fix known issues with certain clients>
         // 1. Dokuwiki sends OAuth as the authorization header => Replace OAuth with Bearer
