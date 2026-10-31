@@ -25,6 +25,7 @@ php tests/bin/setup-test-env.php
 composer test:unit          # unit tests, no database needed
 composer test:integration   # integration tests
 composer test:cli           # command line tests
+composer test:http          # real HTTP route tests
 composer test:all           # everything
 
 # 5. Stop test services when done
@@ -47,19 +48,21 @@ dedicated test tree and its source-controlled marker is present.
 
 ## What the suite contains
 
-447 tests in 57 files:
+Available suites:
 
 | Suite | Files | Tests | Needs a database |
 |-------|-------|-------|------------------|
 | `tests/Unit` | 1 | 6 | no |
 | `tests/Integration` | 51 | 387 | yes |
 | `tests/Cli` | 5 | 54 | yes |
+| `tests/Http` | 4 | 25 | yes (transport cases run without a database) |
 
 ```
 tests/
 ├── Unit/                    # Fast unit tests (no DB)
 ├── Integration/             # Database integration tests, one directory per domain (25 of them)
 ├── Cli/                     # Command line and installation tests
+├── Http/                    # Real HTTP route, transport and cleanup tests
 ├── Support/                 # Test infrastructure
 │   ├── AdmidioTestCase.php           # Base test class and the custom assertions
 │   ├── DatabaseTestCase.php          # DB test class with transaction isolation
@@ -112,6 +115,131 @@ once by hand:
 php admidio cli:defaultconfig --output=adm_my_files/cli-config.php
 # then set $gCliEnabled = true in that file
 ```
+
+### HTTP Tests
+
+- **Purpose:** Real requests to production PHP entry points, including sessions, login,
+  redirects, permission checks, invalid parameters and CSRF validation.
+- **Dependencies:** The same test database settings as integration tests, `ext-curl`,
+  `ext-dom`, and permission to bind a temporary loopback port. No browser or external server.
+- **Location:** `tests/Http/`, shared helpers in `tests/Support/Http*`.
+
+Run `composer test:http` or `TEST_DATABASE_ENGINE=postgres composer test:http`.
+The suite validates the test environment, copies runtime files to a private temporary directory
+inside `TEST_FILES_PATH`, installs Admidio through its production installer with a random
+`ht...` table prefix, and starts PHP's built-in server on `127.0.0.1` with a temporary port.
+The checkout's configuration, uploaded files and CLI policy are never changed. Existing test
+tables under other prefixes remain untouched. Fixtures are committed because HTTP requests use
+separate database connections; these tests do not use `DatabaseTestCase` transaction rollback.
+
+Each test gets its own in-memory cookie client. Login goes through the real form and its CSRF
+token. Redirects are not followed automatically, so tests can assert the original status and
+Location header. Add route cases by extending `HttpTestCase`; tests that change application
+data must restore it, or use a separate test class (a fresh installation is created per class).
+Class teardown stops the server, drops its tables and removes the copied installation, including
+configuration and sessions. If dropping the tables fails, teardown reports the failure and retains
+the installation, including its configuration, so cleanup can be retried. A second `close()` on
+the same environment retries the cleanup; closing an already removed environment is harmless.
+If the entire PHP process is forcibly killed, the random prefix and
+temporary files can remain and require removal; a subsequent run uses a new prefix.
+
+If setup or cleanup fails, the error names the private runtime directory and a diagnostic file
+under `tests/reports/http/`. Reports identify the phase (`setup`, `test` or `cleanup`) and give
+a recovery command with the engine and file path. Setup still attempts automatic cleanup;
+if that succeeds, there is nothing left to remove. A cleanup failure retains the installation.
+
+To recover a retained installation after PHPUnit has exited:
+
+1. Ensure the failed test run and its PHP server have stopped.
+2. Restore the original test database connectivity and any damaged runtime dependency named
+   by the error. Keep the retained configuration and bootstrap files until cleanup succeeds.
+3. From the checkout root, use the same test database settings, engine and `TEST_FILES_PATH`
+   as the failed run. Run the command printed in its diagnostic, for example:
+
+   ```bash
+   TEST_DATABASE_ENGINE=mariadb TEST_FILES_PATH=./tests/adm_my_files/http-mariadb \
+     php tests/bin/cleanup-http-test.php /path/to/checkout/tests/adm_my_files/http-mariadb/ht01234567
+   ```
+
+The helper validates the directory and the `ht` prefix, compares the database settings with
+the retained configuration, drops and verifies only that installation's tables, and removes
+the runtime directory only after success. If it fails, fix the reported cause and retry the
+same command. Do not remove the directory first: its bootstrap/configuration are needed for
+recovery. For a partial copy with no bootstrap and no attempted database installation, no
+tables were created; remove only that exact private directory after confirming the failure
+occurred before installation. A pre-existing directory is never removed by a failed setup.
+
+`HttpClientTest` checks the transport against a separate loopback server without installing
+Admidio: redirect handling, cookie isolation, form encoding, method reset, repeated headers and
+external URL rejection. `EnvironmentTest` checks sanitized diagnostics and forces a cleanup
+subprocess failure to verify that the installation survives and a subsequent cleanup succeeds.
+It also checks setup failure reporting, recovery in a separate process, and rejection of
+unrelated directories or mismatched database settings.
+Run just these infrastructure checks with:
+
+```bash
+composer test:http -- --filter 'HttpClientTest|EnvironmentTest'
+```
+
+`RoutesTest` covers public announcements, login/logout, authentication redirects, administrator
+access, an announcements editor role, denied access for ordinary members, invalid passwords,
+invalid and cross-session CSRF tokens, invalid route parameters and unknown routes. The fixtures
+provide an administrator, an ordinary member and an announcements editor, plus a public
+announcement. Runtime files always come from the checkout being tested.
+
+`AnnouncementsTest` submits the real editor form to create a new announcement, verifies that
+it is visible, rejects an ordinary member's forged update, and deletes it through the real
+action. Invalid CSRF tokens must leave the data unchanged on both create and delete. The test
+reads the category and form token from the edit form and the distinct session token from the
+rendered delete confirmation action. It restores its data through HTTP, with class cleanup as
+a fallback if an earlier assertion fails.
+
+To add a route test, extend `HttpTestCase` and assert both status and meaningful response content:
+
+```php
+<?php
+namespace Admidio\Tests\Http;
+
+use Admidio\Tests\Support\HttpTestCase;
+
+class PublicPageTest extends HttpTestCase
+{
+    public function testAnnouncementsArePublic(): void
+    {
+        $page = $this->browser->request('/modules/announcements.php');
+        $this->assertSame(200, $page->status);
+        $this->assertStringContainsString('HTTP public announcement', $page->body);
+    }
+}
+```
+
+Use `$this->login()` for the administrator, or supply the member/editor credentials from
+`tests/Http/fixture.php`. Forms must use `$this->csrfToken($page)` from the real response.
+No application configuration or permissions are bypassed by the web requests.
+
+For a machine-readable report, run:
+
+```bash
+composer test:http -- --log-junit tests/reports/http/junit.xml
+```
+
+Failing route tests and setup/cleanup failures also save diagnostics under `tests/reports/http/`.
+These contain phase, private runtime path, recovery command and server request statuses/paths.
+They omit query strings, cookies, response bodies, raw PHP logs and configuration contents.
+GitHub Actions prints the sanitized diagnostic files directly in the workflow log when the
+HTTP suite fails. It does not upload artifacts or generate JUnit reports automatically;
+the command above remains available for local use. Test output and failure diagnostics can
+be read in the Actions logs without downloading additional files.
+
+The development-server router supplies normal file-based 404 responses instead of falling back
+to the application's index.php. Tests assert current Admidio behavior: application permission
+errors are currently rendered with HTTP 200 rather than 403. This suite does not change those
+responses. It does not execute JavaScript and does not validate Apache/nginx rules, TLS, browser
+SameSite enforcement, SSO or email delivery. It is an initial route suite, not full module
+coverage. GitHub Actions runs it in the existing database jobs, including when an earlier test
+suite fails after successful environment setup. Local execution uses the same Composer command
+and needs only the configured test database; no external web server or Mailpit is needed for
+the HTTP suite itself.
 
 ## How a test runs
 
@@ -258,7 +386,8 @@ PostgreSQL needs the `pdo_pgsql` extension, MySQL and MariaDB need `pdo_mysql`.
 composer test:unit          # unit tests only
 composer test:integration   # integration tests
 composer test:cli           # command line tests
-composer test:all           # all three suites, each its own process
+composer test:http          # real HTTP route tests
+composer test:all           # all four suites, each its own process
 composer test:coverage      # HTML coverage report in tests/reports/coverage (needs Xdebug)
 composer test:setup         # tests/bin/setup-test-env.php
 ```
@@ -271,9 +400,9 @@ to `master`, weekly for MySQL, and on demand:
 | Job | Runs | Contents |
 |-----|------|----------|
 | `fast-checks` | every run | PHP syntax of `src`, `system`, `modules`, `install`, `tests`; `composer validate`; unit tests |
-| `mariadb` | every run | MariaDB 10.11 + Mailpit, integration and CLI tests |
-| `postgres` | every run | PostgreSQL 15 + Mailpit, integration and CLI tests |
-| `mysql` | weekly and on demand | MySQL 8.0 + Mailpit, integration and CLI tests |
+| `mariadb` | every run | MariaDB 10.11 + Mailpit, integration, CLI and HTTP tests |
+| `postgres` | every run | PostgreSQL 15 + Mailpit, integration, CLI and HTTP tests |
+| `mysql` | weekly and on demand | MySQL 8.0 + Mailpit, integration, CLI and HTTP tests |
 
 The database jobs get their configuration from the `env:` block of the job, so nothing copies or
 edits `.env.test` on the runner.
