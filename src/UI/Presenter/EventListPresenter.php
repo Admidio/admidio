@@ -355,10 +355,6 @@ class EventListPresenter extends PagePresenter
                 // initialize all output elements
                 $attentionDeadline = '';
                 $outputEndDate = '';
-                $outputButtonICal = '';
-                $outputButtonEdit = '';
-                $outputButtonDelete = '';
-                $outputButtonCopy = '';
                 $outputButtonParticipation = '';
                 $outputButtonParticipants = '';
                 $outputButtonParticipantsEmail = '';
@@ -392,26 +388,44 @@ class EventListPresenter extends PagePresenter
                     $outputEndDate = ' &ndash; ' . $formattedEndDate;
                 }
 
+                $actions = array();
                 if ($outputMode === 'html') {
-                    $eventActionClass = $getView === 'detail' ? ' d-inline-flex p-1 fs-6' : '';
-                    $eventActionSpacing = $getView === 'detail' ? '' : ' ms-1';
-
-                    // iCal Download
-                    if ($gSettingsManager->getBool('events_ical_export_enabled')) {
-                        $outputButtonICal = '<a class="admidio-icon-link' . $eventActionClass . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'export')) . '" aria-label="' . $gL10n->get('SYS_DOWNLOAD_ICAL') . '"><i class="bi bi-download" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DOWNLOAD_ICAL') . '"></i></a>';
-                    }
-
-                    // change and delete is only for users with additional rights
                     if ($event->isEditable()) {
-                        $outputButtonCopy = '<a class="admidio-icon-link' . $eventActionClass . $eventActionSpacing . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'edit', 'dat_uuid' => $eventUUID, 'copy' => 1)) . '" aria-label="' . $gL10n->get('SYS_COPY') . '"><i class="bi bi-copy" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
-                        $outputButtonEdit = '<a class="admidio-icon-link' . $eventActionClass . $eventActionSpacing . '" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventEditUrlParams) . '" aria-label="' . $gL10n->get('SYS_EDIT') . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
-                        $outputButtonDelete = '<a class="admidio-icon-link' . $eventActionClass . $eventActionSpacing . ' admidio-messagebox" href="javascript:void(0);"  data-message="' . $eventDeleteMessage . '" data-buttons="yes-no"
-                            data-href="callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')" aria-label="' . $eventDeleteLabel . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $eventDeleteLabel . '"></i></a>';
-
+                        $editAction = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventEditUrlParams),
+                            'icon' => 'bi bi-pencil-square',
+                            'tooltip' => $gL10n->get('SYS_EDIT')
+                        );
+                        $deleteAction = array(
+                            'dataHref' => 'callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                            'dataMessage' => $eventDeleteMessage,
+                            'icon' => 'bi bi-trash',
+                            'tooltip' => $eventDeleteLabel
+                        );
                         if ($recurrenceBadge !== '') {
-                            $outputButtonEdit = '<a class="admidio-icon-link' . $eventActionClass . $eventActionSpacing . ' openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'edit')) . '" aria-label="' . $gL10n->get('SYS_EDIT') . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>';
-                            $outputButtonDelete = '<a class="admidio-icon-link' . $eventActionClass . $eventActionSpacing . ' openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'delete')) . '" aria-label="' . $gL10n->get('SYS_DELETE') . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+                            unset($editAction['url'], $deleteAction['dataMessage']);
+                            $editAction['popup'] = true;
+                            $editAction['dataHref'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'edit'));
+                            $deleteAction['popup'] = true;
+                            $deleteAction['dataHref'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'recurrence_scope_form', 'dat_uuid' => $eventUUID, 'recurrence_action' => 'delete'));
+                            $deleteAction['tooltip'] = $gL10n->get('SYS_DELETE');
                         }
+                        $actions['edit'] = $editAction;
+                    }
+                    if ($gSettingsManager->getBool('events_ical_export_enabled')) {
+                        $actions['ical'] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'export')),
+                            'icon' => 'bi bi-download',
+                            'tooltip' => $gL10n->get('SYS_DOWNLOAD_ICAL')
+                        );
+                    }
+                    if ($event->isEditable()) {
+                        $actions['copy'] = array(
+                            'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'edit', 'dat_uuid' => $eventUUID, 'copy' => 1)),
+                            'icon' => 'bi bi-copy',
+                            'tooltip' => $gL10n->get('SYS_COPY')
+                        );
+                        $actions['delete'] = $deleteAction;
                     }
                 }
 
@@ -771,8 +785,10 @@ class EventListPresenter extends PagePresenter
                             $page->addHtml('<span class="admidio-info-created">' . $gL10n->get('SYS_LAST_EDITED_BY', array($event->getNameOfLastEditingUser(), $event->getValue('dat_timestamp_change'))) . '</span>');
                         }
                         $page->addHtml('</div>');
-                        if ($outputButtonICal !== '' || $outputButtonCopy !== '' || $outputButtonEdit !== '' || $outputButtonDelete !== '') {
-                            $page->addHtml('<div class="col-auto ms-auto text-nowrap">' . $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '</div>');
+                        if (!empty($actions)) {
+                            $actionsTemplate = $page->getSmartyTemplate()->createTemplate('modules/events.actions.tpl');
+                            $actionsTemplate->assign('actions', $actions);
+                            $page->addHtml($actionsTemplate->fetch());
                         }
                         $page->addHtml('
                             </div>
@@ -902,7 +918,9 @@ class EventListPresenter extends PagePresenter
                     $columnValues[] = Language::translateIfTranslationStrId($row['category_name']);
 
                     if ($outputMode === 'html') {
-                        $columnValues[] = '<div class="text-nowrap">' . $outputButtonICal . $outputButtonCopy . $outputButtonEdit . $outputButtonDelete . '</div>';
+                        $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
+                        $actionsTemplate->assign('data', array('uuid' => $eventUUID, 'actions' => $actions));
+                        $columnValues[] = $actionsTemplate->fetch();
                     }
 
                     $data['rows'][] = array('id' => 'evt_' . $event->getValue('dat_uuid'), 'class' => $cssClass, 'data' => $columnValues);
