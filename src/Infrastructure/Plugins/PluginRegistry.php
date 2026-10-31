@@ -196,7 +196,7 @@ final class PluginRegistry
         }
 
         self::$installations = array();
-        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version
+        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version, com_beta
                   FROM ' . TBL_COMPONENTS . '
                  WHERE com_type = ?';
         $statement = $gDb->queryPrepared($sql, array(self::COMPONENT_TYPE));
@@ -206,6 +206,7 @@ final class PluginRegistry
                 'comId' => (int)$row['com_id'],
                 'uuid' => (string)$row['com_uuid'],
                 'version' => (string)$row['com_version']
+                    . ((int)$row['com_beta'] > 0 ? '-beta.' . (int)$row['com_beta'] : '')
             );
         }
 

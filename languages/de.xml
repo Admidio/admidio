@@ -281,6 +281,8 @@
   <string name="SYS_BACK_TO_ALBUM">Zurück zum Album</string>
   <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
   <string name="SYS_BASIC_DATA">Basisdaten</string>
+  <string name="SYS_BETA">Beta</string>
+  <string name="SYS_BETA_VERSION_WARNING">Dies ist eine Beta-Version des Plugins. Sie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Fett</string>

@@ -34,6 +34,61 @@ final class PluginPackageTest extends PluginTestCase
      */
     private array $rubbish = array();
 
+    /**
+     * @testdox A manifest's optional beta number becomes part of its complete version
+     * @dataProvider betaManifests
+     */
+    public function testBetaManifestIsRead(array $manifest, string $version, int $beta): void
+    {
+        $plugin = PluginPackage::describe($this->archive(array(
+            'beta-plugin/plugin.json' => json_encode($manifest),
+            'beta-plugin/plugin.php' => self::ENTRY
+        )));
+
+        $this->assertSame('2.0.0', $plugin->versionBase);
+        $this->assertSame($version, $plugin->version);
+        $this->assertSame($beta, $plugin->beta);
+    }
+
+    /** @return array<string,array{0: array<string,mixed>, 1: string, 2: int}> */
+    public static function betaManifests(): array
+    {
+        return array(
+            'stable default' => array(array('version' => '2.0.0'), '2.0.0', 0),
+            'stable explicit' => array(array('version' => '2.0.0', 'beta' => 0), '2.0.0', 0),
+            'first beta' => array(array('version' => '2.0.0', 'beta' => 1), '2.0.0-beta.1', 1),
+            'largest beta' => array(array('version' => '2.0.0', 'beta' => 32767), '2.0.0-beta.32767', 32767)
+        );
+    }
+
+    /**
+     * @testdox Invalid beta fields and version suffixes are rejected before installation
+     * @dataProvider invalidBetaManifests
+     */
+    public function testInvalidBetaManifestIsRejected(array $manifest): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST');
+        PluginPackage::describe($this->archive(array(
+            'beta-plugin/plugin.json' => json_encode($manifest),
+            'beta-plugin/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /** @return array<string,array{0: array<string,mixed>}> */
+    public static function invalidBetaManifests(): array
+    {
+        return array(
+            'suffix' => array(array('version' => '2.0.0-beta.1')),
+            'too long' => array(array('version' => '1234.5678.90')),
+            'negative' => array(array('version' => '2.0.0', 'beta' => -1)),
+            'overflow' => array(array('version' => '2.0.0', 'beta' => 32768)),
+            'string' => array(array('version' => '2.0.0', 'beta' => '1')),
+            'boolean' => array(array('version' => '2.0.0', 'beta' => true)),
+            'fraction' => array(array('version' => '2.0.0', 'beta' => 1.5)),
+            'null' => array(array('version' => '2.0.0', 'beta' => null))
+        );
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

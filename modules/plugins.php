@@ -15,6 +15,7 @@
  *             settings      - Show the settings of a plugin as the content of a dialog
  *             settings_save - Save the settings a plugin was given in that dialog
  *             install       - Install a plugin
+ *             upload_check  - Inspect an uploaded archive for beta confirmation without installing it
  *             enable        - Enable a plugin for the current organization. A plugin with a menu
  *                             entry of its own (Plugin::wantsMenuEntry()) answers with a redirect
  *                             back to the list instead of JSON, because PluginsPresenter renders
@@ -43,7 +44,7 @@ try {
 
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list',
-        'validValues' => array('list', 'list_refresh', 'add', 'settings', 'settings_save', 'upload', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
+        'validValues' => array('list', 'list_refresh', 'add', 'settings', 'settings_save', 'upload', 'upload_check', 'store_install', 'store_refresh', 'enable', 'disable', 'update', 'remove')));
     // Everything but the list, the list refresh and the settings dialog answers with JSON.
     $isAjax = !in_array($getMode, array('list', 'list_refresh', 'add', 'settings'), true);
 
@@ -59,7 +60,7 @@ try {
      */
     $getPluginId = '';
     $plugin = null;
-    if (!in_array($getMode, array('list', 'list_refresh', 'add', 'upload', 'store_refresh'), true)) {
+    if (!in_array($getMode, array('list', 'list_refresh', 'add', 'upload', 'upload_check', 'store_refresh'), true)) {
         $getPluginId = admFuncVariableIsValid($_GET, 'plugin', 'string', array('requireValue' => true));
         $plugin = PluginRegistry::get($getPluginId);
     }
@@ -96,6 +97,7 @@ try {
             break;
 
         case 'upload':
+        case 'upload_check':
             // check the CSRF token of the form against the session token
             $uploadForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $uploadForm->validate($_POST);
@@ -109,6 +111,12 @@ try {
             }
             if (!is_uploaded_file($uploadedFile)) {
                 throw new Exception('SYS_FILE_NOT_EXIST');
+            }
+
+            if ($getMode === 'upload_check') {
+                $package = PluginPackage::describe($uploadedFile);
+                echo json_encode(array('status' => $package->beta > 0 ? 'beta' : 'success'));
+                break;
             }
 
             $installedId = PluginPackage::install($uploadedFile, !empty($formValues['plugin_replace']));
