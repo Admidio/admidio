@@ -7,6 +7,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\Entity\RolesRights;
 use DateTime;
@@ -274,6 +275,100 @@ class DocumentsService
         }
 
         return $data;
+    }
+
+    /**
+     * Read the subfolders of the current folder that the current user is allowed to open. The result is used for the
+     * nodes of the folder tree. A locked folder is only shown to administrators of the module, as only they can open
+     * it. Each node knows whether it has visible subfolders itself, so the tree can show an expand button without
+     * loading the whole structure at once.
+     * @return array<int,array{id: string, name: string, url: string, hasChildren: bool, selectable: bool}> Returns an
+     *         array with an array for each visible subfolder in the format of the tree view. A folder is selectable if
+     *         the user may upload to it.
+     * @throws Exception
+     */
+    public function findFolderTreeNodes(): array
+    {
+        $subfolders = array_values(array_filter($this->folder->getSubfoldersWithProperties(), function (array $subfolder) {
+            return Folder::isViewable($this->db, $subfolder);
+        }));
+        $foldersWithChildren = $this->findFoldersWithVisibleSubfolders(array_map('intval', array_column($subfolders, 'fol_id')));
+
+        $nodes = array();
+        foreach ($subfolders as $subfolder) {
+            $folder = new Folder($this->db, (int)$subfolder['fol_id']);
+            $nodes[] = array(
+                'id' => $subfolder['fol_uuid'],
+                'name' => html_entity_decode($subfolder['fol_name'], ENT_QUOTES, 'UTF-8'),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('folder_uuid' => $subfolder['fol_uuid'])),
+                'hasChildren' => in_array((int)$subfolder['fol_id'], $foldersWithChildren, true),
+                'selectable' => $folder->hasUploadRight()
+            );
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Find the folders that have at least one subfolder which the current user may open. All subfolders of the given
+     * folders are read with one query, and the check of a folder stops at its first visible subfolder. A subfolder is
+     * visible if the user may open it (Folder::isViewable()) and, for users who are not administrators of the
+     * module, if it exists in the file system like in the folder list.
+     * @param array<int,int> $folderIds IDs of the folders.
+     * @return array<int,int> Returns the IDs of the folders with a visible subfolder.
+     * @throws Exception
+     */
+    private function findFoldersWithVisibleSubfolders(array $folderIds): array
+    {
+        global $gCurrentUser;
+
+        if (count($folderIds) === 0) {
+            return array();
+        }
+
+        $sql = 'SELECT fol_id, fol_fol_id_parent, fol_name, fol_path, fol_public, fol_locked
+                  FROM ' . TBL_FOLDERS . '
+                 WHERE fol_type = \'DOCUMENTS\'
+                   AND fol_fol_id_parent IN (' . Database::getQmForValues($folderIds) . ')
+                   AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+        $statement = $this->db->queryPrepared($sql, array_merge($folderIds, array($GLOBALS['gCurrentOrgId'])));
+
+        $isAdministrator = $gCurrentUser->isAdministratorDocumentsFiles();
+        $foldersWithChildren = array();
+        while ($row = $statement->fetch()) {
+            $parentId = (int)$row['fol_fol_id_parent'];
+            if (isset($foldersWithChildren[$parentId])) {
+                continue;
+            }
+            if (!$isAdministrator && !is_dir(ADMIDIO_PATH . $row['fol_path'] . '/' . $row['fol_name'])) {
+                continue;
+            }
+            if (Folder::isViewable($this->db, $row)) {
+                $foldersWithChildren[$parentId] = true;
+            }
+        }
+
+        return array_keys($foldersWithChildren);
+    }
+
+    /**
+     * Returns the UUIDs of the folders from the root folder to the current folder, including the current folder.
+     * The folder tree opens these folders to show the current folder.
+     * @return array<int,string> Returns the folder UUIDs, the first is the root folder.
+     * @throws Exception
+     */
+    public function findFolderPath(): array
+    {
+        $path = array($this->folder->getValue('fol_uuid'));
+        $parentFolderId = (int)$this->folder->getValue('fol_fol_id_parent');
+
+        while ($parentFolderId > 0) {
+            $parentFolder = new Folder($this->db, $parentFolderId);
+            array_unshift($path, $parentFolder->getValue('fol_uuid'));
+            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
+        }
+
+        return $path;
     }
 
     /**
