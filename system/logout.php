@@ -11,7 +11,7 @@
 
 use Admidio\Hooks\Hooks;
 use Admidio\Preferences\ValueObject\SettingsManager;
-use Admidio\SSO\Service\SAMLService;
+use Psr\Http\Message\ResponseInterface;
 
 try {
     require_once(__DIR__ . '/common.php');
@@ -23,22 +23,6 @@ try {
     if (is_string($logoutTarget) && $logoutTarget !== '') {
         admRedirect($logoutTarget);
         // => EXIT
-    }
-
-    $externalSessionId = (string) $gCurrentSession->getValue('ses_external_session_id');
-
-    /*
-     * Notify every single sign-on client of this session before the session is gone. The
-     * OIDC back-channel clients are contacted right away, the OIDC front-channel clients
-     * are loaded in one page of iframes, and the SAML service providers are then visited
-     * one after another through the browser. The chain ends at the logout homepage.
-     */
-    $ssoLogoutService = null;
-
-    if ($externalSessionId !== ''
-        && ($gSettingsManager->get('sso_saml_enabled') === '1' || $gSettingsManager->get('sso_oidc_enabled') === '1')
-    ) {
-        $ssoLogoutService = new SAMLService($gDb, $gCurrentUser);
     }
 
     $gValidLogin = false;
@@ -73,9 +57,10 @@ try {
     // set homepage to logout page; a listener may send the visitor somewhere else after the logout
     $gHomepage = Hooks::applyTypedFilters('logout_homepage', ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout'));
 
-    if ($ssoLogoutService !== null) {
-        $response = $ssoLogoutService->startSessionLogout($externalSessionId, $gHomepage);
-
+    // A listener may finish the logout with a response of its own, e.g. the single sign-on module
+    // with the logout chain of the clients of the session, which ends at the logout homepage
+    $response = Hooks::resolve('logout_response', null, $gHomepage);
+    if ($response instanceof ResponseInterface) {
         http_response_code($response->getStatusCode());
         foreach ($response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
