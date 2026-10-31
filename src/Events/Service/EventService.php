@@ -150,74 +150,95 @@ class EventService
         }
         $user->readDataByUuid($userUUID);
 
-        $member = new Membership($this->database);
-        $participants = new Participants($this->database, (int)$event->getValue('dat_rol_id'));
-        $participationPossible = true;
-        $outputMessage = '';
+        $this->database->startTransaction();
+        try {
+            // Serialize capacity checks and membership writes on the participant role.
+            $this->database->queryPrepared(
+                'SELECT rol_id FROM ' . TBL_ROLES . ' WHERE rol_id = ? FOR UPDATE',
+                array((int)$event->getValue('dat_rol_id'))
+            )->fetchColumn();
+            $event->readDataById((int)$event->getValue('dat_id'));
+            $member = new Membership($this->database);
+            $participants = new Participants($this->database, (int)$event->getValue('dat_rol_id'));
+            $participationPossible = true;
+            $outputMessage = '';
 
-        // if user is no leader of the event then only allow to handle their own participation
-        if (!$participants->isLeader($gCurrentUserId)) {
-            $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
-        }
-
-        // if current user is allowed to participate or user could edit this event then update user inputs
-        if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
-            $member->readDataByRoleAndUser((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
-            $member->setValue('mem_comment', $formValues['dat_comment']);
-
-            if ($member->isNewRecord()) {
-                $member->setValue('mem_begin', DATE_NOW);
+            // if user is no leader of the event then only allow to handle their own participation
+            if (!$participants->isLeader($gCurrentUserId)) {
+                $user->readDataByUuid($gCurrentUser->getValue('usr_uuid'));
             }
 
-            if ($event->getValue('dat_max_members') > 0) {
-                $totalMembers = $participants->getCount();
+            // if current user is allowed to participate or user could edit this event then update user inputs
+            if ($event->possibleToParticipate() || $participants->isLeader($gCurrentUserId)) {
+                $member->readDataByRoleAndUser((int)$event->getValue('dat_rol_id'), (int)$user->getValue('usr_id'));
+                $member->setValue('mem_comment', $formValues['dat_comment']);
 
-                if ($totalMembers + ($additionalGuests - (int)$member->getValue('mem_count_guests')) < (int)$event->getValue('dat_max_members')) {
-                    $member->setValue('mem_count_guests', $additionalGuests);
-                } else {
-                    $participationPossible = false;
-                }
-
-                $outputMessage = $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($event->getValue('dat_headline')));
-
-                if ($event->getValue('dat_max_members') === $totalMembers && !$participants->isMemberOfEvent($user->getValue('usr_id'))) {
-                    $participationPossible = false;
+                if ($member->isNewRecord()) {
+                    $member->setValue('mem_begin', DATE_NOW);
                 }
 
                 if ($event->getValue('dat_max_members') > 0) {
-                    $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . (int)$event->getValue('dat_max_members');
+                    $totalMembers = $participants->getCount();
+
+                    $alreadyParticipating = $participants->isMemberOfEvent((int)$user->getValue('usr_id'));
+                    $requiredSeats = $alreadyParticipating
+                        ? $additionalGuests - (int)$member->getValue('mem_count_guests')
+                        : 1 + $additionalGuests;
+                    if ($totalMembers + $requiredSeats <= (int)$event->getValue('dat_max_members')) {
+                        $member->setValue('mem_count_guests', $additionalGuests);
+                    } else {
+                        $participationPossible = false;
+                    }
+
+                    $outputMessage = $gL10n->get('SYS_ROLE_MAX_MEMBERS', array($event->getValue('dat_headline')));
+
+                    if ($event->getValue('dat_max_members') === $totalMembers && !$participants->isMemberOfEvent($user->getValue('usr_id'))) {
+                        $participationPossible = false;
+                    }
+
+                    if ($event->getValue('dat_max_members') > 0) {
+                        $outputMessage .= '<br />' . $gL10n->get('SYS_MAX_PARTICIPANTS') . ':&nbsp;' . (int)$event->getValue('dat_max_members');
+                    }
+                } else {
+                    $member->setValue('mem_count_guests', $additionalGuests);
+                }
+
+                if (!$participationPossible && $mode !== 'participate_cancel') {
+                    throw new Exception('SYS_ROLE_MAX_MEMBERS', array($event->getValue('dat_headline')));
+                }
+                $member->save();
+
+                if ($participationPossible || $mode === 'participate_cancel') {
+                    switch ($mode) {
+                        case 'participate':
+                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_ATTENDING);
+                            $outputMessage = $gL10n->get('SYS_ATTEND_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
+                            break;
+
+                        case 'participate_cancel':
+                            if ($gSettingsManager->getBool('events_save_cancellations')) {
+                                $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_REFUSED);
+                            } else {
+                                $member->deleteMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'));
+                            }
+
+                            $outputMessage = $gL10n->get('SYS_CANCEL_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
+                            break;
+
+                        case 'participate_maybe':
+                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_TENTATIVE);
+                            $outputMessage = $gL10n->get('SYS_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
+                            break;
+                    }
                 }
             } else {
-                $member->setValue('mem_count_guests', $additionalGuests);
+                throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
             }
 
-            $member->save();
-
-            if ($participationPossible || $mode === 'participate_cancel') {
-                switch ($mode) {
-                    case 'participate':
-                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_ATTENDING);
-                        $outputMessage = $gL10n->get('SYS_ATTEND_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
-                        break;
-
-                    case 'participate_cancel':
-                        if ($gSettingsManager->getBool('events_save_cancellations')) {
-                            $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_REFUSED);
-                        } else {
-                            $member->deleteMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'));
-                        }
-
-                        $outputMessage = $gL10n->get('SYS_CANCEL_EVENT', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
-                        break;
-
-                    case 'participate_maybe':
-                        $member->startMembership((int)$event->getValue('dat_rol_id'), $user->getValue('usr_id'), null, Participants::STATE_TENTATIVE);
-                        $outputMessage = $gL10n->get('SYS_ATTEND_POSSIBLY', array($event->getValue('dat_headline'), $event->getValue('dat_begin')));
-                        break;
-                }
-            }
-        } else {
-            throw new Exception('SYS_PARTICIPATE_NO_RIGHTS');
+            $this->database->endTransaction();
+        } catch (\Throwable $e) {
+            $this->database->rollback();
+            throw $e;
         }
 
         return array(
