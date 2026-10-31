@@ -127,6 +127,37 @@ class SAMLService extends SSOService {
     }
 
     /**
+     * Load the metadata of a SAML client again from its metadata URL and save the settings it
+     * contains, e.g. after the service provider changed its signing certificate or endpoints.
+     * @param SAMLClient $client The client whose metadata is reloaded.
+     * @throws \Admidio\Infrastructure\Exception SYS_SSO_METADATA_URL_REQUIRED, SYS_SSO_METADATA_LOAD_FAILED,
+     *                                           SYS_SSO_METADATA_INVALID or SYS_SSO_METADATA_ENTITY_MISSING
+     */
+    public function reloadClientMetadata(SAMLClient $client): void
+    {
+        global $gLogger, $gSettingsManager;
+
+        $url = trim((string) $client->getValue('smc_metadata_url'));
+        if ($url === '') {
+            throw new \Admidio\Infrastructure\Exception('SYS_SSO_METADATA_URL_REQUIRED');
+        }
+
+        try {
+            $metadata = (new MetadataFetcher($gSettingsManager->getBool('sso_allow_private_network')))->fetch($url);
+        } catch (\Throwable $exception) {
+            $gLogger->warning('Could not reload SAML metadata.', array(
+                'client' => $client->getValue('smc_client_id'),
+                'url' => $url,
+                'reason' => $exception->getMessage()
+            ));
+            throw new \Admidio\Infrastructure\Exception('SYS_SSO_METADATA_LOAD_FAILED');
+        }
+
+        (new SAMLMetadataImporter())->apply($client, $metadata);
+        $client->save();
+    }
+
+    /**
      * Returns an associative array with labels and links for the static IdP configuration data
      * (metadata/discovery URL, SSO/SLO endpoints, etc.).
      * @return array Associative arry, the keys will be the displayed labels, each entry has the form

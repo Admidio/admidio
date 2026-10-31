@@ -1034,13 +1034,23 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = array(
-                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT')),
-                array(
-                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
-                    'dataHref' => 'callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                    'icon' => 'bi bi-trash',
-                    'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
-                )
+                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT'))
+            );
+            // add link to reload the metadata of a SAML client that has a metadata URL
+            if ((string) $client->getValue('smc_metadata_url') !== '') {
+                $actions[] = array(
+                    'class' => 'admidio-sso-reload-metadata',
+                    'attributes' => array('data-uuid' => $clientUUID),
+                    'icon' => 'bi bi-arrow-clockwise',
+                    'tooltip' => $gL10n->get('SYS_SSO_METADATA_RELOAD')
+                );
+            }
+            // add link to delete SAML client
+        $actions[] = array(
+                'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
+                'dataHref' => 'callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                'icon' => 'bi bi-trash',
+                'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
             );
             $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
@@ -1113,6 +1123,32 @@ class SSOClientPresenter extends PagePresenter
 
             $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
         }
+
+        // Add JS for reloading the metadata of a SAML client
+        $this->addJavascript("
+            $('.admidio-sso-reload-metadata').on('click', function (e) {
+              e.preventDefault();
+              var \$icon = $(this).find('i');
+              \$icon.addClass('spinner-border spinner-border-sm');
+
+              $.post('clients.php?mode=reload_saml_metadata&uuid=' + encodeURIComponent($(this).data('uuid')), {
+                adm_csrf_token: '" . $gCurrentSession->getCSRFToken() . "'
+              }, null, 'json')
+              .done(function (data) {
+                if (data.status === 'success') {
+                  messageBox(data.message);
+                } else {
+                  messageBox(data.message, '', 'error');
+                }
+              })
+              .fail(function (jqXHR) {
+                messageBox(jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : " . json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR) . ", '', 'error');
+              })
+              .always(function () {
+                \$icon.removeClass('spinner-border spinner-border-sm');
+              });
+            });
+          ", true);
 
         // Add JS for toggling clients (enabled/disabled)
         $this->addJavascript("
