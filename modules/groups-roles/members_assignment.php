@@ -66,14 +66,31 @@ try {
 
         if ((isset($_POST['memberFlag']) && $_POST['memberFlag'] === 'true')
             || $leadership) {
-            $event = new Event($gDb);
-            if ($event->readDataByRoleId((int) $role->getValue('rol_id'))
-                && !$user->isMemberOfRole((int) $role->getValue('rol_id'))
-                && $event->participantLimitReached()) {
-                throw new Exception('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name')));
+            $gDb->startTransaction();
+            try {
+                // Use the same lock as event participation, also for roles shared by events.
+                $gDb->queryPrepared(
+                    'SELECT rol_id FROM ' . TBL_ROLES . ' WHERE rol_id = ? FOR UPDATE',
+                    array((int)$role->getValue('rol_id'))
+                )->fetchColumn();
+                if (!$user->isMemberOfRole((int)$role->getValue('rol_id'))) {
+                    $eventIds = $gDb->queryPrepared(
+                        'SELECT dat_id FROM ' . TBL_EVENTS . ' WHERE dat_rol_id = ?',
+                        array((int)$role->getValue('rol_id'))
+                    )->fetchAll(\PDO::FETCH_COLUMN);
+                    foreach ($eventIds as $eventId) {
+                        $event = new Event($gDb, (int)$eventId);
+                        if ($event->participantLimitReached()) {
+                            throw new Exception('SYS_ROLE_MAX_MEMBERS', array($role->getValue('rol_name')));
+                        }
+                    }
+                }
+                $role->startMembership($user->getValue('usr_id'), $leadership);
+                $gDb->endTransaction();
+            } catch (Throwable $e) {
+                $gDb->rollback();
+                throw $e;
             }
-
-            $role->startMembership($user->getValue('usr_id'), $leadership);
         } else {
             $role->stopMembership($user->getValue('usr_id'));
         }
