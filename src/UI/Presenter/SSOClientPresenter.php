@@ -1044,6 +1044,12 @@ class SSOClientPresenter extends PagePresenter
             $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
                     '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT') . '"></i></a>';
 
+            // add link to reload the metadata of a SAML client that has a metadata URL
+            if ((string) $client->getValue('smc_metadata_url') !== '') {
+                $actions .= '<a class="admidio-icon-link admidio-sso-reload-metadata" href="javascript:void(0);" data-uuid="' . $clientUUID . '">' .
+                    '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_METADATA_RELOAD') . '"></i></a>';
+            }
+
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName())))) . '"
@@ -1117,6 +1123,32 @@ class SSOClientPresenter extends PagePresenter
 
             $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
         }
+
+        // Add JS for reloading the metadata of a SAML client
+        $this->addJavascript("
+            $('.admidio-sso-reload-metadata').on('click', function (e) {
+              e.preventDefault();
+              var \$icon = $(this).find('i');
+              \$icon.addClass('spinner-border spinner-border-sm');
+
+              $.post('clients.php?mode=reload_saml_metadata&uuid=' + encodeURIComponent($(this).data('uuid')), {
+                adm_csrf_token: '" . $gCurrentSession->getCSRFToken() . "'
+              }, null, 'json')
+              .done(function (data) {
+                if (data.status === 'success') {
+                  messageBox(data.message);
+                } else {
+                  messageBox(data.message, '', 'error');
+                }
+              })
+              .fail(function (jqXHR) {
+                messageBox(jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : " . json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR) . ", '', 'error');
+              })
+              .always(function () {
+                \$icon.removeClass('spinner-border spinner-border-sm');
+              });
+            });
+          ", true);
 
         // Add JS for toggling clients (enabled/disabled)
         $this->addJavascript("

@@ -1986,12 +1986,15 @@
   <string name="SYS_SSO_LOAD_METADATA">Client-Metadaten laden</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Die Anmeldung wurde abgebrochen.</string>
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Sie sind erfolgreich eingeloggt, aber das Benutzerkonto hat keine Zugriffsrechte auf den Service Provider (#VAR1#). Bitte versuchen Sie entweder, sich mit einem anderen Konto anzumelden, oder kehren Sie zum Service Provider zurück.</string>
+  <string name="SYS_SSO_METADATA_ENTITY_MISSING">Die Metadaten enthalten keinen Service Provider mit der Entity-ID #VAR1#. Falls der Service Provider seine Entity-ID geändert hat, laden Sie seine Metadaten im Formular des Clients.</string>
   <string name="SYS_SSO_METADATA_INVALID">Die geladenen SAML-Metadaten sind keine gültigen XML-Metadaten.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Die SAML-Metadaten konnten nicht geladen werden. Prüfen Sie die URL und versuchen Sie es erneut.</string>
   <string name="SYS_SSO_METADATA_PASTE">Oder Metadaten einfügen</string>
   <string name="SYS_SSO_METADATA_PASTE_BUTTON">Eingefügte Metadaten übernehmen</string>
   <string name="SYS_SSO_METADATA_PASTE_DESC">Falls Admidio die Metadaten-URL nicht erreichen kann (z. B. in einem internen Netzwerk), fügen Sie den Inhalt der Metadaten-Datei der Anwendung hier ein.</string>
   <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Fügen Sie zuerst den Inhalt der Metadaten-Datei ein.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Metadaten neu laden</string>
+  <string name="SYS_SSO_METADATA_RELOADED">Die Metadaten von #VAR1# wurden neu geladen.</string>
   <string name="SYS_SSO_METADATA_URL">Metadaten-URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Einige Clients bieten eine Metadaten-Datei mit allen erforderlichen Einstellungen an. Der automatische Abruf dieser Metadaten-URL funktioniert nur, wenn die URL für den Admidio-Server verfügbar ist.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Geben Sie zuerst eine URL für die SAML-Metadaten ein.</string>
