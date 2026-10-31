@@ -289,11 +289,8 @@ class DocumentsService
      */
     public function findFolderTreeNodes(): array
     {
-        global $gCurrentUser;
-
-        $isAdministrator = $gCurrentUser->isAdministratorDocumentsFiles();
-        $subfolders = array_values(array_filter($this->folder->getSubfoldersWithProperties(), function (array $subfolder) use ($isAdministrator) {
-            return $isAdministrator || !$subfolder['fol_locked'];
+        $subfolders = array_values(array_filter($this->folder->getSubfoldersWithProperties(), function (array $subfolder) {
+            return Folder::isViewable($this->db, $subfolder);
         }));
         $foldersWithChildren = $this->findFoldersWithVisibleSubfolders(array_map('intval', array_column($subfolders, 'fol_id')));
 
@@ -314,16 +311,16 @@ class DocumentsService
 
     /**
      * Find the folders that have at least one subfolder which the current user may open. All subfolders of the given
-     * folders are read with one query, and the check of a folder stops at its first visible subfolder. The rules are
-     * the same as in Folder::getFolderForDownload(): administrators of the module see all folders, other users only
-     * folders that exist, are not locked and are public or assigned to one of their roles.
+     * folders are read with one query, and the check of a folder stops at its first visible subfolder. A subfolder is
+     * visible if the user may open it (Folder::isViewable()) and, for users who are not administrators of the
+     * module, if it exists in the file system like in the folder list.
      * @param array<int,int> $folderIds IDs of the folders.
      * @return array<int,int> Returns the IDs of the folders with a visible subfolder.
      * @throws Exception
      */
     private function findFoldersWithVisibleSubfolders(array $folderIds): array
     {
-        global $gCurrentUser, $gValidLogin;
+        global $gCurrentUser;
 
         if (count($folderIds) === 0) {
             return array();
@@ -343,20 +340,11 @@ class DocumentsService
             if (isset($foldersWithChildren[$parentId])) {
                 continue;
             }
-            if ($isAdministrator) {
-                $foldersWithChildren[$parentId] = true;
+            if (!$isAdministrator && !is_dir(ADMIDIO_PATH . $row['fol_path'] . '/' . $row['fol_name'])) {
                 continue;
             }
-            if ($row['fol_locked'] || !is_dir(ADMIDIO_PATH . $row['fol_path'] . '/' . $row['fol_name'])) {
-                continue;
-            }
-            if ($row['fol_public']) {
+            if (Folder::isViewable($this->db, $row)) {
                 $foldersWithChildren[$parentId] = true;
-            } elseif ($gValidLogin) {
-                $viewRoles = new RolesRights($this->db, 'folder_view', (int)$row['fol_id']);
-                if ($viewRoles->hasRight($gCurrentUser->getRoleMemberships())) {
-                    $foldersWithChildren[$parentId] = true;
-                }
             }
         }
 

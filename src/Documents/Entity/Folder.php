@@ -420,6 +420,33 @@ class Folder extends Entity
     }
 
     /**
+     * Checks whether the current user may open a folder: administrators of the module may open every folder, other
+     * users a folder that is not locked and is public or assigned to one of their roles. getFolderForDownload() and
+     * the folder tree use this rule, so both show the same folders.
+     * @param Database $database Object of the class Database.
+     * @param array{fol_id: int|string, fol_public: bool|int|string, fol_locked: bool|int|string} $folder Data of the folder.
+     * @param RolesRights|null $viewRoles (optional) The view rights of the folder, if they are already read.
+     * @return bool Returns **true** if the current user may open the folder.
+     * @throws Exception
+     */
+    public static function isViewable(Database $database, array $folder, ?RolesRights $viewRoles = null): bool
+    {
+        global $gCurrentUser;
+
+        if ($gCurrentUser->isAdministratorDocumentsFiles()) {
+            return true;
+        }
+        if ($folder['fol_locked']) {
+            return false;
+        }
+        if ($folder['fol_public']) {
+            return true;
+        }
+        $viewRoles = $viewRoles ?? new RolesRights($database, 'folder_view', (int)$folder['fol_id']);
+        return $viewRoles->hasRight($gCurrentUser->getRoleMemberships());
+    }
+
+    /**
      * Reads the folder recordset from database table **adm_folders** and throws an
      * Exception if the user has no right to see the folder, or the folder id doesn't exist.
      * @param string $folderUuid The UUID of the folder. If the UUID is empty, then the root folder will be shown.
@@ -430,7 +457,7 @@ class Folder extends Entity
      */
     public function getFolderForDownload(string $folderUuid): bool
     {
-        global $gCurrentUser, $gCurrentOrgId, $gValidLogin;
+        global $gCurrentOrgId, $gValidLogin;
 
         if ($folderUuid !== '') {
             // get folder of the parameter
@@ -451,19 +478,11 @@ class Folder extends Entity
             throw new Exception('SYS_FOLDER_NOT_FOUND', array($folderUuid));
         }
 
-        // If the current user has download-admin-rights => allow
-        if ($gCurrentUser->isAdministratorDocumentsFiles()) {
-            return true;
-        }
-
-        // If the folder is public (and the file is not locked) => allow
-        if ($this->getValue('fol_public') && !$this->getValue('fol_locked')) {
-            return true;
-        }
-
-        // check if the user has a membership in a role that is assigned to the current folder
-        if ($this->folderViewRolesObject->hasRight($gCurrentUser->getRoleMemberships())
-            && !$this->getValue('fol_locked')) {
+        if (self::isViewable($this->db, array(
+            'fol_id' => $this->getValue('fol_id'),
+            'fol_public' => $this->getValue('fol_public'),
+            'fol_locked' => $this->getValue('fol_locked')
+        ), $this->folderViewRolesObject)) {
             return true;
         }
 

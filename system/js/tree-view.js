@@ -51,6 +51,11 @@ class AdmTreeView {
             onSelect: function () {}
         }, options);
         this.options.root = Object.assign({url: "", selectable: true}, this.options.root);
+        // the ids are compared with the data attributes of the nodes, which are strings, so numbers are allowed too
+        this.options.root.id = String(this.options.root.id);
+        this.options.currentId = String(this.options.currentId);
+        this.options.excludedId = String(this.options.excludedId);
+        this.options.path = this.options.path.map(String);
         this.buildPromise = null;
         this.selectedLink = null;
 
@@ -152,7 +157,7 @@ class AdmTreeView {
     }
 
     getItem(id) {
-        return Array.from(this.tree.querySelectorAll("li.admidio-tree-node")).find((item) => item.dataset.id === id) || null;
+        return Array.from(this.tree.querySelectorAll("li.admidio-tree-node")).find((item) => item.dataset.id === String(id)) || null;
     }
 
     getLink(item) {
@@ -222,7 +227,7 @@ class AdmTreeView {
         const item = document.createElement("li");
         item.className = "admidio-tree-node";
         item.setAttribute("role", "none");
-        item.dataset.id = node.id;
+        item.dataset.id = String(node.id);
         item.dataset.excluded = excluded ? "1" : "0";
         item.dataset.selectable = node.selectable === false ? "0" : "1";
 
@@ -262,19 +267,19 @@ class AdmTreeView {
         link.append(icon, " ", node.name);
 
         if (this.options.select) {
-            const isExcluded = excluded || node.id === this.options.excludedId;
+            const isExcluded = excluded || String(node.id) === this.options.excludedId;
             item.dataset.excluded = isExcluded ? "1" : "0";
             link.setAttribute("aria-selected", "false");
             if (!this.isSelectable(item)) {
                 link.setAttribute("aria-disabled", "true");
             }
-            if (node.id === this.options.currentId && this.options.currentLabel !== "") {
+            if (String(node.id) === this.options.currentId && this.options.currentLabel !== "") {
                 const hint = document.createElement("span");
                 hint.className = "admidio-tree-hint";
                 hint.textContent = this.options.currentLabel;
                 link.appendChild(hint);
             }
-        } else if (node.id === this.options.currentId) {
+        } else if (String(node.id) === this.options.currentId) {
             link.classList.add("active");
             link.setAttribute("aria-current", "page");
         }
@@ -328,6 +333,14 @@ class AdmTreeView {
         link.setAttribute("aria-expanded", expanded ? "true" : "false");
         item.classList.toggle("expanded", expanded);
         if (group) {
+            // the tab stop and the focus can't stay in the hidden child nodes, they move to the collapsed node
+            if (!expanded && (group.querySelector("a[tabindex=\"0\"]") !== null || group.contains(document.activeElement))) {
+                const focused = group.contains(document.activeElement);
+                this.setTabStop(link);
+                if (focused) {
+                    link.focus();
+                }
+            }
             group.hidden = !expanded;
         }
         if (!expanded || group) {

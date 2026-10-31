@@ -320,6 +320,7 @@ try {
                 // the tree can open the folders down to this folder
                 $response['path'] = $documentsService->findFolderPath();
             }
+            header('Content-Type: application/json; charset=utf-8');
             echo json_encode($response);
             break;
 
