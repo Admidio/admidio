@@ -1426,6 +1426,13 @@ class FormPresenter
             $valuesArray[] = array('id' => '', 'value' => '');
         }
 
+        // Native validation recognizes an empty placeholder only as the first option.
+        // Keep the heading for Select2 and optional fields, but never put it before
+        // the empty first entry of a required normal single select.
+        $optionsAll['showHeading'] = $optionsAll['multiselect'] || $optionsAll['search']
+            || $optionsAll['property'] !== self::FIELD_REQUIRED
+            || (string)$valuesArray[0]['id'] !== '';
+
         if ($optionsAll['multiselect'] || $optionsAll['search']) {
             $maximumSelectionNumber = '';
             $allowClear = 'false';
