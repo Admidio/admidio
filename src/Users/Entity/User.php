@@ -563,10 +563,7 @@ class User extends Entity
         global $gSettingsManager, $gCurrentSession, $installedDbVersion;
 
         if ($updateSessionCookies) {
-            $gCurrentSession->setValue('ses_usr_id', (int)$this->getValue('usr_id'));
-            $gCurrentSession->setValue('ses_authentication_time', DATETIME_NOW);
-            $gCurrentSession->setValue('ses_authentication_methods', implode(' ', $authenticationMethods));
-            $gCurrentSession->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
+            $gCurrentSession->setAuthentication((int)$this->getValue('usr_id'), $authenticationMethods);
             $gCurrentSession->save();
         }
 
