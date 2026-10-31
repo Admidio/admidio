@@ -817,13 +817,6 @@ label {
 }
 
 .admidio-functions .admidio-icon-link {
-    color: var(--bs-body-color);
-}
-
-tr:hover .admidio-functions .admidio-icon-link,
-tr:focus-within .admidio-functions .admidio-icon-link,
-.admidio-functions:hover .admidio-icon-link,
-.admidio-functions:focus-within .admidio-icon-link {
     color: var(--bs-link-color);
 }
 
