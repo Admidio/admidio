@@ -105,6 +105,7 @@ try {
             $room->setArray($row);
 
             $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
+            $actionsTemplate->assign('cardActions', true);
             $actionsTemplate->assign('data', array('uuid' => $room->getValue('room_uuid'), 'actions' => array(
                 array('url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)), 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_EDIT')),
                 array(

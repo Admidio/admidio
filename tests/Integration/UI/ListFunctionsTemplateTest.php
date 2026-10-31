@@ -37,10 +37,12 @@ class ListFunctionsTemplateTest extends TestCase
         }
     }
 
-    private function render(array $actions): DOMXPath
+    private function render(array $actions, bool $cardActions = false): DOMXPath
     {
-        $this->smarty->assign('data', array('uuid' => 'test', 'actions' => $actions));
-        $html = $this->smarty->fetch('sys-template-parts/list.functions.tpl');
+        $template = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
+        $template->assign('data', array('uuid' => 'test', 'actions' => $actions));
+        $template->assign('cardActions', $cardActions);
+        $html = $template->fetch();
         $document = new DOMDocument();
         $document->loadHTML('<html><body>' . $html . '</body></html>');
         return new DOMXPath($document);
@@ -59,6 +61,18 @@ class ListFunctionsTemplateTest extends TestCase
             self::assertCount($count > 2 ? 1 : 0, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
             self::assertCount($count > 2 ? $count : 0, $xpath->query('//li'));
             self::assertCount($count > 2 ? 1 : 0, $xpath->query('//li[@class="d-md-none"]'));
+        }
+    }
+
+    public function testCardsShowAllIconsOnDesktopAndAllMenuEntriesOnPhones(): void
+    {
+        foreach (array(0, 1, 2, 3, 5) as $count) {
+            $actions = array_fill(0, $count, array('url' => '/edit', 'icon' => 'bi bi-pencil-square', 'tooltip' => 'Edit'));
+            $xpath = $this->render($actions, true);
+            self::assertCount($count, $xpath->query('//a[@href="/edit" and contains(@class, "d-none d-md-inline-flex")]'));
+            self::assertCount($count, $xpath->query('//li'));
+            self::assertCount(0, $xpath->query('//li[@class="d-md-none"]'));
+            self::assertCount($count > 0 ? 1 : 0, $xpath->query('//div[@class="dropdown d-md-none"]/a[@data-bs-toggle="dropdown"]'));
         }
     }
 
@@ -86,7 +100,7 @@ class ListFunctionsTemplateTest extends TestCase
         self::assertFalse($link->hasAttribute('data-href'));
     }
 
-    public function testPluginActionsUseTheSameRulesInBothLayouts(): void
+    public function testPluginsUseListRulesInTheTableAndCardRulesOnPhones(): void
     {
         $entry = array(
             'id' => 'example', 'name' => 'Example', 'icon' => '', 'description' => '',
@@ -105,7 +119,7 @@ class ListFunctionsTemplateTest extends TestCase
         $document->loadHTML($html);
         $xpath = new DOMXPath($document);
         self::assertCount(2, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
-        self::assertCount(2, $xpath->query('//a[@onclick]'));
+        self::assertCount(3, $xpath->query('//a[@onclick]'));
         self::assertCount(2, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/settings"]'));
         self::assertCount(1, $xpath->query('//*[@id="adm_dropdown_menu_button_mobile_example"]'));
         foreach ($xpath->query('//a[@onclick]') as $toggle) {

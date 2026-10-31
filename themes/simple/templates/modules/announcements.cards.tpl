@@ -22,7 +22,7 @@
                     </div>
                     {if $announcement.editable && {array_key_exists array=$announcement key="actions"} && count($announcement.actions) > 0}
                         <div class="col-auto ms-auto text-nowrap">
-                            {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $announcement.uuid, 'actions' => $announcement.actions]}
+                            {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $announcement.uuid, 'actions' => $announcement.actions]}
                         </div>
                     {/if}
                 </div>

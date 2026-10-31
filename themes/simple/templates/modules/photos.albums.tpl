@@ -51,7 +51,7 @@
                             {$photoActions[] = ['class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'left'], 'icon' => 'bi bi-arrow-counterclockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_LEFT')]}
                             {$photoActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_PHOTO'), 'dataHref' => "callUrlHideElement('div_image_{$photo.number}', '{$photo.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]}
                         {/if}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => "photo_{$photo.number}", 'actions' => $photoActions]}
+                        {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "photo_{$photo.number}", 'actions' => $photoActions]}
                     </div>
                 {/if}
             </div>
@@ -103,7 +103,7 @@
                                         {$albumActions[] = ['class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'lock'], 'icon' => 'bi bi-lock', 'tooltip' => $l10n->get('SYS_LOCK_ALBUM')]}
                                     {/if}
                                     {$albumActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$album.name]), 'dataHref' => "callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE_ALBUM')]}
-                                    {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $album.uuid, 'actions' => $albumActions]}
+                                    {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $album.uuid, 'actions' => $albumActions]}
                                 </div>
                             {/if}
                         </div>

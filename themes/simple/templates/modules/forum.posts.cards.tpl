@@ -11,7 +11,7 @@
                             {$l10n->get('SYS_LAST_EDITED_AT', array($post.timestampChanged))}
                         {/if}
                         {if {array_key_exists array=$post key="actions"} && count($post.actions) > 0}
-                            {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $post.post_uuid, 'actions' => $post.actions]}
+                            {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $post.post_uuid, 'actions' => $post.actions]}
                         {/if}
                     </div>
                 {/if}

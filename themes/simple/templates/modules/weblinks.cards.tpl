@@ -29,7 +29,7 @@
                                             {assign var=linkActions value=[['url' => $link.editUrl, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT')], ['dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$link.name]), 'dataHref' => "callUrlHideElement('lnk_{$link.uuid}', '{$link.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]]}
                                             {$linkActions[] = ['class' => 'admidio-link-move', 'attributes' => ['data-uuid' => $link.uuid, 'data-direction' => 'UP', 'data-target' => "lnk_{$link.uuid}"], 'icon' => 'bi bi-arrow-left-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_LEFT', ['SYS_WEBLINK'])]}
                                             {$linkActions[] = ['class' => 'admidio-link-move', 'attributes' => ['data-uuid' => $link.uuid, 'data-direction' => 'DOWN', 'data-target' => "lnk_{$link.uuid}"], 'icon' => 'bi bi-arrow-right-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_RIGHT', ['SYS_WEBLINK'])]}
-                                            {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $link.uuid, 'actions' => $linkActions]}
+                                            {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $link.uuid, 'actions' => $linkActions]}
                                         </div>
                                     {/if}
                                 </div>

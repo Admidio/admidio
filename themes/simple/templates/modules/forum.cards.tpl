@@ -29,7 +29,7 @@
                             </div>
                             {if $forumTopic.editable && {array_key_exists array=$forumTopic key="actions"} && count($forumTopic.actions) > 0}
                                 <div class="col-auto ms-auto text-nowrap">
-                                    {include 'sys-template-parts/list.functions.tpl' data=$forumTopic}
+                                    {include 'sys-template-parts/list.functions.tpl' cardActions=true data=$forumTopic}
                                 </div>
                             {/if}
                         </div>

@@ -113,7 +113,7 @@
                                 {if $pluginEntry.toggle}
                                     {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
                                 {/if}
-                                {include 'sys-template-parts/list.functions.tpl' data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginActions]}
+                                {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginActions]}
                             </div>
                         </div>
                         <div class="card-body">
