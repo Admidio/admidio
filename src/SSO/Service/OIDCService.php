@@ -117,7 +117,8 @@ class OIDCService extends SSOService {
     private const AUTHORIZATION_REQUEST_PARAMETERS = array(
         'response_type', 'client_id', 'redirect_uri', 'scope', 'state', 'nonce',
         'response_mode', 'prompt', 'max_age', 'display', 'ui_locales', 'acr_values',
-        'id_token_hint', 'login_hint', 'code_challenge', 'code_challenge_method'
+        'id_token_hint', 'login_hint', 'code_challenge', 'code_challenge_method',
+        'request', 'request_uri'
     );
 
     /**

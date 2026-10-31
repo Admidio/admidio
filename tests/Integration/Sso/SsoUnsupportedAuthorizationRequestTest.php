@@ -1,12 +1,16 @@
 <?php
 /**
- * Regression coverage for the response_type of an OIDC authorization request.
+ * Regression coverage for OIDC authorization requests that the OP cannot serve.
  *
  * Only the code flow is supported. A request for another response type, or for none at all,
  * used to end in a JSON error page "unsupported_grant_type" of the OP, although OpenID Connect
  * Core 1.0, section 3.1.2.6, requires the error to be sent to the redirect URI of the client
  * once the client and the redirect URI are verified. The OpenID conformance suite stops at that
  * error page.
+ *
+ * Request objects (request, request_uri) are not supported either, but used to be ignored, so
+ * that state and nonce sent only inside the request object were silently lost
+ * (oidcc-unsigned-request-object-supported-correctly-or-rejected-as-unsupported).
  */
 
 namespace Admidio\Tests\Integration\Sso;
@@ -23,7 +27,7 @@ use Laminas\Diactoros\ServerRequest;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ResponseInterface;
 
-class SsoAuthorizationResponseTypeTest extends AdministratorTestCase
+class SsoUnsupportedAuthorizationRequestTest extends AdministratorTestCase
 {
     use SsoClientFixture;
 
@@ -103,6 +107,45 @@ class SsoAuthorizationResponseTypeTest extends AdministratorTestCase
 
         $this->assertFalse($response->hasHeader('Location'));
         $this->assertSame('invalid_client', json_decode((string) $response->getBody(), true)['error'] ?? null);
+    }
+
+    /**
+     * @testdox A request object is rejected with request_not_supported
+     */
+    public function testARequestObjectIsRejected(): void
+    {
+        $client = $this->createRestrictedClient($this->suffix(), array());
+
+        $response = $this->authorize(array(
+            'response_type' => 'code',
+            'client_id' => $client->getIdentifier(),
+            'redirect_uri' => $client->getRedirectUri(),
+            'scope' => 'openid',
+            'state' => 'state-value',
+            // an unsigned request object, as the conformance suite sends it
+            'request' => 'eyJhbGciOiJub25lIn0.eyJzdGF0ZSI6InN0YXRlLXZhbHVlIn0.'
+        ));
+
+        $this->assertRedirectedWithError($response, $client, 'request_not_supported');
+    }
+
+    /**
+     * @testdox A request_uri is rejected with request_uri_not_supported
+     */
+    public function testARequestUriIsRejected(): void
+    {
+        $client = $this->createRestrictedClient($this->suffix(), array());
+
+        $response = $this->authorize(array(
+            'response_type' => 'code',
+            'client_id' => $client->getIdentifier(),
+            'redirect_uri' => $client->getRedirectUri(),
+            'scope' => 'openid',
+            'state' => 'state-value',
+            'request_uri' => 'https://client.example/request.jwt'
+        ));
+
+        $this->assertRedirectedWithError($response, $client, 'request_uri_not_supported');
     }
 
     /**

@@ -67,24 +67,29 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 
     public function validateAuthorizationRequest(ServerRequestInterface $request): AuthorizationRequestInterface
     {
-        $this->validateResponseType($request);
+        $this->rejectUnsupportedRequest($request);
         $authorizationRequest = parent::validateAuthorizationRequest($request);
         $this->nonce = $this->getQueryStringParameter('nonce', $request);
         return $authorizationRequest;
     }
 
     /**
-     * Reject an authorization request whose response_type is not "code".
+     * Reject an authorization request that this OP cannot serve: a response_type other than
+     * "code", or a request object passed by value (request) or by reference (request_uri),
+     * which discovery announces as not supported. Ignoring a request object would silently
+     * drop parameters such as state and nonce that the client sent only inside it.
      *
      * Once the client and its redirect URI are verified, the error is sent to that redirect
-     * URI (OpenID Connect Core 1.0, section 3.1.2.6). An unknown client or an unregistered
-     * redirect URI is still answered by the OP itself, as for every other request.
+     * URI (OpenID Connect Core 1.0, sections 3.1.2.6 and 6). An unknown client or an
+     * unregistered redirect URI is still answered by the OP itself, as for every other request.
      * @throws OAuthServerException
      */
-    private function validateResponseType(ServerRequestInterface $request): void
+    private function rejectUnsupportedRequest(ServerRequestInterface $request): void
     {
         $responseType = $this->getQueryStringParameter('response_type', $request);
-        if ($responseType === 'code') {
+        $hasRequestObject = $this->getQueryStringParameter('request', $request) !== null;
+        $hasRequestUri = $this->getQueryStringParameter('request_uri', $request) !== null;
+        if ($responseType === 'code' && !$hasRequestObject && !$hasRequestUri) {
             return;
         }
 
@@ -115,8 +120,18 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
                 3, 'invalid_request', 400, null, $redirectUri);
         }
 
-        throw new OAuthServerException('The authorization server does not support this response type.',
-            2, 'unsupported_response_type', 400, 'Only the response type "code" is supported.', $redirectUri);
+        if ($responseType !== 'code') {
+            throw new OAuthServerException('The authorization server does not support this response type.',
+                2, 'unsupported_response_type', 400, 'Only the response type "code" is supported.', $redirectUri);
+        }
+
+        if ($hasRequestObject) {
+            throw new OAuthServerException('The authorization server does not support request objects.',
+                3, 'request_not_supported', 400, null, $redirectUri);
+        }
+
+        throw new OAuthServerException('The authorization server does not support the request_uri parameter.',
+            3, 'request_uri_not_supported', 400, null, $redirectUri);
     }
     
     protected function issueAuthCode(
