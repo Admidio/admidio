@@ -19,6 +19,7 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\RequestEvent;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
@@ -85,9 +86,10 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 
     /**
      * Reject an authorization request that this OP cannot serve: a response_type other than
-     * "code", or a request object passed by value (request) or by reference (request_uri),
-     * which discovery announces as not supported. Ignoring a request object would silently
-     * drop parameters such as state and nonce that the client sent only inside it.
+     * "code", a client that is not allowed to use the authorization code grant, or a request
+     * object passed by value (request) or by reference (request_uri), which discovery
+     * announces as not supported. Ignoring a request object would silently drop parameters
+     * such as state and nonce that the client sent only inside it.
      *
      * Once the client and its redirect URI are verified, the error is sent to that redirect
      * URI (OpenID Connect Core 1.0, sections 3.1.2.6 and 6). An unknown client or an
@@ -99,15 +101,23 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         $responseType = $this->getQueryStringParameter('response_type', $request);
         $hasRequestObject = $this->getQueryStringParameter('request', $request) !== null;
         $hasRequestUri = $this->getQueryStringParameter('request_uri', $request) !== null;
-        if ($responseType === 'code' && !$hasRequestObject && !$hasRequestUri) {
-            return;
-        }
 
         $clientId = $this->getQueryStringParameter('client_id', $request);
         if ($clientId === null) {
             throw OAuthServerException::invalidRequest('client_id');
         }
-        $client = $this->getClientEntityOrFail($clientId, $request);
+        // Not getClientEntityOrFail(), which rejects a client without the authorization code
+        // grant before its redirect URI is known, so that the error could not go to the client
+        $client = $this->clientRepository->getClientEntity($clientId);
+        if ($client === null) {
+            $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
+            throw OAuthServerException::invalidClient($request);
+        }
+        $grantAllowed = $this->supportsGrantType($client, $this->getIdentifier());
+
+        if ($responseType === 'code' && !$hasRequestObject && !$hasRequestUri && $grantAllowed) {
+            return;
+        }
 
         $redirectUri = $this->getQueryStringParameter('redirect_uri', $request);
         if ($redirectUri !== null) {
@@ -133,6 +143,12 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         if ($responseType !== 'code') {
             throw new OAuthServerException('The authorization server does not support this response type.',
                 2, 'unsupported_response_type', 400, 'Only the response type "code" is supported.', $redirectUri);
+        }
+
+        if (!$grantAllowed) {
+            throw new OAuthServerException('The client is not allowed to use the authorization code grant.',
+                9, 'unauthorized_client', 400,
+                'Enable the authorization code grant for client "' . $client->getIdentifier() . '".', $redirectUri);
         }
 
         if ($hasRequestObject) {

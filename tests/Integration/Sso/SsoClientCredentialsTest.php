@@ -6,6 +6,9 @@
  * section 2.3.1), which matters for client IDs that are URLs. Only the authorization code grant
  * decoded them, so a client could exchange its code but not refresh its tokens
  * (oidcc-refresh-token: invalid_client).
+ *
+ * A client that may not use a grant type was only rejected when its secret was checked, as
+ * invalid_client; RFC 6749, section 5.2, calls this unauthorized_client.
  */
 
 namespace Admidio\Tests\Integration\Sso;
@@ -13,15 +16,19 @@ namespace Admidio\Tests\Integration\Sso;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
 use Admidio\SSO\Grants\OIDCRefreshTokenGrant;
 use Admidio\SSO\Repository\AuthCodeRepository;
+use Admidio\SSO\Repository\ClientRepository;
 use Admidio\SSO\Repository\RefreshTokenRepository;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\AdministratorTestCase;
 use Laminas\Diactoros\ServerRequest;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\AbstractGrant;
 use ReflectionMethod;
 
 class SsoClientCredentialsTest extends AdministratorTestCase
 {
+    use SsoClientFixture;
+
     private const CLIENT_ID = 'https://client.example/';
     private const CLIENT_SECRET = 'secret:with/special+chars';
 
@@ -53,6 +60,27 @@ class SsoClientCredentialsTest extends AdministratorTestCase
         }
 
         $this->assertSame(array(self::CLIENT_ID, self::CLIENT_SECRET), $this->clientCredentials($grant, $request));
+    }
+
+    /**
+     * @testdox A client without the refresh token grant cannot refresh tokens
+     */
+    public function testAClientWithoutTheRefreshGrantIsUnauthorized(): void
+    {
+        $client = $this->createRestrictedClient($this->suffix(), array());
+        $client->setValue('ocl_grant_types', 'authorization_code');
+        $client->save();
+
+        $grant = new OIDCRefreshTokenGrant(new RefreshTokenRepository($this->getDatabase()));
+        $grant->setClientRepository(new ClientRepository($this->getDatabase()));
+        $request = new ServerRequest(array(), array(), 'https://op.example/token', 'POST');
+
+        try {
+            (new ReflectionMethod($grant, 'getClientEntityOrFail'))->invoke($grant, $client->getIdentifier(), $request);
+            $this->fail('The client was accepted for the refresh token grant.');
+        } catch (OAuthServerException $exception) {
+            $this->assertSame('unauthorized_client', $exception->getErrorType());
+        }
     }
 
     /**
