@@ -4,6 +4,7 @@ namespace Admidio\Infrastructure\Cli;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\ChangeNotification;
+use Admidio\SSO\Service\SSOHooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Utils\SpreadsheetUtils;
@@ -1379,6 +1380,9 @@ final class CliApplication
             $gChangeNotification = new ChangeNotification();
         }
 
+        // the single sign-on module reacts to memberships that end
+        SSOHooks::register();
+
         $user = self::resolveUser($reference);
 
         /*
@@ -1452,6 +1456,9 @@ final class CliApplication
         if (!isset($gChangeNotification) || !$gChangeNotification instanceof ChangeNotification) {
             $gChangeNotification = new ChangeNotification();
         }
+
+        // the single sign-on module reacts to memberships that end
+        SSOHooks::register();
 
         if (!isset($gCurrentUser) || !$gCurrentUser instanceof User) {
             // An empty user object, exactly as a visitor without a login has.
