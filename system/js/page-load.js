@@ -36,6 +36,77 @@ function initializeEvents() {
     });
 }
 
+// Native mobile select validation also applies to forms loaded later, e.g. in a dialog.
+// Register once here rather than in initializeEvents(), which may run several times.
+(() => {
+    // Preferences can include this script more than once.
+    if (window.admidioMobileSelectValidationInitialized) {
+        return;
+    }
+    window.admidioMobileSelectValidationInitialized = true;
+
+    let reportedField = null;
+
+    document.addEventListener('invalid', async function(event) {
+        const field = event.target;
+        if (field === reportedField || field.tagName !== 'SELECT' || field.multiple
+            || field.classList.contains('select2-hidden-accessible') || !field.form
+            || window.matchMedia('(min-width: 768px)').matches) {
+            return;
+        }
+
+        event.preventDefault();
+        const firstInvalid = Array.from(field.form.elements)
+            .find(control => control.willValidate && !control.validity.valid);
+        if (firstInvalid !== field) {
+            return;
+        }
+
+        // Open Bootstrap containers from the outside in before focusing their field.
+        const containers = [];
+        for (let parent = field.parentElement; parent && parent !== field.form; parent = parent.parentElement) {
+            if (parent.matches('.tab-pane, .collapse, .collapsing')) {
+                containers.unshift(parent);
+            }
+        }
+        for (const container of containers) {
+            if (container.classList.contains('tab-pane') && getComputedStyle(container).display === 'none') {
+                const trigger = document.querySelector('[data-bs-toggle="tab"][data-bs-target="#' + CSS.escape(container.id) + '"]');
+                if (trigger) {
+                    await new Promise(resolve => {
+                        trigger.addEventListener('shown.bs.tab', resolve, {once: true});
+                        bootstrap.Tab.getOrCreateInstance(trigger).show();
+                    });
+                }
+            } else if (container.classList.contains('collapsing')
+                || (container.classList.contains('collapse') && getComputedStyle(container).display === 'none')) {
+                await new Promise(resolve => {
+                    const collapse = bootstrap.Collapse.getOrCreateInstance(container, {toggle: false});
+                    const show = () => collapse.show();
+                    container.addEventListener('shown.bs.collapse', function() {
+                        container.removeEventListener('hidden.bs.collapse', show);
+                        resolve();
+                    }, {once: true});
+                    // If the user submitted while it was closing, open it after that transition.
+                    container.addEventListener('hidden.bs.collapse', show, {once: true});
+                    show();
+                });
+            }
+        }
+
+        requestAnimationFrame(() => {
+            field.focus({preventScroll: true});
+            field.scrollIntoView({block: 'center', behavior: 'instant'});
+            // Let scrolling settle before requesting the standard browser popup.
+            requestAnimationFrame(() => {
+                reportedField = field;
+                field.reportValidity();
+                reportedField = null;
+            });
+        });
+    }, true);
+})();
+
 $(function() {
     initializeEvents();
 });
