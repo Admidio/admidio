@@ -816,13 +816,10 @@ label {
     margin: 0;
 }
 
-#adm_contacts_table tbody tr .admidio-icon-link,
 .admidio-functions .admidio-icon-link {
     color: var(--bs-body-color);
 }
 
-#adm_contacts_table tbody tr:hover .admidio-icon-link,
-#adm_contacts_table tbody tr:focus-within .admidio-icon-link,
 tr:hover .admidio-functions .admidio-icon-link,
 tr:focus-within .admidio-functions .admidio-icon-link,
 .admidio-functions:hover .admidio-icon-link,
