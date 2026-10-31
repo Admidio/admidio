@@ -45,6 +45,7 @@
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\UI\Presenter\PagePresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
 require(__DIR__ . '/../../system/login_valid.php');
@@ -166,12 +167,16 @@ try {
 
     $rowNumber = $getStart; // count for every row
 
+    $smarty = PagePresenter::createSmartyObject();
+    $smarty->assign('l10n', $gL10n);
+
     // show rows with all organization users
     while ($message = $messageStatement->fetch()) {
         ++$rowNumber;
         $arrContent = array();
         $cssClass = 'fw-normal';
         $iconAttachments = '';
+        $actions = array();
 
         $messageObject = new Admidio\Messages\Entity\Message($gDb);
         $messageObject->setArray($message);
@@ -180,12 +185,14 @@ try {
         if ($message['msg_type'] === Admidio\Messages\Entity\Message::MESSAGE_TYPE_EMAIL) {
             $icon = 'bi-envelope-fill';
             $iconText = $gL10n->get('SYS_EMAIL');
-            $links = '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')) . '">
-                    <i class="bi bi-forward" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_FORWARD') . '"></i></a>';
+            $actions[] = array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')),
+                'icon' => 'bi bi-forward',
+                'tooltip' => $gL10n->get('SYS_FORWARD')
+            );
         } else {
             $icon = 'bi-chat-left-fill';
             $iconText = $gL10n->get('SYS_PRIVATE_MESSAGES');
-            $links = '';
         }
 
         if ($messageObject->isUnread()) {
@@ -205,12 +212,14 @@ try {
         $arrContent['2'] = $messageObject->getRecipientsNamesString();
         $arrContent['3'] = $iconAttachments;
         $arrContent['4'] = $messageObject->getValue('msg_timestamp');
-        $arrContent['5'] = $links . '
-            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                data-message="' . $gL10n->get('SYS_DELETE_MESSAGE', array($messageObject->getValue('msg_subject'))) . '"
-                data-href="callUrlHideElement(\'row_message_' . $message['msg_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $message['msg_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_MESSAGE') . '"></i>
-            </a>';
+        $actions[] = array(
+            'dataMessage' => $gL10n->get('SYS_DELETE_MESSAGE', array($messageObject->getValue('msg_subject'))),
+            'dataHref' => 'callUrlHideElement(\'row_message_' . $message['msg_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $message['msg_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+            'icon' => 'bi bi-trash',
+            'tooltip' => $gL10n->get('SYS_REMOVE_MESSAGE')
+        );
+        $smarty->assign('data', array('uuid' => $message['msg_uuid'], 'actions' => $actions));
+        $arrContent['5'] = $smarty->fetch('sys-template-parts/list.functions.tpl');
 
         // create array with all column values and add it to the json array
         $jsonArray['data'][] = $arrContent;
