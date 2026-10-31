@@ -131,7 +131,9 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
             throw OAuthServerException::serverError('Authorization code is not an instance of AuthCodeEntity.');
         }
         $authCode->setValue($authCode->getColumnPrefix() . '_nonce', $this->nonce);
-        $authCode->setValue($authCode->getColumnPrefix() . '_auth_time', $this->authenticationTime);
+        // The column is a timestamp, which does not accept a Unix time
+        $authCode->setValue($authCode->getColumnPrefix() . '_auth_time',
+            $this->authenticationTime > 0 ? date('Y-m-d H:i:s', $this->authenticationTime) : null);
         $authCode->setValue($authCode->getColumnPrefix() . '_external_session_id', $this->externalSessionId);
         $authCode->setValue($authCode->getColumnPrefix() . '_authentication_methods', implode(' ', $this->authenticationMethods));
         $authCode->setValue($authCode->getColumnPrefix() . '_authentication_context', $this->authenticationContext);
