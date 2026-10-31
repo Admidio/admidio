@@ -70,6 +70,10 @@ docker run --detach -it --name "Admidio" \
 
 For detailed instructions on using Admidio in a Docker environment, see [README-Docker.md](https://github.com/Admidio/admidio/blob/master/README-Docker.md).
 
+## One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Admidio/)
+
 ## Contributing
 
 There are numerous ways to contribute to Admidio:
