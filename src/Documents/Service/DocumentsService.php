@@ -494,6 +494,9 @@ class DocumentsService
             $documentsFilesRenameForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesRenameForm->validate($_POST);
 
+            // Validate the base name before constructing the destination path.
+            StringUtils::strIsValidFileName($formValues['adm_new_name'], false);
+
             // get recordset of current file from database and throw exception if necessary
             $file = new File($this->db);
             $file->getFileForDownload($fileUUID);
@@ -511,7 +514,7 @@ class DocumentsService
                 if ($newFile !== $file->getValue('fil_name')) {
                     // rename file in filesystem and database
                     try {
-                        FileSystemUtils::moveFile($oldFile, $newPath . $newFile);
+                        FileSystemUtils::moveFile($oldFile, $newPath . $newFile, array('createDirectoryStructure' => false));
                     } catch (RuntimeException $exception) {
                         throw new Exception('SYS_FILE_RENAME_ERROR', array($oldName));
                     }
