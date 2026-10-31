@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <!--Phrases only in installation-->
   <string name="INS_ADDIDIONAL_DATA">Additional information</string>
   <string name="INS_ADDRESS_LIST">Address list</string>
   <string name="INS_ADMINISTRATOR_LOGIN_DESC">Only an administrator can perform an update. Please enter the administrator credentials.</string>
@@ -71,8 +70,6 @@
   <string name="INS_WELCOME_TO_INSTALLATION">Welcome to the installation of Admidio</string>
   <string name="INS_WELCOME_TO_UPDATE">Welcome to the Admidio update</string>
   <string name="INS_WRONG_MYSQL_VERSION">Admidio #VAR1# requires MariaDB or MySQL version #VAR2# or later. Please update your database or use an #VAR3#older version of Admidio#VAR4# to ensure compatibility.</string>
-  <!--Phrases
-  only in organization administration-->
   <string name="ORG_ACCESS_TO_MODULE">Module access</string>
   <string name="ORG_ACCESS_TO_MODULE_DESC">The module can be disabled or restricted to logged-in users. If access is restricted to logged-in users, the module is hidden from guests and the web feed is disabled for everyone. (Default: enabled)</string>
   <string name="ORG_ACCESS_TO_PLUGIN">Plugin access</string>
@@ -179,8 +176,6 @@
   <string name="ORG_VARIABLE_SHORTNAME_ORGANIZATION">Short name of the organization</string>
   <string name="ORG_VARIABLE_URL_ORGANIZATION">Website URL of the organization</string>
   <string name="ORG_VARIABLE_USERNAME">Username of the user relevant to the notification</string>
-  <!--System-Phrases
-  for use in every module-->
   <string name="SYS_64BIT">64-bit</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Account activated</string>
@@ -202,6 +197,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Add event to calendar</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Add item</string>
+  <string name="SYS_ADD_ITEMS">Add items</string>
   <string name="SYS_ADD_ORGANIZATION">Add organization</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
@@ -248,6 +245,7 @@
   <string name="SYS_APPLY_ALL_AND_UPLOAD">Accept all &amp; upload</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
+  <string name="SYS_APPROVE">Approve</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Set by the roles</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
@@ -274,6 +272,7 @@
   <string name="SYS_ATTEND_EVENT">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">You tentatively signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automatic approval</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available beta version</string>
@@ -285,6 +284,8 @@
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Borrowings</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Active borrowings</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Brother</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -426,8 +427,13 @@
   <string name="SYS_COPY">Copy</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
+  <string name="SYS_COPY_FILE">Copy file</string>
+  <string name="SYS_COPY_FILE_DESC">Select a folder to which you want to copy the #VAR1_BOLD# file. The copy is available in the target folder with the role permissions of that folder.</string>
+  <string name="SYS_COPY_FILE_NAME_EXISTS">A file with the name #VAR1# already exists in the selected folder.</string>
+  <string name="SYS_COPY_FILE_NEW_NAME">Copy the file with the name #VAR1# instead</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
+  <string name="SYS_COPY_TO">Copy to</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
   <string name="SYS_COUNTER">Counter</string>
   <string name="SYS_COUNTRY">Country</string>
@@ -749,6 +755,7 @@
   <string name="SYS_FIRST_LINE_COLUMN_NAME">First line contains the column name</string>
   <string name="SYS_FOLDER">Folder</string>
   <string name="SYS_FOLDER_EXISTS">The folder #VAR1# already exists.\n\nPlease choose a different folder name.</string>
+  <string name="SYS_FOLDER_MOVE_INTO_ITSELF">A folder cannot be moved into itself or into one of its subfolders.</string>
   <string name="SYS_FOLDER_NAME_EMPTY">Folder name is missing!</string>
   <string name="SYS_FOLDER_NAME_INVALID">The selected folder name #VAR1_BOLD# contains invalid characters. Please check the folder name.\n\nThe following special characters are not allowed: ? * ~ ; : \" | &lt; &gt; / \</string>
   <string name="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link">The folder #VAR1_BOLD# could not be created.\n\nPlease ask an #VAR2#administrator#VAR3# to check the parent folder\'s write permissions.</string>
@@ -758,6 +765,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You do not have permission to view the selected folder.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while renaming the folder #VAR1#.</string>
+  <string name="SYS_FOLDER_TREE">Folder tree</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">The folder #VAR1_BOLD# could not be created with the required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# to check the permissions (use FTP to set the permissions to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -796,6 +804,7 @@
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">View and manage all groups and roles in the organization. Display and export member lists, or create custom lists.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Guest request</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -864,6 +873,8 @@
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
+  <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS">Anonymize user names for guests</string>
+  <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC">When this option is enabled, the names of keepers and receivers are replaced with “Member” for guests in the inventory. (Default: yes)</string>
   <string name="SYS_INVENTORY_BORROW_DATE">Borrowing date</string>
   <string name="SYS_INVENTORY_BORROW_DATE_DESC">The date the item was borrowed by the last recipient</string>
   <string name="SYS_INVENTORY_BORROW_DATE_WARNING">The borrowing date of the item must be before the return date!</string>
@@ -876,6 +887,7 @@
   <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
+  <string name="SYS_INVENTORY_EVENT_RESERVATIONS_DESC">Add the inventory items needed for this event. A reservation request is created for each entry for the event period. Removed entries are cancelled and remain in the change history.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
   <string name="SYS_INVENTORY_FIELD">Sequential number field</string>
   <string name="SYS_INVENTORY_FIELD_DESC">Select a field containing a sequential number. For the selected items, the current number is read and increased by the specified amount.\n\nNote: The inventory manager can only check whether a field has the type "Number". It cannot determine whether that field contains a serial number.</string>
@@ -971,8 +983,11 @@
   <string name="SYS_INVENTORY_PROFILE_VIEW_FIELDS">Property fields to display in the profile view</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_KEEPER_DESC">The table shows the items managed by you:</string>
   <string name="SYS_INVENTORY_PROFILE_VIEW_LAST_RECEIVER_DESC">The table shows the items you have borrowed:</string>
+  <string name="SYS_INVENTORY_RESERVATIONS_ENABLED_DESC">When this option is enabled, reservation requests can be submitted for inventory items. (Default: no)</string>
+  <string name="SYS_INVENTORY_RESERVATIONS_EVENTS_ENABLED_DESC">When this option is enabled, inventory items can be reserved for events. The reservation request uses the event period and the configured approval workflow. (Default: yes)</string>
   <string name="SYS_INVENTORY_RETURN_DATE">Return date</string>
   <string name="SYS_INVENTORY_RETURN_DATE_DESC">The date the item was returned to the keeper</string>
+  <string name="SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE">The return date must not be in the future.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE">Delete selected items</string>
   <string name="SYS_INVENTORY_SELECTION_DELETED">The selected items have been deleted.</string>
   <string name="SYS_INVENTORY_SELECTION_DELETE_DESC">If you select #VAR1_BOLD#, the items along with their associated records will be irrevocably removed from the database, and it will not be possible to view the data of these items later.</string>
@@ -993,6 +1008,11 @@
   <string name="SYS_ISO_8859_1">ISO-8859-1</string>
   <string name="SYS_IS_VAR_FROM">is #VAR1# from</string>
   <string name="SYS_ITALIC">Italic</string>
+  <string name="SYS_ITEM_ALREADY_BORROWED">This item cannot be borrowed because it is already borrowed.</string>
+  <string name="SYS_ITEM_HAS_OPEN_RESERVATIONS">This item cannot be deleted or retired while open reservations exist.</string>
+  <string name="SYS_ITEM_NOT_AVAILABLE">The item is not available for the selected period.</string>
+  <string name="SYS_ITEM_NOT_AVAILABLE_FOR_PERIOD">The item "#VAR1#" is not available for the selected period.</string>
+  <string name="SYS_ITEM_RESERVATION_STATUS_PER_EVENT">Item reservation status per event</string>
   <string name="SYS_KEEP_ORIGINAL">Also save original files</string>
   <string name="SYS_KEEP_ORIGINAL_DESC">Save each photo at its original size as well as at the selected resolution. If #VAR1_BOLD# is enabled, downloads use the original photos. This option requires significantly more storage space and should only be enabled if enough space is available.</string>
   <string name="SYS_LANDSCAPE" description="Format for printing">Landscape</string>
@@ -1107,6 +1127,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Member request</string>
   <string name="SYS_MEMORY_LIMIT">Memory limit</string>
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">Configure the menu here. Enter a URL, description, and icon for each item, and choose who can see it.</string>
@@ -1131,13 +1152,19 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOTHER">Mother</string>
+  <string name="SYS_MOVE">Move</string>
+  <string name="SYS_MOVE_ALREADY_IN_FOLDER">#VAR1_BOLD# is already in the selected folder.</string>
+  <string name="SYS_MOVE_CURRENT_FOLDER">current folder</string>
   <string name="SYS_MOVE_DOWN">Move #VAR1# down</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
+  <string name="SYS_MOVE_LAST_FOLDER">last used</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Move or copy file</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
+  <string name="SYS_MOVE_SELECT_FOLDER">Select the destination folder in the tree.</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Move #VAR1# up</string>
   <string name="SYS_MOVE_VAR">Move #VAR1#</string>
@@ -1169,6 +1196,7 @@
   <string name="SYS_NOTE">Note</string>
   <string name="SYS_NOTIFICATION_INVENTORY_CHANGES">Notification for changes in the inventory</string>
   <string name="SYS_NOTIFICATION_INVENTORY_CHANGES_DESC">Members of the stored notification role will get a system notification if items in the inventory are created, changed, deleted, reinstated, retired or imported. (Default: no)</string>
+  <string name="SYS_NOTIFICATION_MANAGER_STATUSES">Notify responsible persons for these actions</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES">Notification for new or changed entries</string>
   <string name="SYS_NOTIFICATION_NEW_ENTRIES_DESC">Members of the stored notification role will get a system notification for new or changed entries in the modules Announcements, Events, Documents &amp; Files, Photos, Web Links and forum. (Default: no)</string>
   <string name="SYS_NOTIFICATION_NEW_REGISTRATION">Notification after a new registration</string>
@@ -1178,6 +1206,7 @@
   <string name="SYS_NOTIFICATION_REGISTRATION_CONFIRMATION">Notification to confirm the registration</string>
   <string name="SYS_NOTIFICATION_ROLE">Notification role</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Members of this role receive notifications about new or changed module entries and changes to member profile data. For data protection reasons, only roles with the #VAR1_BOLD# permission can be selected.</string>
+  <string name="SYS_NOTIFY_REQUESTER">Notify requester by email</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not during registration</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not a member of any organization</string>
@@ -1243,6 +1272,7 @@
   <string name="SYS_ORGANIZATION">Organization</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Origin</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Overhang</string>
   <string name="SYS_OVERVIEW">Overview</string>
@@ -1476,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Enter a regular expression to validate this profile field. The entered value must match the expression before it can be saved. This check applies in addition to the data type\'s general validation rules.</string>
+  <string name="SYS_REJECT">Reject</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
@@ -1499,8 +1530,37 @@
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Requested at</string>
+  <string name="SYS_REQUESTER">Requested by</string>
+  <string name="SYS_REQUEST_AGAIN">Request again</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
+  <string name="SYS_RESERVATIONS">Reservations</string>
+  <string name="SYS_RESERVATIONS_ENABLED">Enable reservation requests</string>
+  <string name="SYS_RESERVATIONS_EVENTS_ENABLED">Allow reservations for events</string>
+  <string name="SYS_RESERVATION_APPROVAL">Approval of reservation requests</string>
+  <string name="SYS_RESERVATION_APPROVAL_DESC">Defines whether reservation requests are approved automatically or must first be reviewed by an administrator. (Default: manual)</string>
+  <string name="SYS_RESERVATION_BORROWINGS_READY">Approved reservations ready for handover</string>
+  <string name="SYS_RESERVATION_ITEM_KEEPERS_MANAGE">Allow item keepers to manage reservations</string>
+  <string name="SYS_RESERVATION_ITEM_KEEPERS_MANAGE_DESC">When this option is enabled, item keepers can manage reservation requests for their items. Keepers must also be allowed to edit items. (Default: yes)</string>
+  <string name="SYS_RESERVATION_NOTIFICATIONS_ENABLED">Enable reservation email notifications</string>
+  <string name="SYS_RESERVATION_NOTIFICATIONS_ENABLED_DESC">If enabled, reservation managers and requesters can receive emails about reservation requests and status changes. The general system notification setting must also be enabled. (Default: no)</string>
+  <string name="SYS_RESERVATION_NOTIFICATION_MANAGER_STATUSES_DESC">Select the reservation status changes for which members of the notification roles receive an email. (Default: all actions)</string>
+  <string name="SYS_RESERVATION_NOTIFICATION_MESSAGE">Reservation status: #VAR1#&lt;br /&gt;&lt;br /&gt;Item: #VAR2#&lt;br /&gt;Reserve from: #VAR3#&lt;br /&gt;Reserve until: #VAR4#&lt;br /&gt;Requested by: #VAR5#</string>
+  <string name="SYS_RESERVATION_NOTIFICATION_ROLE">Reservation notification roles</string>
+  <string name="SYS_RESERVATION_NOTIFICATION_ROLE_DESC">Members of these roles receive reservation notification emails. Members require the right "View all member lists".</string>
+  <string name="SYS_RESERVATION_NOTIFICATION_SUBJECT">Reservation for #VAR1#: #VAR2#</string>
+  <string name="SYS_RESERVATION_NOTIFY_REQUESTER_DESC">If enabled, requesters receive emails about automatic approval and later status changes. (Default: yes)</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Reserve from</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Reserve until</string>
+  <string name="SYS_RESERVATION_REQUEST">Request reservation</string>
+  <string name="SYS_RESERVATION_REQUESTERS">Who may request reservations?</string>
+  <string name="SYS_RESERVATION_REQUESTERS_DESC">Defines whether all visitors, only logged-in users, or users in selected roles may submit reservation requests. (Default: logged-in users)</string>
+  <string name="SYS_RESERVATION_REQUESTER_ROLES">Roles allowed to request reservations</string>
+  <string name="SYS_RESERVATION_REQUESTER_ROLES_DESC">Select the roles whose members may submit reservation requests. This setting is used only when “Roles” is selected under “Who may request reservations?”.</string>
+  <string name="SYS_RESERVATION_REQUEST_APPROVED">The reservation has been approved.</string>
+  <string name="SYS_RESERVATION_REQUEST_SUBMITTED">The reservation has been submitted for approval.</string>
+  <string name="SYS_RESERVATION_REQUIRES_TIME_PERIOD">Item reservations require a time period. Items cannot be reserved for a single point in time.</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
@@ -1924,7 +1984,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_APPROVED">Approved</string>
+  <string name="SYS_STATUS_BORROWED">Borrowed</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
+  <string name="SYS_STATUS_REJECTED">Rejected</string>
+  <string name="SYS_STATUS_REQUESTED">Requested</string>
+  <string name="SYS_STATUS_RETURNED">Returned</string>
   <string name="SYS_STILL_X_CHARACTERS">#VAR1# characters remaining</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUBJECT">Subject</string>
@@ -2092,6 +2157,7 @@
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WIFE">Wife</string>
+  <string name="SYS_WITHDRAW">Withdraw</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>
   <string name="SYS_WRITE_EMAIL">Write email</string>
   <string name="SYS_WRITE_PM">Write private message</string>

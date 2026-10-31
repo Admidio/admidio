@@ -240,20 +240,15 @@ class ItemsData
 
             while ($row = $itemDataStatement->fetch()) {
                 if (!array_key_exists($row['ind_inf_id'], $this->mItemData)) {
-                    // The entities are indexed by the item field, but they are loaded by their own
-                    // key column ind_id. Passing ind_inf_id here reads an unrelated data row.
-                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this, (int)$row['ind_id']);
+                    // The query already contains the complete entity, as in the preload path.
+                    $this->mItemData[$row['ind_inf_id']] = new ItemData($this->mDb, $this);
                 }
                 $this->mItemData[$row['ind_inf_id']]->setArray($row);
             }
 
             // read all item borrow data
-            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . '
-                    INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                        ON inf_name_intern IN ( ?, ?, ? )
-                    WHERE inb_ini_id = ?;';
-            $params = array_merge($this->borrowFieldNames, array($itemId));
-            $itemBorrowStatement = $this->mDb->queryPrepared($sql, $params);
+            $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
+            $itemBorrowStatement = $this->mDb->queryPrepared($sql, array($itemId));
 
             while ($row = $itemBorrowStatement->fetch()) {
                 foreach ($this->getItemFields() as $itemField) {
@@ -263,13 +258,10 @@ class ItemsData
                     }
                     $fieldId = $itemField->getValue('inf_id');
                     if (!array_key_exists($fieldId, $this->mItemData)) {
-                        // Same as above: the entity is loaded by its own key column inb_id.
-                        // inb_ini_id is the item the borrow data belongs to and would read an
-                        // unrelated row. The object is only built for the borrow fields and only
-                        // when it is really needed, because the constructor clones this object
-                        // and reads from the database.
-                        $this->mItemData[$fieldId] = new ItemBorrowData($this->mDb, $this, (int)$row['inb_id']);
+                        $this->mItemData[$fieldId] = new ItemBorrowData($this->mDb, $this);
                     }
+                    $row['inf_id'] = $fieldId;
+                    $row['inf_name_intern'] = $fieldNameIntern;
                     $this->mItemData[$fieldId]->setArray($row);
                 }
             }
@@ -334,6 +326,7 @@ class ItemsData
                 $fieldName = $itemField->getValue('inf_name_intern');
                 if (in_array($fieldName, $this->borrowFieldNames, true)) {
                     $row['inf_id'] = $itemField->getValue('inf_id');
+                    $row['inf_name_intern'] = $fieldName;
                     $this->preloadedItems[$itemsById[(int) $row['inb_ini_id']]]['data'][(int) $row['inf_id']] = $row;
                 }
             }
@@ -383,10 +376,11 @@ class ItemsData
      * Reads the items out of database table @b adm_inventory_manager_items
      * and stores the values to the @b items array.
      *
+     * @param string $search Optional search whose words may match different stored fields.
      * @return void
      * @throws Exception
      */
-    public function readItems(): void
+    public function readItems(string $search = ''): void
     {
         // first initialize existing data
         $this->mItems = array();
@@ -406,17 +400,44 @@ class ItemsData
             $sqlWhereCondition .= 'AND ini_status NOT IN (' . $retiredId . ')';
         }
 
-        $sql = 'SELECT DISTINCT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
-                INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . '
-                    ON ind_ini_id = ini_id
+        $searchCondition = $this->getSqlSearchCondition($search, TBL_INVENTORY_ITEMS . '.ini_id');
+        // A word search already requires a stored field value. Without a search,
+        // exclude incomplete items with EXISTS rather than duplicating item rows.
+        $dataCondition = $searchCondition['sql'] !== '' ? $searchCondition['sql']
+            : ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA
+                . ' WHERE ind_ini_id = ' . TBL_INVENTORY_ITEMS . '.ini_id)';
+        $sql = 'SELECT ini_id, ini_uuid, ini_cat_id, ini_status FROM ' . TBL_INVENTORY_ITEMS . '
                 WHERE (ini_org_id IS NULL
                     OR ini_org_id = ?)
-                ' . $sqlWhereCondition . ';';
-        $statement = $this->mDb->queryPrepared($sql, array($this->organizationId));
+                ' . $sqlWhereCondition . $dataCondition . ';';
+        $statement = $this->mDb->queryPrepared($sql, array_merge([$this->organizationId], $searchCondition['params']));
 
         while ($row = $statement->fetch()) {
             $this->mItems[] = array('ini_id' => $row['ini_id'], 'ini_uuid' => $row['ini_uuid'], 'ini_cat_id' => $row['ini_cat_id'], 'ini_status' => $row['ini_status']);
         }
+    }
+
+    /**
+     * Build a word search across stored item values for inventory queries.
+     * Every word must occur in a stored item field, using the database's case-insensitive
+     * search operator. Commas and hyphens retain their ordinary meaning within a word.
+     *
+     * @param string $search Search text as validated by the request helper.
+     * @param string $itemIdColumn Trusted, qualified outer item ID column; never request input.
+     * @return array{sql:string,params:array<int,string>}
+     */
+    public function getSqlSearchCondition(string $search, string $itemIdColumn): array
+    {
+        $sql = '';
+        $params = [];
+        $operator = $this->mDb->getEngine() === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
+        foreach (preg_split('/\s+/', trim($search), -1, PREG_SPLIT_NO_EMPTY) as $word) {
+            $sql .= ' AND EXISTS (SELECT 1 FROM ' . TBL_INVENTORY_ITEM_DATA . ' search_data'
+                . ' WHERE search_data.ind_ini_id = ' . $itemIdColumn . ' AND search_data.ind_value ' . $operator . ' ?)';
+            $params[] = '%' . htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5) . '%';
+        }
+
+        return ['sql' => $sql, 'params' => $params];
     }
 
     /**
@@ -1257,19 +1278,6 @@ class ItemsData
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // If an error occurred while generating an item, there is an ItemId but no data for that item.
-        // the following routine deletes these unused ItemIds
-        $sql = 'SELECT * FROM ' . TBL_INVENTORY_ITEMS . '
-                LEFT JOIN ' . TBL_INVENTORY_ITEM_DATA . '
-                    ON ind_ini_id = ini_id
-                WHERE ind_ini_id is NULL;';
-        $statement = $this->mDb->queryPrepared($sql);
-
-        while ($row = $statement->fetch()) {
-            $delItem = new Item($this->mDb, $this, $row['ini_id']);
-            $delItem->delete();
-        }
-
         // generate a new ItemId
         if ($this->mItemCreated) {
             $category = new Category($this->mDb);
@@ -1294,9 +1302,6 @@ class ItemsData
 
             $this->mItemId = $newItem->getValue('ini_id');
             $this->mItemUUID = $newItem->getValue('ini_uuid');
-
-            // update item table
-            $this->readItems();
         }
     }
 
@@ -1316,41 +1321,63 @@ class ItemsData
         // Deleting an item is one action of the user, so the item and its data belong into one
         // change set of the changelog.
         $previousChangeSet = LogChanges::startChangeSet();
+        $ownsTransaction = !$this->mDb->isInTransaction();
+        if ($ownsTransaction) {
+            $this->mDb->startTransaction();
+        }
 
-        $item = new Item($this->mDb, $this, $this->mItemId);
+        try {
+            $this->lockItemAndAssertNoOpenReservations();
+            $item = new Item($this->mDb, $this, $this->mItemId);
 
-        // delete all item data. The values are logged and reported to the persistence hooks before
-        // they are removed, a plain DELETE would take them out of the change history and out of the
-        // hook API without a trace - the same reason Entity::deleteDependentRecords() calls both.
-        // This class is not an Entity subclass, so it calls logBulkDeletion() and hookBulkDeletion()
-        // itself instead of going through that helper.
-        $itemData = new ItemData($this->mDb, $this);
-        $itemData->logBulkDeletion(array('ind_id'), 'ind_ini_id = ?', array($this->mItemId));
-        $itemData->hookBulkDeletion('ind_ini_id = ?', array($this->mItemId), $item);
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
-        $this->mDb->queryPrepared($sql, array($this->mItemId));
+            // Deleting an item is irreversible. Once no reservation is still actionable, remove
+            // completed reservation history together with all other item-related records.
+            $this->mDb->queryPrepared(
+                'DELETE FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_ini_id = ?',
+                [$this->mItemId],
+            );
 
-        // delete all item borrow data
-        $itemBorrowData = new ItemBorrowData($this->mDb, $this);
-        $itemBorrowData->logBulkDeletion(array('inb_id'), 'inb_ini_id = ?', array($this->mItemId));
-        $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', array($this->mItemId), $item);
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
-        $this->mDb->queryPrepared($sql, array($this->mItemId));
+            // delete all item data. The values are logged and reported to the persistence hooks before
+            // they are removed, a plain DELETE would take them out of the change history and out of the
+            // hook API without a trace - the same reason Entity::deleteDependentRecords() calls both.
+            // This class is not an Entity subclass, so it calls logBulkDeletion() and hookBulkDeletion()
+            // itself instead of going through that helper.
+            $itemData = new ItemData($this->mDb, $this);
+            $itemData->logBulkDeletion(['ind_id'], 'ind_ini_id = ?', [$this->mItemId]);
+            $itemData->hookBulkDeletion('ind_ini_id = ?', [$this->mItemId], $item);
+            $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_DATA . ' WHERE ind_ini_id = ?;';
+            $this->mDb->queryPrepared($sql, [$this->mItemId]);
 
-        // Log and delete the item itself last. The change history shows a change with the record it
-        // is about, and it recognizes that record as the entry that a deletion logs last.
-        // hookBulkDeletion() is used instead of $item->delete() so that the exact WHERE condition -
-        // including the organization guard - is the one that decides what is actually deleted; it
-        // dispatches the same inventory_item_deleting / inventory_item_deleted as delete() would.
-        $item->logDeletion();
-        $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', array($this->mItemId, $this->organizationId));
+            // delete all item borrow data
+            $itemBorrowData = new ItemBorrowData($this->mDb, $this);
+            $itemBorrowData->logBulkDeletion(['inb_id'], 'inb_ini_id = ?', [$this->mItemId]);
+            $itemBorrowData->hookBulkDeletion('inb_ini_id = ?', [$this->mItemId], $item);
+            $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' WHERE inb_ini_id = ?;';
+            $this->mDb->queryPrepared($sql, [$this->mItemId]);
 
-        $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
-        $this->mDb->queryPrepared($sql, array($this->mItemId, $this->organizationId));
+            // Log and delete the item itself last. The change history shows a change with the record it
+            // is about, and it recognizes that record as the entry that a deletion logs last.
+            // hookBulkDeletion() is used instead of $item->delete() so that the exact WHERE condition -
+            // including the organization guard - is the one that decides what is actually deleted; it
+            // dispatches the same inventory_item_deleting / inventory_item_deleted as delete() would.
+            $item->logDeletion();
+            $item->hookBulkDeletion('ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL)', [$this->mItemId, $this->organizationId]);
 
-        LogChanges::endChangeSet($previousChangeSet);
+            $sql = 'DELETE FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? AND (ini_org_id = ? OR ini_org_id IS NULL);';
+            $this->mDb->queryPrepared($sql, [$this->mItemId, $this->organizationId]);
 
-        $this->mItemDeleted = true;
+            if ($ownsTransaction) {
+                $this->mDb->endTransaction();
+            }
+            $this->mItemDeleted = true;
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->mDb->rollback();
+            }
+            throw $exception;
+        } finally {
+            LogChanges::endChangeSet($previousChangeSet);
+        }
     }
 
     /**
@@ -1377,9 +1404,25 @@ class ItemsData
             }
         }
 
-        $item = new Item($this->mDb, $this, $this->mItemId);
-        $item->setValue('ini_status', $retiredId);
-        $item->save();
+        $ownsTransaction = !$this->mDb->isInTransaction();
+        if ($ownsTransaction) {
+            $this->mDb->startTransaction();
+        }
+
+        try {
+            $this->lockItemAndAssertNoOpenReservations();
+            $item = new Item($this->mDb, $this, $this->mItemId);
+            $item->setValue('ini_status', $retiredId);
+            $item->save();
+            if ($ownsTransaction) {
+                $this->mDb->endTransaction();
+            }
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->mDb->rollback();
+            }
+            throw $exception;
+        }
 
         $this->mItemRetired = true;
         $this->mItemReinstated = false;
@@ -1417,6 +1460,12 @@ class ItemsData
         $this->mItemReinstated = true;
     }
 
+    /** Lock the item and reject mutations while a reservation still requires action. */
+    private function lockItemAndAssertNoOpenReservations(): void
+    {
+        (new Item($this->mDb, $this, $this->mItemId))->assertNoOpenReservations();
+    }
+
     /**
      * Save data of every item data field
      *
@@ -1428,6 +1477,36 @@ class ItemsData
         // check if the current user is authorized to edit the item
         if (!$this->isEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->assertReturnDateIsNotInFuture();
+
+        // Validate a submitted retirement before writing any of the other form fields.
+        foreach ($this->mItemData as $value) {
+            if ($value instanceof ItemData && (int) $value->getValue('ind_inf_id') === (int) $this->getProperty('STATUS', 'inf_id')) {
+                $item = new Item($this->mDb, $this, $this->mItemId);
+                if ((int) $item->getStatus() === (int) $value->getValue('ind_value')) {
+                    continue;
+                }
+                $item->setValue('ini_status', $value->getValue('ind_value'));
+                if ($item->isRetired()) {
+                    $ownsTransaction = !$this->mDb->isInTransaction();
+                    if ($ownsTransaction) {
+                        $this->mDb->startTransaction();
+                    }
+                    try {
+                        $item->assertNoOpenReservations();
+                        if ($ownsTransaction) {
+                            $this->mDb->endTransaction();
+                        }
+                    } catch (\Throwable $exception) {
+                        if ($ownsTransaction) {
+                            $this->mDb->rollback();
+                        }
+                        throw $exception;
+                    }
+                }
+            }
         }
 
         global $gCurrentUser;
@@ -1502,6 +1581,29 @@ class ItemsData
         $this->readItemData($this->mItemUUID);
         $this->mDb->endTransaction();
         LogChanges::endChangeSet($previousChangeSet);
+    }
+
+    /** A return date records an actual return and therefore cannot be in the future. */
+    private function assertReturnDateIsNotInFuture(): void
+    {
+        global $gSettingsManager;
+
+        $returnDateValue = $this->getValue('RETURN_DATE', 'database');
+        if ($returnDateValue === '') {
+            return;
+        }
+
+        $returnDate = new DateTime($returnDateValue);
+        $now = new DateTime();
+        if ($gSettingsManager->get('inventory_field_date_time_format') === 'datetime') {
+            $isInFuture = $returnDate > $now;
+        } else {
+            $isInFuture = $returnDate->format('Y-m-d') > $now->format('Y-m-d');
+        }
+
+        if ($isInFuture) {
+            throw new Exception('SYS_INVENTORY_RETURN_DATE_MUST_NOT_BE_FUTURE');
+        }
     }
 
     /**

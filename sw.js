@@ -40,6 +40,12 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // Audio and video are loaded in parts (range requests) directly from the server. Through the service worker the
+    // playback stops when the browser suspends the worker, e.g. while the installed app is in the background.
+    if (event.request.headers.has('range') || event.request.destination === 'audio' || event.request.destination === 'video') {
+        return;
+    }
+
     // Network-first strategy
     event.respondWith(
         fetch(event.request)

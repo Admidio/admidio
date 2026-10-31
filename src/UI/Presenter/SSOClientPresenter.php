@@ -1046,7 +1046,7 @@ class SSOClientPresenter extends PagePresenter
 
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($client->readableName())) . '"
+                    data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName())))) . '"
                     data-href="callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';
@@ -1109,7 +1109,7 @@ class SSOClientPresenter extends PagePresenter
 
             // add link to delete OIDC client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="' . $gL10n->get('SYS_WANT_DELETE_ENTRY', array($client->readableName())) . '"
+                    data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName())))) . '"
                     data-href="callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
                     <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
                 </a>';

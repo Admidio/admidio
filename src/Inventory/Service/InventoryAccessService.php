@@ -74,4 +74,96 @@ class InventoryAccessService
             || ($gSettingsManager->getInt('inventory_module_enabled') === 3
                 && $gCurrentUser->isAdministratorInventory());
     }
+
+    /** Whether the current visitor may submit a reservation request. */
+    public static function canRequestReservation(): bool
+    {
+        global $gCurrentUser, $gSettingsManager, $gValidLogin;
+
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')) {
+            return false;
+        }
+
+        if ($gCurrentUser->isAdministratorInventory()) {
+            return true;
+        }
+
+        return match ($gSettingsManager->getString('inventory_reservation_requesters')) {
+            'guests' => true,
+            'members' => $gValidLogin,
+            'roles' => $gValidLogin && self::isMemberOfConfiguredReservationRole($gCurrentUser),
+            default => false,
+        };
+    }
+
+    /**
+     * Administrators always manage the shared reservation queue. Item keepers may do so when
+     * the organization explicitly enables this additional permission.
+     */
+    public static function canManageReservations(): bool
+    {
+        global $gCurrentUser, $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')) {
+            return false;
+        }
+
+        return $gCurrentUser->isAdministratorInventory()
+            || ($gSettingsManager->getInt('inventory_module_enabled') !== 3
+                && $gSettingsManager->getBool('inventory_allow_keeper_edit')
+                && $gSettingsManager->getBool('inventory_reservation_keepers_manage')
+                && InventoryPresenter::isCurrentUserKeeper());
+    }
+
+    /** Whether the current user may manage reservations for one specific item. */
+    public static function canManageReservationItem(int $itemId): bool
+    {
+        global $gCurrentOrgId, $gCurrentUser, $gDb;
+
+        if (!self::canManageReservations()) {
+            return false;
+        }
+
+        // Inventory administrators are administrators only within the active organization.
+        // Do not let a guessed reservation UUID expose guest contact data from another
+        // organization through the reservation mail workflow.
+        $itemOrganizationId = $gDb->queryPrepared(
+            'SELECT ini_org_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ?',
+            [$itemId],
+        )->fetchColumn();
+        if ($itemOrganizationId === false
+            || ((int) $itemOrganizationId > 0 && (int) $itemOrganizationId !== (int) $gCurrentOrgId)) {
+            return false;
+        }
+
+        return $gCurrentUser->isAdministratorInventory()
+            || InventoryPresenter::isCurrentUserKeeper($itemId);
+    }
+
+    /**
+     * Whether the current user may process regular borrowings.
+     * Inventory administrators may process all items. Keepers retain the same scope as the
+     * established item borrowing action and may process only items assigned to them.
+     */
+    public static function canManageBorrowings(): bool
+    {
+        global $gCurrentUser, $gSettingsManager;
+
+        return $gCurrentUser->isAdministratorInventory()
+            || ($gSettingsManager->getInt('inventory_module_enabled') !== 3
+                && $gSettingsManager->getBool('inventory_allow_keeper_edit')
+                && InventoryPresenter::isCurrentUserKeeper());
+    }
+
+    private static function isMemberOfConfiguredReservationRole(object $user): bool
+    {
+        global $gSettingsManager;
+
+        foreach (explode(',', $gSettingsManager->getString('inventory_reservation_requester_roles')) as $roleId) {
+            if (is_numeric($roleId) && $user->isMemberOfRole((int) $roleId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

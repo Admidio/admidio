@@ -950,6 +950,15 @@ tr.admidio-event-highlight {
     color: var(--bs-danger);
 }
 
+.admidio-inventory-reservation-action {
+    width: 165px;
+}
+
+.admidio-inventory-reservation-action > .dropdown-toggle {
+    width: 100%;
+    white-space: nowrap;
+}
+
 .card-img, .card-img-top {
     height: 200px !important;
     object-fit: cover !important;
@@ -1144,6 +1153,223 @@ div.adm-changelog-details-table {
   #adm_events_table .admidio-event-period-small {
     display: none;
   }
+}
+
+/* Documents & Files: optional folder tree */
+.admidio-documents-layout {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.admidio-documents-list {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* the sidebar is as high as the list, a longer tree scrolls within the sidebar */
+.admidio-folder-sidebar {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 18rem;
+    width: 18rem;
+    min-height: 12rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-body-bg);
+    overflow: hidden;
+}
+
+/* on large screens there is space between the open sidebar and the footer of the page, as wide as the space
+   between the sidebar and the menu on its left */
+@media (min-width: 768px) {
+    .admidio-folder-sidebar:not(.collapsed) {
+        margin-bottom: 1rem;
+    }
+}
+
+.admidio-folder-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .4rem .5rem .4rem .75rem;
+    border-bottom: 1px solid var(--bs-border-color);
+    background-color: var(--bs-tertiary-bg);
+    white-space: nowrap;
+}
+
+.admidio-folder-sidebar-collapse {
+    padding: .1rem .35rem;
+    border: 0;
+    border-radius: var(--bs-border-radius);
+    background: none;
+    color: inherit;
+}
+
+.admidio-folder-sidebar-collapse:hover {
+    background-color: var(--bs-secondary-bg);
+}
+
+.admidio-folder-sidebar-collapse .bi {
+    display: inline-block;
+    transition: transform .2s;
+}
+
+/* the text is only shown at the button of the collapsed sidebar, the open sidebar has its title in the header */
+.admidio-folder-sidebar-collapse-label {
+    display: none;
+}
+
+/* collapsed, the sidebar needs no space, only its button stays at the top left above the first column of the list */
+.admidio-folder-sidebar.collapsed {
+    flex-basis: 0;
+    width: 0;
+    margin-right: -1rem;
+    min-height: 0;
+    border: 0;
+    overflow: visible;
+}
+
+.admidio-folder-sidebar.collapsed .admidio-folder-sidebar-header {
+    position: absolute;
+    z-index: 2;
+    top: .5rem;
+    left: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.admidio-folder-sidebar.collapsed .admidio-folder-sidebar-collapse-label {
+    display: inline;
+    margin-left: .4rem;
+    white-space: nowrap;
+}
+
+/* a table with an entries menu at the top left: the button shows only its icon and the menu moves to the right */
+.admidio-folder-sidebar.collapsed:has(~ .admidio-documents-list .dt-length) .admidio-folder-sidebar-collapse-label {
+    display: none;
+}
+
+.admidio-folder-sidebar.collapsed ~ .admidio-documents-list .dt-length {
+    margin-left: 3rem;
+}
+
+/* same size as the search field and the entries menu of the table (form-control-sm), so they are on one line */
+.admidio-folder-sidebar.collapsed .admidio-folder-sidebar-collapse {
+    display: inline-flex;
+    align-items: center;
+    padding: .25rem .65rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border: 1px solid var(--bs-border-color);
+    background-color: var(--bs-body-bg);
+}
+
+.admidio-folder-sidebar.collapsed .admidio-folder-sidebar-title,
+.admidio-folder-sidebar.collapsed .admidio-folder-tree-pane {
+    display: none;
+}
+
+.admidio-folder-sidebar.collapsed .admidio-folder-sidebar-collapse .bi {
+    transform: rotate(180deg);
+}
+
+.admidio-folder-tree-pane {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
+    padding: .4rem;
+}
+
+/* the folder tree is only for navigation and is not printed */
+@media print {
+    .admidio-folder-sidebar {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    /* on small screens the sidebar is shown above the list and collapses to its header */
+    .admidio-documents-layout {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admidio-folder-sidebar, .admidio-folder-sidebar.collapsed {
+        flex-basis: auto;
+        width: 100%;
+        min-height: 0;
+        margin-right: 0;
+        border: 1px solid var(--bs-border-color);
+        overflow: hidden;
+    }
+
+    .admidio-folder-sidebar.collapsed ~ .admidio-documents-list .dt-length {
+        margin-left: 0;
+    }
+
+    .admidio-folder-sidebar.collapsed .admidio-folder-sidebar-title {
+        display: inline;
+    }
+
+    .admidio-folder-sidebar.collapsed .admidio-folder-sidebar-collapse-label {
+        display: none;
+    }
+
+    .admidio-folder-tree-pane {
+        flex: none;
+        max-height: 50vh;
+    }
+
+    .admidio-folder-sidebar.collapsed .admidio-folder-sidebar-header {
+        position: static;
+        padding: .4rem .5rem .4rem .75rem;
+        background-color: var(--bs-tertiary-bg);
+    }
+
+    .admidio-folder-sidebar.collapsed .admidio-folder-sidebar-collapse {
+        display: inline-block;
+        padding: .1rem .35rem;
+        border: 0;
+        background: none;
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    .admidio-folder-sidebar .admidio-folder-sidebar-collapse .bi {
+        transform: rotate(90deg);
+    }
+
+    .admidio-folder-sidebar.collapsed .admidio-folder-sidebar-collapse .bi {
+        transform: rotate(-90deg);
+    }
+}
+
+/* the selected action of the switch between moving and copying a file */
+.admidio-move-copy-switch .btn {
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+    --bs-btn-active-color: #fff;
+}
+
+.admidio-move-copy-switch .btn-check:checked + .btn {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+/* the buttons of the switch share the width on small screens, where buttons are as wide as the screen otherwise */
+@media (max-width: 767.98px) {
+    .admidio-move-copy-switch {
+        display: flex;
+    }
+
+    .admidio-move-copy-switch .btn {
+        flex: 1 1 0;
+        width: auto;
+    }
 }
 
 /***********************************/
