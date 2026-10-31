@@ -23,12 +23,23 @@ class CategoryReportPresenter
     public function showReport(): void
     {
         global $gSettingsManager, $gL10n, $gCurrentOrganization, $gNavigation, $gCurrentUser, $gProfileFields;
+        if (!$gCurrentUser->checkRolesRight('rol_all_lists_view')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         $report = new CategoryReportGenerator();
         $config = Hooks::applyFilters('category_report_config', $report->getConfigArray());
         $getCrtId = admFuncVariableIsValid($_GET, 'crt_id', 'int', array('defaultValue' => $gSettingsManager->get('category_report_default_configuration')));
         $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('xlsx', 'ods', 'csv-oo', 'html', 'print', 'pdf', 'pdfl')));
         $getFilter = admFuncVariableIsValid($_GET, 'filter', 'string');
         $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
+
+        $exportAllowed = $gSettingsManager->getInt('groups_roles_export') === 1
+            || ($gSettingsManager->getInt('groups_roles_export') === 2
+                && $gCurrentUser->checkRolesRight('rol_edit_user'));
+        if (!in_array($getMode, array('html', 'print'), true) && !$exportAllowed) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
 
         if ($config === array()) {
             if ($getMode !== 'html' || !$gCurrentUser->isAdministrator()) {
@@ -197,63 +208,65 @@ class CategoryReportPresenter
                     // link to print overlay and exports
                     $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
-                    // dropdown menu item with all export possibilities
-                    $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
-                    $page->addPageFunctionsMenuItem(
-                        'menu_item_lists_xlsx',
-                        $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
-                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
-                            'crt_id' => $getCrtId,
-                            'filter' => $getFilter,
-                            'export_and_filter' => $getExportAndFilter,
-                            'mode' => 'xlsx')),
-                        'bi-file-earmark-excel',
-                        'menu_item_lists_export'
-                    );
-                    $page->addPageFunctionsMenuItem(
-                        'menu_item_lists_odf',
-                        $gL10n->get('SYS_ODF_SPREADSHEET'),
-                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
-                            'crt_id' => $getCrtId,
-                            'filter' => $getFilter,
-                            'export_and_filter' => $getExportAndFilter,
-                            'mode' => 'ods')),
-                        'bi-file-earmark-spreadsheet',
-                        'menu_item_lists_export'
-                    );
-                    $page->addPageFunctionsMenuItem(
-                        'menu_item_lists_csv',
-                        $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
-                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
-                            'crt_id' => $getCrtId,
-                            'filter' => $getFilter,
-                            'export_and_filter' => $getExportAndFilter,
-                            'mode' => 'csv-oo')),
-                        'bi-filetype-csv',
-                        'menu_item_lists_export'
-                    );
-                    $page->addPageFunctionsMenuItem(
-                        'menu_item_lists_pdf',
-                        $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')',
-                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
-                            'crt_id' => $getCrtId,
-                            'filter' => $getFilter,
-                            'export_and_filter' => $getExportAndFilter,
-                            'mode' => 'pdf')),
-                        'bi-file-earmark-pdf',
-                        'menu_item_lists_export'
-                    );
-                    $page->addPageFunctionsMenuItem(
-                        'menu_item_lists_pdfl',
-                        $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')',
-                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
-                            'crt_id' => $getCrtId,
-                            'filter' => $getFilter,
-                            'export_and_filter' => $getExportAndFilter,
-                            'mode' => 'pdfl')),
-                        'bi-file-earmark-pdf',
-                        'menu_item_lists_export'
-                    );
+                    if ($exportAllowed) {
+                        // dropdown menu item with all export possibilities
+                        $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
+                        $page->addPageFunctionsMenuItem(
+                            'menu_item_lists_xlsx',
+                            $gL10n->get('SYS_MICROSOFT_EXCEL') . ' (*.xlsx)',
+                            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                                'crt_id' => $getCrtId,
+                                'filter' => $getFilter,
+                                'export_and_filter' => $getExportAndFilter,
+                                'mode' => 'xlsx')),
+                            'bi-file-earmark-excel',
+                            'menu_item_lists_export'
+                        );
+                        $page->addPageFunctionsMenuItem(
+                            'menu_item_lists_odf',
+                            $gL10n->get('SYS_ODF_SPREADSHEET'),
+                            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                                'crt_id' => $getCrtId,
+                                'filter' => $getFilter,
+                                'export_and_filter' => $getExportAndFilter,
+                                'mode' => 'ods')),
+                            'bi-file-earmark-spreadsheet',
+                            'menu_item_lists_export'
+                        );
+                        $page->addPageFunctionsMenuItem(
+                            'menu_item_lists_csv',
+                            $gL10n->get('SYS_COMMA_SEPARATED_FILE'),
+                            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                                'crt_id' => $getCrtId,
+                                'filter' => $getFilter,
+                                'export_and_filter' => $getExportAndFilter,
+                                'mode' => 'csv-oo')),
+                            'bi-filetype-csv',
+                            'menu_item_lists_export'
+                        );
+                        $page->addPageFunctionsMenuItem(
+                            'menu_item_lists_pdf',
+                            $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')',
+                            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                                'crt_id' => $getCrtId,
+                                'filter' => $getFilter,
+                                'export_and_filter' => $getExportAndFilter,
+                                'mode' => 'pdf')),
+                            'bi-file-earmark-pdf',
+                            'menu_item_lists_export'
+                        );
+                        $page->addPageFunctionsMenuItem(
+                            'menu_item_lists_pdfl',
+                            $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')',
+                            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category_report.php', array(
+                                'crt_id' => $getCrtId,
+                                'filter' => $getFilter,
+                                'export_and_filter' => $getExportAndFilter,
+                                'mode' => 'pdfl')),
+                            'bi-file-earmark-pdf',
+                            'menu_item_lists_export'
+                        );
+                    }
                 } else {
                     // if filter is not enabled, reset filterstring
                     $getFilter = '';

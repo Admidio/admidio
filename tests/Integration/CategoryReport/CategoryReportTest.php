@@ -12,6 +12,8 @@ use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\AdministratorTestCase;
 use Admidio\UI\Presenter\FormPresenter;
+use Admidio\UI\Presenter\CategoryReportPresenter;
+use Admidio\Users\Entity\User;
 
 class CategoryReportTest extends AdministratorTestCase
 {
@@ -21,6 +23,51 @@ class CategoryReportTest extends AdministratorTestCase
 
         parent::tearDown();
         $gSettingsManager->resetAll();
+    }
+
+    public function testDisabledExportsRejectEveryFileFormat(): void
+    {
+        global $gSettingsManager;
+
+        $previousGet = $_GET;
+        $gSettingsManager->set('groups_roles_export', 0);
+        try {
+            foreach (array('xlsx', 'ods', 'csv-oo', 'pdf', 'pdfl') as $mode) {
+                $_GET = array('mode' => $mode);
+                try {
+                    (new CategoryReportPresenter())->showReport();
+                    $this->fail('Export should be denied for ' . $mode);
+                } catch (Exception $e) {
+                    $this->assertSame('SYS_NO_RIGHTS', $e->getTranslationId(), $mode);
+                }
+            }
+        } finally {
+            $_GET = $previousGet;
+        }
+    }
+
+    public function testReportRequiresListViewRightsForEveryOutputMode(): void
+    {
+        global $gCurrentUser;
+
+        $previousUser = $gCurrentUser;
+        $previousGet = $_GET;
+        $gCurrentUser = $this->createMock(User::class);
+        $gCurrentUser->method('checkRolesRight')->willReturn(false);
+        try {
+            foreach (array('html', 'print', 'xlsx', 'ods', 'csv-oo', 'pdf', 'pdfl') as $mode) {
+                $_GET = array('mode' => $mode);
+                try {
+                    (new CategoryReportPresenter())->showReport();
+                    $this->fail('List-view rights should be required for ' . $mode);
+                } catch (Exception $e) {
+                    $this->assertSame('SYS_NO_RIGHTS', $e->getTranslationId(), $mode);
+                }
+            }
+        } finally {
+            $gCurrentUser = $previousUser;
+            $_GET = $previousGet;
+        }
     }
 
     public function testDefaultReportAndRoleNamesAreTranslated(): void
