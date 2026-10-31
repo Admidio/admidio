@@ -1005,19 +1005,19 @@ class OIDCService extends SSOService {
             $token = $this->accessTokenRepository->getToken($tokenId);
 
             if ($tokenUserId !== $userId) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Token does not match the authenticated user'], 403);
+                return $this->createInvalidTokenResponse('Token does not match the authenticated user');
             }
             if ($token->getExpiryDateTime() < new \DateTimeImmutable()) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Token expired'], 403);
+                return $this->createInvalidTokenResponse('Token expired');
             }
             if ($this->accessTokenRepository->isAccessTokenRevoked($tokenId)) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Token was revoked'], 403);
+                return $this->createInvalidTokenResponse('Token was revoked');
             }
 
 
             $user = $token->getUser();
             if ($user === null) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'User not found'], 403);
+                return $this->createInvalidTokenResponse('User not found');
             }
 
             /**
@@ -1025,10 +1025,10 @@ class OIDCService extends SSOService {
              */
             $client = $token->getClient();
             if ($client === null) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
+                return $this->createInvalidTokenResponse('Client not found');
             }
             if (!($client instanceof OIDCClient)) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
+                return $this->createInvalidTokenResponse('Client not found');
             }
 
             $scopes = array_map(fn($s) => $s->getIdentifier(), $token->getScopes());
@@ -1048,11 +1048,39 @@ class OIDCService extends SSOService {
 
         } catch (OAuthServerException $exception) {
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
+            // The resource server rejects a missing or unusable access token as access_denied
+            if ($exception->getErrorType() === 'access_denied') {
+                return $this->createInvalidTokenResponse(
+                    $request->hasHeader('authorization') ? (string) ($exception->getHint() ?? $exception->getMessage()) : null
+                );
+            }
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * Build the response for a userinfo request whose access token cannot be used: 401 with a
+     * Bearer challenge (RFC 6750, section 3.1). A request without any token gets the challenge
+     * without an error code.
+     * @param string|null $description Why the token was rejected, null if there was none.
+     */
+    private function createInvalidTokenResponse(?string $description): JsonResponse
+    {
+        if ($description === null) {
+            return new JsonResponse(new \stdClass(), 401, array('WWW-Authenticate' => 'Bearer'));
+        }
+
+        // The description is quoted in the header, so it must not contain quotes or backslashes
+        $description = str_replace(array('"', '\\'), '', $description);
+
+        return new JsonResponse(
+            array('error' => 'invalid_token', 'error_description' => $description),
+            401,
+            array('WWW-Authenticate' => 'Bearer error="invalid_token", error_description="' . $description . '"')
+        );
     }
 
     public function handleJWKSRequest() {
