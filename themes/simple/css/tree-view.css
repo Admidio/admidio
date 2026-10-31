@@ -1,0 +1,106 @@
+/**
+ ***********************************************************************************************
+ * Styles of the tree view (system/js/tree-view.js), e.g. the folder tree of the documents and files module
+ * and the tree select field of forms. The file is only loaded on pages with a tree. A theme can replace it with
+ * its own css/tree-view.css.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+.admidio-tree, .admidio-tree-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.admidio-tree-group {
+    padding-left: 1rem;
+}
+
+.admidio-tree-line {
+    display: flex;
+    align-items: center;
+}
+
+.admidio-tree-toggle {
+    flex: 0 0 1.5rem;
+    width: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+}
+
+.admidio-tree-toggle .bi {
+    display: inline-block;
+    transition: transform .15s;
+}
+
+.admidio-tree-node.expanded > .admidio-tree-line > .admidio-tree-toggle .bi {
+    transform: rotate(90deg);
+}
+
+.admidio-tree-link {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: .15rem .4rem;
+    border-radius: var(--bs-border-radius);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.admidio-tree-link:focus-visible {
+    outline-offset: -2px;
+}
+
+.admidio-tree-link:hover {
+    background-color: var(--bs-tertiary-bg);
+}
+
+.admidio-tree-link.active, .admidio-tree-link.selected {
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary-text-emphasis);
+    font-weight: bold;
+}
+
+.admidio-tree-link[aria-disabled="true"] {
+    color: var(--bs-secondary-color);
+    cursor: not-allowed;
+}
+
+.admidio-tree-link[aria-disabled="true"]:hover {
+    background-color: transparent;
+}
+
+.admidio-tree-hint {
+    margin-left: .5rem;
+    font-size: .875em;
+    font-style: italic;
+    font-weight: normal;
+}
+
+/* tree select field of a form */
+.admidio-tree-select {
+    max-height: 50vh;
+    overflow: auto;
+    padding: .4rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    background-color: var(--bs-body-bg);
+}
+
+.admidio-tree-select-summary .bi {
+    color: var(--bs-secondary-color);
+}
+
+/* the child nodes could not be loaded, the node can be expanded again */
+.admidio-tree-error {
+    margin-left: .5rem;
+    font-size: .875em;
+    color: var(--bs-danger-text-emphasis);
+}

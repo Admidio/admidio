@@ -19,12 +19,18 @@
  *     file_rename_save - Save the data of the file edit form
  *     move             - Move a file or folder to another folder
  *     move_save        - Move a file or folder to another folder
+ *     copy             - Show form to copy a file to another folder
+ *     copy_save        - Copy a file to another folder
+ *     copy_check       - Return as JSON the name that a copy of a file would get in a folder
  *     permissions      - Show form to set the permissions of the current folder
  *     permissions_save - Save the data of the permissions form
  *     add              - Add unmanaged file or folder to database
  *     download         - Download a file
+ *     tree             - Return the visible subfolders of a folder as JSON for the folder tree
  * folder_uuid        : UUID of the folder that should be shown, edited or saved
  * file_uuid          : UUID of the file that should be edited
+ * with_path          : Could be set in **tree** mode. If set to true, then the response contains the UUIDs of the folders
+ *                       from the root folder to the requested folder.
  * name               : Name of un unmanaged file or folder that should be added to the database
  * view               : Could be set in **download+* mode. If set to true, then the file output will directly be shown in the browser.
  ***********************************************************************************************
@@ -56,14 +62,20 @@ try {
                 'file_delete',
                 'move',
                 'move_save',
+                'copy',
+                'copy_save',
+                'copy_check',
                 'permissions',
                 'permissions_save',
                 'add',
-                'download')
+                'download',
+                'tree')
         )
     );
     $getFolderUUID = admFuncVariableIsValid($_GET, 'folder_uuid', 'uuid');
     $getFileUUID = admFuncVariableIsValid($_GET, 'file_uuid', 'uuid');
+    $getDestinationUUID = admFuncVariableIsValid($_GET, 'destination_uuid', 'uuid');
+    $getWithPath = admFuncVariableIsValid($_GET, 'with_path', 'bool', array('defaultValue' => false));
 
     // Check if the module is activated
     if ($gSettingsManager->getInt('documents_files_module_enabled') === 0) {
@@ -72,7 +84,19 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    if ($getMode != 'list' && $getMode != 'download') {
+    if (in_array($getMode, array('copy', 'copy_save', 'copy_check'))) {
+        // A file can be copied by everybody who is allowed to see it. The right to upload to the destination folder
+        // is checked when the file is copied.
+        if ($getFileUUID === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+        $file = new File($gDb);
+        $file->getFileForDownload($getFileUUID);
+        $getFolderUUID = $file->getValue('fol_uuid');
+
+        $folder = new Folder($gDb);
+        $folder->getFolderForDownload($getFolderUUID);
+    } elseif (!in_array($getMode, array('list', 'download', 'tree'))) {
         if ($getFileUUID !== '') {
             // when file UUID is set then read the folder of that file from database and check the rights
             $file = new File($gDb);
@@ -191,6 +215,10 @@ try {
             $documentsFilesMoveForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesMoveForm->validate($_POST);
 
+            if ($formValues['adm_destination_folder_uuid'] === '') {
+                throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_MOVE_TO')));
+            }
+
             if ($getFileUUID !== '') {
                 $file = new File($gDb);
                 $file->readDataByUuid($getFileUUID);
@@ -203,6 +231,47 @@ try {
 
             $gNavigation->deleteLastUrl();
             echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'copy':
+            $page = new DocumentsPresenter($getFolderUUID);
+            $page->createFolderFileMoveForm($getFileUUID, true);
+            $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
+            $page->show();
+            break;
+
+        case 'copy_save':
+            // check form field input and sanitized it from malicious content
+            $documentsFilesMoveForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
+            $formValues = $documentsFilesMoveForm->validate($_POST);
+
+            if ($formValues['adm_destination_folder_uuid'] === '') {
+                throw new Exception('SYS_FIELD_EMPTY', array($gL10n->get('SYS_MOVE_TO')));
+            }
+
+            $file->copyToFolder($formValues['adm_destination_folder_uuid'], $formValues['adm_accept_new_name'] === '1');
+
+            $gNavigation->deleteLastUrl();
+            echo json_encode(array('status' => 'success', 'url' => $gNavigation->getUrl()));
+            break;
+
+        case 'copy_check':
+            // the name of the copy in the destination folder, the dialog asks the user if it is a new name
+            $destinationFolder = new Folder($gDb);
+            $destinationFolder->readDataByUuid($getDestinationUUID);
+
+            if (!$destinationFolder->hasUploadRight()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
+
+            $nameOfCopy = $file->getNameOfCopy($destinationFolder);
+            echo json_encode(array(
+                'status' => 'success',
+                'newName' => $nameOfCopy,
+                'nameExists' => $nameOfCopy !== $file->getValue('fil_name'),
+                'messageNameExists' => $gL10n->get('SYS_COPY_FILE_NAME_EXISTS', array($file->getValue('fil_name'))),
+                'messageNewName' => $gL10n->get('SYS_COPY_FILE_NEW_NAME', array($nameOfCopy))
+            ));
             break;
 
         case 'permissions':
@@ -240,6 +309,21 @@ try {
             // => EXIT
             break;
 
+        case 'tree':
+            // the user must be allowed to see the folder, otherwise an exception is thrown
+            $folder = new Folder($gDb);
+            $folder->getFolderForDownload($getFolderUUID);
+
+            $documentsService = new DocumentsService($gDb, $folder->getValue('fol_uuid'));
+            $response = array('status' => 'success', 'nodes' => $documentsService->findFolderTreeNodes());
+            if ($getWithPath) {
+                // the tree can open the folders down to this folder
+                $response['path'] = $documentsService->findFolderPath();
+            }
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode($response);
+            break;
+
         case 'download':
             $getView = admFuncVariableIsValid($_GET, 'view', 'bool', array('defaultValue' => false));
 
@@ -260,6 +344,6 @@ try {
     if ($e->getMessage() === 'LOGIN') {
         require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
     } else {
-        handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'permissions_save')));
+        handleException($e, in_array($getMode, array('new_folder_save', 'folder_rename_save', 'folder_delete', 'file_rename_save', 'file_delete', 'move_save', 'copy_save', 'copy_check', 'permissions_save', 'tree')));
     }
 }
