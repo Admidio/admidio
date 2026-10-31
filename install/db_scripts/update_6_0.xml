@@ -58,5 +58,9 @@
     <step id="200" database="pgsql">CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id)</step>
     <step id="210">CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status)</step>
     <step id="220">CREATE INDEX %PREFIX%_idx_ivr_item_status_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_status, ivr_begin)</step>
+    <step id="230">ALTER TABLE %PREFIX%_oidc_access_tokens ADD COLUMN oat_oac_id integer unsigned</step>
+    <step id="240">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD COLUMN ort_oac_id integer unsigned</step>
+    <step id="250">ALTER TABLE %PREFIX%_oidc_access_tokens ADD CONSTRAINT %PREFIX%_fk_oat_oac_id FOREIGN KEY (oat_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="260">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD CONSTRAINT %PREFIX%_fk_ort_oac_id FOREIGN KEY (ort_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step>stop</step>
 </update>

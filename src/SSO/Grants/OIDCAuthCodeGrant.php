@@ -15,6 +15,8 @@ use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
+use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
@@ -22,6 +24,7 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 use Admidio\SSO\Repository\AuthCodeRepository;
 use Admidio\SSO\Entity\AuthCodeEntity;
+use Admidio\SSO\Entity\TokenEntity;
 use Admidio\SSO\Entity\IdTokenResponse;
 
 /**
@@ -37,6 +40,8 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
     protected string $externalSessionId = '';
     protected array $authenticationMethods = array();
     protected ?string $authenticationContext = null;
+    /** @var array<int,TokenEntity> Tokens issued by the current code exchange, linked to the code afterwards */
+    protected array $issuedTokens = array();
 
     public function __construct(
         AuthCodeRepositoryInterface $authCodeRepository,
@@ -156,6 +161,41 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         return $authCode;
     }
 
+    protected function issueAccessToken(
+        DateInterval $accessTokenTTL,
+        ClientEntityInterface $client,
+        string|null $userIdentifier,
+        array $scopes = []
+    ): AccessTokenEntityInterface {
+        $accessToken = parent::issueAccessToken($accessTokenTTL, $client, $userIdentifier, $scopes);
+        if ($accessToken instanceof TokenEntity) {
+            $this->issuedTokens[] = $accessToken;
+        }
+        return $accessToken;
+    }
+
+    protected function issueRefreshToken(AccessTokenEntityInterface $accessToken): ?RefreshTokenEntityInterface
+    {
+        $refreshToken = parent::issueRefreshToken($accessToken);
+        if ($refreshToken instanceof TokenEntity) {
+            $this->issuedTokens[] = $refreshToken;
+        }
+        return $refreshToken;
+    }
+
+    /**
+     * Link the tokens of the current code exchange to the authorization code, so that
+     * AuthCodeRepository can revoke them if the code is presented again.
+     */
+    protected function linkIssuedTokens(AuthCodeEntity $authCode): void
+    {
+        foreach ($this->issuedTokens as $token) {
+            $token->setValue($token->getColumnPrefix() . '_oac_id', $authCode->getValue($authCode->getColumnPrefix() . '_id'));
+            $token->save();
+        }
+        $this->issuedTokens = array();
+    }
+
     public function respondToAccessTokenRequest(
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
@@ -163,6 +203,7 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
     ): ResponseTypeInterface {
         global $gLogger;
 
+        $this->issuedTokens = array();
         $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
         if (!$responseType instanceof IdTokenResponse) {
             throw OAuthServerException::serverError('Response type is not an instance of IdTokenResponse.');
@@ -179,6 +220,8 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 
         $authCode = $this->authCodeRepository->getToken($authCodePayload->auth_code_id);
         if (!($authCode->isNewRecord())) {
+            $this->linkIssuedTokens($authCode);
+
             $nonce = $authCode->getValue($authCode->getColumnPrefix() . '_nonce');
             if (!empty($nonce)) {
                 $responseType->setNonce($nonce);
