@@ -606,6 +606,7 @@ CREATE TABLE %PREFIX%_oidc_access_tokens (
     oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     oat_usr_id                  integer unsigned    NOT NULL,
     oat_ocl_id                  integer unsigned    NOT NULL,
+    oat_oac_id                  integer unsigned    NULL,
     oat_token                   text,
     oat_scope                   text,
     oat_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -644,6 +645,7 @@ CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_id                      integer unsigned    AUTO_INCREMENT,
     ort_ocl_id                  integer unsigned    NOT NULL,
     ort_usr_id                  integer unsigned    NULL,
+    ort_oac_id                  integer unsigned    NULL,
     ort_token                   text,
     ort_scope                   text,
     ort_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -1506,11 +1508,13 @@ ALTER TABLE %PREFIX%_oidc_clients
 ALTER TABLE %PREFIX%_oidc_access_tokens
     ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oat_oac_id      FOREIGN KEY (oat_oac_id)         REFERENCES %PREFIX%_oidc_auth_codes (oac_id)     ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_oidc_refresh_tokens
     ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_ort_oac_id      FOREIGN KEY (ort_oac_id)         REFERENCES %PREFIX%_oidc_auth_codes (oac_id)     ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_oidc_auth_codes
