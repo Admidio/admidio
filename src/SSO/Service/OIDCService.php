@@ -25,7 +25,6 @@ use Psr\Http\Server\RequestHandlerInterface; // May be useful for middleware in 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 
 use Admidio\Infrastructure\Exception;
@@ -49,6 +48,7 @@ use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Admidio\UI\Presenter\OIDCConsentPresenter;
 use Admidio\UI\Presenter\OIDCLogoutPresenter;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
+use Admidio\SSO\Grants\OIDCRefreshTokenGrant;
 use Admidio\SSO\Service\KeyService;
 
 /** ***************************************************************************
@@ -553,7 +553,7 @@ class OIDCService extends SSOService {
         /* ***********************************************************************
         * RefreshToken Grant
         */
-        $grant = new RefreshTokenGrant($refreshTokenRepository);
+        $grant = new OIDCRefreshTokenGrant($refreshTokenRepository);
         $grant->setRefreshTokenTTL($refreshTokenTTL); // new refresh tokens will expire after 1 month
         $server->enableGrantType($grant, $accessTokenTTL);
 
