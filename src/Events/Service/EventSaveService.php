@@ -10,6 +10,9 @@ use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -264,6 +267,29 @@ class EventSaveService
             $roomCheckEndDateTime->setTime(23, 59, 59);
         }
 
+        $reservationItemIds = $formValues['event_inventory_items'] ?? [];
+        if (!is_array($reservationItemIds)) {
+            $reservationItemIds = [$reservationItemIds];
+        }
+        $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int) $itemId > 0);
+        // A session-stored form may still offer items after its user's permission or the
+        // event reservation setting has changed. Recheck before writing any event data.
+        if (count($reservationItemIds) > 0
+            && (!$gSettingsManager->getBool('inventory_reservations_events_enabled')
+                || !InventoryAccessService::canRequestReservation())) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+        // Editors without reservation-request permission do not receive the item controls. Keep
+        // the existing event reservations in that case, so changing an event period cannot leave
+        // their periods behind.
+        if (!array_key_exists('event_inventory_items', $formValues) && (int) $event->getValue('dat_id') > 0) {
+            $reservationItemIds = $this->getOpenEventReservationItemIds((int) $event->getValue('dat_id'));
+        }
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && count($reservationItemIds) > 0 && $startDateTime >= $roomCheckEndDateTime) {
+            throw new Exception('SYS_RESERVATION_REQUIRES_TIME_PERIOD');
+        }
+
         if ($gSettingsManager->getBool('events_rooms_enabled')) {
             $eventRoomId = (int)$formValues['dat_room_id'];
 
@@ -335,10 +361,14 @@ class EventSaveService
         $gDb->startTransaction();
         if ($event->save()) {
             // Notification an email for new or changed entries to all members of the notification role
-            $event->sendNotification();
+            $gDb->registerAfterCommit(static function () use ($event): void {
+                $event->sendNotification();
+            });
         }
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);
+        $reservationService = new ReservationService($gDb);
+        $reservationService->syncEventReservations((int) $event->getValue('dat_id'), $reservationItemIds, $startDateTime, $roomCheckEndDateTime);
 
         if ($recurrenceRule !== null) {
             $generatedUntil = null;
@@ -363,6 +393,12 @@ class EventSaveService
                 $generatedEvent->save();
 
                 $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
+                $reservationService->syncEventReservations(
+                    (int) $generatedEvent->getValue('dat_id'),
+                    $reservationItemIds,
+                    $occurrence->getBegin(),
+                    $occurrence->getEnd(),
+                );
             }
         }
 
@@ -550,6 +586,22 @@ class EventSaveService
         }
     }
 
+    /** @return array<int,int> Item IDs of reservations that still belong to an event. */
+    private function getOpenEventReservationItemIds(int $eventId): array
+    {
+        $itemIds = [];
+        $statement = $this->database->queryPrepared(
+            'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+            [$eventId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
+        );
+        while ($reservation = $statement->fetch()) {
+            $itemIds[] = (int) $reservation['ivr_ini_id'];
+        }
+
+        return $itemIds;
+    }
+
     /**
      * Format one occurrence for recurrence room conflict messages.
      */
@@ -723,7 +775,7 @@ class EventSaveService
         $eventStatement = $gDb->queryPrepared($sql, array($recurrenceId, $seriesUpdateFrom, 'modified', 'cancelled'));
 
         while ($row = $eventStatement->fetch()) {
-            $manualStatuses[(string)$row['dat_recurrence_original_begin']] = (string)$row['dat_recurrence_status'];
+            $manualStatuses[substr((string) $row['dat_recurrence_original_begin'], 0, 10)] = (string) $row['dat_recurrence_status'];
         }
 
         return $manualStatuses;
@@ -738,9 +790,12 @@ class EventSaveService
         global $gDb;
 
         $sql = 'SELECT dat_id
-                  FROM ' . TBL_EVENTS . '
+                 FROM ' . TBL_EVENTS . '
                  WHERE dat_evr_id = ?
-                   AND dat_recurrence_original_begin = ?
+                   -- The scheduled time may change for the complete series. A generated
+                   -- occurrence is still the same occurrence as long as its original day stays
+                   -- the same, so retain its participants and item reservations.
+                   AND DATE(dat_recurrence_original_begin) = DATE(?)
                    AND dat_begin >= ?
                    AND dat_recurrence_status = ?';
         $eventStatement = $gDb->queryPrepared($sql, array($recurrenceId, $originalBegin, $seriesUpdateFrom, 'generated'));
@@ -773,7 +828,7 @@ class EventSaveService
         array $eventParticipationRoles,
         User $user
     ): void {
-        global $gCurrentUserId, $gDb;
+        global $gCurrentUserId, $gDb, $gSettingsManager;
 
         $recurrenceId = $this->getEventRecurrenceId($editedEvent);
         if ($recurrenceId <= 0) {
@@ -798,23 +853,77 @@ class EventSaveService
 
         $seriesUpdateFrom = DATE_NOW . ' 00:00:00';
         $manualStatuses = $this->getFutureManualRecurrenceStatuses($recurrenceId, $seriesUpdateFrom);
-        $processedOriginalBegins = array();
         $generatedUntil = null;
 
         $gDb->startTransaction();
 
+        $seriesPeriodChanged = $masterEvent->getValue('dat_begin', 'database') !== $recurrenceBeginDateTime->format('Y-m-d H:i:s')
+            || $masterEvent->getValue('dat_end', 'database') !== $recurrenceEndDateTime->format('Y-m-d H:i:s');
+        $reservationService = new ReservationService($gDb);
+        // Release obsolete occurrences before checking the new periods: a moved series may
+        // otherwise conflict with its own previous reservations. Keep borrowed items intact.
+        $generatedDays = [];
+        $seriesUpdateBegin = new DateTimeImmutable($seriesUpdateFrom);
+        foreach ($occurrences as $occurrence) {
+            if ($occurrence->getBegin() >= $seriesUpdateBegin
+                && $occurrence->getBegin() != $recurrenceBeginDateTime) {
+                $generatedDays[] = $occurrence->getBegin()->format('Y-m-d');
+            }
+        }
+        $staleParams = [$recurrenceId, $seriesUpdateFrom, 'generated'];
+        $staleCondition = '';
+        if ($generatedDays !== []) {
+            $staleCondition = ' AND DATE(dat_recurrence_original_begin) NOT IN (' . Database::getQmForValues($generatedDays) . ')';
+            $staleParams = array_merge($staleParams, $generatedDays);
+        }
+        $staleEvents = $gDb->queryPrepared(
+            'SELECT dat_id, dat_begin, dat_end FROM ' . TBL_EVENTS . '
+             WHERE dat_evr_id = ? AND dat_begin >= ? AND dat_recurrence_status = ?' . $staleCondition,
+            $staleParams,
+        )->fetchAll();
+        foreach ($staleEvents as $staleEvent) {
+            $reservationService->syncEventReservations(
+                (int) $staleEvent['dat_id'],
+                [],
+                new DateTimeImmutable($staleEvent['dat_begin']),
+                new DateTimeImmutable($staleEvent['dat_end']),
+            );
+            $gDb->queryPrepared(
+                'UPDATE ' . TBL_EVENTS . '
+                 SET dat_recurrence_status = ?, dat_recurrence_scope = ?, dat_usr_id_change = ?, dat_timestamp_change = ?
+                 WHERE dat_id = ?',
+                ['cancelled', 'series', $gCurrentUserId, DATETIME_NOW, $staleEvent['dat_id']],
+            );
+        }
+
         $this->setMasterEventValues($masterEvent, $formValues, $recurrenceBeginDateTime, $recurrenceEndDateTime, $recurrenceId);
         if ($masterEvent->save()) {
-            $masterEvent->sendNotification();
+            $gDb->registerAfterCommit(static function () use ($masterEvent): void {
+                $masterEvent->sendNotification();
+            });
         }
         $this->saveEventParticipation($masterEvent, $formValues, $eventParticipationRoles, $user);
+        $reservationItemIds = $formValues['event_inventory_items'] ?? [];
+        if (!is_array($reservationItemIds)) {
+            $reservationItemIds = [$reservationItemIds];
+        }
+        $reservationItemIds = array_filter($reservationItemIds, static fn($itemId): bool => (int) $itemId > 0);
+        $hasReservationItemSelection = array_key_exists('event_inventory_items', $formValues);
+        if (!$hasReservationItemSelection) {
+            $reservationItemIds = $this->getOpenEventReservationItemIds((int) $masterEvent->getValue('dat_id'));
+        }
+        $reservationService->syncEventReservations(
+            (int) $masterEvent->getValue('dat_id'),
+            $reservationItemIds,
+            $recurrenceBeginDateTime,
+            $recurrenceEndDateTime,
+        );
 
         foreach ($occurrences as $occurrence) {
             $originalBegin = $occurrence->getBegin()->format('Y-m-d H:i:s');
             $generatedUntil = $occurrence->getBegin();
 
             if ($originalBegin === $recurrenceBeginDateTime->format('Y-m-d H:i:s')) {
-                $processedOriginalBegins[] = $originalBegin;
                 continue;
             }
 
@@ -822,8 +931,7 @@ class EventSaveService
                 continue;
             }
 
-            if (isset($manualStatuses[$originalBegin])) {
-                $processedOriginalBegins[] = $originalBegin;
+            if (isset($manualStatuses[substr($originalBegin, 0, 10)])) {
                 continue;
             }
 
@@ -837,34 +945,18 @@ class EventSaveService
             $generatedEvent->save();
 
             $this->saveEventParticipation($generatedEvent, $formValues, $eventParticipationRoles, $user);
-            $processedOriginalBegins[] = $originalBegin;
+            $occurrenceReservationItemIds = $reservationItemIds;
+            if (!$hasReservationItemSelection) {
+                $occurrenceReservationItemIds = $this->getOpenEventReservationItemIds((int) $generatedEvent->getValue('dat_id'));
+            }
+            $reservationService->syncEventReservations(
+                (int) $generatedEvent->getValue('dat_id'),
+                $occurrenceReservationItemIds,
+                $occurrence->getBegin(),
+                $occurrence->getEnd(),
+                $seriesPeriodChanged || $staleEvents !== [],
+            );
         }
-
-        $cancelParams = array(
-            'cancelled',
-            'series',
-            $gCurrentUserId,
-            DATETIME_NOW,
-            $recurrenceId,
-            $seriesUpdateFrom,
-            'generated'
-        );
-        $processedCondition = '';
-        if (count($processedOriginalBegins) > 0) {
-            $processedCondition = '
-                   AND dat_recurrence_original_begin NOT IN (' . Database::getQmForValues($processedOriginalBegins) . ')';
-            $cancelParams = array_merge($cancelParams, $processedOriginalBegins);
-        }
-
-        $sql = 'UPDATE ' . TBL_EVENTS . '
-                   SET dat_recurrence_status = ?
-                     , dat_recurrence_scope  = ?
-                     , dat_usr_id_change     = ?
-                     , dat_timestamp_change  = ?
-                 WHERE dat_evr_id = ?
-                   AND dat_begin >= ?
-                   AND dat_recurrence_status = ?' . $processedCondition;
-        $gDb->queryPrepared($sql, $cancelParams);
 
         $recurrenceRepository->update($recurrenceId, $recurrenceRule, $eventTimezone, $generatedUntil);
 

@@ -717,3 +717,17 @@ function getThemedFile(string $filePath): string
     return $themePath;
 }
 
+/**
+ * Return the url of a file provided by themes, e.g. a css file. The file of the main theme is used, if it
+ * doesn't exist the file of the fallback theme. This is the url to the file of getThemedFile().
+ * @param string $filePath The desired file name relative to the theme path, e.g. /css/quill-editor.css
+ * @return string The url of the file in the theme or in the fallback theme.
+ */
+function getThemedFileUrl(string $filePath): string
+{
+    if (!file_exists(THEME_PATH . $filePath) && defined('THEME_FALLBACK_PATH') && file_exists(THEME_FALLBACK_PATH . $filePath)) {
+        return THEME_FALLBACK_URL . $filePath;
+    }
+    return THEME_URL . $filePath;
+}
+

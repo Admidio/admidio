@@ -7,6 +7,8 @@ description: Apply Admidio UI guidelines when creating or changing controls, for
 
 Choose an action's appearance according to its role in the current context. Use existing Admidio components and Bootstrap classes. When changing an existing interface, check nearby patterns.
 
+Prefer Bootstrap component and utility classes for layout, spacing, sizing, colors, and responsive behavior. Reuse existing Admidio classes where needed. Avoid custom CSS, including new CSS classes, `<style>` blocks, or inline `style` attributes, when existing Bootstrap and Admidio classes can achieve the desired result. Custom CSS is allowed when needed, but keep it minimal.
+
 | Role | Style |
 | --- | --- |
 | Primary action of a form or section | `btn-primary` |

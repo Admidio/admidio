@@ -62,9 +62,10 @@ class DocumentsDownloadTest extends AdmidioTestCase
     public static function downloadTypes(): array
     {
         return array(
-            'SVG view request' => array('payload.svg', true, 'attachment', 'image/svg+xml'),
-            'uppercase SVG view request' => array('payload.SVG', true, 'attachment', 'image/svg+xml'),
-            'SVG download' => array('payload.svg', false, 'attachment', 'image/svg+xml'),
+            // SVG uploads are blocked. Existing files must still be served as generic attachments.
+            'existing SVG view request' => array('payload.svg', true, 'attachment', 'application/octet-stream'),
+            'existing uppercase SVG view request' => array('payload.SVG', true, 'attachment', 'application/octet-stream'),
+            'existing SVG download' => array('payload.svg', false, 'attachment', 'application/octet-stream'),
             'PNG preview' => array('image.png', true, 'inline', 'image/png'),
             'PNG download' => array('image.png', false, 'attachment', 'image/png'),
             'PDF preview' => array('document.pdf', true, 'inline', 'application/pdf'),

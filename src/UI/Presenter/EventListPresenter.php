@@ -471,7 +471,7 @@ class EventListPresenter extends PagePresenter
                     $room = new Room($gDb, $eventRoomId);
 
                     if ($outputMode === 'html') {
-                        $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'SYS_ROOM_INFORMATION', 'message_var1' => $eventRoomId, 'inline' => 'true'));
+                        $roomLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/msg_window.php', array('message_id' => 'room_detail', 'message_title' => 'SYS_ROOM_INFORMATION', 'room_uuid' => $room->getValue('room_uuid'), 'dat_uuid' => $eventUUID, 'inline' => 'true'));
                         $outputLinkRoom = '<a class="openPopup" href="javascript:void(0);" data-href="' . $roomLink . '">' . $room->getValue('room_name') . '</a>';
                     } else { // $outputMode = 'print'
                         $outputLinkRoom = $room->getValue('room_name');
