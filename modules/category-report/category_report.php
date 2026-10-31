@@ -52,6 +52,13 @@ try {
     $getFilter = admFuncVariableIsValid($_GET, 'filter', 'string');
     $getExportAndFilter = admFuncVariableIsValid($_GET, 'export_and_filter', 'bool', array('defaultValue' => false));
 
+    $exportAllowed = $gSettingsManager->getInt('groups_roles_export') === 1
+        || ($gSettingsManager->getInt('groups_roles_export') === 2
+            && $gCurrentUser->checkRolesRight('rol_edit_user'));
+    if (!in_array($getMode, array('html', 'print'), true) && !$exportAllowed) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
     // initialize some special mode parameters
     $separator = '';
     $valueQuotes = '';
@@ -190,52 +197,54 @@ try {
                 // link to print overlay and exports
                 $page->addPageFunctionsMenuItem('menu_item_lists_print_view', $gL10n->get('SYS_PRINT_PREVIEW'), 'javascript:void(0);', 'bi-printer-fill');
 
-                // dropdown menu item with all export possibilities
-                $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
-                $page->addPageFunctionsMenuItem(
-                    'menu_item_lists_xlsx',
-                    $gL10n->get('SYS_MICROSOFT_EXCEL') .' (*.xlsx)',
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
-                        'crt_id' => $getCrtId,
-                        'filter' => $getFilter,
-                        'export_and_filter' => $getExportAndFilter,
-                        'mode' => 'xlsx')),
-                    'bi-file-earmark-excel',
-                    'menu_item_lists_export'
-                );
-                $page->addPageFunctionsMenuItem(
-                    'menu_item_lists_pdf',
-                    $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')',
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
-                        'crt_id' => $getCrtId,
-                        'filter' => $getFilter,
-                        'export_and_filter' => $getExportAndFilter,
-                        'mode' => 'pdf')),
-                    'bi-file-earmark-pdf',
-                    'menu_item_lists_export'
-                );
-                $page->addPageFunctionsMenuItem(
-                    'menu_item_lists_pdfl',
-                    $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')',
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
-                        'crt_id' => $getCrtId,
-                        'filter' => $getFilter,
-                        'export_and_filter' => $getExportAndFilter,
-                        'mode' => 'pdfl')),
-                    'bi-file-earmark-pdf',
-                    'menu_item_lists_export'
-                );
-                $page->addPageFunctionsMenuItem(
-                    'menu_item_lists_csv',
-                    $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_UTF8') . ')',
-                    SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
-                        'crt_id' => $getCrtId,
-                        'filter' => $getFilter,
-                        'export_and_filter' => $getExportAndFilter,
-                        'mode' => 'csv-oo')),
-                    'bi-filetype-csv',
-                    'menu_item_lists_export'
-                );
+                if ($exportAllowed) {
+                    // dropdown menu item with all export possibilities
+                    $page->addPageFunctionsMenuItem('menu_item_lists_export', $gL10n->get('SYS_EXPORT'), '#', 'bi-download');
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_lists_xlsx',
+                        $gL10n->get('SYS_MICROSOFT_EXCEL') .' (*.xlsx)',
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
+                            'crt_id' => $getCrtId,
+                            'filter' => $getFilter,
+                            'export_and_filter' => $getExportAndFilter,
+                            'mode' => 'xlsx')),
+                        'bi-file-earmark-excel',
+                        'menu_item_lists_export'
+                    );
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_lists_pdf',
+                        $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_PORTRAIT') . ')',
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
+                            'crt_id' => $getCrtId,
+                            'filter' => $getFilter,
+                            'export_and_filter' => $getExportAndFilter,
+                            'mode' => 'pdf')),
+                        'bi-file-earmark-pdf',
+                        'menu_item_lists_export'
+                    );
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_lists_pdfl',
+                        $gL10n->get('SYS_PDF') . ' (' . $gL10n->get('SYS_LANDSCAPE') . ')',
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
+                            'crt_id' => $getCrtId,
+                            'filter' => $getFilter,
+                            'export_and_filter' => $getExportAndFilter,
+                            'mode' => 'pdfl')),
+                        'bi-file-earmark-pdf',
+                        'menu_item_lists_export'
+                    );
+                    $page->addPageFunctionsMenuItem(
+                        'menu_item_lists_csv',
+                        $gL10n->get('SYS_CSV') . ' (' . $gL10n->get('SYS_UTF8') . ')',
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/category-report/category_report.php', array(
+                            'crt_id' => $getCrtId,
+                            'filter' => $getFilter,
+                            'export_and_filter' => $getExportAndFilter,
+                            'mode' => 'csv-oo')),
+                        'bi-filetype-csv',
+                        'menu_item_lists_export'
+                    );
+                }
             } else {
                 // if filter is not enabled, reset filterstring
                 $getFilter = '';
