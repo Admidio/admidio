@@ -162,7 +162,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
                 'locale'            => $this->getLocale(),
 
                 'website'           => $this->getValue('WEBSITE'),
-                'gender'            => $this->getValue('GENDER'),
+                'gender'            => $this->getGenderClaim(),
                 'birthdate'         => $this->getClaimValue('BIRTHDAY'),
                 'updated_at'        => $this->getUpdatedAt(),
             ];
@@ -222,6 +222,22 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
             return $this->getValue($fieldNameIntern, 'Y-m-d');
         }
         return $this->getValue($fieldNameIntern);
+    }
+
+    /**
+     * Returns the gender in the values of OIDC Core 1.0, section 5.1, "male" and "female",
+     * instead of the localized text of the profile field. The other options of the field
+     * keep their text, which OIDC allows when neither value applies. The option numbers
+     * are the same as for the vCard export.
+     */
+    private function getGenderClaim(): ?string
+    {
+        return match ((int) $this->getValue('GENDER', 'database')) {
+            0 => null,
+            1 => 'male',
+            2 => 'female',
+            default => (string) $this->getValue('GENDER')
+        };
     }
 
     /**
