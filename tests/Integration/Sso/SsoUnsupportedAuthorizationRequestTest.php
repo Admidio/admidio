@@ -90,7 +90,7 @@ class SsoUnsupportedAuthorizationRequestTest extends AdministratorTestCase
         ));
 
         $this->assertFalse($response->hasHeader('Location'));
-        $this->assertSame('invalid_client', json_decode((string) $response->getBody(), true)['error'] ?? null);
+        $this->assertSame('invalid_request', json_decode((string) $response->getBody(), true)['error'] ?? null);
     }
 
     /**

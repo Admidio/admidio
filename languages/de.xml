@@ -2012,11 +2012,13 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Gültigkeit des Autorisierungscodes</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Gültigkeitsdauer eines Autorisierungscodes in Sekunden. Codes können nur einmal verwendet werden. Standard: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Autorisierungs-Endpunkt</string>
+  <string name="SYS_SSO_OIDC_AUTHORIZATION_FAILED">Die Anmeldeanfrage der Anwendung konnte nicht verarbeitet werden: #VAR1#</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Sitzungskennung (sid) für Back-Channel-Abmeldung verlangen</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Den OIDC-Claim sid in Back-Channel-Abmeldetoken aufnehmen.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Back-Channel-Abmelde-URI</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Optional. Endpunkt der Anwendung, der über eine Abmeldung informiert wird, auch wenn kein Browser offen ist.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
+  <string name="SYS_SSO_OIDC_CLIENT_UNKNOWN">Die Anwendung, die dich hierher geschickt hat, ist in Admidio nicht registriert (Client-ID #VAR1#). Eine Anmeldung ist nicht möglich. Bitte informiere den Administrator der Anwendung.</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC-Zugriffszustimmungen</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# möchte auf dein Admidio-Konto zugreifen.</string>
   <string name="SYS_SSO_OIDC_CONSENT_SCOPES">Zugestimmte Bereiche</string>
@@ -2038,6 +2040,7 @@
   <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Die registrierte OIDC-Abmelde-URI ist ungültig. Verwende eine absolute HTTPS-URI ohne Zugangsdaten oder Fragment; HTTP ist nur für Loopback-Hosts zulässig.</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Weiterleitungs-URIs nach Abmeldung</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Wohin Admidio nach der Abmeldung zurückleiten darf, eine URL pro Zeile. Jede URL muss exakt mit der von der Anwendung gesendeten URL übereinstimmen, es sei denn, sie enthält ein "*", das für einen beliebigen Teil des Pfads oder der Query-Parameter steht, z. B. https://example.org/logout*. Protokoll, Hostname und Port müssen immer ohne "*" angegeben werden. Ohne Eintrag leitet Admidio nach der Abmeldung nirgendwohin weiter.</string>
+  <string name="SYS_SSO_OIDC_REDIRECT_URI_NOT_REGISTERED">#VAR1# möchte dich nach der Anmeldung zu #VAR2# zurückschicken, aber diese Adresse ist für die Anwendung in Admidio nicht registriert. Zu deinem Schutz wurde die Anmeldung abgebrochen. Bitte informiere den Administrator der Anwendung.</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME">Gültigkeit des Aktualisierungstokens</string>
   <string name="SYS_SSO_OIDC_REFRESH_TOKEN_LIFETIME_DESC">Gültigkeitsdauer von Refresh-Tokens in Sekunden. Standard: 2592000 (30 Tage).</string>
   <string name="SYS_SSO_OIDC_REQUESTED_ACCESS">Angeforderte Berechtigungen</string>
