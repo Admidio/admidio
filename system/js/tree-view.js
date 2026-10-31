@@ -36,6 +36,10 @@ class AdmTreeView {
             errorText: ""
         }, options);
         this.options.root = Object.assign({url: ""}, this.options.root);
+        // the ids are compared with the data attributes of the nodes, which are strings, so numbers are allowed too
+        this.options.root.id = String(this.options.root.id);
+        this.options.currentId = String(this.options.currentId);
+        this.options.path = this.options.path.map(String);
         this.buildPromise = null;
 
         this.tree.addEventListener("focusin", (event) => {
@@ -79,7 +83,7 @@ class AdmTreeView {
     }
 
     getItem(id) {
-        return Array.from(this.tree.querySelectorAll("li.admidio-tree-node")).find((item) => item.dataset.id === id) || null;
+        return Array.from(this.tree.querySelectorAll("li.admidio-tree-node")).find((item) => item.dataset.id === String(id)) || null;
     }
 
     getLink(item) {
@@ -148,7 +152,7 @@ class AdmTreeView {
         const item = document.createElement("li");
         item.className = "admidio-tree-node";
         item.setAttribute("role", "none");
-        item.dataset.id = node.id;
+        item.dataset.id = String(node.id);
 
         const line = document.createElement("div");
         line.className = "admidio-tree-line";
@@ -185,7 +189,7 @@ class AdmTreeView {
         icon.className = "bi " + this.options.icon;
         link.append(icon, " ", node.name);
 
-        if (node.id === this.options.currentId) {
+        if (String(node.id) === this.options.currentId) {
             link.classList.add("active");
             link.setAttribute("aria-current", "page");
         }
@@ -209,6 +213,14 @@ class AdmTreeView {
         link.setAttribute("aria-expanded", expanded ? "true" : "false");
         item.classList.toggle("expanded", expanded);
         if (group) {
+            // the tab stop and the focus can't stay in the hidden child nodes, they move to the collapsed node
+            if (!expanded && (group.querySelector("a[tabindex=\"0\"]") !== null || group.contains(document.activeElement))) {
+                const focused = group.contains(document.activeElement);
+                this.setTabStop(link);
+                if (focused) {
+                    link.focus();
+                }
+            }
             group.hidden = !expanded;
         }
         if (!expanded || group) {

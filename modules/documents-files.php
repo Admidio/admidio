@@ -248,6 +248,7 @@ try {
             $folder->getFolderForDownload($getFolderUUID);
 
             $documentsService = new DocumentsService($gDb, $folder->getValue('fol_uuid'));
+            header('Content-Type: application/json; charset=utf-8');
             echo json_encode(array('status' => 'success', 'nodes' => $documentsService->findFolderTreeNodes()));
             break;
 
