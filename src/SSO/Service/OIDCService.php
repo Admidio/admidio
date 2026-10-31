@@ -930,9 +930,32 @@ class OIDCService extends SSOService {
         }
     }
 
+    /**
+     * Return the userinfo request with an access token from a form POST moved into the
+     * Authorization header, where the resource server looks for it.
+     *
+     * RFC 6750, section 2.2, allows the bearer token in a form-encoded body. A request that
+     * also has an Authorization header keeps it, a token must not be sent both ways.
+     */
+    private function getUserInfoRequest(): ServerRequestInterface
+    {
+        $request = $this->getRequest();
+
+        if (strtoupper($request->getMethod()) !== 'POST' || $request->hasHeader('authorization')) {
+            return $request;
+        }
+
+        $body = $request->getParsedBody();
+        if (!is_array($body) || !is_string($body['access_token'] ?? null) || $body['access_token'] === '') {
+            return $request;
+        }
+
+        return $request->withHeader('authorization', 'Bearer ' . $body['access_token']);
+    }
+
     public function handleUserInfoRequest() {
         global $gLogger;
-        $request = $this->getRequest();
+        $request = $this->getUserInfoRequest();
         $response = new Response();
         try {
             if (!$this->isServiceSetup) {
