@@ -105,9 +105,15 @@ class ConfirmationMessageEscapingTest extends TestCase
 
         $document = $this->parseHtml($smarty->fetch($template));
         $links = (new DOMXPath($document))->query('//a[@data-message]');
-        // Inventory fields add move actions, placing the first action both directly
-        // and in the responsive menu. A single action is rendered only once.
-        $expectedCount = $template === 'modules/inventory.item-fields.list.tpl' ? 2 : 1;
+        // Cards render each action as a desktop icon and in the mobile menu.
+        // Inventory fields add move actions, duplicating the first action in the menu.
+        $expectedCount = in_array($template, array(
+            'modules/announcements.cards.tpl',
+            'modules/forum.cards.tpl',
+            'modules/weblinks.cards.tpl',
+            'modules/photos.albums.tpl',
+            'modules/inventory.item-fields.list.tpl'
+        ), true) ? 2 : 1;
         if ($template === 'sys-template-parts/list.functions.tpl') {
             $expectedCount = $actionCount > 2 ? $actionCount + 1 : $actionCount;
         }
