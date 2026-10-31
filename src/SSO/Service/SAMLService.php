@@ -252,7 +252,10 @@ class SAMLService extends SSOService {
     }
 
     protected function receiveMessage() {
-        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        // The protocol parameters as sent, not stripped of HTML like $_GET and $_POST, so that
+        // an opaque RelayState goes back to the service provider unchanged
+        [$query, $body] = self::getRawRequestParameters();
+        $request = new \Symfony\Component\HttpFoundation\Request($query, $body, array(), $_COOKIE, $_FILES, $_SERVER);
 
         $bindingFactory = new \LightSaml\Binding\BindingFactory();
         $binding = $bindingFactory->getBindingByRequest($request);
