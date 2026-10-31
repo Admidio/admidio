@@ -15,16 +15,11 @@
                                 <span class="badge bg-info ms-1" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MEMBERSHIP_DURATION')}">{$membership.duration}</span>
                             {/if}
                         </span>
-                        {if isset($membership.linkMembershipEdit)}
-                            {$membership.linkMembershipEdit}
-                        {/if}
-                        {if isset($membership.linkMembershipDelete)}
-                            {$membership.linkMembershipDelete}
-                        {/if}
+                        {assign var=membershipActions value=$membership.actions}
                         {if $membership.showRelationsCreateEdit}
-                            <a class="admidio-icon-link admidio-create-edit-info" id="member_info_{$membership.memberUUID}" href="javascript:void(0)"><i
-                                class="bi bi-info-circle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_INFORMATIONS')}"></i></a>
+                            {$membershipActions[] = ['class' => 'admidio-create-edit-info', 'attributes' => ['data-info-id' => "member_info_{$membership.memberUUID}"], 'icon' => 'bi bi-info-circle', 'tooltip' => $l10n->get('SYS_INFORMATIONS')]}
                         {/if}
+                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $membership.memberUUID, 'actions' => $membershipActions]}
                     </span>
                 </li>
                 <li class="list-group-item" id="adm_membership_period_{$membership.memberUUID}" style="visibility: hidden; display: none;">

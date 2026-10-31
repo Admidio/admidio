@@ -104,24 +104,20 @@ try {
             $room->clear();
             $room->setArray($row);
 
+            $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
+            $actionsTemplate->assign('data', array('uuid' => $room->getValue('room_uuid'), 'actions' => array(
+                array('url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)), 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_EDIT')),
+                array(
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($room->getValue('room_name'))),
+                    'dataHref' => 'callUrlHideElement(\'room_' . $room->getValue('room_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $room->getValue('room_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'icon' => 'bi bi-trash', 'tooltip' => $gL10n->get('SYS_DELETE')
+                )
+            )));
             $page->addHtml('
         <div class="card admidio-blog" id="room_' . $room->getValue('room_uuid') . '">
             <div class="card-header">
                 <i class="bi bi-house-door-fill"></i>' . $room->getValue('room_name') . '
-                <div class="dropdown float-end">
-                    <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)) . '">
-                            <i class="bi bi-pencil-square" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_EDIT') . '</a>
-                        </li>
-                        <li><a class="dropdown-item admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array($room->getValue('room_name')))) . '"
-                                data-href="callUrlHideElement(\'room_' . $room->getValue('room_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $room->getValue('room_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                                <i class="bi bi-trash" data-bs-toggle="tooltip"></i> ' . $gL10n->get('SYS_DELETE') . '</a>
-                        </li>
-                    </ul>
-                </div>
+                <div class="float-end">' . $actionsTemplate->fetch() . '</div>
             </div>
             <div class="card-body">
                 <div class="row">

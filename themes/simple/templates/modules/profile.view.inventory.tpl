@@ -17,18 +17,7 @@
                         {/foreach}
                         {if isset($row.actions)}
                             <td class="text-end">
-                                {foreach $row.actions as $actionItem}
-                                        <a
-                                            {if isset($actionItem.popup)}
-                                                class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="{$actionItem.dataHref}"
-                                            {elseif isset($actionItem.dataHref)}
-                                                class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no" data-message="{$actionItem.dataMessage}" data-href="{$actionItem.dataHref}"
-                                            {else}
-                                                class="admidio-icon-link" href="{$actionItem.url}"
-                                            {/if}
-                                            ><i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
-                                        </a>
-                                {/foreach}
+                                {include 'sys-template-parts/list.functions.tpl' data=['uuid' => "{$tableId}_{$row.item_uuid}", 'actions' => $row.actions]}
                             </td>
                         {/if}
                     </tr>

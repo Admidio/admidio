@@ -29,13 +29,7 @@
                             </div>
                             {if $forumTopic.editable && {array_key_exists array=$forumTopic key="actions"} && count($forumTopic.actions) > 0}
                                 <div class="col-auto ms-auto text-nowrap">
-                                    {foreach $forumTopic.actions as $actionItem}
-                                        <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox d-inline-flex p-1 fs-6" href="javascript:void(0);"
-                                            data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                                {else} class="admidio-icon-link d-inline-flex p-1 fs-6" href="{$actionItem.url}"{/if}
-                                            aria-label="{$actionItem.tooltip|escape:'html'}">
-                                            <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip|escape:'html'}" aria-hidden="true"></i></a>
-                                    {/foreach}
+                                    {include 'sys-template-parts/list.functions.tpl' data=$forumTopic}
                                 </div>
                             {/if}
                         </div>

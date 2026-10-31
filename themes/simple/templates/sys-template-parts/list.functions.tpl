@@ -4,12 +4,9 @@
     <div class="admidio-functions d-inline-flex align-items-center text-nowrap">
         {foreach $data.actions as $actionItem}
             {if $actionCount <= 2 || $actionItem@first}
-            <a {if isset($actionItem.popup)} class="{if $actionCount > 2}d-none d-md-inline-flex {/if}admidio-icon-link openPopup" href="javascript:void(0);"
-                data-class="{$actionItem.popupClass|default:'modal-lg'}" data-href="{$actionItem.dataHref}"
-                    {elseif isset($actionItem.dataHref)} class="{if $actionCount > 2}d-none d-md-inline-flex {/if}admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                    {else} class="{if $actionCount > 2}d-none d-md-inline-flex {/if}admidio-icon-link{if isset($actionItem.class)} {$actionItem.class}{/if}" href="{$actionItem.url}"{/if}>
-                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i><span class="visually-hidden">{$actionItem.tooltip|escape:'html'}</span></a>
+            {assign var=actionClass value='admidio-icon-link'}
+            {if $actionCount > 2}{assign var=actionClass value='d-none d-md-inline-flex admidio-icon-link'}{/if}
+            {include 'sys-template-parts/list.action.tpl' actionItem=$actionItem actionClass=$actionClass}
             {/if}
         {/foreach}
         {if $actionCount > 2}
@@ -19,12 +16,7 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adm_dropdown_menu_button_{$data.uuid}">
                 {foreach $data.actions as $actionItem}
                     <li{if $actionItem@first} class="d-md-none"{/if}>
-                        <a {if isset($actionItem.popup)} class="dropdown-item openPopup" href="javascript:void(0);"
-                            data-class="{$actionItem.popupClass|default:'modal-lg'}" data-href="{$actionItem.dataHref}"
-                                {elseif isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                            data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                {else} class="dropdown-item{if isset($actionItem.class)} {$actionItem.class}{/if}" href="{$actionItem.url}"{/if}>
-                            <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
+                        {include 'sys-template-parts/list.action.tpl' actionItem=$actionItem actionClass='dropdown-item'}
                     </li>
                 {/foreach}
             </ul>
