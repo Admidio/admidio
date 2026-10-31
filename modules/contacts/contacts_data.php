@@ -478,7 +478,7 @@ try {
                 $actions[] = array(
                     'url' => $mailLink,
                     'icon' => 'bi bi-envelope',
-                    'tooltip' => $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email']))
+                    'tooltip' => $gL10n->get('SYS_SEND_EMAIL')
                 );
             }
 

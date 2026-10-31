@@ -66,9 +66,12 @@
                     <td class="d-none d-lg-table-cell">{$profileField.defaultValue}</td>
                     <td class="d-none d-lg-table-cell">{$profileField.regex}</td>
                     <td class="text-end">
-                        {assign var=rowActions value=$profileField.actions}
+                        {assign var=rowActions value=[$profileField.actions[0]]}
                         {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $profileField.uuid, 'data-direction' => 'UP', 'data-target' => "adm_profile_field_{$profileField.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', ['SYS_PROFILE_FIELD'])]}
                         {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $profileField.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_profile_field_{$profileField.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', ['SYS_PROFILE_FIELD'])]}
+                        {foreach $profileField.actions as $actionItem}
+                            {if !$actionItem@first}{$rowActions[] = $actionItem}{/if}
+                        {/foreach}
                         {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $profileField.uuid, 'actions' => $rowActions]}
                     </td>
                 </tr>
