@@ -1551,10 +1551,12 @@ class SAMLService extends SSOService {
         $oidcService = new OIDCService($gDb, $this->currentUser);
         $notificationService = new OIDCLogoutNotificationService($gDb, $oidcService->getIssuerURL());
 
-        return $notificationService->createFrontChannelResponse(
-            $frontChannelLogoutUris,
-            $continueUrl === '' ? null : $continueUrl
-        );
+        // Without a destination the iframes are loaded by the page that confirms the logout
+        if ($continueUrl === '') {
+            return $this->createLogoutCompletedResponse($notificationService->createFrontChannelFrames($frontChannelLogoutUris));
+        }
+
+        return $notificationService->createFrontChannelResponse($frontChannelLogoutUris, $continueUrl);
     }
 
     private function isPartialLogoutStatus(\LightSaml\Model\Protocol\Status $status): bool 
@@ -1774,15 +1776,28 @@ class SAMLService extends SSOService {
 
     /**
      * Build the response for a logout that has nowhere to return to.
+     *
+     * Without a return address Admidio itself tells the user that the logout is complete,
+     * like its own logout does, and offers to continue to the Admidio logout homepage.
+     * @param string $frontChannelFrames Hidden iframes of front-channel logout URIs that the
+     *                                   page still has to load.
      */
-    private function createLogoutCompletedResponse(): ResponseInterface
+    private function createLogoutCompletedResponse(string $frontChannelFrames = ''): ResponseInterface
     {
+        global $gL10n, $gSettingsManager;
+
+        $page = PagePresenter::withHtmlIDAndHeadline('adm_sso_logout', $gL10n->get('SYS_LOGOUT'));
+        $page->hideBackLink();
+        $page->addHtml($frontChannelFrames);
+        $page->assignSmartyVariable('message', $gL10n->get('SYS_LOGOUT_SUCCESSFUL'));
+        $page->assignSmartyVariable('url', 'self.location.href=\'' . ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout') . '\'');
+        $page->assignSmartyVariable('showYesNoButtons', false);
+        $page->addTemplateFile('system/message.tpl');
+
+        ob_start();
+        $page->show();
         $body = new \Laminas\Diactoros\Stream(fopen('php://temp', 'r+'));
-        $body->write(
-            '<!doctype html><html><head><meta charset="utf-8">'
-            . '<meta name="referrer" content="no-referrer">'
-            . '<title>Logout</title></head><body></body></html>'
-        );
+        $body->write((string) ob_get_clean());
 
         return (new \Laminas\Diactoros\Response())
             ->withStatus(200)
