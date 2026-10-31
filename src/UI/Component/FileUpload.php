@@ -4,6 +4,7 @@ namespace Admidio\UI\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\UI\Presenter\PagePresenter;
 
 /**
@@ -42,150 +43,127 @@ class FileUpload
     }
 
     /**
-     * Creates the html output for the upload dialog with module specific strings.
+     * Creates the html output for the upload dialog with module specific strings. The html is in the template
+     * sys-template-parts/file-upload.tpl of the theme.
      * @param string $destinationName Name of the folder or album where the file should be uploaded
+     * @param bool $isModal The upload is shown in the dialog of the folder page, otherwise on its own page.
      * @return string Returns the html output for an upload dialog.
      * @throws Exception
      */
-    public function getHtml(string $destinationName): string
+    public function getHtml(string $destinationName, bool $isModal = false): string
     {
-        global $gL10n;
-
-        $textUploadDescription = '';
-        $textSelectFiles = '';
-        $textBackButton = '';
-
-        if ($this->module === 'photos') {
-            $textUploadDescription = $gL10n->get('SYS_PHOTO_UPLOAD_DESC', array($destinationName));
-            $textSelectFiles = $gL10n->get('SYS_SELECT_PHOTOS');
-            $textBackButton = $gL10n->get('SYS_BACK_TO_ALBUM');
-        } elseif ($this->module === 'documents_files') {
-            $textUploadDescription = $gL10n->get('SYS_FILES_UPLOAD_DESC', array($destinationName));
-            $textSelectFiles = $gL10n->get('SYS_SELECT_FILES');
-            $textBackButton = $gL10n->get('SYS_BACK_TO_FOLDER');
-        }
-
-        return '
-        <p class="lead">'.$textUploadDescription.'</p>
-
-        <span class="btn btn-primary fileinput-button mb-3">
-            <i class="bi bi-upload"></i>'.$textSelectFiles.'
-            <input id="fileupload" class="btn-secondary" type="file" name="files[]" multiple>
-        </span>
-        <div id="progress" class="progress mb-5" style="max-width: 600px;">
-            <div class="progress-bar progress-bar-success"></div>
-        </div>
-        <div id="files" class="files"></div>
-        <button id="back" class="btn btn-secondary admidio-margin-bottom d-none">' . $textBackButton . '</button>';
+        return $this->fetchTemplate('sys-template-parts/file-upload.tpl', $destinationName, $isModal);
     }
 
     /**
-     * Adds the necessary css and javascript files of the jquery-file-upload library to the page header of the
-     * PagePresenter object that was set in the constructor.
+     * Creates the html output for the upload modal and full-screen drag & drop overlay. The html is in the template
+     * sys-template-parts/file-upload.modal.tpl of the theme.
+     * @param string $destinationName Name of the folder or album where the file should be uploaded
+     * @return string Returns the html output for an upload modal and drag overlay.
+     * @throws Exception
      */
-    public function setHeaderData()
+    public function getModalHtml(string $destinationName): string
     {
+        return $this->fetchTemplate('sys-template-parts/file-upload.modal.tpl', $destinationName, true);
+    }
+
+    /**
+     * Fill a template of the upload with the texts of the module.
+     * @param string $template Name of the template.
+     * @param string $destinationName Name of the folder or album where the file should be uploaded
+     * @param bool $isModal The upload is shown in the dialog of the folder page.
+     * @return string Returns the html of the template.
+     * @throws Exception
+     */
+    private function fetchTemplate(string $template, string $destinationName, bool $isModal): string
+    {
+        global $gL10n;
+
         if ($this->module === 'photos') {
-            $textFileUploaded = $GLOBALS['gL10n']->get('SYS_PHOTO_FILE_UPLOADED');
-            $textUploadSuccessful = $GLOBALS['gL10n']->get('SYS_PHOTO_UPLOAD_SUCCESSFUL');
-            $textUploadNotSuccessful = $GLOBALS['gL10n']->get('SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL');
-        } elseif ($this->module === 'documents_files') {
-            $textFileUploaded = $GLOBALS['gL10n']->get('SYS_FILE_UPLOADED');
-            $textUploadSuccessful = $GLOBALS['gL10n']->get('SYS_FILES_UPLOAD_SUCCESSFUL');
-            $textUploadNotSuccessful = $GLOBALS['gL10n']->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL');
+            $texts = array(
+                'textUploadDescription' => $gL10n->get('SYS_PHOTO_UPLOAD_DESC', array($destinationName)),
+                'textSelectFiles' => $gL10n->get('SYS_SELECT_PHOTOS'),
+                'textBackButton' => $gL10n->get('SYS_BACK_TO_ALBUM'),
+                'textDragAndDrop' => $gL10n->get('SYS_DRAG_AND_DROP_PHOTOS'),
+                'headline' => $gL10n->get('SYS_UPLOAD_PHOTOS')
+            );
+        } else {
+            $texts = array(
+                'textUploadDescription' => $gL10n->get('SYS_FILES_UPLOAD_DESC', array($destinationName)),
+                'textSelectFiles' => $gL10n->get('SYS_SELECT_FILES'),
+                'textBackButton' => $gL10n->get('SYS_BACK_TO_FOLDER'),
+                'textDragAndDrop' => $gL10n->get('SYS_DRAG_AND_DROP_FILES'),
+                'headline' => $gL10n->get('SYS_UPLOAD_FILES')
+            );
         }
 
-        $this->page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/css/jquery.fileupload.css');
-        $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
-        $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/jquery.fileupload.js');
+        try {
+            $smarty = PagePresenter::createSmartyObject();
+            $smarty->assign($texts);
+            $smarty->assign('destinationName', $destinationName);
+            $smarty->assign('isModal', $isModal);
+            $smarty->assign('l10n', $gL10n);
+            return $smarty->fetch($template);
+        } catch (\Smarty\Exception $exception) {
+            throw new Exception($exception->getMessage());
+        }
+    }
 
-        $serverMaxUpload = PhpIniUtils::getUploadMaxSize();
+    /**
+     * Adds the files of the upload to the page: the jquery-file-upload library, the styles of the theme
+     * (css/file-upload.css) and the script system/js/file-upload.js, which is started with the settings of the page.
+     * @param bool $isModal The upload is shown in the dialog of the folder page, otherwise on its own page.
+     * @throws Exception
+     */
+    public function setHeaderData(bool $isModal = false)
+    {
+        global $gL10n, $gNavigation, $gCurrentSession;
+
+        if ($this->module === 'photos') {
+            $texts = array(
+                'fileUploaded' => $gL10n->get('SYS_PHOTO_FILE_UPLOADED'),
+                'uploadSuccessful' => $gL10n->get('SYS_PHOTO_UPLOAD_SUCCESSFUL'),
+                'uploadNotSuccessful' => $gL10n->get('SYS_PHOTO_UPLOAD_NOT_SUCCESSFUL'),
+                'upload' => $gL10n->get('SYS_UPLOAD_PHOTOS')
+            );
+        } else {
+            $texts = array(
+                'fileUploaded' => $gL10n->get('SYS_FILE_UPLOADED'),
+                'uploadSuccessful' => $gL10n->get('SYS_FILES_UPLOAD_SUCCESSFUL'),
+                'uploadNotSuccessful' => $gL10n->get('SYS_FILES_UPLOAD_NOT_SUCCESSFUL'),
+                'upload' => $gL10n->get('SYS_UPLOAD_FILES')
+            );
+        }
+        $texts['renamedTo'] = $gL10n->get('SYS_RENAMED_TO');
+        $texts['uploadCancel'] = $gL10n->get('SYS_UPLOAD_CANCEL');
+        $texts['uploadCancelled'] = $gL10n->get('SYS_UPLOAD_CANCELLED');
+        $texts['uploading'] = $gL10n->get('SYS_UPLOADING');
+        $texts['remove'] = $gL10n->get('SYS_REMOVE');
+        $texts['filenameInvalidNotice'] = $gL10n->get('SYS_FILENAME_INVALID_HINT');
+        $texts['uploadCancelConfirm'] = $gL10n->get('SYS_UPLOAD_CANCEL_CONFIRM');
+
         // Capped at 10 MB, minimum 1 MB, leaving 100 KB headroom for multipart form headers
+        $serverMaxUpload = PhpIniUtils::getUploadMaxSize();
         $maxChunkSize = min(10000000, max(1000000, $serverMaxUpload - 102400));
 
-        $this->page->addJavascript(
-            '
-            var countErrorFiles = 0;
-            var countFiles      = 0;
-
-            $("#back").click(function () {
-                window.location.href = "' . $GLOBALS['gNavigation']->getPreviousUrl() . '";
-            });
-
-            $("#fileupload").fileupload({
-                url: "'.SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php', array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)).'",
-                sequentialUploads: true,
-                maxChunkSize: ' . $maxChunkSize . ',
-                dataType: "json",
-                formData: [{
-                    name: "adm_csrf_token",
-                    value: "' . $GLOBALS['gCurrentSession']->getCsrfToken() . '"
-                }],
-                add: function(e, data) {
-                    $("#files").html("");
-                    countErrorFiles = 0;
-                    countFiles = 0;
-                    data.submit();
-                },
-                done: function(e, data) {
-                    $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
-                    $.each(data.result.files, function(index, file) {
-                        if (typeof file.error !== "undefined") {
-                            $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
-                                + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
-                            countErrorFiles++;
-                        } else {
-                            const message = "'.$textFileUploaded.'";
-                            const newMessage = message.replace("#VAR1_BOLD#", "<strong>" + file.name + "</strong>");
-                            $("<p/>").html(newMessage).appendTo("#files");
-                            countFiles++
-                        }
-                    });
-                },
-                chunkdone: function(e, data) {
-                    // remember if the server rejected a chunk, so the remaining chunks will not be sent
-                    if (data.result && data.result.files && data.result.files.length > 0
-                        && typeof data.result.files[0].error !== "undefined") {
-                        data.files[0].uploadError = data.result.files[0];
-                    }
-                },
-                chunksend: function(e, data) {
-                    if (typeof data.files[0].uploadError !== "undefined") {
-                        return false;
-                    }
-                },
-                fail: function(e, data) {
-                    $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
-                    let fileName, fileError;
-                    if (typeof data.files[0].uploadError !== "undefined") {
-                        // name and error were already encoded by the server
-                        fileName = data.files[0].uploadError.name;
-                        fileError = data.files[0].uploadError.error;
-                    } else {
-                        fileName = $("<div/>").text(data.files[0].name).html();
-                        fileError = $("<div/>").text(data.errorThrown || data.textStatus).html();
-                    }
-                    $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>"
-                        + fileName + " - <strong>" + fileError + "</strong></div>").appendTo("#files");
-                    countErrorFiles++;
-                },
-                progressall: function(e, data) {
-                    const progress = parseInt(data.loaded / data.total * 100, 10);
-                    $("#progress .progress-bar").css(
-                        "width",
-                        progress + "%"
-                    );
-                },
-                stop: function(e, data) {
-                    $("#back").attr("class", "btn btn-secondary admidio-margin-bottom");
-                    if (countErrorFiles === 0 && countFiles > 0) {
-                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg\"></i>'.$textUploadSuccessful.'</div>").appendTo("#files");
-                    } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill\"></i>'.$textUploadNotSuccessful.'</div>").appendTo("#files");
-                    }
-                }
-            }).prop("disabled", !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : "disabled");',
-            true
+        $config = array(
+            'isModal' => $isModal,
+            'uploadUrl' => SecurityUtils::encodeUrl(
+                ADMIDIO_URL . FOLDER_SYSTEM . '/file_upload.php',
+                array('module' => $this->module, 'mode' => 'upload_files', 'uuid' => $this->destinationUuid)
+            ),
+            'csrfToken' => $gCurrentSession->getCsrfToken(),
+            'maxChunkSize' => $maxChunkSize,
+            'backUrl' => $gNavigation->getPreviousUrl(),
+            'invalidFilenamePattern' => StringUtils::getInvalidFilenameCharsPattern(),
+            'texts' => $texts
         );
+
+        $this->page->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/css/jquery.fileupload.css');
+        $this->page->addCssFile(getThemedFileUrl('/css/file-upload.css') . '?v=' . filemtime(getThemedFile('/css/file-upload.css')));
+        $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/vendor/jquery.ui.widget.js');
+        $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/jquery-file-upload/js/jquery.fileupload.js');
+        $this->page->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/file-upload.js?v=' . filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/js/file-upload.js'));
+        $this->page->addJavascript('admFileUpload(' . json_encode($config) . ');', true);
     }
 }
