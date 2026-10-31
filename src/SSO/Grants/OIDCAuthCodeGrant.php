@@ -67,9 +67,56 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
 
     public function validateAuthorizationRequest(ServerRequestInterface $request): AuthorizationRequestInterface
     {
+        $this->validateResponseType($request);
         $authorizationRequest = parent::validateAuthorizationRequest($request);
         $this->nonce = $this->getQueryStringParameter('nonce', $request);
         return $authorizationRequest;
+    }
+
+    /**
+     * Reject an authorization request whose response_type is not "code".
+     *
+     * Once the client and its redirect URI are verified, the error is sent to that redirect
+     * URI (OpenID Connect Core 1.0, section 3.1.2.6). An unknown client or an unregistered
+     * redirect URI is still answered by the OP itself, as for every other request.
+     * @throws OAuthServerException
+     */
+    private function validateResponseType(ServerRequestInterface $request): void
+    {
+        $responseType = $this->getQueryStringParameter('response_type', $request);
+        if ($responseType === 'code') {
+            return;
+        }
+
+        $clientId = $this->getQueryStringParameter('client_id', $request);
+        if ($clientId === null) {
+            throw OAuthServerException::invalidRequest('client_id');
+        }
+        $client = $this->getClientEntityOrFail($clientId, $request);
+
+        $redirectUri = $this->getQueryStringParameter('redirect_uri', $request);
+        if ($redirectUri !== null) {
+            $this->validateRedirectUri($redirectUri, $client, $request);
+        } elseif ($client->getRedirectUri() === ''
+            || (is_array($client->getRedirectUri()) && count($client->getRedirectUri()) !== 1)
+        ) {
+            throw OAuthServerException::invalidClient($request);
+        } else {
+            $redirectUri = $this->getClientRedirectUri($client);
+        }
+
+        $state = $this->getQueryStringParameter('state', $request);
+        if ($state !== null) {
+            $redirectUri = $this->makeRedirectUri($redirectUri, array('state' => $state));
+        }
+
+        if ($responseType === null || $responseType === '') {
+            throw new OAuthServerException('The request is missing the response_type parameter.',
+                3, 'invalid_request', 400, null, $redirectUri);
+        }
+
+        throw new OAuthServerException('The authorization server does not support this response type.',
+            2, 'unsupported_response_type', 400, 'Only the response type "code" is supported.', $redirectUri);
     }
     
     protected function issueAuthCode(

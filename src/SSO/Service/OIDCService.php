@@ -744,7 +744,9 @@ class OIDCService extends SSOService {
             // Validate the HTTP request and return an AuthorizationRequest object.
             // League OAuth2 Server persists a supplied challenge in the
             // authorization code and validates code_verifier at the token endpoint.
-            $authRequest = $this->authServer->validateAuthorizationRequest($request);
+            // The grant is asked directly, because the authorization server rejects a missing
+            // response_type itself, without the redirect to the client that OIDC requires.
+            $authRequest = $this->authCodeGrant->validateAuthorizationRequest($request);
             self::$client = $authRequest->getClient();
 
             if (!self::$client instanceof OIDCClient) {
