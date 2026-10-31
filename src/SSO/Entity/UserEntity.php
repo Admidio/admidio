@@ -163,7 +163,8 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
 
                 'website'           => $this->getValue('WEBSITE'),
                 'gender'            => $this->getValue('GENDER'),
-                'birthdate'         => $this->getValue('BIRTHDAY'),
+                'birthdate'         => $this->getClaimValue('BIRTHDAY'),
+                'updated_at'        => $this->getUpdatedAt(),
             ];
             if (!empty($this->getValue('MOBILE'))) {
                 $userInfo['phone_number'] = $this->getValue('MOBILE');
@@ -196,7 +197,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
             } elseif ($value === 'roles') {
                 $userInfo[$key] = $groups;
             } else {
-                $userInfo[$key] = $this->getValue($value);
+                $userInfo[$key] = $this->getClaimValue($value);
             }
         }
 
@@ -206,6 +207,35 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
 
 
         return $userInfo;
+    }
+
+    /**
+     * Returns the value of a profile field in the format of an OIDC claim. A date is
+     * returned as YYYY-MM-DD (OIDC Core 1.0, section 5.1) instead of the date format of
+     * the installation, all other fields as Admidio shows them.
+     */
+    private function getClaimValue(string $fieldNameIntern): mixed
+    {
+        if (!str_starts_with($fieldNameIntern, 'usr_')
+            && $this->mProfileFieldsData->getProperty($fieldNameIntern, 'usf_type') === 'DATE'
+        ) {
+            return $this->getValue($fieldNameIntern, 'Y-m-d');
+        }
+        return $this->getValue($fieldNameIntern);
+    }
+
+    /**
+     * Returns the time of the last change of the user as Unix time (claim updated_at), or
+     * the time of the creation if the user was never changed.
+     */
+    private function getUpdatedAt(): ?int
+    {
+        foreach (array('usr_timestamp_change', 'usr_timestamp_create') as $column) {
+            if ((string) $this->getValue($column) !== '') {
+                return (int) $this->getValue($column, 'U');
+            }
+        }
+        return null;
     }
 
     /**

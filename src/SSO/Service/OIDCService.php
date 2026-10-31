@@ -1123,7 +1123,8 @@ class OIDCService extends SSOService {
                 "locale",
                 "website",
                 "gender",
-                "birthdate"
+                "birthdate",
+                "updated_at"
             ],
             // "acr_values_supported" => [self::AUTHENTICATION_CONTEXT_PASSWORD, self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP],
             "claims_parameter_supported" => false,
