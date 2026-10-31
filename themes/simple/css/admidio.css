@@ -816,20 +816,17 @@ label {
     margin: 0;
 }
 
-.table-hover tbody tr td .admidio-functions {
-    visibility: hidden;
-}
-
-.table-hover tbody tr:hover td .admidio-functions {
-    visibility: visible;
-}
-
-#adm_contacts_table tbody tr .admidio-icon-link {
-    color: color-mix(in srgb, var(--bs-body-color) 20%, transparent);
+#adm_contacts_table tbody tr .admidio-icon-link,
+.admidio-functions .admidio-icon-link {
+    color: var(--bs-body-color);
 }
 
 #adm_contacts_table tbody tr:hover .admidio-icon-link,
-#adm_contacts_table tbody tr:focus-within .admidio-icon-link {
+#adm_contacts_table tbody tr:focus-within .admidio-icon-link,
+tr:hover .admidio-functions .admidio-icon-link,
+tr:focus-within .admidio-functions .admidio-icon-link,
+.admidio-functions:hover .admidio-icon-link,
+.admidio-functions:focus-within .admidio-icon-link {
     color: var(--bs-link-color);
 }
 
