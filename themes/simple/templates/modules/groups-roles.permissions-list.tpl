@@ -27,12 +27,7 @@
                     <td>{$row.viewMembersProfiles}</td>
                     <td>{$row.roleLeaderRights}</td>
                     <td class="text-end">
-                        {foreach $row.actions as $actionItem}
-                            <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                                data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                    {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
-                                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
-                        {/foreach}
+                        {include 'sys-template-parts/list.functions.tpl' data=$row}
                     </td>
                 </tr>
             {/foreach}
