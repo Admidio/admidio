@@ -4,7 +4,8 @@
  *
  * A date claim was sent in the date format of the installation (03.01.1988), but OIDC Core 1.0,
  * section 5.1, requires YYYY-MM-DD; the conformance tests oidcc-scope-profile and oidcc-scope-all
- * failed on it. The profile claim updated_at was not sent at all.
+ * failed on it. The profile claim updated_at was not sent at all, and gender was the localized
+ * text of the profile field instead of the OIDC values "male" and "female".
  */
 
 namespace Admidio\Tests\Integration\Sso;
@@ -60,6 +61,36 @@ class SsoUserClaimsTest extends AdministratorTestCase
         $column = (string) $user->getValue('usr_timestamp_change') !== '' ? 'usr_timestamp_change' : 'usr_timestamp_create';
 
         $this->assertSame((int) $user->getValue($column, 'U'), $claims['updated_at'] ?? null);
+    }
+
+    /**
+     * @dataProvider genderProvider
+     * @testdox The gender option $option is sent in the values of OIDC
+     */
+    public function testTheGenderIsSentInTheOidcValues(int $option, ?string $expected): void
+    {
+        global $gCurrentUserId, $gProfileFields, $gL10n;
+
+        $client = $this->createRestrictedClient($this->suffix(), array());
+        $user = new UserEntity($this->getDatabase(), $gProfileFields, $client, (int) $gCurrentUserId);
+        $user->setValue('GENDER', $option === 0 ? '' : $option);
+
+        // Options beyond male and female keep the text of the profile field
+        $expected ??= $option === 0 ? null : $gL10n->get('SYS_DIVERSE');
+        $this->assertSame($expected, $user->getClaims()['gender'] ?? null);
+    }
+
+    /**
+     * @return array<string,array{0:int,1:string|null}>
+     */
+    public static function genderProvider(): array
+    {
+        return array(
+            'male' => array(1, 'male'),
+            'female' => array(2, 'female'),
+            'diverse' => array(3, null),
+            'not set' => array(0, null)
+        );
     }
 
     /**
