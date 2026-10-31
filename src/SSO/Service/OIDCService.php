@@ -27,6 +27,7 @@ use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -1757,6 +1758,8 @@ class OIDCService extends SSOService {
         global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
 
         $gValidLogin = false;
+        // the user is still known here, like for the logout in system/logout.php
+        Hooks::doAction('logout', $gCurrentUser);
         $gCurrentSession->logout();
         $gCurrentUser->clear();
         $gMenu->initialize();
