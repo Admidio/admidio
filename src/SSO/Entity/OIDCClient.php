@@ -138,6 +138,15 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         return array_values(array_intersect($configuredGrantTypes, self::SUPPORTED_GRANT_TYPES));
     }
 
+    /**
+     * League asks the client whether it may use a grant type, so that a client is rejected
+     * with unauthorized_client at every endpoint, not only when its secret is checked.
+     */
+    public function supportsGrantType(string $grantType): bool
+    {
+        return in_array($grantType, $this->getAllowedGrantTypes(), true);
+    }
+
     public function getRedirectUri(): string
     {
         return $this->getValue($this->columnPrefix . '_redirect_uri', 'database')??'';

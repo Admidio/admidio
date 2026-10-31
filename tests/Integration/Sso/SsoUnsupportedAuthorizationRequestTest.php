@@ -110,6 +110,29 @@ class SsoUnsupportedAuthorizationRequestTest extends AdministratorTestCase
     }
 
     /**
+     * The token endpoint would reject the code anyway, but only after the user signed in, and
+     * with an invalid_client that hides the reason.
+     *
+     * @testdox A client without the authorization code grant is rejected with unauthorized_client
+     */
+    public function testAClientWithoutTheCodeGrantIsRejected(): void
+    {
+        $client = $this->createRestrictedClient($this->suffix(), array());
+        $client->setValue('ocl_grant_types', 'refresh_token');
+        $client->save();
+
+        $response = $this->authorize(array(
+            'response_type' => 'code',
+            'client_id' => $client->getIdentifier(),
+            'redirect_uri' => $client->getRedirectUri(),
+            'scope' => 'openid',
+            'state' => 'state-value'
+        ));
+
+        $this->assertRedirectedWithError($response, $client, 'unauthorized_client');
+    }
+
+    /**
      * @testdox A request object is rejected with request_not_supported
      */
     public function testARequestObjectIsRejected(): void
