@@ -4,6 +4,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 
 use Admidio\SSO\Service\OIDCService;
+use Admidio\SSO\Service\SSOSessionCookie;
 use Admidio\SSO\Service\SAMLService;
 
 /**
@@ -21,6 +22,11 @@ try {
     $rootPath = dirname(__DIR__, 2);
 
     require_once($rootPath . '/system/common.php');
+
+    // Users who logged in before the SSO session cookie existed get it with their next SSO request
+    if ($gValidLogin) {
+        SSOSessionCookie::set();
+    }
 
     /**
      * Send a PSR-7 response to the client.

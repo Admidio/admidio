@@ -3,6 +3,7 @@ namespace Admidio\Session\Entity;
 
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\Infrastructure\Database;
@@ -353,6 +354,9 @@ class Session extends Entity
         if ($this->getExternalSessionId() === '') {
             $this->setValue('ses_external_session_id', bin2hex(random_bytes(32)));
         }
+
+        // The counterpart of login_succeeded for a user who was logged in by the auto login token
+        Hooks::doAction('auto_login_succeeded', $this);
     }
 
     /**
@@ -666,6 +670,16 @@ class Session extends Entity
 
         if (session_status() === PHP_SESSION_ACTIVE) {
             $gLogger->notice('Session is already started!');
+        }
+
+        // A request can belong to a session without carrying its cookie, e.g. a cross-site post that
+        // does not carry the SameSite=Lax session cookie. A resolver may name the session, so that
+        // the request continues it instead of starting a new session that would replace the cookie.
+        if (!isset($_COOKIE[$sessionName]) && session_status() !== PHP_SESSION_ACTIVE) {
+            $sessionId = Hooks::resolve('session_id', null, $sessionName);
+            if (is_string($sessionId) && preg_match('/^[A-Za-z0-9,-]{22,256}$/', $sessionId) === 1) {
+                session_id($sessionId);
+            }
         }
 
         self::startReadableSession();

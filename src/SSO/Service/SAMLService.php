@@ -36,6 +36,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 use Exception;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Preferences\ValueObject\SettingsManager;
@@ -2038,6 +2039,8 @@ class SAMLService extends SSOService {
         }
 
         $gValidLogin = false;
+        // the user is still known here, like for the logout in system/logout.php
+        Hooks::doAction('logout', $gCurrentUser);
         $gCurrentSession->logout();
 
         if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0
