@@ -40,6 +40,9 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
     protected string $externalSessionId = '';
     protected array $authenticationMethods = array();
     protected ?string $authenticationContext = null;
+    /** Error code of the exception for a redirect URI that is not registered for the client */
+    public const ERROR_REDIRECT_URI_NOT_REGISTERED = 1001;
+
     /** @var array<int,TokenEntity> Tokens issued by the current code exchange, linked to the code afterwards */
     protected array $issuedTokens = array();
 
@@ -139,6 +142,27 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
             3, 'request_uri_not_supported', 400, null, $redirectUri);
     }
     
+    /**
+     * League reports an unregistered redirect URI as a failed client authentication, which
+     * tells neither the user nor the administrator what is wrong. The redirect URI gets an
+     * error of its own, which the authorization endpoint shows instead of redirecting.
+     * @throws OAuthServerException
+     */
+    protected function validateRedirectUri(
+        string $redirectUri,
+        ClientEntityInterface $client,
+        ServerRequestInterface $request
+    ): void {
+        try {
+            parent::validateRedirectUri($redirectUri, $client, $request);
+        } catch (OAuthServerException $exception) {
+            throw new OAuthServerException('The redirect URI is not registered for this client.',
+                self::ERROR_REDIRECT_URI_NOT_REGISTERED, 'invalid_request', 400,
+                'Register "' . $redirectUri . '" as a redirect URI of client "' . $client->getIdentifier() . '".',
+                null, $exception);
+        }
+    }
+
     protected function issueAuthCode(
         DateInterval $authCodeTTL,
         ClientEntityInterface $client,

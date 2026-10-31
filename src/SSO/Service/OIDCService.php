@@ -30,6 +30,7 @@ use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
 use Admidio\SSO\Entity\Key;
@@ -901,12 +902,44 @@ class OIDCService extends SSOService {
         } catch (OAuthServerException $exception) {
             $this->enrichInvalidClientException($exception, $request);
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
+            if (!$exception->hasRedirect()) {
+                $this->showAuthorizationError($exception, $request);
+            }
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * Show an authorization error that cannot be sent to the client on an Admidio page.
+     *
+     * Without a verified redirect URI the OP must not redirect, but has to inform the user
+     * (OpenID Connect Core 1.0, section 3.1.2.6), who reached the authorization endpoint
+     * with the browser and cannot read a JSON error. The page exits the script.
+     */
+    private function showAuthorizationError(OAuthServerException $exception, ServerRequestInterface $request): void
+    {
+        global $gMessage, $gL10n;
+
+        $clientId = $this->extractRequestedClientId($request) ?? '';
+
+        if ($exception->getCode() === OIDCAuthCodeGrant::ERROR_REDIRECT_URI_NOT_REGISTERED) {
+            $message = $gL10n->get('SYS_SSO_OIDC_REDIRECT_URI_NOT_REGISTERED', array(
+                SecurityUtils::encodeHTML(self::$client instanceof OIDCClient ? self::$client->readableName() : $clientId),
+                SecurityUtils::encodeHTML((string) ($request->getQueryParams()['redirect_uri'] ?? ''))
+            ));
+        } elseif ($exception->getErrorType() === 'invalid_client' && !self::$client instanceof OIDCClient) {
+            $message = $gL10n->get('SYS_SSO_OIDC_CLIENT_UNKNOWN', array(SecurityUtils::encodeHTML($clientId)));
+        } else {
+            $message = $gL10n->get('SYS_SSO_OIDC_AUTHORIZATION_FAILED', array(
+                SecurityUtils::encodeHTML(trim($exception->getMessage() . ' ' . $exception->getHint()))
+            ));
+        }
+
+        $gMessage->show($message, $gL10n->get('SYS_ERROR'));
     }
 
     public function handleTokenRequest() {
