@@ -128,7 +128,7 @@ class Update
 
         // remove a session object with all data, so that
         // all data will be read after the update. The command line has no session to end.
-        if (session_status() === PHP_SESSION_ACTIVE) {
+        if (PHP_SAPI !== 'cli' && session_status() === PHP_SESSION_ACTIVE) {
             session_unset();
             session_destroy();
         }
