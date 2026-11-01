@@ -169,7 +169,7 @@ class InstallationStatistics
      */
     public function sent(?array $infoData = null): bool
     {
-        global $gDb;
+        global $gDb, $gStatisticsUrl;
 
         $infoData ??= $this->getInfoData();
         $tenantId = $gDb instanceof Database ? InstallationIdentifier::get($gDb) : null;
@@ -177,7 +177,7 @@ class InstallationStatistics
             throw new Exception('SYS_TENANT_ID_NOT_INITIALIZED');
         }
         $infoData['id'] = $tenantId;
-        $url = ADMIDIO_URL . '/api/statistics.php';
+        $url = $gStatisticsUrl ?? 'https://www.admidio.org/api/statistics.php';
         $json = $this->getJsonData($infoData);
         $statusCode = $this->httpPost !== null ? ($this->httpPost)($url, $json) : $this->postJson($url, $json);
 

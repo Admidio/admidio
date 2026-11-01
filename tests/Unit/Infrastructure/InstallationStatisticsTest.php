@@ -10,9 +10,12 @@ use PHPUnit\Framework\TestCase;
 class InstallationStatisticsTest extends TestCase
 {
     private array $originalDatabase;
+    private array $originalStatisticsUrl;
 
     protected function setUp(): void
     {
+        $this->originalStatisticsUrl = array_key_exists('gStatisticsUrl', $GLOBALS) ? array($GLOBALS['gStatisticsUrl']) : array();
+        unset($GLOBALS['gStatisticsUrl']);
         $this->originalDatabase = array_key_exists('gDb', $GLOBALS) ? array($GLOBALS['gDb']) : array();
         foreach (array('TBL_PREFERENCES' => 'adm_preferences', 'TBL_ORGANIZATIONS' => 'adm_organizations') as $name => $value) {
             if (!defined($name)) {
@@ -30,6 +33,11 @@ class InstallationStatisticsTest extends TestCase
 
     protected function tearDown(): void
     {
+        if ($this->originalStatisticsUrl === array()) {
+            unset($GLOBALS['gStatisticsUrl']);
+        } else {
+            $GLOBALS['gStatisticsUrl'] = $this->originalStatisticsUrl[0];
+        }
         if ($this->originalDatabase === array()) {
             unset($GLOBALS['gDb']);
         } else {
@@ -86,7 +94,19 @@ class InstallationStatisticsTest extends TestCase
         $this->assertSame($preview, (string) $history[0]['body']);
         $this->assertInstanceOf(\stdClass::class, json_decode($preview, false, 512, JSON_THROW_ON_ERROR));
         $this->assertSame($snapshot, json_decode($preview, true, 512, JSON_THROW_ON_ERROR));
-        $this->assertSame(ADMIDIO_URL . '/api/statistics.php', $history[0]['url']);
+        $this->assertSame('https://www.admidio.org/api/statistics.php', $history[0]['url']);
+    }
+
+    public function testConfiguredEndpointOverridesDefault(): void
+    {
+        $GLOBALS['gStatisticsUrl'] = 'https://local.example.test/api/statistics.php';
+        $client = function (string $url, string $json): int {
+            $this->assertSame($GLOBALS['gStatisticsUrl'], $url);
+            return 503;
+        };
+        $statistics = new InstallationStatistics('tenant', null, $client);
+
+        $this->assertFalse($statistics->sent(array('id' => 'tenant')));
     }
 
     public static function failedStatuses(): array
