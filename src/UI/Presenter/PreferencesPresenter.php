@@ -811,9 +811,9 @@ class PreferencesPresenter extends PagePresenter
         if ($isMainOrganization) {
             $formCommon->addCheckbox(
                 'system_statistics_enabled',
-                $gL10n->get('SYS_SEND_ANONYMOUS_STATISTICS'),
+                $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'),
                 (bool) ($formValues['system_statistics_enabled'] ?? true),
-                array('helpTextId' => array('SYS_SEND_ANONYMOUS_STATISTICS_DESC', array(
+                array('helpTextId' => array('SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC', array(
                     '<a href="#adm_statistics_modal" data-bs-toggle="modal" aria-controls="adm_statistics_modal" aria-haspopup="dialog">',
                     '</a>'
                 )))

@@ -31,7 +31,7 @@ final class StatisticsConsent
         $enabled = !isset($gSettingsManager) || !$gSettingsManager->has('system_statistics_enabled')
             || $gSettingsManager->getBool('system_statistics_enabled');
         $page->assignSmartyVariable('statisticsEnabled', $enabled);
-        $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_ANONYMOUS_STATISTICS'), $enabled);
+        $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), $enabled);
         $page->addJavascript('
             $("#adm_send_statistics").on("change", function () {
                 $("#adm_send_statistics_summary").prop("checked", this.checked);

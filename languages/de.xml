@@ -244,7 +244,7 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
-  <string name="SYS_ANONYMOUS_STATISTICS_DESC">Anonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das vollständige JSON, das übermittelt wird, wird unten angezeigt.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Eine dauerhafte Installations-ID ermöglicht es, Meldungen über die Zeit zu verknüpfen. Der empfangende Server kann die IP-Adresse des Absenders sehen; Namen von Drittanbieter-Plugins können eine Organisation identifizieren. Das vollständige JSON, das übermittelt wird, wird unten angezeigt.</string>
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_APPLY_ALL_AND_UPLOAD">Alle übernehmen &amp; hochladen</string>
   <string name="SYS_APPOINTMENT">Termin</string>
@@ -1631,7 +1631,7 @@
   <string name="SYS_SENDER_NAME">Absendername</string>
   <string name="SYS_SENDER_NAME_DESC">Name, der beim Versand von E-Mails als Absender angezeigt wird. Dieses Feld muss ausgefüllt werden, wenn eine Absender-E-Mail-Adresse angegeben ist.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">Die absendende Person war nicht angemeldet. Daher sind die Absenderinformationen möglicherweise falsch.</string>
-  <string name="SYS_SEND_ANONYMOUS_STATISTICS">Anonyme Statistiken senden</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Pseudonyme Statistiken senden</string>
   <string name="SYS_SEND_COPY">Kopie der E-Mail an mich senden</string>
   <string name="SYS_SEND_EMAIL">E-Mail senden</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
@@ -2122,8 +2122,8 @@
   <string name="SYS_YOUR_LISTS">Deine Listen</string>
   <string name="SYS_YOUR_NAME">Dein Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
-  <string name="SYS_ANONYMOUS_STATISTICS_CONSENT_DESC">Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
-  <string name="SYS_SEND_ANONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#anonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird beim Laden der Organisationsdaten geprüft.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#pseudonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird beim Laden der Organisationsdaten geprüft.</string>
   <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS">Benutzernamen für Gäste anonymisieren</string>
   <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC">Wenn diese Option aktiviert ist, werden die Namen von Verwaltern und Empfängern für Gäste im Inventar durch „Mitglied“ ersetzt. (Voreinstellung: ja)</string>
   <string name="SYS_BORROWINGS">Ausleihen</string>

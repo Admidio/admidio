@@ -86,7 +86,7 @@ class UpdateStatisticsDialogTest extends TestCase
         $xpath = new DOMXPath($document);
         $this->assertSame($json, $xpath->query('//pre/code')->item(0)->textContent);
         $this->assertCount(0, $xpath->query('//input | //script | //div[contains(@class,"modal-footer")]'));
-        $this->assertStringNotContainsString('SYS_ANONYMOUS_STATISTICS_CONSENT_DESC', $document->textContent);
+        $this->assertStringNotContainsString('SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC', $document->textContent);
         $this->assertCount(1, $xpath->query('//button[@data-bs-dismiss="modal"]'));
     }
 }
