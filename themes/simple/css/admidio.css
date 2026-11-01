@@ -281,6 +281,24 @@ a {
     border-color: var(--bs-primary) !important;
 }
 
+.btn-outline-secondary {
+    color: var(--bs-secondary) !important;
+    border-color: var(--bs-secondary) !important;
+}
+
+.btn-outline-secondary:hover, .btn-outline-secondary:active {
+    color: var(--bs-body-bg) !important;
+}
+
+.btn-outline-danger {
+    color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
+}
+
+.btn-outline-danger:hover, .btn-outline-danger:active {
+    color: var(--bs-body-bg) !important;
+}
+
 /* Use the btn-secondary variables on file inputs for their native buttons. */
 input[type="file"].btn-secondary::file-selector-button {
     color: var(--bs-btn-color);
@@ -1353,4 +1371,3 @@ div.adm-changelog-details-table {
         width: auto;
     }
 }
-

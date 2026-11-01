@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\UI\Component\DataTables;
+use Admidio\UI\Component\FileUpload;
 
 /**
  * @brief Class with methods to display the module pages of the registration.
@@ -763,5 +764,11 @@ class DocumentsPresenter extends PagePresenter
         $this->smarty->assign('unregisteredList', $templateUnregisteredData);
         $this->smarty->assign('l10n', $gL10n);
         $this->pageContent .= $this->smarty->fetch('modules/documents-files.list.tpl');
+
+        if ($currentFolder->hasUploadRight() && $gSettingsManager->getInt('documents_files_max_upload_size') > 0) {
+            $fileUpload = new FileUpload($this, 'documents_files', $currentFolder->getValue('fol_uuid'));
+            $fileUpload->setHeaderData(true);
+            $this->pageContent .= $fileUpload->getModalHtml($currentFolder->getValue('fol_name'));
+        }
     }
 }
