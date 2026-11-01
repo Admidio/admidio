@@ -153,7 +153,6 @@ class OIDCLogoutNotificationService
             $result = curl_exec($curl);
             $statusCode = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
             $error = curl_error($curl);
-            curl_close($curl);
 
             if ($result === false || $statusCode < 200 || $statusCode >= 300) {
                 throw new \RuntimeException('HTTP status ' . $statusCode . ($error === '' ? '' : ': ' . $error));

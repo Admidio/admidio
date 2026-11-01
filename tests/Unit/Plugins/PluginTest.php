@@ -140,7 +140,6 @@ final class PluginTest extends PluginTestCase
         $plugin = Plugin::read(self::fixturePath('needs-module'));
 
         $reflection = new \ReflectionMethod(Plugin::class, 'getModulePreference');
-        $reflection->setAccessible(true);
 
         $this->assertSame($preference, $reflection->invoke(null, $module));
         $this->assertNotNull($plugin);

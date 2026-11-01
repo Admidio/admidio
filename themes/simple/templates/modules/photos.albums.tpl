@@ -113,7 +113,7 @@
                                     {/if}
                                     <a class="admidio-icon-link" href="{$album.editUrl}" aria-label="{$l10n->get('SYS_EDIT_ALBUM')}"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT_ALBUM')}"></i></a>
                                     <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                       data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($album.name))}"
+                                       data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($album.name))|escape:'html'}"
                                        data-href="callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')"
                                        aria-label="{$l10n->get('SYS_DELETE_ALBUM')}"><i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE_ALBUM')}"></i></a>
                                 </div>

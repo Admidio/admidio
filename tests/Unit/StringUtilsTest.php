@@ -79,4 +79,31 @@ class StringUtilsTest extends AdmidioTestCase
         $this->assertFalse(StringUtils::strValidCharacters('not an email', 'email'));
         $this->assertFalse(StringUtils::strValidCharacters('', 'email'));
     }
+
+    /**
+     * @testdox Invalid filename character pattern returns valid character class
+     */
+    public function testInvalidFilenameCharsPattern(): void
+    {
+        $pattern = StringUtils::getInvalidFilenameCharsPattern();
+        $this->assertSame('[' . StringUtils::INVALID_FILENAME_CHARS . ']', $pattern);
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad/file');
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad?file');
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad*file');
+        $this->assertMatchesRegularExpression('#' . $pattern . '#', 'bad:file');
+        $this->assertDoesNotMatchRegularExpression('#' . $pattern . '#', 'valid-file.pdf');
+    }
+
+    /**
+     * @testdox Filename validation correctly validates filenames and foldernames
+     */
+    public function testFilenameValidation(): void
+    {
+        $this->assertTrue(StringUtils::strValidCharacters('document.pdf', 'file'));
+        $this->assertTrue(StringUtils::strValidCharacters('my [1] document.pdf', 'file'));
+        $this->assertFalse(StringUtils::strValidCharacters('document/bad.pdf', 'file'));
+        $this->assertFalse(StringUtils::strValidCharacters('document?bad.pdf', 'file'));
+        $this->assertTrue(StringUtils::strValidCharacters('My Folder', 'folder'));
+        $this->assertFalse(StringUtils::strValidCharacters('My/Folder', 'folder'));
+    }
 }

@@ -60,7 +60,7 @@ jobs:
       TEST_DATABASE_ENGINE: mariadb
       TEST_DB_MARIADB_NAME: admidio_test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -121,7 +121,7 @@ jobs:
           - 8025:8025
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -187,7 +187,7 @@ jobs:
           - 8025:8025
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -254,7 +254,7 @@ jobs:
           - 8025:8025
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2

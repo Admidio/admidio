@@ -232,6 +232,10 @@ try {
         $list->readDataByUuid($getListUuid);
     }
 
+    if (!$list->isVisible()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
     // only first name and last name should be shown
     if (!$hasRightViewMembersProfile) {
         $list->setModeShowOnlyNames();

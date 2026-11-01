@@ -5,6 +5,7 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['admCurrentProfilePhoto']}
+    {include 'sys-template-parts/form.custom-content.tpl' data=$elements['admPhotoUploadHints']}
     {include 'sys-template-parts/form.file.tpl' data=$elements['admPhotoUploadFile']}
     <div class="form-alert" style="display: none;">&nbsp;</div>
     {include 'sys-template-parts/form.button.tpl' data=$elements['admButtonUpload']}

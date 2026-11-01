@@ -5,6 +5,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
+use Admidio\UI\Presenter\QuillEditor;
 
 /**
  * @brief Creates an Admidio specific form with special elements
@@ -60,6 +61,7 @@ class HtmlForm
      * @var string String with prepared html
      */
     protected string $htmlString = '';
+    protected bool $quillAssetsAdded = false;
     /**
      * @var int Number of visible elements in this form. Hidden elements are not count because no interaction is possible.
      */
@@ -111,7 +113,7 @@ class HtmlForm
      * @throws \Smarty\Exception
      * @deprecated 5.0.0:5.1.0 Class "HtmlForm" is deprecated, use class "Form" instead.
      */
-    public function __construct(string $id, string $action = '', HtmlPage $htmlPage = null, array $options = array())
+    public function __construct(string $id, string $action = '', ?HtmlPage $htmlPage = null, array $options = array())
     {
         // create array with all options
         $optionsDefault = array(
@@ -371,7 +373,7 @@ class HtmlForm
     }
 
     /**
-     * Add a new CKEditor element to the form.
+     * Add a new Quill editor element to the form.
      * @param string $id ID of the password field. This will also be the name of the password field.
      * @param string $label The label of the password field.
      * @param string $value A value for the editor field. The editor will contain this value when created.
@@ -395,7 +397,7 @@ class HtmlForm
      */
     public function addEditor(string $id, string $label, string $value, array $options = array())
     {
-        global $gSettingsManager, $gL10n, $gCurrentSession;
+        global $gSettingsManager;
 
         $flagLabelVertical = $this->type;
         ++$this->countElements;
@@ -425,40 +427,23 @@ class HtmlForm
             $this->flagRequiredFields = true;
         }
 
-        if ($optionsAll['toolbar'] === 'AdmidioComments') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "link", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "undo", "redo"],';
-        } elseif ($optionsAll['toolbar'] === 'AdmidioNoMedia') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "link", "blockQuote", "insertTable", "|", "undo", "redo"],';
-        } else {
-            $toolbarJS = '';
-        }
-
-        $javascriptCode = '
-        let editor;
-        ClassicEditor
-        .create( document.querySelector( "#' . $id . '" ), {
-            ' . $toolbarJS . '
-            language: "' . $gL10n->getLanguageLibs() . '",
-            simpleUpload: {
-                uploadUrl: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php',
-                    array('id' => $id)) . '",
-                headers: { "X-CSRF-TOKEN": "' . $gCurrentSession->getCsrfToken() . '" }
+        $optionsAll['quillEnabled'] = $gSettingsManager->getBool('system_js_editor_enabled');
+        if ($optionsAll['quillEnabled']) {
+            if (!$this->quillAssetsAdded) {
+                if ($this->htmlPage instanceof HtmlPage) {
+                    $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
+                    $this->htmlPage->addCssFile(getThemedFileUrl('/css/quill-editor.css'));
+                    $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
+                    $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js');
+                } else {
+                    $this->htmlString .= '<link rel="stylesheet" href="' . ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css">';
+                    $this->htmlString .= '<link rel="stylesheet" href="' . getThemedFileUrl('/css/quill-editor.css') . '">';
+                    $this->htmlString .= '<script src="' . ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js"></script>';
+                    $this->htmlString .= '<script src="' . ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js"></script>';
+                }
+                $this->quillAssetsAdded = true;
             }
-        } )
-        .then( newEditor => {
-            editor = newEditor;
-        })
-        .catch( error => {
-            console.error( error );
-        } );';
-
-        if ($gSettingsManager->getBool('system_js_editor_enabled')) {
-            // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if ($this->htmlPage instanceof HtmlPage) {
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
-            }
-            $this->addJavascriptCode($javascriptCode, true);
+            $this->addJavascriptCode(QuillEditor::initializationCode($id, $optionsAll['toolbar']), true);
         }
 
         $this->type = $flagLabelVertical;
@@ -1684,7 +1669,7 @@ class HtmlForm
      *                         is set as default and need not set with this parameter.
      */
 
-    public function openGroupBox(string $id, string $headline = null, string $class = '')
+    public function openGroupBox(string $id, ?string $headline = null, string $class = '')
     {
         $this->htmlString .= '<div id="' . $id . '" class="card admidio-field-group ' . $class . '">';
         // add headline to groupbox

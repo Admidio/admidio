@@ -65,7 +65,6 @@ class PhotoFilesystemServiceTest extends FilesystemTestCase
             $image = imagecreatetruecolor(96, 64);
             $this->assertNotFalse($image);
             $this->assertTrue(imagepng($image, $sourcePath));
-            imagedestroy($image);
 
             $service = new PhotoService($db, $album);
             $photoNumber = $service->uploadFromFile($sourcePath);

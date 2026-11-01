@@ -11,6 +11,24 @@ use Admidio\Infrastructure\Exception;
 final class StringUtils
 {
     /**
+     * Characters that are invalid in filenames and foldernames.
+     */
+    public const INVALID_FILENAME_CHARS = '/?*;:~<>|"\\\\';
+
+    /**
+     * Regex character class for invalid filename and foldername characters.
+     */
+    public const INVALID_FILENAME_CHARS_REGEX = '[' . self::INVALID_FILENAME_CHARS . ']';
+
+    /**
+     * Returns the regex pattern for invalid filename characters (as a character class e.g. for JS RegExp or PHP preg_match).
+     */
+    public static function getInvalidFilenameCharsPattern(): string
+    {
+        return self::INVALID_FILENAME_CHARS_REGEX;
+    }
+
+    /**
      * In case the multibyte functions are not supported, we do a fallback to a no-multibyte function
      * IMPORTANT: If the fallback is used, the conversion of umlauts not work!
      * StringUtils::strToLower\(([\w$\[\]()]+)\) -> mb_strtolower($1, 'UTF-8')
@@ -103,16 +121,16 @@ final class StringUtils
 
     /**
      * removes html, php code and blancs at beginning and end
-     * of string or all elements of array without ckeditor variables !!!
+     * of string or all elements of array, except fields containing rich text.
      * @param array<string,string|array<mixed,string>> $srcArray
      * @return array<string,string|array<mixed,string>>
      */
     public static function strStripSpecialTags(array $srcArray): array
     {
-        // "ecard_message" => ckeditor-variable
+        // Rich-text fields must retain their HTML markup.
         $specialKeys = array(
             'ecard_message', 'ann_description', 'dat_description', 'fop_text', 'lnk_description',
-            'msg_body', 'plugin_CKEditor', 'room_description', 'usf_description', 'mail_smtp_password'
+            'msg_body', 'room_description', 'usf_description', 'mail_smtp_password'
         );
 
         foreach ($srcArray as $key => $value) {
@@ -166,10 +184,10 @@ final class StringUtils
                 $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß.@+-]+$/i';
                 break;
             case 'file':
-                $validRegex = '=^[^/?*;:~<>|\"\\\\]+\.[^/?*;:~<>|‚\"\\\\]+$=';
+                $validRegex = '=^[^' . self::INVALID_FILENAME_CHARS . ']+\.[^' . self::INVALID_FILENAME_CHARS . '‚]+$=';
                 break;
             case 'folder':
-                $validRegex = '=^[^/?*;:~<>|\"\\\\]+$=';
+                $validRegex = '=^[^' . self::INVALID_FILENAME_CHARS . ']+$=';
                 break;
             case 'url':
                 $validRegex = '/^[\wáàâåäæçéèêîñóòôöõøœúùûüß$&!?(), \/%=#:~.@+\-\[\]]+$/i';
@@ -236,16 +254,8 @@ final class StringUtils
             throw new Exception('SYS_FILENAME_INVALID', array(SecurityUtils::encodeHTML(self::strStripTags($filename))));
         }
 
-        if ($checkExtension) {
-            // check if the extension is not listed as blocked
-            $extensionBlocklist = array('php', 'php3', 'php4', 'php5', 'pht', 'html', 'htm', 'phtml',
-                'shtml', 'htaccess', 'htpasswd', 'pl', 'js', 'vbs', 'asp',
-                'asa', 'cer', 'asax', 'swf', 'xap', 'cgi', 'ssi', 'phar', 'svg');
-            $fileExtension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-
-            if (in_array($fileExtension, $extensionBlocklist, true)) {
-                throw new Exception('SYS_FILE_EXTENSION_INVALID');
-            }
+        if ($checkExtension && FileSystemUtils::isBlockedFileExtension($filename)) {
+            throw new Exception('SYS_FILE_EXTENSION_INVALID');
         }
 
         return true;

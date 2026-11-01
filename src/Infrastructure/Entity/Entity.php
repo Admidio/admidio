@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
@@ -138,12 +139,23 @@ class Entity
     }
 
     /**
-     * A wakeup add the current database object to this class
+     * Preserve the properties of this entity and its subclasses in session data.
+     * @return array<string,mixed>
      */
-    public function __wakeup()
+    public function __serialize(): array
+    {
+        return (array)$this;
+    }
+
+    /**
+     * Restore legacy session properties and attach the current database object.
+     * @param array<string,mixed> $data
+     */
+    public function __unserialize(array $data): void
     {
         global $gDb;
 
+        SerializationUtils::restoreProperties($this, $data);
         if ($gDb instanceof Database) {
             $this->db = $gDb;
         }
@@ -1051,7 +1063,7 @@ class Entity
         $normalize = static function (string $value) use ($column): string {
             $value = trim(str_replace(array("\r\n", "\r"), "\n", html_entity_decode($value, ENT_QUOTES, 'UTF-8')));
             if (in_array($column, array('room_description', 'usf_description'), true)) {
-                // CKEditor wraps a plain paragraph and normalizes HTML line breaks on submission.
+                // Rich-text editors wrap a plain paragraph and normalize HTML line breaks on submission.
                 if (str_starts_with($value, '<p>') && str_ends_with($value, '</p>') && substr_count($value, '<p>') === 1) {
                     $value = substr($value, 3, -4);
                 }
@@ -1110,7 +1122,8 @@ class Entity
                     }
                     break;
 
-                case 'blob':
+                case 'blob': // fallthrough
+                case 'mediumblob':
                     // For blobs, we return the raw data as is
                     break;
 
@@ -1944,7 +1957,8 @@ class Entity
                         break;
 
                     // Byte/Blob
-                    case 'blob':
+                    case 'blob': // fallthrough
+                    case 'mediumblob':
                         // For blobs, we accept the raw data as is
                         break;
 

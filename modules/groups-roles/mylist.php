@@ -64,6 +64,9 @@ try {
     // create list object
     $list = new ListConfiguration($gDb);
     $list->readDataByUuid($getListUuid);
+    if (!$list->isVisible()) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
 
     // if a saved configuration was loaded then add columns to formValues array
     if ($getListUuid !== '') {

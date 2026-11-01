@@ -149,8 +149,11 @@ if ($mode === 'html') {
     // for security reasons only check database connection if no config file exists
     if (!is_file($configPath)) {
         $gDebug = true;
-        Installation::connectDatabase(InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL));
-        $gDebug = false;
+        try {
+            Installation::connectDatabase(InstallationConfig::fromInstallerSession($_SESSION, ADMIDIO_URL));
+        } finally {
+            $gDebug = false;
+        }
     }
 
     echo json_encode(array(

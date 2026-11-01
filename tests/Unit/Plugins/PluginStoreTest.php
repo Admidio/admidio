@@ -919,7 +919,6 @@ final class PluginStoreTest extends PluginTestCase
     private static function forgetDeveloperCatalogue(): void
     {
         $url = new \ReflectionProperty(PluginStore::class, 'url');
-        $url->setAccessible(true);
         $url->setValue(null, null);
     }
 

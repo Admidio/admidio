@@ -21,6 +21,7 @@ use Admidio\Forum\Entity\Topic;
 use Admidio\Forum\Entity\Post;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Inventory\Entity\Item;
+use Admidio\Inventory\Entity\Reservation;
 
 use Admidio\Roles\Entity\ListColumns;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -305,6 +306,7 @@ class ChangelogService {
             'inventory_items' => 'SYS_INVENTORY_ITEMS',
             'inventory_item_data' => 'SYS_INVENTORY_ITEM_DATA',
             'inventory_item_borrow_data' => 'SYS_INVENTORY_ITEM_BORROW_DATA',
+            'inventory_reservations' => 'SYS_RESERVATIONS',
 
             'organizations' => 'SYS_ORGANIZATION',
             'menu' => 'SYS_MENU_ITEM',
@@ -422,7 +424,7 @@ class ChangelogService {
                 'label' => 'SYS_INVENTORY',
                 'section' => 'content_modules',
                 'enabledBy' => array('inventory_module_enabled'),
-                'tables' => array('inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data')
+                'tables' => ['inventory_fields', 'inventory_field_select_options', 'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations'],
             ),
             'weblinks' => array(
                 'label' => 'SYS_WEBLINKS',
@@ -638,6 +640,8 @@ class ChangelogService {
             case 'inventory_item_borrow_data':
             case 'inventory_items':
                 return new Item($gDb);
+            case 'inventory_reservations':
+                return new Reservation($gDb);
             default:
                 return null;
         }
@@ -859,6 +863,21 @@ class ChangelogService {
             'inb_last_receiver' =>         array('name' => 'SYS_INVENTORY_LAST_RECEIVER', 'type' => 'USER'),
             'inb_borrow_date' =>           array('name' => 'SYS_INVENTORY_BORROW_DATE', 'type' => 'DATETIME'),
             'inb_return_date' =>           array('name' => 'SYS_INVENTORY_RETURN_DATE', 'type' => 'DATETIME'),
+            'ivr_usr_id' =>                ['name' => 'SYS_REQUESTER', 'type' => 'USER'],
+            'ivr_guest_name' =>            'SYS_REQUESTER',
+            'ivr_guest_email' =>           ['name' => 'SYS_EMAIL', 'type' => 'EMAIL'],
+            'ivr_comment' =>               'SYS_COMMENT',
+            'ivr_begin' =>                 ['name' => 'SYS_START', 'type' => 'DATETIME'],
+            'ivr_end' =>                   ['name' => 'SYS_END', 'type' => 'DATETIME'],
+            'ivr_status' =>                ['name' => 'SYS_INVENTORY_STATUS', 'type' => 'CUSTOM_LIST', 'entries' => [
+                'requested' => $gL10n->get('SYS_STATUS_REQUESTED'),
+                'approved' => $gL10n->get('SYS_STATUS_APPROVED'),
+                'rejected' => $gL10n->get('SYS_STATUS_REJECTED'),
+                'cancelled' => $gL10n->get('SYS_CANCELLED'),
+                'borrowed' => $gL10n->get('SYS_STATUS_BORROWED'),
+                'returned' => $gL10n->get('SYS_STATUS_RETURNED'),
+            ]],
+            'ivr_timestamp_create' =>      ['name' => 'SYS_REQUESTED_AT', 'type' => 'DATETIME'],
             'ifo_value' =>                 'SYS_VALUE',
             'ifo_inf_id' =>                'SYS_INVENTORY_ITEMFIELD',
             'ifo_sequence' =>              'SYS_ORDER',
@@ -993,7 +1012,22 @@ class ChangelogService {
         return self::$fieldTranslationsCache;
     }
 
+    /**
+     * Check if the file with the given UUID still exists in the database and in the file system.
+     * @param string $uuid The UUID of the file
+     * @return bool Returns **true** if the file exists
+     */
+    private static function fileExists(string $uuid): bool
+    {
+        global $gDb;
 
+        try {
+            $file = new File($gDb);
+            return $file->readDataByUuid($uuid) && is_file($file->getFullFilePath());
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
 
     /**
      * Create an HTML link to the admidio page corresponding to the given module (DB table without prefix). Optional object ID
@@ -1061,6 +1095,9 @@ class ChangelogService {
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php',array('mode' => 'item_edit', 'item_uuid' => $uuid)); break;
                 case 'inventory_item_borrow_data' :
                     $url = SecurityUtils::encodeUrl( ADMIDIO_URL.FOLDER_MODULES.'/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $uuid)); break;
+                case 'inventory_reservations':
+                    $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_list']);
+                    break;
                 case 'links' :
                     $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/weblinks.php', array('mode' => 'edit', 'link_uuid' => $uuid)); break;
                 case 'lists' :
@@ -1123,7 +1160,10 @@ class ChangelogService {
         // through this same encoding exactly once.
         $text = SecurityUtils::encodeHTML(StringUtils::strStripTags($text));
 
-        if ($url != '') {
+        if ($url != '' && $module === 'files' && self::fileExists($uuid)) {
+            // open previewable files in the file preview modal
+            return '<a href="'.$url.'" data-adm-file-preview data-file-name="'.$text.'">'.$text.'</a>';
+        } elseif ($url != '') {
             return '<a href="'.$url.'">'.$text.'</a>';
         } else {
             return $text;
@@ -1608,7 +1648,7 @@ class ChangelogService {
             $tablesPermitted[] = 'links';
         if ($user->isAdministratorInventory())
             $tablesPermitted = array_merge($tablesPermitted, ['inventory_fields', 'inventory_field_select_options',
-                'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data']);
+                'inventory_items', 'inventory_item_data', 'inventory_item_borrow_data', 'inventory_reservations']);
         if ($user->isAdministratorForum())
             $tablesPermitted = array_merge($tablesPermitted, ['forum_topics', 'forum_posts']);
 

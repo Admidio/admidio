@@ -4,6 +4,7 @@ namespace Admidio\Infrastructure;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Reads language specific texts that are identified with text ids out of language xml files
@@ -98,13 +99,30 @@ class Language
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Exclude SimpleXMLElement objects while retaining the legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
-        return array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0" . self::class . "\0" . $name,
+            array('language', 'languageIsoCode', 'languageLibs', 'languageFolderPaths', 'languages', 'countries', 'textCache', 'pluginLanguageFoldersLoaded')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
+        $this->__wakeup();
+    }
+
+    /** Normalize legacy language codes when restoring an existing session. */
+    public function __wakeup(): void
+    {
+        $this->languages = array();
+        $this->setLanguage($this->language);
     }
 
     /**
@@ -189,25 +207,14 @@ class Language
             }
         }
 
+        require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
+        $languageSelected = self::resolveLanguageCode($languageSelected, $gSupportedLanguages);
+
         // special case for the german language code
         if ($languageSelected === 'de' && $defaultLanguage === 'de-DE') {
             $languageSelected = 'de-DE';
         } elseif ($languageSelected === 'de-DE' && $defaultLanguage === 'de') {
             $languageSelected = 'de';
-        }
-
-        require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
-
-        if (!array_key_exists($languageSelected, $gSupportedLanguages)) {
-            // if language with country code is not available try to set only the language code
-            if (strlen($languageSelected) > 2) {
-                $languageSelected = substr($languageSelected, 0, 2);
-                if (!array_key_exists($languageSelected, $gSupportedLanguages)) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
         }
 
         return $languageSelected;
@@ -417,7 +424,7 @@ class Language
     }
 
     /**
-     * Returns the language code of the language that we need for some libs e.g. datepicker or ckeditor.
+     * Returns the language code needed by libraries such as the datepicker.
      * @return string Returns the language code of the language of this object or the reference language.
      */
     public function getLanguageLibs(): string
@@ -639,6 +646,33 @@ class Language
     }
 
     /**
+     * Resolve supported locales and legacy codes while retaining the base-language fallback.
+     * @param string $language Requested language code.
+     * @param array<string,array<string,string>> $supportedLanguages Supported language definitions.
+     * @return string|false The supported language code, or false if no matching language exists.
+     */
+    private static function resolveLanguageCode(string $language, array $supportedLanguages): string|false
+    {
+        $parts = explode('-', $language, 2);
+        $language = strtolower($parts[0]);
+        if (isset($parts[1])) {
+            $language .= '-' . strtoupper($parts[1]);
+        }
+
+        foreach (array($language, substr($language, 0, 2)) as $candidate) {
+            // Older preferences and browser headers use pt for Portuguese as spoken in Portugal.
+            if ($candidate === 'pt') {
+                $candidate = 'pt-PT';
+            }
+            if (array_key_exists($candidate, $supportedLanguages)) {
+                return $candidate;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Set a language to this object. If there was a language before than initialize the cache
      * @param string $language ISO code of the language that should be set to this object.
      * @return bool Returns true if language exists and could be set.
@@ -647,16 +681,9 @@ class Language
     {
         require(ADMIDIO_PATH . FOLDER_LANGUAGES . '/languages.php');
 
-        if (!array_key_exists($language, $gSupportedLanguages)) {
-            // if language with country code is not available try to set only the language code
-            if (strlen($language) > 2) {
-                $language = substr($language, 0, 2);
-                if (!array_key_exists($language, $gSupportedLanguages)) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+        $language = self::resolveLanguageCode($language, $gSupportedLanguages);
+        if ($language === false) {
+            return false;
         }
 
         if ($language <> $this->language) {

@@ -121,7 +121,6 @@ class SsoConsentTest extends AdministratorTestCase
 
         $service = new OIDCService($this->getDatabase(), $gCurrentUser);
         $hashOf = new ReflectionMethod($service, 'getReleasePolicyHash');
-        $hashOf->setAccessible(true);
 
         $this->getDatabase()->queryPrepared(
             'UPDATE ' . TBL_OIDC_CLIENTS . ' SET ocl_field_mapping = ? WHERE ocl_id = ?',
@@ -161,7 +160,6 @@ class SsoConsentTest extends AdministratorTestCase
 
         $service = new OIDCService($this->getDatabase(), $gCurrentUser);
         $hashOf = new ReflectionMethod($service, 'getReleasePolicyHash');
-        $hashOf->setAccessible(true);
 
         $this->getDatabase()->queryPrepared(
             'UPDATE ' . TBL_OIDC_CLIENTS . ' SET ocl_field_mapping = ? WHERE ocl_id = ?',

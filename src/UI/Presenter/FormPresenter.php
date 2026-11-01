@@ -18,6 +18,7 @@ use HTMLPurifier_Config;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Creates an Admidio specific form
@@ -212,11 +213,10 @@ class FormPresenter
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a SimpleXMLElement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Keep the form data and its legacy session property names without serializing the page.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         global $gLogger;
 
@@ -224,7 +224,17 @@ class FormPresenter
             $gLogger->debug('FORM: sleep/serialize!');
         }
 
-        return array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements', 'finalized');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0*\0" . $name,
+            array('flagRequiredFields', 'showRequiredFields', 'javascript', 'type', 'id', 'csrfToken', 'template', 'attributes', 'elements', 'finalized')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**
@@ -491,9 +501,9 @@ class FormPresenter
     }
 
     /**
-     * Add a new CKEditor element to the form.
-     * @param string $id ID of the password field. This will also be the name of the password field.
-     * @param string $label The label of the password field.
+     * Add a rich text editor element to the form.
+     * @param string $id ID of the editor field. This will also be the name of the editor field.
+     * @param string $label The label of the editor field.
      * @param string $value A value for the editor field. The editor will contain this value when created.
      * @param array $options (optional) An array with the following possible entries:
      *                        - **property** : With this param you can set the following properties:
@@ -514,7 +524,7 @@ class FormPresenter
      */
     public function addEditor(string $id, string $label, string $value, array $options = array()): void
     {
-        global $gSettingsManager, $gL10n, $gCurrentSession;
+        global $gSettingsManager;
 
         $flagLabelVertical = $this->type;
 
@@ -527,6 +537,8 @@ class FormPresenter
             'value' => $value
         ), $options));
 
+        $optionsAll['quillEnabled'] = $gSettingsManager->getBool('system_js_editor_enabled');
+
         $attributes = array();
 
         if ($optionsAll['labelVertical']) {
@@ -538,40 +550,14 @@ class FormPresenter
             $this->flagRequiredFields = true;
         }
 
-        if ($optionsAll['toolbar'] === 'AdmidioComments') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "link", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "undo", "redo"],';
-        } elseif ($optionsAll['toolbar'] === 'AdmidioNoMedia') {
-            $toolbarJS = 'toolbar: ["bold", "italic", "|", "numberedList", "bulletedList", "alignment", "|", "fontFamily", "fontSize", "fontColor", "|", "link", "blockQuote", "insertTable", "|", "undo", "redo"],';
-        } else {
-            $toolbarJS = '';
-        }
-
-        $javascriptCode = '
-        let editor;
-        ClassicEditor
-        .create( document.querySelector( "#' . $id . '" ), {
-            ' . $toolbarJS . '
-            language: "' . $gL10n->getLanguageLibs() . '",
-            simpleUpload: {
-                uploadUrl: "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/ckeditor_upload_handler.php',
-                    array('id' => $id)) . '",
-                headers: { "X-CSRF-TOKEN": "' . $gCurrentSession->getCsrfToken() . '" }
-            }
-        } )
-        .then( newEditor => {
-            editor = newEditor;
-        })
-        .catch( error => {
-            console.error( error );
-        } );';
-
-        if ($gSettingsManager->getBool('system_js_editor_enabled')) {
-            // if a htmlPage object was set then add code to the page, otherwise to the current string
+        if ($optionsAll['quillEnabled']) {
             if (isset($this->htmlPage)) {
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/ckeditor.js');
-                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/ckeditor/translations/' . $gL10n->getLanguageLibs() . '.js');
+                $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.snow.css');
+                $this->htmlPage->addCssFile(getThemedFileUrl('/css/quill-editor.css'));
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/quill/quill.js');
+                $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/quill-editor.js');
             }
-            $this->addJavascriptCode($javascriptCode, true);
+            $this->addJavascriptCode(QuillEditor::initializationCode($id, $optionsAll['toolbar']), true);
         }
 
         $this->type = $flagLabelVertical;
@@ -782,19 +768,27 @@ class FormPresenter
 
         // if datetime then add a time field behind the date field
         if ($optionsAll['type'] === 'datetime') {
+            // the weekday prefix is only shown if the caller sets the option weekdayFormat
+            $weekdayFormat = $optionsAll['weekdayFormat'] ?? 'none';
+
             $datetime = DateTimeUtils::parseDateTime($value);
 
             $attributes['dateValue'] = null;
             $attributes['timeValue'] = null;
+            $attributes['weekday'] = '';
+            $attributes['weekdayFormat'] = $weekdayFormat;
 
             if ($datetime !== null) {
                 $attributes['dateValue'] = $datetime->format('Y-m-d');
                 $attributes['timeValue'] = $datetime->format('H:i');
+                if ($weekdayFormat !== 'none') {
+                    $attributes['weekday'] = DateTimeUtils::getLocalizedWeekday($datetime, $weekdayFormat);
+                }
             }
 
             // now add a date and a time field to the form
             $attributes['dateValueAttributes'] = array();
-            $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control';
+            $attributes['dateValueAttributes']['class'] = 'form-control datetime-date-control' . ($weekdayFormat !== 'none' ? ' admidio-date-with-weekday' : '');
             $attributes['dateValueAttributes']['pattern'] = '\d{4}-\d{2}-\d{2}';
 
             $attributes['timeValueAttributes'] = array();
@@ -813,6 +807,12 @@ class FormPresenter
                 $value = $datetime->format('Y-m-d');
             }
             $attributes['pattern'] = '\d{4}-\d{2}-\d{2}';
+
+            if (isset($optionsAll['weekdayFormat']) && $optionsAll['weekdayFormat'] !== 'none') {
+                $attributes['weekdayFormat'] = $optionsAll['weekdayFormat'];
+                $attributes['weekday'] = ($datetime !== null) ? DateTimeUtils::getLocalizedWeekday($datetime, $optionsAll['weekdayFormat']) : '';
+                $optionsAll['class'] .= ' admidio-date-with-weekday';
+            }
         } elseif ($optionsAll['type'] === 'time') {
             $datetime = DateTime::createFromFormat('Y-m-d' . $gSettingsManager->getString('system_time'), DATE_NOW . $value);
             if (!empty($value) && is_object($datetime))
@@ -1456,6 +1456,13 @@ class FormPresenter
             $valuesArray[] = array('id' => '', 'value' => '');
         }
 
+        // Native validation recognizes an empty placeholder only as the first option.
+        // Keep the heading for Select2 and optional fields, but never put it before
+        // the empty first entry of a required normal single select.
+        $optionsAll['showHeading'] = $optionsAll['multiselect'] || $optionsAll['search']
+            || $optionsAll['property'] !== self::FIELD_REQUIRED
+            || (string)$valuesArray[0]['id'] !== '';
+
         if ($optionsAll['multiselect'] || $optionsAll['search']) {
             $maximumSelectionNumber = '';
             $allowClear = 'false';
@@ -1964,6 +1971,98 @@ class FormPresenter
     }
 
     /**
+     * Add a tree to the form where the user selects one node, e.g. a folder. The tree loads the child nodes from
+     * the server when the user expands a node, so also large structures can be shown. The id of the selected node
+     * is saved in a hidden field with the id of the element. The script and the styles of the tree are only added
+     * to pages with a tree.
+     * The url must return JSON: {"status": "success", "nodes": [{"id": "...", "name": "...", "url": "...",
+     * "hasChildren": true, "selectable": true}]} and with the parameter **with_path=1** also "path" with the ids
+     * of the nodes from the root to the requested node.
+     * The restrictions of the selection (selectable, excludedId, currentSelectable) are only shown to the user. The
+     * script that receives the form must check again that the user may use the selected node.
+     * @param string $id ID of the tree and name of the hidden field that contains the selected node.
+     * @param string $label The label of the tree.
+     * @param string $url Url that returns the child nodes of a node as JSON.
+     * @param array $root The root node of the tree: **id**, **name** and optional **selectable** (default true).
+     * @param array $options (optional) An array with the following possible entries:
+     *                        - **property** : With this param you can set the following properties:
+     *                          + **self::FIELD_DEFAULT** : The user can select a node or leave the field empty.
+     *                          + **self::FIELD_REQUIRED** : The user must select a node.
+     *                        - **idParam** : Name of the url parameter with the id of the parent node. Default **node_id**.
+     *                        - **nodeIcon** : Bootstrap icon of the nodes. Default **bi-folder-fill**.
+     *                        - **currentId** : Id of the current node, e.g. the folder of a moved file. The nodes
+     *                          from the root to this node are expanded at the start.
+     *                        - **currentLabel** : Text that is shown at the current node.
+     *                        - **currentSelectable** : If set to **true** the current node can be selected.
+     *                        - **path** : Ids of the nodes from the root to the current node.
+     *                        - **excludedId** : This node and all its child nodes can't be selected.
+     *                        - **rememberKey** : Key in the storage of the browser. The selected node is remembered
+     *                          when the form is sent and the tree opens at this node next time.
+     *                        - **rememberLabel** : Text that is shown at the remembered node.
+     *                        - **emptyText** : Text below the tree while no node is selected.
+     *                        - **helpTextId** : A unique text id from the translation xml files that should be shown
+     *                          e.g. SYS_DATA_CATEGORY_GLOBAL. The text will be shown under the form control.
+     *                        - **icon** : An icon can be set. This will be placed in front of the label.
+     *                        - **class** : An additional css classname for the tree.
+     * @throws Exception
+     */
+    public function addTreeSelect(string $id, string $label, string $url, array $root, array $options = array()): void
+    {
+        global $gL10n;
+
+        $optionsAll = $this->buildOptionsArray(array_replace(array(
+            'type' => 'tree-select',
+            'id' => $id,
+            'label' => $label,
+            'idParam' => 'node_id',
+            'nodeIcon' => 'bi-folder-fill',
+            'currentId' => '',
+            'currentLabel' => '',
+            'currentSelectable' => false,
+            'path' => array(),
+            'excludedId' => '',
+            'rememberKey' => '',
+            'rememberLabel' => '',
+            'emptyText' => ''
+        ), $options));
+
+        if ($optionsAll['property'] === self::FIELD_REQUIRED) {
+            $this->flagRequiredFields = true;
+        }
+
+        // the options of the script, the tree is created by system/js/tree-view.js
+        $optionsAll['treeOptions'] = json_encode(array(
+            'url' => $url,
+            'idParam' => $optionsAll['idParam'],
+            'icon' => $optionsAll['nodeIcon'],
+            'root' => array(
+                'id' => (string)$root['id'],
+                'name' => (string)$root['name'],
+                'selectable' => $root['selectable'] ?? true
+            ),
+            'currentId' => $optionsAll['currentId'],
+            'currentLabel' => $optionsAll['currentLabel'],
+            'currentSelectable' => (bool)$optionsAll['currentSelectable'],
+            'path' => array_values($optionsAll['path']),
+            'excludedId' => $optionsAll['excludedId'],
+            'rememberKey' => $optionsAll['rememberKey'],
+            'rememberLabel' => $optionsAll['rememberLabel'],
+            'errorText' => $gL10n->get('SYS_REQUEST_FAILED')
+        ));
+
+        if (isset($this->htmlPage)) {
+            $this->htmlPage->addTreeViewFiles();
+        }
+
+        // required field should not be highlighted so set it to a default field
+        if (!$this->showRequiredFields && $optionsAll['property'] === self::FIELD_REQUIRED) {
+            $optionsAll['property'] = self::FIELD_DEFAULT;
+        }
+
+        $this->elements[$id] = $optionsAll;
+    }
+
+    /**
      * This method appends the form attributes and all form elements to the Smarty object.
      * It also assigns the template file of the form to the Smarty object.
      * After this method is called the whole form could be rendered through the Smarty object.
@@ -2434,6 +2533,15 @@ class FormPresenter
                             $config->set('HTML.Doctype', 'HTML 4.01 Transitional');
                             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
                             $config->set('Cache.SerializerPath', ADMIDIO_PATH . FOLDER_DATA . '/templates');
+                            $config->set('HTML.SafeIframe', true);
+                            $config->set('URI.SafeIframeRegexp', '%\\Ahttps://(?:(?:www\\.)?youtube(?:-nocookie)?\\.com/embed/[A-Za-z0-9_-]{11}|player\\.vimeo\\.com/video/[0-9]+)\\z%');
+                            $config->set('HTML.DefinitionID', 'admidio-quill-video');
+                            $config->set('HTML.DefinitionRev', 1);
+                            // A cached definition is already configured and needs no further changes.
+                            $definition = $config->maybeGetRawHTMLDefinition();
+                            if ($definition !== null) {
+                                $definition->addAttribute('iframe', 'allowfullscreen', 'Bool#allowfullscreen');
+                            }
 
                             $filter = new HTMLPurifier($config);
                             $validFieldValues[$element['id']] = $filter->purify($fieldValues[$element['id']]);

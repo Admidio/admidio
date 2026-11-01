@@ -291,7 +291,7 @@ class MenuPresenter extends PagePresenter
                 if (!$menuEntry['men_standard']) {
                     $templateRowMenu['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_menu_entry_' . $menuEntry['men_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'delete', 'uuid' => $menuEntry['men_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($templateRowMenu['name'])),
+                        'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($templateRowMenu['name']))),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE')
                     );

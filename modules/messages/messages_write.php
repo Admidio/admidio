@@ -29,6 +29,8 @@ use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\Messages\Entity\Message;
 use Admidio\Messages\Entity\MessageContent;
 use Admidio\Roles\Entity\ListConfiguration;
@@ -44,6 +46,7 @@ try {
     // Initialize and check the parameters
     $getMsgType = admFuncVariableIsValid($_GET, 'msg_type', 'string', array('defaultValue' => Message::MESSAGE_TYPE_EMAIL));
     $getUserUUID = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid');
+    $getReservationUUID = admFuncVariableIsValid($_GET, 'reservation_uuid', 'uuid');
     $getSubject = admFuncVariableIsValid($_GET, 'subject', 'string');
     $getMsgUUID = admFuncVariableIsValid($_GET, 'msg_uuid', 'uuid');
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid');
@@ -52,6 +55,25 @@ try {
     $getForward = admFuncVariableIsValid($_GET, 'forward', 'bool');
     $postUserUuidList = '';
     $postListUuid = '';
+    $reservationRecipient = '';
+    $reservationRecipientName = '';
+
+    if ($getReservationUUID !== '') {
+        if ($getMsgType !== Message::MESSAGE_TYPE_EMAIL || !InventoryAccessService::canManageReservations()) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservation = new Reservation($gDb);
+        if (!$reservation->readDataByUuid($getReservationUUID)
+            || !InventoryAccessService::canManageReservationItem((int) $reservation->getValue('ivr_ini_id'))
+            || $reservation->getValue('ivr_guest_email') === '') {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $reservationRecipient = 'reservation:' . $getReservationUUID;
+        $reservationRecipientName = $gL10n->get('SYS_VISITORS') . ': '
+            . trim($reservation->getValue('ivr_guest_name') . ' <' . $reservation->getValue('ivr_guest_email') . '>');
+    }
 
     // Check form values
     if ($gValidLogin) {
@@ -449,9 +471,17 @@ try {
             $preloadData = 'dummy';
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
+            if (!$showList->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $list = array('dummy' => $gL10n->get('SYS_LIST') . (strlen($showList->getValue('lst_name')) > 0 ? ' - ' . $showList->getValue('lst_name') : ''));
             $form->addInput('userUuidList', '', $postUserUuidList, array('property' => FormPresenter::FIELD_HIDDEN));
             $form->addInput('list_uuid', '', $postListUuid, array('property' => FormPresenter::FIELD_HIDDEN));
+        }
+
+        if ($reservationRecipient !== '') {
+            $preloadData = $reservationRecipient;
+            $list = [[$reservationRecipient, $reservationRecipientName, '']];
         }
 
         // no roles or users found then show message
@@ -574,7 +604,7 @@ try {
             array('maxLength' => 77, 'property' => FormPresenter::FIELD_REQUIRED)
         );
 
-        // add multiline text element or ckeditor to form
+        // add a multiline text field or rich-text editor to the form
         if ($gValidLogin && $gSettingsManager->getBool('mail_html_registered_users')) {
             $form->addEditor(
                 'msg_body',
@@ -658,7 +688,8 @@ try {
                     $attachmentPath = ADMIDIO_PATH . FOLDER_DATA . '/messages_attachments/' . $attachment['admidio_file_name'];
 
                     if (file_exists($attachmentPath)) {
-                        $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '">' . $attachment['file_name'] . '</a></span>';
+                        $messageFooter .= '<span class="admidio-attachment mr-3"><a href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/get_attachment.php', array('msa_uuid' => $attachment['msa_uuid'])) . '"
+                            data-adm-file-preview data-file-name="' . SecurityUtils::encodeHTML($attachment['file_name']) . '">' . $attachment['file_name'] . '</a></span>';
                     } else {
                         $messageFooter .= '<span class="admidio-attachment mr-3">' . $attachment['file_name'] . '</span>';
                     }

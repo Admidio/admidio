@@ -2,9 +2,12 @@
 namespace Admidio\Menu\ValueObject;
 
 use Admidio\Components\Entity\Component;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Service\RegistrationService;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Messages\Entity\Message;
 use Admidio\Roles\Entity\RolesRights;
 
@@ -153,7 +156,7 @@ class MenuNode
 
         while ($node = $nodesStatement->fetch(\PDO::FETCH_ASSOC)) {
             if ((int) $node['men_com_id'] === 0 || Component::isVisible($node['com_name_intern'])) {
-                if ($this->menuItemIsVisible($node['men_id'])) {
+                if ($this->menuItemIsVisible((int) $node['men_id'], (string) $node['com_name_intern'])) {
                     $badgeCount = 0;
 
                     if ($node['men_name_intern'] === 'messages' && $gValidLogin) {
@@ -163,6 +166,8 @@ class MenuNode
                     } elseif ($node['men_name_intern'] === 'registration') {
                         $registration = new RegistrationService($gDb);
                         $badgeCount = count($registration->findAll());
+                    } elseif ($node['men_name_intern'] === 'inventory' && InventoryAccessService::canManageReservations()) {
+                        $badgeCount = ReservationService::countPendingReservations($gDb);
                     }
 
                     $this->addItem($node['men_name_intern'], $node['men_name'], $node['men_url'], (string) $node['men_icon'], '', $badgeCount, (string) $node['men_description']);
@@ -181,13 +186,15 @@ class MenuNode
      * Therefor this method checks if roles are assigned to the menu item and if the current
      * user is a member of at least one of these roles.
      * @param int $menuId The id of the menu item that should be checked if it's visible.
+     * @param string $componentName Internal name of the component owning the menu item, if any.
      * @return bool Return true if the menu item is visible to the current user.
      * @throws Exception
      */
-    public function menuItemIsVisible(int $menuId): bool
+    public function menuItemIsVisible(int $menuId, string $componentName = ''): bool
     {
         global $gDb, $gCurrentUser;
 
+        $visible = false;
         if ($menuId > 0) {
             // Read current roles rights of the menu
             $displayMenu = new RolesRights($gDb, 'menu_view', $menuId);
@@ -195,11 +202,11 @@ class MenuNode
 
             // check for right to show the menu
             if (count($rolesDisplayRight) === 0 || $displayMenu->hasRight($gCurrentUser->getRoleMemberships())) {
-                return true;
+                $visible = true;
             }
         }
 
-        return false;
+        return Hooks::applyTypedFilters('menu_item_visible', $visible, $menuId, $componentName);
     }
 
     /**

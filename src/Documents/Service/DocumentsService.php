@@ -7,6 +7,7 @@ use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Roles\Entity\RolesRights;
 use DateTime;
@@ -59,9 +60,9 @@ class DocumentsService
 
     /**
      * Send the file to the user for download. Optional the parameter inline could be set and then the file will
-     * be shown in the browser.
+     * be shown in the browser if its file type allows it.
      * @param string $fileUUID The UUID of the file that should be downloaded.
-     * @param bool $inline If set to **true** than the output will be sent inline otherwise as attachment.
+     * @param bool $inline Request inline output for viewable file types, otherwise send an attachment.
      * @return void
      * @throws Exception
      */
@@ -75,7 +76,9 @@ class DocumentsService
         // determine filesize
         $fileSize = filesize($completePath);
 
-        if ($inline) {
+        // Only explicitly viewable types may be rendered on the Admidio origin.
+        // Other types, such as SVG, can contain active content and must be downloaded.
+        if ($inline && $file->isViewableInBrowser()) {
             $content = 'inline';
         } else {
             $content = 'attachment';
@@ -83,6 +86,7 @@ class DocumentsService
 
         // Create appropriate header information of the file
         header('Content-Type: ' . $file->getMimeType());
+        header('X-Content-Type-Options: nosniff');
         header('Content-Length: ' . $fileSize);
         header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
 
@@ -127,9 +131,17 @@ class DocumentsService
             throw new Exception('SYS_FILE_NOT_EXIST');
         }
 
-        // Increment download counter
-        $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
-        $file->save();
+        // Increment download counter only once per file and session, so a preview followed by a download
+        // or the repeated requests of a media player are not counted several times
+        $hasSession = session_status() === PHP_SESSION_ACTIVE;
+        if (!$hasSession || !in_array($fileUUID, $_SESSION['documents_files_counted'] ?? array(), true)) {
+            $file->setValue('fil_counter', (int)$file->getValue('fil_counter') + 1);
+            $file->save();
+
+            if ($hasSession) {
+                $_SESSION['documents_files_counted'][] = $fileUUID;
+            }
+        }
 
         return $file;
     }
@@ -266,6 +278,100 @@ class DocumentsService
     }
 
     /**
+     * Read the subfolders of the current folder that the current user is allowed to open. The result is used for the
+     * nodes of the folder tree. A locked folder is only shown to administrators of the module, as only they can open
+     * it. Each node knows whether it has visible subfolders itself, so the tree can show an expand button without
+     * loading the whole structure at once.
+     * @return array<int,array{id: string, name: string, url: string, hasChildren: bool, selectable: bool}> Returns an
+     *         array with an array for each visible subfolder in the format of the tree view. A folder is selectable if
+     *         the user may upload to it.
+     * @throws Exception
+     */
+    public function findFolderTreeNodes(): array
+    {
+        $subfolders = array_values(array_filter($this->folder->getSubfoldersWithProperties(), function (array $subfolder) {
+            return Folder::isViewable($this->db, $subfolder);
+        }));
+        $foldersWithChildren = $this->findFoldersWithVisibleSubfolders(array_map('intval', array_column($subfolders, 'fol_id')));
+
+        $nodes = array();
+        foreach ($subfolders as $subfolder) {
+            $folder = new Folder($this->db, (int)$subfolder['fol_id']);
+            $nodes[] = array(
+                'id' => $subfolder['fol_uuid'],
+                'name' => html_entity_decode($subfolder['fol_name'], ENT_QUOTES, 'UTF-8'),
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('folder_uuid' => $subfolder['fol_uuid'])),
+                'hasChildren' => in_array((int)$subfolder['fol_id'], $foldersWithChildren, true),
+                'selectable' => $folder->hasUploadRight()
+            );
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Find the folders that have at least one subfolder which the current user may open. All subfolders of the given
+     * folders are read with one query, and the check of a folder stops at its first visible subfolder. A subfolder is
+     * visible if the user may open it (Folder::isViewable()) and, for users who are not administrators of the
+     * module, if it exists in the file system like in the folder list.
+     * @param array<int,int> $folderIds IDs of the folders.
+     * @return array<int,int> Returns the IDs of the folders with a visible subfolder.
+     * @throws Exception
+     */
+    private function findFoldersWithVisibleSubfolders(array $folderIds): array
+    {
+        global $gCurrentUser;
+
+        if (count($folderIds) === 0) {
+            return array();
+        }
+
+        $sql = 'SELECT fol_id, fol_fol_id_parent, fol_name, fol_path, fol_public, fol_locked
+                  FROM ' . TBL_FOLDERS . '
+                 WHERE fol_type = \'DOCUMENTS\'
+                   AND fol_fol_id_parent IN (' . Database::getQmForValues($folderIds) . ')
+                   AND fol_org_id = ? -- $GLOBALS[\'gCurrentOrgId\']';
+        $statement = $this->db->queryPrepared($sql, array_merge($folderIds, array($GLOBALS['gCurrentOrgId'])));
+
+        $isAdministrator = $gCurrentUser->isAdministratorDocumentsFiles();
+        $foldersWithChildren = array();
+        while ($row = $statement->fetch()) {
+            $parentId = (int)$row['fol_fol_id_parent'];
+            if (isset($foldersWithChildren[$parentId])) {
+                continue;
+            }
+            if (!$isAdministrator && !is_dir(ADMIDIO_PATH . $row['fol_path'] . '/' . $row['fol_name'])) {
+                continue;
+            }
+            if (Folder::isViewable($this->db, $row)) {
+                $foldersWithChildren[$parentId] = true;
+            }
+        }
+
+        return array_keys($foldersWithChildren);
+    }
+
+    /**
+     * Returns the UUIDs of the folders from the root folder to the current folder, including the current folder.
+     * The folder tree opens these folders to show the current folder.
+     * @return array<int,string> Returns the folder UUIDs, the first is the root folder.
+     * @throws Exception
+     */
+    public function findFolderPath(): array
+    {
+        $path = array($this->folder->getValue('fol_uuid'));
+        $parentFolderId = (int)$this->folder->getValue('fol_fol_id_parent');
+
+        while ($parentFolderId > 0) {
+            $parentFolder = new Folder($this->db, $parentFolderId);
+            array_unshift($path, $parentFolder->getValue('fol_uuid'));
+            $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
+        }
+
+        return $path;
+    }
+
+    /**
      * Read the data of the folder in an array. Only folders and files that are currently not registered in the
      * database are returned.
      * @return array{array{folder: bool, name: string, size: int}} Returns an array with an array for each missing folder or file.
@@ -388,6 +494,9 @@ class DocumentsService
             $documentsFilesRenameForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
             $formValues = $documentsFilesRenameForm->validate($_POST);
 
+            // Validate the base name before constructing the destination path.
+            StringUtils::strIsValidFileName($formValues['adm_new_name'], false);
+
             // get recordset of current file from database and throw exception if necessary
             $file = new File($this->db);
             $file->getFileForDownload($fileUUID);
@@ -405,7 +514,7 @@ class DocumentsService
                 if ($newFile !== $file->getValue('fil_name')) {
                     // rename file in filesystem and database
                     try {
-                        FileSystemUtils::moveFile($oldFile, $newPath . $newFile);
+                        FileSystemUtils::moveFile($oldFile, $newPath . $newFile, array('createDirectoryStructure' => false));
                     } catch (RuntimeException $exception) {
                         throw new Exception('SYS_FILE_RENAME_ERROR', array($oldName));
                     }

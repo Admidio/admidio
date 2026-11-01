@@ -31,7 +31,6 @@ class DatabaseAbstractionTest extends DatabaseTestCase
     private function transactionDepth(): int
     {
         $property = new \ReflectionProperty($this->getDatabase(), 'transactions');
-        $property->setAccessible(true);
 
         return (int) $property->getValue($this->getDatabase());
     }

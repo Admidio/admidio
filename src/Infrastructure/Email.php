@@ -404,6 +404,48 @@ class Email extends PHPMailer
     }
 
     /**
+     * Create the message body from the HTML text. Images that are given as data URI are embedded here with a
+     * short Content-ID before PHPMailer handles the rest of the HTML. PHPMailer would use the domain of the
+     * sender address in the Content-ID, and with PHP mail() it encodes every header that is longer than
+     * 47 characters. With a sender domain of more than 14 characters the Content-ID then doesn't match the
+     * cid reference in the HTML anymore and mail clients don't show the image (PHPMailer/PHPMailer#1864).
+     * @param string $message HTML message string
+     * @param string $basedir Absolute path to a base directory to prepend to relative paths to images
+     * @param bool|callable $advanced Whether to use the internal HTML to text converter or your own custom converter
+     * @return string The transformed message body
+     * @throws Exception
+     */
+    public function msgHTML($message, $basedir = '', $advanced = false)
+    {
+        preg_match_all('/(?<!-)(src|background)=["\'](.*)["\']/Ui', $message, $images);
+
+        foreach ($images[2] as $imageIndex => $url) {
+            // the same data URIs that PHPMailer would embed
+            if (!preg_match('#^data:(image/(?:jpe?g|gif|png));?(base64)?,(.+)#', $url, $match)) {
+                continue;
+            }
+
+            if ($match[2] === static::ENCODING_BASE64) {
+                $data = base64_decode($match[3]);
+            } elseif ($match[2] === '') {
+                $data = rawurldecode($match[3]);
+            } else {
+                continue;
+            }
+
+            // 16 characters of the hash and the fixed domain keep the Content-ID short enough
+            $cid = substr(hash('sha256', $data), 0, 16) . '@admidio';
+
+            if (!$this->cidExists($cid)) {
+                $this->addStringEmbeddedImage($data, $cid, 'embed' . $imageIndex, static::ENCODING_BASE64, $match[1]);
+            }
+            $message = str_replace($images[0][$imageIndex], $images[1][$imageIndex] . '="cid:' . $cid . '"', $message);
+        }
+
+        return parent::msgHTML($message, $basedir, $advanced);
+    }
+
+    /**
      * Set a debug modus for sending emails. This will only be useful if you use smtp for sending
      * emails. If you still use PHP mail() there fill be no debug output. With the parameter
      **$outputGlobalVar** you have the option to put the output in a global variable
@@ -679,17 +721,48 @@ class Email extends PHPMailer
         $this->emRecipientsArray = Hooks::applyTypedFilters('email_recipients', $this->emRecipientsArray, $this->Subject);
         $recipientCount = count($this->emRecipientsArray);
 
+        // In single mode or with several packages of recipients more than one mail is sent. Keep the
+        // SMTP connection open until all of them are delivered, so only the first mail needs the
+        // connection setup, the TLS handshake and the login.
+        $this->SMTPKeepAlive = true;
+
         try {
             $this->deliver();
         } catch (\Throwable $exception) {
             Hooks::doActionCatchErrors('email_failed', $this->Subject, $recipientCount, $exception->getMessage());
 
             throw $exception;
+        } finally {
+            $this->smtpClose();
+            $this->SMTPKeepAlive = false;
         }
 
         Hooks::doActionCatchErrors('email_sent', $this->Subject, $recipientCount);
 
         return true;
+    }
+
+    /**
+     * Send the current message over the SMTP connection that is kept open for all mails of one sending.
+     * Some servers accept only a limited number of mails per connection and close it, e.g. with
+     * "421 too many messages". If the connection is closed after a failed mail, the mail is sent once more
+     * over a new connection. If the connection is still open, e.g. because a recipient was rejected, the
+     * mail is not sent again, because it could already have been delivered to the other recipients.
+     * @return bool Returns **true** if the mail was sent.
+     * @throws Exception
+     */
+    private function sendKeepingConnection(): bool
+    {
+        try {
+            return $this->send();
+        } catch (Exception $e) {
+            if (!$this->SMTPKeepAlive || $this->Mailer !== 'smtp' || $this->getSMTPInstance()->connected()) {
+                throw $e;
+            }
+
+            $this->smtpClose();
+            return $this->send();
+        }
     }
 
     /**
@@ -739,7 +812,7 @@ class Email extends PHPMailer
                     }
 
                     // now send mail
-                    $this->send();
+                    $this->sendKeepingConnection();
                 } catch (Exception $e) {
                     $errorMessage = $e->getMessage();
                     $errorRecipients[] = $recipient['name'] . ' (' . $recipient[ 'email'] . ')';
@@ -810,7 +883,7 @@ class Email extends PHPMailer
                 }
 
                 // now send mail
-                $this->send();
+                $this->sendKeepingConnection();
             }
         }
 

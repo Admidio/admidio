@@ -1047,6 +1047,19 @@ class ListConfiguration extends Entity
     }
 
     /**
+     * Return whether the current user may view this configuration.
+     * Private configurations are only visible to their owner, including when the viewer is an administrator.
+     * An empty configuration is visible so that users can create a new list.
+     * @return bool
+     */
+    public function isVisible(): bool
+    {
+        return $this->isNewRecord()
+            || (bool)$this->getValue('lst_global')
+            || (int)$this->getValue('lst_usr_id') === (int)$GLOBALS['gCurrentUserId'];
+    }
+
+    /**
      * Read data of responsible columns and store in an object. Only columns of profile fields which the current
      * user is allowed to view will be stored in the object. If only the role membership should be shown, then
      * remove all columns except first name, last name and assignment timestamps. A configuration without any

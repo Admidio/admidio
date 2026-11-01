@@ -36,7 +36,7 @@ Here you find a short overview about our versions that we will support with secu
 
 | Version  | Supported          |
 | -------- | ------------------ |
-| >= 5.1.x | :white_check_mark: |
+| >= 6.0.x | :white_check_mark: |
 | 5.0.x    | :white_check_mark: |
 | <= 4.x   | :x:                |
 

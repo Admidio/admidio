@@ -603,7 +603,7 @@ class CategoriesPresenter extends PagePresenter
                 if (!$category->getValue('cat_system')) {
                     $templateCategory['actions'][] = array(
                         'dataHref' => 'callUrlHideElement(\'adm_category_' . $category->getValue('cat_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('mode' => 'delete', 'uuid' => $category->getValue('cat_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
-                        'dataMessage' => $gL10n->get($deleteMessage, array($category->getValue('cat_name', 'database'))),
+                        'dataMessage' => $gL10n->get($deleteMessage, array($category->getValue('cat_name'))),
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_DELETE')
                     );

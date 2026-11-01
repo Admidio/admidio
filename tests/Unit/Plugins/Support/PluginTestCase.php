@@ -116,6 +116,10 @@ final class PluginTestLanguage
 {
     /** @var array<int,string> */
     public array $folderPaths = array();
+    /** The latest translation request, for assertions about escaped parameters. */
+    public string $lastTextId = '';
+    /** @var array<int,string> */
+    public array $lastParameters = array();
 
     /** The language of the installation, which a case may change to read a translated text. */
     private string $language = 'en';
@@ -125,6 +129,9 @@ final class PluginTestLanguage
      */
     public function get(string $textId, array $params = array()): string
     {
+        $this->lastTextId = $textId;
+        $this->lastParameters = $params;
+
         return $textId;
     }
 

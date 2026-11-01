@@ -110,6 +110,48 @@ class Item extends Entity
         return parent::setValue($columnName, $newValue, $checkValue);
     }
 
+    /** Guard every transition into the retired status, including normal form saves. */
+    public function save(bool $updateFingerPrint = true): bool
+    {
+        $statusChange = $this->changedValues['ini_status'] ?? null;
+        if ($statusChange === null || (int) $statusChange['oldValue'] === (int) $statusChange['newValue'] || !$this->isRetired()) {
+            return parent::save($updateFingerPrint);
+        }
+
+        $ownsTransaction = !$this->db->isInTransaction();
+        if ($ownsTransaction) {
+            $this->db->startTransaction();
+        }
+        try {
+            $this->assertNoOpenReservations();
+            $result = parent::save($updateFingerPrint);
+            if ($ownsTransaction) {
+                $this->db->endTransaction();
+            }
+            return $result;
+        } catch (\Throwable $exception) {
+            if ($ownsTransaction) {
+                $this->db->rollback();
+            }
+            throw $exception;
+        }
+    }
+
+    /** Lock the item before validating a retirement or deletion inside its save transaction. */
+    public function assertNoOpenReservations(): void
+    {
+        $itemId = (int) $this->getValue('ini_id');
+        $this->db->queryPrepared('SELECT ini_id FROM ' . TBL_INVENTORY_ITEMS . ' WHERE ini_id = ? FOR UPDATE', [$itemId]);
+        $openReservation = $this->db->queryPrepared(
+            'SELECT ivr_id FROM ' . TBL_INVENTORY_RESERVATIONS . '
+             WHERE ivr_ini_id = ? AND ivr_status IN (?, ?, ?) FOR UPDATE',
+            [$itemId, Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
+        )->fetchColumn();
+        if ($openReservation !== false) {
+            throw new Exception('SYS_ITEM_HAS_OPEN_RESERVATIONS');
+        }
+    }
+
     /**
      * Reads a record out of the table in database selected by the conditions of the param **$sqlWhereCondition** out
      * of the table. If the SQL find more than one record the method returns **false**. Per default all columns of the

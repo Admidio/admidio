@@ -7,6 +7,7 @@
 
 namespace Admidio\Tests\Unit\Plugins;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
@@ -157,10 +158,51 @@ final class PluginRegistryTest extends PluginTestCase
      */
     public function testUpdateState(): void
     {
-        PluginRegistry::setInstallations(array('hello' => array('comId' => 7, 'version' => '1.1.0')));
+        unset($GLOBALS['gCurrentUser']);
+        $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.1.0')));
 
         $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState('hello'));
         $this->assertSame(array(), PluginRegistry::getLoadable(), 'a plugin waiting for its update must not be loaded');
+
+        $this->expectException(Exception::class);
+        PluginRegistry::requireEnabled('hello');
+    }
+
+    /**
+     * @testdox A plugin name in the update-required message is escaped for non-administrators
+     */
+    public function testUpdateRequiredMessageEscapesPluginNameForNonAdministrators(): void
+    {
+        unset($GLOBALS['gCurrentUser']);
+        $manifestFile = self::fixturePath('hello/plugin.json');
+        $originalManifest = (string) file_get_contents($manifestFile);
+        try {
+            $this->writeHelloManifestName('<script>alert(1)</script>');
+            $this->setEnabledInstallations(array('hello' => array('comId' => 7, 'version' => '1.1.0')));
+
+            try {
+                PluginRegistry::requireEnabled('hello');
+                $this->fail('An outdated plugin was expected to be unavailable.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_PLUGIN_UPDATE_REQUIRED_NO_ACCESS', $exception->getMessage());
+            }
+
+            $this->assertSame('SYS_PLUGIN_UPDATE_REQUIRED_NO_ACCESS', $GLOBALS['gL10n']->lastTextId);
+            $this->assertSame(array('&lt;script&gt;alert(1)&lt;/script&gt;'), $GLOBALS['gL10n']->lastParameters);
+        } finally {
+            file_put_contents($manifestFile, $originalManifest);
+            PluginRegistry::reset();
+        }
+    }
+
+    private function writeHelloManifestName(string $name): void
+    {
+        $file = self::fixturePath('hello/plugin.json');
+        $manifest = json_decode((string) file_get_contents($file), true);
+        $manifest['name'] = $name;
+        file_put_contents($file, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+        PluginRegistry::reset();
     }
 
     /**

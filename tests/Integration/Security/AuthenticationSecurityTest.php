@@ -207,7 +207,7 @@ class AuthenticationSecurityTest extends DatabaseTestCase
         $this->assertNotNull($message);
 
         // the message does not reveal whether the account exists
-        $this->assertStringContainsString('username and/or password', $message);
+        $this->assertSame($GLOBALS['gL10n']->get('SYS_LOGIN_USERNAME_PASSWORD_INCORRECT'), $message);
     }
 
     /**

@@ -82,6 +82,12 @@ class PluginInstallerTest extends FilesystemTestCase
 
     protected function tearDown(): void
     {
+        unset(
+            $GLOBALS['helloPluginUpdateFirstStepRuns'],
+            $GLOBALS['helloPluginUpdatePreviousStepRuns'],
+            $GLOBALS['helloPluginUpdateShouldFail']
+        );
+
         PluginRegistry::setPluginsPath(null);
         PluginRegistry::setInstallations(null);
         PluginRegistry::reset();
@@ -543,6 +549,87 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * @testdox A patch update runs new steps of its current minor migration
+     */
+    public function testPatchUpdateRunsNewStepsOfTheCurrentMinorMigration(): void
+    {
+        PluginInstaller::enable($this->plugin());
+        $this->setComponentUpdateState('1.2.0', 10);
+
+        $this->writeManifestVersion('1.2.1');
+        $this->writePatchUpdateScript();
+        $GLOBALS['helloPluginUpdateShouldFail'] = true;
+
+        try {
+            PluginInstaller::update($this->plugin());
+            $this->fail('The deliberately broken patch update was expected to fail.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('STEP: 20', $exception->getMessage());
+        }
+
+        $component = $this->component();
+        $this->assertSame('1.2.0', $component['com_version']);
+        $this->assertSame('1.2.0', $component['com_update_version']);
+        $this->assertSame(10, (int) $component['com_update_step']);
+        $this->assertFalse((bool) $component['com_update_completed']);
+        $this->assertSame(0, $GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0);
+
+        $GLOBALS['helloPluginUpdateShouldFail'] = false;
+        PluginInstaller::update($this->plugin());
+
+        $component = $this->component();
+        $this->assertSame('1.2.1', $component['com_version']);
+        $this->assertSame('', $component['com_update_version']);
+        $this->assertSame(20, (int) $component['com_update_step']);
+        $this->assertTrue((bool) $component['com_update_completed']);
+        $this->assertSame(0, $GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0);
+    }
+
+    /**
+     * A failed plugin update must leave its successful steps intact while its stored version
+     * remains unchanged. Retrying after the faulty step was repaired must neither replay the
+     * previous migration nor skip the unfinished steps of the failed migration.
+     *
+     * @testdox An interrupted plugin update resumes at its first unfinished step
+     */
+    public function testInterruptedPluginUpdateResumesAtTheFirstUnfinishedStep(): void
+    {
+        PluginInstaller::enable($this->plugin());
+        $this->setComponentUpdateState('1.2.5', 100);
+
+        $this->writeManifestVersion('1.3.0');
+        $this->writePluginUpdateScripts();
+        $GLOBALS['helloPluginUpdateShouldFail'] = true;
+
+        try {
+            PluginInstaller::update($this->plugin());
+            $this->fail('The deliberately broken plugin update was expected to fail.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('STEP: 20', $exception->getMessage());
+        }
+
+        $component = $this->component();
+        $this->assertSame('1.2.5', $component['com_version']);
+        $this->assertSame('1.3.0', $component['com_update_version']);
+        $this->assertSame(10, (int) $component['com_update_step']);
+        $this->assertFalse((bool) $component['com_update_completed']);
+        $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+        $this->assertSame(0, $GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0);
+
+        $GLOBALS['helloPluginUpdateShouldFail'] = false;
+
+        PluginInstaller::update($this->plugin());
+
+        $component = $this->component();
+        $this->assertSame('1.3.0', $component['com_version']);
+        $this->assertSame('', $component['com_update_version']);
+        $this->assertSame(20, (int) $component['com_update_step']);
+        $this->assertTrue((bool) $component['com_update_completed']);
+        $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+        $this->assertSame(0, $GLOBALS['helloPluginUpdatePreviousStepRuns'] ?? 0);
+    }
+
+    /**
      * Test that an update fetches what the store publishes
      *
      * This is the one action the administrator performs, in the web interface and on the command
@@ -821,5 +908,61 @@ class PluginInstallerTest extends FilesystemTestCase
         file_put_contents($file, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         PluginRegistry::reset();
+    }
+
+    /**
+     * Set the version and checkpoint of the previously completed migration.
+     */
+    private function setComponentUpdateState(string $version, int $step): void
+    {
+        $sql = 'UPDATE ' . TBL_COMPONENTS . '
+                   SET com_version = ?
+                     , com_update_step = ?
+                 WHERE com_type = ?
+                   AND com_name_intern = ?';
+        $this->getDatabase()->queryPrepared($sql, array($version, $step, PluginRegistry::COMPONENT_TYPE, self::PLUGIN_ID));
+    }
+
+    /**
+     * Write the completed 1.2 migration and the two 1.3 steps used to test a resumed update.
+     */
+    private function writePluginUpdateScripts(): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        FileSystemUtils::createDirectoryIfNotExists($directory);
+
+        $this->createFixtureFile(
+            $directory,
+            'update_1_2.xml',
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+            . "    <step id=\"100\">UpdateStepsCode::updateStep100MustNotRun</step>\n"
+            . "</update>\n"
+        );
+        $this->createFixtureFile(
+            $directory,
+            'update_1_3.xml',
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+            . "    <step id=\"10\">UpdateStepsCode::updateStep10Succeed</step>\n"
+            . "    <step id=\"20\">UpdateStepsCode::updateStep20FailWhileRequested</step>\n"
+            . "</update>\n"
+        );
+    }
+
+    /**
+     * Write a current-minor migration with one completed and one new patch update step.
+     */
+    private function writePatchUpdateScript(): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        FileSystemUtils::createDirectoryIfNotExists($directory);
+
+        $this->createFixtureFile(
+            $directory,
+            'update_1_2.xml',
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+            . "    <step id=\"10\">UpdateStepsCode::updateStep100MustNotRun</step>\n"
+            . "    <step id=\"20\">UpdateStepsCode::updateStep20FailWhileRequested</step>\n"
+            . "</update>\n"
+        );
     }
 }

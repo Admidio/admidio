@@ -12,11 +12,8 @@ buffer = []
 seen_names = set()
 
 def sort_key(element):
-    # Split the 'name' attribute by '_' and return a tuple of parts.
-    # This ensures that "_" is treated as the separator so that each word
-    # is compared alphabetically.
-    name = element.attrib.get('name', '')
-    return tuple(name.split('_'))
+    # Use the complete attribute value, matching the order of the other language files.
+    return element.attrib.get('name', '')
 
 def flush_buffer():
     """Sort <string> elements from the buffer alphabetically, filter duplicates, and add to new_children."""

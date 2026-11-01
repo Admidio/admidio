@@ -181,7 +181,7 @@ class RequestValidationTest extends DatabaseTestCase
      */
     public function testFileNameWithAnExecutableExtensionIsRefused(): void
     {
-        foreach (array('shell.php', 'page.phtml', 'script.js', 'archive.phar', 'drawing.svg') as $name) {
+        foreach (array('shell.php', 'page.phtml', 'script.js', 'archive.phar', 'drawing.svg', 'drawing.SVG', 'drawing.svgz', 'drawing.SVGZ') as $name) {
             $refused = false;
             try {
                 StringUtils::strIsValidFileName($name);

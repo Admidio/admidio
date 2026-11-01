@@ -154,7 +154,6 @@ class MailpitIntegrationTest extends AdministratorTestCase
             if ($response === false) {
                 $lastError = curl_error($curl);
             }
-            curl_close($curl);
 
             if (is_string($response) && $httpStatus === 200) {
                 $payload = json_decode($response, true);

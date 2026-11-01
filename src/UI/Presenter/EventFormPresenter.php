@@ -6,9 +6,13 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Inventory\Entity\Reservation;
+use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\UI\Component\DataTables;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -154,6 +158,158 @@ class EventFormPresenter extends PagePresenter
         $gCurrentSession->addFormObject($participationForm);
 
         return $smarty->fetch('modules/events.participation.edit.tpl');
+    }
+
+    /**
+     * Return the server-side data for the event inventory reservation status table.
+     * @throws Exception
+     */
+    public function getReservationStatusData(
+        string $eventUuid,
+        string $recurrenceScope,
+        int $draw,
+        int $start,
+        int $length,
+        string $search,
+        int $orderColumn,
+        string $orderDirection,
+    ): array {
+        global $gDb, $gL10n, $gSettingsManager;
+
+        if (!$gSettingsManager->getBool('inventory_reservations_enabled')
+            || !$gSettingsManager->getBool('inventory_reservations_events_enabled')
+            || !InventoryAccessService::canRequestReservation()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $event = new Event($gDb);
+        if (!$event->readDataByUuid($eventUuid) || !$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $eventIds = [(int) $event->getValue('dat_id')];
+        if ($recurrenceScope === 'series') {
+            $recurrenceRepository = new EventRecurrenceRepository($gDb);
+            $recurrence = (int) $event->getValue('dat_evr_id') > 0
+                ? $recurrenceRepository->readById((int) $event->getValue('dat_evr_id'))
+                : $recurrenceRepository->readByMasterEventId((int) $event->getValue('dat_id'));
+
+            if ($recurrence !== null) {
+                $eventIds = [];
+                $eventStatement = $gDb->queryPrepared(
+                    'SELECT dat_id
+                       FROM ' . TBL_EVENTS . '
+                      WHERE dat_evr_id = ?
+                         OR dat_id = ?
+                   ORDER BY dat_begin',
+                    [(int) $recurrence->getValue('evr_id'), (int) $recurrence->getValue('evr_dat_id_master')],
+                );
+                while ($eventRow = $eventStatement->fetch()) {
+                    $eventIds[] = (int) $eventRow['dat_id'];
+                }
+            }
+        }
+
+        $eventIds = array_values(array_unique($eventIds));
+        $params = $eventIds;
+        $whereSearch = '';
+        if ($search !== '') {
+            $searchOperator = DB_TYPE === Database::PDO_ENGINE_PGSQL ? 'ILIKE' : 'LIKE';
+            $whereSearch = ' AND (dat_headline ' . $searchOperator . ' ? OR ind_value ' . $searchOperator . ' ? OR ivr_status ' . $searchOperator . ' ?)';
+            $searchValue = '%' . htmlspecialchars_decode($search, ENT_QUOTES | ENT_HTML5) . '%';
+            array_push($params, $searchValue, $searchValue, $searchValue);
+        }
+
+        $sqlFrom = ' FROM ' . TBL_INVENTORY_RESERVATIONS . '
+             INNER JOIN ' . TBL_EVENTS . ' ON dat_id = ivr_dat_id
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ivr_ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+            WHERE ivr_dat_id IN (' . Database::getQmForValues($eventIds) . ')' . $whereSearch;
+
+        $jsonArray = [
+            'draw' => $draw,
+            'recordsTotal' => (int) $gDb->queryPrepared(
+                'SELECT COUNT(*)' . str_replace($whereSearch, '', $sqlFrom),
+                $eventIds,
+            )->fetchColumn(),
+            'recordsFiltered' => (int) $gDb->queryPrepared('SELECT COUNT(*)' . $sqlFrom, $params)->fetchColumn(),
+            'data' => [],
+        ];
+
+        $orderColumns = ['ivr_begin', 'ind_value', 'ivr_status'];
+        $orderBy = $orderColumns[$orderColumn] ?? 'COALESCE(ivr_timestamp_change, ivr_timestamp_create)';
+        $orderDirection = $orderDirection === 'asc' ? 'ASC' : 'DESC';
+
+        $sql = 'SELECT ivr_id, ivr_dat_id, ivr_ini_id, ind_value, ivr_status, dat_headline, ivr_begin, ivr_end
+                  ' . $sqlFrom . '
+              ORDER BY ' . $orderBy . ' ' . $orderDirection . ', ivr_id DESC';
+        if ($length !== -1) {
+            $sql .= ' LIMIT ' . max($length, 0) . ' OFFSET ' . max($start, 0);
+        }
+
+        $statusLabels = [
+            Reservation::STATUS_REQUESTED => $gL10n->get('SYS_STATUS_REQUESTED'),
+            Reservation::STATUS_APPROVED => $gL10n->get('SYS_STATUS_APPROVED'),
+            Reservation::STATUS_REJECTED => $gL10n->get('SYS_STATUS_REJECTED'),
+            Reservation::STATUS_CANCELLED => $gL10n->get('SYS_CANCELLED'),
+            Reservation::STATUS_BORROWED => $gL10n->get('SYS_STATUS_BORROWED'),
+            Reservation::STATUS_RETURNED => $gL10n->get('SYS_STATUS_RETURNED'),
+        ];
+        $statusIcons = [
+            Reservation::STATUS_REQUESTED => 'bi-hourglass-split text-secondary',
+            Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',
+            Reservation::STATUS_REJECTED => 'bi-x-circle-fill text-danger',
+            Reservation::STATUS_CANCELLED => 'bi-x-circle-fill text-danger',
+            Reservation::STATUS_BORROWED => 'bi-box-arrow-up-right text-primary',
+            Reservation::STATUS_RETURNED => 'bi-box-arrow-in-down-left text-success',
+        ];
+
+        $latestReservationIds = [];
+        $latestStatement = $gDb->queryPrepared(
+            'SELECT ivr_id, ivr_ini_id
+               FROM ' . TBL_INVENTORY_RESERVATIONS . '
+              WHERE ivr_dat_id = ?
+           ORDER BY COALESCE(ivr_timestamp_change, ivr_timestamp_create) DESC, ivr_id DESC',
+            [(int) $event->getValue('dat_id')],
+        );
+        while ($latestReservation = $latestStatement->fetch()) {
+            if (!isset($latestReservationIds[(int) $latestReservation['ivr_ini_id']])) {
+                $latestReservationIds[(int) $latestReservation['ivr_ini_id']] = (int) $latestReservation['ivr_id'];
+            }
+        }
+
+        foreach ($gDb->queryPrepared($sql, $params)->fetchAll() as $reservation) {
+            $status = $reservation['ivr_status'];
+            // Format the reservation's saved period, not the event's potentially changed dates.
+            $eventDate = new Event($gDb);
+            $eventDate->setValue('dat_begin', $reservation['ivr_begin']);
+            $eventDate->setValue('dat_end', $reservation['ivr_end']);
+            $eventDate->setValue('dat_all_day', substr($reservation['ivr_begin'], 11) === '00:00:00'
+                && substr($reservation['ivr_end'], 11) === '23:59:59');
+            $action = '';
+            if ((int) $reservation['ivr_dat_id'] === (int) $event->getValue('dat_id')
+                && ($latestReservationIds[(int) $reservation['ivr_ini_id']] ?? 0) === (int) $reservation['ivr_id']
+                && in_array($status, [Reservation::STATUS_REJECTED, Reservation::STATUS_CANCELLED], true)) {
+                $requestAgainUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', [
+                    'mode' => 'reservation_request_again',
+                    'dat_uuid' => $eventUuid,
+                    'reservation_item_id' => (int) $reservation['ivr_ini_id'],
+                ]);
+                $action = '<button type="button" class="btn btn-sm btn-outline-primary event-inventory-reservation-request-again" data-url="'
+                    . SecurityUtils::encodeHTML($requestAgainUrl) . '" data-item-id="' . (int) $reservation['ivr_ini_id'] . '">'
+                    . SecurityUtils::encodeHTML($gL10n->get('SYS_REQUEST_AGAIN')) . '</button>';
+            }
+
+            $jsonArray['data'][] = [
+                SecurityUtils::encodeHTML($reservation['dat_headline']) . '<br><small>' . SecurityUtils::encodeHTML($eventDate->getDateTimePeriod()) . '</small>',
+                SecurityUtils::encodeHTML($reservation['ind_value']),
+                '<span class="event-inventory-reservation-status"><i class="bi ' . ($statusIcons[$status] ?? 'bi-question-circle-fill text-secondary') . ' me-1"></i>'
+                    . SecurityUtils::encodeHTML($statusLabels[$status] ?? $status) . '</span>',
+                $action,
+            ];
+        }
+
+        return $jsonArray;
     }
 
     /**
@@ -383,18 +539,31 @@ class EventFormPresenter extends PagePresenter
             });
         });
 
-        // Reveal invalid fields before the browser tries to focus them.
+        // Reveal invalid fields and use the same native feedback as normal inputs.
         document.getElementById("adm_events_edit_form").addEventListener("invalid", function(event) {
-            var pane = event.target.closest(".tab-pane");
-            if (!pane || this.querySelector(":invalid") !== event.target) {
+            var isMobile = !window.matchMedia("(min-width: 768px)").matches;
+            // Native mobile selects are revealed and reported centrally in page-load.js.
+            if (isMobile && event.target.tagName === "SELECT" && !event.target.multiple
+                && !event.target.classList.contains("select2-hidden-accessible")) {
                 return;
             }
-            if (window.matchMedia("(min-width: 768px)").matches) {
+            var pane = event.target.closest(".tab-pane");
+            if (!pane) {
+                return;
+            }
+            if (this.querySelector(":invalid") !== event.target) {
+                return;
+            }
+            if (!isMobile) {
                 bootstrap.Tab.getOrCreateInstance(document.getElementById(pane.getAttribute("aria-labelledby"))).show();
             } else {
                 var collapse = pane.querySelector(".accordion-collapse");
+                if (collapse.classList.contains("show")) {
+                    return;
+                }
+                event.preventDefault();
                 collapse.addEventListener("shown.bs.collapse", function() {
-                    event.target.focus();
+                    event.target.reportValidity();
                 }, {once: true});
                 bootstrap.Collapse.getOrCreateInstance(collapse, {toggle: false}).show();
             }
@@ -417,10 +586,10 @@ class EventFormPresenter extends PagePresenter
         });
         $("#event_from").change(function() {
             if ($("#event_from").val() > $("#event_to").val()) {
-                $("#event_to").val($("#event_from").val());
+                $("#event_to").val($("#event_from").val()).trigger("change");
             }
             if ($("#event_recurrence_until").length > 0 && $("#event_recurrence_until").val() < $("#event_from").val()) {
-                $("#event_recurrence_until").val($("#event_from").val());
+                $("#event_recurrence_until").val($("#event_from").val()).trigger("change");
             }
         });
 
@@ -466,10 +635,112 @@ class EventFormPresenter extends PagePresenter
             $form->addSelectBox('dat_room_id', $gL10n->get('SYS_ROOM'), $rooms, ['defaultValue' => (int)$event->getValue('dat_room_id')]);
         }
 
+        $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+
         $form->addCheckbox('dat_all_day', $gL10n->get('SYS_ALL_DAY'), (bool)$event->getValue('dat_all_day'));
-        $form->addInput('event_from', $gL10n->get('SYS_START'), $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
-        $form->addInput('event_to', $gL10n->get('SYS_END'), $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED]);
+        $form->addInput('event_from', $gL10n->get('SYS_START'), $event->getValue('dat_begin', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED, 'weekdayFormat' => $weekdayFormat]);
+        $form->addInput('event_to', $gL10n->get('SYS_END'), $event->getValue('dat_end', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'property' => FormPresenter::FIELD_REQUIRED, 'weekdayFormat' => $weekdayFormat]);
         $form->addSelectBoxForCategories('cat_uuid', $gL10n->get('SYS_CALENDAR'), $gDb, 'EVT', FormPresenter::SELECT_BOX_MODUS_EDIT, ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $event->getValue('cat_uuid')]);
+
+        if ($gSettingsManager->getBool('inventory_reservations_enabled')
+            && $gSettingsManager->getBool('inventory_reservations_events_enabled')
+            && InventoryAccessService::canRequestReservation()) {
+            $selectedItems = [];
+            if ((int) $event->getValue('dat_id') > 0) {
+                $eventReservations = $gDb->queryPrepared(
+                    'SELECT ivr_ini_id FROM ' . TBL_INVENTORY_RESERVATIONS . ' WHERE ivr_dat_id = ? AND ivr_status IN (?, ?, ?)',
+                    [(int) $event->getValue('dat_id'), Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED],
+                );
+                while ($eventReservation = $eventReservations->fetch()) {
+                    $selectedItems[] = (int) $eventReservation['ivr_ini_id'];
+                }
+            }
+            $availableItems = $gDb->queryPrepared(
+                'SELECT ini_id, ind_value
+                   FROM ' . TBL_INVENTORY_ITEMS . '
+             INNER JOIN ' . TBL_INVENTORY_ITEM_DATA . ' ON ind_ini_id = ini_id
+             INNER JOIN ' . TBL_INVENTORY_FIELDS . ' ON inf_id = ind_inf_id AND inf_name_intern = \'ITEMNAME\'
+             INNER JOIN ' . TBL_INVENTORY_FIELD_OPTIONS . ' ON ifo_id = ini_status
+                  WHERE ini_org_id = ? AND ifo_value <> ?
+               ORDER BY ind_value',
+                [$gCurrentOrgId, 'SYS_INVENTORY_FILTER_RETIRED_ITEMS'],
+            )->fetchAll(\PDO::FETCH_KEY_PAIR);
+            // Register the dynamic field with the form validator. The select itself is rendered in the reservation table.
+            $form->addSelectBox(
+                'event_inventory_items',
+                $gL10n->get('SYS_INVENTORY_ITEMS'),
+                $availableItems,
+                ['defaultValue' => $selectedItems, 'multiselect' => true],
+            );
+            $reservationItems = [];
+            foreach ($availableItems as $itemId => $itemName) {
+                $reservationItems[] = ['id' => (int) $itemId, 'name' => $itemName];
+            }
+            $form->addButton(
+                'event_inventory_reservation_add',
+                $gL10n->get('SYS_ADD_ITEM'),
+                ['icon' => 'bi-plus-circle-fill', 'class' => 'btn-primary'],
+            );
+            $page->assignSmartyVariable('eventInventoryReservationsEnabled', true);
+            $page->assignSmartyVariable('eventInventoryReservationItems', $reservationItems);
+            $page->assignSmartyVariable('eventInventoryReservationRows', array_map(
+                static fn(int $itemId): array => ['itemId' => $itemId],
+                $selectedItems,
+            ));
+            $page->assignSmartyVariable('eventInventoryReservationDataJson', json_encode([
+                'items' => $reservationItems,
+                'itemLabel' => $gL10n->get('SYS_INVENTORY_ITEMNAME'),
+                'deleteLabel' => $gL10n->get('SYS_DELETE'),
+                'pleaseChoose' => $gL10n->get('SYS_PLEASE_CHOOSE'),
+            ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
+
+            // A copied event has no reservations yet. Keep the selected items, but do not show
+            // the source event's reservation statuses in the copy form.
+            if (!$getCopy && (int) $event->getValue('dat_id') > 0) {
+                $page->assignSmartyVariable('eventInventoryReservationStatusTable', true);
+                $reservationStatusTable = new DataTables($page, 'adm_event_inventory_reservation_statuses');
+                $reservationStatusTable->setServerSideProcessing(SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/events.php',
+                    ['mode' => 'reservation_status_data', 'dat_uuid' => $getEventUuid, 'recurrence_scope' => $getRecurrenceScope],
+                ));
+                $reservationStatusTable->disableColumnsSort([4]);
+                $reservationStatusTable->setColumnsNotHideResponsive([2, 4]);
+                $reservationStatusTable->createJavascript(0, 4);
+                $page->addJavascript('$(document).on("shown.bs.tab shown.bs.collapse", "#adm_event_reservations_tab, #adm_event_reservations_collapse", function() {
+                    var table = $("#adm_event_inventory_reservation_statuses").DataTable();
+                    table.columns.adjust().responsive.recalc();
+                });', true);
+                $page->addJavascript('$(document).on("click", ".event-inventory-reservation-request-again", function() {
+                    var button = $(this);
+                    button.prop("disabled", true);
+                    $.post(button.data("url"), {adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '"}, function(data) {
+                        var response;
+                        try {
+                            response = typeof data === "string" ? JSON.parse(data) : data;
+                        } catch (error) {
+                            response = {status: "error"};
+                        }
+                        if (response.status !== "success") {
+                            button.prop("disabled", false);
+                            messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                            return;
+                        }
+                        var statusTable = $("#adm_event_inventory_reservation_statuses").DataTable();
+                        statusTable.ajax.reload(null, false);
+                        $(document).trigger("eventInventoryReservationRequestedAgain", [button.data("itemId")]);
+                    }).fail(function(xhr) {
+                        button.prop("disabled", false);
+                        var response;
+                        try {
+                            response = JSON.parse(xhr.responseText);
+                        } catch (error) {
+                            response = {};
+                        }
+                        messageBox(response.message || "' . $gL10n->get('SYS_ERROR') . '", "' . $gL10n->get('SYS_ERROR') . '", "error");
+                    });
+                });', true);
+            }
+        }
 
         if ($showRecurrenceFields) {
             $form->addSelectBox('event_recurrence_frequency', $gL10n->get('SYS_REPEAT'), ['none' => 'SYS_NO_RECURRENCE', EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY', EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY', EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY', EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'], ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC']);
@@ -477,7 +748,7 @@ class EventFormPresenter extends PagePresenter
             $form->addSelectBox('event_recurrence_weekdays', $gL10n->get('SYS_WEEKDAY'), ['MO' => 'SYS_MONDAY', 'TU' => 'SYS_TUESDAY', 'WE' => 'SYS_WEDNESDAY', 'TH' => 'SYS_THURSDAY', 'FR' => 'SYS_FRIDAY', 'SA' => 'SYS_SATURDAY', 'SU' => 'SYS_SUNDAY'], ['defaultValue' => $recurrenceWeekdays, 'multiselect' => true, 'showContextDependentFirstEntry' => false, 'placeholder' => $gL10n->get('SYS_WEEKDAYS'), 'helpTextId' => 'SYS_RECURRENCE_WEEKDAYS_DESC']);
             $form->addSelectBox('event_recurrence_end_type', $gL10n->get('SYS_ENDS'), [EventRecurrenceRule::END_TYPE_NEVER => 'SYS_NEVER', EventRecurrenceRule::END_TYPE_COUNT => 'SYS_AFTER_NUMBER_OF_OCCURRENCES', EventRecurrenceRule::END_TYPE_UNTIL => 'SYS_ON_DATE'], ['defaultValue' => $recurrenceEndType, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_END_DESC']);
             $form->addInput('event_recurrence_count', $gL10n->get('SYS_NUMBER_OF_OCCURRENCES'), (string)$recurrenceCount, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_NUMBER_OF_OCCURRENCES_DESC']);
-            $form->addInput('event_recurrence_until', $gL10n->get('SYS_END_DATE'), $recurrenceUntil, ['type' => 'date', 'helpTextId' => 'SYS_RECURRENCE_UNTIL_DESC']);
+            $form->addInput('event_recurrence_until', $gL10n->get('SYS_END_DATE'), $recurrenceUntil, ['type' => 'date', 'helpTextId' => 'SYS_RECURRENCE_UNTIL_DESC', 'weekdayFormat' => $weekdayFormat]);
         }
 
         $form->addCheckbox('dat_highlight', $gL10n->get('SYS_HIGHLIGHT_EVENT'), (bool)$event->getValue('dat_highlight'));
@@ -502,7 +773,7 @@ class EventFormPresenter extends PagePresenter
         $form->addCheckbox('dat_allow_comments', $gL10n->get('SYS_ALLOW_USER_COMMENTS'), (bool)$event->getValue('dat_allow_comments'), ['helpTextId' => 'SYS_ALLOW_USER_COMMENTS_DESC']);
         $form->addCheckbox('dat_additional_guests', $gL10n->get('SYS_ALLOW_ADDITIONAL_GUESTS'), (bool)$event->getValue('dat_additional_guests'), ['helpTextId' => 'SYS_ALLOW_ADDITIONAL_GUESTS_DESC']);
         $form->addInput('dat_max_members', $gL10n->get('SYS_PARTICIPANTS_LIMIT'), (int)$event->getValue('dat_max_members'), ['type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_EVENT_MAX_MEMBERS']);
-        $form->addInput('event_deadline', $gL10n->get('SYS_DEADLINE'), $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC']);
+        $form->addInput('event_deadline', $gL10n->get('SYS_DEADLINE'), $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC', 'weekdayFormat' => $weekdayFormat]);
         $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
         $form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);
         $form->addEditor('dat_description', '', $event->getValue('dat_description'));

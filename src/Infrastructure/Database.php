@@ -9,6 +9,7 @@ use PDOStatement;
 use Ramsey\Uuid\Uuid;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
  * @brief Handle the connection to the database, send all SQL statements and handle the returned rows.
@@ -210,11 +211,10 @@ class Database
     }
 
     /**
-     * We need the sleep function at this place because otherwise the system will serialize a PDO-Statement
-     * which will lead to an exception.
-     * @return array<int,string>
+     * Exclude PDO objects while retaining the legacy session property names.
+     * @return array<string,mixed>
      */
-    public function __sleep()
+    public function __serialize(): array
     {
         global $gLogger;
 
@@ -222,7 +222,17 @@ class Database
             $gLogger->debug('DATABASE: sleep/serialize!');
         }
 
-        return array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options');
+        $properties = (array)$this;
+        return array_intersect_key($properties, array_fill_keys(array_map(
+            static fn (string $name): string => "\0*\0" . $name,
+            array('engine', 'host', 'port', 'dbName', 'username', 'password', 'options')
+        ), true));
+    }
+
+    /** @param array<string,mixed> $data */
+    public function __unserialize(array $data): void
+    {
+        SerializationUtils::restoreProperties($this, $data);
     }
 
     /**
@@ -353,12 +363,10 @@ class Database
      */
     public function registerAfterCommit(callable $callback): void
     {
-        if ($this->transactions === 0) {
-            $callback();
-            return;
-        }
-
         $this->afterCommitCallbacks[] = $callback;
+        if ($this->transactions === 0) {
+            $this->runAfterCommitCallbacks();
+        }
     }
 
     /**
@@ -406,7 +414,6 @@ class Database
                 if ($gLogger instanceof \Psr\Log\LoggerInterface) {
                     $gLogger->error('DATABASE: after-commit callback failed', array('exception' => $exception));
                 }
-                throw $exception;
             }
         }
     }
@@ -872,6 +879,7 @@ class Database
                 // since version 4.1 we don't replace boolean with smallint
                 //'boolean'  => 'smallint',
                 // A blob is in Postgres a bytea datatype
+                'mediumblob' => 'bytea',
                 'blob' => 'bytea',
                 'DEFAULT CHARSET = utf8mb4' => 'ENCODING \'UTF8\'',
                 'COLLATE = utf8mb4_unicode_ci' => ''

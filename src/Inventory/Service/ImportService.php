@@ -15,7 +15,6 @@ use Admidio\Categories\Service\CategoryService;
 use Admidio\Categories\Entity\Category;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
-use Admidio\Inventory\Entity\Item;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\ValueObjects\ItemsData;
 
@@ -266,14 +265,11 @@ class ImportService
         for ($i = $startRow, $iMax = count($importData); $i < $iMax; ++$i) {
             $row = array();
             foreach ($line as $columnKey => $columnValue) {
-                if (empty($columnValue)) {
-                    $columnValue = '';
-                }
-
                 // get usf id or database column name
                 $fieldId = array_search($columnKey, $importItemFields);
                 if ($fieldId !== false) {
-                    $row[$fieldId] = trim(strip_tags($columnValue));
+                    // CSV readers may return numeric zero or null; preserve zero as text.
+                    $row[$fieldId] = trim(strip_tags((string)$columnValue));
                 }
             }
             $assignedFieldColumn[] = $row;
@@ -293,38 +289,43 @@ class ImportService
         $items = new ItemsData($gDb, $gCurrentOrgId);
         $items->readItems();
         $importSuccess = false;
-
-        // check if the item already exists
-        foreach ($items->getItems() as $fieldId => $value) {
-            $items->readItemData($value['ini_uuid']);
-            $itemValues = array();
-            foreach ($items->getItemData() as $key => $itemData) {
-                $itemValue = $itemData->getValue('ind_value');
-                if ($itemData->getValue('inf_name_intern') === 'KEEPER' || $itemData->getValue('inf_name_intern') === 'LAST_RECEIVER' ||
-                    $itemData->getValue('inf_name_intern') === 'BORROW_DATE' || $itemData->getValue('inf_name_intern') === 'RETURN_DATE') {
-                    continue;
-                }
-
-                $itemValues[] = array($itemData->getValue('inf_name_intern') => $itemValue);
+        $comparisonFieldIds = array();
+        foreach ($items->getItemFields() as $itemField) {
+            $name = $itemField->getValue('inf_name_intern');
+            if (!in_array($name, array_merge(['KEEPER', 'STATUS'], $items->borrowFieldNames), true)) {
+                $comparisonFieldIds[] = $itemField->getValue('inf_id');
             }
-            // also add a column with the category if it exists
-            $item = new Item($gDb, $items, $items->getItemId());
-            $catID = $item->getValue('ini_cat_id');
-            $category = new Category($gDb);
-            if ($category->readDataById($catID)) {
-                $itemValues[] = array('CATEGORY' => $category->getValue('cat_name'));
-            }
+        }
 
-            $itemValues = array_merge_recursive(...$itemValues);
-
+        // Reuse the list preloader in bounded batches, including its category cache.
+        foreach (array_chunk($items->getItems(), 200) as $batch) {
             if (count($assignedFieldColumn) === 0) {
                 break;
             }
+            $items = new ItemsData($gDb, $gCurrentOrgId);
+            $items->preloadItemData(array_column($batch, 'ini_uuid'));
+            foreach ($batch as $value) {
+                $items->readItemData($value['ini_uuid']);
+                $itemValues = array_fill_keys($comparisonFieldIds, '');
+                foreach ($items->getItemData() as $key => $itemData) {
+                    if ($itemData->getValue('inf_name_intern') === 'KEEPER'
+                        || in_array($itemData->getValue('inf_name_intern'), $items->borrowFieldNames, true)) {
+                        continue;
+                    }
+                    $itemValues[$key] = $itemData->getValue('ind_value');
+                }
+                $categoryName = $items->getValue('CATEGORY');
+                if ($categoryName !== '') {
+                    $itemValues[$items->getProperty('CATEGORY', 'inf_id')] = Language::translateIfTranslationStrId($categoryName);
+                }
 
-            foreach ($assignedFieldColumn as $key => $colValue) {
-                $ret = $this->compareArrays($itemValues, $colValue);
-                if (!$ret) {
-                    unset($assignedFieldColumn[$key]);
+                foreach ($assignedFieldColumn as $key => $colValue) {
+                    if (!$this->compareArrays($itemValues, $colValue)) {
+                        unset($assignedFieldColumn[$key]);
+                    }
+                }
+                if (count($assignedFieldColumn) === 0) {
+                    break;
                 }
             }
         }
@@ -538,22 +539,18 @@ class ImportService
     /**
      * Compares two arrays to determine if they are different based on specific criteria
      *
-     * @param array $array1 The first array to compare
-     * @param array $array2 The second array to compare
+     * @param array<int,string> $array1 Existing comparable values keyed by inventory field ID, including empty fields.
+     * @param array<int,string> $array2 Imported values keyed by the same field IDs.
      * @return bool             true if the arrays are different based on the criteria, otherwise false
      */
     private function compareArrays(array $array1, array $array2): bool
     {
-        $array1 = array_filter($array1, function ($key) {
-            return $key !== 'KEEPER' && $key !== 'LAST_RECEIVER' && $key !== 'BORROW_DATE' && $key !== 'RETURN_DATE';
-        }, ARRAY_FILTER_USE_KEY);
-
-        foreach ($array1 as $value) {
-            if ($value === '') {
+        foreach ($array1 as $fieldId => $value) {
+            if ($value === '' && !array_key_exists($fieldId, $array2)) {
                 continue;
             }
 
-            if (!in_array($value, $array2, true)) {
+            if (!array_key_exists($fieldId, $array2) || $array2[$fieldId] !== $value) {
                 return true;
             }
         }

@@ -125,6 +125,12 @@ class DataTables
     {
         global $gSettingsManager, $gL10n;
 
+        // the print view loads no additional javascript files and should show the whole table without paging,
+        // so the table stays a normal HTML table
+        if ($this->htmlPage instanceof PagePresenter && $this->htmlPage->isPrintMode()) {
+            return;
+        }
+
         $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.js');
         $this->htmlPage->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datatables.css');
         if (!$this->serverSideProcessing) {
@@ -132,7 +138,10 @@ class DataTables
             $this->htmlPage->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/datatables/datetime-luxon.js');
         }
 
-        $langCode = $gL10n->getLanguageIsoCode();
+        $langCode = strtolower($gL10n->getLanguage());
+        if (!is_file(ADMIDIO_PATH . FOLDER_LIBS . '/datatables/language/datatables.' . $langCode . '.json')) {
+            $langCode = $gL10n->getLanguageIsoCode();
+        }
         if (empty($langCode)) {
             $langCode = 'en';
         }

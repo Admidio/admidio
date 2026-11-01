@@ -14,6 +14,7 @@
 
 namespace Admidio\Tests\Cli;
 
+use Admidio\Infrastructure\Language;
 use Admidio\Tests\Support\CliSubprocess;
 use Admidio\Tests\Support\DatabaseTestCase;
 
@@ -1151,7 +1152,7 @@ class CliProcessTest extends DatabaseTestCase
             $this->adminCliFails(
                 array('event:participate', $eventUuid, 'admin', '--guests=1'),
                 5,
-                'exceed predefined limit'
+                (new Language('en'))->get('SYS_ROLE_MAX_MEMBERS', array('CLI limited event ' . $suffix))
             );
 
             $participants = $this->adminCliJson(array('event:participants', $eventUuid));
