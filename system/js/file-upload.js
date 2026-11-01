@@ -118,6 +118,63 @@ function admFileUpload(config) {
         return cleaned;
     }
 
+    /**
+     * Badge that shows the name a file was renamed to before the upload.
+     * @param {Object} file File object of jQuery File Upload (name = original name, uploadName = name after the correction)
+     * @returns {string} Html, empty if the file was not renamed
+     */
+    function renamedBadgeHtml(file) {
+        if (!file || !file.uploadName || file.uploadName === file.name) {
+            return "";
+        }
+        var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(file.uploadName) + "</strong>");
+        return " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
+    }
+
+    var resultStyles = {
+        success:   {box: "alert-success",   icon: "bi-check-lg",              color: "text-success"},
+        error:     {box: "alert-danger",    icon: "bi-exclamation-circle-fill", color: "text-danger"},
+        cancelled: {box: "alert-secondary", icon: "bi-dash-circle",           color: "text-secondary"}
+    };
+
+    /**
+     * Shows the result of an upload, in the row of the upload or, if there is none, as a new message in the list.
+     * All names in messageHtml and badgeHtml must be escaped (escapeHtml) or come already encoded from the server.
+     * @param {jQuery|null} $row        Row of the upload (#upload-item-n) or null
+     * @param {string}      kind        success, error or cancelled
+     * @param {string}      messageHtml Message of the result
+     * @param {string}      [badgeHtml] Optional badge after the message
+     */
+    function showResult($row, kind, messageHtml, badgeHtml) {
+        var style = resultStyles[kind];
+        badgeHtml = badgeHtml || "";
+        if ($row && $row.length) {
+            $row.removeClass("alert-light border").addClass(style.box);
+            $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi " + style.icon + " me-2 fs-5 " + style.color + "\"></i><span>"
+                + messageHtml + "</span>" + badgeHtml + "</div>");
+        } else {
+            $("<div class=\"alert " + style.box + "\"><i class=\"bi " + style.icon + " me-2\"></i>" + messageHtml + badgeHtml + "</div>")
+                .appendTo("#files");
+        }
+    }
+
+    function isIdle() {
+        return Object.keys(activeUploads).length === 0 && Object.keys(pendingFiles).length === 0;
+    }
+
+    /**
+     * A new selection or drop after a finished upload starts with an empty list and fresh counters.
+     */
+    function resetResultsIfIdle() {
+        if (isIdle()) {
+            countErrorFiles = 0;
+            countFiles = 0;
+            countAbortedFiles = 0;
+            $("#files").empty();
+            $("#upload-summary-alert").remove();
+        }
+    }
+
     function checkIfAllFinished() {
         var activeCount = Object.keys(activeUploads).length;
         var pendingCount = Object.keys(pendingFiles).length;
@@ -161,17 +218,11 @@ function admFileUpload(config) {
         }
         $("#upload-summary-alert").remove();
 
-        var renamedBadge = "";
-        if (file.uploadName && file.uploadName !== file.name) {
-            var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(file.uploadName) + "</strong>");
-            renamedBadge = " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
-        }
-
         var $row = $("<div class=\"upload-item alert alert-light border d-flex justify-content-between align-items-center py-2 px-3 mb-2\" id=\"upload-item-" + uploadId + "\">" +
             "<div class=\"d-flex align-items-center text-truncate me-2\">" +
                 "<div class=\"spinner-border spinner-border-sm text-primary me-2 flex-shrink-0\" role=\"status\"></div>" +
                 "<span class=\"fw-semibold text-truncate\">" + escapeHtml(file.name) + "</span>" +
-                renamedBadge +
+                renamedBadgeHtml(file) +
                 "<span class=\"text-muted small ms-2 upload-status-msg\">" + textUploading + "</span>" +
             "</div>" +
             "<button type=\"button\" class=\"btn btn-sm btn-outline-danger py-0 px-2 btn-abort-item\" title=\"" + textUploadCancel + "\">" +
@@ -457,23 +508,11 @@ function admFileUpload(config) {
     }).on("drop", function () {
         dragCounter = 0;
         dropzone.removeClass("dragover");
-        if (Object.keys(activeUploads).length === 0 && Object.keys(pendingFiles).length === 0) {
-            countErrorFiles = 0;
-            countFiles = 0;
-            countAbortedFiles = 0;
-            $("#files").empty();
-            $("#upload-summary-alert").remove();
-        }
+        resetResultsIfIdle();
     });
 
     $("#fileupload").on("change", function () {
-        if (Object.keys(activeUploads).length === 0 && Object.keys(pendingFiles).length === 0) {
-            countErrorFiles = 0;
-            countFiles = 0;
-            countAbortedFiles = 0;
-            $("#files").empty();
-            $("#upload-summary-alert").remove();
-        }
+        resetResultsIfIdle();
     });
 
     $("#fileupload").fileupload({
@@ -508,29 +547,13 @@ function admFileUpload(config) {
             $.each(data.result.files, function(index, file) {
                 if (typeof file.error !== "undefined") {
                     countErrorFiles++;
-                    if ($row && $row.length) {
-                        $row.removeClass("alert-light").addClass("alert-danger");
-                        $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi bi-exclamation-circle-fill me-2 text-danger fs-5\"></i><span>"
-                            + escapeHtml(file.name) + " - <strong>" + file.error + "</strong></span></div>");
-                    } else {
-                        $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill me-2\"></i>"
-                            + escapeHtml(file.name) + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
-                    }
+                    // the error text comes encoded from the server
+                    showResult($row, "error", escapeHtml(file.name) + " - <strong>" + file.error + "</strong>");
                 } else {
                     countFiles++;
-                    var message = textFileUploaded;
-                    var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(file.name) + "</strong>");
-                    var renamedBadge = "";
-                    if (data.files[0] && data.files[0].uploadName && data.files[0].uploadName !== data.files[0].name) {
-                        var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(data.files[0].uploadName) + "</strong>");
-                        renamedBadge = " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
-                    }
-                    if ($row && $row.length) {
-                        $row.removeClass("alert-light border").addClass("alert-success");
-                        $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi bi-check-lg text-success me-2 fs-5\"></i><span>" + newMessage + "</span>" + renamedBadge + "</div>");
-                    } else {
-                        $("<p/>").html("<div class=\"alert alert-success\"><i class=\"bi bi-check-lg me-2\"></i>" + newMessage + renamedBadge + "</div>").appendTo("#files");
-                    }
+                    showResult($row, "success",
+                        textFileUploaded.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(file.name) + "</strong>"),
+                        renamedBadgeHtml(data.files[0]));
                 }
             });
             checkIfAllFinished();
@@ -558,14 +581,7 @@ function admFileUpload(config) {
             if (isAborted) {
                 countAbortedFiles++;
                 var displayName = data.files[0] ? (data.files[0].uploadName || data.files[0].name) : "";
-                if ($row && $row.length) {
-                    $row.removeClass("alert-light border").addClass("alert-secondary");
-                    $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi bi-dash-circle me-2 text-secondary fs-5\"></i><span>"
-                        + escapeHtml(displayName) + " - <strong>" + textUploadCancelled + "</strong></span></div>");
-                } else {
-                    $("<p/>").html("<div class=\"alert alert-secondary\"><i class=\"bi bi-dash-circle me-2\"></i>"
-                        + escapeHtml(displayName) + " - <strong>" + textUploadCancelled + "</strong></div>").appendTo("#files");
-                }
+                showResult($row, "cancelled", escapeHtml(displayName) + " - <strong>" + textUploadCancelled + "</strong>");
             } else {
                 countErrorFiles++;
                 var fileName, fileError;
@@ -577,14 +593,7 @@ function admFileUpload(config) {
                     fileName = escapeHtml(data.files[0].name);
                     fileError = escapeHtml(data.errorThrown || data.textStatus);
                 }
-                if ($row && $row.length) {
-                    $row.removeClass("alert-light border").addClass("alert-danger");
-                    $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi bi-exclamation-circle-fill me-2 text-danger fs-5\"></i><span>"
-                        + fileName + " - <strong>" + fileError + "</strong></span></div>");
-                } else {
-                    $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill me-2\"></i>"
-                        + fileName + " - <strong>" + fileError + "</strong></div>").appendTo("#files");
-                }
+                showResult($row, "error", fileName + " - <strong>" + fileError + "</strong>");
             }
             checkIfAllFinished();
         },
