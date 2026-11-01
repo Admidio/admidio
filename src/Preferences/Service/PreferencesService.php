@@ -3,6 +3,7 @@
 namespace Admidio\Preferences\Service;
 
 use Admidio\Changelog\Service\ChangelogService;
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -29,6 +30,12 @@ class PreferencesService
 {
     private const CONFIG_DOCUMENT_SCHEMA = 'admidio-preferences';
     private const CONFIG_DOCUMENT_VERSION = 1;
+
+    /** The automatic check for a new release runs at most twice a day. */
+    public const UPDATE_CHECK_INTERVAL_SECONDS = 43200;
+
+    /** How long a request waits for the update information of the Admidio server. */
+    public const UPDATE_CHECK_TIMEOUT_SECONDS = 5;
 
     /**
      * Function to check an update
@@ -145,8 +152,9 @@ class PreferencesService
      */
     public function getUpdateInformation(): array
     {
-        $updateInfoUrl = ADMIDIO_HOMEPAGE . 'update.txt';
-        $updateInfo = @file_get_contents($updateInfoUrl);
+        global $gSettingsManager;
+
+        $updateInfo = $this->readUpdateInformation();
 
         if ($updateInfo === false) {
             return array(
@@ -162,6 +170,16 @@ class PreferencesService
         $betaVersion = $information['Beta-Version'] ?? '';
         $betaRelease = $information['Beta-Release'] ?? '';
 
+        // Every check keeps what it found, for the notice of an available update.
+        if (isset($gSettingsManager) && $gSettingsManager->has('system_update_information')) {
+            $gSettingsManager->set('system_update_information', json_encode(array(
+                'stableVersion' => $stableVersion,
+                'betaVersion' => $betaVersion,
+                'betaRelease' => $betaRelease,
+                'checkedAt' => time()
+            )));
+        }
+
         return array(
             'stableVersion' => $stableVersion,
             'betaVersion' => $betaVersion,
@@ -174,6 +192,92 @@ class PreferencesService
                 ADMIDIO_VERSION_BETA
             )
         );
+    }
+
+    /**
+     * Read the update information file of the Admidio server. A request of an administrator may
+     * have to wait for it, so it gives up after UPDATE_CHECK_TIMEOUT_SECONDS.
+     * @return string|false The content of the file, or **false** if it could not be read.
+     */
+    protected function readUpdateInformation(): string|false
+    {
+        $context = stream_context_create(array('http' => array('timeout' => self::UPDATE_CHECK_TIMEOUT_SECONDS)));
+
+        return @file_get_contents(ADMIDIO_HOMEPAGE . 'update.txt', false, $context);
+    }
+
+    /**
+     * Look for a new release of Admidio, but at most once every UPDATE_CHECK_INTERVAL_SECONDS, and
+     * only in requests of administrators, so that no member waits for the server of Admidio. The
+     * result is kept for the notice of an available update (getAvailableUpdate()).
+     *
+     * The time of the attempt is stored before the request is made, so that requests that arrive in
+     * the meantime do not start a second one, and so that a server that cannot be reached is not
+     * asked again on every page. The check can be switched off with the preference
+     * system_update_check.
+     * @return bool Returns **true** if the update information was requested.
+     * @throws Exception
+     */
+    public function checkForUpdateIfDue(): bool
+    {
+        global $gSettingsManager, $gValidLogin, $gCurrentUser;
+
+        // This runs on every request, also in an installation whose database does not have these
+        // preferences yet.
+        if (!$gSettingsManager->has('system_update_check') || !$gSettingsManager->getBool('system_update_check')
+            || !$gSettingsManager->has('system_update_check_time')
+            || !$gValidLogin || !$gCurrentUser->isAdministrator()) {
+            return false;
+        }
+
+        // Read again, because another administrator or maintenance:run may have checked meanwhile.
+        $now = time();
+        if ($now - $gSettingsManager->getInt('system_update_check_time', true) < self::UPDATE_CHECK_INTERVAL_SECONDS) {
+            return false;
+        }
+
+        $gSettingsManager->set('system_update_check_time', (string) $now);
+        $this->getUpdateInformation();
+
+        return true;
+    }
+
+    /**
+     * The newer release of Admidio that the last check found, as it is shown to an administrator,
+     * or an empty string. An installation of a stable release is only told about stable releases;
+     * an installation of a beta also about newer betas. The stored versions are compared with the
+     * installed one again, so that the notice ends with the update.
+     * @return string
+     */
+    public function getAvailableUpdate(): string
+    {
+        global $gSettingsManager;
+
+        if (!$gSettingsManager->has('system_update_check') || !$gSettingsManager->getBool('system_update_check')
+            || !$gSettingsManager->has('system_update_information')) {
+            return '';
+        }
+
+        // The session keeps the preferences of its organization, and the result may come from the
+        // request of another administrator or from maintenance:run.
+        $information = json_decode($gSettingsManager->getString('system_update_information', true), true);
+        if (!is_array($information)) {
+            return '';
+        }
+
+        $stableVersion = (string) ($information['stableVersion'] ?? '');
+        $betaVersion = (string) ($information['betaVersion'] ?? '');
+        $betaRelease = (string) ($information['betaRelease'] ?? '');
+        $versionUpdate = $this->checkVersion(ADMIDIO_VERSION, $stableVersion, $betaVersion, $betaRelease, ADMIDIO_VERSION_BETA);
+
+        if ($versionUpdate === 1 || $versionUpdate === 3) {
+            return $stableVersion;
+        }
+        if ($versionUpdate === 2 && (int) ADMIDIO_VERSION_BETA > 0) {
+            return $betaVersion . ' Beta ' . $betaRelease;
+        }
+
+        return '';
     }
 
     /**
@@ -240,6 +344,14 @@ class PreferencesService
         $html .= '
         </p>
         <strong>' . $versionsText . '</strong>';
+
+        // A release this installation is offered can be installed right from here.
+        if ($versionUpdate !== 99 && $this->getAvailableUpdate() !== '') {
+            $html .= '
+        <p class="mt-2"><a class="btn btn-primary" href="' . ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php">
+            <i class="bi bi-arrow-repeat"></i>' . $gL10n->get('SYS_CORE_UPDATE_START') . '</a></p>';
+        }
+
         return $html;
     }
 
@@ -298,7 +410,28 @@ class PreferencesService
                 }
                 break;
 
-            case 'sso': 
+            case 'update_backup':
+                // The directory and the password of the backups belong to the whole installation
+                // and are only set in the first organization; elsewhere they are shown without
+                // being editable.
+                if (!Backups::areSettingsEditable()) {
+                    unset($formValues['system_backup_path'], $formValues['system_update_dump_password'], $formValues['system_update_dump_password_remove']);
+                    break;
+                }
+                // The password of the database backups is never shown, so an empty field keeps
+                // the stored one; only the checkbox removes it.
+                if (!empty($formValues['system_update_dump_password_remove'])) {
+                    $formValues['system_update_dump_password'] = '';
+                } elseif ((string) ($formValues['system_update_dump_password'] ?? '') === '') {
+                    unset($formValues['system_update_dump_password']);
+                }
+                unset($formValues['system_update_dump_password_remove']);
+                if (array_key_exists('system_backup_path', $formValues)) {
+                    $formValues['system_backup_path'] = $this->validateBackupPath((string) $formValues['system_backup_path']);
+                }
+                break;
+
+            case 'sso':
                 // empty issuerURL means "Use the default URL from the admidio installation's URL"
                 $issuerURL = trim((string)($formValues['sso_oidc_issuer_url'] ?? ''));
                 if ($issuerURL !== '') {
@@ -695,6 +828,48 @@ class PreferencesService
 
         // finally send the mail
         return $email->sendEmail();
+    }
+
+    /**
+     * The directory of the backups as it is stored: empty for adm_my_files/backups, else the real
+     * path of an existing directory the web server can write to. It must not be in the program
+     * files of Admidio, which an update replaces, and must not contain the installation.
+     * @param string $path The path the administrator entered.
+     * @return string
+     * @throws Exception
+     */
+    private function validateBackupPath(string $path): string
+    {
+        $path = trim($path);
+        // The default directory is only created with the first backup.
+        if ($path === '' || rtrim(str_replace('\\', '/', $path), '/') === str_replace('\\', '/', ADMIDIO_PATH . FOLDER_DATA . '/backups')) {
+            return '';
+        }
+
+        $directory = preg_match('#^(/|[A-Za-z]:[\\\\/])#', $path) === 1 ? @realpath($path) : false;
+        if ($directory === false || !is_dir($directory)) {
+            throw new Exception('ORG_BACKUP_PATH_INVALID', array($path));
+        }
+
+        $directory = str_replace('\\', '/', $directory);
+        $root = str_replace('\\', '/', (string) realpath(ADMIDIO_PATH));
+        $data = $root . FOLDER_DATA;
+        if ($directory === $data . '/backups') {
+            return '';
+        }
+        // A root directory such as / ends with its slash already.
+        $prefix = rtrim($directory, '/') . '/';
+        $inData = str_starts_with($prefix, $data . '/');
+        $inInstallation = str_starts_with($prefix, $root . '/');
+        $containsInstallation = str_starts_with($root . '/', $prefix);
+        if ($containsInstallation || ($inInstallation && !$inData)) {
+            throw new Exception('ORG_BACKUP_PATH_IN_INSTALLATION', array($path));
+        }
+        if (!is_writable($directory)) {
+            throw new Exception('ORG_BACKUP_PATH_INVALID', array($path));
+        }
+
+        return $directory;
     }
 
     /**
