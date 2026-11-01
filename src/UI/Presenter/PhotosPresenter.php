@@ -271,12 +271,12 @@ class PhotosPresenter extends PagePresenter
         }
 
         foreach (new \DirectoryIterator($uploadPath) as $file) {
-            if ($file->isFile() && $file->getMTime() < time() - 86400) {
-                try {
+            try {
+                if ($file->isFile() && $file->getMTime() < time() - 86400) {
                     FileSystemUtils::deleteFileIfExists($file->getPathname());
-                } catch (\RuntimeException $exception) {
-                    $gLogger->error('Could not delete file!', array('filePath' => $file->getPathname()));
                 }
+            } catch (\RuntimeException $exception) {
+                $gLogger->error('Could not delete file!', array('filePath' => $file->getPathname()));
             }
         }
     }
