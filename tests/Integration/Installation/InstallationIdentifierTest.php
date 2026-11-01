@@ -9,11 +9,6 @@ use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Ramsey\Uuid\Uuid;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
 use Admidio\InstallationUpdate\Service\StatisticsConsent;
 
 class InstallationIdentifierTest extends DatabaseTestCase
@@ -69,12 +64,14 @@ class InstallationIdentifierTest extends DatabaseTestCase
     {
         $canonicalId = InstallationIdentifier::ensure($this->getDatabase());
         $history = array();
-        $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
-        $handler->push(Middleware::history($history));
+        $client = static function (string $url, string $json) use (&$history): int {
+            $history[] = array('url' => $url, 'body' => $json);
+            return 200;
+        };
         $otherId = Uuid::uuid4()->toString();
-        $statistics = new InstallationStatistics($otherId, null, new Client(array('handler' => $handler)));
+        $statistics = new InstallationStatistics($otherId, null, $client);
         $this->assertTrue($statistics->sent(array('id' => $otherId)));
-        $sent = json_decode((string) $history[0]['request']->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        $sent = json_decode((string) $history[0]['body'], true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame($canonicalId, $sent['id']);
         $settings = new SettingsManager($this->getDatabase(), InstallationIdentifier::getOrganizationId($this->getDatabase()));
         $this->assertFalse(InstallationStatistics::isDue($settings->getString('system_statistics_last_sent')));
@@ -90,9 +87,10 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
         $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Monthly statistics child', 'monthstats');
         $history = array();
-        $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
-        $handler->push(Middleware::history($history));
-        $client = new Client(array('handler' => $handler));
+        $client = static function (string $url, string $json) use (&$history): int {
+            $history[] = array('url' => $url, 'body' => $json);
+            return 200;
+        };
 
         InstallationStatistics::sendIfDue($db, (int)$other['org_id'], $client);
         $this->assertCount(0, $history);
@@ -114,9 +112,10 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
         StatisticsConsent::savePreference(false);
         $history = array();
-        $handler = HandlerStack::create(new MockHandler(array(new Response(503), new Response(200))));
-        $handler->push(Middleware::history($history));
-        $client = new Client(array('handler' => $handler));
+        $client = static function (string $url, string $json) use (&$history): int {
+            $history[] = array('url' => $url, 'body' => $json);
+            return count($history) === 1 ? 503 : 200;
+        };
 
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(0, $history);
@@ -135,9 +134,10 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $mainId = InstallationIdentifier::getOrganizationId($db);
         $settings = new SettingsManager($db, $mainId);
         $history = array();
-        $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
-        $handler->push(Middleware::history($history));
-        $client = new Client(array('handler' => $handler));
+        $client = static function (string $url, string $json) use (&$history): int {
+            $history[] = array('url' => $url, 'body' => $json);
+            return 200;
+        };
 
         foreach (array('system_statistics_last_sent', 'system_statistics_enabled') as $missingPreference) {
             $settings->set('system_statistics_enabled', '1');

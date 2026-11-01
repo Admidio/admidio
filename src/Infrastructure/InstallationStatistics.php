@@ -3,12 +3,10 @@ namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Preferences\ValueObject\SettingsManager;
+use Closure;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use Throwable;
 
 /**
@@ -29,12 +27,12 @@ class InstallationStatistics
      * Create a statistics collector for this installation.
      * @param string $tenantID Unique id of this tenant.
      * @param string|null $previousVersion Admidio version installed before this update.
-     * @param ClientInterface|null $client HTTP client, optionally supplied for testing.
+     * @param Closure|null $httpPost Optional transport accepting URL and JSON and returning the HTTP status code (0 on failure).
      */
     public function __construct(
         string $tenantID,
         private ?string $previousVersion = null,
-        private ?ClientInterface $client = null
+        private ?Closure $httpPost = null
     )
     {
         $this->tenantID = $tenantID;
@@ -168,7 +166,6 @@ class InstallationStatistics
      * Sends the anonymous data of this tenant to the Admidio server.
      * @param array|null $infoData Server-side snapshot previously shown in the update dialog.
      * @return bool Returns **true** if the data could successfully send to the server.
-     * @throws GuzzleException
      */
     public function sent(?array $infoData = null): bool
     {
@@ -180,21 +177,44 @@ class InstallationStatistics
             throw new Exception('SYS_TENANT_ID_NOT_INITIALIZED');
         }
         $infoData['id'] = $tenantId;
-        $client = $this->client ?? new Client(array('connect_timeout' => 2, 'timeout' => 5));
-        $response = $client->request(
-            'POST',
-            ADMIDIO_URL . '/api/statistics.php',
-            array(
-                'headers' => array('Content-Type' => 'application/json'),
-                'body' => $this->getJsonData($infoData)
-            )
-        );
+        $url = ADMIDIO_URL . '/api/statistics.php';
+        $json = $this->getJsonData($infoData);
+        $statusCode = $this->httpPost !== null ? ($this->httpPost)($url, $json) : $this->postJson($url, $json);
 
-        if ($response->getStatusCode() === 200) {
+        if ($statusCode === 200) {
             $this->recordSuccessfulSend($gDb);
             return true;
         }
         return false;
+    }
+
+    /** Send JSON using the cURL extension already required by Admidio. */
+    private function postJson(string $url, string $json): int
+    {
+        $curl = curl_init($url);
+        if ($curl === false) {
+            return 0;
+        }
+
+        try {
+            curl_setopt_array($curl, array(
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $json,
+                CURLOPT_HTTPHEADER => array('Content-Type: application/json'),
+                CURLOPT_CONNECTTIMEOUT => 2,
+                CURLOPT_TIMEOUT => 5,
+                // The response body is not needed; discard it without buffering.
+                CURLOPT_WRITEFUNCTION => static function ($curlHandle, string $chunk): int {
+                    return strlen($chunk);
+                }
+            ));
+            if (curl_exec($curl) === false) {
+                return 0;
+            }
+            return (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        } finally {
+            curl_close($curl);
+        }
     }
 
     /** All send paths share the installation-wide success timestamp. */
@@ -226,7 +246,7 @@ class InstallationStatistics
     }
 
     /** Check when rebuilding the organization; statistics must never prevent loading a page. */
-    public static function sendIfDue(Database $db, int $organizationId, ?ClientInterface $client = null): void
+    public static function sendIfDue(Database $db, int $organizationId, ?Closure $httpPost = null): void
     {
         global $gLogger;
 
@@ -250,13 +270,8 @@ class InstallationStatistics
                 && $settings->getBool('system_statistics_enabled')
                 && self::isDue($settings->getString('system_statistics_last_sent'))) {
                 $tenantId = InstallationIdentifier::get($db);
-                try {
-                    if ($tenantId !== null && !(new self($tenantId, null, $client))->sent()) {
-                        $gLogger->warning('Monthly anonymous installation statistics could not be sent.');
-                    }
-                } catch (GuzzleException $exception) {
-                    // A network failure changes no data and must not roll back an enclosing transaction.
-                    $gLogger->warning('Monthly anonymous installation statistics could not be sent.', array('exception' => $exception));
+                if ($tenantId !== null && !(new self($tenantId, null, $httpPost))->sent()) {
+                    $gLogger->warning('Monthly anonymous installation statistics could not be sent.');
                 }
             }
             $db->endTransaction();

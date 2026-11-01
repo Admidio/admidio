@@ -26,7 +26,6 @@
         "bjeavons/zxcvbn-php": "^1.2.0",
         "eluceo/ical": "^2.0",
         "ezyang/htmlpurifier": "^4.14",
-        "guzzlehttp/guzzle": "^7.9",
         "ifsnop/mysqldump-php": "^2.12",
         "monolog/monolog": "^3.0",
         "phpmailer/phpmailer": "^7.0",

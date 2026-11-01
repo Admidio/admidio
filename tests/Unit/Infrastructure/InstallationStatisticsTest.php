@@ -5,11 +5,6 @@ namespace Admidio\Tests\Unit\Infrastructure;
 use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Database;
 use PDOStatement;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class InstallationStatisticsTest extends TestCase
@@ -48,10 +43,12 @@ class InstallationStatisticsTest extends TestCase
             define('ADMIDIO_URL', 'https://installation.example.test');
         }
         $history = array();
-        $handler = HandlerStack::create(new MockHandler(array(new Response(200))));
-        $handler->push(Middleware::history($history));
+        $client = static function (string $url, string $json) use (&$history): int {
+            $history[] = array('url' => $url, 'body' => $json);
+            return 200;
+        };
         $statistics = $this->getMockBuilder(InstallationStatistics::class)
-            ->setConstructorArgs(array('tenant', '5.0.0', new Client(array('handler' => $handler))))
+            ->setConstructorArgs(array('tenant', '5.0.0', $client))
             ->onlyMethods(array('recordSuccessfulSend'))->getMock();
         $statistics->expects($this->once())->method('recordSuccessfulSend')->with($GLOBALS['gDb']);
         $snapshot = array(
@@ -65,19 +62,24 @@ class InstallationStatisticsTest extends TestCase
         // Only the canonical ID is read; collecting fresh technology data would fail this test.
         $this->assertTrue($statistics->sent($snapshot));
         $this->assertCount(1, $history);
-        $this->assertSame($preview, (string) $history[0]['request']->getBody());
+        $this->assertSame($preview, (string) $history[0]['body']);
         $this->assertInstanceOf(\stdClass::class, json_decode($preview, false, 512, JSON_THROW_ON_ERROR));
         $this->assertSame($snapshot, json_decode($preview, true, 512, JSON_THROW_ON_ERROR));
-        $this->assertSame('application/json', $history[0]['request']->getHeaderLine('Content-Type'));
+        $this->assertSame(ADMIDIO_URL . '/api/statistics.php', $history[0]['url']);
     }
 
-    public function testFailedResponseDoesNotRecordASuccessfulSend(): void
+    public static function failedStatuses(): array
+    {
+        return array('network failure' => array(0), 'redirect' => array(302), 'server error' => array(503));
+    }
+
+    /** @dataProvider failedStatuses */
+    public function testFailedResponseDoesNotRecordASuccessfulSend(int $statusCode): void
     {
         if (!defined('ADMIDIO_URL')) {
             define('ADMIDIO_URL', 'https://installation.example.test');
         }
-        $client = new Client(array('handler' => HandlerStack::create(new MockHandler(array(new Response(503)))),
-            'http_errors' => false));
+        $client = static fn(string $url, string $json): int => $statusCode;
         $statistics = $this->getMockBuilder(InstallationStatistics::class)
             ->setConstructorArgs(array('tenant', null, $client))
             ->onlyMethods(array('recordSuccessfulSend'))->getMock();
