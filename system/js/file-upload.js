@@ -51,11 +51,39 @@ function admFileUpload(config) {
     var invalidRegex              = new RegExp(invalidPattern);
     var invalidGlobalRegex        = new RegExp(invalidPattern, "g");
 
+    /**
+     * Escapes a text for the use in html, also in the value of an attribute (quotes are escaped as well).
+     * @param {*} value Text that should be shown
+     * @returns {string}
+     */
+    function escapeHtml(value) {
+        return String(value === null || typeof value === "undefined" ? "" : value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    /**
+     * The server decodes a file name (urldecode) before it checks it. The same decoding is used here, so that
+     * a name like "report%3F.txt" is detected as invalid before the upload.
+     * @param {string} name File name
+     * @returns {string}
+     */
+    function decodeFilename(name) {
+        try {
+            return decodeURIComponent(name);
+        } catch (e) {
+            return name;
+        }
+    }
+
     function isFilenameValid(name) {
         if (!name || typeof name !== "string") {
             return false;
         }
-        var trimmed = name.trim();
+        var trimmed = decodeFilename(name).trim();
         if (trimmed === "" || trimmed.charAt(0) === ".") {
             return false;
         }
@@ -73,7 +101,7 @@ function admFileUpload(config) {
         if (!name || typeof name !== "string") {
             return "file";
         }
-        var trimmed = name.trim();
+        var trimmed = decodeFilename(name).trim();
         var cleaned = trimmed.replace(invalidGlobalRegex, "-");
         cleaned = cleaned.replace(/^\.+/, "");
         var lastDot = cleaned.lastIndexOf(".");
@@ -135,14 +163,14 @@ function admFileUpload(config) {
 
         var renamedBadge = "";
         if (file.uploadName && file.uploadName !== file.name) {
-            var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + $("<div>").text(file.uploadName).html() + "</strong>");
+            var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(file.uploadName) + "</strong>");
             renamedBadge = " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
         }
 
         var $row = $("<div class=\"upload-item alert alert-light border d-flex justify-content-between align-items-center py-2 px-3 mb-2\" id=\"upload-item-" + uploadId + "\">" +
             "<div class=\"d-flex align-items-center text-truncate me-2\">" +
                 "<div class=\"spinner-border spinner-border-sm text-primary me-2 flex-shrink-0\" role=\"status\"></div>" +
-                "<span class=\"fw-semibold text-truncate\">" + $("<div>").text(file.name).html() + "</span>" +
+                "<span class=\"fw-semibold text-truncate\">" + escapeHtml(file.name) + "</span>" +
                 renamedBadge +
                 "<span class=\"text-muted small ms-2 upload-status-msg\">" + textUploading + "</span>" +
             "</div>" +
@@ -172,8 +200,8 @@ function admFileUpload(config) {
             sanitizedName: sanitized
         };
 
-        var escapedOriginal = $("<div>").text(file.name).html();
-        var escapedSanitized = $("<div>").text(sanitized).html();
+        var escapedOriginal = escapeHtml(file.name);
+        var escapedSanitized = escapeHtml(sanitized);
 
         var $item = $("<div class=\"list-group-item px-3 py-3 border-bottom\" id=\"pending-item-" + id + "\">" +
             "<div class=\"row g-2 align-items-center\">" +
@@ -483,18 +511,18 @@ function admFileUpload(config) {
                     if ($row && $row.length) {
                         $row.removeClass("alert-light").addClass("alert-danger");
                         $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi bi-exclamation-circle-fill me-2 text-danger fs-5\"></i><span>"
-                            + $("<div>").text(file.name).html() + " - <strong>" + file.error + "</strong></span></div>");
+                            + escapeHtml(file.name) + " - <strong>" + file.error + "</strong></span></div>");
                     } else {
                         $("<p/>").html("<div class=\"alert alert-danger\"><i class=\"bi bi-exclamation-circle-fill me-2\"></i>"
-                            + $("<div>").text(file.name).html() + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
+                            + escapeHtml(file.name) + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
                     }
                 } else {
                     countFiles++;
                     var message = textFileUploaded;
-                    var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + $("<div>").text(file.name).html() + "</strong>");
+                    var newMessage = message.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(file.name) + "</strong>");
                     var renamedBadge = "";
                     if (data.files[0] && data.files[0].uploadName && data.files[0].uploadName !== data.files[0].name) {
-                        var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + $("<div>").text(data.files[0].uploadName).html() + "</strong>");
+                        var renamedText = textRenamedTo.replace("#VAR1_BOLD#", "<strong>" + escapeHtml(data.files[0].uploadName) + "</strong>");
                         renamedBadge = " <span class=\"badge bg-secondary ms-2 small\">" + renamedText + "</span>";
                     }
                     if ($row && $row.length) {
@@ -533,10 +561,10 @@ function admFileUpload(config) {
                 if ($row && $row.length) {
                     $row.removeClass("alert-light border").addClass("alert-secondary");
                     $row.html("<div class=\"d-flex align-items-center\"><i class=\"bi bi-dash-circle me-2 text-secondary fs-5\"></i><span>"
-                        + $("<div>").text(displayName).html() + " - <strong>" + textUploadCancelled + "</strong></span></div>");
+                        + escapeHtml(displayName) + " - <strong>" + textUploadCancelled + "</strong></span></div>");
                 } else {
                     $("<p/>").html("<div class=\"alert alert-secondary\"><i class=\"bi bi-dash-circle me-2\"></i>"
-                        + $("<div>").text(displayName).html() + " - <strong>" + textUploadCancelled + "</strong></div>").appendTo("#files");
+                        + escapeHtml(displayName) + " - <strong>" + textUploadCancelled + "</strong></div>").appendTo("#files");
                 }
             } else {
                 countErrorFiles++;
@@ -546,8 +574,8 @@ function admFileUpload(config) {
                     fileName = data.files[0].uploadError.name;
                     fileError = data.files[0].uploadError.error;
                 } else {
-                    fileName = $("<div/>").text(data.files[0].name).html();
-                    fileError = $("<div/>").text(data.errorThrown || data.textStatus).html();
+                    fileName = escapeHtml(data.files[0].name);
+                    fileError = escapeHtml(data.errorThrown || data.textStatus);
                 }
                 if ($row && $row.length) {
                     $row.removeClass("alert-light border").addClass("alert-danger");
