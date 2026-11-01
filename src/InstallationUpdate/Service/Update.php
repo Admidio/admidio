@@ -6,7 +6,6 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Utils\PasswordUtils;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\Service\PreferenceDefinitions;
@@ -67,19 +66,15 @@ class Update
 
     /**
      * @param string $installedDbVersion
-     * @param string|null $tenantId Identity already displayed by the update dialog, if available.
      * @throws Exception
      */
-    public function doAdmidioUpdate(string $installedDbVersion, ?string $tenantId = null): void
+    public function doAdmidioUpdate(string $installedDbVersion): void
     {
         global $gLogger, $gDb, $gL10n, $gProfileFields, $gCurrentUser;
 
         $gLogger->info('UPDATE: Execute update');
 
         $this->checkLogin();
-
-        // Keep the preview identity for the 6.0 migration, even when sending was declined.
-        InstallationIdentifier::ensure($gDb, $tenantId);
 
         $this->updateOrgPreferences();
 

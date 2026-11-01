@@ -25,8 +25,8 @@ final class StatisticsConsent
         if ($tenantId === null) {
             $tenantId = $_SESSION[self::SESSION_DATA]['id'] ?? Uuid::uuid4()->toString();
         }
-        $statistics = new InstallationStatistics($tenantId, $previousVersion);
-        $_SESSION[self::SESSION_DATA] = $statistics->getInfoData();
+        $statistics = new InstallationStatistics($previousVersion);
+        $_SESSION[self::SESSION_DATA] = $statistics->getInfoData($tenantId);
         $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($_SESSION[self::SESSION_DATA]));
         $enabled = !isset($gSettingsManager) || !$gSettingsManager->has('system_statistics_enabled')
             || $gSettingsManager->getBool('system_statistics_enabled');
@@ -68,7 +68,7 @@ final class StatisticsConsent
             return;
         }
         try {
-            $statistics = new InstallationStatistics($data['id']);
+            $statistics = new InstallationStatistics();
             if (!$statistics->sent($data)) {
                 $gLogger->warning('Anonymous installation statistics could not be sent.');
             }

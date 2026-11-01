@@ -818,7 +818,7 @@ class PreferencesPresenter extends PagePresenter
                     '</a>'
                 )))
             );
-            $statistics = new InstallationStatistics(InstallationIdentifier::get($gDb) ?? '');
+            $statistics = new InstallationStatistics();
             $this->assignSmartyVariable('statisticsJson', $statistics->getJsonData());
         }
         $formCommon->addInput(

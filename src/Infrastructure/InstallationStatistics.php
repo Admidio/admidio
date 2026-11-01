@@ -19,32 +19,25 @@ use Throwable;
 class InstallationStatistics
 {
     /**
-     * @var string Unique id of this tenant.
-     */
-    private string $tenantID;
-
-    /**
-     * Create a statistics collector for this installation.
-     * @param string $tenantID Unique id of this tenant.
      * @param string|null $previousVersion Admidio version installed before this update.
      * @param Closure|null $httpPost Optional transport accepting URL and JSON and returning the HTTP status code (0 on failure).
      */
     public function __construct(
-        string $tenantID,
         private ?string $previousVersion = null,
         private ?Closure $httpPost = null
     )
     {
-        $this->tenantID = $tenantID;
     }
 
     /**
      * @return array
      */
-    public function getInfoData()
+    public function getInfoData(?string $previewId = null)
     {
+        global $gDb;
+
         return array(
-            'id' => $this->tenantID,
+            'id' => $previewId ?? InstallationIdentifier::get($gDb),
             'timestamp' => InstallationStatistics::getDateTime(),
             'database' => array(
                 'type' => InstallationStatistics::getDatabaseType(),
@@ -269,8 +262,7 @@ class InstallationStatistics
                 && $settings->has('system_statistics_enabled')
                 && $settings->getBool('system_statistics_enabled')
                 && self::isDue($settings->getString('system_statistics_last_sent'))) {
-                $tenantId = InstallationIdentifier::get($db);
-                if ($tenantId !== null && !(new self($tenantId, null, $httpPost))->sent()) {
+                if (!(new self(null, $httpPost))->sent()) {
                     $gLogger->warning('Monthly anonymous installation statistics could not be sent.');
                 }
             }

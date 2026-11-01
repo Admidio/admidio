@@ -77,7 +77,7 @@ class InstallationStatisticsTest extends TestCase
             return 200;
         };
         $statistics = $this->getMockBuilder(InstallationStatistics::class)
-            ->setConstructorArgs(array('tenant', '5.0.0', $client))
+            ->setConstructorArgs(array('5.0.0', $client))
             ->onlyMethods(array('recordSuccessfulSend'))->getMock();
         $statistics->expects($this->once())->method('recordSuccessfulSend')->with($GLOBALS['gDb']);
         $snapshot = array(
@@ -104,7 +104,7 @@ class InstallationStatisticsTest extends TestCase
             $this->assertSame($GLOBALS['gStatisticsUrl'], $url);
             return 503;
         };
-        $statistics = new InstallationStatistics('tenant', null, $client);
+        $statistics = new InstallationStatistics(null, $client);
 
         $this->assertFalse($statistics->sent(array('id' => 'tenant')));
     }
@@ -122,7 +122,7 @@ class InstallationStatisticsTest extends TestCase
         }
         $client = static fn(string $url, string $json): int => $statusCode;
         $statistics = $this->getMockBuilder(InstallationStatistics::class)
-            ->setConstructorArgs(array('tenant', null, $client))
+            ->setConstructorArgs(array(null, $client))
             ->onlyMethods(array('recordSuccessfulSend'))->getMock();
         $statistics->expects($this->never())->method('recordSuccessfulSend');
 

@@ -51,6 +51,24 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $this->assertSame(1, (int) $count);
     }
 
+    public function testUpdateStepPreservesThePreviewIdentity(): void
+    {
+        $db = $this->getDatabase();
+        $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_name = ?', array('system_tenant_id'));
+        $previousSession = $_SESSION;
+        $previewId = Uuid::uuid4()->toString();
+        try {
+            $_SESSION['installationStatisticsData'] = array('id' => $previewId);
+            UpdateStepsCode::setDatabase($db);
+            UpdateStepsCode::updateStep60CreateTenantId();
+            $this->assertSame($previewId, InstallationIdentifier::get($db));
+            UpdateStepsCode::updateStep60CreateTenantId();
+            $this->assertSame($previewId, InstallationIdentifier::get($db));
+        } finally {
+            $_SESSION = $previousSession;
+        }
+    }
+
     public function testReviewedIdentityIsUsedOnFirstCreation(): void
     {
         $db = $this->getDatabase();
@@ -69,7 +87,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
             return 200;
         };
         $otherId = Uuid::uuid4()->toString();
-        $statistics = new InstallationStatistics($otherId, null, $client);
+        $statistics = new InstallationStatistics(null, $client);
         $this->assertTrue($statistics->sent(array('id' => $otherId)));
         $sent = json_decode((string) $history[0]['body'], true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame($canonicalId, $sent['id']);

@@ -42,7 +42,7 @@ final class UpdateStepsCode
     /** Initialize the installation identity once when upgrading to 6.0, including headless updates. */
     public static function updateStep60CreateTenantId(): void
     {
-        InstallationIdentifier::ensure(self::$db);
+        InstallationIdentifier::ensure(self::$db, StatisticsConsent::tenantId());
     }
 
     /**
