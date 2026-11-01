@@ -37,6 +37,27 @@ class InstallationStatisticsTest extends TestCase
         }
     }
 
+    public static function databaseTypes(): array
+    {
+        return array(
+            'MySQL' => array('mysql', '8.0.0'),
+            'MariaDB' => array('mariadb', '10.11.0'),
+            'PostgreSQL' => array('pgsql', '16.0')
+        );
+    }
+
+    /** @dataProvider databaseTypes */
+    public function testDatabaseTypeUsesDetectedServerType(string $type, string $version): void
+    {
+        $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
+            ->onlyMethods(array('getInformation'))->getMock();
+        $database->expects($this->once())->method('getInformation')->willReturn(array($type, $version));
+        $GLOBALS['gDb'] = $database;
+
+        $method = new \ReflectionMethod(InstallationStatistics::class, 'getDatabaseType');
+        $this->assertSame($type, $method->invoke(null));
+    }
+
     public function testReviewedSnapshotIsSentUnchangedWithoutCollectingNewData(): void
     {
         if (!defined('ADMIDIO_URL')) {

@@ -103,9 +103,9 @@ class InstallationStatistics
      */
     private static function getDatabaseType()
     {
-        global $gDbType;
+        global $gDb;
 
-        return $gDbType;
+        return $gDb->getInformation()[0];
     }
 
     /**
