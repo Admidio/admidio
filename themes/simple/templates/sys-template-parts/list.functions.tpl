@@ -13,7 +13,7 @@
                     {elseif isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
                 data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
                     {else} class="admidio-icon-link{if isset($actionItem.class)} {$actionItem.class}{/if}" href="{$actionItem.url}"{/if}>
-                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
+                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i><span class="visually-hidden">{$actionItem.tooltip|escape:'html'}</span></a>
         {/foreach}
     </div>
     <div class="dropdown d-lg-none">

@@ -185,6 +185,13 @@ class EventParticipationWorkflowTest extends DatabaseTestCase
 
             $participate($alice, 1, true);
             $this->assertSame(3, (new Participants($this->getDatabase(), $event['rol_id']))->getCount());
+
+            // An existing participant may fill the final seat with an allowed guest.
+            $participate($alice, 2, true);
+            $this->assertSame(4, (new Participants($this->getDatabase(), $event['rol_id']))->getCount());
+            // Repeating the same participation must also work when the event is full.
+            $participate($alice, 2, true);
+            $this->assertSame(4, (new Participants($this->getDatabase(), $event['rol_id']))->getCount());
         } finally {
             $GLOBALS['gCurrentSession'] = $previousSession;
             $GLOBALS['gNavigation'] = $previousNavigation;

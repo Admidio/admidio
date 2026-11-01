@@ -132,6 +132,27 @@ final class Birthday
     }
 
     /**
+     * SQL expression that moves a birthday into the year of a reference date.
+     *
+     * The birthday is shifted by whole years instead of combining the year with month and day of the
+     * birthday. A birthday on 29 February therefore falls on 28 February in years without a leap day,
+     * where combining would produce the invalid date YYYY-02-29.
+     * @param string $dbType Database engine, 'pgsql' or 'mysql'
+     * @param string $birthdayColumn Column with the birthday in the format YYYY-MM-DD
+     * @param int $yearOffset Number of years added to the year of the reference date
+     * @return string SQL expression with one placeholder for the reference date in the format YYYY-MM-DD
+     */
+    public static function getBirthdayInYearSql(string $dbType, string $birthdayColumn, int $yearOffset = 0): string
+    {
+        if ($dbType === 'pgsql') {
+            return 'CAST(TO_DATE(' . $birthdayColumn . ', \'YYYY-MM-DD\')
+                         + (EXTRACT(YEAR FROM TO_DATE(?, \'YYYY-MM-DD\')) + (' . $yearOffset . ') - EXTRACT(YEAR FROM TO_DATE(' . $birthdayColumn . ', \'YYYY-MM-DD\'))) * INTERVAL \'1 year\' AS DATE)';
+        }
+
+        return 'DATE_ADD(' . $birthdayColumn . ', INTERVAL YEAR(?) + (' . $yearOffset . ') - YEAR(' . $birthdayColumn . ') YEAR)';
+    }
+
+    /**
      * @param array<string,mixed> $config
      * @return array<int,array<string,string>>
      * @throws Exception
@@ -188,23 +209,23 @@ final class Birthday
                                 email.usd_value AS email, gender.usd_value AS gender
                 FROM ' . TBL_USERS . ' AS users
             INNER JOIN ( (SELECT usd_usr_id, usd_value AS bday,
-                                TO_DATE(EXTRACT(YEAR FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\')) || TO_CHAR(TO_TIMESTAMP(bd1.usd_value, \'YYYY-MM-DD\'), \'-MM-DD\'), \'YYYY-MM-DD\') AS bdate -- DATE_NOW
+                                ' . self::getBirthdayInYearSql($gDbType, 'bd1.usd_value') . ' AS bdate -- DATE_NOW
                             FROM ' . TBL_USER_DATA . ' AS bd1
-                        WHERE EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - TO_TIMESTAMP(EXTRACT(YEAR FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\')) || TO_CHAR(TO_TIMESTAMP(bd1.usd_value, \'YYYY-MM-DD\'), \'-MM-DD\'), \'YYYY-MM-DD\')) -- DATE_NOW,DATE_NOW
+                        WHERE EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - ' . self::getBirthdayInYearSql($gDbType, 'bd1.usd_value') . ') -- DATE_NOW,DATE_NOW
                         BETWEEN ? AND ? -- -$config[\'birthday_show_past\'] AND $config[\'birthday_show_future\']
                             AND usd_usf_id = ?) -- $fieldBirthday
                     UNION
                         (SELECT usd_usr_id, usd_value AS bday,
-                                TO_DATE(EXTRACT(YEAR FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\'))-1 || TO_CHAR(TO_TIMESTAMP(bd2.usd_value, \'YYYY-MM-DD\'), \'-MM-DD\'), \'YYYY-MM-DD\') AS bdate -- DATE_NOW
+                                ' . self::getBirthdayInYearSql($gDbType, 'bd2.usd_value', -1) . ' AS bdate -- DATE_NOW
                             FROM ' . TBL_USER_DATA . ' AS bd2
-                        WHERE EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - TO_TIMESTAMP(EXTRACT(YEAR FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\')- INTERVAL \'1 year\') || TO_CHAR(TO_TIMESTAMP(bd2.usd_value, \'YYYY-MM-DD\'), \'-MM-DD\'), \'YYYY-MM-DD\')) -- DATE_NOW,DATE_NOW
+                        WHERE EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - ' . self::getBirthdayInYearSql($gDbType, 'bd2.usd_value', -1) . ') -- DATE_NOW,DATE_NOW
                         BETWEEN ? AND ? -- -$config[\'birthday_show_past\'] AND $config[\'birthday_show_future\']
                             AND usd_usf_id = ?) -- $fieldBirthday
                     UNION
                         (SELECT usd_usr_id, usd_value AS bday,
-                                TO_DATE(EXTRACT(YEAR FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\'))+1 || TO_CHAR(TO_TIMESTAMP(bd3.usd_value, \'YYYY-MM-DD\'), \'-MM-DD\'), \'YYYY-MM-DD\') AS bdate -- DATE_NOW
+                                ' . self::getBirthdayInYearSql($gDbType, 'bd3.usd_value', 1) . ' AS bdate -- DATE_NOW
                             FROM ' . TBL_USER_DATA . ' AS bd3
-                        WHERE EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - TO_TIMESTAMP(EXTRACT(YEAR FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\')+ INTERVAL \'1 year\') || TO_CHAR(TO_TIMESTAMP(bd3.usd_value, \'YYYY-MM-DD\'), \'-MM-DD\'), \'YYYY-MM-DD\')) -- DATE_NOW,DATE_NOW
+                        WHERE EXTRACT(DAY FROM TO_TIMESTAMP(?, \'YYYY-MM-DD\') - ' . self::getBirthdayInYearSql($gDbType, 'bd3.usd_value', 1) . ') -- DATE_NOW,DATE_NOW
                         BETWEEN ? AND ? -- -$config[\'birthday_show_past\'] AND $config[\'birthday_show_future\']
                             AND usd_usf_id = ?) -- $fieldBirthday
                     ) AS birthday
@@ -243,23 +264,23 @@ final class Birthday
                                 email.usd_value AS email, gender.usd_value AS gender
                 FROM ' . TBL_USERS . ' AS users
             INNER JOIN ( (SELECT usd_usr_id, usd_value AS bday,
-                                CONCAT(YEAR(?), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')) AS bdate -- DATE_NOW
+                                ' . self::getBirthdayInYearSql($gDbType, 'bd1.usd_value') . ' AS bdate -- DATE_NOW
                             FROM ' . TBL_USER_DATA . ' AS bd1
-                        WHERE DATEDIFF(CONCAT(YEAR(?), DATE_FORMAT(bd1.usd_value, \'-%m-%d\')), ?) -- DATE_NOW,DATE_NOW
+                        WHERE DATEDIFF(' . self::getBirthdayInYearSql($gDbType, 'bd1.usd_value') . ', ?) -- DATE_NOW,DATE_NOW
                         BETWEEN ? AND ? -- -$config[\'birthday_show_past\'] AND $config[\'birthday_show_future\']
                             AND usd_usf_id = ?) -- $fieldBirthday
                     UNION
                         (SELECT usd_usr_id, usd_value AS bday,
-                                CONCAT(YEAR(?)-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')) AS bdate -- DATE_NOW
+                                ' . self::getBirthdayInYearSql($gDbType, 'bd2.usd_value', -1) . ' AS bdate -- DATE_NOW
                             FROM ' . TBL_USER_DATA . ' AS bd2
-                        WHERE DATEDIFF(CONCAT(YEAR(?)-1, DATE_FORMAT(bd2.usd_value, \'-%m-%d\')), ?) -- DATE_NOW,DATE_NOW
+                        WHERE DATEDIFF(' . self::getBirthdayInYearSql($gDbType, 'bd2.usd_value', -1) . ', ?) -- DATE_NOW,DATE_NOW
                         BETWEEN ? AND ? -- -$config[\'birthday_show_past\'] AND $config[\'birthday_show_future\']
                             AND usd_usf_id = ?) -- $fieldBirthday
                     UNION
                         (SELECT usd_usr_id, usd_value AS bday,
-                                CONCAT(YEAR(?)+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')) AS bdate -- DATE_NOW
+                                ' . self::getBirthdayInYearSql($gDbType, 'bd3.usd_value', 1) . ' AS bdate -- DATE_NOW
                             FROM ' . TBL_USER_DATA . ' AS bd3
-                        WHERE DATEDIFF(CONCAT(YEAR(?)+1, DATE_FORMAT(bd3.usd_value, \'-%m-%d\')), ?) -- DATE_NOW,DATE_NOW
+                        WHERE DATEDIFF(' . self::getBirthdayInYearSql($gDbType, 'bd3.usd_value', 1) . ', ?) -- DATE_NOW,DATE_NOW
                         BETWEEN ? AND ? -- -$config[\'birthday_show_past\'] AND $config[\'birthday_show_future\']
                             AND usd_usf_id = ?) -- $fieldBirthday
                     ) AS birthday

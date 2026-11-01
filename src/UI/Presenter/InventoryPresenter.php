@@ -4,12 +4,12 @@ namespace Admidio\UI\Presenter;
 
 // Admidio namespaces
 use Admidio\Categories\Service\CategoryService;
-use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\ValueObjects\ItemsData;
 use Admidio\Inventory\Service\InventoryAccessService;
+use Admidio\Inventory\Service\ReservationService;
 use Admidio\Inventory\Entity\SelectOptions;
 use Admidio\Inventory\Entity\ItemField;
 use Admidio\Changelog\Service\ChangelogService;
@@ -95,7 +95,6 @@ class InventoryPresenter extends PagePresenter
         // check if the user has selected to show retired items
         $this->showRetiredItems = ($this->getFilterStatus === 0 || $this->getFilterStatus === 2);
         $this->itemsData->showRetiredItems($this->showRetiredItems);
-        $this->itemsData->readItems();
 
         $this->categoryService = new CategoryService($gDb, 'IVT');
 
@@ -366,13 +365,25 @@ class InventoryPresenter extends PagePresenter
                 true
             );
 
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
-                $dataTables->disableColumnsSort(array(1, 2, count($templateData['headers'])));
-                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers']), count($templateData['headers'])));
-            } else {
-                $dataTables->disableColumnsSort(array(1, 2));
-                $dataTables->setColumnsNotHideResponsive(array(array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'])));
+            $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
+            $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
+            $itemNameColumn = array_search($gL10n->get('SYS_INVENTORY_ITEMNAME'), $templateData['headers'], true) + 1;
+            $columnsWithoutSort = [];
+            if ($canUseBulkActions) {
+                $columnsWithoutSort[] = 1;
             }
+            if ($gSettingsManager->getBool('inventory_item_picture_enabled')) {
+                $columnsWithoutSort[] = $canUseBulkActions ? 2 : 1;
+            }
+            if ($hasActionsColumn) {
+                $columnsWithoutSort[] = count($templateData['headers']);
+            }
+            $dataTables->disableColumnsSort($columnsWithoutSort);
+            $columnsNotHideResponsive = [$itemNameColumn];
+            if ($hasActionsColumn) {
+                $columnsNotHideResponsive[] = count($templateData['headers']);
+            }
+            $dataTables->setColumnsNotHideResponsive($columnsNotHideResponsive);
             $dataTables->setRowsPerPage($gSettingsManager->getInt('inventory_items_per_page'));
             $dataTables->setColumnAlignByArray($templateData['column_align']);
             $dataTables->createJavascript(0, count($templateData['headers']));
@@ -393,12 +404,9 @@ class InventoryPresenter extends PagePresenter
      */
     protected function createHeader(): void
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields;
+        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrgId, $gProfileFields, $gSettingsManager, $gValidLogin;
 
         if ($gCurrentUser->isAdministratorInventory()) {
-            // show link to view inventory history
-            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data');
-
             // show link to create new item
             $this->addPageFunctionsMenuItem(
                 'menu_item_inventory_create_item',
@@ -408,7 +416,37 @@ class InventoryPresenter extends PagePresenter
             );
         }
 
+        if (InventoryAccessService::canManageReservations()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservations',
+                $gL10n->get('SYS_RESERVATIONS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_list']),
+                'bi-calendar-check',
+                '',
+                ReservationService::countPendingReservations($gDb),
+            );
+        } elseif (InventoryAccessService::canRequestReservation()) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_reservation_request',
+                $gL10n->get('SYS_RESERVATION_REQUEST'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_request']),
+                'bi-calendar-plus',
+            );
+        }
+
+        if (InventoryAccessService::canManageBorrowings() && !$gSettingsManager->getBool('inventory_items_disable_borrowing')) {
+            $this->addPageFunctionsMenuItem(
+                'menu_item_inventory_borrowings',
+                $gL10n->get('SYS_BORROWINGS'),
+                SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'borrow_list']),
+                'bi-box-arrow-up-right',
+            );
+        }
+
         if ($gCurrentUser->isAdministratorInventory()) {
+            // show link to view inventory history
+            ChangelogService::displayHistoryButton($this, 'inventory', 'inventory_fields,inventory_field_select_options,inventory_items,inventory_item_data,inventory_item_borrow_data,inventory_reservations');
+
             // link to print overlay and exports
             $this->addPageFunctionsMenuItem(
                 'menu_item_lists_print_view',
@@ -549,8 +587,9 @@ class InventoryPresenter extends PagePresenter
             array('defaultValue' => $this->getFilterCategoryUUID)
         );
 
-        // read all keeper
-        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
+        // Do not expose names in filter options to guests when anonymization is enabled.
+        if ($gValidLogin || !$gSettingsManager->getBool('inventory_anonymize_user_names_for_guests')) {
+            // read all keeper
             $sql = 'SELECT DISTINCT ind_value,
             CASE
                 WHEN ind_value = \'-1\' THEN \'n/a\'
@@ -560,50 +599,29 @@ class InventoryPresenter extends PagePresenter
             INNER JOIN ' . TBL_INVENTORY_FIELDS . '
                 ON inf_id = ind_inf_id
             LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = ind_value
+                ON CONCAT(last_name.usd_usr_id, \'\') = ind_value
                 AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
             LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = ind_value
+                ON CONCAT(first_name.usd_usr_id, \'\') = ind_value
                 AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
             WHERE (inf_org_id  = ' . $gCurrentOrgId . '
                 OR inf_org_id IS NULL)
             AND inf_name_intern = \'KEEPER\'
             ORDER BY keeper_name;';
-        } else {
-            $sql = 'SELECT DISTINCT ind_value,
-            CASE
-                WHEN ind_value = \'-1\' THEN \'n/a\'
-                ELSE CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-            END as keeper_name
-            FROM ' . TBL_INVENTORY_ITEM_DATA . '
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . '
-                ON inf_id = ind_inf_id
-            LEFT JOIN ' . TBL_USER_DATA . ' as last_name
-                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
-                AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' as first_name
-                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = ind_value
-                AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE (inf_org_id  = ' . $gCurrentOrgId . '
-                OR inf_org_id IS NULL)
-            AND inf_name_intern = \'KEEPER\'
-            ORDER BY keeper_name;';
-        }
 
-        // filter keeper
-        $form->addSelectBoxFromSql(
-            'items_filter_keeper',
-            $gL10n->get('SYS_INVENTORY_KEEPER'),
-            $gDb,
-            $sql,
-            array(
-                'defaultValue' => $this->getFilterKeeper,
-                'showContextDependentFirstEntry' => true
-            )
-        );
+            // filter keeper
+            $form->addSelectBoxFromSql(
+                'items_filter_keeper',
+                $gL10n->get('SYS_INVENTORY_KEEPER'),
+                $gDb,
+                $sql,
+                [
+                    'defaultValue' => $this->getFilterKeeper,
+                    'showContextDependentFirstEntry' => true,
+                ],
+            );
 
-        // get all last receivers
-        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
+            // get all last receivers
             $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
             CASE
                 WHEN borrowData.inb_last_receiver = \'-1\'
@@ -618,48 +636,26 @@ class InventoryPresenter extends PagePresenter
                 ON fields.inf_name_intern = \'LAST_RECEIVER\'
             AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
             LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
+                ON CONCAT(last_name.usd_usr_id, \'\') = borrowData.inb_last_receiver
             AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
             LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS VARCHAR(255)) = borrowData.inb_last_receiver
+                ON CONCAT(first_name.usd_usr_id, \'\') = borrowData.inb_last_receiver
             AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
             WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
             ORDER BY receiver_name;';
-        } else {
-            $sql = 'SELECT DISTINCT borrowData.inb_last_receiver,
-            CASE
-                WHEN borrowData.inb_last_receiver = \'-1\'
-                    THEN \'n/a\'
-                WHEN last_name.usd_value IS NOT NULL AND last_name.usd_value <> \'\' AND first_name.usd_value IS NOT NULL AND first_name.usd_value <> \'\'
-                    THEN CONCAT_WS(\', \', last_name.usd_value, first_name.usd_value)
-                ELSE
-                    borrowData.inb_last_receiver
-            END AS receiver_name
-            FROM ' . TBL_INVENTORY_ITEM_BORROW_DATA . ' AS borrowData
-            INNER JOIN ' . TBL_INVENTORY_FIELDS . ' AS fields
-                ON fields.inf_name_intern = \'LAST_RECEIVER\'
-            AND (fields.inf_org_id = ' . $gCurrentOrgId . ' OR fields.inf_org_id IS NULL)
-            LEFT JOIN ' . TBL_USER_DATA . ' AS last_name
-                ON CAST(last_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-            AND last_name.usd_usf_id = ' . $gProfileFields->getProperty('LAST_NAME', 'usf_id') . '
-            LEFT JOIN ' . TBL_USER_DATA . ' AS first_name
-                ON CAST(first_name.usd_usr_id AS CHAR) COLLATE utf8mb3_unicode_ci = borrowData.inb_last_receiver
-            AND first_name.usd_usf_id = ' . $gProfileFields->getProperty('FIRST_NAME', 'usf_id') . '
-            WHERE fields.inf_name_intern = \'LAST_RECEIVER\'
-            ORDER BY receiver_name;';
-        }
 
-        // filter last receiver
-        $form->addSelectBoxFromSql(
-            'items_filter_last_receiver',
-            $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
-            $gDb,
-            $sql,
-            array(
-                'defaultValue' => $this->getFilterLastReceiver,
-                'showContextDependentFirstEntry' => true
-            )
-        );
+            // filter last receiver
+            $form->addSelectBoxFromSql(
+                'items_filter_last_receiver',
+                $gL10n->get('SYS_INVENTORY_LAST_RECEIVER'),
+                $gDb,
+                $sql,
+                [
+                    'defaultValue' => $this->getFilterLastReceiver,
+                    'showContextDependentFirstEntry' => true,
+                ],
+            );
+        }
 
         // get the status options for the filter
         $option = new SelectOptions($gDb, $this->itemsData->getProperty('STATUS', 'inf_id'));
@@ -827,8 +823,11 @@ class InventoryPresenter extends PagePresenter
         $headers = array();
         $exportHeaders = array();
 
+        $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
+        $hasActionsColumn = $canUseBulkActions || InventoryAccessService::canRequestReservation();
+
         // initial checkbox header for HTML mode
-        if ($mode === 'html') {
+        if ($mode === 'html' && $canUseBulkActions) {
             $columnAlign[] = 'center';
             $headers[] = '<input type="checkbox" id="select-all" data-bs-toggle="tooltip" data-bs-original-title="' . $gL10n->get('SYS_SELECT_ALL') . '"/>';
         }
@@ -873,11 +872,9 @@ class InventoryPresenter extends PagePresenter
         }
 
         // decide if actions column is needed for html mode
-        if ($mode === 'html') {
-            if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId)) {
-                $columnAlign[] = 'end';
-                $headers[] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
-            }
+        if ($mode === 'html' && $hasActionsColumn) {
+            $columnAlign[] = 'end';
+            $headers[] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
         }
 
         return array(
@@ -992,6 +989,28 @@ class InventoryPresenter extends PagePresenter
         return (string) $content;
     }
 
+    /** Match all search words against the displayed cells of an inventory row. */
+    public static function matchesSearch(array $values, string $search): bool
+    {
+        $words = preg_split('/\s+/', trim(StringUtils::strToLower(
+            htmlspecialchars_decode($search, ENT_QUOTES | ENT_HTML5)
+        )), -1, PREG_SPLIT_NO_EMPTY);
+        if ($words === []) {
+            return true;
+        }
+
+        // Match visible cell text, excluding links, UUIDs and action metadata.
+        $text = StringUtils::strToLower(html_entity_decode(
+            implode(' ', StringUtils::strStripTags($values)), ENT_QUOTES | ENT_HTML5, 'UTF-8'
+        ));
+        foreach ($words as $word) {
+            if (!StringUtils::strContains($text, $word)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Populate the inventory table with the data of the inventory items.
      * This method supports various output formats and fills the table based on the
@@ -1009,7 +1028,12 @@ class InventoryPresenter extends PagePresenter
      */
     public function prepareData(string $mode = 'html'): array
     {
-        global $gCurrentUser, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+        global $gCurrentUser, $gCurrentUserId, $gL10n, $gDb, $gCurrentOrganization, $gProfileFields, $gCurrentSession, $gSettingsManager;
+
+        // The paginated HTML list only needs field definitions. Load all items for exports
+        // and print views here. Their search must also match formatted field values, which
+        // cannot be excluded by a search over raw database values before formatting.
+        $this->itemsData->readItems();
 
         // Initialize the result array
         $preparedData = array(
@@ -1030,7 +1054,9 @@ class InventoryPresenter extends PagePresenter
 
         $rows = array();
         $strikethroughs = array();
-        $actionsHeaderAdded = false;
+        $canUseBulkActions = $gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit($gCurrentUserId);
+        $actionsHeaderAdded = $mode === 'html'
+            && ($canUseBulkActions || InventoryAccessService::canRequestReservation());
 
         $this->itemsData->preloadItemData(array_column($this->itemsData->getItems(), 'ini_uuid'));
 
@@ -1062,7 +1088,9 @@ class InventoryPresenter extends PagePresenter
 
                 if ($columnNumber === 1) {
                     if ($mode === 'html') {
-                        $rowValues['data'][] = ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? '<input type="checkbox"/>' : '';
+                        if ($canUseBulkActions) {
+                            $rowValues['data'][] = $this->itemsData->isEditable() ? '<input type="checkbox"/>' : '';
+                        }
                         if ($gSettingsManager->GetBool('inventory_item_picture_enabled')) {
                             $itemPhotoUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show', 'item_uuid' => $item['ini_uuid']));
                             $itemPhotoModalUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_picture_show_modal', 'item_uuid' => $item['ini_uuid']));
@@ -1122,6 +1150,10 @@ class InventoryPresenter extends PagePresenter
                 $columnNumber++;
             }
 
+            if (!self::matchesSearch($rowValues['data'], $this->getFilterString)) {
+                continue;
+            }
+
             // Append admin action column for HTML mode
             if ($mode === 'html') {
                 $historyButton = ChangelogService::displayHistoryButtonTable(
@@ -1132,6 +1164,14 @@ class InventoryPresenter extends PagePresenter
 
                 if (!empty($historyButton)) {
                     $rowValues['actions'][] = $historyButton;
+                }
+
+                if (!$this->itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
+                    $rowValues['actions'][] = [
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_request', 'item_uuid' => $item['ini_uuid']]),
+                        'icon' => 'bi bi-calendar-plus',
+                        'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST'),
+                    ];
                 }
 
                 if ($gCurrentUser->isAdministratorInventory() || $this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) {
@@ -1200,49 +1240,12 @@ class InventoryPresenter extends PagePresenter
                     }
 
                     // add actions column to header
-                    if (!$actionsHeaderAdded) {
-                        $actionsHeaderAdded = true;
-                        $preparedData['column_align'][] = 'end';
-                        $preparedData['headers'][] = '<span style="display:block; min-width:40px;">&nbsp;</span>';
-                    }
                 }
             }
 
-            // Filter rows based on filter string
-            $showRow = true;
-
-            if ($mode !== 'html') {
-                $showRow = ($this->getFilterString === '');
-                if ($this->getFilterString !== '') {
-                    $showRowException = false;
-                    $filterArray = array_map('trim', explode(',', $this->getFilterString));
-                    $filterColumnValues = array_map(function ($value) {
-                        $parts = explode(',', $value);
-                        return count($parts) > 1 ? implode(',', array_slice($parts, 0, 2)) : $value;
-                    }, $rowValues);
-
-                    foreach ($filterArray as $filterString) {
-                        if (str_contains($filterString, '-')) {
-                            $cleanFilter = substr($filterString, 1);
-                            if (stripos(implode('', $filterColumnValues), $cleanFilter) !== false) {
-                                $showRowException = true;
-                            }
-                        }
-                        if (stripos(implode(' ', $filterColumnValues), $filterString) !== false) {
-                            $showRow = true;
-                        }
-                    }
-                    if ($showRowException) {
-                        $showRow = false;
-                    }
-                }
-            }
-
-            if ($showRow) {
-                $rows[] = $rowValues;
-                if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
-                    $strikethroughs[] = $strikethrough;
-                }
+            $rows[] = $rowValues;
+            if (in_array($mode, ['csv', 'xlsx', 'ods'])) {
+                $strikethroughs[] = $strikethrough;
             }
         }
 
@@ -1253,13 +1256,6 @@ class InventoryPresenter extends PagePresenter
                     if (!isset($row['actions'])) {
                         $row['actions'] = array();
                     }
-                }
-            } else {
-                // remove the checkbox column alignment and header if no action column was added
-                array_shift($preparedData['column_align']);
-                array_shift($preparedData['headers']);
-                foreach ($rows as &$row) {
-                    array_shift($row['data']);
                 }
             }
         }

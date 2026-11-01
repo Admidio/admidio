@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Utils\StringUtils;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Changelog\Entity\LogChanges;
 
 /**
@@ -212,7 +213,7 @@ class ItemField extends Entity
                                     $optionValueText = Language::translateIfTranslationStrId($optionValueText);
 
                                     if ($format === 'html') {
-                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . $optionValueText;
+                                        $option['value'] = Image::getIconHtml($optionValueImage, $optionValueText) . ' ' . SecurityUtils::encodeHTML($optionValueText);
                                     } else {
                                         // if no image is wanted then return the text part or only the position of the entry
                                         if (str_contains($option['value'], '|')) {

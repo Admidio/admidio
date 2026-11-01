@@ -363,12 +363,10 @@ class Database
      */
     public function registerAfterCommit(callable $callback): void
     {
-        if ($this->transactions === 0) {
-            $callback();
-            return;
-        }
-
         $this->afterCommitCallbacks[] = $callback;
+        if ($this->transactions === 0) {
+            $this->runAfterCommitCallbacks();
+        }
     }
 
     /**
@@ -416,7 +414,6 @@ class Database
                 if ($gLogger instanceof \Psr\Log\LoggerInterface) {
                     $gLogger->error('DATABASE: after-commit callback failed', array('exception' => $exception));
                 }
-                throw $exception;
             }
         }
     }

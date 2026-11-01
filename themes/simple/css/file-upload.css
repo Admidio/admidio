@@ -1,0 +1,62 @@
+/**
+ ***********************************************************************************************
+ * Styles of the upload of files and photos (system/js/file-upload.js): drop zone, correction of invalid file
+ * names and the overlay of the folder page. The file is only loaded on pages with an upload.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ ***********************************************************************************************
+ */
+
+/* the drop zone: Bootstrap has no utility class for the dashed frame and the states while dragging */
+.admidio-dropzone {
+  border: 2px dashed var(--bs-border-color);
+  cursor: pointer;
+  transition: border-color .2s ease-in-out, background-color .2s ease-in-out;
+}
+
+.admidio-dropzone:hover,
+.admidio-dropzone:focus-visible,
+.admidio-dropzone.dragover {
+  border-color: var(--bs-primary);
+}
+
+.admidio-dropzone:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+}
+
+.admidio-dropzone.dragover {
+  border-style: solid;
+  background-color: var(--bs-primary-bg-subtle) !important;
+}
+
+/* the icon keeps its size on small screens, the font size classes of Bootstrap become smaller there */
+.admidio-dropzone-icon {
+  font-size: 3rem;
+}
+
+/* only the button reacts to the mouse, the rest of the content is part of the drop zone */
+.admidio-dropzone-content > *:not(.fileinput-button) {
+  pointer-events: none;
+}
+
+/* the upload of a file with an invalid name is only possible after the name was corrected */
+.admidio-icon-link.btn-upload-single.disabled {
+  opacity: .4;
+  pointer-events: none;
+}
+
+/* the overlay of the folder page while files are dragged over the page, above the dialogs of Bootstrap */
+.admidio-folder-drop-overlay {
+  z-index: 1060;
+  background-color: rgba(var(--bs-dark-rgb), .75);
+  backdrop-filter: blur(4px);
+}
+
+.admidio-folder-drop-overlay-box {
+  max-width: 90%;
+  border: 3px dashed var(--bs-primary);
+  pointer-events: none;
+}
