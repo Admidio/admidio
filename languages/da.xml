@@ -574,7 +574,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Kunne ikke slette kategorien #VAR1_BOLD# fordi den indeholder #VAR2# afhængige data.</string>
   <string name="SYS_DONT_SHOW">Vis ikke</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download sikkerhedskopiering af database</string>
   <string name="SYS_DOWNLOAD_FILE">Download fil</string>
   <string name="SYS_DOWNLOAD_ICAL">Hent iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download foto</string>
@@ -1304,7 +1303,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio kræver #VAR1# eller højere</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Vælg</string>
-  <string name="SYS_PLUGIN_ADD">Tilføj plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">Plugin\'et #VAR1# er allerede der. Dens filer erstattes kun, hvis det eksplicit blev bedt om.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">Plugin\'et #VAR1# er allerede installeret.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">Arkivet kunne ikke skrives til #VAR1#.</string>

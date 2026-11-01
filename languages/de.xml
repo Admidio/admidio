@@ -594,15 +594,7 @@
   <string name="SYS_CORE_UPDATE_START_DESC">Der Updater prüft, welche Version verfügbar ist und ob dieser Server dafür bereit ist. Es wird nichts verändert, bevor du bestätigst.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Update starten oder fortsetzen</string>
   <string name="SYS_CORE_UPDATE_STEPS">Schritte des Updates</string>
-  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Datenbank sichern</string>
-  <string name="SYS_CORE_UPDATE_STEP_CHECK">Voraussetzungen prüfen</string>
-  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Datenbank aktualisieren</string>
   <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Update herunterladen</string>
-  <string name="SYS_CORE_UPDATE_STEP_FINISH">Abschließen</string>
-  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Dateien ersetzen</string>
-  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Dateien entpacken und vergleichen</string>
-  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Vorherige Version wiederherstellen</string>
-  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Änderungen prüfen</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio wurde auf Version #VAR1# aktualisiert.</string>
   <string name="SYS_CORE_UPDATE_TARGET">Neue Version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio-Update</string>
@@ -762,7 +754,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Datenbank-Backup herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
   <string name="SYS_DOWNLOAD_ICAL">iCal herunterladen</string>
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
@@ -1508,7 +1499,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
-  <string name="SYS_PLUGIN_ADD">Plugin hinzufügen</string>
   <string name="SYS_PLUGIN_ADD_FROM_DIRECTORY">Aus dem Plugin-Verzeichnis hinzufügen</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">Das Plugin #VAR1# ist bereits vorhanden. Seine Dateien werden nur ersetzt, wenn dies ausdrücklich angefordert wurde.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">Das Plugin #VAR1# ist bereits installiert.</string>

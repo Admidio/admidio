@@ -595,15 +595,7 @@
   <string name="SYS_CORE_UPDATE_START_DESC">The updater checks which version is available and whether this server is ready for it. Nothing is changed before you confirm.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Start or continue update</string>
   <string name="SYS_CORE_UPDATE_STEPS">Steps of the update</string>
-  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Back up database</string>
-  <string name="SYS_CORE_UPDATE_STEP_CHECK">Check requirements</string>
-  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Update database</string>
   <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Download update</string>
-  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finish</string>
-  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Replace files</string>
-  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Unpack and compare files</string>
-  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Restore previous version</string>
-  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Review changes</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio has been updated to version #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_TARGET">New version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio update</string>
@@ -763,7 +755,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">The category #VAR1_BOLD# could not be deleted because #VAR2# entries depend on it.</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
@@ -1524,7 +1515,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ADD_FROM_DIRECTORY">Add from plugin directory</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>

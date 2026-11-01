@@ -574,7 +574,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Nu s-a putut șterge categoria #VAR1_BOLD# din cauza intrărilor dependente #VAR2#.</string>
   <string name="SYS_DONT_SHOW">Nu afișați</string>
   <string name="SYS_DOWNLOAD_ALBUM">Descarcă album foto</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Descărcați copia de rezervă a bazei de date</string>
   <string name="SYS_DOWNLOAD_FILE">Descarcă fișier</string>
   <string name="SYS_DOWNLOAD_ICAL">Descarcă iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Descarcă fotografie</string>
@@ -1304,7 +1303,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio necesită #VAR1# sau o versiune superioară</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Selectați opțiunea</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>

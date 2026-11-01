@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Det går inte att ta bort kategorin #VAR1_BOLD# på grund av #VAR2# beroende poster.</string>
   <string name="SYS_DONT_SHOW">Visa inte</string>
   <string name="SYS_DOWNLOAD_ALBUM">Ladda ner album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Ladda ner fil</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Ladda ner foto</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio kräver #VAR1# eller högre</string>
   <string name="SYS_PIPE">Rör (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Välj alternativ</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>

@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Não foi possível eliminar a categoria #VAR1_BOLD#, pois existem #VAR2# entradas que dependem dela.</string>
   <string name="SYS_DONT_SHOW">Não mostrar</string>
   <string name="SYS_DOWNLOAD_ALBUM">Transferir álbum</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Transferir ficheiro</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Transferir fotografia</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requer versão #VAR1# ou superior</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Selecionar opção</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>

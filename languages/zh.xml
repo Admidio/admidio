@@ -569,7 +569,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">无法删除类别 #VAR1_BOLD# 因为其含有子类别#VAR2# 。</string>
   <string name="SYS_DONT_SHOW">不显示</string>
   <string name="SYS_DOWNLOAD_ALBUM">下载相册</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">下载数据库备份</string>
   <string name="SYS_DOWNLOAD_FILE">下载文件</string>
   <string name="SYS_DOWNLOAD_ICAL">下载 iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">下载照片</string>
@@ -1299,7 +1298,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio 需要 #VAR1# 或更高版本</string>
   <string name="SYS_PIPE">竖线 (|)</string>
   <string name="SYS_PLEASE_CHOOSE">请选择</string>
-  <string name="SYS_PLUGIN_ADD">添加插件</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">插件 #VAR1# 已存在。只有明确要求替换时，才会替换其文件。</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">插件 #VAR1# 已安装。</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">无法将压缩包写入 #VAR1#。</string>

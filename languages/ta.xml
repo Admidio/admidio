@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">#VAR1_BOLD# வகையை நீக்க முடியவில்லை, ஏனெனில் #VAR2# சார்ந்த உள்ளீடுகள்.</string>
   <string name="SYS_DONT_SHOW">காட்ட வேண்டாம்</string>
   <string name="SYS_DOWNLOAD_ALBUM">ஆல்பத்தைப் பதிவிறக்கு</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">தரவுத்தள காப்புப்பிரதியைப் பதிவிறக்கு</string>
   <string name="SYS_DOWNLOAD_FILE">கோப்பைப் பதிவிறக்கு</string>
   <string name="SYS_DOWNLOAD_ICAL">iCal ஐப் பதிவிறக்கு</string>
   <string name="SYS_DOWNLOAD_PHOTO">புகைப்படத்தைப் பதிவிறக்கு</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">அட்மிடியோ-க்கு #VAR1# அல்லது அதற்கு மேற்பட்ட பதிப்பு தேவை</string>
   <string name="SYS_PIPE">பைப்பு (|)</string>
   <string name="SYS_PLEASE_CHOOSE">விருப்பத்தைத் தேர்ந்தெடுக்கவும்</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>

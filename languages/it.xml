@@ -571,7 +571,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Non è possibile cancellare la categoria #VAR1_BOLD# perché a #VAR2# sono associati degli inserimenti.</string>
   <string name="SYS_DONT_SHOW">Non visualizzare</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
@@ -1301,7 +1300,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio richiede #VAR1# o più alto</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Seleziona l\'opzione</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>

@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Nie można usunąć kategorii #VAR1_BOLD# z powodu #VAR2# zależnych wpisów.</string>
   <string name="SYS_DONT_SHOW">Nie wyświetlaj</string>
   <string name="SYS_DOWNLOAD_ALBUM">Pobierz album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Pobierz kopię zapasową bazy danych</string>
   <string name="SYS_DOWNLOAD_FILE">Pobierz plik</string>
   <string name="SYS_DOWNLOAD_ICAL">Pobierz iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Pobierz zdjęcie</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio wymaga #VAR1# lub wyższej</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Wybierz opcję</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>

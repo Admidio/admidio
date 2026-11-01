@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Не удалось удалить категорию #VAR1_BOLD#, потому что в ней есть записи, зависящие от #VAR2#.</string>
   <string name="SYS_DONT_SHOW">Не отображать</string>
   <string name="SYS_DOWNLOAD_ALBUM">Скачать альбом</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Скачать файл</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Скачать фотографию</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Для Admidio требуется #VAR1# или выше</string>
   <string name="SYS_PIPE">Вертикальная черта (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Выбрать вариант</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
