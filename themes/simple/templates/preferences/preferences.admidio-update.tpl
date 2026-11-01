@@ -10,6 +10,20 @@
         </div>
     </div>
 </div>
+{if $availableUpdate != ''}
+    <div class="admidio-form-group admidio-form-custom-content row mb-3">
+        <label class="col-sm-3 col-form-label">
+            {$l10n->get('SYS_UPDATE_AVAILABLE')}
+        </label>
+        <div class="col-sm-9">
+            <div>
+                <p>{$l10n->get('SYS_UPDATE_NOTICE', array($availableUpdate))}</p>
+                <a class="btn btn-primary" id="adm_start_core_update" href="{$coreUpdateUrl}">
+                    <i class="bi bi-arrow-repeat"></i>{$l10n->get('SYS_CORE_UPDATE_START')}</a>
+            </div>
+        </div>
+    </div>
+{/if}
 <div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label for="lastUpdateStep" class="col-sm-3 col-form-label">
         {$l10n->get('ORG_LAST_UPDATE_STEP')}
@@ -20,20 +34,6 @@
         </div>
     </div>
 </div>
-{if $databaseType == 'mysql' || $databaseType == 'mariadb'}
-    <div class="admidio-form-group admidio-form-custom-content row mb-3">
-        <label class="col-sm-3 col-form-label">
-            {$l10n->get('SYS_DATABASE_BACKUP')}
-        </label>
-        <div class="col-sm-9">
-            <div>
-                <a class="btn btn-secondary admidio-send-csrf-token" id="add_another_organization" data-url="{$backupUrl}" data-csrf-token="{$csrfToken}">
-                    <i class="bi bi-download"></i>{$l10n->get('SYS_DOWNLOAD_DATABASE_BACKUP')}</a>
-                <div class="form-text">{$l10n->get('SYS_DATABASE_BACKUP_DESC')}</div>
-            </div>
-        </div>
-    </div>
-{/if}
 <div class="admidio-form-group admidio-form-custom-content row mb-3">
     <label class="col-sm-3 col-form-label">
         {$l10n->get('SYS_DONATE')}
