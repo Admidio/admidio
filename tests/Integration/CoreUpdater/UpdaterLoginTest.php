@@ -48,10 +48,11 @@ final class UpdaterLoginTest extends DatabaseTestCase
     }
 
     /**
-     * A user with a password, optionally a member of a role with or without administrator rights.
+     * A user with a password, optionally a member of a role with or without administrator rights, in
+     * the given organization or the first one.
      * @return int The user ID.
      */
-    private function createUser(string $loginName, ?bool $administratorRole, string $membershipEnd = '9999-12-31'): int
+    private function createUser(string $loginName, ?bool $administratorRole, string $membershipEnd = '9999-12-31', int $orgId = 0): int
     {
         $fixture = new AdmidioTestFixture($this->getDatabase());
         $userId = $fixture->createAndSaveUser($loginName, $loginName . '@test.local')['usr_id'];
@@ -61,7 +62,7 @@ final class UpdaterLoginTest extends DatabaseTestCase
         );
 
         if ($administratorRole !== null) {
-            $orgId = (int)$this->getDatabase()->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();
+            $orgId = $orgId > 0 ? $orgId : (int)$this->getDatabase()->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();
             $roleId = $fixture->createAndSaveRole('Updater test role ' . $loginName, $orgId)['rol_id'];
             $this->getDatabase()->queryPrepared(
                 'UPDATE ' . TBL_ROLES . ' SET rol_administrator = ? WHERE rol_id = ?',
@@ -202,6 +203,45 @@ final class UpdaterLoginTest extends DatabaseTestCase
         // Admidio 4.x has no such column; a table that cannot be read counts the same. Last, because on
         // PostgreSQL a failed statement ends the transaction of the test.
         $this->assertFalse(U\twoFactorInUse($this->pdo, 'zz_no_such_prefix'));
+    }
+
+    /**
+     * @testdox The organization in which the user is an administrator decides about the security code, not the first one
+     */
+    public function testSecurityCodeOfTheAdministratorsOrganization(): void
+    {
+        $firstOrgId = (int)$this->getDatabase()->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $secondOrgId = $fixture->createAndSaveOrganization('Updater second', 'UPD2')['org_id'];
+        $setPreference = fn(int $orgId, string $value) => $this->getDatabase()->queryPrepared(
+            'INSERT INTO ' . TBL_PREFERENCES . ' (prf_org_id, prf_name, prf_value) VALUES (?, ?, ?)',
+            array($orgId, 'two_factor_authentication_enabled', $value));
+        $this->getDatabase()->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_name = ?', array('two_factor_authentication_enabled'));
+        $setPreference($firstOrgId, '0');
+        $setPreference($secondOrgId, '1');
+
+        $secret = 'JBSWY3DPEHPK3PXP';
+        $userId = $this->createUser('updater_tfa_org2', true, '9999-12-31', $secondOrgId);
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_USERS . ' SET usr_tfa_secret = ? WHERE usr_id = ?', array($secret, $userId));
+        $this->assertTrue(U\twoFactorInUse($this->pdo, TABLE_PREFIX), 'the form asks for the code');
+        $this->assertRefused('updater_tfa_org2', self::PASSWORD, 'administrator of the second organization without a code');
+
+        $now = time();
+        $code = U\totpCode(U\decodeBase32($secret), intdiv($now, 30), 6);
+        $this->assertSame($userId, $this->authenticate('updater_tfa_org2', self::PASSWORD, $code, $now));
+
+        // An administrator of both organizations needs the code as well.
+        $bothId = $this->createUser('updater_tfa_both', true, '9999-12-31', $secondOrgId);
+        $roleId = $fixture->createAndSaveRole('Updater test role first org', $firstOrgId)['rol_id'];
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_ROLES . ' SET rol_administrator = ? WHERE rol_id = ?', array(true, $roleId));
+        $fixture->assignUserToRole($bothId, $roleId, '2020-01-01');
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_USERS . ' SET usr_tfa_secret = ? WHERE usr_id = ?', array($secret, $bothId));
+        $this->assertRefused('updater_tfa_both', self::PASSWORD, 'administrator of both organizations without a code');
+
+        // Only the administrator of the first organization logs in without it.
+        $firstId = $this->createUser('updater_tfa_org1', true, '9999-12-31', $firstOrgId);
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_USERS . ' SET usr_tfa_secret = ? WHERE usr_id = ?', array($secret, $firstId));
+        $this->assertSame($firstId, $this->authenticate('updater_tfa_org1', self::PASSWORD, '', time()));
     }
 
     /**

@@ -8,7 +8,8 @@
  * the hash formats Admidio uses (an MD5 hash of a very old version is refused with the hint to log
  * in to Admidio once), the code of the authenticator app when two-factor authentication is set up
  * (RFC 6238: SHA-1, 6 digits, 30 seconds, one step tolerance), that Admidio has not locked the
- * account, and an active membership in a role with administrator rights in any organization.
+ * account, and an active membership in a role with administrator rights in any organization. The
+ * code is asked for if one of these organizations uses two-factor authentication.
  *
  * Every failure says the same thing; every attempt is written to login.log; after
  * MAX_LOGIN_FAILURES failures within LOGIN_WINDOW seconds no login is accepted for LOGIN_BLOCK
@@ -50,7 +51,7 @@ function authenticateAdministrator(PDO $pdo, string $tablePrefix, string $direct
         throw new UpdaterException('SYS_CORE_UPDATE_LOGIN_BLOCKED');
     }
 
-    // Without two-factor authentication in use there is no secret to read and no code to ask for.
+    // Without two-factor authentication in use anywhere there is no secret to read.
     $twoFactor = twoFactorInUse($pdo, $tablePrefix);
     $user = $loginName === '' ? null : dbRow($pdo,
         'SELECT usr_id, usr_password, ' . ($twoFactor ? 'usr_tfa_secret, ' : '') . 'usr_number_invalid, usr_date_invalid FROM ' . $tablePrefix . '_users
@@ -62,12 +63,17 @@ function authenticateAdministrator(PDO $pdo, string $tablePrefix, string $direct
         throw new UpdaterException('SYS_CORE_UPDATE_LOGIN_OUTDATED_PASSWORD');
     }
 
+    // The organizations whose administrator the user is decide whether the code is required, not
+    // only the first organization.
+    $organizations = $password === 'valid' ? administratorOrganizations($pdo, $tablePrefix, (int)$user['usr_id'], $now) : array();
+    $secret = $twoFactor && twoFactorInUse($pdo, $tablePrefix, $organizations) ? (string)($user['usr_tfa_secret'] ?? '') : '';
+
     $reason = match (true) {
         $password !== 'valid' => 'wrong login name or password',
-        !verifyTotp((string)($user['usr_tfa_secret'] ?? ''), $totpCode, $now) => 'wrong security code',
+        !verifyTotp($secret, $totpCode, $now) => 'wrong security code',
         // Admidio's own lock: 3 wrong passwords within 15 minutes (User::hasMaxInvalidLogins())
         (int)($user['usr_number_invalid'] ?? 0) >= 3 && (int)strtotime((string)$user['usr_date_invalid']) > $now - 900 => 'account locked by Admidio',
-        !isAdministrator($pdo, $tablePrefix, (int)$user['usr_id'], $now) => 'no administrator',
+        $organizations === array() => 'no administrator',
         default => ''
     };
 
@@ -84,11 +90,13 @@ function authenticateAdministrator(PDO $pdo, string $tablePrefix, string $direct
 }
 
 /**
- * Whether the login asks for the code of an authenticator app: the users have a secret for it
- * (Admidio 4.x has none, two-factor authentication came with 5.0) and the preference
- * two_factor_authentication_enabled does not switch it off, like User::checkLogin() of Admidio.
+ * Whether the login asks for the code of an authenticator app in at least one of the organizations:
+ * the users have a secret for it (Admidio 4.x has none, two-factor authentication came with 5.0) and
+ * the preference two_factor_authentication_enabled of the organization does not switch it off, like
+ * User::checkLogin() of Admidio.
+ * @param list<int>|null $organizations The organizations to check, null for all of them.
  */
-function twoFactorInUse(PDO $pdo, string $tablePrefix): bool
+function twoFactorInUse(PDO $pdo, string $tablePrefix, ?array $organizations = null): bool
 {
     try {
         $pdo->query('SELECT usr_tfa_secret FROM ' . $tablePrefix . '_users WHERE 1 = 0');
@@ -97,14 +105,23 @@ function twoFactorInUse(PDO $pdo, string $tablePrefix): bool
     }
 
     try {
-        $row = dbRow($pdo, 'SELECT prf_value FROM ' . $tablePrefix . '_preferences WHERE prf_name = ?
-            AND prf_org_id = (SELECT MIN(org_id) FROM ' . $tablePrefix . '_organizations)', array('two_factor_authentication_enabled'));
+        $statement = $pdo->prepare('SELECT org_id, prf_value FROM ' . $tablePrefix . '_organizations
+            LEFT JOIN ' . $tablePrefix . '_preferences ON prf_org_id = org_id AND prf_name = ?');
+        $statement->execute(array('two_factor_authentication_enabled'));
+        $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
     } catch (\Throwable) {
         return true;
     }
 
     // Only a preference that says no switches it off; without one, as with Admidio, it is in use.
-    return $row === null || filter_var((string)$row['prf_value'], FILTER_VALIDATE_BOOLEAN);
+    $switchedOff = array();
+    foreach ($rows as $row) {
+        if ($row['prf_value'] !== null && !filter_var((string)$row['prf_value'], FILTER_VALIDATE_BOOLEAN)) {
+            $switchedOff[] = (int)$row['org_id'];
+        }
+    }
+
+    return array_diff($organizations ?? array_map('intval', array_column($rows, 'org_id')), $switchedOff) !== array();
 }
 
 /**
@@ -186,16 +203,20 @@ function decodeBase32(string $value): string
     return $bytes;
 }
 
-/** Whether the user is an active member of a role with administrator rights, in any organization. */
-function isAdministrator(PDO $pdo, string $tablePrefix, int $userId, int $now): bool
+/**
+ * The organizations in which the user is an active member of a role with administrator rights.
+ * @return list<int> Empty if the user is no administrator.
+ */
+function administratorOrganizations(PDO $pdo, string $tablePrefix, int $userId, int $now): array
 {
     $today = date('Y-m-d', $now);
-    $row = dbRow($pdo, 'SELECT COUNT(*) AS administrator FROM ' . $tablePrefix . '_members
+    $statement = $pdo->prepare('SELECT DISTINCT cat_org_id FROM ' . $tablePrefix . '_members
         INNER JOIN ' . $tablePrefix . '_roles ON rol_id = mem_rol_id
-        WHERE mem_usr_id = ? AND mem_begin <= ? AND mem_end > ? AND rol_valid = true AND rol_administrator = true',
-        array($userId, $today, $today));
+        INNER JOIN ' . $tablePrefix . '_categories ON cat_id = rol_cat_id
+        WHERE mem_usr_id = ? AND mem_begin <= ? AND mem_end > ? AND rol_valid = true AND rol_administrator = true');
+    $statement->execute(array($userId, $today, $today));
 
-    return (int)($row['administrator'] ?? 0) > 0;
+    return array_map('intval', $statement->fetchAll(PDO::FETCH_COLUMN));
 }
 
 /** The time until which logins are blocked, or 0. */
