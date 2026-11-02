@@ -49,6 +49,7 @@ use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Admidio\UI\Presenter\OIDCConsentPresenter;
 use Admidio\UI\Presenter\OIDCLogoutPresenter;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
+use Admidio\SSO\Grants\ClientCredentials;
 use Admidio\SSO\Grants\OIDCRefreshTokenGrant;
 use Admidio\SSO\Service\KeyService;
 
@@ -1408,10 +1409,9 @@ class OIDCService extends SSOService {
                 return null;
             }
 
-            [$clientId, $clientSecret] = explode(':', $decodedCredentials, 2);
-
-            $clientId = urldecode($clientId);
-            $clientSecret = urldecode($clientSecret);
+            [$clientId, $clientSecret] = ClientCredentials::normalizeBasicCredentials(
+                ...explode(':', $decodedCredentials, 2)
+            );
         } elseif ($usesPostAuthentication) {
             $clientId = $requestBody['client_id'] ?? null;
             $clientSecret = $requestBody['client_secret'] ?? null;
@@ -1480,8 +1480,7 @@ class OIDCService extends SSOService {
         if (strncasecmp($authorizationHeader, 'Basic ', 6) === 0) {
             $decoded = base64_decode(trim(substr($authorizationHeader, 6)), true);
             if ($decoded !== false && str_contains($decoded, ':')) {
-                [$clientId] = explode(':', $decoded, 2);
-                $clientId = urldecode($clientId);
+                [$clientId] = ClientCredentials::normalizeBasicCredentials(...explode(':', $decoded, 2));
                 if ($clientId !== '') {
                     return $clientId;
                 }
