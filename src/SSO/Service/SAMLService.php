@@ -59,6 +59,7 @@ class SAMLService extends SSOService {
      */
     public const AUTHN_CONTEXT_TIME_SYNC_TOKEN = 'urn:oasis:names:tc:SAML:2.0:ac:classes:TimeSyncToken';
     public const AUTHN_CONTEXT_PREVIOUS_SESSION = 'urn:oasis:names:tc:SAML:2.0:ac:classes:PreviousSession';
+    public const STATUS_UNKNOWN_PRINCIPAL = 'urn:oasis:names:tc:SAML:2.0:status:UnknownPrincipal';
 
     private $idpEntityId;
     private $ssoUrl;
@@ -559,6 +560,51 @@ class SAMLService extends SSOService {
     }
 
     /**
+     * Check that the principal an AuthnRequest names in its Subject is the logged-in user.
+     *
+     * A service provider may name the identity it wants an assertion for (SAML Profiles 4.1.4.1);
+     * if the identity provider does not recognise the principal as that identity it must answer
+     * with an error and no assertion. Being forgiving about how the service provider knows the
+     * user, the NameID may be the identifier that would be issued or any of login name, UUID
+     * and e-mail address of the user, compared case-insensitively. Only the user themselves can
+     * be named, so this loosens nothing. Formats that carry no identity (entity, transient)
+     * are not checked.
+     *
+     * @param AuthnRequest $request The AuthnRequest
+     * @param string $issuedNameIDValue The NameID value that would be issued to the user
+     * @throws SAMLRequestException If the request names another principal
+     */
+    private function verifyRequestedSubject(AuthnRequest $request, string $issuedNameIDValue): void
+    {
+        $requestedNameID = $request->getSubject()?->getNameID();
+        if ($requestedNameID === null) {
+            return;
+        }
+
+        $requestedFormat = (string) $requestedNameID->getFormat();
+        if (in_array($requestedFormat, [SamlConstants::NAME_ID_FORMAT_ENTITY, SamlConstants::NAME_ID_FORMAT_TRANSIENT], true)) {
+            return;
+        }
+
+        $requested = trim((string) $requestedNameID->getValue());
+        $known = [$issuedNameIDValue];
+        foreach (['usr_login_name', 'usr_uuid', 'EMAIL'] as $field) {
+            $known[] = (string) ($this->currentUser->getValue($field) ?? '');
+        }
+
+        foreach ($known as $identifier) {
+            if ($identifier !== '' && strcasecmp($identifier, $requested) === 0) {
+                return;
+            }
+        }
+
+        throw new SAMLRequestException(
+            'The AuthnRequest names a principal other than the logged-in user.',
+            [SamlConstants::STATUS_REQUESTER, self::STATUS_UNKNOWN_PRINCIPAL]
+        );
+    }
+
+    /**
      * Determine the value of the NameID that is sent to a client.
      *
      * @param SAMLClient $client
@@ -913,6 +959,7 @@ class SAMLService extends SSOService {
 
             $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
             $nameIDValue = $this->getNameIDValue($client, $nameIDPolicy['format']);
+            $this->verifyRequestedSubject($request, $nameIDValue);
 
             // Set up validity periods for the assertions and confirmationData -> Use allowed clock skew and assertion lifetime
             $issueInstant = new \DateTime();
