@@ -511,7 +511,7 @@ class SAMLService extends SSOService {
         $signatureReader = $message->getSignature();
         if (is_null($signatureReader)) {
             if ($required) {
-                throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_MISSING'));
+                throw new SAMLRequestException($gL10n->get('SYS_SSO_SAML_SIGNATURE_MISSING'));
             } else {
                 return false;
             }
@@ -521,12 +521,11 @@ class SAMLService extends SSOService {
             $ok = $signatureReader->validate($key);
             if ($ok) {
                 return true;
-            } else {
-                throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED'));
             }
         } catch (Exception) {
-            throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED'));
+            // handled like an invalid signature
         }
+        throw new SAMLRequestException($gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED'));
     }
 
     /**
@@ -721,12 +720,12 @@ class SAMLService extends SSOService {
         // The HTTP Redirect and HTTP POST bindings require signed messages
         // to contain the endpoint to which the message was sent.
         if ($requestIsSigned && empty($destination)) {
-            throw new Exception('The signed SAML request does not contain a destination.');
+            throw new SAMLRequestException('The signed SAML request does not contain a destination.');
         }
 
         // If Destination is supplied, it must identify this exact endpoint.
         if (!empty($destination) && !hash_equals($expectedDestination, $destination)) {
-            throw new Exception(
+            throw new SAMLRequestException(
                 'The destination in the SAML request ("' . $destination . '") '
                 . 'does not match the endpoint at which the request was received.'
             );
@@ -734,7 +733,7 @@ class SAMLService extends SSOService {
 
         $issueInstant = $request->getIssueInstantTimestamp();
         if (!is_int($issueInstant) || $issueInstant <= 0) {
-            throw new Exception('The SAML request does not contain a valid issue instant.');
+            throw new SAMLRequestException('The SAML request does not contain a valid issue instant.');
         }
 
         $allowedClockSkew = (int)($client->getValue('smc_allowed_clock_skew') ?? 0);
@@ -750,10 +749,10 @@ class SAMLService extends SSOService {
 
         $currentTimestamp = time();
         if ($issueInstant > $currentTimestamp + $allowedClockSkew) {
-            throw new Exception('The SAML request was issued in the future.');
+            throw new SAMLRequestException('The SAML request was issued in the future.');
         }
         if ($issueInstant < $currentTimestamp - $requestLifetime - $allowedClockSkew) {
-            throw new Exception('The SAML request has expired.');
+            throw new SAMLRequestException('The SAML request has expired.');
         }
 
     }
@@ -900,7 +899,7 @@ class SAMLService extends SSOService {
             // Validate ACS URL against registered client configuration
             $registeredACS = $client->getValue('smc_acs_url');
             if (!empty($clientACS) && $clientACS !== $registeredACS) {
-                throw new Exception(
+                throw new SAMLRequestException(
                     'The AssertionConsumerServiceURL in the AuthnRequest ("' . $clientACS . '") ' .
                     'does not match the registered ACS URL for this client. ' .
                     'Possible assertion theft attempt.'
@@ -1087,6 +1086,9 @@ class SAMLService extends SSOService {
                 $request,
                 $client
             );
+        } catch (SAMLRequestException $e) {
+            $gLogger->warning('The SAML request was rejected: ' . $e->getMessage(), array('client' => $client->getIdentifier()));
+            $this->errorResponse($e->getStatus(), $e->getMessage(), $request, $client);
         } catch (Exception $e) {
             $gLogger->error(
                 'Could not process the SAML request.',
@@ -1440,7 +1442,10 @@ class SAMLService extends SSOService {
             $gLogger->error($exception->getMessage());
             return $this->createRedirectResponse(
                 $this->createLogoutResponseUrl($initiatorClient, $request->getID(),
-                    $request->getRelayState(), SamlConstants::STATUS_RESPONDER)
+                    $request->getRelayState(),
+                    $exception instanceof SAMLRequestException
+                        ? $exception->getStatus()[0]
+                        : SamlConstants::STATUS_RESPONDER)
             );
         }
     }
