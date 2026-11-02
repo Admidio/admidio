@@ -302,6 +302,22 @@ class SAMLService extends SSOService {
     }
 
     /**
+     * The HTML page that posts a SAML message to the service provider (HTTP-POST binding).
+     *
+     * LightSAML writes the form method in lower case, SAML Bindings 3.5.4 says that it MUST be
+     * "POST" and some validators compare literally, so the form is corrected here.
+     *
+     * @param \LightSaml\Context\Profile\MessageContext $messageContext The context holding the message
+     * @return string
+     */
+    private function getPostBindingContent(\LightSaml\Context\Profile\MessageContext $messageContext): string
+    {
+        $content = (new HttpPostBinding())->send($messageContext)->getContent();
+
+        return str_replace('<form method="post"', '<form method="POST"', $content);
+    }
+
+    /**
      * Load and validate the keys used by the SAML identity provider.
      *
      * @return array
@@ -473,9 +489,7 @@ class SAMLService extends SSOService {
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $messageContext->setMessage($response);
 
-        $binding = new HttpPostBinding();
-        $httpResponse = $binding->send($messageContext);
-        print $httpResponse->getContent();
+        print $this->getPostBindingContent($messageContext);
     }
 
     /**
@@ -1117,14 +1131,13 @@ class SAMLService extends SSOService {
             $messageContext = new \LightSaml\Context\Profile\MessageContext();
             $messageContext->setMessage($response);
 
-            $binding = new HttpPostBinding();
-            $httpResponse = $binding->send($messageContext);
+            $postContent = $this->getPostBindingContent($messageContext);
 
             $this->saveSessionParticipant($client, (int) $gCurrentUser->getValue('usr_id'), 
                 (string) $nameID->getValue(), (string) $nameID->getFormat(), $nameID->getSPNameQualifier(),
                 $sessionIndex, $authnInstant, $sessionNotOnOrAfter);
 
-            print $httpResponse->getContent();
+            print $postContent;
         } catch (\InvalidArgumentException $exception) {
             $gLogger->error($exception->getMessage());
             $this->errorResponse(
