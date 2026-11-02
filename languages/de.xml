@@ -1957,6 +1957,8 @@
   <string name="SYS_SSO_EXPLANATION">Als Identity Provider ermöglicht es Admidio, dass sich Personen mit ihrem Admidio-Konto bei anderen Webanwendungen anmelden. Unterstützt werden die Protokolle SAML 2.0 und OpenID Connect (OIDC).</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Passwort für den Schlüsselexport</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Schütze den exportierten privaten Schlüssel mit einem Passwort. Dieses Passwort wird benötigt, um die Datei später wieder zu importieren. Bei einem leeren Passwort bleibt der Export ungeschützt. Davon wird dringend abgeraten.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Weiter</string>
+  <string name="SYS_SSO_FORM_POST_NOSCRIPT">In deinem Browser ist JavaScript nicht verfügbar. Klicke auf die Schaltfläche, um zur Anwendung weiterzugehen.</string>
   <string name="SYS_SSO_INVALID_CLIENT">Ungültiger Client</string>
   <string name="SYS_SSO_KEY">SSO-Schlüssel</string>
   <string name="SYS_SSO_KEYS">SSO-Schlüssel</string>
