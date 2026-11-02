@@ -1983,6 +1983,8 @@
   <string name="SYS_SSO_CLIENT_DELETE">Delete SSO client</string>
   <string name="SYS_SSO_CLIENT_ID">Client ID</string>
   <string name="SYS_SSO_CLIENT_ID_DESC">Unique client identifier. It must exactly match the value configured at the client. Typically the URL of the provider or a random string provided by the client.</string>
+  <string name="SYS_SSO_CLIENT_ID_EXISTS">The client ID #VAR1# is already used by the client “#VAR2#”. Please enter a different client ID.</string>
+  <string name="SYS_SSO_CLIENT_ID_EXISTS_OTHER_ORGA">The client ID #VAR1# is already used by a client of another organization. Please enter a different client ID.</string>
   <string name="SYS_SSO_CLIENT_NAME">Client name</string>
   <string name="SYS_SSO_CLIENT_NAME_DESC">Descriptive name shown only in Admidio.</string>
   <string name="SYS_SSO_CLIENT_OIDC">OIDC client</string>
