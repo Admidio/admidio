@@ -9,6 +9,8 @@
 
 namespace Admidio\SSO\Grants;
 
+use Admidio\SSO\Entity\IdTokenResponse;
+use Admidio\SSO\Entity\RefreshTokenEntity;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -37,7 +39,7 @@ class OIDCRefreshTokenGrant extends RefreshTokenGrant
 
         $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
 
-        $this->linkIssuedTokensToCodeOfExchangedToken();
+        $this->continueAuthenticationOfExchangedToken($responseType);
 
         return $responseType;
     }
@@ -56,19 +58,26 @@ class OIDCRefreshTokenGrant extends RefreshTokenGrant
     }
 
     /**
-     * Give the new tokens the authorization code of the refresh token they replace. A refresh
-     * token without a code (issued before the link existed) hands on nothing.
+     * Hand on what the authorization code of the exchanged refresh token stands for: the new
+     * tokens are linked to the code, and the ID token states the authentication the code
+     * recorded (auth_time, sid, acr, amr; OpenID Connect Core 12.2). A refresh token without a
+     * code (issued before the link existed) hands on nothing.
      */
-    private function linkIssuedTokensToCodeOfExchangedToken(): void
+    private function continueAuthenticationOfExchangedToken(ResponseTypeInterface $responseType): void
     {
         if ($this->exchangedRefreshTokenId === null || $this->exchangedRefreshTokenId === '') {
             return;
         }
 
         $oldRefreshToken = $this->refreshTokenRepository->getToken($this->exchangedRefreshTokenId);
-        $authCodeId = (int) $oldRefreshToken->getValue($oldRefreshToken->getColumnPrefix() . '_oac_id');
-        if ($authCodeId > 0) {
-            $this->linkIssuedTokensToCode($authCodeId);
+        $authCode = $oldRefreshToken instanceof RefreshTokenEntity ? $oldRefreshToken->getAuthCode() : null;
+
+        if ($authCode !== null) {
+            $this->linkIssuedTokensToCode((int) $authCode->getValue($authCode->getColumnPrefix() . '_id'));
+
+            if ($responseType instanceof IdTokenResponse) {
+                $responseType->setAuthenticationFromAuthCode($authCode, true);
+            }
         }
         $this->issuedTokens = array();
     }
