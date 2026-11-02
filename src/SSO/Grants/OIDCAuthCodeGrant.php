@@ -44,6 +44,9 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
     protected string $externalSessionId = '';
     protected array $authenticationMethods = array();
     protected ?string $authenticationContext = null;
+    /** Response modes the authorization endpoint answers with, as announced by the discovery document */
+    public const SUPPORTED_RESPONSE_MODES = array('query', 'form_post');
+
     /** Error code of the exception for a redirect URI that is not registered for the client */
     public const ERROR_REDIRECT_URI_NOT_REGISTERED = 1001;
 
@@ -97,6 +100,7 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
     private function rejectUnsupportedRequest(ServerRequestInterface $request): void
     {
         $responseType = $this->getQueryStringParameter('response_type', $request);
+        $responseMode = $this->getQueryStringParameter('response_mode', $request);
         $hasRequestObject = $this->getQueryStringParameter('request', $request) !== null;
         $hasRequestUri = $this->getQueryStringParameter('request_uri', $request) !== null;
 
@@ -113,7 +117,9 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         }
         $grantAllowed = $this->supportsGrantType($client, $this->getIdentifier());
 
-        if ($responseType === 'code' && !$hasRequestObject && !$hasRequestUri && $grantAllowed) {
+        $responseModeSupported = $responseMode === null || in_array($responseMode, self::SUPPORTED_RESPONSE_MODES, true);
+
+        if ($responseType === 'code' && !$hasRequestObject && !$hasRequestUri && $grantAllowed && $responseModeSupported) {
             return;
         }
 
@@ -147,6 +153,12 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
             throw new OAuthServerException('The client is not allowed to use the authorization code grant.',
                 9, 'unauthorized_client', 400,
                 'Enable the authorization code grant for client "' . $client->getIdentifier() . '".', $redirectUri);
+        }
+
+        if (!$responseModeSupported) {
+            throw new OAuthServerException('The authorization server does not support this response mode.',
+                3, 'invalid_request', 400,
+                'Supported response modes: ' . implode(', ', self::SUPPORTED_RESPONSE_MODES) . '.', $redirectUri);
         }
 
         if ($hasRequestObject) {

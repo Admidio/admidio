@@ -13,6 +13,7 @@ use Admidio\SSO\Repository\UserRepository;
 
 
 use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\ServerRequestFactory;
 
@@ -733,13 +734,121 @@ class OIDCService extends SSOService {
     }
 
     public function handleAuthorizationRequest(): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
+        global $gSettingsManager;
 
         if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
             throw new \Exception("SSO OIDC is not enabled");
         }
 
         $request = $this->getAuthorizationRequest();
+
+        return $this->applyResponseMode($request, $this->processAuthorizationRequest($request));
+    }
+
+    /**
+     * Send an authorization response the way the client asked for with response_mode.
+     *
+     * The authorization code (and every error) is a redirect to the redirect URI of the client
+     * with the parameters in the query ("query", the default for the code flow). With
+     * response_mode=form_post (OAuth 2.0 Form Post Response Mode) the parameters go to the client
+     * as the fields of a form that the browser posts to the redirect URI, so that they appear in
+     * neither the URL nor the browser history nor the logs of a server on the way.
+     */
+    private function applyResponseMode(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $queryParams = $request->getQueryParams();
+        if (($queryParams['response_mode'] ?? null) !== 'form_post') {
+            return $response;
+        }
+
+        $location = $response->getHeaderLine('Location');
+        if ($response->getStatusCode() < 300 || $response->getStatusCode() >= 400 || $location === '') {
+            return $response;
+        }
+
+        $redirectUri = $this->getRequestedRedirectUri($request);
+        $locationParts = explode('?', $location, 2);
+        $locationQuery = array();
+        parse_str($locationParts[1] ?? '', $locationQuery);
+
+        // The redirect URI may have a query of its own, which stays in the address the form is
+        // posted to; the parameters the authorization server added are the fields of the form.
+        $ownQuery = array();
+        parse_str((string) parse_url($redirectUri ?? '', PHP_URL_QUERY), $ownQuery);
+        $fields = array();
+        foreach ($locationQuery as $name => $value) {
+            if (!is_string($value) || (array_key_exists($name, $ownQuery) && $ownQuery[$name] === $value)) {
+                continue;
+            }
+            $fields[(string) $name] = $value;
+        }
+
+        return $this->createFormPostResponse($redirectUri ?? $locationParts[0], $fields);
+    }
+
+    /**
+     * The redirect URI an authorization request is answered with: the one it names, or the only
+     * one the client has registered.
+     */
+    private function getRequestedRedirectUri(ServerRequestInterface $request): ?string
+    {
+        $queryParams = $request->getQueryParams();
+        if (is_string($queryParams['redirect_uri'] ?? null) && $queryParams['redirect_uri'] !== '') {
+            return $queryParams['redirect_uri'];
+        }
+
+        if (!is_string($queryParams['client_id'] ?? null) || !isset($this->clientRepository)) {
+            return null;
+        }
+        $registered = $this->clientRepository->getClientEntity($queryParams['client_id'])?->getRedirectUri();
+        if (is_array($registered) && count($registered) === 1) {
+            $registered = reset($registered);
+        }
+
+        return is_string($registered) && $registered !== '' ? $registered : null;
+    }
+
+    /**
+     * A page whose form posts the fields to the redirect URI as soon as the browser has loaded
+     * it (OAuth 2.0 Form Post Response Mode), with a button for a browser without JavaScript.
+     *
+     * @param string $action The redirect URI of the client
+     * @param array<string,string> $fields The authorization response parameters
+     */
+    private function createFormPostResponse(string $action, array $fields): ResponseInterface
+    {
+        global $gL10n;
+
+        $inputs = '';
+        foreach ($fields as $name => $value) {
+            $inputs .= '<input type="hidden" name="' . SecurityUtils::encodeHTML($name)
+                . '" value="' . SecurityUtils::encodeHTML($value) . '" />' . "\n        ";
+        }
+
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admidio</title>
+</head>
+<body onload="document.forms[0].submit()">
+    <form method="POST" action="' . SecurityUtils::encodeHTML($action) . '">
+        ' . $inputs . '<noscript>
+            <p>' . SecurityUtils::encodeHTML($gL10n->get('SYS_SSO_FORM_POST_NOSCRIPT')) . '</p>
+            <button type="submit">' . SecurityUtils::encodeHTML($gL10n->get('SYS_SSO_FORM_POST_CONTINUE')) . '</button>
+        </noscript>
+    </form>
+</body>
+</html>
+';
+
+        // The page carries the authorization code, so it must not be cached
+        return new HtmlResponse($html, 200, array('Cache-Control' => 'no-store', 'Pragma' => 'no-cache'));
+    }
+
+    private function processAuthorizationRequest(ServerRequestInterface $request): ResponseInterface {
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
+
         $response = new Response();
         try {
             if (!$this->isServiceSetup) {
@@ -1177,7 +1286,7 @@ class OIDCService extends SSOService {
             "backchannel_logout_session_supported" => true,
             "scopes_supported" => OIDCClient::getSupportedScopes(),
             "response_types_supported" => ["code"],
-            "response_modes_supported" => ["query"],
+            "response_modes_supported" => ["query", "form_post"],
             "grant_types_supported" => ["authorization_code", "refresh_token"],
             "code_challenge_methods_supported" => ["S256"],
             "subject_types_supported" => ["public"],
