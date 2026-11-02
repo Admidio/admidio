@@ -28,7 +28,7 @@ class BirthdayInYearTest extends DatabaseTestCase
     private function birthdayInYear(string $birthday, string $referenceDate, int $yearOffset): string
     {
         $sql = 'SELECT ' . Birthday::getBirthdayInYearSql($this->getDatabase()->getEngine(), 'bd.usd_value', $yearOffset) . ' AS bdate
-                  FROM (SELECT CAST(? AS VARCHAR(10)) AS usd_value) AS bd';
+                  FROM (SELECT CAST(? AS CHAR(10)) AS usd_value) AS bd';
 
         // the placeholder of the reference date precedes the one of the birthday in the statement
         $bdate = (string) $this->getDatabase()->queryPrepared($sql, array($referenceDate, $birthday))->fetchColumn();
