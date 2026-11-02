@@ -37,6 +37,7 @@ use Admidio\SSO\Entity\IdTokenResponse;
 class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     use ClientCredentialsTrait;
+    use AuthCodeLinkTrait;
 
     protected ?string $nonce = null;
     protected ?int $authenticationTime = null;
@@ -45,9 +46,6 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
     protected ?string $authenticationContext = null;
     /** Error code of the exception for a redirect URI that is not registered for the client */
     public const ERROR_REDIRECT_URI_NOT_REGISTERED = 1001;
-
-    /** @var array<int,TokenEntity> Tokens issued by the current code exchange, linked to the code afterwards */
-    protected array $issuedTokens = array();
 
     public function __construct(
         AuthCodeRepositoryInterface $authCodeRepository,
@@ -203,39 +201,31 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         return $authCode;
     }
 
-    protected function issueAccessToken(
-        DateInterval $accessTokenTTL,
-        ClientEntityInterface $client,
-        string|null $userIdentifier,
-        array $scopes = []
-    ): AccessTokenEntityInterface {
-        $accessToken = parent::issueAccessToken($accessTokenTTL, $client, $userIdentifier, $scopes);
-        if ($accessToken instanceof TokenEntity) {
-            $this->issuedTokens[] = $accessToken;
-        }
-        return $accessToken;
-    }
-
-    protected function issueRefreshToken(AccessTokenEntityInterface $accessToken): ?RefreshTokenEntityInterface
-    {
-        $refreshToken = parent::issueRefreshToken($accessToken);
-        if ($refreshToken instanceof TokenEntity) {
-            $this->issuedTokens[] = $refreshToken;
-        }
-        return $refreshToken;
-    }
-
     /**
      * Link the tokens of the current code exchange to the authorization code, so that
      * AuthCodeRepository can revoke them if the code is presented again.
      */
     protected function linkIssuedTokens(AuthCodeEntity $authCode): void
     {
-        foreach ($this->issuedTokens as $token) {
-            $token->setValue($token->getColumnPrefix() . '_oac_id', $authCode->getValue($authCode->getColumnPrefix() . '_id'));
-            $token->save();
+        $this->linkIssuedTokensToCode((int) $authCode->getValue($authCode->getColumnPrefix() . '_id'));
+    }
+
+    /**
+     * Revoke the tokens of the authorization code the request presents, if that code was
+     * exchanged before. Anything that cannot be read as a code of this server is ignored; the
+     * request is refused anyway.
+     */
+    private function revokeTokensOfPresentedCode(ServerRequestInterface $request): void
+    {
+        try {
+            $encryptedAuthCode = $this->getRequestParameter('code', $request);
+            $payload = json_decode($this->decrypt($encryptedAuthCode));
+            if (is_object($payload) && isset($payload->auth_code_id) && $this->authCodeRepository instanceof AuthCodeRepository) {
+                $this->authCodeRepository->revokeTokensOfReusedCode((string) $payload->auth_code_id);
+            }
+        } catch (\Throwable) {
+            // not a code of this server
         }
-        $this->issuedTokens = array();
     }
 
     public function respondToAccessTokenRequest(
@@ -246,7 +236,16 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         global $gLogger;
 
         $this->issuedTokens = array();
-        $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
+        try {
+            $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
+        } catch (OAuthServerException $exception) {
+            // A code that was exchanged before and is presented again (also after it expired,
+            // which league reports first) may have been intercepted: revoke what it produced.
+            if ($exception->getErrorType() === 'invalid_grant') {
+                $this->revokeTokensOfPresentedCode($request);
+            }
+            throw $exception;
+        }
         if (!$responseType instanceof IdTokenResponse) {
             throw OAuthServerException::serverError('Response type is not an instance of IdTokenResponse.');
         }
