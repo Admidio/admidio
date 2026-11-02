@@ -123,6 +123,14 @@ class SAMLService extends SSOService {
         return $this->idpEntityId;
     }
 
+    /**
+     * The entity ID of a SAML client is unique in the database across all organizations.
+     */
+    protected function clientIdIsUniqueInstallationWide(): bool
+    {
+        return true;
+    }
+
     public function initializeClientObject(Database $database): ?SSOClient {
         return new SAMLClient($database);
     }
