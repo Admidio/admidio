@@ -233,8 +233,6 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
     ): ResponseTypeInterface {
-        global $gLogger;
-
         $this->issuedTokens = array();
         try {
             $responseType = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
@@ -263,36 +261,7 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         if (!($authCode->isNewRecord())) {
             $this->linkIssuedTokens($authCode);
 
-            $nonce = $authCode->getValue($authCode->getColumnPrefix() . '_nonce');
-            if (!empty($nonce)) {
-                $responseType->setNonce($nonce);
-            }
-
-            $authenticationTime = (int) $authCode->getValue($authCode->getColumnPrefix() . '_auth_time', 'U');
-            $externalSessionId = (string) $authCode->getValue($authCode->getColumnPrefix() . '_external_session_id', 'database');
-            $authenticationMethods = preg_split('/\s+/',
-                trim((string) $authCode->getValue($authCode->getColumnPrefix() . '_authentication_methods')),
-                -1, PREG_SPLIT_NO_EMPTY
-            );
-            $authenticationContext = (string) $authCode->getValue($authCode->getColumnPrefix() . '_authentication_context');
-
-            if ($externalSessionId !== '') {
-                $responseType->setExternalSessionId($externalSessionId);
-            } else {
-                $gLogger->warning('OIDC authorization code has no external session identifier; the ID token will be issued without sid.');
-             }
-
-            if ($authenticationTime > 0) {
-                $responseType->setAuthenticationTime($authenticationTime);
-            }
-
-            if (is_array($authenticationMethods)) {
-                $responseType->setAuthenticationMethods($authenticationMethods);
-            }
-
-            if ($authenticationContext !== '') {
-                $responseType->setAuthenticationContext($authenticationContext);
-            }
+            $responseType->setAuthenticationFromAuthCode($authCode);
         }
         return $responseType;
     }
