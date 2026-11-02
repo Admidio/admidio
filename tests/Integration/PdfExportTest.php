@@ -90,8 +90,8 @@ class PdfExportTest extends TestCase
     public static function nonGermanHyphenationLanguages(): array
     {
         return array(
-            'English' => array('en', 'supercalifragilisticexpialidocious', 'supercalif'),
-            'French' => array('fr', 'anticonstitutionnellement', 'anticonsti')
+            'English' => array('en', 'supercalifragilisticexpialidocious', 'supercal-'),
+            'French' => array('fr', 'anticonstitutionnellement', 'anticons-')
         );
     }
 

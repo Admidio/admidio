@@ -46,6 +46,34 @@ class ConfigurationBootstrapTest extends DatabaseTestCase
     }
 
     /**
+     * A session started with a cookie prefix of its own is found by that prefix
+     *
+     * The database update of an automatic core update runs in a session of its own, beside the
+     * regular session of the same browser. The regular session cookie must not take its place.
+     *
+     * @testdox A session with its own cookie prefix reads its own session cookie
+     */
+    public function testSessionReadsTheCookieOfItsOwnPrefix(): void
+    {
+        $prefix = COOKIE_PREFIX . '_CORE_UPDATE_0123456789ab';
+        $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'] = 'regular-session-id-0000000000';
+        $_COOKIE[$prefix . '_SESSION_ID'] = 'update-session-id-00000000000';
+
+        try {
+            $updateSession = new Session($this->getDatabase(), $prefix);
+            $regularSession = new Session($this->getDatabase(), COOKIE_PREFIX);
+            $defaultSession = new Session($this->getDatabase());
+        } finally {
+            unset($_COOKIE[COOKIE_PREFIX . '_SESSION_ID'], $_COOKIE[$prefix . '_SESSION_ID']);
+        }
+
+        $this->assertSame('update-session-id-00000000000', $updateSession->getValue('ses_session_id'));
+        $this->assertSame('regular-session-id-0000000000', $regularSession->getValue('ses_session_id'));
+        $this->assertSame('regular-session-id-0000000000', $defaultSession->getValue('ses_session_id'),
+            'without a prefix the regular cookie is read, as before');
+    }
+
+    /**
      * Test CSRF token is generated
      *
      * @testdox Session generates valid CSRF token on creation

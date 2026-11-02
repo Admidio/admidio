@@ -84,9 +84,15 @@ class Session extends Entity
         // for every other entity for the rest of the request. The table 'sessions' is listed in
         // ChangelogService::$noLogTables, which already prevents any log entry for it.
 
+        // A session that was started with a prefix of its own - the database update of an automatic
+        // core update uses one - is found by that prefix, not by the one of the regular session.
+        if ($cookiePrefix === '') {
+            $cookiePrefix = COOKIE_PREFIX;
+        }
+
         // determine session id
-        if (array_key_exists(COOKIE_PREFIX . '_SESSION_ID', $_COOKIE)) {
-            $sessionId = $_COOKIE[COOKIE_PREFIX . '_SESSION_ID'];
+        if (array_key_exists($cookiePrefix . '_SESSION_ID', $_COOKIE)) {
+            $sessionId = $_COOKIE[$cookiePrefix . '_SESSION_ID'];
         } else {
             $sessionId = session_id();
         }
