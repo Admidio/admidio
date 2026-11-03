@@ -1835,13 +1835,16 @@ class OIDCService extends SSOService {
             }
         }
 
-        if ($externalSessionId === '') {
-            return $this->createOIDCErrorResponse(
-                'invalid_request',
-                'The current session cannot be used for OpenID Connect logout.',
-                400
-            );
+        /*
+        * Nobody is logged in to this browser (the session ended by another logout, by its
+        * timeout or in another way), so there is nothing to end and nothing to confirm. The
+        * relying party that asks for the logout gets what it expects: the browser returns to its
+        * post-logout address, which was checked against the registered ones above.
+        */
+        if (!$gValidLogin) {
+            return $this->createPostLogoutResponse($postLogoutRedirectUri, $state);
         }
+
         $_SESSION['oidc_logout_confirmation'] = array(
             'external_session_id' => $externalSessionId,
             'client_id' => $client?->getIdentifier() ?? '',
@@ -1872,14 +1875,7 @@ class OIDCService extends SSOService {
         $gCurrentUser->clear();
         $gMenu->initialize();
 
-        $redirectLocation = null;
-        if ($postLogoutRedirectUri !== null) {
-            $redirectLocation = $postLogoutRedirectUri;
-            if ($state !== null && $state !== '') {
-                $redirectLocation .= (str_contains($redirectLocation, '?') ? '&' : '?')
-                    . http_build_query(array('state' => $state));
-            }
-        }
+        $redirectLocation = $this->getPostLogoutLocation($postLogoutRedirectUri, $state);
 
         /*
         * Hand the logout to the SAML service, which notifies the OIDC back-channel clients,
@@ -1891,6 +1887,35 @@ class OIDCService extends SSOService {
             return (new SAMLService($this->db, $gCurrentUser))
                 ->startSessionLogout($externalSessionId, $redirectLocation);
         }
+
+        return $this->createPostLogoutResponse($postLogoutRedirectUri, $state);
+    }
+
+    /**
+     * The address the browser returns to after a logout: the registered post-logout redirect URI
+     * of the relying party, with its state.
+     */
+    private function getPostLogoutLocation(?string $postLogoutRedirectUri, ?string $state): ?string
+    {
+        if ($postLogoutRedirectUri === null) {
+            return null;
+        }
+
+        $location = $postLogoutRedirectUri;
+        if ($state !== null && $state !== '') {
+            $location .= (str_contains($location, '?') ? '&' : '?') . http_build_query(array('state' => $state));
+        }
+
+        return $location;
+    }
+
+    /**
+     * The response that ends an OpenID Connect logout: back to the relying party if it named a
+     * post-logout redirect URI, otherwise a plain confirmation.
+     */
+    private function createPostLogoutResponse(?string $postLogoutRedirectUri, ?string $state): ResponseInterface
+    {
+        $redirectLocation = $this->getPostLogoutLocation($postLogoutRedirectUri, $state);
 
         if ($redirectLocation !== null) {
             return (new Response())
