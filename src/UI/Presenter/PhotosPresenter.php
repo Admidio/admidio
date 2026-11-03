@@ -7,9 +7,11 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Photos\Entity\Album;
+use Admidio\UI\Component\FileUpload;
 use Admidio\Users\Entity\User;
 
 class PhotosPresenter extends PagePresenter
@@ -243,6 +245,44 @@ class PhotosPresenter extends PagePresenter
             $albumsCount, $perPage, $start
         ));
         $this->addHtmlByTemplate('modules/photos.albums.tpl');
+
+        // administrators upload photos in a dialog of the album page; files can also be dropped on the page
+        if ($photoUuid !== '' && $gCurrentUser->isAdministratorPhotos() && PhpIniUtils::isFileUploadEnabled()) {
+            $this->deleteStaleUploads();
+            $fileUpload = new FileUpload($this, 'photos', $photoUuid);
+            $fileUpload->setHeaderData(true);
+            $this->addHtml($fileUpload->getModalHtml($photoAlbum->getValue('pho_name')));
+        }
+    }
+
+    /**
+     * Uploaded photos are stored in a temporary folder until they are added to the album. Only a cancelled upload
+     * leaves a part of a file there. The standalone upload page empties the folder when it is opened; the dialog
+     * of the album page only removes files that are older than one day, so that an upload of another
+     * administrator that is still running is not affected.
+     */
+    private function deleteStaleUploads(): void
+    {
+        global $gLogger;
+
+        $uploadPath = ADMIDIO_PATH . FOLDER_DATA . '/photos/upload';
+        if (!is_dir($uploadPath)) {
+            return;
+        }
+
+        try {
+            foreach (new \DirectoryIterator($uploadPath) as $file) {
+                try {
+                    if ($file->isFile() && $file->getMTime() < time() - 86400) {
+                        FileSystemUtils::deleteFileIfExists($file->getPathname());
+                    }
+                } catch (\RuntimeException $exception) {
+                    $gLogger->error('Could not delete file!', array('filePath' => $file->getPathname()));
+                }
+            }
+        } catch (\RuntimeException $exception) {
+            $gLogger->error('Could not read directory content!', array('directoryPath' => $uploadPath));
+        }
     }
 
     public function createAlbumEditForm(string $photoUuid, string $parentPhotoUuid): void
