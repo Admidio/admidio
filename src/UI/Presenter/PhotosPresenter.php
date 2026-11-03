@@ -270,14 +270,18 @@ class PhotosPresenter extends PagePresenter
             return;
         }
 
-        foreach (new \DirectoryIterator($uploadPath) as $file) {
-            try {
-                if ($file->isFile() && $file->getMTime() < time() - 86400) {
-                    FileSystemUtils::deleteFileIfExists($file->getPathname());
+        try {
+            foreach (new \DirectoryIterator($uploadPath) as $file) {
+                try {
+                    if ($file->isFile() && $file->getMTime() < time() - 86400) {
+                        FileSystemUtils::deleteFileIfExists($file->getPathname());
+                    }
+                } catch (\RuntimeException $exception) {
+                    $gLogger->error('Could not delete file!', array('filePath' => $file->getPathname()));
                 }
-            } catch (\RuntimeException $exception) {
-                $gLogger->error('Could not delete file!', array('filePath' => $file->getPathname()));
             }
+        } catch (\RuntimeException $exception) {
+            $gLogger->error('Could not read directory content!', array('directoryPath' => $uploadPath));
         }
     }
 
