@@ -23,7 +23,11 @@ if (is_file($rootPath . '/adm_my_files/config.php')) {
     // check for empty db and redirect to installation wizard
     try {
         $gDb = Database::createDatabaseInstance();
-        $gDb->getTableColumns(TBL_SESSIONS);
+        if (empty($gDb->getTableColumns(TBL_SESSIONS))) {
+            // Postgres does not throw an error, but returns an empty array if the session table does not yet exist.
+            header('Location: installation.php');
+            exit();
+        }
     } catch (\Throwable $t) {
         $page = 'installation.php';
         header('Location: ' . $page);
