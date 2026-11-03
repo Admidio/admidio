@@ -1240,6 +1240,19 @@ const STEP_ICONS = array(
     'pending' => 'bi-circle text-muted'
 );
 
+/** The translation key for each update step. */
+const STEP_TEXT_KEYS = array(
+    'check' => 'SYS_CORE_UPDATE_STEP_CHECK',
+    'download' => 'SYS_CORE_UPDATE_STEP_DOWNLOAD',
+    'prepare' => 'SYS_CORE_UPDATE_STEP_PREPARE',
+    'review' => 'SYS_CORE_UPDATE_STEP_REVIEW',
+    'backup' => 'SYS_CORE_UPDATE_STEP_BACKUP',
+    'install' => 'SYS_CORE_UPDATE_STEP_INSTALL',
+    'database' => 'SYS_CORE_UPDATE_STEP_DATABASE',
+    'finish' => 'SYS_CORE_UPDATE_STEP_FINISH',
+    'restore' => 'SYS_CORE_UPDATE_STEP_RESTORE'
+);
+
 /**
  * The sidebar with the steps of an update, and the script function **showStep(state)** that
  * moves it on while a page drives the update. It returns false when the update starts or stops
@@ -1253,7 +1266,7 @@ function stepsSidebar(array $steps, array $texts): string
     foreach ($steps as $step => $status) {
         $items .= '<li class="core-update-step-' . h($status) . '" data-step="' . h($step) . '"' . ($status === 'current' ? ' aria-current="step"' : '') . '>'
             . '<i class="bi ' . h(STEP_ICONS[$status]) . '" aria-hidden="true"></i>'
-            . '<span>' . h(text($texts, 'SYS_CORE_UPDATE_STEP_' . strtoupper($step))) . '</span></li>';
+            . '<span>' . h(text($texts, STEP_TEXT_KEYS[$step])) . '</span></li>';
     }
 
     $stepOfState = array();
