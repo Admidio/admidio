@@ -326,7 +326,7 @@ function languageFileTexts(string $content): array
     $texts = array();
     foreach ($xml === false ? array() : $xml->string as $node) {
         $key = (string)$node['name'];
-        if (str_starts_with($key, 'SYS_CORE_UPDATE_')) {
+        if ((str_starts_with($key, 'SYS_CORE_UPDATE_') || in_array($key, array('SYS_SEND_PSEUDONYMOUS_STATISTICS', 'SYS_PSEUDONYMOUS_STATISTICS_DESC', 'SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC'), true))) {
             $texts[$key] = strtr((string)$node, array('\\n' => "\n", '\\\'' => '\'', '\\"' => '"'));
         }
     }

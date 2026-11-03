@@ -259,7 +259,7 @@ function coreUpdateHandleRequest(array $context, array $state, string $action): 
     match ($action) {
         'check' => U\phaseACheck($context, $updateId, $channel, $ref),
         'download' => U\phaseAConfirm($context, $updateId),
-        'install' => U\phaseBConfirm($context, $updateId, (string)($_POST['backup'] ?? '')),
+        'install' => U\phaseBConfirm($context, $updateId, (string)($_POST['backup'] ?? ''), ($_POST['statistics'] ?? '') === '1'),
         'restore' => U\phaseBRestore($context, $updateId, !empty($_POST['own_database_restored']), !empty($_POST['then_update'])),
         default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
     };
@@ -511,6 +511,7 @@ function coreUpdatePageRun(array $context, array $state): void
  */
 function coreUpdatePageReview(array $context, array $state): void
 {
+    $state = U\statisticsPreview($context, (string)$state['updateId']);
     $texts = $context['texts'];
     $csrf = coreUpdateCsrfField($state);
     $plan = (array)($state['plan'] ?? array());
@@ -561,7 +562,7 @@ function coreUpdatePageReview(array $context, array $state): void
             . coreUpdateLastError($state)
             . ($problems !== array() ? '<div class="alert alert-' . (U\checksHaveErrors($checks) ? 'danger' : 'warning') . '" role="alert">' . coreUpdateCheckList($problems, $texts) . '</div>' : '')
             . '<p>' . U\h(U\text($texts, 'SYS_CORE_UPDATE_REVIEW_DESC', array((string)$state['installedVersion'], $target))) . '</p>'
-            . (U\checksHaveErrors($checks) ? '' : $backup)
+            . (U\checksHaveErrors($checks) ? '' : $backup . coreUpdateStatistics($state, $texts))
             . $details,
         $actions
     );
@@ -1040,4 +1041,18 @@ function coreUpdateRunScript(array $state, array $texts, bool $start): string
         }
         ' . ($start ? 'drive("run");' : '') . '
     </script>';
+}
+
+/** Optional consent, associated with the installation form in the action area. */
+function coreUpdateStatistics(array $state, array $texts): string
+{
+    return '<fieldset class="mb-4"><legend class="fs-5">' . U\h(U\text($texts, 'SYS_SEND_PSEUDONYMOUS_STATISTICS')) . '</legend>'
+        . '<p>' . U\h(U\text($texts, 'SYS_PSEUDONYMOUS_STATISTICS_DESC')) . '</p>'
+        . '<p>' . U\h(U\text($texts, 'SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC')) . '</p>'
+        . '<div class="form-check"><input class="form-check-input" id="statistics" name="statistics" value="1" type="checkbox" form="install-form"'
+        . (!empty($state['statisticsEnabled']) ? ' checked' : '') . '><label class="form-check-label" for="statistics">'
+        . U\h(U\text($texts, 'SYS_SEND_PSEUDONYMOUS_STATISTICS')) . '</label></div>'
+        . '<details class="mt-2"><summary>' . U\h(U\text($texts, 'SYS_SEND_PSEUDONYMOUS_STATISTICS')) . '</summary><pre class="bg-body-tertiary border rounded p-3"><code>'
+        . U\h((string)json_encode($state['statisticsData'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+        . '</code></pre></details></fieldset>';
 }

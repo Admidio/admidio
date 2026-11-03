@@ -42,7 +42,7 @@ final class StatisticsConsent
     /** Pending identity is retained even if the user opted out of sending statistics. */
     public static function tenantId(): ?string
     {
-        return $_SESSION[self::SESSION_DATA]['id'] ?? null;
+        return $_SESSION[self::SESSION_DATA]['id'] ?? CoreUpdateHandover::fromMaintenance()?->getStatisticsTenantId();
     }
 
     /** Copy the server-side snapshot before installation/update clears the session. */
