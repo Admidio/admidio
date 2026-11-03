@@ -92,6 +92,17 @@ try {
     // connect to database
     $gDb = Database::createDatabaseInstance();
 
+    // now check if a valid installation exists. This must be done before the session is created,
+    // because the session object reads the session table that doesn't exist in an empty database.
+    $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+    $pdoStatement = $gDb->queryPrepared($sql, array(), false);
+
+    if (!$pdoStatement || $pdoStatement->rowCount() === 0) {
+        // no valid installation exists -> show installation wizard
+        admRedirect(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php');
+        // => EXIT
+    }
+
     // start PHP session
     try {
         Session::start(COOKIE_PREFIX);
@@ -106,16 +117,6 @@ try {
         // create a new session object and store it in PHP session
         $gCurrentSession = new Session($gDb, COOKIE_PREFIX);
         $_SESSION['gCurrentSession'] = $gCurrentSession;
-    }
-
-    // now check if a valid installation exists.
-    $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
-    $pdoStatement = $gDb->queryPrepared($sql, array(), false);
-
-    if (!$pdoStatement || $pdoStatement->rowCount() === 0) {
-        // no valid installation exists -> show installation wizard
-        admRedirect(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php');
-        // => EXIT
     }
 
     // create an organization object of the current organization
