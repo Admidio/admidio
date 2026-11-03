@@ -175,7 +175,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
             array('system_statistics_enabled', 'system_statistics_last_sent'));
         $update = simplexml_load_file(dirname(__DIR__, 3) . '/install/db_scripts/update_6_0.xml');
         $applyStatisticsMigration = function () use ($db, $update): void {
-            foreach ($update->xpath('step[@id="140" or @id="150"]') as $step) {
+            foreach ($update->xpath('step[contains(., "system_statistics_enabled") or contains(., "system_statistics_last_sent")]') as $step) {
                 $db->queryPrepared(str_replace('%PREFIX%', TABLE_PREFIX, (string)$step));
             }
         };

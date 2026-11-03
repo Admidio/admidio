@@ -91,7 +91,8 @@ class StatisticsConsentTest extends TestCase
             };
         }
         $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
-            ->onlyMethods(array('getVersion', 'queryPrepared'))->getMock();
+            ->onlyMethods(array('getInformation', 'getVersion', 'queryPrepared'))->getMock();
+        $database->method('getInformation')->willReturn(array('mysql', '8.0.40'));
         $database->method('getVersion')->willReturn('8.0.40');
         $statement = $this->createMock(PDOStatement::class);
         $statement->method('fetchColumn')->willReturn('stable-tenant');
