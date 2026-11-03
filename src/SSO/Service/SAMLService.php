@@ -1480,7 +1480,20 @@ class SAMLService extends SSOService {
             $initiatorParticipant = $this->findActiveSessionParticipant($request, $initiatorClientId);
 
             if ($initiatorParticipant === null) {
-                throw new Exception('The LogoutRequest does not match an active SAML session.');
+                /*
+                 * The session is not known (any more): a participant ends with the Admidio session,
+                 * while a service provider may keep its own session longer and asks for the logout
+                 * only then. Nothing is left to end here, which is what the service provider wants
+                 * to hear, and an error would leave its user unable to log out at all.
+                 */
+                $gLogger->notice(
+                    'The LogoutRequest does not match an active SAML session, so it is answered as logged out.',
+                    array('client' => $initiatorClient->getIdentifier())
+                );
+                return $this->createRedirectResponse(
+                    $this->createLogoutResponseUrl($initiatorClient, $request->getID(),
+                        $request->getRelayState(), SamlConstants::STATUS_SUCCESS)
+                );
             }
 
             $externalSessionId = (string) $initiatorParticipant['ssp_external_session_id'];
