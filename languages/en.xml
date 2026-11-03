@@ -595,6 +595,14 @@
   <string name="SYS_CORE_UPDATE_START_DESC">The updater checks which version is available and whether this server is ready for it. Nothing is changed before you confirm.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Start or continue update</string>
   <string name="SYS_CORE_UPDATE_STEPS">Steps of the update</string>
+  <string name="SYS_CORE_UPDATE_STEP_CHECK">Check requirements</string>
+  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Prepare installation</string>
+  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Review update</string>
+  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Back up database</string>
+  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Install files</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Update database</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finish update</string>
+  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Restore previous version</string>
   <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Download update</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio has been updated to version #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_TARGET">New version</string>

@@ -594,6 +594,14 @@
   <string name="SYS_CORE_UPDATE_START_DESC">Der Updater prüft, welche Version verfügbar ist und ob dieser Server dafür bereit ist. Es wird nichts verändert, bevor du bestätigst.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Update starten oder fortsetzen</string>
   <string name="SYS_CORE_UPDATE_STEPS">Schritte des Updates</string>
+  <string name="SYS_CORE_UPDATE_STEP_CHECK">Voraussetzungen prüfen</string>
+  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Installation vorbereiten</string>
+  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Update prüfen</string>
+  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Datenbank sichern</string>
+  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Dateien installieren</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Datenbank aktualisieren</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Update abschließen</string>
+  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Vorherige Version wiederherstellen</string>
   <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Update herunterladen</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio wurde auf Version #VAR1# aktualisiert.</string>
   <string name="SYS_CORE_UPDATE_TARGET">Neue Version</string>
