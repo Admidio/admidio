@@ -442,7 +442,7 @@ function admFileUpload(config) {
             }
         });
 
-        $("#menu_item_documents_upload_files, #menu_item_photos_upload_photos").on("click", function (e) {
+        $("#menu_item_documents_upload_files, #menu_item_photos_upload_photo").on("click", function (e) {
             e.preventDefault();
             var modalEl = document.getElementById("admidio-upload-modal");
             if (modalEl) {
