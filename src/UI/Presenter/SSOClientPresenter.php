@@ -275,7 +275,15 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_X509_CERTIFICATE'),
             $client->getValue('smc_x509_certificate'),
             6,
-            array('maxLength' => 6000, 'helpTextId' => $gL10n->get('SYS_SSO_X509_CERTIFICATE_DESC'))
+            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_X509_CERTIFICATE_DESC'))
+        );
+
+        $form->addMultilineTextInput(
+            'smc_x509_encryption_certificate',
+            $gL10n->get('SYS_SSO_X509_ENCRYPTION_CERTIFICATE'),
+            $client->getValue('smc_x509_encryption_certificate'),
+            6,
+            array('maxLength' => 6000, 'helpTextId' => $gL10n->get('SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC'))
         );
 
         $form->addCheckbox(
@@ -531,11 +539,13 @@ class SSOClientPresenter extends PagePresenter
             || sloElements[0];
         const sloUrl = sloElement ? sloElement.getAttribute("Location") || "" : "";
 
-        // A KeyDescriptor without a use attribute can be used for signing too.
-        const x509Element = xmlDoc.querySelector(
+        // All signing certificates are taken over, a service provider publishes several during a
+        // key rollover. A KeyDescriptor without a use attribute can be used for signing too.
+        const signingCerts = Array.from(xmlDoc.querySelectorAll(
             "KeyDescriptor[use=\'signing\'] X509Certificate, KeyDescriptor:not([use]) X509Certificate"
-        );
-        const x509Cert = x509Element ? x509Element.textContent.trim() : "";
+        )).map((element) => element.textContent.trim()).filter((cert) => cert !== "");
+        const encryptionElement = xmlDoc.querySelector("KeyDescriptor[use=\'encryption\'] X509Certificate");
+        const encryptionCert = encryptionElement ? encryptionElement.textContent.trim() : "";
 
         const spDescriptor = xmlDoc.querySelector("SPSSODescriptor");
         if (spDescriptor) {
@@ -552,9 +562,14 @@ class SSOClientPresenter extends PagePresenter
         if (sloUrl !== "") {
             $("#smc_slo_url").val(sloUrl);
         }
-        if (x509Cert !== "") {
-            $("#smc_x509_certificate").val(formatCertificate(x509Cert));
+        if (signingCerts.length > 0) {
+            $("#smc_x509_certificate").val(
+                Array.from(new Set(signingCerts.map((cert) => formatCertificate(cert.replace(/\\s+/g, ""))))).join("\n")
+            );
         }
+        $("#smc_x509_encryption_certificate").val(
+            encryptionCert !== "" ? formatCertificate(encryptionCert.replace(/\\s+/g, "")) : ""
+        );
     }
 
     function formatCertificate(cert) {

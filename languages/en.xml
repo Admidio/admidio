@@ -2140,6 +2140,7 @@
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">Allowed clock difference between Admidio and the client, in seconds.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lifetime of SAML assertions sent to the client</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">How long issued SAML assertions remain valid, in seconds.</string>
+  <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">A certificate is not a valid X.509 certificate in PEM format.</string>
   <string name="SYS_SSO_SAML_ENABLED">Enable single sign-on via SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Enable Admidio to act as a SAML 2.0 identity provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID">Assertion encryption requires a valid RSA certificate from the client.</string>
@@ -2177,7 +2178,9 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certificates of the client used to verify signed SAML messages. Several certificates can be entered one after the other, e.g. while the client replaces its key; a message is accepted if one of them verifies it. Without an encryption certificate, assertions are encrypted for the first one.</string>
+  <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509 encryption certificate</string>
+  <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Certificate of the client for encrypting assertions. If empty, the first signing certificate is used.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_APPROVED">Approved</string>
   <string name="SYS_STATUS_BORROWED">Borrowed</string>

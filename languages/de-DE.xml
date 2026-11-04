@@ -2091,6 +2091,7 @@
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">SAML und die Gültigkeit der Anmeldung hängen auch von synchronisierten Uhren ab, um die Berechtigungen zu begrenzen. Da einige Systeme einen leichten Zeitunterschied aufweisen können, bietet diese Einstellung eine Möglichkeit, bestimmte Zeitunterschiede zuzulassen.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lebensdauer der an den Client gesendeten SAML-Assertions</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Nach erfolgreicher Authentifizierung wird eine „Bestätigung“ an den Client gesendet. Diese Konfiguration legt fest, wie lange (in Sekunden) diese Bestätigung vom Client als gültig angesehen werden soll.</string>
+  <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">Ein Zertifikat ist kein gültiges X.509-Zertifikat im PEM-Format.</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML 2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Admidio als SAML-2.0-Identity-Provider aktivieren. Dadurch ist die Anmeldung bei anderen Webanwendungen über ein Admidio-Konto möglich.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID">Für die Verschlüsselung der Assertion ist ein gültiges RSA-Zertifikat des Clients erforderlich.</string>
@@ -2128,7 +2129,9 @@
   <string name="SYS_SSO_USERID_UUID">Benutzer-UUID (zufällige 32-Zeichen-Zeichenfolge)</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validierung der Unterschriften auf allen eingegangenen Anfragen</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 Client-Zertifikat</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML-Nachrichten werden kryptografisch signiert, um Sicherheitsangriffe zu verhindern. Dieses Zertifikat wird vom Client zur Verfügung gestellt und muss genau so eingegeben/kopiert werden, wie vom Client angegeben. Andernfalls schlägt die SAML-Kommunikation fehl und eine SSO-Anmeldung ist nicht möglich.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Zertifikate des Clients zum Prüfen signierter SAML-Nachrichten. Sie können mehrere Zertifikate hintereinander eingeben, z. B. während der Client seinen Schlüssel austauscht; eine Nachricht wird akzeptiert, wenn eines davon sie bestätigt. Ohne Verschlüsselungszertifikat werden Assertions für das erste Zertifikat verschlüsselt.</string>
+  <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509-Verschlüsselungszertifikat</string>
+  <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Zertifikat des Clients zum Verschlüsseln von Assertions. Wenn leer, wird das erste Signaturzertifikat verwendet.</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
