@@ -90,7 +90,16 @@ class SAMLService extends SSOService {
         if (!empty($formValues['smc_encrypt_assertions'])) {
             // This method checks whether all requirements for encryption are fulfilled and
             // returns the certificate, which can be ignored here
-            $this->getClientEncryptionCertificate($formValues['smc_x509_certificate']??'');
+            $this->getClientEncryptionCertificate(self::encryptionCertificateOf(
+                (string) ($formValues['smc_x509_certificate'] ?? ''),
+                (string) ($formValues['smc_x509_encryption_certificate'] ?? '')
+            ));
+        }
+
+        foreach (array('smc_x509_certificate', 'smc_x509_encryption_certificate') as $field) {
+            if (SAMLCertificates::hasInvalidBlock((string) ($formValues[$field] ?? ''))) {
+                throw new \Admidio\Infrastructure\Exception('SYS_SSO_SAML_CERTIFICATE_INVALID');
+            }
         }
     }
     protected function getRolesRightName(): string {
@@ -205,6 +214,26 @@ class SAMLService extends SSOService {
     }
 
 
+    /**
+     * The certificate assertions are encrypted for: the encryption certificate of the client, or its
+     * first signing certificate if it has none.
+     */
+    private static function getEncryptionCertificate(SAMLClient $client): string
+    {
+        return self::encryptionCertificateOf(
+            (string) $client->getValue('smc_x509_certificate'),
+            (string) $client->getValue('smc_x509_encryption_certificate')
+        );
+    }
+
+    private static function encryptionCertificateOf(string $signingCertificates, string $encryptionCertificate): string
+    {
+        if (trim($encryptionCertificate) !== '') {
+            return $encryptionCertificate;
+        }
+        return SAMLCertificates::parse($signingCertificates)[0] ?? '';
+    }
+
 
     public function getSignatureWriter(string $privkeyPEM, X509Certificate $cert) {
         $privateKeyResource = KeyHelper::createPrivateKey($privkeyPEM, '', false, XMLSecurityKey::RSA_SHA256);
@@ -278,7 +307,7 @@ class SAMLService extends SSOService {
         global $gL10n;
         try {
             // If no encryption certificate is set, the following method throws an exception!
-            $SPcert = $this->getClientEncryptionCertificate($client->getValue('smc_x509_certificate'));
+            $SPcert = $this->getClientEncryptionCertificate(self::getEncryptionCertificate($client));
             $key = KeyHelper::createPublicKey($SPcert);
 
             $encryptedAssertion = new EncryptedAssertionWriter();
@@ -515,20 +544,16 @@ class SAMLService extends SSOService {
     public function validateSignature(SAMLClient $client, SamlMessage $message, bool $required = false): bool
     {
         global $gL10n;
-        $certPem = $client->getValue('smc_x509_certificate');
-        if (!$certPem) {
+        // A service provider can sign with any of its certificates, e.g. both while it rolls its key over
+        $certificates = SAMLCertificates::parse((string) $client->getValue('smc_x509_certificate'));
+        if ($certificates === array()) {
             // Client has no cert configured...
-            $SPcert = null;
             if ($required) {
                 throw new Exception($gL10n->get('SYS_SSO_SAML_SIGNATURE_KEY_MISSING'));
             } else {
                 return false;
             }
-        } else {
-            $SPcert = new X509Certificate();
-            $SPcert->loadPem($certPem);
         }
-        $key = KeyHelper::createPublicKey($SPcert);
 
         /** @var \LightSaml\Model\XmlDSig\SignatureXmlReader $signatureReader */
         $signatureReader = $message->getSignature();
@@ -540,13 +565,16 @@ class SAMLService extends SSOService {
             }
         }
 
-        try {
-            $ok = $signatureReader->validate($key);
-            if ($ok) {
-                return true;
+        foreach ($certificates as $certificatePem) {
+            try {
+                $SPcert = new X509Certificate();
+                $SPcert->loadPem($certificatePem);
+                if ($signatureReader->validate(KeyHelper::createPublicKey($SPcert))) {
+                    return true;
+                }
+            } catch (\Throwable) {
+                // handled like an invalid signature, the next certificate may be the right one
             }
-        } catch (Exception) {
-            // handled like an invalid signature
         }
         throw new SAMLRequestException($gL10n->get('SYS_SSO_SAML_SIGNATURE_FAILED'));
     }

@@ -36,6 +36,7 @@
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_slo_url']}
 
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_encryption_certificate']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_validate_signatures']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_sign_assertions']}
         </div>

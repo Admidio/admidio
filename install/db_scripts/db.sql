@@ -716,6 +716,7 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_acs_url                 text                NOT NULL,
     smc_slo_url                 text                NULL,
     smc_x509_certificate        text                NOT NULL,
+    smc_x509_encryption_certificate text            NULL,
     smc_userid_field            varchar(50)         NOT NULL    default 'usr_id',
     smc_field_mapping           text                NULL,
     smc_role_mapping            text                NULL,

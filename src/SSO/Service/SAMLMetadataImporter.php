@@ -68,14 +68,19 @@ class SAMLMetadataImporter
             $client->setValue('smc_slo_url', $sloUrl);
         }
 
-        // A KeyDescriptor without a use attribute can be used for signing too.
-        $certificate = $xpath->query(
-            'md:KeyDescriptor[@use="signing" or not(@use)]/ds:KeyInfo/ds:X509Data/ds:X509Certificate',
-            $spDescriptor
-        )->item(0);
-        if ($certificate !== null && trim($certificate->textContent) !== '') {
-            $client->setValue('smc_x509_certificate', self::formatCertificate($certificate->textContent));
+        // All signing certificates are kept, a service provider publishes several during a key
+        // rollover. A KeyDescriptor without a use attribute can be used for signing and for
+        // encryption. The metadata is authoritative: a certificate that is no longer in it is
+        // removed from the client.
+        $signing = $this->certificates($xpath, $spDescriptor, 'md:KeyDescriptor[@use="signing" or not(@use)]');
+        if ($signing !== array()) {
+            $client->setValue('smc_x509_certificate', SAMLCertificates::join($signing));
         }
+
+        // A separate encryption key is used for encrypted assertions. Without one the client
+        // falls back to its first signing certificate.
+        $encryption = $this->certificates($xpath, $spDescriptor, 'md:KeyDescriptor[@use="encryption"]');
+        $client->setValue('smc_x509_encryption_certificate', $encryption === array() ? null : $encryption[0]);
 
         $client->setValue('smc_require_auth_signed', $spDescriptor->getAttribute('AuthnRequestsSigned') === 'true');
     }
@@ -111,6 +116,21 @@ class SAMLMetadataImporter
         $xpath->registerNamespace('md', self::NS_METADATA);
         $xpath->registerNamespace('ds', self::NS_SIGNATURE);
         return $xpath;
+    }
+
+    /**
+     * The certificates of the key descriptors the query selects below the SP descriptor.
+     * @return array<int,string> PEM certificates, without duplicates and without unreadable ones.
+     */
+    private function certificates(DOMXPath $xpath, DOMElement $spDescriptor, string $descriptorQuery): array
+    {
+        $pem = '';
+        foreach ($xpath->query($descriptorQuery . '/ds:KeyInfo/ds:X509Data/ds:X509Certificate', $spDescriptor) as $certificate) {
+            if (trim($certificate->textContent) !== '') {
+                $pem .= self::formatCertificate($certificate->textContent) . "\n";
+            }
+        }
+        return SAMLCertificates::parse($pem);
     }
 
     /**

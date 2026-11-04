@@ -62,5 +62,6 @@
     <step id="240">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD COLUMN ort_oac_id integer unsigned</step>
     <step id="250">ALTER TABLE %PREFIX%_oidc_access_tokens ADD CONSTRAINT %PREFIX%_fk_oat_oac_id FOREIGN KEY (oat_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="260">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD CONSTRAINT %PREFIX%_fk_ort_oac_id FOREIGN KEY (ort_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="270">ALTER TABLE %PREFIX%_saml_clients ADD COLUMN smc_x509_encryption_certificate text NULL</step>
     <step>stop</step>
 </update>

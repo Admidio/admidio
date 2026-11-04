@@ -20,7 +20,17 @@ class SsoSamlMetadataImporterTest extends AdministratorTestCase
 {
     use SsoClientFixture;
 
-    private const CERTIFICATE = 'MIIBszCCAVmgAwIBAgIUTESTCERTIFICATEFORADMIDIOTESTSONLYxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw';
+    /** Base64 body of a certificate, created for the test */
+    private static string $certificate = '';
+
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        $key = openssl_pkey_new(array('private_key_bits' => 2048, 'private_key_type' => OPENSSL_KEYTYPE_RSA));
+        openssl_x509_export(openssl_csr_sign(openssl_csr_new(array('commonName' => 'importer-test'), $key), null, $key, 1), $pem);
+        self::$certificate = preg_replace('/-----[A-Z ]+-----|\s+/', '', $pem);
+    }
 
     protected function getFixture(): AdmidioTestFixture
     {
@@ -40,7 +50,7 @@ class SsoSamlMetadataImporterTest extends AdministratorTestCase
         // The default ACS wins over the first one, HTTP-Redirect wins for SLO
         $this->assertSame($entityId . '/acs/default', $client->getValue('smc_acs_url'));
         $this->assertSame($entityId . '/slo/redirect', $client->getValue('smc_slo_url'));
-        $this->assertSame(SAMLMetadataImporter::formatCertificate(self::CERTIFICATE), $client->getValue('smc_x509_certificate'));
+        $this->assertSame(SAMLMetadataImporter::formatCertificate(self::$certificate), $client->getValue('smc_x509_certificate'));
         $this->assertTrue((bool) $client->getValue('smc_require_auth_signed'));
         $this->assertSame($entityId, $client->getValue('smc_client_id'));
     }
@@ -116,7 +126,7 @@ class SsoSamlMetadataImporterTest extends AdministratorTestCase
         return '<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="' . $entityId . '">'
             . '<md:SPSSODescriptor AuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">'
             . '<md:KeyDescriptor use="encryption"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>ENCRYPTIONONLY</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor>'
-            . '<md:KeyDescriptor use="signing"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>' . self::CERTIFICATE . '</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor>'
+            . '<md:KeyDescriptor use="signing"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>' . self::$certificate . '</ds:X509Certificate></ds:X509Data></ds:KeyInfo></md:KeyDescriptor>'
             . '<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="' . $entityId . '/slo/post"/>'
             . '<md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="' . $entityId . '/slo/redirect"/>'
             . '<md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="' . $entityId . '/acs/first" index="0"/>'

@@ -2094,6 +2094,7 @@
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">Erlaubte Zeitabweichung zwischen Admidio und dem Client in Sekunden.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lebensdauer der an den Client gesendeten SAML-Assertions</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Gültigkeitsdauer ausgestellter SAML-Assertions in Sekunden.</string>
+  <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">Ein Zertifikat ist kein gültiges X.509-Zertifikat im PEM-Format.</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML 2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Admidio als SAML-2.0-Identity-Provider aktivieren. Dadurch ist die Anmeldung bei anderen Webanwendungen über ein Admidio-Konto möglich.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID">Für die Verschlüsselung der Assertion ist ein gültiges RSA-Zertifikat des Clients erforderlich.</string>
@@ -2131,7 +2132,9 @@
   <string name="SYS_SSO_USERID_UUID">Benutzer-UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Signaturen signierter Anfragen prüfen</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509-Client-Zertifikat</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client-Zertifikat zum Prüfen signierter SAML-Nachrichten und zum Verschlüsseln von Assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Zertifikate des Clients zum Prüfen signierter SAML-Nachrichten. Es können mehrere Zertifikate hintereinander eingegeben werden, z. B. während der Client seinen Schlüssel austauscht; eine Nachricht wird akzeptiert, wenn eines davon sie bestätigt. Ohne Verschlüsselungszertifikat werden Assertions für das erste Zertifikat verschlüsselt.</string>
+  <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509-Verschlüsselungszertifikat</string>
+  <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Zertifikat des Clients zum Verschlüsseln von Assertions. Wenn leer, wird das erste Signaturzertifikat verwendet.</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>

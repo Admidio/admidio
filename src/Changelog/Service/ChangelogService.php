@@ -975,6 +975,7 @@ class ChangelogService {
             'smc_acs_url' =>                'SYS_SSO_ACS_URL',
             'smc_slo_url' =>                'SYS_SSO_SLO_URL',
             'smc_x509_certificate' =>       'SYS_SSO_X509_CERTIFICATE',
+            'smc_x509_encryption_certificate' => 'SYS_SSO_X509_ENCRYPTION_CERTIFICATE',
             'smc_userid_field' =>           'SYS_SSO_USERID_FIELD',
             'smc_field_mapping' =>          array('name' => 'SYS_SSO_ATTRIBUTES', 'type' => 'SAML_field_mapping'),
             'smc_role_mapping' =>           array('name' => 'SYS_SSO_ROLESMAP', 'type' => 'SSO_roles_mapping'),
