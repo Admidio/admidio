@@ -3,9 +3,8 @@
  * Regression coverage for saving an SSO client with a client ID that another client already uses.
  *
  * The SAML entity ID is unique in the database, so saving ended in a raw SQL error page. Saving now
- * stops with a form error that names the client having the ID. A SAML entity ID is unique across
- * all organizations, an OIDC client ID only within its organization, because OIDC clients are
- * looked up per organization. Found with the SAMLscope conformance suite, finding SAML-06.
+ * stops with a form error that names the client having the ID. A client ID is unique within its
+ * organization, because every organization is an identity provider of its own. Found with the SAMLscope conformance suite, finding SAML-06.
  */
 
 namespace Admidio\Tests\Integration\Sso;
@@ -120,26 +119,23 @@ class SsoClientIdUniquenessTest extends AdministratorTestCase
     }
 
     /**
-     * The name of a client of another organization is not shown, but the ID is still refused,
-     * because the database allows each SAML entity ID only once.
+     * An organization is an identity provider of its own, and the service provider is addressed by the
+     * endpoints of that organization, so two organizations can have a client with the same entity ID.
      *
-     * @testdox A SAML entity ID used in another organization is refused without naming that client
+     * @testdox A SAML entity ID used in another organization is available
      */
-    public function testASamlEntityIdOfAnotherOrganizationIsRefusedWithoutItsName(): void
+    public function testASamlEntityIdOfAnotherOrganizationIsAvailable(): void
     {
         $suffix = $this->suffix();
         $otherOrg = $this->getFixture()->createAndSaveOrganization('SSO ids ' . $suffix, 'I' . substr($suffix, 0, 8));
         $foreign = $this->withOrganization((int) $otherOrg['org_id'], function () use ($suffix, $otherOrg) {
             return $this->createSamlClient($suffix, array(), (int) $otherOrg['org_id']);
         });
+        $entityId = (string) $foreign->getValue('smc_client_id');
 
-        try {
-            $this->samlService()->saveData(null, $this->formValues((string) $foreign->getValue('smc_client_id'), 'Mine'));
-            $this->fail('The entity ID of another organization should have been refused.');
-        } catch (Exception $exception) {
-            $this->assertSame('SYS_SSO_CLIENT_ID_EXISTS_OTHER_ORGA', $exception->getTranslationId());
-            $this->assertStringNotContainsString((string) $foreign->getValue('smc_client_name'), $exception->getMessage());
-        }
+        $this->samlService()->saveData(null, $this->formValues($entityId, 'Mine'));
+
+        $this->assertSame(2, $this->countSamlClients($entityId));
     }
 
     private function oidcAvailability(string $clientId): void

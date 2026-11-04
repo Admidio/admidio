@@ -131,7 +131,7 @@ class OIDCService extends SSOService {
      */
     public static function getDefaultIssuerURL(): string
     {
-        return ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+        return SSOOrganization::getBaseUrl() . '/oidc';
     }
 
     /**

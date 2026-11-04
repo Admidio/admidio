@@ -1984,7 +1984,6 @@
   <string name="SYS_SSO_CLIENT_ID">Client ID</string>
   <string name="SYS_SSO_CLIENT_ID_DESC">Unique client identifier. It must exactly match the value configured at the client. Typically the URL of the provider or a random string provided by the client.</string>
   <string name="SYS_SSO_CLIENT_ID_EXISTS">The client ID #VAR1# is already used by the client “#VAR2#”. Please enter a different client ID.</string>
-  <string name="SYS_SSO_CLIENT_ID_EXISTS_OTHER_ORGA">The client ID #VAR1# is already used by a client of another organization. Please enter a different client ID.</string>
   <string name="SYS_SSO_CLIENT_NAME">Client name</string>
   <string name="SYS_SSO_CLIENT_NAME_DESC">Descriptive name shown only in Admidio.</string>
   <string name="SYS_SSO_CLIENT_OIDC">OIDC client</string>
@@ -2005,6 +2004,7 @@
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
   <string name="SYS_SSO_FORM_POST_CONTINUE">Continue</string>
   <string name="SYS_SSO_FORM_POST_NOSCRIPT">JavaScript is not available in your browser. Press the button to continue to the application.</string>
+  <string name="SYS_SSO_IDENTIFIER_IN_USE">The value #VAR1# is already used for single sign-on by another organization. Every organization is an identity provider of its own and needs its own issuer URL and entity ID.</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>

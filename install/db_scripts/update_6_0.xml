@@ -63,5 +63,8 @@
     <step id="250">ALTER TABLE %PREFIX%_oidc_access_tokens ADD CONSTRAINT %PREFIX%_fk_oat_oac_id FOREIGN KEY (oat_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="260">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD CONSTRAINT %PREFIX%_fk_ort_oac_id FOREIGN KEY (ort_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
     <step id="270">ALTER TABLE %PREFIX%_saml_clients ADD COLUMN smc_x509_encryption_certificate text NULL</step>
+    <step id="280" database="mysql">ALTER TABLE %PREFIX%_saml_clients DROP INDEX smc_client_id</step>
+    <step id="290" database="pgsql">ALTER TABLE %PREFIX%_saml_clients DROP CONSTRAINT %PREFIX%_saml_clients_smc_client_id_key</step>
+    <step id="300">CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id)</step>
     <step>stop</step>
 </update>

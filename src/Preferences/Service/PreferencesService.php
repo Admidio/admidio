@@ -15,6 +15,7 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\SSOOrganization;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -896,6 +897,13 @@ class PreferencesService
             // will trigger an exception on illegal keys
             $keyService->getUsableKey((int) ($formValues['sso_oidc_signing_key'] ?? 0), KeyService::USAGE_OIDC_SIGNING);
         }
+
+        // every organization is an identity provider of its own, which has to be recognizable by its issuer and entity ID
+        SSOOrganization::assertIdentifiersAreUnique(
+            $oidcEnabled ? SSOOrganization::getEffectiveIssuerUrl((string) ($formValues['sso_oidc_issuer_url'] ?? '')) : '',
+            !empty($formValues['sso_saml_enabled'])
+                ? SSOOrganization::getEffectiveEntityId((string) ($formValues['sso_saml_entity_id'] ?? '')) : ''
+        );
 
         $samlEnabled = (bool) ($formValues['sso_saml_enabled'] ?? false);
         if ($samlEnabled) {

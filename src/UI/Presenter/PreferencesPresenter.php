@@ -2651,7 +2651,7 @@ class PreferencesPresenter extends PagePresenter
         $formSSO->addInput(
             'sso_saml_entity_id',
             $gL10n->get('SYS_SSO_SAML_ENTITY_ID'),
-            $formValues['sso_saml_entity_id'],
+            \Admidio\SSO\Service\SSOOrganization::getEffectiveEntityId((string)$formValues['sso_saml_entity_id']),
             array('class' => 'copy-container if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_ENTITY_ID_DESC')
         );
 

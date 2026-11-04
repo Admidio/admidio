@@ -4,6 +4,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 
 use Admidio\SSO\Service\OIDCService;
+use Admidio\SSO\Service\SSOOrganization;
 use Admidio\SSO\Service\SSOSessionCookie;
 use Admidio\SSO\Service\SAMLService;
 
@@ -22,11 +23,6 @@ try {
     $rootPath = dirname(__DIR__, 2);
 
     require_once($rootPath . '/system/common.php');
-
-    // Users who logged in before the SSO session cookie existed get it with their next SSO request
-    if ($gValidLogin) {
-        SSOSessionCookie::set();
-    }
 
     /**
      * Send a PSR-7 response to the client.
@@ -79,6 +75,20 @@ try {
 
     if ($endpointPath === '') {
         $sendResponse(new JsonResponse(['error' => 'invalid_request', 'error_description' => 'SSO endpoint not found.'], 404));
+    }
+
+    // Every organization is an identity provider of its own. The default organization is served without
+    // a prefix, every other one below o/<short name>/. The rest of the request runs in that organization.
+    $organizationPath = SSOOrganization::parsePath($endpointPath);
+    if ($organizationPath === null) {
+        $sendResponse(new JsonResponse(['error' => 'invalid_request', 'error_description' => 'SSO endpoint not found.'], 404));
+    }
+    [$organizationShortname, $endpointPath] = $organizationPath;
+    SSOOrganization::enter($organizationShortname);
+
+    // Users who logged in before the SSO session cookie existed get it with their next SSO request
+    if ($gValidLogin) {
+        SSOSessionCookie::set();
     }
 
     $pathParts = explode('/', $endpointPath);

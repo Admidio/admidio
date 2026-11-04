@@ -229,16 +229,6 @@ abstract class SSOService {
     }
 
     /**
-     * Whether a client ID may be used only once in the whole installation, not only once per
-     * organization. SAML entity IDs are unique in the database; OIDC clients are looked up by
-     * organization.
-     */
-    protected function clientIdIsUniqueInstallationWide(): bool
-    {
-        return false;
-    }
-
-    /**
      * Make sure that no other client uses the client ID, so that saving ends in a form error
      * naming the client that has it instead of a database error.
      *
@@ -252,29 +242,18 @@ abstract class SSOService {
         global $gCurrentOrgId;
 
         $prefix = $this->columnPrefix;
-        $sql = 'SELECT ' . $prefix . '_client_name, ' . $prefix . '_org_id
+        $sql = 'SELECT ' . $prefix . '_client_name
                   FROM ' . $this->table . '
                  WHERE ' . $prefix . '_client_id = ?
-                   AND ' . $prefix . '_uuid <> ?';
-        $params = array($clientId, (string) $client->getValue($prefix . '_uuid'));
-
-        if (!$this->clientIdIsUniqueInstallationWide()) {
-            $sql .= ' AND ' . $prefix . '_org_id = ?';
-            $params[] = $gCurrentOrgId;
-        }
+                   AND ' . $prefix . '_uuid <> ?
+                   AND ' . $prefix . '_org_id = ?';
+        $params = array($clientId, (string) $client->getValue($prefix . '_uuid'), $gCurrentOrgId);
 
         $other = $this->db->queryPrepared($sql, $params)->fetch();
         if ($other === false) {
             return;
         }
 
-        // The name of a client of another organization is not shown to this organization
-        if ((int) $other[$prefix . '_org_id'] !== (int) $gCurrentOrgId) {
-            throw new \Admidio\Infrastructure\Exception(
-                'SYS_SSO_CLIENT_ID_EXISTS_OTHER_ORGA',
-                array(SecurityUtils::encodeHTML($clientId))
-            );
-        }
         throw new \Admidio\Infrastructure\Exception(
             'SYS_SSO_CLIENT_ID_EXISTS',
             array(SecurityUtils::encodeHTML($clientId), SecurityUtils::encodeHTML($other[$prefix . '_client_name']))
