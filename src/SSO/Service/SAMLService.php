@@ -97,7 +97,19 @@ class SAMLService extends SSOService {
             ));
         }
 
-        foreach (array('smc_x509_certificate', 'smc_x509_encryption_certificate') as $field) {
+        // a new metadata URL is fetched with the next check instead of waiting for the old schedule, and the
+        // version of the old one is no reason to skip the new document
+        if (array_key_exists('smc_metadata_url', $formValues)
+            && trim((string) $formValues['smc_metadata_url']) !== trim((string) $client->getValue('smc_metadata_url'))
+        ) {
+            foreach (array('smc_metadata_next_check', 'smc_metadata_etag', 'smc_metadata_last_modified', 'smc_metadata_hash',
+                     'smc_metadata_error') as $column) {
+                $client->setValue($column, null);
+            }
+            $client->setValue('smc_metadata_failures', 0);
+        }
+
+        foreach (array('smc_x509_certificate', 'smc_x509_encryption_certificate', 'smc_metadata_signing_certificate') as $field) {
             if (SAMLCertificates::hasInvalidBlock((string) ($formValues[$field] ?? ''))) {
                 throw new \Admidio\Infrastructure\Exception('SYS_SSO_SAML_CERTIFICATE_INVALID');
             }
@@ -146,26 +158,7 @@ class SAMLService extends SSOService {
      */
     public function reloadClientMetadata(SAMLClient $client): void
     {
-        global $gLogger, $gSettingsManager;
-
-        $url = trim((string) $client->getValue('smc_metadata_url'));
-        if ($url === '') {
-            throw new \Admidio\Infrastructure\Exception('SYS_SSO_METADATA_URL_REQUIRED');
-        }
-
-        try {
-            $metadata = (new MetadataFetcher($gSettingsManager->getBool('sso_allow_private_network')))->fetch($url);
-        } catch (\Throwable $exception) {
-            $gLogger->warning('Could not reload SAML metadata.', array(
-                'client' => $client->getValue('smc_client_id'),
-                'url' => $url,
-                'reason' => $exception->getMessage()
-            ));
-            throw new \Admidio\Infrastructure\Exception('SYS_SSO_METADATA_LOAD_FAILED');
-        }
-
-        (new SAMLMetadataImporter())->apply($client, $metadata);
-        $client->save();
+        (new SAMLMetadataRefreshService($this->db))->refresh($client, true);
     }
 
     /**
@@ -207,6 +200,13 @@ class SAMLService extends SSOService {
     }
 
 
+
+    public function getSignatureWriter(string $privkeyPEM, X509Certificate $cert) {
+        $privateKeyResource = KeyHelper::createPrivateKey($privkeyPEM, '', false, XMLSecurityKey::RSA_SHA256);
+        $signatureWriter = new SignatureWriter($cert, $privateKeyResource, XmlSecurityDSig::SHA256);
+        return $signatureWriter;
+    }
+
     /**
      * The certificate assertions are encrypted for: the encryption certificate of the client, or its
      * first signing certificate if it has none.
@@ -225,13 +225,6 @@ class SAMLService extends SSOService {
             return $encryptionCertificate;
         }
         return SAMLCertificates::parse($signingCertificates)[0] ?? '';
-    }
-
-
-    public function getSignatureWriter(string $privkeyPEM, X509Certificate $cert) {
-        $privateKeyResource = KeyHelper::createPrivateKey($privkeyPEM, '', false, XMLSecurityKey::RSA_SHA256);
-        $signatureWriter = new SignatureWriter($cert, $privateKeyResource, XmlSecurityDSig::SHA256);
-        return $signatureWriter;
     }
 
     /**

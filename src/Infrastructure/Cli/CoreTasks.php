@@ -76,6 +76,7 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\SAMLMetadataRefreshService;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\SAMLService;
 use Admidio\Users\Entity\User;
@@ -459,7 +460,7 @@ final class CoreTasks
      * @var array<int,string>
      */
     private const MAINTENANCE_JOBS = array(
-        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'update-check'
+        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'saml-metadata', 'update-check'
     );
 
     private static function registerSystemTasks(): void
@@ -2257,6 +2258,11 @@ final class CoreTasks
             array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('json', 'json-api')))
         );
+        self::task('sso:saml-metadata-refresh', 'ssoSamlMetadataRefresh',
+            'Fetch the metadata of the SAML clients again from their metadata URLs and apply it.',
+            'sso:saml-metadata-refresh [CLIENT] [--force]', 'CORE', true,
+            array(self::arg('client', 'SAML client UUID/client id. Without it the clients that are due are refreshed.', false)),
+            array(self::opt('force', 'Fetch and apply the metadata even if it did not change; with no CLIENT, refresh every client with a metadata URL.', '', false, false, true)));
         self::task(
             'sso:saml-metadata',
             'ssoSamlMetadata',
@@ -3353,6 +3359,7 @@ final class CoreTasks
             'sessions' => static fn (): mixed => self::cleanupSessions(30),
             'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
             'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens(),
+            'saml-metadata' => static fn (): mixed => self::refreshSamlMetadata(),
             'update-check' => static fn (): mixed => self::checkForUpdate()
         );
         $rows = array();
@@ -9472,6 +9479,23 @@ final class CoreTasks
      * administrators do twice a day - unless the check is switched off in the preferences. The time
      * of the check is recorded, so that a request does not repeat it.
      */
+    /**
+     * Check the metadata of the SAML clients that are due for it (see SAMLMetadataRefreshService).
+     * A client whose metadata cannot be fetched or is not valid is reported; the job fails only
+     * for an error that keeps it from running at all.
+     */
+    private static function refreshSamlMetadata(): string
+    {
+        global $gDb;
+
+        $rows = (new SAMLMetadataRefreshService($gDb))->refreshDue();
+        $summary = array();
+        foreach ($rows as $row) {
+            $summary[] = $row['client'] . ': ' . $row['result'] . ($row['message'] !== '' ? ' (' . $row['message'] . ')' : '');
+        }
+        return count($rows) === 0 ? 'No SAML metadata is due.' : implode('; ', $summary);
+    }
+
     private static function checkForUpdate(): string
     {
         global $gSettingsManager;
@@ -12003,6 +12027,39 @@ final class CoreTasks
         }
 
         return $data;
+    }
+
+    public static function ssoSamlMetadataRefresh(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $service = new SAMLMetadataRefreshService($gDb);
+        $force = CliApplication::optionBool($options, 'force', false);
+        $rows = array();
+
+        if (isset($arguments[0])) {
+            [$client] = self::resolveSsoClient((string)$arguments[0], 'saml');
+            $rows[] = array('client' => $client->getIdentifier(), 'result' => $service->refresh($client, $force), 'message' => '');
+        } elseif ($force) {
+            $ids = $gDb->queryPrepared(
+                'SELECT smc_id FROM ' . TBL_SAML_CLIENTS . ' WHERE smc_metadata_url IS NOT NULL AND smc_metadata_url <> ?',
+                array('')
+            )->fetchAll(PDO::FETCH_COLUMN);
+            foreach ($ids as $id) {
+                $client = new SAMLClient($gDb, (int)$id);
+                try {
+                    $rows[] = array('client' => $client->getIdentifier(), 'result' => $service->refresh($client, true), 'message' => '');
+                } catch (\Admidio\Infrastructure\Exception $exception) {
+                    $rows[] = array('client' => $client->getIdentifier(), 'result' => SAMLMetadataRefreshService::FAILED, 'message' => $exception->getTranslationId());
+                }
+            }
+        } else {
+            $rows = $service->refreshDue(PHP_INT_MAX, PHP_INT_MAX);
+        }
+
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return count(array_filter($rows, static fn (array $row): bool => $row['result'] === SAMLMetadataRefreshService::FAILED)) === 0
+            ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_FAILED;
     }
 
     private static function setSsoEnabled(array $arguments, array $options, bool $enabled): int

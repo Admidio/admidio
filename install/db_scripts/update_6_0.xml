@@ -66,5 +66,16 @@
     <step id="280" database="mysql">ALTER TABLE %PREFIX%_saml_clients DROP INDEX smc_client_id</step>
     <step id="290" database="pgsql">ALTER TABLE %PREFIX%_saml_clients DROP CONSTRAINT %PREFIX%_saml_clients_smc_client_id_key</step>
     <step id="300">CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id)</step>
+    <step id="310">ALTER TABLE %PREFIX%_saml_clients
+        ADD COLUMN smc_metadata_refresh bool NOT NULL DEFAULT false,
+        ADD COLUMN smc_metadata_signing_certificate text NULL,
+        ADD COLUMN smc_metadata_checked timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_next_check timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_etag varchar(255) NULL,
+        ADD COLUMN smc_metadata_last_modified varchar(100) NULL,
+        ADD COLUMN smc_metadata_hash varchar(64) NULL,
+        ADD COLUMN smc_metadata_valid_until timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_failures integer unsigned NOT NULL DEFAULT 0,
+        ADD COLUMN smc_metadata_error varchar(100) NULL</step>
     <step>stop</step>
 </update>

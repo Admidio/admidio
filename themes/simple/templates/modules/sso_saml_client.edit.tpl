@@ -10,6 +10,11 @@
 
         <div class="card-body" id="sso_client_metadata"{if !$isNewClient} style="display: none;"{/if}>
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_metadata_url']}
+            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_metadata_refresh']}
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_metadata_signing_certificate']}
+            {if isset($elements['smc_metadata_status'])}
+                {include 'sys-template-parts/form.custom-content.tpl' data=$elements['smc_metadata_status']}
+            {/if}
             <div id="{$elements['adm_button_metadata_setup'].id}_group" class="admidio-form-group row">
                 <label for="adm_button_metadata_setup" class="col-sm-3 col-form-label"></label>            
                 <div class="col-sm-9">

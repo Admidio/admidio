@@ -6,6 +6,10 @@ use Admidio\SSO\Entity\SAMLClient;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
+use LightSaml\Credential\KeyHelper;
+use LightSaml\Credential\X509Certificate;
+use LightSaml\Model\Context\DeserializationContext;
+use LightSaml\Model\XmlDSig\SignatureXmlReader;
 
 /**
  * Applies the SAML metadata of a service provider to its SAML client.
@@ -32,23 +36,36 @@ class SAMLMetadataImporter
      * Apply the metadata to the client. The client is not saved.
      * @param SAMLClient $client The client whose settings are updated.
      * @param string $metadataXml The metadata document.
+     * @param string $trustedCertificates One or more PEM certificates that the metadata has to be signed
+     *                                    with (one of them); empty if the metadata is not required to be signed.
+     * @return array{validUntil:int|null,cacheDuration:int|null} How long the metadata is valid: the
+     *         earliest validUntil (timestamp) and the shortest cacheDuration (seconds) of the entry and
+     *         the aggregates around it, null if it states none.
      * @throws Exception SYS_SSO_METADATA_INVALID if the document is not SAML metadata,
-     *                   SYS_SSO_METADATA_ENTITY_MISSING if it does not describe the client.
+     *                   SYS_SSO_METADATA_ENTITY_MISSING if it does not describe the client,
+     *                   SYS_SSO_METADATA_SIGNATURE_MISSING or SYS_SSO_METADATA_SIGNATURE_INVALID if a signature
+     *                   is required and the entry has none that verifies.
      */
-    public function apply(SAMLClient $client, string $metadataXml): void
+    public function apply(SAMLClient $client, string $metadataXml, string $trustedCertificates = ''): array
     {
         $xpath = $this->load($metadataXml);
         $entityId = (string) $client->getValue('smc_client_id');
 
+        $entityDescriptor = null;
         $spDescriptor = null;
         foreach ($xpath->query('//md:EntityDescriptor') as $entity) {
             if ($entity instanceof DOMElement && $entity->getAttribute('entityID') === $entityId) {
+                $entityDescriptor = $entity;
                 $spDescriptor = $xpath->query('md:SPSSODescriptor', $entity)->item(0);
                 break;
             }
         }
         if (!$spDescriptor instanceof DOMElement) {
             throw new Exception('SYS_SSO_METADATA_ENTITY_MISSING', array($entityId));
+        }
+
+        if (trim($trustedCertificates) !== '') {
+            $this->assertSigned($xpath, $entityDescriptor, $trustedCertificates);
         }
 
         // Prefer the default ACS and otherwise an HTTP-POST ACS, which is the binding Admidio
@@ -83,6 +100,87 @@ class SAMLMetadataImporter
         $client->setValue('smc_x509_encryption_certificate', $encryption === array() ? null : $encryption[0]);
 
         $client->setValue('smc_require_auth_signed', $spDescriptor->getAttribute('AuthnRequestsSigned') === 'true');
+
+        return $this->validity($entityDescriptor);
+    }
+
+    /**
+     * Seconds of an xs:duration like P1D or PT36H. A year counts 365 and a month 30 days, which is
+     * accurate enough for a cache duration.
+     * @return int|null Null if the text is no duration.
+     */
+    public static function parseDuration(string $duration): ?int
+    {
+        if (!preg_match('/^P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)(?:\.\d+)?S)?)?$/', trim($duration), $m)
+            || $duration === 'P' || str_ends_with($duration, 'T')
+        ) {
+            return null;
+        }
+        return ((int) ($m[1] ?? 0)) * 31536000 + ((int) ($m[2] ?? 0)) * 2592000 + ((int) ($m[3] ?? 0)) * 86400
+            + ((int) ($m[4] ?? 0)) * 3600 + ((int) ($m[5] ?? 0)) * 60 + (int) ($m[6] ?? 0);
+    }
+
+    /**
+     * validUntil and cacheDuration of an entry: the strictest value on the entry and the aggregates
+     * around it, because each of them limits everything inside.
+     * @return array{validUntil:int|null,cacheDuration:int|null}
+     */
+    private function validity(DOMElement $entity): array
+    {
+        $validUntil = null;
+        $cacheDuration = null;
+        for ($node = $entity; $node instanceof DOMElement; $node = $node->parentNode) {
+            if ($node->hasAttribute('validUntil')) {
+                $time = strtotime($node->getAttribute('validUntil'));
+                if ($time !== false && ($validUntil === null || $time < $validUntil)) {
+                    $validUntil = $time;
+                }
+            }
+            if ($node->hasAttribute('cacheDuration')) {
+                $seconds = self::parseDuration($node->getAttribute('cacheDuration'));
+                if ($seconds !== null && ($cacheDuration === null || $seconds < $cacheDuration)) {
+                    $cacheDuration = $seconds;
+                }
+            }
+        }
+        return array('validUntil' => $validUntil, 'cacheDuration' => $cacheDuration);
+    }
+
+    /**
+     * Make sure that the entry is covered by a signature of one of the trusted certificates. The signature
+     * is the one of the entry or of the nearest aggregate around it; LightSAML checks that its reference
+     * points to the element it sits in, that the ID is unique in the document and the digest of the
+     * element, which keeps another element of the document from being passed off as the signed one.
+     * @throws Exception SYS_SSO_METADATA_SIGNATURE_MISSING, SYS_SSO_METADATA_SIGNATURE_INVALID
+     */
+    private function assertSigned(DOMXPath $xpath, DOMElement $entity, string $trustedCertificates): void
+    {
+        $signature = null;
+        for ($node = $entity; $node instanceof DOMElement && $signature === null; $node = $node->parentNode) {
+            $signature = $xpath->query('ds:Signature', $node)->item(0);
+        }
+        if (!$signature instanceof DOMElement) {
+            throw new Exception('SYS_SSO_METADATA_SIGNATURE_MISSING');
+        }
+
+        $certificates = SAMLCertificates::parse($trustedCertificates);
+        try {
+            $reader = new SignatureXmlReader();
+            $reader->deserialize($signature, new DeserializationContext($xpath->document));
+
+            foreach ($certificates as $pem) {
+                try {
+                    if ($reader->validate(KeyHelper::createPublicKey((new X509Certificate())->loadPem($pem)))) {
+                        return;
+                    }
+                } catch (\Throwable) {
+                    // not signed with this certificate, the next one may be the right one
+                }
+            }
+        } catch (\Throwable) {
+            // an unreadable signature is an invalid one
+        }
+        throw new Exception('SYS_SSO_METADATA_SIGNATURE_INVALID');
     }
 
     /**

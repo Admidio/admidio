@@ -972,6 +972,8 @@ class ChangelogService {
             'smc_client_id' =>              'SYS_SSO_CLIENT_ID',
             'smc_client_name' =>            'SYS_SSO_CLIENT_NAME',
             'smc_metadata_url' =>           'SYS_SSO_METADATA_URL',
+            'smc_metadata_refresh' =>       array('name' => 'SYS_SSO_METADATA_REFRESH', 'type' => 'BOOL'),
+            'smc_metadata_signing_certificate' => 'SYS_SSO_METADATA_SIGNING_CERTIFICATE',
             'smc_acs_url' =>                'SYS_SSO_ACS_URL',
             'smc_slo_url' =>                'SYS_SSO_SLO_URL',
             'smc_x509_certificate' =>       'SYS_SSO_X509_CERTIFICATE',

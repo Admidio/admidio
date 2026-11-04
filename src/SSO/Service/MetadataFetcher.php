@@ -30,6 +30,9 @@ class MetadataFetcher
     /** Status codes of a redirect to another URL that keeps the request a GET */
     private const REDIRECT_STATUS_CODES = array(301, 302, 303, 307, 308);
 
+    /** Response headers of the last request, in lower case; for the caller of fetchConditional() */
+    protected array $responseHeaders = array();
+
     /**
      * @param bool $allowPrivateNetwork Allow addresses inside the network of the installation and
      *                                  plain HTTP (setting sso_allow_private_network).
@@ -47,8 +50,36 @@ class MetadataFetcher
      */
     public function fetch(string $url): string
     {
+        return (string) $this->fetchConditional($url)['body'];
+    }
+
+    /**
+     * Fetch the metadata document of the given URL, following redirects, unless the server says it did
+     * not change since the version the caller already has.
+     * @param string $url The metadata URL.
+     * @param string|null $etag The ETag of the version the caller has.
+     * @param string|null $lastModified The Last-Modified date of the version the caller has.
+     * @return array{body:string|null,etag:string|null,lastModified:string|null} The body is null if the
+     *         server answered 304 Not Modified.
+     * @throws Exception SYS_OUTBOUND_URL_NOT_ALLOWED if the URL or a redirect target is not allowed.
+     * @throws RuntimeException if the metadata could not be fetched.
+     */
+    public function fetchConditional(string $url, ?string $etag = null, ?string $lastModified = null): array
+    {
+        $headers = array();
+        if ($etag !== null && $etag !== '') {
+            $headers[] = 'If-None-Match: ' . $etag;
+        }
+        if ($lastModified !== null && $lastModified !== '') {
+            $headers[] = 'If-Modified-Since: ' . $lastModified;
+        }
+
         for ($redirects = 0; $redirects <= self::MAX_REDIRECTS; $redirects++) {
             $requestOptions = SecurityUtils::getOutboundRequestCurlOptions($url, $this->allowPrivateNetwork);
+            if ($headers !== array()) {
+                $requestOptions[CURLOPT_HTTPHEADER] = array_merge($requestOptions[CURLOPT_HTTPHEADER] ?? array(), $headers);
+            }
+            $this->responseHeaders = array();
             [$statusCode, $body, $location] = $this->request($url, $requestOptions);
 
             if (in_array($statusCode, self::REDIRECT_STATUS_CODES, true) && $location !== '') {
@@ -56,8 +87,16 @@ class MetadataFetcher
                 continue;
             }
 
+            if ($statusCode === 304 && $headers !== array()) {
+                return array('body' => null, 'etag' => $etag, 'lastModified' => $lastModified);
+            }
+
             if ($statusCode >= 200 && $statusCode < 300) {
-                return $body;
+                return array(
+                    'body' => $body,
+                    'etag' => $this->responseHeaders['etag'] ?? null,
+                    'lastModified' => $this->responseHeaders['last-modified'] ?? null
+                );
             }
 
             throw new RuntimeException('The metadata URL answered with HTTP status ' . $statusCode . '.');
@@ -122,9 +161,12 @@ class MetadataFetcher
         curl_setopt_array($curl, $requestOptions + array(
             CURLOPT_CONNECTTIMEOUT => 5,
             CURLOPT_TIMEOUT => 10,
-            CURLOPT_HEADERFUNCTION => static function ($curlHandle, string $header) use (&$location): int {
+            CURLOPT_HEADERFUNCTION => function ($curlHandle, string $header) use (&$location): int {
                 if (stripos($header, 'Location:') === 0) {
                     $location = trim(substr($header, 9));
+                }
+                if (preg_match('/^(ETag|Last-Modified):\s*(.*?)\s*$/i', $header, $matches)) {
+                    $this->responseHeaders[strtolower($matches[1])] = $matches[2];
                 }
                 return strlen($header);
             },
