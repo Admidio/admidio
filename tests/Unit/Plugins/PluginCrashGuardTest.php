@@ -1,7 +1,7 @@
 <?php
 /**
- * The plugin crash guard: a fatal error while a plugin is loaded is a crash of that plugin and
- * nothing else is, the record it keeps, the rules that let a recorded plugin back in, and what the
+ * The plugin crash guard: a fatal error while a plugin is loaded, or an error in the code of a plugin
+ * file at any time, is a crash of that plugin and nothing else is, the record it keeps, the rules that let a recorded plugin back in, and what the
  * registry does with it. The failures that end a PHP process are produced in a process of their own.
  */
 
@@ -98,6 +98,56 @@ final class PluginCrashGuardTest extends PluginTestCase
         PluginCrashGuard::beginLoading('crashing');
         PluginCrashGuard::endLoading();
         $this->assertNull(PluginCrashGuard::attributeError($error), 'after the plugin was loaded');
+    }
+
+    /**
+     * @testdox An error in the code of a plugin file is a crash of that plugin even after loading
+     *
+     * A class that is only referenced inside a closure is autoloaded when a page needs it.
+     * @dataProvider codeErrorTypes
+     */
+    public function testCodeErrorInPluginFileOutsideLoading(int $type): void
+    {
+        $this->assertSame('crashing', PluginCrashGuard::attributeError(array(
+            'type' => $type, 'message' => 'Declaration must be compatible', 'file' => self::crashingFile('src/Incompatible.php'), 'line' => 12
+        ))['plugin'] ?? null);
+    }
+
+    /**
+     * @return array<string,array{0: int}>
+     */
+    public static function codeErrorTypes(): array
+    {
+        return array(
+            'E_PARSE' => array(E_PARSE),
+            'E_COMPILE_ERROR' => array(E_COMPILE_ERROR),
+            'E_CORE_ERROR' => array(E_CORE_ERROR)
+        );
+    }
+
+    /**
+     * @testdox An error in the code of a file outside the plugins is no crash of a plugin after loading
+     */
+    public function testCodeErrorOutsidePluginsOutsideLoading(): void
+    {
+        $this->assertNull(PluginCrashGuard::attributeError(array(
+            'type' => E_COMPILE_ERROR, 'message' => 'Broken', 'file' => ADMIDIO_PATH . '/src/Foo.php', 'line' => 3
+        )));
+    }
+
+    /**
+     * @testdox The plugin that owns the file is blamed, not the one that happens to be loading
+     */
+    public function testFileOwnerIsBlamedWhileLoading(): void
+    {
+        PluginCrashGuard::beginLoading('hello');
+
+        $this->assertSame('crashing', PluginCrashGuard::attributeError(array(
+            'type' => E_COMPILE_ERROR, 'message' => 'Broken', 'file' => self::crashingFile(), 'line' => 3
+        ))['plugin'] ?? null);
+        $this->assertSame('hello', PluginCrashGuard::attributeError(array(
+            'type' => E_ERROR, 'message' => 'Broken', 'file' => ADMIDIO_PATH . '/src/Foo.php', 'line' => 3
+        ))['plugin'] ?? null, 'a file of Admidio is blamed on the plugin that is loading');
     }
 
     /**
@@ -383,16 +433,17 @@ final class PluginCrashGuardTest extends PluginTestCase
     }
 
     /**
-     * @testdox A fatal error after the plugins are loaded is not recorded
+     * @testdox An incompatible method signature in a class that is autoloaded after loading is recorded
      */
-    public function testCompileErrorAfterLoadingIsNotRecorded(): void
+    public function testCompileErrorAfterLoadingIsRecorded(): void
     {
         $this->runGuardedProcess('\\Admidio\\Infrastructure\\Plugins\\PluginCrashGuard::beginLoading("crashing");
             \\Admidio\\Infrastructure\\Plugins\\PluginCrashGuard::endLoading();
             require ' . var_export(self::crashingFile('src/Incompatible.php'), true) . ';');
 
-        $this->assertSame(array(), PluginCrashGuard::getActive());
-        $this->assertFileDoesNotExist($this->recordFile);
+        $crash = PluginCrashGuard::getActive()['crashing'] ?? null;
+        $this->assertNotNull($crash);
+        $this->assertStringContainsString('must be compatible with Countable::count()', $crash['error']);
     }
 
     /**
