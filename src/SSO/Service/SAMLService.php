@@ -73,10 +73,11 @@ class SAMLService extends SSOService {
         $this->columnPrefix = 'smc';
         $this->table = TBL_SAML_CLIENTS;
 
-        $this->idpEntityId = $gSettingsManager->get('sso_saml_entity_id');
-        $this->ssoUrl      = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/sso';
-        $this->sloUrl      = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/slo';
-        $this->metadataUrl = ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/saml/metadata';
+        $baseUrl = SSOOrganization::getBaseUrl();
+        $this->idpEntityId = SSOOrganization::getEffectiveEntityId((string) $gSettingsManager->get('sso_saml_entity_id'));
+        $this->ssoUrl      = $baseUrl . '/saml/sso';
+        $this->sloUrl      = $baseUrl . '/saml/slo';
+        $this->metadataUrl = $baseUrl . '/saml/metadata';
     }
 
     /**
@@ -130,14 +131,6 @@ class SAMLService extends SSOService {
 
     public function getIdPEntityId() : string {
         return $this->idpEntityId;
-    }
-
-    /**
-     * The entity ID of a SAML client is unique in the database across all organizations.
-     */
-    protected function clientIdIsUniqueInstallationWide(): bool
-    {
-        return true;
     }
 
     public function initializeClientObject(Database $database): ?SSOClient {

@@ -709,7 +709,7 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_id                      integer unsigned    AUTO_INCREMENT,
     smc_uuid                    varchar(36)         NOT NULL,
     smc_org_id                  integer unsigned    NOT NULL,
-    smc_client_id               varchar(255)        NOT NULL UNIQUE,
+    smc_client_id               varchar(255)        NOT NULL,
     smc_client_name             varchar(255)        NOT NULL,
     smc_enabled                 bool                DEFAULT true,
     smc_metadata_url            text                NULL,
@@ -749,6 +749,8 @@ CREATE TABLE %PREFIX%_saml_logout_transactions (
     slt_org_id                  integer unsigned    NOT NULL,
     slt_data                    text                NOT NULL,
     slt_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id);
+
     PRIMARY KEY (slt_id)
 )
 ENGINE = InnoDB
