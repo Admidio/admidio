@@ -239,6 +239,26 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('smc_metadata_url'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
         );
+        $form->addCheckbox(
+            'smc_metadata_refresh',
+            $gL10n->get('SYS_SSO_METADATA_REFRESH'),
+            boolval($client->getValue('smc_metadata_refresh')),
+            array('helpTextId' => $gL10n->get('SYS_SSO_METADATA_REFRESH_DESC'))
+        );
+        $form->addMultilineTextInput(
+            'smc_metadata_signing_certificate',
+            $gL10n->get('SYS_SSO_METADATA_SIGNING_CERTIFICATE'),
+            $client->getValue('smc_metadata_signing_certificate'),
+            4,
+            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_SIGNING_CERTIFICATE_DESC'))
+        );
+        if (!$client->isNewRecord() && (string) $client->getValue('smc_metadata_url') !== '') {
+            $form->addCustomContent(
+                'smc_metadata_status',
+                $gL10n->get('SYS_SSO_METADATA_STATUS'),
+                SecurityUtils::encodeHTML($this->getMetadataStatusText($client))
+            );
+        }
         // NEW: scratch field, deliberately not prefixed smc_/ocl_ so SSOService::save() never
         // tries to persist it as a client column (same convention as sso_fields_all_other etc.)
         $form->addMultilineTextInput(
@@ -1065,6 +1085,12 @@ class SSOClientPresenter extends PagePresenter
                     '<i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_METADATA_RELOAD') . '"></i></a>';
             }
 
+            // a metadata refresh that failed or found expired metadata
+            if ((string) $client->getValue('smc_metadata_error') !== '') {
+                $actions .= '<span class="admidio-icon-link"><i class="bi bi-exclamation-triangle text-danger" data-bs-toggle="tooltip" title="' .
+                    SecurityUtils::encodeHTML($gL10n->get((string) $client->getValue('smc_metadata_error'))) . '"></i></span>';
+            }
+
             // add link to delete SAML client
             $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
                     data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName())))) . '"
@@ -1211,5 +1237,27 @@ class SSOClientPresenter extends PagePresenter
         $this->assignSmartyVariable('rows', $columnValues);
         // add table to the page
         $this->addHtmlByTemplate('modules/sso_oidc_clients.list.tpl');
+    }
+
+    /**
+     * One line about the metadata of a client with a metadata URL: when it was checked last, what went wrong
+     * and when it is checked next.
+     */
+    private function getMetadataStatusText(SAMLClient $client): string
+    {
+        global $gL10n;
+
+        $format = function (string $column) use ($client, $gL10n): string {
+            $value = $client->getValue($column, 'database');
+            return $value === null || $value === '' ? $gL10n->get('SYS_NONE') : date('Y-m-d H:i', (int) strtotime((string) $value));
+        };
+
+        $text = $gL10n->get('SYS_SSO_METADATA_STATUS_TEXT', array(
+            $format('smc_metadata_checked'),
+            $format('smc_metadata_valid_until'),
+            boolval($client->getValue('smc_metadata_refresh')) ? $format('smc_metadata_next_check') : $gL10n->get('SYS_NONE')
+        ));
+        $error = (string) $client->getValue('smc_metadata_error');
+        return $error === '' ? $text : $text . ' ' . $gL10n->get($error);
     }
 }

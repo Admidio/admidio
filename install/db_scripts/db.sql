@@ -713,6 +713,16 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_client_name             varchar(255)        NOT NULL,
     smc_enabled                 bool                DEFAULT true,
     smc_metadata_url            text                NULL,
+    smc_metadata_refresh        bool                NOT NULL    DEFAULT false,
+    smc_metadata_signing_certificate text           NULL,
+    smc_metadata_checked        timestamp           NULL        DEFAULT NULL,
+    smc_metadata_next_check     timestamp           NULL        DEFAULT NULL,
+    smc_metadata_etag           varchar(255)        NULL,
+    smc_metadata_last_modified  varchar(100)        NULL,
+    smc_metadata_hash           varchar(64)         NULL,
+    smc_metadata_valid_until    timestamp           NULL        DEFAULT NULL,
+    smc_metadata_failures       integer unsigned    NOT NULL    DEFAULT 0,
+    smc_metadata_error          varchar(100)        NULL,
     smc_acs_url                 text                NOT NULL,
     smc_slo_url                 text                NULL,
     smc_x509_certificate        text                NOT NULL,
@@ -739,6 +749,8 @@ ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id);
+
 
 /*==============================================================*/
 /* Table: adm_saml_logout_transactions                           */
@@ -749,8 +761,6 @@ CREATE TABLE %PREFIX%_saml_logout_transactions (
     slt_org_id                  integer unsigned    NOT NULL,
     slt_data                    text                NOT NULL,
     slt_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
-CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id);
-
     PRIMARY KEY (slt_id)
 )
 ENGINE = InnoDB
