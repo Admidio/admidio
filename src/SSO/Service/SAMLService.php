@@ -2026,6 +2026,7 @@ class SAMLService extends SSOService {
             && $g_organization !== ''
         ) {
             $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+            $gCurrentOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
             $gProfileFields->readProfileFields($gCurrentOrgId);
 
