@@ -17,9 +17,18 @@ use Throwable;
  * writes the crash to **adm_my_files/plugins-failed.json**. PluginRegistry::getLoadable() leaves the
  * plugin out - and every plugin that requires it - from the next request on.
  *
- * Only loading counts. Once all plugins are loaded, a crash is a bug of the plugin that is reported
- * and fixed, while the plugin stays active: what a visitor sends with a request must never be able to
- * take a plugin away from everybody.
+ * Once all plugins are loaded, only an error in the code itself counts (E_PARSE, E_COMPILE_ERROR,
+ * E_CORE_ERROR) and only if it occurs in a file of a plugin. A class that a plugin references only
+ * inside a closure is autoloaded long after loading, and an incompatible declaration then ends the
+ * pages of the plugin administration just the same. Such an error does not depend on what a visitor
+ * sends. Any other fatal error (an uncaught TypeError, for example) is a bug of the plugin that is
+ * reported and fixed, while the plugin stays active: what a visitor sends with a request must never
+ * be able to take a plugin away from everybody.
+ *
+ * The crash is attributed to the plugin whose directory contains the file of the error. Only if that
+ * is a file of Admidio, it is the plugin that is being loaded. A file that is still being written
+ * while a plugin is updated may be recorded as a parse error; the entry stops to apply as soon as
+ * the plugin version changes.
  *
  * The record is installation-wide and deliberately not a preference: whether a plugin is enabled is
  * the decision of an organization, it is written to the changelog, and a crash must not change it.
@@ -45,6 +54,12 @@ final class PluginCrashGuard
      * The error types PHP cannot recover from. Anything else lets the request continue.
      */
     private const FATAL_ERRORS = E_ERROR | E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR | E_USER_ERROR;
+
+    /**
+     * The error types that come from the code itself and never from what a request sends. They
+     * count as a crash of a plugin even after all plugins were loaded.
+     */
+    private const CODE_ERRORS = E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR;
 
     /**
      * Fatal errors that say the request ran out of a resource. Whatever code ran last only happened
@@ -156,7 +171,7 @@ final class PluginCrashGuard
      */
     public static function attributeError(?array $error): ?array
     {
-        if (self::$loading === null || $error === null || ($error['type'] & self::FATAL_ERRORS) === 0) {
+        if ($error === null || ($error['type'] & self::FATAL_ERRORS) === 0) {
             return null;
         }
 
@@ -167,12 +182,42 @@ final class PluginCrashGuard
             }
         }
 
+        $file = (string)$error['file'];
+        $id = self::getPluginIdOfFile($file);
+        if ($id === null) {
+            $id = self::$loading;
+        } elseif (self::$loading === null && ($error['type'] & self::CODE_ERRORS) === 0) {
+            return null;
+        }
+        if ($id === null) {
+            return null;
+        }
+
         return array(
-            'plugin' => self::$loading,
+            'plugin' => $id,
             'error' => $message,
-            'file' => (string)$error['file'],
+            'file' => $file,
             'line' => (int)$error['line']
         );
+    }
+
+    /**
+     * The ID of the plugin whose directory contains a file, or **null** if the file belongs to no
+     * plugin.
+     * @param string $file
+     * @return string|null
+     */
+    private static function getPluginIdOfFile(string $file): ?string
+    {
+        $base = rtrim(str_replace('\\', '/', PluginRegistry::getPluginsPath()), '/') . '/';
+        $file = str_replace('\\', '/', $file);
+        if (!str_starts_with($file, $base)) {
+            return null;
+        }
+
+        $id = strstr(substr($file, strlen($base)), '/', true);
+
+        return $id !== false && PluginRegistry::get($id) !== null ? $id : null;
     }
 
     /**
