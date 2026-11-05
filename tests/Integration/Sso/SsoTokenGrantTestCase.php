@@ -89,8 +89,10 @@ abstract class SsoTokenGrantTestCase extends AdministratorTestCase
 
         $codeId = $this->issueAuthCode($client);
 
+        // a refresh token is only issued for the offline_access scope
         $accessToken = (new ReflectionMethod($this->codeGrant, 'issueAccessToken'))->invoke($this->codeGrant,
-            new \DateInterval('PT1H'), $client, (string) $gCurrentUser->getValue('usr_uuid'), array());
+            new \DateInterval('PT1H'), $client, (string) $gCurrentUser->getValue('usr_uuid'),
+            array(new \Admidio\SSO\Entity\ScopeEntity('openid'), new \Admidio\SSO\Entity\ScopeEntity('offline_access')));
         $refreshToken = (new ReflectionMethod($this->codeGrant, 'issueRefreshToken'))->invoke($this->codeGrant, $accessToken);
 
         $authCode = $this->authCodeRepository->getToken($codeId);

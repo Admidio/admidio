@@ -1141,6 +1141,10 @@ class OIDCService extends SSOService {
             if (!($client instanceof OIDCClient)) {
                 return $this->createInvalidTokenResponse('Client not found');
             }
+            // like the introspection and the refresh: the token does not outlive the right to use the client
+            if ($user instanceof UserEntity && (!$user->mayLogin() || !$client->hasAccessRight($user))) {
+                return $this->createInvalidTokenResponse('Token was revoked');
+            }
 
             $scopes = array_map(fn($s) => $s->getIdentifier(), $token->getScopes());
             $scopes = array_values(array_intersect($scopes, $client->getAllowedScopes()));
@@ -1394,7 +1398,7 @@ class OIDCService extends SSOService {
              */
             if ((int) $token->getValue($token->getColumnPrefix() . '_usr_id') > 0) {
                 $tokenUser = $token->getUser();
-                if ($tokenUser instanceof UserEntity && !$tokenClient->hasAccessRight($tokenUser)) {
+                if ($tokenUser instanceof UserEntity && (!$tokenUser->mayLogin() || !$tokenClient->hasAccessRight($tokenUser))) {
                     return new JsonResponse(['active' => false]);
                 }
             }
