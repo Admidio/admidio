@@ -1387,10 +1387,12 @@ class SAMLService extends SSOService {
     /**
      * Resolve an SP-initiated LogoutRequest to the persisted SAML participant.
      *
+     * @param bool $signatureVerified Whether the request carries a signature that was verified
      * @return array<string,mixed>|null
+     * @throws SAMLRequestException If an unverified request does not name the session it ends
      * @throws Exception
      */
-    private function findActiveSessionParticipant(LogoutRequest $request, int $clientId): ?array
+    private function findActiveSessionParticipant(LogoutRequest $request, int $clientId, bool $signatureVerified): ?array
     {
         global $gCurrentOrgId;
 
@@ -1416,7 +1418,19 @@ class SAMLService extends SSOService {
         * the NameID of the login names no principal at all. This endpoint only serves the
         * front-channel bindings, so the browser session carrying the request identifies
         * the session that is meant.
+        *
+        * That is only safe for a request whose signature was verified. The SSO cookie is sent with
+        * every cross-site request, so any web page could otherwise send the browser of a visitor to
+        * this endpoint with an unsigned request in the name of a client (entity IDs are public) and log
+        * the visitor out everywhere. A client without a certificate, whose requests cannot be verified,
+        * is served only if the request names the session by its SessionIndex, which is secret and was
+        * issued to this client alone.
         */
+        if (!$signatureVerified) {
+            throw new SAMLRequestException(
+                'An unsigned LogoutRequest without SessionIndex is not accepted.'
+            );
+        }
         return $this->findCurrentSessionParticipant($request, $clientId);
     }
 
@@ -1572,10 +1586,10 @@ class SAMLService extends SSOService {
         $initiatorClient = $this->getClientFromID($initiatorEntityId);
 
         try {
-            $this->validateSLOClient($initiatorClient, $request);
+            $signatureVerified = $this->validateSLOClient($initiatorClient, $request);
 
             $initiatorClientId = (int) $initiatorClient->getValue('smc_id');
-            $initiatorParticipant = $this->findActiveSessionParticipant($request, $initiatorClientId);
+            $initiatorParticipant = $this->findActiveSessionParticipant($request, $initiatorClientId, $signatureVerified);
 
             if ($initiatorParticipant === null) {
                 /*
@@ -2174,9 +2188,11 @@ class SAMLService extends SSOService {
     /**
      * Validate a SAML SLO message and its client.
      *
+     * @return bool Whether the signature of the message was verified. It is not for a client without a
+     *         certificate, whose messages can only be accepted if they identify the session by themselves.
      * @throws Exception
      */
-    private function validateSLOClient(SAMLClient $client, SamlMessage $message): void 
+    private function validateSLOClient(SAMLClient $client, SamlMessage $message): bool
     {
         if (!$client->isEnabled()) {
             throw new Exception('Client "' . $client->getIdentifier() . '" is disabled. Logout is not possible.');
@@ -2198,6 +2214,8 @@ class SAMLService extends SSOService {
         }
 
         $this->validateRequestContext($client, $message, $this->sloUrl);
+
+        return $signatureRequired;
     }
 
     /**
