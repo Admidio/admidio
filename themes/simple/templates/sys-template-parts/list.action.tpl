@@ -5,4 +5,4 @@
     {else} href="{$actionItem.url|default:'javascript:void(0);'}"{/if}
     {if isset($actionItem.attributes)}{foreach $actionItem.attributes as $attribute => $value} {$attribute}="{$value|escape:'html'}"{/foreach}{/if}
     aria-label="{$actionItem.tooltip|escape:'html'}">
-    <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip|escape:'html'}"></i>{if $actionClass === 'dropdown-item'} {$actionItem.tooltip}{else}<span class="visually-hidden">{$actionItem.tooltip|escape:'html'}</span>{/if}</a>
+    <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip|escape:'html'}"></i>{if $actionClass === 'dropdown-item'} <span>{$actionItem.tooltip}</span>{else}<span class="visually-hidden">{$actionItem.tooltip|escape:'html'}</span>{/if}</a>

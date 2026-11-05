@@ -1143,7 +1143,7 @@ class SSOClientPresenter extends PagePresenter
                   \$icon.attr('data-bs-original-title', label);
                   \$link.closest('tr').find('.admidio-client-state').text(currentlyEnabled ? " . json_encode($gL10n->get('SYS_DISABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_ENABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ");
                   bootstrap.Tooltip.getInstance(\$icon[0])?.setContent({'.tooltip-inner': label});
-                  \$link.find('.visually-hidden').text(label);
+                  \$link.children('span').text(label);
 
                   // Update data-enabled attribute
                   \$link.data('enabled', newEnabled);
