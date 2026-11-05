@@ -1908,7 +1908,8 @@
   <string name="SYS_SPOUSE">Ehepartner/-in</string>
   <string name="SYS_SSO">Single-Sign-On</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">URL, die SAML-Antworten nach erfolgreicher Anmeldung empfängt, Haupteinstiegspunkt für den Client.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">URLs, an die der Service Provider die SAML-Antwort nach der Anmeldung erhält. Eine URL pro Zeile. Die erste ist die Standard-URL, an die geantwortet wird, wenn die Anfrage keine nennt; eine Anfrage kann jede der anderen nennen.</string>
+  <string name="SYS_SSO_ACS_URL_INVALID">„#VAR1#“ ist keine gültige ACS-URL. Gib eine http- oder https-Adresse ein.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Erweiterte Einstellungen</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Anfragen ins lokale Netzwerk erlauben</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">Serverseitige SSO-Anfragen (Metadaten-Abruf, Back-Channel-Logout) dürfen standardmäßig nur an öffentliche HTTPS-Adressen gehen. Aktiviere dies nur, wenn ein Service Provider ausschließlich unter einer privaten Adresse im eigenen Netzwerk erreichbar ist.</string>
@@ -2103,6 +2104,7 @@
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">Erlaubte Zeitabweichung zwischen Admidio und dem Client in Sekunden.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lebensdauer der an den Client gesendeten SAML-Assertions</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Gültigkeitsdauer ausgestellter SAML-Assertions in Sekunden.</string>
+  <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_INVALID">Die Lebensdauer der SAML-Assertions muss mindestens 1 Sekunde betragen.</string>
   <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">Ein Zertifikat ist kein gültiges X.509-Zertifikat im PEM-Format.</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML 2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Admidio als SAML-2.0-Identity-Provider aktivieren. Dadurch ist die Anmeldung bei anderen Webanwendungen über ein Admidio-Konto möglich.</string>
@@ -2112,6 +2114,7 @@
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML-Entity-ID</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Eindeutiger SAML-Bezeichner dieser Admidio-Instanz, üblicherweise die URL der Admidio-Installation. Er muss mit dem beim Client eingetragenen Wert übereinstimmen.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata-URL</string>
+  <string name="SYS_SSO_SAML_NAME_ID_EMPTY">Dein Benutzerkonto hat keinen Wert für die Kennung, die #VAR1# benötigt, daher kannst du dich dort nicht anmelden. Bitte wende dich an den Administrator.</string>
   <string name="SYS_SSO_SAML_NAME_ID_POLICY_INVALID">Die angeforderte Richtlinie für die Benutzerkennung wird nicht unterstützt.</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME">Gültigkeit der Anfrage</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME_DESC">Maximales Alter eingehender SAML-Anfragen in Sekunden. Standard: 300.</string>

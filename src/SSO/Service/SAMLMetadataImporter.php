@@ -68,15 +68,26 @@ class SAMLMetadataImporter
             $this->assertSigned($xpath, $entityDescriptor, $trustedCertificates);
         }
 
-        // Prefer the default ACS and otherwise an HTTP-POST ACS, which is the binding Admidio
-        // uses for SAML responses.
-        $acsUrl = $this->firstLocation($xpath, $spDescriptor, 'md:AssertionConsumerService[@isDefault="true"]')
-            ?? $this->firstLocation($xpath, $spDescriptor, 'md:AssertionConsumerService[@Binding="' . self::BINDING_POST . '"]')
-            ?? $this->firstLocation($xpath, $spDescriptor, 'md:AssertionConsumerService');
-        if ($acsUrl === null) {
+        // All assertion consumer services are taken over, the default one first, because a request may name any
+        // of them. Admidio answers with HTTP-POST, so only those are listed unless the service provider offers
+        // no other.
+        $acsUrls = array();
+        foreach (array(
+            'md:AssertionConsumerService[@isDefault="true"]',
+            'md:AssertionConsumerService[@Binding="' . self::BINDING_POST . '"]',
+        ) as $query) {
+            foreach ($this->locations($xpath, $spDescriptor, $query) as $location) {
+                $acsUrls[] = $location;
+            }
+        }
+        if ($acsUrls === array()) {
+            $acsUrls = $this->locations($xpath, $spDescriptor, 'md:AssertionConsumerService');
+        }
+        $acsUrls = array_values(array_unique($acsUrls));
+        if ($acsUrls === array()) {
             throw new Exception('SYS_SSO_METADATA_INVALID');
         }
-        $client->setValue('smc_acs_url', $acsUrl);
+        $client->setValue('smc_acs_url', implode("\n", $acsUrls));
 
         // Admidio sends SLO messages with HTTP-Redirect, so that endpoint is preferred.
         $sloUrl = $this->firstLocation($xpath, $spDescriptor, 'md:SingleLogoutService[@Binding="' . self::BINDING_REDIRECT . '"]')
@@ -242,5 +253,20 @@ class SAMLMetadataImporter
         }
         $location = trim($endpoint->getAttribute('Location'));
         return $location === '' ? null : $location;
+    }
+
+    /**
+     * Locations of all endpoints the query selects below the SP descriptor, in document order.
+     * @return array<int,string>
+     */
+    private function locations(DOMXPath $xpath, DOMElement $spDescriptor, string $query): array
+    {
+        $locations = array();
+        foreach ($xpath->query($query, $spDescriptor) as $endpoint) {
+            if ($endpoint instanceof DOMElement && trim($endpoint->getAttribute('Location')) !== '') {
+                $locations[] = trim($endpoint->getAttribute('Location'));
+            }
+        }
+        return $locations;
     }
 }

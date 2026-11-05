@@ -1954,7 +1954,8 @@
   <string name="SYS_SPOUSE">Spouse</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at these URLs. One URL per line. The first one is the default, the response goes there if the request names none; a request may name any of the others.</string>
+  <string name="SYS_SSO_ACS_URL_INVALID">"#VAR1#" is not a valid assertion consumer URL. Enter an http or https address.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -2149,6 +2150,7 @@
   <string name="SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC">Allowed clock difference between Admidio and the client, in seconds.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME">Lifetime of SAML assertions sent to the client</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">How long issued SAML assertions remain valid, in seconds.</string>
+  <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_INVALID">The lifetime of SAML assertions must be at least 1 second.</string>
   <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">A certificate is not a valid X.509 certificate in PEM format.</string>
   <string name="SYS_SSO_SAML_ENABLED">Enable single sign-on via SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Enable Admidio to act as a SAML 2.0 identity provider, allowing users to sign in to web applications using their Admidio accounts.</string>
@@ -2158,6 +2160,7 @@
   <string name="SYS_SSO_SAML_ENTITY_ID">Server identifier (Entity ID)</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Unique SAML identifier of this Admidio instance, typically the URL of your installation. It must match the value configured at the client.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata URL</string>
+  <string name="SYS_SSO_SAML_NAME_ID_EMPTY">Your account has no value for the identifier that #VAR1# requires, so you cannot be signed in there. Please contact the administrator.</string>
   <string name="SYS_SSO_SAML_NAME_ID_POLICY_INVALID">The requested user identifier policy is not supported.</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME">Request lifetime</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME_DESC">Maximum age of incoming SAML requests in seconds. Default: 300.</string>

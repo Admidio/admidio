@@ -47,8 +47,9 @@ class SsoSamlMetadataImporterTest extends AdministratorTestCase
 
         (new SAMLMetadataImporter())->apply($client, $this->metadata($entityId));
 
-        // The default ACS wins over the first one, HTTP-Redirect wins for SLO
-        $this->assertSame($entityId . '/acs/default', $client->getValue('smc_acs_url'));
+        // All ACS endpoints are taken over, the default one first; HTTP-Redirect wins for SLO
+        $this->assertSame($entityId . "/acs/default\n" . $entityId . '/acs/first', $client->getValue('smc_acs_url'));
+        $this->assertSame(array($entityId . '/acs/default', $entityId . '/acs/first'), $client->getAcsUrls());
         $this->assertSame($entityId . '/slo/redirect', $client->getValue('smc_slo_url'));
         $this->assertSame(SAMLMetadataImporter::formatCertificate(self::$certificate), $client->getValue('smc_x509_certificate'));
         $this->assertTrue((bool) $client->getValue('smc_require_auth_signed'));
@@ -69,7 +70,7 @@ class SsoSamlMetadataImporterTest extends AdministratorTestCase
             . '</md:EntitiesDescriptor>';
         (new SAMLMetadataImporter())->apply($client, $aggregate);
 
-        $this->assertSame($entityId . '/acs/default', $client->getValue('smc_acs_url'));
+        $this->assertSame($entityId . '/acs/default', $client->getAcsUrls()[0]);
     }
 
     /**
