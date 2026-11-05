@@ -77,5 +77,9 @@
         ADD COLUMN smc_metadata_valid_until timestamp NULL DEFAULT NULL,
         ADD COLUMN smc_metadata_failures integer unsigned NOT NULL DEFAULT 0,
         ADD COLUMN smc_metadata_error varchar(100) NULL</step>
+    <!-- one session can sign in several times at the same SAML client, each with its own SessionIndex -->
+    <step id="330" database="mysql">DROP INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants</step>
+    <step id="340" database="pgsql">DROP INDEX %PREFIX%_idx_ssp_session_client</step>
+    <step id="350">CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id, ssp_session_index)</step>
     <step>stop</step>
 </update>
