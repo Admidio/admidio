@@ -68,7 +68,7 @@ class SsoFormPostResponseModeTest extends SsoTokenGrantTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertFalse($response->hasHeader('Location'));
         $this->assertStringContainsString('<form method="POST" action="https://client.example/cb">', $html);
-        $this->assertSame(array('code' => 'the-code', 'state' => 'the-state'), $this->fieldsOf($html));
+        $this->assertSame(array('code' => 'the-code', 'state' => 'the-state', 'iss' => $this->service()->getIssuerURL()), $this->fieldsOf($html));
         $this->assertStringContainsString('no-store', $response->getHeaderLine('Cache-Control'));
         $this->assertStringContainsString('document.forms[0].submit()', $html);
     }
@@ -84,7 +84,7 @@ class SsoFormPostResponseModeTest extends SsoTokenGrantTestCase
 
         $html = (string) $response->getBody();
         $this->assertStringContainsString('action="https://client.example/cb?dummy1=lorem&amp;dummy2=ipsum"', $html);
-        $this->assertSame(array('code' => 'the-code', 'state' => 's'), $this->fieldsOf($html));
+        $this->assertSame(array('code' => 'the-code', 'state' => 's', 'iss' => $this->service()->getIssuerURL()), $this->fieldsOf($html));
     }
 
     /**
@@ -97,7 +97,7 @@ class SsoFormPostResponseModeTest extends SsoTokenGrantTestCase
             $this->redirect('https://client.example/cb?error=access_denied&error_description=No+way&state=s'));
 
         $this->assertSame(
-            array('error' => 'access_denied', 'error_description' => 'No way', 'state' => 's'),
+            array('error' => 'access_denied', 'error_description' => 'No way', 'state' => 's', 'iss' => $this->service()->getIssuerURL()),
             $this->fieldsOf((string) $response->getBody())
         );
     }
@@ -148,7 +148,31 @@ class SsoFormPostResponseModeTest extends SsoTokenGrantTestCase
         }
         $redirect = $this->redirect('https://client.example/cb?code=the-code');
 
-        $this->assertSame($redirect, $this->applyResponseMode($this->service(), $query, $redirect));
+        $answer = $this->applyResponseMode($this->service(), $query, $redirect);
+
+        $this->assertSame(302, $answer->getStatusCode());
+        $this->assertSame(
+            'https://client.example/cb?code=the-code&iss=' . urlencode($this->service()->getIssuerURL()),
+            $answer->getHeaderLine('Location')
+        );
+    }
+
+    /**
+     * RFC 9207: the code and an error name the issuer; a redirect that is no authorization response does not
+     *
+     * @testdox The response names the issuer once, and only if it is an authorization response
+     */
+    public function testTheIssuerIsAddedToAuthorizationResponsesOnly(): void
+    {
+        $service = $this->service();
+        $error = $this->applyResponseMode($service, array(), $this->redirect('https://client.example/cb?error=access_denied'));
+        $this->assertStringContainsString('&iss=', $error->getHeaderLine('Location'));
+
+        $twice = $this->applyResponseMode($service, array(), $this->redirect($error->getHeaderLine('Location')));
+        $this->assertSame(1, substr_count($twice->getHeaderLine('Location'), 'iss='));
+
+        $other = $this->applyResponseMode($service, array(), $this->redirect('https://admidio.test/login'));
+        $this->assertSame('https://admidio.test/login', $other->getHeaderLine('Location'));
     }
 
     /**
