@@ -153,6 +153,16 @@ try {
 
 
     } elseif ($type === 'saml') {
+        if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
+            // The metadata is fetched by software and an unknown resource is a 404; the sign-in and logout
+            // endpoints are reached with a browser, which gets a page it can read.
+            if ($endpoint === 'sso' || $endpoint === 'slo') {
+                http_response_code(404);
+                $gMessage->show($gL10n->get('SYS_SSO_SAML_DISABLED'), $gL10n->get('SYS_ERROR'));
+            }
+            $sendResponse(new JsonResponse(['error' => 'invalid_request', 'error_description' => 'SSO endpoint not found.'], 404));
+        }
+
         try {
             $samlService = new SAMLService($gDb, $gCurrentUser);
     
@@ -174,6 +184,11 @@ try {
             }
         } catch (Throwable $e) {
             $logSSOException('An unexpected error occurred at a SAML endpoint.', $e);
+            if ($endpoint === 'sso' || $endpoint === 'slo') {
+                // a browser navigates here: a page instead of a JSON document
+                http_response_code($e instanceof \Admidio\SSO\Service\SAMLMessageTooLargeException ? 413 : 500);
+                $gMessage->show($gL10n->get('SYS_SSO_SAML_REQUEST_FAILED'), $gL10n->get('SYS_ERROR'));
+            }
             $sendResponse(new JsonResponse([
                     'error' => 'server_error', 'error_description' => 'The SAML request could not be processed.'
                 ], 

@@ -31,12 +31,12 @@ class ClientRepository implements ClientRepositoryInterface {
         ));
         if ($client->isNewRecord()) {
             return null;
-        } elseif (!$client->isEnabled()) {
-            throw new \Exception('Client "'.$clientIdentifier.'" is valid, but disabled. Login is not allowed.', 400);
-        } else {
-            OIDCService::setClient($client);
-            return $client;
         }
+        // A disabled client is returned as well. Throwing here ended in a plain server error; the
+        // authorization endpoint refuses it with a page for the user (OIDCService), and the token endpoint
+        // does not authenticate it (validateClient() below), which answers invalid_client.
+        OIDCService::setClient($client);
+        return $client;
     }
     public function validateClient(string $clientIdentifier, ?string $clientSecret, ?string $grantType): bool {
         global $gCurrentOrgId;
@@ -49,7 +49,7 @@ class ClientRepository implements ClientRepositoryInterface {
         if ($client->isNewRecord()) {
             return false;
         } elseif (!$client->isEnabled()) {
-            throw new \Exception('Client "'.$clientIdentifier.'" is valid, but disabled. Login is not allowed.', 400);
+            return false;
         } elseif ($grantType !== null && !in_array($grantType, $client->getAllowedGrantTypes(), true)) {
             return false;
         } else {

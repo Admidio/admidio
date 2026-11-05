@@ -15,6 +15,8 @@ use Admidio\Session\Entity\Session;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\AdministratorTestCase;
+use Admidio\UI\Component\Message;
+use RuntimeException;
 
 class SsoOidcLogoutWithoutSessionTest extends AdministratorTestCase
 {
@@ -104,19 +106,33 @@ class SsoOidcLogoutWithoutSessionTest extends AdministratorTestCase
     }
 
     /**
-     * Not being logged in must not turn the endpoint into a redirect to any address.
+     * Not being logged in must not turn the endpoint into a redirect to any address. The browser
+     * of the user gets an Admidio page, not a JSON document.
      *
-     * @testdox Without a login an unregistered post-logout address is still refused
+     * @testdox Without a login an unregistered post-logout address is still refused, with a page
      */
     public function testAnUnregisteredReturnAddressIsRefused(): void
     {
-        $response = $this->logout(array(
-            'client_id' => $this->clientWithPostLogoutUri(),
-            'post_logout_redirect_uri' => 'https://evil.example/phish'
-        ));
+        $previousMessage = $GLOBALS['gMessage'] ?? null;
+        // The page exits the script, so the test double hands its content over instead
+        $GLOBALS['gMessage'] = new class extends Message {
+            public function show(string $content, string $headline = ''): void
+            {
+                throw new RuntimeException($content);
+            }
+        };
 
-        $this->assertSame(400, $response->getStatusCode());
-        $this->assertFalse($response->hasHeader('Location'));
-        $this->assertSame('invalid_request', json_decode((string) $response->getBody(), true)['error']);
+        try {
+            $this->logout(array(
+                'client_id' => $this->clientWithPostLogoutUri(),
+                'post_logout_redirect_uri' => 'https://evil.example/phish'
+            ));
+            $this->fail('The unregistered address must end in an error page.');
+        } catch (RuntimeException $exception) {
+            $this->assertStringContainsString('Unregistered post_logout_redirect_uri', $exception->getMessage());
+            $this->assertStringContainsString('evil.example', $exception->getMessage());
+        } finally {
+            $GLOBALS['gMessage'] = $previousMessage;
+        }
     }
 }
