@@ -337,8 +337,22 @@ class SAMLService extends SSOService {
         [$query, $body] = self::getRawRequestParameters();
         $request = new \Symfony\Component\HttpFoundation\Request($query, $body, array(), $_COOKIE, $_FILES, $_SERVER);
 
+        // The endpoints are reachable without a login: refuse an oversized message before anything is decoded
+        foreach (array('SAMLRequest', 'SAMLResponse') as $parameter) {
+            foreach (array($query, $body) as $parameters) {
+                if (isset($parameters[$parameter]) && is_string($parameters[$parameter])
+                    && strlen($parameters[$parameter]) > SAMLBoundedRedirectBinding::MAX_ENCODED_LENGTH) {
+                    throw new SAMLMessageTooLargeException('The SAML message is too large.');
+                }
+            }
+        }
+
         $bindingFactory = new \LightSaml\Binding\BindingFactory();
         $binding = $bindingFactory->getBindingByRequest($request);
+        if ($binding instanceof HttpRedirectBinding) {
+            // the inflation of LightSAML's own binding has no limit
+            $binding = new SAMLBoundedRedirectBinding();
+        }
 
         $messageContext = new \LightSaml\Context\Profile\MessageContext();
         $binding->receive($request, $messageContext);
