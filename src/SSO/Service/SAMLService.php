@@ -2364,8 +2364,7 @@ class SAMLService extends SSOService {
         $mapping = [
             'urn:oid:0.9.2342.19200300.100.1.1' => 'usr_login_name',
             'urn:oid:2.5.4.3' => 'usr_name',
-            'urn:oid:2.5.4.10' => 'EMAIL',
-            'urn:oid:2.5.4.11' => 'roles',
+            'urn:oid:0.9.2342.19200300.100.1.3' => 'EMAIL',
         ];
         $field = $mapping[$samlAttribute]??$admidioField;
 
@@ -2389,7 +2388,12 @@ class SAMLService extends SSOService {
             }
         } else {
             // User profile fields or user fields
-            $att->setName(strtolower($samlAttribute));
+            // NOTE: The name is sent as configured. A strtolower() used to be applied here, on purpose removed:
+            // SAML attribute names are case sensitive (Shibboleth attribute maps match them exactly), so
+            // "eduPersonPrincipalName" arrived as "edupersonprincipalname". A service provider that has been set
+            // up against those lowercase names, with a mapping written in mixed case, will stop matching and needs
+            // its attribute name adjusted. The catch-all names are lowercased where they are generated.
+            $att->setName($samlAttribute);
             $att->setAttributeValue($user->getValue($field));
 /*            $friendlyNames = [
                 'usr_login_name' => 'SYS_USERNAME',
