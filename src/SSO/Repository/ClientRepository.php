@@ -53,7 +53,17 @@ class ClientRepository implements ClientRepositoryInterface {
         } elseif ($grantType !== null && !in_array($grantType, $client->getAllowedGrantTypes(), true)) {
             return false;
         } else {
-            return password_verify((string) $clientSecret, $client->getValue($client->getColumnPrefix() . '_client_secret'));
+            $storedHash = $client->getValue($client->getColumnPrefix() . '_client_secret');
+            if (password_verify((string) $clientSecret, $storedHash)) {
+                return true;
+            }
+
+            // The secret of an HTTP Basic header is URL-decoded when it is in the encoded form (RFC 6749, section
+            // 2.3.1, see ClientCredentials), but a client that sends it raw is just as common, and a raw secret with
+            // a "+" is in that form too: "ab+c" arrives as "ab c". The raw value is urlencode() of the decoded one,
+            // so it is tried as well. The generated secrets are Base64, they contain "+" in about every second one.
+            $rawSecret = urlencode((string) $clientSecret);
+            return $rawSecret !== (string) $clientSecret && password_verify($rawSecret, $storedHash);
         }
     }
 
