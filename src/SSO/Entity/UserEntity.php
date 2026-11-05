@@ -172,7 +172,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
 
                 'email'             => $this->getEmail(),
                 'groups'            => $this->getRoleNames(), // User's roles as groups
-                'locale'            => $this->getLocale(),
+                // no locale claim: Admidio has no language per user, only one for the installation
 
                 'website'           => $this->getValue('WEBSITE'),
                 'gender'            => $this->getGenderClaim(),
@@ -188,7 +188,6 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
             $userInfo['address'] = [
                 'street_address' => $this->getValue('STREET'),
                 'locality' => $this->getValue('CITY'),
-                'region' => $this->getValue('BUNDESLAND'),
                 'postal_code' => $this->getValue('POSTCODE'),
                 'country' => $this->getValue('COUNTRY')
             ];
@@ -265,14 +264,5 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
             }
         }
         return null;
-    }
-
-    /**
-     * Gets the user's locale/language from Admidio.
-     */
-    public function getLocale(): string
-    {
-        global $gSettingsManager;
-        return $gSettingsManager->get('system_language') ?: 'de'; // Default to German if not set
     }
 }
