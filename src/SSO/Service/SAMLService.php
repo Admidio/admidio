@@ -316,7 +316,11 @@ class SAMLService extends SSOService {
             $SPcert = $this->getClientEncryptionCertificate(self::getEncryptionCertificate($client));
             $key = KeyHelper::createPublicKey($SPcert);
 
-            $encryptedAssertion = new EncryptedAssertionWriter();
+            // RSA-OAEP for the key transport and AES-256-CBC for the content. LightSAML's defaults, RSA 1.5 and
+            // AES-128-CBC, are refused by current OpenSAML/Shibboleth service providers (RSA 1.5 is open to
+            // Bleichenbacher's attack). Both algorithms are required by XML Encryption 1.0, which SAML 2.0 builds on,
+            // so every service provider knows them, whereas AES-GCM is only part of XML Encryption 1.1.
+            $encryptedAssertion = new EncryptedAssertionWriter(XMLSecurityKey::AES256_CBC, XMLSecurityKey::RSA_OAEP_MGF1P);
             $encryptedAssertion->encrypt($assertion, $key);
 
             return $encryptedAssertion;
