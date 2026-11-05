@@ -2178,6 +2178,8 @@ class SAMLService extends SSOService {
             && $g_organization !== ''
         ) {
             $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+            // $gCurrentOrgId is a plain integer and still holds the organization the user was logged out of
+            $gCurrentOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
             $gProfileFields->readProfileFields($gCurrentOrgId);
 

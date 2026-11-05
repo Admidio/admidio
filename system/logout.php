@@ -37,6 +37,8 @@ try {
     if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) !== 0 && $g_organization !== '') {
         // read organization of config file with their preferences
         $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+        // $gCurrentOrgId is a plain integer and still holds the organization the user was logged out of
+        $gCurrentOrgId = (int) $gCurrentOrganization->getValue('org_id');
 
         // read new profile field structure for this organization
         $gProfileFields->readProfileFields($gCurrentOrgId);
