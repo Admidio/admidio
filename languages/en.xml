@@ -2039,7 +2039,7 @@
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
   <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in as #VAR2#, but this account does not have permission to access the client (#VAR1#). To continue, sign in below with a different account (this ends the session of #VAR2#), or cancel to return to the client.</string>
   <string name="SYS_SSO_METADATA_ENTITY_MISSING">The metadata contains no service provider with the entity ID #VAR1#. If the service provider has changed its entity ID, load its metadata in the client form.</string>
   <string name="SYS_SSO_METADATA_EXPIRED">The metadata is past its validity date and is still in use.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
@@ -2100,6 +2100,7 @@
   <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION">Confirm logout</string>
   <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION_DESC">Do you want to end your Admidio single sign-on session?</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Logout URL</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_FAILED">The sign-out request of the application could not be processed: #VAR1#</string>
   <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Enter a valid HTTPS URL. HTTP is allowed only for localhost.</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Allowed logout return URLs</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Enter one URL per line. After logout, Admidio may redirect users only to these URLs. Each URL must match exactly, unless it contains a "*", which stands for any part of the path or of the query string, e.g. https://example.org/logout*. The protocol, the host name and the port must always be given without a "*". If no URL is entered, Admidio will not redirect anywhere after the logout.</string>
@@ -2152,6 +2153,9 @@
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">How long issued SAML assertions remain valid, in seconds.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_INVALID">The lifetime of SAML assertions must be at least 1 second.</string>
   <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">A certificate is not a valid X.509 certificate in PEM format.</string>
+  <string name="SYS_SSO_SAML_CLIENT_DISABLED">The service provider #VAR1# is disabled at this identity provider.</string>
+  <string name="SYS_SSO_SAML_CLIENT_UNKNOWN">The application that sent you here (#VAR1#) is not registered in Admidio. Sign-in is not possible. Please inform the administrator of the application.</string>
+  <string name="SYS_SSO_SAML_DISABLED">SAML single sign-on is not enabled.</string>
   <string name="SYS_SSO_SAML_ENABLED">Enable single sign-on via SAML 2.0</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Enable Admidio to act as a SAML 2.0 identity provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID">Assertion encryption requires a valid RSA certificate from the client.</string>
@@ -2162,6 +2166,7 @@
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata URL</string>
   <string name="SYS_SSO_SAML_NAME_ID_EMPTY">Your account has no value for the identifier that #VAR1# requires, so you cannot be signed in there. Please contact the administrator.</string>
   <string name="SYS_SSO_SAML_NAME_ID_POLICY_INVALID">The requested user identifier policy is not supported.</string>
+  <string name="SYS_SSO_SAML_REQUEST_FAILED">The SAML request could not be processed. Please return to the application and try again. If the problem persists, contact the administrator.</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME">Request lifetime</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME_DESC">Maximum age of incoming SAML requests in seconds. Default: 300.</string>
   <string name="SYS_SSO_SAML_ROLE">SAML role name</string>

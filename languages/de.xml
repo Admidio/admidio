@@ -1993,7 +1993,7 @@
   <string name="SYS_SSO_KEY_USAGE_INVALID">Dieser Verwendungszweck wird nicht unterstützt.</string>
   <string name="SYS_SSO_LOAD_METADATA">Client-Metadaten laden</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Die Anmeldung wurde abgebrochen.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du bist angemeldet, aber dein Benutzerkonto hat keine Zugriffsberechtigung für den Client (#VAR1#). Melde dich mit einem anderen Konto an oder kehre zum Client zurück.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du bist als #VAR2# angemeldet, aber dieses Benutzerkonto hat keine Zugriffsberechtigung für den Client (#VAR1#). Melde dich unten mit einem anderen Konto an (die Sitzung von #VAR2# wird dabei beendet) oder brich ab, um zum Client zurückzukehren.</string>
   <string name="SYS_SSO_METADATA_ENTITY_MISSING">Die Metadaten enthalten keinen Service Provider mit der Entity-ID #VAR1#. Falls der Service Provider seine Entity-ID geändert hat, lade seine Metadaten im Formular des Clients.</string>
   <string name="SYS_SSO_METADATA_EXPIRED">Die Metadaten sind nicht mehr gültig und werden weiter verwendet.</string>
   <string name="SYS_SSO_METADATA_INVALID">Die geladenen SAML-Metadaten sind keine gültigen XML-Metadaten.</string>
@@ -2054,6 +2054,7 @@
   <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION">Abmeldung bestätigen</string>
   <string name="SYS_SSO_OIDC_LOGOUT_CONFIRMATION_DESC">Möchtest du deine Admidio-Single-Sign-On-Sitzung beenden?</string>
   <string name="SYS_SSO_OIDC_LOGOUT_ENDPOINT">Abmelde-Endpunkt</string>
+  <string name="SYS_SSO_OIDC_LOGOUT_FAILED">Die Abmeldeanfrage der Anwendung konnte nicht verarbeitet werden: #VAR1#</string>
   <string name="SYS_SSO_OIDC_LOGOUT_URI_INVALID">Die registrierte OIDC-Abmelde-URI ist ungültig. Verwende eine absolute HTTPS-URI ohne Zugangsdaten oder Fragment; HTTP ist nur für Loopback-Hosts zulässig.</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS">Weiterleitungs-URIs nach Abmeldung</string>
   <string name="SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC">Wohin Admidio nach der Abmeldung zurückleiten darf, eine URL pro Zeile. Jede URL muss exakt mit der von der Anwendung gesendeten URL übereinstimmen, es sei denn, sie enthält ein "*", das für einen beliebigen Teil des Pfads oder der Query-Parameter steht, z. B. https://example.org/logout*. Protokoll, Hostname und Port müssen immer ohne "*" angegeben werden. Ohne Eintrag leitet Admidio nach der Abmeldung nirgendwohin weiter.</string>
@@ -2106,6 +2107,9 @@
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_DESC">Gültigkeitsdauer ausgestellter SAML-Assertions in Sekunden.</string>
   <string name="SYS_SSO_SAML_ASSERTION_LIFETIME_INVALID">Die Lebensdauer der SAML-Assertions muss mindestens 1 Sekunde betragen.</string>
   <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">Ein Zertifikat ist kein gültiges X.509-Zertifikat im PEM-Format.</string>
+  <string name="SYS_SSO_SAML_CLIENT_DISABLED">Der Service Provider #VAR1# ist bei diesem Identity Provider deaktiviert.</string>
+  <string name="SYS_SSO_SAML_CLIENT_UNKNOWN">Die Anwendung, die dich hierher geschickt hat (#VAR1#), ist in Admidio nicht registriert. Eine Anmeldung ist nicht möglich. Bitte informiere den Administrator der Anwendung.</string>
+  <string name="SYS_SSO_SAML_DISABLED">SAML-Single-Sign-On ist nicht aktiviert.</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML 2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Admidio als SAML-2.0-Identity-Provider aktivieren. Dadurch ist die Anmeldung bei anderen Webanwendungen über ein Admidio-Konto möglich.</string>
   <string name="SYS_SSO_SAML_ENCRYPTION_CERTIFICATE_INVALID">Für die Verschlüsselung der Assertion ist ein gültiges RSA-Zertifikat des Clients erforderlich.</string>
@@ -2116,6 +2120,7 @@
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata-URL</string>
   <string name="SYS_SSO_SAML_NAME_ID_EMPTY">Dein Benutzerkonto hat keinen Wert für die Kennung, die #VAR1# benötigt, daher kannst du dich dort nicht anmelden. Bitte wende dich an den Administrator.</string>
   <string name="SYS_SSO_SAML_NAME_ID_POLICY_INVALID">Die angeforderte Richtlinie für die Benutzerkennung wird nicht unterstützt.</string>
+  <string name="SYS_SSO_SAML_REQUEST_FAILED">Die SAML-Anfrage konnte nicht verarbeitet werden. Bitte kehre zur Anwendung zurück und versuche es erneut. Besteht das Problem weiter, wende dich an den Administrator.</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME">Gültigkeit der Anfrage</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME_DESC">Maximales Alter eingehender SAML-Anfragen in Sekunden. Standard: 300.</string>
   <string name="SYS_SSO_SAML_ROLE">SAML-Rollenname</string>

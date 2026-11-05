@@ -847,7 +847,7 @@ class OIDCService extends SSOService {
     }
 
     private function processAuthorizationRequest(ServerRequestInterface $request): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession, $gCurrentUser;
 
         $response = new Response();
         try {
@@ -930,7 +930,7 @@ class OIDCService extends SSOService {
             // Check whether the current user has access permissions to the SP client:
             if (!self::$client->hasAccessRight()) {
                 $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
-                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName())) .
+                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName(), SecurityUtils::encodeHTML($gCurrentUser->readableName()))) .
                     '</div>';
                 $this->showSSOLoginForm(self::$client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
@@ -1689,6 +1689,22 @@ class OIDCService extends SSOService {
     }    
 
     /**
+     * Show a logout error on an Admidio page and end the script. The logout endpoint is reached with the
+     * browser of the user, who cannot read a JSON error; the relying party gets nothing back, because a
+     * logout request that cannot be trusted must not redirect (OpenID Connect RP-Initiated Logout 1.0, 2).
+     */
+    private function showLogoutError(string $reason): never
+    {
+        global $gMessage, $gL10n;
+
+        $gMessage->show(
+            $gL10n->get('SYS_SSO_OIDC_LOGOUT_FAILED', array(SecurityUtils::encodeHTML($reason))),
+            $gL10n->get('SYS_ERROR')
+        );
+        exit;
+    }
+
+    /**
      * Handle OpenID Connect RP-Initiated Logout.
      *
      * Requests without id_token_hint are confirmed by the user before the OP
@@ -1697,7 +1713,7 @@ class OIDCService extends SSOService {
      */
     public function handleLogoutRequest(): ResponseInterface
     {
-        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId;
+        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId, $gHomepage;
 
         $request = $this->getRequest();
         $participantService = new OIDCSessionParticipantService($this->db);
@@ -1709,7 +1725,7 @@ class OIDCService extends SSOService {
             || array_key_exists('adm_button_logout', $body)
         ) {
             if (!isset($_POST['adm_csrf_token']) || !is_string($_POST['adm_csrf_token'])) {
-                return $this->createOIDCErrorResponse('invalid_request', 'Invalid logout confirmation.', 400);
+                $this->showLogoutError('Invalid logout confirmation.');
             }
 
             $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -1719,11 +1735,11 @@ class OIDCService extends SSOService {
         if (array_key_exists('adm_button_cancel', $body)) {
             unset($_SESSION['oidc_logout_confirmation']);
 
-            return $this->createOIDCErrorResponse(
-                'access_denied',
-                'The logout request was cancelled by the user.',
-                400
-            );
+            // The user stays logged in, so the browser goes to the Admidio page and not back to the relying party
+            return (new Response())
+                ->withStatus(302)
+                ->withHeader('Location', $gHomepage)
+                ->withHeader('Cache-Control', 'no-store');
         }
 
         if (array_key_exists('adm_button_logout', $body)) {
@@ -1734,11 +1750,7 @@ class OIDCService extends SSOService {
                 || !isset($context['requested_at'], $context['external_session_id'])
                 || (int) $context['requested_at'] < time() - 300
             ) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'The logout confirmation has expired.',
-                    400
-                );
+                $this->showLogoutError('The logout confirmation has expired.');
             }
 
             return $this->completeOIDCLogout(
@@ -1763,11 +1775,7 @@ class OIDCService extends SSOService {
             'state' => $state
         ) as $parameter => $value) {
             if ($value !== null && !is_string($value)) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'Invalid ' . $parameter . '.',
-                    400
-                );
+                $this->showLogoutError('Invalid ' . $parameter . '.');
             }
         }
 
@@ -1781,11 +1789,7 @@ class OIDCService extends SSOService {
                 $hintClaims = $this->validateLogoutIdTokenHint($idTokenHint, $requestedClientIdentifier);
             } catch (\Throwable $exception) {
                 $gLogger->warning('OIDC logout rejected an ID token hint.', array('exception' => $exception));
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'Invalid id_token_hint.',
-                    400
-                );
+                $this->showLogoutError('Invalid id_token_hint.');
             }
 
             $clientIdentifier = $hintClaims['client_id'];
@@ -1795,11 +1799,7 @@ class OIDCService extends SSOService {
         if (is_string($clientIdentifier) && $clientIdentifier !== '') {
             $client = $this->createClientObject(null, $clientIdentifier);
             if ($client->isNewRecord() || !$client->isEnabled()) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'Unknown or disabled client.',
-                    400
-                );
+                $this->showLogoutError('Unknown or disabled client.');
             }
         }
 
@@ -1807,11 +1807,7 @@ class OIDCService extends SSOService {
             && ($client === null
                 || !$client->isPostLogoutRedirectUriAllowed($postLogoutRedirectUri))
         ) {
-            return $this->createOIDCErrorResponse(
-                'invalid_request',
-                'Unregistered post_logout_redirect_uri "' . $postLogoutRedirectUri . '". Add it to the client\'s registered post-logout redirect URIs.',
-                400
-            );
+            $this->showLogoutError('Unregistered post_logout_redirect_uri "' . $postLogoutRedirectUri . '". Add it to the client\'s registered post-logout redirect URIs.');
         }
 
         $externalSessionId = (string) $gCurrentSession->getValue(

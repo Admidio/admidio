@@ -937,7 +937,7 @@ class SAMLService extends SSOService {
 
     public function handleSSORequest(): void
     {
-        global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger;
+        global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger, $gMessage;
 
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
             throw new Exception("SSO SAML is not enabled");
@@ -954,11 +954,23 @@ class SAMLService extends SSOService {
 
         // Load the SAML client data (entityID is in the request issuer)
         $entityIdClient = $requestIssuer->getValue();
-        $client = $this->getClientFromID($entityIdClient);
+        $client = $this->createClientObject(null, $entityIdClient);
+        if ($client->isNewRecord()) {
+            // Nobody to answer: the issuer is not a service provider of this identity provider, and the
+            // request cannot be trusted with a redirect or a form post to any address. The user is told.
+            $gLogger->warning('SAML AuthnRequest of an unknown service provider.', array('entityId' => $entityIdClient));
+            $gMessage->show(
+                $gL10n->get('SYS_SSO_SAML_CLIENT_UNKNOWN', array(SecurityUtils::encodeHTML($entityIdClient))),
+                $gL10n->get('SYS_ERROR')
+            );
+        }
 
         try {
             if (!$client->isEnabled()) {
-                throw new Exception("Client \"" . $client->getIdentifier() . "\" is disabled. Login is no possible.");
+                throw new SAMLRequestException(
+                    $gL10n->get('SYS_SSO_SAML_CLIENT_DISABLED', array($client->readableName())),
+                    array(SamlConstants::STATUS_RESPONDER)
+                );
             }
 
             /*
@@ -1059,7 +1071,7 @@ class SAMLService extends SSOService {
                     // passive request must not be answered with an interactive page.
                     $this->errorResponse(
                         SamlConstants::STATUS_REQUESTER,
-                        $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())),
+                        $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName(), SecurityUtils::encodeHTML($gCurrentUser->readableName()))),
                         $request,
                         $client
                     );
@@ -1067,7 +1079,7 @@ class SAMLService extends SSOService {
                 }
 
                 $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
-                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())) .
+                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName(), SecurityUtils::encodeHTML($gCurrentUser->readableName()))) .
                     '</div>';
                 $this->rememberPendingLogin($request);
                 $this->showSSOLoginForm($client, $message);
