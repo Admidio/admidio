@@ -755,12 +755,17 @@ class OIDCService extends SSOService {
     private function applyResponseMode(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $queryParams = $request->getQueryParams();
-        if (($queryParams['response_mode'] ?? null) !== 'form_post') {
+        $location = $response->getHeaderLine('Location');
+        if ($response->getStatusCode() < 300 || $response->getStatusCode() >= 400 || $location === '') {
             return $response;
         }
 
+        // RFC 9207: every response to the client, the code and an error, names the issuer, so that a client
+        // that talks to several authorization servers can tell a response of a foreign one (mix-up attack)
+        $response = $this->addIssuerToAuthorizationResponse($response, $location);
         $location = $response->getHeaderLine('Location');
-        if ($response->getStatusCode() < 300 || $response->getStatusCode() >= 400 || $location === '') {
+
+        if (($queryParams['response_mode'] ?? null) !== 'form_post') {
             return $response;
         }
 
@@ -782,6 +787,26 @@ class OIDCService extends SSOService {
         }
 
         return $this->createFormPostResponse($redirectUri ?? $locationParts[0], $fields);
+    }
+
+    /**
+     * Add the iss parameter (RFC 9207) to a redirect that carries an authorization response, i.e. a code or an
+     * error. Other redirects, for example to a page of Admidio, stay as they are.
+     */
+    private function addIssuerToAuthorizationResponse(ResponseInterface $response, string $location): ResponseInterface
+    {
+        $parts = explode('?', $location, 2);
+        $query = array();
+        parse_str($parts[1] ?? '', $query);
+
+        if ((!array_key_exists('code', $query) && !array_key_exists('error', $query)) || array_key_exists('iss', $query)) {
+            return $response;
+        }
+
+        return $response->withHeader(
+            'Location',
+            $location . (str_contains($location, '?') ? '&' : '?') . http_build_query(array('iss' => $this->getIssuerURL()))
+        );
     }
 
     /**
@@ -1355,6 +1380,7 @@ class OIDCService extends SSOService {
             "scopes_supported" => OIDCClient::getSupportedScopes(),
             "response_types_supported" => ["code"],
             "response_modes_supported" => ["query", "form_post"],
+            "authorization_response_iss_parameter_supported" => true,
             "grant_types_supported" => ["authorization_code", "refresh_token"],
             "code_challenge_methods_supported" => ["S256"],
             "subject_types_supported" => ["public"],
