@@ -25,6 +25,19 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         $this->client = $client;
     }
 
+    /**
+     * Whether the user may still log in to Admidio at all: the account is activated, has a login name
+     * and the user is a member of the organization (the conditions of User::checkLogin()). Tokens that
+     * are used without the user, a refresh token above all, must not outlive them.
+     */
+    public function mayLogin(): bool
+    {
+        return !$this->isNewRecord()
+            && (bool) $this->getValue('usr_valid')
+            && (string) $this->getValue('usr_login_name') !== ''
+            && $this->isMemberOfOrganization();
+    }
+
     public function getClient(): OIDCClient {
         return $this->client;
     }

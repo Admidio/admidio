@@ -14,6 +14,7 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
     public const SCOPE_PHONE = 'phone';
     public const SCOPE_GROUPS = 'groups';
     public const SCOPE_CUSTOM = 'custom';
+    public const SCOPE_OFFLINE_ACCESS = 'offline_access';
 
     private const SUPPORTED_SCOPES = array(
         self::SCOPE_OPENID,
@@ -22,7 +23,8 @@ class OIDCClient extends SSOClient implements ClientEntityInterface
         self::SCOPE_ADDRESS,
         self::SCOPE_PHONE,
         self::SCOPE_GROUPS,
-        self::SCOPE_CUSTOM
+        self::SCOPE_CUSTOM,
+        self::SCOPE_OFFLINE_ACCESS
     );
 
     private const SUPPORTED_GRANT_TYPES = array(

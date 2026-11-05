@@ -25,6 +25,7 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 
 use Admidio\SSO\Repository\AuthCodeRepository;
 use Admidio\SSO\Entity\AuthCodeEntity;
+use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\TokenEntity;
 use Admidio\SSO\Entity\IdTokenResponse;
 
@@ -37,7 +38,9 @@ use Admidio\SSO\Entity\IdTokenResponse;
 class OIDCAuthCodeGrant extends AuthCodeGrant
 {
     use ClientCredentialsTrait;
-    use AuthCodeLinkTrait;
+    use AuthCodeLinkTrait {
+        issueRefreshToken as protected issueLinkedRefreshToken;
+    }
 
     protected ?string $nonce = null;
     protected ?int $authenticationTime = null;
@@ -238,6 +241,24 @@ class OIDCAuthCodeGrant extends AuthCodeGrant
         } catch (\Throwable) {
             // not a code of this server
         }
+    }
+
+    /**
+     * A refresh token lets the relying party obtain tokens without the user being present, long after
+     * the Admidio session has ended, so it is issued only when the user was asked for it by the
+     * offline_access scope (OpenID Connect Core 1.0, section 11) and the client may request it.
+     */
+    protected function issueRefreshToken(AccessTokenEntityInterface $accessToken): ?RefreshTokenEntityInterface
+    {
+        $scopes = array_map(
+            static fn ($scope): string => $scope->getIdentifier(),
+            $accessToken->getScopes()
+        );
+        if (!in_array(OIDCClient::SCOPE_OFFLINE_ACCESS, $scopes, true)) {
+            return null;
+        }
+
+        return $this->issueLinkedRefreshToken($accessToken);
     }
 
     public function respondToAccessTokenRequest(

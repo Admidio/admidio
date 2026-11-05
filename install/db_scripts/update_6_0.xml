@@ -77,6 +77,8 @@
         ADD COLUMN smc_metadata_valid_until timestamp NULL DEFAULT NULL,
         ADD COLUMN smc_metadata_failures integer unsigned NOT NULL DEFAULT 0,
         ADD COLUMN smc_metadata_error varchar(100) NULL</step>
+    <!-- refresh tokens are issued for the offline_access scope only: clients that could get them keep their option -->
+    <step id="320">UPDATE %PREFIX%_oidc_clients SET ocl_scope = CONCAT(COALESCE(ocl_scope, ''), ' offline_access') WHERE ocl_grant_types LIKE '%refresh_token%' AND (ocl_scope IS NULL OR ocl_scope NOT LIKE '%offline_access%')</step>
     <!-- one session can sign in several times at the same SAML client, each with its own SessionIndex -->
     <step id="330" database="mysql">DROP INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants</step>
     <step id="340" database="pgsql">DROP INDEX %PREFIX%_idx_ssp_session_client</step>

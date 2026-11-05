@@ -2073,6 +2073,8 @@
   <string name="SYS_SSO_OIDC_SCOPE_EMAIL_DESC">Erlaubt den Zugriff auf deine hinterlegte E-Mail-Adresse.</string>
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS">Gruppen- und Rollenzugehörigkeiten anzeigen</string>
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS_DESC">Erlaubt den Zugriff auf deine Gruppen- und Rollenzugehörigkeiten.</string>
+  <string name="SYS_SSO_OIDC_SCOPE_OFFLINE_ACCESS">Angemeldet bleiben, auch wenn du nicht anwesend bist</string>
+  <string name="SYS_SSO_OIDC_SCOPE_OFFLINE_ACCESS_DESC">Erlaubt der Anwendung, später auf deine Daten zuzugreifen, auch wenn du nicht mehr bei Admidio angemeldet bist.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID">Bei Admidio anmelden</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID_DESC">Erforderlich für die Anmeldung über OpenID Connect.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Berechtigung „#VAR1#“ verwenden</string>

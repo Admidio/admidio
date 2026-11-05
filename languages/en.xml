@@ -2119,6 +2119,8 @@
   <string name="SYS_SSO_OIDC_SCOPE_EMAIL_DESC">Allows access to your stored email address.</string>
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS">View your group and role memberships</string>
   <string name="SYS_SSO_OIDC_SCOPE_GROUPS_DESC">Allows access to your group and role memberships.</string>
+  <string name="SYS_SSO_OIDC_SCOPE_OFFLINE_ACCESS">Stay signed in without you being present</string>
+  <string name="SYS_SSO_OIDC_SCOPE_OFFLINE_ACCESS_DESC">Allows the application to access your data later on, also when you are no longer signed in to Admidio.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID">Sign you in</string>
   <string name="SYS_SSO_OIDC_SCOPE_OPENID_DESC">Required to sign you in with OpenID Connect.</string>
   <string name="SYS_SSO_OIDC_SCOPE_OTHER">Use the #VAR1# permission</string>

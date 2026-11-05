@@ -112,6 +112,27 @@ class SsoAuthorizationCodeTest extends AdministratorTestCase
     }
 
     /**
+     * @testdox A refresh token is issued for the offline_access scope only
+     */
+    public function testARefreshTokenNeedsTheOfflineAccessScope(): void
+    {
+        global $gCurrentUser;
+
+        $client = $this->createRestrictedClient($this->suffix(), array());
+        $issueAccessToken = new ReflectionMethod($this->grant, 'issueAccessToken');
+        $issueRefreshToken = new ReflectionMethod($this->grant, 'issueRefreshToken');
+
+        $withoutScope = $issueAccessToken->invoke($this->grant, new \DateInterval('PT1H'), $client,
+            (string) $gCurrentUser->getValue('usr_uuid'), array(new \Admidio\SSO\Entity\ScopeEntity('openid')));
+        $this->assertNull($issueRefreshToken->invoke($this->grant, $withoutScope));
+
+        $withScope = $issueAccessToken->invoke($this->grant, new \DateInterval('PT1H'), $client,
+            (string) $gCurrentUser->getValue('usr_uuid'),
+            array(new \Admidio\SSO\Entity\ScopeEntity('openid'), new \Admidio\SSO\Entity\ScopeEntity('offline_access')));
+        $this->assertNotNull($issueRefreshToken->invoke($this->grant, $withScope));
+    }
+
+    /**
      * Issue an authorization code for the current user, the way the authorization endpoint does.
      *
      * @return string Identifier of the code.
@@ -140,7 +161,8 @@ class SsoAuthorizationCodeTest extends AdministratorTestCase
 
         $issueAccessToken = new ReflectionMethod($this->grant, 'issueAccessToken');
         $accessToken = $issueAccessToken->invoke($this->grant, new \DateInterval('PT1H'), $client,
-            (string) $gCurrentUser->getValue('usr_uuid'), array());
+            (string) $gCurrentUser->getValue('usr_uuid'),
+            array(new \Admidio\SSO\Entity\ScopeEntity('openid'), new \Admidio\SSO\Entity\ScopeEntity('offline_access')));
 
         $issueRefreshToken = new ReflectionMethod($this->grant, 'issueRefreshToken');
         $refreshToken = $issueRefreshToken->invoke($this->grant, $accessToken);
