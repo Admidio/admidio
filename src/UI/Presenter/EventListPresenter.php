@@ -786,9 +786,16 @@ class EventListPresenter extends PagePresenter
                         }
                         $page->addHtml('</div>');
                         if (!empty($actions)) {
-                            $actionsTemplate = $page->getSmartyTemplate()->createTemplate('modules/events.actions.tpl');
-                            $actionsTemplate->assign('actions', $actions);
-                            $page->addHtml($actionsTemplate->fetch());
+                            $cardActions = array();
+                            foreach (array('ical', 'copy', 'edit', 'delete') as $actionKey) {
+                                if (isset($actions[$actionKey])) {
+                                    $cardActions[] = $actions[$actionKey];
+                                }
+                            }
+                            $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
+                            $actionsTemplate->assign('cardActions', true);
+                            $actionsTemplate->assign('data', array('uuid' => $eventUUID, 'actions' => $cardActions));
+                            $page->addHtml('<div class="col-auto ms-auto text-nowrap">' . $actionsTemplate->fetch() . '</div>');
                         }
                         $page->addHtml('
                             </div>
