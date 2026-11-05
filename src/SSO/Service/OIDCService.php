@@ -84,6 +84,9 @@ use Admidio\SSO\Service\KeyService;
 class OIDCService extends SSOService {
     use CryptTrait;
 
+    /** @var int Seconds the client of the current endpoint request is locked out after failed authentications, 0 if it is not */
+    private int $endpointLockSeconds = 0;
+
     private const DEFAULT_AUTH_CODE_LIFETIME = 600;
     private const DEFAULT_ACCESS_TOKEN_LIFETIME = 3600;
     private const DEFAULT_REFRESH_TOKEN_LIFETIME = 2592000;
@@ -567,17 +570,12 @@ class OIDCService extends SSOService {
         * Various other setup things
         */
 
-        // TODO_RK: Handle failed authentications, e.g. after n number of attemps, block the client, etc.
+        // A failed client authentication is counted, and the client is locked out for a growing time
+        // (SSOAuthThrottleService). The password grant, which would emit user.authentication.failed, is not enabled.
         $server->getEmitter()->addListener(
             'client.authentication.failed',
             function (\League\OAuth2\Server\RequestEvent $event) {
-                // TODO_RK
-            }
-        );
-        $server->getEmitter()->addListener(
-            'user.authentication.failed',
-            function (\League\OAuth2\Server\RequestEvent $event) {
-                // TODO_RK
+                $this->recordClientAuthenticationFailure($event->getRequest());
             }
         );
 
@@ -1054,6 +1052,60 @@ class OIDCService extends SSOService {
         $gMessage->show($message, $gL10n->get('SYS_ERROR'));
     }
 
+    /**
+     * The address of the request, which the lockout after failed client authentications is counted for.
+     */
+    private function getThrottleAddress(): string
+    {
+        return (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+    }
+
+    /**
+     * Count a failed client authentication; this must never get in the way of the answer to the client.
+     */
+    private function recordClientAuthenticationFailure(ServerRequestInterface $request): void
+    {
+        try {
+            (new SSOAuthThrottleService($this->db))->recordFailure(
+                $this->extractRequestedClientId($request) ?? '',
+                $this->getThrottleAddress()
+            );
+        } catch (\Throwable $exception) {
+            global $gLogger;
+            $gLogger->error('Could not count a failed OIDC client authentication.', array('message' => $exception->getMessage()));
+        }
+    }
+
+    /**
+     * Seconds the client has to wait before it may authenticate from this address again, 0 for none.
+     */
+    private function getClientLockSeconds(ServerRequestInterface $request): int
+    {
+        try {
+            return (new SSOAuthThrottleService($this->db))->getRetryAfter(
+                $this->extractRequestedClientId($request) ?? '',
+                $this->getThrottleAddress()
+            );
+        } catch (\Throwable) {
+            return 0;
+        }
+    }
+
+    /**
+     * The answer to a client that is locked out after failed authentications (RFC 6585, 429).
+     */
+    private function createTooManyRequestsResponse(int $retryAfter): JsonResponse
+    {
+        return new JsonResponse(
+            array(
+                'error' => 'temporarily_unavailable',
+                'error_description' => 'Too many failed client authentications. Try again later.'
+            ),
+            429,
+            array('Retry-After' => (string) $retryAfter, 'Cache-Control' => 'no-store', 'Pragma' => 'no-cache')
+        );
+    }
+
     public function handleTokenRequest() {
         global $gLogger;
         $request = $this->getRequest();
@@ -1062,8 +1114,20 @@ class OIDCService extends SSOService {
             if (!$this->isServiceSetup) {
                 $this->setupService();
             }
+            $lockSeconds = $this->getClientLockSeconds($request);
+            if ($lockSeconds > 0) {
+                return $this->createTooManyRequestsResponse($lockSeconds);
+            }
+
             // Try to respond to the request
-            return $this->authServer->respondToAccessTokenRequest($request, $response);
+            $tokenResponse = $this->authServer->respondToAccessTokenRequest($request, $response);
+            if ($tokenResponse->getStatusCode() === 200) {
+                (new SSOAuthThrottleService($this->db))->recordSuccess(
+                    $this->extractRequestedClientId($request) ?? '',
+                    $this->getThrottleAddress()
+                );
+            }
+            return $tokenResponse;
 
         } catch (OAuthServerException $exception) {
             $this->enrichInvalidClientException($exception, $request);
@@ -1469,9 +1533,15 @@ class OIDCService extends SSOService {
      */
     private function authenticateEndpointClient(ServerRequestInterface $request): ?string
     {
+        $this->endpointLockSeconds = $this->getClientLockSeconds($request);
+        if ($this->endpointLockSeconds > 0) {
+            return null;
+        }
+
         $clientCredentials = $this->getEndpointClientCredentials($request);
 
         if ($clientCredentials === null) {
+            $this->recordClientAuthenticationFailure($request);
             return null;
         }
 
@@ -1481,12 +1551,15 @@ class OIDCService extends SSOService {
                 $clientCredentials['clientSecret'], 
                 null
             )) {
+                $this->recordClientAuthenticationFailure($request);
                 return null;
             }
         } catch (\Throwable $exception) {
+            $this->recordClientAuthenticationFailure($request);
             return null;
         }
 
+        (new SSOAuthThrottleService($this->db))->recordSuccess($clientCredentials['clientId'], $this->getThrottleAddress());
         return $clientCredentials['clientId'];
     }
 
@@ -1609,6 +1682,10 @@ class OIDCService extends SSOService {
      */
     private function createInvalidClientResponse(): JsonResponse
     {
+        if ($this->endpointLockSeconds > 0) {
+            return $this->createTooManyRequestsResponse($this->endpointLockSeconds);
+        }
+
         return new JsonResponse(
             array('error' => 'invalid_client'),
             401,

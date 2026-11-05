@@ -68,6 +68,7 @@ DROP TABLE IF EXISTS %PREFIX%_oidc_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_logout_transactions          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_session_participants         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_auth_failures                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
 
 
@@ -795,6 +796,26 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id, ssp_session_index);
 CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id);
 CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at);
+
+/*==============================================================*/
+/* Table: adm_sso_auth_failures                                  */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_sso_auth_failures (
+    saf_id                      integer unsigned    AUTO_INCREMENT,
+    saf_kind                    varchar(12)         NOT NULL,
+    saf_key                     varchar(64)         NOT NULL,
+    saf_count                   integer unsigned    NOT NULL    DEFAULT 0,
+    saf_last_failure            integer unsigned    NOT NULL,
+    saf_locked_until            integer unsigned    NOT NULL    DEFAULT 0,
+    PRIMARY KEY (saf_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_saf_kind_key ON %PREFIX%_sso_auth_failures (saf_kind, saf_key);
+CREATE INDEX %PREFIX%_idx_saf_last_failure ON %PREFIX%_sso_auth_failures (saf_last_failure);
+
 
  
 /*==============================================================*/
