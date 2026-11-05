@@ -792,7 +792,7 @@ ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id, ssp_session_index);
 CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id);
 CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at);
 
