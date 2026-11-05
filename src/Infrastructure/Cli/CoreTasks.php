@@ -12506,7 +12506,7 @@ final class CoreTasks
                     'smc_encrypt_assertions' => false,
                     'smc_validate_signatures' => false,
                     'smc_assertion_lifetime' => 600,
-                    'smc_allowed_clock_skew' => 0,
+                    'smc_allowed_clock_skew' => 300,
                     'smc_userid_field' => 'usr_id'
                 );
             }

@@ -273,11 +273,12 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_METADATA_PASTE_BUTTON'),
             array('icon' => 'bi-clipboard-check', 'class' => 'btn btn-secondary')
         );
-        $form->addInput(
+        $form->addMultilineTextInput(
             'smc_acs_url',
             $gL10n->get(textId: 'SYS_SSO_ACS_URL'),
             $client->getValue('smc_acs_url'),
-            array('type' => 'url', 'maxLength' => 2000, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_ACS_URL_DESC'))
+            3,
+            array('maxLength' => 4000, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_ACS_URL_DESC'))
         );
         $form->addInput(
             'smc_slo_url',
@@ -348,13 +349,13 @@ class SSOClientPresenter extends PagePresenter
             'smc_assertion_lifetime',
             $gL10n->get('SYS_SSO_SAML_ASSERTION_LIFETIME'),
             $client->getValue('smc_assertion_lifetime') ?? '600',
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ASSERTION_LIFETIME_DESC')
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ASSERTION_LIFETIME_DESC')
         );
 
         $form->addInput(
             'smc_allowed_clock_skew',
             $gL10n->get('SYS_SSO_SAML_ALLOWED_CLOCK_SKEW'),
-            $client->getValue('smc_allowed_clock_skew') ?? '0',
+            $client->getValue('smc_allowed_clock_skew') ?? '300',
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC')
         );
 
@@ -543,12 +544,15 @@ class SSOClientPresenter extends PagePresenter
         // Prefer the default ACS and otherwise an HTTP-POST ACS, which is the
         // binding used by Admidio for SAML responses.
         const acsElements = Array.from(xmlDoc.querySelectorAll("AssertionConsumerService"));
-        const acsElement =
-            acsElements.find((element) => element.getAttribute("isDefault") === "true")
-            || acsElements.find((element) =>
-                element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST")
-            || acsElements[0];
-        const acsUrl = acsElement ? acsElement.getAttribute("Location") || "" : "";
+        // All of them are taken over, the default one first.
+        const acsPost = acsElements.filter((element) =>
+            element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
+        const acsDefault = acsElements.filter((element) => element.getAttribute("isDefault") === "true");
+        const acsUrl = [...new Set(
+            [...acsDefault, ...(acsPost.length > 0 ? acsPost : acsElements)]
+                .map((element) => element.getAttribute("Location") || "")
+                .filter((location) => location !== "")
+        )].join("\n");
 
         // Admidio currently sends SLO messages with HTTP-Redirect, so prefer
         // the matching SP endpoint when metadata offers multiple bindings.
@@ -1064,7 +1068,7 @@ class SSOClientPresenter extends PagePresenter
             $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';
             $templateClient[] = $client->getValue('smc_client_id');
-            $templateClient[] = $client->getValue('smc_acs_url');
+            $templateClient[] = implode('<br />', array_map(array(SecurityUtils::class, 'encodeHTML'), $client->getAcsUrls()));
             $templateClient[] = implode(', ', $client->getAccessRolesNames());
             //$templateClient[] = $client->getValue('create_name');
 

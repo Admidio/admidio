@@ -39,6 +39,7 @@ use Exception;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\Session\Entity\Session;
 use Admidio\Users\Entity\User;
@@ -107,6 +108,25 @@ class SAMLService extends SSOService {
                 $client->setValue($column, null);
             }
             $client->setValue('smc_metadata_failures', 0);
+        }
+
+        // the assertion consumer URLs: one per line, the first is the default
+        if (array_key_exists('smc_acs_url', $formValues)) {
+            $acsUrls = SAMLClient::splitUrls((string) $formValues['smc_acs_url']);
+            foreach ($acsUrls as $acsUrl) {
+                if (!preg_match('~^https?://[^\s]+$~i', $acsUrl) || filter_var($acsUrl, FILTER_VALIDATE_URL) === false) {
+                    throw new \Admidio\Infrastructure\Exception('SYS_SSO_ACS_URL_INVALID', array(SecurityUtils::encodeHTML($acsUrl)));
+                }
+            }
+            if ($acsUrls === array()) {
+                throw new \Admidio\Infrastructure\Exception('SYS_FIELD_EMPTY', array($GLOBALS['gL10n']->get('SYS_SSO_ACS_URL')));
+            }
+            $formValues['smc_acs_url'] = implode("\n", $acsUrls);
+        }
+
+        // an assertion with a lifetime of 0 seconds is expired on arrival
+        if (array_key_exists('smc_assertion_lifetime', $formValues) && (int) $formValues['smc_assertion_lifetime'] < 1) {
+            throw new \Admidio\Infrastructure\Exception('SYS_SSO_SAML_ASSERTION_LIFETIME_INVALID');
         }
 
         foreach (array('smc_x509_certificate', 'smc_x509_encryption_certificate', 'smc_metadata_signing_certificate') as $field) {
@@ -495,8 +515,10 @@ class SAMLService extends SSOService {
         if ($request instanceof LogoutRequest) {
             $response->setDestination($client->getValue('smc_slo_url'));
         } else {
-            // Always use the registered ACS URL, never the request's ACS URL
-            $response->setDestination($client->getValue('smc_acs_url'));
+            // Only a registered ACS URL, never an arbitrary one from the request
+            $registeredAcs = $client->getAcsUrls();
+            $requestedAcs = $request instanceof AuthnRequest ? (string) $request->getAssertionConsumerServiceURL() : '';
+            $response->setDestination(in_array($requestedAcs, $registeredAcs, true) ? $requestedAcs : ($registeredAcs[0] ?? ''));
         }
         $response->setRelayState($request->getRelayState());
 
@@ -791,10 +813,14 @@ class SAMLService extends SSOService {
      * @param SAMLClient $client
      * @param SamlMessage $request
      * @param string $expectedDestination
+     * @param bool $checkIssueInstant Whether the issue time is judged. It is not on the second pass of a
+     *        request that was held back for a login: the user may need longer for the password or a second
+     *        factor than the request lifetime allows, and the request was fresh when it arrived.
      * @return void
      * @throws Exception
      */
-    private function validateRequestContext(SAMLClient $client, SamlMessage $request, string $expectedDestination): void 
+    private function validateRequestContext(SAMLClient $client, SamlMessage $request, string $expectedDestination,
+        bool $checkIssueInstant = true): void
     {
         $destination = $request->getDestination();
         $requestIsSigned = $request->getSignature() !== null;
@@ -811,6 +837,10 @@ class SAMLService extends SSOService {
                 'The destination in the SAML request ("' . $destination . '") '
                 . 'does not match the endpoint at which the request was received.'
             );
+        }
+
+        if (!$checkIssueInstant) {
+            return;
         }
 
         $issueInstant = $request->getIssueInstantTimestamp();
@@ -836,7 +866,54 @@ class SAMLService extends SSOService {
         if ($issueInstant < $currentTimestamp - $requestLifetime - $allowedClockSkew) {
             throw new SAMLRequestException('The SAML request has expired.');
         }
+    }
 
+    /**
+     * Remember that this AuthnRequest has passed its checks on arrival and is held back for a login.
+     * The login form returns to the same SSO URL and the request is processed a second time.
+     */
+    private function rememberPendingLogin(AuthnRequest $request): void
+    {
+        $_SESSION['saml_pending_login'] = array('request_id' => (string) $request->getID(), 'time' => time());
+    }
+
+    /**
+     * Whether this AuthnRequest was held back for a login and comes back from the login form. The mark
+     * is valid for an hour, which is generous for a login and still bounds the replay of an old request.
+     */
+    private function isPendingLoginReturn(AuthnRequest $request): bool
+    {
+        $pending = $_SESSION['saml_pending_login'] ?? null;
+
+        return is_array($pending)
+            && (string) $request->getID() !== ''
+            && hash_equals((string) ($pending['request_id'] ?? ''), (string) $request->getID())
+            && (int) ($pending['time'] ?? 0) > time() - 3600;
+    }
+
+    /**
+     * The assertion consumer service a response to this request goes to: the one the request names, which
+     * has to be one of the registered ones, otherwise the default (first) registered one. The index of the
+     * request is not evaluated, the registered URLs carry none.
+     *
+     * @throws SAMLRequestException If the request names an URL that is not registered
+     */
+    private function resolveAcsUrl(AuthnRequest $request, SAMLClient $client): string
+    {
+        $registered = $client->getAcsUrls();
+        $requested = (string) $request->getAssertionConsumerServiceURL();
+
+        if ($requested === '') {
+            return $registered[0] ?? '';
+        }
+        if (!in_array($requested, $registered, true)) {
+            throw new SAMLRequestException(
+                'The AssertionConsumerServiceURL in the AuthnRequest ("' . $requested . '") ' .
+                'does not match a registered ACS URL for this client. ' .
+                'Possible assertion theft attempt.'
+            );
+        }
+        return $requested;
     }
 
 
@@ -895,7 +972,10 @@ class SAMLService extends SSOService {
                 $this->validateSignature($client, $request, $signatureRequired);
             }
 
-            $this->validateRequestContext($client, $request, $this->ssoUrl);
+            $returnsFromLogin = $this->isPendingLoginReturn($request);
+            $this->validateRequestContext($client, $request, $this->ssoUrl, !$returnsFromLogin);
+            // judged before a login form is shown, so that a request that cannot be answered is not held back
+            $clientACS = $this->resolveAcsUrl($request, $client);
             $nameIDPolicy = $this->processNameIDPolicy($request, $entityIdClient, $client);
 
             $cancelAuthentication = admFuncVariableIsValid($_GET, 'sso_cancel', 'bool', array('defaultValue' => false));
@@ -949,6 +1029,7 @@ class SAMLService extends SSOService {
 
             if ($authenticationRequired) {
                 $this->rememberReauthenticationRequest($request);
+                $this->rememberPendingLogin($request);
                 $this->showSSOLoginForm($client);
                 // exit;
             }
@@ -970,37 +1051,36 @@ class SAMLService extends SSOService {
                 $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
                     $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName())) .
                     '</div>';
+                $this->rememberPendingLogin($request);
                 $this->showSSOLoginForm($client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
                 exit;
             }
 
+            unset($_SESSION['saml_pending_login']);
             $requestId = $request->getID(); // Extract from incoming AuthnRequest
-            $clientACS = $request->getAssertionConsumerServiceURL();
-
-            // Validate ACS URL against registered client configuration
-            $registeredACS = $client->getValue('smc_acs_url');
-            if (!empty($clientACS) && $clientACS !== $registeredACS) {
-                throw new SAMLRequestException(
-                    'The AssertionConsumerServiceURL in the AuthnRequest ("' . $clientACS . '") ' .
-                    'does not match the registered ACS URL for this client. ' .
-                    'Possible assertion theft attempt.'
-                );
-            }
-
-            // If no ACS URL in request, fall back to the registered one
-            if (empty($clientACS)) {
-                $clientACS = $registeredACS;
-            }
 
             $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
             $nameIDValue = $this->getNameIDValue($client, $nameIDPolicy['format']);
+            if ($nameIDValue === '') {
+                // for example the e-mail address as identifier for a user who has none: the service provider
+                // would log in somebody without a name, and a later logout could not address the session
+                throw new SAMLRequestException(
+                    $gL10n->get('SYS_SSO_SAML_NAME_ID_EMPTY', array($client->readableName())),
+                    array(SamlConstants::STATUS_RESPONDER)
+                );
+            }
             $this->verifyRequestedSubject($request, $nameIDValue);
 
             // Set up validity periods for the assertions and confirmationData -> Use allowed clock skew and assertion lifetime
             $issueInstant = new \DateTime();
-            $notBefore = (clone $issueInstant)->sub(new \DateInterval('PT' . ($client->getValue('smc_allowed_clock_skew')??300) . 'S'));
-            $notOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . ($client->getValue('smc_assertion_lifetime')??600) . 'S'));
+            $assertionLifetime = (int) ($client->getValue('smc_assertion_lifetime') ?? 600);
+            if ($assertionLifetime < 1) {
+                // 0 would make every assertion expired on arrival
+                $assertionLifetime = 600;
+            }
+            $notBefore = (clone $issueInstant)->sub(new \DateInterval('PT' . ((int) ($client->getValue('smc_allowed_clock_skew') ?? 300)) . 'S'));
+            $notOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . $assertionLifetime . 'S'));
 
             // Assertion validity and session validity serve different purposes.
             // SessionNotOnOrAfter tells the service provider when the session
