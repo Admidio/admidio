@@ -411,6 +411,49 @@ class SAMLService extends SSOService {
         return ['idpPrivateKey' => $idpPrivateKeyPem, 'idpCert' => $idpCert, 'idpCertEnc' => $idpCertEnc];
     }
 
+    /**
+     * Name the organization and a contact person in the metadata, which service providers show to their
+     * users in error messages and administrators use to get in touch. Empty settings fall back to the
+     * organization, the Admidio URL and the e-mail address of the administrator of the organization.
+     */
+    private function addOrganizationAndContact(EntityDescriptor $entityDescriptor): void
+    {
+        global $gSettingsManager, $gCurrentOrganization;
+
+        $name = trim((string) $gSettingsManager->get('sso_saml_organization_name'));
+        if ($name === '') {
+            $name = (string) $gCurrentOrganization->getValue('org_longname');
+        }
+        $url = trim((string) $gSettingsManager->get('sso_saml_organization_url'));
+        if ($url === '') {
+            $url = ADMIDIO_URL;
+        }
+        $language = strtolower(substr((string) $gSettingsManager->get('system_language'), 0, 2));
+
+        if ($name !== '') {
+            $organization = new \LightSaml\Model\Metadata\Organization();
+            $organization->setLang(preg_match('/^[a-z]{2,3}$/', $language) ? $language : 'en')
+                ->setOrganizationName($name)
+                ->setOrganizationDisplayName($name)
+                ->setOrganizationURL($url);
+            $entityDescriptor->addOrganization($organization);
+        }
+
+        $email = trim((string) $gSettingsManager->get('sso_saml_contact_email'));
+        if ($email === '') {
+            $email = trim((string) $gCurrentOrganization->getValue('org_email_administrator'));
+        }
+        if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) !== false) {
+            $contact = new \LightSaml\Model\Metadata\ContactPerson();
+            $contact->setContactType(\LightSaml\Model\Metadata\ContactPerson::TYPE_TECHNICAL)
+                ->setEmailAddress($email);
+            if ($name !== '') {
+                $contact->setCompany($name);
+            }
+            $entityDescriptor->addContactPerson($contact);
+        }
+    }
+
     public function handleMetadataRequest(): void
     {
         header('Content-Type: application/xml');
@@ -447,6 +490,12 @@ class SAMLService extends SSOService {
         $entityDescriptor = new EntityDescriptor();
         $entityDescriptor->setID(\LightSaml\Helper::generateID());
         $entityDescriptor->setEntityID($entityId);
+
+        // The metadata is valid for a limited time and may be cached for a while, so that a service provider that
+        // refreshes it by itself (validUntil, cacheDuration) sees a change of certificates or endpoints in time
+        $entityDescriptor->setValidUntil(time() + max(1, $gSettingsManager->getInt('sso_saml_metadata_valid_days')) * 86400);
+        $entityDescriptor->setCacheDuration('PT' . max(1, $gSettingsManager->getInt('sso_saml_metadata_cache_hours')) . 'H');
+        $this->addOrganizationAndContact($entityDescriptor);
 
         // Create IDP SSO Descriptor
         $idpDescriptor = new IDPSSODescriptor();

@@ -2111,6 +2111,8 @@
   <string name="SYS_SSO_SAML_CERTIFICATE_INVALID">Ein Zertifikat ist kein gültiges X.509-Zertifikat im PEM-Format.</string>
   <string name="SYS_SSO_SAML_CLIENT_DISABLED">Der Service Provider #VAR1# ist bei diesem Identity Provider deaktiviert.</string>
   <string name="SYS_SSO_SAML_CLIENT_UNKNOWN">Die Anwendung, die dich hierher geschickt hat (#VAR1#), ist in Admidio nicht registriert. Eine Anmeldung ist nicht möglich. Bitte informiere den Administrator der Anwendung.</string>
+  <string name="SYS_SSO_SAML_CONTACT_EMAIL">Kontakt-E-Mail-Adresse in den Metadaten</string>
+  <string name="SYS_SSO_SAML_CONTACT_EMAIL_DESC">Technischer Ansprechpartner für die Administratoren von Service Providern. Leer: die E-Mail-Adresse des Administrators der Organisation.</string>
   <string name="SYS_SSO_SAML_DISABLED">SAML-Single-Sign-On ist nicht aktiviert.</string>
   <string name="SYS_SSO_SAML_ENABLED">Single-Sign-On über SAML 2.0 aktivieren</string>
   <string name="SYS_SSO_SAML_ENABLED_DESC">Admidio als SAML-2.0-Identity-Provider aktivieren. Dadurch ist die Anmeldung bei anderen Webanwendungen über ein Admidio-Konto möglich.</string>
@@ -2119,9 +2121,16 @@
   <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">Für die Verschlüsselung der Assertion ist ein Zertifikat des Clients erforderlich.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">SAML-Entity-ID</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Eindeutiger SAML-Bezeichner dieser Admidio-Instanz, üblicherweise die URL der Admidio-Installation. Er muss mit dem beim Client eingetragenen Wert übereinstimmen.</string>
+  <string name="SYS_SSO_SAML_METADATA_CACHE_HOURS">Zwischenspeicherdauer der Metadaten (Stunden)</string>
+  <string name="SYS_SSO_SAML_METADATA_CACHE_HOURS_DESC">Service Provider, die die Metadaten selbständig aktualisieren, rufen sie nach dieser Zeit erneut ab (cacheDuration). Standard: 24.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata-URL</string>
+  <string name="SYS_SSO_SAML_METADATA_VALID_DAYS">Gültigkeit der Metadaten (Tage)</string>
+  <string name="SYS_SSO_SAML_METADATA_VALID_DAYS_DESC">Die Metadaten dieses Identity Providers geben an, dass sie ab dem Abruf so viele Tage gültig sind (validUntil). Standard: 30.</string>
   <string name="SYS_SSO_SAML_NAME_ID_EMPTY">Dein Benutzerkonto hat keinen Wert für die Kennung, die #VAR1# benötigt, daher kannst du dich dort nicht anmelden. Bitte wende dich an den Administrator.</string>
   <string name="SYS_SSO_SAML_NAME_ID_POLICY_INVALID">Die angeforderte Richtlinie für die Benutzerkennung wird nicht unterstützt.</string>
+  <string name="SYS_SSO_SAML_ORGANIZATION_DESC">Name und Adresse der Organisation, die diesen Identity Provider betreibt; Service Provider zeigen sie ihren Benutzern an. Leer: der Name der Organisation und die Admidio-URL.</string>
+  <string name="SYS_SSO_SAML_ORGANIZATION_NAME">Organisation in den Metadaten</string>
+  <string name="SYS_SSO_SAML_ORGANIZATION_URL">Webadresse der Organisation</string>
   <string name="SYS_SSO_SAML_REQUEST_FAILED">Die SAML-Anfrage konnte nicht verarbeitet werden. Bitte kehre zur Anwendung zurück und versuche es erneut. Besteht das Problem weiter, wende dich an den Administrator.</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME">Gültigkeit der Anfrage</string>
   <string name="SYS_SSO_SAML_REQUEST_LIFETIME_DESC">Maximales Alter eingehender SAML-Anfragen in Sekunden. Standard: 300.</string>
