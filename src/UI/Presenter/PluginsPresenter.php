@@ -190,7 +190,7 @@ class PluginsPresenter extends PagePresenter
                 'url' => (string)($entry['url'] ?? ''),
                 'icon' => (string)($entry['icon'] ?? 'bi-puzzle'),
                 'version' => (string)$entry['release']['version'],
-                'isBeta' => PluginStore::getReleaseStatus($entry['release']) === 'beta',
+                'isBeta' => PluginStore::getReleaseStatus($entry['release']) !== 'stable',
                 'installed' => (bool)$entry['installed'],
                 'installedVersion' => (string)$entry['installedVersion']
             );
@@ -587,7 +587,7 @@ class PluginsPresenter extends PagePresenter
             'url' => $homepage,
             'urlHost' => $homepage === '' ? '' : (string)(parse_url($homepage, PHP_URL_HOST) ?? $homepage),
             'version' => $plugin?->version ?? '',
-            'isBeta' => ($plugin?->beta ?? 0) > 0,
+            'isBeta' => ($plugin?->prerelease ?? '') !== '',
             'installedVersion' => PluginRegistry::getInstalledVersion($id),
             'versionState' => $this->getVersionState($id, $plugin, $state),
             'toggle' => $this->getStateToggle($id, $plugin, $state),
@@ -633,7 +633,7 @@ class PluginsPresenter extends PagePresenter
             'class' => $enabled ? 'text-success' : 'text-secondary',
             'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
             'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
-            'betaConfirmation' => !$enabled && $plugin->beta > 0 ? '1' : '0',
+            'betaConfirmation' => !$enabled && $plugin->prerelease !== '' ? '1' : '0',
             'dataHref' => $this->toggleScript($id, $enabled, $plugin->wantsMenuEntry())
         );
     }
@@ -807,7 +807,7 @@ class PluginsPresenter extends PagePresenter
         $release = PluginRegistry::isInstalled($id) ? PluginStore::getNewerRelease($id) : null;
         if ($state === PluginRegistry::STATE_UPDATE || $release !== null) {
             $action = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
-            if ($release !== null ? PluginStore::getReleaseStatus($release) === 'beta' : ($plugin?->beta ?? 0) > 0) {
+            if ($release !== null ? PluginStore::getReleaseStatus($release) !== 'stable' : ($plugin?->prerelease ?? '') !== '') {
                 $action['dataMessage'] = $gL10n->get('SYS_BETA_VERSION_WARNING');
                 $action['messageType'] = 'warning';
                 $action['messageTitle'] = $gL10n->get('SYS_WARNING');

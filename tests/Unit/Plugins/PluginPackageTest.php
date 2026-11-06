@@ -35,57 +35,58 @@ final class PluginPackageTest extends PluginTestCase
     private array $rubbish = array();
 
     /**
-     * @testdox A manifest's optional beta number becomes part of its complete version
-     * @dataProvider betaManifests
+     * @testdox A manifest version X.Y.Z-(dev|alpha|beta|rc).N is read as the complete version and its prerelease kind
+     * @dataProvider versionManifests
      */
-    public function testBetaManifestIsRead(array $manifest, string $version, int $beta): void
+    public function testVersionIsRead(string $version, string $prerelease): void
     {
         $plugin = PluginPackage::describe($this->archive(array(
-            'beta-plugin/plugin.json' => json_encode($manifest),
+            'beta-plugin/plugin.json' => json_encode(array('version' => $version)),
             'beta-plugin/plugin.php' => self::ENTRY
         )));
 
-        $this->assertSame('2.0.0', $plugin->versionBase);
         $this->assertSame($version, $plugin->version);
-        $this->assertSame($beta, $plugin->beta);
+        $this->assertSame($prerelease, $plugin->prerelease);
     }
 
-    /** @return array<string,array{0: array<string,mixed>, 1: string, 2: int}> */
-    public static function betaManifests(): array
+    /** @return array<string,array{0: string, 1: string}> */
+    public static function versionManifests(): array
     {
         return array(
-            'stable default' => array(array('version' => '2.0.0'), '2.0.0', 0),
-            'stable explicit' => array(array('version' => '2.0.0', 'beta' => 0), '2.0.0', 0),
-            'first beta' => array(array('version' => '2.0.0', 'beta' => 1), '2.0.0-beta.1', 1),
-            'largest beta' => array(array('version' => '2.0.0', 'beta' => 32767), '2.0.0-beta.32767', 32767)
+            'stable' => array('2.0.0', ''),
+            'daily snapshot' => array('2.0.0-dev.20261106', 'dev'),
+            'alpha' => array('2.0.0-alpha.3', 'alpha'),
+            'beta' => array('2.0.0-beta.1', 'beta'),
+            'release candidate' => array('2.0.0-rc.12', 'rc'),
+            'longest' => array('10000.10000.10000-dev.20261106', 'dev')
         );
     }
 
     /**
-     * @testdox Invalid beta fields and version suffixes are rejected before installation
-     * @dataProvider invalidBetaManifests
+     * @testdox A version that is not X.Y.Z or X.Y.Z-(dev|alpha|beta|rc).N is rejected before installation
+     * @dataProvider invalidVersionManifests
      */
-    public function testInvalidBetaManifestIsRejected(array $manifest): void
+    public function testInvalidVersionIsRejected(mixed $version): void
     {
         $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST');
         PluginPackage::describe($this->archive(array(
-            'beta-plugin/plugin.json' => json_encode($manifest),
+            'beta-plugin/plugin.json' => json_encode(array('version' => $version)),
             'beta-plugin/plugin.php' => self::ENTRY
         )));
     }
 
-    /** @return array<string,array{0: array<string,mixed>}> */
-    public static function invalidBetaManifests(): array
+    /** @return array<string,array{0: mixed}> */
+    public static function invalidVersionManifests(): array
     {
         return array(
-            'suffix' => array(array('version' => '2.0.0-beta.1')),
-            'too long' => array(array('version' => '1234.5678.90')),
-            'negative' => array(array('version' => '2.0.0', 'beta' => -1)),
-            'overflow' => array(array('version' => '2.0.0', 'beta' => 32768)),
-            'string' => array(array('version' => '2.0.0', 'beta' => '1')),
-            'boolean' => array(array('version' => '2.0.0', 'beta' => true)),
-            'fraction' => array(array('version' => '2.0.0', 'beta' => 1.5)),
-            'null' => array(array('version' => '2.0.0', 'beta' => null))
+            'beta without number' => array('2.0.0-beta'),
+            'beta number zero' => array('2.0.0-beta.0'),
+            'beta without dot' => array('2.0.0-beta1'),
+            'unknown kind' => array('2.0.0-nightly.1'),
+            'pr ranks above the release' => array('2.0.0-pr.5'),
+            'two parts' => array('2.0'),
+            'too long' => array('1000000.1000000.1000000-dev.20261106'),
+            'integer' => array(2)
         );
     }
 

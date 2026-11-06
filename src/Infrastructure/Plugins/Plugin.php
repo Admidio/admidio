@@ -68,6 +68,18 @@ final class Plugin
      */
     public const ERROR_INVALID_ID = 'invalid_id';
     public const ERROR_ID_CONFLICT = 'id_conflict';
+    /**
+     * The length of the column that stores the installed version (com_version).
+     */
+    public const VERSION_MAX_LENGTH = 32;
+
+    /**
+     * The kinds of prerelease a version may carry, e.g. 1.2.0-dev.20261106. version_compare() orders
+     * them dev < alpha < beta < rc < release. Do not add a kind that starts with "p": version_compare()
+     * reads it as "patch level" and ranks it above the release.
+     */
+    public const PRERELEASE_KINDS = array('dev', 'alpha', 'beta', 'rc');
+
     public const ERROR_NO_MANIFEST = 'no_manifest';
     public const ERROR_INVALID_MANIFEST = 'invalid_manifest';
     public const ERROR_BROKEN_MANIFEST = 'broken_manifest';
@@ -106,19 +118,16 @@ final class Plugin
     public readonly string $description;
 
     /**
-     * Complete version of the files, including the optional beta number.
+     * Version of the files, as declared in the manifest: **X.Y.Z** for a stable release or
+     * **X.Y.Z-(dev|alpha|beta|rc).N** for a prerelease, e.g. **2.0.0-beta.1**.
      */
     public readonly string $version;
 
     /**
-     * Base version declared in the manifest, stored separately from the beta number.
+     * Maturity of the version: **dev**, **alpha**, **beta** or **rc** for a prerelease, an empty string for
+     * a stable release.
      */
-    public readonly string $versionBase;
-
-    /**
-     * Beta number, or zero for a stable release.
-     */
-    public readonly int $beta;
+    public readonly string $prerelease;
 
     /**
      * Bootstrap icon name, e.g. **bi-cake2**.
@@ -194,9 +203,8 @@ final class Plugin
         $this->manifest = $manifest;
         $this->name = (string)($manifest['name'] ?? $id);
         $this->description = (string)($manifest['description'] ?? '');
-        $this->versionBase = (string)($manifest['version'] ?? '0.0.0');
-        $this->beta = is_int($manifest['beta'] ?? null) ? $manifest['beta'] : 0;
-        $this->version = $this->versionBase . ($this->beta > 0 ? '-beta.' . $this->beta : '');
+        $this->version = (string)($manifest['version'] ?? '0.0.0');
+        $this->prerelease = preg_match('/-(' . implode('|', self::PRERELEASE_KINDS) . ')\.\d+$/D', $this->version, $matches) === 1 ? $matches[1] : '';
         $this->icon = (string)($manifest['icon'] ?? 'bi-puzzle-fill');
         $this->author = (string)($manifest['author'] ?? '');
         $this->homepage = (string)($manifest['url'] ?? '');
@@ -259,12 +267,11 @@ final class Plugin
                 'The manifest does not declare a version.', self::ERROR_BROKEN_MANIFEST);
         }
 
-        if (strlen($manifest['version']) > 10
-            || preg_match('/^[0-9]+\.[0-9]+\.[0-9]+$/D', $manifest['version']) !== 1
-            || (array_key_exists('beta', $manifest)
-                && (!is_int($manifest['beta']) || $manifest['beta'] < 0 || $manifest['beta'] > 32767))) {
+        if (strlen($manifest['version']) > self::VERSION_MAX_LENGTH
+            || preg_match('/^\d+\.\d+\.\d+(?:-(?:' . implode('|', self::PRERELEASE_KINDS) . ')\.[1-9]\d*)?$/D', $manifest['version']) !== 1) {
             return new self($id, $path, $manifest, array(), array(), $empty,
-                'The manifest version must be a base version such as 1.2.0 (at most 10 characters), with an optional beta integer between 0 and 32767.',
+                'The manifest version must be written X.Y.Z or X.Y.Z-(dev|alpha|beta|rc).N, e.g. 1.2.0 or 1.2.0-beta.1 (at most '
+                . self::VERSION_MAX_LENGTH . ' characters).',
                 self::ERROR_BROKEN_MANIFEST);
         }
 
