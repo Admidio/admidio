@@ -38,6 +38,7 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\UserEntity;
 use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
+use Admidio\SSO\Entity\TokenEntity;
 use Admidio\SSO\Entity\IdTokenResponse;
 use Admidio\SSO\Entity\OIDCConsent;
 use Admidio\Session\Entity\Session;
@@ -1454,6 +1455,15 @@ class OIDCService extends SSOService {
             return new JsonResponse(['active' => false]);
         }
 
+        // A refresh token is an encrypted payload, an access token a signed JWT: a token that is none of the
+        // two is inactive. The hint only says which one to try first, a server may ignore it (RFC 7662, 2.1).
+        if (is_string($tokenValue) && ($requestBody['token_type_hint'] ?? null) !== 'access_token') {
+            $refreshTokenResponse = $this->introspectRefreshToken($tokenValue, $clientId);
+            if ($refreshTokenResponse !== null) {
+                return $refreshTokenResponse;
+            }
+        }
+
         try {
             // Validate the token using the resource server
             $validatedRequest = $this->resourceServer->validateAuthenticatedRequest(
@@ -1493,15 +1503,80 @@ class OIDCService extends SSOService {
                 }
             }
 
-            return new JsonResponse([
-                'active' => true,
-                'sub' => $token->getUserIdentifier(),
-                'client_id' => $token->getClient()->getIdentifier(),
-                'exp' => $token->getExpiryDateTime()->getTimestamp(),
-                'scope' => implode(' ', array_map(fn($s) => $s->getIdentifier(), $token->getScopes())),
-            ]);
+            return new JsonResponse($this->describeActiveToken($token, $tokenClient, 'Bearer'));
         } catch (\Exception $e) {
             return new JsonResponse(['active' => false]);
+        }
+    }
+
+    /**
+     * The introspection response of an active token (RFC 7662, 2.2).
+     *
+     * @param string|null $tokenType Type of the access token, null for a refresh token
+     * @return array<string,mixed>
+     */
+    private function describeActiveToken(TokenEntity $token, OIDCClient $client, ?string $tokenType): array
+    {
+        $prefix = $token->getColumnPrefix();
+        $response = array(
+            'active' => true,
+            'scope' => implode(' ', array_map(fn($scope) => $scope->getIdentifier(), $token->getScopes())),
+            'client_id' => $client->getIdentifier(),
+            'sub' => $token->getUserIdentifier(),
+            'aud' => $client->getIdentifier(),
+            'iss' => $this->getIssuerURL(),
+            'exp' => $token->getExpiryDateTime()->getTimestamp(),
+        );
+        $created = (int) $token->getValue($prefix . '_timestamp_create', 'U');
+        if ($created > 0) {
+            $response['iat'] = $created;
+        }
+        if ($tokenType !== null) {
+            $response['token_type'] = $tokenType;
+        }
+        $user = (int) $token->getValue($prefix . '_usr_id') > 0 ? $token->getUser() : null;
+        if ($user instanceof UserEntity && $user->getUsername() !== '') {
+            $response['username'] = $user->getUsername();
+        }
+
+        return $response;
+    }
+
+    /**
+     * Introspect a refresh token.
+     *
+     * @param string $tokenValue The token as the client holds it
+     * @param string $clientId The authenticated client
+     * @return JsonResponse|null The answer, or null if the value is no refresh token of this server
+     */
+    private function introspectRefreshToken(string $tokenValue, string $clientId): ?JsonResponse
+    {
+        try {
+            $payload = json_decode($this->decrypt($tokenValue), true);
+        } catch (\Throwable) {
+            return null;
+        }
+        if (!is_array($payload) || !is_string($payload['refresh_token_id'] ?? null) || $payload['refresh_token_id'] === '') {
+            return null;
+        }
+
+        $inactive = new JsonResponse(['active' => false]);
+        try {
+            $tokenId = $payload['refresh_token_id'];
+            $token = $this->refreshTokenRepository->getToken($tokenId);
+            $client = $token->isNewRecord() ? null : $token->getClient();
+
+            if (!$client instanceof OIDCClient || !hash_equals($clientId, $client->getIdentifier())
+                || $token->getExpiryDateTime() < new \DateTimeImmutable()
+                // revoked, or the user may no longer log in or use the client (the check revokes the token)
+                || $this->refreshTokenRepository->isRefreshTokenRevoked($tokenId)
+            ) {
+                return $inactive;
+            }
+
+            return new JsonResponse($this->describeActiveToken($token, $client, null));
+        } catch (\Throwable) {
+            return $inactive;
         }
     }
 
