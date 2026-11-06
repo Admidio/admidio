@@ -37,7 +37,7 @@
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['smc_enabled']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_client_name']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_client_id']}
-            {include 'sys-template-parts/form.input.tpl' data=$elements['smc_acs_url']}
+            {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_acs_url']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_slo_url']}
 
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
