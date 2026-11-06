@@ -60,6 +60,63 @@ class Membership extends Entity
     }
 
     /**
+     * The SQL condition of a membership that is valid on a day, with its parameters for a prepared
+     * statement. A membership is valid from 00:00 of mem_begin up to, but not including, 00:00 of
+     * mem_end: the end date is the first day without membership, which is also what
+     * stopMembership() writes (yesterday, so the membership ends at once).
+     *
+     * Queries use this instead of writing the comparison themselves, so that every part of Admidio
+     * agrees on who is a member on a given day.
+     *
+     * **Code example**
+     * ```
+     * $valid = Membership::getSqlValidCondition();
+     * $sql = 'SELECT mem_usr_id FROM ' . TBL_MEMBERS . ' WHERE mem_rol_id = ? AND ' . $valid['sql'];
+     * $statement = $gDb->queryPrepared($sql, array_merge(array($roleId), $valid['params']));
+     * ```
+     * @param string|null $date The day (Y-m-d), by default today.
+     * @param string $tableAlias Alias of the members table in the query, if it has one.
+     * @return array{sql: string, params: array<int,string>} Returns the condition and its parameters.
+     */
+    public static function getSqlValidCondition(?string $date = null, string $tableAlias = ''): array
+    {
+        $date ??= DATE_NOW;
+        $prefix = $tableAlias === '' ? '' : $tableAlias . '.';
+
+        return array(
+            'sql' => $prefix . 'mem_begin <= ? AND ' . $prefix . 'mem_end > ?',
+            'params' => array($date, $date)
+        );
+    }
+
+    /**
+     * Whether a membership period is valid on a day, by the same rule as getSqlValidCondition().
+     * @param string $begin The start date of the membership (Y-m-d).
+     * @param string $end The end date of the membership (Y-m-d), the first day without membership.
+     * @param string|null $date The day (Y-m-d), by default today.
+     * @return bool Returns **true** if the membership is valid on that day.
+     */
+    public static function isValidPeriod(string $begin, string $end, ?string $date = null): bool
+    {
+        $date ??= DATE_NOW;
+        return strcmp($begin, $date) <= 0 && strcmp($end, $date) > 0;
+    }
+
+    /**
+     * Whether this membership is valid on a day.
+     * @param string|null $date The day (Y-m-d), by default today.
+     * @return bool Returns **true** if the membership is valid on that day.
+     * @throws Exception
+     */
+    public function isValid(?string $date = null): bool
+    {
+        if ($this->newRecord) {
+            return false;
+        }
+        return self::isValidPeriod($this->getValue('mem_begin', 'Y-m-d'), $this->getValue('mem_end', 'Y-m-d'), $date);
+    }
+
+    /**
      * Reads the membership of a user in a role. A user could have several membership periods in a role,
      * e.g. if the leader flag was changed or the user was removed and assigned again. Then the period that
      * is valid today is read, otherwise the period with the latest end date. If the user has no membership

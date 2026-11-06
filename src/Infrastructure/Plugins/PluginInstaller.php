@@ -4,6 +4,7 @@ namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -152,6 +153,38 @@ final class PluginInstaller
         self::update($plugin);
 
         return $plugin;
+    }
+
+    /**
+     * What removing the plugin would leave behind, in the words of the plugin, for the confirmation
+     * of the removal. A plugin answers through the filter **plugin_removal_warnings**, which
+     * receives the list of messages so far and the plugin and returns the list with its own
+     * messages added:
+     * ```
+     * Hooks::addFilter('plugin_removal_warnings', function (array $warnings, Plugin $plugin): array {
+     *     if ($plugin->id === 'example' && ExampleService::hasRemoteData()) {
+     *         $warnings[] = 'The accounts on the remote system are no longer managed.';
+     *     }
+     *     return $warnings;
+     * }, 10, 2);
+     * ```
+     * A warning never prevents the removal - otherwise a broken plugin could not be removed at
+     * all. Only plugins that are loaded can answer, which is the case for a plugin that is enabled
+     * in the current organization.
+     * @param Plugin|string $plugin The plugin, or the ID of a plugin whose files are already gone.
+     * @return array<int,string> The messages, plain text.
+     */
+    public static function getRemovalWarnings(Plugin|string $plugin): array
+    {
+        if (!$plugin instanceof Plugin) {
+            return array();
+        }
+
+        $warnings = Hooks::applyTypedFilters('plugin_removal_warnings', array(), $plugin);
+        return array_values(array_filter(
+            array_map(static fn (mixed $warning): string => is_string($warning) ? trim($warning) : '', $warnings),
+            static fn (string $warning): bool => $warning !== ''
+        ));
     }
 
     /**
