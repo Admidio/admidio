@@ -211,6 +211,7 @@ class SAMLService extends SSOService {
         $staticSettings = array(
             $gL10n->get('SYS_SSO_SAML_METADATA_URL') => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
             $gL10n->get('SYS_SSO_SAML_SSO_ENDPOINT') => ['value' => $this->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
+            $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_ENDPOINT') => ['value' => SSOOrganization::getBaseUrl() . '/saml/idp-init?sp=<i>' . $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_ENTITY_ID') . '</i>', 'id' => 'IdP_initiated_endpoint'],
             $gL10n->get('SYS_SSO_SAML_SLO_ENDPOINT') => ['value' => $this->getSloEndpoint(),'id' => 'SLO_endpoint'],
             $gL10n->get('SYS_SSO_KEY_CERTIFICATE')   => ['value' => $idpCertPem,  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
                     border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;
@@ -984,6 +985,212 @@ class SAMLService extends SSOService {
     }
 
 
+    /**
+     * Build, sign and send the response with the assertion for the logged-in user, and remember the SAML session.
+     *
+     * @param SAMLClient $client The service provider
+     * @param string $clientACS The assertion consumer URL the response goes to, one of the registered ones
+     * @param array{format:string,spNameQualifier:?string} $nameIDPolicy The NameID the assertion carries
+     * @param AuthnRequest|null $request The request that is answered; null for an unsolicited response (IdP-initiated SSO)
+     * @param string|null $relayState RelayState of an unsolicited response
+     * @throws Exception
+     */
+    private function issueAuthnResponse(SAMLClient $client, string $clientACS, array $nameIDPolicy,
+        ?AuthnRequest $request, ?string $relayState = null): void
+    {
+        global $gSettingsManager, $gL10n, $gCurrentSession, $gCurrentUser, $gProfileFields;
+
+        $requestId = $request?->getID(); // null for an unsolicited response
+        $entityIdClient = $client->getIdentifier();
+
+        $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
+        $nameIDValue = $this->getNameIDValue($client, $nameIDPolicy['format']);
+        if ($nameIDValue === '') {
+            // for example the e-mail address as identifier for a user who has none: the service provider
+            // would log in somebody without a name, and a later logout could not address the session
+            throw new SAMLRequestException(
+                $gL10n->get('SYS_SSO_SAML_NAME_ID_EMPTY', array($client->readableName())),
+                array(SamlConstants::STATUS_RESPONDER)
+            );
+        }
+        if ($request !== null) {
+            $this->verifyRequestedSubject($request, $nameIDValue);
+        }
+
+        // Set up validity periods for the assertions and confirmationData -> Use allowed clock skew and assertion lifetime
+        $issueInstant = new \DateTime();
+        $assertionLifetime = (int) ($client->getValue('smc_assertion_lifetime') ?? 600);
+        if ($assertionLifetime < 1) {
+            // 0 would make every assertion expired on arrival
+            $assertionLifetime = 600;
+        }
+        $notBefore = (clone $issueInstant)->sub(new \DateInterval('PT' . ((int) ($client->getValue('smc_allowed_clock_skew') ?? 300)) . 'S'));
+        $notOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . $assertionLifetime . 'S'));
+
+        // Assertion validity and session validity serve different purposes.
+        // SessionNotOnOrAfter tells the service provider when the session
+        // established from this assertion must end.
+        $sessionLifetime = $gSettingsManager->getInt('logout_minutes') * 60;
+        if ($sessionLifetime <= 0) {
+            throw new Exception('The configured login session lifetime is invalid.');
+        }
+        $sessionNotOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . $sessionLifetime . 'S'));
+
+        $statusSuccess = new \LightSaml\Model\Protocol\Status(
+            new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
+
+        $response = new Response();
+        $response->setStatus($statusSuccess);
+        $response->setID(id: 'ID' . \LightSaml\Helper::generateID());
+        $response->setIssueInstant($issueInstant);
+        $response->setDestination($clientACS);
+        $response->setIssuer($issuer);
+        if ($requestId !== null) {
+            $response->setInResponseTo($requestId);
+        }
+        $response->setRelayState($request?->getRelayState() ?? $relayState);
+        $assertion = new Assertion();
+
+        // Create SubjectConfirmationData
+        $subjectConfirmationData = new \LightSaml\Model\Assertion\SubjectConfirmationData();
+        $subjectConfirmationData
+            ->setRecipient($clientACS) // Required recipient URL
+            ->setNotOnOrAfter($notOnOrAfter);
+        if ($requestId !== null) {
+            $subjectConfirmationData->setInResponseTo($requestId); // ID of the AuthnRequest (optional but recommended)
+        }
+
+        // Create SubjectConfirmation (Bearer method)
+        $subjectConfirmation = new \LightSaml\Model\Assertion\SubjectConfirmation();
+        $subjectConfirmation
+            ->setMethod(SamlConstants::CONFIRMATION_METHOD_BEARER) // Bearer confirmation method
+            ->setSubjectConfirmationData($subjectConfirmationData);
+
+        $subject = new Subject();
+        $nameID = new NameID($nameIDValue, $nameIDPolicy['format']);
+        if ($nameIDPolicy['spNameQualifier'] !== null) {
+            $nameID->setSPNameQualifier($nameIDPolicy['spNameQualifier']);
+        } elseif ($nameIDPolicy['format'] === SamlConstants::NAME_ID_FORMAT_PERSISTENT) {
+            /*
+            * A persistent identifier is only meaningful together with the two parties it
+            * belongs to, so it states them even when the request did not ask for it.
+            */
+            $nameID->setNameQualifier($this->getIdPEntityId());
+            $nameID->setSPNameQualifier($entityIdClient);
+        }
+        $subject->setNameID($nameID);
+        $subject->addSubjectConfirmation($subjectConfirmation);
+
+        $assertion
+            ->setId('ID' . \LightSaml\Helper::generateID())
+            ->setIssueInstant($issueInstant)
+            ->setIssuer($issuer)
+            ->setSubject($subject)
+            ->setConditions(
+                (new \LightSaml\Model\Assertion\Conditions())
+                ->setNotBefore($notBefore)
+                ->setNotOnOrAfter($notOnOrAfter)
+                ->addItem(
+                    new \LightSaml\Model\Assertion\AudienceRestriction([$entityIdClient])
+                )
+            );
+
+        $sessionIndex = bin2hex(random_bytes(32));
+        $authenticationTimestamp = (int) $gCurrentSession->getValue('ses_authentication_time', 'U');
+
+        if ($authenticationTimestamp <= 0) {
+            throw new Exception('The current Admidio session has no valid authentication time.');
+        }
+
+        $authnInstant = (new \DateTime())->setTimestamp($authenticationTimestamp);
+
+        $assertion->addItem(
+            (new \LightSaml\Model\Assertion\AuthnStatement())
+                ->setAuthnInstant($authnInstant)
+                ->setSessionIndex($sessionIndex)
+                ->setSessionNotOnOrAfter($sessionNotOnOrAfter)
+                ->setAuthnContext(
+                    (new \LightSaml\Model\Assertion\AuthnContext())
+                        ->setAuthnContextClassRef($this->getAuthenticationContextClassRef())
+                )
+        );
+
+        $attributeStatement = new AttributeStatement();
+
+        $fields = $client->getFieldMapping();
+        $fieldsDone = [];
+        foreach ($fields as $samlField => $admidioField) {
+            $att = $this->getUserAttribute($client, $gCurrentUser, $admidioField, $samlField);
+            if ($att->getAllAttributeValues() !== null) {
+                $attributeStatement->addAttribute($att);
+            }
+            $fieldsDone[] = $admidioField;
+        }
+        // now loop through all available profile and user fields and add it if catch-all is configured
+        if ($client->getFieldMappingCatchall()) {
+            $useridFields = [
+                'usr_id'         => $gL10n->get('SYS_SSO_USERID_ID'),
+                'usr_uuid'       => $gL10n->get('SYS_SSO_USERID_UUID'),
+                'usr_login_name' => $gL10n->get('SYS_SSO_USERID_LOGIN'),
+                'fullname'       => $gL10n->get('SYS_NAME')
+            ];
+            foreach ($useridFields as $field => $friendlyName) {
+                if (in_array($field, $fieldsDone))
+                    continue;
+                $att = $this->getUserAttribute($client, $gCurrentUser, $field, $field, $friendlyName);
+                if ($att->getFirstAttributeValue() !== null) {
+                    $attributeStatement->addAttribute($att);
+                }
+            }
+            foreach ($gProfileFields->getProfileFields() as $field) {
+                $fieldname = $field->getValue('usf_name_intern');
+                if ($field->getValue('usf_hidden') == 0 && !in_array($fieldname, $fieldsDone) && !empty($gCurrentUser->getValue($fieldname))) {
+                    // NOTE: Nextcloud does not like duplicate friendly names (althouth the SAML2.0 spec says that the friendly name must not be used for formally identifying attributes...)
+                    $att = $this->getUserAttribute($client, $gCurrentUser, $fieldname, strtolower($fieldname));
+                    if ($att->getFirstAttributeValue() !== null) {
+                        $attributeStatement->addAttribute($att);
+                    }
+                }
+            }
+        }
+
+
+        $assertion->addItem($attributeStatement);
+
+
+        // HTTP-POST SSO assertions are always signed. The legacy
+        // smc_sign_assertions setting now controls only the additional
+        // response-level signature.
+        $keys = $this->getKeysCertificates();
+        $signResponse = (bool) $client->getValue('smc_sign_assertions');
+        $assertion->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
+
+        // IF required, encrypt the assertion
+        $encryptAssertionRequired = (bool)$client->getValue('smc_encrypt_assertions');
+
+        if ($encryptAssertionRequired) {
+            $assertionEnc = $this->encryptAssertion($assertion, $client, $encryptAssertionRequired);
+            $response->addEncryptedAssertion($assertionEnc);
+        } else {
+            $response->addAssertion($assertion);
+        }
+
+        if ($signResponse) {
+            $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
+        }
+
+        $messageContext = new \LightSaml\Context\Profile\MessageContext();
+        $messageContext->setMessage($response);
+
+        $postContent = $this->getPostBindingContent($messageContext);
+
+        $this->saveSessionParticipant($client, (int) $gCurrentUser->getValue('usr_id'), 
+            (string) $nameID->getValue(), (string) $nameID->getFormat(), $nameID->getSPNameQualifier(),
+            $sessionIndex, $authnInstant, $sessionNotOnOrAfter);
+
+        print $postContent;
+    }
+
     public function handleSSORequest(): void
     {
         global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gProfileFields, $gValidLogin, $gLogger, $gMessage;
@@ -1137,188 +1344,7 @@ class SAMLService extends SSOService {
             }
 
             unset($_SESSION['saml_pending_login']);
-            $requestId = $request->getID(); // Extract from incoming AuthnRequest
-
-            $issuer = new \LightSaml\Model\Assertion\Issuer($this->getIdPEntityId());
-            $nameIDValue = $this->getNameIDValue($client, $nameIDPolicy['format']);
-            if ($nameIDValue === '') {
-                // for example the e-mail address as identifier for a user who has none: the service provider
-                // would log in somebody without a name, and a later logout could not address the session
-                throw new SAMLRequestException(
-                    $gL10n->get('SYS_SSO_SAML_NAME_ID_EMPTY', array($client->readableName())),
-                    array(SamlConstants::STATUS_RESPONDER)
-                );
-            }
-            $this->verifyRequestedSubject($request, $nameIDValue);
-
-            // Set up validity periods for the assertions and confirmationData -> Use allowed clock skew and assertion lifetime
-            $issueInstant = new \DateTime();
-            $assertionLifetime = (int) ($client->getValue('smc_assertion_lifetime') ?? 600);
-            if ($assertionLifetime < 1) {
-                // 0 would make every assertion expired on arrival
-                $assertionLifetime = 600;
-            }
-            $notBefore = (clone $issueInstant)->sub(new \DateInterval('PT' . ((int) ($client->getValue('smc_allowed_clock_skew') ?? 300)) . 'S'));
-            $notOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . $assertionLifetime . 'S'));
-
-            // Assertion validity and session validity serve different purposes.
-            // SessionNotOnOrAfter tells the service provider when the session
-            // established from this assertion must end.
-            $sessionLifetime = $gSettingsManager->getInt('logout_minutes') * 60;
-            if ($sessionLifetime <= 0) {
-                throw new Exception('The configured login session lifetime is invalid.');
-            }
-            $sessionNotOnOrAfter = (clone $issueInstant)->add(new \DateInterval('PT' . $sessionLifetime . 'S'));
-
-            $statusSuccess = new \LightSaml\Model\Protocol\Status(
-                new \LightSaml\Model\Protocol\StatusCode(SamlConstants::STATUS_SUCCESS));
-
-            $response = new Response();
-            $response->setStatus($statusSuccess);
-            $response->setID(id: 'ID' . \LightSaml\Helper::generateID());
-            $response->setIssueInstant($issueInstant);
-            $response->setDestination($clientACS);
-            $response->setIssuer($issuer);
-            $response->setInResponseTo($requestId);
-            $response->setRelayState($request->getRelayState());
-            $assertion = new Assertion();
-
-            // Create SubjectConfirmationData
-            $subjectConfirmationData = new \LightSaml\Model\Assertion\SubjectConfirmationData();
-            $subjectConfirmationData
-                ->setRecipient($clientACS) // Required recipient URL
-                ->setNotOnOrAfter($notOnOrAfter)
-                ->setInResponseTo($requestId); // ID of the AuthnRequest (optional but recommended)
-
-            // Create SubjectConfirmation (Bearer method)
-            $subjectConfirmation = new \LightSaml\Model\Assertion\SubjectConfirmation();
-            $subjectConfirmation
-                ->setMethod(SamlConstants::CONFIRMATION_METHOD_BEARER) // Bearer confirmation method
-                ->setSubjectConfirmationData($subjectConfirmationData);
-
-            $subject = new Subject();
-            $nameID = new NameID($nameIDValue, $nameIDPolicy['format']);
-            if ($nameIDPolicy['spNameQualifier'] !== null) {
-                $nameID->setSPNameQualifier($nameIDPolicy['spNameQualifier']);
-            } elseif ($nameIDPolicy['format'] === SamlConstants::NAME_ID_FORMAT_PERSISTENT) {
-                /*
-                * A persistent identifier is only meaningful together with the two parties it
-                * belongs to, so it states them even when the request did not ask for it.
-                */
-                $nameID->setNameQualifier($this->getIdPEntityId());
-                $nameID->setSPNameQualifier($entityIdClient);
-            }
-            $subject->setNameID($nameID);
-            $subject->addSubjectConfirmation($subjectConfirmation);
-
-            $assertion
-                ->setId('ID' . \LightSaml\Helper::generateID())
-                ->setIssueInstant($issueInstant)
-                ->setIssuer($issuer)
-                ->setSubject($subject)
-                ->setConditions(
-                    (new \LightSaml\Model\Assertion\Conditions())
-                    ->setNotBefore($notBefore)
-                    ->setNotOnOrAfter($notOnOrAfter)
-                    ->addItem(
-                        new \LightSaml\Model\Assertion\AudienceRestriction([$entityIdClient])
-                    )
-                );
-
-            $sessionIndex = bin2hex(random_bytes(32));
-            $authenticationTimestamp = (int) $gCurrentSession->getValue('ses_authentication_time', 'U');
-
-            if ($authenticationTimestamp <= 0) {
-                throw new Exception('The current Admidio session has no valid authentication time.');
-            }
-
-            $authnInstant = (new \DateTime())->setTimestamp($authenticationTimestamp);
-
-            $assertion->addItem(
-                (new \LightSaml\Model\Assertion\AuthnStatement())
-                    ->setAuthnInstant($authnInstant)
-                    ->setSessionIndex($sessionIndex)
-                    ->setSessionNotOnOrAfter($sessionNotOnOrAfter)
-                    ->setAuthnContext(
-                        (new \LightSaml\Model\Assertion\AuthnContext())
-                            ->setAuthnContextClassRef($this->getAuthenticationContextClassRef())
-                    )
-            );
-
-            $attributeStatement = new AttributeStatement();
-
-            $fields = $client->getFieldMapping();
-            $fieldsDone = [];
-            foreach ($fields as $samlField => $admidioField) {
-                $att = $this->getUserAttribute($client, $gCurrentUser, $admidioField, $samlField);
-                if ($att->getAllAttributeValues() !== null) {
-                    $attributeStatement->addAttribute($att);
-                }
-                $fieldsDone[] = $admidioField;
-            }
-            // now loop through all available profile and user fields and add it if catch-all is configured
-            if ($client->getFieldMappingCatchall()) {
-                $useridFields = [
-                    'usr_id'         => $gL10n->get('SYS_SSO_USERID_ID'),
-                    'usr_uuid'       => $gL10n->get('SYS_SSO_USERID_UUID'),
-                    'usr_login_name' => $gL10n->get('SYS_SSO_USERID_LOGIN'),
-                    'fullname'       => $gL10n->get('SYS_NAME')
-                ];
-                foreach ($useridFields as $field => $friendlyName) {
-                    if (in_array($field, $fieldsDone))
-                        continue;
-                    $att = $this->getUserAttribute($client, $gCurrentUser, $field, $field, $friendlyName);
-                    if ($att->getFirstAttributeValue() !== null) {
-                        $attributeStatement->addAttribute($att);
-                    }
-                }
-                foreach ($gProfileFields->getProfileFields() as $field) {
-                    $fieldname = $field->getValue('usf_name_intern');
-                    if ($field->getValue('usf_hidden') == 0 && !in_array($fieldname, $fieldsDone) && !empty($gCurrentUser->getValue($fieldname))) {
-                        // NOTE: Nextcloud does not like duplicate friendly names (althouth the SAML2.0 spec says that the friendly name must not be used for formally identifying attributes...)
-                        $att = $this->getUserAttribute($client, $gCurrentUser, $fieldname, strtolower($fieldname));
-                        if ($att->getFirstAttributeValue() !== null) {
-                            $attributeStatement->addAttribute($att);
-                        }
-                    }
-                }
-            }
-
-
-            $assertion->addItem($attributeStatement);
-
-
-            // HTTP-POST SSO assertions are always signed. The legacy
-            // smc_sign_assertions setting now controls only the additional
-            // response-level signature.
-            $keys = $this->getKeysCertificates();
-            $signResponse = (bool) $client->getValue('smc_sign_assertions');
-            $assertion->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
-
-            // IF required, encrypt the assertion
-            $encryptAssertionRequired = (bool)$client->getValue('smc_encrypt_assertions');
-
-            if ($encryptAssertionRequired) {
-                $assertionEnc = $this->encryptAssertion($assertion, $client, $encryptAssertionRequired);
-                $response->addEncryptedAssertion($assertionEnc);
-            } else {
-                $response->addAssertion($assertion);
-            }
-
-            if ($signResponse) {
-                $response->setSignature($this->getSignatureWriter($keys['idpPrivateKey'], $keys['idpCert']));
-            }
-
-            $messageContext = new \LightSaml\Context\Profile\MessageContext();
-            $messageContext->setMessage($response);
-
-            $postContent = $this->getPostBindingContent($messageContext);
-
-            $this->saveSessionParticipant($client, (int) $gCurrentUser->getValue('usr_id'), 
-                (string) $nameID->getValue(), (string) $nameID->getFormat(), $nameID->getSPNameQualifier(),
-                $sessionIndex, $authnInstant, $sessionNotOnOrAfter);
-
-            print $postContent;
+            $this->issueAuthnResponse($client, $clientACS, $nameIDPolicy, $request);
         } catch (\InvalidArgumentException $exception) {
             $gLogger->error($exception->getMessage());
             $this->errorResponse(
@@ -1342,6 +1368,92 @@ class SAMLService extends SSOService {
                 ]
             );
             $this->errorResponse(SamlConstants::STATUS_RESPONDER, 'The SAML request could not be processed.', $request, $client);
+        }
+    }
+
+    /**
+     * The URL that starts an IdP-initiated sign-in at a service provider: the user is sent there from Admidio (a link
+     * on a page, a bookmark) and arrives at the service provider logged in, without an AuthnRequest of the SP.
+     * @param string $entityId Entity ID of the service provider
+     * @param string|null $relayState Where the service provider is to continue, at most 80 bytes (SAML Bindings 3.1.1)
+     */
+    public function getIdPInitiatedUrl(string $entityId, ?string $relayState = null): string
+    {
+        $parameters = array('sp' => $entityId);
+        if ($relayState !== null && $relayState !== '') {
+            $parameters['RelayState'] = $relayState;
+        }
+        return SSOOrganization::getBaseUrl() . '/saml/idp-init?' . http_build_query($parameters, '', '&', PHP_QUERY_RFC3986);
+    }
+
+    /**
+     * IdP-initiated SSO: answer with an assertion that no AuthnRequest asked for (SAML Profiles 4.1.5).
+     *
+     * The service provider is named by `sp` (its entity ID), the assertion goes to its default ACS URL. The user has to
+     * be logged in and allowed to use the client; otherwise the login form is shown first, like for a request of the
+     * service provider. There is no request, so nothing is replied to when something fails: the user sees a page.
+     * A service provider decides itself whether it accepts an unsolicited response.
+     */
+    public function handleIdPInitiatedRequest(): void
+    {
+        global $gCurrentSession, $gCurrentUser, $gSettingsManager, $gL10n, $gValidLogin, $gLogger, $gMessage, $gHomepage;
+
+        if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
+            throw new Exception('SSO SAML is not enabled');
+        }
+
+        [$query] = self::getRawRequestParameters();
+        $entityId = is_string($query['sp'] ?? null) ? $query['sp'] : '';
+        $relayState = is_string($query['RelayState'] ?? null) ? $query['RelayState'] : null;
+
+        if (!empty($query['sso_cancel'])) {
+            unset($_SESSION['login_forward_url'], $_SESSION['login_forward_url_post']);
+            admRedirect($gHomepage);
+            // => EXIT
+        }
+
+        $client = $this->createClientObject(null, $entityId);
+        if ($entityId === '' || $client->isNewRecord()) {
+            $gMessage->show(
+                $gL10n->get('SYS_SSO_SAML_CLIENT_UNKNOWN', array(SecurityUtils::encodeHTML($entityId))),
+                $gL10n->get('SYS_ERROR')
+            );
+        }
+        if (!$client->isEnabled()) {
+            $gMessage->show($gL10n->get('SYS_SSO_SAML_CLIENT_DISABLED', array(SecurityUtils::encodeHTML($client->readableName()))), $gL10n->get('SYS_ERROR'));
+        }
+        if ($relayState !== null && strlen($relayState) > 80) {
+            $gMessage->show($gL10n->get('SYS_SSO_SAML_REQUEST_FAILED'), $gL10n->get('SYS_ERROR'));
+        }
+
+        // The assertion has to state when the user authenticated, so a session without that time logs in again
+        if (!$gValidLogin || (int) $gCurrentSession->getValue('ses_authentication_time', 'U') <= 0) {
+            $this->showSSOLoginForm($client);
+            // exit
+        }
+
+        if (!$client->hasAccessRight()) {
+            $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
+                $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array($client->readableName(), SecurityUtils::encodeHTML($gCurrentUser->readableName()))) .
+                '</div>';
+            $this->showSSOLoginForm($client, $message);
+            // exit
+        }
+
+        try {
+            $this->issueAuthnResponse(
+                $client,
+                $client->getAcsUrls()[0] ?? '',
+                array('format' => SamlConstants::NAME_ID_FORMAT_UNSPECIFIED, 'spNameQualifier' => null),
+                null,
+                $relayState
+            );
+        } catch (SAMLRequestException $exception) {
+            $gLogger->warning('The IdP-initiated SAML sign-in was refused: ' . $exception->getMessage(), array('client' => $entityId));
+            $gMessage->show(SecurityUtils::encodeHTML($exception->getMessage()), $gL10n->get('SYS_ERROR'));
+        } catch (Exception $exception) {
+            $gLogger->error('Could not process the IdP-initiated SAML sign-in.', array('message' => $exception->getMessage(), 'trace' => $exception->getTraceAsString()));
+            $gMessage->show($gL10n->get('SYS_SSO_SAML_REQUEST_FAILED'), $gL10n->get('SYS_ERROR'));
         }
     }
 

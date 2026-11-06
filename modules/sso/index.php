@@ -156,7 +156,7 @@ try {
         if ($gSettingsManager->get('sso_saml_enabled') !== '1') {
             // The metadata is fetched by software and an unknown resource is a 404; the sign-in and logout
             // endpoints are reached with a browser, which gets a page it can read.
-            if ($endpoint === 'sso' || $endpoint === 'slo') {
+            if (in_array($endpoint, array('sso', 'slo', 'idp-init'), true)) {
                 http_response_code(404);
                 $gMessage->show($gL10n->get('SYS_SSO_SAML_DISABLED'), $gL10n->get('SYS_ERROR'));
             }
@@ -176,6 +176,9 @@ try {
                 case 'slo':
                     $samlService->handleSLORequest();
                     break;
+                case 'idp-init':
+                    $samlService->handleIdPInitiatedRequest();
+                    break;
         //        case 'attribute-query':
         //            $samlService->handleAttributeQuery();
         //            break;
@@ -184,7 +187,7 @@ try {
             }
         } catch (Throwable $e) {
             $logSSOException('An unexpected error occurred at a SAML endpoint.', $e);
-            if ($endpoint === 'sso' || $endpoint === 'slo') {
+            if (in_array($endpoint, array('sso', 'slo', 'idp-init'), true)) {
                 // a browser navigates here: a page instead of a JSON document
                 http_response_code($e instanceof \Admidio\SSO\Service\SAMLMessageTooLargeException ? 413 : 500);
                 $gMessage->show($gL10n->get('SYS_SSO_SAML_REQUEST_FAILED'), $gL10n->get('SYS_ERROR'));

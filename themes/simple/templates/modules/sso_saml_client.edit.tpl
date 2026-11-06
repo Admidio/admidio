@@ -39,6 +39,9 @@
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_client_id']}
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_acs_url']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['smc_slo_url']}
+            {if isset($elements['smc_idp_initiated_url'])}
+                {include 'sys-template-parts/form.custom-content.tpl' data=$elements['smc_idp_initiated_url']}
+            {/if}
 
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_certificate']}
             {include 'sys-template-parts/form.multiline.tpl' data=$elements['smc_x509_encryption_certificate']}

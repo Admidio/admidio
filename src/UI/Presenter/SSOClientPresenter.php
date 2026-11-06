@@ -286,6 +286,16 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('smc_slo_url'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_SLO_URL_DESC'))
         );
+        if (!$client->isNewRecord()) {
+            // the link that signs the logged-in user in at this service provider without a request of the SP
+            $idpInitiatedUrl = SecurityUtils::encodeHTML($SAMLService->getIdPInitiatedUrl((string) $client->getValue('smc_client_id')));
+            $form->addCustomContent(
+                'smc_idp_initiated_url',
+                $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_URL'),
+                '<a href="' . $idpInitiatedUrl . '">' . $idpInitiatedUrl . '</a>',
+                array('helpTextId' => $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_URL_DESC'))
+            );
+        }
 
 
 

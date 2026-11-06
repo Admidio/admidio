@@ -2167,6 +2167,10 @@
   <string name="SYS_SSO_SAML_ENCRYPTION_KEY_MISSING">Assertion encryption requires a certificate from the client.</string>
   <string name="SYS_SSO_SAML_ENTITY_ID">Server identifier (Entity ID)</string>
   <string name="SYS_SSO_SAML_ENTITY_ID_DESC">Unique SAML identifier of this Admidio instance, typically the URL of your installation. It must match the value configured at the client.</string>
+  <string name="SYS_SSO_SAML_IDP_INITIATED_ENDPOINT">IdP-initiated sign-in URL</string>
+  <string name="SYS_SSO_SAML_IDP_INITIATED_ENTITY_ID">entity ID of the client</string>
+  <string name="SYS_SSO_SAML_IDP_INITIATED_URL">IdP-initiated sign-in URL</string>
+  <string name="SYS_SSO_SAML_IDP_INITIATED_URL_DESC">Opening this address signs the logged-in user in at this service provider without a request of the service provider, for example from a link on a page. The service provider has to accept unsolicited responses. An optional parameter RelayState (at most 80 bytes) is handed on.</string>
   <string name="SYS_SSO_SAML_METADATA_CACHE_HOURS">Cache duration of the metadata (hours)</string>
   <string name="SYS_SSO_SAML_METADATA_CACHE_HOURS_DESC">Service providers that refresh the metadata by themselves fetch it again after this time (cacheDuration). Default: 24.</string>
   <string name="SYS_SSO_SAML_METADATA_URL">Metadata URL</string>
