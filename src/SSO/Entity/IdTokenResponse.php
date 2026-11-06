@@ -69,6 +69,13 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         $extraParams = parent::getExtraParams($accessToken);
         $this->persistSessionParticipant($accessToken);
 
+        // RFC 6749, 5.1: the scope is stated if it differs from the requested one, and the client may have
+        // asked for scopes that are not granted (openid is always granted, unknown ones are dropped)
+        $extraParams['scope'] = implode(' ', array_map(
+            static fn ($scope): string => $scope->getIdentifier(),
+            $accessToken->getScopes()
+        ));
+
         return $extraParams;
     }
 
@@ -132,6 +139,12 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         global $gLogger;
 
         $builder = parent::getBuilder($accessToken, $userEntity);
+        // at_hash (OpenID Connect Core 3.1.3.6): the left half of the SHA-256 of the access token, base64url
+        $accessTokenHash = hash('sha256', $accessToken->toString(), true);
+        $builder = $builder->withClaim(
+            'at_hash',
+            rtrim(strtr(base64_encode(substr($accessTokenHash, 0, 16)), '+/', '-_'), '=')
+        );
         if (!empty($this->nonce)) {
             $builder = $builder->withClaim('nonce', $this->nonce);
         }

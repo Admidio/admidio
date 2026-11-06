@@ -122,6 +122,26 @@ class SsoRefreshIdTokenTest extends SsoTokenGrantTestCase
     }
 
     /**
+     * @testdox The token response states the scope, and the ID token the hash of the access token
+     */
+    public function testTheResponseHasAScopeAndTheIdTokenAnAtHash(): void
+    {
+        $client = $this->createRestrictedClient($this->suffix(), array());
+        [, , $refreshTokenId] = $this->authenticatedExchange($client, 'session-' . $this->suffix());
+
+        $responseType = $this->newIdTokenResponse();
+        $this->refresh($client, $refreshTokenId, $responseType, array('openid'));
+        OIDCService::setClient($this->currentClient);
+        $body = json_decode((string) $responseType->generateHttpResponse(new Response())->getBody(), true);
+
+        $this->assertSame('openid', $body['scope']);
+
+        $claims = json_decode(base64_decode(strtr(explode('.', $body['id_token'])[1], '-_', '+/')), true);
+        $expected = rtrim(strtr(base64_encode(substr(hash('sha256', $body['access_token'], true), 0, 16)), '+/', '-_'), '=');
+        $this->assertSame($expected, $claims['at_hash']);
+    }
+
+    /**
      * @testdox A refreshed ID token has no nonce
      */
     public function testARefreshedIdTokenHasNoNonce(): void
