@@ -98,6 +98,16 @@ class SAMLService extends SSOService {
             ));
         }
 
+        if (array_key_exists('smc_metadata_url', $formValues)) {
+            $formValues['smc_metadata_url'] = trim((string) $formValues['smc_metadata_url']);
+            if ($formValues['smc_metadata_url'] !== ''
+                && (!preg_match('~^https?://[^\s]+$~i', $formValues['smc_metadata_url'])
+                    || filter_var($formValues['smc_metadata_url'], FILTER_VALIDATE_URL) === false)
+            ) {
+                throw new \Admidio\Infrastructure\Exception('SYS_SSO_METADATA_URL_INVALID', array(SecurityUtils::encodeHTML($formValues['smc_metadata_url'])));
+            }
+        }
+
         // a new metadata URL is fetched with the next check instead of waiting for the old schedule, and the
         // version of the old one is no reason to skip the new document
         if (array_key_exists('smc_metadata_url', $formValues)
@@ -188,7 +198,7 @@ class SAMLService extends SSOService {
      *     ['value' => 'linkHTML', 'id' => 'uniqueIDinForm', 'style' => 'additionalCSSstyles']
      *   where the 'style' key is optional, but 'value' and 'id' are required.
      */
-    public function getStaticSettings() : array {
+    public function getStaticSettings(?string $clientEntityId = null) : array {
         global $gSettingsManager, $gL10n;
 
         // Load Certificate PEM
@@ -208,10 +218,17 @@ class SAMLService extends SSOService {
         }
 
         $metaURL = $this->getMetadataUrl();
+        // on the page of a client the link names that client, elsewhere it shows a placeholder
+        if ($clientEntityId !== null && $clientEntityId !== '') {
+            $idpInitiatedUrl = SecurityUtils::encodeHTML($this->getIdPInitiatedUrl($clientEntityId));
+            $idpInitiatedValue = '<a href="' . $idpInitiatedUrl . '">' . $idpInitiatedUrl . '</a>';
+        } else {
+            $idpInitiatedValue = SSOOrganization::getBaseUrl() . '/saml/idp-init?sp=<i>' . $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_ENTITY_ID') . '</i>';
+        }
         $staticSettings = array(
             $gL10n->get('SYS_SSO_SAML_METADATA_URL') => ['value' => '<a href="' . $metaURL . '">' . $metaURL . '</a>', 'id' => 'metadata_URL'],
             $gL10n->get('SYS_SSO_SAML_SSO_ENDPOINT') => ['value' => $this->getSsoEndpoint(), 'id' => 'SSO_endpoint'],
-            $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_ENDPOINT') => ['value' => SSOOrganization::getBaseUrl() . '/saml/idp-init?sp=<i>' . $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_ENTITY_ID') . '</i>', 'id' => 'IdP_initiated_endpoint'],
+            $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_ENDPOINT') => ['value' => $idpInitiatedValue, 'id' => 'IdP_initiated_endpoint'],
             $gL10n->get('SYS_SSO_SAML_SLO_ENDPOINT') => ['value' => $this->getSloEndpoint(),'id' => 'SLO_endpoint'],
             $gL10n->get('SYS_SSO_KEY_CERTIFICATE')   => ['value' => $idpCertPem,  'id' => 'wrapper_certificate', 'style' => 'white-space: pre-wrap; word-wrap: break-word; background-color: #f8f9fa;
                     border: 1px solid #ced4da; padding: 0.375rem 0.75rem; font-family: monospace; width: 100%;

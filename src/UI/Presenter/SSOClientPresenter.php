@@ -212,7 +212,7 @@ class SSOClientPresenter extends PagePresenter
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '',
-            array('data' => $SAMLService->getStaticSettings())
+            array('data' => $SAMLService->getStaticSettings($client->isNewRecord() ? null : (string) $client->getValue('smc_client_id')))
         );
 
         $form->addCheckbox(
@@ -233,11 +233,13 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('smc_client_id'),
             array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_ID_DESC'))
         );
-        $form->addInput(
+        // one field for both: a metadata URL is fetched, pasted metadata XML is read directly
+        $form->addMultilineTextInput(
             'smc_metadata_url',
             $gL10n->get('SYS_SSO_METADATA_URL'),
-            $client->getValue('smc_metadata_url'),
-            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
+            (string) $client->getValue('smc_metadata_url'),
+            2,
+            array('helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
         );
         $form->addCheckbox(
             'smc_metadata_refresh',
@@ -259,26 +261,12 @@ class SSOClientPresenter extends PagePresenter
                 SecurityUtils::encodeHTML($this->getMetadataStatusText($client))
             );
         }
-        // NEW: scratch field, deliberately not prefixed smc_/ocl_ so SSOService::save() never
-        // tries to persist it as a client column (same convention as sso_fields_all_other etc.)
-        $form->addMultilineTextInput(
-            'sso_saml_metadata_paste',
-            $gL10n->get('SYS_SSO_METADATA_PASTE'),
-            '',
-            4,
-            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_PASTE_DESC'))
-        );
-        $form->addButton(
-            'adm_button_metadata_paste_setup',
-            $gL10n->get('SYS_SSO_METADATA_PASTE_BUTTON'),
-            array('icon' => 'bi-clipboard-check', 'class' => 'btn btn-secondary')
-        );
         $form->addMultilineTextInput(
             'smc_acs_url',
             $gL10n->get(textId: 'SYS_SSO_ACS_URL'),
             $client->getValue('smc_acs_url'),
-            3,
-            array('maxLength' => 4000, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_ACS_URL_DESC'))
+            2,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_ACS_URL_DESC'))
         );
         $form->addInput(
             'smc_slo_url',
@@ -286,18 +274,6 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('smc_slo_url'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_SLO_URL_DESC'))
         );
-        if (!$client->isNewRecord()) {
-            // the link that signs the logged-in user in at this service provider without a request of the SP
-            $idpInitiatedUrl = SecurityUtils::encodeHTML($SAMLService->getIdPInitiatedUrl((string) $client->getValue('smc_client_id')));
-            $form->addCustomContent(
-                'smc_idp_initiated_url',
-                $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_URL'),
-                '<a href="' . $idpInitiatedUrl . '">' . $idpInitiatedUrl . '</a>',
-                array('helpTextId' => $gL10n->get('SYS_SSO_SAML_IDP_INITIATED_URL_DESC'))
-            );
-        }
-
-
 
         // TAB: Signatures and Encryption
 
@@ -489,13 +465,22 @@ class SSOClientPresenter extends PagePresenter
     $metadataUrlRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_URL_REQUIRED'), JSON_THROW_ON_ERROR);
     $metadataLoadFailedMessage = json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR);
     $metadataInvalidMessage = json_encode($gL10n->get('SYS_SSO_METADATA_INVALID'), JSON_THROW_ON_ERROR);
-    $metadataPasteRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_PASTE_REQUIRED'), JSON_THROW_ON_ERROR);
 
     $this->addJavascript('
+    // the URL that is stored with the client; pasted metadata XML must never replace it
+    const savedMetadataUrl = $("#smc_metadata_url").val();
+
     $("#adm_button_metadata_setup").click(function () {
         const metadataUrl = $("#smc_metadata_url").val().trim();
         if (!metadataUrl) {
             alert(' . $metadataUrlRequiredMessage . ');
+            return;
+        }
+
+        // pasted XML is read directly, no network request
+        if (metadataUrl.charAt(0) === "<") {
+            handleClientMetadataXML(metadataUrl);
+            $("#smc_metadata_url").val(savedMetadataUrl);
             return;
         }
 
@@ -514,16 +499,6 @@ class SSOClientPresenter extends PagePresenter
         .fail(function () {
             alert(' . $metadataLoadFailedMessage . ');
         });
-    });
-
-    // parse pasted metadata directly, no network request
-    $("#adm_button_metadata_paste_setup").click(function () {
-        const pastedXml = $("#sso_saml_metadata_paste").val().trim();
-        if (!pastedXml) {
-            alert(' . $metadataPasteRequiredMessage . ');
-            return;
-        }
-        handleClientMetadataXML(pastedXml);
     });
 
     function handleClientMetadataXML(metadataXml) {
@@ -758,11 +733,8 @@ class SSOClientPresenter extends PagePresenter
             'ocl_post_logout_redirect_uris',
             $gL10n->get('SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS'),
             (string) $client->getValue('ocl_post_logout_redirect_uris', 'database'),
-            3,
-            array(
-                'maxLength' => 8000,
-                'helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC'
-            )
+            2,
+            array('helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC')
         );
         $form->addInput(
             'ocl_frontchannel_logout_uri',
@@ -781,12 +753,6 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI'),
             $client->getValue('ocl_backchannel_logout_uri', 'database'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC')
-        );
-        $form->addCheckbox(
-            'ocl_backchannel_logout_session_required',
-            $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED'),
-            (bool) $client->getValue('ocl_backchannel_logout_session_required'),
-            array('helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC')
         );
         // TODO: Grant Types, Scopes
 
