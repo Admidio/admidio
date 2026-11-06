@@ -192,6 +192,7 @@
   <!--System-Phrases for use in every module-->
   <string name="SYS_64BIT">64 Bit</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">Nr.</string>
+  <string name="SYS_ACCOUNT">Konto</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Konto aktiviert</string>
   <string name="SYS_ACTIVATE_ROLE">Rolle aktivieren</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">Wenn Sie die Rolle #VAR1_BOLD# wieder aktivieren, bekommen die Rollenmitglieder wieder die Rechte zugeordnet und die Rolle erscheint in sämtlichen Listen.\n\nMöchten Sie die Rolle wieder aktivieren?</string>
@@ -283,6 +284,7 @@
   <string name="SYS_ATTEND_EVENT">Sie haben die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# zugesagt. </string>
   <string name="SYS_ATTEND_POSSIBLY">Sie haben die Teilnahme für die Veranstaltung #VAR1_BOLD# am #VAR2# unter Vorbehalt zugesagt. </string>
   <string name="SYS_AUTHOR">Autor</string>
+  <string name="SYS_AUTHORIZATION_CODE">Autorisierungscode</string>
   <string name="SYS_AUTO_DETECT">Automatische Erkennung</string>
   <string name="SYS_AVAILABLE">Verfügbar</string>
   <string name="SYS_AVAILABLE_BETA">Verfügbare Beta</string>
@@ -364,6 +366,8 @@
   <string name="SYS_CITY">Ort</string>
   <string name="SYS_CLAMP_TEXT_LINES">Textzeilen begrenzen</string>
   <string name="SYS_CLAMP_TEXT_LINES_DESC">Mit dieser Einstellung kann die Anzahl der Zeilen festgelegt werden, die maximal als #VAR1# angezeigt werden sollen. Wenn 0 ausgewählt ist, wird der komplette Text dargestellt. (Voreinstellung: 0)</string>
+  <string name="SYS_CLIENT_CREDENTIALS">Client-Anmeldeinformationen</string>
+  <string name="SYS_CLIENT_SECRET_STORED">Ein Client Secret ist gespeichert</string>
   <string name="SYS_CLOCK">Uhr</string>
   <string name="SYS_CLOSE">Schließen</string>
   <string name="SYS_CODING">Kodierung</string>
@@ -417,7 +421,10 @@
   <string name="SYS_CONFIRMATION_OF_INPUT">Bestätigung der Eingaben</string>
   <string name="SYS_CONFIRM_PASSWORD">Passwort bestätigen</string>
   <string name="SYS_CONFIRM_REGISTRATION">Registrierung bestätigen</string>
+  <string name="SYS_CONNECTED">Verbunden</string>
   <string name="SYS_CONNECTION_ERROR">Es konnte keine Verbindung zum Admidio-Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchen Sie es zu einem späteren Zeitpunkt noch einmal. Alternativ können Sie auch manuell auf der Webseite von #VAR1# prüfen, ob ein Update vorliegt.</string>
+  <string name="SYS_CONNECT_ACCOUNT">Konto verbinden</string>
+  <string name="SYS_CONNECT_ACCOUNT_DESC">Speichern Sie zuerst die Einstellungen. Melden Sie sich dann beim Anbieter mit dem Postfachkonto des SMTP-Benutzernamens an und erlauben Sie den Zugriff. Admidio speichert ein Aktualisierungstoken und versendet E-Mails ohne erneute Anmeldung.</string>
   <string name="SYS_CONTACTS">Kontakte</string>
   <string name="SYS_CONTACTS_DESC">Hier können alle aktiven und ehemaligen Mitglieder angezeigt und organisiert werden. Neue Kontakte können importiert oder erstellt werden.</string>
   <string name="SYS_CONTACTS_PER_PAGE">Anzahl der Kontakte pro Seite</string>
@@ -747,6 +754,7 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnistrenner</string>
   <string name="SYS_DISABLE">Deaktiviert</string>
   <string name="SYS_DISABLED">Deaktiviert</string>
+  <string name="SYS_DISCONNECT_ACCOUNT">Konto trennen</string>
   <string name="SYS_DISK_SPACE">Speicherplatz</string>
   <string name="SYS_DISK_SPACE_ERROR">Die Belegung des Speicherplatzes konnte nicht ermittelt werden.\n\nFehlermeldung:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Anzeige der Weiterleitung</string>
@@ -979,6 +987,9 @@
   <string name="SYS_GEN_RANDOM_ERROR">Es ist ein unerwarteter Fehler bei der Generierung einer zufälligen Zahl aufgetreten.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">Das Programm kann keine zufälligen Zahlen erzeugen.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GIRLFRIEND">Freundin</string>
+  <string name="SYS_GOOGLE">Google</string>
+  <string name="SYS_GRANT_TYPE">Grant-Typ</string>
+  <string name="SYS_GRANT_TYPE_DESC">Beim Autorisierungscode meldet sich ein Administrator einmal mit dem Postfachkonto an (delegierte Berechtigung SMTP.Send). Mit Client-Anmeldeinformationen meldet sich Admidio ohne Benutzer als App selbst an (Anwendungsberechtigung SMTP.SendAsApp). Dafür sind die Mandanten-ID und ein Zugriff auf das Postfach nötig, den ein Administrator von Exchange Online erteilen muss. (Voreinstellung: #VAR1#)</string>
   <string name="SYS_GREETING_CARD">Grußkarte</string>
   <string name="SYS_GROUPS_ROLES">Gruppen &amp; Rollen</string>
   <string name="SYS_GROUPS_ROLES_DESC">Übersicht und Verwaltung aller Gruppen und Rollen der Organisation. Es können verschiedene Mitgliederlisten angezeigt, exportiert und eigene Listen erstellt werden.</string>
@@ -1306,6 +1317,7 @@
   <string name="SYS_MESSAGES">Nachrichten</string>
   <string name="SYS_MESSAGES_DESC">Übersicht über alle geschriebenen E-Mails und privaten Nachrichten. Neue E-Mails und private Nachrichten können erfasst und an einzelne Kontakte oder Rollen gesendet werden.</string>
   <string name="SYS_MESSAGE_WENT_TO">Diese Nachricht ging an</string>
+  <string name="SYS_MICROSOFT_365">Microsoft 365</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="SYS_MOBILE">Handy</string>
   <string name="SYS_MODAL_WINDOW">Modales Fenster</string>
@@ -1372,6 +1384,7 @@
   <string name="SYS_NOTIFICATION_ROLE">Rolle für Benachrichtigungen</string>
   <string name="SYS_NOTIFICATION_ROLE_DESC">Mitglieder dieser Rolle erhalten die Benachrichtigungen über neue oder geänderte Einträge in den Modulen und Änderungen in den Profildaten der Mitglieder. Aus Datenschutzgründen können nur Rollen hinterlegt werden, die das Rollenrecht #VAR1_BOLD# haben.</string>
   <string name="SYS_NOT_AT_REGISTRATION">Nicht bei Registrierung</string>
+  <string name="SYS_NOT_CONNECTED">Nicht verbunden</string>
   <string name="SYS_NOT_EMPTY">Nicht leer</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Kein Mitglied einer Organisation</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Nicht Mitglied der Organisation #VAR1#</string>
@@ -1417,6 +1430,9 @@
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Anzahl der Themen pro Seite</string>
   <string name="SYS_NUMBER_RECIPIENTS">Anzahl der Empfänger:innen</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">Die Anzahl in diesem Feld gibt die maximale Anzahl von Empfangenden pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Soll eine E-Mail an mehr Personen gesendet werden als hier eingestellt, werden mehrere E-Mails erzeugt. Auch die Anzahl der innerhalb eines Zeitraums möglichen E-Mails kann von Providern beschränkt werden. (Voreinstellung: 50)</string>
+  <string name="SYS_OAUTH_NO_REFRESH_TOKEN">Der OAuth-2.0-Anbieter hat kein Aktualisierungstoken ausgestellt, daher konnte das Konto nicht verbunden werden. Erlauben Sie der App beim Anbieter den Offline-Zugriff und verbinden Sie das Konto erneut.</string>
+  <string name="SYS_OAUTH_REQUEST_FAILED">Die Anfrage beim OAuth-2.0-Anbieter ist fehlgeschlagen.\n\nFolgender Fehler ist aufgetreten:\n#VAR1#</string>
+  <string name="SYS_OAUTH_SIGN_IN_EXPIRED">Die Anmeldung beim OAuth-2.0-Anbieter ist abgelaufen oder wurde bereits abgeschlossen. Bitte verbinden Sie das Konto erneut.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF-Tabellendokument (*.ods)</string>
   <string name="SYS_OFF">aus</string>
   <string name="SYS_OK">OK</string>
@@ -1607,6 +1623,8 @@
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">Das Foto wird auf maximal #VAR1# Pixel an der längeren Seite verkleinert. Das Seitenverhältnis bleibt erhalten.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">Sie sollten selbst auf dem Foto zu sehen sein.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
+  <string name="SYS_PROVIDER">Anbieter</string>
+  <string name="SYS_PROVIDER_DESC">Registrieren Sie beim Anbieter des Postfachs eine App für Admidio und tragen Sie ihre Daten hier ein. Als SMTP-Server tragen Sie smtp.office365.com oder smtp.gmail.com mit Port 587 und TLS ein.</string>
   <string name="SYS_PWA_ENABLED">Progressive Web App (PWA) aktivieren</string>
   <string name="SYS_PWA_ENABLED_DESC">Admidio kann als eigenständige Web-App auf dem Smartphone, Tablet oder Desktop installiert werden. Der App-Name richtet sich nach dem Namen der Organisation. Eigene App-Icons können im Ordner adm_my_files/ als app_icon.png oder app_icon_512.png abgelegt werden. Andernfalls wird ein unter „Design“ konfiguriertes PNG-Favicon oder das Standard-Logo als Fallback verwendet.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tippen Sie auf das Drei-Punkte-Menü oben oder unten.</string>
@@ -1689,6 +1707,7 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Wollen Sie die Anmeldung für die Veranstaltung wirklich entfernen? Hierbei werden alle bisherigen Teilnehmenden gelöscht.</string>
   <string name="SYS_REMOVE_FORMATTING">Formatierung entfernen</string>
   <string name="SYS_REMOVE_MESSAGE">Nachricht entfernen</string>
+  <string name="SYS_REMOVE_STORED_CLIENT_SECRET">Gespeichertes Client Secret entfernen</string>
   <string name="SYS_RENAMED_TO">umbenannt in #VAR1_BOLD#</string>
   <string name="SYS_REPEAT">Wiederholen</string>
   <string name="SYS_REPEATS">Wiederholt sich</string>
@@ -1824,7 +1843,7 @@
   <string name="SYS_SEND_MAILS">E-Mails zusenden</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Die E-Mail wird an alle Mitglieder der ausgewählten Rolle gesendet. Weitere Rollen und empfangende Personen sind für angemeldete Personen verfügbar.</string>
   <string name="SYS_SEND_METHOD">Versandmethode</string>
-  <string name="SYS_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Voreinstellung: PHP mail())</string>
+  <string name="SYS_SEND_METHOD_DESC">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden E-Mail-Adresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. Für Microsoft 365 oder Google eignet sich SMTP OAuth 2.0, das ohne Passwort auskommt. (Voreinstellung: PHP mail())</string>
   <string name="SYS_SEND_NEW_LOGIN">Möchten Sie #VAR1_BOLD# eine E-Mail mit dem aktuellen Anmeldenamen und einem neuen Passwort senden?</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Foto als Grußkarte versenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
@@ -1878,7 +1897,7 @@
   <string name="SYS_SISTER">Schwester</string>
   <string name="SYS_SIZE">Größe</string>
   <string name="SYS_SMALL">Klein</string>
-  <string name="SYS_SMTP">SMTP</string>
+  <string name="SYS_SMTP">SMTP Basic Auth</string>
   <string name="SYS_SMTP_AUTH">SMTP-Authentifizierung</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
   <string name="SYS_SMTP_AUTH_DESC">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Anmeldename und Passwort ausgefüllt werden. (Voreinstellung: ja)</string>
@@ -1888,6 +1907,8 @@
   <string name="SYS_SMTP_AUTH_TYPE_DESC">SMTP kennt verschiedene Authentifizierungsmethoden. Geben Sie hier die Authentifizierungsmethode ein, die Ihr SMTP-Server unterstützt. Wenn Sie nicht sicher sind, welche Methode unterstützt wird, wählen Sie #VAR1_BOLD#. Admidio wird dann nacheinander die verschiedenen Authentifizierungsmethoden ausprobieren, bis eine Anmeldung erfolgreich war. (Voreinstellung: automatisch)</string>
   <string name="SYS_SMTP_HOST">SMTP-Host</string>
   <string name="SYS_SMTP_HOST_DESC">Adresse des zu verwendenden SMTP-Servers.</string>
+  <string name="SYS_SMTP_OAUTH">SMTP OAuth 2.0</string>
+  <string name="SYS_SMTP_OAUTH_NOT_CONNECTED">Für den E-Mail-Versand mit SMTP OAuth 2.0 ist kein Konto verbunden. Ein Administrator kann es in den Einstellungen unter #VAR1_BOLD# verbinden.</string>
   <string name="SYS_SMTP_PASSWORD">SMTP-Passwort</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Das Passwort, das bei der SMTP-Authentifizierung verwendet wird.</string>
   <string name="SYS_SMTP_PORT">SMTP-Port</string>
@@ -1898,7 +1919,7 @@
   <string name="SYS_SMTP_SECURE_SSL">SMTPS / implizites TLS</string>
   <string name="SYS_SMTP_SECURE_TLS">STARTTLS</string>
   <string name="SYS_SMTP_USER">SMTP-Anmeldename</string>
-  <string name="SYS_SMTP_USER_DESC">Der Anmeldename, der bei der SMTP-Authentifizierung verwendet wird.</string>
+  <string name="SYS_SMTP_USER_DESC">Der Anmeldename, der bei der SMTP-Authentifizierung verwendet wird. Bei SMTP OAuth 2.0 ist das die E-Mail-Adresse des Postfachs.</string>
   <string name="SYS_SOCIAL_NETWORKS">Soziale Netzwerke</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">Möchten Sie einen Link zu Ihrem Profil in diesem sozialen Netzwerk setzen? Ihr Anmeldename ist erforderlich. Melden Sie sich bei Ihrem Konto des sozialen Netzwerks an und gehen Sie zu Ihrem Profil. Kopieren Sie nun die URL in dieses Feld und speichern Sie Ihr Profil hier. Besucher Ihres Profils können nun direkt Ihr Profil des sozialen Netzwerks öffnen.</string>
   <string name="SYS_SON">Sohn</string>
@@ -2163,6 +2184,8 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Legen Sie die Vorlage fest, die bei der Erstellung der E-Card vorausgewählt wird. (Standard: Postkarte)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template-Ordner konnte nicht geöffnet/gelesen werden.</string>
+  <string name="SYS_TENANT_ID">Mandanten-ID</string>
+  <string name="SYS_TENANT_ID_DESC">Verzeichnis-ID (Mandanten-ID) oder primäre Domain Ihrer Microsoft-365-Organisation, z. B. contoso.onmicrosoft.com. Client-Anmeldeinformationen benötigen sie. Lassen Sie das Feld leer, um jedes Geschäfts-, Schul- oder private Microsoft-Konto zuzulassen.</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor Sie diese Funktion aufrufen, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse der angemeldeten Person auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>

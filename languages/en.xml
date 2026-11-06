@@ -189,6 +189,7 @@
   <string name="ORG_VARIABLE_USERNAME">Username of the user relevant to the notification</string>
   <string name="SYS_64BIT">64-bit</string>
   <string name="SYS_ABR_NO" description="Abbreviation for Number">No.</string>
+  <string name="SYS_ACCOUNT">Account</string>
   <string name="SYS_ACCOUNT_ACTIVATED">Account activated</string>
   <string name="SYS_ACTIVATE_ROLE">Activate role</string>
   <string name="SYS_ACTIVATE_ROLE_DESC">If you reactivate the role #VAR1_BOLD#, its members regain the role\'s permissions and the role becomes available in all lists.\n\nDo you want to reactivate the role?</string>
@@ -283,6 +284,7 @@
   <string name="SYS_ATTEND_EVENT">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">You tentatively signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTHORIZATION_CODE">Authorization code</string>
   <string name="SYS_AUTOMATIC_APPROVAL">Automatic approval</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AVAILABLE">Available</string>
@@ -367,6 +369,8 @@
   <string name="SYS_CITY">City</string>
   <string name="SYS_CLAMP_TEXT_LINES">Limit text lines</string>
   <string name="SYS_CLAMP_TEXT_LINES_DESC">This setting allows you to specify the maximum number of lines to be displayed as an #VAR1#. If 0 is selected, the complete text will be displayed. (Default: 0)</string>
+  <string name="SYS_CLIENT_CREDENTIALS">Client credentials</string>
+  <string name="SYS_CLIENT_SECRET_STORED">A client secret is stored</string>
   <string name="SYS_CLOCK">o\'clock</string>
   <string name="SYS_CLOSE">Close</string>
   <string name="SYS_CODING">Coding</string>
@@ -420,7 +424,10 @@
   <string name="SYS_CONFIRMATION_OF_INPUT">Confirm value</string>
   <string name="SYS_CONFIRM_PASSWORD">Confirm password</string>
   <string name="SYS_CONFIRM_REGISTRATION">Confirm registration</string>
+  <string name="SYS_CONNECTED">Connected</string>
   <string name="SYS_CONNECTION_ERROR">Could not connect to the Admidio update page. Please check your internet connection or try again later. You can also visit the #VAR1# website to update manually.</string>
+  <string name="SYS_CONNECT_ACCOUNT">Connect account</string>
+  <string name="SYS_CONNECT_ACCOUNT_DESC">Save the settings first. Then sign in at the provider with the mailbox account of the SMTP username and allow the access. Admidio stores a refresh token and sends emails without signing in again.</string>
   <string name="SYS_CONTACTS">Contacts</string>
   <string name="SYS_CONTACTS_DESC">Display and organize all active and former members here. New contacts can be imported or created.</string>
   <string name="SYS_CONTACTS_PER_PAGE">Number of contacts per page</string>
@@ -750,6 +757,7 @@
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISABLE">Disabled</string>
   <string name="SYS_DISABLED">Disabled</string>
+  <string name="SYS_DISCONNECT_ACCOUNT">Disconnect account</string>
   <string name="SYS_DISK_SPACE">Disk space</string>
   <string name="SYS_DISK_SPACE_ERROR">The usage of the storage space could not be determined.\n\nError message:\n#VAR1#</string>
   <string name="SYS_DISPLAY_REDIRECT">Show redirect</string>
@@ -982,6 +990,9 @@
   <string name="SYS_GEN_RANDOM_ERROR">An unexpected error occurred while generating a random number.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GEN_RANDOM_EXCEPTION">The program cannot generate random numbers.\nError Code: #VAR1#\nError Message: #VAR2#</string>
   <string name="SYS_GIRLFRIEND">Girlfriend</string>
+  <string name="SYS_GOOGLE">Google</string>
+  <string name="SYS_GRANT_TYPE">Grant type</string>
+  <string name="SYS_GRANT_TYPE_DESC">With the authorization code, an administrator signs in once with the mailbox account (delegated permission SMTP.Send). With client credentials, Admidio signs in as the app itself without a user (application permission SMTP.SendAsApp). This needs the tenant ID and access to the mailbox, which an administrator of Exchange Online must grant. (Default: #VAR1#)</string>
   <string name="SYS_GREETING_CARD">Greeting card</string>
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">View and manage all groups and roles in the organization. Display and export member lists, or create custom lists.</string>
@@ -1322,6 +1333,7 @@
   <string name="SYS_MESSAGES">Messages</string>
   <string name="SYS_MESSAGES_DESC">View sent emails and private messages. Compose and send new messages to individual contacts or roles.</string>
   <string name="SYS_MESSAGE_WENT_TO">Message was sent to</string>
+  <string name="SYS_MICROSOFT_365">Microsoft 365</string>
   <string name="SYS_MICROSOFT_EXCEL">Microsoft Excel</string>
   <string name="SYS_MOBILE">Mobile</string>
   <string name="SYS_MODAL_WINDOW">Modal window</string>
@@ -1390,6 +1402,7 @@
   <string name="SYS_NOTIFICATION_ROLE_DESC">Members of this role receive notifications about new or changed module entries and changes to member profile data. For data protection reasons, only roles with the #VAR1_BOLD# permission can be selected.</string>
   <string name="SYS_NOTIFY_REQUESTER">Notify requester by email</string>
   <string name="SYS_NOT_AT_REGISTRATION">Not during registration</string>
+  <string name="SYS_NOT_CONNECTED">Not connected</string>
   <string name="SYS_NOT_EMPTY">Not empty</string>
   <string name="SYS_NOT_MEMBER_OF_ANY_ORGANIZATION">Not a member of any organization</string>
   <string name="SYS_NOT_MEMBER_OF_ORGANIZATION">Not a member of organization #VAR1#</string>
@@ -1435,6 +1448,9 @@
   <string name="SYS_NUMBER_OF_TOPICS_PER_PAGE">Number of topics per page</string>
   <string name="SYS_NUMBER_RECIPIENTS">Number of recipients</string>
   <string name="SYS_NUMBER_RECIPIENTS_DESC">The number in this field indicates the maximum number of recipients in an email. This number can be limited by providers. If an email should be sent to more recipients than the number set here, multiple emails will be generated. The number of possible emails to be sent within a period can also be limited by providers. (Default: 50)</string>
+  <string name="SYS_OAUTH_NO_REFRESH_TOKEN">The OAuth 2.0 provider issued no refresh token, so the account could not be connected. Allow offline access for the app at the provider and connect the account again.</string>
+  <string name="SYS_OAUTH_REQUEST_FAILED">The request to the OAuth 2.0 provider failed.\n\nThe following error occurred:\n#VAR1#</string>
+  <string name="SYS_OAUTH_SIGN_IN_EXPIRED">The sign-in at the OAuth 2.0 provider has expired or was already completed. Please connect the account again.</string>
   <string name="SYS_ODF_SPREADSHEET">ODF Spreadsheet (*.ods)</string>
   <string name="SYS_OFF">Off</string>
   <string name="SYS_OK">OK</string>
@@ -1626,6 +1642,8 @@
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
   <string name="SYS_PROPERTIES">Properties</string>
+  <string name="SYS_PROVIDER">Provider</string>
+  <string name="SYS_PROVIDER_DESC">Register an app for Admidio at the provider of the mailbox and enter its data here. As SMTP server enter smtp.office365.com or smtp.gmail.com with port 587 and TLS.</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tap the three-dot menu at the top or bottom.</string>
@@ -1709,6 +1727,7 @@
   <string name="SYS_REMOVE_EVENT_REGISTRATION">Do you really want to remove the registration for the event? This will delete all previous participants.</string>
   <string name="SYS_REMOVE_FORMATTING">Remove formatting</string>
   <string name="SYS_REMOVE_MESSAGE">Remove message</string>
+  <string name="SYS_REMOVE_STORED_CLIENT_SECRET">Remove the stored client secret</string>
   <string name="SYS_RENAMED_TO">renamed to #VAR1_BOLD#</string>
   <string name="SYS_REPEAT">Repeat</string>
   <string name="SYS_REPEATS">Repeats</string>
@@ -1873,7 +1892,7 @@
   <string name="SYS_SEND_MAILS">Send emails</string>
   <string name="SYS_SEND_MAIL_TO_ROLE">Your email will be sent to all members of the selected role. Additional roles and recipients are available only to logged-in users.</string>
   <string name="SYS_SEND_METHOD">Send via</string>
-  <string name="SYS_SEND_METHOD_DESC">Some providers restrict PHP\'s mail() function, and messages sent with it may be flagged as spam. We recommend sending email through an existing email address and SMTP server. Configure the SMTP settings below. (Default: PHP mail())</string>
+  <string name="SYS_SEND_METHOD_DESC">Some providers restrict PHP\'s mail() function, and messages sent with it may be flagged as spam. We recommend sending email through an existing email address and SMTP server. Configure the SMTP settings below. For Microsoft 365 or Google use SMTP OAuth 2.0, which signs in without a password. (Default: PHP mail())</string>
   <string name="SYS_SEND_NEW_LOGIN">Do you want to send #VAR1_BOLD# an email with the current username and a new password?</string>
   <string name="SYS_SEND_PHOTO_AS_ECARD">Send photo as greeting card</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
@@ -1927,7 +1946,7 @@
   <string name="SYS_SISTER">Sister</string>
   <string name="SYS_SIZE">Size</string>
   <string name="SYS_SMALL">Small</string>
-  <string name="SYS_SMTP">SMTP</string>
+  <string name="SYS_SMTP">SMTP Basic Auth</string>
   <string name="SYS_SMTP_AUTH">SMTP authentication</string>
   <string name="SYS_SMTP_AUTH_CRAM_MD5">CRAM-MD5</string>
   <string name="SYS_SMTP_AUTH_DESC">If the SMTP server requires authentication, the username and password fields are also required. (Default: Yes)</string>
@@ -1937,6 +1956,8 @@
   <string name="SYS_SMTP_AUTH_TYPE_DESC">Select an authentication method supported by your SMTP server. If you are unsure, select #VAR1_BOLD#. Admidio will try the available methods in turn until authentication succeeds. (Default: automatically)</string>
   <string name="SYS_SMTP_HOST">SMTP host</string>
   <string name="SYS_SMTP_HOST_DESC">Address of the SMTP server.</string>
+  <string name="SYS_SMTP_OAUTH">SMTP OAuth 2.0</string>
+  <string name="SYS_SMTP_OAUTH_NOT_CONNECTED">No account is connected for sending emails with SMTP OAuth 2.0. An administrator can connect it in the preferences under #VAR1_BOLD#.</string>
   <string name="SYS_SMTP_PASSWORD">SMTP password</string>
   <string name="SYS_SMTP_PASSWORD_DESC">Password used for SMTP authentication.</string>
   <string name="SYS_SMTP_PORT">SMTP port</string>
@@ -1947,7 +1968,7 @@
   <string name="SYS_SMTP_SECURE_SSL">SMTPS / implicit TLS</string>
   <string name="SYS_SMTP_SECURE_TLS">STARTTLS</string>
   <string name="SYS_SMTP_USER">SMTP username</string>
-  <string name="SYS_SMTP_USER_DESC">The username that is used in the SMTP authentication.</string>
+  <string name="SYS_SMTP_USER_DESC">The username that is used in the SMTP authentication. With SMTP OAuth 2.0 this is the email address of the mailbox.</string>
   <string name="SYS_SOCIAL_NETWORKS">Social networks</string>
   <string name="SYS_SOCIAL_NETWORK_FIELD_URL_DESC">To link to your social network profile, log in to that network and open your profile. Copy its URL into this field and save your Admidio profile. Visitors can then follow the link directly to your social network profile.</string>
   <string name="SYS_SON">Son</string>
@@ -2217,6 +2238,8 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
+  <string name="SYS_TENANT_ID">Tenant ID</string>
+  <string name="SYS_TENANT_ID_DESC">Directory (tenant) ID or primary domain of your Microsoft 365 organization, e.g. contoso.onmicrosoft.com. Client credentials need it. Leave it empty to allow every work, school or personal Microsoft account.</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Save all email settings before using this function.\nA test email with the subject #VAR1_BOLD# will be sent to the logged-in user\'s email address using the saved settings. When sending via SMTP, a delivery log is displayed to help diagnose problems.</string>
   <string name="SYS_TEXT">Text</string>
