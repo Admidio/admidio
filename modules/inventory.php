@@ -15,6 +15,7 @@ use Admidio\UI\Presenter\InventoryFieldsPresenter;
 use Admidio\UI\Presenter\InventoryImportPresenter;
 use Admidio\UI\Presenter\InventoryItemPresenter;
 use Admidio\UI\Presenter\InventoryPresenter;
+use Ramsey\Uuid\Uuid;
 
 /**
  ***********************************************************************************************
@@ -55,8 +56,13 @@ try {
     if (empty($getItemUUIDs)) {
         $getItemUUIDs = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
         $getItemUUIDs = array_map(function ($uuid) {
-            return preg_replace('/adm_inventory_item_/', '', $uuid);
+            return is_string($uuid) ? preg_replace('/^adm_inventory_item_/', '', $uuid) : $uuid;
         }, $getItemUUIDs);
+    }
+    foreach ($getItemUUIDs as $itemUuid) {
+        if (!is_string($itemUuid) || !Uuid::isValid($itemUuid)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
     }
     $getBorrowed = admFuncVariableIsValid($_GET, 'item_borrowed', 'bool', array('defaultValue' => false));
     $getNewPicture = admFuncVariableIsValid($_GET, 'new_picture', 'bool', array('defaultValue' => false));
@@ -327,21 +333,21 @@ try {
             $msg .= '</div>
                 <div class="modal-footer">';
             if (count($getItemUUIDs) > 0) {
-                $msg .= '<button id="adm_button_reinstate" type="button" class="btn btn-primary mr-4" onclick="' . $reinstateOnClick . '">
+                $msg .= '<button id="adm_button_reinstate" type="button" class="btn btn-primary mr-4" onclick="' . SecurityUtils::encodeHTML($reinstateOnClick) . '">
                         <i class="bi bi-eye"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_REINSTATE') . '</button>';
-                $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
+                $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . SecurityUtils::encodeHTML($retireOnClick) . '">
                         <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_RETIRE') . '</button>';
                 if ($gCurrentUser->isAdministratorInventory()) {
-                    $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+                    $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . SecurityUtils::encodeHTML($deleteOnClick) . '">
                         <i class="bi bi-trash"></i>' . $gL10n->get('SYS_INVENTORY_SELECTION_DELETE') . '</button>';
                 }
             } else {
                 if (!$getRetired) {
-                    $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . $retireOnClick . '">
+                    $msg .= '<button id="adm_button_retire" type="button" class="btn btn-primary mr-4" onclick="' . SecurityUtils::encodeHTML($retireOnClick) . '">
                             <i class="bi bi-eye-slash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_RETIRE') . '</button>';
                 }
                 if ($gCurrentUser->isAdministratorInventory()) {
-                    $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+                    $msg .= '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . SecurityUtils::encodeHTML($deleteOnClick) . '">
                             <i class="bi bi-trash"></i>' . $gL10n->get('SYS_INVENTORY_ITEM_DELETE') . '</button>';
                 }
             }
