@@ -244,6 +244,43 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that the manifest decides below which top-level node the menu entry is created
+     *
+     * @testdox The menu entry goes below the node the manifest names in menuParent
+     * @dataProvider menuParentProvider
+     */
+    public function testMenuEntryGoesBelowTheNodeTheManifestNames(string $menuParent): void
+    {
+        $manifestFile = $this->pluginsPath . '/' . self::PLUGIN_ID . '/plugin.json';
+        $manifest = json_decode((string)file_get_contents($manifestFile), true);
+        $manifest['menuParent'] = $menuParent;
+        file_put_contents($manifestFile, json_encode($manifest));
+        PluginRegistry::reset();
+
+        $nodeId = (int)$this->getDatabase()->queryPrepared(
+            'SELECT men_id FROM ' . TBL_MENU . ' WHERE men_men_id_parent IS NULL AND men_name_intern = ?',
+            array($menuParent)
+        )->fetchColumn();
+        $this->assertGreaterThan(0, $nodeId, 'The standard menu has no node "' . $menuParent . '".');
+
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame($nodeId, (int)$this->menuEntry()['men_men_id_parent']);
+    }
+
+    /**
+     * @return array<string,array<int,string>>
+     */
+    public static function menuParentProvider(): array
+    {
+        return array(
+            'modules' => array('modules'),
+            'administration' => array('administration'),
+            'extensions' => array('extensions'),
+        );
+    }
+
+    /**
      * Test that the plugin is loaded by the operation that installs it
      *
      * @testdox Installing a plugin loads it, because its preferences cannot be seeded otherwise

@@ -68,6 +68,11 @@ final class Plugin
      */
     public const ERROR_INVALID_ID = 'invalid_id';
     public const ERROR_ID_CONFLICT = 'id_conflict';
+    /**
+     * The internal names of the menu nodes a plugin may name as **menuParent** in its manifest.
+     */
+    public const MENU_PARENTS = array('modules', 'administration', 'extensions');
+
     public const ERROR_NO_MANIFEST = 'no_manifest';
     public const ERROR_INVALID_MANIFEST = 'invalid_manifest';
     public const ERROR_BROKEN_MANIFEST = 'broken_manifest';
@@ -247,6 +252,12 @@ final class Plugin
                 'The manifest does not declare a version.', self::ERROR_BROKEN_MANIFEST);
         }
 
+        if (isset($manifest['menuParent']) && !in_array($manifest['menuParent'], self::MENU_PARENTS, true)) {
+            return new self($id, $path, $manifest, array(), array(), $empty,
+                'The manifest declares an unknown menuParent. Use one of: ' . implode(', ', self::MENU_PARENTS) . '.',
+                self::ERROR_BROKEN_MANIFEST);
+        }
+
         $error = null;
         $autoload = self::readAutoload($path, $manifest, $error);
 
@@ -372,6 +383,20 @@ final class Plugin
     public function wantsMenuEntry(): bool
     {
         return $this->hasPages() && ($this->manifest['menu'] ?? true) !== false;
+    }
+
+    /**
+     * Internal name of the menu node below which the menu entry of the plugin is created. A plugin
+     * that is a tool for administrators says **"menuParent": "administration"** in its manifest, a
+     * plugin that is a module of its own says **"modules"**; the default is **extensions**. Any other
+     * value makes the manifest broken (see read()), so it never gets here.
+     * @return string
+     */
+    public function getMenuParent(): string
+    {
+        $parent = $this->manifest['menuParent'] ?? 'extensions';
+
+        return in_array($parent, self::MENU_PARENTS, true) ? $parent : 'extensions';
     }
 
     /**
