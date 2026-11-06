@@ -66,6 +66,26 @@ class SsoReviewFixesTest extends AdministratorTestCase
     }
 
     /**
+     * @testdox The single metadata field keeps a URL and refuses anything else, such as pasted XML
+     */
+    public function testTheMetadataUrlFieldRefusesNonUrls(): void
+    {
+        $client = $this->samlService()->saveData(null, $this->formValues($this->suffix(), array(
+            'smc_metadata_url' => '  https://sp.example/metadata  '
+        )));
+        $this->assertSame('https://sp.example/metadata', $client->getValue('smc_metadata_url'));
+
+        foreach (array('<EntityDescriptor entityID="x"/>', 'not a url', 'javascript:alert(1)') as $value) {
+            try {
+                $this->samlService()->saveData(null, $this->formValues($this->suffix(), array('smc_metadata_url' => $value)));
+                $this->fail('"' . $value . '" must be refused.');
+            } catch (Exception $exception) {
+                $this->assertSame('SYS_SSO_METADATA_URL_INVALID', $exception->getTranslationId());
+            }
+        }
+    }
+
+    /**
      * @testdox An ACS URL that is no http(s) address, and an empty list, are refused
      */
     public function testAnInvalidAcsUrlIsRefused(): void
