@@ -39,29 +39,19 @@
                 </a>
                 {if $showPhotoActions}
                     <div id="image_preferences_{$photo.number}" class="text-center">
+                        {assign var=photoActions value=[]}
                         {if $ecardEnabled}
-                            <a class="admidio-icon-link" href="{$photo.ecardUrl}">
-                                <i class="bi bi-envelope" data-bs-toggle="tooltip" title="{$l10n->get('SYS_SEND_PHOTO_AS_ECARD')}"></i>
-                            </a>
+                            {$photoActions[] = ['url' => $photo.ecardUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_PHOTO_AS_ECARD')]}
                         {/if}
                         {if $downloadEnabled}
-                            <a class="admidio-icon-link" href="{$photo.downloadUrl}">
-                                <i class="bi bi-download" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DOWNLOAD_PHOTO')}"></i>
-                            </a>
+                            {$photoActions[] = ['url' => $photo.downloadUrl, 'icon' => 'bi bi-download', 'tooltip' => $l10n->get('SYS_DOWNLOAD_PHOTO')]}
                         {/if}
                         {if $isPhotoAdministrator}
-                            <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="{$photo.number}" data-direction="right">
-                                <i class="bi bi-arrow-clockwise" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ROTATE_PHOTO_RIGHT')}"></i>
-                            </a>
-                            <a class="admidio-icon-link admidio-image-rotate" href="javascript:void(0)" data-image="{$photo.number}" data-direction="left">
-                                <i class="bi bi-arrow-counterclockwise" data-bs-toggle="tooltip" title="{$l10n->get('SYS_ROTATE_PHOTO_LEFT')}"></i>
-                            </a>
-                            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                               data-message="{$l10n->get('SYS_WANT_DELETE_PHOTO')}"
-                               data-href="callUrlHideElement('div_image_{$photo.number}', '{$photo.deleteUrl}', '{$csrfToken}')">
-                                <i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE')}"></i>
-                            </a>
+                            {$photoActions[] = ['class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'right'], 'icon' => 'bi bi-arrow-clockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_RIGHT')]}
+                            {$photoActions[] = ['class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'left'], 'icon' => 'bi bi-arrow-counterclockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_LEFT')]}
+                            {$photoActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_PHOTO'), 'dataHref' => "callUrlHideElement('div_image_{$photo.number}', '{$photo.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]}
                         {/if}
+                        {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "photo_{$photo.number}", 'actions' => $photoActions]}
                     </div>
                 {/if}
             </div>
@@ -106,16 +96,14 @@
                             <small class="text-body-secondary">{$album.photoCount} {$l10n->get('SYS_PHOTOS')}</small>
                             {if $album.editable}
                                 <div>
+                                    {assign var=albumActions value=[['url' => $album.editUrl, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT_ALBUM')]]}
                                     {if $album.locked}
-                                        <a class="admidio-icon-link admidio-album-lock" href="javascript:void(0)" data-id="{$album.uuid}" data-mode="unlock" aria-label="{$l10n->get('SYS_UNLOCK_ALBUM')}"><i class="bi bi-unlock" data-bs-toggle="tooltip" title="{$l10n->get('SYS_UNLOCK_ALBUM')}"></i></a>
+                                        {$albumActions[] = ['class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'unlock'], 'icon' => 'bi bi-unlock', 'tooltip' => $l10n->get('SYS_UNLOCK_ALBUM')]}
                                     {else}
-                                        <a class="admidio-icon-link admidio-album-lock" href="javascript:void(0)" data-id="{$album.uuid}" data-mode="lock" aria-label="{$l10n->get('SYS_LOCK_ALBUM')}"><i class="bi bi-lock" data-bs-toggle="tooltip" title="{$l10n->get('SYS_LOCK_ALBUM')}"></i></a>
+                                        {$albumActions[] = ['class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'lock'], 'icon' => 'bi bi-lock', 'tooltip' => $l10n->get('SYS_LOCK_ALBUM')]}
                                     {/if}
-                                    <a class="admidio-icon-link" href="{$album.editUrl}" aria-label="{$l10n->get('SYS_EDIT_ALBUM')}"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="{$l10n->get('SYS_EDIT_ALBUM')}"></i></a>
-                                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                                       data-message="{$l10n->get('SYS_WANT_DELETE_ENTRY', array($album.name))|escape:'html'}"
-                                       data-href="callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')"
-                                       aria-label="{$l10n->get('SYS_DELETE_ALBUM')}"><i class="bi bi-trash" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DELETE_ALBUM')}"></i></a>
+                                    {$albumActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$album.name]), 'dataHref' => "callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE_ALBUM')]}
+                                    {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $album.uuid, 'actions' => $albumActions]}
                                 </div>
                             {/if}
                         </div>
