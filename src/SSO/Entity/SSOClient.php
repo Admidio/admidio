@@ -346,7 +346,13 @@ class SSOClient extends Entity
         if (empty($this->rolesAccess) || empty($this->rolesAccess->getRolesIds())) {
             return true;
         } else {
-            return $this->rolesAccess->hasRight($user->getRoleMemberships()) || $user->isAdministrator();
+            // NOTE: Administrators are deliberately NOT admitted here. An earlier version let every administrator
+            // pass (`|| $user->isAdministrator()`, since the first SAML version, without a recorded reason). That
+            // made the access roles meaningless for administrators and kept their tokens alive when they lost
+            // the role. A client without access roles is open to everybody (see above); one with roles admits
+            // exactly the members of those roles. Existing setups where an administrator relied on the bypass
+            // have to add the administrator to one of the roles.
+            return $this->rolesAccess->hasRight($user->getRoleMemberships());
         }
     }
 

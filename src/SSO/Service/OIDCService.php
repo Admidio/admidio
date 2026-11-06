@@ -13,6 +13,7 @@ use Admidio\SSO\Repository\UserRepository;
 
 
 use Laminas\Diactoros\Response;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\ServerRequestFactory;
 
@@ -25,17 +26,19 @@ use Psr\Http\Server\RequestHandlerInterface; // May be useful for middleware in 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\ResourceServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Users\Entity\User;
 use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\UserEntity;
 use Admidio\SSO\Entity\SSOClient;
 use Admidio\SSO\Entity\OIDCClient;
+use Admidio\SSO\Entity\TokenEntity;
 use Admidio\SSO\Entity\IdTokenResponse;
 use Admidio\SSO\Entity\OIDCConsent;
 use Admidio\Session\Entity\Session;
@@ -48,6 +51,8 @@ use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Admidio\UI\Presenter\OIDCConsentPresenter;
 use Admidio\UI\Presenter\OIDCLogoutPresenter;
 use Admidio\SSO\Grants\OIDCAuthCodeGrant;
+use Admidio\SSO\Grants\ClientCredentials;
+use Admidio\SSO\Grants\OIDCRefreshTokenGrant;
 use Admidio\SSO\Service\KeyService;
 
 /** ***************************************************************************
@@ -79,6 +84,9 @@ use Admidio\SSO\Service\KeyService;
 
 class OIDCService extends SSOService {
     use CryptTrait;
+
+    /** @var int Seconds the client of the current endpoint request is locked out after failed authentications, 0 if it is not */
+    private int $endpointLockSeconds = 0;
 
     private const DEFAULT_AUTH_CODE_LIFETIME = 600;
     private const DEFAULT_ACCESS_TOKEN_LIFETIME = 3600;
@@ -117,7 +125,8 @@ class OIDCService extends SSOService {
     private const AUTHORIZATION_REQUEST_PARAMETERS = array(
         'response_type', 'client_id', 'redirect_uri', 'scope', 'state', 'nonce',
         'response_mode', 'prompt', 'max_age', 'display', 'ui_locales', 'acr_values',
-        'id_token_hint', 'login_hint', 'code_challenge', 'code_challenge_method'
+        'id_token_hint', 'login_hint', 'code_challenge', 'code_challenge_method',
+        'request', 'request_uri'
     );
 
     /**
@@ -126,7 +135,7 @@ class OIDCService extends SSOService {
      */
     public static function getDefaultIssuerURL(): string
     {
-        return ADMIDIO_URL . FOLDER_MODULES . '/sso/index.php/oidc';
+        return SSOOrganization::getBaseUrl() . '/oidc';
     }
 
     /**
@@ -404,8 +413,9 @@ class OIDCService extends SSOService {
      * Returns a PSR-7 request for the OAuth2 server while ensuring Admidio compatibility
      */
     private function getRequest() {
-        // Ensure Admidio’s global request variables are used for internal logic
-        $serverRequest = ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        // The protocol parameters as sent, not stripped of HTML like $_GET and $_POST
+        [$query, $body] = self::getRawRequestParameters();
+        $serverRequest = ServerRequestFactory::fromGlobals($_SERVER, $query, $body, $_COOKIE, $_FILES);
 
         // Fix known issues with certain clients>
         // 1. Dokuwiki sends OAuth as the authorization header => Replace OAuth with Bearer
@@ -551,7 +561,7 @@ class OIDCService extends SSOService {
         /* ***********************************************************************
         * RefreshToken Grant
         */
-        $grant = new RefreshTokenGrant($refreshTokenRepository);
+        $grant = new OIDCRefreshTokenGrant($refreshTokenRepository);
         $grant->setRefreshTokenTTL($refreshTokenTTL); // new refresh tokens will expire after 1 month
         $server->enableGrantType($grant, $accessTokenTTL);
 
@@ -561,17 +571,12 @@ class OIDCService extends SSOService {
         * Various other setup things
         */
 
-        // TODO_RK: Handle failed authentications, e.g. after n number of attemps, block the client, etc.
+        // A failed client authentication is counted, and the client is locked out for a growing time
+        // (SSOAuthThrottleService). The password grant, which would emit user.authentication.failed, is not enabled.
         $server->getEmitter()->addListener(
             'client.authentication.failed',
             function (\League\OAuth2\Server\RequestEvent $event) {
-                // TODO_RK
-            }
-        );
-        $server->getEmitter()->addListener(
-            'user.authentication.failed',
-            function (\League\OAuth2\Server\RequestEvent $event) {
-                // TODO_RK
+                $this->recordClientAuthenticationFailure($event->getRequest());
             }
         );
 
@@ -728,13 +733,146 @@ class OIDCService extends SSOService {
     }
 
     public function handleAuthorizationRequest(): ResponseInterface {
-        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession;
+        global $gSettingsManager;
 
         if ($gSettingsManager->get('sso_oidc_enabled') !== '1') {
             throw new \Exception("SSO OIDC is not enabled");
         }
 
         $request = $this->getAuthorizationRequest();
+
+        return $this->applyResponseMode($request, $this->processAuthorizationRequest($request));
+    }
+
+    /**
+     * Send an authorization response the way the client asked for with response_mode.
+     *
+     * The authorization code (and every error) is a redirect to the redirect URI of the client
+     * with the parameters in the query ("query", the default for the code flow). With
+     * response_mode=form_post (OAuth 2.0 Form Post Response Mode) the parameters go to the client
+     * as the fields of a form that the browser posts to the redirect URI, so that they appear in
+     * neither the URL nor the browser history nor the logs of a server on the way.
+     */
+    private function applyResponseMode(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $queryParams = $request->getQueryParams();
+        $location = $response->getHeaderLine('Location');
+        if ($response->getStatusCode() < 300 || $response->getStatusCode() >= 400 || $location === '') {
+            return $response;
+        }
+
+        // RFC 9207: every response to the client, the code and an error, names the issuer, so that a client
+        // that talks to several authorization servers can tell a response of a foreign one (mix-up attack)
+        $response = $this->addIssuerToAuthorizationResponse($response, $location);
+        $location = $response->getHeaderLine('Location');
+
+        if (($queryParams['response_mode'] ?? null) !== 'form_post') {
+            return $response;
+        }
+
+        $redirectUri = $this->getRequestedRedirectUri($request);
+        $locationParts = explode('?', $location, 2);
+        $locationQuery = array();
+        parse_str($locationParts[1] ?? '', $locationQuery);
+
+        // The redirect URI may have a query of its own, which stays in the address the form is
+        // posted to; the parameters the authorization server added are the fields of the form.
+        $ownQuery = array();
+        parse_str((string) parse_url($redirectUri ?? '', PHP_URL_QUERY), $ownQuery);
+        $fields = array();
+        foreach ($locationQuery as $name => $value) {
+            if (!is_string($value) || (array_key_exists($name, $ownQuery) && $ownQuery[$name] === $value)) {
+                continue;
+            }
+            $fields[(string) $name] = $value;
+        }
+
+        return $this->createFormPostResponse($redirectUri ?? $locationParts[0], $fields);
+    }
+
+    /**
+     * Add the iss parameter (RFC 9207) to a redirect that carries an authorization response, i.e. a code or an
+     * error. Other redirects, for example to a page of Admidio, stay as they are.
+     */
+    private function addIssuerToAuthorizationResponse(ResponseInterface $response, string $location): ResponseInterface
+    {
+        $parts = explode('?', $location, 2);
+        $query = array();
+        parse_str($parts[1] ?? '', $query);
+
+        if ((!array_key_exists('code', $query) && !array_key_exists('error', $query)) || array_key_exists('iss', $query)) {
+            return $response;
+        }
+
+        return $response->withHeader(
+            'Location',
+            $location . (str_contains($location, '?') ? '&' : '?') . http_build_query(array('iss' => $this->getIssuerURL()))
+        );
+    }
+
+    /**
+     * The redirect URI an authorization request is answered with: the one it names, or the only
+     * one the client has registered.
+     */
+    private function getRequestedRedirectUri(ServerRequestInterface $request): ?string
+    {
+        $queryParams = $request->getQueryParams();
+        if (is_string($queryParams['redirect_uri'] ?? null) && $queryParams['redirect_uri'] !== '') {
+            return $queryParams['redirect_uri'];
+        }
+
+        if (!is_string($queryParams['client_id'] ?? null) || !isset($this->clientRepository)) {
+            return null;
+        }
+        $registered = $this->clientRepository->getClientEntity($queryParams['client_id'])?->getRedirectUri();
+        if (is_array($registered) && count($registered) === 1) {
+            $registered = reset($registered);
+        }
+
+        return is_string($registered) && $registered !== '' ? $registered : null;
+    }
+
+    /**
+     * A page whose form posts the fields to the redirect URI as soon as the browser has loaded
+     * it (OAuth 2.0 Form Post Response Mode), with a button for a browser without JavaScript.
+     *
+     * @param string $action The redirect URI of the client
+     * @param array<string,string> $fields The authorization response parameters
+     */
+    private function createFormPostResponse(string $action, array $fields): ResponseInterface
+    {
+        global $gL10n;
+
+        $inputs = '';
+        foreach ($fields as $name => $value) {
+            $inputs .= '<input type="hidden" name="' . SecurityUtils::encodeHTML($name)
+                . '" value="' . SecurityUtils::encodeHTML($value) . '" />' . "\n        ";
+        }
+
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admidio</title>
+</head>
+<body onload="document.forms[0].submit()">
+    <form method="POST" action="' . SecurityUtils::encodeHTML($action) . '">
+        ' . $inputs . '<noscript>
+            <p>' . SecurityUtils::encodeHTML($gL10n->get('SYS_SSO_FORM_POST_NOSCRIPT')) . '</p>
+            <button type="submit">' . SecurityUtils::encodeHTML($gL10n->get('SYS_SSO_FORM_POST_CONTINUE')) . '</button>
+        </noscript>
+    </form>
+</body>
+</html>
+';
+
+        // The page carries the authorization code, so it must not be cached
+        return new HtmlResponse($html, 200, array('Cache-Control' => 'no-store', 'Pragma' => 'no-cache'));
+    }
+
+    private function processAuthorizationRequest(ServerRequestInterface $request): ResponseInterface {
+        global $gProfileFields, $gSettingsManager, $gValidLogin, $gCurrentUserId, $gL10n, $gLogger, $gCurrentSession, $gCurrentUser;
+
         $response = new Response();
         try {
             if (!$this->isServiceSetup) {
@@ -744,7 +882,9 @@ class OIDCService extends SSOService {
             // Validate the HTTP request and return an AuthorizationRequest object.
             // League OAuth2 Server persists a supplied challenge in the
             // authorization code and validates code_verifier at the token endpoint.
-            $authRequest = $this->authServer->validateAuthorizationRequest($request);
+            // The grant is asked directly, because the authorization server rejects a missing
+            // response_type itself, without the redirect to the client that OIDC requires.
+            $authRequest = $this->authCodeGrant->validateAuthorizationRequest($request);
             self::$client = $authRequest->getClient();
 
             if (!self::$client instanceof OIDCClient) {
@@ -814,7 +954,7 @@ class OIDCService extends SSOService {
             // Check whether the current user has access permissions to the SP client:
             if (!self::$client->hasAccessRight()) {
                 $message = '<div class="alert alert-danger form-alert" style=""><i class="bi bi-exclamation-circle-fill"></i>' .
-                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName())) .
+                    $gL10n->get('SYS_SSO_LOGIN_MISSING_PERMISSIONS', array(self::$client->readableName(), SecurityUtils::encodeHTML($gCurrentUser->readableName()))) .
                     '</div>';
                 $this->showSSOLoginForm(self::$client, $message);
                 // Either exit in the showLoginForm or an Exception was triggered => execution won't continue here!
@@ -898,12 +1038,98 @@ class OIDCService extends SSOService {
         } catch (OAuthServerException $exception) {
             $this->enrichInvalidClientException($exception, $request);
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
+            if (!$exception->hasRedirect()) {
+                $this->showAuthorizationError($exception, $request);
+            }
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * Show an authorization error that cannot be sent to the client on an Admidio page.
+     *
+     * Without a verified redirect URI the OP must not redirect, but has to inform the user
+     * (OpenID Connect Core 1.0, section 3.1.2.6), who reached the authorization endpoint
+     * with the browser and cannot read a JSON error. The page exits the script.
+     */
+    private function showAuthorizationError(OAuthServerException $exception, ServerRequestInterface $request): void
+    {
+        global $gMessage, $gL10n;
+
+        $clientId = $this->extractRequestedClientId($request) ?? '';
+
+        if ($exception->getCode() === OIDCAuthCodeGrant::ERROR_REDIRECT_URI_NOT_REGISTERED) {
+            $message = $gL10n->get('SYS_SSO_OIDC_REDIRECT_URI_NOT_REGISTERED', array(
+                SecurityUtils::encodeHTML(self::$client instanceof OIDCClient ? self::$client->readableName() : $clientId),
+                SecurityUtils::encodeHTML((string) ($request->getQueryParams()['redirect_uri'] ?? ''))
+            ));
+        } elseif ($exception->getErrorType() === 'invalid_client' && !self::$client instanceof OIDCClient) {
+            $message = $gL10n->get('SYS_SSO_OIDC_CLIENT_UNKNOWN', array(SecurityUtils::encodeHTML($clientId)));
+        } else {
+            $message = $gL10n->get('SYS_SSO_OIDC_AUTHORIZATION_FAILED', array(
+                SecurityUtils::encodeHTML(trim($exception->getMessage() . ' ' . $exception->getHint()))
+            ));
+        }
+
+        $gMessage->show($message, $gL10n->get('SYS_ERROR'));
+    }
+
+    /**
+     * The address of the request, which the lockout after failed client authentications is counted for.
+     */
+    private function getThrottleAddress(): string
+    {
+        return (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+    }
+
+    /**
+     * Count a failed client authentication; this must never get in the way of the answer to the client.
+     */
+    private function recordClientAuthenticationFailure(ServerRequestInterface $request): void
+    {
+        try {
+            (new SSOAuthThrottleService($this->db))->recordFailure(
+                $this->extractRequestedClientId($request) ?? '',
+                $this->getThrottleAddress()
+            );
+        } catch (\Throwable $exception) {
+            global $gLogger;
+            $gLogger->error('Could not count a failed OIDC client authentication.', array('message' => $exception->getMessage()));
+        }
+    }
+
+    /**
+     * Seconds the client has to wait before it may authenticate from this address again, 0 for none.
+     */
+    private function getClientLockSeconds(ServerRequestInterface $request): int
+    {
+        try {
+            return (new SSOAuthThrottleService($this->db))->getRetryAfter(
+                $this->extractRequestedClientId($request) ?? '',
+                $this->getThrottleAddress()
+            );
+        } catch (\Throwable) {
+            return 0;
+        }
+    }
+
+    /**
+     * The answer to a client that is locked out after failed authentications (RFC 6585, 429).
+     */
+    private function createTooManyRequestsResponse(int $retryAfter): JsonResponse
+    {
+        return new JsonResponse(
+            array(
+                'error' => 'temporarily_unavailable',
+                'error_description' => 'Too many failed client authentications. Try again later.'
+            ),
+            429,
+            array('Retry-After' => (string) $retryAfter, 'Cache-Control' => 'no-store', 'Pragma' => 'no-cache')
+        );
     }
 
     public function handleTokenRequest() {
@@ -914,8 +1140,20 @@ class OIDCService extends SSOService {
             if (!$this->isServiceSetup) {
                 $this->setupService();
             }
+            $lockSeconds = $this->getClientLockSeconds($request);
+            if ($lockSeconds > 0) {
+                return $this->createTooManyRequestsResponse($lockSeconds);
+            }
+
             // Try to respond to the request
-            return $this->authServer->respondToAccessTokenRequest($request, $response);
+            $tokenResponse = $this->authServer->respondToAccessTokenRequest($request, $response);
+            if ($tokenResponse->getStatusCode() === 200) {
+                (new SSOAuthThrottleService($this->db))->recordSuccess(
+                    $this->extractRequestedClientId($request) ?? '',
+                    $this->getThrottleAddress()
+                );
+            }
+            return $tokenResponse;
 
         } catch (OAuthServerException $exception) {
             $this->enrichInvalidClientException($exception, $request);
@@ -927,9 +1165,32 @@ class OIDCService extends SSOService {
         }
     }
 
+    /**
+     * Return the userinfo request with an access token from a form POST moved into the
+     * Authorization header, where the resource server looks for it.
+     *
+     * RFC 6750, section 2.2, allows the bearer token in a form-encoded body. A request that
+     * also has an Authorization header keeps it, a token must not be sent both ways.
+     */
+    private function getUserInfoRequest(): ServerRequestInterface
+    {
+        $request = $this->getRequest();
+
+        if (strtoupper($request->getMethod()) !== 'POST' || $request->hasHeader('authorization')) {
+            return $request;
+        }
+
+        $body = $request->getParsedBody();
+        if (!is_array($body) || !is_string($body['access_token'] ?? null) || $body['access_token'] === '') {
+            return $request;
+        }
+
+        return $request->withHeader('authorization', 'Bearer ' . $body['access_token']);
+    }
+
     public function handleUserInfoRequest() {
         global $gLogger;
-        $request = $this->getRequest();
+        $request = $this->getUserInfoRequest();
         $response = new Response();
         try {
             if (!$this->isServiceSetup) {
@@ -945,19 +1206,19 @@ class OIDCService extends SSOService {
             $token = $this->accessTokenRepository->getToken($tokenId);
 
             if ($tokenUserId !== $userId) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Token does not match the authenticated user'], 403);
+                return $this->createInvalidTokenResponse('Token does not match the authenticated user');
             }
             if ($token->getExpiryDateTime() < new \DateTimeImmutable()) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Token expired'], 403);
+                return $this->createInvalidTokenResponse('Token expired');
             }
             if ($this->accessTokenRepository->isAccessTokenRevoked($tokenId)) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Token was revoked'], 403);
+                return $this->createInvalidTokenResponse('Token was revoked');
             }
 
 
             $user = $token->getUser();
             if ($user === null) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'User not found'], 403);
+                return $this->createInvalidTokenResponse('User not found');
             }
 
             /**
@@ -965,10 +1226,14 @@ class OIDCService extends SSOService {
              */
             $client = $token->getClient();
             if ($client === null) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
+                return $this->createInvalidTokenResponse('Client not found');
             }
             if (!($client instanceof OIDCClient)) {
-                return new JsonResponse(['error' => 'access_denied', 'message' => 'Client not found'], 403);
+                return $this->createInvalidTokenResponse('Client not found');
+            }
+            // like the introspection and the refresh: the token does not outlive the right to use the client
+            if ($user instanceof UserEntity && (!$user->mayLogin() || !$client->hasAccessRight($user))) {
+                return $this->createInvalidTokenResponse('Token was revoked');
             }
 
             $scopes = array_map(fn($s) => $s->getIdentifier(), $token->getScopes());
@@ -988,11 +1253,39 @@ class OIDCService extends SSOService {
 
         } catch (OAuthServerException $exception) {
             $gLogger->error($exception->getMessage(), array_merge($exception->getPayload(), ['trace' => $exception->getTraceAsString()]));
+            // The resource server rejects a missing or unusable access token as access_denied
+            if ($exception->getErrorType() === 'access_denied') {
+                return $this->createInvalidTokenResponse(
+                    $request->hasHeader('authorization') ? (string) ($exception->getHint() ?? $exception->getMessage()) : null
+                );
+            }
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * Build the response for a userinfo request whose access token cannot be used: 401 with a
+     * Bearer challenge (RFC 6750, section 3.1). A request without any token gets the challenge
+     * without an error code.
+     * @param string|null $description Why the token was rejected, null if there was none.
+     */
+    private function createInvalidTokenResponse(?string $description): JsonResponse
+    {
+        if ($description === null) {
+            return new JsonResponse(new \stdClass(), 401, array('WWW-Authenticate' => 'Bearer'));
+        }
+
+        // The description is quoted in the header, so it must not contain quotes or backslashes
+        $description = str_replace(array('"', '\\'), '', $description);
+
+        return new JsonResponse(
+            array('error' => 'invalid_token', 'error_description' => $description),
+            401,
+            array('WWW-Authenticate' => 'Bearer error="invalid_token", error_description="' . $description . '"')
+        );
     }
 
     public function handleJWKSRequest() {
@@ -1087,7 +1380,8 @@ class OIDCService extends SSOService {
             "backchannel_logout_session_supported" => true,
             "scopes_supported" => OIDCClient::getSupportedScopes(),
             "response_types_supported" => ["code"],
-            "response_modes_supported" => ["query"],
+            "response_modes_supported" => ["query", "form_post"],
+            "authorization_response_iss_parameter_supported" => true,
             "grant_types_supported" => ["authorization_code", "refresh_token"],
             "code_challenge_methods_supported" => ["S256"],
             "subject_types_supported" => ["public"],
@@ -1121,7 +1415,8 @@ class OIDCService extends SSOService {
                 "locale",
                 "website",
                 "gender",
-                "birthdate"
+                "birthdate",
+                "updated_at"
             ],
             // "acr_values_supported" => [self::AUTHENTICATION_CONTEXT_PASSWORD, self::AUTHENTICATION_CONTEXT_PASSWORD_TOTP],
             "claims_parameter_supported" => false,
@@ -1160,6 +1455,15 @@ class OIDCService extends SSOService {
             return new JsonResponse(['active' => false]);
         }
 
+        // A refresh token is an encrypted payload, an access token a signed JWT: a token that is none of the
+        // two is inactive. The hint only says which one to try first, a server may ignore it (RFC 7662, 2.1).
+        if (is_string($tokenValue) && ($requestBody['token_type_hint'] ?? null) !== 'access_token') {
+            $refreshTokenResponse = $this->introspectRefreshToken($tokenValue, $clientId);
+            if ($refreshTokenResponse !== null) {
+                return $refreshTokenResponse;
+            }
+        }
+
         try {
             // Validate the token using the resource server
             $validatedRequest = $this->resourceServer->validateAuthenticatedRequest(
@@ -1194,20 +1498,85 @@ class OIDCService extends SSOService {
              */
             if ((int) $token->getValue($token->getColumnPrefix() . '_usr_id') > 0) {
                 $tokenUser = $token->getUser();
-                if ($tokenUser instanceof UserEntity && !$tokenClient->hasAccessRight($tokenUser)) {
+                if ($tokenUser instanceof UserEntity && (!$tokenUser->mayLogin() || !$tokenClient->hasAccessRight($tokenUser))) {
                     return new JsonResponse(['active' => false]);
                 }
             }
 
-            return new JsonResponse([
-                'active' => true,
-                'sub' => $token->getUserIdentifier(),
-                'client_id' => $token->getClient()->getIdentifier(),
-                'exp' => $token->getExpiryDateTime()->getTimestamp(),
-                'scope' => implode(' ', array_map(fn($s) => $s->getIdentifier(), $token->getScopes())),
-            ]);
+            return new JsonResponse($this->describeActiveToken($token, $tokenClient, 'Bearer'));
         } catch (\Exception $e) {
             return new JsonResponse(['active' => false]);
+        }
+    }
+
+    /**
+     * The introspection response of an active token (RFC 7662, 2.2).
+     *
+     * @param string|null $tokenType Type of the access token, null for a refresh token
+     * @return array<string,mixed>
+     */
+    private function describeActiveToken(TokenEntity $token, OIDCClient $client, ?string $tokenType): array
+    {
+        $prefix = $token->getColumnPrefix();
+        $response = array(
+            'active' => true,
+            'scope' => implode(' ', array_map(fn($scope) => $scope->getIdentifier(), $token->getScopes())),
+            'client_id' => $client->getIdentifier(),
+            'sub' => $token->getUserIdentifier(),
+            'aud' => $client->getIdentifier(),
+            'iss' => $this->getIssuerURL(),
+            'exp' => $token->getExpiryDateTime()->getTimestamp(),
+        );
+        $created = (int) $token->getValue($prefix . '_timestamp_create', 'U');
+        if ($created > 0) {
+            $response['iat'] = $created;
+        }
+        if ($tokenType !== null) {
+            $response['token_type'] = $tokenType;
+        }
+        $user = (int) $token->getValue($prefix . '_usr_id') > 0 ? $token->getUser() : null;
+        if ($user instanceof UserEntity && $user->getUsername() !== '') {
+            $response['username'] = $user->getUsername();
+        }
+
+        return $response;
+    }
+
+    /**
+     * Introspect a refresh token.
+     *
+     * @param string $tokenValue The token as the client holds it
+     * @param string $clientId The authenticated client
+     * @return JsonResponse|null The answer, or null if the value is no refresh token of this server
+     */
+    private function introspectRefreshToken(string $tokenValue, string $clientId): ?JsonResponse
+    {
+        try {
+            $payload = json_decode($this->decrypt($tokenValue), true);
+        } catch (\Throwable) {
+            return null;
+        }
+        if (!is_array($payload) || !is_string($payload['refresh_token_id'] ?? null) || $payload['refresh_token_id'] === '') {
+            return null;
+        }
+
+        $inactive = new JsonResponse(['active' => false]);
+        try {
+            $tokenId = $payload['refresh_token_id'];
+            $token = $this->refreshTokenRepository->getToken($tokenId);
+            $client = $token->isNewRecord() ? null : $token->getClient();
+
+            if (!$client instanceof OIDCClient || !hash_equals($clientId, $client->getIdentifier())
+                || $token->getExpiryDateTime() < new \DateTimeImmutable()
+                // revoked, or the user may no longer log in or use the client (the check revokes the token)
+                || $this->refreshTokenRepository->isRefreshTokenRevoked($tokenId)
+            ) {
+                return $inactive;
+            }
+
+            return new JsonResponse($this->describeActiveToken($token, $client, null));
+        } catch (\Throwable) {
+            return $inactive;
         }
     }
 
@@ -1265,9 +1634,15 @@ class OIDCService extends SSOService {
      */
     private function authenticateEndpointClient(ServerRequestInterface $request): ?string
     {
+        $this->endpointLockSeconds = $this->getClientLockSeconds($request);
+        if ($this->endpointLockSeconds > 0) {
+            return null;
+        }
+
         $clientCredentials = $this->getEndpointClientCredentials($request);
 
         if ($clientCredentials === null) {
+            $this->recordClientAuthenticationFailure($request);
             return null;
         }
 
@@ -1277,12 +1652,15 @@ class OIDCService extends SSOService {
                 $clientCredentials['clientSecret'], 
                 null
             )) {
+                $this->recordClientAuthenticationFailure($request);
                 return null;
             }
         } catch (\Throwable $exception) {
+            $this->recordClientAuthenticationFailure($request);
             return null;
         }
 
+        (new SSOAuthThrottleService($this->db))->recordSuccess($clientCredentials['clientId'], $this->getThrottleAddress());
         return $clientCredentials['clientId'];
     }
 
@@ -1318,10 +1696,9 @@ class OIDCService extends SSOService {
                 return null;
             }
 
-            [$clientId, $clientSecret] = explode(':', $decodedCredentials, 2);
-
-            $clientId = urldecode($clientId);
-            $clientSecret = urldecode($clientSecret);
+            [$clientId, $clientSecret] = ClientCredentials::normalizeBasicCredentials(
+                ...explode(':', $decodedCredentials, 2)
+            );
         } elseif ($usesPostAuthentication) {
             $clientId = $requestBody['client_id'] ?? null;
             $clientSecret = $requestBody['client_secret'] ?? null;
@@ -1390,8 +1767,7 @@ class OIDCService extends SSOService {
         if (strncasecmp($authorizationHeader, 'Basic ', 6) === 0) {
             $decoded = base64_decode(trim(substr($authorizationHeader, 6)), true);
             if ($decoded !== false && str_contains($decoded, ':')) {
-                [$clientId] = explode(':', $decoded, 2);
-                $clientId = urldecode($clientId);
+                [$clientId] = ClientCredentials::normalizeBasicCredentials(...explode(':', $decoded, 2));
                 if ($clientId !== '') {
                     return $clientId;
                 }
@@ -1407,6 +1783,10 @@ class OIDCService extends SSOService {
      */
     private function createInvalidClientResponse(): JsonResponse
     {
+        if ($this->endpointLockSeconds > 0) {
+            return $this->createTooManyRequestsResponse($this->endpointLockSeconds);
+        }
+
         return new JsonResponse(
             array('error' => 'invalid_client'),
             401,
@@ -1491,6 +1871,22 @@ class OIDCService extends SSOService {
     }    
 
     /**
+     * Show a logout error on an Admidio page and end the script. The logout endpoint is reached with the
+     * browser of the user, who cannot read a JSON error; the relying party gets nothing back, because a
+     * logout request that cannot be trusted must not redirect (OpenID Connect RP-Initiated Logout 1.0, 2).
+     */
+    private function showLogoutError(string $reason): never
+    {
+        global $gMessage, $gL10n;
+
+        $gMessage->show(
+            $gL10n->get('SYS_SSO_OIDC_LOGOUT_FAILED', array(SecurityUtils::encodeHTML($reason))),
+            $gL10n->get('SYS_ERROR')
+        );
+        exit;
+    }
+
+    /**
      * Handle OpenID Connect RP-Initiated Logout.
      *
      * Requests without id_token_hint are confirmed by the user before the OP
@@ -1499,7 +1895,7 @@ class OIDCService extends SSOService {
      */
     public function handleLogoutRequest(): ResponseInterface
     {
-        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId;
+        global $gLogger, $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin, $gCurrentOrgId, $gHomepage;
 
         $request = $this->getRequest();
         $participantService = new OIDCSessionParticipantService($this->db);
@@ -1511,7 +1907,7 @@ class OIDCService extends SSOService {
             || array_key_exists('adm_button_logout', $body)
         ) {
             if (!isset($_POST['adm_csrf_token']) || !is_string($_POST['adm_csrf_token'])) {
-                return $this->createOIDCErrorResponse('invalid_request', 'Invalid logout confirmation.', 400);
+                $this->showLogoutError('Invalid logout confirmation.');
             }
 
             $form = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
@@ -1521,11 +1917,11 @@ class OIDCService extends SSOService {
         if (array_key_exists('adm_button_cancel', $body)) {
             unset($_SESSION['oidc_logout_confirmation']);
 
-            return $this->createOIDCErrorResponse(
-                'access_denied',
-                'The logout request was cancelled by the user.',
-                400
-            );
+            // The user stays logged in, so the browser goes to the Admidio page and not back to the relying party
+            return (new Response())
+                ->withStatus(302)
+                ->withHeader('Location', $gHomepage)
+                ->withHeader('Cache-Control', 'no-store');
         }
 
         if (array_key_exists('adm_button_logout', $body)) {
@@ -1536,11 +1932,7 @@ class OIDCService extends SSOService {
                 || !isset($context['requested_at'], $context['external_session_id'])
                 || (int) $context['requested_at'] < time() - 300
             ) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'The logout confirmation has expired.',
-                    400
-                );
+                $this->showLogoutError('The logout confirmation has expired.');
             }
 
             return $this->completeOIDCLogout(
@@ -1565,11 +1957,7 @@ class OIDCService extends SSOService {
             'state' => $state
         ) as $parameter => $value) {
             if ($value !== null && !is_string($value)) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'Invalid ' . $parameter . '.',
-                    400
-                );
+                $this->showLogoutError('Invalid ' . $parameter . '.');
             }
         }
 
@@ -1583,11 +1971,7 @@ class OIDCService extends SSOService {
                 $hintClaims = $this->validateLogoutIdTokenHint($idTokenHint, $requestedClientIdentifier);
             } catch (\Throwable $exception) {
                 $gLogger->warning('OIDC logout rejected an ID token hint.', array('exception' => $exception));
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'Invalid id_token_hint.',
-                    400
-                );
+                $this->showLogoutError('Invalid id_token_hint.');
             }
 
             $clientIdentifier = $hintClaims['client_id'];
@@ -1597,11 +1981,7 @@ class OIDCService extends SSOService {
         if (is_string($clientIdentifier) && $clientIdentifier !== '') {
             $client = $this->createClientObject(null, $clientIdentifier);
             if ($client->isNewRecord() || !$client->isEnabled()) {
-                return $this->createOIDCErrorResponse(
-                    'invalid_request',
-                    'Unknown or disabled client.',
-                    400
-                );
+                $this->showLogoutError('Unknown or disabled client.');
             }
         }
 
@@ -1609,11 +1989,7 @@ class OIDCService extends SSOService {
             && ($client === null
                 || !$client->isPostLogoutRedirectUriAllowed($postLogoutRedirectUri))
         ) {
-            return $this->createOIDCErrorResponse(
-                'invalid_request',
-                'Unregistered post_logout_redirect_uri "' . $postLogoutRedirectUri . '". Add it to the client\'s registered post-logout redirect URIs.',
-                400
-            );
+            $this->showLogoutError('Unregistered post_logout_redirect_uri "' . $postLogoutRedirectUri . '". Add it to the client\'s registered post-logout redirect URIs.');
         }
 
         $externalSessionId = (string) $gCurrentSession->getValue(
@@ -1637,13 +2013,16 @@ class OIDCService extends SSOService {
             }
         }
 
-        if ($externalSessionId === '') {
-            return $this->createOIDCErrorResponse(
-                'invalid_request',
-                'The current session cannot be used for OpenID Connect logout.',
-                400
-            );
+        /*
+        * Nobody is logged in to this browser (the session ended by another logout, by its
+        * timeout or in another way), so there is nothing to end and nothing to confirm. The
+        * relying party that asks for the logout gets what it expects: the browser returns to its
+        * post-logout address, which was checked against the registered ones above.
+        */
+        if (!$gValidLogin) {
+            return $this->createPostLogoutResponse($postLogoutRedirectUri, $state);
         }
+
         $_SESSION['oidc_logout_confirmation'] = array(
             'external_session_id' => $externalSessionId,
             'client_id' => $client?->getIdentifier() ?? '',
@@ -1668,18 +2047,13 @@ class OIDCService extends SSOService {
         global $gCurrentSession, $gCurrentUser, $gMenu, $gValidLogin;
 
         $gValidLogin = false;
+        // the user is still known here, like for the logout in system/logout.php
+        Hooks::doAction('logout', $gCurrentUser);
         $gCurrentSession->logout();
         $gCurrentUser->clear();
         $gMenu->initialize();
 
-        $redirectLocation = null;
-        if ($postLogoutRedirectUri !== null) {
-            $redirectLocation = $postLogoutRedirectUri;
-            if ($state !== null && $state !== '') {
-                $redirectLocation .= (str_contains($redirectLocation, '?') ? '&' : '?')
-                    . http_build_query(array('state' => $state));
-            }
-        }
+        $redirectLocation = $this->getPostLogoutLocation($postLogoutRedirectUri, $state);
 
         /*
         * Hand the logout to the SAML service, which notifies the OIDC back-channel clients,
@@ -1691,6 +2065,35 @@ class OIDCService extends SSOService {
             return (new SAMLService($this->db, $gCurrentUser))
                 ->startSessionLogout($externalSessionId, $redirectLocation);
         }
+
+        return $this->createPostLogoutResponse($postLogoutRedirectUri, $state);
+    }
+
+    /**
+     * The address the browser returns to after a logout: the registered post-logout redirect URI
+     * of the relying party, with its state.
+     */
+    private function getPostLogoutLocation(?string $postLogoutRedirectUri, ?string $state): ?string
+    {
+        if ($postLogoutRedirectUri === null) {
+            return null;
+        }
+
+        $location = $postLogoutRedirectUri;
+        if ($state !== null && $state !== '') {
+            $location .= (str_contains($location, '?') ? '&' : '?') . http_build_query(array('state' => $state));
+        }
+
+        return $location;
+    }
+
+    /**
+     * The response that ends an OpenID Connect logout: back to the relying party if it named a
+     * post-logout redirect URI, otherwise a plain confirmation.
+     */
+    private function createPostLogoutResponse(?string $postLogoutRedirectUri, ?string $state): ResponseInterface
+    {
+        $redirectLocation = $this->getPostLogoutLocation($postLogoutRedirectUri, $state);
 
         if ($redirectLocation !== null) {
             return (new Response())

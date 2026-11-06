@@ -12,6 +12,7 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Session\Entity\Session;
+use Admidio\SSO\Service\SSOHooks;
 use Admidio\UI\Component\Message;
 use Admidio\Users\Entity\User;
 
@@ -77,6 +78,10 @@ $gHtmlPurifierFilter = new HTMLPurifier($gHtmlPurifierConfig);
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
 /********************************************************************************/
+
+// The single sign-on module takes part in the session, login, logout and membership events
+// through hooks, which have to be in place before the session starts
+SSOHooks::register();
 
 // start PHP session
 try {

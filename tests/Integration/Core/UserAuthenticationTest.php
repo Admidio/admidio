@@ -285,4 +285,39 @@ class UserAuthenticationTest extends DatabaseTestCase
         $this->assertEquals($org1['org_id'], $session1->getValue('ses_org_id'));
         $this->assertEquals($org2['org_id'], $session2->getValue('ses_org_id'));
     }
+
+    /**
+     * @testdox An authentication records user, time and methods with a new external session id
+     */
+    public function testAnAuthenticationRecordsTheLoginWithAnExternalSessionId(): void
+    {
+        $user = $this->getFixture()->createAndSaveUser('authuser', 'auth@test.local');
+        $session = $this->createSessionWithId('authentication' . bin2hex(random_bytes(8)));
+        $this->assertSame('', $session->getExternalSessionId(), 'a session without login has none');
+
+        $session->setAuthentication((int) $user['usr_id'], array('pwd', 'otp'));
+
+        $this->assertSame((int) $user['usr_id'], (int) $session->getValue('ses_usr_id'));
+        $this->assertSame('pwd otp', $session->getValue('ses_authentication_methods'));
+        $this->assertGreaterThan(0, (int) $session->getValue('ses_authentication_time', 'U'));
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{64}$/', $session->getExternalSessionId());
+    }
+
+    /**
+     * The clients of an earlier login of the same browser session must not be able to address the
+     * new one, e.g. to log it out.
+     *
+     * @testdox A new authentication gets a new external session id
+     */
+    public function testANewAuthenticationGetsANewExternalSessionId(): void
+    {
+        $user = $this->getFixture()->createAndSaveUser('reauthuser', 'reauth@test.local');
+        $session = $this->createSessionWithId('reauthentication' . bin2hex(random_bytes(8)));
+
+        $session->setAuthentication((int) $user['usr_id'], array('pwd'));
+        $first = $session->getExternalSessionId();
+        $session->setAuthentication((int) $user['usr_id'], array('pwd'));
+
+        $this->assertNotSame($first, $session->getExternalSessionId());
+    }
 }

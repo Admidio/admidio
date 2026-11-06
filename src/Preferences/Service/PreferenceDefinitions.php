@@ -380,6 +380,14 @@ final class PreferenceDefinitions
             'sso_saml_want_requests_signed' => array('default' => '1', 'type' => 'bool'),
             'sso_saml_signing_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
             'sso_saml_encryption_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
+            // The metadata of the IdP is valid for this long (validUntil) and may be cached for this long (cacheDuration)
+            'sso_saml_metadata_valid_days' => array('default' => '30', 'type' => 'int', 'minimum' => 1, 'maximum' => 3650, 'required' => true),
+            'sso_saml_metadata_cache_hours' => array('default' => '24', 'type' => 'int', 'minimum' => 1, 'maximum' => 8760, 'required' => true),
+            // Organization and contact person of the metadata; empty means the organization, the Admidio URL and
+            // the e-mail address of the administrator of the installation
+            'sso_saml_organization_name' => array('default' => '', 'maxLength' => 250),
+            'sso_saml_organization_url' => array('default' => '', 'maxLength' => 250),
+            'sso_saml_contact_email' => array('default' => '', 'maxLength' => 250),
             'sso_saml_persistent_id_secret' => array('default' => '', 'internal' => true, 'sensitive' => true),
             'sso_oidc_enabled' => array('default' => '0', 'type' => 'bool'),
             // empty means "use the default admidio URL"; do not seed it with the resolved

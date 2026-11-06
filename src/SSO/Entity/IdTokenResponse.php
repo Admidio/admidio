@@ -35,6 +35,8 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
     protected ?string $authenticationContext = null;
     private Database $database;
     private int $participantLifetime;
+    /** @var bool Persist the participant only while the session of the sid is still logged in (refresh) */
+    private bool $requireActiveSession = false;
 
     public function __construct(
         IdentityProviderInterface $identityProvider,
@@ -67,6 +69,13 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         $extraParams = parent::getExtraParams($accessToken);
         $this->persistSessionParticipant($accessToken);
 
+        // RFC 6749, 5.1: the scope is stated if it differs from the requested one, and the client may have
+        // asked for scopes that are not granted (openid is always granted, unknown ones are dropped)
+        $extraParams['scope'] = implode(' ', array_map(
+            static fn ($scope): string => $scope->getIdentifier(),
+            $accessToken->getScopes()
+        ));
+
         return $extraParams;
     }
 
@@ -78,6 +87,11 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         global $gCurrentOrgId, $gLogger;
         if ($this->externalSessionId === '') {
             $gLogger->warning('OIDC session participant was not persisted because no external session identifier is available.');
+            return;
+        }
+
+        // A refreshed token must not bring the participant of a session back that was logged out
+        if ($this->requireActiveSession && !$this->isSessionActive()) {
             return;
         }
 
@@ -125,6 +139,12 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
         global $gLogger;
 
         $builder = parent::getBuilder($accessToken, $userEntity);
+        // at_hash (OpenID Connect Core 3.1.3.6): the left half of the SHA-256 of the access token, base64url
+        $accessTokenHash = hash('sha256', $accessToken->toString(), true);
+        $builder = $builder->withClaim(
+            'at_hash',
+            rtrim(strtr(base64_encode(substr($accessTokenHash, 0, 16)), '+/', '-_'), '=')
+        );
         if (!empty($this->nonce)) {
             $builder = $builder->withClaim('nonce', $this->nonce);
         }
@@ -147,6 +167,69 @@ class IdTokenResponse extends \OpenIDConnectServer\IdTokenResponse
             $builder = $builder->withClaim('acr', $this->authenticationContext);
         }
         return $builder->issuedBy($this->issuerURL);
+    }
+
+    /**
+     * Whether a user is still logged in to the Admidio session that the sid names. Logging out
+     * clears the user of the session but keeps its row.
+     */
+    private function isSessionActive(): bool
+    {
+        return (bool) $this->database->queryPrepared(
+            'SELECT 1 FROM ' . TBL_SESSIONS . ' WHERE ses_external_session_id = ? AND ses_usr_id IS NOT NULL',
+            array($this->externalSessionId)
+        )->fetchColumn();
+    }
+
+    /**
+     * Take what the authorization code knows about the authentication of the user: the time
+     * (auth_time), the session (sid), the methods (amr) and the context (acr).
+     *
+     * An ID token from a refresh states the same authentication as the original one (OpenID
+     * Connect Core 12.2), but not its nonce.
+     *
+     * @param AuthCodeEntity $authCode The code of the authentication
+     * @param bool $isRefresh Whether the ID token is issued in exchange for a refresh token
+     */
+    public function setAuthenticationFromAuthCode(AuthCodeEntity $authCode, bool $isRefresh = false): void
+    {
+        global $gLogger;
+
+        $prefix = $authCode->getColumnPrefix();
+
+        if (!$isRefresh) {
+            $nonce = $authCode->getValue($prefix . '_nonce');
+            if (!empty($nonce)) {
+                $this->setNonce($nonce);
+            }
+        }
+        $this->requireActiveSession = $isRefresh;
+
+        $authenticationTime = (int) $authCode->getValue($prefix . '_auth_time', 'U');
+        $externalSessionId = (string) $authCode->getValue($prefix . '_external_session_id', 'database');
+        $authenticationMethods = preg_split('/\s+/',
+            trim((string) $authCode->getValue($prefix . '_authentication_methods')),
+            -1, PREG_SPLIT_NO_EMPTY
+        );
+        $authenticationContext = (string) $authCode->getValue($prefix . '_authentication_context');
+
+        if ($externalSessionId !== '') {
+            $this->setExternalSessionId($externalSessionId);
+        } else {
+            $gLogger->warning('OIDC authorization code has no external session identifier; the ID token will be issued without sid.');
+        }
+
+        if ($authenticationTime > 0) {
+            $this->setAuthenticationTime($authenticationTime);
+        }
+
+        if (is_array($authenticationMethods)) {
+            $this->setAuthenticationMethods($authenticationMethods);
+        }
+
+        if ($authenticationContext !== '') {
+            $this->setAuthenticationContext($authenticationContext);
+        }
     }
 
     public function getNonce(): string|null {   
