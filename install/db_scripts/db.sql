@@ -189,10 +189,10 @@ CREATE TABLE %PREFIX%_components
     com_type                    varchar(10)         NOT NULL,
     com_name                    varchar(255)        NOT NULL,
     com_name_intern             varchar(255)        NOT NULL,
-    com_version                 varchar(10)         NOT NULL,
+    com_version                 varchar(32)         NOT NULL,
     com_beta                    smallint            NOT NULL    DEFAULT 0,
     com_update_step             integer             NOT NULL    DEFAULT 0,
-    com_update_version          varchar(10)         NOT NULL    DEFAULT '',
+    com_update_version          varchar(32)         NOT NULL    DEFAULT '',
     com_update_completed        boolean             NOT NULL    DEFAULT true,
     com_timestamp_installed     timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (com_id)

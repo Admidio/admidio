@@ -71,8 +71,7 @@ final class PluginInstaller
         // The update mechanism resolves db_scripts/update_x_y.xml through com_name_intern, so it
         // has to be the directory name and nothing else.
         $component->setValue('com_name_intern', $plugin->id);
-        $component->setValue('com_version', $plugin->versionBase);
-        $component->setValue('com_beta', $plugin->beta);
+        $component->setValue('com_version', $plugin->version);
         $component->save();
 
         PluginRegistry::reset();
@@ -111,7 +110,7 @@ final class PluginInstaller
             'com_type' => PluginRegistry::COMPONENT_TYPE,
             'com_name_intern' => $plugin->id
         ));
-        $componentUpdate->updatePlugin($plugin->versionBase, self::getUpdateNamespace($plugin), $plugin->beta);
+        $componentUpdate->updatePlugin($plugin->version, self::getUpdateNamespace($plugin));
 
         PluginRegistry::reset();
 
