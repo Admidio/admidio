@@ -823,22 +823,26 @@ final class FileSystemUtils
     /**
      * Get the value of the header **Content-Disposition** for a file that is sent to the browser. The name is sent as
      * UTF-8 in the parameter **filename*** (RFC 6266, RFC 5987). The parameter **filename** is an ASCII fallback for
-     * old browsers; each character that is not allowed there is replaced with an underscore. Without **filename***
+     * old browsers: German umlauts and ß are transliterated (ä => ae), every other character that is not allowed
+     * there, and quotes, backslashes and percent signs, are replaced with an underscore. Without **filename***
      * some browsers read the UTF-8 bytes as ISO-8859-1 and show "angezÃ¼ndet" instead of "angezündet".
      * @param string $disposition Either **attachment** (download) or **inline** (show in the browser)
-     * @param string $fileName The name of the file, e.g. with umlauts
+     * @param string $fileName The name of the file as UTF-8, e.g. with umlauts, without HTML encoding
      * @return string Returns the value for the header, without the name of the header
-     * @example getContentDisposition('attachment', 'Müller Übung.pdf') => "attachment; filename="M_ller _bung.pdf"; filename*=UTF-8''M%C3%BCller%20%C3%9Cbung.pdf"
+     * @example getContentDisposition('attachment', 'Müller Übung.pdf') => "attachment; filename="Mueller Uebung.pdf"; filename*=UTF-8''M%C3%BCller%20%C3%9Cbung.pdf"
      */
     public static function getContentDisposition(string $disposition, string $fileName): string
     {
         // a file name has no control characters, they could also break the header
-        $fileName = preg_replace('/[\x00-\x1F\x7F]/u', '', $fileName) ?? '';
+        $fileName = preg_replace('/[\x00-\x1F\x7F]/', '', $fileName);
         if ($fileName === '') {
             $fileName = 'download';
         }
 
-        $asciiFileName = preg_replace('/[^\x20-\x7E]|["\\\\%]/u', '_', $fileName) ?? 'download';
+        $transliterated = strtr($fileName, array('ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue', 'ß' => 'ss'));
+        $pattern = '/[^\x20-\x7E]|["\\\\%]/';
+        // one underscore per character; a name that is not valid UTF-8 is replaced byte by byte
+        $asciiFileName = preg_replace($pattern . 'u', '_', $transliterated) ?? preg_replace($pattern, '_', $transliterated);
 
         return $disposition . '; filename="' . $asciiFileName . '"; filename*=UTF-8\'\'' . rawurlencode($fileName);
     }

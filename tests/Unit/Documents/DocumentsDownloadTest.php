@@ -78,20 +78,20 @@ class DocumentsDownloadTest extends AdmidioTestCase
             'text preview with active markup' => array('document.txt', true, 'inline', 'text/plain'),
             'archive view request' => array('archive.zip', true, 'attachment', 'application/zip'),
             'unknown file type' => array('document.unknown', true, 'attachment', 'application/octet-stream'),
-            // Umlauts: ASCII fallback with one underscore per character, the real name in filename*
+            // Umlauts: ASCII fallback with ae/oe/ue/ss, the real name in filename*
             'umlauts in the file name' => array(
                 'Müller Übung.pdf',
                 false,
                 'attachment',
                 'application/pdf',
-                'Content-Disposition: attachment; filename="M_ller _bung.pdf"; filename*=UTF-8\'\'M%C3%BCller%20%C3%9Cbung.pdf'
+                'Content-Disposition: attachment; filename="Mueller Uebung.pdf"; filename*=UTF-8\'\'M%C3%BCller%20%C3%9Cbung.pdf'
             ),
             'umlauts in the file name, preview' => array(
                 'Sind die Lichter angezündet.pdf',
                 true,
                 'inline',
                 'application/pdf',
-                'Content-Disposition: inline; filename="Sind die Lichter angez_ndet.pdf"; filename*=UTF-8\'\'Sind%20die%20Lichter%20angez%C3%BCndet.pdf'
+                'Content-Disposition: inline; filename="Sind die Lichter angezuendet.pdf"; filename*=UTF-8\'\'Sind%20die%20Lichter%20angez%C3%BCndet.pdf'
             ),
             // quotes, percent signs and backslashes must not break the header of the fallback name
             'quotes, percent sign and backslash in the file name' => array(

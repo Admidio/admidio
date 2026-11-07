@@ -74,20 +74,20 @@ class FileSystemUtilsTest extends AdmidioTestCase
     {
         return array(
             'ASCII name' => array('attachment', 'report.pdf', 'attachment; filename="report.pdf"; filename*=UTF-8\'\'report.pdf'),
-            'umlauts: fallback with one underscore per character, real name in filename*' => array(
+            'umlauts and ß are transliterated in the fallback, the real name is in filename*' => array(
                 'attachment',
                 'Müller Übung.pdf',
-                'attachment; filename="M_ller _bung.pdf"; filename*=UTF-8\'\'M%C3%BCller%20%C3%9Cbung.pdf'
+                'attachment; filename="Mueller Uebung.pdf"; filename*=UTF-8\'\'M%C3%BCller%20%C3%9Cbung.pdf'
             ),
             'inline' => array(
                 'inline',
                 'Sind die Lichter angezündet.pdf',
-                'inline; filename="Sind die Lichter angez_ndet.pdf"; filename*=UTF-8\'\'Sind%20die%20Lichter%20angez%C3%BCndet.pdf'
+                'inline; filename="Sind die Lichter angezuendet.pdf"; filename*=UTF-8\'\'Sind%20die%20Lichter%20angez%C3%BCndet.pdf'
             ),
-            'characters outside of the Basic Latin block' => array(
+            'other characters outside of ASCII: one underscore per character' => array(
                 'attachment',
                 'Straße – 北京.txt',
-                'attachment; filename="Stra_e _ __.txt"; filename*=UTF-8\'\'Stra%C3%9Fe%20%E2%80%93%20%E5%8C%97%E4%BA%AC.txt'
+                'attachment; filename="Strasse _ __.txt"; filename*=UTF-8\'\'Stra%C3%9Fe%20%E2%80%93%20%E5%8C%97%E4%BA%AC.txt'
             ),
             'quotes, percent sign and backslash' => array(
                 'attachment',
@@ -100,10 +100,10 @@ class FileSystemUtilsTest extends AdmidioTestCase
                 'attachment; filename="aX-Injected: 1b.txt"; filename*=UTF-8\'\'aX-Injected%3A%201b.txt'
             ),
             'empty name' => array('attachment', '', 'attachment; filename="download"; filename*=UTF-8\'\'download'),
-            'invalid UTF-8 falls back to a default name instead of breaking the header' => array(
+            'invalid UTF-8: the fallback is replaced byte by byte' => array(
                 'attachment',
                 "a\xFFb.txt",
-                'attachment; filename="download"; filename*=UTF-8\'\'download'
+                'attachment; filename="a_b.txt"; filename*=UTF-8\'\'a%FFb.txt'
             )
         );
     }
