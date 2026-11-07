@@ -97,9 +97,9 @@ try {
     //  * No object ID/UUIDs given: "Change history: Table description 1[, Table description 2, ...]" or "Change history"  (if no tables given)
     //  * Only one table (table column will be hidden): "Change history: OBJECTNAME (Table description)"
     //  *
-    $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $getTables);
+    $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], array_values(array_intersect($getTables, $readableTables)));
     // set headline of the script
-    if ($isUserLog && (!empty($getId) || !empty($getUuid))) {
+    if ($isUserLog && (!empty($getId) || !empty($getUuid)) && $gCurrentUser->hasRightViewProfile($user)) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->readableName()));
     } elseif ($isUserLog) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_USERDATA');
@@ -111,9 +111,13 @@ try {
         }
     } else {
         $objName = '';
-        $useTable = $getTables[0]??'users';
-        $object = ChangelogService::getObjectForTable($useTable);
-        if ($useTable == 'members') {
+        // IDs belong to the originally requested first table. Do not reinterpret them
+        // as IDs of another table, or load an object from an unauthorized table.
+        $useTable = $getTables[0] ?? '';
+        $object = in_array($useTable, $readableTables, true)
+            ? ChangelogService::getObjectForTable($useTable)
+            : null;
+        if ($object !== null && $useTable == 'members') {
             // Memberships are special-cased, as the membership Role UUID is stored as relatedID
             $object = new Role($gDb);
             $object->readDataByUuid($getRelatedId);
@@ -127,7 +131,11 @@ try {
             } elseif (!empty($getId)) {
                 $object->readDataById($getId);
             }
-            $objName = $object->readableName();
+            // User table access can be restricted to the current user's own history.
+            // It does not grant permission to display an arbitrary user's name.
+            if (!($object instanceof User) || $gCurrentUser->hasRightViewProfile($object)) {
+                $objName = $object->readableName();
+            }
         }
         if (count($getTables) == 0) {
             if (empty($objName)) {
