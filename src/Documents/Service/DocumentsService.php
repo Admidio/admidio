@@ -102,11 +102,7 @@ class DocumentsService
         // umlauts. The plain filename is an ASCII fallback, because without filename* some browsers read the
         // UTF-8 bytes as ISO-8859-1 and show "angezÃ¼ndet" instead of "angezündet".
         $fileName = (string)$file->getValue('fil_name', 'database');
-        $asciiFileName = preg_replace(
-            '/[^\x20-\x7E]|["\\\\%]/',
-            '_',
-            strtr($fileName, array('ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue', 'ß' => 'ss'))
-        );
+        $asciiFileName = preg_replace('/[^\x20-\x7E]|["\\\\%]/u', '_', $fileName) ?? 'download';
         header(
             'Content-Disposition: ' . $content . '; filename="' . $asciiFileName . '"; filename*=UTF-8\'\'' . rawurlencode($fileName)
         );
