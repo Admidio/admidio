@@ -14,6 +14,7 @@
  *            save           - Save organization preferences
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
+ *            smtp_oauth_authorize - redirect to the sign-in at the OAuth 2.0 provider of the SMTP server
  *            backup         - back up the database into the directory of the backups
  *            backup_download - send a backup from the directory of the backups
  *            backup_delete  - remove a backup from the directory of the backups
@@ -26,6 +27,7 @@
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\Presenter\PreferencesPresenter;
@@ -38,7 +40,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'backup_download', 'backup_delete',
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'smtp_oauth_authorize', 'backup', 'backup_download', 'backup_delete',
                 'update_check', 'changelog_purge')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
@@ -117,6 +119,14 @@ try {
                 // => EXIT
             }
             break;
+
+        // redirect to the sign-in at the OAuth 2.0 provider; admRedirect() would show its forwarding page for this external URL
+        case 'smtp_oauth_authorize':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            $smtpOAuth = new SmtpOAuth();
+            header('Location: ' . $smtpOAuth->getAuthorizationUrl(), true, 303);
+            exit();
 
         // back up the database into the directory of the backups, then show the list of the backups
         case 'backup':

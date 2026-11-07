@@ -369,6 +369,8 @@ class PreferencesService
         // check form field input and sanitized it from malicious content
         $preferencesForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
         $formValues = $preferencesForm->validate($formData);
+        // Preferences that Admidio maintains itself and that the panel changes together with the validated ones.
+        $internalValues = array();
 
         // Adapt presentation-specific values before canonical preference validation.
         switch ($panel) {
@@ -408,6 +410,30 @@ class PreferencesService
                         $formValues['changelog_table_' . $tableName] = $areaValue;
                     }
                 }
+                break;
+
+            case 'email_dispatch':
+                // Microsoft issues app tokens only within the tenant of the app, not at the common endpoint.
+                if (($formValues['mail_send_method'] ?? '') === 'SMTP_OAUTH'
+                    && ($formValues['mail_smtp_oauth_provider'] ?? '') === 'microsoft'
+                    && ($formValues['mail_smtp_oauth_grant_type'] ?? '') === 'client_credentials'
+                    && (string) ($formValues['mail_smtp_oauth_tenant_id'] ?? '') === '') {
+                    throw new Exception('SYS_FIELD_EMPTY', array('SYS_TENANT_ID'));
+                }
+
+                // The client secret is never shown, so an empty field keeps the stored one; only the
+                // checkbox removes it.
+                if (!empty($formValues['mail_smtp_oauth_client_secret_remove'])) {
+                    $formValues['mail_smtp_oauth_client_secret'] = '';
+                } elseif ((string) ($formValues['mail_smtp_oauth_client_secret'] ?? '') === '') {
+                    unset($formValues['mail_smtp_oauth_client_secret']);
+                }
+                unset($formValues['mail_smtp_oauth_client_secret_remove']);
+
+                if (!empty($formValues['mail_smtp_oauth_refresh_token_remove'])) {
+                    $internalValues['mail_smtp_oauth_refresh_token'] = '';
+                }
+                unset($formValues['mail_smtp_oauth_refresh_token_remove']);
                 break;
 
             case 'update_backup':
@@ -518,7 +544,7 @@ class PreferencesService
         }
 
         if (count($corePreferences) > 0) {
-            $this->persistCorePreferences(PreferenceDefinitions::normalizeValues($corePreferences));
+            $this->persistCorePreferences(PreferenceDefinitions::normalizeValues($corePreferences) + $internalValues);
         }
 
         // clean up
@@ -776,6 +802,14 @@ class PreferencesService
         $disableAutoLogin = isset($normalized['enable_auto_login'])
             && $normalized['enable_auto_login'] === '0'
             && $gSettingsManager->getBool('enable_auto_login');
+
+        // A refresh token only belongs to the app and the directory that issued it.
+        foreach (array('mail_smtp_oauth_provider', 'mail_smtp_oauth_grant_type', 'mail_smtp_oauth_tenant_id', 'mail_smtp_oauth_client_id') as $settingName) {
+            if (isset($normalized[$settingName]) && $normalized[$settingName] !== $gSettingsManager->getString($settingName)) {
+                $normalized['mail_smtp_oauth_refresh_token'] = '';
+                break;
+            }
+        }
 
         $gDb->startTransaction();
         try {

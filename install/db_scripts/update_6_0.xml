@@ -58,5 +58,8 @@
     <step id="200" database="pgsql">CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id)</step>
     <step id="210">CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status)</step>
     <step id="220">CREATE INDEX %PREFIX%_idx_ivr_item_status_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_status, ivr_begin)</step>
+    <!-- OAuth 2.0 refresh tokens of the SMTP dispatch are longer than 255 characters. -->
+    <step id="230" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_value text NOT NULL</step>
+    <step id="240" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_value TYPE text</step>
     <step>stop</step>
 </update>

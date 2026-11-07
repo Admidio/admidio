@@ -9,6 +9,7 @@ use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -1557,7 +1558,7 @@ class PreferencesPresenter extends PagePresenter
             null,
             array('class' => 'form-preferences')
         );
-        $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
+        $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'), 'SMTP_OAUTH' => $gL10n->get('SYS_SMTP_OAUTH'));
         $formEmailDispatch->addRadioButton(
             'mail_send_method',
             $gL10n->get('SYS_SEND_METHOD'),
@@ -1670,6 +1671,73 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_password'],
             self::preferenceInputOptions('mail_smtp_password', array('type' => 'password', 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC'))
         );
+        $selectBoxEntries = array('microsoft' => $gL10n->get('SYS_MICROSOFT_365'), 'google' => $gL10n->get('SYS_GOOGLE'));
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_oauth_provider',
+            $gL10n->get('SYS_PROVIDER'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_oauth_provider'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_PROVIDER_DESC')
+        );
+        $selectBoxEntries = array('authorization_code' => $gL10n->get('SYS_AUTHORIZATION_CODE'), 'client_credentials' => $gL10n->get('SYS_CLIENT_CREDENTIALS'));
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_oauth_grant_type',
+            $gL10n->get('SYS_GRANT_TYPE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_oauth_grant_type'], 'showContextDependentFirstEntry' => false, 'helpTextId' => array('SYS_GRANT_TYPE_DESC', array('SYS_AUTHORIZATION_CODE')))
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_tenant_id',
+            $gL10n->get('SYS_TENANT_ID'),
+            $formValues['mail_smtp_oauth_tenant_id'],
+            self::preferenceInputOptions('mail_smtp_oauth_tenant_id', array('helpTextId' => 'SYS_TENANT_ID_DESC'))
+        );
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_client_id',
+            $gL10n->get('SYS_SSO_CLIENT_ID'),
+            $formValues['mail_smtp_oauth_client_id'],
+            self::preferenceInputOptions('mail_smtp_oauth_client_id')
+        );
+        // The client secret is never shown again: an empty field keeps it, and the browser must not
+        // fill in the password of the login.
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_client_secret',
+            $gL10n->get('SYS_SSO_CLIENT_SECRET'),
+            '',
+            self::preferenceInputOptions('mail_smtp_oauth_client_secret', array(
+                'type' => 'password',
+                'autocomplete' => 'new-password',
+                'placeholder' => $formValues['mail_smtp_oauth_client_secret'] !== '' ? $gL10n->get('SYS_CLIENT_SECRET_STORED') : '',
+                'helpTextId' => 'SYS_SSO_CLIENT_SECRET_HIDDEN'
+            ))
+        );
+        if ($formValues['mail_smtp_oauth_client_secret'] !== '') {
+            $formEmailDispatch->addCheckbox(
+                'mail_smtp_oauth_client_secret_remove',
+                $gL10n->get('SYS_REMOVE_STORED_CLIENT_SECRET'),
+                false
+            );
+        }
+        $formEmailDispatch->addCustomContent(
+            'smtp_oauth_redirect_uri',
+            $gL10n->get('SYS_SSO_REDIRECT_URI'),
+            '<input type="text" class="form-control" value="' . SecurityUtils::encodeHTML(SmtpOAuth::getRedirectUri()) . '" aria-label="' . $gL10n->get('SYS_SSO_REDIRECT_URI') . '" readonly>',
+            array('helpTextId' => 'SYS_SSO_REDIRECT_URI_DESC')
+        );
+        if ($formValues['mail_smtp_oauth_refresh_token'] !== '') {
+            $html = '<p class="text-success">' . $gL10n->get('SYS_CONNECTED') . '</p>';
+        } else {
+            $html = '<p class="text-danger">' . $gL10n->get('SYS_NOT_CONNECTED') . '</p>';
+        }
+        $html .= '<a class="btn btn-secondary admidio-send-csrf-token" id="adm_smtp_oauth_connect" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'smtp_oauth_authorize')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
+            <i class="bi bi-box-arrow-up-right"></i>' . $gL10n->get('SYS_CONNECT_ACCOUNT') . '</a>';
+        $formEmailDispatch->addCustomContent('smtp_oauth_account', $gL10n->get('SYS_ACCOUNT'), $html, array('helpTextId' => 'SYS_CONNECT_ACCOUNT_DESC'));
+        if ($formValues['mail_smtp_oauth_refresh_token'] !== '') {
+            $formEmailDispatch->addCheckbox(
+                'mail_smtp_oauth_refresh_token_remove',
+                $gL10n->get('SYS_DISCONNECT_ACCOUNT'),
+                false
+            );
+        }
         $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));

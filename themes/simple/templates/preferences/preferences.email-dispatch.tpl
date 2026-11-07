@@ -11,16 +11,28 @@
                 $(fieldsToHideOnSingleMode).slideDown("slow");
             }
         });
-        if($("input[name='mail_send_method']:checked").val() !== "SMTP") {
+        var smtpSendMethods = ["SMTP", "SMTP_OAUTH"];
+        function showSmtpAuthenticationSettings() {
+            var sendMethod = $("input[name='mail_send_method']:checked").val();
+            var microsoft = $("#mail_smtp_oauth_provider").val() === "microsoft";
+            $("#mail_smtp_auth_group, #mail_smtp_authentication_type_group, #mail_smtp_password_group").toggle(sendMethod === "SMTP");
+            $("#smtp_oauth_settings").toggle(sendMethod === "SMTP_OAUTH");
+            $("#mail_smtp_oauth_grant_type_group, #mail_smtp_oauth_tenant_id_group").toggle(microsoft);
+            $("#smtp_oauth_authorization").toggle(!microsoft || $("#mail_smtp_oauth_grant_type").val() === "authorization_code");
+        }
+        if(!smtpSendMethods.includes($("input[name='mail_send_method']:checked").val())) {
             $("#smtp_settings").hide();
         }
+        showSmtpAuthenticationSettings();
         $("input[name='mail_send_method']").on("change", function() {
-            if($(this).val() === "SMTP") {
+            if(smtpSendMethods.includes($(this).val())) {
                 $("#smtp_settings").slideDown("slow");
             } else {
                 $("#smtp_settings").slideUp("slow");
             }
+            showSmtpAuthenticationSettings();
         });
+        $("#mail_smtp_oauth_provider, #mail_smtp_oauth_grant_type").on("change", showSmtpAuthenticationSettings);
         $("#mail_smtp_secure").on("change", function() {
             var smtpPorts = {
                 "": 25,
@@ -54,6 +66,23 @@
         {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_authentication_type']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_user']}
         {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_password']}
+        <div id="smtp_oauth_settings">
+            {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_oauth_provider']}
+            {include 'sys-template-parts/form.select.tpl' data=$elements['mail_smtp_oauth_grant_type']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_tenant_id']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_client_id']}
+            {include 'sys-template-parts/form.input.tpl' data=$elements['mail_smtp_oauth_client_secret']}
+            {if isset($elements['mail_smtp_oauth_client_secret_remove'])}
+                {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_smtp_oauth_client_secret_remove']}
+            {/if}
+            <div id="smtp_oauth_authorization">
+                {include 'sys-template-parts/form.custom-content.tpl' data=$elements['smtp_oauth_redirect_uri']}
+                {include 'sys-template-parts/form.custom-content.tpl' data=$elements['smtp_oauth_account']}
+                {if isset($elements['mail_smtp_oauth_refresh_token_remove'])}
+                    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['mail_smtp_oauth_refresh_token_remove']}
+                {/if}
+            </div>
+        </div>
     </div>
     {include 'sys-template-parts/form.custom-content.tpl' data=$elements['send_test_email']}
     {include 'sys-template-parts/form.button.tpl' data=$elements['adm_button_save_email_dispatch']}
