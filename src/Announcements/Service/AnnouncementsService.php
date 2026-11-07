@@ -6,6 +6,7 @@ use Admidio\Announcements\Entity\Announcement;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\RssFeed;
+use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
 use DateTime;
@@ -186,30 +187,25 @@ class AnnouncementsService
      */
     public function rssFeed(string $organizationShortName): void
     {
-        global $gSettingsManager, $gCurrentUser, $gCurrentOrganization, $gL10n, $gCurrentOrgId;
+        global $gCurrentOrganization, $gL10n;
 
-        // Check if RSS is active...
-        if (!$gSettingsManager->getBool('enable_rss')) {
-            throw new Exception('SYS_RSS_DISABLED');
-        }
-
-        if ($organizationShortName !== '') {
-            $organization = new Organization($this->db, $organizationShortName);
-            $organizationName = $organization->getValue('org_longname');
-            $gCurrentUser->setOrganization($organization->getValue('org_id'));
-        } else {
-            $organizationName = $gCurrentOrganization->getValue('org_longname');
-        }
+        $organization = RssFeedAccess::resolveOrganization($this->db, $gCurrentOrganization, $organizationShortName);
+        RssFeedAccess::assertAccessible($organization, 'announcements_module_enabled');
+        $organizationName = $organization->getValue('org_longname');
 
         // create RSS feed object with channel information
         $rss = new RssFeed(
             $organizationName . ' - ' . $gL10n->get('SYS_ANNOUNCEMENTS'),
-            $gCurrentOrganization->getValue('org_homepage'),
+            $organization->getValue('org_homepage'),
             $gL10n->get('SYS_LATEST_FORUM_TOPICS_OF_ORGANIZATION', array($organizationName)),
             $organizationName
         );
 
-        $announcements = $this->findAll(0, 50);
+        $announcements = RssFeedAccess::asGuest(
+            $this->db,
+            $organization,
+            fn () => $this->findAll(0, 50)
+        );
 
         if (count($announcements) > 0) {
             foreach ($announcements as $announcement) {
@@ -226,7 +222,6 @@ class AnnouncementsService
             }
         }
 
-        $gCurrentUser->setOrganization($gCurrentOrgId);
         $rss->getRssFeed();
     }
 
