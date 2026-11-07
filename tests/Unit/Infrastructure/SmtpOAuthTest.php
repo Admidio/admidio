@@ -135,6 +135,16 @@ class SmtpOAuthTest extends AdmidioTestCase
         $this->assertSame(array(), $this->settings->writes, 'an app token leaves the stored refresh token alone');
     }
 
+    public function testAPublicClientSendsNoSecret(): void
+    {
+        $this->configure(array('mail_smtp_oauth_client_secret' => ''));
+        $oauth = (new ScriptedSmtpOAuth())->answerWith(array('access_token' => 'access-1', 'expires_in' => 3599));
+
+        $oauth->getOauth64();
+
+        $this->assertArrayNotHasKey('client_secret', $oauth->requests[0]['parameters'], 'an app without secret signs in with PKCE alone');
+    }
+
     public function testTheTenantCannotLeaveThePathOfTheTokenEndpoint(): void
     {
         $this->configure(array('mail_smtp_oauth_grant_type' => 'client_credentials', 'mail_smtp_oauth_tenant_id' => 'evil.example/x?y#'));
@@ -381,7 +391,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $verifier = $_SESSION['smtp_oauth_authorization'][$first]['code_verifier'];
         $oauth->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-new', 'expires_in' => 3599));
 
-        $oauth->handleAuthorizationResponse($first, 'the-code', '');
+        $oauth->handleAuthorizationResponse(array('state' => $first, 'code' => 'the-code'));
 
         $this->assertSame('https://login.microsoftonline.com/contoso.onmicrosoft.com/oauth2/v2.0/token', $oauth->requests[0]['url']);
         $this->assertEquals(array(
@@ -393,7 +403,20 @@ class SmtpOAuthTest extends AdmidioTestCase
             'client_secret' => 'client-secret'
         ), $oauth->requests[0]['parameters']);
         $this->assertSame(array(array('mail_smtp_oauth_refresh_token', 'refresh-token-new')), $this->settings->writes);
-        $this->assertArrayNotHasKey('smtp_oauth_authorization', $_SESSION, 'a completed sign-in ends every other one that was started');
+    }
+
+    public function testAnotherStartedSignInCanStillBeCompleted(): void
+    {
+        $oauth = new ScriptedSmtpOAuth();
+        $first = $this->startSignIn($oauth);
+        $second = $this->startSignIn($oauth);
+        $oauth->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-a', 'expires_in' => 3599))
+            ->answerWith(array('access_token' => 'access-2', 'refresh_token' => 'refresh-token-b', 'expires_in' => 3599));
+        $oauth->handleAuthorizationResponse(array('state' => $first, 'code' => 'code-a'));
+
+        $oauth->handleAuthorizationResponse(array('state' => $second, 'code' => 'code-b'));
+
+        $this->assertSame('refresh-token-b', $this->settings->values['mail_smtp_oauth_refresh_token'], 'a second tab completes its own sign-in');
     }
 
     public function testAnAnswerToASignInThatWasNeverStartedIsRejected(): void
@@ -401,7 +424,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $oauth = new ScriptedSmtpOAuth();
         $state = $this->startSignIn($oauth);
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(str_repeat('0', 64), 'the-code', ''));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => str_repeat('0', 64), 'code' => 'the-code')));
 
         $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
         $this->assertSame(array(), $oauth->requests);
@@ -415,7 +438,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $state = $this->startSignIn($oauth);
         $_SESSION['smtp_oauth_authorization'][$state]['requested_at'] -= 3600;
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse($state, 'the-code', ''));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
 
         $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
         $this->assertSame(array(), $oauth->requests);
@@ -426,9 +449,9 @@ class SmtpOAuthTest extends AdmidioTestCase
         $oauth = new ScriptedSmtpOAuth();
         $state = $this->startSignIn($oauth);
         $oauth->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-new', 'expires_in' => 3599));
-        $oauth->handleAuthorizationResponse($state, 'the-code', '');
+        $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code'));
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse($state, 'the-code', ''));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
 
         $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
         $this->assertCount(1, $oauth->requests);
@@ -443,7 +466,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $state = $this->startSignIn($oauth);
         $GLOBALS[$global] = $value;
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse($state, 'the-code', ''));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
 
         $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
         $this->assertSame(array(), $oauth->requests);
@@ -462,7 +485,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $oauth = new ScriptedSmtpOAuth();
         $state = $this->startSignIn($oauth);
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse($state, '', 'access_denied'));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'error' => 'access_denied')));
 
         $this->assertSame('SYS_OAUTH_REQUEST_FAILED(access_denied)', $exception->getMessage());
         $this->assertSame(array(), $oauth->requests);
@@ -473,14 +496,49 @@ class SmtpOAuthTest extends AdmidioTestCase
         $oauth = new ScriptedSmtpOAuth();
         $state = $this->startSignIn($oauth);
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(
-            $state,
-            '',
-            'access_denied',
-            "AADSTS65004: User declined to consent to access the app.\r\nTrace ID: 0000aaaa\r\nCorrelation ID: bbbb"
-        ));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array(
+            'state' => $state,
+            'error' => 'access_denied',
+            'error_description' => "AADSTS65004: User declined to consent to access the app.\r\nTrace ID: 0000aaaa\r\nCorrelation ID: bbbb"
+        )));
 
         $this->assertSame('SYS_OAUTH_REQUEST_FAILED(access_denied: AADSTS65004: User declined to consent to access the app.)', $exception->getMessage());
+    }
+
+    public function testTheProviderCannotPutHtmlIntoTheSignInError(): void
+    {
+        $oauth = new ScriptedSmtpOAuth();
+        $state = $this->startSignIn($oauth);
+
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array(
+            'state' => $state,
+            'error' => 'invalid_request',
+            'error_description' => '<img src=x onerror=alert(1)> & "more"'
+        )));
+
+        $this->assertSame('SYS_OAUTH_REQUEST_FAILED(invalid_request: &lt;img src=x onerror=alert(1)&gt; &amp; &quot;more&quot;)', $exception->getMessage(), 'encoded exactly once');
+    }
+
+    public function testTheCodeIsRedeemedAsTheProviderSentIt(): void
+    {
+        $oauth = new ScriptedSmtpOAuth();
+        $state = $this->startSignIn($oauth);
+        $oauth->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-new', 'expires_in' => 3599));
+
+        $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => '4/0Ad&b"c\'d'));
+
+        $this->assertSame('4/0Ad&b"c\'d', $oauth->requests[0]['parameters']['code'], 'the code is not HTML encoded');
+    }
+
+    public function testAStateThatIsNoTextIsRejected(): void
+    {
+        $oauth = new ScriptedSmtpOAuth();
+        $state = $this->startSignIn($oauth);
+
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => array($state), 'code' => 'the-code')));
+
+        $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
+        $this->assertSame(array(), $oauth->requests);
     }
 
     public function testTheErrorOfASignInThatWasNeverStartedIsNotShown(): void
@@ -488,7 +546,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $oauth = new ScriptedSmtpOAuth();
         $this->startSignIn($oauth);
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse('forged', '', 'Your account is blocked, call +1 555 0100'));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => 'forged', 'error' => 'Your account is blocked, call +1 555 0100')));
 
         $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getMessage());
     }
@@ -499,7 +557,7 @@ class SmtpOAuthTest extends AdmidioTestCase
         $state = $this->startSignIn($oauth);
         $oauth->answerWith(array('access_token' => 'access-1', 'expires_in' => 3599));
 
-        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse($state, 'the-code', ''));
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
 
         $this->assertSame('SYS_OAUTH_NO_REFRESH_TOKEN', $exception->getTranslationId(), 'the admin learns that offline access is missing');
         $this->assertSame(array(), $this->settings->writes);

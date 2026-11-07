@@ -30,13 +30,10 @@ try {
         throw new Exception('SYS_NO_RIGHTS');
     }
 
-    $getState = admFuncVariableIsValid($_GET, 'state', 'string');
-    $getCode = admFuncVariableIsValid($_GET, 'code', 'string');
-    $getError = admFuncVariableIsValid($_GET, 'error', 'string');
-    $getErrorDescription = admFuncVariableIsValid($_GET, 'error_description', 'string');
-
+    // not read with admFuncVariableIsValid(), because the code goes back to the provider unchanged
+    // and SmtpOAuth encodes the error itself
     $smtpOAuth = new SmtpOAuth();
-    $smtpOAuth->handleAuthorizationResponse($getState, $getCode, $getError, $getErrorDescription);
+    $smtpOAuth->handleAuthorizationResponse($_GET);
 
     admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
     // => EXIT

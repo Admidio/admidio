@@ -127,18 +127,16 @@ class SmtpOAuth implements OAuthTokenProvider
 
     /**
      * Completes the sign-in when the provider returned to the redirect URI and stores the refresh
-     * token of the mailbox user. The parameters are expected HTML encoded, as admFuncVariableIsValid()
-     * returns them.
-     * @param string $state The state the provider returned.
-     * @param string $code The authorization code the provider returned.
-     * @param string $error The error code the provider returned instead of an authorization code.
-     * @param string $errorDescription The description of the error.
+     * token of the mailbox user.
+     * @param array<string,mixed> $response The query parameters as the provider sent them: the state
+     *        and the authorization code, or an error and its description.
      * @throws Exception
      */
-    public function handleAuthorizationResponse(string $state, string $code, string $error, string $errorDescription = ''): void
+    public function handleAuthorizationResponse(array $response): void
     {
         global $gSettingsManager, $gCurrentUserId, $gCurrentOrgId;
 
+        $state = self::getParameter($response, 'state');
         $signIn = $_SESSION[self::SESSION_KEY][$state] ?? null;
 
         if (!is_array($signIn)
@@ -147,15 +145,16 @@ class SmtpOAuth implements OAuthTokenProvider
             || $signIn['requested_at'] < time() - self::SIGN_IN_LIFETIME) {
             throw new Exception('SYS_OAUTH_SIGN_IN_EXPIRED');
         }
-        unset($_SESSION[self::SESSION_KEY]);
+        unset($_SESSION[self::SESSION_KEY][$state]);
 
+        $error = self::getParameter($response, 'error');
         if ($error !== '') {
-            throw new Exception('SYS_OAUTH_REQUEST_FAILED', array(self::getErrorReason($error, $errorDescription)));
+            throw self::requestFailed(self::getErrorReason($error, self::getParameter($response, 'error_description')));
         }
 
         $token = $this->requestToken(array(
             'grant_type' => 'authorization_code',
-            'code' => $code,
+            'code' => self::getParameter($response, 'code'),
             'redirect_uri' => self::getRedirectUri(),
             'code_verifier' => $signIn['code_verifier']
         ));
@@ -211,7 +210,10 @@ class SmtpOAuth implements OAuthTokenProvider
         global $gSettingsManager;
 
         $parameters['client_id'] = $gSettingsManager->getString('mail_smtp_oauth_client_id');
-        $parameters['client_secret'] = $gSettingsManager->getString('mail_smtp_oauth_client_secret');
+        // an app without secret (public client) signs in with PKCE alone and must not send an empty one
+        if ($gSettingsManager->getString('mail_smtp_oauth_client_secret') !== '') {
+            $parameters['client_secret'] = $gSettingsManager->getString('mail_smtp_oauth_client_secret');
+        }
 
         $response = $this->sendTokenRequest($this->getUrl('tokenUrl'), $parameters);
         $token = json_decode($response['body'], true);
@@ -221,7 +223,7 @@ class SmtpOAuth implements OAuthTokenProvider
             if (is_array($token) && is_string($token['error'] ?? null)) {
                 $reason = self::getErrorReason($token['error'], is_string($token['error_description'] ?? null) ? $token['error_description'] : '');
             }
-            throw new Exception('SYS_OAUTH_REQUEST_FAILED', array(SecurityUtils::encodeHTML($reason)));
+            throw self::requestFailed($reason);
         }
 
         return $token;
@@ -247,7 +249,7 @@ class SmtpOAuth implements OAuthTokenProvider
         $body = curl_exec($curl);
 
         if ($body === false) {
-            throw new Exception('SYS_OAUTH_REQUEST_FAILED', array(SecurityUtils::encodeHTML(curl_error($curl))));
+            throw self::requestFailed(curl_error($curl));
         }
 
         return array('status' => (int)curl_getinfo($curl, CURLINFO_RESPONSE_CODE), 'body' => $body);
@@ -274,6 +276,23 @@ class SmtpOAuth implements OAuthTokenProvider
         $tenant = $gSettingsManager->getString('mail_smtp_oauth_tenant_id');
 
         return str_replace('#TENANT#', rawurlencode($tenant !== '' ? $tenant : 'common'), $this->getProvider()[$type]);
+    }
+
+    /**
+     * @return string The parameter as the provider sent it, or an empty string if it is missing or no text.
+     */
+    private static function getParameter(array $response, string $name): string
+    {
+        return is_string($response[$name] ?? null) ? $response[$name] : '';
+    }
+
+    /**
+     * @param string $reason The reason as the provider or cURL reported it.
+     * @return Exception The error for the admin, with the reason encoded for the HTML output.
+     */
+    private static function requestFailed(string $reason): Exception
+    {
+        return new Exception('SYS_OAUTH_REQUEST_FAILED', array(SecurityUtils::encodeHTML($reason)));
     }
 
     private static function base64UrlEncode(string $data): string

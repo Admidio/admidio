@@ -413,6 +413,14 @@ class PreferencesService
                 break;
 
             case 'email_dispatch':
+                // Microsoft issues app tokens only within the tenant of the app, not at the common endpoint.
+                if (($formValues['mail_send_method'] ?? '') === 'SMTP_OAUTH'
+                    && ($formValues['mail_smtp_oauth_provider'] ?? '') === 'microsoft'
+                    && ($formValues['mail_smtp_oauth_grant_type'] ?? '') === 'client_credentials'
+                    && (string) ($formValues['mail_smtp_oauth_tenant_id'] ?? '') === '') {
+                    throw new Exception('SYS_FIELD_EMPTY', array('SYS_TENANT_ID'));
+                }
+
                 // The client secret is never shown, so an empty field keeps the stored one; only the
                 // checkbox removes it.
                 if (!empty($formValues['mail_smtp_oauth_client_secret_remove'])) {

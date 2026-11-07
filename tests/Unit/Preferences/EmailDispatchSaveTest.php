@@ -8,14 +8,17 @@
 
 namespace Admidio\Tests\Unit\Preferences;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Tests\Support\AdmidioTestCase;
+use Admidio\Tests\Unit\Infrastructure\Support\SmtpOAuthLanguageDouble;
+use Admidio\Tests\Unit\Infrastructure\Support\SmtpOAuthLoggerDouble;
 use Admidio\Tests\Unit\Infrastructure\Support\SmtpOAuthSettingsDouble;
 use InvalidArgumentException;
 
 class EmailDispatchSaveTest extends AdmidioTestCase
 {
-    private const GLOBALS = array('gSettingsManager', 'gCurrentSession', 'gDb');
+    private const GLOBALS = array('gSettingsManager', 'gCurrentSession', 'gDb', 'gL10n', 'gLogger');
 
     private array $savedGlobals = array();
 
@@ -26,6 +29,8 @@ class EmailDispatchSaveTest extends AdmidioTestCase
         foreach (self::GLOBALS as $name) {
             $this->savedGlobals[$name] = $GLOBALS[$name] ?? null;
         }
+        $GLOBALS['gL10n'] = new SmtpOAuthLanguageDouble();
+        $GLOBALS['gLogger'] = new SmtpOAuthLoggerDouble();
 
         // the form object returns what was posted, as validate() does for valid input
         $GLOBALS['gCurrentSession'] = new class {
@@ -186,6 +191,39 @@ class EmailDispatchSaveTest extends AdmidioTestCase
 
         $this->assertSame('client-id', $settings->values['mail_smtp_oauth_client_id']);
         $this->assertSame('refresh-token-1', $settings->values['mail_smtp_oauth_refresh_token'], 'nothing of the panel was saved, so the account still belongs to it');
+    }
+
+    public function testClientCredentialsNeedTheTenant(): void
+    {
+        $settings = $this->connectedAccount();
+
+        try {
+            $this->post(array('mail_smtp_oauth_grant_type' => 'client_credentials', 'mail_smtp_oauth_tenant_id' => ''));
+            $this->fail('The empty tenant was expected to be rejected.');
+        } catch (Exception $exception) {
+            $this->assertSame('SYS_FIELD_EMPTY(SYS_TENANT_ID)', $exception->getMessage(), 'Microsoft issues app tokens only within the tenant');
+        }
+
+        $this->assertSame('authorization_code', $settings->values['mail_smtp_oauth_grant_type'], 'nothing of the panel was saved');
+    }
+
+    /**
+     * @dataProvider withoutTenant
+     */
+    public function testOtherwiseTheTenantMayBeEmpty(array $posted): void
+    {
+        $settings = $this->save($posted + array('mail_smtp_oauth_tenant_id' => ''));
+
+        $this->assertSame('', $settings->values['mail_smtp_oauth_tenant_id']);
+    }
+
+    public static function withoutTenant(): array
+    {
+        return array(
+            'authorization code for every account' => array(array()),
+            'Google with the hidden grant type of Microsoft' => array(array('mail_smtp_oauth_provider' => 'google', 'mail_smtp_oauth_grant_type' => 'client_credentials')),
+            'SMTP Basic Auth with the hidden grant type' => array(array('mail_send_method' => 'SMTP', 'mail_smtp_oauth_grant_type' => 'client_credentials'))
+        );
     }
 
     public function testTheCommandLineRemovesTheRefreshTokenOfAnotherAppToo(): void
