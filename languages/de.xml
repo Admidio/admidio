@@ -255,7 +255,8 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">Eine Ankündigung wurde geändert auf #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">Eine neue Ankündigung wurde angelegt auf #VAR1#</string>
   <string name="SYS_ANNUALLY">Jährlich</string>
-  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Eine dauerhafte Installations-ID ermöglicht es, Meldungen über die Zeit zu verknüpfen. Der empfangende Server kann die IP-Adresse des Absenders sehen; Namen von Drittanbieter-Plugins können eine Organisation identifizieren. Das vollständige JSON, das übermittelt wird, wird unten angezeigt.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das folgende JSON beschreibt die Daten, die übermittelt werden.</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">Aus Datenschutzgründen zeigt dieser Update-Dialog nur die JSON-Struktur mit Platzhaltern. Konkrete Installationsdaten werden ausgeblendet, da aktuell keine gültige Anmeldung vorliegt.</string>
   <string name="SYS_APPLY">Übernehmen</string>
   <string name="SYS_APPLY_ALL_AND_UPLOAD">Alle übernehmen &amp; hochladen</string>
   <string name="SYS_APPOINTMENT">Termin</string>

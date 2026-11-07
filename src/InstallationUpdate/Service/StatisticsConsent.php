@@ -27,7 +27,25 @@ final class StatisticsConsent
         }
         $statistics = new InstallationStatistics($previousVersion);
         $_SESSION[self::SESSION_DATA] = $statistics->getInfoData($tenantId);
-        $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($_SESSION[self::SESSION_DATA]));
+        // The update dialog can be viewed before authentication. Never expose installation data here.
+        $schemaOnly = $previousVersion !== null;
+        $preview = $schemaOnly ? array(
+            'id' => '<uuid>',
+            'timestamp' => '<datetime>',
+            'database' => array('type' => '<string>', 'version' => '<string>'),
+            'admidio' => array(
+                'version' => '<string>',
+                'previous_version' => '<string|null>',
+                'language' => '<string>',
+                'plugins' => array('<plugin>' => '<version>')
+            ),
+            'php' => array(
+                'version' => '<string>',
+                'extensions' => array('<extension>' => '<version|false>')
+            )
+        ) : $_SESSION[self::SESSION_DATA];
+        $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($preview));
+        $page->assignSmartyVariable('statisticsSchemaOnly', $schemaOnly);
         $enabled = !isset($gSettingsManager) || !$gSettingsManager->has('system_statistics_enabled')
             || $gSettingsManager->getBool('system_statistics_enabled');
         $page->assignSmartyVariable('statisticsEnabled', $enabled);

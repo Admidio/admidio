@@ -252,7 +252,8 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNUALLY">Annually</string>
-  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. A persistent installation ID allows reports to be linked over time. The receiving server can see the sender’s IP address, and third-party plugin names may identify an organization. The complete JSON data to be sent is shown below.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. A persistent installation ID allows reports to be linked over time. The receiving server can see the sender’s IP address, and third-party plugin names may identify an organization. The JSON below describes the data to be sent.</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">For privacy reasons, this update dialog only shows the JSON structure with placeholders. Actual installation data are hidden because the dialog can be opened before logging in.</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_APPLY_ALL_AND_UPLOAD">Accept all &amp; upload</string>
   <string name="SYS_APPOINTMENT">Appointment</string>

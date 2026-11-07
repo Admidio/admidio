@@ -102,15 +102,28 @@ class StatisticsConsentTest extends TestCase
         $GLOBALS['gDbType'] = 'mysql';
         $_SESSION['installationStatisticsData'] = array('id' => 'stable-tenant');
         $page = $this->getMockBuilder(InstallationPresenter::class)->disableOriginalConstructor()->getMock();
-        $page->expects($this->exactly(2))->method('assignSmartyVariable')
+        $page->expects($this->exactly(3))->method('assignSmartyVariable')
             ->willReturnCallback(function (string $name, $value) use ($previousVersion): void {
                 if ($name === 'statisticsEnabled') {
                     $this->assertTrue($value);
                     return;
                 }
+                if ($name === 'statisticsSchemaOnly') {
+                    $this->assertSame($previousVersion !== null, $value);
+                    return;
+                }
                 $this->assertSame('statisticsJson', $name);
                 $json = $value;
                 $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                if ($previousVersion !== null) {
+                    $this->assertSame('<uuid>', $data['id']);
+                    $this->assertSame(array('<plugin>' => '<version>'), $data['admidio']['plugins']);
+                    $this->assertSame(array('<extension>' => '<version|false>'), $data['php']['extensions']);
+                    $this->assertStringNotContainsString('stable-tenant', $json);
+                    $this->assertStringNotContainsString('pt-BR', $json);
+                    $this->assertStringNotContainsString('8.0.40', $json);
+                    return;
+                }
                 $this->assertSame('stable-tenant', $data['id']);
                 $this->assertSame($previousVersion, $data['admidio']['previous_version']);
                 $this->assertSame($previousVersion === null ? 'de' : 'pt-BR', $data['admidio']['language']);

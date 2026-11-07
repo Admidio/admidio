@@ -8,6 +8,9 @@
                 <div class="modal-body">
                     <p>{$l10n->get('SYS_PSEUDONYMOUS_STATISTICS_DESC')}
                         {if $statisticsShowCheckbox|default:true}{$l10n->get('SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC')}{/if}</p>
+                    {if $statisticsSchemaOnly|default:false}
+                        <p>{$l10n->get('SYS_STATISTICS_SCHEMA_ONLY_DESC')}</p>
+                    {/if}
                     <pre class="bg-body-tertiary border rounded p-3"><code>{$statisticsJson|escape:'html'}</code></pre>
                     {if $statisticsShowCheckbox|default:true}
                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['adm_send_statistics']}
