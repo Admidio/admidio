@@ -164,6 +164,14 @@ class InstallationStatistics
     {
         global $gDb, $gStatisticsUrl;
 
+        if (!isset($gStatisticsUrl)) {
+            $statement = $gDb->queryPrepared(
+                'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?', array(1));
+            if ($statement->fetchColumn() === 'ADM_DEMO') {
+                return false;
+            }
+        }
+
         $infoData ??= $this->getInfoData();
         $tenantId = $gDb instanceof Database ? InstallationIdentifier::get($gDb) : null;
         if ($tenantId === null) {

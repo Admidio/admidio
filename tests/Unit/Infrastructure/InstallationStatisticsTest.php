@@ -114,6 +114,46 @@ class InstallationStatisticsTest extends TestCase
         return array('network failure' => array(0), 'redirect' => array(302), 'server error' => array(503));
     }
 
+    public static function demoEndpoints(): array
+    {
+        return array(
+            'unset endpoint' => array(null, false),
+            'configured endpoint' => array('https://local.example.test/api/statistics.php', true)
+        );
+    }
+
+    /** @dataProvider demoEndpoints */
+    public function testDemoOnlySendsToConfiguredEndpoint(?string $url, bool $expectedSend): void
+    {
+        if ($url !== null) {
+            $GLOBALS['gStatisticsUrl'] = $url;
+        }
+        $statement = $this->createMock(PDOStatement::class);
+        $statement->method('fetchColumn')->willReturn('ADM_DEMO');
+        $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
+            ->onlyMethods(array('queryPrepared'))->getMock();
+        $database->method('queryPrepared')->willReturnCallback(function (string $sql, array $params) use ($statement) {
+            $this->assertSame('SELECT org_shortname FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?', $sql);
+            $this->assertSame(array(1), $params);
+            return $statement;
+        });
+        if (!$expectedSend) {
+            $GLOBALS['gDb'] = $database;
+        }
+        $sent = false;
+        $statistics = $this->getMockBuilder(InstallationStatistics::class)
+            ->setConstructorArgs(array(null, static function () use (&$sent): int {
+                $sent = true;
+                return 503;
+            }))
+            ->onlyMethods(array('getInfoData', 'recordSuccessfulSend'))->getMock();
+        $statistics->expects($this->never())->method('getInfoData');
+        $statistics->expects($this->never())->method('recordSuccessfulSend');
+
+        $this->assertFalse($statistics->sent(array('id' => 'tenant')));
+        $this->assertSame($expectedSend, $sent);
+    }
+
     /** @dataProvider failedStatuses */
     public function testFailedResponseDoesNotRecordASuccessfulSend(int $statusCode): void
     {
