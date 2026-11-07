@@ -168,7 +168,7 @@ function curlTransport(string $url, int $maxBytes, array $headers = array()): ar
     $success = curl_exec($curl);
     $status = (int)curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
     $error = curl_error($curl);
-    curl_close($curl);
+    unset($curl);
 
     if ($tooLarge) {
         throw UpdaterException::withDetail('SYS_CORE_UPDATE_DOWNLOAD_FAILED', 'The download is larger than ' . $maxBytes . ' bytes: ' . $url, array(''));

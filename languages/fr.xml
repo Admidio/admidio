@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">La catégorie #VAR1_BOLD# ne peut pas être supprimée, puisqu\'il y a encore des entrées dépendantes: #VAR2#.</string>
   <string name="SYS_DONT_SHOW">Ne pas afficher</string>
   <string name="SYS_DOWNLOAD_ALBUM">Télécharger l\'album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Télécharger un fichier</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Télécharger la photo</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio nécessite #VAR1# ou supérieur</string>
   <string name="SYS_PIPE">Barre verticale (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Sélectionner une option</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1608,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Envoyer un courriel</string>
   <string name="SYS_SEND_EMAIL_FORMER">Envoyer des courriels aux anciens membres</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Si cette option est activée, des couriels peuvent être envoyés à des anciens membres individuels, ainsi qu\'à tous les anciens membres d\'un rôle. (Par défaut : Activé)</string>
-  <string name="SYS_SEND_EMAIL_TO">Envoyer un courriel à #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Envoyer des courriels à toutes les adresses de l\'utilisateur</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Si ce paramètre est activé, des courriels sont envoyés à toutes les adresses de l\'utilisateur stockées dans le profil. Si ce paramètre est désactivé, les courriels ne sont envoyés à l\'adresse de courriel qu\'à partir du champ de profil avec le nom interne EMAIL. (Par défaut : Activé)</string>
   <string name="SYS_SEND_GREETING_CARD">Envoyer une carte de vœux</string>

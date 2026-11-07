@@ -29,6 +29,7 @@ final class EntryTest extends AdmidioTestCase
 
         $this->root = sys_get_temp_dir() . '/adm_updater_entry_' . uniqid();
         $this->createUpdater($this->root . '/install/core-update', 'INSTALLED');
+        $this->root = realpath($this->root);
         foreach (array('index.php', 'cli.php', 'entry.php') as $file) {
             copy(dirname(__DIR__, 3) . '/install/core-update/' . $file, $this->root . '/install/core-update/' . $file);
         }

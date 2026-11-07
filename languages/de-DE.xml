@@ -591,15 +591,15 @@
   <string name="SYS_CORE_UPDATE_START_DESC">Der Updater prüft, welche Version verfügbar ist und ob dieser Server dafür bereit ist. Es wird nichts verändert, bevor Sie bestätigen.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Update starten oder fortsetzen</string>
   <string name="SYS_CORE_UPDATE_STEPS">Schritte des Updates</string>
-  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Datenbank sichern</string>
   <string name="SYS_CORE_UPDATE_STEP_CHECK">Voraussetzungen prüfen</string>
+  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Installation vorbereiten</string>
+  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Update prüfen</string>
+  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Datenbank sichern</string>
+  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Dateien installieren</string>
   <string name="SYS_CORE_UPDATE_STEP_DATABASE">Datenbank aktualisieren</string>
-  <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Update herunterladen</string>
-  <string name="SYS_CORE_UPDATE_STEP_FINISH">Abschließen</string>
-  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Dateien ersetzen</string>
-  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Dateien entpacken und vergleichen</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Update abschließen</string>
   <string name="SYS_CORE_UPDATE_STEP_RESTORE">Vorherige Version wiederherstellen</string>
-  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Änderungen prüfen</string>
+  <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Update herunterladen</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio wurde auf Version #VAR1# aktualisiert.</string>
   <string name="SYS_CORE_UPDATE_TARGET">Neue Version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio-Update</string>
@@ -759,7 +759,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Datenbank-Backup herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
   <string name="SYS_DOWNLOAD_ICAL">iCal herunterladen</string>
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
@@ -1504,7 +1503,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
-  <string name="SYS_PLUGIN_ADD">Plugin hinzufügen</string>
   <string name="SYS_PLUGIN_ADD_FROM_DIRECTORY">Aus dem Plugin-Verzeichnis hinzufügen</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">Das Plugin #VAR1# ist bereits vorhanden. Seine Dateien werden nur ersetzt, wenn dies ausdrücklich angefordert wurde.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">Das Plugin #VAR1# ist bereits installiert.</string>
@@ -1816,7 +1814,6 @@
   <string name="SYS_SEND_EMAIL">E-Mail senden</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: ja)</string>
-  <string name="SYS_SEND_EMAIL_TO">Senden Sie eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">E-Mails an alle E-Mail-Adressen im Profil senden</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: nein)</string>
   <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
@@ -2303,6 +2300,10 @@
   <string name="SYS_YOUR_LISTS">Ihre Listen</string>
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das folgende JSON beschreibt die Daten, die übermittelt werden.</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">Aus Datenschutzgründen zeigt dieser Update-Dialog nur die JSON-Struktur mit Platzhaltern. Konkrete Installationsdaten werden ausgeblendet, da aktuell keine gültige Anmeldung vorliegt.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#pseudonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird beim Laden der Organisationsdaten geprüft.</string>
   <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS">Benutzernamen für Gäste anonymisieren</string>
   <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC">Wenn diese Option aktiviert ist, werden die Namen von Verwaltern und Empfängern für Gäste im Inventar durch „Mitglied“ ersetzt. (Voreinstellung: ja)</string>
   <string name="SYS_BORROWINGS">Ausleihen</string>

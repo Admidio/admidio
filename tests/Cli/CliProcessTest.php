@@ -22,6 +22,13 @@ class CliProcessTest extends DatabaseTestCase
 {
     use CliSubprocess;
 
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        self::ensureCliPolicy();
+    }
+
+
     /**
      * Test that the program starts
      *

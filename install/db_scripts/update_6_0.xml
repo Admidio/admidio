@@ -58,5 +58,17 @@
     <step id="200" database="pgsql">CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id)</step>
     <step id="210">CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status)</step>
     <step id="220">CREATE INDEX %PREFIX%_idx_ivr_item_status_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_status, ivr_begin)</step>
+    <step id="225" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY prf_org_id integer unsigned NULL</step>
+    <step id="225" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_org_id DROP NOT NULL</step>
+    <step id="230">UpdateStepsCode::updateStep60CreateTenantId</step>
+    <step id="240">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
+        SELECT org_id, 'system_statistics_enabled', '1'
+        FROM %PREFIX%_organizations
+        WHERE NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
+        WHERE prf_org_id = org_id AND prf_name = 'system_statistics_enabled')</step>
+    <step id="250">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
+        SELECT NULL, 'system_statistics_last_sent', ''
+        WHERE NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
+        WHERE prf_org_id IS NULL AND prf_name = 'system_statistics_last_sent')</step>
     <step>stop</step>
 </update>

@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Не удалось удалить категорию #VAR1_BOLD#, потому что в ней есть записи, зависящие от #VAR2#.</string>
   <string name="SYS_DONT_SHOW">Не отображать</string>
   <string name="SYS_DOWNLOAD_ALBUM">Скачать альбом</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Скачать файл</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Скачать фотографию</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Для Admidio требуется #VAR1# или выше</string>
   <string name="SYS_PIPE">Вертикальная черта (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Выбрать вариант</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1608,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Отправить эл. письмо</string>
   <string name="SYS_SEND_EMAIL_FORMER">Отправить эл. письма бывшим участникам</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Если этот параметр установлен, то письма могут быть отправлены как отдельным бывшим участникам, так и всем бывшим участникам роли. (По умолчанию: активировано)</string>
-  <string name="SYS_SEND_EMAIL_TO">Отправить эл. письмо #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Отправить эл. письма на все адреса эл. почты пользователя</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Если эта настройка активирована, письма будут отправляться на все адреса эл. почты пользователей, хранящиеся в профиле. Если настройка отключена, письма будут отправляться только на адрес эл. почты из поля профиля с внутренним именем EMAIL. (По умолчанию: включено)</string>
   <string name="SYS_SEND_GREETING_CARD">Отправить поздравительную открытку</string>

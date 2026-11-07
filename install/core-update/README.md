@@ -371,3 +371,12 @@ with it. An installation that skips that release cannot verify later ones and ha
 release by hand. If the private key leaks, publish a new key and announce a manual update.
 
 For a local test server, `--test-release` puts the public part of a test key into the package.
+
+## Pseudonymous statistics
+
+The review page offers an optional statistics checkbox and the complete JSON preview. The saved
+choice of the first organization is retained; a missing preference defaults to disabled. The
+preview and choice are kept in the update workspace across interruptions. Only a successful
+database update saves the preference and sends the reviewed snapshot, at most once per update.
+The CLI accepts `apply --statistics=yes|no`; omitting it retains the saved choice. With `yes`,
+the preview is printed before confirmation. `--yes` alone does not enable statistics.
