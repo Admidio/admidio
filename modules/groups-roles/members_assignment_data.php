@@ -47,6 +47,7 @@
  *****************************************************************************/
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 
@@ -68,6 +69,11 @@ try {
     $jsonArray = array('draw' => $getDraw);
 
     header('Content-Type: application/json');
+
+    // Apply the same module access restriction before reading roles or users.
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
 
     // create object of the commited role
     $role = new Role($gDb);
