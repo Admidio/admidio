@@ -940,21 +940,25 @@ class SSOClientPresenter extends PagePresenter
 
 
     /**
-     * Create the action to enable or disable a client via a JSON call.
+     * Display a toggle to enable or disable a client via a JSON call.
      * @param SSOClient $client
-     * @return array
+     * @return string
      * @throws Exception
      */
-    protected function generateEnableAction(SSOClient $client): array
+    protected function generateEnableLink(SSOClient $client): string
     {
         global $gL10n;
         $enabled = $client->isEnabled();
-        return array(
+        $action = array(
             'class' => 'toggle-client-status',
-            'icon' => 'bi bi-toggle-' . ($enabled ? 'on' : 'off'),
+            'icon' => 'bi bi-toggle-' . ($enabled ? 'on' : 'off') . ' fs-2',
             'tooltip' => $gL10n->get($enabled ? 'SYS_DISABLE' : 'SYS_ENABLE'),
             'attributes' => array('data-uuid' => $client->getValue($client->getColumnPrefix() . '_uuid'), 'data-enabled' => $enabled ? '1' : '0')
         );
+        $template = $this->smarty->createTemplate('sys-template-parts/list.action.tpl');
+        $template->assign('actionItem', $action);
+        $template->assign('actionClass', 'admidio-icon-link');
+        return $template->fetch();
     }
 
     /**
@@ -1026,7 +1030,7 @@ class SSOClientPresenter extends PagePresenter
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
             $client = $SAMLService->getClientFromUUID($clientUUID);
             $templateClient = array();
-            $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
+            $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';
             $templateClient[] = $client->getValue('smc_client_id');
             $templateClient[] = $client->getValue('smc_acs_url');
@@ -1042,7 +1046,6 @@ class SSOClientPresenter extends PagePresenter
                     'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
                 )
             );
-            $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
             $templateClient[] = $actionsTemplate->fetch();
@@ -1090,7 +1093,7 @@ class SSOClientPresenter extends PagePresenter
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $clientUUID));
             $client = $OIDCService->createClientObject($clientUUID);
             $templateClient = array();
-            $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
+            $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';
             $templateClient[] = $client->getValue('ocl_client_id');
             $templateClient[] = $client->getValue('ocl_redirect_uri');
@@ -1106,7 +1109,6 @@ class SSOClientPresenter extends PagePresenter
                     'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
                 )
             );
-            $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
             $templateClient[] = $actionsTemplate->fetch();
@@ -1137,11 +1139,10 @@ class SSOClientPresenter extends PagePresenter
                   \$icon.removeClass('bi-toggle-' + (currentlyEnabled ? 'on' : 'off'))
                        .addClass('bi-toggle-' + (currentlyEnabled ? 'off' : 'on'));
 
-                  // Update the action label and the state displayed in the table.
+                  // Update the action label and tooltip.
                   var label = currentlyEnabled ? " . json_encode($gL10n->get('SYS_ENABLE'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_DISABLE'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";
                   \$link.attr('aria-label', label);
                   \$icon.attr('data-bs-original-title', label);
-                  \$link.closest('tr').find('.admidio-client-state').text(currentlyEnabled ? " . json_encode($gL10n->get('SYS_DISABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_ENABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ");
                   bootstrap.Tooltip.getInstance(\$icon[0])?.setContent({'.tooltip-inner': label});
                   \$link.children('span').text(label);
 
