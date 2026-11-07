@@ -1606,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Изпращане на имейл</string>
   <string name="SYS_SEND_EMAIL_FORMER">Изпращане на имейли до бивши участници</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then emails could be sent to individual former members, as well as to all former members of a role. (Default: Activated)</string>
-  <string name="SYS_SEND_EMAIL_TO">Изпращане на имейл до #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Изпращане на имейл до всички имейл адреси на потребителя</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ако тази настройка е активирана, имейлите ще бъдат изпращани до всички потребителски имейл адреси, съхранени в профила. Ако настройката е деактивирана, имейлите ще се изпращат само на имейл адреса от полето на профила с вътрешно име EMAIL. (По подразбиране: активирано)</string>
   <string name="SYS_SEND_GREETING_CARD">Изпращане на поздравителна картичка</string>

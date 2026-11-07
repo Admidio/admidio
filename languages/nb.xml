@@ -1607,7 +1607,6 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SEND_EMAIL">Send e-post</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send e-post til tidligere medlemmer</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Hvis dette alternativet er angitt, kan e-poster sendes til individuelle tidligere medlemmer, samt til alle tidligere medlemmer av en rolle. (Standard: Aktivert)</string>
-  <string name="SYS_SEND_EMAIL_TO">Send epost til #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-post til alle brukerens e-postadresser</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Hvis denne innstillingen er aktivert, sendes e-poster til alle brukerens e-postadresser som er lagret i profilen. Hvis innstillingen er deaktivert, sendes e-poster kun til e-postadressen fra profilfeltet med det interne navnet EMAIL. (Standard: aktivert)</string>
   <string name="SYS_SEND_GREETING_CARD">Send hilsen</string>

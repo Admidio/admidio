@@ -1608,7 +1608,6 @@
   <string name="SYS_SEND_EMAIL">E-mail küldése</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-mailek küldése a volt tagoknak</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ha ez az opció be van kapcsolva, akkor e-maileket lehet küldeni egyes korábbi tagoknak, valamint egy adott szerepkör összes korábbi tagjának. (Alapértelmezett: Bekapcsolva)</string>
-  <string name="SYS_SEND_EMAIL_TO">E-mail küldése a #VAR1# címre</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Küldjön e-maileket a felhasználó összes e-mail-címére</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ha ez a beállítás engedélyezve van, az e-mailek a profilban tárolt összes felhasználói e-mail-címre elküldésre kerülnek. Ha a beállítás le van tiltva, az e-mailek csak a profil azon mezőjében megadott e-mail-címre kerülnek elküldésre, amelynek belső neve EMAIL. (Alapértelmezett: letiltva)</string>
   <string name="SYS_SEND_GREETING_CARD">Üdvözlőkártya küldése</string>

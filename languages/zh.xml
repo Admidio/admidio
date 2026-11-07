@@ -1603,7 +1603,6 @@
   <string name="SYS_SEND_EMAIL">发送电子邮件</string>
   <string name="SYS_SEND_EMAIL_FORMER">向以前的成员发送电子邮件</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">启用后，可以向单个以前的成员或某角色的所有以前成员发送邮件。（默认：启用）</string>
-  <string name="SYS_SEND_EMAIL_TO">向 #VAR1# 发送电子邮件</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">向用户的所有电子邮箱地址发送邮件</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">启用后，邮件将发送至用户个人资料中保存的所有电子邮箱地址。禁用后，仅发送至内部名称为 EMAIL 的个人资料字段中的邮箱地址。（默认：禁用）</string>
   <string name="SYS_SEND_GREETING_CARD">发送贺卡</string>

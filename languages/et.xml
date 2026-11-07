@@ -1606,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Saada email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Saatke endistele liikmetele e-kirju</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Kui see valik on määratud, saab e-kirju saata nii üksikutele endistele liikmetele kui ka kõikidele endistele rolliliikmetele. (Vaikimisi: aktiveeritud)</string>
-  <string name="SYS_SEND_EMAIL_TO">Saada e-kiri aadressile #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Saada e-kirju kasutaja kõikidele e-posti aadressidele</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Kui see säte on aktiveeritud, saadetakse e-kirjad kõikidele profiilis salvestatud kasutaja e-posti aadressidele. Kui seade on välja lülitatud, saadetakse e-kirjad ainult profiiliväljalt sisemise nimega EMAIL e-posti aadressile. (Vaikimisi: lubatud)</string>
   <string name="SYS_SEND_GREETING_CARD">Saada õnnitluskaart</string>

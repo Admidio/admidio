@@ -1608,7 +1608,6 @@
   <string name="SYS_SEND_EMAIL">Trimite e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Trimiteți e-mailuri foștilor membri</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Dacă această opțiune este activată, e-mailurile pot fi trimise atât foștilor membri individuali, cât și tuturor foștilor membri ai unui rol. (Implicit: Activată)</string>
-  <string name="SYS_SEND_EMAIL_TO">Trimiteți e-mailul la #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Trimiteți e-mailuri către toate adresele de e-mail ale utilizatorului</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Dacă această setare este activată, mesajele de e-mail vor fi trimise către toate adresele de e-mail ale utilizatorului stocate în profil. Dacă setarea este dezactivată, mesajele de e-mail vor fi trimise doar către adresa de e-mail din câmpul profilului cu denumirea internă EMAIL. (Implicit: dezactivată)</string>
   <string name="SYS_SEND_GREETING_CARD">Trimite felicitare</string>

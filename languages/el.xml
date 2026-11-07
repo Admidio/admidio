@@ -1606,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Αποστολή email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Αποστολή emails σε πρώην μέλη</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Εάν οριστεί αυτή η επιλογή, τότε θα μπορούσαν να σταλούν μηνύματα ηλεκτρονικού ταχυδρομείου σε μεμονωμένα πρώην μέλη, καθώς και σε όλα τα πρώην μέλη ενός ρόλου. (Default: Activated)</string>
-  <string name="SYS_SEND_EMAIL_TO">Αποστολή email σε #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Στείλτε e-mail σε όλες τις διευθύνσεις e-mail του χρήστη</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Εάν ενεργοποιηθεί αυτή η ρύθμιση, τα μηνύματα ηλεκτρονικού ταχυδρομείου θα σταλούν σε όλες τις διευθύνσεις e-mail χρήστη που είναι αποθηκευμένες στο προφίλ. Εάν η ρύθμιση είναι απενεργοποιημένη, τα e-mail θα αποστέλλονται μόνο στη διεύθυνση e-mail από το πεδίο προφίλ με το εσωτερικό όνομα EMAIL. (Default: enabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>

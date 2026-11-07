@@ -1606,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Wyślij e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Wysyłaj e-maile do byłych członków</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Jeśli ta opcja jest ustawiona, wiadomości e-mail mogą być wysyłane do poszczególnych byłych członków, a także do wszystkich byłych członków roli. (domyślnie: włączone)</string>
-  <string name="SYS_SEND_EMAIL_TO">Wyślij e-mail do #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Wyślij e-maile do wszystkich adresów e-mail użytkownika</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Jeśli to ustawienie jest włączone, wiadomości e-mail będą wysyłane na wszystkie adresy e-mail użytkowników zapisane w profilu. Jeśli ustawienie jest wyłączone, wiadomości e-mail będą wysyłane tylko na adres e-mail z pola profilu z nazwą wewnętrzną EMAIL. (domyślnie: włączone)</string>
   <string name="SYS_SEND_GREETING_CARD">Wyślij kartkę z życzeniami</string>

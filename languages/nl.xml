@@ -1660,7 +1660,6 @@
   <string name="SYS_SEND_EMAIL">Stuur e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-mails naar voormalige leden sturen</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Als deze optie is ingeschakeld, kunnen e-mails worden verzonden naar individuele voormalige leden, maar ook naar alle voormalige leden van een rol. (Standaard: Geactiveerd)</string>
-  <string name="SYS_SEND_EMAIL_TO">Stuur e-mail naar #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Stuur e-mails naar alle e-mailadressen van de gebruiker</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Als deze instelling is geactiveerd, worden e-mails naar alle e-mailadressen gestuurd die in het profiel staan. Als deze instelling is gedeactiveerd, worden e-mails alleen gestuurd naar het e-mailadres van het profielveld met de interne naam EMAIL. (Standaard: geactiveerd)</string>
   <string name="SYS_SEND_GREETING_CARD">Stuur Ecard</string>

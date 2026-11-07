@@ -1606,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Enviar e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send emails to former members</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Se esta opção estiver ativa, podem ser enviados e-mails tanto a ex-membros individuais como a todos os ex-membros de uma função. (Predefinição: ativado)</string>
-  <string name="SYS_SEND_EMAIL_TO">Enviar e-mail para #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Enviar mensagens para todos os endereços de e-mail do utilizador</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, emails will be sent to all user email addresses stored in the profile. If the setting is deactivated, emails will only be sent to the email address from the profile field with the internal name EMAIL. (Default: disabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>

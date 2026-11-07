@@ -1614,7 +1614,6 @@
   <string name="SYS_SEND_EMAIL">Lähetä sähköposti</string>
   <string name="SYS_SEND_EMAIL_FORMER">Lähetä sähköpostia entisille jäsenille</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Jos tämä vaihtoehto on asetettu, sähköpostit voidaan lähettää yksittäisille entisille jäsenille sekä kaikille roolin entisille jäsenille. (Oletus: aktivoitu)</string>
-  <string name="SYS_SEND_EMAIL_TO">Lähetä sähköpostia osoitteeseen #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Lähetä sähköpostiviestejä kaikkiin käyttäjän sähköpostiosoitteisiin</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Jos tämä asetus on käytössä, sähköpostiviestit lähetetään kaikkiin profiiliin tallennettuihin käyttäjän sähköpostiosoitteisiin. Jos asetus on pois käytöstä, sähköpostiviestit lähetetään vain profiilikenttään, jonka sisäinen nimi on EMAIL, tallennettuun sähköpostiosoitteeseen. (Oletusasetus: pois käytöstä)</string>
   <string name="SYS_SEND_GREETING_CARD">Lähetä onnittelukortti</string>

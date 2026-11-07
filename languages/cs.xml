@@ -1608,7 +1608,6 @@
   <string name="SYS_SEND_EMAIL">Odeslat e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Odeslat e-mail bývalým členům</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Pokud je tato možnost nastavena, lze posílat e-maily jednotlivým bývalým členům i všem bývalým členům role. (Výchozí: Aktivováno)</string>
-  <string name="SYS_SEND_EMAIL_TO">Odeslat email uživateli #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Posílat e-maily na všechny e-mailové adresy uživatele</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, emails will be sent to all user email addresses stored in the profile. If the setting is deactivated, emails will only be sent to the email address from the profile field with the internal name EMAIL. (Default: disabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Poslat blahopřání</string>

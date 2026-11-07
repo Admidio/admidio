@@ -1608,7 +1608,6 @@
   <string name="SYS_SEND_EMAIL">Send email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send e-mails til tidligere medlemmer</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Hvis denne mulighed er indstillet, kan e-mails sendes til individuelle tidligere medlemmer såvel som til alle tidligere medlemmer af en rolle. (Standard: Aktiveret)</string>
-  <string name="SYS_SEND_EMAIL_TO">Send e-mail til #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send e-mails til alle brugerens e-mail-adresser</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Hvis denne indstilling er aktiveret, vil e-mails blive sendt til alle brugernes e-mailadresser, der er gemt i profilen. Hvis indstillingen deaktiveres, vil e-mails kun blive sendt til e-mailadressen fra profilfeltet med det interne navn EMAIL. (Standard: deaktiveret)</string>
   <string name="SYS_SEND_GREETING_CARD">Send lykønskningskort</string>
