@@ -25,6 +25,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Users\Entity\User;
 use Admidio\Users\Service\ContactService;
+use Ramsey\Uuid\Uuid;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -35,14 +36,26 @@ try {
     $showFormerButton = admFuncVariableIsValid($_GET, 'show_former_button', 'bool', array('defaultValue' => true));
     $customCallback = admFuncVariableIsValid($_GET, 'custom_callback', 'bool', array('defaultValue' => false));
     $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
+    if (!is_array($getUserUuids)) {
+        throw new Exception('SYS_INVALID_PAGE_VIEW');
+    }
     if (empty($getUserUuids)) {
         $getUserUuids = admFuncVariableIsValid($_POST, 'uuids', 'array', array('defaultValue' => array()));
+        if (!is_array($getUserUuids)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
         $getUserUuids = array_map(function($uuid) {
-            return preg_replace('/row_members_/', '', $uuid);
+            return is_string($uuid) ? preg_replace('/^row_members_/', '', $uuid) : $uuid;
         }, $getUserUuids);
 
         if (empty($getUserUuids)) {
             $getUserUuids = array(admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', array('requireValue' => true)));
+        }
+    }
+
+    foreach ($getUserUuids as $userUuid) {
+        if (!is_string($userUuid) || !Uuid::isValid($userUuid)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
     }
 
@@ -89,10 +102,10 @@ try {
             </div>
             <div class="modal-footer">';
         if ($showFormerButton) {
-            echo '<button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="' . $formerOnClick . '">
+            echo '<button id="adm_button_former" type="button" class="btn btn-primary mr-4" onclick="' . SecurityUtils::encodeHTML($formerOnClick) . '">
                     <i class="bi bi-person-fill-dash"></i>' . $formerButtonText . '</button>';
         }
-        echo '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . $deleteOnClick . '">
+        echo '<button id="adm_button_delete" type="button" class="btn btn-primary" onclick="' . SecurityUtils::encodeHTML($deleteOnClick) . '">
                     <i class="bi bi-trash"></i>' . $deleteButtonText . '</button>
                 <div id="adm_status_message" class="mt-4 w-100"></div>
             </div>';

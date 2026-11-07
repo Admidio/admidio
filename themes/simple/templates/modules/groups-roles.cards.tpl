@@ -24,15 +24,7 @@
                         </ul>
                         {if isset($role.actions) && count($role.actions) > 0}
                             <div class="mt-auto pt-3 d-flex justify-content-end align-items-center">
-                                {foreach $role.actions as $actionItem}
-                                    <a
-                                        {if isset($actionItem.dataHref)}class="admidio-icon-link admidio-messagebox"
-                                            href="javascript:void(0);" data-buttons="yes-no"
-                                            data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                        {else}class="admidio-icon-link" href="{$actionItem.url}"{/if} aria-label="{$actionItem.tooltip}">
-                                        <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i>
-                                    </a>
-                                {/foreach}
+                                {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $role.id, 'actions' => $role.actions]}
                             </div>
                         {/if}
                     </div>

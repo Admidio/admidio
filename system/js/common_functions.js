@@ -8,6 +8,9 @@
  ***********************************************************************************************
  */
 
+// Delay tooltip display while hiding immediately when the pointer leaves.
+bootstrap.Tooltip.Default.delay = {show: 500, hide: 0};
+
 /**
  * The function can be used to show or hide an element. Therefore, a small
  * caret is used that will change his orientation if the element is hidden.

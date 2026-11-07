@@ -51,6 +51,7 @@ use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\UI\Presenter\PagePresenter;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -352,6 +353,9 @@ try {
 
     $jsonArray['data'] = array();
 
+    $smarty = PagePresenter::createSmartyObject();
+    $smarty->assign('l10n', $gL10n);
+
     while ($row = $mglStatement->fetch(PDO::FETCH_BOTH)) {
         // Filter the raw row before anything is formatted from it. FETCH_BOTH is kept, not FETCH_ASSOC:
         // the list-configuration loop below reads $row[$ColumnNumberSql] by numeric position, so a
@@ -430,23 +434,36 @@ try {
         }
 
         // Add "user-administration icons"
-        $userAdministration = '';
+        $actions = array();
+
+        // add link to edit user, but only edit users who are members of the current organization
+        if ($gCurrentUser->isAdministratorUsers() && ($contactsOfThisOrganization || !$contactsOfOtherOrganization)) {
+            $actions[] = array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])),
+                'icon' => 'bi bi-pencil-square',
+                'tooltip' => $gL10n->get('SYS_EDIT_USER')
+            );
+        }
 
         // Administrators can change or send password if login is configured and user is member of current organization
         if ($contactsOfThisOrganization && $gCurrentUser->isAdministrator()
             && !empty($row['login_name']) && $row['usr_uuid'] !== $gCurrentUserUUID) {
             if (!empty($row['member_email']) && $gSettingsManager->getBool('system_notifications_enabled')) {
                 // if email is set and systemmails are activated then administrators can send a new password to user
-                $userAdministration = '
-                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_SEND_NEW_LOGIN', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name'])))) . '"
-                        data-href="callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_USERNAME_PASSWORD') . '"></i></a>';
+                $actions[] = array(
+                    'dataMessage' => $gL10n->get('SYS_SEND_NEW_LOGIN', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']))),
+                    'dataHref' => 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'icon' => 'bi bi-key-fill',
+                    'tooltip' => $gL10n->get('SYS_SEND_USERNAME_PASSWORD')
+                );
             } else {
                 // if user has no email or send email is disabled then administrators could set a new password
-                $userAdministration = '<a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $row['usr_uuid'])) . '">' .
-                    '<i class="bi bi-key-fill" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_CHANGE_PASSWORD') . '"></i></a>';
+                $actions[] = array(
+                    'popup' => true,
+                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $row['usr_uuid'])),
+                    'icon' => 'bi bi-key-fill',
+                    'tooltip' => $gL10n->get('SYS_CHANGE_PASSWORD')
+                );
             }
         }
 
@@ -458,47 +475,51 @@ try {
                 } else {
                     $mailLink = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('user_uuid' => $row['usr_uuid']));
                 }
-                $userAdministration .= '<a class="admidio-icon-link" href="' . $mailLink . '">' .
-                    '<i class="bi bi-envelope" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SEND_EMAIL_TO', array($row['member_email'])) . '"></i></a>';
+                $actions[] = array(
+                    'url' => $mailLink,
+                    'icon' => 'bi bi-envelope',
+                    'tooltip' => $gL10n->get('SYS_SEND_EMAIL')
+                );
             }
 
-            $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)) . '">' .
-                '<i class="bi bi-copy" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_COPY') . '"></i></a>';
-
-            // add link to edit user, but only edit users who are members of the current organization
-            if ($contactsOfThisOrganization || !$contactsOfOtherOrganization) {
-                $userAdministration .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])) . '">' .
-                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT_USER') . '"></i></a>';
-            }
+            $actions[] = array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)),
+                'icon' => 'bi bi-copy',
+                'tooltip' => $gL10n->get('SYS_COPY')
+            );
 
             // add link to delete user btw. remove user from the current organization, no one is allowed to remove their own profile
             if (!$contactsOfOtherOrganization && $gCurrentUser->isAdministrator() && $row['usr_uuid'] !== $gCurrentUserUUID) {
                 if ($contactsOfThisOrganization) {
                     // User is ONLY member of this organization -> ask if user should make to former member or delete completely
-                    $userAdministration .= '
-                        <a class="admidio-icon-link openPopup" href="javascript:void(0);"
-                            data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= ShowMembers::AllContactsThisOrganization ))) . '">
-                            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
-                        </a>';
+                    $actions[] = array(
+                        'popup' => true,
+                        'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= ShowMembers::AllContactsThisOrganization ))),
+                        'icon' => 'bi bi-trash',
+                        'tooltip' => $gL10n->get('SYS_REMOVE_CONTACT')
+                    );
                 } else {
                     // User is not member of any organization -> ask if delete completely
-                    $userAdministration .= '
-                        <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                            data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_USER_DELETE_DESC', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name'])))) . '"
-                            data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                            <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
-                        </a>';
+                    $actions[] = array(
+                        'dataMessage' => $gL10n->get('SYS_USER_DELETE_DESC', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']))),
+                        'dataHref' => 'callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'icon' => 'bi bi-trash',
+                        'tooltip' => $gL10n->get('SYS_REMOVE_CONTACT')
+                    );
                 }
             } elseif ($contactsOfOtherOrganization && $contactsOfThisOrganization) {
                 // User could only be removed from this organization -> ask so
-                $userAdministration .= '
-                    <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                        data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']), $gCurrentOrganization->getValue('org_longname')))) . '"
-                        data-href="callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                        <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_REMOVE_CONTACT') . '"></i>
-                    </a>';
+                $actions[] = array(
+                    'dataMessage' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']), $gCurrentOrganization->getValue('org_longname'))),
+                    'dataHref' => 'callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'icon' => 'bi bi-trash',
+                    'tooltip' => $gL10n->get('SYS_REMOVE_CONTACT')
+                );
             }
         }
+
+        $smarty->assign('data', array('uuid' => $row['usr_uuid'], 'actions' => $actions));
+        $userAdministration = $smarty->fetch('sys-template-parts/list.functions.tpl');
 
         $userAdministration = Hooks::applyTypedFilters('list_row_actions', $userAdministration, 'contacts', $row);
         $columnValues[(string)$columnNumberJson] = $userAdministration;

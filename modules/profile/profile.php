@@ -191,7 +191,7 @@ try {
                 "#adm_profile_role_memberships_former_pane_content, " +
                 "#adm_profile_role_memberships_future_pane_content, " +
                 "#adm_profile_user_relations_pane_content"
-            ).find("#" + $(this).attr("id") + "_content").first();
+            ).find("#" + ($(this).attr("data-info-id") || $(this).attr("id")) + "_content").first();
             editInfoElement.toggle("fast");
 
             /* Accordions */
@@ -200,7 +200,7 @@ try {
                 "#adm_profile_role_memberships_former_accordion_content, " +
                 "#adm_profile_role_memberships_future_accordion_content, " +
                 "#adm_profile_user_relations_accordion_content"
-            ).find("#" + $(this).attr("id") + "_content").first();
+            ).find("#" + ($(this).attr("data-info-id") || $(this).attr("id")) + "_content").first();
             editInfoElement.toggle("fast");
         });
 
