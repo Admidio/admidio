@@ -23,7 +23,12 @@
                         {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                     </td>
                     <td>
-
+                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.uuid}"
+                           data-direction="UP" data-target="adm_item_field_{$itemField.uuid}" aria-label="{$l10n->get('SYS_MOVE_UP', array('SYS_FIELD'))|escape:'html'}">
+                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_FIELD'))}"></i></a>
+                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.uuid}"
+                           data-direction="DOWN" data-target="adm_item_field_{$itemField.uuid}" aria-label="{$l10n->get('SYS_MOVE_DOWN', array('SYS_FIELD'))|escape:'html'}">
+                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_FIELD'))}"></i></a>
                         <a class="admidio-icon-link">
                             <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_FIELD'))}"></i></a>
                     </td>
@@ -35,10 +40,7 @@
                         {/if}
                     </td>
                     <td class="text-end">
-                       {assign var=rowActions value=$itemField.actions}
-                       {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $itemField.uuid, 'data-direction' => 'UP', 'data-target' => "adm_item_field_{$itemField.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', ['SYS_FIELD'])]}
-                       {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $itemField.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_item_field_{$itemField.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', ['SYS_FIELD'])]}
-                       {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $itemField.uuid, 'actions' => $rowActions]}
+                        {include 'sys-template-parts/list.functions.tpl' data=$itemField}
                     </td>
                 </tr>
             {/foreach}
