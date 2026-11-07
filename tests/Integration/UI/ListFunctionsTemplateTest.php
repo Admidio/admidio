@@ -118,9 +118,11 @@ class ListFunctionsTemplateTest extends TestCase
         $document = new DOMDocument();
         $document->loadHTML($html);
         $xpath = new DOMXPath($document);
-        self::assertCount(2, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
-        self::assertCount(3, $xpath->query('//a[@onclick]'));
-        self::assertCount(2, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/settings"]'));
+        self::assertCount(1, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
+        self::assertCount(2, $xpath->query('//a[@onclick]'));
+        self::assertCount(1, $xpath->query('//tr/td[1]/a[@onclick]'));
+        self::assertCount(1, $xpath->query('//div[contains(@class, "card-header")]/a[@onclick]'));
+        self::assertCount(1, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/settings"]'));
         self::assertCount(1, $xpath->query('//*[@id="adm_dropdown_menu_button_mobile_example"]'));
         foreach ($xpath->query('//a[@onclick]') as $toggle) {
             self::assertSame($entry['toggle']['dataHref'], $toggle->getAttribute('onclick'));
