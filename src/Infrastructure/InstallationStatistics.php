@@ -4,13 +4,12 @@ namespace Admidio\Infrastructure;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Closure;
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Throwable;
 
 /**
- * @brief Collect anonymous installation statistics and send the reviewed JSON payload.
+ * @brief Collect pseudonymous installation statistics and send the reviewed JSON payload.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -25,14 +24,13 @@ class InstallationStatistics
     public function __construct(
         private ?string $previousVersion = null,
         private ?Closure $httpPost = null
-    )
-    {
+    ) {
     }
 
     /**
      * @return array
      */
-    public function getInfoData(?string $previewId = null)
+    public function getInfoData(?string $previewId = null): array
     {
         global $gDb;
 
@@ -59,33 +57,33 @@ class InstallationStatistics
     /**
      * @return string
      */
-    private static function getDateTime()
+    private static function getDateTime(): string
     {
-        $dateTime = new DateTime('now', new DateTimeZone('UTC'));
+        $dateTime = new DateTimeImmutable('now', new DateTimeZone('UTC'));
 
-        return $dateTime->format('Y-m-d H:i:s');
+        return $dateTime->format('Y-m-d\\TH:i:s\\Z');
     }
 
     /**
      * @return string
      */
-    private static function getPHPVersion()
+    private static function getPHPVersion(): string
     {
         return PHP_VERSION;
     }
 
     /**
-     * @return string[]
+     * @return array<string, string|null>
      */
-    private static function getPHPExtensions()
+    private static function getPHPExtensions(): array
     {
         $extensions = get_loaded_extensions();
         asort($extensions);
 
         $extensionsVersions = array();
-        foreach ($extensions as $extension)
-        {
-            $extensionsVersions[$extension] = phpversion($extension);
+        foreach ($extensions as $extension) {
+            $version = phpversion($extension);
+            $extensionsVersions[$extension] = $version === false ? null : $version;
         }
 
         return $extensionsVersions;
@@ -94,7 +92,7 @@ class InstallationStatistics
     /**
      * @return string
      */
-    private static function getDatabaseType()
+    private static function getDatabaseType(): string
     {
         global $gDb;
 
@@ -104,7 +102,7 @@ class InstallationStatistics
     /**
      * @return string
      */
-    private static function getDatabaseVersion()
+    private static function getDatabaseVersion(): string
     {
         global $gDb;
 
@@ -114,7 +112,7 @@ class InstallationStatistics
     /**
      * @return string
      */
-    private static function getAdmidioVersion()
+    private static function getAdmidioVersion(): string
     {
         return ADMIDIO_VERSION_TEXT;
     }
@@ -133,14 +131,21 @@ class InstallationStatistics
     }
 
     /**
-     * Versions declared by the plugins present in the plugins directory.
+     * Manifest versions of installed plugins enabled in at least one organization.
      * @return array<string,string>
      */
     private static function getAdmidioPlugins(): array
     {
+        global $gSettingsManager;
+
+        // The installer preview runs before any plugin or preference tables exist.
+        if (!isset($gSettingsManager)) {
+            return array();
+        }
         $plugins = array();
         foreach (PluginRegistry::all() as $id => $plugin) {
-            if ($plugin->isValid()) {
+            if ($plugin->isValid() && PluginRegistry::isInstalled((string)$id)
+                && PluginRegistry::getEnabledOrganizations((string)$id) !== array()) {
                 $plugins[$id] = $plugin->version;
             }
         }
@@ -156,11 +161,11 @@ class InstallationStatistics
     }
 
     /**
-     * Sends the anonymous data of this tenant to the Admidio server.
+     * Sends the pseudonymous data of this tenant to the Admidio server.
      * @param array|null $infoData Server-side snapshot previously shown in the update dialog.
      * @return bool Returns **true** if the data could successfully send to the server.
      */
-    public function sent(?array $infoData = null): bool
+    public function send(?array $infoData = null): bool
     {
         global $gDb, $gStatisticsUrl;
 
@@ -218,11 +223,21 @@ class InstallationStatistics
         }
     }
 
+    /** Null means that the installation/update has not initialized the preference yet. */
+    public static function getLastSent(Database $db): ?string
+    {
+        $value = $db->queryPrepared('SELECT prf_value FROM ' . TBL_PREFERENCES . '
+            WHERE prf_name = ? AND prf_org_id IS NULL', array('system_statistics_last_sent'))->fetchColumn();
+
+        return is_string($value) ? $value : null;
+    }
+
     /** All send paths share the installation-wide success timestamp. */
     protected function recordSuccessfulSend(Database $db): void
     {
-        $settings = new SettingsManager($db, InstallationIdentifier::getOrganizationId($db));
-        $settings->set('system_statistics_last_sent', self::getDateTime());
+        $db->queryPrepared('UPDATE ' . TBL_PREFERENCES . '
+            SET prf_value = ? WHERE prf_name = ? AND prf_org_id IS NULL',
+            array(self::getDateTime(), 'system_statistics_last_sent'));
     }
 
     /** Whether a complete calendar month has passed since the last successful send (UTC). */
@@ -233,8 +248,9 @@ class InstallationStatistics
         }
 
         $utc = new DateTimeZone('UTC');
-        $date = DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $lastSent, $utc);
-        if ($date === false || $date->format('Y-m-d H:i:s') !== $lastSent) {
+        $format = str_contains($lastSent, 'T') ? 'Y-m-d\\TH:i:s\\Z' : 'Y-m-d H:i:s';
+        $date = DateTimeImmutable::createFromFormat('!' . $format, $lastSent, $utc);
+        if ($date === false || $date->format($format) !== $lastSent) {
             return true;
         }
 
@@ -253,25 +269,32 @@ class InstallationStatistics
 
         $transactionStarted = false;
         try {
+            // Consent remains controlled by the main organization.
+            if ($organizationId !== InstallationIdentifier::getOrganizationId($db)) {
+                return;
+            }
             $settings = new SettingsManager($db, $organizationId);
-            if (!$settings->has('system_statistics_last_sent')
+            $lastSent = self::getLastSent($db);
+            if ($lastSent === null
                 || !$settings->has('system_statistics_enabled')
                 || !$settings->getBool('system_statistics_enabled')
-                || !self::isDue($settings->getString('system_statistics_last_sent'))) {
+                || !self::isDue($lastSent)) {
                 return;
             }
 
             $db->startTransaction();
             $transactionStarted = true;
             // Serialize concurrent requests and recheck after acquiring the lock.
-            $db->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ? FOR UPDATE', array($organizationId));
+            $db->queryPrepared('SELECT com_id FROM ' . TBL_COMPONENTS . '
+                WHERE com_name_intern = ? FOR UPDATE', array('CORE'));
             $settings = new SettingsManager($db, $organizationId);
-            if ($settings->has('system_statistics_last_sent')
+            $lastSent = self::getLastSent($db);
+            if ($lastSent !== null
                 && $settings->has('system_statistics_enabled')
                 && $settings->getBool('system_statistics_enabled')
-                && self::isDue($settings->getString('system_statistics_last_sent'))) {
-                if (!(new self(null, $httpPost))->sent()) {
-                    $gLogger->warning('Monthly anonymous installation statistics could not be sent.');
+                && self::isDue($lastSent)) {
+                if (!(new self(null, $httpPost))->send()) {
+                    $gLogger->warning('Monthly pseudonymous installation statistics could not be sent.');
                 }
             }
             $db->endTransaction();
@@ -279,7 +302,7 @@ class InstallationStatistics
             if ($transactionStarted) {
                 $db->rollback();
             }
-            $gLogger->warning('Monthly anonymous installation statistics could not be sent.', array('exception' => $exception));
+            $gLogger->warning('Monthly pseudonymous installation statistics could not be sent.', array('exception' => $exception));
         }
     }
 }

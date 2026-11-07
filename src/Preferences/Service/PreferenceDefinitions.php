@@ -167,6 +167,8 @@ final class PreferenceDefinitions
             'system_backup_path' => array('default' => '', 'maxLength' => 250),
             'system_browser_update_check' => array('default' => '0', 'type' => 'bool'),
             'system_pwa_enabled' => array('default' => '1', 'type' => 'bool'),
+            'system_tenant_id' => array('default' => '', 'internal' => true),
+            'system_statistics_last_sent' => array('default' => '', 'internal' => true),
             'system_statistics_enabled' => array('default' => '1', 'type' => 'bool'),
             'system_cookie_note' => array('default' => '1', 'type' => 'bool'),
             'system_currency' => array('default' => '€', 'maxLength' => 20),

@@ -569,7 +569,8 @@ class Installation
         $gSettingsManager = $gCurrentOrganization->getSettingsManager();
         $gSettingsManager->setMulti(self::defaultOrganizationPreferences($config), false);
         InstallationIdentifier::ensure($db, $tenantId);
-        $gSettingsManager->set('system_statistics_last_sent', '', false);
+        $db->queryPrepared('INSERT INTO ' . TBL_PREFERENCES . '
+            (prf_org_id, prf_name, prf_value) VALUES (NULL, ?, ?)', array('system_statistics_last_sent', ''));
         self::disableSoundexSearchIfPgSql($db);
         $gCurrentOrganization->createBasicData($administratorId);
 
@@ -839,6 +840,7 @@ class Installation
 
         // the registered defaults of the core and of every plugin that is in use
         $defaultOrgPreferences = PreferenceDefinitions::defaults();
+        unset($defaultOrgPreferences['system_tenant_id'], $defaultOrgPreferences['system_statistics_last_sent']);
 
         // set some specific preferences whose values came from the input of the installation
         $defaultOrgPreferences['system_language'] = $config->language;

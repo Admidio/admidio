@@ -3704,6 +3704,7 @@ final class CoreTasks
 
             Entity::setLoggingEnabled(false);
             $defaultOrgPreferences = PreferenceDefinitions::defaults();
+            unset($defaultOrgPreferences['system_tenant_id'], $defaultOrgPreferences['system_statistics_last_sent']);
             $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
 
             $newSettingsManager =& $organization->getSettingsManager();

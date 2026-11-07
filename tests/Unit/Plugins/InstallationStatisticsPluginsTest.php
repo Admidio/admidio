@@ -10,7 +10,25 @@ use ReflectionMethod;
 
 final class InstallationStatisticsPluginsTest extends PluginTestCase
 {
-    public function testStatisticsIncludeDirectoryPluginsRegardlessOfInstallationAndEnabledState(): void
+    private array $originalDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->originalDatabase = array_key_exists('gDb', $GLOBALS) ? array($GLOBALS['gDb']) : array();
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->originalDatabase === array()) {
+            unset($GLOBALS['gDb']);
+        } else {
+            $GLOBALS['gDb'] = $this->originalDatabase[0];
+        }
+        parent::tearDown();
+    }
+
+    public function testStatisticsOnlyIncludeInstalledPluginsEnabledInAnyOrganization(): void
     {
         PluginRegistry::setInstallations(array(
             'hello' => array('comId' => 2, 'version' => '1.1.0'),
@@ -26,11 +44,24 @@ final class InstallationStatisticsPluginsTest extends PluginTestCase
             'plugin_missing_enabled' => '1'
         ));
 
+        foreach (array('TBL_PREFERENCES' => 'adm_preferences', 'TBL_ORGANIZATIONS' => 'adm_organizations') as $name => $value) {
+            if (!defined($name)) {
+                define($name, $value);
+            }
+        }
+        $database = $this->getMockBuilder(\Admidio\Infrastructure\Database::class)
+            ->disableOriginalConstructor()->onlyMethods(array('queryPrepared'))->getMock();
+        $database->method('queryPrepared')->willReturnCallback(function (string $sql, array $params) {
+            $statement = $this->createMock(\PDOStatement::class);
+            // hello is enabled in a different organization; dependent is disabled everywhere.
+            $statement->method('fetchAll')->willReturn($params === array('plugin_hello_enabled')
+                ? array('Other organization') : array());
+            return $statement;
+        });
+        $GLOBALS['gDb'] = $database;
         $method = new ReflectionMethod(InstallationStatistics::class, 'getAdmidioPlugins');
         $this->assertSame(array(
-            'dependent' => '1.0.0',
-            'hello' => '1.2.0',
-            'needs-module' => '1.0.0'
+            'hello' => '1.2.0'
         ), $method->invoke(null));
     }
 
@@ -40,10 +71,6 @@ final class InstallationStatisticsPluginsTest extends PluginTestCase
         PluginRegistry::setInstallations(null);
 
         $method = new ReflectionMethod(InstallationStatistics::class, 'getAdmidioPlugins');
-        $this->assertSame(array(
-            'dependent' => '1.0.0',
-            'hello' => '1.2.0',
-            'needs-module' => '1.0.0'
-        ), $method->invoke(null));
+        $this->assertSame(array(), $method->invoke(null));
     }
 }

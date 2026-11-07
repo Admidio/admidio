@@ -82,6 +82,7 @@ class StatisticsConsentTest extends TestCase
                 define($name, $value);
             }
         }
+        \Admidio\Infrastructure\Plugins\PluginRegistry::setInstallations(array());
         unset($GLOBALS['gSettingsManager']);
         if ($previousVersion !== null) {
             // The configured system language must take priority over the current UI language.
@@ -118,7 +119,7 @@ class StatisticsConsentTest extends TestCase
                 if ($previousVersion !== null) {
                     $this->assertSame('<uuid>', $data['id']);
                     $this->assertSame(array('<plugin>' => '<version>'), $data['admidio']['plugins']);
-                    $this->assertSame(array('<extension>' => '<version|false>'), $data['php']['extensions']);
+                    $this->assertSame(array('<extension>' => '<version|null>'), $data['php']['extensions']);
                     $this->assertStringNotContainsString('stable-tenant', $json);
                     $this->assertStringNotContainsString('pt-BR', $json);
                     $this->assertStringNotContainsString('8.0.40', $json);

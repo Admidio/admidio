@@ -19,22 +19,21 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $this->assertValidUuid(InstallationIdentifier::get($this->getDatabase()));
     }
 
-    public function testIdentityIsCreatedOnceForTheSmallestOrganizationOnly(): void
+    public function testIdentityIsMigratedAndSurvivesDeletionOfItsFormerOrganization(): void
     {
         $db = $this->getDatabase();
         $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_name = ?', array('system_tenant_id'));
         $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Other tenant ID', 'tenantid');
-        $otherId = Uuid::uuid4()->toString();
-        (new SettingsManager($db, $other['org_id']))->set('system_tenant_id', $otherId);
-        $this->assertNull(InstallationIdentifier::get($db), 'Other organizations must not provide a fallback ID.');
-
-        $id = InstallationIdentifier::ensure($db);
-        $this->assertValidUuid($id);
-        $this->assertSame($id, InstallationIdentifier::get($db));
-        $this->assertSame($id, InstallationIdentifier::ensure($db, Uuid::uuid4()->toString()));
-        $firstOrgId = (int) $db->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();
-        $this->assertSame($id, (new SettingsManager($db, $firstOrgId))->getString('system_tenant_id'));
-        $this->assertSame($otherId, (new SettingsManager($db, $other['org_id']))->getString('system_tenant_id'));
+        $legacyId = Uuid::uuid4()->toString();
+        (new SettingsManager($db, $other['org_id']))->set('system_tenant_id', $legacyId);
+        $this->assertSame($legacyId, InstallationIdentifier::get($db));
+        $this->assertSame($legacyId, InstallationIdentifier::ensure($db));
+        $this->assertSame($legacyId, InstallationIdentifier::ensure($db, Uuid::uuid4()->toString()));
+        $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ?', array($other['org_id']));
+        $db->queryPrepared('DELETE FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?', array($other['org_id']));
+        $this->assertSame($legacyId, InstallationIdentifier::get($db));
+        $this->assertSame(1, (int)$db->queryPrepared('SELECT COUNT(*) FROM ' . TBL_PREFERENCES . '
+            WHERE prf_name = ? AND prf_org_id IS NULL', array('system_tenant_id'))->fetchColumn());
     }
 
     public function testUpdateStepCreatesIdentityWithoutStatisticsConsentAndKeepsItOnRetry(): void
@@ -78,7 +77,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $this->assertSame($previewId, InstallationIdentifier::get($db));
     }
 
-    public function testSenderAlwaysUsesTheFirstOrganizationIdentity(): void
+    public function testSenderAlwaysUsesTheInstallationIdentity(): void
     {
         $canonicalId = InstallationIdentifier::ensure($this->getDatabase());
         $history = array();
@@ -88,11 +87,11 @@ class InstallationIdentifierTest extends DatabaseTestCase
         };
         $otherId = Uuid::uuid4()->toString();
         $statistics = new InstallationStatistics(null, $client);
-        $this->assertTrue($statistics->sent(array('id' => $otherId)));
+        $this->assertTrue($statistics->send(array('id' => $otherId)));
         $sent = json_decode((string) $history[0]['body'], true, 512, JSON_THROW_ON_ERROR);
         $this->assertSame($canonicalId, $sent['id']);
         $settings = new SettingsManager($this->getDatabase(), InstallationIdentifier::getOrganizationId($this->getDatabase()));
-        $this->assertFalse(InstallationStatistics::isDue($settings->getString('system_statistics_last_sent')));
+        $this->assertFalse(InstallationStatistics::isDue(InstallationStatistics::getLastSent($this->getDatabase())));
     }
 
     public function testMonthlySendRunsOnceAndOnlyForTheMainOrganization(): void
@@ -102,7 +101,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $mainId = InstallationIdentifier::getOrganizationId($db);
         $settings = new SettingsManager($db, $mainId);
         $settings->set('system_statistics_enabled', '1');
-        $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
+        $this->setLastSent('2000-01-01 12:00:00');
         $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Monthly statistics child', 'monthstats');
         $history = array();
         $client = static function (string $url, string $json) use (&$history): int {
@@ -112,12 +111,12 @@ class InstallationIdentifierTest extends DatabaseTestCase
 
         InstallationStatistics::sendIfDue($db, (int)$other['org_id'], $client);
         $this->assertCount(0, $history);
-        $this->assertSame('2000-01-01 12:00:00', $settings->getString('system_statistics_last_sent', true));
+        $this->assertSame('2000-01-01 12:00:00', InstallationStatistics::getLastSent($this->getDatabase()));
 
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(1, $history);
-        $this->assertFalse(InstallationStatistics::isDue($settings->getString('system_statistics_last_sent', true)));
+        $this->assertFalse(InstallationStatistics::isDue(InstallationStatistics::getLastSent($this->getDatabase())));
         $this->assertFalse((new SettingsManager($db, (int)$other['org_id']))->has('system_statistics_last_sent'));
     }
 
@@ -127,7 +126,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
         InstallationIdentifier::ensure($db);
         $mainId = InstallationIdentifier::getOrganizationId($db);
         $settings = new SettingsManager($db, $mainId);
-        $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
+        $this->setLastSent('2000-01-01 12:00:00');
         StatisticsConsent::savePreference(false);
         $history = array();
         $client = static function (string $url, string $json) use (&$history): int {
@@ -140,13 +139,13 @@ class InstallationIdentifierTest extends DatabaseTestCase
         StatisticsConsent::savePreference(true);
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(1, $history);
-        $this->assertSame('2000-01-01 12:00:00', $settings->getString('system_statistics_last_sent', true));
+        $this->assertSame('2000-01-01 12:00:00', InstallationStatistics::getLastSent($this->getDatabase()));
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(2, $history);
-        $this->assertFalse(InstallationStatistics::isDue($settings->getString('system_statistics_last_sent', true)));
+        $this->assertFalse(InstallationStatistics::isDue(InstallationStatistics::getLastSent($this->getDatabase())));
     }
 
-    public function testMonthlySendRequiresBothPreferencesInTheCurrentOrganization(): void
+    public function testMonthlySendRequiresConsentAndTheInstallationTimestamp(): void
     {
         $db = $this->getDatabase();
         $mainId = InstallationIdentifier::getOrganizationId($db);
@@ -158,10 +157,13 @@ class InstallationIdentifierTest extends DatabaseTestCase
         };
 
         foreach (array('system_statistics_last_sent', 'system_statistics_enabled') as $missingPreference) {
+            $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_name = ?', array('system_statistics_last_sent'));
+            $db->queryPrepared('INSERT INTO ' . TBL_PREFERENCES . '
+                (prf_org_id, prf_name, prf_value) VALUES (NULL, ?, ?)', array('system_statistics_last_sent', ''));
             $settings->set('system_statistics_enabled', '1');
-            $settings->set('system_statistics_last_sent', '2000-01-01 12:00:00');
-            $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ? AND prf_name = ?',
-                array($mainId, $missingPreference));
+            $this->setLastSent('2000-01-01 12:00:00');
+            $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_name = ?',
+                array($missingPreference));
 
             InstallationStatistics::sendIfDue($db, $mainId, $client);
             $this->assertCount(0, $history, 'No send without ' . $missingPreference);
@@ -182,11 +184,18 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $applyStatisticsMigration();
         $settings = new SettingsManager($db, InstallationIdentifier::getOrganizationId($db));
         $this->assertTrue($settings->getBool('system_statistics_enabled'));
-        $this->assertSame('', $settings->getString('system_statistics_last_sent'));
+        $this->assertSame('', InstallationStatistics::getLastSent($this->getDatabase()));
         $settings->set('system_statistics_enabled', '0');
-        $settings->set('system_statistics_last_sent', '2026-10-01 12:00:00');
+        $this->setLastSent('2026-10-01 12:00:00');
         $applyStatisticsMigration();
         $this->assertFalse($settings->getBool('system_statistics_enabled', true));
-        $this->assertSame('2026-10-01 12:00:00', $settings->getString('system_statistics_last_sent', true));
+        $this->assertSame('2026-10-01 12:00:00', InstallationStatistics::getLastSent($this->getDatabase()));
+    }
+
+    private function setLastSent(string $value): void
+    {
+        $this->getDatabase()->queryPrepared('UPDATE ' . TBL_PREFERENCES . '
+            SET prf_value = ? WHERE prf_name = ? AND prf_org_id IS NULL',
+            array($value, 'system_statistics_last_sent'));
     }
 }

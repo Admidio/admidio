@@ -41,7 +41,7 @@ final class StatisticsConsent
             ),
             'php' => array(
                 'version' => '<string>',
-                'extensions' => array('<extension>' => '<version|false>')
+                'extensions' => array('<extension>' => '<version|null>')
             )
         ) : $_SESSION[self::SESSION_DATA];
         $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($preview));
@@ -87,7 +87,7 @@ final class StatisticsConsent
         }
         try {
             $statistics = new InstallationStatistics();
-            if (!$statistics->sent($data)) {
+            if (!$statistics->send($data)) {
                 $gLogger->warning('Anonymous installation statistics could not be sent.');
             }
         } catch (Throwable $exception) {

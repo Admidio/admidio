@@ -89,7 +89,7 @@ class InstallationStatisticsTest extends TestCase
         $preview = $statistics->getJsonData($snapshot);
 
         // Only the canonical ID is read; collecting fresh technology data would fail this test.
-        $this->assertTrue($statistics->sent($snapshot));
+        $this->assertTrue($statistics->send($snapshot));
         $this->assertCount(1, $history);
         $this->assertSame($preview, (string) $history[0]['body']);
         $this->assertInstanceOf(\stdClass::class, json_decode($preview, false, 512, JSON_THROW_ON_ERROR));
@@ -106,7 +106,7 @@ class InstallationStatisticsTest extends TestCase
         };
         $statistics = new InstallationStatistics(null, $client);
 
-        $this->assertFalse($statistics->sent(array('id' => 'tenant')));
+        $this->assertFalse($statistics->send(array('id' => 'tenant')));
     }
 
     public static function failedStatuses(): array
@@ -150,7 +150,7 @@ class InstallationStatisticsTest extends TestCase
         $statistics->expects($this->never())->method('getInfoData');
         $statistics->expects($this->never())->method('recordSuccessfulSend');
 
-        $this->assertFalse($statistics->sent(array('id' => 'tenant')));
+        $this->assertFalse($statistics->send(array('id' => 'tenant')));
         $this->assertSame($expectedSend, $sent);
     }
 
@@ -166,13 +166,28 @@ class InstallationStatisticsTest extends TestCase
             ->onlyMethods(array('recordSuccessfulSend'))->getMock();
         $statistics->expects($this->never())->method('recordSuccessfulSend');
 
-        $this->assertFalse($statistics->sent(array('id' => 'tenant')));
+        $this->assertFalse($statistics->send(array('id' => 'tenant')));
+    }
+
+    public function testTimestampHasExplicitUtcTimezoneAndExtensionVersionsAreNullableStrings(): void
+    {
+        $method = new \ReflectionMethod(InstallationStatistics::class, 'getDateTime');
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $method->invoke(null));
+        $method = new \ReflectionMethod(InstallationStatistics::class, 'getPHPExtensions');
+        foreach ($method->invoke(null) as $extension => $version) {
+            $this->assertSame(phpversion($extension) === false ? null : phpversion($extension), $version);
+        }
+        foreach (array('system_tenant_id', 'system_statistics_last_sent') as $name) {
+            $this->assertContains($name, \Admidio\Preferences\Service\PreferenceDefinitions::internalNames());
+        }
     }
 
     public static function monthlyIntervals(): array
     {
         return array(
             'never sent' => array('', '2026-10-25 12:00:00', true),
+            'ISO UTC recent' => array('2026-10-01T12:00:00Z', '2026-10-25 12:00:00', false),
+            'ISO UTC due' => array('2026-09-25T12:00:00Z', '2026-10-25 12:00:01', true),
             'recent' => array('2026-10-01 12:00:00', '2026-10-25 12:00:00', false),
             'exact month' => array('2026-09-25 12:00:00', '2026-10-25 12:00:00', false),
             'over a month' => array('2026-09-25 12:00:00', '2026-10-25 12:00:01', true),
