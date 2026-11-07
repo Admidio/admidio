@@ -240,7 +240,7 @@ class InstallationStatistics
             array(self::getDateTime(), 'system_statistics_last_sent'));
     }
 
-    /** Whether a complete calendar month has passed since the last successful send (UTC). */
+    /** Whether the monthly interval or a reserved retry deadline has passed (UTC). */
     public static function isDue(string $lastSent, ?DateTimeImmutable $now = null): bool
     {
         if ($lastSent === '') {
@@ -248,10 +248,18 @@ class InstallationStatistics
         }
 
         $utc = new DateTimeZone('UTC');
+        $retry = str_starts_with($lastSent, 'retry:');
+        if ($retry) {
+            $lastSent = substr($lastSent, 6);
+        }
         $format = str_contains($lastSent, 'T') ? 'Y-m-d\\TH:i:s\\Z' : 'Y-m-d H:i:s';
         $date = DateTimeImmutable::createFromFormat('!' . $format, $lastSent, $utc);
         if ($date === false || $date->format($format) !== $lastSent) {
             return true;
+        }
+
+        if ($retry) {
+            return $date <= ($now ?? new DateTimeImmutable('now', $utc));
         }
 
         // Clamp to the last day of shorter months (January 31 -> February 28/29).
@@ -293,11 +301,23 @@ class InstallationStatistics
                 && $settings->has('system_statistics_enabled')
                 && $settings->getBool('system_statistics_enabled')
                 && self::isDue($lastSent)) {
-                if (!(new self(null, $httpPost))->send()) {
-                    $gLogger->warning('Monthly pseudonymous installation statistics could not be sent.');
-                }
+                // Reserve the attempt before releasing the lock. Failed requests (including
+                // exceptions) keep this deadline so visitors cannot trigger immediate retries.
+                $retryAt = new DateTimeImmutable('+1 hour', new DateTimeZone('UTC'));
+                $db->queryPrepared('UPDATE ' . TBL_PREFERENCES . '
+                    SET prf_value = ? WHERE prf_name = ? AND prf_org_id IS NULL',
+                    array('retry:' . $retryAt->format('Y-m-d\\TH:i:s\\Z'), 'system_statistics_last_sent'));
+            } else {
+                $db->endTransaction();
+                return;
             }
             $db->endTransaction();
+            $transactionStarted = false;
+
+            // Never hold the database lock while waiting for the statistics server.
+            if (!(new self(null, $httpPost))->send()) {
+                $gLogger->warning('Monthly pseudonymous installation statistics could not be sent.');
+            }
         } catch (Throwable $exception) {
             if ($transactionStarted) {
                 $db->rollback();

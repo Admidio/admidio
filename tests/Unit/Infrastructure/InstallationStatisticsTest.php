@@ -194,7 +194,10 @@ class InstallationStatisticsTest extends TestCase
             'future date' => array('2026-11-25 12:00:00', '2026-10-25 12:00:00', false),
             'short month' => array('2026-01-31 12:00:00', '2026-02-28 12:00:01', true),
             'leap year' => array('2024-01-31 12:00:00', '2024-02-29 12:00:00', false),
-            'invalid date' => array('invalid', '2026-10-25 12:00:00', true)
+            'invalid date' => array('invalid', '2026-10-25 12:00:00', true),
+            'retry pending at month end' => array('retry:2026-03-31T13:00:00Z', '2026-03-31 12:59:59', false),
+            'retry deadline' => array('retry:2026-03-31T13:00:00Z', '2026-03-31 13:00:00', true),
+            'retry overdue' => array('retry:2026-03-31T13:00:00Z', '2026-03-31 13:00:01', true)
         );
     }
 
@@ -203,5 +206,77 @@ class InstallationStatisticsTest extends TestCase
     {
         $this->assertSame($expected, InstallationStatistics::isDue($lastSent,
             new \DateTimeImmutable($now, new \DateTimeZone('UTC'))));
+    }
+
+    public static function monthlySendResults(): array
+    {
+        return array('success' => array(200), 'failure' => array(503), 'exception' => array(null));
+    }
+
+    /** @dataProvider monthlySendResults */
+    public function testMonthlySendReservesRetryAndReleasesTransactionBeforeTransport(?int $status): void
+    {
+        if (!defined('TBL_COMPONENTS')) {
+            define('TBL_COMPONENTS', 'adm_components');
+        }
+        if (!defined('ADMIDIO_VERSION_TEXT')) {
+            define('ADMIDIO_VERSION_TEXT', '6.0.0');
+        }
+        $originalLogger = $GLOBALS['gLogger'] ?? null;
+        $GLOBALS['gLogger'] = new \Psr\Log\NullLogger();
+        $GLOBALS['gStatisticsUrl'] = 'https://statistics.example.test';
+        $lastSent = '';
+        $inTransaction = false;
+        $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
+            ->onlyMethods(array('queryPrepared', 'startTransaction', 'endTransaction', 'rollback', 'getInformation', 'getVersion'))->getMock();
+        $database->method('getInformation')->willReturn(array('mysql', '8.0'));
+        $database->method('getVersion')->willReturn('8.0');
+        $database->method('startTransaction')->willReturnCallback(function () use (&$inTransaction): bool {
+            $inTransaction = true;
+            return true;
+        });
+        $database->method('endTransaction')->willReturnCallback(function () use (&$inTransaction): bool {
+            $inTransaction = false;
+            return true;
+        });
+        $database->expects($this->never())->method('rollback');
+        $database->method('queryPrepared')->willReturnCallback(function (string $sql, array $params = array()) use (&$lastSent) {
+            $value = '1';
+            if (str_starts_with($sql, 'UPDATE ')) {
+                $lastSent = $params[0];
+            } elseif (($params[0] ?? null) === 'system_statistics_last_sent') {
+                $value = $lastSent;
+            } elseif (($params[0] ?? null) === 'system_tenant_id') {
+                $value = 'tenant';
+            }
+            $statement = $this->createMock(PDOStatement::class);
+            $statement->method('fetchColumn')->willReturn($value);
+            $statement->method('rowCount')->willReturn(1);
+            return $statement;
+        });
+        $GLOBALS['gDb'] = $database;
+        $calls = 0;
+        $client = function () use (&$calls, &$inTransaction, &$lastSent, $status): int {
+            ++$calls;
+            $this->assertFalse($inTransaction);
+            $this->assertStringStartsWith('retry:', $lastSent);
+            $deadline = new \DateTimeImmutable(substr($lastSent, 6));
+            $this->assertEqualsWithDelta(time() + 3600, $deadline->getTimestamp(), 2);
+            if ($status === null) {
+                throw new \RuntimeException('Transport failed');
+            }
+            return $status;
+        };
+        try {
+            InstallationStatistics::sendIfDue($database, 1, $client);
+            $this->assertSame(1, $calls);
+            $this->assertFalse($inTransaction);
+            $this->assertSame($status !== 200, str_starts_with($lastSent, 'retry:'));
+            $this->assertFalse(InstallationStatistics::isDue($lastSent));
+            InstallationStatistics::sendIfDue($database, 1, $client);
+            $this->assertSame(1, $calls);
+        } finally {
+            $GLOBALS['gLogger'] = $originalLogger;
+        }
     }
 }
