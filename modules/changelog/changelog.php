@@ -102,9 +102,14 @@ try {
     //  * No object ID/UUIDs given: "Change history: Table description 1[, Table description 2, ...]" or "Change history"  (if no tables given)
     //  * Only one table (table column will be hidden): "Change history: OBJECTNAME (Table description)"
     //  *
-    $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $getTables);
+    // Only use authorized tables for the headline. User histories additionally use
+    // the profile permission checked below before displaying a user's name.
+    $headlineTables = ($gCurrentUser->isAdministrator() || $isUserLog)
+        ? $getTables
+        : array_values(array_intersect($getTables, $tablesPermitted));
+    $tableTitles = array_map([ChangelogService::class, 'getTableLabel'], $headlineTables);
     // set headline of the script
-    if ($isUserLog && $haveID) {
+    if ($isUserLog && $haveID && $gCurrentUser->hasRightViewProfile($user)) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_OF', array($user->readableName()));
     } elseif ($isUserLog) {
         $headline = $gL10n->get('SYS_CHANGE_HISTORY_USERDATA');
@@ -116,9 +121,13 @@ try {
         }
     } else {
         $objName = '';
-        $useTable = $getTables[0]??'users';
-        $object = ChangelogService::getObjectForTable($useTable);
-        if ($useTable == 'members') {
+        // Keep the ID associated with its original table; never substitute another
+        // table or fall back to a user lookup when no table was requested.
+        $useTable = $getTables[0] ?? '';
+        $object = in_array($useTable, $headlineTables, true)
+            ? ChangelogService::getObjectForTable($useTable)
+            : null;
+        if ($object !== null && $useTable == 'members') {
             // Memberships are special-cased, as the membership Role UUID is stored as relatedID
             $object = new Role($gDb);
             $object->readDataByUuid($getRelatedId);
@@ -132,7 +141,9 @@ try {
             } elseif (!empty($getId)) {
                 $object->readDataById($getId);
             }
-            $objName = $object->readableName();
+            if (!($object instanceof User) || $gCurrentUser->hasRightViewProfile($object)) {
+                $objName = $object->readableName();
+            }
         }
         if (count($getTables) == 0) {
             if (empty($objName)) {
