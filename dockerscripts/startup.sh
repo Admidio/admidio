@@ -140,6 +140,25 @@ if [ -f "${ADMIDIO_CONFIG}" ]; then
         echo "\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE};" >> "${ADMIDIO_CONFIG}"
     fi
 
+    # // Enable the optional health endpoint system/health.php (disabled by default).
+    # // It is used by the Docker healthcheck and can be used by external monitors.
+    # $gHealthEndpoint = true;
+    # // Optional: the endpoint then requires this token in the header X-Health-Token.
+    # $gHealthToken = '';
+    # the options are not part of the config template, so add them if they were set
+    if grep -q '^\$gHealthEndpoint' "${ADMIDIO_CONFIG}"; then
+        sed -i "/^\$gHealthEndpoint/d" "${ADMIDIO_CONFIG}"
+    fi
+    if [ "${ADMIDIO_HEALTH_ENDPOINT}" = "1" ]; then
+        echo "\$gHealthEndpoint = true;" >> "${ADMIDIO_CONFIG}"
+    fi
+    if grep -q '^\$gHealthToken' "${ADMIDIO_CONFIG}"; then
+        sed -i "/^\$gHealthToken/d" "${ADMIDIO_CONFIG}"
+    fi
+    if [ "${ADMIDIO_HEALTH_TOKEN}" != "" ]; then
+        echo "\$gHealthToken = '${ADMIDIO_HEALTH_TOKEN}';" >> "${ADMIDIO_CONFIG}"
+    fi
+
     # // Set the preferred password hashing algorithm.
     # // Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
     # $gPasswordHashAlgorithm = 'DEFAULT';

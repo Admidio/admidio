@@ -24,7 +24,12 @@ healthcheck_main () {
         exit 0
     else
         # Get the http response code
-        http_response=$(curl --noproxy "*" -s -k --location -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
+        # If the optional health endpoint is enabled, it also checks the database and the data folder
+        if [ "${ADMIDIO_HEALTH_ENDPOINT:-}" = "1" ]; then
+            resource="/system/health.php"
+        fi
+
+        http_response=$(curl --noproxy "*" -s -k --location -H "X-Health-Token: ${ADMIDIO_HEALTH_TOKEN:-}" -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
 
         # If http_response is 200 - server is up.
         if [ "${http_response}" != "200" ]; then

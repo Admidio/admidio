@@ -177,6 +177,16 @@ Possible values: `Value from table field adm_organizations::org shortname`
 
 see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_config.php#g_organization
 
+### `ADMIDIO_HEALTH_ENDPOINT`
+Enables the optional health endpoint `system/health.php`. It is disabled by default and answers `404` as long as it is not enabled. If it is enabled, the Docker healthcheck uses it instead of a static file. The endpoint checks the connection to the database and the write access to the data folder and answers only `ok` (`200`) or `fail` (`503`); the reason of a failure is written to the log. It starts no session and sets no cookie, so external monitors that call it don't show up as "visitors online".
+
+Possible values: `1` (enabled) or empty (disabled)
+
+### `ADMIDIO_HEALTH_TOKEN`
+Optional token for the health endpoint. If it is set, the endpoint answers `404` unless the header `X-Health-Token` contains this token. The Docker healthcheck sends it automatically.
+
+Possible value: any string without quotes
+
 ### `ADMIDIO_PASSWORD_HASH_ALGORITHM`
 Optionally, the encryption algorithm for the user passwords can be stored here. This should always point to DEFAULT . Then the best algorithm, supported by all current PHP installations, is taken. SHA512 is not automatically available on all servers, so this option should only be selected if it is ensured that the Admidio version will always run on a server that supports this encryption. The encodings ARGON2ID and ARGON2I are only available from Admidio 4.
 
