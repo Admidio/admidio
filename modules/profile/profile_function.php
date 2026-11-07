@@ -51,10 +51,10 @@ try {
 
         $filename = $user->getValue('FIRST_NAME') . ' ' . $user->getValue('LAST_NAME');
 
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.vcf';
+        $filename = FileSystemUtils::getSanitizedDownloadName($filename) . '.vcf';
 
         header('Content-Type: text/vcard; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $filename));
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');

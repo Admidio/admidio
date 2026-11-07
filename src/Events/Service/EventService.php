@@ -337,21 +337,21 @@ class EventService
             $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database'));
             $events->setEventUuid($eventUUID);
         } else {
-            $filename = FileSystemUtils::getSanitizedPathEntry($gCurrentOrganization->getValue('org_longname'));
+            $filename = FileSystemUtils::getSanitizedDownloadName($gCurrentOrganization->getValue('org_longname'));
             $events->setDateRange($dateFrom, $dateTo);
 
             if ($categoryUUID !== '') {
                 $calendar = new Category($this->database);
                 $events->setCategoryUuid($categoryUUID);
                 $calendar->readDataByUuid($categoryUUID);
-                $filename .= '-' . FileSystemUtils::getSanitizedPathEntry($calendar->getValue('cat_name'));
+                $filename .= '-' . FileSystemUtils::getSanitizedDownloadName($calendar->getValue('cat_name'));
             }
         }
 
         $contentDisposition = $inline ? 'inline' : 'attachment';
 
         header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: ' . $contentDisposition . '; filename="' . $filename . '.ics"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition($contentDisposition, $filename . '.ics'));
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');

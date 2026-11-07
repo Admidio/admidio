@@ -806,6 +806,44 @@ final class FileSystemUtils
     }
 
     /**
+     * Get the name of a file that is sent to the browser as download, cleaned of all characters that must not be in a
+     * file name: control characters, path separators, quotes and other special characters. In contrast to
+     * **getSanitizedPathEntry()** letters and digits of all languages are kept, e.g. umlauts. Use it only for the
+     * name that is shown to the user, not for a name in the file system. Send it with **getContentDisposition()**.
+     * @param string $name The name to clean
+     * @param string $replacer The character to replace special-characters with
+     * @return string Returns the cleaned name
+     * @example "Müller: Übung 1/2.pdf" => "Müller_ Übung 1_2.pdf"
+     */
+    public static function getSanitizedDownloadName(string $name, string $replacer = '_'): string
+    {
+        return preg_replace('/[^\p{L}\p{N}._ -]/u', $replacer, $name) ?? '';
+    }
+
+    /**
+     * Get the value of the header **Content-Disposition** for a file that is sent to the browser. The name is sent as
+     * UTF-8 in the parameter **filename*** (RFC 6266, RFC 5987). The parameter **filename** is an ASCII fallback for
+     * old browsers; each character that is not allowed there is replaced with an underscore. Without **filename***
+     * some browsers read the UTF-8 bytes as ISO-8859-1 and show "angezÃ¼ndet" instead of "angezündet".
+     * @param string $disposition Either **attachment** (download) or **inline** (show in the browser)
+     * @param string $fileName The name of the file, e.g. with umlauts
+     * @return string Returns the value for the header, without the name of the header
+     * @example getContentDisposition('attachment', 'Müller Übung.pdf') => "attachment; filename="M_ller _bung.pdf"; filename*=UTF-8''M%C3%BCller%20%C3%9Cbung.pdf"
+     */
+    public static function getContentDisposition(string $disposition, string $fileName): string
+    {
+        // a file name has no control characters, they could also break the header
+        $fileName = preg_replace('/[\x00-\x1F\x7F]/u', '', $fileName) ?? '';
+        if ($fileName === '') {
+            $fileName = 'download';
+        }
+
+        $asciiFileName = preg_replace('/[^\x20-\x7E]|["\\\\%]/u', '_', $fileName) ?? 'download';
+
+        return $disposition . '; filename="' . $asciiFileName . '"; filename*=UTF-8\'\'' . rawurlencode($fileName);
+    }
+
+    /**
      * Get a normalized/simplified path
      * @param string $path The path to normalize
      * @return string Returns the normalized path

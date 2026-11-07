@@ -508,7 +508,7 @@ class KeyService {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array(openssl_error_string()));
         }
 
-        $filename = FileSystemUtils::getSanitizedPathEntry($name) . '.p12';
+        $filename = FileSystemUtils::getSanitizedDownloadName($name) . '.p12';
 
         return array(
             'filename' => $filename,
@@ -523,7 +523,7 @@ class KeyService {
 
         // Send the PKCS#12 file as a download to the browser.
         header('Content-Type: ' . $export['contentType']);
-        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $export['filename']));
         header('Content-Length: ' . strlen($export['content']));
         echo $export['content'];
         exit;
@@ -680,7 +680,7 @@ class KeyService {
             throw new Exception('SYS_SSO_KEY_EXPORT_FAILURE', array($gL10n->get('SYS_SSO_CERTIFICATE_MISSING')));
         }
 
-        $filename = FileSystemUtils::getSanitizedPathEntry($ssoKey->getValue('key_name')) . '_Certificate.pem';
+        $filename = FileSystemUtils::getSanitizedDownloadName($ssoKey->getValue('key_name')) . '_Certificate.pem';
 
         return array(
             'filename' => $filename,
@@ -695,7 +695,7 @@ class KeyService {
 
         // Set headers for file download
         header('Content-Type: ' . $export['contentType']);
-        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $export['filename']));
         header('Content-Length: ' . strlen($export['content']));
 
         // Output the certificate contents

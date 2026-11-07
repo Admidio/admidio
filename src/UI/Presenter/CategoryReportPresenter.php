@@ -516,9 +516,9 @@ class CategoryReportPresenter
 
     // Settings for export file
         if ($getMode === 'csv' || $getMode === 'pdf') {
-            $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
+            $filename = FileSystemUtils::getSanitizedDownloadName($filename) . '.' . $getMode;
 
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $filename));
 
             // necessary for IE6 to 8, because without it the download with SSL has problems
             header('Cache-Control: private');
@@ -530,7 +530,7 @@ class CategoryReportPresenter
             header('Content-Type: text/comma-separated-values; charset=' . $charset);
             echo CategoryReportOutput::createCsv($csvRows);
         } elseif (in_array($getMode, array('xlsx', 'ods'), true)) {
-            $filename = FileSystemUtils::getSanitizedPathEntry($filename) . '.' . $getMode;
+            $filename = FileSystemUtils::getSanitizedDownloadName($filename) . '.' . $getMode;
             self::formatSpreadsheet($spreadsheet, $columnCount + 1, true);
 
             if ($getMode === 'xlsx') {
@@ -540,7 +540,7 @@ class CategoryReportPresenter
                 header('Content-Type: application/vnd.oasis.opendocument.spreadsheet; charset=' . $charset);
                 $writer = new Ods($spreadsheet);
             }
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $filename));
             header('Cache-Control: max-age=0');
 
             $writer->save('php://output');
