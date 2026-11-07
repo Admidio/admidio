@@ -27,7 +27,6 @@ try {
     $organization = RssFeedAccess::resolveOrganization($gDb, $gCurrentOrganization, $getOrganization);
     RssFeedAccess::assertAccessible($organization, 'events_module_enabled');
     $organizationName = $organization->getValue('org_longname');
-    $organizationID = (int)$organization->getValue('org_id');
     $organizationSettings = $organization->getSettingsManager();
 
     $eventsResult = RssFeedAccess::asGuest($gDb, $organization, function (): array {

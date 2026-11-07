@@ -8,7 +8,6 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\RssFeed;
 use Admidio\Infrastructure\RssFeedAccess;
 use Admidio\Infrastructure\Utils\SecurityUtils;
-use Admidio\Organizations\Entity\Organization;
 use DateTime;
 
 /**
