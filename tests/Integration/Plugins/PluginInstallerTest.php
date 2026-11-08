@@ -775,6 +775,35 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that an unreadable update file stops the installation before install.sql ran
+     *
+     * @testdox A malformed update file fails the installation before install.sql created any table
+     */
+    public function testAMalformedUpdateFileFailsBeforeInstallSqlRuns(): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        if (!is_dir($directory)) {
+            mkdir($directory);
+        }
+        file_put_contents($directory . '/install.sql', 'CREATE TABLE %PREFIX%_hello_marker (hm_id INT)');
+        file_put_contents($directory . '/update_' . str_replace('.', '_', substr(self::PLUGIN_VERSION, 0, 3)) . '.xml', '<update><step id="10">');
+
+        try {
+            PluginInstaller::enable($this->plugin());
+            $this->fail('A malformed update file must fail the installation.');
+        } catch (\Exception) {
+            // expected
+        }
+
+        global $gDb;
+        $this->assertFalse(
+            $gDb->tableExists(TABLE_PREFIX . '_hello_marker'),
+            'install.sql must not have run.'
+        );
+        $this->assertFalse(PluginRegistry::isInstalled(self::PLUGIN_ID));
+    }
+
+    /**
      * Test that removing takes everything away
      *
      * @testdox Removing a plugin takes its files, its component, its menu entry and its preferences
