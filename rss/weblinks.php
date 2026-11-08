@@ -29,15 +29,11 @@ try {
     $organizationName = $organization->getValue('org_longname');
     $organizationSettings = $organization->getSettingsManager();
 
-    RssFeedAccess::assertAccessible($organization, 'weblinks_module_enabled', $gValidLogin);
+    RssFeedAccess::assertAccessible($organization, 'weblinks_module_enabled');
 
-    $currentUserOrganizationID = $gCurrentUser->getOrganization();
-    try {
-        $gCurrentUser->setOrganization((int)$organizationID);
-        $visibleCategoryIDs = array_merge(array(0), $gCurrentUser->getAllVisibleCategories('LNK'));
-    } finally {
-        $gCurrentUser->setOrganization($currentUserOrganizationID);
-    }
+    $visibleCategoryIDs = RssFeedAccess::asGuest($gDb, $organization, function (): array {
+        return array_merge(array(0), $GLOBALS['gCurrentUser']->getAllVisibleCategories('LNK'));
+    });
 
     if ($organizationSettings->getInt('system_show_create_edit') === 1) {
         // show firstname and lastname of create and last change user

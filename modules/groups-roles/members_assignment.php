@@ -33,6 +33,11 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
+    // Apply the same module access restriction as the groups and roles page.
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
+
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid', array('requireValue' => true, 'directOutput' => true));
