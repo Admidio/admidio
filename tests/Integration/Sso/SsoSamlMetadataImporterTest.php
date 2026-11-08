@@ -57,6 +57,22 @@ class SsoSamlMetadataImporterTest extends AdministratorTestCase
     }
 
     /**
+     * @testdox Metadata without a signing certificate removes the certificates that were stored
+     */
+    public function testAWithdrawnSigningCertificateIsNoLongerTrusted(): void
+    {
+        $client = $this->createSamlClient($this->suffix());
+        $entityId = (string) $client->getValue('smc_client_id');
+        $importer = new SAMLMetadataImporter();
+        $importer->apply($client, $this->metadata($entityId));
+        $this->assertNotSame('', trim((string) $client->getValue('smc_x509_certificate')));
+
+        $importer->apply($client, str_replace('use="signing"', 'use="encryption"', $this->metadata($entityId)));
+
+        $this->assertSame('', trim((string) $client->getValue('smc_x509_certificate')));
+    }
+
+    /**
      * @testdox Only the entry with the entity ID of the client is used from an aggregate
      */
     public function testTheEntryOfTheClientIsUsedFromAnAggregate(): void

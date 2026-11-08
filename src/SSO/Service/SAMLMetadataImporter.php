@@ -100,10 +100,10 @@ class SAMLMetadataImporter
         // rollover. A KeyDescriptor without a use attribute can be used for signing and for
         // encryption. The metadata is authoritative: a certificate that is no longer in it is
         // removed from the client.
+        // Metadata without any signing certificate empties the list as well: a key that was withdrawn
+        // must not stay trusted.
         $signing = $this->certificates($xpath, $spDescriptor, 'md:KeyDescriptor[@use="signing" or not(@use)]');
-        if ($signing !== array()) {
-            $client->setValue('smc_x509_certificate', SAMLCertificates::join($signing));
-        }
+        $client->setValue('smc_x509_certificate', SAMLCertificates::join($signing));
 
         // A separate encryption key is used for encrypted assertions. Without one the client
         // falls back to its first signing certificate.
