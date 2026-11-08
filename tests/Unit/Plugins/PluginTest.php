@@ -402,6 +402,42 @@ final class PluginTest extends PluginTestCase
     }
 
     /**
+     * @testdox The menu entry goes below Extensions unless the manifest names another node, and an unknown node is an error
+     */
+    public function testMenuParent(): void
+    {
+        $this->assertSame('extensions', Plugin::read(self::fixturePath('hello'))->getMenuParent());
+
+        $directory = sys_get_temp_dir() . '/adm_menu_parent_' . uniqid() . '/menuplugin';
+        mkdir($directory . '/src', 0777, true);
+        file_put_contents($directory . '/plugin.php', "<?php\n");
+
+        try {
+            foreach (array('modules', 'administration', 'extensions') as $declared) {
+                $manifest = json_decode((string)file_get_contents(self::fixturePath('hello') . '/plugin.json'), true);
+                $manifest['menuParent'] = $declared;
+                file_put_contents($directory . '/plugin.json', json_encode($manifest));
+
+                $plugin = Plugin::read($directory);
+                $this->assertNull($plugin->error, $declared);
+                $this->assertSame($declared, $plugin->getMenuParent(), $declared);
+            }
+
+            $manifest['menuParent'] = 'nonsense';
+            file_put_contents($directory . '/plugin.json', json_encode($manifest));
+            $broken = Plugin::read($directory);
+            $this->assertSame(Plugin::ERROR_BROKEN_MANIFEST, $broken->errorCode);
+            $this->assertStringContainsString('menuParent', (string)$broken->error);
+        } finally {
+            unlink($directory . '/plugin.json');
+            unlink($directory . '/plugin.php');
+            rmdir($directory . '/src');
+            rmdir($directory);
+            rmdir(dirname($directory));
+        }
+    }
+
+    /**
      * @testdox A setting is read in the type the manifest declares for it
      */
     public function testSettingValuesAreTyped(): void
