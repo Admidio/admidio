@@ -54,8 +54,7 @@ class ForumPostPresenter extends PagePresenter
 
         // check if the current user may create or edit a post in the topic's category
         $topic = new Topic($gDb);
-        $topic->readDataByUuid($topicUUID);
-        if (!$topic->isCategoryEditable()) {
+        if (!$topic->readDataByUuid($topicUUID) || !$topic->isCategoryEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -63,9 +62,11 @@ class ForumPostPresenter extends PagePresenter
         $post = new Post($gDb);
 
         if ($this->postUUID !== '') {
-            $post->readDataByUuid($this->postUUID);
-            if (!$post->isEditableByCurrentUser()) {
-                throw new Exception($gL10n->get('SYS_NO_RIGHTS'));
+            // Only edit posts belonging to the topic whose category permissions were checked.
+            if (!$post->readDataByUuid($this->postUUID)
+                || (int)$post->getValue('fop_fot_id') !== (int)$topic->getValue('fot_id')
+                || !$post->isEditableByCurrentUser()) {
+                throw new Exception('SYS_NO_RIGHTS');
             }
         }
 
