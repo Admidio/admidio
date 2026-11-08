@@ -94,7 +94,7 @@ class InstallationStatisticsTest extends TestCase
         $this->assertSame($preview, (string) $history[0]['body']);
         $this->assertInstanceOf(\stdClass::class, json_decode($preview, false, 512, JSON_THROW_ON_ERROR));
         $this->assertSame($snapshot, json_decode($preview, true, 512, JSON_THROW_ON_ERROR));
-        $this->assertSame('https://www.admidio.org/api/statistics.php', $history[0]['url']);
+        $this->assertSame('https://www.admidio.org/api/installation-statistics/statistics.php', $history[0]['url']);
     }
 
     public function testConfiguredEndpointOverridesDefault(): void

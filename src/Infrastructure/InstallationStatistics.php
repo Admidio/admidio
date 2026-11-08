@@ -183,7 +183,7 @@ class InstallationStatistics
             throw new Exception('SYS_TENANT_ID_NOT_INITIALIZED');
         }
         $infoData['id'] = $tenantId;
-        $url = $gStatisticsUrl ?? 'https://www.admidio.org/api/statistics.php';
+        $url = $gStatisticsUrl ?? 'https://www.admidio.org/api/installation-statistics/statistics.php';
         $json = $this->getJsonData($infoData);
         $statusCode = $this->httpPost !== null ? ($this->httpPost)($url, $json) : $this->postJson($url, $json);
 
