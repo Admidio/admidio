@@ -45,7 +45,7 @@ class InstallationStatistics
                 'version' => InstallationStatistics::getAdmidioVersion(),
                 'previous_version' => $this->previousVersion,
                 'language' => InstallationStatistics::getAdmidioLanguage(),
-                'plugins' => InstallationStatistics::getAdmidioPlugins()
+                'plugins' => InstallationStatistics::getAdmidioPlugins($this->previousVersion)
             ),
             'php' => array(
                 'version' => InstallationStatistics::getPHPVersion(),
@@ -134,12 +134,17 @@ class InstallationStatistics
      * Manifest versions of installed plugins enabled in at least one organization.
      * @return array<string,string>
      */
-    private static function getAdmidioPlugins(): array
+    private static function getAdmidioPlugins(?string $previousVersion = null): array
     {
-        global $gSettingsManager;
+        global $gDb, $gSettingsManager;
 
         // The installer preview runs before any plugin or preference tables exist.
         if (!isset($gSettingsManager)) {
+            return array();
+        }
+        // The update preview runs before migrations add the plugin registry columns.
+        if ($previousVersion !== null
+            && array_diff(array('com_uuid', 'com_type'), $gDb->getTableColumns(TBL_COMPONENTS)) !== array()) {
             return array();
         }
         $plugins = array();

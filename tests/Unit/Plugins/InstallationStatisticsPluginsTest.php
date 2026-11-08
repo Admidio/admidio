@@ -73,4 +73,22 @@ final class InstallationStatisticsPluginsTest extends PluginTestCase
         $method = new ReflectionMethod(InstallationStatistics::class, 'getAdmidioPlugins');
         $this->assertSame(array(), $method->invoke(null));
     }
+
+    public function testUpdatePreviewDoesNotReadPluginRegistryBeforeMigration(): void
+    {
+        if (!defined('TBL_COMPONENTS')) {
+            define('TBL_COMPONENTS', 'adm_components');
+        }
+        $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array());
+        PluginRegistry::setInstallations(null);
+        $database = $this->getMockBuilder(\Admidio\Infrastructure\Database::class)
+            ->disableOriginalConstructor()->onlyMethods(array('getTableColumns', 'queryPrepared'))->getMock();
+        $database->expects($this->once())->method('getTableColumns')->with(TBL_COMPONENTS)
+            ->willReturn(array('com_id', 'com_name_intern', 'com_version'));
+        $database->expects($this->never())->method('queryPrepared');
+        $GLOBALS['gDb'] = $database;
+
+        $method = new ReflectionMethod(InstallationStatistics::class, 'getAdmidioPlugins');
+        $this->assertSame(array(), $method->invoke(null, '5.0.0'));
+    }
 }

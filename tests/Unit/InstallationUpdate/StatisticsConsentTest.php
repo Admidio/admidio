@@ -77,7 +77,7 @@ class StatisticsConsentTest extends TestCase
     {
         foreach (array('ADMIDIO_PATH' => dirname(__DIR__, 3), 'FOLDER_PLUGINS' => '/plugins',
             'ADMIDIO_VERSION_TEXT' => '5.1.0', 'TBL_PREFERENCES' => 'adm_preferences',
-            'TBL_ORGANIZATIONS' => 'adm_organizations') as $name => $value) {
+            'TBL_ORGANIZATIONS' => 'adm_organizations', 'TBL_COMPONENTS' => 'adm_components') as $name => $value) {
             if (!defined($name)) {
                 define($name, $value);
             }
@@ -92,7 +92,8 @@ class StatisticsConsentTest extends TestCase
             };
         }
         $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
-            ->onlyMethods(array('getInformation', 'getVersion', 'queryPrepared'))->getMock();
+            ->onlyMethods(array('getInformation', 'getVersion', 'getTableColumns', 'queryPrepared'))->getMock();
+        $database->method('getTableColumns')->willReturn(array('com_id', 'com_name_intern', 'com_version'));
         $database->method('getInformation')->willReturn(array('mysql', '8.0.40'));
         $database->method('getVersion')->willReturn('8.0.40');
         $statement = $this->createMock(PDOStatement::class);
