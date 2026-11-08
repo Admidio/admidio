@@ -2068,11 +2068,11 @@
   <string name="SYS_SSO_OIDC_ALLOW_ACCESS">Allow access</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES">Claims in custom scope and field overrides</string>
   <string name="SYS_SSO_OIDC_ATTRIBUTES_DESC">Select user fields to include in the custom scope. You can also override standard claims, for example by mapping a profile field to phone_number or name.</string>
+  <string name="SYS_SSO_OIDC_AUTHORIZATION_FAILED">The sign-in request of the application could not be processed: #VAR1#</string>
   <string name="SYS_SSO_OIDC_AUTHORIZE_CLIENT">Authorize #VAR1#</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_AUTHORIZATION_FAILED">The sign-in request of the application could not be processed: #VAR1#</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Back-channel logout URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Server-to-server logout notification with a signed token. Optional.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
