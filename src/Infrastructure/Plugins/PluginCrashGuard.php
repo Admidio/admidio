@@ -209,9 +209,20 @@ final class PluginCrashGuard
      */
     private static function getPluginIdOfFile(string $file): ?string
     {
-        $base = rtrim(str_replace('\\', '/', PluginRegistry::getPluginsPath()), '/') . '/';
         $file = str_replace('\\', '/', $file);
-        if (!str_starts_with($file, $base)) {
+
+        // PHP reports the resolved path of a file, while the plugins directory (or one of its parents)
+        // may be a symbolic link or a mount point, so the configured path alone may never match.
+        $path = PluginRegistry::getPluginsPath();
+        $base = null;
+        foreach (array($path, (string)realpath($path)) as $candidate) {
+            $candidate = rtrim(str_replace('\\', '/', $candidate), '/') . '/';
+            if ($candidate !== '/' && str_starts_with($file, $candidate)) {
+                $base = $candidate;
+                break;
+            }
+        }
+        if ($base === null) {
             return null;
         }
 

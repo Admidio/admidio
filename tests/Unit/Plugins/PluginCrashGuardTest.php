@@ -126,6 +126,30 @@ final class PluginCrashGuardTest extends PluginTestCase
     }
 
     /**
+     * @testdox A plugin is found although the plugins directory is a symbolic link
+     *
+     * PHP reports the resolved path of the file, not the path that is configured.
+     */
+    public function testPluginsDirectoryThatIsASymbolicLink(): void
+    {
+        $link = sys_get_temp_dir() . '/adm_plugins_link_' . uniqid();
+        if (!@symlink(self::fixturePath(''), $link)) {
+            $this->markTestSkipped('Symbolic links are not available.');
+        }
+
+        try {
+            PluginRegistry::setPluginsPath($link);
+            $this->assertSame('crashing', PluginCrashGuard::attributeError(array(
+                'type' => E_COMPILE_ERROR, 'message' => 'Declaration must be compatible',
+                'file' => realpath(self::crashingFile('src/Incompatible.php')), 'line' => 12
+            ))['plugin'] ?? null);
+        } finally {
+            PluginRegistry::setPluginsPath(self::fixturePath(''));
+            unlink($link);
+        }
+    }
+
+    /**
      * @testdox An error in the code of a file outside the plugins is no crash of a plugin after loading
      */
     public function testCodeErrorOutsidePluginsOutsideLoading(): void
