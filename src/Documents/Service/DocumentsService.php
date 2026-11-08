@@ -98,14 +98,7 @@ class DocumentsService
         header('Content-Type: ' . $file->getMimeType());
         header('X-Content-Type-Options: nosniff');
         header('Content-Length: ' . $fileSize);
-        // The file name is sent twice: filename* (RFC 6266 / RFC 5987) carries the real UTF-8 name, e.g. with
-        // umlauts. The plain filename is an ASCII fallback, because without filename* some browsers read the
-        // UTF-8 bytes as ISO-8859-1 and show "angezÃ¼ndet" instead of "angezündet".
-        $fileName = (string)$file->getValue('fil_name', 'database');
-        $asciiFileName = preg_replace('/[^\x20-\x7E]|["\\\\%]/u', '_', $fileName) ?? 'download';
-        header(
-            'Content-Disposition: ' . $content . '; filename="' . $asciiFileName . '"; filename*=UTF-8\'\'' . rawurlencode($fileName)
-        );
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition($content, (string)$file->getValue('fil_name', 'database')));
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
