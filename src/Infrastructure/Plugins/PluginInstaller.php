@@ -63,8 +63,6 @@ final class PluginInstaller
             throw new Exception(implode(' ', $problems));
         }
 
-        self::executeSqlFile($plugin, 'install.sql');
-
         $component = new ComponentUpdate($gDb);
         $component->setValue('com_type', PluginRegistry::COMPONENT_TYPE);
         $component->setValue('com_name', $plugin->name);
@@ -74,7 +72,12 @@ final class PluginInstaller
         $component->setValue('com_version', $plugin->version);
         // install.sql already creates the schema of this version, so the steps of its update file
         // count as done. Otherwise the next update would run them again on that schema.
+        // Reading the steps fails on a malformed update file. That has to happen before install.sql
+        // created any table, or the failed attempt leaves them behind and every retry fails on them.
         $component->setValue('com_update_step', $component->getMaxUpdateStep());
+
+        self::executeSqlFile($plugin, 'install.sql');
+
         $component->save();
 
         PluginRegistry::reset();
