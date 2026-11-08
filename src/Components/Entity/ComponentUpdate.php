@@ -50,11 +50,14 @@ class ComponentUpdate extends Component
     /**
      * Gets the version parts of a version string
      * @param string $versionString A version string
-     * @return array<int,int> Returns an array with the version parts
+     * @return array<int,int> Returns an array with the version parts, at least major and minor.
+     *                        A missing component counts as 0, so "1" is read as 1.0.
      */
     private static function getVersionArrayFromVersion(string $versionString): array
     {
-        return array_map('intval', explode('.', $versionString));
+        $versionArray = array_map('intval', explode('.', $versionString));
+
+        return $versionArray + array(0, 0);
     }
 
     /**

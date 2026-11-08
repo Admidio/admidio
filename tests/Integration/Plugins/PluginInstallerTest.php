@@ -756,6 +756,25 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that a version without a minor component can be installed
+     *
+     * The manifest accepts "1". Reading its steps used to need two components and threw after
+     * install.sql had run, which left the tables behind and made every retry fail.
+     *
+     * @testdox A plugin whose version has no minor component installs, "1" being read as 1.0
+     */
+    public function testAVersionWithoutAMinorComponentInstalls(): void
+    {
+        $this->writeManifestVersion('1');
+        $this->writeUpdateScript('1.0', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame('1', $this->component()['com_version']);
+        $this->assertSame(10, (int)$this->component()['com_update_step']);
+    }
+
+    /**
      * Test that removing takes everything away
      *
      * @testdox Removing a plugin takes its files, its component, its menu entry and its preferences
