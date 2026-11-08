@@ -833,16 +833,17 @@ final class FileSystemUtils
      */
     public static function getContentDisposition(string $disposition, string $fileName): string
     {
-        // a file name has no control characters, they could also break the header
-        $fileName = preg_replace('/[\x00-\x1F\x7F]/', '', $fileName);
+        // filename* is declared as UTF-8, so bytes that are not valid UTF-8 are replaced; a file name has no control
+        // characters, they could also break the header
+        $fileName = preg_replace('/[\x00-\x1F\x7F]/', '', mb_scrub($fileName));
         if ($fileName === '') {
             $fileName = 'download';
         }
 
         $transliterated = strtr($fileName, array('ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue', 'ß' => 'ss'));
         $pattern = '/[^\x20-\x7E]|["\\\\%]/';
-        // one underscore per character; a name that is not valid UTF-8 is replaced byte by byte
-        $asciiFileName = preg_replace($pattern . 'u', '_', $transliterated) ?? preg_replace($pattern, '_', $transliterated);
+        // one underscore per character
+        $asciiFileName = preg_replace($pattern . 'u', '_', $transliterated);
 
         return $disposition . '; filename="' . $asciiFileName . '"; filename*=UTF-8\'\'' . rawurlencode($fileName);
     }

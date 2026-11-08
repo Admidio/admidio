@@ -100,10 +100,10 @@ class FileSystemUtilsTest extends AdmidioTestCase
                 'attachment; filename="aX-Injected: 1b.txt"; filename*=UTF-8\'\'aX-Injected%3A%201b.txt'
             ),
             'empty name' => array('attachment', '', 'attachment; filename="download"; filename*=UTF-8\'\'download'),
-            'invalid UTF-8: the fallback is replaced byte by byte' => array(
+            'invalid UTF-8 is replaced, so filename* is always valid UTF-8' => array(
                 'attachment',
                 "a\xFFb.txt",
-                'attachment; filename="a_b.txt"; filename*=UTF-8\'\'a%FFb.txt'
+                'attachment; filename="a?b.txt"; filename*=UTF-8\'\'a%3Fb.txt'
             )
         );
     }

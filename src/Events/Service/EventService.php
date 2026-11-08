@@ -334,7 +334,7 @@ class EventService
             $event = new Event($this->database);
             $event->readDataByUuid($eventUUID);
 
-            $filename = FileSystemUtils::getSanitizedPathEntry($event->getValue('dat_headline', 'database'));
+            $filename = FileSystemUtils::getSanitizedDownloadName($event->getValue('dat_headline', 'database'));
             $events->setEventUuid($eventUUID);
         } else {
             $filename = FileSystemUtils::getSanitizedDownloadName($gCurrentOrganization->getValue('org_longname'));
