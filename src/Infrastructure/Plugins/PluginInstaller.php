@@ -352,7 +352,8 @@ final class PluginInstaller
     }
 
     /**
-     * Add the menu entry of the plugin below the "Extensions" node. The entry belongs to the
+     * Add the menu entry of the plugin below the "Extensions" node, or below "Administration" or
+     * "Modules" if the manifest says so (see Plugin::getMenuParent()). The entry belongs to the
      * component of the plugin, so it disappears with it, and an administrator may rename, move or
      * delete it afterwards like any other menu entry.
      * @param Plugin $plugin
@@ -364,8 +365,13 @@ final class PluginInstaller
     {
         global $gDb;
 
+        $parentId = (int)$gDb->queryPrepared(
+            'SELECT men_id FROM ' . TBL_MENU . ' WHERE men_name_intern = ?',
+            array($plugin->getMenuParent())
+        )->fetchColumn();
+
         $menuEntry = new MenuEntry($gDb);
-        $menuEntry->setValue('men_men_id_parent', 3); // the "Extensions" node
+        $menuEntry->setValue('men_men_id_parent', $parentId > 0 ? $parentId : 3); // 3 is the "Extensions" node
         $menuEntry->setValue('men_com_id', $componentId);
         $menuEntry->setValue('men_name', $plugin->name);
         $menuEntry->setValue('men_description', $plugin->description);

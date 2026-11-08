@@ -12,11 +12,10 @@ class WeblinksRssAccessTest extends DatabaseTestCase
 {
     private function assertRssDenied(
         Organization $organization,
-        bool $validLogin,
         string $expectedError
     ): void {
         try {
-            RssFeedAccess::assertAccessible($organization, 'weblinks_module_enabled', $validLogin);
+            RssFeedAccess::assertAccessible($organization, 'weblinks_module_enabled');
             $this->fail('The RSS feed should be denied.');
         } catch (Exception $exception) {
             $this->assertSame($expectedError, $exception->getTranslationId());
@@ -37,20 +36,19 @@ class WeblinksRssAccessTest extends DatabaseTestCase
         $settings = $requestedOrganization->getSettingsManager();
         $settings->set('enable_rss', '0');
         $settings->set('weblinks_module_enabled', '1');
-        $this->assertRssDenied($requestedOrganization, false, 'SYS_RSS_DISABLED');
+        $this->assertRssDenied($requestedOrganization, 'SYS_RSS_DISABLED');
 
         $settings->set('enable_rss', '1');
         $settings->set('weblinks_module_enabled', '0');
-        $this->assertRssDenied($requestedOrganization, false, 'SYS_MODULE_DISABLED');
+        $this->assertRssDenied($requestedOrganization, 'SYS_MODULE_DISABLED');
 
         $settings->set('weblinks_module_enabled', '2');
-        $this->assertRssDenied($requestedOrganization, false, 'SYS_NO_RIGHTS');
-        RssFeedAccess::assertAccessible($requestedOrganization, 'weblinks_module_enabled', true);
+        $this->assertRssDenied($requestedOrganization, 'SYS_NO_RIGHTS');
 
         $settings->set('weblinks_module_enabled', '1');
-        RssFeedAccess::assertAccessible($requestedOrganization, 'weblinks_module_enabled', false);
+        RssFeedAccess::assertAccessible($requestedOrganization, 'weblinks_module_enabled');
 
         $currentOrganization->getSettingsManager()->set('enable_rss', '0');
-        RssFeedAccess::assertAccessible($requestedOrganization, 'weblinks_module_enabled', false);
+        RssFeedAccess::assertAccessible($requestedOrganization, 'weblinks_module_enabled');
     }
 }

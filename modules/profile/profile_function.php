@@ -86,13 +86,31 @@ try {
         // check the CSRF token of the form against the session token
         SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-        if ($gCurrentUser->isAdministrator()) {
-            $member = new Membership($gDb);
-            $member->readDataByUuid($getMemberUuid);
-            $member->delete();
-
-            echo 'done';
+        if (!$gCurrentUser->isAdministrator()) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
+
+        $member = new Membership($gDb);
+        if (!$member->readDataByUuid($getMemberUuid)
+            || (int)$member->getValue('mem_usr_id') !== (int)$user->getValue('usr_id')) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $role = new Role($gDb, (int)$member->getValue('mem_rol_id'));
+        if ($role->getValue('cat_org_id') !== null
+            && (int)$role->getValue('cat_org_id') !== $gCurrentOrgId) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // This endpoint also removes future memberships. Active memberships must be stopped instead.
+        if (strcmp($member->getValue('mem_begin', 'Y-m-d'), DATE_NOW) <= 0
+            && strcmp($member->getValue('mem_end', 'Y-m-d'), DATE_NOW) >= 0) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $member->delete();
+
+        echo 'done';
     } elseif ($getMode === 'reload_current_memberships') {
         // reload role memberships
         $roleStatement = getRolesFromDatabase($user->getValue('usr_id'));

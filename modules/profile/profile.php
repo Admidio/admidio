@@ -528,7 +528,7 @@ try {
 
         // Abfragen der aktiven Rollen mit Berechtigung und Schreiben in ein Array
         foreach ($rolesRights as $rolesRightsDbName) {
-            $sql = 'SELECT rol_name
+            $sql = 'SELECT rol_id, rol_name
                   FROM ' . TBL_MEMBERS . '
             INNER JOIN ' . TBL_ROLES . '
                     ON rol_id = mem_rol_id
@@ -546,8 +546,12 @@ try {
             $roleStatement = $gDb->queryPrepared($sql, $queryParams);
 
             $roles = array();
-            while ($roleName = $roleStatement->fetchColumn()) {
-                $roles[] = $roleName;
+            while ($row = $roleStatement->fetch()) {
+                // Apply the same membership visibility rules as the profile's role list.
+                if ($gCurrentUser->hasRightViewRole((int) $row['rol_id'])
+                    || $gCurrentUserId === (int) $userId) {
+                    $roles[] = $row['rol_name'];
+                }
             }
 
             if (count($roles) > 0) {
@@ -557,21 +561,21 @@ try {
 
         if (count($rightsOrigin) > 0) {
 
-            if ($user->checkRolesRight('rol_assign_roles')) {
+            if (isset($rightsOrigin['rol_assign_roles'])) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_assign_roles'],
                     'right' => $gL10n->get('SYS_RIGHT_ASSIGN_ROLES'),
                     'icon' => 'bi-people-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_approve_users')) {
+            if (isset($rightsOrigin['rol_approve_users'])) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_approve_users'],
                     'right' => $gL10n->get('SYS_RIGHT_APPROVE_USERS'),
                     'icon' => 'bi-card-checklist'
                 );
             }
-            if ($user->checkRolesRight('rol_edit_user')) {
+            if (isset($rightsOrigin['rol_edit_user'])) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_edit_user'],
                     'right' => $gL10n->get('SYS_RIGHT_EDIT_USER'),
@@ -579,70 +583,70 @@ try {
                 );
             }
 
-            if ($user->checkRolesRight('rol_mail_to_all')) {
+            if (isset($rightsOrigin['rol_mail_to_all'])) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_mail_to_all'],
                     'right' => $gL10n->get('SYS_RIGHT_MAIL_TO_ALL'),
                     'icon' => 'bi-envelope-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_profile')) {
+            if (isset($rightsOrigin['rol_profile'])) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_profile'],
                     'right' => $gL10n->get('SYS_RIGHT_PROFILE'),
                     'icon' => 'bi-person-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_announcements') && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_announcements']) && $gSettingsManager->getInt('announcements_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_announcements'],
                     'right' => $gL10n->get('SYS_RIGHT_ANNOUNCEMENTS'),
                     'icon' => 'bi-newspaper'
                 );
             }
-            if ($user->checkRolesRight('rol_events') && $gSettingsManager->getInt('events_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_events']) && $gSettingsManager->getInt('events_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_events'],
                     'right' => $gL10n->get('SYS_RIGHT_DATES'),
                     'icon' => 'bi-calendar-week-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_photo') && $gSettingsManager->getInt('photo_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_photo']) && $gSettingsManager->getInt('photo_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_photo'],
                     'right' => $gL10n->get('SYS_RIGHT_PHOTOS'),
                     'icon' => 'bi-image-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_documents_files') && $gSettingsManager->getInt('documents_files_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_documents_files']) && $gSettingsManager->getInt('documents_files_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_documents_files'],
                     'right' => $gL10n->get('SYS_RIGHT_DOCUMENTS_FILES'),
                     'icon' => 'bi-file-earmark-arrow-down-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_inventory_admin') && (int)$gSettingsManager->getInt('inventory_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_inventory_admin']) && (int)$gSettingsManager->getInt('inventory_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_inventory_admin'],
                     'right' => $gL10n->get('SYS_RIGHT_INVENTORY'),
                     'icon' => 'bi-box-seam-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_forum_admin') && $gSettingsManager->getInt('forum_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_forum_admin']) && $gSettingsManager->getInt('forum_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_forum_admin'],
                     'right' => $gL10n->get('SYS_RIGHT_FORUM'),
                     'icon' => 'bi-chat-dots-fill'
                 );
             }
-            if ($user->checkRolesRight('rol_weblinks') && $gSettingsManager->getInt('weblinks_module_enabled') > 0) {
+            if (isset($rightsOrigin['rol_weblinks']) && $gSettingsManager->getInt('weblinks_module_enabled') > 0) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_weblinks'],
                     'right' => $gL10n->get('SYS_RIGHT_WEBLINKS'),
                     'icon' => 'bi-link-45deg'
                 );
             }
-            if ($user->checkRolesRight('rol_all_lists_view')) {
+            if (isset($rightsOrigin['rol_all_lists_view'])) {
                 $userRightsArray[] = array(
                     'roles' => $rightsOrigin['rol_all_lists_view'],
                     'right' => $gL10n->get('SYS_RIGHT_ALL_LISTS_VIEW'),

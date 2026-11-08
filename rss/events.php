@@ -26,19 +26,15 @@ try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
     $organization = RssFeedAccess::resolveOrganization($gDb, $gCurrentOrganization, $getOrganization);
-    RssFeedAccess::assertAccessible($organization, 'events_module_enabled', $gValidLogin);
+    RssFeedAccess::assertAccessible($organization, 'events_module_enabled');
     $organizationName = $organization->getValue('org_longname');
     $organizationSettings = $organization->getSettingsManager();
 
-    $previousUserOrganizationID = $gCurrentUser->getOrganization();
-    try {
-        $gCurrentUser->setOrganization((int)$organization->getValue('org_id'));
+    $eventsResult = RssFeedAccess::asGuest($gDb, $organization, function () use ($gDb): array {
         $events = new EventRepository($gDb);
         $events->setDateRange();
-        $eventsResult = $events->getDataSet(0, 50);
-    } finally {
-        $gCurrentUser->setOrganization($previousUserOrganizationID);
-    }
+        return $events->getDataSet(0, 50);
+    });
 
     // create RSS feed object with channel information
     $rss = new RssFeed(
