@@ -167,7 +167,7 @@ class SAMLMetadataRefreshService
         $body = $response['body'];
         $hash = $body === null ? null : hash('sha256', $body);
         if ($body === null || (!$force && $hash === $this->stored($client, 'smc_metadata_hash'))) {
-            $this->recordSuccess($client, $fetchedAt, $response, $this->storedTime($client), null, false);
+            $this->recordSuccess($client, $fetchedAt, $response, $this->storedTime($client), $this->storedCacheDuration($client), false);
             return self::UNCHANGED;
         }
 
@@ -229,6 +229,16 @@ class SAMLMetadataRefreshService
     }
 
     /**
+     * The cacheDuration of the metadata that is in use. An unchanged answer does not carry it again,
+     * and without it the next check would be scheduled as if the metadata gave no cache hint.
+     */
+    private function storedCacheDuration(SAMLClient $client): ?int
+    {
+        $value = $this->stored($client, 'smc_metadata_cache_duration');
+        return $value === null ? null : (int) $value;
+    }
+
+    /**
      * @param array{body:string|null,etag:string|null,lastModified:string|null} $response
      * @param int|null $validUntil
      * @param int|null $cacheDuration
@@ -243,6 +253,7 @@ class SAMLMetadataRefreshService
             $client->setValue('smc_metadata_hash', $hash);
         }
         $client->setValue('smc_metadata_valid_until', $validUntil === null ? null : date('Y-m-d H:i:s', $validUntil));
+        $client->setValue('smc_metadata_cache_duration', $cacheDuration);
         $client->setValue('smc_metadata_failures', 0);
         $client->setValue('smc_metadata_error', $validUntil !== null && $validUntil < $now ? 'SYS_SSO_METADATA_EXPIRED' : null);
         // only the record of the check changes if the metadata did not, which is neither a change by a person

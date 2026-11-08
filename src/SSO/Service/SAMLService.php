@@ -114,7 +114,7 @@ class SAMLService extends SSOService {
             && trim((string) $formValues['smc_metadata_url']) !== trim((string) $client->getValue('smc_metadata_url'))
         ) {
             foreach (array('smc_metadata_next_check', 'smc_metadata_etag', 'smc_metadata_last_modified', 'smc_metadata_hash',
-                     'smc_metadata_error') as $column) {
+                     'smc_metadata_cache_duration', 'smc_metadata_error') as $column) {
                 $client->setValue($column, null);
             }
             $client->setValue('smc_metadata_failures', 0);

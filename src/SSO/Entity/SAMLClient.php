@@ -55,7 +55,7 @@ class SAMLClient extends SSOClient
     {
         return array_merge(parent::getIgnoredLogColumns(), array(
             'smc_metadata_checked', 'smc_metadata_next_check', 'smc_metadata_etag', 'smc_metadata_last_modified',
-            'smc_metadata_hash', 'smc_metadata_valid_until', 'smc_metadata_failures', 'smc_metadata_error'
+            'smc_metadata_hash', 'smc_metadata_valid_until', 'smc_metadata_cache_duration', 'smc_metadata_failures', 'smc_metadata_error'
         ));
     }
 }

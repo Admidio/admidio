@@ -722,6 +722,7 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_metadata_last_modified  varchar(100)        NULL,
     smc_metadata_hash           varchar(64)         NULL,
     smc_metadata_valid_until    timestamp           NULL        DEFAULT NULL,
+    smc_metadata_cache_duration integer unsigned    NULL,
     smc_metadata_failures       integer unsigned    NOT NULL    DEFAULT 0,
     smc_metadata_error          varchar(100)        NULL,
     smc_acs_url                 text                NOT NULL,

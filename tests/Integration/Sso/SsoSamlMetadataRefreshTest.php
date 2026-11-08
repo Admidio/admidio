@@ -232,6 +232,29 @@ class SsoSamlMetadataRefreshTest extends AdministratorTestCase
     }
 
     /**
+     * @testdox Unchanged metadata keeps the cache duration it was applied with
+     */
+    public function testUnchangedMetadataKeepsTheCacheDuration(): void
+    {
+        $client = $this->clientWithUrl();
+        $xml = $this->metadata((string) $client->getValue('smc_client_id'), 'https://sp.example/acs-1', ' cacheDuration="PT20M"');
+        $service = $this->service(array($this->answer($xml, '"v1"'), $this->answer(null, '"v1"'), $this->answer($xml, '"v1"')));
+
+        $service->refresh($client);
+        $client = $this->reload($client);
+        $this->assertEqualsWithDelta(time() + 900, strtotime($client->getValue('smc_metadata_next_check', 'database')), 10);
+
+        // 304 Not Modified
+        $this->assertSame(SAMLMetadataRefreshService::UNCHANGED, $service->refresh($client));
+        $client = $this->reload($client);
+        $this->assertEqualsWithDelta(time() + 900, strtotime($client->getValue('smc_metadata_next_check', 'database')), 10);
+
+        // the same document again
+        $this->assertSame(SAMLMetadataRefreshService::UNCHANGED, $service->refresh($client));
+        $this->assertEqualsWithDelta(time() + 900, strtotime($this->reload($client)->getValue('smc_metadata_next_check', 'database')), 10);
+    }
+
+    /**
      * @testdox A forced refresh ignores the version and applies the metadata again
      */
     public function testAForcedRefreshAppliesTheMetadataAgain(): void

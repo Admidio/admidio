@@ -75,6 +75,7 @@
         ADD COLUMN smc_metadata_last_modified varchar(100) NULL,
         ADD COLUMN smc_metadata_hash varchar(64) NULL,
         ADD COLUMN smc_metadata_valid_until timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_cache_duration integer unsigned NULL,
         ADD COLUMN smc_metadata_failures integer unsigned NOT NULL DEFAULT 0,
         ADD COLUMN smc_metadata_error varchar(100) NULL</step>
     <!-- refresh tokens are issued for the offline_access scope only: clients that could get them keep their option -->
