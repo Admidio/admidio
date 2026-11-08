@@ -207,7 +207,7 @@ try {
             header('Content-Type: ' . $download['contentType']);
             header('Content-Length: ' . $fileSize);
             header('Content-Description: File Transfer');
-            header('Content-Disposition: attachment; filename="' . $download['filename'] . '"');
+            header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $download['filename']));
             header('Expires: 0');
             header('Content-Transfer-Encoding: binary');
             header('Cache-Control: private');

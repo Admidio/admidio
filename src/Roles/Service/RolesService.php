@@ -77,10 +77,10 @@ class RolesService
         // create filename of organization name and role name
         $filename = $gCurrentOrganization->getValue('org_shortname') . '-' . str_replace('.', '', $this->roleRessource->getValue('rol_name')) . '.vcf';
 
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+        $filename = FileSystemUtils::getSanitizedDownloadName($filename);
 
         header('Content-Type: text/vcard; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $filename));
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');

@@ -88,7 +88,7 @@ class DocumentsService
         header('Content-Type: ' . $file->getMimeType());
         header('X-Content-Type-Options: nosniff');
         header('Content-Length: ' . $fileSize);
-        header('Content-Disposition: ' . $content . '; filename="' . $file->getValue('fil_name') . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition($content, (string)$file->getValue('fil_name', 'database')));
 
         // necessary for IE, because without it the download with SSL has problems
         header('Cache-Control: private');
