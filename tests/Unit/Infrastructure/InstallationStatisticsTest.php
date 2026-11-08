@@ -11,9 +11,17 @@ class InstallationStatisticsTest extends TestCase
 {
     private array $originalDatabase;
     private array $originalStatisticsUrl;
+    private array $originalContext = array();
 
     protected function setUp(): void
     {
+        // Exercise the installer fallback without inheriting another test's language or settings stubs.
+        foreach (array('gL10n', 'gSettingsManager') as $name) {
+            if (array_key_exists($name, $GLOBALS)) {
+                $this->originalContext[$name] = $GLOBALS[$name];
+            }
+            unset($GLOBALS[$name]);
+        }
         $this->originalStatisticsUrl = array_key_exists('gStatisticsUrl', $GLOBALS) ? array($GLOBALS['gStatisticsUrl']) : array();
         unset($GLOBALS['gStatisticsUrl']);
         $this->originalDatabase = array_key_exists('gDb', $GLOBALS) ? array($GLOBALS['gDb']) : array();
@@ -33,6 +41,14 @@ class InstallationStatisticsTest extends TestCase
 
     protected function tearDown(): void
     {
+        foreach (array('gL10n', 'gSettingsManager') as $name) {
+            if (array_key_exists($name, $this->originalContext)) {
+                $GLOBALS[$name] = $this->originalContext[$name];
+            } else {
+                unset($GLOBALS[$name]);
+            }
+        }
+        $this->originalContext = array();
         if ($this->originalStatisticsUrl === array()) {
             unset($GLOBALS['gStatisticsUrl']);
         } else {

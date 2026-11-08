@@ -120,7 +120,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $this->assertFalse((new SettingsManager($db, (int)$other['org_id']))->has('system_statistics_last_sent'));
     }
 
-    public function testOptOutAndFailedSendDoNotAdvanceLastSuccessfulSend(): void
+    public function testOptOutPreventsSendingAndFailedSendReservesRetry(): void
     {
         $db = $this->getDatabase();
         InstallationIdentifier::ensure($db);
@@ -136,12 +136,24 @@ class InstallationIdentifierTest extends DatabaseTestCase
 
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(0, $history);
+        $this->assertSame('2000-01-01 12:00:00', InstallationStatistics::getLastSent($db));
         StatisticsConsent::savePreference(true);
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(1, $history);
-        $this->assertSame('2000-01-01 12:00:00', InstallationStatistics::getLastSent($this->getDatabase()));
+        $retry = InstallationStatistics::getLastSent($db);
+        $this->assertStringStartsWith('retry:', $retry);
+        $deadline = new \DateTimeImmutable(substr($retry, 6));
+        $this->assertEqualsWithDelta(time() + 3600, $deadline->getTimestamp(), 2);
+        $this->assertFalse(InstallationStatistics::isDue($retry));
+        InstallationStatistics::sendIfDue($db, $mainId, $client);
+        $this->assertCount(1, $history);
+        $this->assertSame($retry, InstallationStatistics::getLastSent($db));
+
+        // Expire the reservation without waiting for the retry interval in real time.
+        $this->setLastSent('retry:2000-01-01T13:00:00Z');
         InstallationStatistics::sendIfDue($db, $mainId, $client);
         $this->assertCount(2, $history);
+        $this->assertStringStartsNotWith('retry:', InstallationStatistics::getLastSent($db));
         $this->assertFalse(InstallationStatistics::isDue(InstallationStatistics::getLastSent($this->getDatabase())));
     }
 
