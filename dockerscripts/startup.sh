@@ -115,9 +115,12 @@ if [ -f "${ADMIDIO_CONFIG}" ]; then
         sed -i "s#^\$g_root_path.*#\$g_root_path = '${ADMIDIO_ROOT_PATH}';#g" "${ADMIDIO_CONFIG}"
     fi
 
+    # the option is not part of the config template anymore, so add it if it was set
     if [ "${ADMIDIO_ORGANISATION}" != "" ]; then
-        if [ "$(egrep '^\$g_organization' ${ADMIDIO_CONFIG})" != "" ]; then
+        if grep -q '^\$g_organization' "${ADMIDIO_CONFIG}"; then
             sed -i "s/^\$g_organization.*/\$g_organization = '${ADMIDIO_ORGANISATION}';/g" "${ADMIDIO_CONFIG}"
+        else
+            echo "\$g_organization = '${ADMIDIO_ORGANISATION}';" >> "${ADMIDIO_CONFIG}"
         fi
     fi
 
