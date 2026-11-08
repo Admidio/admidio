@@ -7,36 +7,24 @@
         <div class="card admidio-blog" id="adm_announcement_{$announcement.uuid}">
             <div class="card-header">
                 <i class="bi bi-newspaper"></i> {$announcement.title}
-
-                {if $announcement.editable}
-                    <div class="dropdown float-end">
-                        <a class="admidio-icon-link" href="#" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="bi bi-three-dots" data-bs-toggle="tooltip"></i></a>
-                        {if {array_key_exists array=$announcement key="actions"} && count($announcement.actions) > 0}
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                {foreach $announcement.actions as $actionItem}
-                                    <a {if isset($actionItem.dataHref)} class="dropdown-item admidio-messagebox" href="javascript:void(0);"
-                                        data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                            {else} class="dropdown-item" href="{$actionItem.url}"{/if}>
-                                        <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i> {$actionItem.tooltip}</a>
-                                {/foreach}
-                            </ul>
-                        {/if}
-                    </div>
-                {/if}
             </div>
             <div class="card-body">
                 {$announcement.description}
             </div>
             <div class="card-footer container">
-                <div class="row">
+                <div class="row align-items-center">
                     <div class="col-auto">
-                        <img class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="{$announcement.userCreatedProfilePhotoUrl}" />
+                        <img class="rounded-circle admidio-small-photo" src="{$announcement.userCreatedProfilePhotoUrl}" />
                     </div>
                     <div class="col admidio-info-category">
                         <span class="admidio-info-created">{$l10n->get('SYS_CREATED_BY_AND_AT', array($announcement.userCreatedName, $announcement.userCreatedTimestamp))}</span>
                         {$l10n->get('SYS_CATEGORY')} <a href="{$urlAdmidio}/modules/announcements.php?category_uuid={$announcement.categoryUUID}">{$announcement.category}</a>
                     </div>
+                    {if $announcement.editable && {array_key_exists array=$announcement key="actions"} && count($announcement.actions) > 0}
+                        <div class="col-auto ms-auto text-nowrap">
+                            {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $announcement.uuid, 'actions' => $announcement.actions]}
+                        </div>
+                    {/if}
                 </div>
             </div>
         </div>

@@ -84,7 +84,8 @@ class RoleMessageEscapingTest extends AdministratorTestCase
             foreach (array('createCards', 'createPermissionsList') as $method) {
                 $presenter = new GroupsRolesPresenter('test_role_messages');
                 $presenter->$method($category['cat_uuid'], $roleType);
-                $this->assertMessagesContainOnlyRoleText($presenter->getPageContent(), $roleName, $method === 'createCards' ? 2 : 1);
+                // Cards expose both confirmation actions as desktop icons and in the mobile menu.
+                $this->assertMessagesContainOnlyRoleText($presenter->getPageContent(), $roleName, $method === 'createCards' ? 4 : 1);
             }
         }
     }

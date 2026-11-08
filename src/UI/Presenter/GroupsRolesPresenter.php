@@ -647,6 +647,7 @@ class GroupsRolesPresenter extends PagePresenter
             $templateRow['categoryOrder'] = $role->getValue('cat_sequence');
             $templateRow['role'] = $role->getValue('rol_name');
             $templateRow['roleUUID'] = $role->getValue('rol_uuid');
+            $templateRow['uuid'] = $templateRow['roleUUID'];
             $templateRow['roleUrl'] = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $row['rol_uuid']));
             $templateRow['roleRights'] = array();
             if ($role->getValue('rol_assign_roles') == 1) {

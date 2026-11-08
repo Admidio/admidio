@@ -382,7 +382,6 @@ class SSOKeyPresenter extends PagePresenter
             $templateKey[] = $keyData['key_expires_at'];
             $templateKey[] = $keyData['key_is_active'] ? $gL10n->get('SYS_YES') : $gL10n->get('SYS_NO');
 
-            $actions = '';
             // Actions: Certificate, Export, Edit, Re-Generate, Delete
             $actions = array(
                 array('mode' => 'edit',        'icon' => 'bi-pencil-square',  'title' => $gL10n->get('SYS_SSO_KEY_EDIT')),
@@ -391,35 +390,23 @@ class SSOKeyPresenter extends PagePresenter
                 array('mode' => 'delete',      'icon' => 'bi-trash',          'title' => $gL10n->get('SYS_SSO_KEY_DELETE'), 'message' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($keyData['key_name'])), 'buttons' => 'yes-no')
             );
 
-            $actions = array_map(function($action) use ($keyData) {
-                global $gCurrentSession, $gCurrentUser;
+            $actions = array_map(function ($action) use ($keyData) {
+                global $gCurrentSession;
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('mode' => $action['mode'], 'uuid' => $keyData['key_uuid']));
-                $classes = '';
-                $href = $url;
-                $attributes = '';
-
+                $item = array('url' => $url, 'icon' => 'bi ' . $action['icon'], 'tooltip' => $action['title']);
                 if (!empty($action['message'])) {
-                    $classes = 'admidio-messagebox';
-                    $href = "javascript:void(0)";
-                    if (!empty($action['buttons'])) {
-                        $attributes .= " data-buttons=\"" . $action['buttons'] . "\"";
-                    }
-                    if (!empty($action['message'])) {
-                        $attributes .= " data-message=\"" . $action['message'] . "\"";
-                    }
-                    $attributes .= " data-href=\"callUrlHideElement('adm_sso_key_" . $keyData['key_uuid'] . "', '$url', '" . $gCurrentSession->getCsrfToken() . '\')"';
+                    $item['dataMessage'] = $action['message'];
+                    $item['dataHref'] = 'callUrlHideElement(\'adm_sso_key_' . $keyData['key_uuid'] . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
                 }
                 if (!empty($action['popup'])) {
-                    $classes = 'openPopup';
-                    $href = "javascript:void(0)";
-                    $attributes .= " data-href=\"$url\"";
+                    $item['popup'] = true;
+                    $item['dataHref'] = $url;
                 }
-
-                return '<a class="admidio-icon-link '.$classes.'" href="' . $href . '" ' . $attributes . '>' .
-                    '<i class="bi ' . $action['icon'] . '" data-bs-toggle="tooltip" title="' . $action['title'] . '"></i></a>';
+                return $item;
             }, $actions);
-
-            $templateKey[] = implode(' ', $actions);
+            $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
+            $actionsTemplate->assign('data', array('uuid' => $keyData['key_uuid'], 'actions' => $actions));
+            $templateKey[] = $actionsTemplate->fetch();
 
             $columnValues[] = array('id' => 'adm_sso_key_' . $keyData['key_uuid'], 'data' => $templateKey);
         }

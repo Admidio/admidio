@@ -14,6 +14,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\Service\InventoryAccessService;
 use Admidio\UI\Presenter\InventoryPresenter;
+use Admidio\UI\Presenter\PagePresenter;
 use Admidio\Users\Entity\User;
 
 require_once(__DIR__ . '/../../system/common.php');
@@ -279,6 +280,9 @@ try {
 
     $data = array();
     $matchedRows = 0;
+    $smarty = PagePresenter::createSmartyObject();
+    $smarty->assign('l10n', $gL10n);
+
     foreach ($itemRows as $row) {
         // Activates the preloaded data without additional queries for this row.
         $itemsData->readItemData($row['ini_uuid']);
@@ -353,20 +357,20 @@ try {
         }
 
         // actions
-        $actionsHtml = '';
+        $actions = array();
 
         // history button (displayHistoryButtonTable returns an array with url/icon/tooltip)
         $historyButton = ChangelogService::displayHistoryButtonTable('inventory_items,inventory_item_data,inventory_item_borrow_data', $gCurrentUser->isAdministratorInventory(), array('uuid' => $row['ini_uuid']));
         if (is_array($historyButton) && !empty($historyButton)) {
-            $actionsHtml .= '<a class="admidio-icon-link" href="' . $historyButton['url'] . '"><i class="' . $historyButton['icon'] . '" data-bs-toggle="tooltip" title="' . htmlspecialchars($historyButton['tooltip'], ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+            $actions[] = $historyButton;
         }
 
         if (!$itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
-            $actionsHtml .= '<a class="admidio-icon-link" aria-label="' . SecurityUtils::encodeHTML($gL10n->get('SYS_RESERVATION_REQUEST')) . '" href="' . SecurityUtils::encodeUrl(
-                ADMIDIO_URL . FOLDER_MODULES . '/inventory.php',
-                ['mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid']],
-            ) . '"><i class="bi bi-calendar-plus" data-bs-toggle="tooltip" title="'
-                . htmlspecialchars($gL10n->get('SYS_RESERVATION_REQUEST'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+            $actions[] = array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid'])),
+                'icon' => 'bi bi-calendar-plus',
+                'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST')
+            );
         }
 
         $keeperDbId = (int)$itemsData->getValue('KEEPER', 'database');
@@ -375,7 +379,11 @@ try {
         if ($itemsData->isEditable()) {
             if (!$itemsData->isRetired()) {
                 // edit action
-                $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_EDIT'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+                $actions[] = array(
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
+                    'icon' => 'bi bi-pencil-square',
+                    'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
+                );
 
                 // borrow / return action (if borrowing not disabled)
                 if (!$gSettingsManager->GetBool('inventory_items_disable_borrowing')) {
@@ -388,15 +396,28 @@ try {
                         $icon = 'bi bi-box-arrow-in-left';
                         $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                     }
-                    $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $row['ini_uuid'], 'item_borrowed' => $item_borrowed)) . '"><i class="' . $icon . '" data-bs-toggle="tooltip" title="' . htmlspecialchars($tooltip, ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+                    array_unshift($actions, array(
+                        'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $row['ini_uuid'], 'item_borrowed' => $item_borrowed)),
+                        'icon' => $icon,
+                        'tooltip' => $tooltip
+                    ));
                 }
 
                 // copy action
-                $actionsHtml .= '<a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'copy' => true)) . '"><i class="bi bi-file-earmark-plus" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_COPY'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+                $actions[] = array(
+                    'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'copy' => true)),
+                    'icon' => 'bi bi-file-earmark-plus',
+                    'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
+                );
             } else {
                 // reinstate action for retired item
                 $dataMessage = ($isKeeperAuthorized) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
-                $actionsHtml .= '<a class="admidio-icon-link" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '" data-message="' . htmlspecialchars($dataMessage, ENT_QUOTES | ENT_HTML5) . '"><i class="bi bi-eye" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_REINSTATE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+                $actions[] = array(
+                    'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $row['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'dataMessage' => $dataMessage,
+                    'icon' => 'bi bi-eye',
+                    'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE')
+                );
             }
         }
 
@@ -404,15 +425,26 @@ try {
         if (!$gCurrentUser->isAdministratorInventory() && $isKeeperAuthorized) {
             if (!$itemsData->isRetired()) {
                 // keeper retire action (popup)
-                $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_DELETE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+                $actions[] = array(
+                    'popup' => true,
+                    'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])),
+                    'icon' => 'bi bi-trash',
+                    'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
+                );
             }
         } elseif ($gCurrentUser->isAdministratorInventory()) {
             // admin delete/retire action
-            $actionsHtml .= '<a class="admidio-icon-link openPopup" href="javascript:void(0);" data-href="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '"><i class="bi bi-trash" data-bs-toggle="tooltip" title="' . htmlspecialchars($gL10n->get('SYS_INVENTORY_ITEM_DELETE'), ENT_QUOTES | ENT_HTML5) . '"></i></a>';
+            $actions[] = array(
+                'popup' => true,
+                'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
+                'icon' => 'bi bi-trash',
+                'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_DELETE')
+            );
         }
 
         if ($hasActionsColumn) {
-            $rowValues[] = $actionsHtml;
+            $smarty->assign('data', array('uuid' => $row['ini_uuid'], 'actions' => $actions));
+            $rowValues[] = $smarty->fetch('sys-template-parts/list.functions.tpl');
         }
 
         // Build associative row including DT_RowId so DataTables will keep the TR id
