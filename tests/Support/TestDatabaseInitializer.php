@@ -9,6 +9,7 @@
 namespace Admidio\Tests\Support;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Language;
 use Admidio\InstallationUpdate\Service\Installation;
 use Admidio\InstallationUpdate\ValueObject\InstallationConfig;
@@ -94,6 +95,11 @@ class TestDatabaseInitializer
         // web request covers only that request but here applies to the whole PHPUnit process and
         // kills the run once the suite needs longer than that.
         @set_time_limit(0);
+
+        // Installation::install() also switches the entity hooks off for the rest of the process,
+        // which in a web request is only the installation request. The tests run like the requests
+        // of an installed system afterwards, so the hooks are switched on again.
+        Entity::setHooksEnabled(true);
 
         echo "  ✓ Database initialized\n";
         echo "  ✓ Schema created\n";

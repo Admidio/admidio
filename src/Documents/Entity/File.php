@@ -208,9 +208,112 @@ class File extends Entity
     }
 
     /**
+     * Check if a file with the name already exists in the folder, in the database or in the file system.
+     * @param Folder $folder The folder that should be checked.
+     * @param string $name   The name of the file.
+     * @return bool Returns **true** if the name is already used in the folder.
+     * @throws Exception
+     */
+    private function existsInFolder(Folder $folder, string $name): bool
+    {
+        if (is_file($folder->getFullFolderPath() . '/' . $name)) {
+            return true;
+        }
+
+        $sql = 'SELECT fil_id
+                  FROM ' . TBL_FILES . '
+                 WHERE fil_fol_id = ? -- $folder->getValue(\'fol_id\')
+                   AND fil_name IN (?, ?) -- $name, htmlspecialchars($name)';
+        $statement = $this->db->queryPrepared($sql, array((int)$folder->getValue('fol_id'), $name, htmlspecialchars($name)));
+
+        return $statement->fetch() !== false;
+    }
+
+    /**
+     * Returns the name that a copy of this file gets in the destination folder. That is the name of this file if
+     * the destination folder has no file with this name. Otherwise, a number is added to the name, e.g. report (2).pdf
+     * @param Folder $destFolder The destination folder of the copy.
+     * @return string Returns the name for the copy.
+     * @throws Exception
+     */
+    public function getNameOfCopy(Folder $destFolder): string
+    {
+        $name = $this->getValue('fil_name');
+        if (!$this->existsInFolder($destFolder, $name)) {
+            return $name;
+        }
+
+        $extension = pathinfo($name, PATHINFO_EXTENSION);
+        $baseName = pathinfo($name, PATHINFO_FILENAME);
+        $suffix = '';
+        if ($extension !== '') {
+            $suffix = '.' . $extension;
+        }
+
+        $number = 2;
+        while ($this->existsInFolder($destFolder, $baseName . ' (' . $number . ')' . $suffix)) {
+            ++$number;
+        }
+
+        return $baseName . ' (' . $number . ')' . $suffix;
+    }
+
+    /**
+     * Copy this file to the folder that is set with the parameter $destFolderUUID. The method will check if
+     * the user has the right to upload files to that folder. If the destination folder has already a file with
+     * the name of this file, an Exception is thrown. If **$acceptNewName** is set to true, then the copy gets a
+     * number in its name instead, e.g. report (2).pdf. The user must have the right to see this file, that
+     * should be checked before the method is called.
+     * @param string $destFolderUUID UUID of the destination folder to which this file is to be copied.
+     * @param bool $acceptNewName Set to **true** if a copy with a changed name is allowed.
+     * @return File Returns the new file.
+     * @throws Exception
+     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
+     */
+    public function copyToFolder(string $destFolderUUID, bool $acceptNewName = false): File
+    {
+        $folder = new Folder($this->db);
+        $folder->readDataByUuid($destFolderUUID);
+
+        if (!$folder->hasUploadRight()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        if (!is_file($this->getFullFilePath())) {
+            throw new Exception('SYS_FILE_NOT_EXIST');
+        }
+
+        $newName = $this->getNameOfCopy($folder);
+        if ($newName !== $this->getValue('fil_name') && !$acceptNewName) {
+            throw new Exception('SYS_FILE_EXIST', array($this->getValue('fil_name')));
+        }
+
+        $newPath = $folder->getFullFolderPath() . '/' . $newName;
+        FileSystemUtils::copyFile($this->getFullFilePath(), $newPath);
+
+        try {
+            $copy = new File($this->db);
+            $copy->setValue('fil_fol_id', $folder->getValue('fol_id'));
+            $copy->setValue('fil_name', $newName);
+            $copy->setValue('fil_description', $this->getValue('fil_description', 'database'));
+            $copy->setValue('fil_locked', $this->getValue('fil_locked'));
+            $copy->setValue('fil_counter', 0);
+            $copy->save();
+        } catch (\Throwable $exception) {
+            // no file without a database entry should stay in the destination folder
+            FileSystemUtils::deleteFileIfExists($newPath);
+            throw $exception;
+        }
+
+        return $copy;
+    }
+
+    /**
      * Move this file to the folder that is set with the parameter $destFolderUUID. The method
-     * will check if the user has the right to upload files to that folder and then move the file
-     * within the file system and the database structure.
+     * will check if the user has the right to upload files to that folder, that the file is not already
+     * there and that no file with the same name exists in that folder and then move the file within the
+     * file system and the database structure. Otherwise, an Exception is thrown.
      * @param string $destFolderUUID UUID of the destination folder to which this file is to be moved.
      * @return void
      * @throws Exception
@@ -223,12 +326,22 @@ class File extends Entity
         $folder = new Folder($this->db);
         $folder->readDataByUuid($destFolderUUID);
 
-        if ($folder->hasUploadRight()) {
-            FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath() . '/' . $this->getValue('fil_name'));
-
-            $this->setValue('fil_fol_id', $folder->getValue('fol_id'));
-            $this->save();
+        if (!$folder->hasUploadRight()) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
+
+        if ((int)$folder->getValue('fol_id') === (int)$this->getValue('fil_fol_id')) {
+            throw new Exception('SYS_MOVE_ALREADY_IN_FOLDER', array($this->getValue('fil_name')));
+        }
+
+        if (is_file($folder->getFullFolderPath() . '/' . $this->getValue('fil_name', 'database'))) {
+            throw new Exception('SYS_FILE_EXIST', array($this->getValue('fil_name')));
+        }
+
+        FileSystemUtils::moveFile($this->getFullFilePath(), $folder->getFullFolderPath() . '/' . $this->getValue('fil_name'));
+
+        $this->setValue('fil_fol_id', $folder->getValue('fol_id'));
+        $this->save();
     }
 
     /**

@@ -28,5 +28,20 @@ class AuthCodeEntity extends TokenEntity implements AuthCodeEntityInterface
     {
         $this->setValue($this->columnPrefix . '_redirect_uri', $uri);
     }
-    
+
+    /**
+     * Delete the expired authorization codes, except those that tokens are still linked to. A
+     * code that is presented again after it expired has to find its row, so that the tokens it
+     * produced can be revoked; the row is purged once its last token has expired.
+     */
+    public function deleteExpiredTokens(): void
+    {
+        $this->db->queryPrepared(
+            'DELETE FROM ' . $this->tableName . '
+              WHERE oac_expires_at < ?
+                AND NOT EXISTS (SELECT 1 FROM ' . TBL_OIDC_ACCESS_TOKENS . ' WHERE oat_oac_id = oac_id)
+                AND NOT EXISTS (SELECT 1 FROM ' . TBL_OIDC_REFRESH_TOKENS . ' WHERE ort_oac_id = oac_id)',
+            array(DATETIME_NOW)
+        );
+    }
 }

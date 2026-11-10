@@ -129,6 +129,10 @@ class OIDCConsentPresenter extends PagePresenter
             'custom' => array(
                 'name' => 'SYS_SSO_OIDC_SCOPE_CUSTOM',
                 'description' => 'SYS_SSO_OIDC_SCOPE_CUSTOM_DESC'
+            ),
+            'offline_access' => array(
+                'name' => 'SYS_SSO_OIDC_SCOPE_OFFLINE_ACCESS',
+                'description' => 'SYS_SSO_OIDC_SCOPE_OFFLINE_ACCESS_DESC'
             )
         );
 

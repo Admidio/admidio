@@ -222,9 +222,11 @@ class SAMLLogoutTransaction extends Entity
      */
     private function writeTransactionData(): void
     {
+        // Entity strips HTML from text columns, which must not touch a RelayState or a return
+        // URL in the data, so their HTML characters are written as JSON escapes
         $this->setValue(
             'slt_data',
-            json_encode($this->transactionData, JSON_THROW_ON_ERROR)
+            json_encode($this->transactionData, JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
         );
     }
 }

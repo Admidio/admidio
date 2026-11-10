@@ -9,8 +9,10 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
 use Admidio\Session\Entity\Session;
+use Admidio\SSO\Service\SSOHooks;
 use Admidio\UI\Component\Message;
 use Admidio\Users\Entity\User;
 
@@ -76,6 +78,10 @@ $gHtmlPurifierFilter = new HTMLPurifier($gHtmlPurifierConfig);
 /*********************************************************************************
  Create and validate sessions, check auto login, read session variables
 /********************************************************************************/
+
+// The single sign-on module takes part in the session, login, logout and membership events
+// through hooks, which have to be in place before the session starts
+SSOHooks::register();
 
 // start PHP session
 try {
@@ -304,6 +310,9 @@ if ($gValidLogin) {
 } else {
     $gHomepage = ADMIDIO_URL . '/' . $gSettingsManager->getString('homepage_logout');
 }
+
+// look for a new release of Admidio, at most twice a day and only in requests of administrators
+(new PreferencesService())->checkForUpdateIfDue();
 
 // the plugins of this organization extend the fully initialized request, and only then
 PluginLoader::loadEnabled();

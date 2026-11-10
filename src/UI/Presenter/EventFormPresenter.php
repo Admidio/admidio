@@ -476,7 +476,7 @@ class EventFormPresenter extends PagePresenter
                 return;
             }
 
-            var recurrenceFrequency = $("#event_recurrence_frequency").val();
+            var recurrenceFrequency = $("#event_recurrence_frequency").val() || "none";
             var recurrenceEndType = $("#event_recurrence_end_type").val();
             var recurrenceSelected = recurrenceFrequency !== "none";
 
@@ -539,18 +539,31 @@ class EventFormPresenter extends PagePresenter
             });
         });
 
-        // Reveal invalid fields before the browser tries to focus them.
+        // Reveal invalid fields and use the same native feedback as normal inputs.
         document.getElementById("adm_events_edit_form").addEventListener("invalid", function(event) {
-            var pane = event.target.closest(".tab-pane");
-            if (!pane || this.querySelector(":invalid") !== event.target) {
+            var isMobile = !window.matchMedia("(min-width: 768px)").matches;
+            // Native mobile selects are revealed and reported centrally in page-load.js.
+            if (isMobile && event.target.tagName === "SELECT" && !event.target.multiple
+                && !event.target.classList.contains("select2-hidden-accessible")) {
                 return;
             }
-            if (window.matchMedia("(min-width: 768px)").matches) {
+            var pane = event.target.closest(".tab-pane");
+            if (!pane) {
+                return;
+            }
+            if (this.querySelector(":invalid") !== event.target) {
+                return;
+            }
+            if (!isMobile) {
                 bootstrap.Tab.getOrCreateInstance(document.getElementById(pane.getAttribute("aria-labelledby"))).show();
             } else {
                 var collapse = pane.querySelector(".accordion-collapse");
+                if (collapse.classList.contains("show")) {
+                    return;
+                }
+                event.preventDefault();
                 collapse.addEventListener("shown.bs.collapse", function() {
-                    event.target.focus();
+                    event.target.reportValidity();
                 }, {once: true});
                 bootstrap.Collapse.getOrCreateInstance(collapse, {toggle: false}).show();
             }
@@ -730,7 +743,7 @@ class EventFormPresenter extends PagePresenter
         }
 
         if ($showRecurrenceFields) {
-            $form->addSelectBox('event_recurrence_frequency', $gL10n->get('SYS_REPEAT'), ['none' => 'SYS_NO_RECURRENCE', EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY', EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY', EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY', EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'], ['property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC']);
+            $form->addSelectBox('event_recurrence_frequency', $gL10n->get('SYS_REPEAT'), ['none' => 'SYS_NO_RECURRENCE', EventRecurrenceRule::FREQUENCY_DAILY => 'SYS_DAILY', EventRecurrenceRule::FREQUENCY_WEEKLY => 'SYS_WEEKLY', EventRecurrenceRule::FREQUENCY_MONTHLY => 'SYS_MONTHLY', EventRecurrenceRule::FREQUENCY_YEARLY => 'SYS_ANNUALLY'], ['defaultValue' => $recurrenceFrequency, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_FREQUENCY_DESC']);
             $form->addInput('event_recurrence_interval', $gL10n->get('SYS_INTERVAL'), (string)$recurrenceInterval, ['type' => 'number', 'minNumber' => 1, 'maxNumber' => 999, 'step' => 1, 'helpTextId' => 'SYS_RECURRENCE_INTERVAL_DESC']);
             $form->addSelectBox('event_recurrence_weekdays', $gL10n->get('SYS_WEEKDAY'), ['MO' => 'SYS_MONDAY', 'TU' => 'SYS_TUESDAY', 'WE' => 'SYS_WEDNESDAY', 'TH' => 'SYS_THURSDAY', 'FR' => 'SYS_FRIDAY', 'SA' => 'SYS_SATURDAY', 'SU' => 'SYS_SUNDAY'], ['defaultValue' => $recurrenceWeekdays, 'multiselect' => true, 'showContextDependentFirstEntry' => false, 'placeholder' => $gL10n->get('SYS_WEEKDAYS'), 'helpTextId' => 'SYS_RECURRENCE_WEEKDAYS_DESC']);
             $form->addSelectBox('event_recurrence_end_type', $gL10n->get('SYS_ENDS'), [EventRecurrenceRule::END_TYPE_NEVER => 'SYS_NEVER', EventRecurrenceRule::END_TYPE_COUNT => 'SYS_AFTER_NUMBER_OF_OCCURRENCES', EventRecurrenceRule::END_TYPE_UNTIL => 'SYS_ON_DATE'], ['defaultValue' => $recurrenceEndType, 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_RECURRENCE_END_DESC']);

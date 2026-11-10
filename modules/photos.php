@@ -207,7 +207,7 @@ try {
             header('Content-Type: ' . $download['contentType']);
             header('Content-Length: ' . $fileSize);
             header('Content-Description: File Transfer');
-            header('Content-Disposition: attachment; filename="' . $download['filename'] . '"');
+            header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $download['filename']));
             header('Expires: 0');
             header('Content-Transfer-Encoding: binary');
             header('Cache-Control: private');
@@ -312,5 +312,9 @@ try {
     if ($getMode === 'ecard_preview') {
         $gMessage->showInModalWindow();
     }
-    handleException($e, in_array($getMode, array('album_save', 'album_delete', 'ecard_send'), true));
+    handleException(
+        $e,
+        in_array($getMode, array('album_save', 'album_delete', 'ecard_send'), true),
+        in_array($getMode, array('photo_delete', 'photo_rotate', 'album_lock', 'album_unlock'), true)
+    );
 }

@@ -80,6 +80,11 @@ final class Plugin
      */
     public const PRERELEASE_KINDS = array('dev', 'alpha', 'beta', 'rc');
 
+    /**
+     * The internal names of the menu nodes a plugin may name as **menuParent** in its manifest.
+     */
+    public const MENU_PARENTS = array('modules', 'administration', 'extensions');
+
     public const ERROR_NO_MANIFEST = 'no_manifest';
     public const ERROR_INVALID_MANIFEST = 'invalid_manifest';
     public const ERROR_BROKEN_MANIFEST = 'broken_manifest';
@@ -120,6 +125,7 @@ final class Plugin
     /**
      * Version of the files, as declared in the manifest: **X.Y.Z** for a stable release or
      * **X.Y.Z-(dev|alpha|beta|rc).N** for a prerelease, e.g. **2.0.0-beta.1**.
+     * Short numeric versions such as **1** or **1.2** are also accepted.
      */
     public readonly string $version;
 
@@ -268,10 +274,16 @@ final class Plugin
         }
 
         if (strlen($manifest['version']) > self::VERSION_MAX_LENGTH
-            || preg_match('/^\d+\.\d+\.\d+(?:-(?:' . implode('|', self::PRERELEASE_KINDS) . ')\.[1-9]\d*)?$/D', $manifest['version']) !== 1) {
+            || preg_match('/^\d+(?:\.\d+){0,2}(?:-(?:' . implode('|', self::PRERELEASE_KINDS) . ')\.[1-9]\d*)?$/D', $manifest['version']) !== 1) {
             return new self($id, $path, $manifest, array(), array(), $empty,
-                'The manifest version must be written X.Y.Z or X.Y.Z-(dev|alpha|beta|rc).N, e.g. 1.2.0 or 1.2.0-beta.1 (at most '
+                'The manifest version must be written X, X.Y or X.Y.Z, optionally followed by -(dev|alpha|beta|rc).N (at most '
                 . self::VERSION_MAX_LENGTH . ' characters).',
+                self::ERROR_BROKEN_MANIFEST);
+        }
+
+        if (isset($manifest['menuParent']) && !in_array($manifest['menuParent'], self::MENU_PARENTS, true)) {
+            return new self($id, $path, $manifest, array(), array(), $empty,
+                'The manifest declares an unknown menuParent. Use one of: ' . implode(', ', self::MENU_PARENTS) . '.',
                 self::ERROR_BROKEN_MANIFEST);
         }
 
@@ -400,6 +412,20 @@ final class Plugin
     public function wantsMenuEntry(): bool
     {
         return $this->hasPages() && ($this->manifest['menu'] ?? true) !== false;
+    }
+
+    /**
+     * Internal name of the menu node below which the menu entry of the plugin is created. A plugin
+     * that is a tool for administrators says **"menuParent": "administration"** in its manifest, a
+     * plugin that is a module of its own says **"modules"**; the default is **extensions**. Any other
+     * value makes the manifest broken (see read()), so it never gets here.
+     * @return string
+     */
+    public function getMenuParent(): string
+    {
+        $parent = $this->manifest['menuParent'] ?? 'extensions';
+
+        return in_array($parent, self::MENU_PARENTS, true) ? $parent : 'extensions';
     }
 
     /**

@@ -68,6 +68,7 @@ DROP TABLE IF EXISTS %PREFIX%_oidc_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_logout_transactions          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_session_participants         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_auth_failures                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
 
 
@@ -606,6 +607,7 @@ CREATE TABLE %PREFIX%_oidc_access_tokens (
     oat_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
     oat_usr_id                  integer unsigned    NOT NULL,
     oat_ocl_id                  integer unsigned    NOT NULL,
+    oat_oac_id                  integer unsigned    NULL,
     oat_token                   text,
     oat_scope                   text,
     oat_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -644,6 +646,7 @@ CREATE TABLE %PREFIX%_oidc_refresh_tokens (
     ort_id                      integer unsigned    AUTO_INCREMENT,
     ort_ocl_id                  integer unsigned    NOT NULL,
     ort_usr_id                  integer unsigned    NULL,
+    ort_oac_id                  integer unsigned    NULL,
     ort_token                   text,
     ort_scope                   text,
     ort_expires_at              timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
@@ -707,13 +710,25 @@ CREATE TABLE %PREFIX%_saml_clients (
     smc_id                      integer unsigned    AUTO_INCREMENT,
     smc_uuid                    varchar(36)         NOT NULL,
     smc_org_id                  integer unsigned    NOT NULL,
-    smc_client_id               varchar(255)        NOT NULL UNIQUE,
+    smc_client_id               varchar(255)        NOT NULL,
     smc_client_name             varchar(255)        NOT NULL,
     smc_enabled                 bool                DEFAULT true,
     smc_metadata_url            text                NULL,
+    smc_metadata_refresh        bool                NOT NULL    DEFAULT false,
+    smc_metadata_signing_certificate text           NULL,
+    smc_metadata_checked        timestamp           NULL        DEFAULT NULL,
+    smc_metadata_next_check     timestamp           NULL        DEFAULT NULL,
+    smc_metadata_etag           varchar(255)        NULL,
+    smc_metadata_last_modified  varchar(100)        NULL,
+    smc_metadata_hash           varchar(64)         NULL,
+    smc_metadata_valid_until    timestamp           NULL        DEFAULT NULL,
+    smc_metadata_cache_duration integer unsigned    NULL,
+    smc_metadata_failures       integer unsigned    NOT NULL    DEFAULT 0,
+    smc_metadata_error          varchar(100)        NULL,
     smc_acs_url                 text                NOT NULL,
     smc_slo_url                 text                NULL,
     smc_x509_certificate        text                NOT NULL,
+    smc_x509_encryption_certificate text            NULL,
     smc_userid_field            varchar(50)         NOT NULL    default 'usr_id',
     smc_field_mapping           text                NULL,
     smc_role_mapping            text                NULL,
@@ -735,6 +750,8 @@ CREATE TABLE %PREFIX%_saml_clients (
 ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id);
 
 
 /*==============================================================*/
@@ -777,9 +794,29 @@ ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
-CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id);
+CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id, ssp_session_index);
 CREATE INDEX %PREFIX%_idx_ssp_session ON %PREFIX%_saml_session_participants (ssp_external_session_id);
 CREATE INDEX %PREFIX%_idx_ssp_expires_at ON %PREFIX%_saml_session_participants (ssp_expires_at);
+
+/*==============================================================*/
+/* Table: adm_sso_auth_failures                                  */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_sso_auth_failures (
+    saf_id                      integer unsigned    AUTO_INCREMENT,
+    saf_kind                    varchar(12)         NOT NULL,
+    saf_key                     varchar(64)         NOT NULL,
+    saf_count                   integer unsigned    NOT NULL    DEFAULT 0,
+    saf_last_failure            integer unsigned    NOT NULL,
+    saf_locked_until            integer unsigned    NOT NULL    DEFAULT 0,
+    PRIMARY KEY (saf_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_saf_kind_key ON %PREFIX%_sso_auth_failures (saf_kind, saf_key);
+CREATE INDEX %PREFIX%_idx_saf_last_failure ON %PREFIX%_sso_auth_failures (saf_last_failure);
+
 
  
 /*==============================================================*/
@@ -1506,11 +1543,13 @@ ALTER TABLE %PREFIX%_oidc_clients
 ALTER TABLE %PREFIX%_oidc_access_tokens
     ADD CONSTRAINT %PREFIX%_fk_oat_usr_id      FOREIGN KEY (oat_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT %PREFIX%_fk_oat_ocl_id      FOREIGN KEY (oat_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_oat_oac_id      FOREIGN KEY (oat_oac_id)         REFERENCES %PREFIX%_oidc_auth_codes (oac_id)     ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_oat_usr_create  FOREIGN KEY (oat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_oidc_refresh_tokens
     ADD CONSTRAINT %PREFIX%_fk_ort_usr_id      FOREIGN KEY (ort_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT %PREFIX%_fk_ort_ocl_id      FOREIGN KEY (ort_ocl_id)         REFERENCES %PREFIX%_oidc_clients (ocl_id)        ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT %PREFIX%_fk_ort_oac_id      FOREIGN KEY (ort_oac_id)         REFERENCES %PREFIX%_oidc_auth_codes (oac_id)     ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_ort_usr_create  FOREIGN KEY (ort_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_oidc_auth_codes

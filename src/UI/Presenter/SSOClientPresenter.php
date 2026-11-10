@@ -212,7 +212,7 @@ class SSOClientPresenter extends PagePresenter
             'sso_saml_sso_staticsettings',
             $gL10n->get('SYS_SSO_STATIC_SETTINGS'),
             '',
-            array('data' => $SAMLService->getStaticSettings())
+            array('data' => $SAMLService->getStaticSettings($client->isNewRecord() ? null : (string) $client->getValue('smc_client_id')))
         );
 
         $form->addCheckbox(
@@ -233,31 +233,40 @@ class SSOClientPresenter extends PagePresenter
             $client->getValue('smc_client_id'),
             array('maxLength' => 250, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_CLIENT_ID_DESC'))
         );
-        $form->addInput(
+        // one field for both: a metadata URL is fetched, pasted metadata XML is read directly
+        $form->addMultilineTextInput(
             'smc_metadata_url',
             $gL10n->get('SYS_SSO_METADATA_URL'),
-            $client->getValue('smc_metadata_url'),
-            array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
+            (string) $client->getValue('smc_metadata_url'),
+            2,
+            array('helpTextId' => $gL10n->get('SYS_SSO_METADATA_URL_DESC'))
         );
-        // NEW: scratch field, deliberately not prefixed smc_/ocl_ so SSOService::save() never
-        // tries to persist it as a client column (same convention as sso_fields_all_other etc.)
+        $form->addCheckbox(
+            'smc_metadata_refresh',
+            $gL10n->get('SYS_SSO_METADATA_REFRESH'),
+            boolval($client->getValue('smc_metadata_refresh')),
+            array('helpTextId' => $gL10n->get('SYS_SSO_METADATA_REFRESH_DESC'))
+        );
         $form->addMultilineTextInput(
-            'sso_saml_metadata_paste',
-            $gL10n->get('SYS_SSO_METADATA_PASTE'),
-            '',
+            'smc_metadata_signing_certificate',
+            $gL10n->get('SYS_SSO_METADATA_SIGNING_CERTIFICATE'),
+            $client->getValue('smc_metadata_signing_certificate'),
             4,
-            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_PASTE_DESC'))
+            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_METADATA_SIGNING_CERTIFICATE_DESC'))
         );
-        $form->addButton(
-            'adm_button_metadata_paste_setup',
-            $gL10n->get('SYS_SSO_METADATA_PASTE_BUTTON'),
-            array('icon' => 'bi-clipboard-check', 'class' => 'btn btn-secondary')
-        );
-        $form->addInput(
+        if (!$client->isNewRecord() && (string) $client->getValue('smc_metadata_url') !== '') {
+            $form->addCustomContent(
+                'smc_metadata_status',
+                $gL10n->get('SYS_SSO_METADATA_STATUS'),
+                SecurityUtils::encodeHTML($this->getMetadataStatusText($client))
+            );
+        }
+        $form->addMultilineTextInput(
             'smc_acs_url',
             $gL10n->get(textId: 'SYS_SSO_ACS_URL'),
             $client->getValue('smc_acs_url'),
-            array('type' => 'url', 'maxLength' => 2000, 'property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_ACS_URL_DESC'))
+            2,
+            array('property' => FormPresenter::FIELD_REQUIRED, 'helpTextId' => $gL10n->get('SYS_SSO_ACS_URL_DESC'))
         );
         $form->addInput(
             'smc_slo_url',
@@ -266,8 +275,6 @@ class SSOClientPresenter extends PagePresenter
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => $gL10n->get('SYS_SSO_SLO_URL_DESC'))
         );
 
-
-
         // TAB: Signatures and Encryption
 
         $form->addMultilineTextInput(
@@ -275,7 +282,15 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_X509_CERTIFICATE'),
             $client->getValue('smc_x509_certificate'),
             6,
-            array('maxLength' => 6000, 'helpTextId' => $gL10n->get('SYS_SSO_X509_CERTIFICATE_DESC'))
+            array('maxLength' => 20000, 'helpTextId' => $gL10n->get('SYS_SSO_X509_CERTIFICATE_DESC'))
+        );
+
+        $form->addMultilineTextInput(
+            'smc_x509_encryption_certificate',
+            $gL10n->get('SYS_SSO_X509_ENCRYPTION_CERTIFICATE'),
+            $client->getValue('smc_x509_encryption_certificate'),
+            6,
+            array('maxLength' => 6000, 'helpTextId' => $gL10n->get('SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC'))
         );
 
         $form->addCheckbox(
@@ -320,13 +335,13 @@ class SSOClientPresenter extends PagePresenter
             'smc_assertion_lifetime',
             $gL10n->get('SYS_SSO_SAML_ASSERTION_LIFETIME'),
             $client->getValue('smc_assertion_lifetime') ?? '600',
-            array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ASSERTION_LIFETIME_DESC')
+            array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ASSERTION_LIFETIME_DESC')
         );
 
         $form->addInput(
             'smc_allowed_clock_skew',
             $gL10n->get('SYS_SSO_SAML_ALLOWED_CLOCK_SKEW'),
-            $client->getValue('smc_allowed_clock_skew') ?? '0',
+            $client->getValue('smc_allowed_clock_skew') ?? '300',
             array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 9999, 'step' => 1, 'helpTextId' => 'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW_DESC')
         );
 
@@ -450,13 +465,22 @@ class SSOClientPresenter extends PagePresenter
     $metadataUrlRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_URL_REQUIRED'), JSON_THROW_ON_ERROR);
     $metadataLoadFailedMessage = json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR);
     $metadataInvalidMessage = json_encode($gL10n->get('SYS_SSO_METADATA_INVALID'), JSON_THROW_ON_ERROR);
-    $metadataPasteRequiredMessage = json_encode($gL10n->get('SYS_SSO_METADATA_PASTE_REQUIRED'), JSON_THROW_ON_ERROR);
 
     $this->addJavascript('
+    // the URL that is stored with the client; pasted metadata XML must never replace it
+    const savedMetadataUrl = $("#smc_metadata_url").val();
+
     $("#adm_button_metadata_setup").click(function () {
         const metadataUrl = $("#smc_metadata_url").val().trim();
         if (!metadataUrl) {
             alert(' . $metadataUrlRequiredMessage . ');
+            return;
+        }
+
+        // pasted XML is read directly, no network request
+        if (metadataUrl.charAt(0) === "<") {
+            handleClientMetadataXML(metadataUrl);
+            $("#smc_metadata_url").val(savedMetadataUrl);
             return;
         }
 
@@ -475,16 +499,6 @@ class SSOClientPresenter extends PagePresenter
         .fail(function () {
             alert(' . $metadataLoadFailedMessage . ');
         });
-    });
-
-    // parse pasted metadata directly, no network request
-    $("#adm_button_metadata_paste_setup").click(function () {
-        const pastedXml = $("#sso_saml_metadata_paste").val().trim();
-        if (!pastedXml) {
-            alert(' . $metadataPasteRequiredMessage . ');
-            return;
-        }
-        handleClientMetadataXML(pastedXml);
     });
 
     function handleClientMetadataXML(metadataXml) {
@@ -515,12 +529,15 @@ class SSOClientPresenter extends PagePresenter
         // Prefer the default ACS and otherwise an HTTP-POST ACS, which is the
         // binding used by Admidio for SAML responses.
         const acsElements = Array.from(xmlDoc.querySelectorAll("AssertionConsumerService"));
-        const acsElement =
-            acsElements.find((element) => element.getAttribute("isDefault") === "true")
-            || acsElements.find((element) =>
-                element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST")
-            || acsElements[0];
-        const acsUrl = acsElement ? acsElement.getAttribute("Location") || "" : "";
+        // All of them are taken over, the default one first.
+        const acsPost = acsElements.filter((element) =>
+            element.getAttribute("Binding") === "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
+        const acsDefault = acsElements.filter((element) => element.getAttribute("isDefault") === "true");
+        const acsUrl = [...new Set(
+            [...acsDefault, ...(acsPost.length > 0 ? acsPost : acsElements)]
+                .map((element) => element.getAttribute("Location") || "")
+                .filter((location) => location !== "")
+        )].join("\n");
 
         // Admidio currently sends SLO messages with HTTP-Redirect, so prefer
         // the matching SP endpoint when metadata offers multiple bindings.
@@ -531,11 +548,13 @@ class SSOClientPresenter extends PagePresenter
             || sloElements[0];
         const sloUrl = sloElement ? sloElement.getAttribute("Location") || "" : "";
 
-        // A KeyDescriptor without a use attribute can be used for signing too.
-        const x509Element = xmlDoc.querySelector(
+        // All signing certificates are taken over, a service provider publishes several during a
+        // key rollover. A KeyDescriptor without a use attribute can be used for signing too.
+        const signingCerts = Array.from(xmlDoc.querySelectorAll(
             "KeyDescriptor[use=\'signing\'] X509Certificate, KeyDescriptor:not([use]) X509Certificate"
-        );
-        const x509Cert = x509Element ? x509Element.textContent.trim() : "";
+        )).map((element) => element.textContent.trim()).filter((cert) => cert !== "");
+        const encryptionElement = xmlDoc.querySelector("KeyDescriptor[use=\'encryption\'] X509Certificate");
+        const encryptionCert = encryptionElement ? encryptionElement.textContent.trim() : "";
 
         const spDescriptor = xmlDoc.querySelector("SPSSODescriptor");
         if (spDescriptor) {
@@ -552,9 +571,14 @@ class SSOClientPresenter extends PagePresenter
         if (sloUrl !== "") {
             $("#smc_slo_url").val(sloUrl);
         }
-        if (x509Cert !== "") {
-            $("#smc_x509_certificate").val(formatCertificate(x509Cert));
+        if (signingCerts.length > 0) {
+            $("#smc_x509_certificate").val(
+                Array.from(new Set(signingCerts.map((cert) => formatCertificate(cert.replace(/\\s+/g, ""))))).join("\n")
+            );
         }
+        $("#smc_x509_encryption_certificate").val(
+            encryptionCert !== "" ? formatCertificate(encryptionCert.replace(/\\s+/g, "")) : ""
+        );
     }
 
     function formatCertificate(cert) {
@@ -709,11 +733,8 @@ class SSOClientPresenter extends PagePresenter
             'ocl_post_logout_redirect_uris',
             $gL10n->get('SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS'),
             (string) $client->getValue('ocl_post_logout_redirect_uris', 'database'),
-            3,
-            array(
-                'maxLength' => 8000,
-                'helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC'
-            )
+            2,
+            array('helpTextId' => 'SYS_SSO_OIDC_POST_LOGOUT_REDIRECT_URIS_DESC')
         );
         $form->addInput(
             'ocl_frontchannel_logout_uri',
@@ -732,12 +753,6 @@ class SSOClientPresenter extends PagePresenter
             $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI'),
             $client->getValue('ocl_backchannel_logout_uri', 'database'),
             array('type' => 'url', 'maxLength' => 2000, 'helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC')
-        );
-        $form->addCheckbox(
-            'ocl_backchannel_logout_session_required',
-            $gL10n->get('SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED'),
-            (bool) $client->getValue('ocl_backchannel_logout_session_required'),
-            array('helpTextId' => 'SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC')
         );
         // TODO: Grant Types, Scopes
 
@@ -940,27 +955,21 @@ class SSOClientPresenter extends PagePresenter
 
 
     /**
-     * Display a toggle to enable/disable a client (via a JSON call).
+     * Create the action to enable or disable a client via a JSON call.
      * @param SSOClient $client
-     * @return string
+     * @return array
      * @throws Exception
      */
-    protected function generateEnableLink(SSOClient $client): string
+    protected function generateEnableAction(SSOClient $client): array
     {
-        global $gL10n, $gCurrentSession;
+        global $gL10n;
         $enabled = $client->isEnabled();
-        $uuid = $client->getValue($client->getColumnPrefix() . '_uuid');
-
-        $clientToggleURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'enable', 'uuid' => $uuid, 'enabled' => !$enabled));
-        $actions = '
-        <a href="#"
-           class="admidio-icon-link toggle-client-status"
-           data-uuid="' . $uuid . '"
-           data-enabled="' . ($enabled ? '1' : '0') . '"
-           title="' . $gL10n->get($enabled ? 'SYS_DISABLE' : 'SYS_ENABLE') . '">
-           <i class="bi bi-toggle-' . ($enabled ? 'on' : 'off') . ' fs-2"></i>
-        </a>';
-        return $actions;
+        return array(
+            'class' => 'toggle-client-status',
+            'icon' => 'bi bi-toggle-' . ($enabled ? 'on' : 'off'),
+            'tooltip' => $gL10n->get($enabled ? 'SYS_DISABLE' : 'SYS_ENABLE'),
+            'attributes' => array('data-uuid' => $client->getValue($client->getColumnPrefix() . '_uuid'), 'data-enabled' => $enabled ? '1' : '0')
+        );
     }
 
     /**
@@ -1032,25 +1041,44 @@ class SSOClientPresenter extends PagePresenter
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
             $client = $SAMLService->getClientFromUUID($clientUUID);
             $templateClient = array();
-            $templateClient[] = $this->generateEnableLink($client);
+            $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';
             $templateClient[] = $client->getValue('smc_client_id');
-            $templateClient[] = $client->getValue('smc_acs_url');
+            $templateClient[] = implode('<br />', array_map(array(SecurityUtils::class, 'encodeHTML'), $client->getAcsUrls()));
             $templateClient[] = implode(', ', $client->getAccessRolesNames());
             //$templateClient[] = $client->getValue('create_name');
 
-            $actions = '';
-            // add link to edit SAML client
-            $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
-                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT') . '"></i></a>';
-
+            $actions = array(
+                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT'))
+            );
+            // add link to reload the metadata of a SAML client that has a metadata URL
+            if ((string) $client->getValue('smc_metadata_url') !== '') {
+                $actions[] = array(
+                    'class' => 'admidio-sso-reload-metadata',
+                    'attributes' => array('data-uuid' => $clientUUID),
+                    'icon' => 'bi bi-arrow-clockwise',
+                    'tooltip' => $gL10n->get('SYS_SSO_METADATA_RELOAD')
+                );
+            }
+            // a metadata refresh that failed or found expired metadata
+            if ((string) $client->getValue('smc_metadata_error') !== '') {
+                $actions[] = array(
+                    'class' => 'text-danger',
+                    'icon' => 'bi bi-exclamation-triangle',
+                    'tooltip' => $gL10n->get((string) $client->getValue('smc_metadata_error'))
+                );
+            }
             // add link to delete SAML client
-            $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName())))) . '"
-                    data-href="callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                    <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
-                </a>';
-            $templateClient[] = $actions;
+            $actions[] = array(
+                'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
+                'dataHref' => 'callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                'icon' => 'bi bi-trash',
+                'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
+            );
+            $actions[] = $this->generateEnableAction($client);
+            $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
+            $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
+            $templateClient[] = $actionsTemplate->fetch();
 
             $columnValues[] = array('id' => 'adm_saml_client_' . $clientUUID, 'data' => $templateClient);
         }
@@ -1095,28 +1123,55 @@ class SSOClientPresenter extends PagePresenter
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $clientUUID));
             $client = $OIDCService->createClientObject($clientUUID);
             $templateClient = array();
-            $templateClient[] = $this->generateEnableLink($client);
+            $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';
             $templateClient[] = $client->getValue('ocl_client_id');
             $templateClient[] = $client->getValue('ocl_redirect_uri');
             $templateClient[] = implode(', ', $client->getAccessRolesNames());
             //$templateClient[] = $client->getValue('create_name');
 
-            $actions = '';
-            // add link to edit OIDC client
-            $actions .= '<a class="admidio-icon-link" href="' . $clientEditURL . '">' .
-                    '<i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT') . '"></i></a>';
-
-            // add link to delete OIDC client
-            $actions .= '<a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                    data-message="' . SecurityUtils::encodeHTML($gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName())))) . '"
-                    data-href="callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                    <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_SSO_CLIENT_DELETE') . '"></i>
-                </a>';
-            $templateClient[] = $actions;
+            $actions = array(
+                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT')),
+                array(
+                    'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
+                    'dataHref' => 'callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'icon' => 'bi bi-trash',
+                    'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
+                )
+            );
+            $actions[] = $this->generateEnableAction($client);
+            $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
+            $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
+            $templateClient[] = $actionsTemplate->fetch();
 
             $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
         }
+
+        // Add JS for reloading the metadata of a SAML client
+        $this->addJavascript("
+            $('.admidio-sso-reload-metadata').on('click', function (e) {
+              e.preventDefault();
+              var \$icon = $(this).find('i');
+              \$icon.addClass('spinner-border spinner-border-sm');
+
+              $.post('clients.php?mode=reload_saml_metadata&uuid=' + encodeURIComponent($(this).data('uuid')), {
+                adm_csrf_token: '" . $gCurrentSession->getCSRFToken() . "'
+              }, null, 'json')
+              .done(function (data) {
+                if (data.status === 'success') {
+                  messageBox(data.message);
+                } else {
+                  messageBox(data.message, '', 'error');
+                }
+              })
+              .fail(function (jqXHR) {
+                messageBox(jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : " . json_encode($gL10n->get('SYS_SSO_METADATA_LOAD_FAILED'), JSON_THROW_ON_ERROR) . ", '', 'error');
+              })
+              .always(function () {
+                \$icon.removeClass('spinner-border spinner-border-sm');
+              });
+            });
+          ", true);
 
         // Add JS for toggling clients (enabled/disabled)
         $this->addJavascript("
@@ -1141,9 +1196,13 @@ class SSOClientPresenter extends PagePresenter
                   \$icon.removeClass('bi-toggle-' + (currentlyEnabled ? 'on' : 'off'))
                        .addClass('bi-toggle-' + (currentlyEnabled ? 'off' : 'on'));
 
-                  // Update tooltip title (you might want to localize this)
-                  \$link.attr('title', currentlyEnabled ? 'Enable' : 'Disable');
-                  \$link.tooltip('dispose').tooltip(); // Refresh tooltip if Bootstrap tooltip is used
+                  // Update the action label and the state displayed in the table.
+                  var label = currentlyEnabled ? " . json_encode($gL10n->get('SYS_ENABLE'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_DISABLE'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";
+                  \$link.attr('aria-label', label);
+                  \$icon.attr('data-bs-original-title', label);
+                  \$link.closest('tr').find('.admidio-client-state').text(currentlyEnabled ? " . json_encode($gL10n->get('SYS_DISABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_ENABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ");
+                  bootstrap.Tooltip.getInstance(\$icon[0])?.setContent({'.tooltip-inner': label});
+                  \$link.children('span').text(label);
 
                   // Update data-enabled attribute
                   \$link.data('enabled', newEnabled);
@@ -1164,5 +1223,27 @@ class SSOClientPresenter extends PagePresenter
         $this->assignSmartyVariable('rows', $columnValues);
         // add table to the page
         $this->addHtmlByTemplate('modules/sso_oidc_clients.list.tpl');
+    }
+
+    /**
+     * One line about the metadata of a client with a metadata URL: when it was checked last, what went wrong
+     * and when it is checked next.
+     */
+    private function getMetadataStatusText(SAMLClient $client): string
+    {
+        global $gL10n;
+
+        $format = function (string $column) use ($client, $gL10n): string {
+            $value = $client->getValue($column, 'database');
+            return $value === null || $value === '' ? $gL10n->get('SYS_NONE') : date('Y-m-d H:i', (int) strtotime((string) $value));
+        };
+
+        $text = $gL10n->get('SYS_SSO_METADATA_STATUS_TEXT', array(
+            $format('smc_metadata_checked'),
+            $format('smc_metadata_valid_until'),
+            boolval($client->getValue('smc_metadata_refresh')) ? $format('smc_metadata_next_check') : $gL10n->get('SYS_NONE')
+        ));
+        $error = (string) $client->getValue('smc_metadata_error');
+        return $error === '' ? $text : $text . ' ' . $gL10n->get($error);
     }
 }

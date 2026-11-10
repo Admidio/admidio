@@ -103,15 +103,22 @@ try {
             $nameRelationshiptype .= '&nbsp;&nbsp;-&nbsp;&nbsp;' . $relationType2->getValue('urt_name') . $editUserInverseIcon;
         }
 
-        $relationtypeAdministration = '
-            <a class="admidio-icon-link" href="' . SecurityUtils::encodeUrl(
-                ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_new.php',
-                array('urt_uuid' => $relationType1->getValue('urt_uuid'))
-            ) . '"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_EDIT') . '"></i></a>
-            <a class="admidio-icon-link admidio-messagebox" href="javascript:void(0);" data-buttons="yes-no"
-                data-message="' . $gL10n->get('SYS_RELATIONSHIP_TYPE_DELETE', array($relationType1->getValue('urt_name') . ($relationType1->isUnidirectional() ? '' : ('/' . $relationType2->getValue('urt_name'))))) . '"
-                data-href="callUrlHideElement(\'row_' . $relationType1->getValue('urt_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 'delete', 'urt_uuid' => $relationType1->getValue('urt_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')">
-                <i class="bi bi-trash" data-bs-toggle="tooltip" title="' . $gL10n->get('SYS_DELETE') . '"></i></a>';
+        $actions = array(
+            array(
+                'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_new.php', array('urt_uuid' => $relationType1->getValue('urt_uuid'))),
+                'icon' => 'bi bi-pencil-square',
+                'tooltip' => $gL10n->get('SYS_EDIT')
+            ),
+            array(
+                'dataMessage' => $gL10n->get('SYS_RELATIONSHIP_TYPE_DELETE', array($relationType1->getValue('urt_name') . ($relationType1->isUnidirectional() ? '' : ('/' . $relationType2->getValue('urt_name'))))),
+                'dataHref' => 'callUrlHideElement(\'row_' . $relationType1->getValue('urt_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 'delete', 'urt_uuid' => $relationType1->getValue('urt_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                'icon' => 'bi bi-trash',
+                'tooltip' => $gL10n->get('SYS_DELETE')
+            )
+        );
+        $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
+        $actionsTemplate->assign('data', array('uuid' => $relationType1->getValue('urt_uuid'), 'actions' => $actions));
+        $relationtypeAdministration = $actionsTemplate->fetch();
 
         // create array with all column values
         $columnValues = array(

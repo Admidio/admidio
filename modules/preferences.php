@@ -14,16 +14,19 @@
  *            save           - Save organization preferences
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
- *            backup         - create backup of Admidio database
+ *            backup         - back up the database into the directory of the backups
+ *            backup_download - send a backup from the directory of the backups
+ *            backup_delete  - remove a backup from the directory of the backups
  *            update_check   - Check for a new version of Admidio
  * panel    : The name of the preferences panel that should be shown or saved.
+ * name     : The name of the backup to send or remove.
  ***********************************************************************************************
  */
 
 use Admidio\Changelog\Service\ChangelogService;
-use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\DatabaseDump;
+use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\Presenter\PreferencesPresenter;
@@ -36,9 +39,11 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'update_check', 'changelog_purge')
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'backup', 'backup_download', 'backup_delete',
+                'update_check', 'changelog_purge')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
+    $getName = admFuncVariableIsValid($_GET, 'name', 'string');
 
     // only administrators are allowed to view, edit organization preferences or create new organizations
     if (!$gCurrentUser->isAdministrator()) {
@@ -114,18 +119,29 @@ try {
             }
             break;
 
-        // create backup of Admidio database
+        // back up the database into the directory of the backups, then show the list of the backups
         case 'backup':
-            // function not available for other databases except MySQL
-            if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-                throw new Exception('SYS_MODULE_DISABLED');
-            }
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
-            $dump = new DatabaseDump($gDb);
-            $dump->create('admidio_dump_' . $g_adm_db . '.sql.gz');
-            $dump->export();
-            $dump->deleteDumpFile();
+            Backups::createDatabaseBackup();
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'update_backup')));
+            break;
+
+        // a backup contains every data of the installation: only an administrator gets it, and only from the list
+        case 'backup_download':
+            $file = Backups::getFile($getName);
+            header('Content-Type: application/zip');
+            header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $getName));
+            header('Content-Length: ' . filesize($file));
+            header('Cache-Control: private, no-store');
+            readfile($file);
+            exit();
+
+        case 'backup_delete':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            Backups::delete($getName);
+            admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'update_backup')));
             break;
 
         case 'update_check':

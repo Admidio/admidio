@@ -10,6 +10,13 @@
                 <strong>{$messageText}</strong>
             </div>
         </p>
+    {elseif $outputMode == "warning"}
+        <p>
+            <div class="alert alert-warning alert-small" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <strong>{$messageText}</strong>
+            </div>
+        </p>
     {elseif $outputMode == "success"}
         <p>
             <div class="alert alert-success alert-small" role="alert">

@@ -4,7 +4,9 @@ namespace Admidio\UI\Presenter;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\ValueObject\MenuNode;
+use Admidio\Preferences\Service\PreferencesService;
 use Smarty\Smarty;
 
 /**
@@ -194,6 +196,23 @@ class PagePresenter
                 $this->jsFiles[] = $this->getDebugOrMinFilepath($jsFile);
             }
         }
+    }
+
+    /**
+     * Adds the script and the styles of the tree view (system/js/tree-view.js) to the page, e.g. for the folder
+     * tree of the documents and files module or a tree select field of a form. The styles are taken from the
+     * current theme or, if the theme has no file css/tree-view.css, from the fallback theme. The modification time is
+     * part of the url, so the browser loads a changed file at once.
+     */
+    public function addTreeViewFiles(): void
+    {
+        $cssFile = '/css/tree-view.css';
+        $cssUrl = THEME_URL . $cssFile;
+        if (!file_exists(THEME_PATH . $cssFile) && defined('THEME_FALLBACK_PATH')) {
+            $cssUrl = THEME_FALLBACK_URL . $cssFile;
+        }
+        $this->addCssFile($cssUrl . '?v=' . filemtime(getThemedFile($cssFile)));
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_SYSTEM . '/js/tree-view.js?v=' . filemtime(ADMIDIO_PATH . FOLDER_SYSTEM . '/js/tree-view.js'));
     }
 
     /**
@@ -684,7 +703,7 @@ class PagePresenter
      */
     public function show(): void
     {
-        global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation;
+        global $gSettingsManager, $gLayoutReduced, $gMenu, $gNavigation, $gCurrentUser, $gValidLogin;
 
         // The page is finished. The two texts that name it can still be changed, and
         // page_before_render is the last point at which anything can be added to it; everything the
@@ -717,6 +736,11 @@ class PagePresenter
         $this->smarty->assign('menuFunctions', $this->menuNodePageFunctions->getAllItems());
         $this->smarty->assign('templateFile', $this->templateFile);
         $this->smarty->assign('content', $this->pageContent);
+        // An administrator is told about a new release of Admidio that the last update check found.
+        // The version comes from the update information of the Admidio server.
+        $this->smarty->assign('availableUpdate', isset($gCurrentUser) && $gValidLogin && $gCurrentUser->isAdministrator()
+            ? SecurityUtils::encodeHTML((new PreferencesService())->getAvailableUpdate()) : '');
+        $this->smarty->assign('availableUpdateUrl', ADMIDIO_URL . FOLDER_INSTALLATION . '/core-update/index.php');
         $this->smarty->assign('rssFeeds', $this->rssFiles);
         $this->smarty->assign('cssFiles', $this->cssFiles);
         $this->smarty->assign('javascriptFiles', $this->jsFiles);

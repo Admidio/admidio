@@ -35,7 +35,7 @@ final class PluginPackageTest extends PluginTestCase
     private array $rubbish = array();
 
     /**
-     * @testdox A manifest version X.Y.Z-(dev|alpha|beta|rc).N is read as the complete version and its prerelease kind
+     * @testdox Numeric manifest versions with optional prerelease suffixes are read with their prerelease kind
      * @dataProvider versionManifests
      */
     public function testVersionIsRead(string $version, string $prerelease): void
@@ -53,6 +53,8 @@ final class PluginPackageTest extends PluginTestCase
     public static function versionManifests(): array
     {
         return array(
+            'major only' => array('2', ''),
+            'major and minor' => array('2.0', ''),
             'stable' => array('2.0.0', ''),
             'daily snapshot' => array('2.0.0-dev.20261106', 'dev'),
             'alpha' => array('2.0.0-alpha.3', 'alpha'),
@@ -63,7 +65,7 @@ final class PluginPackageTest extends PluginTestCase
     }
 
     /**
-     * @testdox A version that is not X.Y.Z or X.Y.Z-(dev|alpha|beta|rc).N is rejected before installation
+     * @testdox Invalid numeric versions and prerelease suffixes are rejected before installation
      * @dataProvider invalidVersionManifests
      */
     public function testInvalidVersionIsRejected(mixed $version): void
@@ -84,7 +86,6 @@ final class PluginPackageTest extends PluginTestCase
             'beta without dot' => array('2.0.0-beta1'),
             'unknown kind' => array('2.0.0-nightly.1'),
             'pr ranks above the release' => array('2.0.0-pr.5'),
-            'two parts' => array('2.0'),
             'too long' => array('1000000.1000000.1000000-dev.20261106'),
             'integer' => array(2)
         );

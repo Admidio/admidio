@@ -375,7 +375,7 @@ class PhotoService
             '',
             (string)$this->album->getValue('pho_name', 'database')
         ) . '.zip';
-        $filename = FileSystemUtils::getSanitizedPathEntry($filename);
+        $filename = FileSystemUtils::getSanitizedDownloadName($filename);
 
         return array(
             'path' => $tempFile,
