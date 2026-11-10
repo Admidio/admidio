@@ -1,7 +1,7 @@
 {
     "name": "PLG_HELLO_WORLD_NAME",
     "description": "PLG_HELLO_WORLD_DESCRIPTION",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": "The Admidio Team",
     "url": "https://www.admidio.org",
     "icon": "bi-globe-americas",
@@ -35,6 +35,12 @@
             "default": false,
             "label": "PLG_HELLO_WORLD_DECORATE_HEADLINE",
             "description": "PLG_HELLO_WORLD_DECORATE_HEADLINE_DESC"
+        },
+        "hello_world_list_actions": {
+            "type": "boolean",
+            "default": false,
+            "label": "PLG_HELLO_WORLD_LIST_ACTIONS",
+            "description": "PLG_HELLO_WORLD_LIST_ACTIONS_DESC"
         }
     }
 }

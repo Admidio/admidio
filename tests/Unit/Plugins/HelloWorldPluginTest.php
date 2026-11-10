@@ -28,7 +28,7 @@ final class HelloWorldPluginTest extends PluginTestCase
         $this->assertNull($plugin->error);
         $this->assertSame('hello-world', $plugin->id);
         $this->assertSame('PLG_HELLO_WORLD_NAME', $plugin->name);
-        $this->assertSame('1.1.0', $plugin->version);
+        $this->assertSame('1.2.0', $plugin->version);
         $this->assertSame(array(), $plugin->checkRequirements());
     }
 
@@ -51,7 +51,7 @@ final class HelloWorldPluginTest extends PluginTestCase
         $plugin = $this->example();
 
         $this->assertSame(
-            array('hello_world_greeting', 'hello_world_address', 'hello_world_decorate_headline'),
+            array('hello_world_greeting', 'hello_world_address', 'hello_world_decorate_headline', 'hello_world_list_actions'),
             array_keys($plugin->settings)
         );
         $this->assertSame('plugin_hello_world_enabled', $plugin->getEnabledSettingName());
