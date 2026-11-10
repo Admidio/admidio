@@ -57,7 +57,7 @@
                                     {if $storeEntry.installed}
                                         <span class="badge bg-success">{$l10n->get('SYS_INSTALLED')}</span>
                                     {else}
-                                        {include 'sys-template-parts/list.functions.tpl' data=$storeEntry}
+                                        {include 'sys-template-parts/list.functions.tpl' listId='plugin-store' data=$storeEntry}
                                     {/if}
                                 </td>
                             </tr>

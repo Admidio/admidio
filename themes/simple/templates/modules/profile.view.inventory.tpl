@@ -17,7 +17,7 @@
                         {/foreach}
                         {if isset($row.actions)}
                             <td class="text-end">
-                                {include 'sys-template-parts/list.functions.tpl' data=['uuid' => "{$tableId}_{$row.item_uuid}", 'actions' => $row.actions]}
+                                {include 'sys-template-parts/list.functions.tpl' listId='profile-inventory' listRow=$row data=['uuid' => "{$tableId}_{$row.item_uuid}", 'actions' => $row.actions]}
                             </td>
                         {/if}
                     </tr>

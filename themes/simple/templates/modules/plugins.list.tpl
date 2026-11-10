@@ -81,7 +81,7 @@
                                 {if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}
                             </td>
                             <td class="text-end">
-                                {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
+                                {include 'sys-template-parts/list.functions.tpl' listId='plugins' data=$pluginEntry}
                             </td>
                         </tr>
                     {/foreach}
@@ -115,7 +115,7 @@
                             {/if}
                             {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
                             <div class="float-end">
-                                {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginEntry.actions]}
+                                {include 'sys-template-parts/list.functions.tpl' listId='plugins' listRow=$pluginEntry cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginEntry.actions]}
                             </div>
                         </div>
                         <div class="card-body">

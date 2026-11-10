@@ -31,7 +31,7 @@
                     {/foreach}
                     {if isset($row.actions)}
                         <td class="text-end">
-                            {include 'sys-template-parts/list.functions.tpl' data=$row}
+                            {include 'sys-template-parts/list.functions.tpl' listId='inventory-items' data=$row}
                         </td>
                     {/if}
                 </tr>

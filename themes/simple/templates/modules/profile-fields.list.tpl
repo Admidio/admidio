@@ -71,7 +71,7 @@
                     <td class="d-none d-lg-table-cell">{$profileField.defaultValue}</td>
                     <td class="d-none d-lg-table-cell">{$profileField.regex}</td>
                     <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$profileField}
+                        {include 'sys-template-parts/list.functions.tpl' listId='profile-fields' data=$profileField}
                     </td>
                 </tr>
             {/foreach}

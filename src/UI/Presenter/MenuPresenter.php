@@ -282,6 +282,7 @@ class MenuPresenter extends PagePresenter
                 }
 
                 $templateRowMenu['actions'][] = array(
+                    'id' => 'edit',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'edit', 'uuid' => $menuEntry['men_uuid'])),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT')
@@ -290,6 +291,7 @@ class MenuPresenter extends PagePresenter
                 // don't allow delete for standard menus
                 if (!$menuEntry['men_standard']) {
                     $templateRowMenu['actions'][] = array(
+                        'id' => 'delete',
                         'dataHref' => 'callUrlHideElement(\'adm_menu_entry_' . $menuEntry['men_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/menu.php', array('mode' => 'delete', 'uuid' => $menuEntry['men_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($templateRowMenu['name']))),
                         'icon' => 'bi bi-trash',
