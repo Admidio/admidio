@@ -460,6 +460,130 @@ class Event extends Entity
     }
 
     /**
+     * Send a reminder email to all eligible members of this event who have not yet registered or unregistered
+     * (i.e. not currently active or tentative participants in the event role).
+     * This is triggered a fixed 3 days prior to the event start date.
+     * @return int Returns the number of reminder emails sent.
+     * @throws Exception
+     */
+    public function sendReminderNotification(): int
+    {
+        global $gCurrentOrganization, $gSettingsManager, $gL10n, $gDb, $gProfileFields;
+
+        // Check if global system notifications are enabled
+        if (!$gSettingsManager->getBool('system_notifications_enabled')) {
+            return 0;
+        }
+
+        $datBegin = $this->getValue('dat_begin', 'database');
+        if (empty($datBegin)) {
+            return 0;
+        }
+
+        // Calculate target date for sending the reminder: event begin date minus fixed 3 days
+        $reminderDays = 3;
+        $eventDateTime = new \DateTime($datBegin);
+        $targetDate = clone $eventDateTime;
+        $targetDate->modify('-' . (int)$reminderDays . ' days');
+
+        $now = new \DateTime();
+        // Send reminder if today matches the target reminder date (same calendar day)
+        if ($now->format('Y-m-d') !== $targetDate->format('Y-m-d')) {
+            return 0;
+        }
+
+        $roleId = (int)$this->getValue('dat_rol_id');
+        if ($roleId <= 0) {
+            return 0;
+        }
+
+        // Get all roles authorized to participate in this event
+        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
+        $authorizedRoleIds = $eventParticipationRoles->getRolesIds();
+
+        if (count($authorizedRoleIds) === 0) {
+            return 0;
+        }
+
+        // Get users who are already participating (active or tentative)
+        $participants = new Participants($this->db, $roleId);
+        $participantsArray = $participants->getParticipantsArray();
+        $participatingUserIds = array();
+        if (is_array($participantsArray)) {
+            foreach ($participantsArray as $p) {
+                if ($p['approved'] != Participants::STATE_REFUSED) {
+                    $participatingUserIds[] = (int)$p['usrId'];
+                }
+            }
+        }
+
+        // Query all members of authorized roles who have a valid email address and are not yet participating
+        $sqlEmailField = '';
+        if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
+            $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
+        }
+
+        $placeholders = implode(',', array_fill(0, count($authorizedRoleIds), '?'));
+        $sql = 'SELECT DISTINCT usr_id, first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
+                  FROM ' . TBL_MEMBERS . ' mem
+            INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
+            INNER JOIN ' . TBL_USERS . ' ON usr_id = mem_usr_id
+            INNER JOIN ' . TBL_USER_DATA . ' AS email ON email.usd_usr_id = usr_id AND LENGTH(email.usd_value) > 0
+            INNER JOIN ' . TBL_USER_FIELDS . ' AS field ON field.usf_id = email.usd_usf_id AND field.usf_type = \'EMAIL\' ' . $sqlEmailField . '
+             LEFT JOIN ' . TBL_USER_DATA . ' AS first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ?
+             LEFT JOIN ' . TBL_USER_DATA . ' AS last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ?
+                 WHERE mem_rol_id IN (' . $placeholders . ')
+                   AND mem_begin <= ?
+                   AND mem_end > ?';
+
+        $queryParams = array(
+            (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
+            (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
+        );
+        foreach ($authorizedRoleIds as $rId) {
+            $queryParams[] = $rId;
+        }
+        $queryParams[] = DATE_NOW;
+        $queryParams[] = DATE_NOW;
+
+        $stmt = $this->db->queryPrepared($sql, $queryParams);
+        $sentCount = 0;
+
+        while ($row = $stmt->fetch()) {
+            $userId = (int)$row['usr_id'];
+            if (in_array($userId, $participatingUserIds, true)) {
+                continue;
+            }
+
+            $email = new Email();
+            $email->addRecipient($row['email'], $row['firstname'], $row['lastname']);
+            $subject = $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($this->getValue('dat_headline')));
+            $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array($this->getValue('dat_headline'))) . '<br /><br />'
+                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('dat_headline') . '<br />'
+                . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br /><br />'
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+
+            $email->setSubject($gCurrentOrganization->getValue('org_shortname') . ': ' . $subject);
+            if ($gSettingsManager->getBool('mail_html_registered_users')) {
+                $email->setHtmlMail();
+            } else {
+                $message = str_replace('<br />', "\n", $message);
+            }
+            $email->setText($message);
+
+            try {
+                if ($email->sendEmail()) {
+                    ++$sentCount;
+                }
+            } catch (\Throwable $e) {
+                // Log or ignore individual email delivery failures to keep batch running
+            }
+        }
+
+        return $sentCount;
+    }
+
+    /**
      * Send a notification email that a new event was created or an existing event was changed
      * to all members of the notification role. This role is configured within the global preference
      * **system_notifications_role**. The email contains the event title, date, time, location, room,
