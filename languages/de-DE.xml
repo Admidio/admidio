@@ -401,6 +401,8 @@
   <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unbekanntes Konto</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Kommagetrennte Datei (*.csv)</string>
   <string name="SYS_COMMENT">Kommentar</string>
+  <string name="SYS_COMMENT_PRIVACY">Kommentar-Privatsphäre</string>
+  <string name="SYS_COMMENT_PRIVACY_DESC">Wenn aktiviert, können nur Administratoren und Leiter der Veranstaltung die Anmeldekommentare sehen.</string>
   <string name="SYS_COMMON">Allgemein</string>
   <string name="SYS_COMMUNICATION">Kommunikation</string>
   <string name="SYS_COMPACT">Kompakt</string>

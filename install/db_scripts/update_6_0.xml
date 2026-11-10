@@ -107,5 +107,6 @@
     -->
     <step id="390">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
     <step id="400">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
+    <step id="410">ALTER TABLE %PREFIX%_events ADD COLUMN dat_comment_privacy boolean NOT NULL DEFAULT false</step>
     <step>stop</step>
 </update>

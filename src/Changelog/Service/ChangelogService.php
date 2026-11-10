@@ -780,6 +780,7 @@ class ChangelogService {
             'dat_deadline' =>              'SYS_DEADLINE',
             'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
             'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
+            'dat_comment_privacy' =>       array('name' => 'SYS_COMMENT_PRIVACY', 'type' => 'BOOL'),
             'dat_additional_guests' =>     array('name' => 'SYS_ALLOW_ADDITIONAL_GUESTS', 'type' => 'BOOL'),
             'dat_evr_id' =>                array('name' => 'SYS_RECURRENCE_RULE', 'type' => 'RECURRENCE_RULE'),
             'dat_recurrence_original_begin' => array('name' => 'SYS_RECURRENCE_ORIGINAL_BEGIN', 'type' => 'DATETIME'),
@@ -987,7 +988,7 @@ class ChangelogService {
             'smc_encrypt_assertions' =>     array('name' => 'SYS_SSO_ENCRYPT_ASSERTIONS', 'type' => 'BOOL'),
             'smc_assertion_lifetime' =>     'SYS_SSO_SAML_ASSERTION_LIFETIME',
             'smc_allowed_clock_skew' =>     'SYS_SSO_SAML_ALLOWED_CLOCK_SKEW',
-            
+
             'ocl_client_id' =>              'SYS_SSO_CLIENT_ID',
             'ocl_client_name' =>            'SYS_SSO_CLIENT_NAME',
             'ocl_client_secret' =>          'SYS_SSO_CLIENT_SECRET',
