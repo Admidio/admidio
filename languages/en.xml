@@ -239,6 +239,8 @@
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participants can add extra seats to their registration. These seats count toward the maximum number of participants and reduce the remaining availability. This is useful when participants bring guests and need more than one seat.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Allow registration comments</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Participants can add comments to their registration. These comments are visible in the participant list.</string>
+  <string name="SYS_COMMENT_PRIVACY">Comment privacy</string>
+  <string name="SYS_COMMENT_PRIVACY_DESC">If enabled, only administrators and leaders of the event can see the registration comments.</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">All day</string>
   <string name="SYS_ALL_MEMBERS">All members</string>

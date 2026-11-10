@@ -240,6 +240,8 @@
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Teilnehmende können zu ihrer Anmeldung weitere zusätzliche Plätze belegen. Diese werden dann von der maximalen Anzahl an Teilnehmenden abgezogen und die übrigen freien Plätze werden dadurch reduziert. Dies ist z. B. sinnvoll, wenn eine teilnehmende Person weitere Gäste mitbringen kann und dadurch eine Gesamtanzahl von freien Plätzen benötigt.</string>
   <string name="SYS_ALLOW_USER_COMMENTS">Kommentare zur Anmeldung erlauben</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Teilnehmende können ihre Teilnahme kommentieren. Die Kommentare können über die Liste der Teilnehmenden eingesehen werden</string>
+  <string name="SYS_COMMENT_PRIVACY">Kommentar-Privatsphäre</string>
+  <string name="SYS_COMMENT_PRIVACY_DESC">Wenn aktiviert, können nur Administratoren und Leiter der Veranstaltung die Anmeldekommentare sehen.</string>
   <string name="SYS_ALL_CONTACTS">Alle Kontakte</string>
   <string name="SYS_ALL_DAY">Ganztägig</string>
   <string name="SYS_ALL_MEMBERS">Alle Mitglieder</string>
