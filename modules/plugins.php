@@ -115,7 +115,7 @@ try {
 
             if ($getMode === 'upload_check') {
                 $package = PluginPackage::describe($uploadedFile);
-                echo json_encode(array('status' => $package->beta > 0 ? 'beta' : 'success'));
+                echo json_encode(array('status' => $package->prerelease !== '' ? 'beta' : 'success'));
                 break;
             }
 

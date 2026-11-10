@@ -177,6 +177,8 @@ final class PluginStoreTest extends PluginTestCase
         $this->assertSame('stable', PluginStore::getChannel());
 
         $GLOBALS['gDebug'] = true;
+        $GLOBALS['gPluginStoreChannel'] = 'dev';
+        $this->assertSame('dev', PluginStore::getChannel());
         $GLOBALS['gPluginStoreChannel'] = 'nightly';
         $this->assertSame('stable', PluginStore::getChannel());
     }
@@ -193,7 +195,9 @@ final class PluginStoreTest extends PluginTestCase
         $this->assertSame('stable', $status(array('version' => '1.0.0-pl1')));
         $this->assertSame('rc', $status(array('version' => '1.0.0-RC2')));
         $this->assertSame('beta', $status(array('version' => '1.0.0b3')));
-        $this->assertSame('alpha', $status(array('version' => '1.0.0-dev')));
+        $this->assertSame('dev', $status(array('version' => '1.0.0-dev')));
+        $this->assertSame('dev', $status(array('version' => '1.0.0-dev.20261106')));
+        $this->assertSame('alpha', $status(array('version' => '1.0.0-alpha.1')));
         $this->assertSame('beta', $status(array('version' => '1.0.0-alpha1', 'status' => 'beta')));
         $this->assertSame('withdrawn', $status(array('version' => '1.0.0', 'status' => 'Withdrawn')));
     }
