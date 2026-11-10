@@ -80,7 +80,7 @@ class ListFunctionsTemplateTest extends TestCase
     {
         $xpath = $this->render(array(
             array('popup' => true, 'popupClass' => 'modal-xl', 'dataHref' => '/edit', 'icon' => 'bi bi-pencil-square', 'tooltip' => 'Edit'),
-            array('dataMessage' => 'Delete "A & B"?', 'dataHref' => "callUrlHideElement('row_test', '/delete', 'csrf')", 'icon' => 'bi bi-trash', 'tooltip' => 'Delete'),
+            array('dataMessage' => 'Delete "A & B"?', 'dataHref' => "callUrlHideElement('row_test', '/delete', 'csrf')", 'messageType' => 'warning', 'messageTitle' => 'Warning "A & B"', 'confirmLabel' => 'Delete', 'cancelLabel' => 'Cancel', 'icon' => 'bi bi-trash', 'tooltip' => 'Delete'),
             array('class' => 'admidio-field-move', 'attributes' => array('data-uuid' => 'test', 'data-direction' => 'UP', 'data-target' => 'row_test'), 'icon' => 'bi bi-arrow-up', 'tooltip' => 'Move up')
         ));
         self::assertCount(2, $xpath->query('//a[contains(@class, "openPopup") and @data-class="modal-xl" and @data-href="/edit"]'));
@@ -88,6 +88,10 @@ class ListFunctionsTemplateTest extends TestCase
         self::assertSame('Delete "A & B"?', $delete->getAttribute('data-message'));
         self::assertSame("callUrlHideElement('row_test', '/delete', 'csrf')", $delete->getAttribute('data-href'));
         self::assertSame('yes-no', $delete->getAttribute('data-buttons'));
+        self::assertSame('warning', $delete->getAttribute('data-type'));
+        self::assertSame('Warning "A & B"', $delete->getAttribute('data-title'));
+        self::assertSame('Delete', $delete->getAttribute('data-confirm-label'));
+        self::assertSame('Cancel', $delete->getAttribute('data-cancel-label'));
         self::assertCount(1, $xpath->query('//a[contains(@class, "admidio-field-move") and @data-direction="UP" and @data-uuid="test" and @data-target="row_test"]'));
     }
 
@@ -100,13 +104,25 @@ class ListFunctionsTemplateTest extends TestCase
         self::assertFalse($link->hasAttribute('data-href'));
     }
 
-    public function testPluginsUseListRulesInTheTableAndCardRulesOnPhones(): void
+    /**
+     * @dataProvider pluginVersions
+     */
+    public function testPluginsUseListRulesInTheTableAndCardRulesOnPhones(string $version, string $prereleaseLabel): void
     {
+        $requiresConfirmation = $prereleaseLabel !== '';
         $entry = array(
             'id' => 'example', 'name' => 'Example', 'icon' => '', 'description' => '',
-            'author' => '', 'url' => '', 'version' => '1.0', 'installedVersion' => '1.0',
+            'author' => '', 'url' => '', 'version' => $version, 'installedVersion' => $version,
+            'prereleaseLabel' => $prereleaseLabel,
             'versionState' => 'current', 'notes' => array(), 'diagnostics' => array(),
-            'toggle' => array('icon' => 'bi bi-toggle-on', 'class' => 'text-success', 'label' => 'Enabled', 'tooltip' => 'Disable', 'dataHref' => "togglePlugin(this, '/disable', 'csrf', '/refresh')"),
+            'toggle' => array(
+                'icon' => $requiresConfirmation ? 'bi bi-toggle-off' : 'bi bi-toggle-on',
+                'class' => $requiresConfirmation ? 'text-secondary' : 'text-success',
+                'label' => $requiresConfirmation ? 'Disabled' : 'Enabled',
+                'tooltip' => $requiresConfirmation ? 'Enable' : 'Disable',
+                'prereleaseConfirmation' => $requiresConfirmation ? '1' : '0',
+                'dataHref' => "togglePlugin(this, '" . ($requiresConfirmation ? '/enable' : '/disable') . "', 'csrf', '/refresh')"
+            ),
             'actions' => array(
                 array('url' => '/settings', 'icon' => 'bi bi-gear', 'tooltip' => 'Settings'),
                 array('url' => '/history', 'icon' => 'bi bi-clock-history', 'tooltip' => 'History')
@@ -124,7 +140,25 @@ class ListFunctionsTemplateTest extends TestCase
         self::assertCount(1, $xpath->query('//*[@id="adm_dropdown_menu_button_mobile_example"]'));
         foreach ($xpath->query('//a[@onclick]') as $toggle) {
             self::assertSame($entry['toggle']['dataHref'], $toggle->getAttribute('onclick'));
+            self::assertSame($entry['toggle']['prereleaseConfirmation'], $toggle->getAttribute('data-prerelease-confirmation'));
         }
+        $badges = $xpath->query('//span[contains(@class, "badge")]');
+        self::assertCount($requiresConfirmation ? 2 : 0, $badges);
+        foreach ($badges as $badge) {
+            self::assertSame($prereleaseLabel, $badge->textContent);
+        }
+    }
+
+    /** @return array<string,array{0: string, 1: string}> */
+    public static function pluginVersions(): array
+    {
+        return array(
+            'stable' => array('1.0', ''),
+            'dev' => array('1.0.0-dev.20261110', 'Dev'),
+            'alpha' => array('1.0.0-alpha.1', 'Alpha'),
+            'beta' => array('1.0.0-beta.1', 'Beta'),
+            'rc' => array('1.0.0-rc.1', 'RC')
+        );
     }
 
     public function testReservationActionsKeepTheirAjaxAndCommentAttributes(): void
