@@ -32,15 +32,15 @@
                     <span class="me-2"><i class="bi {$row.statusIcon}"></i>{$row.statusLabel}</span>
                     {assign var=reservationActions value=[]}
                     {foreach $row.actions as $action}
-                        {$reservationActions[] = ['icon' => "bi {$action.icon}", 'tooltip' => $action.label, 'class' => 'admidio-inventory-reservation-update', 'attributes' => ['data-url' => $action.url, 'data-row-id' => $row.id]]}
+                        {$reservationActions[] = ['id' => 'update', 'icon' => "bi {$action.icon}", 'tooltip' => $action.label, 'class' => 'admidio-inventory-reservation-update', 'attributes' => ['data-url' => $action.url, 'data-row-id' => $row.id]]}
                     {/foreach}
                     {if $row.mailUrl}
-                        {$reservationActions[] = ['url' => $row.mailUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_EMAIL')]}
+                        {$reservationActions[] = ['id' => 'send_email', 'url' => $row.mailUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_EMAIL')]}
                     {/if}
                     {if $row.comment}
-                        {$reservationActions[] = ['class' => 'admidio-inventory-reservation-comment', 'attributes' => ['data-comment' => $row.comment], 'icon' => 'bi bi-chat-left-text-fill', 'tooltip' => $l10n->get('SYS_COMMENT')]}
+                        {$reservationActions[] = ['id' => 'comment', 'class' => 'admidio-inventory-reservation-comment', 'attributes' => ['data-comment' => $row.comment], 'icon' => 'bi bi-chat-left-text-fill', 'tooltip' => $l10n->get('SYS_COMMENT')]}
                     {/if}
-                    {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $row.id, 'actions' => $reservationActions]}
+                    {include 'sys-template-parts/list.functions.tpl' listId='inventory-reservations' listRow=$row data=['uuid' => $row.id, 'actions' => $reservationActions]}
                 </td>
             </tr>
         {/foreach}

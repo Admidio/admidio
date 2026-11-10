@@ -392,11 +392,13 @@ class EventListPresenter extends PagePresenter
                 if ($outputMode === 'html') {
                     if ($event->isEditable()) {
                         $editAction = array(
+                            'id' => 'edit',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventEditUrlParams),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_EDIT')
                         );
                         $deleteAction = array(
+                            'id' => 'delete',
                             'dataHref' => 'callUrlHideElement(\'evt_' . $eventUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $eventDeleteUrlParams) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                             'dataMessage' => $eventDeleteMessage,
                             'icon' => 'bi bi-trash',
@@ -414,6 +416,7 @@ class EventListPresenter extends PagePresenter
                     }
                     if ($gSettingsManager->getBool('events_ical_export_enabled')) {
                         $actions['ical'] = array(
+                            'id' => 'download_ical',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('dat_uuid' => $eventUUID, 'mode' => 'export')),
                             'icon' => 'bi bi-download',
                             'tooltip' => $gL10n->get('SYS_DOWNLOAD_ICAL')
@@ -421,6 +424,7 @@ class EventListPresenter extends PagePresenter
                     }
                     if ($event->isEditable()) {
                         $actions['copy'] = array(
+                            'id' => 'copy',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', array('mode' => 'edit', 'dat_uuid' => $eventUUID, 'copy' => 1)),
                             'icon' => 'bi bi-copy',
                             'tooltip' => $gL10n->get('SYS_COPY')
@@ -795,6 +799,7 @@ class EventListPresenter extends PagePresenter
                             $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
                             $actionsTemplate->assign('cardActions', true);
                             $actionsTemplate->assign('data', array('uuid' => $eventUUID, 'actions' => $cardActions));
+                            $actionsTemplate->assign('listId', 'events');
                             $page->addHtml('<div class="col-auto ms-auto text-nowrap">' . $actionsTemplate->fetch() . '</div>');
                         }
                         $page->addHtml('
@@ -927,6 +932,7 @@ class EventListPresenter extends PagePresenter
                     if ($outputMode === 'html') {
                         $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
                         $actionsTemplate->assign('data', array('uuid' => $eventUUID, 'actions' => $actions));
+                        $actionsTemplate->assign('listId', 'events');
                         $columnValues[] = $actionsTemplate->fetch();
                     }
 

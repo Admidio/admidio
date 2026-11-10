@@ -596,12 +596,14 @@ class CategoriesPresenter extends PagePresenter
 
             if ($category->isEditable()) {
                 $templateCategory['actions'][] = array(
+                    'id' => 'edit',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('mode' => 'edit', 'uuid' => $category->getValue('cat_uuid'), 'type' => $type)),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT')
                 );
                 if (!$category->getValue('cat_system')) {
                     $templateCategory['actions'][] = array(
+                        'id' => 'delete',
                         'dataHref' => 'callUrlHideElement(\'adm_category_' . $category->getValue('cat_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/categories.php', array('mode' => 'delete', 'uuid' => $category->getValue('cat_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get($deleteMessage, array($category->getValue('cat_name'))),
                         'icon' => 'bi bi-trash',
@@ -609,6 +611,7 @@ class CategoriesPresenter extends PagePresenter
                     );
                 } else {
                     $templateCategory['actions'][] = array(
+                        'id' => 'spacer',
                         'url' => '',
                         'icon' => 'bi bi-trash invisible',
                         'tooltip' => ''

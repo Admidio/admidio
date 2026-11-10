@@ -2038,6 +2038,7 @@ class ChangelogService {
 
         // If the user has access to the changelog, create the link to the changelog page
         return array(
+            'id' => 'history',
             'url' => $url,
             'icon' => 'bi bi-clock-history',
             'tooltip' => $gL10n->get('SYS_CHANGE_HISTORY'),

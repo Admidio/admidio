@@ -43,7 +43,7 @@
                         {/if}
                     </td>
                     <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$menuEntry}
+                        {include 'sys-template-parts/list.functions.tpl' listId='menu' data=$menuEntry}
                     </td>
                 </tr>
             {/foreach}

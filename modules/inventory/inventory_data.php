@@ -367,6 +367,7 @@ try {
 
         if (!$itemsData->isRetired() && InventoryAccessService::canRequestReservation()) {
             $actions[] = array(
+                'id' => 'reserve',
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'reservation_request', 'item_uuid' => $row['ini_uuid'])),
                 'icon' => 'bi bi-calendar-plus',
                 'tooltip' => $gL10n->get('SYS_RESERVATION_REQUEST')
@@ -380,6 +381,7 @@ try {
             if (!$itemsData->isRetired()) {
                 // edit action
                 $actions[] = array(
+                    'id' => 'edit',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
@@ -397,6 +399,7 @@ try {
                         $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                     }
                     array_unshift($actions, array(
+                        'id' => 'borrow',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $row['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                         'icon' => $icon,
                         'tooltip' => $tooltip
@@ -405,6 +408,7 @@ try {
 
                 // copy action
                 $actions[] = array(
+                    'id' => 'copy',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $row['ini_uuid'], 'copy' => true)),
                     'icon' => 'bi bi-file-earmark-plus',
                     'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
@@ -413,6 +417,7 @@ try {
                 // reinstate action for retired item
                 $dataMessage = ($isKeeperAuthorized) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                 $actions[] = array(
+                    'id' => 'reinstate',
                     'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $row['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $dataMessage,
                     'icon' => 'bi bi-eye',
@@ -426,6 +431,7 @@ try {
             if (!$itemsData->isRetired()) {
                 // keeper retire action (popup)
                 $actions[] = array(
+                    'id' => 'delete',
                     'popup' => true,
                     'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $row['ini_uuid'])),
                     'icon' => 'bi bi-trash',
@@ -435,6 +441,7 @@ try {
         } elseif ($gCurrentUser->isAdministratorInventory()) {
             // admin delete/retire action
             $actions[] = array(
+                'id' => 'delete',
                 'popup' => true,
                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => isset($_GET['items_filter_status']) ? $_GET['items_filter_status'] : '', 'item_uuid' => $row['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                 'icon' => 'bi bi-trash',
@@ -444,6 +451,8 @@ try {
 
         if ($hasActionsColumn) {
             $smarty->assign('data', array('uuid' => $row['ini_uuid'], 'actions' => $actions));
+            $smarty->assign('listId', 'inventory-items');
+            $smarty->assign('listRow', $row);
             $rowValues[] = $smarty->fetch('sys-template-parts/list.functions.tpl');
         }
 
