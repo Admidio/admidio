@@ -19,6 +19,7 @@ class ListFunctionsTemplateTest extends TestCase
         $this->smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
         $this->smarty->setCompileDir($this->compileDirectory);
         $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+        $this->smarty->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
         $this->smarty->assign('l10n', new class {
             public function get(string $key): string
             {
@@ -175,4 +176,48 @@ class ListFunctionsTemplateTest extends TestCase
         self::assertCount(2, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/borrow"]'));
     }
 
+
+    private function renderList(array $actions, string $listId, array $row = array()): DOMXPath
+    {
+        $template = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
+        $template->assign('data', array('uuid' => 'test', 'actions' => $actions));
+        $template->assign('listId', $listId);
+        $template->assign('listRow', $row);
+        $document = new DOMDocument();
+        $document->loadHTML('<html><body>' . $template->fetch() . '</body></html>');
+        return new DOMXPath($document);
+    }
+
+    public function testListRowActionsFilterChangesTheRenderedIcons(): void
+    {
+        \Admidio\Hooks\Hooks::reset();
+        \Admidio\Hooks\Hooks::addFilter('list_row_actions', static function (array $actions, string $listId, array $row) {
+            if ($listId !== 'example') {
+                return $actions;
+            }
+            $actions = array_values(array_filter($actions, static fn($action) => ($action['id'] ?? '') !== 'delete'));
+            array_unshift($actions, array('id' => 'locked', 'icon' => 'bi bi-shield-lock', 'tooltip' => 'Locked ' . $row['name']));
+            return $actions;
+        });
+
+        try {
+            $core = array(
+                array('id' => 'edit', 'url' => '/edit', 'icon' => 'bi bi-pencil-square', 'tooltip' => 'Edit'),
+                array('id' => 'delete', 'url' => '/delete', 'icon' => 'bi bi-trash', 'tooltip' => 'Delete'),
+            );
+            $xpath = $this->renderList($core, 'example', array('name' => 'X'));
+            self::assertCount(0, $xpath->query('//a[@data-action-id="delete"]'));
+            self::assertCount(1, $xpath->query('//a[@data-action-id="edit"]'));
+            $locked = $xpath->query('//a[@data-action-id="locked"]');
+            self::assertCount(1, $locked);
+            self::assertSame('javascript:void(0);', $locked->item(0)->getAttribute('href'), 'an informational action does nothing');
+            self::assertSame('Locked X', $locked->item(0)->getAttribute('aria-label'));
+
+            // another list, and a list without an ID, are not touched
+            self::assertCount(1, $this->renderList($core, 'other')->query('//a[@data-action-id="delete"]'));
+            self::assertCount(1, $this->render($core)->query('//a[@href="/delete"]'));
+        } finally {
+            \Admidio\Hooks\Hooks::reset();
+        }
+    }
 }

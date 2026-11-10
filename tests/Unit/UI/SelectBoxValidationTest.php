@@ -45,6 +45,7 @@ class SelectBoxValidationTest extends TestCase
         $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
         $smarty->setCompileDir(sys_get_temp_dir());
         $smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+        $smarty->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
         $smarty->registerPlugin('function', 'is_translation_string_id', static fn(array $params): bool => false);
         $smarty->assign(array('data' => $element, 'formType' => 'default'));
 
