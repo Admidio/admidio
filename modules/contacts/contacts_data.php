@@ -440,6 +440,7 @@ try {
         if ($gCurrentUser->isAdministratorUsers() && ($contactsOfThisOrganization || !$contactsOfOtherOrganization)) {
             $actions[] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'])),
+                'id' => 'edit',
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT_USER')
             );
@@ -453,6 +454,7 @@ try {
                 $actions[] = array(
                     'dataMessage' => $gL10n->get('SYS_SEND_NEW_LOGIN', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']))),
                     'dataHref' => 'callUrlHideElement(\'no_element\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'send_login', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'id' => 'send_login',
                     'icon' => 'bi bi-key-fill',
                     'tooltip' => $gL10n->get('SYS_SEND_USERNAME_PASSWORD')
                 );
@@ -461,6 +463,7 @@ try {
                 $actions[] = array(
                     'popup' => true,
                     'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/password.php', array('user_uuid' => $row['usr_uuid'])),
+                    'id' => 'change_password',
                     'icon' => 'bi bi-key-fill',
                     'tooltip' => $gL10n->get('SYS_CHANGE_PASSWORD')
                 );
@@ -477,6 +480,7 @@ try {
                 }
                 $actions[] = array(
                     'url' => $mailLink,
+                    'id' => 'send_email',
                     'icon' => 'bi bi-envelope',
                     'tooltip' => $gL10n->get('SYS_SEND_EMAIL')
                 );
@@ -484,6 +488,7 @@ try {
 
             $actions[] = array(
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_new.php', array('user_uuid' => $row['usr_uuid'], 'copy' => 1)),
+                'id' => 'copy',
                 'icon' => 'bi bi-copy',
                 'tooltip' => $gL10n->get('SYS_COPY')
             );
@@ -495,6 +500,7 @@ try {
                     $actions[] = array(
                         'popup' => true,
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('user_uuid' => $row['usr_uuid'], 'mode' => 'delete_explain_msg', 'custom_callback' => ($getMembersShowFilter >= ShowMembers::AllContactsThisOrganization ))),
+                        'id' => 'delete',
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_REMOVE_CONTACT')
                     );
@@ -503,6 +509,7 @@ try {
                     $actions[] = array(
                         'dataMessage' => $gL10n->get('SYS_USER_DELETE_DESC', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']))),
                         'dataHref' => 'callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'delete', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                        'id' => 'delete',
                         'icon' => 'bi bi-trash',
                         'tooltip' => $gL10n->get('SYS_REMOVE_CONTACT')
                     );
@@ -512,17 +519,18 @@ try {
                 $actions[] = array(
                     'dataMessage' => $gL10n->get('SYS_END_MEMBERSHIP_OF_USER', array(SecurityUtils::encodeHTML($row['first_name'] . ' ' . $row['last_name']), $gCurrentOrganization->getValue('org_longname'))),
                     'dataHref' => 'callUrlHideElement(\'row_members_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/contacts/contacts_function.php', array('mode' => 'remove', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
+                    'id' => 'remove',
                     'icon' => 'bi bi-trash',
                     'tooltip' => $gL10n->get('SYS_REMOVE_CONTACT')
                 );
             }
         }
 
+        // The template passes the actions through the list_row_actions filter (see ListActions).
         $smarty->assign('data', array('uuid' => $row['usr_uuid'], 'actions' => $actions));
-        $userAdministration = $smarty->fetch('sys-template-parts/list.functions.tpl');
-
-        $userAdministration = Hooks::applyTypedFilters('list_row_actions', $userAdministration, 'contacts', $row);
-        $columnValues[(string)$columnNumberJson] = $userAdministration;
+        $smarty->assign('listId', 'contacts');
+        $smarty->assign('listRow', $row);
+        $columnValues[(string)$columnNumberJson] = $smarty->fetch('sys-template-parts/list.functions.tpl');
 
         // add current row to json array
         $jsonArray['data'][] = Hooks::applyTypedFilters('list_rendered_data', $columnValues, 'contacts', $row);

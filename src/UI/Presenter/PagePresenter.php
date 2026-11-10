@@ -456,6 +456,7 @@ class PagePresenter
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
             $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
             $smartyObject->registerPlugin('function', 'version_compare', 'Admidio\Infrastructure\Plugins\Smarty::versionCompare');
+            $smartyObject->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
