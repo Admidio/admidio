@@ -246,6 +246,7 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">The selected category is shared for all organizations.\nThe current object (event, announcement, profile field, web link, etc.) will be visible not only in this organization but also in all the following organizations: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">All others</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">All members of this organization</string>
+  <string name="SYS_ALPHA">Alpha</string>
   <string name="SYS_ALSO_VISITORS">Also visitors</string>
   <string name="SYS_ANNOUNCEMENTS">Announcements</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Display or edit announcements, news and other information.</string>
@@ -295,6 +296,7 @@
   <string name="SYS_BACK_TO_ALBUM">Back to album</string>
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
+  <string name="SYS_BETA">Beta</string>
   <string name="SYS_BIRTHDAY">Birthday</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
@@ -746,6 +748,7 @@
   <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Name</string>
   <string name="SYS_DETAILED">Detailed</string>
+  <string name="SYS_DEV">Dev</string>
   <string name="SYS_DIRECTORY_PROTECTION">Directory protection</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Directory separator</string>
   <string name="SYS_DISABLE">Disabled</string>
@@ -1598,6 +1601,7 @@
   <string name="SYS_POSTCODE">Postal code</string>
   <string name="SYS_POSTS">Posts</string>
   <string name="SYS_POST_MAX_SIZE">Max. POST size</string>
+  <string name="SYS_PRERELEASE_VERSION_WARNING">This is a prerelease version of the plugin. It may be unstable and could cause data loss. Please use it only in a test environment.</string>
   <string name="SYS_PRESET_CONFIGURATION">Default configuration</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Administrators are able to define default configurations for all users. Configure columns and conditions and save them by naming the configuration set.</string>
   <string name="SYS_PREVIEW">Preview</string>
@@ -1648,6 +1652,7 @@
   <string name="SYS_QUARTERLY">Quarterly</string>
   <string name="SYS_QUOTE">Single quote (')</string>
   <string name="SYS_RADIO_BUTTON">Radio button</string>
+  <string name="SYS_RC">RC</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Latest photo album of organization #VAR1#</string>
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">Email recipient</string>

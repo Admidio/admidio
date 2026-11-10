@@ -55,7 +55,8 @@ class ComponentUpdate extends Component
      */
     private static function getVersionArrayFromVersion(string $versionString): array
     {
-        $versionArray = array_map('intval', explode('.', $versionString));
+        // A prerelease suffix does not belong to the migration files.
+        $versionArray = array_map('intval', explode('.', explode('-', $versionString)[0]));
 
         return $versionArray + array(0, 0);
     }
@@ -366,7 +367,8 @@ class ComponentUpdate extends Component
      * execute all steps in this file until the end of file is reached. If an error occurred then the update will
      * be stopped and the system will be marked with update not completed so that it's possible to continue the
      * update later if the problem was fixed.
-     * @param string $targetVersion The target version to update.
+     * @param string $targetVersion The target version to update, e.g. 1.2.0 or 1.2.0-beta.1.
+     * @param string $namespace Namespace containing the plugin's UpdateStepsCode class.
      * @throws Exception
      */
     public function updatePlugin(string $targetVersion, string $namespace)

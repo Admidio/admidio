@@ -69,6 +69,18 @@ final class Plugin
     public const ERROR_INVALID_ID = 'invalid_id';
     public const ERROR_ID_CONFLICT = 'id_conflict';
     /**
+     * The length of the column that stores the installed version (com_version).
+     */
+    public const VERSION_MAX_LENGTH = 32;
+
+    /**
+     * The kinds of prerelease a version may carry, e.g. 1.2.0-dev.20261106. version_compare() orders
+     * them dev < alpha < beta < rc < release. Do not add a kind that starts with "p": version_compare()
+     * reads it as "patch level" and ranks it above the release.
+     */
+    public const PRERELEASE_KINDS = array('dev', 'alpha', 'beta', 'rc');
+
+    /**
      * The internal names of the menu nodes a plugin may name as **menuParent** in its manifest.
      */
     public const MENU_PARENTS = array('modules', 'administration', 'extensions');
@@ -111,9 +123,17 @@ final class Plugin
     public readonly string $description;
 
     /**
-     * Version of the files, as declared in the manifest.
+     * Version of the files, as declared in the manifest: **X.Y.Z** for a stable release or
+     * **X.Y.Z-(dev|alpha|beta|rc).N** for a prerelease, e.g. **2.0.0-beta.1**.
+     * Short numeric versions such as **1** or **1.2** are also accepted.
      */
     public readonly string $version;
+
+    /**
+     * Maturity of the version: **dev**, **alpha**, **beta** or **rc** for a prerelease, an empty string for
+     * a stable release.
+     */
+    public readonly string $prerelease;
 
     /**
      * Bootstrap icon name, e.g. **bi-cake2**.
@@ -190,6 +210,7 @@ final class Plugin
         $this->name = (string)($manifest['name'] ?? $id);
         $this->description = (string)($manifest['description'] ?? '');
         $this->version = (string)($manifest['version'] ?? '0.0.0');
+        $this->prerelease = preg_match('/-(' . implode('|', self::PRERELEASE_KINDS) . ')\.\d+$/D', $this->version, $matches) === 1 ? $matches[1] : '';
         $this->icon = (string)($manifest['icon'] ?? 'bi-puzzle-fill');
         $this->author = (string)($manifest['author'] ?? '');
         $this->homepage = (string)($manifest['url'] ?? '');
@@ -250,6 +271,14 @@ final class Plugin
         if (!isset($manifest['version']) || !is_string($manifest['version']) || $manifest['version'] === '') {
             return new self($id, $path, $manifest, array(), array(), $empty,
                 'The manifest does not declare a version.', self::ERROR_BROKEN_MANIFEST);
+        }
+
+        if (strlen($manifest['version']) > self::VERSION_MAX_LENGTH
+            || preg_match('/^\d+(?:\.\d+){0,2}(?:-(?:' . implode('|', self::PRERELEASE_KINDS) . ')\.[1-9]\d*)?$/D', $manifest['version']) !== 1) {
+            return new self($id, $path, $manifest, array(), array(), $empty,
+                'The manifest version must be written X, X.Y or X.Y.Z, optionally followed by -(dev|alpha|beta|rc).N (at most '
+                . self::VERSION_MAX_LENGTH . ' characters).',
+                self::ERROR_BROKEN_MANIFEST);
         }
 
         if (isset($manifest['menuParent']) && !in_array($manifest['menuParent'], self::MENU_PARENTS, true)) {

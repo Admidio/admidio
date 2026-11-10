@@ -55,7 +55,8 @@ final class PluginStore
         'stable' => array('stable'),
         'rc' => array('stable', 'rc'),
         'beta' => array('stable', 'rc', 'beta'),
-        'alpha' => array('stable', 'rc', 'beta', 'alpha')
+        'alpha' => array('stable', 'rc', 'beta', 'alpha'),
+        'dev' => array('stable', 'rc', 'beta', 'alpha', 'dev')
     );
 
     /**
@@ -432,7 +433,7 @@ final class PluginStore
     }
 
     /**
-     * How mature a release is: stable, rc, beta or alpha - or withdrawn, which no channel admits.
+     * How mature a release is: stable, rc, beta, alpha or dev - or withdrawn, which no channel admits.
      *
      * A catalogue that states no status is taken at its word that the release is stable, unless the
      * version itself says otherwise: 1.2.0-beta1 is not offered as a stable release just because a
@@ -456,6 +457,9 @@ final class PluginStore
             if ($suffix === 'beta' || $suffix === 'b') {
                 return 'beta';
             }
+            if ($suffix === 'dev') {
+                return 'dev';
+            }
             if ($suffix !== 'pl' && $suffix !== 'p') {
                 return 'alpha';
             }
@@ -467,8 +471,8 @@ final class PluginStore
     /**
      * The channel of this installation: how early it is offered plugin releases.
      *
-     * Always **stable**, unless a developer sets **$gPluginStoreChannel** in config.php to rc, beta
-     * or alpha - which, like the catalogue address, only applies while $gDebug is on. Trying
+     * Always **stable**, unless a developer sets **$gPluginStoreChannel** in config.php to rc, beta,
+     * alpha or dev - which, like the catalogue address, only applies while $gDebug is on. Trying
      * pre-releases is something a developer does on a test installation; a production installation
      * must not end up with alpha code because of a line left over from testing.
      * @return string A key of CHANNELS.

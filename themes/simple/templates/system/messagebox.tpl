@@ -9,8 +9,8 @@
                 <p></p>
             </div>
             <div class="modal-footer">
-                <a id="adm_messagebox_button_yes" type="button" class="btn btn-primary">{$l10n->get('SYS_YES')}</a>
-                <a id="adm_messagebox_button_no" type="button" class="btn btn-secondary" data-bs-dismiss="modal">{$l10n->get('SYS_NO')}</a>
+                <a id="adm_messagebox_button_yes" type="button" class="btn btn-primary" data-default-label="{$l10n->get('SYS_YES')}">{$l10n->get('SYS_YES')}</a>
+                <a id="adm_messagebox_button_no" type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-default-label="{$l10n->get('SYS_NO')}">{$l10n->get('SYS_NO')}</a>
                 <div id="adm_status_message" class="mt-4 w-100"></div>
             </div>
         </div>

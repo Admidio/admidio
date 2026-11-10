@@ -34,6 +34,63 @@ final class PluginPackageTest extends PluginTestCase
      */
     private array $rubbish = array();
 
+    /**
+     * @testdox Numeric manifest versions with optional prerelease suffixes are read with their prerelease kind
+     * @dataProvider versionManifests
+     */
+    public function testVersionIsRead(string $version, string $prerelease): void
+    {
+        $plugin = PluginPackage::describe($this->archive(array(
+            'beta-plugin/plugin.json' => json_encode(array('version' => $version)),
+            'beta-plugin/plugin.php' => self::ENTRY
+        )));
+
+        $this->assertSame($version, $plugin->version);
+        $this->assertSame($prerelease, $plugin->prerelease);
+    }
+
+    /** @return array<string,array{0: string, 1: string}> */
+    public static function versionManifests(): array
+    {
+        return array(
+            'major only' => array('2', ''),
+            'major and minor' => array('2.0', ''),
+            'stable' => array('2.0.0', ''),
+            'daily snapshot' => array('2.0.0-dev.20261106', 'dev'),
+            'alpha' => array('2.0.0-alpha.3', 'alpha'),
+            'beta' => array('2.0.0-beta.1', 'beta'),
+            'release candidate' => array('2.0.0-rc.12', 'rc'),
+            'longest' => array('10000.10000.10000-dev.20261106', 'dev')
+        );
+    }
+
+    /**
+     * @testdox Invalid numeric versions and prerelease suffixes are rejected before installation
+     * @dataProvider invalidVersionManifests
+     */
+    public function testInvalidVersionIsRejected(mixed $version): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST');
+        PluginPackage::describe($this->archive(array(
+            'beta-plugin/plugin.json' => json_encode(array('version' => $version)),
+            'beta-plugin/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /** @return array<string,array{0: mixed}> */
+    public static function invalidVersionManifests(): array
+    {
+        return array(
+            'beta without number' => array('2.0.0-beta'),
+            'beta number zero' => array('2.0.0-beta.0'),
+            'beta without dot' => array('2.0.0-beta1'),
+            'unknown kind' => array('2.0.0-nightly.1'),
+            'pr ranks above the release' => array('2.0.0-pr.5'),
+            'too long' => array('1000000.1000000.1000000-dev.20261106'),
+            'integer' => array(2)
+        );
+    }
+
     protected function setUp(): void
     {
         parent::setUp();

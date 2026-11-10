@@ -63,7 +63,10 @@
                                     <div class="text-danger"><small><code>{$diagnostic}</code></small></div>
                                 {/foreach}
                             </td>
-                            <td>{$pluginEntry.version}</td>
+                            <td>
+                                {$pluginEntry.version}
+                                {if $pluginEntry.prereleaseLabel}<span class="badge bg-warning text-dark ms-1">{$pluginEntry.prereleaseLabel|escape:'html'}</span>{/if}
+                            </td>
                             <td>
                                 {if $pluginEntry.versionState === 'update'}
                                     <i class="bi bi-exclamation-triangle-fill me-1 text-warning"
@@ -79,7 +82,7 @@
                             <td class="text-end">
                                 {assign var=pluginActions value=$pluginEntry.actions}
                                 {if $pluginEntry.toggle}
-                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
+                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref, 'data-prerelease-confirmation' => $pluginEntry.toggle.prereleaseConfirmation]]}
                                 {/if}
                                 {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $pluginEntry.id, 'actions' => $pluginActions]}
                             </td>
@@ -111,7 +114,7 @@
                             <div class="float-end">
                                 {assign var=pluginActions value=$pluginEntry.actions}
                                 {if $pluginEntry.toggle}
-                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
+                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref, 'data-prerelease-confirmation' => $pluginEntry.toggle.prereleaseConfirmation]]}
                                 {/if}
                                 {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginActions]}
                             </div>
@@ -130,7 +133,9 @@
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_version">
                                 <strong>{$l10n->get('SYS_PLUGIN_VERSION')}:</strong>
-                                <p>{$pluginEntry.version}</p>
+                                <p>{$pluginEntry.version}
+                                    {if $pluginEntry.prereleaseLabel}<span class="badge bg-warning text-dark ms-1">{$pluginEntry.prereleaseLabel|escape:'html'}</span>{/if}
+                                </p>
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">
                                 <strong>{$l10n->get('SYS_INSTALLED_VERSION')}:</strong>

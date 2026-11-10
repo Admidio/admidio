@@ -155,12 +155,14 @@ class PluginsPresenter extends PagePresenter
 
             $row = array(
                 'id' => (string)$entry['id'],
+                'uuid' => (string)$entry['id'],
                 'name' => $name,
                 'description' => Language::translateIfTranslationStrId(PluginStore::getDescription($entry)),
                 'author' => (string)($entry['author'] ?? ''),
                 'url' => (string)($entry['url'] ?? ''),
                 'icon' => (string)($entry['icon'] ?? 'bi-puzzle'),
                 'version' => (string)$entry['release']['version'],
+                'prereleaseLabel' => $this->getPrereleaseLabel(PluginStore::getReleaseStatus($entry['release'])),
                 'installed' => (bool)$entry['installed'],
                 'installedVersion' => (string)$entry['installedVersion']
             );
@@ -171,10 +173,17 @@ class PluginsPresenter extends PagePresenter
                 // The same action shape the plugin list uses, so list.functions.tpl renders it.
                 $row['actions'] = array(array(
                     'dataHref' => $this->actionScript((string)$entry['id'], 'store_install'),
-                    'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
+                    'dataMessage' => $row['prereleaseLabel'] !== '' ? $gL10n->get('SYS_PRERELEASE_VERSION_WARNING')
+                        : $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
                     'icon' => 'bi bi-plus-circle-fill',
                     'tooltip' => $gL10n->get('SYS_PLUGIN_STORE_INSTALL')
                 ));
+                if ($row['prereleaseLabel'] !== '') {
+                    $row['actions'][0]['messageType'] = 'warning';
+                    $row['actions'][0]['messageTitle'] = $gL10n->get('SYS_WARNING');
+                    $row['actions'][0]['confirmLabel'] = $gL10n->get('SYS_INSTALL');
+                    $row['actions'][0]['cancelLabel'] = $gL10n->get('SYS_CANCEL');
+                }
             }
 
             $store[] = $row;
@@ -261,6 +270,7 @@ class PluginsPresenter extends PagePresenter
          * which posts the form as FormData - so the file actually reaches the server - and expects
          * the JSON that mode=upload answers with.
          */
+        $this->addActionJavascript();
         $form->addToHtmlPage();
         $gCurrentSession->addFormObject($form);
     }
@@ -363,8 +373,8 @@ class PluginsPresenter extends PagePresenter
      *
      * Installing, updating and removing all change what the other rows may offer, so those still
      * reload the whole page rather than one row being patched. Enabling and disabling is different:
-     * an administrator switches several plugins in a row, so it neither asks for confirmation - there
-     * is nothing destructive about it - nor reloads the page: the toggle flips its own icon and dims
+     * an administrator switches several plugins in a row, so stable plugins do not ask for
+     * confirmation or reload the page: the toggle flips its own icon and dims
      * its row before the request even answers, so the click itself already looks like something
      * happened, and once the answer arrives it re-fetches the list content and replaces it, which
      * still lets a plugin move to another group or change its actions.
@@ -383,8 +393,80 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
 
         $errorTitle = json_encode($gL10n->get('SYS_ERROR'), JSON_THROW_ON_ERROR);
+        $prereleaseWarning = json_encode($gL10n->get('SYS_PRERELEASE_VERSION_WARNING'), JSON_THROW_ON_ERROR);
+        $warningTitle = json_encode($gL10n->get('SYS_WARNING'), JSON_THROW_ON_ERROR);
+        $enableButtons = json_encode(array($gL10n->get('SYS_ENABLE'), $gL10n->get('SYS_CANCEL')), JSON_THROW_ON_ERROR);
+        $installButtons = json_encode(array($gL10n->get('SYS_INSTALL'), $gL10n->get('SYS_CANCEL')), JSON_THROW_ON_ERROR);
 
         $this->addJavascript('
+            function confirmPrereleasePlugin(link) {
+                if (link.dataset.prereleaseConfirmed === "1") {
+                    delete link.dataset.prereleaseConfirmed;
+                    return false;
+                }
+                if (link.dataset.prereleaseConfirmation !== "1") {
+                    return false;
+                }
+
+                messageBox(' . $prereleaseWarning . ', ' . $warningTitle . ', "warning", "yes-no",
+                    "", ' . $enableButtons . ');
+                document.getElementById("adm_messagebox_button_yes").onclick = function() {
+                    $("#adm_modal_messagebox").modal("hide");
+                    link.dataset.prereleaseConfirmed = "1";
+                    link.click();
+                };
+                return true;
+            }
+
+            function submitPluginUpload() {
+                const form = document.getElementById("adm_plugin_upload_form");
+                $("#adm_modal_messagebox").modal("hide");
+                form.dataset.prereleaseConfirmed = "1";
+                form.requestSubmit();
+            }
+
+            $(function() {
+                const pluginUploadForm = document.getElementById("adm_plugin_upload_form");
+                if (!pluginUploadForm) {
+                    return;
+                }
+                pluginUploadForm.addEventListener("submit", function(event) {
+                    if (this.dataset.prereleaseConfirmed === "1") {
+                        delete this.dataset.prereleaseConfirmed;
+                        return;
+                    }
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (this.dataset.prereleaseChecking === "1") {
+                        return;
+                    }
+                    this.dataset.prereleaseChecking = "1";
+                    const form = this;
+                    const url = new URL(this.action, window.location.href);
+                    url.searchParams.set("mode", "upload_check");
+                    $.ajax({
+                        url: url.toString(),
+                        method: "POST",
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false
+                    }).done(function(data) {
+                        const result = parsePluginResponse(data);
+                        if (result.status === "prerelease") {
+                            messageBox(' . $prereleaseWarning . ', ' . $warningTitle . ', "warning", "yes-no", "submitPluginUpload();", ' . $installButtons . ');
+                        } else if (result.status === "success") {
+                            submitPluginUpload();
+                        } else {
+                            showPluginActionError(result.message);
+                        }
+                    }).fail(function(jqXHR) {
+                        showPluginActionError(jqXHR.status === 0 ? "" : "HTTP " + jqXHR.status + " " + jqXHR.statusText);
+                    }).always(function() {
+                        delete form.dataset.prereleaseChecking;
+                    });
+                }, true);
+            });
+
             function parsePluginResponse(data) {
                 let status = "error";
                 let message = "";
@@ -454,6 +536,9 @@ class PluginsPresenter extends PagePresenter
                 }
 
                 const $icon = $link.find("i");
+                if (confirmPrereleasePlugin(link)) {
+                    return;
+                }
 
                 // Optimistic update: flip the icon and dim the row right away, so the click gives
                 // immediate feedback instead of looking unresponsive until the request comes back.
@@ -497,6 +582,9 @@ class PluginsPresenter extends PagePresenter
                 if ($row.css("pointer-events") === "none") {
                     return;
                 }
+                if (confirmPrereleasePlugin(link)) {
+                    return;
+                }
 
                 // No optimistic icon flip - the page is about to reload either way, so dimming the
                 // row is the only feedback that is worth giving here.
@@ -505,6 +593,22 @@ class PluginsPresenter extends PagePresenter
                 redirectPost(url, { "adm_csrf_token": csrfToken });
             }
         ');
+    }
+
+    /**
+     * The translated badge label of a prerelease, or an empty string for a stable release.
+     */
+    private function getPrereleaseLabel(string $prerelease): string
+    {
+        global $gL10n;
+
+        return match ($prerelease) {
+            'dev' => $gL10n->get('SYS_DEV'),
+            'alpha' => $gL10n->get('SYS_ALPHA'),
+            'beta' => $gL10n->get('SYS_BETA'),
+            'rc' => $gL10n->get('SYS_RC'),
+            default => ''
+        };
     }
 
     /**
@@ -539,6 +643,7 @@ class PluginsPresenter extends PagePresenter
             'url' => $homepage,
             'urlHost' => $homepage === '' ? '' : (string)(parse_url($homepage, PHP_URL_HOST) ?? $homepage),
             'version' => $plugin?->version ?? '',
+            'prereleaseLabel' => $this->getPrereleaseLabel($plugin?->prerelease ?? ''),
             'installedVersion' => PluginRegistry::getInstalledVersion($id),
             'versionState' => $this->getVersionState($id, $plugin, $state),
             'toggle' => $this->getStateToggle($id, $plugin, $state),
@@ -584,6 +689,7 @@ class PluginsPresenter extends PagePresenter
             'class' => $enabled ? 'text-success' : 'text-secondary',
             'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
             'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
+            'prereleaseConfirmation' => !$enabled && $plugin->prerelease !== '' ? '1' : '0',
             'dataHref' => $this->toggleScript($id, $enabled, $plugin->wantsMenuEntry())
         );
     }
@@ -754,9 +860,17 @@ class PluginsPresenter extends PagePresenter
          * database, or the store offers newer files - and an administrator should not have to
          * know which. One action covers both, and the route does whatever is actually needed.
          */
-        if ($state === PluginRegistry::STATE_UPDATE
-            || (PluginRegistry::isInstalled($id) && PluginStore::getNewerRelease($id) !== null)) {
-            $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
+        $release = PluginRegistry::isInstalled($id) ? PluginStore::getNewerRelease($id) : null;
+        if ($state === PluginRegistry::STATE_UPDATE || $release !== null) {
+            $action = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
+            if ($release !== null ? PluginStore::getReleaseStatus($release) !== 'stable' : ($plugin?->prerelease ?? '') !== '') {
+                $action['dataMessage'] = $gL10n->get('SYS_PRERELEASE_VERSION_WARNING');
+                $action['messageType'] = 'warning';
+                $action['messageTitle'] = $gL10n->get('SYS_WARNING');
+                $action['confirmLabel'] = $gL10n->get('SYS_PLUGIN_UPDATE');
+                $action['cancelLabel'] = $gL10n->get('SYS_CANCEL');
+            }
+            $actions[] = $action;
         }
 
 

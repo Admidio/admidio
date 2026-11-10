@@ -26,6 +26,10 @@ else.
 The directory name is the plugin ID and the only identity the plugin has. `name` and `description`
 may be language keys, which is what this plugin uses. Everything else is optional:
 
+* `version` — `X.Y.Z` for a stable release, or `X.Y.Z-(dev|alpha|beta|rc).N` for a prerelease, e.g.
+  `"version": "2.0.0-beta.1"`. A prerelease is older than the release it leads up to, and the same
+  string must be used in the plugin catalogue. Short numeric versions such as `"1"` and `"1.2"`
+  are also accepted; missing components count as zero when choosing migration files.
 * `requires` — version constraints for `admidio` and `php`, plus `extensions` and `plugins`. A
   constraint is a space separated list of terms that all have to match, e.g. `>=5.1 <6.0`; a term
   without an operator means `>=`.

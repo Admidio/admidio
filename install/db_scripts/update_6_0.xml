@@ -99,5 +99,9 @@
         COLLATE = utf8mb4_unicode_ci</step>
     <step id="370">CREATE UNIQUE INDEX %PREFIX%_idx_saf_kind_key ON %PREFIX%_sso_auth_failures (saf_kind, saf_key)</step>
     <step id="380">CREATE INDEX %PREFIX%_idx_saf_last_failure ON %PREFIX%_sso_auth_failures (saf_last_failure)</step>
+    <step id="390" database="mysql">ALTER TABLE %PREFIX%_components MODIFY COLUMN com_version varchar(32) NOT NULL</step>
+    <step id="400" database="pgsql">ALTER TABLE %PREFIX%_components ALTER COLUMN com_version TYPE varchar(32)</step>
+    <step id="410" database="mysql">ALTER TABLE %PREFIX%_components MODIFY COLUMN com_update_version varchar(32) NOT NULL DEFAULT ''</step>
+    <step id="420" database="pgsql">ALTER TABLE %PREFIX%_components ALTER COLUMN com_update_version TYPE varchar(32)</step>
     <step>stop</step>
 </update>

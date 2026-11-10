@@ -586,6 +586,30 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * @testdox A prerelease version is stored, compared and updated as the complete version string
+     */
+    public function testPrereleaseVersionsAreInstalledAndUpdated(): void
+    {
+        $this->writeManifestVersion('2.0.0-beta.1');
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame('2.0.0-beta.1', $this->component()['com_version']);
+        $this->assertSame('2.0.0-beta.1', PluginRegistry::getInstalledVersion(self::PLUGIN_ID));
+        $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState(self::PLUGIN_ID));
+        $this->assertFalse(Plugin::versionMatches(PluginRegistry::getInstalledVersion(self::PLUGIN_ID), '>=2.0.0'));
+
+        foreach (array('2.0.0-beta.2', '2.0.0-rc.1', '2.0.0') as $version) {
+            $this->writeManifestVersion($version);
+            $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState(self::PLUGIN_ID), $version);
+            PluginInstaller::update($this->plugin());
+
+            $this->assertSame($version, $this->component()['com_version']);
+            $this->assertSame($version, PluginRegistry::getInstalledVersion(self::PLUGIN_ID));
+            $this->assertSame(PluginRegistry::STATE_ENABLED, PluginRegistry::getState(self::PLUGIN_ID), $version);
+        }
+    }
+
+    /**
      * @testdox A patch update runs new steps of its current minor migration
      */
     public function testPatchUpdateRunsNewStepsOfTheCurrentMinorMigration(): void
