@@ -44,9 +44,9 @@
                             {* The switch shows the state the plugin is in and flips it when clicked. *}
                             <td class="text-center">
                                 {if $pluginEntry.toggle}
-                                    {* Only enabling a beta plugin needs confirmation before the toggle acts. *}
+                                    {* Only enabling a prerelease plugin needs confirmation before the toggle acts. *}
                                     <a id="adm_plugin_toggle_table_{$pluginEntry.id}" class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
-                                       data-beta-confirmation="{$pluginEntry.toggle.betaConfirmation}"
+                                       data-prerelease-confirmation="{$pluginEntry.toggle.prereleaseConfirmation}"
                                        onclick="{$pluginEntry.toggle.dataHref}"
                                        data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip}"
                                        aria-label="{$pluginEntry.toggle.label}">
@@ -71,7 +71,7 @@
                             </td>
                             <td>
                                 {$pluginEntry.version}
-                                {if $pluginEntry.isBeta}<span class="badge bg-warning text-dark ms-1">{$l10n->get('SYS_BETA')}</span>{/if}
+                                {if $pluginEntry.prereleaseLabel}<span class="badge bg-warning text-dark ms-1">{$pluginEntry.prereleaseLabel|escape:'html'}</span>{/if}
                             </td>
                             <td>
                                 {if $pluginEntry.versionState === 'update'}
@@ -113,7 +113,7 @@
                         <div class="card-header">
                             {if $pluginEntry.toggle}
                                 <a id="adm_plugin_toggle_card_{$pluginEntry.id}" class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
-                                   data-beta-confirmation="{$pluginEntry.toggle.betaConfirmation}"
+                                   data-prerelease-confirmation="{$pluginEntry.toggle.prereleaseConfirmation}"
                                    onclick="{$pluginEntry.toggle.dataHref}"
                                    aria-label="{$pluginEntry.toggle.label}">
                                     <i class="{$pluginEntry.toggle.icon}"></i></a>
@@ -155,7 +155,7 @@
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_version">
                                 <strong>{$l10n->get('SYS_PLUGIN_VERSION')}:</strong>
                                 <p>{$pluginEntry.version}
-                                    {if $pluginEntry.isBeta}<span class="badge bg-warning text-dark ms-1">{$l10n->get('SYS_BETA')}</span>{/if}
+                                    {if $pluginEntry.prereleaseLabel}<span class="badge bg-warning text-dark ms-1">{$pluginEntry.prereleaseLabel|escape:'html'}</span>{/if}
                                 </p>
                             </div>
                             <div id="adm_plugin_card_entry_{$pluginEntry.id}_installed_version">

@@ -15,7 +15,7 @@
  *             settings      - Show the settings of a plugin as the content of a dialog
  *             settings_save - Save the settings a plugin was given in that dialog
  *             install       - Install a plugin
- *             upload_check  - Inspect an uploaded archive for beta confirmation without installing it
+ *             upload_check  - Inspect an uploaded archive for prerelease confirmation without installing it
  *             enable        - Enable a plugin for the current organization. A plugin with a menu
  *                             entry of its own (Plugin::wantsMenuEntry()) answers with a redirect
  *                             back to the list instead of JSON, because PluginsPresenter renders
@@ -115,7 +115,7 @@ try {
 
             if ($getMode === 'upload_check') {
                 $package = PluginPackage::describe($uploadedFile);
-                echo json_encode(array('status' => $package->prerelease !== '' ? 'beta' : 'success'));
+                echo json_encode(array('status' => $package->prerelease !== '' ? 'prerelease' : 'success'));
                 break;
             }
 

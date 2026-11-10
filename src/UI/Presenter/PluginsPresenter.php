@@ -191,7 +191,7 @@ class PluginsPresenter extends PagePresenter
                 'url' => (string)($entry['url'] ?? ''),
                 'icon' => (string)($entry['icon'] ?? 'bi-puzzle'),
                 'version' => (string)$entry['release']['version'],
-                'isBeta' => PluginStore::getReleaseStatus($entry['release']) !== 'stable',
+                'prereleaseLabel' => $this->getPrereleaseLabel(PluginStore::getReleaseStatus($entry['release'])),
                 'installed' => (bool)$entry['installed'],
                 'installedVersion' => (string)$entry['installedVersion']
             );
@@ -202,12 +202,12 @@ class PluginsPresenter extends PagePresenter
                 // The same action shape the plugin list uses, so list.functions.tpl renders it.
                 $row['actions'] = array(array(
                     'dataHref' => $this->actionScript((string)$entry['id'], 'store_install'),
-                    'dataMessage' => $row['isBeta'] ? $gL10n->get('SYS_BETA_VERSION_WARNING')
+                    'dataMessage' => $row['prereleaseLabel'] !== '' ? $gL10n->get('SYS_PRERELEASE_VERSION_WARNING')
                         : $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
                     'icon' => 'bi bi-plus-circle-fill',
                     'tooltip' => $gL10n->get('SYS_PLUGIN_STORE_INSTALL')
                 ));
-                if ($row['isBeta']) {
+                if ($row['prereleaseLabel'] !== '') {
                     $row['actions'][0]['messageType'] = 'warning';
                     $row['actions'][0]['messageTitle'] = $gL10n->get('SYS_WARNING');
                     $row['actions'][0]['confirmLabel'] = $gL10n->get('SYS_INSTALL');
@@ -357,32 +357,32 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
 
         $errorTitle = json_encode($gL10n->get('SYS_ERROR'), JSON_THROW_ON_ERROR);
-        $betaWarning = json_encode($gL10n->get('SYS_BETA_VERSION_WARNING'), JSON_THROW_ON_ERROR);
+        $prereleaseWarning = json_encode($gL10n->get('SYS_PRERELEASE_VERSION_WARNING'), JSON_THROW_ON_ERROR);
         $warningTitle = json_encode($gL10n->get('SYS_WARNING'), JSON_THROW_ON_ERROR);
         $enableButtons = json_encode(array($gL10n->get('SYS_ENABLE'), $gL10n->get('SYS_CANCEL')), JSON_THROW_ON_ERROR);
         $installButtons = json_encode(array($gL10n->get('SYS_INSTALL'), $gL10n->get('SYS_CANCEL')), JSON_THROW_ON_ERROR);
 
         $this->addJavascript('
-            function confirmBetaPlugin(link) {
-                if (link.dataset.betaConfirmed === "1") {
-                    delete link.dataset.betaConfirmed;
+            function confirmPrereleasePlugin(link) {
+                if (link.dataset.prereleaseConfirmed === "1") {
+                    delete link.dataset.prereleaseConfirmed;
                     return false;
                 }
-                if (link.dataset.betaConfirmation !== "1") {
+                if (link.dataset.prereleaseConfirmation !== "1") {
                     return false;
                 }
 
                 const target = "document.getElementById(" + JSON.stringify(link.id) + ")";
-                messageBox(' . $betaWarning . ', ' . $warningTitle . ', "warning", "yes-no",
+                messageBox(' . $prereleaseWarning . ', ' . $warningTitle . ', "warning", "yes-no",
                     "$(\"#adm_modal_messagebox\").modal(\"hide\");"
-                    + target + ".dataset.betaConfirmed = \"1\";" + target + ".click();", ' . $enableButtons . ');
+                    + target + ".dataset.prereleaseConfirmed = \"1\";" + target + ".click();", ' . $enableButtons . ');
                 return true;
             }
 
             function submitPluginUpload() {
                 const form = document.getElementById("adm_plugin_upload_form");
                 $("#adm_modal_messagebox").modal("hide");
-                form.dataset.betaConfirmed = "1";
+                form.dataset.prereleaseConfirmed = "1";
                 form.requestSubmit();
             }
 
@@ -392,16 +392,16 @@ class PluginsPresenter extends PagePresenter
                     return;
                 }
                 pluginUploadForm.addEventListener("submit", function(event) {
-                    if (this.dataset.betaConfirmed === "1") {
-                        delete this.dataset.betaConfirmed;
+                    if (this.dataset.prereleaseConfirmed === "1") {
+                        delete this.dataset.prereleaseConfirmed;
                         return;
                     }
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                    if (this.dataset.betaChecking === "1") {
+                    if (this.dataset.prereleaseChecking === "1") {
                         return;
                     }
-                    this.dataset.betaChecking = "1";
+                    this.dataset.prereleaseChecking = "1";
                     const form = this;
                     const url = new URL(this.action, window.location.href);
                     url.searchParams.set("mode", "upload_check");
@@ -413,8 +413,8 @@ class PluginsPresenter extends PagePresenter
                         contentType: false
                     }).done(function(data) {
                         const result = parsePluginResponse(data);
-                        if (result.status === "beta") {
-                            messageBox(' . $betaWarning . ', ' . $warningTitle . ', "warning", "yes-no", "submitPluginUpload();", ' . $installButtons . ');
+                        if (result.status === "prerelease") {
+                            messageBox(' . $prereleaseWarning . ', ' . $warningTitle . ', "warning", "yes-no", "submitPluginUpload();", ' . $installButtons . ');
                         } else if (result.status === "success") {
                             submitPluginUpload();
                         } else {
@@ -423,7 +423,7 @@ class PluginsPresenter extends PagePresenter
                     }).fail(function(jqXHR) {
                         showPluginActionError(jqXHR.status === 0 ? "" : "HTTP " + jqXHR.status + " " + jqXHR.statusText);
                     }).always(function() {
-                        delete form.dataset.betaChecking;
+                        delete form.dataset.prereleaseChecking;
                     });
                 }, true);
             });
@@ -497,7 +497,7 @@ class PluginsPresenter extends PagePresenter
                 }
 
                 const $icon = $link.find("i");
-                if (confirmBetaPlugin(link)) {
+                if (confirmPrereleasePlugin(link)) {
                     return;
                 }
 
@@ -543,7 +543,7 @@ class PluginsPresenter extends PagePresenter
                 if ($row.css("pointer-events") === "none") {
                     return;
                 }
-                if (confirmBetaPlugin(link)) {
+                if (confirmPrereleasePlugin(link)) {
                     return;
                 }
 
@@ -554,6 +554,22 @@ class PluginsPresenter extends PagePresenter
                 redirectPost(url, { "adm_csrf_token": csrfToken });
             }
         ');
+    }
+
+    /**
+     * The translated badge label of a prerelease, or an empty string for a stable release.
+     */
+    private function getPrereleaseLabel(string $prerelease): string
+    {
+        global $gL10n;
+
+        return match ($prerelease) {
+            'dev' => $gL10n->get('SYS_DEV'),
+            'alpha' => $gL10n->get('SYS_ALPHA'),
+            'beta' => $gL10n->get('SYS_BETA'),
+            'rc' => $gL10n->get('SYS_RC'),
+            default => ''
+        };
     }
 
     /**
@@ -588,7 +604,7 @@ class PluginsPresenter extends PagePresenter
             'url' => $homepage,
             'urlHost' => $homepage === '' ? '' : (string)(parse_url($homepage, PHP_URL_HOST) ?? $homepage),
             'version' => $plugin?->version ?? '',
-            'isBeta' => ($plugin?->prerelease ?? '') !== '',
+            'prereleaseLabel' => $this->getPrereleaseLabel($plugin?->prerelease ?? ''),
             'installedVersion' => PluginRegistry::getInstalledVersion($id),
             'versionState' => $this->getVersionState($id, $plugin, $state),
             'toggle' => $this->getStateToggle($id, $plugin, $state),
@@ -634,7 +650,7 @@ class PluginsPresenter extends PagePresenter
             'class' => $enabled ? 'text-success' : 'text-secondary',
             'label' => $gL10n->get($enabled ? 'SYS_ENABLED' : 'SYS_DISABLED'),
             'tooltip' => $gL10n->get($enabled ? 'SYS_PLUGIN_DISABLE' : 'SYS_PLUGIN_ENABLE'),
-            'betaConfirmation' => !$enabled && $plugin->prerelease !== '' ? '1' : '0',
+            'prereleaseConfirmation' => !$enabled && $plugin->prerelease !== '' ? '1' : '0',
             'dataHref' => $this->toggleScript($id, $enabled, $plugin->wantsMenuEntry())
         );
     }
@@ -809,7 +825,7 @@ class PluginsPresenter extends PagePresenter
         if ($state === PluginRegistry::STATE_UPDATE || $release !== null) {
             $action = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
             if ($release !== null ? PluginStore::getReleaseStatus($release) !== 'stable' : ($plugin?->prerelease ?? '') !== '') {
-                $action['dataMessage'] = $gL10n->get('SYS_BETA_VERSION_WARNING');
+                $action['dataMessage'] = $gL10n->get('SYS_PRERELEASE_VERSION_WARNING');
                 $action['messageType'] = 'warning';
                 $action['messageTitle'] = $gL10n->get('SYS_WARNING');
                 $action['confirmLabel'] = $gL10n->get('SYS_PLUGIN_UPDATE');

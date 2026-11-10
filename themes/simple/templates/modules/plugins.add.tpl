@@ -68,7 +68,7 @@
                                 </td>
                                 <td>
                                     {$storeEntry.version}
-                                    {if $storeEntry.isBeta}<span class="badge bg-warning text-dark ms-1">{$l10n->get('SYS_BETA')}</span>{/if}
+                                    {if $storeEntry.prereleaseLabel}<span class="badge bg-warning text-dark ms-1">{$storeEntry.prereleaseLabel|escape:'html'}</span>{/if}
                                     {if $storeEntry.installed and $storeEntry.installedVersion neq $storeEntry.version}
                                         <div><small class="text-muted">{$l10n->get('SYS_INSTALLED_VERSION')}: {$storeEntry.installedVersion}</small></div>
                                     {/if}

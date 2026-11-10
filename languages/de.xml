@@ -238,6 +238,7 @@
   <string name="SYS_ALL_ORGANIZATIONS_DESC">Die ausgewählte Kategorie ist für alle Organisationen freigegeben.\nDas gerade bearbeitete Objekt (Veranstaltung, Ankündigung, Profilfeld, Weblink ...) wird also nicht nur in dieser Organisation sichtbar sein, sondern in allen folgenden Organisationen ebenfalls angezeigt: #VAR1#.</string>
   <string name="SYS_ALL_OTHERS">Alle anderen</string>
   <string name="SYS_ALL_THIS_ORGANIZATION">Alle Mitglieder dieser Organisation</string>
+  <string name="SYS_ALPHA">Alpha</string>
   <string name="SYS_ALSO_VISITORS">auch Gäste</string>
   <string name="SYS_ANNOUNCEMENTS">Ankündigungen</string>
   <string name="SYS_ANNOUNCEMENTS_DESC">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</string>
@@ -282,7 +283,6 @@
   <string name="SYS_BACK_TO_FOLDER">Zurück zum Ordner</string>
   <string name="SYS_BASIC_DATA">Basisdaten</string>
   <string name="SYS_BETA">Beta</string>
-  <string name="SYS_BETA_VERSION_WARNING">Dies ist eine Beta-Version des Plugins. Sie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="SYS_BIRTHDAY">Geburtstag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Fett</string>
@@ -559,6 +559,7 @@
   <string name="SYS_DESIGN">Design</string>
   <string name="SYS_DESIGNATION">Bezeichnung</string>
   <string name="SYS_DETAILED">Detailliert</string>
+  <string name="SYS_DEV">Dev</string>
   <string name="SYS_DIRECTORY_PROTECTION">Verzeichnisschutz</string>
   <string name="SYS_DIRECTORY_SEPARATOR">Verzeichnistrenner</string>
   <string name="SYS_DISABLE">Deaktiviert</string>
@@ -1378,6 +1379,7 @@
   <string name="SYS_POSTCODE">PLZ</string>
   <string name="SYS_POSTS">Beiträge</string>
   <string name="SYS_POST_MAX_SIZE">max. POST-Größe</string>
+  <string name="SYS_PRERELEASE_VERSION_WARNING">Dies ist eine Vorabversion des Plugins. Sie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</string>
   <string name="SYS_PRESET_CONFIGURATION">Vorgegebene Konfigurationen</string>
   <string name="SYS_PRESET_CONFIGURATION_DESC">Als Administrator kannst du Konfigurationen erstellen, auf die alle Personen mit Benutzerkonto Zugriff haben. Konfiguriere die entsprechenden Spalten und Bedingungen und speichere sie unter dem gewünschten Namen.</string>
   <string name="SYS_PREVIEW">Vorschau</string>
@@ -1428,6 +1430,7 @@
   <string name="SYS_QUARTERLY">Vierteljährlich</string>
   <string name="SYS_QUOTE">Einfaches Anführungszeichen (\')</string>
   <string name="SYS_RADIO_BUTTON">Optionsfeld</string>
+  <string name="SYS_RC">RC</string>
   <string name="SYS_RECENT_ALBUMS_OF_ORGA">Neueste Fotoalben der Organisation #VAR1#</string>
   <string name="SYS_RECIPIENT">Empfänger</string>
   <string name="SYS_RECIPIENT_EMAIL">Empfängeradresse</string>
