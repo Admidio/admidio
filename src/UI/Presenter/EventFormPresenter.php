@@ -773,6 +773,11 @@ class EventFormPresenter extends PagePresenter
         $form->addCheckbox('dat_allow_comments', $gL10n->get('SYS_ALLOW_USER_COMMENTS'), (bool)$event->getValue('dat_allow_comments'), ['helpTextId' => 'SYS_ALLOW_USER_COMMENTS_DESC']);
         $form->addCheckbox('dat_additional_guests', $gL10n->get('SYS_ALLOW_ADDITIONAL_GUESTS'), (bool)$event->getValue('dat_additional_guests'), ['helpTextId' => 'SYS_ALLOW_ADDITIONAL_GUESTS_DESC']);
         $form->addInput('dat_max_members', $gL10n->get('SYS_PARTICIPANTS_LIMIT'), (int)$event->getValue('dat_max_members'), ['type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_EVENT_MAX_MEMBERS']);
+        $reminderDays = $event->getValue('dat_reminder_days');
+        if ($reminderDays === '' || $reminderDays === null) {
+            $reminderDays = 3;
+        }
+        $form->addInput('dat_reminder_days', $gL10n->get('SYS_EVENT_REMINDER_DAYS'), (int)$reminderDays, ['type' => 'number', 'minNumber' => 0, 'maxNumber' => 99, 'step' => 1, 'helpTextId' => 'SYS_EVENT_REMINDER_DAYS_DESC']);
         $form->addInput('event_deadline', $gL10n->get('SYS_DEADLINE'), $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC', 'weekdayFormat' => $weekdayFormat]);
         $form->addCheckbox('event_right_list_view', $gL10n->get('SYS_RIGHT_VIEW_PARTICIPANTS'), $flagDateRightListView);
         $form->addCheckbox('event_right_send_mail', $gL10n->get('SYS_RIGHT_MAIL_PARTICIPANTS'), $flagDateRightSendMail);

@@ -234,6 +234,7 @@ CREATE TABLE %PREFIX%_events
     dat_timestamp_change        timestamp           NULL        DEFAULT NULL,
     dat_allow_comments          boolean             NOT NULL    DEFAULT false,
     dat_additional_guests       boolean             NOT NULL    DEFAULT false,
+    dat_reminder_days           integer             NULL        DEFAULT 3,
     PRIMARY KEY (dat_id)
 )
 ENGINE = InnoDB

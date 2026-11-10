@@ -107,5 +107,26 @@ class Maintenance
                 }
             }
         }
+    /**
+     * Send reminder emails for upcoming events that are scheduled for reminder today.
+     * @return string Returns summary message of sent reminders.
+     * @throws Exception
+     */
+    public function sendEventReminders(): string
+    {
+        $sql = 'SELECT dat_id
+                  FROM ' . TBL_EVENTS . '
+                 WHERE (dat_recurrence_status IS NULL OR dat_recurrence_status <> \'cancelled\')
+                   AND dat_reminder_days > 0
+                   AND dat_begin >= ?';
+        $stmt = $this->database->queryPrepared($sql, array(DATE_NOW));
+        $totalSent = 0;
+
+        while ($row = $stmt->fetch()) {
+            $event = new \Admidio\Events\Entity\Event($this->database, (int)$row['dat_id']);
+            $totalSent += $event->sendReminderNotification();
+        }
+
+        return 'Sent ' . $totalSent . ' event reminder(s).';
     }
 }
