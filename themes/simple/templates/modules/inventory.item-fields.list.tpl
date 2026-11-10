@@ -36,9 +36,9 @@
                     </td>
                     <td class="text-end">
                        {assign var=rowActions value=$itemField.actions}
-                       {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $itemField.uuid, 'data-direction' => 'UP', 'data-target' => "adm_item_field_{$itemField.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', ['SYS_FIELD'])]}
-                       {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $itemField.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_item_field_{$itemField.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', ['SYS_FIELD'])]}
-                       {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $itemField.uuid, 'actions' => $rowActions]}
+                       {$rowActions[] = ['id' => 'move_up', 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $itemField.uuid, 'data-direction' => 'UP', 'data-target' => "adm_item_field_{$itemField.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', ['SYS_FIELD'])]}
+                       {$rowActions[] = ['id' => 'move_down', 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $itemField.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_item_field_{$itemField.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', ['SYS_FIELD'])]}
+                       {include 'sys-template-parts/list.functions.tpl' listId='inventory-fields' listRow=$itemField data=['uuid' => $itemField.uuid, 'actions' => $rowActions]}
                     </td>
                 </tr>
             {/foreach}

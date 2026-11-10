@@ -80,9 +80,9 @@
                             <td class="text-end">
                                 {assign var=pluginActions value=$pluginEntry.actions}
                                 {if $pluginEntry.toggle}
-                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
+                                    {$pluginActions[] = ['id' => 'toggle', 'class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
                                 {/if}
-                                {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $pluginEntry.id, 'actions' => $pluginActions]}
+                                {include 'sys-template-parts/list.functions.tpl' listId='plugins' listRow=$pluginEntry data=['uuid' => $pluginEntry.id, 'actions' => $pluginActions]}
                             </td>
                         </tr>
                     {/foreach}
@@ -112,9 +112,9 @@
                             <div class="float-end">
                                 {assign var=pluginActions value=$pluginEntry.actions}
                                 {if $pluginEntry.toggle}
-                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
+                                    {$pluginActions[] = ['id' => 'toggle', 'class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
                                 {/if}
-                                {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginActions]}
+                                {include 'sys-template-parts/list.functions.tpl' listId='plugins' listRow=$pluginEntry cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginActions]}
                             </div>
                         </div>
                         <div class="card-body">

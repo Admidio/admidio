@@ -620,12 +620,14 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['title'] = $gL10n->get('SYS_FOLDER');
                 if ($this->folder->hasUploadRight() && $gCurrentUser->isAdministratorDocumentsFiles()) {
                     $templateRow['actions'][] = array(
+                        'id' => 'permissions',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'permissions', 'folder_uuid' => $row['uuid'])),
                         'icon' => 'bi bi-shield-lock',
                         'tooltip' => $gL10n->get('SYS_PERMISSIONS')
                     );
                 }
                 $templateRow['actions'][] = array(
+                    'id' => 'copy_link',
                     'url' => $templateRow['url'],
                     'icon' => 'bi bi-link-45deg',
                     'tooltip' => $gL10n->get('SYS_COPY_LINK'),
@@ -635,6 +637,7 @@ class DocumentsPresenter extends PagePresenter
                 if ($this->folder->hasUploadRight()) {
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(
+                            'id' => 'edit',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array(
                                     'mode' => 'folder_rename',
@@ -644,12 +647,14 @@ class DocumentsPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_EDIT_FOLDER')
                         );
                         $templateRow['actions'][] = array(
+                            'id' => 'move',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'folder_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-folder-symlink',
                             'tooltip' => $gL10n->get('SYS_MOVE_FOLDER')
                         );
                     }
                     $templateRow['actions'][] = array(
+                        'id' => 'delete',
                         'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'folder_delete', 'folder_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($row['name']))),
@@ -663,11 +668,13 @@ class DocumentsPresenter extends PagePresenter
                 $templateRow['title'] = $gL10n->get('SYS_FILE');
 
                 $templateRow['actions'][] = array(
+                    'id' => 'download',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'download', 'file_uuid' => $row['uuid'])),
                     'icon' => 'bi bi-download',
                     'tooltip' => $gL10n->get('SYS_DOWNLOAD_FILE')
                 );
                 $templateRow['actions'][] = array(
+                    'id' => 'copy_link',
                     'url' => $templateRow['url'],
                     'icon' => 'bi bi-link-45deg',
                     'tooltip' => $gL10n->get('SYS_COPY_LINK'),
@@ -678,6 +685,7 @@ class DocumentsPresenter extends PagePresenter
                 // also move the file use the action to move the file, its dialog can copy as well.
                 if ($gValidLogin && $row['existsInFileSystem'] && !$this->folder->hasUploadRight()) {
                     $templateRow['actions'][] = array(
+                        'id' => 'copy',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'copy', 'file_uuid' => $row['uuid'])),
                         'icon' => 'bi bi-copy',
                         'tooltip' => $gL10n->get('SYS_COPY_FILE')
@@ -687,6 +695,7 @@ class DocumentsPresenter extends PagePresenter
                 if ($this->folder->hasUploadRight()) {
                     if ($row['existsInFileSystem']) {
                         $templateRow['actions'][] = array(
+                            'id' => 'edit',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array(
                                     'mode' => 'file_rename',
@@ -696,12 +705,14 @@ class DocumentsPresenter extends PagePresenter
                             'tooltip' => $gL10n->get('SYS_EDIT')
                         );
                         $templateRow['actions'][] = array(
+                            'id' => 'move',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('mode' => 'move', 'file_uuid' => $row['uuid'])),
                             'icon' => 'bi bi-folder-symlink',
                             'tooltip' => $gL10n->get('SYS_MOVE_OR_COPY_FILE')
                         );
                     }
                     $templateRow['actions'][] = array(
+                        'id' => 'delete',
                         'dataHref' => 'callUrlHideElement(\'row_' . $row['uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php',
                                 array('mode' => 'file_delete', 'file_uuid' => $row['uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($row['name']))),

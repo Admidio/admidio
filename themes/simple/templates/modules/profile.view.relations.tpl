@@ -8,15 +8,15 @@
                     <span class="float-end text-end">
                         {assign var=relationActions value=[]}
                         {if isset($userRelation.urlUserEdit)}
-                            {$relationActions[] = ['url' => $userRelation.urlUserEdit, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT_USER_IN_RELATION')]}
+                            {$relationActions[] = ['id' => 'edit', 'url' => $userRelation.urlUserEdit, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT_USER_IN_RELATION')]}
                         {/if}
                         {if $isAdministratorUsers}
-                            {$relationActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', array($userRelation.relationName)), 'dataHref' => $userRelation.urlRelationDelete, 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_CANCEL_RELATIONSHIP')]}
+                            {$relationActions[] = ['id' => 'delete', 'dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', array($userRelation.relationName)), 'dataHref' => $userRelation.urlRelationDelete, 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_CANCEL_RELATIONSHIP')]}
                         {/if}
                         {if $showRelationsCreateEdit}
-                            {$relationActions[] = ['class' => 'admidio-create-edit-info', 'attributes' => ['data-info-id' => "relation_info_{$userRelation.uuid}"], 'icon' => 'bi bi-info-circle', 'tooltip' => $l10n->get('SYS_INFORMATIONS')]}
+                            {$relationActions[] = ['id' => 'info', 'class' => 'admidio-create-edit-info', 'attributes' => ['data-info-id' => "relation_info_{$userRelation.uuid}"], 'icon' => 'bi bi-info-circle', 'tooltip' => $l10n->get('SYS_INFORMATIONS')]}
                         {/if}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $userRelation.uuid, 'actions' => $relationActions]}
+                        {include 'sys-template-parts/list.functions.tpl' listId='profile-relations' listRow=$userRelation data=['uuid' => $userRelation.uuid, 'actions' => $relationActions]}
                     </span>
                 </div>
                 {if $showRelationsCreateEdit}

@@ -41,17 +41,17 @@
                     <div id="image_preferences_{$photo.number}" class="text-center">
                         {assign var=photoActions value=[]}
                         {if $ecardEnabled}
-                            {$photoActions[] = ['url' => $photo.ecardUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_PHOTO_AS_ECARD')]}
+                            {$photoActions[] = ['id' => 'ecard', 'url' => $photo.ecardUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_PHOTO_AS_ECARD')]}
                         {/if}
                         {if $downloadEnabled}
-                            {$photoActions[] = ['url' => $photo.downloadUrl, 'icon' => 'bi bi-download', 'tooltip' => $l10n->get('SYS_DOWNLOAD_PHOTO')]}
+                            {$photoActions[] = ['id' => 'download', 'url' => $photo.downloadUrl, 'icon' => 'bi bi-download', 'tooltip' => $l10n->get('SYS_DOWNLOAD_PHOTO')]}
                         {/if}
                         {if $isPhotoAdministrator}
-                            {$photoActions[] = ['class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'right'], 'icon' => 'bi bi-arrow-clockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_RIGHT')]}
-                            {$photoActions[] = ['class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'left'], 'icon' => 'bi bi-arrow-counterclockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_LEFT')]}
-                            {$photoActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_PHOTO'), 'dataHref' => "callUrlHideElement('div_image_{$photo.number}', '{$photo.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]}
+                            {$photoActions[] = ['id' => 'rotate_right', 'class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'right'], 'icon' => 'bi bi-arrow-clockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_RIGHT')]}
+                            {$photoActions[] = ['id' => 'rotate_left', 'class' => 'admidio-image-rotate', 'attributes' => ['data-image' => $photo.number, 'data-direction' => 'left'], 'icon' => 'bi bi-arrow-counterclockwise', 'tooltip' => $l10n->get('SYS_ROTATE_PHOTO_LEFT')]}
+                            {$photoActions[] = ['id' => 'delete', 'dataMessage' => $l10n->get('SYS_WANT_DELETE_PHOTO'), 'dataHref' => "callUrlHideElement('div_image_{$photo.number}', '{$photo.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]}
                         {/if}
-                        {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "photo_{$photo.number}", 'actions' => $photoActions]}
+                        {include 'sys-template-parts/list.functions.tpl' listId='photos' listRow=$photo cardActions=true data=['uuid' => "photo_{$photo.number}", 'actions' => $photoActions]}
                     </div>
                 {/if}
             </div>
@@ -96,14 +96,14 @@
                             <small class="text-body-secondary">{$album.photoCount} {$l10n->get('SYS_PHOTOS')}</small>
                             {if $album.editable}
                                 <div>
-                                    {assign var=albumActions value=[['url' => $album.editUrl, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT_ALBUM')]]}
+                                    {assign var=albumActions value=[['id' => 'edit', 'url' => $album.editUrl, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT_ALBUM')]]}
                                     {if $album.locked}
-                                        {$albumActions[] = ['class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'unlock'], 'icon' => 'bi bi-unlock', 'tooltip' => $l10n->get('SYS_UNLOCK_ALBUM')]}
+                                        {$albumActions[] = ['id' => 'unlock', 'class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'unlock'], 'icon' => 'bi bi-unlock', 'tooltip' => $l10n->get('SYS_UNLOCK_ALBUM')]}
                                     {else}
-                                        {$albumActions[] = ['class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'lock'], 'icon' => 'bi bi-lock', 'tooltip' => $l10n->get('SYS_LOCK_ALBUM')]}
+                                        {$albumActions[] = ['id' => 'lock', 'class' => 'admidio-album-lock', 'attributes' => ['data-id' => $album.uuid, 'data-mode' => 'lock'], 'icon' => 'bi bi-lock', 'tooltip' => $l10n->get('SYS_LOCK_ALBUM')]}
                                     {/if}
-                                    {$albumActions[] = ['dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$album.name]), 'dataHref' => "callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE_ALBUM')]}
-                                    {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => $album.uuid, 'actions' => $albumActions]}
+                                    {$albumActions[] = ['id' => 'delete', 'dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$album.name]), 'dataHref' => "callUrlHideElement('panel_pho_{$album.uuid}', '{$album.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE_ALBUM')]}
+                                    {include 'sys-template-parts/list.functions.tpl' listId='photo-albums' listRow=$album cardActions=true data=['uuid' => $album.uuid, 'actions' => $albumActions]}
                                 </div>
                             {/if}
                         </div>

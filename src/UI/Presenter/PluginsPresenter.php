@@ -248,6 +248,7 @@ class PluginsPresenter extends PagePresenter
             if (!$row['installed']) {
                 // The same action shape the plugin list uses, so list.functions.tpl renders it.
                 $row['actions'] = array(array(
+                    'id' => 'install',
                     'dataHref' => $this->actionScript((string)$entry['id'], 'store_install'),
                     'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
                     'icon' => 'bi bi-plus-circle-fill',
@@ -817,6 +818,7 @@ class PluginsPresenter extends PagePresenter
             && $this->getSettingsPanelId($plugin) !== '') {
             // The settings open in a dialog, so that the administrator keeps their place in the list.
             $actions[] = array(
+                'id' => 'settings',
                 'popup' => true,
                 'dataHref' => SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
@@ -865,6 +867,7 @@ class PluginsPresenter extends PagePresenter
              * clicked; it is there so that the tooltip can say what is going on.
              */
             $actions[] = array(
+                'id' => 'built_in',
                 'url' => 'javascript:void(0);',
                 'icon' => 'bi bi-shield-lock',
                 'tooltip' => $gL10n->get('SYS_PLUGIN_BUILT_IN')
@@ -939,6 +942,7 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
 
         return array(
+            'id' => $mode,
             'dataHref' => $this->actionScript($id, $mode, $parameters),
             'dataMessage' => $gL10n->get($message, $messageVariables ?? array($id)),
             'icon' => $icon,

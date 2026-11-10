@@ -1049,11 +1049,12 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = array(
-                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT'))
+                array('id' => 'edit', 'url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT'))
             );
             // add link to reload the metadata of a SAML client that has a metadata URL
             if ((string) $client->getValue('smc_metadata_url') !== '') {
                 $actions[] = array(
+                    'id' => 'reload-metadata',
                     'class' => 'admidio-sso-reload-metadata',
                     'attributes' => array('data-uuid' => $clientUUID),
                     'icon' => 'bi bi-arrow-clockwise',
@@ -1063,6 +1064,7 @@ class SSOClientPresenter extends PagePresenter
             // a metadata refresh that failed or found expired metadata
             if ((string) $client->getValue('smc_metadata_error') !== '') {
                 $actions[] = array(
+                    'id' => 'metadata-error',
                     'class' => 'text-danger',
                     'icon' => 'bi bi-exclamation-triangle',
                     'tooltip' => $gL10n->get((string) $client->getValue('smc_metadata_error'))
@@ -1070,6 +1072,7 @@ class SSOClientPresenter extends PagePresenter
             }
             // add link to delete SAML client
             $actions[] = array(
+                'id' => 'delete',
                 'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
                 'dataHref' => 'callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                 'icon' => 'bi bi-trash',
@@ -1078,6 +1081,7 @@ class SSOClientPresenter extends PagePresenter
             $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
+            $actionsTemplate->assign('listId', 'sso-clients-saml');
             $templateClient[] = $actionsTemplate->fetch();
 
             $columnValues[] = array('id' => 'adm_saml_client_' . $clientUUID, 'data' => $templateClient);
@@ -1131,8 +1135,9 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = array(
-                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT')),
+                array('id' => 'edit', 'url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT')),
                 array(
+                    'id' => 'delete',
                     'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
                     'dataHref' => 'callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'icon' => 'bi bi-trash',
@@ -1142,6 +1147,7 @@ class SSOClientPresenter extends PagePresenter
             $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
+            $actionsTemplate->assign('listId', 'sso-clients-oidc');
             $templateClient[] = $actionsTemplate->fetch();
 
             $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);

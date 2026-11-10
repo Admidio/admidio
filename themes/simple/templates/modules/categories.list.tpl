@@ -25,10 +25,10 @@
                     <td class="text-end">
                         {assign var=rowActions value=$category.actions}
                         {if !$category.system}
-                            {$rowActions[] = ['class' => 'admidio-category-move', 'attributes' => ['data-uuid' => $category.uuid, 'data-direction' => 'UP', 'data-target' => "adm_category_{$category.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', [$title])]}
-                            {$rowActions[] = ['class' => 'admidio-category-move', 'attributes' => ['data-uuid' => $category.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_category_{$category.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', [$title])]}
+                            {$rowActions[] = ['id' => 'move_up', 'class' => 'admidio-category-move', 'attributes' => ['data-uuid' => $category.uuid, 'data-direction' => 'UP', 'data-target' => "adm_category_{$category.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', [$title])]}
+                            {$rowActions[] = ['id' => 'move_down', 'class' => 'admidio-category-move', 'attributes' => ['data-uuid' => $category.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_category_{$category.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', [$title])]}
                         {/if}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $category.uuid, 'actions' => $rowActions]}
+                        {include 'sys-template-parts/list.functions.tpl' listId='categories' listRow=$category data=['uuid' => $category.uuid, 'actions' => $rowActions]}
                     </td>
                 </tr>
             {/foreach}

@@ -393,7 +393,7 @@ class SSOKeyPresenter extends PagePresenter
             $actions = array_map(function ($action) use ($keyData) {
                 global $gCurrentSession;
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/keys.php', array('mode' => $action['mode'], 'uuid' => $keyData['key_uuid']));
-                $item = array('url' => $url, 'icon' => 'bi ' . $action['icon'], 'tooltip' => $action['title']);
+                $item = array('id' => $action['mode'], 'url' => $url, 'icon' => 'bi ' . $action['icon'], 'tooltip' => $action['title']);
                 if (!empty($action['message'])) {
                     $item['dataMessage'] = $action['message'];
                     $item['dataHref'] = 'callUrlHideElement(\'adm_sso_key_' . $keyData['key_uuid'] . '\', \'' . $url . '\', \'' . $gCurrentSession->getCsrfToken() . '\')';
@@ -406,6 +406,8 @@ class SSOKeyPresenter extends PagePresenter
             }, $actions);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $keyData['key_uuid'], 'actions' => $actions));
+            $actionsTemplate->assign('listId', 'sso-keys');
+            $actionsTemplate->assign('listRow', $keyData);
             $templateKey[] = $actionsTemplate->fetch();
 
             $columnValues[] = array('id' => 'adm_sso_key_' . $keyData['key_uuid'], 'data' => $templateKey);
