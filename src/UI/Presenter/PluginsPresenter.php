@@ -184,6 +184,7 @@ class PluginsPresenter extends PagePresenter
 
             $row = array(
                 'id' => (string)$entry['id'],
+                'uuid' => (string)$entry['id'],
                 'name' => $name,
                 'description' => Language::translateIfTranslationStrId(PluginStore::getDescription($entry)),
                 'author' => (string)($entry['author'] ?? ''),
