@@ -442,9 +442,11 @@ class Event extends Entity
         if ($returnCode) {
             // Refresh the joined category columns used by isVisible() and isEditable().
             // Reading the record back clears the inserted state, which sendNotification() needs.
-            $inserted = $this->wasInserted();
+            $inserted = method_exists($this, 'wasInserted') ? $this->wasInserted() : $this->isNewRecord();
             $this->readDataById((int) $this->getValue('dat_id'));
-            $this->insertedRecord = $inserted;
+            if (property_exists($this, 'insertedRecord')) {
+                $this->insertedRecord = $inserted;
+            }
 
             // The event is the source of truth for the participant limit. Keep its
             // participation role in sync so generic role assignments enforce it, too.
@@ -462,19 +464,13 @@ class Event extends Entity
     /**
      * Send a reminder email to all eligible members of this event who have not yet registered or unregistered
      * (i.e. not currently active or tentative participants in the event role).
-     * This is triggered a configured number of days (dat_reminder_days) prior to the event start date.
+     * This is triggered a fixed 3 days prior to the event start date.
      * @return int Returns the number of reminder emails sent.
      * @throws Exception
      */
     public function sendReminderNotification(): int
     {
         global $gCurrentOrganization, $gSettingsManager, $gL10n, $gDb, $gProfileFields;
-
-        // Check if reminders are disabled for this event (dat_reminder_days === 0 or null/empty)
-        $reminderDays = $this->getValue('dat_reminder_days');
-        if ($reminderDays === null || (int)$reminderDays <= 0) {
-            return 0;
-        }
 
         // Check if global system notifications are enabled
         if (!$gSettingsManager->getBool('system_notifications_enabled')) {
@@ -486,7 +482,8 @@ class Event extends Entity
             return 0;
         }
 
-        // Calculate target date for sending the reminder: event begin date minus dat_reminder_days
+        // Calculate target date for sending the reminder: event begin date minus fixed 3 days
+        $reminderDays = 3;
         $eventDateTime = new \DateTime($datBegin);
         $targetDate = clone $eventDateTime;
         $targetDate->modify('-' . (int)$reminderDays . ' days');
@@ -637,7 +634,7 @@ class Event extends Entity
 
             $notification = new Email();
 
-            if ($this->wasInserted()) {
+            if (method_exists($this, 'wasInserted') ? $this->wasInserted() : $this->isNewRecord()) {
                 $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
