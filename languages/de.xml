@@ -713,7 +713,7 @@
   <string name="SYS_DEFAULT_VIEW">Standard-Darstellung</string>
   <string name="SYS_EVENT_REMINDER_DAYS">Tage vor Veranstaltung für Erinnerungsmail</string>
   <string name="SYS_EVENT_REMINDER_DAYS_DESC">Anzahl der Tage vor der Veranstaltung, an denen Mitglieder, die sich noch nicht angemeldet oder abgemeldet haben, eine Erinnerungsmail erhalten. Auf 0 setzen, um Erinnerungsmails für diese Veranstaltung zu deaktivieren. (Voreinstellung: 3)</string>
-  <string name="SYS_EVENT_REMINDER_TITLE">Erinnerung: Anstehende Veranstaltung #VAR1#</string>
+  <string name="SYS_EVENT_REMINDER_TITLE">Hey #VAR1#! Am #VAR2# findet die Veranstaltung #VAR3# statt, und Deine Zusage zur Teilnahme fehlt noch! Bitte melde Dich an unter folgendem Link #VAR4#</string>
   <string name="SYS_EVENT_REMINDER_SUBJECT">Erinnerung: Bitte Teilnahme für #VAR1# anmelden oder absagen</string>
   <string name="SYS_DEFAULT_VIEW_DESC">Es kann ein Anzeigemodus für die Veranstaltungen vorausgewählt werden. Im Modus #VAR1_BOLD# werden alle Informationen zu einer Veranstaltung in einem Kasten angezeigt. Im Anzeigemodus #VAR2_BOLD# werden die wichtigsten Veranstaltungsinformationen in einer kompakten Liste angezeigt. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">Ein Anzeigemodus für die Forenthemen kann vorgewählt werden. Im Modus #VAR1_BOLD# wird jedes Thema in einer Karte mit einer Vorschau des Thementextes dargestellt. Im Modus #VAR2_BOLD# werden die Themen in einer Liste dargestellt, um die Informationen in einer kompakten Liste zu zeigen. (Standardeinstellung: #VAR1#)</string>

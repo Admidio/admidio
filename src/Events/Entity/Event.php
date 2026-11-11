@@ -492,6 +492,17 @@ class Event extends Entity
     }
 
     /**
+     * Build the base URL of the events module. The module moved from
+     * modules/events/events.php (Admidio 5.x) to modules/events.php (Admidio 6.x).
+     * @return string Returns the version-independent URL of the events module.
+     */
+    private function getEventsModuleUrl(): string
+    {
+        return ADMIDIO_URL . FOLDER_MODULES
+            . (file_exists(ADMIDIO_PATH . FOLDER_MODULES . '/events.php') ? '/events.php' : '/events/events.php');
+    }
+
+    /**
      * Send a reminder email to all eligible members of this event who have not yet registered or unregistered
      * (i.e. not currently active or tentative participants in the event role).
      * This is triggered a configurable number of days prior to the event start date (default 3).
@@ -614,13 +625,18 @@ class Event extends Entity
                 continue;
             }
 
+            $recipientName = trim((string)$row['firstname']) !== '' ? $row['firstname'] : $row['lastname'];
+            $eventUrl = $this->getEventsModuleUrl() . '?dat_uuid=' . $this->getValue('dat_uuid');
+
             $email = new Email();
             $email->addRecipient($row['email'], $row['firstname'], $row['lastname']);
             $subject = $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($this->getValue('dat_headline')));
-            $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array($this->getValue('dat_headline'))) . '<br /><br />'
-                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('dat_headline') . '<br />'
-                . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br /><br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+            $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array(
+                $recipientName,
+                $this->getDateTimePeriod(),
+                $this->getValue('dat_headline'),
+                $eventUrl
+            ));
 
             $email->setSubject($gCurrentOrganization->getValue('org_shortname') . ': ' . $subject);
             if ($gSettingsManager->getBool('mail_html_registered_users')) {
@@ -709,7 +725,7 @@ class Event extends Entity
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . $this->getEventsModuleUrl() . '?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message
