@@ -452,14 +452,16 @@ class Event extends Entity
             throw new Exception('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
+        // Capture the new-record state before save(), because save() resets it. This works
+        // on all Admidio versions and doesn't rely on Entity::wasInserted() (added after 5.0).
+        $wasNewRecord = $this->isNewRecord();
+
         $returnCode = parent::save($updateFingerPrint);
         if ($returnCode) {
-            // Remember whether this save inserted the event. Reading the record back resets
-            // the new-record state, so we must capture it beforehand. Older Admidio versions
-            // (5.x) don't provide Entity::wasInserted(), therefore fall back to isNewRecord().
-            $this->eventWasInserted = method_exists($this, 'wasInserted')
-                ? $this->wasInserted()
-                : $this->isNewRecord();
+            // Keep the "created" state even if the same object is saved again later.
+            if ($wasNewRecord) {
+                $this->eventWasInserted = true;
+            }
 
             // Refresh the joined category columns used by isVisible() and isEditable().
             $this->readDataById((int) $this->getValue('dat_id'));
