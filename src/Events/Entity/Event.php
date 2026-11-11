@@ -442,9 +442,11 @@ class Event extends Entity
         if ($returnCode) {
             // Refresh the joined category columns used by isVisible() and isEditable().
             // Reading the record back clears the inserted state, which sendNotification() needs.
-            $inserted = $this->wasInserted();
+            $inserted = method_exists($this, 'wasInserted') ? $this->wasInserted() : $this->isNewRecord();
             $this->readDataById((int) $this->getValue('dat_id'));
-            $this->insertedRecord = $inserted;
+            if (property_exists($this, 'insertedRecord')) {
+                $this->insertedRecord = $inserted;
+            }
 
             // The event is the source of truth for the participant limit. Keep its
             // participation role in sync so generic role assignments enforce it, too.
@@ -632,7 +634,7 @@ class Event extends Entity
 
             $notification = new Email();
 
-            if ($this->wasInserted()) {
+            if (method_exists($this, 'wasInserted') ? $this->wasInserted() : $this->isNewRecord()) {
                 $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
