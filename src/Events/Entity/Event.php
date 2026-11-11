@@ -588,19 +588,29 @@ class Event extends Entity
         $stmt = $this->db->queryPrepared($sql, $queryParams);
         $sentCount = 0;
 
+        // The events module moved from modules/events/events.php (Admidio 5.x) to
+        // modules/events.php (Admidio 6.x). Detect the location so the link works on both.
+        $eventsModuleUrl = ADMIDIO_URL . FOLDER_MODULES
+            . (file_exists(ADMIDIO_PATH . FOLDER_MODULES . '/events.php') ? '/events.php' : '/events/events.php');
+
         while ($stmt && ($row = $stmt->fetch())) {
             $userId = (int)$row['usr_id'];
             if (in_array($userId, $doNotRemindUserIds, true)) {
                 continue;
             }
 
+            $recipientName = trim((string)$row['firstname']) !== '' ? $row['firstname'] : $row['lastname'];
+            $eventUrl = $eventsModuleUrl . '?dat_uuid=' . $this->getValue('dat_uuid');
+
             $email = new Email();
             $email->addRecipient($row['email'], $row['firstname'], $row['lastname']);
             $subject = $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($this->getValue('dat_headline')));
-            $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array($this->getValue('dat_headline'))) . '<br /><br />'
-                . $gL10n->get('SYS_TITLE') . ': ' . $this->getValue('dat_headline') . '<br />'
-                . $gL10n->get('SYS_DATE') . ': ' . $this->getDateTimePeriod() . '<br /><br />'
-                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+            $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array(
+                $recipientName,
+                $this->getDateTimePeriod(),
+                $this->getValue('dat_headline'),
+                $eventUrl
+            ));
 
             $email->setSubject($gCurrentOrganization->getValue('org_shortname') . ': ' . $subject);
             if ($gSettingsManager->getBool('mail_html_registered_users')) {
