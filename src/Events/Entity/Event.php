@@ -53,6 +53,12 @@ class Event extends Entity
     private ?Participants $mParticipants;
 
     /**
+     * @var bool Remembers whether the last save() inserted a new event. This is needed for the
+     *      created/changed notification and works with Admidio 5.x as well as newer versions.
+     */
+    private bool $eventWasInserted = false;
+
+    /**
      * Constructor that will create an object of a recordset of the table adm_events.
      * If the id is set than the specific event will be loaded.
      * @param Database $database Object of the class Database. This should be the default global object **$gDb**.
@@ -109,6 +115,7 @@ class Event extends Entity
 
         // initialize class members
         $this->mParticipants = null;
+        $this->eventWasInserted = false;
     }
 
     /**
@@ -182,7 +189,10 @@ class Event extends Entity
 
         // Keep the reservation audit trail when an event disappears. The FK then clears the
         // event reference, while the cancelled status ensures its former period is not blocked.
-        (new ReservationService($this->db))->cancelEventReservations($datId);
+        // The reservation service only exists in newer Admidio versions (>= 6.0).
+        if (class_exists(ReservationService::class)) {
+            (new ReservationService($this->db))->cancelEventReservations($datId);
+        }
 
         // now delete event
         parent::delete();
@@ -204,7 +214,11 @@ class Event extends Entity
         global $gSettingsManager;
 
         if ($weekdayFormat === null) {
-            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            // The setting events_weekday_format was introduced after Admidio 5.0.
+            // Older installations don't know it, so fall back to the short weekday.
+            $weekdayFormat = $gSettingsManager->has('events_weekday_format')
+                ? $gSettingsManager->getString('events_weekday_format')
+                : 'short';
         }
 
         $dateFormat = $gSettingsManager->getString('system_date');
@@ -440,19 +454,23 @@ class Event extends Entity
 
         $returnCode = parent::save($updateFingerPrint);
         if ($returnCode) {
+            // Remember whether this save inserted the event. Reading the record back resets
+            // the new-record state, so we must capture it beforehand. Older Admidio versions
+            // (5.x) don't provide Entity::wasInserted(), therefore fall back to isNewRecord().
+            $this->eventWasInserted = method_exists($this, 'wasInserted')
+                ? $this->wasInserted()
+                : $this->isNewRecord();
+
             // Refresh the joined category columns used by isVisible() and isEditable().
-            // Reading the record back clears the inserted state, which sendNotification() needs.
-            $inserted = method_exists($this, 'wasInserted') ? $this->wasInserted() : $this->isNewRecord();
             $this->readDataById((int) $this->getValue('dat_id'));
-            if (property_exists($this, 'insertedRecord')) {
-                $this->insertedRecord = $inserted;
-            }
 
             // The event is the source of truth for the participant limit. Keep its
             // participation role in sync so generic role assignments enforce it, too.
+            // setMaxMembersFromEvent() is not available in older Admidio versions (5.x).
             if ((int) $this->getValue('dat_rol_id') > 0) {
                 $role = new Role($this->db, (int) $this->getValue('dat_rol_id'));
-                if ($role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
+                if (method_exists($role, 'setMaxMembersFromEvent')
+                    && $role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
                     $role->save($updateFingerPrint);
                 }
             }
@@ -477,7 +495,9 @@ class Event extends Entity
             return 0;
         }
 
-        $datBegin = $this->getValue('dat_begin', 'database');
+        // Use an explicit date format: Admidio 5.x doesn't support the special
+        // "database" format for date/time columns in Entity::getValue().
+        $datBegin = $this->getValue('dat_begin', 'Y-m-d H:i:s');
         if (empty($datBegin)) {
             return 0;
         }
@@ -507,13 +527,19 @@ class Event extends Entity
             return 0;
         }
 
+        // Admidio 5.x names the participation states PARTICIPATION_*, newer versions
+        // use STATE_*. Read the declined state in a version-independent way.
+        $stateRefused = defined('Admidio\Events\ValueObject\Participants::STATE_REFUSED')
+            ? constant('Admidio\Events\ValueObject\Participants::STATE_REFUSED')
+            : 3;
+
         // Get users who are already participating (active or tentative)
         $participants = new Participants($this->db, $roleId);
         $participantsArray = $participants->getParticipantsArray();
         $participatingUserIds = array();
         if (is_array($participantsArray)) {
             foreach ($participantsArray as $p) {
-                if ($p['approved'] != Participants::STATE_REFUSED) {
+                if ($p['approved'] != $stateRefused) {
                     $participatingUserIds[] = (int)$p['usrId'];
                 }
             }
@@ -545,13 +571,16 @@ class Event extends Entity
         foreach ($authorizedRoleIds as $rId) {
             $queryParams[] = $rId;
         }
-        $queryParams[] = DATE_NOW;
-        $queryParams[] = DATE_NOW;
+        // DATE_NOW isn't defined when this method runs from a cron job, so use a
+        // plain date here. mem_begin and mem_end are date columns in all versions.
+        $currentDate = date('Y-m-d');
+        $queryParams[] = $currentDate;
+        $queryParams[] = $currentDate;
 
         $stmt = $this->db->queryPrepared($sql, $queryParams);
         $sentCount = 0;
 
-        while ($row = $stmt->fetch()) {
+        while ($stmt && ($row = $stmt->fetch())) {
             $userId = (int)$row['usr_id'];
             if (in_array($userId, $participatingUserIds, true)) {
                 continue;
@@ -634,7 +663,7 @@ class Event extends Entity
 
             $notification = new Email();
 
-            if (method_exists($this, 'wasInserted') ? $this->wasInserted() : $this->isNewRecord()) {
+            if ($this->eventWasInserted) {
                 $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';

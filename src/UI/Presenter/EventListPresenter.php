@@ -222,11 +222,10 @@ class EventListPresenter extends PagePresenter
                 $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
             }
         } else {
-            try {
-                $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
-            } catch (\Throwable $e) {
-                $weekdayFormat = 'short';
-            }
+            // The setting events_weekday_format was introduced after Admidio 5.0.
+            $weekdayFormat = $gSettingsManager->has('events_weekday_format')
+                ? $gSettingsManager->getString('events_weekday_format')
+                : 'short';
             // the weekday is shown in its own column, so the column width fits to the weekday names of every language
             $showWeekdayColumn = ($weekdayFormat !== 'none');
 
