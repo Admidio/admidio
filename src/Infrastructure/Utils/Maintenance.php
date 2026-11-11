@@ -117,16 +117,23 @@ class Maintenance
     public function sendEventReminders(): string
     {
         $currentDateTime = date('Y-m-d H:i:s');
+        // Don't filter cancelled events in SQL: the column dat_recurrence_status only
+        // exists since Admidio 5.1. Filter them in PHP instead so this also works on 5.0.x.
         $sql = 'SELECT dat_id
                   FROM ' . TBL_EVENTS . '
-                 WHERE (dat_recurrence_status IS NULL OR dat_recurrence_status <> \'cancelled\')
-                   AND dat_begin >= ?';
+                 WHERE dat_begin >= ?';
         $stmt = $this->database->queryPrepared($sql, array($currentDateTime));
         $totalSent = 0;
 
         if ($stmt) {
             while ($row = $stmt->fetch()) {
                 $event = new \Admidio\Events\Entity\Event($this->database, (int)$row['dat_id']);
+
+                // On Admidio < 5.1 the column doesn't exist and getValue() returns an empty string.
+                if ((string)$event->getValue('dat_recurrence_status') === 'cancelled') {
+                    continue;
+                }
+
                 $totalSent += $event->sendReminderNotification();
             }
         }
