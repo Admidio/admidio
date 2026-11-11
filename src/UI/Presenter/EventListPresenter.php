@@ -222,7 +222,11 @@ class EventListPresenter extends PagePresenter
                 $page->addHtml('<p>' . $gL10n->get('SYS_NO_ENTRIES') . '</p>');
             }
         } else {
-            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            try {
+                $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            } catch (\Throwable $e) {
+                $weekdayFormat = 'short';
+            }
             // the weekday is shown in its own column, so the column width fits to the weekday names of every language
             $showWeekdayColumn = ($weekdayFormat !== 'none');
 

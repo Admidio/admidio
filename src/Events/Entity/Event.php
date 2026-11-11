@@ -204,7 +204,11 @@ class Event extends Entity
         global $gSettingsManager;
 
         if ($weekdayFormat === null) {
-            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            try {
+                $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            } catch (\Throwable $e) {
+                $weekdayFormat = 'short';
+            }
         }
 
         $dateFormat = $gSettingsManager->getString('system_date');

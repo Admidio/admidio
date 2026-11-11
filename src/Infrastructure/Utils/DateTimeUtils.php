@@ -203,7 +203,11 @@ final class DateTimeUtils
         $formattedDate = $dateTime->format($dateFormat);
 
         if ($weekdayFormat === null) {
-            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            try {
+                $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
+            } catch (\Throwable $e) {
+                $weekdayFormat = 'short';
+            }
         }
 
         if ($weekdayFormat === 'none') {
