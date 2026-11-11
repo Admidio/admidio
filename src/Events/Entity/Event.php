@@ -550,24 +550,30 @@ class Event extends Entity
         }
 
         // Admidio 5.x names the participation states PARTICIPATION_*, newer versions
-        // use STATE_*. Read the declined state in a version-independent way.
+        // use STATE_*. Read the relevant states in a version-independent way.
+        $stateAttending = defined('Admidio\Events\ValueObject\Participants::STATE_ATTENDING')
+            ? constant('Admidio\Events\ValueObject\Participants::STATE_ATTENDING')
+            : 2;
         $stateRefused = defined('Admidio\Events\ValueObject\Participants::STATE_REFUSED')
             ? constant('Admidio\Events\ValueObject\Participants::STATE_REFUSED')
             : 3;
 
-        // Get users who are already participating (active or tentative)
+        // Only remind members who are invited but haven't confirmed their participation yet:
+        // those without any statement (INVITED) or with an uncertain statement (TENTATIVE).
+        // Members who already confirmed (ATTENDING) or declined (REFUSED) must not be reminded.
         $participants = new Participants($this->db, $roleId);
         $participantsArray = $participants->getParticipantsArray();
-        $participatingUserIds = array();
+        $doNotRemindUserIds = array();
         if (is_array($participantsArray)) {
             foreach ($participantsArray as $p) {
-                if ($p['approved'] != $stateRefused) {
-                    $participatingUserIds[] = (int)$p['usrId'];
+                if (in_array((int)$p['approved'], array($stateAttending, $stateRefused), true)) {
+                    $doNotRemindUserIds[] = (int)$p['usrId'];
                 }
             }
         }
 
-        // Query all members of authorized roles who have a valid email address and are not yet participating
+        // Query all members of the authorized roles who have a valid email address. Users without
+        // an entry in the event role are treated as invited without a statement and get reminded.
         $sqlEmailField = '';
         if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
             $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
@@ -604,7 +610,7 @@ class Event extends Entity
 
         while ($stmt && ($row = $stmt->fetch())) {
             $userId = (int)$row['usr_id'];
-            if (in_array($userId, $participatingUserIds, true)) {
+            if (in_array($userId, $doNotRemindUserIds, true)) {
                 continue;
             }
 
