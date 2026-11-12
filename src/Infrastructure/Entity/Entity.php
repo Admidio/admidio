@@ -2058,13 +2058,25 @@ class Entity
      */
     protected function valuesDiffer(string $columnName, mixed $oldValue, ?string $newValue): bool
     {
+        // the value as it was passed in: for a number, 0 is a value and not "unset"
+        $originalOldValue = $oldValue;
         $oldValue = !empty($oldValue) ? $oldValue : null;
 
         // certain data types need special handling to detect changes
         //   * bool: unset/null and 0 mean false
         //   * date/time: Make sure seconds are handled consistently, no need to convert to string
+        //   * decimal numbers: the database returns "6.00", while the code sets 6 or 6.0 - these are
+        //     the same number, and a column that is unset (NULL) is not the number 0
         //   * all other types can be compared by converting to string and comparing strings
         switch ($this->columnsInfos[$columnName]['type']) {
+            case 'decimal': // fallthrough
+            case 'numeric': // fallthrough
+            case 'float': // fallthrough
+            case 'double': // fallthrough
+            case 'real':
+                $oldNumber = ($originalOldValue === null || $originalOldValue === '') ? null : (float)$originalOldValue;
+                $newNumber = ($newValue === null || $newValue === '') ? null : (float)$newValue;
+                return $oldNumber !== $newNumber;
             case 'boolean': // fallthrough
             case 'tinyint':
                 if (empty($newValue)) $newValue = 0;
