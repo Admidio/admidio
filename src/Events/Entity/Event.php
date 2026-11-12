@@ -651,7 +651,14 @@ class Event extends Entity
                     ++$sentCount;
                 }
             } catch (\Throwable $e) {
-                // Log or ignore individual email delivery failures to keep batch running
+                // Log the failure but keep the batch running. The event is still marked as
+                // processed so the successful recipients don't receive the reminder twice.
+                if (isset($GLOBALS['gLogger'])) {
+                    $GLOBALS['gLogger']->error(
+                        'Could not send event reminder for event ID ' . (int)$this->getValue('dat_id')
+                        . ' to user ID ' . $userId . ': ' . $e->getMessage()
+                    );
+                }
             }
         }
 
