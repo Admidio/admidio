@@ -117,6 +117,7 @@ class Maintenance
     public function sendEventReminders(): string
     {
         $currentDateTime = date('Y-m-d H:i:s');
+        $today = date('Y-m-d');
         // Don't filter cancelled events in SQL: the column dat_recurrence_status only
         // exists since Admidio 5.1. Filter them in PHP instead so this also works on 5.0.x.
         $sql = 'SELECT dat_id
@@ -125,18 +126,57 @@ class Maintenance
         $stmt = $this->database->queryPrepared($sql, array($currentDateTime));
         $totalSent = 0;
 
+        $stateFile = ADMIDIO_PATH . FOLDER_DATA . '/cron_reminders_' . $today . '.json';
+        $lockFile = ADMIDIO_PATH . FOLDER_DATA . '/cron_reminders.lock';
+
+        $lockHandle = @fopen($lockFile, 'c+');
+        if ($lockHandle === false || !flock($lockHandle, LOCK_EX | LOCK_NB)) {
+            if ($lockHandle !== false) {
+                @fclose($lockHandle);
+            }
+            return 'Event reminders already running or locked.';
+        }
+
+        $processedEventIds = array();
+        if (is_file($stateFile)) {
+            $content = file_get_contents($stateFile);
+            $decoded = json_decode($content, true);
+            if (is_array($decoded)) {
+                $processedEventIds = $decoded;
+            }
+        }
+
         if ($stmt) {
             while ($row = $stmt->fetch()) {
-                $event = new \Admidio\Events\Entity\Event($this->database, (int)$row['dat_id']);
-
-                // On Admidio < 5.1 the column doesn't exist and getValue() returns an empty string.
-                if ((string)$event->getValue('dat_recurrence_status') === 'cancelled') {
+                $eventId = (int)$row['dat_id'];
+                if (in_array($eventId, $processedEventIds, true)) {
                     continue;
                 }
 
-                $totalSent += $event->sendReminderNotification();
+                $event = new \Admidio\Events\Entity\Event($this->database, $eventId);
+
+                // On Admidio < 5.1 the column doesn't exist and getValue() returns an empty string.
+                if ((string)$event->getValue('dat_recurrence_status') === 'cancelled') {
+                    $processedEventIds[] = $eventId;
+                    continue;
+                }
+
+                try {
+                    $totalSent += $event->sendReminderNotification();
+                } catch (\Throwable $e) {
+                    if (isset($GLOBALS['gLogger'])) {
+                        $GLOBALS['gLogger']->error('Error sending event reminder for event ID ' . $eventId . ': ' . $e->getMessage());
+                    }
+                }
+
+                $processedEventIds[] = $eventId;
+                @file_put_contents($stateFile . '.tmp', json_encode($processedEventIds));
+                @rename($stateFile . '.tmp', $stateFile);
             }
         }
+
+        @flock($lockHandle, LOCK_UN);
+        @fclose($lockHandle);
 
         return 'Sent ' . $totalSent . ' event reminder(s).';
     }

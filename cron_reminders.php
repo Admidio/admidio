@@ -9,6 +9,11 @@
  * ***********************************************************************************************
  */
 
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit('This script may only be executed from the command line.');
+}
+
 $_SERVER['HTTP_HOST'] = 'localhost';
 $_SERVER['SERVER_NAME'] = 'localhost';
 $_SERVER['REQUEST_URI'] = '/';
