@@ -2,6 +2,7 @@
 namespace Admidio\Events\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Events\Repository\EventReminderRepository;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
@@ -51,12 +52,6 @@ class Event extends Entity
      * @var Participants|null object to handle all participants of this event
      */
     private ?Participants $mParticipants;
-
-    /**
-     * @var bool Remembers whether the last save() inserted a new event. This is needed for the
-     *      created/changed notification and works with Admidio 5.x as well as newer versions.
-     */
-    private bool $eventWasInserted = false;
 
     /**
      * Constructor that will create an object of a recordset of the table adm_events.
@@ -115,17 +110,6 @@ class Event extends Entity
 
         // initialize class members
         $this->mParticipants = null;
-        $this->eventWasInserted = false;
-    }
-
-    /**
-     * Check whether the current database schema contains the dat_reminder_days column.
-     * This column was introduced in Admidio 6.0, so older installations (5.x) don't have it.
-     * @return bool Returns **true** if the configured reminder days can be stored for this event.
-     */
-    public function hasReminderDaysColumn(): bool
-    {
-        return array_key_exists('dat_reminder_days', $this->dbColumns);
     }
 
     /**
@@ -199,10 +183,7 @@ class Event extends Entity
 
         // Keep the reservation audit trail when an event disappears. The FK then clears the
         // event reference, while the cancelled status ensures its former period is not blocked.
-        // The reservation service only exists in newer Admidio versions (>= 6.0).
-        if (class_exists(ReservationService::class)) {
-            (new ReservationService($this->db))->cancelEventReservations($datId);
-        }
+        (new ReservationService($this->db))->cancelEventReservations($datId);
 
         // now delete event
         parent::delete();
@@ -224,11 +205,7 @@ class Event extends Entity
         global $gSettingsManager;
 
         if ($weekdayFormat === null) {
-            // The setting events_weekday_format was introduced after Admidio 5.0.
-            // Older installations don't know it, so fall back to the short weekday.
-            $weekdayFormat = $gSettingsManager->has('events_weekday_format')
-                ? $gSettingsManager->getString('events_weekday_format')
-                : 'short';
+            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
         }
 
         $dateFormat = $gSettingsManager->getString('system_date');
@@ -462,27 +439,19 @@ class Event extends Entity
             throw new Exception('Event could not be saved because you are not allowed to edit events of this category.');
         }
 
-        // Capture the new-record state before save(), because save() resets it. This works
-        // on all Admidio versions and doesn't rely on Entity::wasInserted() (added after 5.0).
-        $wasNewRecord = $this->isNewRecord();
-
         $returnCode = parent::save($updateFingerPrint);
         if ($returnCode) {
-            // Keep the "created" state even if the same object is saved again later.
-            if ($wasNewRecord) {
-                $this->eventWasInserted = true;
-            }
-
             // Refresh the joined category columns used by isVisible() and isEditable().
+            // Reading the record back clears the inserted state, which sendNotification() needs.
+            $inserted = $this->wasInserted();
             $this->readDataById((int) $this->getValue('dat_id'));
+            $this->insertedRecord = $inserted;
 
             // The event is the source of truth for the participant limit. Keep its
             // participation role in sync so generic role assignments enforce it, too.
-            // setMaxMembersFromEvent() is not available in older Admidio versions (5.x).
             if ((int) $this->getValue('dat_rol_id') > 0) {
                 $role = new Role($this->db, (int) $this->getValue('dat_rol_id'));
-                if (method_exists($role, 'setMaxMembersFromEvent')
-                    && $role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
+                if ($role->setMaxMembersFromEvent((int) $this->getValue('dat_max_members'))) {
                     $role->save($updateFingerPrint);
                 }
             }
@@ -492,145 +461,98 @@ class Event extends Entity
     }
 
     /**
-     * Build the base URL of the events module. The module moved from
-     * modules/events/events.php (Admidio 5.x) to modules/events.php (Admidio 6.x).
-     * @return string Returns the version-independent URL of the events module.
-     */
-    private function getEventsModuleUrl(): string
-    {
-        return ADMIDIO_URL . FOLDER_MODULES
-            . (file_exists(ADMIDIO_PATH . FOLDER_MODULES . '/events.php') ? '/events.php' : '/events/events.php');
-    }
-
-    /**
-     * Send a reminder email to all eligible members of this event who have not yet registered or unregistered
-     * (i.e. not currently active or tentative participants in the event role).
+     * Send a reminder email to all eligible members of this event who have not confirmed or declined yet.
      * This is triggered a configurable number of days prior to the event start date (default 3).
      * @return int Returns the number of reminder emails sent.
      * @throws Exception
      */
     public function sendReminderNotification(): int
     {
-        global $gCurrentOrganization, $gSettingsManager, $gL10n, $gDb, $gProfileFields;
+        global $gCurrentOrganization, $gSettingsManager, $gL10n;
 
-        // Check if global system notifications are enabled
         if (!$gSettingsManager->getBool('system_notifications_enabled')) {
             return 0;
         }
 
-        // Use an explicit date format: Admidio 5.x doesn't support the special
-        // "database" format for date/time columns in Entity::getValue().
+        $eventId = (int) $this->getValue('dat_id');
         $datBegin = $this->getValue('dat_begin', 'Y-m-d H:i:s');
         if (empty($datBegin)) {
             return 0;
         }
 
-        // Read the configured reminder days. On Admidio 5.x the column doesn't exist,
-        // so fall back to the default of 3 days. A value of 0 disables the reminder.
-        $reminderDays = 3;
-        if ($this->hasReminderDaysColumn()) {
-            $configuredDays = $this->getValue('dat_reminder_days');
-            $reminderDays = ($configuredDays === '' || $configuredDays === null) ? 3 : (int)$configuredDays;
-        }
+        $configuredDays = $this->getValue('dat_reminder_days');
+        $reminderDays = ($configuredDays === '' || $configuredDays === null) ? 3 : (int) $configuredDays;
         if ($reminderDays <= 0) {
             return 0;
         }
 
-        // Calculate target date for sending the reminder: event begin date minus configured days
-        $eventDateTime = new \DateTime($datBegin);
-        $targetDate = clone $eventDateTime;
-        $targetDate->modify('-' . (int)$reminderDays . ' days');
-
-        $now = new \DateTime();
-        // Send reminder if today matches the target reminder date (same calendar day)
-        if ($now->format('Y-m-d') !== $targetDate->format('Y-m-d')) {
+        $targetDate = (new \DateTime($datBegin))
+            ->modify('-' . $reminderDays . ' days')
+            ->format('Y-m-d');
+        if (DATE_NOW !== $targetDate) {
             return 0;
         }
 
-        $roleId = (int)$this->getValue('dat_rol_id');
+        $roleId = (int) $this->getValue('dat_rol_id');
         if ($roleId <= 0) {
             return 0;
         }
 
-        // Get all roles authorized to participate in this event
-        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', (int) $this->getValue('dat_id'));
+        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $eventId);
         $authorizedRoleIds = $eventParticipationRoles->getRolesIds();
-
         if (count($authorizedRoleIds) === 0) {
             return 0;
         }
 
-        // Admidio 5.x names the participation states PARTICIPATION_*, newer versions
-        // use STATE_*. Read the relevant states in a version-independent way.
-        $stateAttending = defined('Admidio\Events\ValueObject\Participants::STATE_ATTENDING')
-            ? constant('Admidio\Events\ValueObject\Participants::STATE_ATTENDING')
-            : 2;
-        $stateRefused = defined('Admidio\Events\ValueObject\Participants::STATE_REFUSED')
-            ? constant('Admidio\Events\ValueObject\Participants::STATE_REFUSED')
-            : 3;
-
-        // Only remind members who are invited but haven't confirmed their participation yet:
-        // those without any statement (INVITED) or with an uncertain statement (TENTATIVE).
-        // Members who already confirmed (ATTENDING) or declined (REFUSED) must not be reminded.
         $participants = new Participants($this->db, $roleId);
         $participantsArray = $participants->getParticipantsArray();
         $doNotRemindUserIds = array();
         if (is_array($participantsArray)) {
-            foreach ($participantsArray as $p) {
-                if (in_array((int)$p['approved'], array($stateAttending, $stateRefused), true)) {
-                    $doNotRemindUserIds[] = (int)$p['usrId'];
+            foreach ($participantsArray as $participant) {
+                if (in_array((int) $participant['approved'], array(Participants::STATE_ATTENDING, Participants::STATE_REFUSED), true)) {
+                    $doNotRemindUserIds[] = (int) $participant['usrId'];
                 }
             }
         }
 
-        // Query all members of the authorized roles who have a valid email address. Users without
-        // an entry in the event role are treated as invited without a statement and get reminded.
-        $sqlEmailField = '';
-        if (!$gSettingsManager->getBool('mail_send_to_all_addresses')) {
-            $sqlEmailField = ' AND field.usf_name_intern = \'EMAIL\' ';
-        }
-
-        $placeholders = implode(',', array_fill(0, count($authorizedRoleIds), '?'));
-        $sql = 'SELECT DISTINCT usr_id, first_name.usd_value AS firstname, last_name.usd_value AS lastname, email.usd_value AS email
-                  FROM ' . TBL_MEMBERS . ' mem
-            INNER JOIN ' . TBL_ROLES . ' ON rol_id = mem_rol_id
-            INNER JOIN ' . TBL_USERS . ' ON usr_id = mem_usr_id
-            INNER JOIN ' . TBL_USER_DATA . ' AS email ON email.usd_usr_id = usr_id AND LENGTH(email.usd_value) > 0
-            INNER JOIN ' . TBL_USER_FIELDS . ' AS field ON field.usf_id = email.usd_usf_id AND field.usf_type = \'EMAIL\' ' . $sqlEmailField . '
-             LEFT JOIN ' . TBL_USER_DATA . ' AS first_name ON first_name.usd_usr_id = usr_id AND first_name.usd_usf_id = ?
-             LEFT JOIN ' . TBL_USER_DATA . ' AS last_name ON last_name.usd_usr_id = usr_id AND last_name.usd_usf_id = ?
-                 WHERE mem_rol_id IN (' . $placeholders . ')
-                   AND mem_begin <= ?
-                   AND mem_end > ?';
-
-        $queryParams = array(
-            (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-            (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-        );
-        foreach ($authorizedRoleIds as $rId) {
-            $queryParams[] = $rId;
-        }
-        // DATE_NOW isn't defined when this method runs from a cron job, so use a
-        // plain date here. mem_begin and mem_end are date columns in all versions.
-        $currentDate = date('Y-m-d');
-        $queryParams[] = $currentDate;
-        $queryParams[] = $currentDate;
-
-        $stmt = $this->db->queryPrepared($sql, $queryParams);
-        $sentCount = 0;
-
-        while ($stmt && ($row = $stmt->fetch())) {
-            $userId = (int)$row['usr_id'];
+        $repository = new EventReminderRepository($this->db);
+        $recipients = $repository->getRecipients($eventId, $authorizedRoleIds, $targetDate);
+        $recipientsByUser = array();
+        foreach ($recipients as $row) {
+            $userId = (int) $row['usr_id'];
             if (in_array($userId, $doNotRemindUserIds, true)) {
                 continue;
             }
 
-            $recipientName = trim((string)$row['firstname']) !== '' ? $row['firstname'] : $row['lastname'];
-            $eventUrl = $this->getEventsModuleUrl() . '?dat_uuid=' . $this->getValue('dat_uuid');
+            if (!isset($recipientsByUser[$userId])) {
+                $recipientsByUser[$userId] = array(
+                    'firstname' => (string) $row['firstname'],
+                    'lastname' => (string) $row['lastname'],
+                    'emails' => array()
+                );
+            }
 
+            $emailAddress = trim((string) $row['email']);
+            if ($emailAddress !== '' && !in_array($emailAddress, $recipientsByUser[$userId]['emails'], true)) {
+                $recipientsByUser[$userId]['emails'][] = $emailAddress;
+            }
+        }
+
+        $eventUrl = ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid');
+        $subject = $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($this->getValue('dat_headline')));
+        $sentCount = 0;
+
+        foreach ($recipientsByUser as $userId => $recipient) {
+            if (count($recipient['emails']) === 0) {
+                continue;
+            }
+
+            $recipientName = trim($recipient['firstname']) !== '' ? $recipient['firstname'] : $recipient['lastname'];
             $email = new Email();
-            $email->addRecipient($row['email'], $row['firstname'], $row['lastname']);
-            $subject = $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($this->getValue('dat_headline')));
+            foreach ($recipient['emails'] as $emailAddress) {
+                $email->addRecipient($emailAddress, $recipient['firstname'], $recipient['lastname']);
+            }
+
             $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array(
                 $recipientName,
                 $this->getDateTimePeriod(),
@@ -647,15 +569,25 @@ class Event extends Entity
             $email->setText($message);
 
             try {
-                if ($email->sendEmail()) {
-                    ++$sentCount;
+                if (!$email->sendEmail()) {
+                    continue;
+                }
+
+                ++$sentCount;
+                try {
+                    $repository->markSent($eventId, $userId);
+                } catch (\Throwable $e) {
+                    if (isset($GLOBALS['gLogger'])) {
+                        $GLOBALS['gLogger']->error(
+                            'Event reminder for event ID ' . $eventId . ' was sent to user ID ' . $userId
+                            . ', but the reminder status could not be saved: ' . $e->getMessage()
+                        );
+                    }
                 }
             } catch (\Throwable $e) {
-                // Log the failure but keep the batch running. The event is still marked as
-                // processed so the successful recipients don't receive the reminder twice.
                 if (isset($GLOBALS['gLogger'])) {
                     $GLOBALS['gLogger']->error(
-                        'Could not send event reminder for event ID ' . (int)$this->getValue('dat_id')
+                        'Could not send event reminder for event ID ' . $eventId
                         . ' to user ID ' . $userId . ': ' . $e->getMessage()
                     );
                 }
@@ -714,7 +646,7 @@ class Event extends Entity
 
             $notification = new Email();
 
-            if ($this->eventWasInserted) {
+            if ($this->wasInserted()) {
                 $messageTitleText = 'SYS_EVENT_CREATED_TITLE';
                 $messageUserText = 'SYS_CREATED_BY';
                 $messageDateText = 'SYS_CREATED_AT';
@@ -732,7 +664,7 @@ class Event extends Entity
                 . $gL10n->get('SYS_PARTICIPANTS') . ': ' . $participants . '<br />'
                 . $gL10n->get($messageUserText) . ': ' . $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME') . '<br />'
                 . $gL10n->get($messageDateText) . ': ' . date($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')) . '<br />'
-                . $gL10n->get('SYS_URL') . ': ' . $this->getEventsModuleUrl() . '?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
+                . $gL10n->get('SYS_URL') . ': ' . ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid') . '<br />';
             return $notification->sendNotification(
                 $gL10n->get($messageTitleText, array($gCurrentOrganization->getValue('org_longname'))),
                 $message

@@ -183,16 +183,10 @@ class EventSaveService
             $formValues['dat_room_id'] = 0;
         }
 
-        // The reminder days column only exists since Admidio 6.0. On older installations
-        // the field isn't available and the reminder falls back to 3 days.
-        if ($event->hasReminderDaysColumn()) {
-            if (!isset($formValues['dat_reminder_days']) || !is_numeric($formValues['dat_reminder_days'])) {
-                $formValues['dat_reminder_days'] = 3;
-            } else {
-                $formValues['dat_reminder_days'] = (int)$formValues['dat_reminder_days'];
-            }
+        if (!isset($formValues['dat_reminder_days']) || !is_numeric($formValues['dat_reminder_days'])) {
+            $formValues['dat_reminder_days'] = 3;
         } else {
-            unset($formValues['dat_reminder_days']);
+            $formValues['dat_reminder_days'] = (int) $formValues['dat_reminder_days'];
         }
 
         if (!is_numeric($formValues['dat_max_members'])) {

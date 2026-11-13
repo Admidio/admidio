@@ -203,11 +203,7 @@ final class DateTimeUtils
         $formattedDate = $dateTime->format($dateFormat);
 
         if ($weekdayFormat === null) {
-            // The setting events_weekday_format was introduced after Admidio 5.0.
-            // Older installations don't know it, so fall back to the short weekday.
-            $weekdayFormat = $gSettingsManager->has('events_weekday_format')
-                ? $gSettingsManager->getString('events_weekday_format')
-                : 'short';
+            $weekdayFormat = $gSettingsManager->getString('events_weekday_format');
         }
 
         if ($weekdayFormat === 'none') {

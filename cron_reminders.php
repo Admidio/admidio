@@ -9,6 +9,8 @@
  * ***********************************************************************************************
  */
 
+use Admidio\Events\Service\EventReminderService;
+
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
     exit('This script may only be executed from the command line.');
@@ -28,12 +30,10 @@ $_SERVER['SCRIPT_NAME'] = '/cron_reminders.php';
 
 require_once(__DIR__ . '/system/common.php');
 
-use Admidio\Infrastructure\Utils\Maintenance;
-
 try {
     if ($gDb instanceof Admidio\Infrastructure\Database) {
-        $maintenance = new Maintenance($gDb);
-        echo $maintenance->sendEventReminders() . PHP_EOL;
+        $service = new EventReminderService($gDb);
+        echo $service->sendDueReminders() . PHP_EOL;
     } else {
         fwrite(STDERR, 'Database connection not available.' . PHP_EOL);
         exit(1);

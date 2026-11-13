@@ -460,7 +460,7 @@ final class CoreTasks
      * @var array<int,string>
      */
     private const MAINTENANCE_JOBS = array(
-        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'saml-metadata', 'update-check', 'event-reminders'
+        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'saml-metadata', 'update-check'
     );
 
     private static function registerSystemTasks(): void
@@ -3360,8 +3360,7 @@ final class CoreTasks
             'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
             'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens(),
             'saml-metadata' => static fn (): mixed => self::refreshSamlMetadata(),
-            'update-check' => static fn (): mixed => self::checkForUpdate(),
-            'event-reminders' => static fn (): mixed => $maintenance->sendEventReminders()
+            'update-check' => static fn (): mixed => self::checkForUpdate()
         );
         $rows = array();
         $failures = 0;

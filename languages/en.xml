@@ -713,7 +713,7 @@
   <string name="SYS_DEFAULT_VAR">Default #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Default view</string>
   <string name="SYS_EVENT_REMINDER_DAYS">Days before event for reminder email</string>
-  <string name="SYS_EVENT_REMINDER_DAYS_DESC">Number of days before the event when members who have not yet registered or unregistered will receive a reminder email. Set to 0 to disable reminder emails for this event. (Default: 3)</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_DESC">Number of days before the event when members who have not confirmed or declined yet will receive a reminder email. Set to 0 to disable reminder emails for this event. (Default: 3)</string>
   <string name="SYS_EVENT_REMINDER_TITLE">Hi #VAR1#! The event #VAR3# takes place on #VAR2#, and your confirmation of participation is still missing! Please register using the following link: #VAR4#</string>
   <string name="SYS_EVENT_REMINDER_SUBJECT">Reminder: Please register or update participation for #VAR1#</string>
   <string name="SYS_DEFAULT_VIEW_DESC">Choose the default event view. In #VAR1_BOLD# view, all event information appears in a card. In #VAR2_BOLD# view, the main event details appear in a compact list. (Default: #VAR1#)</string>
