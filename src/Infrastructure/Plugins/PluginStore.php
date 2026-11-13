@@ -94,7 +94,7 @@ final class PluginStore
      * than a list that silently omits half of what was published.
      * @return array<int,array<string,mixed>> Each entry is the catalogue entry with the single
      *                                        **release** that applies to this Admidio resolved, plus
-     *                                        **installed** and **installedVersion**.
+     *                                        **installed**, **installedVersion** and **legacy**.
      * @throws Exception
      */
     public static function getPlugins(): array
@@ -114,9 +114,16 @@ final class PluginStore
 
             $plugin = PluginRegistry::get($id);
 
+            /*
+             * A folder without a manifest is the plugin as it was before the plugin system. The
+             * release of the catalogue is what replaces it, so it counts as not installed.
+             */
+            $legacy = $plugin !== null && $plugin->errorCode === Plugin::ERROR_NO_MANIFEST;
+
             $entry['release'] = $release;
-            $entry['installed'] = $plugin !== null;
-            $entry['installedVersion'] = $plugin?->version ?? '';
+            $entry['legacy'] = $legacy;
+            $entry['installed'] = $plugin !== null && !$legacy;
+            $entry['installedVersion'] = $legacy ? '' : ($plugin?->version ?? '');
             $plugins[] = $entry;
         }
 
@@ -198,7 +205,8 @@ final class PluginStore
 
         try {
             self::verifyArchiveMatches($archive, $id, $entry['release']);
-            return PluginPackage::install($archive);
+            // the folder of a plugin from before the plugin system is replaced, see getPlugins()
+            return PluginPackage::install($archive, (bool)$entry['legacy']);
         } finally {
             @unlink($archive);
         }
