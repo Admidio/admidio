@@ -415,6 +415,18 @@ final class PluginPackage
     {
         $target = PluginRegistry::getPluginsPath() . '/' . $id;
 
+        /*
+         * A folder without a manifest is a plugin from before the plugin system, and its config.php
+         * holds the settings the administrator made. It is carried over so that the update steps of
+         * the new version can still read it (see LegacyConfig).
+         */
+        $legacyConfig = !is_file($target . '/' . Plugin::MANIFEST_FILE) && is_file($target . '/' . LegacyConfig::FILE)
+            ? file_get_contents($target . '/' . LegacyConfig::FILE)
+            : false;
+        if ($legacyConfig !== false && !is_file($source . '/' . LegacyConfig::FILE)) {
+            file_put_contents($source . '/' . LegacyConfig::FILE, $legacyConfig);
+        }
+
         if (is_dir($target)) {
             self::deleteQuietly($target);
         }
