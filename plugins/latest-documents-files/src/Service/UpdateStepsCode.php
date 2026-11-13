@@ -3,6 +3,7 @@ namespace AdmidioPlugin\LatestDocumentsFiles\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 
 /**
  * @copyright The Admidio Team
@@ -26,36 +27,15 @@ final class UpdateStepsCode
     }
 
     /**
-     * Retrieve previous settings from config file and update the database settings accordingly.
+     * Take over the settings of the config.php the plugin had before it kept them as preferences.
      * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
-        global  $gSettingsManager;
-
-
-        // check if there is a config.php file with previous settings in the latest-documents-files plugin folder
-        $configFile = ADMIDIO_PATH . '/adm_plugins/latest-documents-files/config.php';
-        if (file_exists($configFile)) {
-            // include the config file to get the previous settings
-            include $configFile;
-
-            // update the settings in the database with the previous settings from the config file if they are different to the current settings
-            foreach (get_defined_vars() as $varName => $varValue) {
-                if ($varName === 'plgCountFiles') {
-                    if ($gSettingsManager->getInt('latest_documents_files_files_count') !== (int)$varValue) {
-                        $gSettingsManager->set('latest_documents_files_files_count', (int)$varValue);
-                    }
-                } elseif ($varName === 'plgMaxCharsFilename') {
-                    if ($gSettingsManager->getInt('latest_documents_files_max_chars_filename') !== (int)$varValue) {
-                        $gSettingsManager->set('latest_documents_files_max_chars_filename', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_show_upload_timestamp') {
-                    if ($gSettingsManager->getBool('latest_documents_files_show_upload_timestamp') !== (bool)$varValue) {
-                        $gSettingsManager->set('latest_documents_files_show_upload_timestamp', (bool)$varValue);
-                    }
-                }
-            }
-        }
+        LegacyConfig::import('latest-documents-files', array(
+            'plgCountFiles'             => array('latest_documents_files_files_count', 'intval'),
+            'plgMaxCharsFilename'       => array('latest_documents_files_max_chars_filename', 'intval'),
+            'plg_show_upload_timestamp' => array('latest_documents_files_show_upload_timestamp', 'boolval')
+        ));
     }
 }

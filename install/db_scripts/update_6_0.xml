@@ -99,5 +99,13 @@
         COLLATE = utf8mb4_unicode_ci</step>
     <step id="370">CREATE UNIQUE INDEX %PREFIX%_idx_saf_kind_key ON %PREFIX%_sso_auth_failures (saf_kind, saf_key)</step>
     <step id="380">CREATE INDEX %PREFIX%_idx_saf_last_failure ON %PREFIX%_sso_auth_failures (saf_last_failure)</step>
+    <!--
+        The built-in plugins are installed at the end, on the finished schema: installing a plugin
+        runs its update scripts, which need com_update_version. The old folders in adm_plugins are
+        removed after that, not before, because installing a built-in plugin reads the config.php of
+        its old folder and takes over the settings.
+    -->
+    <step id="390">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
+    <step id="400">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
     <step>stop</step>
 </update>

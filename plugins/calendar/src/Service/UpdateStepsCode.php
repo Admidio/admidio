@@ -3,6 +3,7 @@ namespace AdmidioPlugin\Calendar\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 
 /**
  * @copyright The Admidio Team
@@ -26,91 +27,56 @@ final class UpdateStepsCode
     }
 
     /**
-     * Retrieve previous settings from config file and update the database settings accordingly.
+     * Take over the settings of the config.php the plugin had before it kept them as preferences.
      * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
-        global  $gSettingsManager;
+        LegacyConfig::import('calendar', array(
+            'plg_ter_aktiv'                  => array('calendar_show_events', 'boolval'),
+            'plg_geb_aktiv'                  => array('calendar_show_birthdays', 'boolval'),
+            'plg_geb_login'                  => array('calendar_show_birthdays_to_guests', 'boolval'),
+            'plg_geb_icon'                   => array('calendar_show_birthday_icon', 'boolval'),
+            'plg_geb_displayNames'           => array('calendar_show_birthday_names', 'intval'),
+            'plg_kal_cat_show'               => array('calendar_show_categories_names', 'boolval'),
+            'plg_kal_cat'                    => array('calendar_show_categories', array(self::class, 'categories')),
+            'plg_calendar_roles_view_plugin' => array('calendar_roles_view_plugin', array(self::class, 'roles')),
+            'plg_rolle_sql'                  => array('calendar_roles_sql', array(self::class, 'roles'))
+        ));
+    }
 
+    /**
+     * The IDs of the categories an old setting names, or all categories if none of them exists.
+     * @param mixed $names
+     * @return array<int,mixed>
+     * @throws Exception
+     */
+    public static function categories(mixed $names): array
+    {
+        $categoryIds = array();
 
-        // check if there is a config.php file with previous settings in the calendar plugin folder
-        $configFile = ADMIDIO_PATH . '/adm_plugins/calendar/config.php';
-        if (file_exists($configFile)) {
-            // include the config file to get the previous settings
-            include $configFile;
+        foreach (is_array($names) ? $names : array() as $name) {
+            if (strtolower((string)$name) === 'all') {
+                return array('All');
+            }
 
-            // update the settings in the database with the previous settings from the config file if they are different to the current settings
-            foreach (get_defined_vars() as $varName => $varValue) {
-                if ($varName === 'plg_ter_aktiv') {
-                    if ($gSettingsManager->getBool('calendar_show_events') !== (bool)$varValue) {
-                        $gSettingsManager->set('calendar_show_events', (bool)$varValue);
-                    }
-                } elseif ($varName === 'plg_geb_aktiv') {
-                    if ($gSettingsManager->getBool('calendar_show_birthdays') !== (bool)$varValue) {
-                        $gSettingsManager->set('calendar_show_birthdays', (bool)$varValue);
-                    }
-                } elseif ($varName === 'plg_geb_login') {
-                    if ($gSettingsManager->getBool('calendar_show_birthdays_to_guests') !== (bool)$varValue) {
-                        $gSettingsManager->set('calendar_show_birthdays_to_guests', (bool)$varValue);
-                    }
-                } elseif ($varName === 'plg_geb_icon') {
-                    if ($gSettingsManager->getBool('calendar_show_birthday_icon') !== (bool)$varValue) {
-                        $gSettingsManager->set('calendar_show_birthday_icon', (bool)$varValue);
-                    }
-                }elseif ($varName === 'plg_geb_displayNames') {
-                    if ($gSettingsManager->getInt('calendar_show_birthday_names') !== (int)$varValue) {
-                        $gSettingsManager->set('calendar_show_birthday_names', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_kal_cat_show') {
-                    if ($gSettingsManager->getBool('calendar_show_categories_names') !== (bool)$varValue) {
-                        $gSettingsManager->set('calendar_show_categories_names', (bool)$varValue);
-                    }
-                } elseif ($varName === 'plg_kal_cat') {
-                    $categories = (is_array($varValue) && !empty($varValue)) ? $varValue : array('All');
-                    if ($categories !== array('All')) {
-                        $categoryIds = array();
-                        foreach ($categories as $category) {
-                            // check if the category name exists and get the category id
-                            $sql = 'SELECT cat_id
-                                      FROM ' . TBL_CATEGORIES . '
-                                     WHERE cat_name = ?
-                                       AND cat_type = \'EVT\'';
-                            $pdoStatement = self::$db->queryPrepared($sql, array($category));
-                            $row = $pdoStatement->fetch();
-                            if ($row !== false) {
-                                $categoryIds[] = (int)$row['cat_id'];
-                            }
-                        }
-                        // if there are no valid category ids found, get all visible categories for the current user
-                        if (empty($categoryIds)) {
-                            $categoryIds = array('All');
-                        }
-                    } else {
-                        $categoryIds = array('All');
-                    }
-
-                    $categoriesString = implode(',', $categoryIds);
-                    // make sure to use 'All' instead of 'all' for consistency
-                    $categoriesString = str_ireplace('all', 'All', $categoriesString);
-
-                    if ($gSettingsManager->get('calendar_show_categories') !== $categoriesString) {
-                        $gSettingsManager->set('calendar_show_categories', $categoriesString);
-                    }
-                } elseif ($varName === 'plg_calendar_roles_view_plugin') {
-                    $categories = (is_array($varValue) && !empty($varValue)) ? $varValue : array('All');
-                    $categoriesString = implode(',', $categories);
-                    if ($gSettingsManager->get('calendar_roles_view_plugin') !== $categoriesString) {
-                        $gSettingsManager->set('calendar_roles_view_plugin', $categoriesString);
-                    }
-                } elseif ($varName === 'plg_rolle_sql') {
-                    $categories = (is_array($varValue) && !empty($varValue)) ? $varValue : array('All');
-                    $categoriesString = implode(',', $categories);
-                    if ($gSettingsManager->get('calendar_roles_sql') !== $categoriesString) {
-                        $gSettingsManager->set('calendar_roles_sql', $categoriesString);
-                    }
-                }
+            $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name = ? AND cat_type = ?';
+            $categoryId = self::$db->queryPrepared($sql, array($name, 'EVT'))->fetchColumn();
+            if ($categoryId !== false) {
+                $categoryIds[] = (int)$categoryId;
             }
         }
+
+        return $categoryIds === array() ? array('All') : $categoryIds;
+    }
+
+    /**
+     * The roles an old setting names, or all of them if it names none.
+     * @param mixed $roles
+     * @return array<int,mixed>
+     */
+    public static function roles(mixed $roles): array
+    {
+        return is_array($roles) && $roles !== array() ? $roles : array('All');
     }
 }
