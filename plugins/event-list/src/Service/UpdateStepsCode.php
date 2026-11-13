@@ -3,6 +3,7 @@ namespace AdmidioPlugin\EventList\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 
 /**
  * @copyright The Admidio Team
@@ -26,73 +27,43 @@ final class UpdateStepsCode
     }
 
     /**
-     * Retrieve previous settings from config file and update the database settings accordingly.
+     * Take over the settings of the config.php the plugin had before it kept them as preferences.
      * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
-        global  $gSettingsManager;
+        LegacyConfig::import('event-list', array(
+            'plg_max_number_events_shown' => array('event_list_events_count', 'intval'),
+            'plg_show_date_end'           => array('event_list_show_event_date_end', 'boolval'),
+            'plg_events_show_preview'     => array('event_list_show_preview_chars', 'intval'),
+            'plgShowFullDescription'      => array('event_list_show_full_description', 'boolval'),
+            'plg_max_char_per_word'       => array('event_list_chars_before_linebreak', 'intval'),
+            'plg_kal_cat'                 => array('event_list_displayed_categories', array(self::class, 'categories'))
+        ));
+    }
 
+    /**
+     * The IDs of the categories an old setting names, or all categories if none of them exists.
+     * @param mixed $names
+     * @return array<int,mixed>
+     * @throws Exception
+     */
+    public static function categories(mixed $names): array
+    {
+        $categoryIds = array();
 
-        // check if there is a config.php file with previous settings in the event-list plugin folder
-        $configFile = ADMIDIO_PATH . '/adm_plugins/event-list/config.php';
-        if (file_exists($configFile)) {
-            // include the config file to get the previous settings
-            include $configFile;
+        foreach (is_array($names) ? $names : array() as $name) {
+            if (strtolower((string)$name) === 'all') {
+                return array('All');
+            }
 
-            // update the settings in the database with the previous settings from the config file if they are different to the current settings
-            foreach (get_defined_vars() as $varName => $varValue) {
-                if ($varName === 'plg_max_number_events_shown') {
-                    if ($gSettingsManager->getInt('event_list_events_count') !== (int)$varValue) {
-                        $gSettingsManager->set('event_list_events_count', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_show_date_end') {
-                    if ($gSettingsManager->getBool('event_list_show_event_date_end') !== (bool)$varValue) {
-                        $gSettingsManager->set('event_list_show_event_date_end', (bool)$varValue);
-                    }
-                } elseif ($varName === 'plg_events_show_preview') {
-                    if ($gSettingsManager->getInt('event_list_show_preview_chars') !== (int)$varValue) {
-                        $gSettingsManager->set('event_list_show_preview_chars', (int)$varValue);
-                    }
-                } elseif ($varName === 'plgShowFullDescription') {
-                    if ($gSettingsManager->getBool('event_list_show_full_description') !== (bool)$varValue) {
-                        $gSettingsManager->set('event_list_show_full_description', (bool)$varValue);
-                    }
-                }elseif ($varName === 'plg_max_char_per_word') {
-                    if ($gSettingsManager->getInt('event_list_chars_before_linebreak') !== (int)$varValue) {
-                        $gSettingsManager->set('event_list_chars_before_linebreak', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_kal_cat') {
-                    $categories = (is_array($varValue) && !empty($varValue)) ? $varValue : array('All');
-
-                    if ($categories !== array('All')) {
-                        $categoryIds = array();
-                        foreach ($categories as $category) {
-                            // check if the category name exists and get the category id
-                            $sql = 'SELECT cat_id
-                                      FROM ' . TBL_CATEGORIES . '
-                                     WHERE cat_name = ?
-                                       AND cat_type = \'EVT\'';
-                            $pdoStatement = self::$db->queryPrepared($sql, array($category));
-                            $row = $pdoStatement->fetch();
-                            if ($row !== false) {
-                                $categoryIds[] = (int)$row['cat_id'];
-                            }
-                        }
-                        // if there are no valid category ids found, get all visible categories for the current user
-                        if (empty($categoryIds)) {
-                            $categoryIds = array('All');
-                        }
-                    } else {
-                        $categoryIds = array('All');
-                    }
-
-                    $categoriesString = implode(',', $categoryIds);
-                    if ($gSettingsManager->get('event_list_displayed_categories') !== $categoriesString) {
-                        $gSettingsManager->set('event_list_displayed_categories', $categoriesString);
-                    }
-                }
+            $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name = ? AND cat_type = ?';
+            $categoryId = self::$db->queryPrepared($sql, array($name, 'EVT'))->fetchColumn();
+            if ($categoryId !== false) {
+                $categoryIds[] = (int)$categoryId;
             }
         }
+
+        return $categoryIds === array() ? array('All') : $categoryIds;
     }
 }

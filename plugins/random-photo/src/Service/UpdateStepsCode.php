@@ -3,6 +3,7 @@ namespace AdmidioPlugin\RandomPhoto\Service;
 
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 
 /**
  * @copyright The Admidio Team
@@ -26,49 +27,18 @@ final class UpdateStepsCode
     }
 
     /**
-     * Retrieve previous settings from config file and update the database settings accordingly.
+     * Take over the settings of the config.php the plugin had before it kept them as preferences.
      * @throws Exception
      */
     public static function updateStep10RetrievePreviousSettings()
     {
-        // $gL10n is needed to get the localized rank names from the config file
-        global $gL10n, $gSettingsManager;
-
-
-        // check if there is a config.php file with previous settings in the random_photo plugin folder
-        $configFile = ADMIDIO_PATH . '/adm_plugins/random_photo/config.php';
-        if (file_exists($configFile)) {
-            // include the config file to get the previous settings
-            include $configFile;
-
-            // update the settings in the database with the previous settings from the config file if they are different to the current settings
-            foreach (get_defined_vars() as $varName => $varValue) {
-                if ($varName === 'plg_max_char_per_word') {
-                    if ($gSettingsManager->getInt('random_photo_max_char_per_word') !== (int)$varValue) {
-                        $gSettingsManager->set('random_photo_max_char_per_word', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_photos_max_width') {
-                    if ($gSettingsManager->getInt('random_photo_max_width') !== (int)$varValue) {
-                        $gSettingsManager->set('random_photo_max_width', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_photos_max_height') {
-                    if ($gSettingsManager->getInt('random_photo_max_height') !== (int)$varValue) {
-                        $gSettingsManager->set('random_photo_max_height', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_photos_albums') {
-                    if ($gSettingsManager->getInt('random_photo_albums') !== (int)$varValue) {
-                        $gSettingsManager->set('random_photo_albums', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_photos_picnr') {
-                    if ($gSettingsManager->getInt('random_photo_album_photo_number') !== (int)$varValue) {
-                        $gSettingsManager->set('random_photo_album_photo_number', (int)$varValue);
-                    }
-                } elseif ($varName === 'plg_photos_show_link') {
-                    if ($gSettingsManager->getBool('random_photo_show_album_link') !== (bool)$varValue) {
-                        $gSettingsManager->set('random_photo_show_album_link', (bool)$varValue);
-                    }
-                }
-            }
-        }
+        LegacyConfig::import('random-photo', array(
+            'plg_max_char_per_word' => array('random_photo_max_char_per_word', 'intval'),
+            'plg_photos_max_width'  => array('random_photo_max_width', 'intval'),
+            'plg_photos_max_height' => array('random_photo_max_height', 'intval'),
+            'plg_photos_albums'     => array('random_photo_albums', 'intval'),
+            'plg_photos_picnr'      => array('random_photo_album_photo_number', 'intval'),
+            'plg_photos_show_link'  => array('random_photo_show_album_link', 'boolval')
+        ), 'random_photo');
     }
 }

@@ -3,6 +3,7 @@
 namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\CategoryReport\Entity\CategoryReportColumn;
+use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
@@ -365,6 +366,15 @@ final class UpdateStepsCode
                     continue;
                 }
             } else {
+                // The plugin was active in every organization. The version for the plugin system is
+                // enabled per organization, and an organization that already has the preference
+                // keeps it when the plugin is installed, so the plugin stays active everywhere.
+                if (Plugin::isValidId($folderName)) {
+                    PreferencesService::setForAllOrganizations(
+                        array('plugin_' . Plugin::getSettingKey($folderName) . '_enabled' => '1')
+                    );
+                }
+
                 // there is a 3rd party plugin installed, so we try to move it to the new plugin folder
                 $newPluginPath = ADMIDIO_PATH . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $folderName;
                 try {
