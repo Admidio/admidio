@@ -1530,6 +1530,8 @@
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE_DESC">Wähle die ZIP-Datei eines Plugins aus. Admidio prüft die Datei, bevor Inhalte entpackt werden. Das Plugin wird nur hinzugefügt und nicht aktiviert. Aktiviere es anschließend in der Plugin-Verwaltung.</string>
   <string name="SYS_PLUGIN_INVALID_ID">Der Plugin-Ordner #VAR1# ist kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</string>
   <string name="SYS_PLUGIN_INVALID_MANIFEST">Dieses Plugin ist nicht mit dem Plugin-System von Admidio ab Version 6.0 kompatibel: Das Manifest #VAR1# ist kein gültiges JSON-Objekt.</string>
+  <string name="SYS_PLUGIN_LEGACY">Dieses Plugin wurde für eine Admidio-Version vor 6.0 erstellt. Aktualisiere es auf die aktuelle Version; seine Daten und Einstellungen bleiben erhalten.</string>
+  <string name="SYS_PLUGIN_LEGACY_UPDATE">Auf die aktuelle Version aktualisieren</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">Diese Plugins konnten nicht geladen werden und sind daher inaktiv:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Hier kannst du die Plugins von Admidio verwalten. Plugins sind zusätzliche Module, die installiert werden können, um die Funktionalität von Admidio zu erweitern. Du kannst Plugins installieren, aktualisieren oder entfernen.</string>
@@ -2320,6 +2322,7 @@
   <string name="SYS_WANT_INSTALL_FROM_STORE">Möchtest du das Plugin #VAR1_BOLD# installieren?\n\nEs wird heruntergeladen und hinzugefügt, aber nicht aktiviert. Aktiviere es anschließend in der Plugin-Verwaltung.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# entfernen?\n\nDies gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktiviere das Plugin stattdessen, wenn du es nicht mehr verwenden möchtest.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Möchtest du das Plugin #VAR1_BOLD# entfernen?\n\nEs ist in diesen Organisationen noch aktiviert: #VAR2_BOLD#.\n\nDas Entfernen gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktiviere das Plugin stattdessen, wenn du es nicht mehr verwenden möchtest.</string>
+  <string name="SYS_WANT_UPDATE_LEGACY_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# auf die aktuelle Version aktualisieren?\n\nSeine Dateien werden durch die Version für dieses Admidio ersetzt. Seine Daten und Einstellungen bleiben erhalten.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Möchtest du das Plugin #VAR1_BOLD# aktualisieren?</string>
   <string name="SYS_WARNING">Warnung</string>
   <string name="SYS_WEBLINK">Weblink</string>
