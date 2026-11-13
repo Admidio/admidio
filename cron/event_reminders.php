@@ -5,7 +5,7 @@
  *
  * This script may only be executed from the command line. Configure a daily cron job at your
  * web host, for example:
- * php /path/to/admidio/cron_reminders.php
+ * php /path/to/admidio/cron/event_reminders.php
  * ***********************************************************************************************
  */
 
@@ -24,11 +24,12 @@ $_SERVER['REQUEST_URI'] = '/';
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['SERVER_PORT'] = '80';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$_SERVER['DOCUMENT_ROOT'] = __DIR__;
+$rootPath = dirname(__DIR__);
+$_SERVER['DOCUMENT_ROOT'] = $rootPath;
 $_SERVER['SCRIPT_FILENAME'] = __FILE__;
-$_SERVER['SCRIPT_NAME'] = '/cron_reminders.php';
+$_SERVER['SCRIPT_NAME'] = '/cron/event_reminders.php';
 
-require_once(__DIR__ . '/system/common.php');
+require_once($rootPath . '/system/common.php');
 
 try {
     if ($gDb instanceof Admidio\Infrastructure\Database) {
