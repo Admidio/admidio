@@ -86,6 +86,7 @@
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['dat_allow_comments']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['dat_additional_guests']}
                                         {include 'sys-template-parts/form.input.tpl' data=$elements['dat_max_members']}
+                                        {include 'sys-template-parts/form.input.tpl' data=$elements['dat_reminder_days']}
                                         {include 'sys-template-parts/form.input.tpl' data=$elements['event_deadline']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['event_right_list_view']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['event_right_send_mail']}
