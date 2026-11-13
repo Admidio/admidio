@@ -123,7 +123,7 @@ class EventReminderTest extends DatabaseTestCase
         $alice = $this->createUserWithEmail($fixture, 'reminderAlice', 'alice@example.local');
         $fixture->assignUserToRole($alice['usr_id'], $eligibleRole['rol_id']);
 
-        $event = $this->createEventWithReminder('Reminder event', date('Y-m-d', strtotime('+3 days')));
+        $event = $this->createEventWithReminder('Reminder event', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
         $this->asAdministrator(function () use ($event, $eligibleRole) {
             (new RolesRights($this->getDatabase(), 'event_participation', $event['dat_id']))
                 ->addRoles([$eligibleRole['rol_id']]);
@@ -165,7 +165,7 @@ class EventReminderTest extends DatabaseTestCase
             $fixture->assignUserToRole($user['usr_id'], $eligibleRole['rol_id']);
         }
 
-        $event = $this->createEventWithReminder('Reminder statuses event', date('Y-m-d', strtotime('+3 days')));
+        $event = $this->createEventWithReminder('Reminder statuses event', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
         $this->asAdministrator(function () use ($event, $eligibleRole, $bob, $carol) {
             (new RolesRights($this->getDatabase(), 'event_participation', $event['dat_id']))
                 ->addRoles([$eligibleRole['rol_id']]);
@@ -201,9 +201,9 @@ class EventReminderTest extends DatabaseTestCase
      */
     public function testDisabledAndCancelledEventsAreNotDue(): void
     {
-        $disabledEvent = $this->createEventWithReminder('Disabled reminder', date('Y-m-d', strtotime('+3 days')), 0);
-        $cancelledEvent = $this->createEventWithReminder('Cancelled reminder', date('Y-m-d', strtotime('+3 days')));
-        $dueEvent = $this->createEventWithReminder('Due reminder', date('Y-m-d', strtotime('+3 days')));
+        $disabledEvent = $this->createEventWithReminder('Disabled reminder', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')), 0);
+        $cancelledEvent = $this->createEventWithReminder('Cancelled reminder', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
+        $dueEvent = $this->createEventWithReminder('Due reminder', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
 
         $this->getDatabase()->queryPrepared(
             'UPDATE ' . TBL_EVENTS . ' SET dat_recurrence_status = ? WHERE dat_id = ?',
