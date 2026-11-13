@@ -119,14 +119,14 @@ class Maintenance
     {
         $currentDateTime = date('Y-m-d H:i:s');
         $today = date('Y-m-d');
-        $stateFile = ADMIDIO_PATH . FOLDER_DATA . '/cron_reminders_' . $today . '.json';
-        $lockFile = ADMIDIO_PATH . FOLDER_DATA . '/cron_reminders.lock';
+        $stateFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/cron_reminders_' . $today . '.json';
+        $lockFile = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/cron_reminders.lock';
 
         $lockHandle = @fopen($lockFile, 'c+');
         if ($lockHandle === false) {
             throw new \RuntimeException(
                 'Could not open the event reminder lock file ' . $lockFile
-                . '. Please check that the cron job can write to ' . ADMIDIO_PATH . FOLDER_DATA . '.'
+                . '. Please check that the cron job can write to ' . ADMIDIO_PATH . FOLDER_TEMP_DATA . '.'
             );
         }
 
@@ -231,7 +231,7 @@ class Maintenance
      */
     private function cleanupReminderStateFiles(): void
     {
-        $files = glob(ADMIDIO_PATH . FOLDER_DATA . '/cron_reminders_*');
+        $files = glob(ADMIDIO_PATH . FOLDER_TEMP_DATA . '/cron_reminders_*');
         if (!is_array($files)) {
             return;
         }
