@@ -186,6 +186,7 @@ try {
             $icon = 'bi-envelope-fill';
             $iconText = $gL10n->get('SYS_EMAIL');
             $actions[] = array(
+                'id' => 'forward',
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('msg_uuid' => $message['msg_uuid'], 'forward' => '1')),
                 'icon' => 'bi bi-forward',
                 'tooltip' => $gL10n->get('SYS_FORWARD')
@@ -213,12 +214,15 @@ try {
         $arrContent['3'] = $iconAttachments;
         $arrContent['4'] = $messageObject->getValue('msg_timestamp');
         $actions[] = array(
+            'id' => 'delete',
             'dataMessage' => $gL10n->get('SYS_DELETE_MESSAGE', array($messageObject->getValue('msg_subject'))),
             'dataHref' => 'callUrlHideElement(\'row_message_' . $message['msg_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages.php', array('msg_uuid' => $message['msg_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
             'icon' => 'bi bi-trash',
             'tooltip' => $gL10n->get('SYS_REMOVE_MESSAGE')
         );
         $smarty->assign('data', array('uuid' => $message['msg_uuid'], 'actions' => $actions));
+        $smarty->assign('listId', 'messages');
+        $smarty->assign('listRow', $message);
         $arrContent['5'] = $smarty->fetch('sys-template-parts/list.functions.tpl');
 
         // create array with all column values and add it to the json array

@@ -1033,8 +1033,9 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = array(
-                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT')),
+                array('id' => 'edit', 'url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_SAML_CLIENT')),
                 array(
+                    'id' => 'delete',
                     'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
                     'dataHref' => 'callUrlHideElement(\'adm_saml_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_saml', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'icon' => 'bi bi-trash',
@@ -1043,6 +1044,7 @@ class SSOClientPresenter extends PagePresenter
             );
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
+            $actionsTemplate->assign('listId', 'sso-clients-saml');
             $templateClient[] = $actionsTemplate->fetch();
 
             $columnValues[] = array(
@@ -1100,8 +1102,9 @@ class SSOClientPresenter extends PagePresenter
             //$templateClient[] = $client->getValue('create_name');
 
             $actions = array(
-                array('url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT')),
+                array('id' => 'edit', 'url' => $clientEditURL, 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_SSO_EDIT_OIDC_CLIENT')),
                 array(
+                    'id' => 'delete',
                     'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array(SecurityUtils::encodeHTML($client->readableName()))),
                     'dataHref' => 'callUrlHideElement(\'adm_oidc_client_' . $clientUUID . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'delete_oidc', 'uuid' => $clientUUID)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'icon' => 'bi bi-trash',
@@ -1110,6 +1113,7 @@ class SSOClientPresenter extends PagePresenter
             );
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
+            $actionsTemplate->assign('listId', 'sso-clients-oidc');
             $templateClient[] = $actionsTemplate->fetch();
 
             $columnValues[] = array(

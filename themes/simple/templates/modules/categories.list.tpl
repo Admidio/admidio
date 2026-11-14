@@ -30,7 +30,7 @@
                     <td style="word-break: break-word;">{$category.visibleForRoles}</td>
                     <td style="word-break: break-word;">{$category.editableForRoles}</td>
                     <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$category}
+                        {include 'sys-template-parts/list.functions.tpl' listId='categories' data=$category}
                     </td>
                 </tr>
             {/foreach}

@@ -315,16 +315,19 @@ class AnnouncementsPresenter extends PagePresenter
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
+                    'id' => 'copy',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'edit', 'copy' => true, 'announcement_uuid' => $announcementData['ann_uuid'])),
                     'icon' => 'bi bi-copy',
                     'tooltip' => $gL10n->get('SYS_COPY')
                 );
                 $templateRow['actions'][] = array(
+                    'id' => 'edit',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/announcements.php', array('mode' => 'edit', 'announcement_uuid' => $announcementData['ann_uuid'])),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT')
                 );
                 $templateRow['actions'][] = array(
+                    'id' => 'delete',
                     'dataHref' => 'callUrlHideElement(\'adm_announcement_' . $announcementData['ann_uuid'] . '\', \'' .
                         SecurityUtils::encodeUrl(
                             ADMIDIO_URL . FOLDER_MODULES . '/announcements.php',

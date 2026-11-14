@@ -37,7 +37,7 @@
                         {/if}
                     </td>
                     <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$itemField}
+                        {include 'sys-template-parts/list.functions.tpl' listId='inventory-fields' data=$itemField}
                     </td>
                 </tr>
             {/foreach}

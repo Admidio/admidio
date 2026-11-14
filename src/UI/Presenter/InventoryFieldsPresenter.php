@@ -329,6 +329,7 @@ class InventoryFieldsPresenter extends PagePresenter
             ];
 
             $templateRowItemField['actions'][] = array(
+                'id' => 'edit',
                 'url' => $editUrl,
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT')
@@ -336,12 +337,14 @@ class InventoryFieldsPresenter extends PagePresenter
 
             if ($itemField->getValue('inf_system') == 1) {
                 $templateRowItemField['actions'][] = array(
+                    'id' => 'spacer',
                     'url' => '',
                     'icon' => 'bi bi-trash invisible',
                     'tooltip' => ''
                 );
             } else {
                 $templateRowItemField['actions'][] = array(
+                    'id' => 'delete',
                     'dataHref' => 'callUrlHideElement(\'adm_item_field_' . $itemField->getValue('inf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'field_delete', 'uuid' => $itemField->getValue('inf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_INVENTORY_ITEMFIELD_DELETE_DESC', array($itemField->getValue('inf_name'))),
                     'icon' => 'bi bi-trash',

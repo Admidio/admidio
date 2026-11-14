@@ -17,9 +17,9 @@
                         </span>
                         {assign var=membershipActions value=$membership.actions}
                         {if $membership.showRelationsCreateEdit}
-                            {$membershipActions[] = ['class' => 'admidio-create-edit-info', 'attributes' => ['data-info-id' => "member_info_{$membership.memberUUID}"], 'icon' => 'bi bi-info-circle', 'tooltip' => $l10n->get('SYS_INFORMATIONS')]}
+                            {$membershipActions[] = ['id' => 'info', 'class' => 'admidio-create-edit-info', 'attributes' => ['data-info-id' => "member_info_{$membership.memberUUID}"], 'icon' => 'bi bi-info-circle', 'tooltip' => $l10n->get('SYS_INFORMATIONS')]}
                         {/if}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $membership.memberUUID, 'actions' => $membershipActions]}
+                        {include 'sys-template-parts/list.functions.tpl' listId='profile-roles' listRow=$membership data=['uuid' => $membership.memberUUID, 'actions' => $membershipActions]}
                     </span>
                 </li>
                 <li class="list-group-item" id="adm_membership_period_{$membership.memberUUID}" style="visibility: hidden; display: none;">

@@ -288,11 +288,13 @@ class ForumPresenter extends PagePresenter
                 $templateRow['editable'] = true;
 
                 $templateRow['actions'][] = array(
+                    'id' => 'edit',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumTopic['fot_uuid'])),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT')
                 );
                 $templateRow['actions'][] = array(
+                    'id' => 'delete',
                     'dataHref' => 'callUrlHideElement(\'adm_topic_' . $forumTopic['fot_uuid'] . '\', \'' .
                         SecurityUtils::encodeUrl(
                             ADMIDIO_URL . FOLDER_MODULES . '/forum.php',
