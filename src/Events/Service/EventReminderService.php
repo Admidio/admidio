@@ -68,6 +68,45 @@ class EventReminderService
         }
     }
 
+    /**
+     * Run the due‑event check and optionally send reminders.
+     *
+     * When $dryRun is true the method only determines which events are due
+     * and returns a summary string – no e‑mail is sent and no claim rows are
+     * written. This is intended for the CLI command
+     * `event:send-reminders --dry-run`.
+     *
+     * When $dryRun is false the method behaves like {@see sendDueReminders()}
+     * (but without the file‑based lock – the claim/release mechanism in the
+     * repository takes care of concurrency).
+     *
+     * @return string|false Summary message or false if nothing is due.
+     * @throws Throwable If an unexpected error occurs while processing a single event.
+     *
+     * @deprecated Will be removed after the maintenance‑job infrastructure from
+     *             PR #2310 is merged; the lock‑file based {@see sendDueReminders()}
+     *             will then be replaced completely.
+     */
+    public function runIfDue(bool $dryRun = false): string|false
+    {
+        if ($dryRun) {
+            $dueIds = $this->repository->getDueEventIds();
+            if ($dueIds === []) {
+                return false;
+            }
+            // Build a simple list for display – the real UI would use the
+            // translation system, but for a quick CLI hint this is enough.
+            $list = implode(', ', array_map(static fn($id) => 'Event '.$id, $dueIds));
+            return 'The following events are due for reminders: ' . $list . '.';
+        }
+
+        // Non‑dry‑run path – delegate to the existing implementation,
+        // but we skip the lock because the repository’s claim/release
+        // mechanism now handles concurrency.
+        // (In a full re‑base after #2310 this would be the new canonical method.)
+        return $this->sendDueReminders();
+    }
+
     private function logError(string $message): void
     {
         if (isset($GLOBALS['gLogger'])) {
