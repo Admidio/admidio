@@ -470,7 +470,7 @@ final class CoreTasks
         }, 'Repair the paths of the documents and files folders.');
         CliTaskRegistry::registerCoreMaintenanceJob('sessions', static function (): void {
             self::cleanupSessions(30);
-        }, 'Remove sessions that were inactive for 30 days.');
+        }, 'Remove sessions that were inactive for 30 minutes.');
         CliTaskRegistry::registerCoreMaintenanceJob('auto-logins', static function (): void {
             self::cleanupAutoLogins();
         }, 'Remove expired automatic logins.');
@@ -673,7 +673,7 @@ final class CoreTasks
         self::task('maintenance:repair-documents', 'repairDocuments', 'Run the native documents/files path repair operation.',
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
-        self::task('maintenance:run', 'maintenanceRun', 'Run the maintenance jobs of core, modules and plugins and report each result.',
+        self::task('maintenance:run', 'maintenanceRun', 'Run the maintenance jobs of core, modules and plugins for one organization (see --organization) and report each result.',
             'maintenance:run [--job=JOB]... [--yes] [--format=table|json|json-api|csv|md|dokuwiki]',
             'CORE', true, array(), array(
                 // no list of values: modules and plugins register their jobs after the core commands

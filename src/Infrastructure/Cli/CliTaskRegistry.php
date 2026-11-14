@@ -256,7 +256,9 @@ final class CliTaskRegistry
      *
      * A module provides its jobs in modules/<module>/cli.php and a plugin in plugins/<plugin>/cli.php,
      * next to its commands. The name uses the namespace of the module or plugin, like a command. The
-     * job runs in the organization and as the acting user of maintenance:run. It is run every time
+     * job runs in the organization and as the acting user of maintenance:run; an installation with
+     * several organizations runs maintenance:run once per organization (--organization), so a job
+     * that works on the whole installation runs more than once and must not mind. It is run every time
      * maintenance:run runs - typically hourly - and has to decide itself whether there is anything
      * to do, cheaply when there is not. It may return a short message for the result table and
      * throws when it fails; the other jobs run anyway.
