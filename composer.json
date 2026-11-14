@@ -85,6 +85,10 @@
             "Composer\\Config::disableProcessTimeout",
             "phpunit --testsuite=\"CLI Tests\""
         ],
+        "test:http": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit --testsuite=\"HTTP Tests\""
+        ],
         "test:all": [
             "Composer\\Config::disableProcessTimeout",
             "php tests/bin/run-all-tests.php"
