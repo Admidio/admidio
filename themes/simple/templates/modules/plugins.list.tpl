@@ -45,7 +45,7 @@
                             <td class="text-center">
                                 {if $pluginEntry.toggle}
                                     <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
-                                       onclick="{$pluginEntry.toggle.dataHref}"
+                                       onclick="{$pluginEntry.toggle.dataHref|escape:'html'}"
                                        data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip|escape:'html'}"
                                        aria-label="{$pluginEntry.toggle.tooltip|escape:'html'}">
                                         <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
@@ -108,7 +108,7 @@
                         <div class="card-header">
                             {if $pluginEntry.toggle}
                                 <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
-                                   onclick="{$pluginEntry.toggle.dataHref}"
+                                   onclick="{$pluginEntry.toggle.dataHref|escape:'html'}"
                                    data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip|escape:'html'}"
                                    aria-label="{$pluginEntry.toggle.tooltip|escape:'html'}">
                                     <i class="{$pluginEntry.toggle.icon}"></i></a>
