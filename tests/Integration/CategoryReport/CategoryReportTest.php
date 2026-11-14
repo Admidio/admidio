@@ -40,6 +40,8 @@ class CategoryReportTest extends AdministratorTestCase
                 array(true, false, true, false),
                 array(true, true, true, true)
             ) as [$categoryVisible, $administrator, $hidden, $expected]) {
+                // Only an administrator may save a profile field, so save it before the mock takes over.
+                $gCurrentUser = $previousUser;
                 $field->setValue('usf_hidden', (int)$hidden);
                 $field->save();
                 $gCurrentUser = $this->createMock(User::class);
