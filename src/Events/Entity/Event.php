@@ -2,6 +2,7 @@
 namespace Admidio\Events\Entity;
 
 use Admidio\Categories\Entity\Category;
+use Admidio\Events\Repository\EventReminderRepository;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
@@ -457,6 +458,143 @@ class Event extends Entity
         }
 
         return $returnCode;
+    }
+
+    /**
+     * Send a reminder email to all eligible members of this event who have not confirmed or declined yet.
+     * This is triggered a configurable number of days prior to the event start date (default 3).
+     * @return int Returns the number of reminder emails sent.
+     * @throws Exception
+     */
+    public function sendReminderNotification(): int
+    {
+        global $gCurrentOrganization, $gSettingsManager, $gL10n;
+
+        if (!$gSettingsManager->getBool('system_notifications_enabled')) {
+            return 0;
+        }
+
+        $eventId = (int) $this->getValue('dat_id');
+        $datBegin = $this->getValue('dat_begin', 'Y-m-d H:i:s');
+        if (empty($datBegin)) {
+            return 0;
+        }
+
+        $configuredDays = $this->getValue('dat_reminder_days');
+        $reminderDays = ($configuredDays === '' || $configuredDays === null) ? 3 : (int) $configuredDays;
+        if ($reminderDays <= 0) {
+            return 0;
+        }
+
+        $targetDate = (new \DateTime($datBegin))
+            ->modify('-' . $reminderDays . ' days')
+            ->format('Y-m-d');
+        if (DATE_NOW !== $targetDate) {
+            return 0;
+        }
+
+        $roleId = (int) $this->getValue('dat_rol_id');
+        if ($roleId <= 0) {
+            return 0;
+        }
+
+        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $eventId);
+        $authorizedRoleIds = $eventParticipationRoles->getRolesIds();
+        if (count($authorizedRoleIds) === 0) {
+            return 0;
+        }
+
+        $participants = new Participants($this->db, $roleId);
+        $participantsArray = $participants->getParticipantsArray();
+        $doNotRemindUserIds = array();
+        if (is_array($participantsArray)) {
+            foreach ($participantsArray as $participant) {
+                if (in_array((int) $participant['approved'], array(Participants::STATE_ATTENDING, Participants::STATE_REFUSED), true)) {
+                    $doNotRemindUserIds[] = (int) $participant['usrId'];
+                }
+            }
+        }
+
+        $repository = new EventReminderRepository($this->db);
+        $recipients = $repository->getRecipients($eventId, $authorizedRoleIds, $targetDate);
+        $recipientsByUser = array();
+        foreach ($recipients as $row) {
+            $userId = (int) $row['usr_id'];
+            if (in_array($userId, $doNotRemindUserIds, true)) {
+                continue;
+            }
+
+            if (!isset($recipientsByUser[$userId])) {
+                $recipientsByUser[$userId] = array(
+                    'firstname' => (string) $row['firstname'],
+                    'lastname' => (string) $row['lastname'],
+                    'emails' => array()
+                );
+            }
+
+            $emailAddress = trim((string) $row['email']);
+            if ($emailAddress !== '' && !in_array($emailAddress, $recipientsByUser[$userId]['emails'], true)) {
+                $recipientsByUser[$userId]['emails'][] = $emailAddress;
+            }
+        }
+
+        $eventUrl = ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $this->getValue('dat_uuid');
+        $subject = $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($this->getValue('dat_headline')));
+        $sentCount = 0;
+
+        foreach ($recipientsByUser as $userId => $recipient) {
+            if (count($recipient['emails']) === 0) {
+                continue;
+            }
+
+            $recipientName = trim($recipient['firstname']) !== '' ? $recipient['firstname'] : $recipient['lastname'];
+            $email = new Email();
+            foreach ($recipient['emails'] as $emailAddress) {
+                $email->addRecipient($emailAddress, $recipient['firstname'], $recipient['lastname']);
+            }
+
+            $message = $gL10n->get('SYS_EVENT_REMINDER_TITLE', array(
+                $recipientName,
+                $this->getDateTimePeriod(),
+                $this->getValue('dat_headline'),
+                $eventUrl
+            ));
+
+            $email->setSubject($gCurrentOrganization->getValue('org_shortname') . ': ' . $subject);
+            if ($gSettingsManager->getBool('mail_html_registered_users')) {
+                $email->setHtmlMail();
+            } else {
+                $message = str_replace('<br />', "\n", $message);
+            }
+            $email->setText($message);
+
+            try {
+                if (!$email->sendEmail()) {
+                    continue;
+                }
+
+                ++$sentCount;
+                try {
+                    $repository->markSent($eventId, $userId);
+                } catch (\Throwable $e) {
+                    if (isset($GLOBALS['gLogger'])) {
+                        $GLOBALS['gLogger']->error(
+                            'Event reminder for event ID ' . $eventId . ' was sent to user ID ' . $userId
+                            . ', but the reminder status could not be saved: ' . $e->getMessage()
+                        );
+                    }
+                }
+            } catch (\Throwable $e) {
+                if (isset($GLOBALS['gLogger'])) {
+                    $GLOBALS['gLogger']->error(
+                        'Could not send event reminder for event ID ' . $eventId
+                        . ' to user ID ' . $userId . ': ' . $e->getMessage()
+                    );
+                }
+            }
+        }
+
+        return $sentCount;
     }
 
     /**

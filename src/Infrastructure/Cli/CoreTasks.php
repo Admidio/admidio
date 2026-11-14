@@ -15,6 +15,7 @@ use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\Service\EventICalExportService;
 use Admidio\Events\Service\EventService;
+use Admidio\Events\Service\EventReminderService;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Forum\Entity\Post;
@@ -1771,6 +1772,24 @@ final class CoreTasks
                 self::opt('date-from', 'Start date.', 'DATE'),
                 self::opt('date-to', 'End date.', 'DATE')
             ));
+        CliTaskRegistry::registerCore(
+            'event:send-reminders',
+            static function (array $arguments, array $options): int {
+                $service = new EventReminderService($GLOBALS['gDb']);
+                $service->runIfDue(true);
+                return 0;
+            },
+            'Send pending event reminders (or list them in dry‑run mode).',
+            'event:send-reminders [--dry-run]',
+            'EVENTS',
+            true,
+            [],
+            [],
+            false,
+            null,
+            null,
+            false
+        );
     }
 
     private static function registerRoomTasks(): void

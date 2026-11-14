@@ -709,6 +709,10 @@
   <string name="SYS_DEFAULT_VALUE_SELECT_OPTIONS_DESC">Sie können einen Standardwert für dieses Profilfeld festlegen. Dieser Wert wird bei neuen Profilen direkt im Feld voreingestellt. Wählen Sie dazu den Wert aus, den Sie auch im Profil selbst auswählen würden.</string>
   <string name="SYS_DEFAULT_VAR">Standard-#VAR1#</string>
   <string name="SYS_DEFAULT_VIEW">Standard-Darstellung</string>
+  <string name="SYS_EVENT_REMINDER_DAYS">Tage vor Veranstaltung für Erinnerungsmail</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_DESC">Anzahl der Tage vor der Veranstaltung, an denen Mitglieder, die noch nicht zu- oder abgesagt haben, eine Erinnerungsmail erhalten. Setzen Sie den Wert auf 0, um Erinnerungsmails für diese Veranstaltung zu deaktivieren. (Voreinstellung: 3)</string>
+  <string name="SYS_EVENT_REMINDER_TITLE">Hallo #VAR1#! Am #VAR2# findet die Veranstaltung #VAR3# statt, und Ihre Zusage zur Teilnahme fehlt noch! Bitte melden Sie sich unter folgendem Link #VAR4# an</string>
+  <string name="SYS_EVENT_REMINDER_SUBJECT">Erinnerung: Bitte Teilnahme für #VAR1# anmelden oder absagen</string>
   <string name="SYS_DEFAULT_VIEW_DESC">Es kann ein Anzeigemodus für die Veranstaltungen vorausgewählt werden. Im Modus #VAR1_BOLD# werden alle Informationen zu einer Veranstaltung in einem Kasten angezeigt. Im Anzeigemodus #VAR2_BOLD# werden die wichtigsten Veranstaltungsinformationen in einer kompakten Liste angezeigt. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DEFAULT_VIEW_FORUM_DESC">Ein Anzeigemodus für die Forenthemen kann vorgewählt werden. Im Modus #VAR1_BOLD# wird jedes Thema in einer Karte mit einer Vorschau des Thementextes dargestellt. Im Modus #VAR2_BOLD# werden die Themen in einer Liste dargestellt, um die Informationen in einer kompakten Liste zu zeigen. (Standardeinstellung: #VAR1#)</string>
   <string name="SYS_DELETE">Löschen</string>

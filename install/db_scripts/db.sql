@@ -234,6 +234,7 @@ CREATE TABLE %PREFIX%_events
     dat_timestamp_change        timestamp           NULL        DEFAULT NULL,
     dat_allow_comments          boolean             NOT NULL    DEFAULT false,
     dat_additional_guests       boolean             NOT NULL    DEFAULT false,
+    dat_reminder_days           integer             NULL        DEFAULT 3,
     PRIMARY KEY (dat_id)
 )
 ENGINE = InnoDB
@@ -243,6 +244,24 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_events (dat_uuid);
 CREATE INDEX %PREFIX%_idx_dat_evr_original_begin ON %PREFIX%_events (dat_evr_id, dat_recurrence_original_begin);
 CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status);
+
+/*==============================================================*/
+/* Table: adm_event_reminder_sent                               */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_event_reminder_sent
+(
+    ers_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    ers_dat_id                  integer unsigned    NOT NULL,
+    ers_usr_id                  integer unsigned    NOT NULL,
+    ers_timestamp_sent          timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (ers_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_ers_dat_usr ON %PREFIX%_event_reminder_sent (ers_dat_id, ers_usr_id);
+CREATE INDEX %PREFIX%_idx_ers_usr ON %PREFIX%_event_reminder_sent (ers_usr_id);
 
 /*==============================================================*/
 /* Table: adm_event_recurrences                                 */
@@ -1470,6 +1489,10 @@ ALTER TABLE %PREFIX%_events
     ADD CONSTRAINT %PREFIX%_fk_dat_evr         FOREIGN KEY (dat_evr_id)         REFERENCES %PREFIX%_event_recurrences (evr_id)   ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_usr_create  FOREIGN KEY (dat_usr_id_create)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_dat_usr_change  FOREIGN KEY (dat_usr_id_change)  REFERENCES %PREFIX%_users (usr_id)               ON DELETE SET NULL ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_event_reminder_sent
+    ADD CONSTRAINT %PREFIX%_fk_ers_dat         FOREIGN KEY (ers_dat_id)         REFERENCES %PREFIX%_events (dat_id)              ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_ers_usr         FOREIGN KEY (ers_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_event_recurrences
     ADD CONSTRAINT %PREFIX%_fk_evr_dat_master  FOREIGN KEY (evr_dat_id_master)  REFERENCES %PREFIX%_events (dat_id)              ON DELETE RESTRICT ON UPDATE RESTRICT,

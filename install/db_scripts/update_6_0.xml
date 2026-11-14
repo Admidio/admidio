@@ -99,5 +99,18 @@
         COLLATE = utf8mb4_unicode_ci</step>
     <step id="370">CREATE UNIQUE INDEX %PREFIX%_idx_saf_kind_key ON %PREFIX%_sso_auth_failures (saf_kind, saf_key)</step>
     <step id="380">CREATE INDEX %PREFIX%_idx_saf_last_failure ON %PREFIX%_sso_auth_failures (saf_last_failure)</step>
+    <step id="390">ALTER TABLE %PREFIX%_events ADD COLUMN dat_reminder_days integer NULL DEFAULT 3</step>
+    <step id="400">CREATE TABLE %PREFIX%_event_reminder_sent (
+        ers_id integer unsigned NOT NULL AUTO_INCREMENT,
+        ers_dat_id integer unsigned NOT NULL,
+        ers_usr_id integer unsigned NOT NULL,
+        ers_timestamp_sent timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (ers_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci</step>
+    <step id="410">CREATE UNIQUE INDEX %PREFIX%_idx_ers_dat_usr ON %PREFIX%_event_reminder_sent (ers_dat_id, ers_usr_id)</step>
+    <step id="420">CREATE INDEX %PREFIX%_idx_ers_usr ON %PREFIX%_event_reminder_sent (ers_usr_id)</step>
+    <step id="430">ALTER TABLE %PREFIX%_event_reminder_sent
+        ADD CONSTRAINT %PREFIX%_fk_ers_dat FOREIGN KEY (ers_dat_id) REFERENCES %PREFIX%_events (dat_id) ON DELETE CASCADE ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_ers_usr FOREIGN KEY (ers_usr_id) REFERENCES %PREFIX%_users (usr_id) ON DELETE CASCADE ON UPDATE RESTRICT</step>
     <step>stop</step>
 </update>
