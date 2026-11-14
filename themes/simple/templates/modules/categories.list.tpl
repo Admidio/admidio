@@ -16,12 +16,10 @@
                     <td style="word-break: break-word;"><a href="{$category.urlEdit}">{$category.name}</a></td>
                     <td>
                         {if !$category.system}
-                            <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="{$category.uuid}"
-                               data-direction="UP" data-target="adm_category_{$category.uuid}" aria-label="{$l10n->get('SYS_MOVE_UP', [$title])|escape:'html'}">
-                                <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', [$title])}"></i></a>
-                            <a class="admidio-icon-link admidio-category-move" href="javascript:void(0)" data-uuid="{$category.uuid}"
-                               data-direction="DOWN" data-target="adm_category_{$category.uuid}" aria-label="{$l10n->get('SYS_MOVE_DOWN', [$title])|escape:'html'}">
-                                <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', [$title])}"></i></a>
+                            {include 'sys-template-parts/list.move.tpl' moveActions=[
+                                ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', [$title]), 'class' => 'admidio-category-move', 'attributes' => ['data-uuid' => "`$category.uuid`", 'data-target' => "adm_category_`$category.uuid`"]],
+                                ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', [$title]), 'class' => 'admidio-category-move', 'attributes' => ['data-uuid' => "`$category.uuid`", 'data-target' => "adm_category_`$category.uuid`"]]
+                            ]}
                         {/if}
                     </td>
                     <td>

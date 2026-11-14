@@ -27,14 +27,10 @@
                         {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                     </td>
                     <td>
-                        <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}"
-                           data-direction="UP" data-target="adm_menu_entry_{$menuEntry.uuid}" aria-label="{$l10n->get('SYS_MOVE_UP', [$headline])|escape:'html'}">
-                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', [$headline])}"></i>
-                        </a>
-                        <a class="admidio-icon-link admidio-menu-move" href="javascript:void(0)" data-uuid="{$menuEntry.uuid}"
-                           data-direction="DOWN" data-target="adm_menu_entry_{$menuEntry.uuid}" aria-label="{$l10n->get('SYS_MOVE_DOWN', [$headline])|escape:'html'}">
-                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', [$headline])}"></i>
-                        </a>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', [$headline]), 'class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => "`$menuEntry.uuid`", 'data-target' => "adm_menu_entry_`$menuEntry.uuid`"]],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', [$headline]), 'class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => "`$menuEntry.uuid`", 'data-target' => "adm_menu_entry_`$menuEntry.uuid`"]]
+                        ]}
                     </td>
                     <td><a href="{$menuEntry.urlLink}" title="{$menuEntry.description}">{$menuEntry.url}</a></td>
                     <td class="text-center">
