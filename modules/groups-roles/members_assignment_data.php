@@ -70,14 +70,15 @@ try {
 
     header('Content-Type: application/json');
 
-    // Apply the same module access restriction before reading roles or users.
-    if (!$gSettingsManager->getBool('groups_roles_module_enabled')) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    }
-
     // create object of the commited role
     $role = new Role($gDb);
     $role->readDataByUuid($getRoleUuid);
+
+    // Event roles remain accessible when the groups and roles module is disabled.
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')
+        && $role->getValue('cat_name_intern') !== 'EVENTS') {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
 
     // check if user is allowed to assign members to this role
     if (!$role->allowedToAssignMembers($gCurrentUser)) {
