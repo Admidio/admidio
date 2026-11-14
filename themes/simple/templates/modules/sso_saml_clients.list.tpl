@@ -11,7 +11,7 @@
             {foreach $rows as $row}
                 <tr id="{$row.id}">
                     {foreach $row.data as $key => $cell}
-                        <td {if isset($columnAlign)}style="text-align:{$columnAlign[$key]};{/if}">{$cell}</td>
+                        <td {if $key == 0}data-order="{$row.enabledLabel|escape:'html'}" data-search="{$row.enabledLabel|escape:'html'}" {/if}{if isset($columnAlign)}style="text-align:{$columnAlign[$key]};{/if}">{$cell}</td>
                     {/foreach}
                 </tr>
             {/foreach}
