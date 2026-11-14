@@ -15,6 +15,8 @@ class InstallationStatisticsTest extends TestCase
 
     protected function setUp(): void
     {
+        require_once dirname(__DIR__, 2) . '/constants.php';
+
         // Exercise the installer fallback without inheriting another test's language or settings stubs.
         foreach (array('gL10n', 'gSettingsManager') as $name) {
             if (array_key_exists($name, $GLOBALS)) {
@@ -234,9 +236,6 @@ class InstallationStatisticsTest extends TestCase
     {
         if (!defined('TBL_COMPONENTS')) {
             define('TBL_COMPONENTS', 'adm_components');
-        }
-        if (!defined('ADMIDIO_VERSION_TEXT')) {
-            define('ADMIDIO_VERSION_TEXT', '6.0.0');
         }
         $originalLogger = $GLOBALS['gLogger'] ?? null;
         $GLOBALS['gLogger'] = new \Psr\Log\NullLogger();
