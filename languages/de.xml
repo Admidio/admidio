@@ -1531,6 +1531,7 @@
   <string name="SYS_PLUGIN_INVALID_ID">Der Plugin-Ordner #VAR1# ist kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</string>
   <string name="SYS_PLUGIN_INVALID_MANIFEST">Dieses Plugin ist nicht mit dem Plugin-System von Admidio ab Version 6.0 kompatibel: Das Manifest #VAR1# ist kein gültiges JSON-Objekt.</string>
   <string name="SYS_PLUGIN_LEGACY">Dieses Plugin wurde für eine Admidio-Version vor 6.0 erstellt. Aktualisiere es auf die aktuelle Version; seine Daten und Einstellungen bleiben erhalten.</string>
+  <string name="SYS_PLUGIN_LEGACY_CONFIG_UNREADABLE">Die alte Konfigurationsdatei #VAR2# des Plugins #VAR1# konnte nicht gelesen werden (#VAR3#), daher wurden ihre Einstellungen nicht übernommen. Korrigiere die Datei oder lösche sie, um die Standardeinstellungen zu verwenden, und wiederhole dann das Update.</string>
   <string name="SYS_PLUGIN_LEGACY_UPDATE">Auf die aktuelle Version aktualisieren</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">Diese Plugins konnten nicht geladen werden und sind daher inaktiv:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>

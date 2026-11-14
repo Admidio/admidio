@@ -656,6 +656,39 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that an old config.php that cannot run is neither lost nor replaced by the defaults
+     *
+     * @testdox An old config.php that cannot be read stops the installation, is kept, and is taken over once corrected
+     */
+    public function testAnUnreadableOldConfigStopsTheInstallation(): void
+    {
+        global $gCurrentOrgId;
+
+        $folder = $this->pluginsPath . '/' . self::PLUGIN_ID;
+        // a syntax error: the semicolon is missing
+        $this->createFixtureFile($folder, 'config.php', "<?php\n\$plg_greeting = 'Servus'\n");
+        $this->writeUpdateScript('1_2', array(30 => 'updateStep30ImportLegacyConfig'));
+
+        try {
+            PluginInstaller::enable($this->plugin());
+            $this->fail('The installation was expected to stop at the unreadable config.php.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('config.php', $exception->getMessage());
+        }
+
+        $this->assertFileExists($folder . '/config.php', 'The old configuration must be kept.');
+        $this->assertFalse((bool)$this->component()['com_update_completed']);
+        $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState(self::PLUGIN_ID));
+
+        file_put_contents($folder . '/config.php', "<?php\n\$plg_greeting = 'Servus';\n");
+        $plugin = $this->plugin();
+        PluginInstaller::update($plugin);
+
+        $this->assertTrue((bool)$this->component()['com_update_completed']);
+        $this->assertSame('Servus', $this->preferences((int)$gCurrentOrgId, $plugin)['hello_greeting']);
+    }
+
+    /**
      * Test the step with which a plugin of the Admidio distribution takes over its old config.php
      *
      * @testdox A plugin of the Admidio distribution converts the settings of its old config.php

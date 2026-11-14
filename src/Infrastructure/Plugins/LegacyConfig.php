@@ -19,7 +19,10 @@ use Throwable;
  * ));
  * ```
  * The file was one for the whole installation, so what it holds is written into every
- * organization. An installation that never had the file keeps the defaults.
+ * organization. An installation that never had the file keeps the defaults. A file that is there but
+ * can no longer be run stops the update step: the plugin's installation keeps its checkpoint, and the
+ * update of Admidio stops before it removes adm_plugins/, so the file and its settings are still there
+ * when the administrator has corrected it - or deleted it to go on with the defaults.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -92,11 +95,13 @@ final class LegacyConfig
      * The variables the old config.php sets, as name => value.
      *
      * The file is included, which runs it - as every page view of the old plugin did. A file that
-     * can no longer run is reported and counts as missing, so that it cannot keep the plugin from
-     * being installed.
+     * can no longer run (a syntax error, a function PHP has dropped) is not taken for a missing one:
+     * that would install the plugin with its defaults, and the update of Admidio would then delete
+     * the file with the old folder.
      * @param string $pluginId The ID of the plugin, which is the name of its folder.
      * @param string $legacyFolder The name the folder had in adm_plugins/, if it was a different one.
      * @return array<string,mixed>
+     * @throws Exception If the file exists but cannot be run.
      */
     public static function read(string $pluginId, string $legacyFolder = ''): array
     {
@@ -120,12 +125,12 @@ final class LegacyConfig
         try {
             $variables = $include($file);
         } catch (Throwable $exception) {
-            $gLogger->warning(
+            $gLogger->error(
                 'The old configuration of the plugin "' . $pluginId . '" could not be read.',
                 array('file' => $file, 'error' => $exception->getMessage())
             );
 
-            return array();
+            throw new Exception('SYS_PLUGIN_LEGACY_CONFIG_UNREADABLE', array($pluginId, $file, $exception->getMessage()));
         }
 
         $gLogger->notice(
