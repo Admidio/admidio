@@ -1081,7 +1081,11 @@ class SSOClientPresenter extends PagePresenter
             $actionsTemplate->assign('listId', 'sso-clients-saml');
             $templateClient[] = $actionsTemplate->fetch();
 
-            $columnValues[] = array('id' => 'adm_saml_client_' . $clientUUID, 'data' => $templateClient);
+            $columnValues[] = array(
+                'id' => 'adm_saml_client_' . $clientUUID,
+                'enabledLabel' => $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED'),
+                'data' => $templateClient
+            );
         }
 
         // add table to the form
@@ -1146,7 +1150,11 @@ class SSOClientPresenter extends PagePresenter
             $actionsTemplate->assign('listId', 'sso-clients-oidc');
             $templateClient[] = $actionsTemplate->fetch();
 
-            $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
+            $columnValues[] = array(
+                'id' => 'adm_oidc_client_' . $clientUUID,
+                'enabledLabel' => $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED'),
+                'data' => $templateClient
+            );
         }
 
         // Add JS for reloading the metadata of a SAML client
@@ -1207,6 +1215,12 @@ class SSOClientPresenter extends PagePresenter
 
                   // Update data-enabled attribute
                   \$link.data('enabled', newEnabled);
+
+                  // Update the status used for sorting and searching.
+                  var statusLabel = newEnabled ? " . json_encode($gL10n->get('SYS_ENABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_DISABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";
+                  var \$cell = \$link.closest('td');
+                  \$cell.attr('data-order', statusLabel).attr('data-search', statusLabel);
+                  \$link.closest('table').DataTable().cell(\$cell).invalidate('dom').draw(false);
                 } else {
                   alert('Update failed: ' + (data.message || 'Unknown error'));
                 }
