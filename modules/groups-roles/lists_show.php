@@ -144,6 +144,12 @@ try {
             if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleID))) {
                 $isAdministratorUserstatus = true;
             }
+
+            // Check if comment privacy is enabled and user has rights to see private comments
+            if ((bool)$event->getValue('dat_allow_comments') && (bool)$event->getValue('dat_comment_privacy')) {
+                // Only show comments to admins and leaders if privacy is enabled
+                $showComment = $gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleID);
+            }
         }
     }
 
