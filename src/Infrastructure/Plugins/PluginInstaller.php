@@ -52,7 +52,9 @@ final class PluginInstaller
      * database that is already in the newest shape, which is what install.sql creates: a step that
      * changes a table is written with error="ignore".
      *
-     * An installation that fails leaves no component record, so it can simply be repeated.
+     * An installation whose update scripts fail keeps its component record at the last step that
+     * ran: the plugin then waits for its update, and update() resumes from that step and completes
+     * the installation. Starting over would run install.sql on the tables it already created.
      * @param Plugin $plugin
      * @param bool $addMenuEntry Whether the plugin should get a menu entry below "Extensions". A
      *                           plugin without a page, and one whose manifest says "menu": false,
@@ -103,11 +105,9 @@ final class PluginInstaller
         if ($firstUpdateVersion !== null) {
             try {
                 self::runUpdateScripts($plugin);
-            } catch (\Throwable $exception) {
-                $component->delete();
+            } finally {
+                // after a failure the record states the checkpoint and that the run did not end
                 PluginRegistry::reset();
-
-                throw $exception;
             }
         }
 
@@ -125,6 +125,11 @@ final class PluginInstaller
 
     /**
      * Run the update scripts of a plugin up to the version its files declare.
+     *
+     * A run that failed before resumes from the step it reached. If that run was the one of an
+     * installation, the plugin has no menu entry yet, and gets it now - unless its update scripts
+     * took one over. Only a failed earlier update of a plugin whose entry an administrator deleted
+     * gets the entry back as well.
      * @param Plugin $plugin
      * @return void
      * @throws Exception
@@ -134,6 +139,8 @@ final class PluginInstaller
         if (!PluginRegistry::isInstalled($plugin->id)) {
             throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($plugin->id));
         }
+
+        $resumesFailedRun = !PluginRegistry::isUpdateCompleted($plugin->id);
 
         self::runUpdateScripts($plugin);
 
@@ -145,7 +152,13 @@ final class PluginInstaller
 
         // The new version may bring or drop pages, so the stubs are written from the current list.
         PluginPages::publish($plugin);
-        self::updateMenuEntries($plugin, PluginRegistry::getComponentId($plugin->id));
+
+        $componentId = PluginRegistry::getComponentId($plugin->id);
+        if ($resumesFailedRun && $plugin->wantsMenuEntry() && !self::hasMenuEntry($componentId)) {
+            self::addMenuEntry($plugin, $componentId);
+        } else {
+            self::updateMenuEntries($plugin, $componentId);
+        }
     }
 
     /**

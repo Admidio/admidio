@@ -461,7 +461,8 @@ final class UpdateStepsCode
      * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
      * again with everything it already has - its version, its preferences and its data.
      *
-     * A built-in plugin that has no component row at all is installed here, and the menu entry of a
+     * A built-in plugin that has no component row at all is installed here, one whose installation
+     * failed in an earlier attempt is completed, and the menu entry of a
      * plugin that only contributes a widget is removed, because the file it pointed at is gone.
      * @return void
      * @throws Exception
@@ -480,6 +481,12 @@ final class UpdateStepsCode
             if (!PluginRegistry::isInstalled($id)) {
                 PluginInstaller::install($plugin);
                 continue;
+            }
+
+            // An installation of an earlier attempt of this step failed half way. It is completed
+            // now, while the config.php in the old folder that it imports is still there.
+            if (!PluginRegistry::isUpdateCompleted($id)) {
+                PluginInstaller::update($plugin);
             }
 
             // The plugin keeps its component row and every setting an administrator made. What it
