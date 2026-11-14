@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">#VAR1_BOLD# வகையை நீக்க முடியவில்லை, ஏனெனில் #VAR2# சார்ந்த உள்ளீடுகள்.</string>
   <string name="SYS_DONT_SHOW">காட்ட வேண்டாம்</string>
   <string name="SYS_DOWNLOAD_ALBUM">ஆல்பத்தைப் பதிவிறக்கு</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">தரவுத்தள காப்புப்பிரதியைப் பதிவிறக்கு</string>
   <string name="SYS_DOWNLOAD_FILE">கோப்பைப் பதிவிறக்கு</string>
   <string name="SYS_DOWNLOAD_ICAL">iCal ஐப் பதிவிறக்கு</string>
   <string name="SYS_DOWNLOAD_PHOTO">புகைப்படத்தைப் பதிவிறக்கு</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">அட்மிடியோ-க்கு #VAR1# அல்லது அதற்கு மேற்பட்ட பதிப்பு தேவை</string>
   <string name="SYS_PIPE">பைப்பு (|)</string>
   <string name="SYS_PLEASE_CHOOSE">விருப்பத்தைத் தேர்ந்தெடுக்கவும்</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1608,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">மின்னஞ்சல் அனுப்பு</string>
   <string name="SYS_SEND_EMAIL_FORMER">முன்னாள் உறுப்பினர்களுக்கு மின்னஞ்சல்களை அனுப்பவும்</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">இந்த விருப்பம் அமைக்கப்பட்டிருந்தால், தனிப்பட்ட முன்னாள் உறுப்பினர்களுக்கும், ஒரு பதவியில் உள்ள அனைத்து முன்னாள் உறுப்பினர்களுக்கும் மின்னஞ்சல்களை அனுப்ப முடியும். (இயல்புநிலை: செயல்படுத்தப்பட்டது)</string>
-  <string name="SYS_SEND_EMAIL_TO">#VAR1#-க்கு மின்னஞ்சல் அனுப்பு</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">பயனரின் அனைத்து மின்னஞ்சல் முகவரிகளுக்கும் மின்னஞ்சல்களை அனுப்பவும்</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">இந்த அமைப்பு செயல்படுத்தப்பட்டால், சுயவிவரத்தில் சேமிக்கப்பட்டுள்ள அனைத்து பயனர் மின்னஞ்சல் முகவரிகளுக்கும் மின்னஞ்சல்கள் அனுப்பப்படும். இந்த அமைப்பு செயலிழக்கப்பட்டால், EMAIL என்ற உள் பெயரைக் கொண்ட சுயவிவரப் புலத்தில் உள்ள மின்னஞ்சல் முகவரிக்கு மட்டுமே மின்னஞ்சல்கள் அனுப்பப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
   <string name="SYS_SEND_GREETING_CARD">வாழ்த்து அட்டை அனுப்பு</string>

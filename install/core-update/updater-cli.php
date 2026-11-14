@@ -48,7 +48,7 @@ require_once __DIR__ . '/lib/cli.php';
 $arguments = array_slice($argv, 1);
 $command = '';
 $values = array('format' => 'text', 'host' => (string)getenv('ADMIDIO_HOST'), 'channel' => 'stable', 'ref' => '', 'backup' => '',
-    'on-changed' => 'archive', 'dump-password-env' => '');
+    'statistics' => '', 'on-changed' => 'archive', 'dump-password-env' => '');
 $flags = array('dry-run' => false, 'skip-database' => false, 'resume' => false, 'yes' => false, 'no-interaction' => false,
     'database-restored' => false);
 foreach ($arguments as $argument) {
@@ -69,7 +69,7 @@ foreach ($arguments as $argument) {
     }
 }
 
-if (!in_array($command, array('status', 'apply', 'rollback', 'database'), true) || !in_array($values['format'], array('text', 'json'), true)
+if (!in_array($values['statistics'], array('', 'yes', 'no'), true) || !in_array($command, array('status', 'apply', 'rollback', 'database'), true) || !in_array($values['format'], array('text', 'json'), true)
     || !in_array($values['backup'], array('', 'dump', 'own'), true) || !in_array($values['on-changed'], U\ON_CHANGED, true)) {
     fwrite($command === 'help' ? STDOUT : STDERR, 'Usage: php install/core-update/cli.php <command> [options] [--format=text|json] [--host=<host>]' . PHP_EOL
         . PHP_EOL
@@ -86,6 +86,7 @@ if (!in_array($command, array('status', 'apply', 'rollback', 'database'), true) 
         . '                              your own backup' . PHP_EOL
         . '  --on-changed=archive|cancel files that were changed or do not belong to the installed version are' . PHP_EOL
         . '                              kept in an archive and replaced (default), or the update is cancelled' . PHP_EOL
+        . '  --statistics=yes|no         send pseudonymous statistics after success; default: retain the saved choice' . PHP_EOL
         . '  --dry-run                   check and plan the update, then cancel it' . PHP_EOL
         . '  --skip-database             install the files only; maintenance mode stays on until the database' . PHP_EOL
         . '                              is updated with apply --resume or install/update.php' . PHP_EOL
@@ -191,6 +192,7 @@ try {
             'ref' => $values['ref'],
             'backup' => $values['backup'],
             'onChanged' => $values['on-changed'],
+            'statistics' => $values['statistics'],
             'dryRun' => $flags['dry-run'],
             'skipDatabase' => $flags['skip-database'],
             'resume' => $flags['resume'],

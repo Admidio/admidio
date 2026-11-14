@@ -112,6 +112,7 @@ trait PreparedUpdate
         file_put_contents($workspace . '/update-manifest.json', $manifest);
         mkdir($workspace . '/extracted');
         U\updateState($this->root, $state['updateId'], static fn(array $s): array => array_merge($s, array(
+            'statisticsData' => array('id' => '12345678-1234-4234-8234-123456789abc'), 'statisticsEnabled' => false,
             'state' => 'extracting', 'cursor' => 0, 'cursorTotal' => 0, 'channel' => 'stable', 'targetVersion' => '5.1.0', 'targetVersionText' => '5.1.0')));
 
         $context = array(

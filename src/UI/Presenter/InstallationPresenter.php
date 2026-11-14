@@ -2,6 +2,7 @@
 namespace Admidio\UI\Presenter;
 
 use Admidio\Infrastructure\Exception;
+use Smarty\Smarty;
 use Throwable;
 
 /**
@@ -52,13 +53,22 @@ class InstallationPresenter extends PagePresenter
 
         // initialize php template engine smarty
         $this->smarty = $this->createSmartyObject();
-        $this->smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
         $this->assignBasicSmartyVariables();
 
         // if no modus set then set installation modus
         if ($headline === '') {
             $this->setInstallationModus();
         }
+    }
+
+    /** Installation templates also need shared components before a theme has been configured. */
+    public static function createSmartyObject(): Smarty
+    {
+        $smarty = parent::createSmartyObject();
+        $smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_INSTALLATION . '/templates/', 'inst');
+        $smarty->addTemplateDir(ADMIDIO_PATH . FOLDER_THEMES . '/simple/templates/', 'simple');
+
+        return $smarty;
     }
 
     /**

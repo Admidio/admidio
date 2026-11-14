@@ -548,7 +548,7 @@ final class CoreTasks
             'Install the newest Admidio release with the core updater: check, download, install the files and update the database.'
                 . ' Asks before the download and before the installation unless --yes is given. If an update stops,'
                 . ' continue it with "php install/core-update/cli.php apply --resume".',
-            'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--skip-database]'
+            'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--statistics=yes|no] [--skip-database]'
                 . ' [--dump-password-env=VAR] [--resume] [--dry-run] [--yes] [--format=text|json]',
             'PREFERENCES',
             true,
@@ -561,6 +561,8 @@ final class CoreTasks
                     array('dump', 'own')),
                 self::opt('on-changed', 'Changed or unknown files are archived and replaced (default), or the update is cancelled.', 'ACTION',
                     false, false, false, array('archive', 'cancel')),
+                self::opt('statistics', 'Send pseudonymous statistics after success; default: retain the saved choice.', 'CHOICE',
+                    false, false, false, array('yes', 'no')),
                 self::opt('skip-database', 'Install the files only; maintenance mode stays on until the database is updated.', '', false, false, true),
                 self::opt('dump-password-env', 'Environment variable with the password that encrypts the backup of the database.', 'VAR'),
                 self::opt('resume', 'Continue the unfinished update.', '', false, false, true),
@@ -3136,7 +3138,7 @@ final class CoreTasks
     public static function updateApply(array $arguments, array $options): int
     {
         $updaterArguments = array('apply');
-        foreach (array('channel', 'ref', 'backup', 'on-changed', 'dump-password-env') as $name) {
+        foreach (array('channel', 'ref', 'backup', 'on-changed', 'statistics', 'dump-password-env') as $name) {
             $value = CliApplication::optionString($options, $name);
             if ($value !== '') {
                 $updaterArguments[] = '--' . $name . '=' . $value;
@@ -3709,6 +3711,7 @@ final class CoreTasks
 
             Entity::setLoggingEnabled(false);
             $defaultOrgPreferences = PreferenceDefinitions::defaults();
+            unset($defaultOrgPreferences['system_tenant_id'], $defaultOrgPreferences['system_statistics_last_sent']);
             $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');
 
             $newSettingsManager =& $organization->getSettingsManager();

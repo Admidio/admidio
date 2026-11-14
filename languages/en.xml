@@ -252,6 +252,8 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNUALLY">Annually</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. A persistent installation ID allows reports to be linked over time. The receiving server can see the sender’s IP address, and third-party plugin names may identify an organization. The JSON below describes the data to be sent.</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">For privacy reasons, this update dialog only shows the JSON structure with placeholders. Actual installation data are hidden because the dialog can be opened before logging in.</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_APPLY_ALL_AND_UPLOAD">Accept all &amp; upload</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
@@ -594,15 +596,15 @@
   <string name="SYS_CORE_UPDATE_START_DESC">The updater checks which version is available and whether this server is ready for it. Nothing is changed before you confirm.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Start or continue update</string>
   <string name="SYS_CORE_UPDATE_STEPS">Steps of the update</string>
-  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Back up database</string>
   <string name="SYS_CORE_UPDATE_STEP_CHECK">Check requirements</string>
+  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Prepare installation</string>
+  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Review update</string>
+  <string name="SYS_CORE_UPDATE_STEP_BACKUP">Back up database</string>
+  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Install files</string>
   <string name="SYS_CORE_UPDATE_STEP_DATABASE">Update database</string>
-  <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Download update</string>
-  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finish</string>
-  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Replace files</string>
-  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Unpack and compare files</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finish update</string>
   <string name="SYS_CORE_UPDATE_STEP_RESTORE">Restore previous version</string>
-  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Review changes</string>
+  <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Download update</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio has been updated to version #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_TARGET">New version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio update</string>
@@ -762,7 +764,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">The category #VAR1_BOLD# could not be deleted because #VAR2# entries depend on it.</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
@@ -1523,7 +1524,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ADD_FROM_DIRECTORY">Add from plugin directory</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
@@ -1866,11 +1866,11 @@
   <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">The display name for the sender\'s email address. This field is required if a sender email address is provided.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Send pseudonymous statistics</string>
   <string name="SYS_SEND_COPY">Send copy of email to my address</string>
   <string name="SYS_SEND_EMAIL">Send email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send emails to former members</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then emails could be sent to individual former members, as well as to all former members of a role. (Default: Activated)</string>
-  <string name="SYS_SEND_EMAIL_TO">Send email to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send emails to all email addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, emails will be sent to all user email addresses stored in the profile. If the setting is deactivated, emails will only be sent to the email address from the profile field with the internal name EMAIL. (Default: disabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>
@@ -2260,6 +2260,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">The installation ID has not been initialized.</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Save all email settings before using this function.\nA test email with the subject #VAR1_BOLD# will be sent to the logged-in user\'s email address using the saved settings. When sending via SMTP, a delivery log is displayed to help diagnose problems.</string>
   <string name="SYS_TEXT">Text</string>
@@ -2401,4 +2402,6 @@
   <string name="SYS_YOUR_LISTS">Your lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Uncheck the checkbox to continue without sending these data and disable monthly sending.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Send #VAR1#pseudonymous technical data#VAR2# to admidio.org once a month. Sending is checked when the organization data are loaded.</string>
 </resources>

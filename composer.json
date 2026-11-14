@@ -98,6 +98,7 @@
     },
     "archive": {
         "exclude": [
+            "/api/",
             ".DS_Store",
             "**/.DS_Store",
             "__MACOSX",

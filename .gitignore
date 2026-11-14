@@ -29,6 +29,9 @@
 # Don't commit the external libs from vendor folder
 /vendor
 
+# Local statistics API for development
+/api/
+
 # Local configuration and cache of the regression test suite
 /.env.test
 /.phpunit.cache/
