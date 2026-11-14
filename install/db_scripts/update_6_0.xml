@@ -58,17 +58,57 @@
     <step id="200" database="pgsql">CREATE INDEX %PREFIX%_idx_ind_ini_id ON %PREFIX%_inventory_item_data (ind_ini_id)</step>
     <step id="210">CREATE INDEX %PREFIX%_idx_ini_org_status ON %PREFIX%_inventory_items (ini_org_id, ini_status)</step>
     <step id="220">CREATE INDEX %PREFIX%_idx_ivr_item_status_period ON %PREFIX%_inventory_reservations (ivr_ini_id, ivr_status, ivr_begin)</step>
-    <step id="225" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY prf_org_id integer unsigned NULL</step>
-    <step id="225" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_org_id DROP NOT NULL</step>
-    <step id="230">UpdateStepsCode::updateStep60CreateTenantId</step>
-    <step id="240">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
+    <step id="230">ALTER TABLE %PREFIX%_oidc_access_tokens ADD COLUMN oat_oac_id integer unsigned</step>
+    <step id="240">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD COLUMN ort_oac_id integer unsigned</step>
+    <step id="250">ALTER TABLE %PREFIX%_oidc_access_tokens ADD CONSTRAINT %PREFIX%_fk_oat_oac_id FOREIGN KEY (oat_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="260">ALTER TABLE %PREFIX%_oidc_refresh_tokens ADD CONSTRAINT %PREFIX%_fk_ort_oac_id FOREIGN KEY (ort_oac_id) REFERENCES %PREFIX%_oidc_auth_codes (oac_id) ON DELETE SET NULL ON UPDATE RESTRICT</step>
+    <step id="270">ALTER TABLE %PREFIX%_saml_clients ADD COLUMN smc_x509_encryption_certificate text NULL</step>
+    <step id="280" database="mysql">ALTER TABLE %PREFIX%_saml_clients DROP INDEX smc_client_id</step>
+    <step id="290" database="pgsql">ALTER TABLE %PREFIX%_saml_clients DROP CONSTRAINT %PREFIX%_saml_clients_smc_client_id_key</step>
+    <step id="300">CREATE UNIQUE INDEX %PREFIX%_idx_smc_org_client_id ON %PREFIX%_saml_clients (smc_org_id, smc_client_id)</step>
+    <step id="310">ALTER TABLE %PREFIX%_saml_clients
+        ADD COLUMN smc_metadata_refresh bool NOT NULL DEFAULT false,
+        ADD COLUMN smc_metadata_signing_certificate text NULL,
+        ADD COLUMN smc_metadata_checked timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_next_check timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_etag varchar(255) NULL,
+        ADD COLUMN smc_metadata_last_modified varchar(100) NULL,
+        ADD COLUMN smc_metadata_hash varchar(64) NULL,
+        ADD COLUMN smc_metadata_valid_until timestamp NULL DEFAULT NULL,
+        ADD COLUMN smc_metadata_cache_duration integer unsigned NULL,
+        ADD COLUMN smc_metadata_failures integer unsigned NOT NULL DEFAULT 0,
+        ADD COLUMN smc_metadata_error varchar(100) NULL</step>
+    <!-- refresh tokens are issued for the offline_access scope only: clients that could get them keep their option -->
+    <step id="320">UPDATE %PREFIX%_oidc_clients SET ocl_scope = CONCAT(COALESCE(ocl_scope, ''), ' offline_access') WHERE ocl_grant_types LIKE '%refresh_token%' AND (ocl_scope IS NULL OR ocl_scope NOT LIKE '%offline_access%')</step>
+    <!-- one session can sign in several times at the same SAML client, each with its own SessionIndex -->
+    <step id="330" database="mysql">DROP INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants</step>
+    <step id="340" database="pgsql">DROP INDEX %PREFIX%_idx_ssp_session_client</step>
+    <step id="350">CREATE UNIQUE INDEX %PREFIX%_idx_ssp_session_client ON %PREFIX%_saml_session_participants (ssp_external_session_id, ssp_client_id, ssp_session_index)</step>
+    <!-- failed client authentications at the OIDC endpoints, for the lockout with growing delay -->
+    <step id="360">CREATE TABLE %PREFIX%_sso_auth_failures (
+            saf_id                      integer unsigned    AUTO_INCREMENT,
+            saf_kind                    varchar(12)         NOT NULL,
+            saf_key                     varchar(64)         NOT NULL,
+            saf_count                   integer unsigned    NOT NULL    DEFAULT 0,
+            saf_last_failure            integer unsigned    NOT NULL,
+            saf_locked_until            integer unsigned    NOT NULL    DEFAULT 0,
+            PRIMARY KEY (saf_id)
+        )
+        ENGINE = InnoDB
+        DEFAULT CHARSET = utf8mb4
+        COLLATE = utf8mb4_unicode_ci</step>
+    <step id="370">CREATE UNIQUE INDEX %PREFIX%_idx_saf_kind_key ON %PREFIX%_sso_auth_failures (saf_kind, saf_key)</step>
+    <step id="380">CREATE INDEX %PREFIX%_idx_saf_last_failure ON %PREFIX%_sso_auth_failures (saf_last_failure)</step>
+    <step id="390" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY prf_org_id integer unsigned NULL</step>
+    <step id="400" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_org_id DROP NOT NULL</step>
+    <step id="410">UpdateStepsCode::updateStep60CreateTenantId</step>
+    <step id="420">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
         SELECT org_id, 'system_statistics_enabled', '1'
         FROM %PREFIX%_organizations
         WHERE NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
         WHERE prf_org_id = org_id AND prf_name = 'system_statistics_enabled')</step>
-    <step id="250">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
+    <step id="430">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
         SELECT NULL, 'system_statistics_last_sent', ''
         WHERE NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
-        WHERE prf_org_id IS NULL AND prf_name = 'system_statistics_last_sent')</step>
-    <step>stop</step>
+        WHERE prf_org_id IS NULL AND prf_name = 'system_statistics_last_sent')</step>    <step>stop</step>
 </update>

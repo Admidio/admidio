@@ -5,14 +5,21 @@
  * A client whose access is restricted to roles is checked while the authorization request runs.
  * What that check issues - the access token, the refresh token - outlives the request, so the end
  * of the membership has to reach the tokens as well. See finding 48.
+ *
+ * The SSO module reacts through the lifecycle hooks of memberships and roles, which fire after the
+ * commit. The tests run inside a transaction that is rolled back, so they flush the hook queue
+ * where the commit would be.
  */
 
 namespace Admidio\Tests\Integration\Sso;
 
+use Admidio\Hooks\Hooks;
+use Admidio\Hooks\Service\EntityHookQueue;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\SSO\Repository\RefreshTokenRepository;
 use Admidio\SSO\Service\SSOAccessRevocationService;
+use Admidio\SSO\Service\SSOHooks;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\AdministratorTestCase;
 
@@ -23,6 +30,26 @@ class SsoAccessRevocationTest extends AdministratorTestCase
     protected function getFixture(): AdmidioTestFixture
     {
         return new AdmidioTestFixture($this->getDatabase());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        SSOHooks::register();
+    }
+
+    protected function tearDown(): void
+    {
+        // only the registrations of the SSO module are removed, other hooks of the run stay
+        foreach (array('membership_updated', 'membership_deleting', 'membership_deleted', 'logout') as $action) {
+            Hooks::removeAction($action, 'sso');
+        }
+        Hooks::removeResolver('logout_response', 'sso');
+        foreach (array('login_succeeded', 'auto_login_succeeded', 'logout') as $action) {
+            Hooks::removeAction($action, 'sso_session_cookie');
+        }
+        Hooks::removeResolver('session_id', 'sso_session_cookie');
+        parent::tearDown();
     }
 
     /**
@@ -48,8 +75,9 @@ class SsoAccessRevocationTest extends AdministratorTestCase
         $this->assertFalse($this->isRevoked(TBL_OIDC_ACCESS_TOKENS, 'oat', $accessToken));
         $this->assertFalse($this->isRevoked(TBL_OIDC_REFRESH_TOKENS, 'ort', $refreshToken));
 
-        // Removing the user from the role has to reach the tokens through Membership::delete().
+        // Removing the user from the role has to reach the tokens through the membership hooks.
         (new Membership($this->getDatabase(), (int) $membership['mem_id']))->delete();
+        EntityHookQueue::flush();
 
         $this->assertTrue($this->isRevoked(TBL_OIDC_ACCESS_TOKENS, 'oat', $accessToken));
         $this->assertTrue($this->isRevoked(TBL_OIDC_REFRESH_TOKENS, 'ort', $refreshToken));
@@ -75,6 +103,7 @@ class SsoAccessRevocationTest extends AdministratorTestCase
         $accessToken = $this->createToken($client, $user['usr_id'], TBL_OIDC_ACCESS_TOKENS, 'oat');
 
         (new Membership($this->getDatabase(), (int) $membership['mem_id']))->delete();
+        EntityHookQueue::flush();
 
         $this->assertFalse($this->isRevoked(TBL_OIDC_ACCESS_TOKENS, 'oat', $accessToken));
     }
@@ -101,13 +130,14 @@ class SsoAccessRevocationTest extends AdministratorTestCase
         $accessToken = $this->createToken($client, $user['usr_id'], TBL_OIDC_ACCESS_TOKENS, 'oat');
 
         (new Membership($this->getDatabase(), (int) $firstMembership['mem_id']))->delete();
+        EntityHookQueue::flush();
 
         $this->assertFalse($this->isRevoked(TBL_OIDC_ACCESS_TOKENS, 'oat', $accessToken));
     }
 
     /**
-     * Deleting a role removes its memberships with one bulk statement that never reaches
-     * Membership::delete(), so the members have to be collected before the role is gone.
+     * Deleting a role also removes its access rights, so the members have to be collected before
+     * the role is gone (membership_deleting) and checked after the commit (membership_deleted).
      *
      * @testdox Deleting a granting role revokes the tokens of its members
      */
@@ -129,6 +159,32 @@ class SsoAccessRevocationTest extends AdministratorTestCase
         $accessToken = $this->createToken($client, $user['usr_id'], TBL_OIDC_ACCESS_TOKENS, 'oat');
 
         (new Role($this->getDatabase(), (int) $accessRole['rol_id']))->delete();
+        EntityHookQueue::flush();
+
+        $this->assertTrue($this->isRevoked(TBL_OIDC_ACCESS_TOKENS, 'oat', $accessToken));
+    }
+
+    /**
+     * @testdox Ending the membership by its end date revokes the tokens of that client
+     */
+    public function testEndingTheMembershipByItsEndDateRevokesTheTokens(): void
+    {
+        global $gCurrentOrgId;
+
+        $fixture = $this->getFixture();
+        $suffix = $this->suffix();
+
+        $accessRole = $fixture->createAndSaveRole('SSO ended ' . $suffix, $gCurrentOrgId);
+        $user = $fixture->createAndSaveUser('sso-ended-' . $suffix, 'sso-ended-' . $suffix . '@example.local');
+        $membership = $fixture->assignUserToRole($user['usr_id'], $accessRole['rol_id']);
+
+        $client = $this->createRestrictedClient($suffix, array($accessRole['rol_id']));
+        $accessToken = $this->createToken($client, $user['usr_id'], TBL_OIDC_ACCESS_TOKENS, 'oat');
+
+        $ended = new Membership($this->getDatabase(), (int) $membership['mem_id']);
+        $ended->setValue('mem_end', date('Y-m-d', strtotime('-1 day')));
+        $ended->save();
+        EntityHookQueue::flush();
 
         $this->assertTrue($this->isRevoked(TBL_OIDC_ACCESS_TOKENS, 'oat', $accessToken));
     }

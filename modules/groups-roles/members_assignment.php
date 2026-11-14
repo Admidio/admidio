@@ -33,11 +33,6 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
-    // Apply the same module access restriction as the groups and roles page.
-    if (!$gSettingsManager->getBool('groups_roles_module_enabled')) {
-        throw new Exception('SYS_MODULE_DISABLED');
-    }
-
     // Initialize and check the parameters
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
     $getRoleUuid = admFuncVariableIsValid($_GET, 'role_uuid', 'uuid', array('requireValue' => true, 'directOutput' => true));
@@ -49,6 +44,12 @@ try {
     $role = new Role($gDb);
     $role->readDataByUuid($getRoleUuid);
 
+    // Event roles remain accessible when the groups and roles module is disabled.
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')
+        && $role->getValue('cat_name_intern') !== 'EVENTS') {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
+
     // check if user is allowed to assign members to this role
     if (!$role->allowedToAssignMembers($gCurrentUser)) {
         throw new Exception('SYS_NO_RIGHTS');
@@ -59,7 +60,7 @@ try {
         // this must be called as ajax request
 
         // check the CSRF token of the form against the session token
-        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+        SecurityUtils::validateCsrfToken($_POST['adm_csrf_token'] ?? '');
 
         $leadership = false;
         if (isset($_POST['leaderFlag']) && $_POST['leaderFlag'] === 'true') {
@@ -159,6 +160,17 @@ try {
 
             var memberChecked = $("input[type=checkbox]#member-" + userUuid).prop("checked");
             var leaderChecked = $("input[type=checkbox]#leader-" + userUuid).prop("checked");
+            var memberCheckbox = $("input[type=checkbox]#member-" + userUuid);
+            var leaderCheckbox = $("input[type=checkbox]#leader-" + userUuid);
+            // The click has already toggled the selected checkbox.
+            var previousMemberChecked = checkbox.data("type") === "member" ? !memberChecked : memberChecked;
+            var previousLeaderChecked = checkbox.data("type") === "leader" ? !leaderChecked : leaderChecked;
+
+            function showAssignmentError(message) {
+                memberCheckbox.prop("checked", previousMemberChecked);
+                leaderCheckbox.prop("checked", previousLeaderChecked);
+                messageBox(message, "' . $gL10n->get('SYS_ERROR') . '", "error");
+            }
 
             // If the group leader checkbox is set, the member checkbox must also be set
             if (checkbox.data("type") === "leader" && leaderChecked) {
@@ -172,28 +184,37 @@ try {
                 leaderChecked = false;
             }
 
-            // change data in database
-            $.post(gRootPath + "/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
-                "memberFlag=" + memberChecked + "&leaderFlag=" + leaderChecked + "&adm_csrf_token=' . $gCurrentSession->getCsrfToken() . '",
-                function(data) {
-                    // check if error occurs
-                    if (data !== "success") {
-                        // reset checkbox status
-                        if (checkbox.prop("checked")) {
-                            checkbox.prop("checked", false);
-                            if (checkbox.data("type") === "leader") {
-                                $("input[type=checkbox]#member-" + userUuid).prop("checked", false);
-                            }
-                        } else {
-                            checkbox.prop("checked", true);
-                        }
-
-                        messageBox(data, "' . $gL10n->get('SYS_ERROR') . '", "error");
-                        return false;
-                    }
-                    return true;
+            // Prevent overlapping updates for the same user while saving.
+            memberCheckbox.add(leaderCheckbox).prop("disabled", true);
+            $.ajax({
+                url: gRootPath + "/modules/groups-roles/members_assignment.php?mode=assign&role_uuid=' . $getRoleUuid . '&user_uuid=" + userUuid,
+                type: "POST",
+                dataType: "text",
+                timeout: 30000,
+                data: {
+                    memberFlag: memberChecked,
+                    leaderFlag: leaderChecked,
+                    adm_csrf_token: "' . $gCurrentSession->getCsrfToken() . '"
                 }
-            );
+            }).done(function(data) {
+                if (data !== "success") {
+                    showAssignmentError(data || ' . json_encode($gL10n->get('SYS_REQUEST_FAILED')) . ');
+                }
+            }).fail(function(xhr) {
+                var message = ' . json_encode($gL10n->get('SYS_REQUEST_FAILED')) . ';
+                // Only display structured application errors, never an arbitrary server error page.
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === "error" && typeof response.message === "string" && response.message) {
+                        message = response.message;
+                    }
+                } catch (e) {
+                    // Network failures and non-JSON server responses use the translated fallback.
+                }
+                showAssignmentError(message);
+            }).always(function() {
+                memberCheckbox.add(leaderCheckbox).prop("disabled", false);
+            });
         });';
 
         $page->addJavascript($javascriptCode, true);
@@ -309,8 +330,10 @@ try {
     }
 } catch (Throwable $e) {
     if (isset($_GET['mode']) && $_GET['mode'] === 'assign') {
-        // ajax mode then only show text if error occurs
-        $gMessage->showTextOnly();
+        // Return structured errors for assignment requests, including unexpected server errors.
+        http_response_code($e instanceof Exception ? 400 : 500);
+        header('Content-Type: application/json; charset=utf-8');
+        handleException($e, true);
     }
     handleException($e);
 }

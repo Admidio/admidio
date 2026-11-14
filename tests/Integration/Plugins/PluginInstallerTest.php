@@ -715,6 +715,95 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that an installation counts the update steps of its own version as done
+     *
+     * install.sql already creates the schema of the version it ships with. Without the steps of
+     * that version recorded, the next update ran its update file again on that schema - and a step
+     * that adds a column failed on the column install.sql had already created.
+     *
+     * @testdox Installing a plugin records the steps of its version, so the next update skips them
+     */
+    public function testAnUpdateDoesNotRepeatTheStepsOfTheInstalledVersion(): void
+    {
+        $this->writeUpdateScript('1.2', "UPDATE %PREFIX%_components SET com_name = 'step of 1.2 ran' WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+        $this->writeUpdateScript('1.3', "UPDATE %PREFIX%_components SET com_beta = 13 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+
+        PluginInstaller::enable($this->plugin());
+        $this->assertSame(10, (int)$this->component()['com_update_step']);
+
+        $this->writeManifestVersion('1.3.0');
+        PluginInstaller::update($this->plugin());
+
+        $this->assertNotSame('step of 1.2 ran', $this->component()['com_name']);
+        $this->assertSame(13, (int)$this->component()['com_beta'], 'The steps of the new version did run.');
+        $this->assertSame('1.3.0', $this->component()['com_version']);
+    }
+
+    /**
+     * Test that a plugin below version 2 has update steps at all
+     *
+     * @testdox The update steps of a plugin with a version below 2.0 are recorded too
+     */
+    public function testTheStepsOfAVersionBelowTwoAreRecorded(): void
+    {
+        $this->writeManifestVersion('0.4.0');
+        $this->writeUpdateScript('0.4', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame(10, (int)$this->component()['com_update_step']);
+        $this->assertSame(0, (int)$this->component()['com_beta'], 'Installing runs no update step.');
+    }
+
+    /**
+     * Test that a version without a minor component can be installed
+     *
+     * The manifest accepts "1". Reading its steps used to need two components and threw after
+     * install.sql had run, which left the tables behind and made every retry fail.
+     *
+     * @testdox A plugin whose version has no minor component installs, "1" being read as 1.0
+     */
+    public function testAVersionWithoutAMinorComponentInstalls(): void
+    {
+        $this->writeManifestVersion('1');
+        $this->writeUpdateScript('1.0', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame('1', $this->component()['com_version']);
+        $this->assertSame(10, (int)$this->component()['com_update_step']);
+    }
+
+    /**
+     * Test that an unreadable update file stops the installation before install.sql ran
+     *
+     * @testdox A malformed update file fails the installation before install.sql created any table
+     */
+    public function testAMalformedUpdateFileFailsBeforeInstallSqlRuns(): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        if (!is_dir($directory)) {
+            mkdir($directory);
+        }
+        file_put_contents($directory . '/install.sql', 'CREATE TABLE %PREFIX%_hello_marker (hm_id INT)');
+        file_put_contents($directory . '/update_' . str_replace('.', '_', substr(self::PLUGIN_VERSION, 0, 3)) . '.xml', '<update><step id="10">');
+
+        try {
+            PluginInstaller::enable($this->plugin());
+            $this->fail('A malformed update file must fail the installation.');
+        } catch (\Exception) {
+            // expected
+        }
+
+        global $gDb;
+        $this->assertFalse(
+            $gDb->tableExists(TABLE_PREFIX . '_hello_marker'),
+            'install.sql must not have run.'
+        );
+        $this->assertFalse(PluginRegistry::isInstalled(self::PLUGIN_ID));
+    }
+
+    /**
      * Test that removing takes everything away
      *
      * @testdox Removing a plugin takes its files, its component, its menu entry and its preferences
@@ -931,6 +1020,27 @@ class PluginInstallerTest extends FilesystemTestCase
         }
 
         return $files;
+    }
+
+    /**
+     * Give the copied plugin an update file for one version, with the statement as its step 10.
+     */
+    private function writeUpdateScript(string $version, string $statement): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        if (!is_dir($directory)) {
+            mkdir($directory);
+        }
+
+        file_put_contents(
+            $directory . '/update_' . str_replace('.', '_', $version) . '.xml',
+            '<?xml version="1.0" encoding="UTF-8"?>' . "\n"
+            . '<update>' . "\n"
+            . '    <step id="10">' . htmlspecialchars($statement, ENT_XML1) . '</step>' . "\n"
+            . '    <step>stop</step>' . "\n"
+            . '</update>' . "\n"
+        );
+        PluginRegistry::reset();
     }
 
     /**

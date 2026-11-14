@@ -2621,7 +2621,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createSsoForm(): string
     {
-        global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentUser;
+        global $gL10n, $gSettingsManager, $gCurrentSession, $gDb, $gCurrentUser, $gCurrentOrganization;
 
         $formValues = $gSettingsManager->getAll();
 
@@ -2668,7 +2668,7 @@ class PreferencesPresenter extends PagePresenter
         $formSSO->addInput(
             'sso_saml_entity_id',
             $gL10n->get('SYS_SSO_SAML_ENTITY_ID'),
-            $formValues['sso_saml_entity_id'],
+            \Admidio\SSO\Service\SSOOrganization::getEffectiveEntityId((string)$formValues['sso_saml_entity_id']),
             array('class' => 'copy-container if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_ENTITY_ID_DESC')
         );
 
@@ -2751,6 +2751,40 @@ class PreferencesPresenter extends PagePresenter
             'sso_saml_advanced_settings',
             $gL10n->get('SYS_SSO_ADVANCED_PROPERTIES'),
             array('collapse' => "sso_saml_advanced", 'collapsed' => true, 'separator_line' => false, 'class' => 'if-saml-enabled')
+        );
+        $formSSO->addInput(
+            'sso_saml_metadata_valid_days',
+            $gL10n->get('SYS_SSO_SAML_METADATA_VALID_DAYS'),
+            $formValues['sso_saml_metadata_valid_days'],
+            array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'number', 'minNumber' => 1, 'maxNumber' => 3650, 'step' => 1,
+                'class' => 'if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_METADATA_VALID_DAYS_DESC')
+        );
+        $formSSO->addInput(
+            'sso_saml_metadata_cache_hours',
+            $gL10n->get('SYS_SSO_SAML_METADATA_CACHE_HOURS'),
+            $formValues['sso_saml_metadata_cache_hours'],
+            array('property' => FormPresenter::FIELD_REQUIRED, 'type' => 'number', 'minNumber' => 1, 'maxNumber' => 8760, 'step' => 1,
+                'class' => 'if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_METADATA_CACHE_HOURS_DESC')
+        );
+        $formSSO->addInput(
+            'sso_saml_organization_name',
+            $gL10n->get('SYS_SSO_SAML_ORGANIZATION_NAME'),
+            (string)$formValues['sso_saml_organization_name'],
+            array('maxLength' => 250, 'placeholder' => (string)$gCurrentOrganization->getValue('org_longname'),
+                'class' => 'if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_ORGANIZATION_DESC')
+        );
+        $formSSO->addInput(
+            'sso_saml_organization_url',
+            $gL10n->get('SYS_SSO_SAML_ORGANIZATION_URL'),
+            (string)$formValues['sso_saml_organization_url'],
+            array('maxLength' => 250, 'type' => 'url', 'placeholder' => ADMIDIO_URL, 'class' => 'if-saml-enabled')
+        );
+        $formSSO->addInput(
+            'sso_saml_contact_email',
+            $gL10n->get('SYS_SSO_SAML_CONTACT_EMAIL'),
+            (string)$formValues['sso_saml_contact_email'],
+            array('maxLength' => 250, 'type' => 'email', 'placeholder' => (string)$gCurrentOrganization->getValue('org_email_administrator'),
+                'class' => 'if-saml-enabled', 'helpTextId' => 'SYS_SSO_SAML_CONTACT_EMAIL_DESC')
         );
 
 

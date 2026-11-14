@@ -17,7 +17,7 @@ use Admidio\SSO\Service\OIDCService;
 use Admidio\UI\Presenter\SSOClientPresenter;
 
 require_once(__DIR__ . '/../../system/common.php');
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit_saml', 'save_saml', 'delete_saml', 'edit_oidc', 'save_oidc', 'delete_oidc', 'sequence', 'enable')));
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'list', 'validValues' => array('list', 'edit_saml', 'save_saml', 'delete_saml', 'reload_saml_metadata', 'edit_oidc', 'save_oidc', 'delete_oidc', 'sequence', 'enable')));
 
 try {
 
@@ -71,6 +71,21 @@ try {
             echo json_encode(array('status' => 'success'));
             break;
 
+        case 'reload_saml_metadata':
+            // check the CSRF token of the form against the session token
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+            $samlService = new SAMLService($gDb, $gCurrentUser);
+            $client = $samlService->getClientFromUUID($getClientUUID);
+            if ($client->isNewRecord()) {
+                throw new Exception('SYS_SSO_INVALID_CLIENT');
+            }
+            $samlService->reloadClientMetadata($client);
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => $gL10n->get('SYS_SSO_METADATA_RELOADED', array(SecurityUtils::encodeHTML($client->readableName())))
+            ));
+            break;
+
         case 'edit_oidc':
             // create html page object
             $page = new SSOClientPresenter($getClientUUID);
@@ -118,5 +133,5 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    handleException($e, in_array($getMode, array('save', 'delete', 'save_saml', 'delete_saml', 'save_oidc', 'delete_oidc', 'enable')));
+    handleException($e, in_array($getMode, array('save', 'delete', 'save_saml', 'delete_saml', 'reload_saml_metadata', 'save_oidc', 'delete_oidc', 'enable')));
 }

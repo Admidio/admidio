@@ -1,6 +1,8 @@
 <?php
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\SSO\Service\MetadataFetcher;
 
 try {
     require_once(__DIR__ . '/../../system/common.php');
@@ -21,49 +23,15 @@ try {
 
     $url = trim(admFuncVariableIsValid($_POST, 'url', 'url'));
 
-    // The metadata URL is requested by the server, so it must be a public HTTPS target.
-    // The returned options pin cURL to the address that was validated here.
+    // The metadata URL and every redirect target are requested by the server, so they must pass
+    // the outbound request policy: a public HTTPS target unless private networks are allowed.
     try {
-        $requestOptions = SecurityUtils::getOutboundRequestCurlOptions(
-            $url,
-            $gSettingsManager->getBool('sso_allow_private_network')
-        );
+        $metadata = (new MetadataFetcher($gSettingsManager->getBool('sso_allow_private_network')))->fetch($url);
     } catch (Exception $e) {
         http_response_code(400);
         exit;
-    }
-
-    $metadata = '';
-    $responseTooLarge = false;
-    $maximumResponseSize = 2 * 1024 * 1024;
-
-    $curl = curl_init($url);
-    if ($curl === false) {
-        throw new RuntimeException('Could not initialize the metadata request.');
-    }
-
-    curl_setopt_array($curl, $requestOptions + array(
-        CURLOPT_CONNECTTIMEOUT => 5,
-        CURLOPT_TIMEOUT => 10,
-        CURLOPT_WRITEFUNCTION => static function ($curlHandle, string $chunk) use (
-            &$metadata,
-            &$responseTooLarge,
-            $maximumResponseSize
-        ): int {
-            if (strlen($metadata) + strlen($chunk) > $maximumResponseSize) {
-                $responseTooLarge = true;
-                return 0;
-            }
-
-            $metadata .= $chunk;
-            return strlen($chunk);
-        }
-    ));
-
-    $result = curl_exec($curl);
-    $statusCode = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-
-    if ($result === false || $responseTooLarge || $statusCode < 200 || $statusCode >= 300) {
+    } catch (RuntimeException $e) {
+        $gLogger->warning('Could not load SAML metadata.', array('url' => $url, 'reason' => $e->getMessage()));
         http_response_code(502);
         exit;
     }

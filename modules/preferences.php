@@ -26,6 +26,7 @@
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\UI\Presenter\PreferencesPresenter;
@@ -130,7 +131,7 @@ try {
         case 'backup_download':
             $file = Backups::getFile($getName);
             header('Content-Type: application/zip');
-            header('Content-Disposition: attachment; filename="' . $getName . '"');
+            header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $getName));
             header('Content-Length: ' . filesize($file));
             header('Cache-Control: private, no-store');
             readfile($file);

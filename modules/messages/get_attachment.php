@@ -51,7 +51,7 @@ try {
 
     // determine filesize
     $fileSize = filesize($completePath);
-    $filename = FileSystemUtils::getSanitizedPathEntry($attachment->getValue('msa_file_name'));
+    $filename = FileSystemUtils::getSanitizedDownloadName((string)$attachment->getValue('msa_file_name', 'database'));
 
     if ($getView) {
         $content = 'inline';
@@ -62,7 +62,7 @@ try {
     // Create appropriate header information of the file
     header('Content-Type: ' . FileSystemUtils::getFileMimeType($filename));
     header('Content-Length: ' . $fileSize);
-    header('Content-Disposition: ' . $content . '; filename="' . $filename . '"');
+    header('Content-Disposition: ' . FileSystemUtils::getContentDisposition($content, $filename));
 
     // necessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');
