@@ -66,15 +66,11 @@
                                 </div>
                             </td>
                             <td id="{$data.id}_option_{$option.id}_move_actions" class="text-center align-middle">
-                                <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0);" data-direction="UP" data-target="{$data.id}_option_{$option.id}">
-                                    <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$translationStrings.move_up}"></i>
-                                </a>
-                                <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0);" data-direction="DOWN" data-target="{$data.id}_option_{$option.id}">
-                                    <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$translationStrings.move_down}"></i>
-                                </a>
-                                <a class="admidio-icon-link">
-                                    <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$translationStrings.move_var}"></i>
-                                </a>
+                                {include 'sys-template-parts/list.move.tpl' moveActions=[
+                                    ['direction' => 'UP', 'label' => $translationStrings.move_up, 'class' => 'admidio-entry-move', 'attributes' => ['data-target' => "`$data.id`_option_`$option.id`"]],
+                                    ['direction' => 'DOWN', 'label' => $translationStrings.move_down, 'class' => 'admidio-entry-move', 'attributes' => ['data-target' => "`$data.id`_option_`$option.id`"]],
+                                    ['direction' => 'FREE', 'label' => $translationStrings.move_var]
+                                ]}
                             </td>
                             <td id="{$data.id}_option_{$option.id}_delete_actions" class="text-center align-middle">
                                 <a id="{$data.id}_option_{$option.id}_restore" class="admidio-icon-link" href="javascript:void(0);" onclick="restoreEntry('{$data.id}', '{$option.id}');" {if !$option.obsolete} style="display: none;"{/if}>

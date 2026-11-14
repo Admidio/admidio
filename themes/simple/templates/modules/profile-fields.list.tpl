@@ -36,14 +36,11 @@
                         {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                     </td>
                     <td>
-                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$profileField.uuid}"
-                           data-direction="UP" data-target="adm_profile_field_{$profileField.uuid}" aria-label="{$l10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD'))|escape:'html'}">
-                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD'))}"></i></a>
-                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$profileField.uuid}"
-                           data-direction="DOWN" data-target="adm_profile_field_{$profileField.uuid}" aria-label="{$l10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD'))|escape:'html'}">
-                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD'))}"></i></a>
-                        <a class="admidio-icon-link">
-                            <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD'))}"></i></a>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')), 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => "`$profileField.uuid`", 'data-target' => "adm_profile_field_`$profileField.uuid`"]],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD')), 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => "`$profileField.uuid`", 'data-target' => "adm_profile_field_`$profileField.uuid`"]],
+                            ['direction' => 'FREE', 'label' => $l10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD'))]
+                        ]}
                     </td>
                     <td>{$profileField.dataType}</td>
                     <td>

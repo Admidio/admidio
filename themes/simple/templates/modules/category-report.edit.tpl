@@ -84,8 +84,7 @@
         $row.append($fieldCell);
         $row.append($('<td>').append($('<input type="text" class="form-control" name="conditions[]" maxlength="50">')
             .val(String(condition || '').replace(/{/g, '<').replace(/}/g, '>'))));
-        const $move = $('<a class="admidio-icon-link admidio-move-row me-2 text-body" href="javascript:void(0);">')
-            .append($('<i class="bi bi-arrows-move" data-bs-toggle="tooltip">').attr('title', data.moveLabel));
+        const $move = $({/literal}{capture assign="moveButton"}{include 'sys-template-parts/list.move.tpl' moveActions=[['direction' => 'FREE', 'label' => $l10n->get('SYS_MOVE_VAR', [$l10n->get('SYS_COLUMN')]), 'class' => 'admidio-move-row me-2 text-body']]}{/capture}{$moveButton|json_encode nofilter}{literal});
         const $remove = $('<a class="admidio-icon-link text-danger" href="javascript:void(0);">')
             .append($('<i class="bi bi-trash-fill" data-bs-toggle="tooltip">').attr('title', data.deleteLabel));
         $remove.on('click', function () { $row.remove(); renumber(); });
