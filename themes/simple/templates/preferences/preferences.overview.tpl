@@ -167,13 +167,10 @@
                         </div>
                     </div>
                     <div class="d-block d-md-none">
-                        <a class="admidio-plugin-move" href="javascript:void(0)" data-plugin-id="{$overviewPlugin.id}"
-                           data-direction="UP">
-                            <i class="bi bi-arrow-up-circle-fill"></i>{$l10n->get('SYS_MOVE_UP', array('SYS_EXTENSION'))}</a>
-                        <br>
-                        <a class="admidio-plugin-move" href="javascript:void(0)" data-plugin-id="{$overviewPlugin.id}"
-                           data-direction="DOWN">
-                            <i class="bi bi-arrow-down-circle-fill"></i>{$l10n->get('SYS_MOVE_DOWN', array('SYS_EXTENSION'))}</a>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', array('SYS_EXTENSION')), 'class' => 'admidio-plugin-move', 'attributes' => ['data-plugin-id' => "`$overviewPlugin.id`"], 'showText' => true],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', array('SYS_EXTENSION')), 'class' => 'admidio-plugin-move', 'attributes' => ['data-plugin-id' => "`$overviewPlugin.id`"], 'showText' => true]
+                        ]}
                     </div>
                 </div>
             </div>

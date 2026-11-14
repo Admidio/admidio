@@ -36,9 +36,11 @@
                         {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                     </td>
                     <td>
-
-                        <a class="admidio-icon-link">
-                            <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD'))}"></i></a>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', array('SYS_PROFILE_FIELD')), 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => "`$profileField.uuid`", 'data-target' => "adm_profile_field_`$profileField.uuid`"]],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', array('SYS_PROFILE_FIELD')), 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => "`$profileField.uuid`", 'data-target' => "adm_profile_field_`$profileField.uuid`"]],
+                            ['direction' => 'FREE', 'label' => $l10n->get('SYS_MOVE_VAR', array('SYS_PROFILE_FIELD'))]
+                        ]}
                     </td>
                     <td>{$profileField.dataType}</td>
                     <td>
@@ -66,13 +68,7 @@
                     <td class="d-none d-lg-table-cell">{$profileField.defaultValue}</td>
                     <td class="d-none d-lg-table-cell">{$profileField.regex}</td>
                     <td class="text-end">
-                        {assign var=rowActions value=[$profileField.actions[0]]}
-                        {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $profileField.uuid, 'data-direction' => 'UP', 'data-target' => "adm_profile_field_{$profileField.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', ['SYS_PROFILE_FIELD'])]}
-                        {$rowActions[] = ['class' => 'admidio-field-move', 'attributes' => ['data-uuid' => $profileField.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_profile_field_{$profileField.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', ['SYS_PROFILE_FIELD'])]}
-                        {foreach $profileField.actions as $actionItem}
-                            {if !$actionItem@first}{$rowActions[] = $actionItem}{/if}
-                        {/foreach}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $profileField.uuid, 'actions' => $rowActions]}
+                        {include 'sys-template-parts/list.functions.tpl' data=$profileField}
                     </td>
                 </tr>
             {/foreach}

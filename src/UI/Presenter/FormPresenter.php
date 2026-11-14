@@ -1081,6 +1081,19 @@ class FormPresenter
             $optionsAll['property'] = self::FIELD_DEFAULT;
         }
 
+        $moveTemplate = PagePresenter::createSmartyObject()->createTemplate('sys-template-parts/list.move.tpl');
+        $moveActions = array();
+        foreach (array('UP' => 'SYS_MOVE_UP', 'DOWN' => 'SYS_MOVE_DOWN', 'FREE' => 'SYS_MOVE_VAR') as $direction => $label) {
+            $moveActions[] = array(
+                'direction' => $direction,
+                'label' => $gL10n->get($label, array('SYS_ENTRY')),
+                'class' => $direction === 'FREE' ? '' : 'admidio-entry-move',
+                'attributes' => $direction === 'FREE' ? array() : array('data-target' => 'ADMIDIO_OPTION_TARGET')
+            );
+        }
+        $moveTemplate->assign('moveActions', $moveActions);
+        $moveButtons = $moveTemplate->fetch();
+
         $this->addJavascriptCode('
             function addOptionRow(dataId, checkUrl, deleteUrl, csrfToken, translationStrings) {
                 const table = document.querySelector("#" + dataId + "_table tbody.admidio-sortable");
@@ -1105,17 +1118,7 @@ class FormPresenter
                         </div>
                     </td>
                     <td id="${dataId}_option_${optionId}_move_actions" class="text-center align-middle">
-                        <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0)"
-                            data-direction="UP" data-target="${dataId}_option_${optionId}">
-                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_up}"></i>
-                        </a>
-                        <a class="admidio-icon-link admidio-entry-move" href="javascript:void(0)"
-                            data-direction="DOWN" data-target="${dataId}_option_${optionId}">
-                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="${translationStrings.move_down}"></i>
-                        </a>
-                        <a class="admidio-icon-link">
-                            <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="${translationStrings.move_var}"></i>
-                        </a>
+                        ${' . json_encode($moveButtons, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . '.replaceAll("ADMIDIO_OPTION_TARGET", `${dataId}_option_${optionId}`)}
                     </td>
                     <td id="${dataId}_option_${optionId}_delete_actions" class="text-center align-middle">
                         <a id="${dataId}_option_${optionId}_restore" class="admidio-icon-link" href="javascript:void(0)" onclick="restoreEntry(\'${dataId}\', \'${optionId}\');" style="display: none;">

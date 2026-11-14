@@ -199,9 +199,8 @@ try {
         newCellConditions.innerHTML = htmlFormCondition;
 
         var newCellHandle = newTableRow.insertCell(-1);
-        newCellHandle.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
-            "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
-            "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+        newCellHandle.innerHTML = ' . json_encode($page->getSmartyTemplate()->createTemplate('sys-template-parts/list.move.tpl', array('moveActions' => array(array('direction' => 'FREE', 'label' => $gL10n->get('SYS_MOVE_VAR'), 'class' => 'admidio-move-row'))))->fetch(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ' +
+                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
             "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
 
         $(newTableRow).fadeIn("slow");

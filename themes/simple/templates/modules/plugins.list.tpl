@@ -44,7 +44,11 @@
                             {* The switch shows the state the plugin is in and flips it when clicked. *}
                             <td class="text-center">
                                 {if $pluginEntry.toggle}
-                                    <i class="{$pluginEntry.toggle.icon}" aria-label="{$pluginEntry.toggle.label|escape:'html'}"></i>
+                                    <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                       onclick="{$pluginEntry.toggle.dataHref|escape:'html'}"
+                                       data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip|escape:'html'}"
+                                       aria-label="{$pluginEntry.toggle.tooltip|escape:'html'}">
+                                        <i class="{$pluginEntry.toggle.icon} fs-5"></i></a>
                                 {/if}
                             </td>
                             <td style="white-space: nowrap;">
@@ -77,11 +81,7 @@
                                 {if $pluginEntry.versionState === 'not_installed'}&ndash;{else}{$pluginEntry.installedVersion}{/if}
                             </td>
                             <td class="text-end">
-                                {assign var=pluginActions value=$pluginEntry.actions}
-                                {if $pluginEntry.toggle}
-                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
-                                {/if}
-                                {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $pluginEntry.id, 'actions' => $pluginActions]}
+                                {include 'sys-template-parts/list.functions.tpl' data=$pluginEntry}
                             </td>
                         </tr>
                     {/foreach}
@@ -106,14 +106,16 @@
                 {foreach $pluginNode.entries as $pluginEntry}
                     <div class="card admidio-accordion-field-group" id="adm_plugin_card_entry_{$pluginEntry.id}" data-uuid="{$pluginEntry.id}">
                         <div class="card-header">
-
+                            {if $pluginEntry.toggle}
+                                <a class="admidio-icon-link {$pluginEntry.toggle.class}" href="javascript:void(0);"
+                                   onclick="{$pluginEntry.toggle.dataHref|escape:'html'}"
+                                   data-bs-toggle="tooltip" title="{$pluginEntry.toggle.tooltip|escape:'html'}"
+                                   aria-label="{$pluginEntry.toggle.tooltip|escape:'html'}">
+                                    <i class="{$pluginEntry.toggle.icon}"></i></a>
+                            {/if}
                             {if $pluginEntry.icon neq ''}<i class="bi {$pluginEntry.icon}"></i>{/if} {$pluginEntry.name}
                             <div class="float-end">
-                                {assign var=pluginActions value=$pluginEntry.actions}
-                                {if $pluginEntry.toggle}
-                                    {$pluginActions[] = ['class' => $pluginEntry.toggle.class, 'icon' => $pluginEntry.toggle.icon, 'tooltip' => $pluginEntry.toggle.tooltip, 'attributes' => ['onclick' => $pluginEntry.toggle.dataHref]]}
-                                {/if}
-                                {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginActions]}
+                                {include 'sys-template-parts/list.functions.tpl' cardActions=true data=['uuid' => "mobile_{$pluginEntry.id}", 'actions' => $pluginEntry.actions]}
                             </div>
                         </div>
                         <div class="card-body">

@@ -110,12 +110,7 @@ class SSOClientPresenter extends PagePresenter
                 var newCellButtons = newTableRow.insertCell(-1);
                 newCellButtons.style.paddingLeft = "0";
                 newCellButtons.style.paddingRight = "0";
-                htmlMoveButtons = /*"<a class=\"admidio-icon-link admidio-move-row-up\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
-                        "        <i class=\"bi bi-arrow-up-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_UP') . '\"></i></a>" +
-                        "    <a class=\"admidio-icon-link admidio-move-row-down\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
-                        "        <i class=\"bi bi-arrow-down-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_DOWN') . '\"></i></a>" + */
-                        "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
-                        "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
+                htmlMoveButtons = ' . json_encode($this->smarty->createTemplate('sys-template-parts/list.move.tpl', array('moveActions' => array(array('direction' => 'FREE', 'label' => $gL10n->get('SYS_MOVE_VAR'), 'class' => 'admidio-move-row'))))->fetch(), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ' +
                         "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
                         "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
                 newCellButtons.innerHTML = htmlMoveButtons;
@@ -955,21 +950,25 @@ class SSOClientPresenter extends PagePresenter
 
 
     /**
-     * Create the action to enable or disable a client via a JSON call.
+     * Display a toggle to enable or disable a client via a JSON call.
      * @param SSOClient $client
-     * @return array
+     * @return string
      * @throws Exception
      */
-    protected function generateEnableAction(SSOClient $client): array
+    protected function generateEnableLink(SSOClient $client): string
     {
         global $gL10n;
         $enabled = $client->isEnabled();
-        return array(
+        $action = array(
             'class' => 'toggle-client-status',
-            'icon' => 'bi bi-toggle-' . ($enabled ? 'on' : 'off'),
+            'icon' => 'bi bi-toggle-' . ($enabled ? 'on' : 'off') . ' fs-2',
             'tooltip' => $gL10n->get($enabled ? 'SYS_DISABLE' : 'SYS_ENABLE'),
             'attributes' => array('data-uuid' => $client->getValue($client->getColumnPrefix() . '_uuid'), 'data-enabled' => $enabled ? '1' : '0')
         );
+        $template = $this->smarty->createTemplate('sys-template-parts/list.action.tpl');
+        $template->assign('actionItem', $action);
+        $template->assign('actionClass', 'admidio-icon-link');
+        return $template->fetch();
     }
 
     /**
@@ -1041,7 +1040,7 @@ class SSOClientPresenter extends PagePresenter
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_saml', 'uuid' => $clientUUID));
             $client = $SAMLService->getClientFromUUID($clientUUID);
             $templateClient = array();
-            $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
+            $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('smc_client_name') . '</a>';
             $templateClient[] = $client->getValue('smc_client_id');
             $templateClient[] = implode('<br />', array_map(array(SecurityUtils::class, 'encodeHTML'), $client->getAcsUrls()));
@@ -1075,12 +1074,15 @@ class SSOClientPresenter extends PagePresenter
                 'icon' => 'bi bi-trash',
                 'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
             );
-            $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
             $templateClient[] = $actionsTemplate->fetch();
 
-            $columnValues[] = array('id' => 'adm_saml_client_' . $clientUUID, 'data' => $templateClient);
+            $columnValues[] = array(
+                'id' => 'adm_saml_client_' . $clientUUID,
+                'enabledLabel' => $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED'),
+                'data' => $templateClient
+            );
         }
 
         // add table to the form
@@ -1123,7 +1125,7 @@ class SSOClientPresenter extends PagePresenter
             $clientEditURL = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/sso/clients.php', array('mode' => 'edit_oidc', 'uuid' => $clientUUID));
             $client = $OIDCService->createClientObject($clientUUID);
             $templateClient = array();
-            $templateClient[] = '<span class="admidio-client-state">' . $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED') . '</span>';
+            $templateClient[] = $this->generateEnableLink($client);
             $templateClient[] = '<a href="' . $clientEditURL . '">' . $client->getValue('ocl_client_name') . '</a>';
             $templateClient[] = $client->getValue('ocl_client_id');
             $templateClient[] = $client->getValue('ocl_redirect_uri');
@@ -1139,12 +1141,15 @@ class SSOClientPresenter extends PagePresenter
                     'tooltip' => $gL10n->get('SYS_SSO_CLIENT_DELETE')
                 )
             );
-            $actions[] = $this->generateEnableAction($client);
             $actionsTemplate = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('data', array('uuid' => $clientUUID, 'actions' => $actions));
             $templateClient[] = $actionsTemplate->fetch();
 
-            $columnValues[] = array('id' => 'adm_oidc_client_' . $clientUUID, 'data' => $templateClient);
+            $columnValues[] = array(
+                'id' => 'adm_oidc_client_' . $clientUUID,
+                'enabledLabel' => $gL10n->get($client->isEnabled() ? 'SYS_ENABLED' : 'SYS_DISABLED'),
+                'data' => $templateClient
+            );
         }
 
         // Add JS for reloading the metadata of a SAML client
@@ -1196,16 +1201,21 @@ class SSOClientPresenter extends PagePresenter
                   \$icon.removeClass('bi-toggle-' + (currentlyEnabled ? 'on' : 'off'))
                        .addClass('bi-toggle-' + (currentlyEnabled ? 'off' : 'on'));
 
-                  // Update the action label and the state displayed in the table.
+                  // Update the action label and tooltip.
                   var label = currentlyEnabled ? " . json_encode($gL10n->get('SYS_ENABLE'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_DISABLE'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";
                   \$link.attr('aria-label', label);
                   \$icon.attr('data-bs-original-title', label);
-                  \$link.closest('tr').find('.admidio-client-state').text(currentlyEnabled ? " . json_encode($gL10n->get('SYS_DISABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_ENABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ");
                   bootstrap.Tooltip.getInstance(\$icon[0])?.setContent({'.tooltip-inner': label});
                   \$link.children('span').text(label);
 
                   // Update data-enabled attribute
                   \$link.data('enabled', newEnabled);
+
+                  // Update the status used for sorting and searching.
+                  var statusLabel = newEnabled ? " . json_encode($gL10n->get('SYS_ENABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . " : " . json_encode($gL10n->get('SYS_DISABLED'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";
+                  var \$cell = \$link.closest('td');
+                  \$cell.attr('data-order', statusLabel).attr('data-search', statusLabel);
+                  \$link.closest('table').DataTable().cell(\$cell).invalidate('dom').draw(false);
                 } else {
                   alert('Update failed: ' + (data.message || 'Unknown error'));
                 }

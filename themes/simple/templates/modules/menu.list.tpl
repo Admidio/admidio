@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>{$l10n->get('SYS_TITLE')}</th>
-            <th class="d-none">&nbsp;</th>
+            <th>&nbsp;</th>
             <th>{$l10n->get('SYS_URL')}</th>
             <th class="text-center"><i class="bi bi-star-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_DEFAULT_VAR', [$l10n->get('SYS_MENU_ITEM')])}"></i></th>
             <th>&nbsp;</th>
@@ -26,7 +26,12 @@
                         {assign var="data" value=['helpTextId' => $menuEntry.description]}
                         {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                     </td>
-                    <td class="d-none"></td>
+                    <td>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', [$headline]), 'class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => "`$menuEntry.uuid`", 'data-target' => "adm_menu_entry_`$menuEntry.uuid`"]],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', [$headline]), 'class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => "`$menuEntry.uuid`", 'data-target' => "adm_menu_entry_`$menuEntry.uuid`"]]
+                        ]}
+                    </td>
                     <td><a href="{$menuEntry.urlLink}" title="{$menuEntry.description}">{$menuEntry.url}</a></td>
                     <td class="text-center">
                         {if $menuEntry.standard}
@@ -34,10 +39,7 @@
                         {/if}
                     </td>
                     <td class="text-end">
-                        {assign var=rowActions value=$menuEntry.actions}
-                        {$rowActions[] = ['class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => $menuEntry.uuid, 'data-direction' => 'UP', 'data-target' => "adm_menu_entry_{$menuEntry.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', [$headline])]}
-                        {$rowActions[] = ['class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => $menuEntry.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_menu_entry_{$menuEntry.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', [$headline])]}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $menuEntry.uuid, 'actions' => $rowActions]}
+                        {include 'sys-template-parts/list.functions.tpl' data=$menuEntry}
                     </td>
                 </tr>
             {/foreach}
