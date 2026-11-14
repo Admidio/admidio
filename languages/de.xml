@@ -884,8 +884,7 @@
   <string name="SYS_EVENT_REMINDER_DAYS_DESC">Anzahl der Tage vor der Veranstaltung, an denen Mitglieder, die noch nicht zu- oder abgesagt haben, eine Erinnerungsmail erhalten. Auf 0 setzen, um Erinnerungsmails für diese Veranstaltung zu deaktivieren.</string>
   <string name="SYS_EVENT_REMINDER_DAYS_PREFERENCE">Standard-Erinnerungstage für neue Veranstaltungen</string>
   <string name="SYS_EVENT_REMINDER_DAYS_PREFERENCE_DESC">Dieser Wert füllt die Erinnerungstage neuer Veranstaltungen vor. Auf 0 setzen, um Erinnerungen standardmäßig zu deaktivieren.</string>
-  <string name="SYS_EVENT_REMINDER_MESSAGE">Hallo #VAR1#! Am #VAR2# findet die Veranstaltung #VAR3# im Kalender #VAR4# statt (Ort: #VAR5#, Raum: #VAR6#, Zeitzone: #VAR7#). Deine Zusage zur Teilnahme fehlt noch! Bitte melde dich hier an: #VAR8#</string>
-  <string name="SYS_EVENT_REMINDER_SUBJECT">Erinnerung: Bitte Teilnahme für #VAR1# anmelden oder absagen</string>
+  <string name="SYS_EVENT_REMINDER_EMAIL">Erinnerungsmail für Veranstaltungen</string>
   <string name="SYS_EVENT_PARTICIPATION_ATTEND">Ich nehme teil</string>
   <string name="SYS_EVENT_PARTICIPATION_CANCELED">Abgesagt</string>
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Eingeladen</string>
@@ -2198,6 +2197,7 @@
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Wechsel zur Beziehungskonfiguration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Wechsel zur Raumverwaltung</string>
   <string name="SYS_SYMMETRICAL">symmetrisch</string>
+  <string name="SYS_SYSMAIL_EVENT_REMINDER">#subject# #organization_short_name#: Erinnerung: Bitte Teilnahme für #event_name# anmelden oder absagen\n#content# Hallo #user_first_name#,\n\nam #event_period# findet die Veranstaltung #event_name# im Kalender #event_calendar# statt (Ort: #event_location#, Raum: #event_room#, Zeitzone: #event_timezone#).\n\ndeine Zusage zur Teilnahme fehlt noch! Bitte melde dich hier an: #event_url#\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Zugangsdaten für #organization_long_name#\n#content# Hallo #user_first_name#,\n\ndu erhältst deine Zugangsdaten für die Webseite #organization_homepage#.\nAnmeldename: #user_login_name#\nPasswort: #variable1#\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf #organization_homepage# in deinem Profil ändern.\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Passwort zurücksetzen für #organization_long_name#\n#content# Hallo #user_first_name#,\n\nwir haben eine Anfrage zum Zurücksetzen deines Passwortes auf #organization_homepage# erhalten.\n\nFalls die Anfrage von dir gekommen ist, kannst du über den folgenden Link dein Passwort zurücksetzen und ein neues Passwort vergeben: \n#variable1#\n\nViele Grüße\nDas Team von #organization_long_name#</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registrierung bei #organization_long_name# abgelehnt\n#content# Hallo #user_first_name#,\n\ndeine Anmeldung auf #organization_homepage# wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an einen Administrator unter #administrator_email# von #organization_homepage#.\n\nViele Grüße\nDas Team von #organization_long_name#</string>

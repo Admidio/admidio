@@ -4,9 +4,11 @@ namespace Admidio\Tests\Integration\Installation;
 
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\SystemMail;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\UI\Presenter\PreferencesPresenter;
+use Admidio\Users\Entity\User;
 
 class SystemMailTemplateModeTest extends DatabaseTestCase
 {
@@ -115,7 +117,7 @@ class SystemMailTemplateModeTest extends DatabaseTestCase
         $dom = new \DOMDocument();
         @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html);
         $xpath = new \DOMXPath($dom);
-        $this->assertSame(6, $xpath->query('//input[contains(@class,"admidio-system-mail-default")]')->length);
+        $this->assertSame(count(Text::SYSTEM_MAIL_DEFAULTS), $xpath->query('//input[contains(@class,"admidio-system-mail-default")]')->length);
         foreach (Text::SYSTEM_MAIL_DEFAULTS as $name => $id) {
             $this->assertSame(1, $xpath->query('//textarea[@id="' . $name . '_DEFAULT" and @disabled]')->length);
             $this->assertSame(1, $xpath->query('//div[@id="' . $name . '_custom_panel" and @hidden]')->length);
@@ -131,7 +133,7 @@ class SystemMailTemplateModeTest extends DatabaseTestCase
         $text = $this->template($name);
         $this->assertSame(Text::SYSTEM_MAIL_DEFAULTS[$name], $text->getValue('txt_text', 'database'));
         $this->assertSame('Saved personal draft', $text->getSystemMailCustomText());
-        $this->assertSame(6, (int)$this->getDatabase()->queryPrepared('SELECT COUNT(*) FROM ' . TBL_TEXTS . ' WHERE txt_org_id = ?', array($GLOBALS['gCurrentOrgId']))->fetchColumn());
+        $this->assertSame(count(Text::SYSTEM_MAIL_DEFAULTS), (int)$this->getDatabase()->queryPrepared('SELECT COUNT(*) FROM ' . TBL_TEXTS . ' WHERE txt_org_id = ?', array($GLOBALS['gCurrentOrgId']))->fetchColumn());
 
         $html = $this->renderForm();
         @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html);
@@ -168,6 +170,37 @@ class SystemMailTemplateModeTest extends DatabaseTestCase
         $this->assertSame($payload, $xpath->query('//textarea[@id="' . $name . '"]')->item(0)->textContent);
         $this->assertSame(0, $xpath->query('//script[contains(text(), "alert(1)")]')->length);
     }
+    public function testEventReminderNamedPlaceholdersAreReplaced(): void
+    {
+        $name = 'SYSMAIL_EVENT_REMINDER';
+        $text = $this->template($name);
+        $text->setSystemMailTemplate(false, "#subject# Reminder\n#content# #event_name# | #event_period# | #event_calendar# | #event_location# | #event_room# | #event_timezone# | #event_url#");
+        $text->save();
+
+        $userId = (int) $this->getDatabase()->queryPrepared(
+            "SELECT usr_id FROM " . TBL_USERS . " WHERE usr_login_name = 'admin'"
+        )->fetchColumn();
+        $user = new User($this->getDatabase(), $GLOBALS['gProfileFields'], $userId);
+
+        $mail = new SystemMail($this->getDatabase());
+        $mail->setCustomVariable('event_name', 'Summer party');
+        $mail->setCustomVariable('event_period', '2030-07-01 18:00');
+        $mail->setCustomVariable('event_calendar', 'Club calendar');
+        $mail->setCustomVariable('event_location', 'Main hall');
+        $mail->setCustomVariable('event_room', 'Room 1');
+        $mail->setCustomVariable('event_timezone', 'Europe/Berlin');
+        $mail->setCustomVariable('event_url', 'https://example.org/events/42');
+
+        $body = $mail->getMailText($name, $user);
+        $this->assertStringContainsString('Summer party', $body);
+        $this->assertStringContainsString('2030-07-01 18:00', $body);
+        $this->assertStringContainsString('Club calendar', $body);
+        $this->assertStringContainsString('Main hall', $body);
+        $this->assertStringContainsString('Room 1', $body);
+        $this->assertStringContainsString('Europe/Berlin', $body);
+        $this->assertStringContainsString('https://example.org/events/42', $body);
+    }
+
     public function testUpgradeCopiesExistingCustomTemplatesButNotDefaultIds(): void
     {
         $name = 'SYSMAIL_PASSWORD_RESET';

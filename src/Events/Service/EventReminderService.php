@@ -4,9 +4,10 @@ namespace Admidio\Events\Service;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Repository\EventReminderRepository;
 use Admidio\Infrastructure\Database;
-use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\SystemMail;
 use Admidio\Roles\Entity\RolesRights;
+use Admidio\Users\Entity\User;
 use Throwable;
 
 /**
@@ -134,37 +135,20 @@ class EventReminderService
     /**
      * Send one reminder email to the given user.
      *
+     * The subject and body come from the administrator-editable system mail
+     * SYSMAIL_EVENT_REMINDER. Event-specific values are passed as named placeholders, so an
+     * administrator can move or remove them in the custom text without changing code.
+     *
      * @throws Throwable
      */
     private function sendReminder(Event $event, int $userId, string $userUuid): bool
     {
-        global $gCurrentOrganization, $gL10n, $gProfileFields, $gSettingsManager, $gTimezone;
+        global $gL10n, $gProfileFields, $gSettingsManager, $gTimezone;
 
-        $email = new Email();
-        if ($email->addRecipientsByUser($userUuid) === 0) {
+        $user = new User($this->database, $gProfileFields, $userId);
+        $mail = new SystemMail($this->database);
+        if ($mail->addRecipientsByUser($userUuid) === 0) {
             return false;
-        }
-
-        $nameRow = $this->database->queryPrepared(
-            'SELECT first_name.usd_value AS firstname, last_name.usd_value AS lastname
-               FROM ' . TBL_USER_DATA . ' first_name
-               JOIN ' . TBL_USER_DATA . ' last_name
-                 ON last_name.usd_usr_id = first_name.usd_usr_id
-              WHERE first_name.usd_usr_id = ?
-                AND first_name.usd_usf_id = ?
-                AND last_name.usd_usf_id = ?',
-            array(
-                $userId,
-                (int) $gProfileFields->getProperty('FIRST_NAME', 'usf_id'),
-                (int) $gProfileFields->getProperty('LAST_NAME', 'usf_id')
-            )
-        )->fetch();
-        $recipientName = trim((string) ($nameRow['firstname'] ?? ''));
-        if ($recipientName === '') {
-            $recipientName = trim((string) ($nameRow['lastname'] ?? ''));
-        }
-        if ($recipientName === '') {
-            $recipientName = $gL10n->get('SYS_UNKNOWN');
         }
 
         $eventUrl = ADMIDIO_URL . FOLDER_MODULES . '/events.php?dat_uuid=' . $event->getValue('dat_uuid');
@@ -196,33 +180,26 @@ class EventReminderService
             }
         }
 
-        $message = $gL10n->get('SYS_EVENT_REMINDER_MESSAGE', array(
-            $recipientName,
-            $event->getDateTimePeriod(),
-            $event->getValue('dat_headline'),
-            $calendar,
-            $location,
-            $room,
-            $gTimezone !== '' ? $gTimezone : date_default_timezone_get(),
-            $eventUrl
-        ));
-
-        $email->setSubject(
-            $gCurrentOrganization->getValue('org_shortname') . ': '
-            . $gL10n->get('SYS_EVENT_REMINDER_SUBJECT', array($event->getValue('dat_headline')))
+        $htmlMail = $gSettingsManager->getBool('mail_html_registered_users');
+        $mail->setCustomVariable('event_name', (string) $event->getValue('dat_headline'));
+        $mail->setCustomVariable('event_period', $event->getDateTimePeriod());
+        $mail->setCustomVariable('event_calendar', $calendar);
+        $mail->setCustomVariable('event_location', $location);
+        $mail->setCustomVariable('event_room', $room);
+        $mail->setCustomVariable(
+            'event_timezone',
+            $gTimezone !== '' ? $gTimezone : date_default_timezone_get()
+        );
+        $mail->setCustomVariable(
+            'event_url',
+            $htmlMail ? '<a href="' . $eventUrl . '">' . $eventUrl . '</a>' : $eventUrl
         );
 
-        if ($gSettingsManager->getBool('mail_html_registered_users')) {
-            $email->setHtmlMail();
-            $message = str_replace(
-                $eventUrl,
-                '<a href="' . $eventUrl . '">' . $eventUrl . '</a>',
-                $message
-            );
+        if ($htmlMail) {
+            $mail->setHtmlMail();
         }
-        $email->setText($message);
 
-        return $email->sendEmail();
+        return $mail->sendSystemMail('SYSMAIL_EVENT_REMINDER', $user);
     }
 
     private function logError(string $message): void

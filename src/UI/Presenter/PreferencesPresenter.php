@@ -3438,6 +3438,15 @@ class PreferencesPresenter extends PagePresenter
             if ($name === 'SYSMAIL_LOGIN_INFORMATION' || $name === 'SYSMAIL_PASSWORD_RESET') {
                 $variable = $name === 'SYSMAIL_LOGIN_INFORMATION' ? 'ORG_VARIABLE_NEW_PASSWORD' : 'ORG_VARIABLE_ACTIVATION_LINK';
                 $options['helpTextId'] = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br /><strong>#variable1#</strong> - ' . $gL10n->get($variable);
+            } elseif ($name === 'SYSMAIL_EVENT_REMINDER') {
+                $options['helpTextId'] = $gL10n->get('ORG_ADDITIONAL_VARIABLES') . ':<br />'
+                    . '<strong>#event_name#</strong> - ' . $gL10n->get('SYS_EVENT') . '<br />'
+                    . '<strong>#event_period#</strong> - ' . $gL10n->get('SYS_DATE') . '<br />'
+                    . '<strong>#event_calendar#</strong> - ' . $gL10n->get('SYS_CALENDAR') . '<br />'
+                    . '<strong>#event_location#</strong> - ' . $gL10n->get('SYS_VENUE') . '<br />'
+                    . '<strong>#event_room#</strong> - ' . $gL10n->get('SYS_ROOM') . '<br />'
+                    . '<strong>#event_timezone#</strong> - ' . $gL10n->get('ORG_TIMEZONE') . '<br />'
+                    . '<strong>#event_url#</strong> - ' . $gL10n->get('SYS_URL');
             }
             $formSystemNotifications->addMultilineTextInput($name, $label, $customText, 7, $options);
             $formSystemNotifications->addMultilineTextInput($name . '_DEFAULT', $label, $defaultText->getValue('txt_text'), 7,
