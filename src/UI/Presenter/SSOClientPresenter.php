@@ -108,15 +108,14 @@ class SSOClientPresenter extends PagePresenter
                 newCellSAML.innerHTML = htmlMappedName;
 
                 var newCellButtons = newTableRow.insertCell(-1);
-                newCellButtons.style.paddingLeft = "0";
-                newCellButtons.style.paddingRight = "0";
-                htmlMoveButtons = /*"<a class=\"admidio-icon-link admidio-move-row-up\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+                newCellButtons.classList.add("text-nowrap", "align-middle", "px-0");
+                htmlMoveButtons = /*"<a class=\"admidio-icon-link admidio-move-row-up\">" +
                         "        <i class=\"bi bi-arrow-up-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_UP') . '\"></i></a>" +
-                        "    <a class=\"admidio-icon-link admidio-move-row-down\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+                        "<a class=\"admidio-icon-link admidio-move-row-down\">" +
                         "        <i class=\"bi bi-arrow-down-circle-fill\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_DOWN') . '\"></i></a>" + */
-                        "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+                        "<a class=\"admidio-icon-link admidio-move-row\">" +
                         "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
-                        "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+                        "<a class=\"admidio-icon-link admidio-delete\">" +
                         "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
                 newCellButtons.innerHTML = htmlMoveButtons;
 

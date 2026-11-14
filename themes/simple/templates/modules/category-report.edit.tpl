@@ -89,7 +89,7 @@
         const $remove = $('<a class="admidio-icon-link text-danger" href="javascript:void(0);">')
             .append($('<i class="bi bi-trash-fill" data-bs-toggle="tooltip">').attr('title', data.deleteLabel));
         $remove.on('click', function () { $row.remove(); renumber(); });
-        $row.append($('<td>').append($move, $remove));
+        $row.append($('<td class="text-nowrap align-middle px-0">').append($move, $remove));
         $body.append($row);
         $row.find('[data-bs-toggle="tooltip"]').each(function () { new bootstrap.Tooltip(this); });
         toggleProperty();
