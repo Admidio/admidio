@@ -22,9 +22,10 @@
                                 {/foreach}
                             {/if}
                         </ul>
-                        {if isset($role.actions) && count($role.actions) > 0}
+                        {list_actions actions=$role.actions|default:[] listId='roles' row=$role assign='roleActions'}
+                        {if count($roleActions) > 0}
                             <div class="mt-auto pt-3 d-flex justify-content-end align-items-center">
-                                {include 'sys-template-parts/list.functions.tpl' listId='roles' listRow=$role cardActions=true data=['uuid' => $role.id, 'actions' => $role.actions]}
+                                {include 'sys-template-parts/list.functions.tpl' filteredActions=$roleActions cardActions=true data=['uuid' => $role.id]}
                             </div>
                         {/if}
                     </div>

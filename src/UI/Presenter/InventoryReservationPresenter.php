@@ -148,16 +148,16 @@ class InventoryReservationPresenter extends PagePresenter
             $canManageReservation = $isManager && InventoryAccessService::canManageReservationItem((int) $row['ivr_ini_id']);
             if ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_REQUESTED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_approve', 'reservation_uuid' => $row['ivr_uuid']]);
-                $actions[] = ['url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_APPROVE')];
+                $actions[] = ['id' => 'approve', 'url' => $url, 'icon' => 'bi-check-circle-fill text-success', 'label' => $gL10n->get('SYS_APPROVE')];
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_reject', 'reservation_uuid' => $row['ivr_uuid']]);
-                $actions[] = ['url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_REJECT')];
+                $actions[] = ['id' => 'reject', 'url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_REJECT')];
             } elseif ($canManageReservation && $row['ivr_status'] === Reservation::STATUS_APPROVED) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_cancel', 'reservation_uuid' => $row['ivr_uuid']]);
-                $actions[] = ['url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL')];
+                $actions[] = ['id' => 'cancel', 'url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_CANCEL')];
             }
             if (!$isManager && in_array($row['ivr_status'], [Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED], true)) {
                 $url = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', ['mode' => 'reservation_withdraw', 'reservation_uuid' => $row['ivr_uuid']]);
-                $actions[] = ['url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_WITHDRAW')];
+                $actions[] = ['id' => 'withdraw', 'url' => $url, 'icon' => 'bi-x-circle-fill text-danger', 'label' => $gL10n->get('SYS_WITHDRAW')];
             }
             $buttonIcon = match ($row['ivr_status']) {
                 Reservation::STATUS_APPROVED => 'bi-check-circle-fill text-success',

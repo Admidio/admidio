@@ -139,7 +139,10 @@ class ListFunctionsTemplateTest extends TestCase
                 'beginIso' => '', 'endIso' => '', 'timestampIso' => '', 'beginDateTimeIso' => '', 'endDateTimeIso' => '',
                 'itemName' => 'Item', 'requester' => 'User', 'email' => '', 'timestamp' => '', 'begin' => '', 'end' => '',
                 'originUrl' => '', 'origin' => '', 'mailUrl' => 'mailto:user@example.org', 'comment' => 'Comment "A & B"',
-                'actions' => array(array('url' => '/approve', 'icon' => 'bi-check', 'label' => 'Approve'))
+                'actions' => array(
+                    array('id' => 'approve', 'url' => '/approve', 'icon' => 'bi-check', 'label' => 'Approve'),
+                    array('id' => 'reject', 'url' => '/reject', 'icon' => 'bi-x', 'label' => 'Reject')
+                )
             ))
         ));
         $html = $this->smarty->fetch('modules/inventory.reservations.list.tpl');
@@ -148,6 +151,9 @@ class ListFunctionsTemplateTest extends TestCase
         $xpath = new DOMXPath($document);
         self::assertCount(1, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
         self::assertCount(2, $xpath->query('//a[contains(@class, "admidio-inventory-reservation-update") and @data-url="/approve" and @data-row-id="reservation_test"]'));
+        // every status action keeps its own stable ID, so plugins can tell approve and reject apart
+        self::assertCount(2, $xpath->query('//a[@data-action-id="approve" and @data-url="/approve"]'));
+        self::assertCount(1, $xpath->query('//a[@data-action-id="reject" and @data-url="/reject"]'), 'only in the menu');
         self::assertSame('Comment "A & B"', $xpath->query('//a[@data-comment]')->item(0)->getAttribute('data-comment'));
         self::assertCount(1, $xpath->query('//a[@href="mailto:user@example.org"]'));
     }
@@ -221,5 +227,52 @@ class ListFunctionsTemplateTest extends TestCase
         } finally {
             \Admidio\Hooks\Hooks::reset();
         }
+    }
+
+    public function testCardsApplyTheFilterOnceEvenWithoutCoreActions(): void
+    {
+        $calls = 0;
+        \Admidio\Hooks\Hooks::reset();
+        \Admidio\Hooks\Hooks::addFilter('list_row_actions', static function (array $actions, string $listId, array $row) use (&$calls) {
+            if ($listId === 'announcements') {
+                $calls++;
+                $actions[] = array('id' => 'example_read', 'url' => '/read/' . $row['uuid'], 'icon' => 'bi bi-eye', 'tooltip' => 'Read');
+            }
+            return $actions;
+        });
+
+        try {
+            $this->smarty->assign('urlAdmidio', '');
+            $this->smarty->assign('pagination', '');
+            $this->smarty->assign('cards', array(array(
+                'uuid' => 'readonly', 'title' => 'Title', 'description' => '', 'userCreatedProfilePhotoUrl' => '',
+                'userCreatedName' => '', 'userCreatedTimestamp' => '', 'categoryUUID' => '', 'category' => '',
+                'editable' => false
+            )));
+            $document = new DOMDocument();
+            $document->loadHTML($this->smarty->fetch('modules/announcements.cards.tpl'), LIBXML_NOERROR | LIBXML_NOWARNING);
+            $xpath = new DOMXPath($document);
+            // a plugin action appears on a card the user may not edit, and only once
+            self::assertCount(2, $xpath->query('//a[@data-action-id="example_read" and @href="/read/readonly"]'), 'icon and phone menu entry');
+            self::assertSame(1, $calls);
+        } finally {
+            \Admidio\Hooks\Hooks::reset();
+        }
+    }
+
+    public function testCardsWithoutAnyActionsRenderNoActionArea(): void
+    {
+        $this->smarty->assign('urlAdmidio', '');
+        $this->smarty->assign('pagination', '');
+        $this->smarty->assign('cards', array(array(
+            'uuid' => 'readonly', 'title' => 'Title', 'description' => '', 'userCreatedProfilePhotoUrl' => '',
+            'userCreatedName' => '', 'userCreatedTimestamp' => '', 'categoryUUID' => '', 'category' => '',
+            'editable' => false
+        )));
+        $document = new DOMDocument();
+        $document->loadHTML($this->smarty->fetch('modules/announcements.cards.tpl'), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new DOMXPath($document);
+        self::assertCount(0, $xpath->query('//div[contains(@class, "admidio-functions")]'));
+        self::assertCount(0, $xpath->query('//div[contains(@class, "col-auto ms-auto")]'));
     }
 }

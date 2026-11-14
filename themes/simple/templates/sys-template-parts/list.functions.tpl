@@ -1,7 +1,13 @@
 {* Lists show at most two icons; cards show all icons from md and use a menu on phones. *}
 {assign var=isCard value=$cardActions|default:false}
-{* Plugins may change the actions of a list through the list_row_actions hook, which needs the listId. *}
-{list_actions actions=$data.actions|default:[] listId=$listId|default:'' row=$listRow|default:$data assign='rowActions'}
+{* Plugins may change the actions of a list through the list_row_actions hook, which needs the listId.
+   A template that has to know the filtered actions beforehand (e.g. to decide whether to render the
+   action area at all) calls list_actions itself and passes the result as filteredActions. *}
+{if isset($filteredActions)}
+    {assign var=rowActions value=$filteredActions}
+{else}
+    {list_actions actions=$data.actions|default:[] listId=$listId|default:'' row=$listRow|default:$data assign='rowActions'}
+{/if}
 {if count($rowActions) > 0}
     {assign var=actionCount value=count($rowActions)}
     <div class="admidio-functions d-inline-flex align-items-center text-nowrap">

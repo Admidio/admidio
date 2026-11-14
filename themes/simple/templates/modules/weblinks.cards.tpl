@@ -24,12 +24,16 @@
                                 {/if}
                                 <div class="mt-auto d-flex justify-content-between align-items-center">
                                     <small class="text-body-secondary">{$l10n->get('SYS_COUNTER')}: {$link.counter}</small>
+                                    {assign var=linkActions value=[]}
                                     {if $link.editable}
+                                        {assign var=linkActions value=[['id' => 'edit', 'url' => $link.editUrl, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT')], ['id' => 'delete', 'dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$link.name]), 'dataHref' => "callUrlHideElement('lnk_{$link.uuid}', '{$link.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]]}
+                                        {$linkActions[] = ['id' => 'move_up', 'class' => 'admidio-link-move', 'attributes' => ['data-uuid' => $link.uuid, 'data-direction' => 'UP', 'data-target' => "lnk_{$link.uuid}"], 'icon' => 'bi bi-arrow-left-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_LEFT', ['SYS_WEBLINK'])]}
+                                        {$linkActions[] = ['id' => 'move_down', 'class' => 'admidio-link-move', 'attributes' => ['data-uuid' => $link.uuid, 'data-direction' => 'DOWN', 'data-target' => "lnk_{$link.uuid}"], 'icon' => 'bi bi-arrow-right-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_RIGHT', ['SYS_WEBLINK'])]}
+                                    {/if}
+                                    {list_actions actions=$linkActions listId='weblinks' row=$link assign='linkActions'}
+                                    {if count($linkActions) > 0}
                                         <div>
-                                            {assign var=linkActions value=[['id' => 'edit', 'url' => $link.editUrl, 'icon' => 'bi bi-pencil-square', 'tooltip' => $l10n->get('SYS_EDIT')], ['id' => 'delete', 'dataMessage' => $l10n->get('SYS_WANT_DELETE_ENTRY', [$link.name]), 'dataHref' => "callUrlHideElement('lnk_{$link.uuid}', '{$link.deleteUrl}', '{$csrfToken}')", 'icon' => 'bi bi-trash', 'tooltip' => $l10n->get('SYS_DELETE')]]}
-                                            {$linkActions[] = ['id' => 'move_up', 'class' => 'admidio-link-move', 'attributes' => ['data-uuid' => $link.uuid, 'data-direction' => 'UP', 'data-target' => "lnk_{$link.uuid}"], 'icon' => 'bi bi-arrow-left-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_LEFT', ['SYS_WEBLINK'])]}
-                                            {$linkActions[] = ['id' => 'move_down', 'class' => 'admidio-link-move', 'attributes' => ['data-uuid' => $link.uuid, 'data-direction' => 'DOWN', 'data-target' => "lnk_{$link.uuid}"], 'icon' => 'bi bi-arrow-right-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_RIGHT', ['SYS_WEBLINK'])]}
-                                            {include 'sys-template-parts/list.functions.tpl' listId='weblinks' listRow=$link cardActions=true data=['uuid' => $link.uuid, 'actions' => $linkActions]}
+                                            {include 'sys-template-parts/list.functions.tpl' filteredActions=$linkActions cardActions=true data=['uuid' => $link.uuid]}
                                         </div>
                                     {/if}
                                 </div>

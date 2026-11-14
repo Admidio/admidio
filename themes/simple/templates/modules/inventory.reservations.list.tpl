@@ -32,7 +32,7 @@
                     <span class="me-2"><i class="bi {$row.statusIcon}"></i>{$row.statusLabel}</span>
                     {assign var=reservationActions value=[]}
                     {foreach $row.actions as $action}
-                        {$reservationActions[] = ['id' => 'update', 'icon' => "bi {$action.icon}", 'tooltip' => $action.label, 'class' => 'admidio-inventory-reservation-update', 'attributes' => ['data-url' => $action.url, 'data-row-id' => $row.id]]}
+                        {$reservationActions[] = ['id' => $action.id, 'icon' => "bi {$action.icon}", 'tooltip' => $action.label, 'class' => 'admidio-inventory-reservation-update', 'attributes' => ['data-url' => $action.url, 'data-row-id' => $row.id]]}
                     {/foreach}
                     {if $row.mailUrl}
                         {$reservationActions[] = ['id' => 'send_email', 'url' => $row.mailUrl, 'icon' => 'bi bi-envelope', 'tooltip' => $l10n->get('SYS_SEND_EMAIL')]}

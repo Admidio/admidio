@@ -27,9 +27,10 @@
                                     <span class="d-block">{$l10n->get('SYS_CATEGORY')} <span class="fw-bold">{$forumTopic.category}</span></span>
                                 {/if}
                             </div>
-                            {if $forumTopic.editable && {array_key_exists array=$forumTopic key="actions"} && count($forumTopic.actions) > 0}
+                            {list_actions actions=$forumTopic.actions|default:[] listId='forum-topics' row=$forumTopic assign='topicActions'}
+                            {if count($topicActions) > 0}
                                 <div class="col-auto ms-auto text-nowrap">
-                                    {include 'sys-template-parts/list.functions.tpl' listId='forum-topics' cardActions=true data=$forumTopic}
+                                    {include 'sys-template-parts/list.functions.tpl' filteredActions=$topicActions cardActions=true data=$forumTopic}
                                 </div>
                             {/if}
                         </div>

@@ -20,9 +20,10 @@
                         <span class="admidio-info-created">{$l10n->get('SYS_CREATED_BY_AND_AT', array($announcement.userCreatedName, $announcement.userCreatedTimestamp))}</span>
                         {$l10n->get('SYS_CATEGORY')} <a href="{$urlAdmidio}/modules/announcements.php?category_uuid={$announcement.categoryUUID}">{$announcement.category}</a>
                     </div>
-                    {if $announcement.editable && {array_key_exists array=$announcement key="actions"} && count($announcement.actions) > 0}
+                    {list_actions actions=$announcement.actions|default:[] listId='announcements' row=$announcement assign='announcementActions'}
+                    {if count($announcementActions) > 0}
                         <div class="col-auto ms-auto text-nowrap">
-                            {include 'sys-template-parts/list.functions.tpl' listId='announcements' listRow=$announcement cardActions=true data=['uuid' => $announcement.uuid, 'actions' => $announcement.actions]}
+                            {include 'sys-template-parts/list.functions.tpl' filteredActions=$announcementActions cardActions=true data=['uuid' => $announcement.uuid]}
                         </div>
                     {/if}
                 </div>
