@@ -244,11 +244,17 @@ class CategoryService
              WHERE cat_type = ? -- $this->type
                AND (  cat_org_id  = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
-          ORDER BY cat_org_id, cat_sequence';
+          ORDER BY CASE WHEN cat_org_id IS NULL THEN 0 ELSE 1 END, cat_sequence';
         $categoriesStatement = $gDb->queryPrepared($sql, array($this->type, $gCurrentOrgId));
 
         while ($row = $categoriesStatement->fetch()) {
             ++$sequence;
+
+            // Global categories occupy the first positions, but child organizations must not rewrite them.
+            if ($row['cat_org_id'] === null && $gCurrentOrganization->isChildOrganization()) {
+                continue;
+            }
+
             $sequenceCategory->clear();
             $sequenceCategory->setArray($row);
 
