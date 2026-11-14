@@ -881,6 +881,12 @@
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Participants can register for the event until this date. After the deadline, leaders and members with permission to edit events can still add participants. If no date is specified, registration closes when the event starts.</string>
   <string name="SYS_EVENT_MAX_MEMBERS">Limit the number of participants for this event. Leave the field blank for unlimited participants.</string>
+  <string name="SYS_EVENT_REMINDER_DAYS">Days before event for reminder email</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_DESC">Number of days before the event when members who have not confirmed or declined yet receive a reminder email. Set to 0 to disable reminder emails for this event.</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_PREFERENCE">Default reminder days for new events</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_PREFERENCE_DESC">This value prefills the reminder days of new events. Set to 0 to disable reminders by default.</string>
+  <string name="SYS_EVENT_REMINDER_MESSAGE">Hello #VAR1#! The event #VAR3# in the calendar #VAR4# takes place on #VAR2# (location: #VAR5#, room: #VAR6#, time zone: #VAR7#). Your confirmation of participation is still missing. Please register here: #VAR8#</string>
+  <string name="SYS_EVENT_REMINDER_SUBJECT">Reminder: Please register or update participation for #VAR1#</string>
   <string name="SYS_EVENT_PARTICIPATION_ATTEND">I take part</string>
   <string name="SYS_EVENT_PARTICIPATION_CANCELED">Participation canceled</string>
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Invited</string>

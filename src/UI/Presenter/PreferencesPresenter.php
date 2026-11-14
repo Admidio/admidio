@@ -1755,6 +1755,12 @@ class PreferencesPresenter extends PagePresenter
             $selectBoxEntries,
             array('defaultValue' => $formValues['events_weekday_format'] ?? 'short', 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_WEEKDAY_FORMAT_DESC')
         );
+        $formEvents->addInput(
+            'events_reminder_days',
+            $gL10n->get('SYS_EVENT_REMINDER_DAYS_PREFERENCE'),
+            $formValues['events_reminder_days'] ?? '0',
+            self::preferenceInputOptions('events_reminder_days', array('helpTextId' => 'SYS_EVENT_REMINDER_DAYS_PREFERENCE_DESC'))
+        );
          $formEvents->addInput(
             'events_clamp_text_lines',
             $gL10n->get('SYS_CLAMP_TEXT_LINES', array($gL10n->get('SYS_DESCRIPTION'))),

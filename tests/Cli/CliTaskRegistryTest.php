@@ -39,10 +39,12 @@ class CliTaskRegistryTest extends AdmidioTestCase
         // one command from each corner of the application
         foreach (array(
             'user:show', 'group:list', 'category:list', 'message:list',
-            'event:list', 'room:list', 'maintenance:mode', 'cli:selfcheck'
+            'event:list', 'event:send-reminders', 'room:list', 'maintenance:mode', 'cli:selfcheck'
         ) as $expected) {
             $this->assertArrayHasKey($expected, $tasks, $expected . ' should be a registered command.');
         }
+
+        $this->assertArrayHasKey('event-reminders', CliTaskRegistry::getMaintenanceJobs());
     }
 
     /**

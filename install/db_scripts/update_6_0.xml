@@ -107,5 +107,16 @@
     -->
     <step id="390">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
     <step id="400">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
+    <step id="410">ALTER TABLE %PREFIX%_events ADD COLUMN dat_reminder_days smallint NOT NULL DEFAULT 0</step>
+    <step id="420">CREATE TABLE %PREFIX%_event_reminder_sent (
+        ers_dat_id integer unsigned NOT NULL,
+        ers_usr_id integer unsigned NOT NULL,
+        ers_timestamp_sent timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (ers_dat_id, ers_usr_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci</step>
+    <step id="430">ALTER TABLE %PREFIX%_event_reminder_sent
+        ADD CONSTRAINT %PREFIX%_fk_ers_dat FOREIGN KEY (ers_dat_id) REFERENCES %PREFIX%_events (dat_id) ON DELETE CASCADE ON UPDATE RESTRICT,
+        ADD CONSTRAINT %PREFIX%_fk_ers_usr FOREIGN KEY (ers_usr_id) REFERENCES %PREFIX%_users (usr_id) ON DELETE CASCADE ON UPDATE RESTRICT</step>
+    <step id="440">UpdateStepsCode::updateStep51AddEventReminderText</step>
     <step>stop</step>
 </update>
