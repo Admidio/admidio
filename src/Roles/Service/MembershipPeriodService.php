@@ -17,11 +17,19 @@ use Admidio\SSO\Service\SSOAccessRevocationService;
  *   ended, so that plugins can react to it.
  *
  * It runs as the maintenance job **memberships** and, for installations without cron, on the first
- * request of the day. The day is claimed in the database before the work starts, so two requests or a
- * request and the cron job do not do it twice. If the revocation of tokens fails, the claim is handed
- * back and the next request or run tries again; revoking twice does no harm. A callback of the action
- * that fails is logged and does not stop the others - the day is not repeated for it, because a broken
- * plugin would otherwise make every request do the work again.
+ * request of the day. Two preferences of the organization keep track of it:
+ *
+ * - **groups_roles_membership_period_date** is the last day that was processed completely. It is
+ *   written only after the work is done, so a run that fails or is killed (a timeout, a restarted
+ *   worker) leaves it as it was, and the next run starts from there again.
+ * - **groups_roles_membership_period_lock** holds the start time of the run that is working right now.
+ *   It is taken with an atomic UPDATE, so two requests or a request and the cron job do not do the work
+ *   at the same time. A run that ends, also with an error, clears it; a lock that a killed run left
+ *   behind counts as abandoned after LOCK_TIMEOUT seconds and is taken over.
+ *
+ * Doing a day twice does no harm to the tokens: revoking them again changes nothing. A callback of the
+ * action that fails is logged and does not stop the others - the day is not repeated for it, because a
+ * broken plugin would otherwise make every request do the work again.
  *
  * The callbacks of the action receive the membership as array (mem_id, mem_uuid, mem_usr_id,
  * mem_rol_id, mem_begin, mem_end, mem_leader) and **started** or **ended**:
@@ -39,6 +47,10 @@ class MembershipPeriodService
 {
     public const HOOK = 'membership_period_changed';
     public const SETTING = 'groups_roles_membership_period_date';
+    public const LOCK_SETTING = 'groups_roles_membership_period_lock';
+
+    /** Seconds after which the lock of a run that did not finish counts as abandoned. */
+    public const LOCK_TIMEOUT = 3600;
 
     public const CHANGE_STARTED = 'started';
     public const CHANGE_ENDED = 'ended';
@@ -67,16 +79,25 @@ class MembershipPeriodService
             return null;
         }
 
-        $since = $this->claim($today);
-        if ($since === null) {
+        $lock = $this->lock();
+        if ($lock === null) {
             return null;
         }
 
         try {
-            return $this->process($since, $today);
-        } catch (\Throwable $exception) {
-            $this->release($today, $since);
-            throw $exception;
+            // read after the lock is taken: a run that just finished may have done today already
+            $since = $this->lastProcessedDay($today);
+            if ($since >= $today) {
+                $gSettingsManager->has(self::SETTING, true);
+                return null;
+            }
+
+            $count = $this->process($since, $today);
+            $gSettingsManager->set(self::SETTING, $today);
+
+            return $count;
+        } finally {
+            $this->unlock($lock);
         }
     }
 
@@ -140,66 +161,92 @@ class MembershipPeriodService
     }
 
     /**
-     * Claim the day: write it into the preference unless it is there already. The conditional UPDATE
-     * is atomic, so of two requests that arrive at the same time only one gets the day.
-     *
-     * @return string|null The last day that was processed (yesterday for the very first run), or
-     *                     **null** if another request or run claimed today already.
+     * The last day that was processed completely, or yesterday if there was none yet.
      * @throws Exception
      */
-    private function claim(string $today): ?string
+    private function lastProcessedDay(string $today): string
     {
-        global $gSettingsManager, $gCurrentOrgId;
+        $value = (string) $this->readPreference(self::SETTING);
 
-        $yesterday = date('Y-m-d', (int) strtotime($today . ' -1 day'));
-        $current = $this->db->queryPrepared(
-            'SELECT prf_value FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ? AND prf_name = ?',
-            array((int) $gCurrentOrgId, self::SETTING)
-        )->fetchColumn();
-
-        if ($current === false) {
-            // an installation from before this preference: create it, and start with yesterday
-            $gSettingsManager->set(self::SETTING, $today);
-            return $yesterday;
-        }
-
-        $current = (string) $current;
-        if ($current !== '' && $current >= $today) {
-            return null;
-        }
-        $claimed = $this->db->queryPrepared(
-            'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ?
-              WHERE prf_org_id = ? AND prf_name = ? AND prf_value = ?',
-            array($today, (int) $gCurrentOrgId, self::SETTING, $current)
-        )->rowCount() === 1;
-
-        if (!$claimed) {
-            return null;
-        }
-
-        // keep the settings of this request, which may come from the session, in line
-        $gSettingsManager->set(self::SETTING, $today);
-        return $current === '' ? $yesterday : $current;
+        return $value === '' ? date('Y-m-d', (int) strtotime($today . ' -1 day')) : $value;
     }
 
     /**
-     * Hand a claimed day back after its processing failed, so the next request or run repeats it.
-     * Only a claim that is still the one of this run is handed back.
+     * Take the lock of the current organization, unless another run holds it. A lock older than
+     * LOCK_TIMEOUT is one a killed run left behind and is taken over. Both the insert of a missing
+     * preference and the conditional UPDATE are atomic, so of two requests only one gets the lock.
+     *
+     * @return string|null The value of the lock, which unlock() needs, or **null** if another run
+     *                     holds it.
      * @throws Exception
      */
-    private function release(string $today, string $since): void
+    private function lock(): ?string
     {
-        global $gSettingsManager, $gCurrentOrgId;
+        global $gCurrentOrgId;
 
-        $released = $this->db->queryPrepared(
+        $now = time();
+        $lock = date('Y-m-d H:i:s', $now) . ' ' . bin2hex(random_bytes(4));
+        $current = $this->readPreference(self::LOCK_SETTING);
+
+        if ($current === false) {
+            // an installation from before this preference; a concurrent insert fails on the unique index
+            $inserted = $this->db->queryPrepared(
+                'INSERT INTO ' . TBL_PREFERENCES . ' (prf_org_id, prf_name, prf_value) VALUES (?, ?, ?)',
+                array((int) $gCurrentOrgId, self::LOCK_SETTING, $lock),
+                false
+            );
+            return $inserted === false ? null : $lock;
+        }
+
+        $current = (string) $current;
+        if ($current !== '' && (int) strtotime(substr($current, 0, 19)) > $now - self::LOCK_TIMEOUT) {
+            return null;
+        }
+
+        return $this->replacePreference(self::LOCK_SETTING, $current, $lock) ? $lock : null;
+    }
+
+    /**
+     * Release the lock, unless another run took it over in the meantime.
+     * @throws Exception
+     */
+    private function unlock(string $lock): void
+    {
+        $this->replacePreference(self::LOCK_SETTING, $lock, '');
+    }
+
+    /**
+     * The value of a preference of the current organization, read from the database and not from the
+     * settings of the session, or **false** if there is none.
+     * @throws Exception
+     */
+    private function readPreference(string $name): string|false
+    {
+        global $gCurrentOrgId;
+
+        $value = $this->db->queryPrepared(
+            'SELECT prf_value FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ? AND prf_name = ?',
+            array((int) $gCurrentOrgId, $name)
+        )->fetchColumn();
+
+        return $value === false ? false : (string) $value;
+    }
+
+    /**
+     * Change a preference of the current organization from $expected to $value, but only if it still
+     * has the value $expected.
+     * @return bool Whether the preference was changed.
+     * @throws Exception
+     */
+    private function replacePreference(string $name, string $expected, string $value): bool
+    {
+        global $gCurrentOrgId;
+
+        return $this->db->queryPrepared(
             'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ?
               WHERE prf_org_id = ? AND prf_name = ? AND prf_value = ?',
-            array($since, (int) $gCurrentOrgId, self::SETTING, $today)
+            array($value, (int) $gCurrentOrgId, $name, $expected)
         )->rowCount() === 1;
-
-        if ($released) {
-            $gSettingsManager->set(self::SETTING, $since);
-        }
     }
 
     /**

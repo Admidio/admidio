@@ -345,6 +345,7 @@ final class PreferenceDefinitions
             'groups_roles_preview_characters' => array('default' => '200', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
             'groups_roles_show_former_members' => array('default' => '2', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'groups_roles_membership_period_date' => array('default' => '', 'internal' => true),
+            'groups_roles_membership_period_lock' => array('default' => '', 'internal' => true),
             'mail_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'pm_module_enabled' => array('default' => '1', 'type' => 'bool'),
             'mail_delivery_confirmation' => array('default' => '0', 'type' => 'enum', 'values' => array('0', '1', '2')),
