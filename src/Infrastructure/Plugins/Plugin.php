@@ -439,7 +439,9 @@ final class Plugin
 
         foreach ($this->settings as $name => $definition) {
             if (!isset($gSettingsManager) || !$gSettingsManager->has($name)) {
-                $values[$name] = $definition['default'];
+                $values[$name] = $definition['type'] === 'roles'
+                    ? self::toRoleIds($definition['default'])
+                    : $definition['default'];
                 continue;
             }
 
@@ -447,11 +449,40 @@ final class Plugin
                 'int', 'integer' => $gSettingsManager->getInt($name),
                 'bool', 'boolean' => $gSettingsManager->getBool($name),
                 'array' => self::readArraySetting($name),
+                'roles' => self::toRoleIds($gSettingsManager->getString($name)),
                 default => $gSettingsManager->getString($name)
             };
         }
 
         return $values;
+    }
+
+    /**
+     * The role IDs of a setting of the type **roles**.
+     *
+     * Such a setting is a selection of roles of the organization, stored as their IDs in one
+     * comma-separated string and edited as a multi-select in the generated settings form:
+     * ```
+     * "example_roles": { "type": "roles", "default": [], "label": "PLG_EXAMPLE_ROLES" }
+     * ```
+     * An empty list means that no role was chosen, which a plugin usually reads as "no restriction".
+     * Anything that is not an ID is dropped, so the word **All** that older plugins stored for
+     * exactly that reads as the empty list.
+     * @param mixed $value The stored string, or a list as the manifest declares the default.
+     * @return array<int,int>
+     */
+    public static function toRoleIds(mixed $value): array
+    {
+        $roleIds = array();
+
+        foreach (is_array($value) ? $value : explode(',', (string)$value) as $entry) {
+            $entry = is_scalar($entry) ? trim((string)$entry) : '';
+            if (ctype_digit($entry) && (int)$entry > 0) {
+                $roleIds[] = (int)$entry;
+            }
+        }
+
+        return array_values(array_unique($roleIds));
     }
 
     /**

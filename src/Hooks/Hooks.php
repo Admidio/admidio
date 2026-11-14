@@ -24,7 +24,8 @@ use InvalidArgumentException;
  * Exceptions of a callback are logged and rethrown. A hook is an extension point of the operation
  * that dispatches it, so a failing extension has to fail that operation instead of leaving it half
  * done. Only the dispatch sites of failure and diagnostic hooks use doActionCatchErrors(), so that
- * a failing diagnostic cannot mask the failure it reports.
+ * a failing diagnostic cannot mask the failure it reports, and those of notifications about a change
+ * that already happened and that nothing could undo (membership_period_changed).
  *
  * **Code example**
  * ```

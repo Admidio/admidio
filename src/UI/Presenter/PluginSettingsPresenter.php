@@ -12,8 +12,8 @@ use Admidio\Infrastructure\Utils\SecurityUtils;
  * A plugin describes its settings in the manifest with a type, a label and a description, and the
  * loader registers them as ordinary Admidio preferences. Everything a form needs is therefore
  * already declared, and this class turns that declaration into the form. A plugin only has to write
- * a presenter when it wants more than its manifest can express - readable names for the values of
- * an enum, a role selection, a live preview - and the panel it registers itself takes precedence.
+ * a presenter when it wants more than its manifest can express - a live preview, controls that
+ * depend on each other - and the panel it registers itself takes precedence.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -99,6 +99,8 @@ final class PluginSettingsPresenter
      */
     private static function addControl(FormPresenter $form, string $name, array $definition, mixed $value): void
     {
+        global $gDb, $gCurrentOrgId;
+
         $label = Language::translateIfTranslationStrId((string)($definition['label'] ?? $name));
         $options = array();
         if (($definition['description'] ?? '') !== '') {
@@ -126,6 +128,29 @@ final class PluginSettingsPresenter
                 $options['defaultValue'] = (string)$value;
                 $options['showContextDependentFirstEntry'] = false;
                 $form->addSelectBox($name, $label, $entries, $options);
+                break;
+
+            case 'roles':
+                // The roles of this organization, grouped by their category as in the core forms.
+                $sql = 'SELECT rol_id, rol_name, cat_name
+                          FROM ' . TBL_ROLES . '
+                    INNER JOIN ' . TBL_CATEGORIES . '
+                            ON cat_id = rol_cat_id
+                         WHERE rol_valid  = true
+                           AND rol_system = false
+                           AND cat_org_id = ? -- $gCurrentOrgId
+                           AND cat_name_intern <> \'EVENTS\'
+                      ORDER BY cat_sequence, rol_name';
+                $options['defaultValue'] = Plugin::toRoleIds($value);
+                $options['multiselect'] = true;
+                $options['showContextDependentFirstEntry'] = false;
+                $form->addSelectBoxFromSql(
+                    $name,
+                    $label,
+                    $gDb,
+                    array('query' => $sql, 'params' => array($gCurrentOrgId)),
+                    $options
+                );
                 break;
 
             case 'int':

@@ -346,6 +346,32 @@ final class PluginPackageTest extends PluginTestCase
     }
 
     /**
+     * @testdox Replacing a folder from before the plugin system keeps its config.php
+     */
+    public function testReplacingAnOldPluginFolderKeepsItsConfig(): void
+    {
+        mkdir($this->pluginsPath . '/hello-store');
+        file_put_contents($this->pluginsPath . '/hello-store/config.php', '<?php $plg_greeting = 1;');
+        file_put_contents($this->pluginsPath . '/hello-store/old.php', self::ENTRY);
+
+        PluginPackage::install($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.0.0"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )), true);
+
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/old.php');
+        $this->assertSame('<?php $plg_greeting = 1;', file_get_contents($this->pluginsPath . '/hello-store/config.php'));
+
+        // the folder now has a manifest, so the next version replaces all of it
+        PluginPackage::install($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.1.0"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )), true);
+
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/config.php');
+    }
+
+    /**
      * @testdox An archive with more entries than a plugin could have is refused
      */
     public function testOversizedArchiveIsRefused(): void

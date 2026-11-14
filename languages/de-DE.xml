@@ -1527,6 +1527,8 @@
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE_DESC">Wählen Sie die ZIP-Datei eines Plugins aus. Admidio prüft die Datei, bevor Inhalte entpackt werden. Das Plugin wird nur hinzugefügt und nicht aktiviert. Aktivieren Sie es anschließend in der Plugin-Verwaltung.</string>
   <string name="SYS_PLUGIN_INVALID_ID">Der Plugin-Ordner #VAR1# ist kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</string>
   <string name="SYS_PLUGIN_INVALID_MANIFEST">Dieses Plugin ist nicht mit dem Plugin-System von Admidio ab Version 6.0 kompatibel: Das Manifest #VAR1# ist kein gültiges JSON-Objekt.</string>
+  <string name="SYS_PLUGIN_LEGACY">Dieses Plugin wurde für eine Admidio-Version vor 6.0 erstellt. Aktualisieren Sie es auf die aktuelle Version; seine Daten und Einstellungen bleiben erhalten.</string>
+  <string name="SYS_PLUGIN_LEGACY_UPDATE">Auf die aktuelle Version aktualisieren</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">Diese Plugins konnten nicht geladen werden und sind daher inaktiv:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin-Manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Hier können Sie die Plugins von Admidio verwalten. Plugins sind zusätzliche Module, die installiert werden können, um die Funktionalität von Admidio zu erweitern. Sie können Plugins installieren, aktualisieren oder entfernen.</string>
@@ -1554,6 +1556,7 @@
   <string name="SYS_PLUGIN_PACKAGE_UNREADABLE">Die Datei konnte nicht gelesen werden.</string>
   <string name="SYS_PLUGIN_PACKAGE_UNSAFE_ENTRY">Das Archiv enthält den Eintrag #VAR1#, der außerhalb des Plugin-Ordners schreiben würde. Die Datei wurde abgelehnt.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin-Einstellungen</string>
+  <string name="SYS_PLUGIN_REMOVAL_WARNINGS">Das Plugin meldet:</string>
   <string name="SYS_PLUGIN_REMOVE">Plugin entfernen</string>
   <string name="SYS_PLUGIN_REMOVED">Das Plugin wurde erfolgreich entfernt.</string>
   <string name="SYS_PLUGIN_REMOVED_FILES_KEPT">Das Plugin wurde entfernt, sein Ordner konnte jedoch nicht gelöscht werden, weil Admidio nicht in den Plugin-Ordner schreiben darf. Das Plugin wird wieder als verfügbar aufgeführt. Löschen Sie seinen Ordner auf dem Server, um es vollständig zu entfernen.</string>
@@ -2316,6 +2319,7 @@
   <string name="SYS_WANT_INSTALL_FROM_STORE">Möchten Sie das Plugin #VAR1_BOLD# installieren?\n\nEs wird heruntergeladen und hinzugefügt, aber nicht aktiviert. Aktivieren Sie es anschließend in der Plugin-Verwaltung.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Möchten Sie das Plugin #VAR1_BOLD# entfernen?\n\nDies gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktivieren Sie das Plugin stattdessen, wenn Sie es nicht mehr verwenden möchten.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Möchten Sie das Plugin #VAR1_BOLD# entfernen?\n\nEs ist in diesen Organisationen noch aktiviert: #VAR2_BOLD#.\n\nDas Entfernen gilt für jede Organisation dieser Installation. Alle Daten des Plugins und seine Dateien auf dem Server werden unwiderruflich gelöscht. Deaktivieren Sie das Plugin stattdessen, wenn Sie es nicht mehr verwenden möchten.</string>
+  <string name="SYS_WANT_UPDATE_LEGACY_PLUGIN">Möchten Sie das Plugin #VAR1_BOLD# auf die aktuelle Version aktualisieren?\n\nSeine Dateien werden durch die Version für dieses Admidio ersetzt. Seine Daten und Einstellungen bleiben erhalten.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Möchten Sie das Plugin #VAR1_BOLD# aktualisieren?</string>
   <string name="SYS_WARNING">Warnung</string>
   <string name="SYS_WEBLINK">Weblink</string>

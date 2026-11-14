@@ -23,7 +23,9 @@ use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
+use Admidio\Menu\Entity\MenuEntry;
 use Admidio\Preferences\Service\PreferenceDefinitions;
+use Admidio\Preferences\Service\PreferencesService;
 use Admidio\Session\Entity\Session;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\FilesystemTestCase;
@@ -561,6 +563,179 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that installing runs the update scripts, and that a later update does not run them again
+     *
+     * @testdox Installing a plugin runs its update scripts from the first one and records the last step
+     */
+    public function testInstallRunsTheUpdateScriptsFromTheFirstOne(): void
+    {
+        $this->writeUpdateScript('1_1', array(10 => 'updateStep10Succeed'));
+        $this->writeUpdateScript('1_2', array(10 => 'updateStep10Succeed', 20 => 'updateStep20FailWhileRequested'));
+
+        PluginInstaller::enable($this->plugin());
+
+        $component = $this->component();
+        $this->assertSame(self::PLUGIN_VERSION, $component['com_version']);
+        $this->assertSame('', $component['com_update_version']);
+        $this->assertSame(20, (int)$component['com_update_step']);
+        $this->assertTrue((bool)$component['com_update_completed']);
+        $this->assertSame(2, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+
+        // a patch release runs nothing of what the installation already ran
+        $this->writeManifestVersion('1.2.1');
+        PluginInstaller::update($this->plugin());
+
+        $this->assertSame('1.2.1', $this->component()['com_version']);
+        $this->assertSame(2, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+    }
+
+    /**
+     * Test that an installation whose update scripts fail resumes with the update
+     *
+     * Starting the installation over would run install.sql on the tables it already created, so the
+     * component record stays at the last step that ran. The plugin waits for its update - also when
+     * its version is the one of its first update script, as here - and the update runs the
+     * remaining steps and completes the installation with its menu entry.
+     *
+     * @testdox A plugin whose installation fails waits for its update, which resumes and completes it
+     */
+    public function testFailedInstallIsCompletedByTheUpdate(): void
+    {
+        $this->writeUpdateScript('1_2', array(10 => 'updateStep10Succeed', 20 => 'updateStep20FailWhileRequested'));
+        $GLOBALS['helloPluginUpdateShouldFail'] = true;
+
+        try {
+            PluginInstaller::enable($this->plugin());
+            $this->fail('The deliberately broken installation was expected to fail.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('STEP: 20', $exception->getMessage());
+        }
+
+        $component = $this->component();
+        $this->assertSame(10, (int)$component['com_update_step']);
+        $this->assertFalse((bool)$component['com_update_completed']);
+        $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState(self::PLUGIN_ID));
+        $this->assertNotContains(self::PLUGIN_ID, array_map(static fn (Plugin $plugin): string => $plugin->id, PluginRegistry::getLoadable()));
+        $this->assertSame(array(), $this->menuEntry());
+
+        $GLOBALS['helloPluginUpdateShouldFail'] = false;
+        PluginInstaller::update($this->plugin());
+
+        $component = $this->component();
+        $this->assertSame(self::PLUGIN_VERSION, $component['com_version']);
+        $this->assertSame(20, (int)$component['com_update_step']);
+        $this->assertTrue((bool)$component['com_update_completed']);
+        $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns'], 'The step that ran must not run again.');
+        $this->assertNotSame(array(), $this->menuEntry());
+    }
+
+    /**
+     * Test that the config.php of a plugin from before the plugin system reaches every organization
+     *
+     * @testdox Installing over an old config.php takes its settings over for every organization
+     */
+    public function testInstallTakesOverTheOldConfigForEveryOrganization(): void
+    {
+        global $gCurrentOrgId;
+
+        $second = $this->getFixture()->createAndSaveOrganization('Second Organization', 'SECOND');
+        $this->createFixtureFile(
+            $this->pluginsPath . '/' . self::PLUGIN_ID,
+            'config.php',
+            "<?php\n\$plg_greeting = 'Servus';\n\$plg_unknown = 1;\n"
+        );
+        $this->writeUpdateScript('1_2', array(30 => 'updateStep30ImportLegacyConfig'));
+
+        $plugin = $this->plugin();
+        PluginInstaller::enable($plugin);
+
+        $this->assertSame('Servus', $this->preferences((int)$gCurrentOrgId, $plugin)['hello_greeting']);
+        $this->assertSame('Servus', $this->preferences($second['org_id'], $plugin)['hello_greeting']);
+        // what the old file does not name keeps its default
+        $this->assertSame('3', $this->preferences($second['org_id'], $plugin)['hello_repeat']);
+    }
+
+    /**
+     * Test the step with which a plugin of the Admidio distribution takes over its old config.php
+     *
+     * @testdox A plugin of the Admidio distribution converts the settings of its old config.php
+     */
+    public function testABuiltInPluginConvertsItsOldConfig(): void
+    {
+        global $gCurrentOrgId;
+
+        FileSystemUtils::copyDirectory(ADMIDIO_PATH . '/plugins/birthday', $this->pluginsPath . '/birthday');
+        $this->createFixtureFile(
+            $this->pluginsPath . '/birthday',
+            'config.php',
+            "<?php\n\$plg_show_age = 1;\n\$plg_show_hinweis_keiner = 0;\n\$plg_show_zeitraum = 5;\n"
+            . "\$plg_rolle_sql = array(2, 3);\n\$plg_birthday_roles_view_plugin = array();\n"
+        );
+        PluginRegistry::reset();
+
+        $plugin = $this->plugin('birthday');
+        PluginLoader::load($plugin);
+        \AdmidioPlugin\Birthday\Service\UpdateStepsCode::setDatabase($this->getDatabase());
+        \AdmidioPlugin\Birthday\Service\UpdateStepsCode::updateStep10RetrievePreviousSettings();
+
+        $preferences = $this->preferences((int)$gCurrentOrgId, $plugin);
+        $this->assertSame('1', $preferences['birthday_show_age']);
+        $this->assertSame('0', $preferences['birthday_show_notice_none']);
+        $this->assertSame('5', $preferences['birthday_show_past']);
+        $this->assertSame('2,3', $preferences['birthday_roles_sql']);
+        $this->assertSame('All', $preferences['birthday_roles_view_plugin']);
+        // a setting the old file does not name is left as it is
+        $this->assertSame('2', $preferences['birthday_show_future']);
+    }
+
+    /**
+     * Test that a plugin the update to 6.0 found in adm_plugins stays active in every organization
+     *
+     * @testdox A plugin the update marked as enabled is enabled in every organization once installed
+     */
+    public function testAPluginEnabledBeforeItsInstallationStaysEnabledEverywhere(): void
+    {
+        $second = $this->getFixture()->createAndSaveOrganization('Second Organization', 'SECOND');
+        $plugin = $this->plugin();
+
+        // what updateStep51CheckFor3rdPartyPlugins does for a folder it finds in adm_plugins
+        PreferencesService::setForAllOrganizations(array($plugin->getEnabledSettingName() => '1'));
+        $this->assertFalse(PluginRegistry::isEnabled(self::PLUGIN_ID), 'A plugin that is not installed is not enabled.');
+
+        PluginInstaller::install($plugin);
+
+        $this->assertTrue(PluginRegistry::isEnabled(self::PLUGIN_ID));
+        $this->assertSame('1', $this->preferences($second['org_id'], $plugin)[$plugin->getEnabledSettingName()]);
+    }
+
+    /**
+     * Test that a menu entry an update step gave to the plugin is the one it keeps
+     *
+     * @testdox A menu entry the update scripts took over is kept instead of adding a second one
+     */
+    public function testInstallKeepsAMenuEntryTheUpdateScriptsTookOver(): void
+    {
+        $legacy = new MenuEntry($this->getDatabase());
+        $legacy->setValue('men_men_id_parent', self::EXTENSIONS_NODE_ID);
+        $legacy->setValue('men_name', 'My greeting');
+        $legacy->setValue('men_url', '/plugins/' . self::PLUGIN_ID . '/modules/index.php');
+        $legacy->save();
+        $legacy->readDataById((int)$legacy->getValue('men_id'));
+        $legacy->setValue('men_name_intern', 'hello_legacy');
+        $legacy->save();
+
+        $this->writeUpdateScript('1_2', array(40 => 'updateStep40TakeOverMenuEntry'));
+
+        PluginInstaller::enable($this->plugin());
+
+        $this->assertSame(array(), $this->menuEntry(), 'The plugin got a second menu entry.');
+        $entry = $this->menuEntry('hello_legacy');
+        $this->assertSame((int)$this->component()['com_id'], (int)$entry['men_com_id']);
+        $this->assertSame('My greeting', $entry['men_name']);
+        $this->assertSame('/plugins/' . self::PLUGIN_ID . '/modules/index.php', $entry['men_url']);
+    }
+
+    /**
      * Test that an update raises the version of the component
      *
      * @testdox A plugin whose files declare a newer version is updated to it
@@ -715,44 +890,44 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
-     * Test that an installation counts the update steps of its own version as done
+     * Test that an installation records the update steps it ran
      *
-     * install.sql already creates the schema of the version it ships with. Without the steps of
-     * that version recorded, the next update ran its update file again on that schema - and a step
-     * that adds a column failed on the column install.sql had already created.
+     * Installing runs the update scripts, and records the last step of each. Without that the next
+     * update would run the update file of the installed version again.
      *
-     * @testdox Installing a plugin records the steps of its version, so the next update skips them
+     * @testdox Installing a plugin records the steps it ran, so the next update skips them
      */
     public function testAnUpdateDoesNotRepeatTheStepsOfTheInstalledVersion(): void
     {
-        $this->writeUpdateScript('1.2', "UPDATE %PREFIX%_components SET com_name = 'step of 1.2 ran' WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
-        $this->writeUpdateScript('1.3', "UPDATE %PREFIX%_components SET com_beta = 13 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+        $this->writeUpdateStatement('1.2', "UPDATE %PREFIX%_components SET com_beta = com_beta + 1 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+        $this->writeUpdateStatement('1.3', "UPDATE %PREFIX%_components SET com_name = 'step of 1.3 ran' WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
 
         PluginInstaller::enable($this->plugin());
         $this->assertSame(10, (int)$this->component()['com_update_step']);
+        $this->assertSame(1, (int)$this->component()['com_beta'], 'Installing runs the update steps.');
 
         $this->writeManifestVersion('1.3.0');
         PluginInstaller::update($this->plugin());
 
-        $this->assertNotSame('step of 1.2 ran', $this->component()['com_name']);
-        $this->assertSame(13, (int)$this->component()['com_beta'], 'The steps of the new version did run.');
+        $this->assertSame(1, (int)$this->component()['com_beta'], 'The steps of the installed version must not run again.');
+        $this->assertSame('step of 1.3 ran', $this->component()['com_name'], 'The steps of the new version did run.');
         $this->assertSame('1.3.0', $this->component()['com_version']);
     }
 
     /**
      * Test that a plugin below version 2 has update steps at all
      *
-     * @testdox The update steps of a plugin with a version below 2.0 are recorded too
+     * @testdox The update steps of a plugin with a version below 2.0 run and are recorded too
      */
     public function testTheStepsOfAVersionBelowTwoAreRecorded(): void
     {
         $this->writeManifestVersion('0.4.0');
-        $this->writeUpdateScript('0.4', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+        $this->writeUpdateStatement('0.4', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
 
         PluginInstaller::enable($this->plugin());
 
         $this->assertSame(10, (int)$this->component()['com_update_step']);
-        $this->assertSame(0, (int)$this->component()['com_beta'], 'Installing runs no update step.');
+        $this->assertSame(4, (int)$this->component()['com_beta'], 'Installing runs the update steps.');
     }
 
     /**
@@ -766,7 +941,7 @@ class PluginInstallerTest extends FilesystemTestCase
     public function testAVersionWithoutAMinorComponentInstalls(): void
     {
         $this->writeManifestVersion('1');
-        $this->writeUpdateScript('1.0', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
+        $this->writeUpdateStatement('1.0', "UPDATE %PREFIX%_components SET com_beta = 4 WHERE com_type = 'PLUGIN' AND com_name_intern = 'hello'");
 
         PluginInstaller::enable($this->plugin());
 
@@ -1025,7 +1200,7 @@ class PluginInstallerTest extends FilesystemTestCase
     /**
      * Give the copied plugin an update file for one version, with the statement as its step 10.
      */
-    private function writeUpdateScript(string $version, string $statement): void
+    private function writeUpdateStatement(string $version, string $statement): void
     {
         $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
         if (!is_dir($directory)) {
@@ -1068,6 +1243,25 @@ class PluginInstallerTest extends FilesystemTestCase
                  WHERE com_type = ?
                    AND com_name_intern = ?';
         $this->getDatabase()->queryPrepared($sql, array($version, $step, PluginRegistry::COMPONENT_TYPE, self::PLUGIN_ID));
+    }
+
+    /**
+     * Write an update script of the plugin.
+     *
+     * @param string $version The version of the script as it appears in the file name, e.g. **1_2**.
+     * @param array<int,string> $steps The method of UpdateStepsCode each step calls, keyed by its ID.
+     */
+    private function writeUpdateScript(string $version, array $steps): void
+    {
+        $directory = $this->pluginsPath . '/' . self::PLUGIN_ID . '/db_scripts';
+        FileSystemUtils::createDirectoryIfNotExists($directory);
+
+        $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n";
+        foreach ($steps as $id => $method) {
+            $content .= '    <step id="' . $id . '">UpdateStepsCode::' . $method . "</step>\n";
+        }
+
+        $this->createFixtureFile($directory, 'update_' . $version . '.xml', $content . "    <step>stop</step>\n</update>\n");
     }
 
     /**

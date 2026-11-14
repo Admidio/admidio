@@ -7,10 +7,13 @@ use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\PluginLoader;
+use Admidio\Infrastructure\Plugins\PluginPages;
+use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Menu\ValueObject\Menu;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\Service\PreferencesService;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
+use Admidio\Roles\Service\MembershipPeriodService;
 use Admidio\Session\Entity\Session;
 use Admidio\SSO\Service\SSOHooks;
 use Admidio\UI\Component\Message;
@@ -315,4 +318,14 @@ if ($gValidLogin) {
 (new PreferencesService())->checkForUpdateIfDue();
 
 // the plugins of this organization extend the fully initialized request, and only then
-PluginLoader::loadEnabled();
+try {
+    PluginLoader::loadEnabled();
+} catch (Exception $exception) {
+    // The only refusal loadEnabled() passes on is that of a script of a plugin that was requested
+    // directly and may not run. It is answered like the same page requested through its stub.
+    PluginPages::refuse((string)PluginRegistry::getScriptPluginId(), $exception);
+}
+
+// once per day: report the memberships whose start or end date was reached, after the plugins are
+// loaded so that their listeners are called
+MembershipPeriodService::runIfDueSilently($gDb);

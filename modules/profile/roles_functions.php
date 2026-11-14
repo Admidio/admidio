@@ -188,6 +188,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                 // do not edit administrator role
                 if ($row['rol_administrator'] == 0) {
                     $membership['actions'][] = array(
+                        'id' => 'change_date',
                         'url' => 'javascript:profileJS.toggleDetailsOn(\'' . $memberUuid . '\')',
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_CHANGE_DATE')
@@ -206,6 +207,7 @@ function getRoleMemberships(string $htmlListId, User $user, PDOStatement $roleSt
                         $description = $gL10n->get('SYS_CANCEL_MEMBERSHIP');
                     }
                     $membership['actions'][] = array(
+                        'id' => 'delete',
                         'dataMessage' => $gL10n->get($deleteMessage, array($role->getValue('rol_name'))),
                         'dataHref' => 'callUrlHideElement(\'role_' . $role->getValue('rol_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/profile_function.php', array('mode' => $deleteMode, 'member_uuid' => $memberUuid)) . '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'' . $callbackFunction . '\')',
                         'icon' => $icon,

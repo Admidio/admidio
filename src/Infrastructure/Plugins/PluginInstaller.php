@@ -4,6 +4,7 @@ namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Components\Entity\Component;
 use Admidio\Components\Entity\ComponentUpdate;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
@@ -41,12 +42,25 @@ final class PluginInstaller
     }
 
     /**
-     * Install a plugin: run its installation SQL, create its component record, give its
-     * preferences a row in every organization and add its menu entry.
+     * Install a plugin: run its installation SQL and its update scripts, create its component
+     * record, give its preferences a row in every organization and add its menu entry.
+     *
+     * The update scripts run from the first one on, whatever the plugin is installed over. That
+     * makes them the one place where a plugin changes its schema and takes over what an earlier
+     * version left behind - tables in an old shape, a config.php from before the plugin system (see
+     * LegacyConfig), menu entries it once inserted itself. A step therefore has to cope with a
+     * database that is already in the newest shape, which is what install.sql creates: a step that
+     * changes a table is written with error="ignore".
+     *
+     * An installation whose update scripts fail keeps its component record at the last step that
+     * ran: the plugin then waits for its update, and update() resumes from that step and completes
+     * the installation. Starting over would run install.sql on the tables it already created.
      * @param Plugin $plugin
      * @param bool $addMenuEntry Whether the plugin should get a menu entry below "Extensions". A
      *                           plugin without a page, and one whose manifest says "menu": false,
-     *                           never gets one - see Plugin::wantsMenuEntry().
+     *                           never gets one - see Plugin::wantsMenuEntry(). Neither does a plugin
+     *                           whose update scripts took over an entry of an earlier version by
+     *                           giving it the component of the plugin.
      * @return void
      * @throws Exception
      */
@@ -63,60 +77,72 @@ final class PluginInstaller
             throw new Exception(implode(' ', $problems));
         }
 
-        $component = new ComponentUpdate($gDb);
+        // Reading the update files fails on a malformed one. That has to happen before install.sql
+        // created any table, or the failed attempt leaves them behind and every retry fails on them.
+        $firstUpdateVersion = self::getFirstUpdateVersion($plugin);
+
+        self::executeSqlFile($plugin, 'install.sql');
+
+        $component = new Component($gDb);
         $component->setValue('com_type', PluginRegistry::COMPONENT_TYPE);
         $component->setValue('com_name', $plugin->name);
         // The update mechanism resolves db_scripts/update_x_y.xml through com_name_intern, so it
         // has to be the directory name and nothing else.
         $component->setValue('com_name_intern', $plugin->id);
-        $component->setValue('com_version', $plugin->version);
-        // install.sql already creates the schema of this version, so the steps of its update file
-        // count as done. Otherwise the next update would run them again on that schema.
-        // Reading the steps fails on a malformed update file. That has to happen before install.sql
-        // created any table, or the failed attempt leaves them behind and every retry fails on them.
-        $component->setValue('com_update_step', $component->getMaxUpdateStep());
-
-        self::executeSqlFile($plugin, 'install.sql');
-
+        $component->setValue('com_version', $firstUpdateVersion ?? $plugin->version);
         $component->save();
+        $componentId = (int)$component->getValue('com_id');
 
         PluginRegistry::reset();
 
         /*
          * The preferences have to be registered before they can be seeded, and a plugin that is not
-         * loaded yet has not registered them.
+         * loaded yet has not registered them - nor the classes its update steps are written in.
          */
         PluginLoader::load($plugin);
         PreferencesService::seedDefaults(self::getPreferenceNames($plugin));
+
+        if ($firstUpdateVersion !== null) {
+            try {
+                self::runUpdateScripts($plugin);
+            } finally {
+                // after a failure the record states the checkpoint and that the run did not end
+                PluginRegistry::reset();
+            }
+        }
 
         PluginPages::publish($plugin);
 
         // A plugin that only brings a widget or a hook has nothing a menu entry could point at.
         if ($addMenuEntry && $plugin->wantsMenuEntry()) {
-            self::addMenuEntry($plugin, (int)$component->getValue('com_id'));
+            if (self::hasMenuEntry($componentId)) {
+                self::updateMenuEntries($plugin, $componentId);
+            } else {
+                self::addMenuEntry($plugin, $componentId);
+            }
         }
     }
 
     /**
      * Run the update scripts of a plugin up to the version its files declare.
+     *
+     * A run that failed before resumes from the step it reached. If that run was the one of an
+     * installation, the plugin has no menu entry yet, and gets it now - unless its update scripts
+     * took one over. Only a failed earlier update of a plugin whose entry an administrator deleted
+     * gets the entry back as well.
      * @param Plugin $plugin
      * @return void
      * @throws Exception
      */
     public static function update(Plugin $plugin): void
     {
-        global $gDb;
-
         if (!PluginRegistry::isInstalled($plugin->id)) {
             throw new Exception('SYS_PLUGIN_NOT_INSTALLED', array($plugin->id));
         }
 
-        $componentUpdate = new ComponentUpdate($gDb);
-        $componentUpdate->readDataByColumns(array(
-            'com_type' => PluginRegistry::COMPONENT_TYPE,
-            'com_name_intern' => $plugin->id
-        ));
-        $componentUpdate->updatePlugin($plugin->version, self::getUpdateNamespace($plugin));
+        $resumesFailedRun = !PluginRegistry::isUpdateCompleted($plugin->id);
+
+        self::runUpdateScripts($plugin);
 
         PluginRegistry::reset();
 
@@ -126,7 +152,13 @@ final class PluginInstaller
 
         // The new version may bring or drop pages, so the stubs are written from the current list.
         PluginPages::publish($plugin);
-        self::updateMenuEntries($plugin, PluginRegistry::getComponentId($plugin->id));
+
+        $componentId = PluginRegistry::getComponentId($plugin->id);
+        if ($resumesFailedRun && $plugin->wantsMenuEntry() && !self::hasMenuEntry($componentId)) {
+            self::addMenuEntry($plugin, $componentId);
+        } else {
+            self::updateMenuEntries($plugin, $componentId);
+        }
     }
 
     /**
@@ -158,6 +190,38 @@ final class PluginInstaller
         self::update($plugin);
 
         return $plugin;
+    }
+
+    /**
+     * What removing the plugin would leave behind, in the words of the plugin, for the confirmation
+     * of the removal. A plugin answers through the filter **plugin_removal_warnings**, which
+     * receives the list of messages so far and the plugin and returns the list with its own
+     * messages added:
+     * ```
+     * Hooks::addFilter('plugin_removal_warnings', function (array $warnings, Plugin $plugin): array {
+     *     if ($plugin->id === 'example' && ExampleService::hasRemoteData()) {
+     *         $warnings[] = 'The accounts on the remote system are no longer managed.';
+     *     }
+     *     return $warnings;
+     * }, 10, 2);
+     * ```
+     * A warning never prevents the removal - otherwise a broken plugin could not be removed at
+     * all. Only plugins that are loaded can answer, which is the case for a plugin that is enabled
+     * in the current organization.
+     * @param Plugin|string $plugin The plugin, or the ID of a plugin whose files are already gone.
+     * @return array<int,string> The messages, plain text.
+     */
+    public static function getRemovalWarnings(Plugin|string $plugin): array
+    {
+        if (!$plugin instanceof Plugin) {
+            return array();
+        }
+
+        $warnings = Hooks::applyTypedFilters('plugin_removal_warnings', array(), $plugin);
+        return array_values(array_filter(
+            array_map(static fn (mixed $warning): string => is_string($warning) ? trim($warning) : '', $warnings),
+            static fn (string $warning): bool => $warning !== ''
+        ));
     }
 
     /**
@@ -330,6 +394,73 @@ final class PluginInstaller
         $prefixes = array_keys($plugin->autoload);
 
         return $prefixes === array() ? '' : $prefixes[0] . 'Service\\';
+    }
+
+    /**
+     * Run the update scripts of a plugin, from the version and step its component record stands at
+     * up to the version its files declare.
+     * @param Plugin $plugin
+     * @return void
+     * @throws Exception
+     */
+    private static function runUpdateScripts(Plugin $plugin): void
+    {
+        global $gDb;
+
+        $componentUpdate = new ComponentUpdate($gDb);
+        $componentUpdate->readDataByColumns(array(
+            'com_type' => PluginRegistry::COMPONENT_TYPE,
+            'com_name_intern' => $plugin->id
+        ));
+        $componentUpdate->updatePlugin($plugin->version, self::getUpdateNamespace($plugin));
+    }
+
+    /**
+     * The lowest version a plugin has an update script for, which is where an installation starts.
+     * Every update script is read on the way, so that a malformed one fails the installation before
+     * anything was changed.
+     * @param Plugin $plugin
+     * @return string|null The version as **x.y.0**, or **null** for a plugin without update scripts.
+     * @throws Exception
+     */
+    private static function getFirstUpdateVersion(Plugin $plugin): ?string
+    {
+        $directory = $plugin->getDirectory(Plugin::DIR_DB_SCRIPTS);
+        $first = null;
+
+        foreach ($directory === null ? array() : (scandir($directory) ?: array()) as $file) {
+            if (preg_match('/^update_(\d+)_(\d+)\.xml$/', $file, $matches) === 1) {
+                $previous = libxml_use_internal_errors(true);
+                $readable = simplexml_load_file($directory . '/' . $file) !== false;
+                libxml_clear_errors();
+                libxml_use_internal_errors($previous);
+                if (!$readable) {
+                    throw new Exception('INS_ERROR_OPEN_FILE', array($directory . '/' . $file));
+                }
+
+                $version = (int)$matches[1] . '.' . (int)$matches[2] . '.0';
+                if ($first === null || version_compare($version, $first, '<')) {
+                    $first = $version;
+                }
+            }
+        }
+
+        return $first;
+    }
+
+    /**
+     * Whether the component of a plugin has a menu entry.
+     * @param int $componentId
+     * @return bool
+     * @throws Exception
+     */
+    private static function hasMenuEntry(int $componentId): bool
+    {
+        global $gDb;
+
+        $sql = 'SELECT COUNT(*) FROM ' . TBL_MENU . ' WHERE men_com_id = ?';
+
+        return (int)$gDb->queryPrepared($sql, array($componentId))->fetchColumn() > 0;
     }
 
     /**

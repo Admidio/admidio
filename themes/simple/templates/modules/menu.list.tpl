@@ -35,9 +35,9 @@
                     </td>
                     <td class="text-end">
                         {assign var=rowActions value=$menuEntry.actions}
-                        {$rowActions[] = ['class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => $menuEntry.uuid, 'data-direction' => 'UP', 'data-target' => "adm_menu_entry_{$menuEntry.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', [$headline])]}
-                        {$rowActions[] = ['class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => $menuEntry.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_menu_entry_{$menuEntry.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', [$headline])]}
-                        {include 'sys-template-parts/list.functions.tpl' data=['uuid' => $menuEntry.uuid, 'actions' => $rowActions]}
+                        {$rowActions[] = ['id' => 'move_up', 'class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => $menuEntry.uuid, 'data-direction' => 'UP', 'data-target' => "adm_menu_entry_{$menuEntry.uuid}"], 'icon' => 'bi bi-arrow-up-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_UP', [$headline])]}
+                        {$rowActions[] = ['id' => 'move_down', 'class' => 'admidio-menu-move', 'attributes' => ['data-uuid' => $menuEntry.uuid, 'data-direction' => 'DOWN', 'data-target' => "adm_menu_entry_{$menuEntry.uuid}"], 'icon' => 'bi bi-arrow-down-circle-fill', 'tooltip' => $l10n->get('SYS_MOVE_DOWN', [$headline])]}
+                        {include 'sys-template-parts/list.functions.tpl' listId='menu' listRow=$menuEntry data=['uuid' => $menuEntry.uuid, 'actions' => $rowActions]}
                     </td>
                 </tr>
             {/foreach}

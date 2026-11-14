@@ -45,7 +45,7 @@
                     <td class="text-end">{$row.size}</td>
                     <td class="text-end">{$row.counter}</td>
                     <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$row}
+                        {include 'sys-template-parts/list.functions.tpl' listId='documents-files' data=$row}
 
                         {if $row.existsInFileSystem == false}
                             <i class="bi bi-exclamation-triangle-fill" style="color:red;" data-bs-toggle="popover" data-bs-trigger="hover click" data-bs-placement="left"

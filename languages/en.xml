@@ -1546,6 +1546,8 @@
   <string name="SYS_PLUGIN_INSTALL_FROM_FILE_DESC">Choose a plugin ZIP file. Admidio checks the file before extracting it. The plugin is installed without being enabled. You can enable it in the plugin manager afterward.</string>
   <string name="SYS_PLUGIN_INVALID_ID">The plugin folder #VAR1# is not a valid plugin name. A plugin name may only contain letters, digits, hyphens and underscores.</string>
   <string name="SYS_PLUGIN_INVALID_MANIFEST">This plugin is not compatible with the plugin system in Admidio 6.0 and later: The manifest #VAR1# is not a valid JSON object.</string>
+  <string name="SYS_PLUGIN_LEGACY">This plugin was made for an Admidio version before 6.0. Update it to its current version; its data and settings are kept.</string>
+  <string name="SYS_PLUGIN_LEGACY_UPDATE">Update to the current version</string>
   <string name="SYS_PLUGIN_LOAD_FAILED">These plugins could not be loaded and are therefore inactive:</string>
   <string name="SYS_PLUGIN_MANAGER">Plugin manager</string>
   <string name="SYS_PLUGIN_MANAGER_DESC">Here you can manage the plugins of Admidio. Plugins are additional modules that can be installed to extend the functionality of Admidio. You can install, update or remove plugins.</string>
@@ -1573,6 +1575,7 @@
   <string name="SYS_PLUGIN_PACKAGE_UNREADABLE">The file could not be read.</string>
   <string name="SYS_PLUGIN_PACKAGE_UNSAFE_ENTRY">The archive contains the entry #VAR1#, which would write outside the plugin folder. The file was rejected.</string>
   <string name="SYS_PLUGIN_PREFERENCES">Plugin preferences</string>
+  <string name="SYS_PLUGIN_REMOVAL_WARNINGS">The plugin reports:</string>
   <string name="SYS_PLUGIN_REMOVE">Remove plugin</string>
   <string name="SYS_PLUGIN_REMOVED">Plugin successfully removed.</string>
   <string name="SYS_PLUGIN_REMOVED_FILES_KEPT">The plugin was removed, but its folder could not be deleted, because Admidio is not allowed to write into the plugins folder. The plugin is listed as available again. Delete its folder on the server to remove it completely.</string>
@@ -2370,6 +2373,7 @@
   <string name="SYS_WANT_INSTALL_FROM_STORE">Do you want to install the plugin #VAR1_BOLD#?\n\nIt will be downloaded and installed without being enabled. You can enable it in the plugin manager afterward.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN">Do you want to remove the plugin #VAR1_BOLD#?\n\nThis affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
   <string name="SYS_WANT_REMOVE_PLUGIN_ENABLED_IN">Do you want to remove the plugin #VAR1_BOLD#?\n\nIt is still enabled in these organizations: #VAR2_BOLD#.\n\nRemoval affects every organization in this installation. All plugin data will be permanently deleted, and its files will be removed from the server. Disable the plugin if you only want to stop using it.</string>
+  <string name="SYS_WANT_UPDATE_LEGACY_PLUGIN">Do you want to update the plugin #VAR1_BOLD# to its current version?\n\nIts files are replaced by the version for this Admidio. Its data and settings are kept.</string>
   <string name="SYS_WANT_UPDATE_PLUGIN">Do you want to update the plugin #VAR1_BOLD#?</string>
   <string name="SYS_WARNING">Warning</string>
   <string name="SYS_WEBLINK">Web link</string>

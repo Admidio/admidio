@@ -734,6 +734,38 @@ class PreferencesService
     }
 
     /**
+     * Write values of preferences into every organization, replacing what is stored.
+     *
+     * This is for a setting that was one for the whole installation before it became a preference,
+     * as the config.php of a plugin from before the plugin system was (see LegacyConfig).
+     *
+     * @param array<string,mixed> $values The values, keyed by the name of the preference.
+     * @throws Exception
+     */
+    public static function setForAllOrganizations(array $values): void
+    {
+        global $gDb, $gSettingsManager;
+
+        if ($values === array()) {
+            return;
+        }
+
+        // SettingsManager stores a boolean as it casts to a string, and false casts to nothing.
+        $values = array_map(static fn (mixed $value): mixed => is_bool($value) ? (int)$value : $value, $values);
+
+        $statement = $gDb->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS);
+        while ($organizationId = $statement->fetchColumn()) {
+            $organization = new Organization($gDb, (int)$organizationId);
+            $settingsManager =& $organization->getSettingsManager();
+            $settingsManager->setMulti($values);
+        }
+
+        if (isset($gSettingsManager) && $gSettingsManager instanceof SettingsManager) {
+            $gSettingsManager->resetAll();
+        }
+    }
+
+    /**
      * Remove the named preferences from every organization.
      *
      * The counterpart of seedDefaults(), for a module or plugin that is uninstalled. A preference

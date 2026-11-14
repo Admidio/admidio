@@ -500,4 +500,63 @@ final class PluginTest extends PluginTestCase
             Plugin::read(self::fixturePath('hello'))->getSettingValues()['hello_names']
         );
     }
+
+    /**
+     * @testdox A role selection is read as the IDs of the roles, whatever else was stored
+     * @dataProvider roleIdsProvider
+     * @param array<int,int> $expected
+     */
+    public function testRoleIdsAreReadFromAStoredSelection(mixed $stored, array $expected): void
+    {
+        $this->assertSame($expected, Plugin::toRoleIds($stored));
+    }
+
+    /**
+     * @return array<string,array{0:mixed,1:array<int,int>}>
+     */
+    public static function roleIdsProvider(): array
+    {
+        return array(
+            'stored list' => array('2,5,11', array(2, 5, 11)),
+            'nothing selected' => array('', array()),
+            'the word older plugins stored for all roles' => array('All', array()),
+            'a declared default' => array(array(), array()),
+            'a declared default of older plugins' => array(array('All'), array()),
+            'form values' => array(array('3', '7'), array(3, 7)),
+            'spaces and duplicates' => array(' 4, 4 ,9', array(4, 9)),
+            'no IDs' => array('0,-3,1.5,abc', array())
+        );
+    }
+
+    /**
+     * @testdox A setting of the type roles answers the role IDs, and the empty list without a row
+     */
+    public function testSettingValuesReadARoleSelection(): void
+    {
+        $directory = sys_get_temp_dir() . '/admidio-roles-plugin-' . bin2hex(random_bytes(4)) . '/roles-plugin';
+        mkdir($directory, 0o777, true);
+        file_put_contents($directory . '/plugin.php', '<?php');
+        file_put_contents($directory . '/plugin.json', json_encode(array(
+            'name' => 'Roles plugin',
+            'version' => '1.0.0',
+            'settings' => array(
+                'roles_plugin_view' => array('type' => 'roles', 'default' => array(), 'label' => 'View'),
+                'roles_plugin_edit' => array('type' => 'roles', 'default' => array('All'), 'label' => 'Edit')
+            )
+        )));
+
+        try {
+            $GLOBALS['gSettingsManager'] = new PluginSettingsDouble(array('roles_plugin_view' => '2,5'));
+
+            $this->assertSame(
+                array('roles_plugin_view' => array(2, 5), 'roles_plugin_edit' => array()),
+                Plugin::read($directory)->getSettingValues()
+            );
+        } finally {
+            unlink($directory . '/plugin.php');
+            unlink($directory . '/plugin.json');
+            rmdir($directory);
+            rmdir(dirname($directory));
+        }
+    }
 }

@@ -224,17 +224,20 @@ class ForumTopicPresenter extends PagePresenter
 
                 if ($firstPost) {
                     $templateRow['actions'][] = array(
+                        'id' => 'edit',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'topic_edit', 'topic_uuid' => $forumPost['fot_uuid'])),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_EDIT')
                     );
                 } else {
                     $templateRow['actions'][] = array(
+                        'id' => 'edit',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_edit', 'post_uuid' => $forumPost['fop_uuid'])),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_EDIT')
                     );
                     $templateRow['actions'][] = array(
+                        'id' => 'delete',
                         'dataHref' => 'callUrlHideElement(\'adm_post_' . $forumPost['fop_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/forum.php', array('mode' => 'post_delete', 'post_uuid' => $forumPost['fop_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array('SYS_POST')),
                         'icon' => 'bi bi-trash',
