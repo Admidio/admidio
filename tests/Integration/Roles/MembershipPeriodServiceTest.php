@@ -111,7 +111,7 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
     }
 
     /**
-     * @testdox A day whose processing failed is handed back and runs again
+     * @testdox A day whose processing failed stays undone and runs again
      */
     public function testAFailedDayRunsAgain(): void
     {
@@ -133,6 +133,56 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
             (new MembershipPeriodService($this->getDatabase()))->runIfDue(self::day(3)),
             'The day of the failed run must not count as done.'
         );
+    }
+
+    /**
+     * @testdox A run that was killed blocks others only until its lock is abandoned, and is then resumed
+     */
+    public function testAnInterruptedRunIsResumed(): void
+    {
+        $recording = new class ($this->getDatabase()) extends MembershipPeriodService {
+            /** @var array<int,array{0:string,1:string}> */
+            public array $runs = array();
+
+            public function process(string $since, string $until): int
+            {
+                $this->runs[] = array($since, $until);
+                return 0;
+            }
+        };
+
+        $this->assertNotNull($recording->runIfDue(self::day(4)));
+
+        // a run for the next day was killed after it took the lock: the lock stays, the day stays undone
+        $this->setLock(date('Y-m-d H:i:s') . ' killed');
+        $this->assertNull($recording->runIfDue(self::day(5)), 'A run must not start while another holds the lock.');
+
+        $this->setLock(date('Y-m-d H:i:s', time() - MembershipPeriodService::LOCK_TIMEOUT - 60) . ' killed');
+        $this->assertNotNull($recording->runIfDue(self::day(5)), 'An abandoned lock must be taken over.');
+
+        $this->assertSame(array(self::day(4), self::day(5)), end($recording->runs), 'The resumed run starts after the last completed day.');
+        $this->assertSame(self::day(5), $this->preference(MembershipPeriodService::SETTING));
+        $this->assertSame('', $this->preference(MembershipPeriodService::LOCK_SETTING));
+    }
+
+    private function setLock(string $value): void
+    {
+        global $gCurrentOrgId;
+
+        $this->getDatabase()->queryPrepared(
+            'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ? WHERE prf_org_id = ? AND prf_name = ?',
+            array($value, (int) $gCurrentOrgId, MembershipPeriodService::LOCK_SETTING)
+        );
+    }
+
+    private function preference(string $name): string
+    {
+        global $gCurrentOrgId;
+
+        return (string) $this->getDatabase()->queryPrepared(
+            'SELECT prf_value FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ? AND prf_name = ?',
+            array((int) $gCurrentOrgId, $name)
+        )->fetchColumn();
     }
 
     /**

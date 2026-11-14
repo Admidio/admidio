@@ -485,7 +485,7 @@ final class CoreTasks
         }, 'Look for a new release of Admidio, unless the update check is switched off.');
         CliTaskRegistry::registerCoreMaintenanceJob('memberships', static function (): string {
             $count = (new MembershipPeriodService($GLOBALS['gDb']))->runIfDue();
-            return $count === null ? 'already done today' : $count . ' memberships started or ended';
+            return $count === null ? 'done today already, or running' : $count . ' memberships started or ended';
         }, 'Report the memberships that started or ended since the last run, once per day.');
     }
 
