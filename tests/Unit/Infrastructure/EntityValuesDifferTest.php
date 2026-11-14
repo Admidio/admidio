@@ -72,6 +72,28 @@ class EntityValuesDifferTest extends TestCase
         $this->assertFalse($this->differs($type, null, ''));
     }
 
+    /**
+     * A float has 53 bits of mantissa, a decimal column can hold more digits than that.
+     */
+    public static function exactTypes(): array
+    {
+        return array(array('decimal'), array('numeric'));
+    }
+
+    /**
+     * @dataProvider exactTypes
+     */
+    public function testExactNumbersAreComparedWithoutRounding(string $type): void
+    {
+        $this->assertTrue($this->differs($type, '9007199254740992.00', '9007199254740993'));
+        $this->assertTrue($this->differs($type, '0.10000000000000000001', '0.1'));
+        $this->assertFalse($this->differs($type, '9007199254740993.00', '9007199254740993'));
+        $this->assertFalse($this->differs($type, '-0.00', '0'));
+        $this->assertFalse($this->differs($type, '0.50', '.5'));
+        $this->assertTrue($this->differs($type, '-1.50', '1.5'));
+        $this->assertFalse($this->differs($type, '1000.00', '1e3'), 'A value in another notation is compared as a number.');
+    }
+
     public function testOtherTypesAreStillComparedAsBefore(): void
     {
         $this->assertFalse($this->differs('varchar', 'abc', 'abc'));
