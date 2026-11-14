@@ -2029,6 +2029,35 @@ class Entity
     }
 
     /**
+     * A decimal number in one canonical spelling, without sign for zero, leading zeros and trailing
+     * zeros of the fraction: "06.50", "6.5" and "+6.500" all become "6.5".
+     *
+     * @param mixed $value The value as the database returns it or as the code sets it.
+     * @return string|null|false The canonical spelling, **null** for no value, **false** if the
+     *                           value is not written as a plain decimal number.
+     */
+    private static function normalizeDecimal(mixed $value): string|null|false
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        if (is_int($value)) {
+            $value = (string)$value;
+        }
+        if (!is_string($value)
+            || preg_match('/^([+-]?)0*(\d*)(?:\.(\d*?)0*)?$/', trim($value), $matches) !== 1
+            || ($matches[2] === '' && ($matches[3] ?? '') === '' && !str_contains(trim($value), '0'))) {
+            return false;
+        }
+
+        $integer = $matches[2] === '' ? '0' : $matches[2];
+        $fraction = $matches[3] ?? '';
+        $number = $fraction === '' ? $integer : $integer . '.' . $fraction;
+
+        return ($matches[1] === '-' && $number !== '0') ? '-' . $number : $number;
+    }
+
+    /**
      * Check if the given column has changed, considering the DB column type.
      * Since loading from the database converts to the actual data types, but setting
      * uses strings, some datatypes need special-casing. Boolean false are read as null,
@@ -2070,7 +2099,15 @@ class Entity
         //   * all other types can be compared by converting to string and comparing strings
         switch ($this->columnsInfos[$columnName]['type']) {
             case 'decimal': // fallthrough
-            case 'numeric': // fallthrough
+            case 'numeric':
+                // exact numbers are compared as normalized strings; a float would make
+                // 9007199254740992 and 9007199254740993 the same number
+                $oldDecimal = self::normalizeDecimal($originalOldValue);
+                $newDecimal = self::normalizeDecimal($newValue);
+                if ($oldDecimal !== false && $newDecimal !== false) {
+                    return $oldDecimal !== $newDecimal;
+                }
+                // a value that is not written as a plain decimal number (e.g. 1e3) - fallthrough
             case 'float': // fallthrough
             case 'double': // fallthrough
             case 'real':
