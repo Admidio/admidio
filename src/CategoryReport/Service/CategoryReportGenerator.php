@@ -920,7 +920,7 @@ class CategoryReportGenerator
 
         $i = 1;
         foreach ($gProfileFields->getProfileFields() as $field) {
-            if ($field->getValue('usf_hidden') == 0 || $gCurrentUser->isAdministratorUsers()) {
+            if ($gProfileFields->isVisible($field->getValue('usf_name_intern'), $gCurrentUser->isAdministratorUsers())) {
                 $this->headerSelection[$i]['id'] = 'p' . $field->getValue('usf_id');
                 $this->headerSelection[$i]['cat_name'] = $field->getValue('cat_name');
                 $this->headerSelection[$i]['data'] = Language::translateIfTranslationStrId(
