@@ -18,7 +18,10 @@ use Admidio\SSO\Service\SSOAccessRevocationService;
  *
  * It runs as the maintenance job **memberships** and, for installations without cron, on the first
  * request of the day. The day is claimed in the database before the work starts, so two requests or a
- * request and the cron job do not do it twice.
+ * request and the cron job do not do it twice. If the revocation of tokens fails, the claim is handed
+ * back and the next request or run tries again; revoking twice does no harm. A callback of the action
+ * that fails is logged and does not stop the others - the day is not repeated for it, because a broken
+ * plugin would otherwise make every request do the work again.
  *
  * The callbacks of the action receive the membership as array (mem_id, mem_uuid, mem_usr_id,
  * mem_rol_id, mem_begin, mem_end, mem_leader) and **started** or **ended**:
@@ -68,7 +71,13 @@ class MembershipPeriodService
         if ($since === null) {
             return null;
         }
-        return $this->process($since, $today);
+
+        try {
+            return $this->process($since, $today);
+        } catch (\Throwable $exception) {
+            $this->release($today, $since);
+            throw $exception;
+        }
     }
 
     /**
@@ -101,19 +110,28 @@ class MembershipPeriodService
             }
         }
 
-        // the OIDC tokens first: they are the security relevant part
+        // the OIDC tokens first: they are the security relevant part. One user that fails must not
+        // keep the others' tokens alive, so all are tried before the failure is reported.
         $revocation = new SSOAccessRevocationService($this->db);
+        $failure = null;
         foreach (array_keys($ended) as $userId) {
-            $revocation->revokeLostClientAccess($userId);
+            try {
+                $revocation->revokeLostClientAccess($userId);
+            } catch (\Throwable $exception) {
+                $failure ??= $exception;
+            }
+        }
+        if ($failure !== null) {
+            throw $failure;
         }
 
         if (Hooks::hasAction(self::HOOK)) {
             foreach ($rows as $row) {
                 if ($row['mem_begin'] > $since && $row['mem_begin'] <= $until) {
-                    Hooks::doAction(self::HOOK, $row, self::CHANGE_STARTED);
+                    Hooks::doActionCatchErrors(self::HOOK, $row, self::CHANGE_STARTED);
                 }
                 if ($row['mem_end'] > $since && $row['mem_end'] <= $until) {
-                    Hooks::doAction(self::HOOK, $row, self::CHANGE_ENDED);
+                    Hooks::doActionCatchErrors(self::HOOK, $row, self::CHANGE_ENDED);
                 }
             }
         }
@@ -162,6 +180,26 @@ class MembershipPeriodService
         // keep the settings of this request, which may come from the session, in line
         $gSettingsManager->set(self::SETTING, $today);
         return $current === '' ? $yesterday : $current;
+    }
+
+    /**
+     * Hand a claimed day back after its processing failed, so the next request or run repeats it.
+     * Only a claim that is still the one of this run is handed back.
+     * @throws Exception
+     */
+    private function release(string $today, string $since): void
+    {
+        global $gSettingsManager, $gCurrentOrgId;
+
+        $released = $this->db->queryPrepared(
+            'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = ?
+              WHERE prf_org_id = ? AND prf_name = ? AND prf_value = ?',
+            array($since, (int) $gCurrentOrgId, self::SETTING, $today)
+        )->rowCount() === 1;
+
+        if ($released) {
+            $gSettingsManager->set(self::SETTING, $since);
+        }
     }
 
     /**

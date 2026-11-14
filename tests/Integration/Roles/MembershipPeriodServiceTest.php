@@ -109,4 +109,55 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
         $this->assertNull($service->runIfDue(self::day(1)), 'The same day must not run twice.');
         $this->assertNotNull($service->runIfDue(self::day(2)), 'The next day runs again.');
     }
+
+    /**
+     * @testdox A day whose processing failed is handed back and runs again
+     */
+    public function testAFailedDayRunsAgain(): void
+    {
+        $failing = new class ($this->getDatabase()) extends MembershipPeriodService {
+            public function process(string $since, string $until): int
+            {
+                throw new \RuntimeException('The revocation failed.');
+            }
+        };
+
+        try {
+            $failing->runIfDue(self::day(3));
+            $this->fail('The failing run was expected to throw.');
+        } catch (\RuntimeException $exception) {
+            $this->assertSame('The revocation failed.', $exception->getMessage());
+        }
+
+        $this->assertNotNull(
+            (new MembershipPeriodService($this->getDatabase()))->runIfDue(self::day(3)),
+            'The day of the failed run must not count as done.'
+        );
+    }
+
+    /**
+     * @testdox A failing callback does not keep the others from learning about the change
+     */
+    public function testAFailingCallbackDoesNotStopTheOthers(): void
+    {
+        global $gCurrentOrgId;
+
+        Hooks::addAction(MembershipPeriodService::HOOK, static function (): void {
+            throw new \RuntimeException('A broken plugin.');
+        }, 5, null, 'membership-period-broken');
+
+        try {
+            $fixture = new AdmidioTestFixture($this->getDatabase());
+            $suffix = $this->suffix();
+            $role = $fixture->createAndSaveRole('Broken ' . $suffix, (int) $gCurrentOrgId);
+            $user = $fixture->createAndSaveUser('period-broken-' . $suffix, 'broken-' . $suffix . '@example.local');
+            $membership = $fixture->assignUserToRolePeriod($user['usr_id'], $role['rol_id'], DATE_NOW, DATE_MAX);
+
+            (new MembershipPeriodService($this->getDatabase()))->process(self::day(-1), DATE_NOW);
+
+            $this->assertContains(array($membership['mem_id'], MembershipPeriodService::CHANGE_STARTED), $this->reported);
+        } finally {
+            Hooks::removeAction(MembershipPeriodService::HOOK, 'membership-period-broken');
+        }
+    }
 }
