@@ -590,11 +590,16 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
-     * Test that an installation whose update scripts fail can be repeated
+     * Test that an installation whose update scripts fail resumes with the update
      *
-     * @testdox A plugin whose installation fails is not installed and can be installed again
+     * Starting the installation over would run install.sql on the tables it already created, so the
+     * component record stays at the last step that ran. The plugin waits for its update - also when
+     * its version is the one of its first update script, as here - and the update runs the
+     * remaining steps and completes the installation with its menu entry.
+     *
+     * @testdox A plugin whose installation fails waits for its update, which resumes and completes it
      */
-    public function testFailedInstallLeavesNoComponent(): void
+    public function testFailedInstallIsCompletedByTheUpdate(): void
     {
         $this->writeUpdateScript('1_2', array(10 => 'updateStep10Succeed', 20 => 'updateStep20FailWhileRequested'));
         $GLOBALS['helloPluginUpdateShouldFail'] = true;
@@ -606,15 +611,22 @@ class PluginInstallerTest extends FilesystemTestCase
             $this->assertStringContainsString('STEP: 20', $exception->getMessage());
         }
 
-        $this->assertSame(array(), $this->component());
-        $this->assertFalse(PluginRegistry::isInstalled(self::PLUGIN_ID));
+        $component = $this->component();
+        $this->assertSame(10, (int)$component['com_update_step']);
+        $this->assertFalse((bool)$component['com_update_completed']);
+        $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState(self::PLUGIN_ID));
+        $this->assertNotContains(self::PLUGIN_ID, array_map(static fn (Plugin $plugin): string => $plugin->id, PluginRegistry::getLoadable()));
         $this->assertSame(array(), $this->menuEntry());
 
         $GLOBALS['helloPluginUpdateShouldFail'] = false;
-        PluginInstaller::enable($this->plugin());
+        PluginInstaller::update($this->plugin());
 
-        $this->assertSame(self::PLUGIN_VERSION, $this->component()['com_version']);
-        $this->assertSame(2, $GLOBALS['helloPluginUpdateFirstStepRuns']);
+        $component = $this->component();
+        $this->assertSame(self::PLUGIN_VERSION, $component['com_version']);
+        $this->assertSame(20, (int)$component['com_update_step']);
+        $this->assertTrue((bool)$component['com_update_completed']);
+        $this->assertSame(1, $GLOBALS['helloPluginUpdateFirstStepRuns'], 'The step that ran must not run again.');
+        $this->assertNotSame(array(), $this->menuEntry());
     }
 
     /**

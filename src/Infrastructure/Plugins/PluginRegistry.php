@@ -189,9 +189,9 @@ final class PluginRegistry
     }
 
     /**
-     * The installed plugins, as pluginId => array{comId: int, version: string}. This is one query
-     * per request instead of one per plugin.
-     * @return array<string,array{comId: int, version: string}>
+     * The installed plugins, as pluginId => array{comId: int, uuid: string, version: string,
+     * completed: bool}. This is one query per request instead of one per plugin.
+     * @return array<string,array{comId: int, uuid: string, version: string, completed: bool}>
      * @throws Exception
      */
     public static function getInstallations(): array
@@ -203,7 +203,7 @@ final class PluginRegistry
         }
 
         self::$installations = array();
-        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version
+        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version, com_update_completed
                   FROM ' . TBL_COMPONENTS . '
                  WHERE com_type = ?';
         $statement = $gDb->queryPrepared($sql, array(self::COMPONENT_TYPE));
@@ -212,7 +212,8 @@ final class PluginRegistry
             self::$installations[(string)$row['com_name_intern']] = array(
                 'comId' => (int)$row['com_id'],
                 'uuid' => (string)$row['com_uuid'],
-                'version' => (string)$row['com_version']
+                'version' => (string)$row['com_version'],
+                'completed' => (bool)$row['com_update_completed']
             );
         }
 
@@ -280,6 +281,33 @@ final class PluginRegistry
     public static function getInstalledVersion(string $id): string
     {
         return self::getInstallations()[$id]['version'] ?? '';
+    }
+
+    /**
+     * Whether the last run of the update scripts of an installed plugin went through to the end.
+     * A run that failed - also the one an installation starts - keeps its checkpoint, and the next
+     * update resumes from there.
+     * @param string $id
+     * @return bool **true** as well for a plugin that is not installed.
+     * @throws Exception
+     */
+    public static function isUpdateCompleted(string $id): bool
+    {
+        return self::getInstallations()[$id]['completed'] ?? true;
+    }
+
+    /**
+     * Whether an installed plugin has to be updated before it may run: its files are newer than
+     * the installed version, or the last run of its update scripts failed half way.
+     * @param Plugin $plugin
+     * @return bool
+     * @throws Exception
+     */
+    public static function isUpdatePending(Plugin $plugin): bool
+    {
+        return self::isInstalled($plugin->id)
+            && (version_compare(self::getInstalledVersion($plugin->id), $plugin->version, '<')
+                || !self::isUpdateCompleted($plugin->id));
     }
 
     /**
@@ -394,7 +422,7 @@ final class PluginRegistry
             return $plugin->checkRequirements(self::getEnabledVersions()) === array()
                 ? self::STATE_AVAILABLE : self::STATE_BROKEN;
         }
-        if (version_compare(self::getInstalledVersion($plugin->id), $plugin->version, '<')) {
+        if (self::isUpdatePending($plugin)) {
             return self::STATE_UPDATE;
         }
 
@@ -416,7 +444,7 @@ final class PluginRegistry
         $candidates = array();
         foreach (self::all() as $id => $plugin) {
             if ($plugin->isValid() && !isset($excluded[$id]) && self::isEnabled($id)
-                && !version_compare(self::getInstalledVersion($id), $plugin->version, '<')) {
+                && !self::isUpdatePending($plugin)) {
                 $candidates[$id] = $plugin;
             }
         }
@@ -575,7 +603,7 @@ final class PluginRegistry
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        if (version_compare(self::getInstalledVersion($id), $plugin->version, '<')) {
+        if (self::isUpdatePending($plugin)) {
             if (isset($gCurrentUser) && $gCurrentUser->isAdministrator()) {
                 $pluginManagerUrl = SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'
