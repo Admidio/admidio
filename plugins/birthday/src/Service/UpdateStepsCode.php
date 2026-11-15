@@ -42,19 +42,9 @@ final class UpdateStepsCode
             'plg_show_future'                => array('birthday_show_future', 'intval'),
             'plg_show_display_limit'         => array('birthday_show_display_limit', 'intval'),
             'plg_show_email_extern'          => array('birthday_show_email_extern', 'intval'),
-            'plg_birthday_roles_view_plugin' => array('birthday_roles_view_plugin', array(self::class, 'roles')),
-            'plg_rolle_sql'                  => array('birthday_roles_sql', array(self::class, 'roles')),
+            'plg_birthday_roles_view_plugin' => array('birthday_roles_view_plugin', array(LegacyConfig::class, 'roles')),
+            'plg_rolle_sql'                  => array('birthday_roles_sql', array(LegacyConfig::class, 'roles')),
             'plg_sort_sql'                   => array('birthday_sort_sql', 'strval')
         ));
-    }
-
-    /**
-     * The roles an old setting names, or all of them if it names none.
-     * @param mixed $roles
-     * @return array<int,mixed>
-     */
-    public static function roles(mixed $roles): array
-    {
-        return is_array($roles) && $roles !== array() ? $roles : array('All');
     }
 }

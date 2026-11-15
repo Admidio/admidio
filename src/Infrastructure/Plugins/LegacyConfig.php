@@ -4,6 +4,8 @@ namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Service\PreferencesService;
+use Closure;
+use PDO;
 use RuntimeException;
 use Throwable;
 
@@ -93,6 +95,53 @@ final class LegacyConfig
     }
 
     /**
+     * A converter for an old setting that names categories, for the map of import(). It turns the
+     * names into the IDs of the categories of that type, or into **All** if the setting says so or
+     * none of the names exists:
+     * ```
+     * 'plg_kal_cat' => array('calendar_show_categories', LegacyConfig::categories('EVT'))
+     * ```
+     * The old file was one for the whole installation, so a name is looked up in every
+     * organization; an organization only ever matches the IDs of its own categories.
+     * @param string $type The type of the categories, e.g. **ANN** or **EVT**.
+     * @return Closure(mixed):array<int,int|string>
+     */
+    public static function categories(string $type): Closure
+    {
+        return static function (mixed $names) use ($type): array {
+            global $gDb;
+
+            $categoryIds = array();
+            foreach (is_array($names) ? $names : array() as $name) {
+                if (strtolower((string)$name) === 'all') {
+                    return array('All');
+                }
+
+                $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name = ? AND cat_type = ?';
+                foreach ($gDb->queryPrepared($sql, array((string)$name, $type))->fetchAll(PDO::FETCH_COLUMN) as $categoryId) {
+                    $categoryIds[] = (int)$categoryId;
+                }
+            }
+
+            return $categoryIds === array() ? array('All') : array_values(array_unique($categoryIds));
+        };
+    }
+
+    /**
+     * A converter for an old setting that lists roles, for the map of import(): the roles it names,
+     * or **All** if it names none.
+     * ```
+     * 'plg_rolle_sql' => array('birthday_roles_sql', array(LegacyConfig::class, 'roles'))
+     * ```
+     * @param mixed $roles
+     * @return array<int,mixed>
+     */
+    public static function roles(mixed $roles): array
+    {
+        return is_array($roles) && $roles !== array() ? array_values($roles) : array('All');
+    }
+
+    /**
      * The variables the old config.php sets, as name => value.
      *
      * The file is included, which runs it - as every page view of the old plugin did. A file that
@@ -123,11 +172,18 @@ final class LegacyConfig
             }
 
             $__known = get_defined_vars();
-            if ((include $__file) === false) {
+            // what the file prints (a BOM, blank lines after its closing tag) must not reach the response
+            ob_start();
+            try {
+                $__included = include $__file;
+            } finally {
+                ob_end_clean();
+            }
+            if ($__included === false) {
                 throw new RuntimeException('The file could not be included.');
             }
 
-            return array_diff_key(get_defined_vars(), $__known, array('__known' => true));
+            return array_diff_key(get_defined_vars(), $__known, array('__known' => true, '__included' => true));
         };
 
         try {
