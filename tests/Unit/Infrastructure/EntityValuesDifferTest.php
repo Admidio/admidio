@@ -31,7 +31,11 @@ class EntityValuesDifferTest extends TestCase
 
     public static function decimalTypes(): array
     {
-        return array(array('decimal'), array('numeric'), array('float'), array('double'), array('real'));
+        return array(
+            array('decimal'), array('numeric'), array('float'), array('double'), array('real'),
+            // as MySQL and PostgreSQL report them
+            array('decimal(10,2)'), array('decimal(10,2) unsigned'), array('double precision'), array('float(8,2)')
+        );
     }
 
     /**
@@ -77,7 +81,7 @@ class EntityValuesDifferTest extends TestCase
      */
     public static function exactTypes(): array
     {
-        return array(array('decimal'), array('numeric'));
+        return array(array('decimal'), array('numeric'), array('decimal(30,2)'));
     }
 
     /**

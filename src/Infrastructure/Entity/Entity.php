@@ -2097,7 +2097,9 @@ class Entity
         //   * decimal numbers: the database returns "6.00", while the code sets 6 or 6.0 - these are
         //     the same number, and a column that is unset (NULL) is not the number 0
         //   * all other types can be compared by converting to string and comparing strings
-        switch ($this->columnsInfos[$columnName]['type']) {
+        // The type is the name of the database: MySQL reports "decimal(10,2)" or "double unsigned",
+        // PostgreSQL "double precision". Only the name of the type itself decides.
+        switch (strtolower((string)strtok((string)$this->columnsInfos[$columnName]['type'], ' ('))) {
             case 'decimal': // fallthrough
             case 'numeric':
                 // exact numbers are compared as normalized strings; a float would make
