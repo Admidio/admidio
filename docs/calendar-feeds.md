@@ -6,7 +6,7 @@ Admidio can provide protected iCal feeds for events. The public
 
 - **Username:** the Admidio login name
 - **Password:** a feed token generated in the user profile
-- **URL:** shown next to each token in the profile
+- **URL:** shown next to each token in the profile or the event view
 
 The token is independent of the Admidio password. Two-factor authentication,
 password changes and password resets therefore do not affect calendar clients.
@@ -15,11 +15,13 @@ A German translation is available in [calendar-feeds.de.md](calendar-feeds.de.md
 
 ## Creating a feed
 
-1. Open your profile and choose **Calendar feeds**.
+1. Open your profile and choose **Calendar feeds**, or use **Calendar feeds** in the event view.
 2. Enter a name, optionally choose one calendar and optionally set an expiry date.
 3. Create the feed.
 4. Copy the token, the feed URL and the username. The token is shown only once.
 5. Revoke a token at any time in the same dialog.
+
+The direct **Subscribe** button in the event view is only shown for public calendars. Private or mixed calendar views show **Calendar feeds** instead, because the direct webcal URL has no token and external calendar clients cannot send an Admidio session.
 
 The user who creates the feed must have a login name and be a valid member of at
 least one role in the organization. The feed uses the event visibility rules of
@@ -133,5 +135,7 @@ access logs or application logs.
 ## Delimitation from `mode=subscribe`
 
 `mode=subscribe` remains the public export controlled by the normal module and
-iCal preferences. `mode=feed` is a separate, token protected endpoint for
-calendar clients and never redirects to the HTML login.
+iCal preferences. In the event view it is therefore only offered for public
+calendars. `mode=feed` is a separate, token protected endpoint for calendar
+clients, works for private calendars as well and never redirects to the HTML
+login.

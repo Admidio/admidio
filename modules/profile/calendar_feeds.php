@@ -12,6 +12,7 @@
  * mode - html   : (Default) show the list of feeds and the form to create a new feed
  *        create : create a new feed and show the token once
  *        revoke : revoke one of the user's feeds
+ * cat_uuid - optional: preselect this visible calendar in the create form
  ***********************************************************************************************
  */
 
@@ -34,11 +35,13 @@ try {
         'defaultValue' => 'html',
         'validValues' => array('html', 'create', 'revoke')
     ));
+    $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
 
     $orgId = (int)$gCurrentOrgId;
     $userId = (int)$gCurrentUserId;
     $feedService = new CalendarFeedService($gDb);
     $pageUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/calendar_feeds.php');
+    $pageParams = $getCatUuid !== '' ? array('cat_uuid' => $getCatUuid) : array();
     $isAjaxResponse = false;
     $newFeed = null;
     $message = '';
@@ -95,6 +98,8 @@ try {
         }
     }
 
+    $defaultCategoryUuid = $getCatUuid !== '' && array_key_exists($getCatUuid, $calendarValues) ? $getCatUuid : '';
+
     $feeds = $feedService->listFeeds($orgId, $userId);
     $dateFormat = $gSettingsManager->getString('system_date');
     $timeFormat = $gSettingsManager->getString('system_time');
@@ -116,7 +121,7 @@ try {
     $createForm = new FormPresenter(
         'adm_calendar_feed_create_form',
         $template,
-        SecurityUtils::encodeUrl($pageUrl, array('mode' => 'create')),
+        SecurityUtils::encodeUrl($pageUrl, array_merge($pageParams, array('mode' => 'create'))),
         options: array('type' => 'vertical')
     );
     $createForm->addInput(
@@ -130,7 +135,7 @@ try {
         $gL10n->get('SYS_CALENDAR'),
         $calendarValues,
         array(
-            'defaultValue' => '',
+            'defaultValue' => $defaultCategoryUuid,
             'showContextDependentFirstEntry' => true,
             'firstEntry' => $gL10n->get('SYS_ALL_CALENDARS')
         )
@@ -155,7 +160,7 @@ try {
     $smarty->assign('newFeed', $newFeed);
     $smarty->assign('message', $message);
     $smarty->assign('loginName', $gCurrentUser->getValue('usr_login_name'));
-    $smarty->assign('urlRevoke', SecurityUtils::encodeUrl($pageUrl, array('mode' => 'revoke')));
+    $smarty->assign('urlRevoke', SecurityUtils::encodeUrl($pageUrl, array_merge($pageParams, array('mode' => 'revoke'))));
     $smarty->assign('csrfToken', $gCurrentSession->getCsrfToken());
 
     if ($isAjaxResponse) {

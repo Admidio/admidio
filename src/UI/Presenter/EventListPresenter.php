@@ -12,6 +12,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\DateTimeUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
+use Admidio\Roles\Entity\RolesRights;
 use Admidio\UI\Component\DataTables;
 
 /**
@@ -65,6 +66,23 @@ class EventListPresenter extends PagePresenter
         if ($getCatUuid !== '') {
             $calendar->readDataByUuid($getCatUuid);
         }
+
+        // A public calendar has no category_view role rights. The direct webcal export works only
+        // for such calendars because external calendar clients do not send an Admidio session.
+        // Private or mixed views need a token based feed instead.
+        $isPublicCalendar = false;
+        if ($getCatUuid === '') {
+            $isPublicCalendar = !$gValidLogin;
+        } elseif ((int)$calendar->getValue('cat_id') > 0) {
+            $isPublicCalendar = count((new RolesRights($gDb, 'category_view', (int)$calendar->getValue('cat_id')))->getRolesIds()) === 0;
+        }
+
+        $calendarFeedsUrlParams = $getCatUuid !== '' ? array('cat_uuid' => $getCatUuid) : array();
+        $calendarFeedsUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/calendar_feeds.php', $calendarFeedsUrlParams);
+        $showCalendarFeeds = $gSettingsManager->getBool('events_ical_export_enabled')
+            && $gValidLogin
+            && (string)$gCurrentUser->getValue('usr_login_name') !== ''
+            && !$isPublicCalendar;
 
         $events = new EventRepository($gDb);
         $events->setMode($dateMode);
@@ -152,6 +170,14 @@ class EventListPresenter extends PagePresenter
                 });
             ', true);
 
+            if ($showCalendarFeeds) {
+                $page->addJavascript('
+                    $("#menu_item_event_calendar_feeds").attr("href", "javascript:void(0);");
+                    $("#menu_item_event_calendar_feeds").attr("data-href", ' . json_encode($calendarFeedsUrl) . ');
+                    $("#menu_item_event_calendar_feeds").addClass("openPopup");
+                ', true);
+            }
+
             // If the default view mode is set to compact, we need a back navigation if one date is selected for detail view
             if ($getEventUuid !== '') {
                 // add backlink to module menu
@@ -176,11 +202,17 @@ class EventListPresenter extends PagePresenter
                     ($getDateFrom !== '' ? $param['date_from'] = $getDateFrom : '');
                     ($getDateTo !== '' ? $param['date_to'] = $getDateTo : '');
 
-                    $param['mode'] = 'subscribe';
-                    $page->addPageFunctionsMenuItem('menu_item_event_subscribe', $gL10n->get('SYS_SUBSCRIBE'), str_replace(array('http://', 'https://'), 'webcal://', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $param)), 'bi-calendar-plus');
+                    if ($isPublicCalendar) {
+                        $param['mode'] = 'subscribe';
+                        $page->addPageFunctionsMenuItem('menu_item_event_subscribe', $gL10n->get('SYS_SUBSCRIBE'), str_replace(array('http://', 'https://'), 'webcal://', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $param)), 'bi-calendar-plus');
+                    }
 
                     $param['mode'] = 'export';
                     $page->addPageFunctionsMenuItem('menu_item_event_ical', $gL10n->get('SYS_DOWNLOAD_ICAL'), SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/events.php', $param), 'bi-download');
+
+                    if ($showCalendarFeeds) {
+                        $page->addPageFunctionsMenuItem('menu_item_event_calendar_feeds', $gL10n->get('SYS_CALENDAR_FEEDS'), $calendarFeedsUrl, 'bi-calendar2-week-fill');
+                    }
                 }
 
                 if ($gCurrentUser->isAdministratorEvents()) {

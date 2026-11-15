@@ -6,7 +6,7 @@ verwenden den neuen Endpunkt `mode=feed` und HTTP-Basic-Authentifizierung:
 
 - **Benutzername:** der Admidio-Loginname
 - **Passwort:** ein im Benutzerprofil erzeugtes Feed-Token
-- **URL:** wird im Profil neben jedem Token angezeigt
+- **URL:** wird im Profil oder in der Veranstaltungsansicht neben jedem Token angezeigt
 
 Das Token ist unabhängig vom Admidio-Passwort. Zwei-Faktor-Authentifizierung,
 Passwortänderungen und Passwort-Zurücksetzungen wirken sich daher nicht auf
@@ -16,11 +16,16 @@ Eine englische Fassung steht in [calendar-feeds.md](calendar-feeds.md) bereit.
 
 ## Feed anlegen
 
-1. Eigenes Profil öffnen und **Kalender-Feeds** wählen.
+1. Eigenes Profil öffnen und **Kalender-Feeds** wählen oder in der Veranstaltungsansicht **Kalender-Feeds** öffnen.
 2. Einen Namen eingeben, optional einen Kalender und optional ein Ablaufdatum wählen.
 3. Den Feed anlegen.
 4. Token, Feed-URL und Benutzername kopieren. Das Token wird nur einmal angezeigt.
 5. Ein Token kann jederzeit im selben Dialog widerrufen werden.
+
+Der direkte Knopf **Abonnieren** in der Veranstaltungsansicht wird nur für
+öffentliche Kalender angeboten. Bei privaten oder gemischten Kalenderansichten
+erscheint stattdessen **Kalender-Feeds**, weil die direkte Webcal-URL kein Token
+enthält und externe Kalenderclients keine Admidio-Session senden können.
 
 Der Benutzer, der den Feed anlegt, benötigt einen Loginname und muss gültiges
 Mitglied mindestens einer Rolle der Organisation sein. Der Feed verwendet die
@@ -138,6 +143,7 @@ oder Anwendungslogs geschrieben werden.
 ## Abgrenzung zu `mode=subscribe`
 
 `mode=subscribe` bleibt der öffentliche Export, der über das normale Modul und
-die iCal-Einstellungen gesteuert wird. `mode=feed` ist ein separater,
-tokenbasierter Endpunkt für Kalenderclients und leitet niemals zur HTML-Anmeldung
-weiter.
+die iCal-Einstellungen gesteuert wird. In der Veranstaltungsansicht wird er
+deshalb nur für öffentliche Kalender angeboten. `mode=feed` ist ein separater,
+tokenbasierter Endpunkt für Kalenderclients, funktioniert auch für private
+Kalender und leitet niemals zur HTML-Anmeldung weiter.
