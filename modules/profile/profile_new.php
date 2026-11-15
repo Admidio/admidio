@@ -34,6 +34,12 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html','html_selection', 'save')));
     $getCopy = admFuncVariableIsValid($_GET, 'copy', 'bool');
     $getAcceptRegistration = admFuncVariableIsValid($_GET, 'accept_registration', 'bool');
+
+    // Registration approval requires its own permission, including direct save requests.
+    if ($getAcceptRegistration && (!$gValidLogin || !$gCurrentUser->isAdministratorRegistration())) {
+        throw new Exception('SYS_NO_RIGHTS');
+    }
+
     $getUserUuids = admFuncVariableIsValid($_GET, 'user_uuids', 'array', array('defaultValue' => array()));
     $editSelection = true;
     if (empty($getUserUuids)) {
