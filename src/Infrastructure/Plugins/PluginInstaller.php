@@ -121,6 +121,8 @@ final class PluginInstaller
                 self::addMenuEntry($plugin, $componentId);
             }
         }
+
+        LegacyConfig::discardCarriedFile($plugin->id);
     }
 
     /**
@@ -159,6 +161,8 @@ final class PluginInstaller
         } else {
             self::updateMenuEntries($plugin, $componentId);
         }
+
+        LegacyConfig::discardCarriedFile($plugin->id);
     }
 
     /**

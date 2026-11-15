@@ -631,6 +631,28 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that the settings the plugin manager carried over are preferred and then removed
+     *
+     * @testdox The old settings the plugin manager carried over win over a config.php of the new version, and are removed once taken over
+     */
+    public function testInstallTakesOverTheCarriedConfigAndRemovesIt(): void
+    {
+        global $gCurrentOrgId;
+
+        $folder = $this->pluginsPath . '/' . self::PLUGIN_ID;
+        $this->createFixtureFile($folder, LegacyConfig::CARRIED_FILE, "<?php\n\$plg_greeting = 'Servus';\n");
+        $this->createFixtureFile($folder, 'config.php', "<?php\n\$plg_greeting = 'Default';\n");
+        $this->writeUpdateScript('1_2', array(30 => 'updateStep30ImportLegacyConfig'));
+
+        $plugin = $this->plugin();
+        PluginInstaller::enable($plugin);
+
+        $this->assertSame('Servus', $this->preferences((int)$gCurrentOrgId, $plugin)['hello_greeting']);
+        $this->assertFileDoesNotExist($folder . '/' . LegacyConfig::CARRIED_FILE);
+        $this->assertFileExists($folder . '/config.php', 'A file of the plugin itself is not touched.');
+    }
+
+    /**
      * Test that the config.php of a plugin from before the plugin system reaches every organization
      *
      * @testdox Installing over an old config.php takes its settings over for every organization
