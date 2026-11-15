@@ -23,9 +23,10 @@ Eine englische Fassung steht in [calendar-feeds.md](calendar-feeds.md) bereit.
 5. Ein Token kann jederzeit im selben Dialog widerrufen werden.
 
 Der direkte Knopf **Abonnieren** in der Veranstaltungsansicht wird nur für
-öffentliche Kalender angeboten. Bei privaten oder gemischten Kalenderansichten
-erscheint stattdessen **Kalender-Feeds**, weil die direkte Webcal-URL kein Token
-enthält und externe Kalenderclients keine Admidio-Session senden können.
+öffentliche Kalender angeboten. Bei angemeldeten Benutzern erscheint bei privaten oder gemischten
+Kalenderansichten stattdessen **Kalender-Feeds**, weil die direkte Webcal-URL
+kein Token enthält und externe Kalenderclients keine Admidio-Session senden
+können.
 
 Der Benutzer, der den Feed anlegt, benötigt einen Loginname und muss gültiges
 Mitglied mindestens einer Rolle der Organisation sein. Der Feed verwendet die

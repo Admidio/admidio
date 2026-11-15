@@ -79,7 +79,8 @@ class EventListPresenter extends PagePresenter
 
         $calendarFeedsUrlParams = $getCatUuid !== '' ? array('cat_uuid' => $getCatUuid) : array();
         $calendarFeedsUrl = SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/calendar_feeds.php', $calendarFeedsUrlParams);
-        $showCalendarFeeds = $gSettingsManager->getBool('events_ical_export_enabled')
+        $showCalendarFeeds = $getEventUuid === ''
+            && $gSettingsManager->getBool('events_ical_export_enabled')
             && $gValidLogin
             && (string)$gCurrentUser->getValue('usr_login_name') !== ''
             && !$isPublicCalendar;

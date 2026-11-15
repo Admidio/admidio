@@ -21,7 +21,7 @@ A German translation is available in [calendar-feeds.de.md](calendar-feeds.de.md
 4. Copy the token, the feed URL and the username. The token is shown only once.
 5. Revoke a token at any time in the same dialog.
 
-The direct **Subscribe** button in the event view is only shown for public calendars. Private or mixed calendar views show **Calendar feeds** instead, because the direct webcal URL has no token and external calendar clients cannot send an Admidio session.
+The direct **Subscribe** button in the event view is only shown for public calendars. For logged-in users, private or mixed calendar views show **Calendar feeds** instead, because the direct webcal URL has no token and external calendar clients cannot send an Admidio session.
 
 The user who creates the feed must have a login name and be a valid member of at
 least one role in the organization. The feed uses the event visibility rules of
