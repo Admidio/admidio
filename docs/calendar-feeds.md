@@ -26,7 +26,7 @@ least one role in the organization. The feed uses the event visibility rules of
 that user.
 
 Several tokens per user and organization are supported, for example one for
-Thunderbird and one for ICSx5.
+Thunderbird, one for ICSx5 and one for Apple Calendar.
 
 ## Thunderbird
 
@@ -43,11 +43,36 @@ Thunderbird and one for ICSx5.
 3. Enter the token as the password.
 4. Subscribe to the calendar.
 
+## Apple Calendar (iOS/iPadOS)
+
+Choose **Add Subscribed Calendar**, not **CalDAV**. CalDAV is meant for two-way
+calendar accounts and does not use the feed URL.
+
+1. Open **Settings > Calendar > Accounts > Add Account > Other**.
+   On newer iOS versions the path is
+   **Settings > Apps > Calendar > Calendar Accounts > Add Account > Other**.
+2. Choose **Add Subscribed Calendar**.
+3. Enter the feed URL from the profile and tap **Next**.
+4. When iOS asks for credentials, enter the Admidio login name as the username
+   and the feed token as the password.
+5. Save the calendar.
+
+Alternatively, use the Calendar app: **Calendars > Add Calendar >
+Add Subscription Calendar**.
+
+The subscription is read-only and refreshed by iOS on its own schedule. If iOS
+refuses the URL, first open it in Safari and check that it returns an iCalendar
+file.
+
 ## Server configuration for HTTP Basic authentication
 
 Calendar clients send the credentials in the `Authorization` header. Some server
 setups remove this header before PHP receives it. In that case the feed answers
 with HTTP 401 even though the username and token are correct.
+
+The TLS certificate must be valid for the exact host name used in the feed URL.
+iOS and other clients reject self-signed certificates or certificates issued for
+a different host name.
 
 Apache with PHP-FPM usually needs:
 
