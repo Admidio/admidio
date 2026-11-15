@@ -45,13 +45,14 @@ Thunderbird, one for ICSx5 and one for Apple Calendar.
 
 ## Apple Calendar (iOS/iPadOS)
 
-Choose **Add Subscribed Calendar**, not **CalDAV**. CalDAV is meant for two-way
-calendar accounts and does not use the feed URL.
+Choose **Calendar Subscription** (some versions label it **Add Subscribed
+Calendar**), not **CalDAV**. CalDAV is meant for two-way calendar accounts and
+does not use the feed URL.
 
 1. Open **Settings > Calendar > Accounts > Add Account > Other**.
    On newer iOS versions the path is
    **Settings > Apps > Calendar > Calendar Accounts > Add Account > Other**.
-2. Choose **Add Subscribed Calendar**.
+2. Choose **Calendar Subscription**.
 3. Enter the feed URL from the profile and tap **Next**.
 4. When iOS asks for credentials, enter the Admidio login name as the username
    and the feed token as the password.
@@ -59,6 +60,9 @@ calendar accounts and does not use the feed URL.
 
 Alternatively, use the Calendar app: **Calendars > Add Calendar >
 Add Subscription Calendar**.
+
+If iOS asks for a CalDAV server, username, password and description, the wrong
+option was selected. Go back and choose **Calendar Subscription** instead.
 
 The subscription is read-only and refreshed by iOS on its own schedule. If iOS
 refuses the URL, first open it in Safari and check that it returns an iCalendar
