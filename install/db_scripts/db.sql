@@ -242,6 +242,7 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX %PREFIX%_idx_dat_uuid ON %PREFIX%_events (dat_uuid);
+CREATE INDEX %PREFIX%_idx_dat_begin ON %PREFIX%_events (dat_begin);
 CREATE INDEX %PREFIX%_idx_dat_evr_original_begin ON %PREFIX%_events (dat_evr_id, dat_recurrence_original_begin);
 CREATE INDEX %PREFIX%_idx_dat_recurrence_status ON %PREFIX%_events (dat_recurrence_status);
 

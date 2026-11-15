@@ -213,6 +213,33 @@ class EventReminderTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox A dry run does not count recipients that are already claimed
+     */
+    public function testDryRunSkipsClaimedRecipients(): void
+    {
+        $fixture = $this->getFixture();
+        $eligibleRole = $fixture->createAndSaveRole('Reminder dry run claimed', self::ORG_ID);
+        $alice = $this->createUserWithEmail($fixture, 'dryRunClaimedAlice', 'dry-run-claimed-alice@example.local');
+        $fixture->assignUserToRole($alice['usr_id'], $eligibleRole['rol_id']);
+
+        $event = $this->createEventWithReminder('Dry run claimed event', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
+        $this->asAdministrator(function () use ($event, $eligibleRole, $alice) {
+            (new RolesRights($this->getDatabase(), 'event_participation', $event['dat_id']))
+                ->addRoles([$eligibleRole['rol_id']]);
+            $this->getDatabase()->queryPrepared(
+                'INSERT INTO ' . TBL_EVENT_REMINDER_SENT . ' (ers_dat_id, ers_usr_id, ers_timestamp_sent) VALUES (?, ?, ?)',
+                [$event['dat_id'], $alice['usr_id'], DATETIME_NOW]
+            );
+        });
+
+        $result = $this->asAdministrator(function (): ?string {
+            return (new EventReminderService($this->getDatabase()))->runIfDue(true);
+        });
+
+        $this->assertSame('Would send 0 reminder(s) for 1 event(s).', $result);
+    }
+
+    /**
      * @testdox Confirmed and declined participants do not receive a reminder
      */
     public function testConfirmedAndDeclinedParticipantsAreSkipped(): void
@@ -405,7 +432,7 @@ class EventReminderTest extends DatabaseTestCase
     }
 
     /**
-     * @testdox Due events are limited to the current organization
+     * @testdox Due events are limited to the current organization plus global categories
      */
     public function testDueEventsAreLimitedToCurrentOrganization(): void
     {
@@ -430,6 +457,33 @@ class EventReminderTest extends DatabaseTestCase
             return (new EventReminderRepository($this->getDatabase()))->getDueEventIds();
         });
         $this->assertNotContains($eventId, $dueEventIds);
+
+        // Events in global event categories are visible in every organization and must be due as well.
+        $globalCategoryUuid = (string) Uuid::uuid4();
+        $this->getDatabase()->queryPrepared(
+            'INSERT INTO ' . TBL_CATEGORIES . ' (cat_org_id, cat_uuid, cat_type, cat_name_intern, cat_name, cat_default, cat_sequence)
+             VALUES (NULL, ?, ?, ?, ?, ?, ?)',
+            [$globalCategoryUuid, 'EVT', 'EVT_TEST_GLOBAL', 'Global calendar', 0, 99]
+        );
+        $globalCategoryId = (int) $this->getDatabase()->queryPrepared(
+            'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_uuid = ?',
+            [$globalCategoryUuid]
+        )->fetchColumn();
+        $globalEventUuid = (string) Uuid::uuid4();
+        $this->getDatabase()->queryPrepared(
+            'INSERT INTO ' . TBL_EVENTS . ' (dat_cat_id, dat_uuid, dat_headline, dat_begin, dat_end, dat_reminder_days)
+             VALUES (?, ?, ?, ?, ?, ?)',
+            [$globalCategoryId, $globalEventUuid, 'Global reminder', $begin, $end, 3]
+        );
+        $globalEventId = (int) $this->getDatabase()->queryPrepared(
+            'SELECT dat_id FROM ' . TBL_EVENTS . ' WHERE dat_uuid = ?',
+            [$globalEventUuid]
+        )->fetchColumn();
+
+        $dueEventIds = $this->asAdministrator(function (): array {
+            return (new EventReminderRepository($this->getDatabase()))->getDueEventIds();
+        });
+        $this->assertContains($globalEventId, $dueEventIds);
     }
 
     /**

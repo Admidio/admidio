@@ -118,5 +118,6 @@
         ADD CONSTRAINT %PREFIX%_fk_ers_dat FOREIGN KEY (ers_dat_id) REFERENCES %PREFIX%_events (dat_id) ON DELETE CASCADE ON UPDATE RESTRICT,
         ADD CONSTRAINT %PREFIX%_fk_ers_usr FOREIGN KEY (ers_usr_id) REFERENCES %PREFIX%_users (usr_id) ON DELETE CASCADE ON UPDATE RESTRICT</step>
     <step id="440">UpdateStepsCode::updateStep51AddEventReminderText</step>
+    <step id="450">CREATE INDEX %PREFIX%_idx_dat_begin ON %PREFIX%_events (dat_begin)</step>
     <step>stop</step>
 </update>

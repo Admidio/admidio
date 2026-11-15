@@ -11136,8 +11136,8 @@ final class CoreTasks
 
         if (CliApplication::optionExists($options, 'reminder-days')) {
             $reminderDays = CliApplication::optionInt($options, 'reminder-days');
-            if ($reminderDays === null || $reminderDays < 0) {
-                throw new InvalidArgumentException('--reminder-days must be a non-negative integer.');
+            if ($reminderDays === null || $reminderDays < 0 || $reminderDays > 99) {
+                throw new InvalidArgumentException('--reminder-days must be an integer between 0 and 99.');
             }
             $formValues['dat_reminder_days'] = $reminderDays;
         }

@@ -97,6 +97,13 @@ class EventReminderService
                     $userId = (int) $recipient['usr_id'];
 
                     if ($dryRun) {
+                        if ($this->repository->isClaimed($eventId, $userId)) {
+                            continue;
+                        }
+                        $dryRunMail = new SystemMail($this->database);
+                        if ($dryRunMail->addRecipientsByUser((string) $recipient['usr_uuid']) === 0) {
+                            continue;
+                        }
                         $sent++;
                         continue;
                     }
@@ -207,22 +214,36 @@ class EventReminderService
             )->fetchColumn();
             if ($roomName !== false && (string) $roomName !== '') {
                 $room = (string) $roomName;
+                if (Language::isTranslationStringId($room)) {
+                    $room = $gL10n->get($room);
+                }
             }
         }
 
         $htmlMail = $gSettingsManager->getBool('mail_html_registered_users');
-        $mail->setCustomVariable('event_name', (string) $event->getValue('dat_headline'));
-        $mail->setCustomVariable('event_period', $event->getDateTimePeriod());
+        $eventName = (string) $event->getValue('dat_headline');
+        $eventPeriod = $event->getDateTimePeriod();
+        $eventTimezone = $gTimezone !== '' ? $gTimezone : date_default_timezone_get();
+
+        if ($htmlMail) {
+            $eventName = htmlspecialchars($eventName, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $eventPeriod = htmlspecialchars($eventPeriod, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $calendar = htmlspecialchars($calendar, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $location = htmlspecialchars($location, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $room = htmlspecialchars($room, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $eventTimezone = htmlspecialchars($eventTimezone, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        }
+
+        $safeEventUrl = htmlspecialchars($eventUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $mail->setCustomVariable('event_name', $eventName);
+        $mail->setCustomVariable('event_period', $eventPeriod);
         $mail->setCustomVariable('event_calendar', $calendar);
         $mail->setCustomVariable('event_location', $location);
         $mail->setCustomVariable('event_room', $room);
-        $mail->setCustomVariable(
-            'event_timezone',
-            $gTimezone !== '' ? $gTimezone : date_default_timezone_get()
-        );
+        $mail->setCustomVariable('event_timezone', $eventTimezone);
         $mail->setCustomVariable(
             'event_url',
-            $htmlMail ? '<a href="' . $eventUrl . '">' . $eventUrl . '</a>' : $eventUrl
+            $htmlMail ? '<a href="' . $safeEventUrl . '">' . $safeEventUrl . '</a>' : $eventUrl
         );
 
         if ($htmlMail) {

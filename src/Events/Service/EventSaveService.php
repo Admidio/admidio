@@ -186,7 +186,7 @@ class EventSaveService
 
         if (array_key_exists('dat_reminder_days', $formValues)) {
             $formValues['dat_reminder_days'] = is_numeric($formValues['dat_reminder_days'])
-                ? max(0, (int) $formValues['dat_reminder_days'])
+                ? min(99, max(0, (int) $formValues['dat_reminder_days']))
                 : 0;
         }
 
@@ -230,6 +230,15 @@ class EventSaveService
         $reminderDaysChanged = array_key_exists('dat_reminder_days', $formValues)
             && (int) $formValues['dat_reminder_days'] !== $originalReminderDays;
         $recurrenceRule = $isExistingRecurringEvent && !$isSeriesUpdate ? null : $this->createEventRecurrenceRuleFromFormValues($formValues, $startDateTime);
+        $recurrenceRuleChanged = false;
+        if ($isSeriesUpdate && $seriesRecurrenceId > 0 && $recurrenceRule !== null) {
+            $recurrenceRepository = new EventRecurrenceRepository($gDb);
+            $oldRecurrence = $recurrenceRepository->readById($seriesRecurrenceId);
+            if ($oldRecurrence !== null) {
+                $recurrenceRuleChanged = $recurrenceRepository->toRule($oldRecurrence)->toRRule()
+                    !== $recurrenceRule->toRRule();
+            }
+        }
         $recurrenceOccurrences = array();
         $eventTimezone = $gTimezone;
         $deadlineOffsetSeconds = null;
@@ -350,7 +359,7 @@ class EventSaveService
                 $user
             );
 
-            if (($beginChanged || $reminderDaysChanged) && $seriesRecurrenceId > 0) {
+            if (($beginChanged || $reminderDaysChanged || $recurrenceRuleChanged) && $seriesRecurrenceId > 0) {
                 (new EventReminderRepository($gDb))->deleteForSeries($seriesRecurrenceId);
             }
 
@@ -381,10 +390,10 @@ class EventSaveService
             $gDb->registerAfterCommit(static function () use ($event): void {
                 $event->sendNotification();
             });
-        }
 
-        if (($beginChanged || $reminderDaysChanged) && $eventUUID !== '') {
-            (new EventReminderRepository($gDb))->deleteForEvent((int) $event->getValue('dat_id'));
+            if (($beginChanged || $reminderDaysChanged) && $eventUUID !== '') {
+                (new EventReminderRepository($gDb))->deleteForEvent((int) $event->getValue('dat_id'));
+            }
         }
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);

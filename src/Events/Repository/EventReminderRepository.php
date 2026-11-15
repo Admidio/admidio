@@ -24,6 +24,10 @@ class EventReminderRepository
      * Return the future events of the current organization whose reminder window is open and that
      * are not cancelled.
      *
+     * Events in global event categories (cat_org_id IS NULL) are visible in every organization and
+     * are therefore included as well. A global event can be inspected by more than one organization's
+     * maintenance run; the claim in adm_event_reminder_sent prevents duplicate mails.
+     *
      * @return array<int,int>
      * @throws \Admidio\Infrastructure\Exception
      */
@@ -38,7 +42,7 @@ class EventReminderRepository
         $sql = 'SELECT dat_id
                   FROM ' . TBL_EVENTS . ' ev
             INNER JOIN ' . TBL_CATEGORIES . ' cat ON cat.cat_id = ev.dat_cat_id
-                 WHERE cat.cat_org_id = ?
+                 WHERE (cat.cat_org_id = ? OR cat.cat_org_id IS NULL)
                    AND ev.dat_begin > ?
                    AND ev.dat_begin <= ' . $interval . '
                    AND ev.dat_reminder_days > 0
@@ -141,6 +145,19 @@ class EventReminderRepository
     }
 
     /**
+     * Check whether the reminder for an event/user pair has already been claimed.
+     *
+     * @throws \Admidio\Infrastructure\Exception
+     */
+    public function isClaimed(int $eventId, int $userId): bool
+    {
+        return (int) $this->database->queryPrepared(
+            'SELECT COUNT(*) FROM ' . TBL_EVENT_REMINDER_SENT . ' WHERE ers_dat_id = ? AND ers_usr_id = ?',
+            array($eventId, $userId)
+        )->fetchColumn() > 0;
+    }
+
+    /**
      * Atomically claim the reminder for an event/user pair.
      *
      * @return bool true if this process claimed the reminder, false if it was already claimed.
@@ -154,9 +171,14 @@ class EventReminderRepository
                ON CONFLICT DO NOTHING'
             : 'INSERT INTO ' . TBL_EVENT_REMINDER_SENT . ' (ers_dat_id, ers_usr_id, ers_timestamp_sent)
                     VALUES (?, ?, ?)
-               ON DUPLICATE KEY UPDATE ers_dat_id = VALUES(ers_dat_id)';
+               ON DUPLICATE KEY UPDATE ers_dat_id = ?';
 
-        return $this->database->queryPrepared($sql, array($eventId, $userId, DATETIME_NOW))->rowCount() === 1;
+        $params = array($eventId, $userId, DATETIME_NOW);
+        if (DB_TYPE !== Database::PDO_ENGINE_PGSQL) {
+            $params[] = $eventId;
+        }
+
+        return $this->database->queryPrepared($sql, $params)->rowCount() === 1;
     }
 
     /**
