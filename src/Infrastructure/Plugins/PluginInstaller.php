@@ -407,6 +407,9 @@ final class PluginInstaller
     {
         global $gDb;
 
+        // in a request of its own, a plugin that waits for its update is not loaded
+        PluginLoader::prepareForUpdate($plugin);
+
         $componentUpdate = new ComponentUpdate($gDb);
         $componentUpdate->readDataByColumns(array(
             'com_type' => PluginRegistry::COMPONENT_TYPE,
