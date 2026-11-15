@@ -11,6 +11,8 @@ Admidio can provide protected iCal feeds for events. The public
 The token is independent of the Admidio password. Two-factor authentication,
 password changes and password resets therefore do not affect calendar clients.
 
+A German translation is available in [calendar-feeds.de.md](calendar-feeds.de.md).
+
 ## Creating a feed
 
 1. Open your profile and choose **Calendar feeds**.
@@ -18,6 +20,10 @@ password changes and password resets therefore do not affect calendar clients.
 3. Create the feed.
 4. Copy the token, the feed URL and the username. The token is shown only once.
 5. Revoke a token at any time in the same dialog.
+
+The user who creates the feed must have a login name and be a valid member of at
+least one role in the organization. The feed uses the event visibility rules of
+that user.
 
 Several tokens per user and organization are supported, for example one for
 Thunderbird and one for ICSx5.
@@ -36,6 +42,59 @@ Thunderbird and one for ICSx5.
 2. Enter the Admidio login name as the username.
 3. Enter the token as the password.
 4. Subscribe to the calendar.
+
+## Server configuration for HTTP Basic authentication
+
+Calendar clients send the credentials in the `Authorization` header. Some server
+setups remove this header before PHP receives it. In that case the feed answers
+with HTTP 401 even though the username and token are correct.
+
+Apache with PHP-FPM usually needs:
+
+```apache
+CGIPassAuth On
+```
+
+This can be set in the virtual host or in an `.htaccess` file if overrides are
+allowed. If `CGIPassAuth` is not available, these Apache alternatives can help:
+
+```apache
+<IfModule mod_setenvif.c>
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+</IfModule>
+```
+
+```apache
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+```
+
+When nginx works as a reverse proxy, it must forward the header:
+
+```nginx
+proxy_set_header Authorization $http_authorization;
+```
+
+For nginx with FastCGI:
+
+```nginx
+fastcgi_param HTTP_AUTHORIZATION $http_authorization;
+```
+
+The `Authorization` header contains the token and must never be written to
+access logs or application logs.
+
+## Troubleshooting
+
+- **HTTP 401:** Missing or wrong username or token, the user is not a member of
+  the organization, or PHP does not receive the `Authorization` header.
+- **HTTP 403:** The feed is requested over plain HTTP, the events module is
+  disabled, or the iCal export is disabled.
+- **Empty calendar:** The user cannot see any matching events, the selected
+  calendar has no events, or the token is bound to a calendar without events.
+- **Token lost:** The token is shown only once and cannot be recovered. Revoke
+  the old feed and create a new one.
 
 ## Security notes for administrators
 
