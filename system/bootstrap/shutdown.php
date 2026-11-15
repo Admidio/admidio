@@ -36,9 +36,16 @@ function admShutdown()
          *
          * The CLI has no response to send; there the listeners simply run at the end.
          */
-        if (PHP_SAPI !== 'cli' && function_exists('fastcgi_finish_request')) {
-            ignore_user_abort(true);
-            fastcgi_finish_request();
+        if (PHP_SAPI !== 'cli') {
+            // The session is locked while it is open, and the next request of the same browser
+            // would wait for the listeners. What a listener writes into it is not kept.
+            if (session_status() === PHP_SESSION_ACTIVE) {
+                session_write_close();
+            }
+            if (function_exists('fastcgi_finish_request')) {
+                ignore_user_abort(true);
+                fastcgi_finish_request();
+            }
         }
         Hooks::doActionCatchErrors('request_finished');
     }
