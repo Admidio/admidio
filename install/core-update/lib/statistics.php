@@ -56,7 +56,9 @@ function statisticsPreview(array $ctx, string $updateId): array
         }
         ksort($plugins);
         $driver = $ctx['pdo']->getAttribute(\PDO::ATTR_DRIVER_NAME);
-        $state['statisticsEnabled'] = $preference('system_statistics_enabled') === '1';
+        $consent = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $prefix . '_preferences'
+            . ' WHERE prf_name = ? AND prf_org_id IS NULL', array('system_statistics_enabled'));
+        $state['statisticsEnabled'] = ($consent['prf_value'] ?? $preference('system_statistics_enabled')) === '1';
         $state['statisticsData'] = array(
             'id' => $id,
             'timestamp' => gmdate('Y-m-d\\TH:i:s\\Z'),

@@ -58,22 +58,30 @@ final class InstallationIdentifierTest extends TestCase
         $this->assertSame($legacyId, InstallationIdentifier::get($this->db));
         $this->assertSame(0, (int)$this->pdo->query('SELECT COUNT(*) FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id IS NOT NULL')->fetchColumn());
     }
-    public function testStatisticsMigrationDisablesUnreviewedOrganizationsAndPreservesChoices(): void
+    public function testStatisticsMigrationPreservesGlobalChoiceAfterOrganizationDeletion(): void
     {
         $this->assertSame('0', \Admidio\Preferences\Service\PreferenceDefinitions::definition('system_statistics_enabled')['default']);
         $this->pdo->exec('CREATE TABLE adm_organizations (org_id INTEGER)');
         $this->pdo->exec('INSERT INTO adm_organizations VALUES (1), (2), (3)');
         $this->pdo->exec("INSERT INTO " . TBL_PREFERENCES . " VALUES
-            (2, 'system_statistics_enabled', '1'), (3, 'system_statistics_enabled', '0')");
+            (1, 'system_statistics_enabled', '0'), (2, 'system_statistics_enabled', '1')");
         $update = simplexml_load_file(dirname(__DIR__, 3) . '/install/db_scripts/update_6_0.xml');
         $steps = $update->xpath('step[contains(., "system_statistics_enabled")]');
-        $this->assertCount(1, $steps);
-        $sql = str_replace('%PREFIX%', 'adm', (string)$steps[0]);
-        $this->pdo->exec($sql);
-        $this->pdo->exec($sql);
-        $this->assertSame(array(1 => '0', 2 => '1', 3 => '0'), $this->pdo->query(
-            "SELECT prf_org_id, prf_value FROM " . TBL_PREFERENCES . " WHERE prf_name = 'system_statistics_enabled' ORDER BY prf_org_id"
-        )->fetchAll(PDO::FETCH_KEY_PAIR));
+        $this->assertCount(2, $steps);
+        foreach (array(1, 2) as $attempt) {
+            foreach ($steps as $step) {
+                $this->pdo->exec(str_replace('%PREFIX%', 'adm', (string)$step));
+            }
+        }
+        $this->assertSame('0', $this->pdo->query(
+            "SELECT prf_value FROM " . TBL_PREFERENCES . " WHERE prf_name = 'system_statistics_enabled' AND prf_org_id IS NULL"
+        )->fetchColumn());
+        $this->pdo->exec("UPDATE " . TBL_PREFERENCES . " SET prf_value = '0' WHERE prf_name = 'system_statistics_enabled'");
+        $this->pdo->exec('DELETE FROM adm_organizations WHERE org_id = 1');
+        $this->pdo->exec('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id IS NOT NULL');
+        $this->assertSame('0', $this->pdo->query(
+            "SELECT prf_value FROM " . TBL_PREFERENCES . " WHERE prf_name = 'system_statistics_enabled'"
+        )->fetchColumn());
     }
 
     public function testLastSentSqlInitializesGlobalValueAndPreservesSuccessfulSendOnRetry(): void

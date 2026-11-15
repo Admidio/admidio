@@ -197,6 +197,9 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $settings = new SettingsManager($db, InstallationIdentifier::getOrganizationId($db));
         $this->assertFalse($settings->getBool('system_statistics_enabled', true));
         $this->assertSame('', InstallationStatistics::getLastSent($this->getDatabase()));
+        $settings->set('system_statistics_enabled', '1');
+        $applyStatisticsMigration();
+        $this->assertTrue((new SettingsManager($db, InstallationIdentifier::getOrganizationId($db)))->getBool('system_statistics_enabled'));
         $settings->set('system_statistics_enabled', '0');
         $this->setLastSent('2026-10-01 12:00:00');
         $applyStatisticsMigration();

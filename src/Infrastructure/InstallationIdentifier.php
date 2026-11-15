@@ -8,7 +8,7 @@ use Throwable;
 /** Installation identity stored independently of organizations. */
 final class InstallationIdentifier
 {
-    /** The first organization controls statistics consent. */
+    /** The first organization provides the statistics administration interface. */
     public static function getOrganizationId(Database $db): int
     {
         return (int)$db->queryPrepared('SELECT MIN(org_id) FROM ' . TBL_ORGANIZATIONS)->fetchColumn();

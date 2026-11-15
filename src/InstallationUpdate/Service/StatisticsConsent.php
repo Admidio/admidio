@@ -101,7 +101,7 @@ final class StatisticsConsent
     {
         global $gDb;
 
-        $settings = new SettingsManager($gDb, InstallationIdentifier::getOrganizationId($gDb));
+        $settings = new SettingsManager($gDb, 0);
         $settings->set('system_statistics_enabled', $enabled ? '1' : '0');
     }
 }

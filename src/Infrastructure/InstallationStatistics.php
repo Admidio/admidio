@@ -282,7 +282,7 @@ class InstallationStatistics
 
         $transactionStarted = false;
         try {
-            // Consent remains controlled by the main organization.
+            // Only the main organization triggers delivery; consent is stored globally.
             if ($organizationId !== InstallationIdentifier::getOrganizationId($db)) {
                 return;
             }
