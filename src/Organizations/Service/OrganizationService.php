@@ -63,7 +63,6 @@ class OrganizationService
 
         // every organization starts with the registered defaults of the core and of the plugins
         $defaultOrgPreferences = PreferenceDefinitions::defaults();
-        unset($defaultOrgPreferences['system_statistics_enabled']);
 
         // set some specific preferences whose values came from user input of the installation wizard
         $defaultOrgPreferences['system_language'] = $gSettingsManager->getString('system_language');

@@ -177,7 +177,7 @@ if (array_key_exists('gCurrentSession', $_SESSION)
     ChangelogService::purgeOldEntriesIfDue();
 
     // Check monthly statistics only when the organization is rebuilt, not when restored from the session.
-    InstallationStatistics::sendIfDue($gDb, (int)$gCurrentOrgId);
+    InstallationStatistics::sendIfDue($gDb);
 }
 
 // Check if reduced layout should be shown

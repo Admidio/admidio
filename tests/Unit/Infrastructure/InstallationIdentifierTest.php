@@ -5,6 +5,7 @@ namespace Admidio\Tests\Unit\Infrastructure;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\InstallationStatistics;
+use Admidio\Infrastructure\InstallationSettings;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -13,6 +14,7 @@ final class InstallationIdentifierTest extends TestCase
 {
     private PDO $pdo;
     private Database $db;
+    private int $locks = 0;
 
     protected function setUp(): void
     {
@@ -29,6 +31,9 @@ final class InstallationIdentifierTest extends TestCase
         $this->db = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
             ->onlyMethods(array('queryPrepared', 'startTransaction', 'endTransaction', 'rollback'))->getMock();
         $this->db->method('queryPrepared')->willReturnCallback(function (string $sql, array $params) {
+            if (str_contains($sql, 'FOR UPDATE')) {
+                ++$this->locks;
+            }
             // SQLite exercises persistence and migration; row locking needs the server integration tests.
             $statement = $this->pdo->prepare(str_replace(' FOR UPDATE', '', $sql));
             $statement->execute($params);
@@ -37,6 +42,49 @@ final class InstallationIdentifierTest extends TestCase
         $this->db->method('startTransaction')->willReturnCallback(fn(): bool => $this->pdo->beginTransaction());
         $this->db->method('endTransaction')->willReturnCallback(fn(): bool => $this->pdo->commit());
         $this->db->method('rollback')->willReturnCallback(fn(): bool => $this->pdo->rollBack());
+    }
+
+    public function testInstallationSettingsSerializeWritesAndStayIndependentOfOrganizations(): void
+    {
+        $first = new InstallationSettings($this->db);
+        $second = new InstallationSettings($this->db);
+        $this->assertNull($first->get('system_statistics_enabled'));
+        $this->assertFalse($first->getBool('system_statistics_enabled'));
+        $first->set('system_statistics_enabled', '1');
+        $second->set('system_statistics_enabled', '0');
+        $this->assertSame(2, $this->locks);
+        $this->assertFalse($first->getBool('system_statistics_enabled'));
+        $this->assertSame(1, (int)$this->pdo->query('SELECT COUNT(*) FROM ' . TBL_PREFERENCES)->fetchColumn());
+
+        $first->withLock(function (InstallationSettings $settings): void {
+            $settings->set('system_tenant_id', 'installation');
+            $settings->set('system_statistics_last_sent', '');
+        });
+        $this->assertSame(3, $this->locks, 'A grouped write acquires the CORE lock once.');
+        $this->pdo->exec('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id IS NOT NULL');
+        $this->assertSame('installation', $second->get('system_tenant_id'));
+        $this->assertSame('', $second->get('system_statistics_last_sent'));
+        foreach (InstallationSettings::defaults() as $name => $value) {
+            $this->assertFalse(\Admidio\Preferences\Service\PreferenceDefinitions::exists($name));
+        }
+    }
+
+    public function testInstallationSettingsRollBackGroupedWritesAndCanBeUsedAgain(): void
+    {
+        $settings = new InstallationSettings($this->db);
+        try {
+            $settings->withLock(function (InstallationSettings $settings): void {
+                $settings->set('system_statistics_enabled', '1');
+                throw new \RuntimeException('Abort the change');
+            });
+            $this->fail('The exception should propagate.');
+        } catch (\RuntimeException $exception) {
+            $this->assertSame('Abort the change', $exception->getMessage());
+        }
+        $this->assertNull($settings->get('system_statistics_enabled'));
+        $settings->set('system_statistics_enabled', '0');
+        $this->assertSame('0', $settings->get('system_statistics_enabled'));
+        $this->assertSame(2, $this->locks);
     }
 
     public function testIdentityIsIndependentOfOrganizationPreferences(): void
@@ -60,7 +108,7 @@ final class InstallationIdentifierTest extends TestCase
     }
     public function testStatisticsMigrationPreservesGlobalChoiceAfterOrganizationDeletion(): void
     {
-        $this->assertSame('0', \Admidio\Preferences\Service\PreferenceDefinitions::definition('system_statistics_enabled')['default']);
+        $this->assertSame('0', InstallationSettings::defaults()['system_statistics_enabled']);
         $this->pdo->exec('CREATE TABLE adm_organizations (org_id INTEGER)');
         $this->pdo->exec('INSERT INTO adm_organizations VALUES (1), (2), (3)');
         $this->pdo->exec("INSERT INTO " . TBL_PREFERENCES . " VALUES
@@ -87,7 +135,7 @@ final class InstallationIdentifierTest extends TestCase
     public function testLastSentSqlInitializesGlobalValueAndPreservesSuccessfulSendOnRetry(): void
     {
         $update = simplexml_load_file(dirname(__DIR__, 3) . '/install/db_scripts/update_6_0.xml');
-        $steps = $update->xpath('step[contains(., "system_statistics_last_sent")]');
+        $steps = $update->xpath('step[@id="430"]');
         $this->assertCount(1, $steps);
         $sql = str_replace('%PREFIX%_preferences', TBL_PREFERENCES, (string)$steps[0]);
         $this->pdo->exec($sql);

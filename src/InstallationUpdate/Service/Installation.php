@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\InstallationIdentifier;
+use Admidio\Infrastructure\InstallationSettings;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Cli\CliPolicy;
@@ -569,8 +570,14 @@ class Installation
         $gSettingsManager = $gCurrentOrganization->getSettingsManager();
         $gSettingsManager->setMulti(self::defaultOrganizationPreferences($config), false);
         InstallationIdentifier::ensure($db, $tenantId);
-        $db->queryPrepared('INSERT INTO ' . TBL_PREFERENCES . '
-            (prf_org_id, prf_name, prf_value) VALUES (NULL, ?, ?)', array('system_statistics_last_sent', ''));
+        $installationSettings = new InstallationSettings($db);
+        $installationSettings->withLock(function (InstallationSettings $settings): void {
+            foreach (InstallationSettings::defaults() as $name => $value) {
+                if ($settings->get($name) === null) {
+                    $settings->set($name, $value);
+                }
+            }
+        });
         self::disableSoundexSearchIfPgSql($db);
         $gCurrentOrganization->createBasicData($administratorId);
 
@@ -840,7 +847,6 @@ class Installation
 
         // the registered defaults of the core and of every plugin that is in use
         $defaultOrgPreferences = PreferenceDefinitions::defaults();
-        unset($defaultOrgPreferences['system_tenant_id'], $defaultOrgPreferences['system_statistics_last_sent']);
 
         // set some specific preferences whose values came from the input of the installation
         $defaultOrgPreferences['system_language'] = $config->language;

@@ -3,6 +3,7 @@
 namespace Admidio\Preferences\ValueObject;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationSettings;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Entity\Preferences;
@@ -94,7 +95,7 @@ class SettingsManager
         // The setting is removed through its own entity, so the deletion reaches the change history.
         // A plain DELETE would take it out of the audit trail without a trace.
         $preference = new Preferences($this->db);
-        $preference->readDataByColumns(array('prf_org_id' => $name === 'system_statistics_enabled' ? null : $this->orgId, 'prf_name' => $name));
+        $preference->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
         $preference->delete();
     }
 
@@ -237,6 +238,9 @@ class SettingsManager
      */
     public function has(string $name, bool $update = false): bool
     {
+        if (array_key_exists($name, InstallationSettings::defaults())) {
+            return false;
+        }
         if (!self::isValidName($name) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
@@ -262,7 +266,8 @@ class SettingsManager
      */
     private static function isValidName(string $name): bool
     {
-        return (bool)preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
+        return !array_key_exists($name, InstallationSettings::defaults())
+            && (bool)preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
     }
 
     /**
@@ -284,14 +289,15 @@ class SettingsManager
     {
         $sql = 'SELECT prf_name, prf_value
                   FROM ' . TBL_PREFERENCES . '
-                 WHERE (prf_org_id = ? AND prf_name <> \'system_statistics_enabled\')
-                    OR (prf_org_id IS NULL AND prf_name = \'system_statistics_enabled\')';
+                 WHERE prf_org_id = ? -- $this->orgId';
         $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId));
 
         $settings = array();
 
         while ($row = $pdoStatement->fetch()) {
-            $settings[$row['prf_name']] = $row['prf_value'];
+            if (!array_key_exists($row['prf_name'], InstallationSettings::defaults())) {
+                $settings[$row['prf_name']] = $row['prf_value'];
+            }
         }
 
         return $settings;
@@ -309,13 +315,7 @@ class SettingsManager
                   FROM ' . TBL_PREFERENCES . '
                  WHERE prf_org_id = ? -- $this->orgId
                    AND prf_name   = ? -- $name';
-        if ($name === 'system_statistics_enabled') {
-            $sql = 'SELECT prf_value FROM ' . TBL_PREFERENCES . '
-                WHERE prf_org_id IS NULL AND prf_name = ?';
-            $pdoStatement = $this->db->queryPrepared($sql, array($name));
-        } else {
-            $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
-        }
+        $pdoStatement = $this->db->queryPrepared($sql, array($this->orgId, $name));
 
         if ($pdoStatement->rowCount() === 0 && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" does not exist!');
@@ -333,7 +333,7 @@ class SettingsManager
     private function insert(string $name, string $value)
     {
         $prf = new Preferences($this->db);
-        $prf->setValue('prf_org_id', $name === 'system_statistics_enabled' ? null : $this->orgId);
+        $prf->setValue('prf_org_id', $this->orgId);
         $prf->setValue('prf_name', $name);
         $prf->setValue('prf_value', $value);
         $prf->save();
@@ -440,7 +440,7 @@ class SettingsManager
     private function update(string $name, string $value)
     {
         $prf = new Preferences($this->db);
-        $found = $prf->readDataByColumns(array('prf_org_id' => $name === 'system_statistics_enabled' ? null : $this->orgId, 'prf_name' => $name));
+        $found = $prf->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
 
         if ($found) {
             $prf->setValue('prf_value', $value);

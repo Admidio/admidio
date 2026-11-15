@@ -2,7 +2,6 @@
 namespace Admidio\Infrastructure;
 
 use Admidio\Infrastructure\Plugins\PluginRegistry;
-use Admidio\Preferences\ValueObject\SettingsManager;
 use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -231,18 +230,13 @@ class InstallationStatistics
     /** Null means that the installation/update has not initialized the preference yet. */
     public static function getLastSent(Database $db): ?string
     {
-        $value = $db->queryPrepared('SELECT prf_value FROM ' . TBL_PREFERENCES . '
-            WHERE prf_name = ? AND prf_org_id IS NULL', array('system_statistics_last_sent'))->fetchColumn();
-
-        return is_string($value) ? $value : null;
+        return (new InstallationSettings($db))->get('system_statistics_last_sent');
     }
 
     /** All send paths share the installation-wide success timestamp. */
     protected function recordSuccessfulSend(Database $db): void
     {
-        $db->queryPrepared('UPDATE ' . TBL_PREFERENCES . '
-            SET prf_value = ? WHERE prf_name = ? AND prf_org_id IS NULL',
-            array(self::getDateTime(), 'system_statistics_last_sent'));
+        (new InstallationSettings($db))->set('system_statistics_last_sent', self::getDateTime());
     }
 
     /** Whether the monthly interval or a reserved retry deadline has passed (UTC). */
@@ -276,57 +270,32 @@ class InstallationStatistics
     }
 
     /** Check when rebuilding the organization; statistics must never prevent loading a page. */
-    public static function sendIfDue(Database $db, int $organizationId, ?Closure $httpPost = null): void
+    public static function sendIfDue(Database $db, ?Closure $httpPost = null): void
     {
         global $gLogger;
 
-        $transactionStarted = false;
         try {
-            // Only the main organization triggers delivery; consent is stored globally.
-            if ($organizationId !== InstallationIdentifier::getOrganizationId($db)) {
+            $settings = new InstallationSettings($db);
+            $lastSent = $settings->get('system_statistics_last_sent');
+            if (!$settings->getBool('system_statistics_enabled') || $lastSent === null || !self::isDue($lastSent)) {
                 return;
             }
-            $settings = new SettingsManager($db, $organizationId);
-            $lastSent = self::getLastSent($db);
-            if ($lastSent === null
-                || !$settings->has('system_statistics_enabled')
-                || !$settings->getBool('system_statistics_enabled')
-                || !self::isDue($lastSent)) {
-                return;
-            }
-
-            $db->startTransaction();
-            $transactionStarted = true;
-            // Serialize concurrent requests and recheck after acquiring the lock.
-            $db->queryPrepared('SELECT com_id FROM ' . TBL_COMPONENTS . '
-                WHERE com_name_intern = ? FOR UPDATE', array('CORE'));
-            $settings = new SettingsManager($db, $organizationId);
-            $lastSent = self::getLastSent($db);
-            if ($lastSent !== null
-                && $settings->has('system_statistics_enabled')
-                && $settings->getBool('system_statistics_enabled')
-                && self::isDue($lastSent)) {
-                // Reserve the attempt before releasing the lock. Failed requests (including
-                // exceptions) keep this deadline so visitors cannot trigger immediate retries.
+            $reserved = $settings->withLock(function (InstallationSettings $settings): bool {
+                $lastSent = $settings->get('system_statistics_last_sent');
+                if (!$settings->getBool('system_statistics_enabled') || $lastSent === null || !self::isDue($lastSent)) {
+                    return false;
+                }
+                // Failed attempts retain this deadline to prevent retries on every page load.
                 $retryAt = new DateTimeImmutable('+1 hour', new DateTimeZone('UTC'));
-                $db->queryPrepared('UPDATE ' . TBL_PREFERENCES . '
-                    SET prf_value = ? WHERE prf_name = ? AND prf_org_id IS NULL',
-                    array('retry:' . $retryAt->format('Y-m-d\\TH:i:s\\Z'), 'system_statistics_last_sent'));
-            } else {
-                $db->endTransaction();
-                return;
-            }
-            $db->endTransaction();
-            $transactionStarted = false;
+                $settings->set('system_statistics_last_sent', 'retry:' . $retryAt->format('Y-m-d\\TH:i:s\\Z'));
 
+                return true;
+            });
             // Never hold the database lock while waiting for the statistics server.
-            if (!(new self(null, $httpPost))->send()) {
+            if ($reserved && !(new self(null, $httpPost))->send()) {
                 $gLogger->warning('Monthly pseudonymous installation statistics could not be sent.');
             }
         } catch (Throwable $exception) {
-            if ($transactionStarted) {
-                $db->rollback();
-            }
             $gLogger->warning('Monthly pseudonymous installation statistics could not be sent.', array('exception' => $exception));
         }
     }

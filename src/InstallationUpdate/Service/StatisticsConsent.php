@@ -5,7 +5,7 @@ namespace Admidio\InstallationUpdate\Service;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\InstallationIdentifier;
-use Admidio\Preferences\ValueObject\SettingsManager;
+use Admidio\Infrastructure\InstallationSettings;
 use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\InstallationPresenter;
 use Ramsey\Uuid\Uuid;
@@ -18,7 +18,7 @@ final class StatisticsConsent
 
     public static function addToForm(FormPresenter $form, InstallationPresenter $page, ?string $previousVersion = null): void
     {
-        global $gDb, $gL10n, $gSettingsManager;
+        global $gDb, $gL10n;
 
         // Fresh installations have no organization/preferences tables yet.
         $tenantId = $previousVersion !== null ? InstallationIdentifier::get($gDb) : null;
@@ -46,8 +46,8 @@ final class StatisticsConsent
         ) : $_SESSION[self::SESSION_DATA];
         $page->assignSmartyVariable('statisticsJson', $statistics->getJsonData($preview));
         $page->assignSmartyVariable('statisticsSchemaOnly', $schemaOnly);
-        $enabled = !isset($gSettingsManager) || !$gSettingsManager->has('system_statistics_enabled')
-            || $gSettingsManager->getBool('system_statistics_enabled');
+        $enabled = $previousVersion !== null
+            && (new InstallationSettings($gDb))->getBool('system_statistics_enabled');
         $page->assignSmartyVariable('statisticsEnabled', $enabled);
         $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), $enabled);
         $page->addJavascript('
@@ -101,7 +101,7 @@ final class StatisticsConsent
     {
         global $gDb;
 
-        $settings = new SettingsManager($gDb, 0);
+        $settings = new InstallationSettings($gDb);
         $settings->set('system_statistics_enabled', $enabled ? '1' : '0');
     }
 }

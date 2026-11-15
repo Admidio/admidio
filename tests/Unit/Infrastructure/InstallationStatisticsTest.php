@@ -196,7 +196,8 @@ class InstallationStatisticsTest extends TestCase
             $this->assertSame(phpversion($extension) === false ? null : phpversion($extension), $version);
         }
         foreach (array('system_tenant_id', 'system_statistics_last_sent') as $name) {
-            $this->assertContains($name, \Admidio\Preferences\Service\PreferenceDefinitions::internalNames());
+            $this->assertArrayHasKey($name, \Admidio\Infrastructure\InstallationSettings::defaults());
+            $this->assertFalse(\Admidio\Preferences\Service\PreferenceDefinitions::exists($name));
         }
     }
 
@@ -283,12 +284,12 @@ class InstallationStatisticsTest extends TestCase
             return $status;
         };
         try {
-            InstallationStatistics::sendIfDue($database, 1, $client);
+            InstallationStatistics::sendIfDue($database, $client);
             $this->assertSame(1, $calls);
             $this->assertFalse($inTransaction);
             $this->assertSame($status !== 200, str_starts_with($lastSent, 'retry:'));
             $this->assertFalse(InstallationStatistics::isDue($lastSent));
-            InstallationStatistics::sendIfDue($database, 1, $client);
+            InstallationStatistics::sendIfDue($database, $client);
             $this->assertSame(1, $calls);
         } finally {
             $GLOBALS['gLogger'] = $originalLogger;

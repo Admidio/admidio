@@ -112,7 +112,9 @@
     <step id="430">INSERT INTO %PREFIX%_preferences (prf_org_id, prf_name, prf_value)
         SELECT NULL, 'system_statistics_last_sent', ''
         WHERE NOT EXISTS (SELECT 1 FROM %PREFIX%_preferences
-        WHERE prf_org_id IS NULL AND prf_name = 'system_statistics_last_sent')</step>    <step id="440">DELETE FROM %PREFIX%_preferences
-        WHERE prf_name = 'system_statistics_enabled' AND prf_org_id IS NOT NULL</step>
+        WHERE prf_org_id IS NULL AND prf_name = 'system_statistics_last_sent')</step>
+    <step id="440">DELETE FROM %PREFIX%_preferences
+        WHERE prf_name IN ('system_statistics_enabled', 'system_statistics_last_sent', 'system_tenant_id')
+        AND prf_org_id IS NOT NULL</step>
     <step>stop</step>
 </update>

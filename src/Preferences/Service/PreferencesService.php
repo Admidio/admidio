@@ -5,6 +5,7 @@ namespace Admidio\Preferences\Service;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\InstallationSettings;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -490,6 +491,11 @@ class PreferencesService
 
         foreach ($formValues as $key => $value) {
             if (in_array($key, array('save', 'adm_csrf_token'), true)) {
+                continue;
+            }
+
+            if ($panel === 'common' && $key === 'system_statistics_enabled') {
+                (new InstallationSettings($gDb))->set($key, $value ? '1' : '0');
                 continue;
             }
 
