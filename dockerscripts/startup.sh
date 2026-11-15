@@ -148,18 +148,19 @@ if [ -f "${ADMIDIO_CONFIG}" ]; then
     # $gHealthEndpoint = true;
     # // Optional: the endpoint then requires this token in the header X-Health-Token.
     # $gHealthToken = '';
-    # the options are not part of the config template, so add them if they were set
-    if grep -q '^\$gHealthEndpoint' "${ADMIDIO_CONFIG}"; then
+    # The options are not part of the config template. They are only touched if the environment variable
+    # is set, so a manual setting in config.php survives a restart of the container.
+    if [ "${ADMIDIO_HEALTH_ENDPOINT:-}" != "" ]; then
         sed -i "/^\$gHealthEndpoint/d" "${ADMIDIO_CONFIG}"
+        if [ "${ADMIDIO_HEALTH_ENDPOINT}" = "1" ]; then
+            echo "\$gHealthEndpoint = true;" >> "${ADMIDIO_CONFIG}"
+        fi
     fi
-    if [ "${ADMIDIO_HEALTH_ENDPOINT}" = "1" ]; then
-        echo "\$gHealthEndpoint = true;" >> "${ADMIDIO_CONFIG}"
-    fi
-    if grep -q '^\$gHealthToken' "${ADMIDIO_CONFIG}"; then
+    if [ "${ADMIDIO_HEALTH_TOKEN:-}" != "" ]; then
         sed -i "/^\$gHealthToken/d" "${ADMIDIO_CONFIG}"
-    fi
-    if [ "${ADMIDIO_HEALTH_TOKEN}" != "" ]; then
-        echo "\$gHealthToken = '${ADMIDIO_HEALTH_TOKEN}';" >> "${ADMIDIO_CONFIG}"
+        # escape \ and ' because the token is written into a single quoted PHP string
+        health_token_php=$(printf '%s' "${ADMIDIO_HEALTH_TOKEN}" | sed -e 's/\\/\\\\/g' -e "s/'/\\\\'/g")
+        printf '%s\n' "\$gHealthToken = '${health_token_php}';" >> "${ADMIDIO_CONFIG}"
     fi
 
     # // Set the preferred password hashing algorithm.
