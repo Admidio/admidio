@@ -27,7 +27,7 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $settings->set('system_statistics_enabled', '0');
         $id = $settings->get('system_tenant_id');
         $lastSent = $settings->get('system_statistics_last_sent');
-        $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Installation settings', 'instsettings');
+        $other = (new AdmidioTestFixture($db))->createAndSaveOrganization('Installation settings', 'instset');
         foreach (InstallationSettings::defaults() as $name => $value) {
             $this->assertFalse((new SettingsManager($db, (int)$other['org_id']))->has($name));
         }
