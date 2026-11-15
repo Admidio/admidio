@@ -72,7 +72,9 @@ class MessageService
         $message = new Message($this->db);
         if ($messageUuid !== '') {
             $message->readDataByUuid($messageUuid);
-            if ($message->isNewRecord()) {
+            // Only private-message conversations may be continued. Email history is immutable.
+            if ($message->isNewRecord()
+                || $message->getValue('msg_type') !== Message::MESSAGE_TYPE_PM) {
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
             $messageType = (string)$message->getValue('msg_type');

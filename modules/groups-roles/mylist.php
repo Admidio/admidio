@@ -199,9 +199,10 @@ try {
         newCellConditions.innerHTML = htmlFormCondition;
 
         var newCellHandle = newTableRow.insertCell(-1);
-        newCellHandle.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+        newCellHandle.classList.add("text-nowrap", "align-middle", "px-0");
+        newCellHandle.innerHTML = "    <a class=\"admidio-icon-link admidio-move-row\">" +
             "        <i class=\"bi bi-arrows-move handle\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_MOVE_VAR') . '\"></i></a>" +
-            "    <a class=\"admidio-icon-link admidio-delete\" style=\"padding-left: 0pt; padding-right: 0pt;\">" +
+            "<a class=\"admidio-icon-link admidio-delete\">" +
             "        <i class=\"bi bi-trash\" data-bs-toggle=\"tooltip\" title=\"' . $gL10n->get('SYS_DELETE') . '\"></i></a>";
 
         $(newTableRow).fadeIn("slow");

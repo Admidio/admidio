@@ -156,6 +156,12 @@ class CategoryService
         $categoryEditForm = $gCurrentSession->getFormObject($_POST['adm_csrf_token']);
         $formValues = $categoryEditForm->validate($_POST);
 
+        // Child organizations may edit local categories, but must not make them global.
+        // Check the raw payload because validation removes disabled form fields.
+        if ($gCurrentOrganization->isChildOrganization() && isset($_POST['show_in_several_organizations'])) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
         if ($this->type !== 'ROL'
             && ((bool)$this->categoryRessource->getValue('cat_system') === false || $gCurrentOrganization->countAllRecords() === 1)
             && !isset($_POST['adm_categories_view_right'])) {
@@ -171,7 +177,7 @@ class CategoryService
         // set a global category if it's not a role category and the flag was set,
         // if it's a profile field category and only 1 organization exists,
         // if it's the role category of events
-        if (($this->type !== 'ROL' && isset($_POST['show_in_several_organizations']))
+        if (($this->type !== 'ROL' && (bool)($formValues['show_in_several_organizations'] ?? false))
             || ($this->type === 'USF' && ($gCurrentOrganization->countAllRecords() === 1 || $this->categoryRessource->getValue('cat_system') === true))
             || ($this->type === 'ROL' && $this->categoryRessource->getValue('cat_name_intern') === 'EVENTS')) {
             $this->categoryRessource->setValue('cat_org_id', 0);
@@ -244,11 +250,17 @@ class CategoryService
              WHERE cat_type = ? -- $this->type
                AND (  cat_org_id  = ? -- $gCurrentOrgId
                    OR cat_org_id IS NULL )
-          ORDER BY cat_org_id, cat_sequence';
+          ORDER BY CASE WHEN cat_org_id IS NULL THEN 0 ELSE 1 END, cat_sequence';
         $categoriesStatement = $gDb->queryPrepared($sql, array($this->type, $gCurrentOrgId));
 
         while ($row = $categoriesStatement->fetch()) {
             ++$sequence;
+
+            // Global categories occupy the first positions, but child organizations must not rewrite them.
+            if ($row['cat_org_id'] === null && $gCurrentOrganization->isChildOrganization()) {
+                continue;
+            }
+
             $sequenceCategory->clear();
             $sequenceCategory->setArray($row);
 
