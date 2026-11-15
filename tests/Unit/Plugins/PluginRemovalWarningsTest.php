@@ -39,6 +39,23 @@ class PluginRemovalWarningsTest extends AdmidioTestCase
     }
 
     /**
+     * @testdox A callback that fails or returns no list leaves no warnings instead of an error
+     */
+    public function testAFailingCallbackLeavesNoWarnings(): void
+    {
+        $plugin = Plugin::read(dirname(__DIR__, 3) . '/plugins/hello-world');
+
+        Hooks::addFilter('plugin_removal_warnings', static function (array $warnings): array {
+            throw new \RuntimeException('The remote service is not available.');
+        }, 10, 1, 'removal-warning-test');
+        $this->assertSame(array(), PluginInstaller::getRemovalWarnings($plugin));
+
+        Hooks::removeFilter('plugin_removal_warnings', 'removal-warning-test');
+        Hooks::addFilter('plugin_removal_warnings', static fn (array $warnings): string => 'not a list', 10, 1, 'removal-warning-test');
+        $this->assertSame(array(), PluginInstaller::getRemovalWarnings($plugin));
+    }
+
+    /**
      * @testdox Without listeners, and for a plugin whose files are gone, there is nothing to report
      */
     public function testNothingToReport(): void

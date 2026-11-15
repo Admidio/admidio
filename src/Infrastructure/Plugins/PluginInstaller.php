@@ -210,18 +210,31 @@ final class PluginInstaller
      * }, 10, 2);
      * ```
      * A warning never prevents the removal - otherwise a broken plugin could not be removed at
-     * all. Only plugins that are loaded can answer, which is the case for a plugin that is enabled
-     * in the current organization.
+     * all. For the same reason a callback that fails or returns something other than a list is
+     * logged, and there are no warnings then: the plugin manager and the CLI must still work when a
+     * plugin cannot answer. Only plugins that are loaded can answer, which is the case for a plugin
+     * that is enabled in the current organization.
      * @param Plugin|string $plugin The plugin, or the ID of a plugin whose files are already gone.
      * @return array<int,string> The messages, plain text.
      */
     public static function getRemovalWarnings(Plugin|string $plugin): array
     {
+        global $gLogger;
+
         if (!$plugin instanceof Plugin) {
             return array();
         }
 
-        $warnings = Hooks::applyTypedFilters('plugin_removal_warnings', array(), $plugin);
+        try {
+            $warnings = Hooks::applyTypedFilters('plugin_removal_warnings', array(), $plugin);
+        } catch (\Throwable $exception) {
+            if ($gLogger instanceof \Psr\Log\LoggerInterface) {
+                $gLogger->error('The removal warnings of a plugin could not be collected.', array('plugin' => $plugin->id, 'error' => $exception->getMessage()));
+            }
+
+            return array();
+        }
+
         return array_values(array_filter(
             array_map(static fn (mixed $warning): string => is_string($warning) ? trim($warning) : '', $warnings),
             static fn (string $warning): bool => $warning !== ''
