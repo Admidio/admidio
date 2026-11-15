@@ -372,7 +372,8 @@ final class PluginPackageTest extends PluginTestCase
         )), true);
         $this->assertSame('<?php $plg_greeting = 1;', file_get_contents($carried));
 
-        LegacyConfig::discardCarriedFile('hello-store');
+        // what the plugin's update steps do once they took the settings over
+        unlink($carried);
         PluginPackage::install($this->archive(array(
             'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.2.0"}',
             'hello-store/plugin.php' => self::ENTRY
