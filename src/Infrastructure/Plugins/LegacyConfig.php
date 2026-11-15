@@ -4,6 +4,7 @@ namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Service\PreferencesService;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -95,13 +96,13 @@ final class LegacyConfig
      * The variables the old config.php sets, as name => value.
      *
      * The file is included, which runs it - as every page view of the old plugin did. A file that
-     * can no longer run (a syntax error, a function PHP has dropped) is not taken for a missing one:
-     * that would install the plugin with its defaults, and the update of Admidio would then delete
-     * the file with the old folder.
+     * cannot be read or can no longer run (missing permissions, a syntax error, a function PHP has
+     * dropped) is not taken for a missing one: that would install the plugin with its defaults, and
+     * the update of Admidio would then delete the file with the old folder.
      * @param string $pluginId The ID of the plugin, which is the name of its folder.
      * @param string $legacyFolder The name the folder had in adm_plugins/, if it was a different one.
      * @return array<string,mixed>
-     * @throws Exception If the file exists but cannot be run.
+     * @throws Exception If the file exists but cannot be read or run.
      */
     public static function read(string $pluginId, string $legacyFolder = ''): array
     {
@@ -116,8 +117,15 @@ final class LegacyConfig
         $include = static function (string $__file): array {
             global $gL10n, $gDb, $gSettingsManager, $gCurrentOrganization, $gCurrentOrgId, $gCurrentUser;
 
+            // include only warns about a file it cannot open, and then returns false
+            if (!is_readable($__file)) {
+                throw new RuntimeException('The file cannot be read.');
+            }
+
             $__known = get_defined_vars();
-            include $__file;
+            if ((include $__file) === false) {
+                throw new RuntimeException('The file could not be included.');
+            }
 
             return array_diff_key(get_defined_vars(), $__known, array('__known' => true));
         };
