@@ -689,6 +689,39 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that an old config.php without read permission is not taken for a missing one
+     *
+     * @testdox An old config.php that may not be read stops the installation and is kept
+     */
+    public function testAnOldConfigWithoutReadPermissionStopsTheInstallation(): void
+    {
+        $folder = $this->pluginsPath . '/' . self::PLUGIN_ID;
+        $this->createFixtureFile($folder, 'config.php', "<?php\n\$plg_greeting = 'Servus';\n");
+        chmod($folder . '/config.php', 0000);
+        if (is_readable($folder . '/config.php')) {
+            chmod($folder . '/config.php', 0644);
+            $this->markTestSkipped('The tests run as a user that can read every file.');
+        }
+        $this->writeUpdateScript('1_2', array(30 => 'updateStep30ImportLegacyConfig'));
+
+        // PHPUnit turns warnings into exceptions; a production installation only logs the warning
+        // include gives for a file it cannot open, and include then returns false
+        set_error_handler(static fn (): bool => true, E_WARNING);
+        try {
+            PluginInstaller::enable($this->plugin());
+            $this->fail('The installation was expected to stop at the config.php it may not read.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('config.php', $exception->getMessage());
+        } finally {
+            restore_error_handler();
+            chmod($folder . '/config.php', 0644);
+        }
+
+        $this->assertFileExists($folder . '/config.php', 'The old configuration must be kept.');
+        $this->assertFalse((bool)$this->component()['com_update_completed']);
+    }
+
+    /**
      * Test the step with which a plugin of the Admidio distribution takes over its old config.php
      *
      * @testdox A plugin of the Admidio distribution converts the settings of its old config.php
