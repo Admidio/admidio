@@ -38,10 +38,17 @@ final class LegacyConfig
     /**
      * The name the old file gets when the plugin manager replaces the old folder with a new
      * version. It is a name of its own, so that a config.php the new version brings cannot take its
-     * place. The file is removed once the installation or update of the plugin has completed, when
-     * its settings are preferences.
+     * place. The file is removed once an update step of the plugin took it over with import() and
+     * the installation or update has completed. A version without such a step leaves it alone, so
+     * that a later version can still take the settings over.
      */
     public const CARRIED_FILE = 'config.legacy.php';
+
+    /**
+     * The plugins whose carried file import() took over in this request, as ID => true.
+     * @var array<string,bool>
+     */
+    private static array $carriedFilesImported = array();
 
     /**
      * The class only offers static methods and must not be instantiated.
@@ -80,14 +87,20 @@ final class LegacyConfig
 
     /**
      * Remove the old file the plugin manager carried over into the folder of the plugin, after the
-     * installation or update of the plugin has completed and its update steps took the settings
-     * over. Otherwise every later version would carry it on.
+     * installation or update of the plugin has completed - but only if an update step took its
+     * settings over with import() in this run. Without that the file is the only copy of the
+     * settings, and it stays for a later version whose update steps import it.
      * @param string $pluginId The ID of the plugin, which is the name of its folder.
      * @return void
      */
-    public static function discardCarriedFile(string $pluginId): void
+    public static function discardImportedCarriedFile(string $pluginId): void
     {
         global $gLogger;
+
+        if (!isset(self::$carriedFilesImported[$pluginId])) {
+            return;
+        }
+        unset(self::$carriedFilesImported[$pluginId]);
 
         $file = PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE;
         if (is_file($file) && !@unlink($file) && $gLogger instanceof \Psr\Log\LoggerInterface) {
@@ -108,6 +121,7 @@ final class LegacyConfig
      */
     public static function import(string $pluginId, array $map, string $legacyFolder = ''): void
     {
+        $carried = self::find($pluginId, $legacyFolder) === PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE;
         $variables = self::read($pluginId, $legacyFolder);
         $preferences = array();
 
@@ -118,6 +132,10 @@ final class LegacyConfig
         }
 
         PreferencesService::setForAllOrganizations($preferences);
+
+        if ($carried) {
+            self::$carriedFilesImported[$pluginId] = true;
+        }
     }
 
     /**

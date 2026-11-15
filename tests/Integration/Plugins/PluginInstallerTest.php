@@ -653,6 +653,43 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that the settings the plugin manager carried over stay while no update step imports them
+     *
+     * @testdox The old settings the plugin manager carried over are kept by a version that does not import them
+     * @dataProvider provideUpdateScriptsWithoutImport
+     * @param array<int,string> $steps The steps of the update script, none for a plugin without one.
+     */
+    public function testInstallWithoutImportKeepsTheCarriedConfig(array $steps): void
+    {
+        global $gCurrentOrgId;
+
+        $folder = $this->pluginsPath . '/' . self::PLUGIN_ID;
+        $this->createFixtureFile($folder, LegacyConfig::CARRIED_FILE, "<?php\n\$plg_greeting = 'Servus';\n");
+        if ($steps !== array()) {
+            $this->writeUpdateScript('1_2', $steps);
+        }
+
+        $plugin = $this->plugin();
+        PluginInstaller::enable($plugin);
+        PluginInstaller::update($this->plugin());
+
+        $this->assertTrue((bool)$this->component()['com_update_completed']);
+        $this->assertNotSame('Servus', $this->preferences((int)$gCurrentOrgId, $plugin)['hello_greeting']);
+        $this->assertFileExists($folder . '/' . LegacyConfig::CARRIED_FILE, 'Nothing took the old settings over, so they must be kept.');
+    }
+
+    /**
+     * @return array<string,array{0:array<int,string>}>
+     */
+    public static function provideUpdateScriptsWithoutImport(): array
+    {
+        return array(
+            'no update scripts' => array(array()),
+            'update scripts without an import' => array(array(10 => 'updateStep10Succeed'))
+        );
+    }
+
+    /**
      * Test that the config.php of a plugin from before the plugin system reaches every organization
      *
      * @testdox Installing over an old config.php takes its settings over for every organization

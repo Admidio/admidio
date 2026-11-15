@@ -122,7 +122,7 @@ final class PluginInstaller
             }
         }
 
-        LegacyConfig::discardCarriedFile($plugin->id);
+        LegacyConfig::discardImportedCarriedFile($plugin->id);
     }
 
     /**
@@ -162,7 +162,7 @@ final class PluginInstaller
             self::updateMenuEntries($plugin, $componentId);
         }
 
-        LegacyConfig::discardCarriedFile($plugin->id);
+        LegacyConfig::discardImportedCarriedFile($plugin->id);
     }
 
     /**
