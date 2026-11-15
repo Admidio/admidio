@@ -36,7 +36,7 @@ Thunderbird, one for ICSx5 and one for Apple Calendar.
 4. Save the calendar. Thunderbird will refresh it according to its normal
    calendar refresh settings.
 
-## ICSx5 (Android)
+## [ICSx5](https://icsx5.bitfire.at) (Android)
 
 1. Add a new calendar in ICSx5 and paste the feed URL.
 2. Enter the Admidio login name as the username.
@@ -45,14 +45,10 @@ Thunderbird, one for ICSx5 and one for Apple Calendar.
 
 ## Apple Calendar (iOS/iPadOS)
 
-Choose **Calendar Subscription** (some versions label it **Add Subscribed
-Calendar**), not **CalDAV**. CalDAV is meant for two-way calendar accounts and
-does not use the feed URL.
-
 1. Open **Settings > Calendar > Accounts > Add Account > Other**.
    On newer iOS versions the path is
    **Settings > Apps > Calendar > Calendar Accounts > Add Account > Other**.
-2. Choose **Calendar Subscription**.
+2. Choose **Calendar Subscription**, not **CalDAV**.
 3. Enter the feed URL from the profile and tap **Next**.
 4. When iOS asks for credentials, enter the Admidio login name as the username
    and the feed token as the password.
@@ -60,9 +56,6 @@ does not use the feed URL.
 
 Alternatively, use the Calendar app: **Calendars > Add Calendar >
 Add Subscription Calendar**.
-
-If iOS asks for a CalDAV server, username, password and description, the wrong
-option was selected. Go back and choose **Calendar Subscription** instead.
 
 The subscription is read-only and refreshed by iOS on its own schedule. If iOS
 refuses the URL, first open it in Safari and check that it returns an iCalendar

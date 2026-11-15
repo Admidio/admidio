@@ -37,7 +37,7 @@ für Thunderbird, eines für ICSx5 und eines für Apple Kalender.
 4. Den Kalender speichern. Thunderbird aktualisiert ihn gemäß den normalen
    Einstellungen für die Kalenderaktualisierung.
 
-## ICSx5 (Android)
+## [ICSx5](https://icsx5.bitfire.at) (Android)
 
 1. In ICSx5 einen neuen Kalender hinzufügen und die Feed-URL einfügen.
 2. Den Admidio-Loginnamen als Benutzernamen eintragen.
@@ -46,14 +46,10 @@ für Thunderbird, eines für ICSx5 und eines für Apple Kalender.
 
 ## Apple Kalender (iOS/iPadOS)
 
-**Kalenderabo** wählen (je nach iOS-Version auch **Abonnierten Kalender
-hinzufügen**), nicht **CalDAV**. CalDAV ist für zweiweg-synchronisierte
-Kalenderkonten gedacht und verwendet nicht die Feed-URL.
-
 1. **Einstellungen > Kalender > Accounts > Account hinzufügen > Andere** öffnen.
    Bei neueren iOS-Versionen lautet der Pfad
    **Einstellungen > Apps > Kalender > Kalenderaccounts > Account hinzufügen > Andere**.
-2. **Kalenderabo** wählen.
+2. **Kalenderabo** wählen, nicht **CalDAV**.
 3. Die Feed-URL aus dem Profil eintragen und auf **Weiter** tippen.
 4. Wenn iOS nach Zugangsdaten fragt, den Admidio-Loginnamen als Benutzernamen
    und das Feed-Token als Passwort eintragen.
@@ -61,9 +57,6 @@ Kalenderkonten gedacht und verwendet nicht die Feed-URL.
 
 Alternativ in der Kalender-App: **Kalender > Kalender hinzufügen >
 Abonnement-Kalender hinzufügen**.
-
-Wenn iOS nach CalDAV-Server, Benutzername, Passwort und Beschreibung fragt,
-wurde der falsche Punkt gewählt. Zurückgehen und **Kalenderabo** wählen.
 
 Das Abonnement ist schreibgeschützt und wird von iOS nach eigenem Zeitplan
 aktualisiert. Falls iOS die URL ablehnt, diese zuerst in Safari öffnen und
