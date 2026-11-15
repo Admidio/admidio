@@ -722,6 +722,70 @@ class PluginInstallerTest extends FilesystemTestCase
     }
 
     /**
+     * Test that the update of a plugin that is not loaded finds the class of its update steps
+     *
+     * A plugin whose installation failed, or whose update is otherwise pending, is not loaded with
+     * the others. In a request of its own - the plugin manager, the CLI or a repeated update of
+     * Admidio - nothing has registered its classes yet when the update scripts run. The plugin has
+     * a namespace of its own, so that no other test of this process can have declared the class.
+     *
+     * @testdox A failed installation is completed in a request of its own, in which the plugin is not loaded
+     */
+    public function testAFailedInstallIsCompletedInAFreshRequest(): void
+    {
+        $id = 'resumer';
+        $namespace = 'AdmidioPlugin\\Resumer' . bin2hex(random_bytes(4)) . '\\';
+        $folder = $this->pluginsPath . '/' . $id;
+        FileSystemUtils::createDirectoryIfNotExists($folder . '/src/Service');
+        FileSystemUtils::createDirectoryIfNotExists($folder . '/db_scripts');
+        $this->createFixtureFile($folder, 'plugin.json', json_encode(array(
+            'name' => 'Resumer',
+            'version' => '1.0.0',
+            'requires' => array('admidio' => '>=5.0', 'php' => '>=8.2'),
+            'autoload' => array($namespace => 'src/')
+        ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->createFixtureFile($folder, 'plugin.php', "<?php\n");
+        $this->createFixtureFile(
+            $folder . '/src/Service',
+            'UpdateStepsCode.php',
+            "<?php\nnamespace " . rtrim($namespace, '\\') . "\\Service;\n\nfinal class UpdateStepsCode\n{\n"
+            . "    public static function setDatabase(\\Admidio\\Infrastructure\\Database \$database): void\n    {\n    }\n\n"
+            . "    public static function updateStep10Complete(): void\n    {\n"
+            . "        \$GLOBALS['resumerPluginStepRuns'] = (\$GLOBALS['resumerPluginStepRuns'] ?? 0) + 1;\n    }\n}\n"
+        );
+        PluginRegistry::reset();
+        PluginInstaller::install($this->plugin($id), false);
+
+        // what an installation leaves behind whose update scripts failed before their first step
+        $this->createFixtureFile(
+            $folder . '/db_scripts',
+            'update_1_0.xml',
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<update>\n"
+            . "    <step id=\"10\">UpdateStepsCode::updateStep10Complete</step>\n    <step>stop</step>\n</update>\n"
+        );
+        $this->getDatabase()->queryPrepared(
+            'UPDATE ' . TBL_COMPONENTS . ' SET com_update_step = 0, com_update_completed = 0
+              WHERE com_type = ? AND com_name_intern = ?',
+            array(PluginRegistry::COMPONENT_TYPE, $id)
+        );
+
+        // the next request: nothing is loaded, and the waiting plugin is not loaded either
+        PluginRegistry::reset();
+        PluginLoader::reset();
+        $this->assertSame(PluginRegistry::STATE_UPDATE, PluginRegistry::getState($id));
+        $this->assertFalse(class_exists($namespace . 'Service\\UpdateStepsCode', false));
+
+        try {
+            PluginInstaller::update($this->plugin($id));
+
+            $this->assertSame(1, $GLOBALS['resumerPluginStepRuns'] ?? 0);
+            $this->assertTrue((bool)$this->component($id)['com_update_completed']);
+        } finally {
+            unset($GLOBALS['resumerPluginStepRuns']);
+        }
+    }
+
+    /**
      * Test the step with which a plugin of the Admidio distribution takes over its old config.php
      *
      * @testdox A plugin of the Admidio distribution converts the settings of its old config.php
