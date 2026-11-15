@@ -66,24 +66,37 @@ class ListActions
      * @param array<int,array<string,mixed>> $actions The action items the row has so far.
      * @param array<string,mixed> $row The data of the row, as context for the filters. For contacts this is
      *                                 the database row, for the other lists the array the template renders.
-     * @return array<int,array<string,mixed>> The action items to render, with consecutive keys.
-     * @throws UnexpectedValueException If a filter returned something that is not a list of action items.
+     * @return array<int,array<string,mixed>> The action items to render, with consecutive keys. If a filter
+     *                                         fails or returns something that is not a list of action items, the
+     *                                         error is logged and the actions are returned unfiltered: a broken
+     *                                         plugin must not take the lists down, least of all the plugin manager
+     *                                         in which it is switched off.
      */
     public static function filter(string $listId, array $actions, array $row = array()): array
     {
+        global $gLogger;
+
         if ($listId === '' || !Hooks::hasFilter(self::HOOK)) {
             return $actions;
         }
 
-        $filtered = Hooks::applyTypedFilters(self::HOOK, array_values($actions), $listId, $row);
+        try {
+            $filtered = Hooks::applyTypedFilters(self::HOOK, array_values($actions), $listId, $row);
 
-        foreach ($filtered as $index => $action) {
-            if (!is_array($action) || empty($action['icon']) || !isset($action['tooltip'])) {
-                throw new UnexpectedValueException(
-                    'A ' . self::HOOK . ' filter for "' . $listId . '" returned an invalid action at position '
-                    . $index . ': an action is an array with at least an "icon" and a "tooltip".'
-                );
+            foreach ($filtered as $index => $action) {
+                if (!is_array($action) || empty($action['icon']) || !isset($action['tooltip'])) {
+                    throw new UnexpectedValueException(
+                        'A ' . self::HOOK . ' filter for "' . $listId . '" returned an invalid action at position '
+                        . $index . ': an action is an array with at least an "icon" and a "tooltip".'
+                    );
+                }
             }
+        } catch (\Throwable $exception) {
+            if ($gLogger instanceof \Psr\Log\LoggerInterface) {
+                $gLogger->error('The actions of a list row could not be filtered.', array('list' => $listId, 'error' => $exception->getMessage()));
+            }
+
+            return array_values($actions);
         }
 
         return array_values($filtered);

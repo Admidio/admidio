@@ -5,7 +5,6 @@ namespace Admidio\Tests\Unit\UI\Component;
 use Admidio\Hooks\Hooks;
 use Admidio\Tests\Support\AdmidioTestCase;
 use Admidio\UI\Component\ListActions;
-use UnexpectedValueException;
 
 class ListActionsTest extends AdmidioTestCase
 {
@@ -108,20 +107,26 @@ class ListActionsTest extends AdmidioTestCase
         self::assertSame(array('edit', 'delete', 'locked'), $this->ids(ListActions::filter('plugins', $this->coreActions())));
     }
 
-    public function testAnActionWithoutIconOrTooltipIsRejected(): void
+    public function testAnActionWithoutIconOrTooltipLeavesTheActionsUnfiltered(): void
     {
         Hooks::addFilter(ListActions::HOOK, static fn(array $actions) => array(array('url' => '/x', 'tooltip' => 'No icon')));
 
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('"menu"');
-        ListActions::filter('menu', $this->coreActions());
+        self::assertSame(array('edit', 'delete'), $this->ids(ListActions::filter('menu', $this->coreActions())));
     }
 
-    public function testAFilterMustReturnAnArray(): void
+    public function testAFilterThatDoesNotReturnAnArrayLeavesTheActionsUnfiltered(): void
     {
         Hooks::addFilter(ListActions::HOOK, static fn(array $actions) => '<a href="#">html</a>');
 
-        $this->expectException(UnexpectedValueException::class);
-        ListActions::filter('menu', $this->coreActions());
+        self::assertSame(array('edit', 'delete'), $this->ids(ListActions::filter('menu', $this->coreActions())));
+    }
+
+    public function testAFilterThatThrowsLeavesTheActionsUnfiltered(): void
+    {
+        Hooks::addFilter(ListActions::HOOK, static function (): array {
+            throw new \RuntimeException('A broken plugin.');
+        });
+
+        self::assertSame(array('edit', 'delete'), $this->ids(ListActions::filter('plugins', $this->coreActions())));
     }
 }
