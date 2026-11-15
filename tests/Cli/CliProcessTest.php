@@ -918,6 +918,15 @@ class CliProcessTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox The event reminder maintenance job and manual command can be executed
+     */
+    public function testEventReminderEntryPointsRun(): void
+    {
+        $this->adminCliOk(array('maintenance:run', '--job=event-reminders', '--yes'));
+        $this->adminCliOk(array('event:send-reminders', '--dry-run'));
+    }
+
+    /**
      * @testdox Event mutations are committed by real CLI processes
      */
     public function testEventLifecycleAcrossIndependentProcesses(): void

@@ -23,6 +23,9 @@ use Throwable;
  */
 class EventReminderService
 {
+    private const DEFAULT_TIME_BUDGET_SECONDS = 45;
+    private const REQUEST_TIME_BUDGET_SECONDS = 10;
+
     private Database $database;
     private EventReminderRepository $repository;
 
@@ -36,10 +39,12 @@ class EventReminderService
      * Send all reminders that are due for the current organization.
      *
      * @param bool $dryRun Only count the reminders, do not send mails and do not write state.
+     * @param int $timeBudgetSeconds Stop starting new work after this many seconds. Remaining
+     *                               reminders are due again on the next run.
      * @return string|null Summary message, or null if nothing is due.
      * @throws Throwable If an unexpected error occurs outside a single event.
      */
-    public function runIfDue(bool $dryRun = false): ?string
+    public function runIfDue(bool $dryRun = false, int $timeBudgetSeconds = self::DEFAULT_TIME_BUDGET_SECONDS): ?string
     {
         global $gSettingsManager;
 
@@ -52,10 +57,19 @@ class EventReminderService
             return null;
         }
 
+        $startedAt = microtime(true);
+        $timeBudgetSeconds = max(0, $timeBudgetSeconds);
+        $budgetReached = false;
         $sent = 0;
+        $failed = 0;
         $processedEvents = 0;
 
         foreach ($eventIds as $eventId) {
+            if ((microtime(true) - $startedAt) >= $timeBudgetSeconds) {
+                $budgetReached = true;
+                break;
+            }
+
             try {
                 $event = new Event($this->database, $eventId);
                 if ($event->deadlineExceeded() || $event->participantLimitReached()) {
@@ -75,6 +89,11 @@ class EventReminderService
 
                 $processedEvents++;
                 foreach ($recipients as $recipient) {
+                    if ((microtime(true) - $startedAt) >= $timeBudgetSeconds) {
+                        $budgetReached = true;
+                        break 2;
+                    }
+
                     $userId = (int) $recipient['usr_id'];
 
                     if ($dryRun) {
@@ -89,11 +108,13 @@ class EventReminderService
                     try {
                         if (!$this->sendReminder($event, $userId, (string) $recipient['usr_uuid'])) {
                             $this->repository->release($eventId, $userId);
+                            $failed++;
                             continue;
                         }
                         $sent++;
                     } catch (Throwable $exception) {
                         $this->repository->release($eventId, $userId);
+                        $failed++;
                         $this->logError(
                             'Could not send event reminder for event ID ' . $eventId
                             . ' to user ID ' . $userId . ': ' . $exception->getMessage()
@@ -101,6 +122,7 @@ class EventReminderService
                     }
                 }
             } catch (Throwable $exception) {
+                $failed++;
                 $this->logError(
                     'Error processing event reminder for event ID ' . $eventId . ': ' . $exception->getMessage()
                 );
@@ -111,8 +133,16 @@ class EventReminderService
             return null;
         }
 
-        return ($dryRun ? 'Would send ' : 'Sent ') . $sent . ' reminder(s) for '
+        $summary = ($dryRun ? 'Would send ' : 'Sent ') . $sent . ' reminder(s) for '
             . $processedEvents . ' event(s).';
+        if ($failed > 0) {
+            $summary .= ' ' . $failed . ' failed.';
+        }
+        if ($budgetReached) {
+            $summary .= ' Time budget reached.';
+        }
+
+        return $summary;
     }
 
     /**
@@ -123,7 +153,7 @@ class EventReminderService
         global $gLogger;
 
         try {
-            (new self($db))->runIfDue();
+            (new self($db))->runIfDue(false, self::REQUEST_TIME_BUDGET_SECONDS);
         } catch (Throwable $exception) {
             $gLogger->warning(
                 'The event reminder check failed.',

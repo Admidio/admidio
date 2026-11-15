@@ -13,6 +13,8 @@ use Admidio\Events\Entity\Event;
 use Admidio\Events\Repository\EventReminderRepository;
 use Admidio\Events\Service\EventReminderService;
 use Admidio\Events\ValueObject\Participants;
+use Admidio\Hooks\Hooks;
+use Admidio\Infrastructure\SystemMail;
 use Admidio\Roles\Entity\Membership;
 use Admidio\Roles\Entity\Role;
 use Admidio\Roles\Entity\RolesRights;
@@ -27,6 +29,21 @@ class EventReminderTest extends DatabaseTestCase
     use PermissionContext;
 
     private const ORG_ID = 1;
+
+    private int $previousNotificationsEnabled;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->previousNotificationsEnabled = $GLOBALS['gSettingsManager']->getBool('system_notifications_enabled') ? 1 : 0;
+        $GLOBALS['gSettingsManager']->set('system_notifications_enabled', 1);
+    }
+
+    protected function tearDown(): void
+    {
+        $GLOBALS['gSettingsManager']->set('system_notifications_enabled', $this->previousNotificationsEnabled);
+        parent::tearDown();
+    }
 
     protected function getFixture(): AdmidioTestFixture
     {
@@ -106,6 +123,17 @@ class EventReminderTest extends DatabaseTestCase
             'INSERT INTO ' . TBL_USER_DATA . ' (usd_usr_id, usd_usf_id, usd_value) VALUES (?, ?, ?)',
             [$user['usr_id'], $emailFieldId, $email]
         );
+
+        foreach (array('FIRST_NAME' => 'Reminder', 'LAST_NAME' => $login) as $fieldName => $value) {
+            $fieldId = (int) $this->getDatabase()->queryPrepared(
+                'SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_name_intern = ?',
+                [$fieldName]
+            )->fetchColumn();
+            $this->getDatabase()->queryPrepared(
+                'INSERT INTO ' . TBL_USER_DATA . ' (usd_usr_id, usd_usf_id, usd_value) VALUES (?, ?, ?)',
+                [$user['usr_id'], $fieldId, $value]
+            );
+        }
 
         return $user;
     }
@@ -256,6 +284,110 @@ class EventReminderTest extends DatabaseTestCase
             } else {
                 $GLOBALS['gDisableEmailSending'] = $previousDisableEmailSending;
             }
+        }
+    }
+
+    /**
+     * @testdox The request_finished listener runs the reminder service after a request
+     */
+    public function testRequestFinishedListenerRunsReminder(): void
+    {
+        $fixture = $this->getFixture();
+        $eligibleRole = $fixture->createAndSaveRole('Reminder request route', self::ORG_ID);
+        $alice = $this->createUserWithEmail($fixture, 'requestRouteAlice', 'request-route-alice@example.local');
+        $fixture->assignUserToRole($alice['usr_id'], $eligibleRole['rol_id']);
+
+        $event = $this->createEventWithReminder('Request route event', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
+        $this->asAdministrator(function () use ($event, $eligibleRole) {
+            (new RolesRights($this->getDatabase(), 'event_participation', $event['dat_id']))
+                ->addRoles([$eligibleRole['rol_id']]);
+        });
+
+        $previousDisableEmailSending = $GLOBALS['gDisableEmailSending'] ?? null;
+        $GLOBALS['gDisableEmailSending'] = true;
+        $db = $this->getDatabase();
+        Hooks::addAction('request_finished', static function () use ($db): void {
+            EventReminderService::runIfDueSilently($db);
+        }, 50, null, 'event-reminder-request-test');
+
+        try {
+            Hooks::doAction('request_finished');
+
+            $sql = 'SELECT COUNT(*) FROM ' . TBL_EVENT_REMINDER_SENT . ' WHERE ers_dat_id = ? AND ers_usr_id = ?';
+            $this->assertSame(1, (int) $db->queryPrepared($sql, [$event['dat_id'], $alice['usr_id']])->fetchColumn());
+        } finally {
+            Hooks::removeAction('request_finished', 'event-reminder-request-test');
+            if ($previousDisableEmailSending === null) {
+                unset($GLOBALS['gDisableEmailSending']);
+            } else {
+                $GLOBALS['gDisableEmailSending'] = $previousDisableEmailSending;
+            }
+        }
+    }
+
+    /**
+     * @testdox One recipient without an address does not stop the other recipients
+     */
+    public function testOneFailingRecipientDoesNotStopOthers(): void
+    {
+        $fixture = $this->getFixture();
+        $eligibleRole = $fixture->createAndSaveRole('Reminder failures', self::ORG_ID);
+        $alice = $this->createUserWithEmail($fixture, 'failureAlice', 'failure-alice@example.local');
+        $bob = $fixture->createAndSaveUser('failureBob', 'no-address@example.local');
+        $fixture->assignUserToRole($alice['usr_id'], $eligibleRole['rol_id']);
+        $fixture->assignUserToRole($bob['usr_id'], $eligibleRole['rol_id']);
+
+        $event = $this->createEventWithReminder('Failure event', date('Y-m-d', strtotime(DATE_NOW . ' +3 days')));
+        $this->asAdministrator(function () use ($event, $eligibleRole) {
+            (new RolesRights($this->getDatabase(), 'event_participation', $event['dat_id']))
+                ->addRoles([$eligibleRole['rol_id']]);
+        });
+
+        $previousDisableEmailSending = $GLOBALS['gDisableEmailSending'] ?? null;
+        $GLOBALS['gDisableEmailSending'] = true;
+
+        try {
+            $summary = $this->runService();
+            $this->assertStringContainsString('Sent 1 reminder(s)', (string) $summary);
+
+            $sql = 'SELECT ers_usr_id FROM ' . TBL_EVENT_REMINDER_SENT . ' WHERE ers_dat_id = ?';
+            $remindedUserIds = array_map(
+                'intval',
+                $this->getDatabase()->queryPrepared($sql, [$event['dat_id']])->fetchAll(\PDO::FETCH_COLUMN)
+            );
+            $this->assertSame([$alice['usr_id']], $remindedUserIds);
+        } finally {
+            if ($previousDisableEmailSending === null) {
+                unset($GLOBALS['gDisableEmailSending']);
+            } else {
+                $GLOBALS['gDisableEmailSending'] = $previousDisableEmailSending;
+            }
+        }
+    }
+
+    /**
+     * @testdox mail_send_to_all_addresses is delegated to the email class
+     */
+    public function testMailSendToAllAddressesIsUsed(): void
+    {
+        $fixture = $this->getFixture();
+        $alice = $this->createUserWithEmail($fixture, 'allAddressesAlice', 'all-addresses-alice@example.local');
+        $emailFieldId = (int) $this->getDatabase()->queryPrepared(
+            'SELECT usf_id FROM ' . TBL_USER_FIELDS . ' WHERE usf_name_intern = ?',
+            ['EMAIL']
+        )->fetchColumn();
+        $this->getDatabase()->queryPrepared(
+            'INSERT INTO ' . TBL_USER_DATA . ' (usd_usr_id, usd_usf_id, usd_value) VALUES (?, ?, ?)',
+            [$alice['usr_id'], $emailFieldId, 'all-addresses-alice-second@example.local']
+        );
+
+        $previousAllAddresses = $GLOBALS['gSettingsManager']->getBool('mail_send_to_all_addresses');
+        $GLOBALS['gSettingsManager']->set('mail_send_to_all_addresses', 1);
+        try {
+            $mail = new SystemMail($this->getDatabase());
+            $this->assertSame(2, $mail->addRecipientsByUser((string) $alice['usr_uuid']));
+        } finally {
+            $GLOBALS['gSettingsManager']->set('mail_send_to_all_addresses', $previousAllAddresses ? 1 : 0);
         }
     }
 
