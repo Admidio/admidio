@@ -423,8 +423,10 @@ final class PluginPackage
         $legacyConfig = !is_file($target . '/' . Plugin::MANIFEST_FILE) && is_file($target . '/' . LegacyConfig::FILE)
             ? file_get_contents($target . '/' . LegacyConfig::FILE)
             : false;
-        if ($legacyConfig !== false && !is_file($source . '/' . LegacyConfig::FILE)) {
-            file_put_contents($source . '/' . LegacyConfig::FILE, $legacyConfig);
+        if ($legacyConfig !== false && !is_file($source . '/' . LegacyConfig::FILE)
+            && file_put_contents($source . '/' . LegacyConfig::FILE, $legacyConfig) === false) {
+            // before the old folder is deleted: it holds the only copy of the settings
+            throw new Exception('SYS_PLUGIN_PACKAGE_NOT_INSTALLED', array($id));
         }
 
         if (is_dir($target)) {
@@ -437,8 +439,31 @@ final class PluginPackage
              * directory is on a different mount than the Admidio installation.
              */
             if (!self::copyDirectory($source, $target)) {
+                // The old folder is gone, and the temporary directory goes too: its settings are put
+                // back where the next attempt finds them.
+                if ($legacyConfig !== false) {
+                    self::restoreLegacyConfig($target, $legacyConfig);
+                }
                 throw new Exception('SYS_PLUGIN_PACKAGE_NOT_INSTALLED', array($id));
             }
+        }
+    }
+
+    /**
+     * Write the config.php of a plugin from before the plugin system back into its folder, after
+     * putting the new version in place failed.
+     * @param string $target The folder of the plugin.
+     * @param string $contents The contents of the old file.
+     * @return void
+     */
+    private static function restoreLegacyConfig(string $target, string $contents): void
+    {
+        global $gLogger;
+
+        $restored = (is_dir($target) || @mkdir($target, 0o755, true))
+            && @file_put_contents($target . '/' . LegacyConfig::FILE, $contents) !== false;
+        if (!$restored) {
+            $gLogger->error('The old configuration of a plugin could not be put back.', array('file' => $target . '/' . LegacyConfig::FILE));
         }
     }
 
