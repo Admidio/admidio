@@ -3,6 +3,7 @@
 use Admidio\Application\Navigation;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Language;
@@ -326,6 +327,11 @@ try {
     PluginPages::refuse((string)PluginRegistry::getScriptPluginId(), $exception);
 }
 
-// once per day: report the memberships whose start or end date was reached, after the plugins are
-// loaded so that their listeners are called
-MembershipPeriodService::runIfDueSilently($gDb);
+// once per day: report the memberships whose start or end date was reached. It runs after the
+// response was sent, and after the plugins are loaded so that their listeners are called. The CLI
+// has the maintenance job "memberships" for it.
+if (PHP_SAPI !== 'cli' && MembershipPeriodService::mayBeDue()) {
+    Hooks::addAction('request_finished', static function () use ($gDb): void {
+        MembershipPeriodService::runIfDueSilently($gDb);
+    }, Hooks::DEFAULT_PRIORITY, 0, 'membership-period');
+}

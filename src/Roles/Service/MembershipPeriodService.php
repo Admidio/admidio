@@ -22,10 +22,13 @@ use Admidio\SSO\Service\SSOAccessRevocationService;
  * - **groups_roles_membership_period_date** is the last day that was processed completely. It is
  *   written only after the work is done, so a run that fails or is killed (a timeout, a restarted
  *   worker) leaves it as it was, and the next run starts from there again.
- * - **groups_roles_membership_period_lock** holds the start time of the run that is working right now.
- *   It is taken with an atomic UPDATE, so two requests or a request and the cron job do not do the work
- *   at the same time. A run that ends, also with an error, clears it; a lock that a killed run left
- *   behind counts as abandoned after LOCK_TIMEOUT seconds and is taken over.
+ * - **groups_roles_membership_period_lock** holds the time until which no other run may start. It is
+ *   taken with an atomic UPDATE, so two requests or a request and the cron job do not do the work at
+ *   the same time. A running job holds it for LOCK_TIMEOUT seconds at most, so the lock of a run that
+ *   was killed expires and is taken over. A run that succeeds clears it. A run that fails leaves it
+ *   for RETRY_DELAY seconds: the day stays undone and is repeated then, but a cause that persists
+ *   (a broken table, say) does not make every request repeat the whole work. The cron job does not
+ *   wait for that delay.
  *
  * Doing a day twice does no harm to the tokens: revoking them again changes nothing. A callback of the
  * action that fails is logged and does not stop the others - the day is not repeated for it, because a
@@ -52,6 +55,12 @@ class MembershipPeriodService
     /** Seconds after which the lock of a run that did not finish counts as abandoned. */
     public const LOCK_TIMEOUT = 3600;
 
+    /** Seconds a failed run waits before it is repeated, except by the cron job. */
+    public const RETRY_DELAY = 900;
+
+    /** The mark of a lock that only makes a failed run wait. */
+    private const RETRY_MARK = 'retry';
+
     public const CHANGE_STARTED = 'started';
     public const CHANGE_ENDED = 'ended';
 
@@ -64,22 +73,22 @@ class MembershipPeriodService
      * per day.
      *
      * @param string|null $today The day to catch up to, by default today.
-     * @return int|null The number of memberships, or **null** if today was done already.
+     * @param bool $ignoreRetryDelay Repeat a failed run at once instead of after RETRY_DELAY, as the
+     *                               cron job does. A run that is working is never joined.
+     * @return int|null The number of memberships, or **null** if today was done already, another
+     *                  run is working or a failed run waits for its retry.
      * @throws Exception
      */
-    public function runIfDue(?string $today = null): ?int
+    public function runIfDue(?string $today = null, bool $ignoreRetryDelay = false): ?int
     {
         global $gSettingsManager;
 
         $today ??= DATE_NOW;
-
-        // the settings of a session may be cached; only a value that is today already is conclusive
-        $cached = $gSettingsManager->has(self::SETTING) ? $gSettingsManager->getString(self::SETTING) : '';
-        if ($cached !== '' && $cached >= $today) {
+        if (!self::mayBeDue($today)) {
             return null;
         }
 
-        $lock = $this->lock();
+        $lock = $this->lock($ignoreRetryDelay);
         if ($lock === null) {
             return null;
         }
@@ -96,6 +105,14 @@ class MembershipPeriodService
             $gSettingsManager->set(self::SETTING, $today);
 
             return $count;
+        } catch (\Throwable $exception) {
+            // the lock now only makes the next attempt wait; unlock() below leaves it alone
+            try {
+                $this->replacePreference(self::LOCK_SETTING, $lock, self::lockValue(time() + self::RETRY_DELAY, self::RETRY_MARK));
+            } catch (\Throwable) {
+                // without the delay the next request simply tries again
+            }
+            throw $exception;
         } finally {
             $this->unlock($lock);
         }
@@ -180,20 +197,44 @@ class MembershipPeriodService
     }
 
     /**
-     * Take the lock of the current organization, unless another run holds it. A lock older than
-     * LOCK_TIMEOUT is one a killed run left behind and is taken over. Both the insert of a missing
-     * preference and the conditional UPDATE are atomic, so of two requests only one gets the lock.
+     * Whether today may still be undone, judged by the settings of this request alone - cheap
+     * enough for every request. The settings of a session may be cached; only a value that is today
+     * already is conclusive, so **true** does not mean that a run will do anything.
+     * @param string|null $today The day to catch up to, by default today.
+     */
+    public static function mayBeDue(?string $today = null): bool
+    {
+        global $gSettingsManager;
+
+        $today ??= DATE_NOW;
+        $cached = $gSettingsManager->has(self::SETTING) ? $gSettingsManager->getString(self::SETTING) : '';
+
+        return $cached === '' || $cached < $today;
+    }
+
+    /**
+     * The value of a lock: the time until which it holds, and a mark that tells the locks apart.
+     */
+    private static function lockValue(int $until, string $mark): string
+    {
+        return date('Y-m-d H:i:s', $until) . ' ' . $mark;
+    }
+
+    /**
+     * Take the lock of the current organization, unless it is held. A lock holds until the time it
+     * names, so the lock of a run that was killed expires after LOCK_TIMEOUT. Both the insert of a
+     * missing preference and the conditional UPDATE are atomic, so of two requests only one gets it.
      *
-     * @return string|null The value of the lock, which unlock() needs, or **null** if another run
-     *                     holds it.
+     * @param bool $ignoreRetryDelay Take a lock that only makes a failed run wait.
+     * @return string|null The value of the lock, which unlock() needs, or **null** if it is held.
      * @throws Exception
      */
-    private function lock(): ?string
+    private function lock(bool $ignoreRetryDelay = false): ?string
     {
         global $gCurrentOrgId;
 
         $now = time();
-        $lock = date('Y-m-d H:i:s', $now) . ' ' . bin2hex(random_bytes(4));
+        $lock = self::lockValue($now + self::LOCK_TIMEOUT, bin2hex(random_bytes(4)));
         $current = $this->readPreference(self::LOCK_SETTING);
 
         if ($current === false) {
@@ -207,7 +248,8 @@ class MembershipPeriodService
         }
 
         $current = (string) $current;
-        if ($current !== '' && (int) strtotime(substr($current, 0, 19)) > $now - self::LOCK_TIMEOUT) {
+        $held = $current !== '' && (int) strtotime(substr($current, 0, 19)) > $now;
+        if ($held && !($ignoreRetryDelay && str_ends_with($current, ' ' . self::RETRY_MARK))) {
             return null;
         }
 
@@ -268,7 +310,10 @@ class MembershipPeriodService
         try {
             (new self($db))->runIfDue();
         } catch (\Throwable $exception) {
-            $gLogger->warning('The daily check of membership periods failed.', array('message' => $exception->getMessage()));
+            $gLogger->error(
+                'The daily check of membership periods failed; it is repeated in ' . intdiv(self::RETRY_DELAY, 60) . ' minutes.',
+                array('message' => $exception->getMessage())
+            );
         }
     }
 }
