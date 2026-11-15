@@ -161,14 +161,22 @@ class MembershipPeriodService
     }
 
     /**
-     * The last day that was processed completely, or yesterday if there was none yet.
+     * The last day that was processed completely. The very first run starts with yesterday, and
+     * writes that down before it does any work: a first run that fails or is killed would otherwise
+     * start with the yesterday of its retry, which on the next day skips the day it was meant to do.
      * @throws Exception
      */
     private function lastProcessedDay(string $today): string
     {
-        $value = (string) $this->readPreference(self::SETTING);
+        global $gSettingsManager;
 
-        return $value === '' ? date('Y-m-d', (int) strtotime($today . ' -1 day')) : $value;
+        $value = (string) $this->readPreference(self::SETTING);
+        if ($value === '') {
+            $value = date('Y-m-d', (int) strtotime($today . ' -1 day'));
+            $gSettingsManager->set(self::SETTING, $value);
+        }
+
+        return $value;
     }
 
     /**

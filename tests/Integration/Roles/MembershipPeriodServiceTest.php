@@ -165,6 +165,46 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
         $this->assertSame('', $this->preference(MembershipPeriodService::LOCK_SETTING));
     }
 
+    /**
+     * @testdox A first run that fails is retried the next day from the day it was meant to do
+     */
+    public function testAFailedFirstRunKeepsItsStartingDay(): void
+    {
+        global $gCurrentOrgId;
+
+        // an installation where the job never completed a day
+        $this->getDatabase()->queryPrepared(
+            'UPDATE ' . TBL_PREFERENCES . ' SET prf_value = \'\' WHERE prf_org_id = ? AND prf_name = ?',
+            array((int) $gCurrentOrgId, MembershipPeriodService::SETTING)
+        );
+
+        $failing = new class ($this->getDatabase()) extends MembershipPeriodService {
+            public function process(string $since, string $until): int
+            {
+                throw new \RuntimeException('Killed.');
+            }
+        };
+        try {
+            $failing->runIfDue(self::day(6));
+            $this->fail('The failing run was expected to throw.');
+        } catch (\RuntimeException) {
+        }
+
+        $recording = new class ($this->getDatabase()) extends MembershipPeriodService {
+            /** @var array<int,array{0:string,1:string}> */
+            public array $runs = array();
+
+            public function process(string $since, string $until): int
+            {
+                $this->runs[] = array($since, $until);
+                return 0;
+            }
+        };
+        $this->assertNotNull($recording->runIfDue(self::day(7)));
+
+        $this->assertSame(array(array(self::day(5), self::day(7))), $recording->runs, 'The retry must include the day of the failed first run.');
+    }
+
     private function setLock(string $value): void
     {
         global $gCurrentOrgId;
