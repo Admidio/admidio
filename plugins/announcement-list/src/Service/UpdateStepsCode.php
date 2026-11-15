@@ -37,32 +37,7 @@ final class UpdateStepsCode
             'plg_show_preview'        => array('announcement_list_show_preview_chars', 'intval'),
             'plgShowFullDescription'  => array('announcement_list_show_full_description', 'boolval'),
             'plg_max_char_per_word'   => array('announcement_list_chars_before_linebreak', 'intval'),
-            'plg_categories'          => array('announcement_list_displayed_categories', array(self::class, 'categories'))
+            'plg_categories'          => array('announcement_list_displayed_categories', LegacyConfig::categories('ANN'))
         ));
-    }
-
-    /**
-     * The IDs of the categories an old setting names, or all categories if none of them exists.
-     * @param mixed $names
-     * @return array<int,mixed>
-     * @throws Exception
-     */
-    public static function categories(mixed $names): array
-    {
-        $categoryIds = array();
-
-        foreach (is_array($names) ? $names : array() as $name) {
-            if (strtolower((string)$name) === 'all') {
-                return array('All');
-            }
-
-            $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name = ? AND cat_type = ?';
-            $categoryId = self::$db->queryPrepared($sql, array($name, 'ANN'))->fetchColumn();
-            if ($categoryId !== false) {
-                $categoryIds[] = (int)$categoryId;
-            }
-        }
-
-        return $categoryIds === array() ? array('All') : $categoryIds;
     }
 }

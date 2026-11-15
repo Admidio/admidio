@@ -16,6 +16,7 @@ namespace Admidio\Tests\Integration\Plugins;
 
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
@@ -686,6 +687,55 @@ class PluginInstallerTest extends FilesystemTestCase
 
         $this->assertTrue((bool)$this->component()['com_update_completed']);
         $this->assertSame('Servus', $this->preferences((int)$gCurrentOrgId, $plugin)['hello_greeting']);
+    }
+
+    /**
+     * Test that what an old config.php prints does not reach the response
+     *
+     * @testdox An old config.php with a BOM and blank lines after its closing tag prints nothing
+     */
+    public function testAnOldConfigPrintsNothing(): void
+    {
+        global $gCurrentOrgId;
+
+        $this->createFixtureFile(
+            $this->pluginsPath . '/' . self::PLUGIN_ID,
+            'config.php',
+            "\xEF\xBB\xBF<?php\n\$plg_greeting = 'Servus';\n?>\n\n"
+        );
+        $this->writeUpdateScript('1_2', array(30 => 'updateStep30ImportLegacyConfig'));
+
+        $this->expectOutputString('');
+        $plugin = $this->plugin();
+        PluginInstaller::enable($plugin);
+
+        $this->assertSame('Servus', $this->preferences((int)$gCurrentOrgId, $plugin)['hello_greeting']);
+    }
+
+    /**
+     * Test the converters a plugin uses for old settings that name categories and roles
+     *
+     * @testdox Old category names become the IDs of every organization's categories, and no roles mean all
+     */
+    public function testTheLegacyConvertersOfCategoriesAndRoles(): void
+    {
+        global $gCurrentOrgId;
+
+        $second = $this->getFixture()->createAndSaveOrganization('Second Organization', 'SECOND');
+        $name = 'Concerts ' . bin2hex(random_bytes(3));
+        $first = $this->getFixture()->createAndSaveCategory($name, 'EVT', (int)$gCurrentOrgId);
+        $other = $this->getFixture()->createAndSaveCategory($name, 'EVT', $second['org_id']);
+        $this->getFixture()->createAndSaveCategory($name, 'ANN', (int)$gCurrentOrgId);
+
+        $events = LegacyConfig::categories('EVT');
+        $this->assertEqualsCanonicalizing(array($first['cat_id'], $other['cat_id']), $events(array($name, 'Unknown')));
+        $this->assertSame(array('All'), $events(array($name, 'all')));
+        $this->assertSame(array('All'), $events(array('Unknown')));
+        $this->assertSame(array('All'), $events('not a list'));
+
+        $this->assertSame(array(2, 3), LegacyConfig::roles(array(2, 3)));
+        $this->assertSame(array('All'), LegacyConfig::roles(array()));
+        $this->assertSame(array('All'), LegacyConfig::roles(null));
     }
 
     /**

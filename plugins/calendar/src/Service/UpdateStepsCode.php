@@ -39,44 +39,9 @@ final class UpdateStepsCode
             'plg_geb_icon'                   => array('calendar_show_birthday_icon', 'boolval'),
             'plg_geb_displayNames'           => array('calendar_show_birthday_names', 'intval'),
             'plg_kal_cat_show'               => array('calendar_show_categories_names', 'boolval'),
-            'plg_kal_cat'                    => array('calendar_show_categories', array(self::class, 'categories')),
-            'plg_calendar_roles_view_plugin' => array('calendar_roles_view_plugin', array(self::class, 'roles')),
-            'plg_rolle_sql'                  => array('calendar_roles_sql', array(self::class, 'roles'))
+            'plg_kal_cat'                    => array('calendar_show_categories', LegacyConfig::categories('EVT')),
+            'plg_calendar_roles_view_plugin' => array('calendar_roles_view_plugin', array(LegacyConfig::class, 'roles')),
+            'plg_rolle_sql'                  => array('calendar_roles_sql', array(LegacyConfig::class, 'roles'))
         ));
-    }
-
-    /**
-     * The IDs of the categories an old setting names, or all categories if none of them exists.
-     * @param mixed $names
-     * @return array<int,mixed>
-     * @throws Exception
-     */
-    public static function categories(mixed $names): array
-    {
-        $categoryIds = array();
-
-        foreach (is_array($names) ? $names : array() as $name) {
-            if (strtolower((string)$name) === 'all') {
-                return array('All');
-            }
-
-            $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name = ? AND cat_type = ?';
-            $categoryId = self::$db->queryPrepared($sql, array($name, 'EVT'))->fetchColumn();
-            if ($categoryId !== false) {
-                $categoryIds[] = (int)$categoryId;
-            }
-        }
-
-        return $categoryIds === array() ? array('All') : $categoryIds;
-    }
-
-    /**
-     * The roles an old setting names, or all of them if it names none.
-     * @param mixed $roles
-     * @return array<int,mixed>
-     */
-    public static function roles(mixed $roles): array
-    {
-        return is_array($roles) && $roles !== array() ? $roles : array('All');
     }
 }
