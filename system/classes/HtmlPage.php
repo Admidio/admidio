@@ -412,6 +412,8 @@ class HtmlPage
             $smartyObject->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
             $smartyObject->registerPlugin('function', 'is_translation_string_id', 'Admidio\Infrastructure\Plugins\Smarty::isTranslationStringID');
             $smartyObject->registerPlugin('function', 'get_themed_file', 'Admidio\Infrastructure\Plugins\Smarty::smarty_tag_getThemedFile');
+            // list.functions.tpl lets plugins change the actions of a row
+            $smartyObject->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
             return $smartyObject;
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
