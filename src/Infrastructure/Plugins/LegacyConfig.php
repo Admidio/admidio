@@ -36,6 +36,14 @@ final class LegacyConfig
     public const FILE = 'config.php';
 
     /**
+     * The name the old file gets when the plugin manager replaces the old folder with a new
+     * version. It is a name of its own, so that a config.php the new version brings cannot take its
+     * place. The file is removed once the installation or update of the plugin has completed, when
+     * its settings are preferences.
+     */
+    public const CARRIED_FILE = 'config.legacy.php';
+
+    /**
      * The class only offers static methods and must not be instantiated.
      */
     private function __construct()
@@ -45,10 +53,10 @@ final class LegacyConfig
     /**
      * The file an earlier version of the plugin left behind, or **null** if there is none.
      *
-     * It is looked for in the folder of the plugin itself, where it is when the new files were
-     * copied over the old ones or installed by the plugin manager (see
-     * PluginPackage::moveIntoPlace()), and in adm_plugins/, where the plugins of Admidio itself
-     * were and where a plugin stays that the update could not move.
+     * It is looked for in the folder of the plugin itself - as CARRIED_FILE where the plugin
+     * manager put the new version in place (see PluginPackage::moveIntoPlace()), as FILE where the
+     * new files were copied over the old ones - and in adm_plugins/, where the plugins of Admidio
+     * itself were and where a plugin stays that the update could not move.
      * @param string $pluginId The ID of the plugin, which is the name of its folder.
      * @param string $legacyFolder The name the folder had in adm_plugins/, if it was a different one.
      * @return string|null
@@ -56,6 +64,7 @@ final class LegacyConfig
     public static function find(string $pluginId, string $legacyFolder = ''): ?string
     {
         $files = array(
+            PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE,
             PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::FILE,
             ADMIDIO_PATH . '/adm_plugins/' . ($legacyFolder === '' ? $pluginId : $legacyFolder) . '/' . self::FILE
         );
@@ -67,6 +76,23 @@ final class LegacyConfig
         }
 
         return null;
+    }
+
+    /**
+     * Remove the old file the plugin manager carried over into the folder of the plugin, after the
+     * installation or update of the plugin has completed and its update steps took the settings
+     * over. Otherwise every later version would carry it on.
+     * @param string $pluginId The ID of the plugin, which is the name of its folder.
+     * @return void
+     */
+    public static function discardCarriedFile(string $pluginId): void
+    {
+        global $gLogger;
+
+        $file = PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE;
+        if (is_file($file) && !@unlink($file) && $gLogger instanceof \Psr\Log\LoggerInterface) {
+            $gLogger->warning('The old configuration of a plugin could not be removed.', array('file' => $file));
+        }
     }
 
     /**

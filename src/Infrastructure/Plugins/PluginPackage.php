@@ -415,16 +415,9 @@ final class PluginPackage
     {
         $target = PluginRegistry::getPluginsPath() . '/' . $id;
 
-        /*
-         * A folder without a manifest is a plugin from before the plugin system, and its config.php
-         * holds the settings the administrator made. It is carried over so that the update steps of
-         * the new version can still read it (see LegacyConfig).
-         */
-        $legacyConfig = !is_file($target . '/' . Plugin::MANIFEST_FILE) && is_file($target . '/' . LegacyConfig::FILE)
-            ? file_get_contents($target . '/' . LegacyConfig::FILE)
-            : false;
-        if ($legacyConfig !== false && !is_file($source . '/' . LegacyConfig::FILE)
-            && file_put_contents($source . '/' . LegacyConfig::FILE, $legacyConfig) === false) {
+        $legacyConfig = self::readLegacyConfig($target, $id);
+        if ($legacyConfig !== null
+            && @file_put_contents($source . '/' . LegacyConfig::CARRIED_FILE, $legacyConfig) === false) {
             // before the old folder is deleted: it holds the only copy of the settings
             throw new Exception('SYS_PLUGIN_PACKAGE_NOT_INSTALLED', array($id));
         }
@@ -441,7 +434,7 @@ final class PluginPackage
             if (!self::copyDirectory($source, $target)) {
                 // The old folder is gone, and the temporary directory goes too: its settings are put
                 // back where the next attempt finds them.
-                if ($legacyConfig !== false) {
+                if ($legacyConfig !== null) {
                     self::restoreLegacyConfig($target, $legacyConfig);
                 }
                 throw new Exception('SYS_PLUGIN_PACKAGE_NOT_INSTALLED', array($id));
@@ -450,8 +443,42 @@ final class PluginPackage
     }
 
     /**
-     * Write the config.php of a plugin from before the plugin system back into its folder, after
-     * putting the new version in place failed.
+     * The settings of a plugin from before the plugin system that the folder being replaced still
+     * holds, or **null** if it holds none.
+     *
+     * A folder without a manifest is such a plugin, and its config.php holds the settings the
+     * administrator made. A folder that already got them carried over by an earlier replacement
+     * holds them as LegacyConfig::CARRIED_FILE until the update steps of the plugin took them over.
+     * They are carried into the new version under that name, whatever files the new version brings,
+     * so that its update steps can still read them (see LegacyConfig).
+     * @param string $target The folder that is replaced.
+     * @param string $id
+     * @return string|null
+     * @throws Exception If the file is there but cannot be read: the folder must not be deleted then.
+     */
+    private static function readLegacyConfig(string $target, string $id): ?string
+    {
+        if (is_file($target . '/' . LegacyConfig::CARRIED_FILE)) {
+            $file = $target . '/' . LegacyConfig::CARRIED_FILE;
+        } elseif (!is_file($target . '/' . Plugin::MANIFEST_FILE) && is_file($target . '/' . LegacyConfig::FILE)) {
+            $file = $target . '/' . LegacyConfig::FILE;
+        } else {
+            return null;
+        }
+
+        $contents = is_readable($file) ? @file_get_contents($file) : false;
+        if ($contents === false) {
+            throw new Exception('SYS_PLUGIN_LEGACY_CONFIG_UNREADABLE', array($id, $file, 'The file cannot be read.'));
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Write the settings of a plugin from before the plugin system back into its folder, after
+     * putting the new version in place failed. They go back as LegacyConfig::CARRIED_FILE, which
+     * the next attempt carries over even if part of the new version, its manifest included, already
+     * arrived in the folder.
      * @param string $target The folder of the plugin.
      * @param string $contents The contents of the old file.
      * @return void
@@ -461,9 +488,9 @@ final class PluginPackage
         global $gLogger;
 
         $restored = (is_dir($target) || @mkdir($target, 0o755, true))
-            && @file_put_contents($target . '/' . LegacyConfig::FILE, $contents) !== false;
+            && @file_put_contents($target . '/' . LegacyConfig::CARRIED_FILE, $contents) !== false;
         if (!$restored) {
-            $gLogger->error('The old configuration of a plugin could not be put back.', array('file' => $target . '/' . LegacyConfig::FILE));
+            $gLogger->error('The old configuration of a plugin could not be put back.', array('file' => $target . '/' . LegacyConfig::CARRIED_FILE));
         }
     }
 

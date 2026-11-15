@@ -9,6 +9,7 @@
 
 namespace Admidio\Tests\Unit\Plugins;
 
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
@@ -737,7 +738,7 @@ final class PluginStoreTest extends PluginTestCase
 
         $this->assertFileExists($plugins . '/store-plugin/plugin.json');
         $this->assertFileDoesNotExist($plugins . '/store-plugin/store-plugin.php');
-        $this->assertFileExists($plugins . '/store-plugin/config.php', 'The settings of the old version were lost.');
+        $this->assertFileExists($plugins . '/store-plugin/' . LegacyConfig::CARRIED_FILE, 'The settings of the old version were lost.');
 
         PluginStore::reset();
         $entry = PluginStore::getEntry('store-plugin');
