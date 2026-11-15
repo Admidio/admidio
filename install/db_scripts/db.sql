@@ -115,6 +115,30 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 /*==============================================================*/
+/* Table: adm_calendar_feeds                                    */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_calendar_feeds
+(
+    cfd_id                      integer unsigned    NOT NULL    AUTO_INCREMENT,
+    cfd_org_id                  integer unsigned    NOT NULL,
+    cfd_usr_id                  integer unsigned    NOT NULL,
+    cfd_cat_uuid                varchar(36)         NULL        DEFAULT NULL,
+    cfd_token_hash              char(64)            NOT NULL,
+    cfd_name                    varchar(255)        NOT NULL,
+    cfd_timestamp_create        timestamp           NOT NULL    DEFAULT CURRENT_TIMESTAMP,
+    cfd_timestamp_last_used     timestamp           NULL        DEFAULT NULL,
+    cfd_timestamp_expires       timestamp           NULL        DEFAULT NULL,
+    cfd_active                  boolean             NOT NULL    DEFAULT true,
+    PRIMARY KEY (cfd_id)
+)
+ENGINE = InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+CREATE UNIQUE INDEX %PREFIX%_idx_cfd_token_hash ON %PREFIX%_calendar_feeds (cfd_token_hash);
+CREATE INDEX %PREFIX%_idx_cfd_org_usr ON %PREFIX%_calendar_feeds (cfd_org_id, cfd_usr_id);
+
+/*==============================================================*/
 /* Table: adm_categories                                        */
 /*==============================================================*/
 CREATE TABLE %PREFIX%_categories
@@ -1448,6 +1472,10 @@ ALTER TABLE %PREFIX%_announcements
 ALTER TABLE %PREFIX%_auto_login
     ADD CONSTRAINT %PREFIX%_fk_atl_usr         FOREIGN KEY (atl_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE RESTRICT ON UPDATE RESTRICT,
     ADD CONSTRAINT %PREFIX%_fk_atl_org         FOREIGN KEY (atl_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE %PREFIX%_calendar_feeds
+    ADD CONSTRAINT %PREFIX%_fk_cfd_org         FOREIGN KEY (cfd_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE CASCADE ON UPDATE RESTRICT,
+    ADD CONSTRAINT %PREFIX%_fk_cfd_usr         FOREIGN KEY (cfd_usr_id)         REFERENCES %PREFIX%_users (usr_id)               ON DELETE CASCADE ON UPDATE RESTRICT;
 
 ALTER TABLE %PREFIX%_categories
     ADD CONSTRAINT %PREFIX%_fk_cat_org         FOREIGN KEY (cat_org_id)         REFERENCES %PREFIX%_organizations (org_id)       ON DELETE RESTRICT ON UPDATE RESTRICT,
