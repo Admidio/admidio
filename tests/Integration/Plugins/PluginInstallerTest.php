@@ -764,7 +764,7 @@ class PluginInstallerTest extends FilesystemTestCase
             . "    <step id=\"10\">UpdateStepsCode::updateStep10Complete</step>\n    <step>stop</step>\n</update>\n"
         );
         $this->getDatabase()->queryPrepared(
-            'UPDATE ' . TBL_COMPONENTS . ' SET com_update_step = 0, com_update_completed = 0
+            'UPDATE ' . TBL_COMPONENTS . ' SET com_update_step = 0, com_update_completed = false
               WHERE com_type = ? AND com_name_intern = ?',
             array(PluginRegistry::COMPONENT_TYPE, $id)
         );
