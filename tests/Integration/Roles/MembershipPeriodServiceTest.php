@@ -23,8 +23,12 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
 
     protected function setUp(): void
     {
+        global $gSettingsManager;
+
         parent::setUp();
         $this->reported = array();
+        // the database is rolled back after each test, the cached settings are not
+        $gSettingsManager->has(MembershipPeriodService::SETTING, true);
         Hooks::addAction(MembershipPeriodService::HOOK, function (array $membership, string $change): void {
             $this->reported[] = array((int) $membership['mem_id'], $change);
         }, 10, 2, 'membership-period-test');
@@ -111,7 +115,7 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
     }
 
     /**
-     * @testdox A day whose processing failed stays undone and runs again
+     * @testdox A day whose processing failed stays undone and runs again after the retry delay, or at once by cron
      */
     public function testAFailedDayRunsAgain(): void
     {
@@ -129,10 +133,29 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
             $this->assertSame('The revocation failed.', $exception->getMessage());
         }
 
-        $this->assertNotNull(
-            (new MembershipPeriodService($this->getDatabase()))->runIfDue(self::day(3)),
-            'The day of the failed run must not count as done.'
-        );
+        $service = new MembershipPeriodService($this->getDatabase());
+        $this->assertNull($service->runIfDue(self::day(3)), 'A request must wait for the retry delay.');
+        $this->assertStringEndsWith(' retry', $this->preference(MembershipPeriodService::LOCK_SETTING));
+
+        $this->setLock(date('Y-m-d H:i:s', time() - 60) . ' retry');
+        $this->assertNotNull($service->runIfDue(self::day(3)), 'After the delay, the day of the failed run must run again.');
+        $this->assertSame(self::day(3), $this->preference(MembershipPeriodService::SETTING));
+    }
+
+    /**
+     * @testdox The cron job repeats a failed run without waiting, but never joins a run that is working
+     */
+    public function testTheCronJobIgnoresOnlyTheRetryDelay(): void
+    {
+        $service = new MembershipPeriodService($this->getDatabase());
+        $this->assertNotNull($service->runIfDue(self::day(8)));
+
+        $this->setLock(date('Y-m-d H:i:s', time() + MembershipPeriodService::LOCK_TIMEOUT) . ' a1b2c3d4');
+        $this->assertNull($service->runIfDue(self::day(9), true), 'A working run must not be joined.');
+
+        $this->setLock(date('Y-m-d H:i:s', time() + MembershipPeriodService::RETRY_DELAY) . ' retry');
+        $this->assertNull($service->runIfDue(self::day(9)), 'A request waits for the retry delay.');
+        $this->assertNotNull($service->runIfDue(self::day(9), true), 'The cron job does not.');
     }
 
     /**
@@ -154,10 +177,10 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
         $this->assertNotNull($recording->runIfDue(self::day(4)));
 
         // a run for the next day was killed after it took the lock: the lock stays, the day stays undone
-        $this->setLock(date('Y-m-d H:i:s') . ' killed');
+        $this->setLock(date('Y-m-d H:i:s', time() + MembershipPeriodService::LOCK_TIMEOUT - 60) . ' killed');
         $this->assertNull($recording->runIfDue(self::day(5)), 'A run must not start while another holds the lock.');
 
-        $this->setLock(date('Y-m-d H:i:s', time() - MembershipPeriodService::LOCK_TIMEOUT - 60) . ' killed');
+        $this->setLock(date('Y-m-d H:i:s', time() - 60) . ' killed');
         $this->assertNotNull($recording->runIfDue(self::day(5)), 'An abandoned lock must be taken over.');
 
         $this->assertSame(array(self::day(4), self::day(5)), end($recording->runs), 'The resumed run starts after the last completed day.');
@@ -200,7 +223,7 @@ class MembershipPeriodServiceTest extends AdministratorTestCase
                 return 0;
             }
         };
-        $this->assertNotNull($recording->runIfDue(self::day(7)));
+        $this->assertNotNull($recording->runIfDue(self::day(7), true));
 
         $this->assertSame(array(array(self::day(5), self::day(7))), $recording->runs, 'The retry must include the day of the failed first run.');
     }
