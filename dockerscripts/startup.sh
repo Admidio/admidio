@@ -143,6 +143,26 @@ if [ -f "${ADMIDIO_CONFIG}" ]; then
         echo "\$gLoginForUpdate = ${ADMIDIO_LOGIN_FOR_UPDATE};" >> "${ADMIDIO_CONFIG}"
     fi
 
+    # // Enable the optional health endpoint system/health.php (disabled by default).
+    # // It is used by the Docker healthcheck and can be used by external monitors.
+    # $gHealthEndpoint = true;
+    # // Optional: the endpoint then requires this token in the header X-Health-Token.
+    # $gHealthToken = '';
+    # The options are not part of the config template. They are only touched if the environment variable
+    # is set, so a manual setting in config.php survives a restart of the container.
+    if [ "${ADMIDIO_HEALTH_ENDPOINT:-}" != "" ]; then
+        sed -i "/^\$gHealthEndpoint/d" "${ADMIDIO_CONFIG}"
+        if [ "${ADMIDIO_HEALTH_ENDPOINT}" = "1" ]; then
+            echo "\$gHealthEndpoint = true;" >> "${ADMIDIO_CONFIG}"
+        fi
+    fi
+    if [ "${ADMIDIO_HEALTH_TOKEN:-}" != "" ]; then
+        sed -i "/^\$gHealthToken/d" "${ADMIDIO_CONFIG}"
+        # escape \ and ' because the token is written into a single quoted PHP string
+        health_token_php=$(printf '%s' "${ADMIDIO_HEALTH_TOKEN}" | sed -e 's/\\/\\\\/g' -e "s/'/\\\\'/g")
+        printf '%s\n' "\$gHealthToken = '${health_token_php}';" >> "${ADMIDIO_CONFIG}"
+    fi
+
     # // Set the preferred password hashing algorithm.
     # // Possible values are: 'DEFAULT', 'ARGON2ID', 'ARGON2I', 'BCRYPT', 'SHA512'
     # $gPasswordHashAlgorithm = 'DEFAULT';
