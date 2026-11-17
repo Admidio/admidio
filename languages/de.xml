@@ -1549,11 +1549,11 @@
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">Die plugin.json dieses Plugins kann nicht gelesen werden: #VAR1#</string>
   <string name="SYS_PLUGIN_PACKAGE_EMPTY">Die Datei ist ein leeres Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_INSTALLED">Das Plugin #VAR1# wurde hinzugefügt. Aktiviere es, um es zu verwenden.</string>
-  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">Der Ordner im Archiv heißt #VAR1# und ist damit kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</string>
+  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">#VAR1# ist kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten. Er wird aus „id“ in plugin.json gelesen, sonst aus dem Namen des Ordners im Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_A_ZIP">Die Datei ist kein ZIP-Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_EXTRACTED">Das Archiv konnte nicht entpackt werden. Prüfe, ob Admidio in seinen temporären Ordner schreiben darf.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_INSTALLED">Das Plugin #VAR1# konnte nicht in den Plugin-Ordner verschoben werden. Prüfe, ob Admidio in diesen Ordner schreiben darf.</string>
-  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">Das Archiv muss genau einen Ordner enthalten, der wie das Plugin benannt ist und alle weiteren Inhalte enthält.</string>
+  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">Das Archiv muss genau einen Ordner enthalten, der alle weiteren Inhalte enthält. Der Ordner ist wie das Plugin benannt, außer plugin.json gibt den Plugin-Namen in „id“ an.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE">Das Archiv enthält keine #VAR1#. Jedes Plugin benötigt diese Datei.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_MANIFEST">Das Archiv enthält keine #VAR1#. Jedes Plugin benötigt diese Datei.</string>
   <string name="SYS_PLUGIN_PACKAGE_REPLACE">Installiertes Plugin ersetzen</string>

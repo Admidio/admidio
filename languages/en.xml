@@ -1565,11 +1565,11 @@
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">The plugin\'s plugin.json file could not be read: #VAR1#</string>
   <string name="SYS_PLUGIN_PACKAGE_EMPTY">The file is an empty archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_INSTALLED">The plugin #VAR1# was added. Enable it to start using it.</string>
-  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">The folder in the archive is called #VAR1#, which cannot be a plugin name. A plugin name may only contain letters, digits, hyphens and underscores.</string>
+  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">#VAR1# cannot be a plugin name. A plugin name may only contain letters, digits, hyphens and underscores. It is taken from "id" in plugin.json, or else from the name of the folder in the archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_A_ZIP">The file is not a ZIP archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_EXTRACTED">The archive could not be unpacked. Check that Admidio may write into its temporary folder.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_INSTALLED">The plugin #VAR1# could not be moved into the plugins folder. Check that Admidio may write into it.</string>
-  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">The archive must contain exactly one folder, named after the plugin, with everything else inside it.</string>
+  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">The archive must contain exactly one folder with everything else inside it. The folder is named after the plugin, unless plugin.json states the plugin name in "id".</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE">The archive contains no #VAR1#. Every plugin needs that file.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_MANIFEST">The archive contains no #VAR1#. Every plugin needs that file.</string>
   <string name="SYS_PLUGIN_PACKAGE_REPLACE">Replace the installed plugin</string>
