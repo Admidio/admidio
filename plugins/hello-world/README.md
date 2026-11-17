@@ -27,6 +27,11 @@ else.
 The directory name is the plugin ID and the only identity the plugin has. `name` and `description`
 may be language keys, which is what this plugin uses. Everything else is optional:
 
+* `id` — the plugin ID once more. If it is there, it has to equal the directory name, and the
+  installer then accepts an archive whose folder is named differently — such as the source archive
+  GitHub generates for a release tag (`admidio-hello-world-1.2.0/`). The folder is renamed to the ID
+  when the plugin is installed.
+
 * `requires` — version constraints for `admidio` and `php`, plus `extensions` and `plugins`. A
   constraint is a space separated list of terms that all have to match, e.g. `>=5.1 <6.0`; a term
   without an operator means `>=`.

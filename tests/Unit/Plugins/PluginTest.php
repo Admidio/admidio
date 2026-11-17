@@ -559,4 +559,36 @@ final class PluginTest extends PluginTestCase
             rmdir(dirname($directory));
         }
     }
+
+    /**
+     * @testdox A manifest may state the ID, but only the one the directory is named after
+     */
+    public function testDeclaredIdHasToMatchTheDirectory(): void
+    {
+        $directory = sys_get_temp_dir() . '/adm_declared_id_' . uniqid() . '/idplugin';
+        mkdir($directory . '/src', 0777, true);
+        file_put_contents($directory . '/plugin.php', "<?php\n");
+        $manifest = json_decode((string)file_get_contents(self::fixturePath('hello') . '/plugin.json'), true);
+        unset($manifest['autoload']);
+
+        try {
+            $manifest['id'] = 'idplugin';
+            file_put_contents($directory . '/plugin.json', json_encode($manifest));
+            $plugin = Plugin::read($directory);
+            $this->assertNull($plugin->error);
+            $this->assertSame('idplugin', $plugin->id);
+
+            $manifest['id'] = 'otherplugin';
+            file_put_contents($directory . '/plugin.json', json_encode($manifest));
+            $plugin = Plugin::read($directory);
+            $this->assertSame(Plugin::ERROR_INVALID_ID, $plugin->errorCode);
+            $this->assertStringContainsString('otherplugin', (string)$plugin->error);
+        } finally {
+            unlink($directory . '/plugin.json');
+            unlink($directory . '/plugin.php');
+            rmdir($directory . '/src');
+            rmdir($directory);
+            rmdir(dirname($directory));
+        }
+    }
 }
