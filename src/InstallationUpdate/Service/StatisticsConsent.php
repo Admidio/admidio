@@ -88,11 +88,11 @@ final class StatisticsConsent
         try {
             $statistics = new InstallationStatistics();
             if (!$statistics->send($data)) {
-                $gLogger->warning('Anonymous installation statistics could not be sent.');
+                $gLogger->warning('Pseudonymous installation statistics could not be sent.');
             }
         } catch (Throwable $exception) {
             // Telemetry must never turn a completed installation/update into a failure.
-            $gLogger->warning('Anonymous installation statistics could not be sent.', array('exception' => $exception));
+            $gLogger->warning('Pseudonymous installation statistics could not be sent.', array('exception' => $exception));
         }
     }
 

@@ -412,11 +412,8 @@ try {
         } else {
             throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
         }
-
-
-        $statisticsData = StatisticsConsent::selectedData($formValues);
-
         // Preserve consent and payload locally: doAdmidioUpdate destroys the session.
+        $statisticsData = StatisticsConsent::selectedData($formValues);
 
         // start the update
         if ($coreUpdate !== null) {
@@ -426,7 +423,7 @@ try {
             $coreUpdate->markDatabaseRunning();
         }
         $databaseUpdateStarted = true;
-        
+
         $update = new Update();
         $update->doAdmidioUpdate($installedDbVersion);
         $databaseUpdateStarted = false;
