@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="PLG_HELLO_WORLD_ACTION_GREET">Greet</string>
+  <string name="PLG_HELLO_WORLD_ACTION_INFO">The list actions of this plugin are examples. See ListActionExamples.php.</string>
   <string name="PLG_HELLO_WORLD_ADDRESS">Address the visitor by</string>
   <string name="PLG_HELLO_WORLD_ADDRESS_DESC">How a logged-in visitor is named in the greeting. A visitor who is not logged in is greeted without a name.</string>
   <string name="PLG_HELLO_WORLD_ADDRESS_FIRST_NAME">First name</string>
@@ -10,6 +12,8 @@
   <string name="PLG_HELLO_WORLD_DESCRIPTION">An example plugin that shows every convention in one place: a manifest, an entry file that registers a hook, one page, one class, its own preferences and its own language file. A plugin needs none of that beyond the manifest and the entry file.</string>
   <string name="PLG_HELLO_WORLD_GREETING">Greeting</string>
   <string name="PLG_HELLO_WORLD_GREETING_DESC">The text the plugin greets with.</string>
+  <string name="PLG_HELLO_WORLD_LIST_ACTIONS">Change the action icons of some lists</string>
+  <string name="PLG_HELLO_WORLD_LIST_ACTIONS_DESC">If this is enabled, the plugin adds, hides, reorders and modifies action icons in the contacts, announcements, menu and plugin lists. This is only meant to show how a plugin changes the icons at the end of a row.</string>
   <string name="PLG_HELLO_WORLD_NAME">Hello World</string>
   <string name="PLG_HELLO_WORLD_PAGE_TEXT">This page belongs to the Hello World plugin. It is an ordinary Admidio module file that lives inside the plugin directory.</string>
   <string name="PLG_HELLO_WORLD_VISITOR">visitor</string>

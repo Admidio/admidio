@@ -106,9 +106,11 @@ try {
 
             $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
             $actionsTemplate->assign('cardActions', true);
+            $actionsTemplate->assign('listId', 'rooms');
             $actionsTemplate->assign('data', array('uuid' => $room->getValue('room_uuid'), 'actions' => array(
-                array('url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)), 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_EDIT')),
+                array('id' => 'edit', 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_new.php', array('room_uuid' => $room->getValue('room_uuid'), 'headline' => $textRoom)), 'icon' => 'bi bi-pencil-square', 'tooltip' => $gL10n->get('SYS_EDIT')),
                 array(
+                    'id' => 'delete',
                     'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($room->getValue('room_name'))),
                     'dataHref' => 'callUrlHideElement(\'room_' . $room->getValue('room_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/rooms/rooms_function.php', array('mode' => 'delete', 'room_uuid' => $room->getValue('room_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'icon' => 'bi bi-trash', 'tooltip' => $gL10n->get('SYS_DELETE')

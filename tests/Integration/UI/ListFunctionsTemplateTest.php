@@ -19,6 +19,7 @@ class ListFunctionsTemplateTest extends TestCase
         $this->smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
         $this->smarty->setCompileDir($this->compileDirectory);
         $this->smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+        $this->smarty->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
         $this->smarty->assign('l10n', new class {
             public function get(string $key): string
             {
@@ -46,6 +47,74 @@ class ListFunctionsTemplateTest extends TestCase
         $document = new DOMDocument();
         $document->loadHTML('<html><body>' . $html . '</body></html>');
         return new DOMXPath($document);
+    }
+
+    public function testMoveActionsEscapeLabelsAndPreserveSortingHooks(): void
+    {
+        $label = 'Move "A & B" <up>';
+        foreach (array('UP', 'DOWN', 'FREE') as $direction) {
+            foreach (array(false, true) as $showText) {
+                $template = $this->smarty->createTemplate('sys-template-parts/list.move.tpl');
+                $template->assign('moveActions', array(array(
+                    'direction' => $direction, 'label' => $label, 'showText' => $showText,
+                    'class' => 'admidio-test-move', 'attributes' => array('data-id' => '"A & B" <id>')
+                )));
+                $document = new DOMDocument();
+                $document->loadHTML('<html><body>' . $template->fetch() . '</body></html>');
+                $xpath = new DOMXPath($document);
+                $link = $xpath->query('//a')->item(0);
+                self::assertSame($label, $link->getAttribute('aria-label'));
+                self::assertSame($label, trim($link->textContent));
+                self::assertSame('"A & B" <id>', $link->getAttribute('data-id'));
+                self::assertStringContainsString('admidio-test-move', $link->getAttribute('class'));
+                self::assertSame(!$showText, str_contains($link->getAttribute('class'), 'admidio-icon-link'));
+                self::assertSame($direction !== 'FREE', $link->hasAttribute('data-direction'));
+                if ($direction !== 'FREE') {
+                    self::assertSame($direction, $link->getAttribute('data-direction'));
+                }
+                $icon = $xpath->query('//a/i')->item(0);
+                $iconClass = array('UP' => 'bi-arrow-up-circle-fill', 'DOWN' => 'bi-arrow-down-circle-fill', 'FREE' => 'bi-arrows-move handle');
+                self::assertSame('bi ' . $iconClass[$direction], $icon->getAttribute('class'));
+                self::assertSame(!$showText, $icon->hasAttribute('data-bs-toggle'));
+                self::assertSame(!$showText, $icon->hasAttribute('title'));
+                if (!$showText) {
+                    self::assertSame($label, $icon->getAttribute('title'));
+                }
+                self::assertCount($showText ? 0 : 1, $xpath->query('//span[@class="visually-hidden"]'));
+            }
+        }
+    }
+
+    public function testSsoClientCellsEscapeSearchAndOrderAttributes(): void
+    {
+        $label = 'Enabled "A & B" <client>';
+        foreach (array('sso_saml_clients', 'sso_oidc_clients') as $module) {
+            foreach (array(false, true) as $aligned) {
+                $template = $this->smarty->createTemplate('modules/' . $module . '.list.tpl');
+                $template->assign('headers', array('Status', 'Name'));
+                $template->assign('rows', array(array('id' => 'client_test', 'enabledLabel' => $label, 'data' => array('Enabled', 'Client'))));
+                if ($aligned) {
+                    $template->assign('columnAlign', array('center', 'left'));
+                }
+                $html = $template->fetch();
+                self::assertStringNotContainsString(' ">', $html);
+                $document = new DOMDocument();
+                $document->loadHTML($html);
+                $xpath = new DOMXPath($document);
+                $cells = $xpath->query('//tbody/tr/td');
+                self::assertCount(2, $cells);
+                self::assertSame($label, $cells->item(0)->getAttribute('data-order'));
+                self::assertSame($label, $cells->item(0)->getAttribute('data-search'));
+                self::assertFalse($cells->item(1)->hasAttribute('data-order'));
+                self::assertFalse($cells->item(1)->hasAttribute('data-search'));
+                foreach ($cells as $key => $cell) {
+                    self::assertSame($aligned, $cell->hasAttribute('style'));
+                    if ($aligned) {
+                        self::assertSame('text-align:' . array('center', 'left')[$key] . ';', $cell->getAttribute('style'));
+                    }
+                }
+            }
+        }
     }
 
     public function testResponsiveActionCounts(): void
@@ -118,9 +187,11 @@ class ListFunctionsTemplateTest extends TestCase
         $document = new DOMDocument();
         $document->loadHTML($html);
         $xpath = new DOMXPath($document);
-        self::assertCount(2, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
-        self::assertCount(3, $xpath->query('//a[@onclick]'));
-        self::assertCount(2, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/settings"]'));
+        self::assertCount(1, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
+        self::assertCount(2, $xpath->query('//a[@onclick]'));
+        self::assertCount(1, $xpath->query('//tr/td[1]/a[@onclick]'));
+        self::assertCount(1, $xpath->query('//div[contains(@class, "card-header")]/a[@onclick]'));
+        self::assertCount(1, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/settings"]'));
         self::assertCount(1, $xpath->query('//*[@id="adm_dropdown_menu_button_mobile_example"]'));
         foreach ($xpath->query('//a[@onclick]') as $toggle) {
             self::assertSame($entry['toggle']['dataHref'], $toggle->getAttribute('onclick'));
@@ -136,7 +207,10 @@ class ListFunctionsTemplateTest extends TestCase
                 'beginIso' => '', 'endIso' => '', 'timestampIso' => '', 'beginDateTimeIso' => '', 'endDateTimeIso' => '',
                 'itemName' => 'Item', 'requester' => 'User', 'email' => '', 'timestamp' => '', 'begin' => '', 'end' => '',
                 'originUrl' => '', 'origin' => '', 'mailUrl' => 'mailto:user@example.org', 'comment' => 'Comment "A & B"',
-                'actions' => array(array('url' => '/approve', 'icon' => 'bi-check', 'label' => 'Approve'))
+                'actions' => array(
+                    array('id' => 'approve', 'url' => '/approve', 'icon' => 'bi-check', 'label' => 'Approve'),
+                    array('id' => 'reject', 'url' => '/reject', 'icon' => 'bi-x', 'label' => 'Reject')
+                )
             ))
         ));
         $html = $this->smarty->fetch('modules/inventory.reservations.list.tpl');
@@ -145,6 +219,9 @@ class ListFunctionsTemplateTest extends TestCase
         $xpath = new DOMXPath($document);
         self::assertCount(1, $xpath->query('//a[@data-bs-toggle="dropdown"]'));
         self::assertCount(2, $xpath->query('//a[contains(@class, "admidio-inventory-reservation-update") and @data-url="/approve" and @data-row-id="reservation_test"]'));
+        // every status action keeps its own stable ID, so plugins can tell approve and reject apart
+        self::assertCount(2, $xpath->query('//a[@data-action-id="approve" and @data-url="/approve"]'));
+        self::assertCount(1, $xpath->query('//a[@data-action-id="reject" and @data-url="/reject"]'), 'only in the menu');
         self::assertSame('Comment "A & B"', $xpath->query('//a[@data-comment]')->item(0)->getAttribute('data-comment'));
         self::assertCount(1, $xpath->query('//a[@href="mailto:user@example.org"]'));
     }
@@ -175,4 +252,95 @@ class ListFunctionsTemplateTest extends TestCase
         self::assertCount(2, $xpath->query('//a[contains(@class, "d-none d-md-inline-flex") and @href="/borrow"]'));
     }
 
+
+    private function renderList(array $actions, string $listId, array $row = array()): DOMXPath
+    {
+        $template = $this->smarty->createTemplate('sys-template-parts/list.functions.tpl');
+        $template->assign('data', array('uuid' => 'test', 'actions' => $actions));
+        $template->assign('listId', $listId);
+        $template->assign('listRow', $row);
+        $document = new DOMDocument();
+        $document->loadHTML('<html><body>' . $template->fetch() . '</body></html>');
+        return new DOMXPath($document);
+    }
+
+    public function testListRowActionsFilterChangesTheRenderedIcons(): void
+    {
+        \Admidio\Hooks\Hooks::reset();
+        \Admidio\Hooks\Hooks::addFilter('list_row_actions', static function (array $actions, string $listId, array $row) {
+            if ($listId !== 'example') {
+                return $actions;
+            }
+            $actions = array_values(array_filter($actions, static fn($action) => ($action['id'] ?? '') !== 'delete'));
+            array_unshift($actions, array('id' => 'locked', 'icon' => 'bi bi-shield-lock', 'tooltip' => 'Locked ' . $row['name']));
+            return $actions;
+        });
+
+        try {
+            $core = array(
+                array('id' => 'edit', 'url' => '/edit', 'icon' => 'bi bi-pencil-square', 'tooltip' => 'Edit'),
+                array('id' => 'delete', 'url' => '/delete', 'icon' => 'bi bi-trash', 'tooltip' => 'Delete'),
+            );
+            $xpath = $this->renderList($core, 'example', array('name' => 'X'));
+            self::assertCount(0, $xpath->query('//a[@data-action-id="delete"]'));
+            self::assertCount(1, $xpath->query('//a[@data-action-id="edit"]'));
+            $locked = $xpath->query('//a[@data-action-id="locked"]');
+            self::assertCount(1, $locked);
+            self::assertSame('javascript:void(0);', $locked->item(0)->getAttribute('href'), 'an informational action does nothing');
+            self::assertSame('Locked X', $locked->item(0)->getAttribute('aria-label'));
+
+            // another list, and a list without an ID, are not touched
+            self::assertCount(1, $this->renderList($core, 'other')->query('//a[@data-action-id="delete"]'));
+            self::assertCount(1, $this->render($core)->query('//a[@href="/delete"]'));
+        } finally {
+            \Admidio\Hooks\Hooks::reset();
+        }
+    }
+
+    public function testCardsApplyTheFilterOnceEvenWithoutCoreActions(): void
+    {
+        $calls = 0;
+        \Admidio\Hooks\Hooks::reset();
+        \Admidio\Hooks\Hooks::addFilter('list_row_actions', static function (array $actions, string $listId, array $row) use (&$calls) {
+            if ($listId === 'announcements') {
+                $calls++;
+                $actions[] = array('id' => 'example_read', 'url' => '/read/' . $row['uuid'], 'icon' => 'bi bi-eye', 'tooltip' => 'Read');
+            }
+            return $actions;
+        });
+
+        try {
+            $this->smarty->assign('urlAdmidio', '');
+            $this->smarty->assign('pagination', '');
+            $this->smarty->assign('cards', array(array(
+                'uuid' => 'readonly', 'title' => 'Title', 'description' => '', 'userCreatedProfilePhotoUrl' => '',
+                'userCreatedName' => '', 'userCreatedTimestamp' => '', 'categoryUUID' => '', 'category' => '',
+                'editable' => false
+            )));
+            $document = new DOMDocument();
+            $document->loadHTML($this->smarty->fetch('modules/announcements.cards.tpl'), LIBXML_NOERROR | LIBXML_NOWARNING);
+            $xpath = new DOMXPath($document);
+            // a plugin action appears on a card the user may not edit, and only once
+            self::assertCount(2, $xpath->query('//a[@data-action-id="example_read" and @href="/read/readonly"]'), 'icon and phone menu entry');
+            self::assertSame(1, $calls);
+        } finally {
+            \Admidio\Hooks\Hooks::reset();
+        }
+    }
+
+    public function testCardsWithoutAnyActionsRenderNoActionArea(): void
+    {
+        $this->smarty->assign('urlAdmidio', '');
+        $this->smarty->assign('pagination', '');
+        $this->smarty->assign('cards', array(array(
+            'uuid' => 'readonly', 'title' => 'Title', 'description' => '', 'userCreatedProfilePhotoUrl' => '',
+            'userCreatedName' => '', 'userCreatedTimestamp' => '', 'categoryUUID' => '', 'category' => '',
+            'editable' => false
+        )));
+        $document = new DOMDocument();
+        $document->loadHTML($this->smarty->fetch('modules/announcements.cards.tpl'), LIBXML_NOERROR | LIBXML_NOWARNING);
+        $xpath = new DOMXPath($document);
+        self::assertCount(0, $xpath->query('//div[contains(@class, "admidio-functions")]'));
+        self::assertCount(0, $xpath->query('//div[contains(@class, "col-auto ms-auto")]'));
+    }
 }

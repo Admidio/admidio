@@ -105,11 +105,13 @@ try {
 
         $actions = array(
             array(
+                'id' => 'edit',
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_new.php', array('urt_uuid' => $relationType1->getValue('urt_uuid'))),
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT')
             ),
             array(
+                'id' => 'delete',
                 'dataMessage' => $gL10n->get('SYS_RELATIONSHIP_TYPE_DELETE', array($relationType1->getValue('urt_name') . ($relationType1->isUnidirectional() ? '' : ('/' . $relationType2->getValue('urt_name'))))),
                 'dataHref' => 'callUrlHideElement(\'row_' . $relationType1->getValue('urt_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/userrelations/relationtypes_function.php', array('mode' => 'delete', 'urt_uuid' => $relationType1->getValue('urt_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                 'icon' => 'bi bi-trash',
@@ -118,6 +120,7 @@ try {
         );
         $actionsTemplate = $page->getSmartyTemplate()->createTemplate('sys-template-parts/list.functions.tpl');
         $actionsTemplate->assign('data', array('uuid' => $relationType1->getValue('urt_uuid'), 'actions' => $actions));
+        $actionsTemplate->assign('listId', 'relation-types');
         $relationtypeAdministration = $actionsTemplate->fetch();
 
         // create array with all column values

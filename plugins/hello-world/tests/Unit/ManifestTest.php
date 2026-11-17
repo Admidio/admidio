@@ -82,7 +82,7 @@ final class ManifestTest extends PluginTestCase
     public function testSettingNamesDoNotChange(): void
     {
         $this->assertSame(
-            array('hello_world_greeting', 'hello_world_address', 'hello_world_decorate_headline'),
+            array('hello_world_greeting', 'hello_world_address', 'hello_world_decorate_headline', 'hello_world_list_actions'),
             array_keys($this->readPlugin()->settings)
         );
     }

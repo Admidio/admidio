@@ -27,7 +27,7 @@
                     <td>{$row.viewMembersProfiles}</td>
                     <td>{$row.roleLeaderRights}</td>
                     <td class="text-end">
-                        {include 'sys-template-parts/list.functions.tpl' data=$row}
+                        {include 'sys-template-parts/list.functions.tpl' listId='role-permissions' data=$row}
                     </td>
                 </tr>
             {/foreach}

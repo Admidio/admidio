@@ -92,6 +92,7 @@ class GroupsRolesPresenter extends PagePresenter
             // send mail to all role members
             if ($gCurrentUser->hasRightSendMailToRole($row['rol_id']) && $gSettingsManager->getInt('mail_module_enabled') > 0) {
                 $templateRow['actions'][] = array(
+                    'id' => 'email_members',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/messages/messages_write.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'bi bi-envelope',
                     'tooltip' => $gL10n->get('SYS_EMAIL_TO_MEMBERS')
@@ -101,6 +102,7 @@ class GroupsRolesPresenter extends PagePresenter
             // link to assign or remove members if you are allowed to do it
             if ($role->allowedToAssignMembers($gCurrentUser)) {
                 $templateRow['actions'][] = array(
+                    'id' => 'assign_members',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/members_assignment.php', array('role_uuid' => $row['rol_uuid'])),
                     'icon' => 'bi bi-person-plus',
                     'tooltip' => $gL10n->get('SYS_ASSIGN_MEMBERS')
@@ -111,6 +113,7 @@ class GroupsRolesPresenter extends PagePresenter
                 // set a role active or inactive
                 if ($roleType === GroupsRolesPresenter::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
+                        'id' => 'activate',
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                         'icon' => 'bi bi-eye',
@@ -118,6 +121,7 @@ class GroupsRolesPresenter extends PagePresenter
                     );
                 } elseif ($roleType === GroupsRolesPresenter::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
+                        'id' => 'deactivate',
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                         'icon' => 'bi bi-eye-slash',
@@ -127,12 +131,14 @@ class GroupsRolesPresenter extends PagePresenter
 
                 // edit roles of you are allowed to assign roles
                 $templateRow['actions'][] = array(
+                    'id' => 'edit',
                     'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'edit', 'role_uuid' => $row['rol_uuid'])),
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT_ROLE')
                 );
                 if (!$role->getValue('rol_administrator')) {
                     $templateRow['actions'][] = array(
+                        'id' => 'delete',
                         'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($role->getValue('rol_name'))),
                         'icon' => 'bi bi-trash',
@@ -751,12 +757,14 @@ class GroupsRolesPresenter extends PagePresenter
             }
 
             $templateRow['actions'][] = array(
+                'id' => 'show_members',
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/lists_show.php', array('mode' => 'html', 'role_list' => $row['rol_uuid'])),
                 'icon' => 'bi bi-card-list',
                 'tooltip' => $gL10n->get('SYS_SHOW_ROLE_MEMBERSHIP')
             );
             if ($roleType === $this::ROLE_TYPE_INACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
+                    'id' => 'activate',
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'activate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_ACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                     'icon' => 'bi bi-eye',
@@ -764,6 +772,7 @@ class GroupsRolesPresenter extends PagePresenter
                 );
             } elseif ($roleType === $this::ROLE_TYPE_ACTIVE && !$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
+                    'id' => 'deactivate',
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'deactivate', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_DEACTIVATE_ROLE_DESC', array($role->getValue('rol_name'))),
                     'icon' => 'bi bi-eye-slash',
@@ -772,6 +781,7 @@ class GroupsRolesPresenter extends PagePresenter
             }
             if (!$role->getValue('rol_administrator')) {
                 $templateRow['actions'][] = array(
+                    'id' => 'delete',
                     'dataHref' => 'callUrlHideElement(\'role_' . $row['rol_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/groups-roles/groups_roles.php', array('mode' => 'delete', 'role_uuid' => $row['rol_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($role->getValue('rol_name'))),
                     'icon' => 'bi bi-trash',

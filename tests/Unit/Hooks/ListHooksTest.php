@@ -1,12 +1,13 @@
 <?php
 /**
- * The generic list hooks - list_columns, list_data, list_rendered_data, list_row_actions - proven on
+ * The generic list hooks - list_columns, list_data, list_rendered_data - proven on
  * contacts.php/contacts_data.php, the first module to carry them (SS 2.7 of HOOKS_PLAN.md).
  *
  * Neither file can run here - both need a full database, session and settings stack - so this
  * reproduces the exact dispatch lines verbatim rather than executing the module: the guard in
- * contacts.php that refuses a list_columns filter which changes the column count, and the three
- * dispatch calls in contacts_data.php's row loop. What is not exercised is the surrounding SQL and
+ * contacts.php that refuses a list_columns filter which changes the column count, and the
+ * dispatch calls in contacts_data.php's row loop. list_row_actions lives in ListActions and is
+ * tested in ListActionsTest. What is not exercised is the surrounding SQL and
  * permission logic, which this filter layer does not touch.
  */
 
@@ -68,16 +69,6 @@ class ListHooksTest extends AdmidioTestCase
         $row = Hooks::applyTypedFilters('list_data', array('usr_uuid' => 'u-1', 'login_name' => 'jdoe'), 'contacts');
 
         $this->assertSame('JDOE', $row['login_name']);
-    }
-
-    public function testListRowActionsCanAddAnActionIcon(): void
-    {
-        Hooks::addFilter('list_row_actions', function (string $actions, string $listId, array $row) {
-            return $actions . '<a href="#extra">Extra for ' . $row['usr_uuid'] . '</a>';
-        });
-        $actions = Hooks::applyTypedFilters('list_row_actions', '<a href="#edit">Edit</a>', 'contacts', array('usr_uuid' => 'u-1'));
-
-        $this->assertStringContainsString('Extra for u-1', $actions);
     }
 
     public function testListRenderedDataFiltersTheFullyRenderedRowBeforeItIsSent(): void

@@ -336,6 +336,21 @@ final class PluginLoader
     }
 
     /**
+     * Make the classes and the texts of a plugin available to its update scripts, without loading it.
+     *
+     * A plugin whose update is pending is not loaded with the others, so in the request that runs
+     * the update nothing has registered the class its update steps are written in. Its entry file
+     * is not included here: it may expect the schema the update is about to create.
+     * @param Plugin $plugin
+     * @return void
+     */
+    public static function prepareForUpdate(Plugin $plugin): void
+    {
+        self::registerClasses($plugin);
+        self::registerLanguages($plugin);
+    }
+
+    /**
      * Make the classes of a plugin resolvable.
      *
      * Admidio registers one autoloader for all plugins instead of adding prefixes to the Composer

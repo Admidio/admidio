@@ -49,6 +49,7 @@ class ConfirmationMessageEscapingTest extends TestCase
         $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
         $smarty->setCompileDir(sys_get_temp_dir());
         $smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+        $smarty->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
         $smarty->registerPlugin('function', 'is_translation_string_id', static fn(array $params): bool => false);
 
         // Input follows the presenter contract: names are escaped for the dialog HTML.
@@ -106,13 +107,11 @@ class ConfirmationMessageEscapingTest extends TestCase
         $document = $this->parseHtml($smarty->fetch($template));
         $links = (new DOMXPath($document))->query('//a[@data-message]');
         // Cards render each action as a desktop icon and in the mobile menu.
-        // Inventory fields add move actions, duplicating the first action in the menu.
         $expectedCount = in_array($template, array(
             'modules/announcements.cards.tpl',
             'modules/forum.cards.tpl',
             'modules/weblinks.cards.tpl',
-            'modules/photos.albums.tpl',
-            'modules/inventory.item-fields.list.tpl'
+            'modules/photos.albums.tpl'
         ), true) ? 2 : 1;
         if ($template === 'sys-template-parts/list.functions.tpl') {
             $expectedCount = $actionCount > 2 ? $actionCount + 1 : $actionCount;

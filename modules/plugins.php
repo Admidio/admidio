@@ -137,10 +137,21 @@ try {
         case 'store_install':
             SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
 
+            $legacy = (bool)(PluginStore::getEntry($getPluginId)['legacy'] ?? false);
             $installedId = PluginStore::install($getPluginId);
+
+            // A plugin from before the plugin system was in use, so its new version is installed at
+            // once: that carries its data and settings over and leaves it enabled where it was.
+            $legacyPlugin = $legacy ? PluginRegistry::get($installedId) : null;
+            if ($legacyPlugin !== null && !PluginRegistry::isInstalled($installedId)) {
+                PluginInstaller::install($legacyPlugin);
+            }
+
             echo json_encode(array(
                 'status' => 'success',
-                'message' => $gL10n->get('SYS_PLUGIN_PACKAGE_INSTALLED', array($installedId))
+                'message' => $legacyPlugin !== null
+                    ? $gL10n->get('SYS_PLUGIN_UPDATED_TO', array($legacyPlugin->version))
+                    : $gL10n->get('SYS_PLUGIN_PACKAGE_INSTALLED', array($installedId))
             ));
             break;
 
