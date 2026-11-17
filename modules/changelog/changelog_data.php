@@ -257,6 +257,16 @@ try {
         $queryParamsConditions[] = $userTableRestriction;
     }
 
+    // In the tables of an extension that lets everybody read their own changes, the entries of
+    // a user without a permission for the whole table are those he/she made.
+    $ownChangeTables = ChangelogService::getOwnChangeRestriction($gCurrentUser);
+    if (count($ownChangeTables) > 0) {
+        $sqlConditions .= ' AND (log_table NOT IN (' . Database::getQmForValues($ownChangeTables) . ')
+                                 OR log_usr_id_create = ?) ';
+        $queryParamsConditions = array_merge($queryParamsConditions, $ownChangeTables);
+        $queryParamsConditions[] = (int)$gCurrentUser->getValue('usr_id');
+    }
+
     // Apply field and role visibility before search, counts, pagination and grouping, including
     // requests for the detail rows of a grouped change.
     [$visibilitySql, $visibilityParams] = ChangelogService::getVisibilityRestriction($gCurrentUser, $subject);
