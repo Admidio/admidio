@@ -179,9 +179,6 @@ if (array_key_exists('gCurrentSession', $_SESSION)
 
     // delete the entries of the change history that are older than the configured retention period
     ChangelogService::purgeOldEntriesIfDue();
-
-    // Check monthly statistics only when the organization is rebuilt, not when restored from the session.
-    InstallationStatistics::sendIfDue($gDb);
 }
 
 // Check if reduced layout should be shown
@@ -338,4 +335,12 @@ if (PHP_SAPI !== 'cli' && MembershipPeriodService::mayBeDue()) {
     Hooks::addAction('request_finished', static function () use ($gDb): void {
         MembershipPeriodService::runIfDueSilently($gDb);
     }, Hooks::DEFAULT_PRIORITY, 0, 'membership-period');
+}
+
+// Monthly installation statistics also run through maintenance:run. Without cron, check after
+// the response; the installation-wide lock and due date prevent duplicate sends.
+if (PHP_SAPI !== 'cli') {
+    Hooks::addAction('request_finished', static function () use ($gDb): void {
+        InstallationStatistics::sendIfDue($gDb);
+    }, Hooks::DEFAULT_PRIORITY, 0, 'installation-statistics');
 }

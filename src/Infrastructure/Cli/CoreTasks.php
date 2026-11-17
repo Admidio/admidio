@@ -26,6 +26,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
@@ -483,6 +484,9 @@ final class CoreTasks
         CliTaskRegistry::registerCoreMaintenanceJob('update-check', static function (): string {
             return self::checkForUpdate();
         }, 'Look for a new release of Admidio, unless the update check is switched off.');
+        CliTaskRegistry::registerCoreMaintenanceJob('statistics', static function (): void {
+            InstallationStatistics::sendIfDue($GLOBALS['gDb']);
+        }, 'Send monthly installation statistics if enabled and due.');
         CliTaskRegistry::registerCoreMaintenanceJob('memberships', static function (): string {
             // the cron job repeats a failed run at once, without its retry delay
             $count = (new MembershipPeriodService($GLOBALS['gDb']))->runIfDue(null, true);

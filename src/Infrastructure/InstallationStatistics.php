@@ -269,7 +269,7 @@ class InstallationStatistics
         return $nextMonth < ($now ?? new DateTimeImmutable('now', $utc));
     }
 
-    /** Check when rebuilding the organization; statistics must never prevent loading a page. */
+    /** Check from maintenance or after a web response; failures must not interrupt other jobs. */
     public static function sendIfDue(Database $db, ?Closure $httpPost = null): void
     {
         global $gLogger;
