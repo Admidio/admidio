@@ -38,6 +38,8 @@ class ProfileFieldValueTest extends DatabaseTestCase
 
     /**
      * Write profile values on an existing user, bypassing the edit-rights check.
+     * The EMAIL field of a login account ignores that bypass and only accepts the owner or an
+     * administrator, so the user stands in as $gCurrentUser for their own profile.
      */
     private function writeProfile(int $usrId, int $orgId, array $values): void
     {
@@ -46,10 +48,17 @@ class ProfileFieldValueTest extends DatabaseTestCase
             $user->readDataById($usrId);
             // no $gCurrentUser is logged in, so the rights check has to be bypassed
             $user->saveChangesWithoutRights();
-            foreach ($values as $field => $value) {
-                $user->setValue($field, $value);
+
+            $previousCurrentUser = $GLOBALS['gCurrentUser'] ?? null;
+            $GLOBALS['gCurrentUser'] = $user;
+            try {
+                foreach ($values as $field => $value) {
+                    $user->setValue($field, $value);
+                }
+                $user->save();
+            } finally {
+                $GLOBALS['gCurrentUser'] = $previousCurrentUser;
             }
-            $user->save();
         });
     }
 
