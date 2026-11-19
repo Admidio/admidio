@@ -82,6 +82,13 @@ try {
 
     if ($getMsgUUID !== '') {
         $getMsgType = $message->getValue('msg_type');
+        // Only the sender of an email or a participant of a PM may use an existing message.
+        if (!$gValidLogin || $gCurrentUserId <= 0
+            || ($gCurrentUserId !== (int) $message->getValue('msg_usr_id_sender')
+                && ($getMsgType !== Message::MESSAGE_TYPE_PM
+                    || $gCurrentUserId !== (int) $message->getConversationPartner()))) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
     } else {
         $message->setValue('msg_type', $getMsgType);
         $message->setValue('msg_usr_id_sender', $gCurrentUserId);
@@ -289,7 +296,9 @@ try {
         // ***** PM *****
 
         // check if user is allowed to view message
-        if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
+        if (!$gValidLogin || $gCurrentUserId <= 0
+            || ($gCurrentUserId !== (int) $message->getValue('msg_usr_id_sender')
+                && $gCurrentUserId !== (int) $message->getConversationPartner())) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 

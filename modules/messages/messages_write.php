@@ -94,7 +94,10 @@ try {
     // Update the read status of the message
     if ($getMsgUUID !== '') {
         // check if user is allowed to view message
-        if (!in_array($gCurrentUserId, array($message->getValue('msg_usr_id_sender'), $message->getConversationPartner()))) {
+        if (!$gValidLogin || $gCurrentUserId <= 0
+            || ($gCurrentUserId !== (int) $message->getValue('msg_usr_id_sender')
+                && ($getMsgType !== Message::MESSAGE_TYPE_PM
+                    || $gCurrentUserId !== (int) $message->getConversationPartner()))) {
             throw new Exception('SYS_INVALID_PAGE_VIEW');
         }
 
