@@ -48,8 +48,13 @@ final class StatisticsConsent
         $page->assignSmartyVariable('statisticsSchemaOnly', $schemaOnly);
         $enabled = $previousVersion !== null
             && (new InstallationSettings($gDb))->getBool('system_statistics_enabled');
-        $page->assignSmartyVariable('statisticsEnabled', $enabled);
-        $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), $enabled);
+        $_SESSION['installationStatisticsAlreadyEnabled'] = $enabled;
+        $page->assignSmartyVariable('statisticsInline', $previousVersion !== null);
+        $page->assignSmartyVariable('statisticsAlreadyEnabled', $enabled);
+        $page->assignSmartyVariable('statisticsEnabled', $previousVersion !== null);
+        if (!$enabled) {
+            $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), $previousVersion !== null);
+        }
         $page->addJavascript('
             $("#adm_send_statistics").on("change", function () {
                 $("#adm_send_statistics_summary").prop("checked", this.checked);
@@ -66,7 +71,7 @@ final class StatisticsConsent
     /** Copy the server-side snapshot before installation/update clears the session. */
     public static function selectedData(array $formValues): ?array
     {
-        if (($formValues['adm_send_statistics'] ?? '0') !== '1') {
+        if (empty($_SESSION['installationStatisticsAlreadyEnabled']) && ($formValues['adm_send_statistics'] ?? '0') !== '1') {
             return null;
         }
         $data = $_SESSION[self::SESSION_DATA] ?? null;

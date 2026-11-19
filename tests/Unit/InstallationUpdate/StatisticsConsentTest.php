@@ -19,6 +19,7 @@ class StatisticsConsentTest extends TestCase
     protected function setUp(): void
     {
         $this->originalSession = $_SESSION;
+        unset($_SESSION['installationStatisticsAlreadyEnabled']);
         $this->originalGlobals = array();
         foreach (array('gL10n', 'gLogger', 'gDb', 'gDbType', 'gSettingsManager') as $name) {
             $this->originalGlobals[$name] = array_key_exists($name, $GLOBALS) ? array($GLOBALS[$name]) : array();
@@ -112,9 +113,13 @@ class StatisticsConsentTest extends TestCase
         $GLOBALS['gDbType'] = 'mysql';
         $_SESSION['installationStatisticsData'] = array('id' => 'stable-tenant');
         $page = $this->getMockBuilder(InstallationPresenter::class)->disableOriginalConstructor()->getMock();
-        $page->expects($this->exactly(3))->method('assignSmartyVariable')
+        $page->expects($this->exactly(5))->method('assignSmartyVariable')
             ->willReturnCallback(function (string $name, $value) use ($previousVersion, $enabled): void {
-                if ($name === 'statisticsEnabled') {
+                if ($name === 'statisticsInline' || $name === 'statisticsEnabled') {
+                    $this->assertSame($previousVersion !== null, $value);
+                    return;
+                }
+                if ($name === 'statisticsAlreadyEnabled') {
                     $this->assertSame($enabled, $value);
                     return;
                 }
@@ -141,7 +146,9 @@ class StatisticsConsentTest extends TestCase
             });
         $form = new FormPresenter('confirmation', 'installation.install-admidio.tpl');
         StatisticsConsent::addToForm($form, $page, $previousVersion);
-        $this->assertSame($enabled, isset($form->getElements()['adm_send_statistics']['attributes']['checked']));
+        $this->assertSame(!$enabled, isset($form->getElements()['adm_send_statistics']));
+        $this->assertSame($previousVersion !== null && !$enabled, isset($form->getElements()['adm_send_statistics']['attributes']['checked']));
+        $this->assertSame($enabled ? $_SESSION['installationStatisticsData'] : null, StatisticsConsent::selectedData(array()));
         $this->assertSame($_SESSION['installationStatisticsData'], StatisticsConsent::selectedData(array('adm_send_statistics' => '1')));
         $this->assertSame('stable-tenant', StatisticsConsent::tenantId());
     }

@@ -86,7 +86,7 @@ if (!in_array($values['statistics'], array('', 'yes', 'no'), true) || !in_array(
         . '                              your own backup' . PHP_EOL
         . '  --on-changed=archive|cancel files that were changed or do not belong to the installed version are' . PHP_EOL
         . '                              kept in an archive and replaced (default), or the update is cancelled' . PHP_EOL
-        . '  --statistics=yes|no         send pseudonymous statistics after success; default: retain the saved choice' . PHP_EOL
+        . '  --statistics=yes|no         send pseudonymous statistics after success; default: yes; an enabled system preference remains enabled' . PHP_EOL
         . '  --dry-run                   check and plan the update, then cancel it' . PHP_EOL
         . '  --skip-database             install the files only; maintenance mode stays on until the database' . PHP_EOL
         . '                              is updated with apply --resume or install/update.php' . PHP_EOL

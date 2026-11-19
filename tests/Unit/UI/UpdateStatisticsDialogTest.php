@@ -52,6 +52,7 @@ class UpdateStatisticsDialogTest extends TestCase
                 public function get(string $key, array $arguments = array()): string { return $key; }
             },
             'installedDbVersion' => '5.0.0', 'statisticsJson' => $json, 'formType' => 'default',
+            'statisticsInline' => $template === 'update.tpl',
             'attributes' => $form->getAttributes(), 'elements' => $form->getElements()
         ));
         $document = new DOMDocument();
@@ -60,10 +61,22 @@ class UpdateStatisticsDialogTest extends TestCase
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
         $xpath = new DOMXPath($document);
+        if ($template === 'update.tpl') {
+            $this->assertCount(1, $xpath->query('//label[@for="adm_send_statistics"]/a[@href="#adm_statistics_modal" and @data-bs-toggle="modal"]'));
+            $this->assertCount(0, $xpath->query('//div[contains(@class, "modal")]//input'));
+        }
         $this->assertSame($json, $xpath->query('//pre/code')->item(0)->textContent);
         $this->assertCount(0, $xpath->query('//script'));
         $this->assertCount(1, $xpath->query('//form[@id="' . $formId . '"]//input[@name="adm_send_statistics" and @checked and not(@disabled)]'));
-        $this->assertCount(1, $xpath->query('//input[@id="adm_send_statistics_summary" and @checked and @disabled and not(@name)]'));
+        $this->assertCount($template === 'update.tpl' ? 0 : 1, $xpath->query('//input[@id="adm_send_statistics_summary" and @checked and @disabled and not(@name)]'));
+
+        if ($template === 'update.tpl') {
+            $smarty->assign('statisticsAlreadyEnabled', true);
+            $document->loadHTML($smarty->fetch($template));
+            $xpath = new DOMXPath($document);
+            $this->assertCount(0, $xpath->query('//input[@name="adm_send_statistics"]'));
+            $this->assertCount(0, $xpath->query('//div[@id="adm_statistics_modal"]'));
+        }
     }
 
     public function testSettingsPreviewContainsJsonWithoutConsentCheckbox(): void

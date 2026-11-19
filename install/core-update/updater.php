@@ -1046,6 +1046,10 @@ function coreUpdateRunScript(array $state, array $texts, bool $start): string
 /** Optional consent, associated with the installation form in the action area. */
 function coreUpdateStatistics(array $state, array $texts): string
 {
+    if (!empty($state['statisticsAlreadyEnabled'])) {
+        return '';
+    }
+
     return '<fieldset class="mb-4"><legend class="fs-5">' . U\h(U\text($texts, 'SYS_SEND_PSEUDONYMOUS_STATISTICS')) . '</legend>'
         . '<p>' . U\h(U\text($texts, 'SYS_PSEUDONYMOUS_STATISTICS_DESC')) . '</p>'
         . '<p>' . U\h(U\text($texts, 'SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC')) . '</p>'

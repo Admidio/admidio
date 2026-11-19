@@ -79,7 +79,7 @@ function phaseBConfirm(array $ctx, string $updateId, string $backup, ?bool $stat
 
         $cookie = issueCredential($state, time());
         $state = array_merge($state, array('state' => 'ready', 'backup' => $backup, 'lastError' => '',
-            'statisticsEnabled' => $statisticsEnabled ?? ($state['statisticsEnabled'] ?? false)));
+            'statisticsEnabled' => !empty($state['statisticsAlreadyEnabled']) || ($statisticsEnabled ?? true)));
         writeState($root, $state);
         updateLog($root, $updateId, 'confirmed by the administrator, database backup: ' . $backup);
         sendCredentialCookie($ctx['config'], $cookie);

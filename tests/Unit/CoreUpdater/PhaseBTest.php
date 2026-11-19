@@ -70,7 +70,8 @@ final class PhaseBTest extends AdmidioTestCase
             return $state;
         });
         $first = U\statisticsPreview($ctx, $id);
-        self::assertFalse($first['statisticsEnabled']);
+        self::assertTrue($first['statisticsEnabled']);
+        self::assertFalse($first['statisticsAlreadyEnabled']);
         self::assertSame($identity, $first['statisticsData']['id']);
         self::assertSame(array('enabled-plugin' => '1.2.3'), $first['statisticsData']['admidio']['plugins']);
         self::assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $first['statisticsData']['timestamp']);
@@ -83,7 +84,7 @@ final class PhaseBTest extends AdmidioTestCase
 
     public static function statisticsChoices(): array
     {
-        return array('opt out' => array(false, false), 'opt in' => array(true, true), 'retain opt out' => array(null, false));
+        return array('opt out' => array(false, false), 'opt in' => array(true, true), 'default opt in' => array(null, true));
     }
 
     /** @dataProvider statisticsChoices */
@@ -95,6 +96,14 @@ final class PhaseBTest extends AdmidioTestCase
         $state = U\phaseBConfirm($ctx, $id, 'own', $choice);
         self::assertSame($expected, $state['statisticsEnabled']);
         self::assertSame('12345678-1234-4234-8234-123456789abc', $state['statisticsData']['id']);
+    }
+
+    public function testExistingConsentRemainsEnabledWithoutCheckbox(): void
+    {
+        [$ctx, $id] = $this->prepared();
+        U\updateState($this->root, $id, static fn(array $state): array => array_merge($state,
+            array('state' => 'review', 'planChecks' => array(), 'statisticsAlreadyEnabled' => true)));
+        self::assertTrue(U\phaseBConfirm($ctx, $id, 'own', false)['statisticsEnabled']);
     }
 
     /**
