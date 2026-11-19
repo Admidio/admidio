@@ -141,7 +141,12 @@ jobs:
           (cd "$DIRECTORY" && find . -mindepth 1 \( "${prune[@]}" \) -prune -o -type f -print0 \
             | xargs -0 --no-run-if-empty cp --parents -p -t "$staging/$ID")
 
-          (cd "$staging" && find "$ID" -type f | LC_ALL=C sort | zip -X -q "$GITHUB_WORKSPACE/$archive" -@)
+          # The checkout gives every file the time it ran, and zip stores that time. Use the time of
+          # the commit instead, so that building the same commit again gives the same bytes.
+          epoch=$(git log -1 --format=%ct)
+          find "$staging/$ID" -exec touch -h -d "@$epoch" {} +
+
+          (cd "$staging" && find "$ID" -type f | LC_ALL=C sort | TZ=UTC zip -X -q "$GITHUB_WORKSPACE/$archive" -@)
 
           sha256=$(sha256sum "$archive" | cut -d' ' -f1)
           {
@@ -181,12 +186,25 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.manifest.outputs.tag }}
           ARCHIVE: ${{ steps.build.outputs.archive }}
+          SHA256: ${{ steps.build.outputs.sha256 }}
           ID: ${{ steps.manifest.outputs.id }}
           VERSION: ${{ steps.manifest.outputs.version }}
           DRAFT: ${{ inputs.draft }}
         run: |
           if gh release view "$TAG" > /dev/null 2>&1; then
-            gh release upload "$TAG" "$ARCHIVE" --clobber
+            # An archive already attached is never replaced: the plugin directory may list its
+            # checksum. A rerun that builds the same bytes leaves it as it is.
+            if gh release view "$TAG" --json assets --jq '.assets[].name' | grep -qxF "$ARCHIVE"; then
+              gh release download "$TAG" --pattern "$ARCHIVE" --dir "$RUNNER_TEMP/published"
+              published=$(sha256sum "$RUNNER_TEMP/published/$ARCHIVE" | cut -d' ' -f1)
+              if [ "$published" != "$SHA256" ]; then
+                echo "::error::The release $TAG already holds $ARCHIVE with the SHA-256 $published, this build has $SHA256. To replace it, delete $ARCHIVE from the release, rerun this workflow, and submit the address to the plugin directory again."
+                exit 1
+              fi
+              echo "::notice::The release $TAG already holds this $ARCHIVE."
+            else
+              gh release upload "$TAG" "$ARCHIVE"
+            fi
           else
             options=(--verify-tag --title "$ID $VERSION" --generate-notes)
             [ "$DRAFT" = "true" ] && options+=(--draft)
