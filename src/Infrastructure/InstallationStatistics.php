@@ -175,7 +175,7 @@ class InstallationStatistics
 
         if (!isset($gStatisticsUrl)) {
             $statement = $gDb->queryPrepared(
-                'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?', array(1));
+                'SELECT org_shortname FROM ' . TBL_ORGANIZATIONS . ' WHERE org_shortname = ? LIMIT 1', array('ADM_DEMO'));
             if ($statement->fetchColumn() === 'ADM_DEMO') {
                 return false;
             }

@@ -151,8 +151,8 @@ class InstallationStatisticsTest extends TestCase
         $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
             ->onlyMethods(array('queryPrepared'))->getMock();
         $database->method('queryPrepared')->willReturnCallback(function (string $sql, array $params) use ($statement) {
-            $this->assertSame('SELECT org_shortname FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?', $sql);
-            $this->assertSame(array(1), $params);
+            $this->assertSame('SELECT org_shortname FROM ' . TBL_ORGANIZATIONS . ' WHERE org_shortname = ? LIMIT 1', $sql);
+            $this->assertSame(array('ADM_DEMO'), $params);
             return $statement;
         });
         if (!$expectedSend) {

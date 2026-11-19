@@ -114,6 +114,36 @@ class InstallationIdentifierTest extends DatabaseTestCase
         $this->assertFalse(InstallationStatistics::isDue(InstallationStatistics::getLastSent($this->getDatabase())));
     }
 
+    public function testDemoProtectionFindsAnOrganizationOtherThanOne(): void
+    {
+        $db = $this->getDatabase();
+        $demo = (new AdmidioTestFixture($db))->createAndSaveOrganization('Demo statistics', 'ADM_DEMO');
+        $this->assertNotSame(1, (int)$demo['org_id']);
+        $hadUrl = array_key_exists('gStatisticsUrl', $GLOBALS);
+        $originalUrl = $GLOBALS['gStatisticsUrl'] ?? null;
+        unset($GLOBALS['gStatisticsUrl']);
+        $calls = 0;
+        $statistics = new InstallationStatistics(null, static function () use (&$calls): int {
+            ++$calls;
+            return 503;
+        });
+        try {
+            $this->assertFalse($statistics->send(array()));
+            $this->assertSame(0, $calls);
+            // Removing the demo organization allows the production transport again.
+            $db->queryPrepared('DELETE FROM ' . TBL_PREFERENCES . ' WHERE prf_org_id = ?', array($demo['org_id']));
+            $db->queryPrepared('DELETE FROM ' . TBL_ORGANIZATIONS . ' WHERE org_id = ?', array($demo['org_id']));
+            $this->assertFalse($statistics->send(array()));
+            $this->assertSame(1, $calls);
+        } finally {
+            if ($hadUrl) {
+                $GLOBALS['gStatisticsUrl'] = $originalUrl;
+            } else {
+                unset($GLOBALS['gStatisticsUrl']);
+            }
+        }
+    }
+
     public function testMonthlySendRunsOnceForTheInstallation(): void
     {
         $db = $this->getDatabase();
