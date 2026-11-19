@@ -817,9 +817,9 @@
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">Edit web links</string>
   <string name="SYS_EMAIL">Email</string>
-  <string name="SYS_EMAIL_ADMINISTRATOR">Email administrator</string>
   <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">The email address for your account #VAR1# on #VAR4# has changed from #VAR2# to #VAR3#. If you did not authorize this change, please contact your administrator immediately.</string>
   <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Your email address has changed</string>
+  <string name="SYS_EMAIL_ADMINISTRATOR">Email administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was changed</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">The user #VAR1# #VAR2# (login: #VAR3#) was created by #VAR4#.</string>
