@@ -152,6 +152,13 @@ class ChangeNotification
         // Store the change to send out one change notification mail (after all modifications are done)
         $this->prepareUserChanges($userID, $user);
         $this->changes[$userID]['profile_changes'][] = array($fieldName, $old_value, $new_value);
+        if ($fieldName === 'EMAIL' && $this->changes[$userID]['usr_login_name'] !== '') {
+            // Keep the original address if the field is changed repeatedly in one request.
+            $this->changes[$userID]['email_change'] = array(
+                $this->changes[$userID]['email_change'][0] ?? $old_value_db,
+                $new_value_db
+            );
+        }
     }
 
     /**
@@ -400,7 +407,14 @@ class ChangeNotification
      */
     public function sendNotifications(int $userID = 0)
     {
-        global $gSettingsManager, $gL10n, $gCurrentUser;
+        global $gSettingsManager, $gL10n, $gCurrentUser, $gDb;
+
+        // Leave the queue intact until the caller has committed its outer transaction.
+        if ($gDb instanceof Database && $gDb->isInTransaction()) {
+            return;
+        }
+
+        $this->sendEmailChangeNotifications($userID);
 
         if ($gSettingsManager->has('system_notifications_profile_changes')
             && $gSettingsManager->getBool('system_notifications_profile_changes')
@@ -493,6 +507,52 @@ class ChangeNotification
         }
 
         $this->clearChanges($userID);
+    }
+
+    /** Send security notifications only for changes that have actually been committed. */
+    private function sendEmailChangeNotifications(int $userID): void
+    {
+        global $gDb, $gL10n, $gCurrentOrganization, $gLogger;
+
+        foreach ($this->changes as $id => $change) {
+            if (($userID > 0 && $id !== $userID) || !isset($change['email_change'])) {
+                continue;
+            }
+            [$oldEmail, $newEmail] = $change['email_change'];
+            if ($oldEmail === $newEmail || !filter_var($oldEmail, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+            $statement = $gDb->queryPrepared(
+                'SELECT usd_value FROM ' . TBL_USER_DATA . '
+                 INNER JOIN ' . TBL_USER_FIELDS . ' ON usf_id = usd_usf_id
+                 WHERE usd_usr_id = ? AND usf_name_intern = ?',
+                array($id, 'EMAIL')
+            );
+            $storedEmail = $statement->fetchColumn();
+            if (($storedEmail === false ? '' : $storedEmail) !== $newEmail || $change['deleted']) {
+                continue;
+            }
+            try {
+                $mail = $this->createEmailChangeNotification();
+                $mail->setSender($gCurrentOrganization->getValue('org_email_administrator'));
+                $mail->addRecipient($oldEmail);
+                $mail->setSubject($gL10n->get('SYS_EMAIL_ADDRESS_CHANGED_TITLE'));
+                $mail->setText($gL10n->get('SYS_EMAIL_ADDRESS_CHANGED_MESSAGE', array(
+                    $change['usr_login_name'], $oldEmail, $newEmail,
+                    $gCurrentOrganization->getValue('org_homepage')
+                )));
+                if (!$mail->sendEmail()) {
+                    $gLogger->error('Email address change notification could not be sent');
+                }
+            } catch (\Throwable $exception) {
+                $gLogger->error('Email address change notification failed', array('exception' => $exception));
+            }
+        }
+    }
+
+    protected function createEmailChangeNotification(): Email
+    {
+        return new Email();
     }
 
 
