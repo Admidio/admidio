@@ -1,0 +1,219 @@
+name: Plugin release
+
+# A reusable workflow for the repositories of Admidio plugins: it builds the archive that the plugin
+# manager of Admidio installs and attaches it to the GitHub release of a tag. A plugin repository
+# calls it from a workflow of its own:
+#
+#   on:
+#     push:
+#       tags: [ 'v*' ]
+#   permissions:
+#     contents: write
+#   jobs:
+#     release:
+#       uses: Admidio/admidio/.github/workflows/plugin-release.yml@master
+#
+# The archive holds one folder named after the plugin ID with the plugin in it, and leaves out what
+# belongs to developing it - the same list "admidio plugin:archive" leaves out (PluginPackage::
+# EXCLUDED). Its address and SHA-256 are what the release form of the plugin directory on
+# admidio.org asks for. Unlike the source archive GitHub generates for a tag, an attached file never
+# changes, so its checksum stays valid.
+
+on:
+  workflow_call:
+    inputs:
+      plugin-directory:
+        description: Directory of the plugin inside the repository (the one holding plugin.json).
+        type: string
+        default: '.'
+      plugin-id:
+        description: The plugin ID, if plugin.json does not state it in "id".
+        type: string
+        default: ''
+      tag:
+        description: The tag to release. Defaults to the tag the calling workflow runs for.
+        type: string
+        default: ''
+      draft:
+        description: Create a missing release as a draft, to be published by hand.
+        type: boolean
+        default: false
+    outputs:
+      archive:
+        description: File name of the archive.
+        value: ${{ jobs.package.outputs.archive }}
+      sha256:
+        description: SHA-256 of the archive.
+        value: ${{ jobs.package.outputs.sha256 }}
+      url:
+        description: Download address of the archive attached to the release.
+        value: ${{ jobs.package.outputs.url }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  package:
+    name: Package the plugin
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      archive: ${{ steps.build.outputs.archive }}
+      sha256: ${{ steps.build.outputs.sha256 }}
+      url: ${{ steps.upload.outputs.url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Read and check the manifest
+        id: manifest
+        env:
+          DIRECTORY: ${{ inputs.plugin-directory }}
+          INPUT_ID: ${{ inputs.plugin-id }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          manifest="$DIRECTORY/plugin.json"
+          [ -f "$manifest" ] || { echo "::error::$manifest is missing."; exit 1; }
+          [ -f "$DIRECTORY/plugin.php" ] || { echo "::error::$DIRECTORY/plugin.php is missing."; exit 1; }
+          jq -e 'type == "object"' "$manifest" > /dev/null || { echo "::error::$manifest is not a JSON object."; exit 1; }
+
+          declared=$(jq -r '.id // empty' "$manifest")
+          id="${declared:-$INPUT_ID}"
+          if [ -z "$id" ]; then
+            echo "::error::State the plugin ID in plugin.json (\"id\") or pass the input plugin-id."
+            exit 1
+          fi
+          if [ -n "$declared" ] && [ -n "$INPUT_ID" ] && [ "$declared" != "$INPUT_ID" ]; then
+            echo "::error::plugin.json states the ID \"$declared\", the input plugin-id \"$INPUT_ID\"."
+            exit 1
+          fi
+          # Plugin::isValidId()
+          if ! [[ "$id" =~ ^[a-zA-Z0-9]+([-_][a-zA-Z0-9]+)*$ ]]; then
+            echo "::error::\"$id\" is not a valid plugin ID: letters and digits, with single hyphens or underscores as separators."
+            exit 1
+          fi
+
+          version=$(jq -r '.version // empty' "$manifest")
+          [ -n "$version" ] || { echo "::error::plugin.json does not declare a version."; exit 1; }
+
+          # The tag names the release; it has to be the version of the manifest, with or without "v".
+          tag="${INPUT_TAG:-$GITHUB_REF_NAME}"
+          if [ "$INPUT_TAG" != "" ] || [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            if [ "${tag#v}" != "$version" ]; then
+              echo "::error::The tag $tag does not match the version $version in plugin.json."
+              exit 1
+            fi
+          else
+            tag=""
+          fi
+
+          {
+            echo "id=$id"
+            echo "version=$version"
+            echo "tag=$tag"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build the archive
+        id: build
+        env:
+          DIRECTORY: ${{ inputs.plugin-directory }}
+          ID: ${{ steps.manifest.outputs.id }}
+          VERSION: ${{ steps.manifest.outputs.version }}
+        run: |
+          # Keep in step with PluginPackage::EXCLUDED: a name that matches is left out at any depth.
+          excluded=(.git .github .svn .hg node_modules vendor tests phpunit.xml phpunit.xml.dist
+                    .phpunit.result.cache .DS_Store Thumbs.db .gitignore .gitattributes)
+
+          staging="$RUNNER_TEMP/package"
+          archive="$ID-$VERSION.zip"
+          mkdir -p "$staging/$ID"
+
+          prune=()
+          for name in "${excluded[@]}"; do
+            prune+=(-name "$name" -o)
+          done
+          unset 'prune[${#prune[@]}-1]'
+
+          (cd "$DIRECTORY" && find . -mindepth 1 \( "${prune[@]}" \) -prune -o -type f -print0 \
+            | xargs -0 --no-run-if-empty cp --parents -p -t "$staging/$ID")
+
+          # The checkout gives every file the time it ran, and zip stores that time. Use the time of
+          # the commit instead, so that building the same commit again gives the same bytes.
+          epoch=$(git log -1 --format=%ct)
+          find "$staging/$ID" -exec touch -h -d "@$epoch" {} +
+
+          (cd "$staging" && find "$ID" -type f | LC_ALL=C sort | TZ=UTC zip -X -q "$GITHUB_WORKSPACE/$archive" -@)
+
+          sha256=$(sha256sum "$archive" | cut -d' ' -f1)
+          {
+            echo "archive=$archive"
+            echo "sha256=$sha256"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### $archive"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Plugin | \`$ID\` |"
+            echo "| Version | $VERSION |"
+            echo "| Size | $(stat -c %s "$archive") bytes |"
+            echo "| SHA-256 | \`$sha256\` |"
+            echo
+            echo "<details><summary>Contents</summary>"
+            echo
+            echo '```'
+            unzip -Z1 "$archive"
+            echo '```'
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the archive with the run
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.archive }}
+          path: ${{ steps.build.outputs.archive }}
+          if-no-files-found: error
+
+      - name: Attach the archive to the release
+        id: upload
+        if: steps.manifest.outputs.tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.manifest.outputs.tag }}
+          ARCHIVE: ${{ steps.build.outputs.archive }}
+          SHA256: ${{ steps.build.outputs.sha256 }}
+          ID: ${{ steps.manifest.outputs.id }}
+          VERSION: ${{ steps.manifest.outputs.version }}
+          DRAFT: ${{ inputs.draft }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            # An archive already attached is never replaced: the plugin directory may list its
+            # checksum. A rerun that builds the same bytes leaves it as it is.
+            if gh release view "$TAG" --json assets --jq '.assets[].name' | grep -qxF "$ARCHIVE"; then
+              gh release download "$TAG" --pattern "$ARCHIVE" --dir "$RUNNER_TEMP/published"
+              published=$(sha256sum "$RUNNER_TEMP/published/$ARCHIVE" | cut -d' ' -f1)
+              if [ "$published" != "$SHA256" ]; then
+                echo "::error::The release $TAG already holds $ARCHIVE with the SHA-256 $published, this build has $SHA256. To replace it, delete $ARCHIVE from the release, rerun this workflow, and submit the address to the plugin directory again."
+                exit 1
+              fi
+              echo "::notice::The release $TAG already holds this $ARCHIVE."
+            else
+              gh release upload "$TAG" "$ARCHIVE"
+            fi
+          else
+            options=(--verify-tag --title "$ID $VERSION" --generate-notes)
+            [ "$DRAFT" = "true" ] && options+=(--draft)
+            gh release create "$TAG" "$ARCHIVE" "${options[@]}"
+          fi
+
+          url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$TAG/$ARCHIVE"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          {
+            echo
+            echo "Download address for the plugin directory: $url"
+          } >> "$GITHUB_STEP_SUMMARY"

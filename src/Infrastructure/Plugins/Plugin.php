@@ -234,6 +234,18 @@ final class Plugin
         }
 
         /*
+         * The ID is the directory name. A manifest may state it as well - the installer then accepts
+         * an archive whose folder is named differently, such as the source archive of a release
+         * tag - but a plugin directory that is not named like it would be a second identity.
+         */
+        if (array_key_exists('id', $manifest) && $manifest['id'] !== $id) {
+            return new self($id, $path, array(), array(), array(), $empty,
+                'The manifest declares the ID "' . (is_scalar($manifest['id']) ? (string)$manifest['id'] : '')
+                . '", but the plugin directory is named "' . $id . '". Rename the directory or correct the ID.',
+                self::ERROR_INVALID_ID);
+        }
+
+        /*
          * The permitted values of an enum may be a plain list or an object that names each value,
          * and after json_decode() with associative arrays the two are indistinguishable as soon as
          * the names are "0", "1", "2" - which is the most common enum there is. Decoding a second
