@@ -492,6 +492,36 @@ class ChangelogTest extends DatabaseTestCase
     }
 
     /**
+     * The changelog page names a record of an own-change table only with the name the member's own
+     * change recorded; a record somebody else changed stays unnamed, see PR #2343 review.
+     *
+     * @testdox A member sees the name of a record of an own-change table only if they changed it themselves
+     */
+    public function testAMemberSeesTheNameOfAnOwnChangeRecordOnlyIfTheyChangedIt(): void
+    {
+        $this->registerOwnChangeTable('own_changes_test');
+        $data = $this->getFixture()->createAndSaveUser('changelog_own_namer', 'namer@example.org', self::ORG_ID);
+        $member = $this->loadUserInOrganization($data['usr_id'], self::ORG_ID);
+        $administrator = $this->administrator();
+
+        $sql = 'INSERT INTO ' . TBL_LOG_CHANGES . '
+                       (log_table, log_record_id, log_record_uuid, log_record_name, log_action, log_usr_id_create)
+                VALUES (\'own_changes_test\', ?, ?, ?, \'MODIFY\', ?)';
+        $own = array(901, '00000000-0000-4000-8000-000000000901');
+        $foreign = array(902, '00000000-0000-4000-8000-000000000902');
+        $this->getDatabase()->queryPrepared($sql, array($own[0], $own[1], 'Old title', $data['usr_id']));
+        $this->getDatabase()->queryPrepared($sql, array($own[0], $own[1], 'My title', $data['usr_id']));
+        $this->getDatabase()->queryPrepared($sql, array($own[0], $own[1], 'Renamed by admin', $administrator->getValue('usr_id')));
+        $this->getDatabase()->queryPrepared($sql, array($foreign[0], $foreign[1], 'Secret title', $administrator->getValue('usr_id')));
+
+        $this->assertSame('My title', ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', $own[0], ''));
+        $this->assertSame('My title', ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', 0, $own[1]));
+        $this->assertSame('', ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', $foreign[0], ''));
+        $this->assertSame('', ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', 0, $foreign[1]));
+        $this->assertSame('', ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', 0, ''));
+    }
+
+    /**
      * Where a permission opens the whole table, the own-changes restriction does not narrow it.
      *
      * @testdox A table that a permission opens in full is not restricted to the own changes

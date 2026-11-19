@@ -1725,6 +1725,39 @@ class ChangelogService {
     }
 
     /**
+     * Return the name of a record of a table restricted to the user's own changes, as it was when
+     * the user last changed it. Read access to such a table is no permission to load the record
+     * itself, so its current name must not be shown; the name stored with the user's own log entry
+     * is one he/she has already seen.
+     * @param User $user The user whose own changes are looked up
+     * @param string $table The database table without prefix
+     * @param int $recordId The id of the record, or 0 if the uuid is given
+     * @param string $recordUuid The uuid of the record, or an empty string if the id is given
+     * @return string The record name of the user's latest own change, or an empty string if he/she
+     *                has not changed that record
+     * @throws Exception
+     */
+    public static function getOwnChangeRecordName(User $user, string $table, int $recordId, string $recordUuid) : string {
+        global $gDb;
+
+        if ($recordId <= 0 && $recordUuid === '') {
+            return '';
+        }
+
+        $sql = 'SELECT log_record_name
+                  FROM ' . TBL_LOG_CHANGES . '
+                 WHERE log_table = ?
+                   AND log_usr_id_create = ?
+                   AND ' . ($recordUuid !== '' ? 'log_record_uuid = ?' : 'log_record_id = ?') . '
+              ORDER BY log_id DESC
+                 LIMIT 1';
+        $name = $gDb->queryPrepared($sql, array($table, (int)$user->getValue('usr_id'),
+            $recordUuid !== '' ? $recordUuid : $recordId))->fetchColumn();
+
+        return $name === false ? '' : (string)$name;
+    }
+
+    /**
      * Database tables that hold data shared between all organizations. They are not protected by
      * per-table permissions, but by the right to edit the profile of the affected user.
      * @var array
