@@ -817,6 +817,8 @@
   <string name="SYS_EDIT_WEBLINKS">Weblinks bearbeiten</string>
   <string name="SYS_EMAIL">E-Mail</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-Mail an Administrator</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Die E-Mail-Adresse für dein Konto #VAR1# auf #VAR4# wurde von #VAR2# auf #VAR3# geändert. Falls du diese Änderung nicht veranlasst hast, wende dich bitte umgehend an deine Administration.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Deine E-Mail-Adresse wurde geändert</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildaten von #VAR1# #VAR2# (Login: #VAR3#) wurden geändert durch #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Konto #VAR1# #VAR2# (Login: #VAR3#) wurde geändert</string>
   <string name="SYS_EMAIL_CREATE_NOTIFICATION_MESSAGE">Konto #VAR1# #VAR2# (Login: #VAR3#) wurde von #VAR4# erstellt.</string>

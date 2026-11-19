@@ -179,7 +179,19 @@ class User extends Entity
      */
     public function allowedEditProfileField(self $user, string $fieldNameIntern): bool
     {
+        if ($fieldNameIntern === 'EMAIL' && !$this->hasRightEditEmail($user)) {
+            return false;
+        }
         return $this->hasRightEditProfile($user) && $user->mProfileFieldsData->isEditable($fieldNameIntern, $this->hasRightEditProfile($user));
+    }
+
+    /** Only the account owner or an administrator may change a login account's recovery address. */
+    public function hasRightEditEmail(self $user): bool
+    {
+        return (int)$user->getValue('usr_id') === 0
+            || $user->getValue('usr_login_name', 'database') === ''
+            || ((int)$this->getValue('usr_id') > 0
+                && ((int)$this->getValue('usr_id') === (int)$user->getValue('usr_id') || $this->isAdministrator()));
     }
 
     /**
@@ -2314,6 +2326,12 @@ class User extends Entity
         // only update if value has changed
         if ($oldFieldValue_db === $newValue) {
             return true;
+        }
+
+        if ($columnName === 'EMAIL' && (int)$this->getValue('usr_id') > 0
+            && $this->getValue('usr_login_name', 'database') !== ''
+            && (!isset($GLOBALS['gCurrentUser']) || !$GLOBALS['gCurrentUser']->hasRightEditEmail($this))) {
+            throw new Exception('SYS_NO_RIGHTS');
         }
 
         $returnCode = false;
