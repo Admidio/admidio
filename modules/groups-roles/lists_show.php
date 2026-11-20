@@ -138,10 +138,15 @@ try {
             // it's an event, so there is no need to show former members
             $hasRightViewFormerMembers = false;
 
-            $showComment = $event->getValue('dat_allow_comments');
+            $canManageEvent = $gCurrentUser->isAdministrator()
+                || $gCurrentUser->isAdministratorEvents()
+                || $gCurrentUser->isLeaderOfRole($roleID)
+                || $event->isEditable();
+            $showComment = (bool)$event->getValue('dat_allow_comments')
+                && (!(bool)$event->getValue('dat_comment_privacy') || $canManageEvent);
             $showCountGuests = $event->getValue('dat_additional_guests');
 
-            if ($getMode === 'html' && ($gCurrentUser->isAdministrator() || $gCurrentUser->isLeaderOfRole($roleID))) {
+            if ($getMode === 'html' && $canManageEvent) {
                 $isAdministratorUserstatus = true;
             }
         }

@@ -84,6 +84,7 @@
                                         {include 'sys-template-parts/form.select.tpl' data=$elements['adm_event_participation_right']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['event_current_user_assigned']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['dat_allow_comments']}
+                                        {include 'sys-template-parts/form.checkbox.tpl' data=$elements['dat_comment_privacy']}
                                         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['dat_additional_guests']}
                                         {include 'sys-template-parts/form.input.tpl' data=$elements['dat_max_members']}
                                         {include 'sys-template-parts/form.input.tpl' data=$elements['event_deadline']}

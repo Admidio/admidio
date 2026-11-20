@@ -7413,7 +7413,7 @@ final class CoreTasks
 
     public static function eventParticipants(array $arguments, array $options): int
     {
-        global $gDb;
+        global $gDb, $gCurrentUser;
 
         $event = self::resolveEvent(CliApplication::requireArgument($arguments, 0, 'event'));
         if (!$event->isVisible()) {
@@ -7423,6 +7423,13 @@ final class CoreTasks
             CliApplication::writeRows(array(), CliApplication::optionString($options, 'format', 'table'), $options);
             return 0;
         }
+
+        $canManageEvent = $gCurrentUser->isAdministrator()
+            || $gCurrentUser->isAdministratorEvents()
+            || $gCurrentUser->isLeaderOfRole((int)$event->getValue('dat_rol_id'))
+            || $event->isEditable();
+        $showComments = (bool)$event->getValue('dat_allow_comments')
+            && (!(bool)$event->getValue('dat_comment_privacy') || $canManageEvent);
 
         /*
          * Participants::getParticipantsArray() answers the columns the participant list of the
@@ -7441,7 +7448,11 @@ final class CoreTasks
         $participants = new Participants($gDb, (int)$event->getValue('dat_rol_id'));
         $rows = array();
         foreach ($participants->getParticipantsArray() as $usrId => $participant) {
-            $participant['comment'] = (string)($additional[$usrId]['mem_comment'] ?? '');
+            if ($showComments) {
+                $participant['comment'] = (string)($additional[$usrId]['mem_comment'] ?? '');
+            } else {
+                $participant['comment'] = '';
+            }
             $participant['count_guests'] = (int)($additional[$usrId]['mem_count_guests'] ?? 0);
             $rows[] = $participant;
         }
@@ -10916,6 +10927,7 @@ final class CoreTasks
             'deadline' => $event->getValue('dat_deadline', 'Y-m-d H:i:s'),
             'max_members' => (int)$event->getValue('dat_max_members'),
             'allow_comments' => (bool)$event->getValue('dat_allow_comments'),
+            'comment_privacy' => (bool)$event->getValue('dat_comment_privacy'),
             'additional_guests' => (bool)$event->getValue('dat_additional_guests')
         );
     }
@@ -10950,6 +10962,7 @@ final class CoreTasks
                 'adm_event_participation_right' => array(),
                 'event_current_user_assigned' => 1,
                 'dat_allow_comments' => 0,
+                'dat_comment_privacy' => 0,
                 'dat_additional_guests' => 0,
                 'dat_max_members' => 0,
                 'event_deadline' => '',
@@ -11005,6 +11018,7 @@ final class CoreTasks
                     $participationRoleId > 0 && $gCurrentUser->isLeaderOfRole($participationRoleId)
                 ),
                 'dat_allow_comments' => (int)(bool)$event->getValue('dat_allow_comments'),
+                'dat_comment_privacy' => (int)(bool)$event->getValue('dat_comment_privacy'),
                 'dat_additional_guests' => (int)(bool)$event->getValue('dat_additional_guests'),
                 'dat_max_members' => (int)$event->getValue('dat_max_members'),
                 'event_deadline' => $deadline === '' ? '' : substr($deadline, 0, 10),
@@ -11077,6 +11091,7 @@ final class CoreTasks
             'participation' => 'event_participation_possible',
             'participate-self' => 'event_current_user_assigned',
             'allow-comments' => 'dat_allow_comments',
+            'comment-privacy' => 'dat_comment_privacy',
             'allow-guests' => 'dat_additional_guests',
             'participants-visible' => 'event_right_list_view',
             'participants-mail' => 'event_right_send_mail'
