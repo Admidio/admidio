@@ -3,7 +3,7 @@
 /**
  * Admidio Regression Test Suite - Run All Suites
  *
- * Runs the Unit, Integration and CLI suites as three separate phpunit processes, so that a
+ * Runs the Unit, Integration, CLI and HTTP suites as separate phpunit processes, so that a
  * constant one suite defines for its own purposes - DB_TYPE in particular, which the Hooks unit
  * tests fix at a SQLite-compatible value regardless of the configured test database engine - never
  * leaks into a later suite that needs the real configured value. A PHP constant cannot be
@@ -14,7 +14,7 @@
  * script exits with the worst exit code so a failure anywhere still fails the overall run.
  */
 
-$testsuites = array('Unit Tests', 'Integration Tests', 'CLI Tests');
+$testsuites = array('Unit Tests', 'Integration Tests', 'CLI Tests', 'HTTP Tests');
 $worstExitCode = 0;
 
 foreach ($testsuites as $testsuite) {
