@@ -61,7 +61,8 @@
                     return;
                 }
 
-                var tip = popover.getTipElement();
+                var tipId = this.getAttribute("aria-describedby");
+                var tip = tipId ? document.getElementById(tipId) : null;
                 if (!tip || tip.querySelector(".calendar-feed-help-close")) {
                     return;
                 }
@@ -107,15 +108,15 @@
             });
 
         $(document)
-            .off("hidden.bs.modal", "#adm_modal", destroyCalendarFeedHelpPopovers)
-            .on("hidden.bs.modal", "#adm_modal", destroyCalendarFeedHelpPopovers);
+            .off("hidden.bs.modal", "#adm_modal", hideCalendarFeedHelpPopovers)
+            .on("hidden.bs.modal", "#adm_modal", hideCalendarFeedHelpPopovers);
     }
 
-    function destroyCalendarFeedHelpPopovers() {
+    function hideCalendarFeedHelpPopovers() {
         $("#adm_modal [data-bs-toggle=popover]").each(function () {
             var popover = bootstrap.Popover.getInstance(this);
             if (popover) {
-                popover.dispose();
+                popover.hide();
             }
         });
     }
@@ -160,7 +161,7 @@
 
             var modalBody = $("#adm_modal .modal-body");
             if (modalBody.length > 0 && typeof data === "string") {
-                destroyCalendarFeedHelpPopovers();
+                hideCalendarFeedHelpPopovers();
                 modalBody.html(data);
             } else {
                 window.location.reload();
