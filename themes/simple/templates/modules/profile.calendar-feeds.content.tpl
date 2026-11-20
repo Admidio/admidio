@@ -45,9 +45,77 @@
     }
 
     function initCalendarFeedHelpPopovers() {
-        $("#adm_modal [data-bs-toggle=popover]").each(function () {
+        var $triggers = $("#adm_modal [data-bs-toggle=popover]");
+
+        $triggers.each(function () {
             if (!bootstrap.Popover.getInstance(this)) {
                 new bootstrap.Popover(this);
+            }
+        });
+
+        $triggers
+            .off("inserted.bs.popover")
+            .on("inserted.bs.popover", function () {
+                var popover = bootstrap.Popover.getInstance(this);
+                if (!popover) {
+                    return;
+                }
+
+                var tip = popover.getTipElement();
+                if (!tip || tip.querySelector(".calendar-feed-help-close")) {
+                    return;
+                }
+
+                var $closeButton = $('<button type="button" class="btn-close float-end ms-2 mt-1 calendar-feed-help-close"></button>')
+                    .attr("aria-label", "{$l10n->get('SYS_CLOSE')|escape:'javascript'}")
+                    .attr("title", "{$l10n->get('SYS_CLOSE')|escape:'javascript'}")
+                    .attr("data-calendar-feed-popover-trigger", this.id);
+
+                $(tip).find(".popover-body").prepend($closeButton);
+            });
+
+        $(document)
+            .off("click.calendarFeedPopoverClose", ".calendar-feed-help-close")
+            .on("click.calendarFeedPopoverClose", ".calendar-feed-help-close", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                var trigger = document.getElementById($(this).attr("data-calendar-feed-popover-trigger"));
+                if (trigger) {
+                    var popover = bootstrap.Popover.getInstance(trigger);
+                    if (popover) {
+                        popover.hide();
+                    }
+                }
+            });
+
+        $(document)
+            .off("click.calendarFeedPopover")
+            .on("click.calendarFeedPopover", function (event) {
+                var $target = $(event.target);
+                if ($target.closest(".popover").length > 0
+                    || $target.closest("[data-bs-toggle=popover]").length > 0) {
+                    return;
+                }
+
+                $("#adm_modal [data-bs-toggle=popover]").each(function () {
+                    var popover = bootstrap.Popover.getInstance(this);
+                    if (popover) {
+                        popover.hide();
+                    }
+                });
+            });
+
+        $(document)
+            .off("hidden.bs.modal", "#adm_modal", destroyCalendarFeedHelpPopovers)
+            .on("hidden.bs.modal", "#adm_modal", destroyCalendarFeedHelpPopovers);
+    }
+
+    function destroyCalendarFeedHelpPopovers() {
+        $("#adm_modal [data-bs-toggle=popover]").each(function () {
+            var popover = bootstrap.Popover.getInstance(this);
+            if (popover) {
+                popover.dispose();
             }
         });
     }
@@ -92,6 +160,7 @@
 
             var modalBody = $("#adm_modal .modal-body");
             if (modalBody.length > 0 && typeof data === "string") {
+                destroyCalendarFeedHelpPopovers();
                 modalBody.html(data);
             } else {
                 window.location.reload();
@@ -139,7 +208,7 @@
 
     <h4>
         {$l10n->get('SYS_CALENDAR_FEED_ADD')}
-        <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
+        <i id="adm_calendar_feed_help" class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
            data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
            data-bs-container="body" data-bs-content="{$l10n->get('SYS_CALENDAR_FEED_HELP')|escape:'html'}"></i>
     </h4>
