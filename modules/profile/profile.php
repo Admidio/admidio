@@ -212,6 +212,11 @@ try {
         $("#menu_item_profile_tfa").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)) . '");
         $("#menu_item_profile_tfa").attr("class", "nav-link btn btn-primary openPopup");
 
+        $("#menu_item_profile_calendar_feeds").attr("href", "javascript:void(0);");
+        $("#menu_item_profile_calendar_feeds").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/calendar_feeds.php') . '");
+        $("#menu_item_profile_calendar_feeds").attr("data-class", "modal-xl");
+        $("#menu_item_profile_calendar_feeds").attr("class", "nav-link btn btn-primary openPopup");
+
         $("body").on("hidden.bs.modal", ".modal", function() {
             $(this).removeData("bs.modal");
             profileJS.reloadRoleMemberships();
@@ -236,6 +241,21 @@ try {
             $gL10n->get('SYS_TFA'),
             SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/two_factor_authentication.php', array('user_uuid' => $getUserUuid)),
             'bi-shield-lock-fill'
+        );
+    }
+
+    // show link to manage token based calendar feeds for the current user
+    if (
+        $userId === $gCurrentUserId
+        && $gSettingsManager->getInt('events_module_enabled') > 0
+        && $gSettingsManager->getBool('events_ical_export_enabled')
+        && strlen((string)$user->getValue('usr_login_name')) > 0
+    ) {
+        $page->addPageFunctionsMenuItem(
+            'menu_item_profile_calendar_feeds',
+            $gL10n->get('SYS_CALENDAR_FEEDS'),
+            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/calendar_feeds.php'),
+            'bi-calendar2-week-fill'
         );
     }
 

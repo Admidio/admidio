@@ -112,6 +112,7 @@ define('TABLE_PREFIX', $g_tbl_praefix);
 
 const TBL_ANNOUNCEMENTS = TABLE_PREFIX . '_announcements';
 const TBL_AUTO_LOGIN = TABLE_PREFIX . '_auto_login';
+const TBL_CALENDAR_FEEDS = TABLE_PREFIX . '_calendar_feeds';
 const TBL_CATEGORIES = TABLE_PREFIX . '_categories';
 const TBL_CATEGORY_REPORT = TABLE_PREFIX . '_category_report';
 const TBL_CATEGORY_REPORT_COLUMNS = TABLE_PREFIX . '_category_report_columns';
