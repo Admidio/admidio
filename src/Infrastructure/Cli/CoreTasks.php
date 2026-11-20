@@ -8732,6 +8732,15 @@ final class CoreTasks
             $params[] = $userTableRestriction;
         }
 
+        // Tables that are readable for the changes one made oneself only.
+        $ownChangeTables = ChangelogService::getOwnChangeRestriction($gCurrentUser);
+        if ($ownChangeTables !== array()) {
+            $conditions[] = '(log_table NOT IN (' . Database::getQmForValues($ownChangeTables) . ')
+                              OR log_usr_id_create = ?)';
+            array_push($params, ...$ownChangeTables);
+            $params[] = (int)$gCurrentUser->getValue('usr_id');
+        }
+
         if ($objectUuid !== '') {
             $conditions[] = 'log_record_uuid = ?';
             $params[] = $objectUuid;
@@ -8837,6 +8846,12 @@ final class CoreTasks
         if ($userTableRestriction !== ''
             && in_array($table, ChangelogService::$userTables, true)
             && (string)$row['record_uuid'] !== $userTableRestriction) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // In a table readable for one's own changes only, a change by somebody else is not.
+        if (in_array($table, ChangelogService::getOwnChangeRestriction($gCurrentUser), true)
+            && (int)$row['user_id'] !== (int)$gCurrentUser->getValue('usr_id')) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 

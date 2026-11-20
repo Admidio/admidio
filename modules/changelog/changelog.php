@@ -114,7 +114,13 @@ try {
         // IDs belong to the originally requested first table. Do not reinterpret them
         // as IDs of another table, or load an object from an unauthorized table.
         $useTable = $getTables[0] ?? '';
-        $object = in_array($useTable, $readableTables, true)
+        // A table restricted to the user's own changes grants no access to its records: never
+        // load the record, but show the name it had when the user last changed it.
+        $isOwnChangeTable = in_array($useTable, ChangelogService::getOwnChangeRestriction($gCurrentUser), true);
+        if ($isOwnChangeTable) {
+            $objName = ChangelogService::getOwnChangeRecordName($gCurrentUser, $useTable, (int)$getId, (string)$getUuid);
+        }
+        $object = in_array($useTable, $readableTables, true) && !$isOwnChangeTable
             ? ChangelogService::getObjectForTable($useTable)
             : null;
         if ($object !== null && $useTable == 'members') {
