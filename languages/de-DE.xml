@@ -312,6 +312,7 @@
   <string name="SYS_CALENDAR_FEED_EXPIRED_STATUS">Abgelaufen</string>
   <string name="SYS_CALENDAR_FEED_EXPIRES">Gültig bis</string>
   <string name="SYS_CALENDAR_FEED_EXPIRES_DESC">Leer lassen, wenn das Token nicht ablaufen soll. Sie können das Token jederzeit widerrufen.</string>
+  <string name="SYS_CALENDAR_FEED_HELP">Feed im Kalenderprogramm einrichten:&lt;ul&gt;&lt;li&gt;Thunderbird: Neuer Kalender &gt; Im Netzwerk&lt;/li&gt;&lt;li&gt;&lt;a href="https://icsx5.bitfire.at" target="_blank" rel="noopener noreferrer"&gt;ICSx5&lt;/a&gt; (Android): Kalenderabo hinzufügen&lt;/li&gt;&lt;li&gt;Apple Kalender: Einstellungen &gt; Kalender &gt; Accounts &gt; Account hinzufügen &gt; Andere &gt; Kalenderabo&lt;/li&gt;&lt;/ul&gt;Benutzername: Admidio-Loginname&lt;br /&gt;Passwort: das erzeugte Feed-Token</string>
   <string name="SYS_CALENDAR_FEED_HTTPS_REQUIRED">Kalender-Feeds sind nur über HTTPS verfügbar.</string>
   <string name="SYS_CALENDAR_FEED_INVALID_TOKEN">Ungültiges oder fehlendes Kalender-Feed-Token.</string>
   <string name="SYS_CALENDAR_FEED_LAST_USED">Zuletzt verwendet</string>

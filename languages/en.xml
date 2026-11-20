@@ -315,6 +315,7 @@
   <string name="SYS_CALENDAR_FEED_EXPIRED_STATUS">Expired</string>
   <string name="SYS_CALENDAR_FEED_EXPIRES">Expires on</string>
   <string name="SYS_CALENDAR_FEED_EXPIRES_DESC">Leave empty if the token should not expire. You can revoke the token at any time.</string>
+  <string name="SYS_CALENDAR_FEED_HELP">Use the feed in your calendar app:&lt;ul&gt;&lt;li&gt;Thunderbird: New Calendar &gt; On the Network&lt;/li&gt;&lt;li&gt;&lt;a href="https://icsx5.bitfire.at" target="_blank" rel="noopener noreferrer"&gt;ICSx5&lt;/a&gt; (Android): Add calendar subscription&lt;/li&gt;&lt;li&gt;Apple Calendar: Settings &gt; Calendar &gt; Accounts &gt; Add Account &gt; Other &gt; Calendar Subscription&lt;/li&gt;&lt;/ul&gt;Username: Admidio login name&lt;br /&gt;Password: the generated feed token</string>
   <string name="SYS_CALENDAR_FEED_HTTPS_REQUIRED">Calendar feeds are only available over HTTPS.</string>
   <string name="SYS_CALENDAR_FEED_INVALID_TOKEN">Invalid or missing calendar feed token.</string>
   <string name="SYS_CALENDAR_FEED_LAST_USED">Last used</string>

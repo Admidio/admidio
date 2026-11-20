@@ -44,6 +44,14 @@
         });
     }
 
+    function initCalendarFeedHelpPopovers() {
+        $("#adm_modal [data-bs-toggle=popover]").each(function () {
+            if (!bootstrap.Popover.getInstance(this)) {
+                new bootstrap.Popover(this);
+            }
+        });
+    }
+
     function calendarFeedSubmit(event) {
         event.preventDefault();
         var form = $(this);
@@ -106,6 +114,7 @@
         .on("submit.calendarfeed", "#adm_calendar_feed_create_form, .adm-calendar-feed-revoke-form", calendarFeedSubmit);
 
     initCalendarFeedCopyButtons();
+    initCalendarFeedHelpPopovers();
 </script>
 
     {if $message}
@@ -128,7 +137,12 @@
         </div>
     {/if}
 
-    <h4>{$l10n->get('SYS_CALENDAR_FEED_ADD')}</h4>
+    <h4>
+        {$l10n->get('SYS_CALENDAR_FEED_ADD')}
+        <i class="bi bi-info-circle-fill admidio-info-icon" data-bs-toggle="popover"
+           data-bs-html="true" data-bs-trigger="hover click" data-bs-placement="auto"
+           data-bs-container="body" data-bs-content="{$l10n->get('SYS_CALENDAR_FEED_HELP')|escape:'html'}"></i>
+    </h4>
     <form {foreach $attributes as $attribute}
             {$attribute@key}="{$attribute}"
         {/foreach}>
