@@ -214,6 +214,7 @@ try {
 
         $("#menu_item_profile_calendar_feeds").attr("href", "javascript:void(0);");
         $("#menu_item_profile_calendar_feeds").attr("data-href", "' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile/calendar_feeds.php') . '");
+        $("#menu_item_profile_calendar_feeds").attr("data-class", "modal-xl");
         $("#menu_item_profile_calendar_feeds").attr("class", "nav-link btn btn-primary openPopup");
 
         $("body").on("hidden.bs.modal", ".modal", function() {

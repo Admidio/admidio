@@ -29,6 +29,13 @@ try {
     require_once(__DIR__ . '/../../system/common.php');
     require(__DIR__ . '/../../system/login_valid.php');
 
+    if ($gSettingsManager->getInt('events_module_enabled') === 0) {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
+    if (!$gSettingsManager->getBool('events_ical_export_enabled')) {
+        throw new Exception('SYS_ICAL_DISABLED');
+    }
+
     header('Content-type: text/html; charset=utf-8');
 
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array(
@@ -108,6 +115,7 @@ try {
         if ($feed['cat_name'] !== null && Language::isTranslationStringId((string)$feed['cat_name'])) {
             $feed['cat_name'] = $gL10n->get((string)$feed['cat_name']);
         }
+        $feed['calendar_missing'] = (string)$feed['cfd_cat_uuid'] !== '' && $feed['cat_name'] === null;
         $expiresTimestamp = empty($feed['cfd_timestamp_expires']) ? false : strtotime((string)$feed['cfd_timestamp_expires']);
         $feed['is_expired'] = $expiresTimestamp !== false && $expiresTimestamp <= time();
         $feed['url'] = $feedService->buildFeedUrl($gCurrentOrganization, (string)$feed['cfd_cat_uuid']);

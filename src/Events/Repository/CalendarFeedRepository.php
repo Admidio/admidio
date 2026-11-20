@@ -124,19 +124,15 @@ class CalendarFeedRepository
      */
     public function touchLastUsed(int $feedId): void
     {
-        $sql = 'SELECT cfd_timestamp_last_used FROM ' . TBL_CALENDAR_FEEDS . ' WHERE cfd_id = ?';
-        $lastUsed = $this->database->queryPrepared($sql, array($feedId))->fetchColumn();
+        $sql = 'UPDATE ' . TBL_CALENDAR_FEEDS . '
+                   SET cfd_timestamp_last_used = ?
+                 WHERE cfd_id = ?
+                   AND (cfd_timestamp_last_used IS NULL OR cfd_timestamp_last_used < ?)';
 
-        if ($lastUsed !== false && $lastUsed !== null && $lastUsed !== '') {
-            $lastUsedTimestamp = strtotime((string)$lastUsed);
-            if ($lastUsedTimestamp !== false && $lastUsedTimestamp > time() - self::LAST_USED_UPDATE_INTERVAL) {
-                return;
-            }
-        }
-
-        $sql = 'UPDATE ' . TBL_CALENDAR_FEEDS . ' SET cfd_timestamp_last_used = ? WHERE cfd_id = ?';
-        $this->database->queryPrepared($sql, array(date('Y-m-d H:i:s'), $feedId));
+        $this->database->queryPrepared($sql, array(
+            date('Y-m-d H:i:s'),
+            $feedId,
+            date('Y-m-d H:i:s', time() - self::LAST_USED_UPDATE_INTERVAL)
+        ));
     }
-
-
 }

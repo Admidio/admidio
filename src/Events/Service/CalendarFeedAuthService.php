@@ -37,7 +37,7 @@ class CalendarFeedAuthService
      */
     public function authorize(string $organizationShortName): ?array
     {
-        if (!defined('HTTPS') || !HTTPS) {
+        if (!$this->isHttpsRequest()) {
             $this->sendError(403, 'SYS_CALENDAR_FEED_HTTPS_REQUIRED');
             return null;
         }
@@ -98,6 +98,17 @@ class CalendarFeedAuthService
         $orgId = (int)$organization->getValue('org_id');
         $settings = $organization->getSettingsManager();
 
+        // common.php binds these globals by reference to objects stored in the caller's session.
+        // Detach them before assigning the feed context, so this request cannot write another
+        // organization, user or language back into that session.
+        unset(
+            $GLOBALS['gCurrentOrganization'],
+            $GLOBALS['gSettingsManager'],
+            $GLOBALS['gProfileFields'],
+            $GLOBALS['gCurrentUser'],
+            $GLOBALS['gL10n']
+        );
+
         $GLOBALS['gCurrentOrganization'] = $organization;
         $GLOBALS['gSettingsManager'] = $settings;
         $GLOBALS['gCurrentOrgId'] = $orgId;
@@ -107,6 +118,36 @@ class CalendarFeedAuthService
         $GLOBALS['gCurrentUserUUID'] = $user->getValue('usr_uuid');
         $GLOBALS['gValidLogin'] = true;
         $GLOBALS['gL10n'] = new Language($settings->getString('system_language'), true);
+    }
+
+    /**
+     * Check whether the current request reached the application over HTTPS.
+     *
+     * The configured HTTPS constant only describes the scheme of the installation URL and
+     * cannot detect a direct HTTP request to a server that is also configured for HTTPS.
+     * Check the request itself and accept the usual reverse-proxy headers.
+     */
+    private function isHttpsRequest(): bool
+    {
+        if (!empty($_SERVER['HTTPS']) && strcasecmp((string)$_SERVER['HTTPS'], 'off') !== 0) {
+            return true;
+        }
+        if (isset($_SERVER['REQUEST_SCHEME']) && strcasecmp((string)$_SERVER['REQUEST_SCHEME'], 'https') === 0) {
+            return true;
+        }
+        if ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443) {
+            return true;
+        }
+
+        $forwardedProto = (string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '');
+        foreach (explode(',', $forwardedProto) as $protocol) {
+            if (strcasecmp(trim($protocol), 'https') === 0) {
+                return true;
+            }
+        }
+
+        return isset($_SERVER['HTTP_X_FORWARDED_SSL'])
+            && strcasecmp((string)$_SERVER['HTTP_X_FORWARDED_SSL'], 'on') === 0;
     }
 
     /**

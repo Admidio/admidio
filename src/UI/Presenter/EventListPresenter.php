@@ -175,6 +175,7 @@ class EventListPresenter extends PagePresenter
                 $page->addJavascript('
                     $("#menu_item_event_calendar_feeds").attr("href", "javascript:void(0);");
                     $("#menu_item_event_calendar_feeds").attr("data-href", ' . json_encode($calendarFeedsUrl) . ');
+                    $("#menu_item_event_calendar_feeds").attr("data-class", "modal-xl");
                     $("#menu_item_event_calendar_feeds").addClass("openPopup");
                 ', true);
             }

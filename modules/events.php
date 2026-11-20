@@ -84,13 +84,15 @@ try {
 
         // A token bound to one calendar always exports that calendar. Tokens
         // without a calendar may be restricted by the cat_uuid request parameter.
+        // Single-event URLs are deliberately ignored: otherwise a token bound to
+        // one calendar could export individual events from any other calendar.
         $feedCategoryUuid = (string)$feedAuthentication['feed']->getValue('cfd_cat_uuid', 'database');
         if ($feedCategoryUuid === '') {
             $feedCategoryUuid = $getCatUuid;
         }
 
         $eventService = new EventService($gDb);
-        $eventService->exportICal($getEventUuid, $feedCategoryUuid, $getDateFrom, $getDateTo, true);
+        $eventService->exportICal('', $feedCategoryUuid, $getDateFrom, $getDateTo, true);
         exit();
     }
 

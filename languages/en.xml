@@ -306,8 +306,10 @@
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
   <string name="SYS_CALENDAR">Calendar</string>
   <string name="SYS_CALENDARS">Calendars</string>
+  <string name="SYS_CALENDAR_FEEDS">Calendar feeds</string>
   <string name="SYS_CALENDAR_FEED_ACTIVE">Active</string>
   <string name="SYS_CALENDAR_FEED_ADD">Create calendar feed</string>
+  <string name="SYS_CALENDAR_FEED_CALENDAR_MISSING">Calendar no longer exists</string>
   <string name="SYS_CALENDAR_FEED_CREATED">Calendar feed created</string>
   <string name="SYS_CALENDAR_FEED_EXISTING">Your calendar feeds</string>
   <string name="SYS_CALENDAR_FEED_EXPIRED_STATUS">Expired</string>
@@ -320,15 +322,14 @@
   <string name="SYS_CALENDAR_FEED_NEVER">Never</string>
   <string name="SYS_CALENDAR_FEED_NO_FEEDS">You have not created a calendar feed yet.</string>
   <string name="SYS_CALENDAR_FEED_REVOKE">Revoke</string>
-  <string name="SYS_CALENDAR_FEED_REVOKE_CONFIRM">Do you really want to revoke this calendar feed? Calendar clients using this token will no longer receive events.</string>
   <string name="SYS_CALENDAR_FEED_REVOKED">The calendar feed was revoked.</string>
   <string name="SYS_CALENDAR_FEED_REVOKED_STATUS">Revoked</string>
+  <string name="SYS_CALENDAR_FEED_REVOKE_CONFIRM">Do you really want to revoke this calendar feed? Calendar clients using this token will no longer receive events.</string>
   <string name="SYS_CALENDAR_FEED_STATUS">Status</string>
   <string name="SYS_CALENDAR_FEED_TOKEN">Token</string>
   <string name="SYS_CALENDAR_FEED_TOKEN_ONCE">Copy the token now. For security reasons it is shown only once and cannot be displayed again.</string>
   <string name="SYS_CALENDAR_FEED_URL">Feed URL</string>
   <string name="SYS_CALENDAR_FEED_USERNAME">Username</string>
-  <string name="SYS_CALENDAR_FEEDS">Calendar feeds</string>
   <string name="SYS_CANCEL">Cancel</string>
   <string name="SYS_CANCELLED">Canceled</string>
   <string name="SYS_CANCEL_ALL">Discard all</string>

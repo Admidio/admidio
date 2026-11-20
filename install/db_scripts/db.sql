@@ -13,6 +13,7 @@
 /*==============================================================*/
 DROP TABLE IF EXISTS %PREFIX%_announcements                     CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_auto_login                        CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_calendar_feeds                    CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report_columns           CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_category_report                   CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_components                        CASCADE;

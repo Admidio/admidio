@@ -30,6 +30,9 @@ that user.
 Several tokens per user and organization are supported, for example one for
 Thunderbird, one for ICSx5 and one for Apple Calendar.
 
+A feed always exports a complete calendar. Single-event parameters such as
+`dat_uuid` are ignored.
+
 ## Thunderbird
 
 1. Open the calendar view and choose **New Calendar > On the Network**.
@@ -72,6 +75,10 @@ with HTTP 401 even though the username and token are correct.
 The TLS certificate must be valid for the exact host name used in the feed URL.
 iOS and other clients reject self-signed certificates or certificates issued for
 a different host name.
+
+If a reverse proxy terminates TLS, it must pass the original scheme to PHP, for
+example with `X-Forwarded-Proto: https` or `X-Forwarded-SSL: on`. Otherwise the
+feed rejects the request as non-HTTPS.
 
 Apache with PHP-FPM usually needs:
 
@@ -116,7 +123,8 @@ access logs or application logs.
 - **HTTP 403:** The feed is requested over plain HTTP, the events module is
   disabled, or the iCal export is disabled.
 - **Empty calendar:** The user cannot see any matching events, the selected
-  calendar has no events, or the token is bound to a calendar without events.
+  calendar has no events, the token is bound to a calendar without events, or
+  the bound calendar was deleted.
 - **Token lost:** The token is shown only once and cannot be recovered. Revoke
   the old feed and create a new one.
 

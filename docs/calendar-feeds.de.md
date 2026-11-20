@@ -35,6 +35,9 @@ Sichtbarkeitsregeln dieses Benutzers für Veranstaltungen.
 Mehrere Token pro Benutzer und Organisation sind möglich, zum Beispiel eines
 für Thunderbird, eines für ICSx5 und eines für Apple Kalender.
 
+Ein Feed exportiert immer einen vollständigen Kalender. Parameter für einzelne
+Veranstaltungen wie `dat_uuid` werden ignoriert.
+
 ## Thunderbird
 
 1. In der Kalenderansicht **Neuer Kalender > Im Netzwerk** wählen.
@@ -77,6 +80,10 @@ Fall antwortet der Feed mit HTTP 401, obwohl Benutzername und Token korrekt sind
 Das TLS-Zertifikat muss für den exakten Hostnamen der Feed-URL gültig sein.
 iOS und andere Clients lehnen selbstsignierte Zertifikate oder Zertifikate für
 einen anderen Hostnamen ab.
+
+Wenn ein Reverse Proxy TLS terminiert, muss er das ursprüngliche Schema an PHP
+weitergeben, zum Beispiel mit `X-Forwarded-Proto: https` oder
+`X-Forwarded-SSL: on`. Andernfalls lehnt der Feed die Anfrage als nicht-HTTPS ab.
 
 Apache mit PHP-FPM benötigt in der Regel:
 
@@ -122,8 +129,9 @@ oder Anwendungslogs geschrieben werden.
 - **HTTP 403:** Der Feed wird über einfaches HTTP aufgerufen, das
   Veranstaltungsmodul ist deaktiviert, oder der iCal-Export ist deaktiviert.
 - **Leerer Kalender:** Der Benutzer kann keine passenden Veranstaltungen sehen,
-  der gewählte Kalender enthält keine Veranstaltungen, oder das Token ist an
-  einen Kalender ohne Veranstaltungen gebunden.
+  der gewählte Kalender enthält keine Veranstaltungen, das Token ist an einen
+  Kalender ohne Veranstaltungen gebunden, oder der gebundene Kalender wurde
+  gelöscht.
 - **Token verloren:** Das Token wird nur einmal angezeigt und kann nicht
   wiederhergestellt werden. Den alten Feed widerrufen und einen neuen anlegen.
 

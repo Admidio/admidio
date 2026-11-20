@@ -193,4 +193,42 @@ class CalendarFeedServiceTest extends DatabaseTestCase
 
         $this->assertNotEmpty($lastUsed);
     }
+
+    /**
+     * @testdox The last usage is updated at most once per hour
+     */
+    public function testLastUsedIsThrottled(): void
+    {
+        $fixture = $this->getFixture();
+        $orgId = $this->getDefaultOrgId();
+        $user = $this->createMember($fixture, $orgId, 'feeduser8');
+        $service = new CalendarFeedService($this->getDatabase());
+        $created = $service->createFeed($orgId, $user['usr_id'], 'Throttled');
+        $feedId = (int)$created['feed']->getValue('cfd_id');
+
+        $service->touchLastUsed($feedId);
+        $firstTimestamp = $this->getDatabase()
+            ->queryPrepared('SELECT cfd_timestamp_last_used FROM ' . TBL_CALENDAR_FEEDS . ' WHERE cfd_id = ?', array($feedId))
+            ->fetchColumn();
+
+        $service->touchLastUsed($feedId);
+        $secondTimestamp = $this->getDatabase()
+            ->queryPrepared('SELECT cfd_timestamp_last_used FROM ' . TBL_CALENDAR_FEEDS . ' WHERE cfd_id = ?', array($feedId))
+            ->fetchColumn();
+
+        $this->assertSame($firstTimestamp, $secondTimestamp);
+
+        $oldTimestamp = date('Y-m-d H:i:s', time() - 7200);
+        $this->getDatabase()->queryPrepared(
+            'UPDATE ' . TBL_CALENDAR_FEEDS . ' SET cfd_timestamp_last_used = ? WHERE cfd_id = ?',
+            array($oldTimestamp, $feedId)
+        );
+        $service->touchLastUsed($feedId);
+        $updatedTimestamp = $this->getDatabase()
+            ->queryPrepared('SELECT cfd_timestamp_last_used FROM ' . TBL_CALENDAR_FEEDS . ' WHERE cfd_id = ?', array($feedId))
+            ->fetchColumn();
+
+        $this->assertNotSame($oldTimestamp, $updatedTimestamp);
+        $this->assertNotEmpty($updatedTimestamp);
+    }
 }
