@@ -96,20 +96,36 @@ class ProbeEmail
 
 class EmailHooksTest extends AdmidioTestCase
 {
-    public static function setUpBeforeClass(): void
+    private array $originalGlobals = array();
+
+    protected function setUp(): void
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
+        foreach (array('gSettingsManager', 'gL10n', 'gDebug', 'gValidLogin', 'gDisableEmailSending') as $name) {
+            if (array_key_exists($name, $GLOBALS)) {
+                $this->originalGlobals[$name] = $GLOBALS[$name];
+            }
+        }
 
         $GLOBALS['gSettingsManager'] = new EmailStubSettings();
         $GLOBALS['gL10n'] = new EmailStubLanguage();
         $GLOBALS['gDebug'] = false;
         $GLOBALS['gValidLogin'] = false;
+        Hooks::reset();
     }
 
-    protected function setUp(): void
+    protected function tearDown(): void
     {
-        parent::setUp();
         Hooks::reset();
+        foreach (array('gSettingsManager', 'gL10n', 'gDebug', 'gValidLogin', 'gDisableEmailSending') as $name) {
+            if (array_key_exists($name, $this->originalGlobals)) {
+                $GLOBALS[$name] = $this->originalGlobals[$name];
+            } else {
+                unset($GLOBALS[$name]);
+            }
+        }
+        $this->originalGlobals = array();
+        parent::tearDown();
     }
 
     private function anEmail(callable $deliver): ProbeEmail

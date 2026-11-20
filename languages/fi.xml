@@ -574,7 +574,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Luokkaa #VAR1_BOLD# ei voitu poistaa #VAR2# merkinnän vuoksi.</string>
   <string name="SYS_DONT_SHOW">Älä näytä</string>
   <string name="SYS_DOWNLOAD_ALBUM">Lataa albumi</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Lataa tietokannan varmuuskopio</string>
   <string name="SYS_DOWNLOAD_FILE">Lataa tiedosto</string>
   <string name="SYS_DOWNLOAD_ICAL">Lataa iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Lataa kuva</string>
@@ -1310,7 +1309,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio vaatii #VAR1# tai uudemman</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Valitse vaihtoehto</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1616,7 +1614,6 @@
   <string name="SYS_SEND_EMAIL">Lähetä sähköposti</string>
   <string name="SYS_SEND_EMAIL_FORMER">Lähetä sähköpostia entisille jäsenille</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Jos tämä vaihtoehto on asetettu, sähköpostit voidaan lähettää yksittäisille entisille jäsenille sekä kaikille roolin entisille jäsenille. (Oletus: aktivoitu)</string>
-  <string name="SYS_SEND_EMAIL_TO">Lähetä sähköpostia osoitteeseen #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Lähetä sähköpostiviestejä kaikkiin käyttäjän sähköpostiosoitteisiin</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Jos tämä asetus on käytössä, sähköpostiviestit lähetetään kaikkiin profiiliin tallennettuihin käyttäjän sähköpostiosoitteisiin. Jos asetus on pois käytöstä, sähköpostiviestit lähetetään vain profiilikenttään, jonka sisäinen nimi on EMAIL, tallennettuun sähköpostiosoitteeseen. (Oletusasetus: pois käytöstä)</string>
   <string name="SYS_SEND_GREETING_CARD">Lähetä onnittelukortti</string>

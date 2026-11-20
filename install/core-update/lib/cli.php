@@ -168,13 +168,18 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
                     return commandResult(EXIT_REJECTED, text($texts, 'SYS_CORE_UPDATE_BACKUP_NOT_POSSIBLE')
                         . ' Then continue with --resume --backup=own.', $state);
                 }
+                $state = statisticsPreview($ctx, $updateId);
+                if (($options['statistics'] ?? '') === 'yes') {
+                    $out((string)json_encode($state['statisticsData'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                }
                 if (!$confirm('Install Admidio ' . commandTarget($state) . ' now? '
                     . ($backup === 'dump' ? 'The updater backs up the database first.' : 'You have confirmed your own backup of the database.'))) {
                     cancelUpdate($ctx, $updateId);
 
                     return commandResult(EXIT_FAILED, text($texts, 'SYS_CORE_UPDATE_CANCELLED'), $state);
                 }
-                phaseBConfirm($ctx, $updateId, $backup);
+                phaseBConfirm($ctx, $updateId, $backup, ($options['statistics'] ?? '') === ''
+                    ? null : $options['statistics'] === 'yes');
                 break;
 
             case 'prepared':

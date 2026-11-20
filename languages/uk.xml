@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Не вдалося видалити категорію #VAR1_BOLD#, тому що в ній є записи, які залежать від #VAR2#.</string>
   <string name="SYS_DONT_SHOW">Не відображати</string>
   <string name="SYS_DOWNLOAD_ALBUM">Завантажити альбом</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Завантажити файл</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Завантажити фотографію</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Для Admidio потрібно #VAR1# або вище</string>
   <string name="SYS_PIPE">Вертикальна характеристика (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Вибрати варіант</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1608,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">Надіслати ел. лист</string>
   <string name="SYS_SEND_EMAIL_FORMER">Надіслати ел. колишнім учасникам</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Якщо цей параметр встановлений, листи можуть бути надіслані як окремим колишнім учасникам, так і всім колишнім учасникам ролі. (За замовчуванням: активовано)</string>
-  <string name="SYS_SEND_EMAIL_TO">Надіслати ел. лист #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Надіслати ел. листи на всі адреси ел. пошти користувача</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Якщо ця настройка активована, листи будуть надсилатися на всі адреси ел. пошти користувачів, що зберігаються у профілі. Якщо налаштування вимкнено, листи надсилатимуться лише на адресу ел. пошти з поля профілю із внутрішнім ім'ям EMAIL. (За замовчуванням: увімкнено)</string>
   <string name="SYS_SEND_GREETING_CARD">Надіслати вітальну листівку</string>

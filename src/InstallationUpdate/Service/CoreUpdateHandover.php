@@ -150,6 +150,12 @@ final class CoreUpdateHandover
         return new self($rootPath, $updateId, $state);
     }
 
+    /** Reviewed identity survives the session reset during migration, including on the CLI. */
+    public function getStatisticsTenantId(): ?string
+    {
+        return $this->state['statisticsData']['id'] ?? null;
+    }
+
     public function getUpdateId(): string
     {
         return $this->updateId;
@@ -251,6 +257,13 @@ final class CoreUpdateHandover
     {
         if (!$this->isMigrationAllowed()) {
             throw new Exception('SYS_CORE_UPDATE_IN_PROGRESS');
+        }
+
+        if (isset($this->state['statisticsData']) && empty($this->state['statisticsProcessed'])) {
+            // Record before delivery: a retry must not send the same report twice.
+            StatisticsConsent::savePreference(!empty($this->state['statisticsEnabled']));
+            $this->update(array('statisticsProcessed' => true));
+            StatisticsConsent::send(!empty($this->state['statisticsEnabled']) ? $this->state['statisticsData'] : null);
         }
 
         $this->update(array('state' => self::STATE_COMPLETED, 'lastError' => '', 'databaseNotes' => $notes));
