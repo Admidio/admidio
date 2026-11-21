@@ -144,6 +144,11 @@
     background-color: color-mix(in srgb, var(--admidio-header-font-color) 15%, transparent);
 }
 
+/* Optically center the asymmetric box-arrow glyph inside the circular slot. */
+#adm_main_navbar .adm-header-login-icon .bi {
+    transform: translateX(0.05em);
+}
+
 @media (max-width: 767px)
 {
     /* navbar should not be fixed at top if in mobile view */
