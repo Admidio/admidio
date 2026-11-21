@@ -15,6 +15,7 @@ use Admidio\Events\Repository\EventRepository;
 use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Events\Service\EventICalExportService;
 use Admidio\Events\Service\EventService;
+use Admidio\Events\Service\EventReminderService;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
 use Admidio\Forum\Entity\Post;
@@ -488,6 +489,9 @@ final class CoreTasks
             $count = (new MembershipPeriodService($GLOBALS['gDb']))->runIfDue(null, true);
             return $count === null ? 'done today already, or running' : $count . ' memberships started or ended';
         }, 'Report the memberships that started or ended since the last run, once per day.');
+        CliTaskRegistry::registerCoreMaintenanceJob('event-reminders', static function (): string {
+            return (new EventReminderService($GLOBALS['gDb']))->runIfDue() ?? 'nothing due';
+        }, 'Send the reminder mails that are due for upcoming events.');
     }
 
     private static function registerSystemTasks(): void
@@ -1804,6 +1808,22 @@ final class CoreTasks
                 self::opt('date-from', 'Start date.', 'DATE'),
                 self::opt('date-to', 'End date.', 'DATE')
             ));
+        self::task(
+            'event:send-reminders',
+            'eventSendReminders',
+            'Send pending event reminders (or list them in dry-run mode).',
+            'event:send-reminders [--dry-run]',
+            'EVENTS',
+            true,
+            array(),
+            array(),
+            array(),
+            null,
+            CliTaskRegistry::ACCESS_ADMINISTRABLE,
+            null,
+            null,
+            true
+        );
     }
 
     private static function registerRoomTasks(): void
@@ -7295,6 +7315,22 @@ final class CoreTasks
         return 0;
     }
 
+    /**
+     * Send due event reminders, or only list them with --dry-run.
+     *
+     * This command is optional: the same work runs as the maintenance job "event-reminders" and on
+     * the request_finished hook. It exists for manual runs and support.
+     */
+    public static function eventSendReminders(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $dryRun = CliApplication::optionBool($options, 'dry-run', false) === true;
+        $message = (new EventReminderService($gDb))->runIfDue($dryRun) ?? 'nothing due';
+        CliApplication::writeSuccess($message, $options);
+        return 0;
+    }
+
     public static function eventDelete(array $arguments, array $options): int
     {
         global $gDb;
@@ -10877,6 +10913,7 @@ final class CoreTasks
             self::opt('allow-comments', 'Allow participation comments.', 'BOOL'),
             self::opt('allow-guests', 'Allow additional guests.', 'BOOL'),
             self::opt('max-members', 'Maximum number of participants.', 'N'),
+            self::opt('reminder-days', 'Days before the event for the reminder email; 0 disables it.', 'N'),
             self::opt('deadline', 'Participation deadline (YYYY-MM-DDTHH:MM), empty value clears it.', 'DATETIME'),
             self::opt('participants-visible', 'Participants may view the participants list.', 'BOOL'),
             self::opt('participants-mail', 'Participants may send mail to the event role.', 'BOOL'),
@@ -10915,6 +10952,7 @@ final class CoreTasks
             'country' => $event->getValue('dat_country', 'database'),
             'deadline' => $event->getValue('dat_deadline', 'Y-m-d H:i:s'),
             'max_members' => (int)$event->getValue('dat_max_members'),
+            'reminder_days' => (int)$event->getValue('dat_reminder_days'),
             'allow_comments' => (bool)$event->getValue('dat_allow_comments'),
             'additional_guests' => (bool)$event->getValue('dat_additional_guests')
         );
@@ -10952,6 +10990,7 @@ final class CoreTasks
                 'dat_allow_comments' => 0,
                 'dat_additional_guests' => 0,
                 'dat_max_members' => 0,
+                'dat_reminder_days' => $gSettingsManager->getInt('events_reminder_days'),
                 'event_deadline' => '',
                 'event_deadline_time' => '',
                 'event_right_list_view' => 0,
@@ -11007,6 +11046,7 @@ final class CoreTasks
                 'dat_allow_comments' => (int)(bool)$event->getValue('dat_allow_comments'),
                 'dat_additional_guests' => (int)(bool)$event->getValue('dat_additional_guests'),
                 'dat_max_members' => (int)$event->getValue('dat_max_members'),
+                'dat_reminder_days' => (int)$event->getValue('dat_reminder_days'),
                 'event_deadline' => $deadline === '' ? '' : substr($deadline, 0, 10),
                 'event_deadline_time' => $deadline === '' ? '' : substr($deadline, 11, 5),
                 'event_right_list_view' => (int)$rightListView,
@@ -11092,6 +11132,14 @@ final class CoreTasks
                 throw new InvalidArgumentException('--max-members must be a non-negative integer.');
             }
             $formValues['dat_max_members'] = $maxMembers;
+        }
+
+        if (CliApplication::optionExists($options, 'reminder-days')) {
+            $reminderDays = CliApplication::optionInt($options, 'reminder-days');
+            if ($reminderDays === null || $reminderDays < 0 || $reminderDays > 99) {
+                throw new InvalidArgumentException('--reminder-days must be an integer between 0 and 99.');
+            }
+            $formValues['dat_reminder_days'] = $reminderDays;
         }
 
         if (CliApplication::optionExists($options, 'participation-role')) {

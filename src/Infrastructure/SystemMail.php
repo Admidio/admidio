@@ -38,6 +38,10 @@ class SystemMail extends Email
      * @var array<int,string> stores additional variables for the mail text
      */
     private array $smVariables = array();
+    /**
+     * @var array<string,string> stores named placeholders such as #event_name#
+     */
+    private array $smCustomVariables = array();
 
     /**
      * Constructor that will create an object of a SystemMail to handle all system notifications.
@@ -102,6 +106,11 @@ class SystemMail extends Email
                 $mailSrcText = str_replace('#variable' . $number . '#', $value, $mailSrcText);
             }
 
+            // named variables are used by newer system mails such as the event reminder
+            foreach ($this->smCustomVariables as $name => $value) {
+                $mailSrcText = str_replace('#' . $name . '#', $value, $mailSrcText);
+            }
+
             // Split subject and content based on labels or take default content if necessary
             if (str_contains($mailSrcText, '#subject#')) {
                 $this->smMailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
@@ -127,6 +136,17 @@ class SystemMail extends Email
     public function setVariable(int $number, string $value): void
     {
         $this->smVariables[$number] = $value;
+    }
+
+    /**
+     * Set a named placeholder for the mail text, e.g. #event_name#.
+     *
+     * The name is given without the surrounding hash characters. The value is inserted as-is, so a
+     * caller can use it for a prepared HTML link when HTML mail is enabled.
+     */
+    public function setCustomVariable(string $name, string $value): void
+    {
+        $this->smCustomVariables[$name] = $value;
     }
 
     /**

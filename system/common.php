@@ -3,6 +3,7 @@
 use Admidio\Application\Navigation;
 use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Components\Entity\Component;
+use Admidio\Events\Service\EventReminderService;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
@@ -334,4 +335,12 @@ if (PHP_SAPI !== 'cli' && MembershipPeriodService::mayBeDue()) {
     Hooks::addAction('request_finished', static function () use ($gDb): void {
         MembershipPeriodService::runIfDueSilently($gDb);
     }, Hooks::DEFAULT_PRIORITY, 0, 'membership-period');
+}
+
+// Send due event reminders after the response has been sent. On the command line the maintenance
+// job "event-reminders" handles this, so the listener is only registered for web requests.
+if (PHP_SAPI !== 'cli') {
+    Hooks::addAction('request_finished', static function () use ($gDb): void {
+        EventReminderService::runIfDueSilently($gDb);
+    }, Hooks::DEFAULT_PRIORITY, 0, 'event-reminders');
 }

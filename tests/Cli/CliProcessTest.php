@@ -918,6 +918,15 @@ class CliProcessTest extends DatabaseTestCase
     }
 
     /**
+     * @testdox The event reminder maintenance job and manual command can be executed
+     */
+    public function testEventReminderEntryPointsRun(): void
+    {
+        $this->adminCliOk(array('maintenance:run', '--job=event-reminders', '--yes'));
+        $this->adminCliOk(array('event:send-reminders', '--dry-run'));
+    }
+
+    /**
      * @testdox Event mutations are committed by real CLI processes
      */
     public function testEventLifecycleAcrossIndependentProcesses(): void
@@ -943,17 +952,20 @@ class CliProcessTest extends DatabaseTestCase
                 '--calendar=' . $categoryUuid,
                 '--location=Main hall',
                 '--description=created-' . $suffix,
+                '--reminder-days=0',
                 '--participate-self=0'
             ));
             $eventUuid = (string)$created['uuid'];
 
             $this->assertSame('2030-07-01 18:00:00', $created['begin']);
             $this->assertSame('2030-07-01 20:30:00', $created['end']);
+            $this->assertSame(0, $created['reminder_days']);
 
             $shown = $this->adminCliJson(array('event:show', $eventUuid));
             $this->assertSame('CLI event ' . $suffix, $shown['headline']);
             $this->assertSame('Main hall', $shown['location']);
             $this->assertSame('created-' . $suffix, $shown['description']);
+            $this->assertSame(0, $shown['reminder_days']);
 
             $this->adminCliOk(array(
                 'event:update',
@@ -965,6 +977,7 @@ class CliProcessTest extends DatabaseTestCase
             $shown = $this->adminCliJson(array('event:show', $eventUuid));
             $this->assertSame('CLI event updated ' . $suffix, $shown['headline']);
             $this->assertSame('Side room', $shown['location']);
+            $this->assertSame(0, $shown['reminder_days']);
 
             $rows = $this->adminCliJson(array('event:list', '--calendar=' . $categoryUuid));
             $this->assertSame(array('CLI event updated ' . $suffix), array_column($rows, 'headline'));

@@ -109,6 +109,32 @@ class DefaultEntryTranslationsTest extends DatabaseTestCase
         $this->assertSame('Our own message', $text->getValue('txt_text', 'database'));
     }
 
+    public function testEventReminderSystemMailHasDefaultTranslationAndPlaceholders(): void
+    {
+        $db = $this->getDatabase();
+        $text = new Text($db);
+        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_EVENT_REMINDER', 'txt_org_id' => $GLOBALS['gCurrentOrgId']));
+        $this->assertSame('SYS_SYSMAIL_EVENT_REMINDER', $text->getValue('txt_text', 'database'));
+
+        $userId = $db->queryPrepared("SELECT usr_id FROM " . TBL_USERS . " WHERE usr_login_name = 'admin'")->fetchColumn();
+        $user = new User($db, $GLOBALS['gProfileFields'], (int) $userId);
+        foreach (array('de', 'en') as $code) {
+            $GLOBALS['gL10n'] = new Language($code);
+            $mail = new SystemMail($db);
+            $mail->setCustomVariable('event_name', 'Summer party');
+            $mail->setCustomVariable('event_period', '2030-07-01 18:00');
+            $mail->setCustomVariable('event_calendar', 'Club calendar');
+            $mail->setCustomVariable('event_location', 'Main hall');
+            $mail->setCustomVariable('event_room', 'Room 1');
+            $mail->setCustomVariable('event_timezone', 'Europe/Berlin');
+            $mail->setCustomVariable('event_url', 'https://example.org/events/42');
+            $body = $mail->getMailText('SYSMAIL_EVENT_REMINDER', $user);
+            $this->assertStringContainsString('Summer party', $body);
+            $this->assertStringContainsString('https://example.org/events/42', $body);
+            $this->assertStringNotContainsString('SYS_SYSMAIL_', $body);
+        }
+    }
+
     public function testDescriptionsKeepIdsAfterRichTextEditorNormalization(): void
     {
         $db = $this->getDatabase();

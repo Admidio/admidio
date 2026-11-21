@@ -5,6 +5,7 @@ use Admidio\Categories\Entity\Category;
 use Admidio\Events\Entity\Event;
 use Admidio\Events\Entity\Room;
 use Admidio\Events\Repository\EventRecurrenceRepository;
+use Admidio\Events\Repository\EventReminderRepository;
 use Admidio\Events\ValueObject\EventOccurrence;
 use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Events\ValueObject\Participants;
@@ -183,6 +184,12 @@ class EventSaveService
             $formValues['dat_room_id'] = 0;
         }
 
+        if (array_key_exists('dat_reminder_days', $formValues)) {
+            $formValues['dat_reminder_days'] = is_numeric($formValues['dat_reminder_days'])
+                ? min(99, max(0, (int) $formValues['dat_reminder_days']))
+                : 0;
+        }
+
         if (!is_numeric($formValues['dat_max_members'])) {
             $formValues['dat_max_members'] = 0;
         } else {
@@ -216,7 +223,22 @@ class EventSaveService
 
         $isExistingRecurringEvent = $eventUUID !== '' && $this->isRecurringEvent($event);
         $isSeriesUpdate = $isExistingRecurringEvent && $recurrenceScope === 'series';
+        $originalBegin = (string) $event->getValue('dat_begin', 'Y-m-d H:i:s');
+        $originalReminderDays = (int) $event->getValue('dat_reminder_days');
+        $seriesRecurrenceId = $isSeriesUpdate ? $this->getEventRecurrenceId($event) : 0;
+        $beginChanged = $eventUUID !== '' && (string) $formValues['dat_begin'] !== $originalBegin;
+        $reminderDaysChanged = array_key_exists('dat_reminder_days', $formValues)
+            && (int) $formValues['dat_reminder_days'] !== $originalReminderDays;
         $recurrenceRule = $isExistingRecurringEvent && !$isSeriesUpdate ? null : $this->createEventRecurrenceRuleFromFormValues($formValues, $startDateTime);
+        $recurrenceRuleChanged = false;
+        if ($isSeriesUpdate && $seriesRecurrenceId > 0 && $recurrenceRule !== null) {
+            $recurrenceRepository = new EventRecurrenceRepository($gDb);
+            $oldRecurrence = $recurrenceRepository->readById($seriesRecurrenceId);
+            if ($oldRecurrence !== null) {
+                $recurrenceRuleChanged = $recurrenceRepository->toRule($oldRecurrence)->toRRule()
+                    !== $recurrenceRule->toRRule();
+            }
+        }
         $recurrenceOccurrences = array();
         $eventTimezone = $gTimezone;
         $deadlineOffsetSeconds = null;
@@ -337,6 +359,10 @@ class EventSaveService
                 $user
             );
 
+            if (($beginChanged || $reminderDaysChanged || $recurrenceRuleChanged) && $seriesRecurrenceId > 0) {
+                (new EventReminderRepository($gDb))->deleteForSeries($seriesRecurrenceId);
+            }
+
             return $event;
         }
 
@@ -364,6 +390,10 @@ class EventSaveService
             $gDb->registerAfterCommit(static function () use ($event): void {
                 $event->sendNotification();
             });
+
+            if (($beginChanged || $reminderDaysChanged) && $eventUUID !== '') {
+                (new EventReminderRepository($gDb))->deleteForEvent((int) $event->getValue('dat_id'));
+            }
         }
 
         $this->saveEventParticipation($event, $formValues, $eventParticipationRoles, $user, $copy, (string)$originalEventUuid);

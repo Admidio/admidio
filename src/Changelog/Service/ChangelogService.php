@@ -779,6 +779,7 @@ class ChangelogService {
             'dat_country' =>               array('name' => 'SYS_COUNTRY', 'type' => 'COUNTRY'),
             'dat_deadline' =>              'SYS_DEADLINE',
             'dat_max_members' =>           'SYS_MAX_PARTICIPANTS',
+            'dat_reminder_days' =>         'SYS_EVENT_REMINDER_DAYS',
             'dat_allow_comments' =>        array('name' => 'SYS_ALLOW_USER_COMMENTS', 'type' => 'BOOL'),
             'dat_additional_guests' =>     array('name' => 'SYS_ALLOW_ADDITIONAL_GUESTS', 'type' => 'BOOL'),
             'dat_evr_id' =>                array('name' => 'SYS_RECURRENCE_RULE', 'type' => 'RECURRENCE_RULE'),

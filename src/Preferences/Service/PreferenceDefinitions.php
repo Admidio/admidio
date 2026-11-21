@@ -327,6 +327,7 @@ final class PreferenceDefinitions
             'events_may_take_part' => array('default' => '0', 'type' => 'bool'),
             'events_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'events_per_page' => array('default' => '10', 'type' => 'enum', 'values' => array('10', '25', '50', '100', '-1')),
+            'events_reminder_days' => array('default' => '0', 'type' => 'int', 'minimum' => 0, 'maximum' => 99),
             'events_clamp_text_lines' => array('default' => '0', 'type' => 'int', 'minimum' => 0, 'maximum' => null),
             'events_rooms_enabled' => array('default' => '0', 'type' => 'bool'),
             'events_save_cancellations' => array('default' => '1', 'type' => 'bool'),

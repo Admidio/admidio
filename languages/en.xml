@@ -883,6 +883,11 @@
   <string name="SYS_EVENT_CREATED_TITLE">A new event was created at #VAR1#</string>
   <string name="SYS_EVENT_DEADLINE_DESC">Participants can register for the event until this date. After the deadline, leaders and members with permission to edit events can still add participants. If no date is specified, registration closes when the event starts.</string>
   <string name="SYS_EVENT_MAX_MEMBERS">Limit the number of participants for this event. Leave the field blank for unlimited participants.</string>
+  <string name="SYS_EVENT_REMINDER_DAYS">Days before event for reminder email</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_DESC">Number of days before the event when members who have not confirmed or declined yet receive a reminder email. Set to 0 to disable reminder emails for this event.</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_PREFERENCE">Default reminder days for new events</string>
+  <string name="SYS_EVENT_REMINDER_DAYS_PREFERENCE_DESC">This value prefills the reminder days of new events. Set to 0 to disable reminders by default.</string>
+  <string name="SYS_EVENT_REMINDER_EMAIL">Event reminder email</string>
   <string name="SYS_EVENT_PARTICIPATION_ATTEND">I take part</string>
   <string name="SYS_EVENT_PARTICIPATION_CANCELED">Participation canceled</string>
   <string name="SYS_EVENT_PARTICIPATION_INVITED">Invited</string>
@@ -2245,6 +2250,7 @@
   <string name="SYS_SWITCH_TO_RELATIONSHIP_CONFIGURATION">Switch to relationship configuration</string>
   <string name="SYS_SWITCH_TO_ROOM_MANAGEMENT">Switch to room management</string>
   <string name="SYS_SYMMETRICAL">Symmetrical</string>
+  <string name="SYS_SYSMAIL_EVENT_REMINDER">#subject# #organization_short_name#: Reminder: Please register or update participation for #event_name#\n#content# Hello #user_first_name#,\n\nThe event #event_name# in the calendar #event_calendar# takes place on #event_period# (location: #event_location#, room: #event_room#, time zone: #event_timezone#).\n\nYour confirmation of participation is still missing. Please register or update your participation here: #event_url#\n\nRegards,\nThe #organization_long_name# team</string>
   <string name="SYS_SYSMAIL_LOGIN_INFORMATION">#subject# Login information for #organization_long_name#\n#content# Hello #user_first_name#,\n\nHere is your login information for #organization_homepage#.\nUsername: #user_login_name#\nPassword: #variable1#\n\nThis password was generated automatically.\nPlease change it in your profile after logging in to #organization_homepage#.\n\nRegards,\nThe #organization_long_name# team</string>
   <string name="SYS_SYSMAIL_PASSWORD_RESET">#subject# Reset your password for #organization_long_name#\n#content# Hello #user_first_name#,\n\nWe received a request to reset your password on #organization_homepage#.\n\nIf you made this request, use the following link to choose a new password:\n#variable1#\n\nRegards,\nThe #organization_long_name# team</string>
   <string name="SYS_SYSMAIL_REFUSE_REGISTRATION">#subject# Registration with #organization_long_name# rejected\n#content# Hello #user_first_name#,\n\nYour registration on #organization_homepage# was rejected.\n\nWe generally accept registrations only from members. If you are a member, we may not have been able to identify you as one.\nTo find out why your registration was rejected, please contact an administrator of #organization_homepage# at #administrator_email#.\n\nRegards,\nThe #organization_long_name# team</string>

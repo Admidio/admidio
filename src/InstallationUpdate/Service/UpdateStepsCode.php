@@ -1241,6 +1241,36 @@ final class UpdateStepsCode
     }
 
     /**
+     * Add the customizable event reminder system mail to every existing organization.
+     *
+     * New organizations receive the row through Organization::createBasicData(), but installations
+     * that already exist need the default translation ID in adm_texts as well.
+     *
+     * @throws Exception
+     */
+    public static function updateStep51AddEventReminderText(): void
+    {
+        $sql = 'SELECT org_id FROM ' . TBL_ORGANIZATIONS;
+        $organizationStatement = self::$db->queryPrepared($sql);
+
+        while ($row = $organizationStatement->fetch()) {
+            $text = new Text(self::$db);
+            $text->readDataByColumns(array(
+                'txt_org_id' => (int) $row['org_id'],
+                'txt_name' => 'SYSMAIL_EVENT_REMINDER'
+            ));
+            if ((int) $text->getValue('txt_id') > 0) {
+                continue;
+            }
+
+            $text->setValue('txt_org_id', (int) $row['org_id']);
+            $text->setValue('txt_name', 'SYSMAIL_EVENT_REMINDER');
+            $text->setValue('txt_text', 'SYS_SYSMAIL_EVENT_REMINDER');
+            $text->save();
+        }
+    }
+
+    /**
      * This method will add a new systemmail text to the database table **adm_texts** for each
      * organization in the database.
      * @throws Exception

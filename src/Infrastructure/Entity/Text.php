@@ -21,6 +21,7 @@ class Text extends Entity
         'SYSMAIL_REGISTRATION_REFUSED' => 'SYS_SYSMAIL_REFUSE_REGISTRATION',
         'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SYSMAIL_LOGIN_INFORMATION',
         'SYSMAIL_PASSWORD_RESET' => 'SYS_SYSMAIL_PASSWORD_RESET',
+        'SYSMAIL_EVENT_REMINDER' => 'SYS_SYSMAIL_EVENT_REMINDER',
     );
 
     /** Null means that no custom version has been saved yet; an empty version is intentional. */
@@ -147,6 +148,7 @@ class Text extends Entity
             'SYSMAIL_REGISTRATION_REFUSED' => 'ORG_REFUSE_REGISTRATION',
             'SYSMAIL_LOGIN_INFORMATION' => 'SYS_SEND_LOGIN_INFORMATION',
             'SYSMAIL_PASSWORD_RESET' => 'SYS_PASSWORD_FORGOTTEN',
+            'SYSMAIL_EVENT_REMINDER' => 'SYS_EVENT_REMINDER_EMAIL',
         );
 //        $textLabel = Language::translateIfTranslationStrId($textLabels[$row['name']]);
         if (array_key_exists($this->columnPrefix.'_name', $this->dbColumns)) {

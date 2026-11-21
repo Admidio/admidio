@@ -33,7 +33,7 @@ class MaintenanceJobRegistryTest extends AdmidioTestCase
         $jobs = array_filter(CliTaskRegistry::getMaintenanceJobs(), static fn (array $job): bool => $job['core']);
 
         $this->assertSame(
-            array('categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'saml-metadata', 'update-check', 'memberships'),
+            array('categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'saml-metadata', 'update-check', 'memberships', 'event-reminders'),
             array_keys($jobs)
         );
         foreach ($jobs as $job) {
