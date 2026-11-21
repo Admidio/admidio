@@ -103,7 +103,8 @@ final class LoginForm
             $gCurrentSession->addFormObject($form);
 
             return $plugin->renderTemplate($page, 'plugin.login-form.edit.tpl', array(
-                'name' => $plugin->id
+                'name' => $plugin->id,
+                'showRegisterLink' => self::$pluginConfig['login_form_show_register_link']
             ));
         }
 

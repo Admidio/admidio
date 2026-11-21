@@ -17,5 +17,7 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Om aktiverat visas en länk i inloggningsformuläret för att skicka e-post till administratören vid inloggningsproblem. (Standard: på)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Visa utloggningslänk</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Om aktiverat visas en utloggningslänk efter inloggning. (Standard: av)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Visa registreringslänk</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Om aktiverat visas en länk till registreringsformuläret i inloggningsformuläret. (Standard: på)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online-medlem</string>
 </resources>

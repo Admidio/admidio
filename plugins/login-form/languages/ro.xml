@@ -18,5 +18,7 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Afișează linkul de logout</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Dacă această opțiune este activată, după conectare va fi afișat un link pentru deconectare. (implicit: fals)</string>
   <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Afișează linkul de înregistrare</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Dacă această opțiune este activată, în formularul de autentificare va fi afișat un link către formularul de înregistrare. (implicit: adevărat)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membru senior online</string>
 </resources>

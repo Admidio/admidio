@@ -17,5 +17,7 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Si se activa, el formulario de inicio de sesión muestra un enlace para enviar un correo al administrador si hay problemas de acceso. (Predeterminado: activado)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Mostrar el enlace para cerrar sesión</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Si se activa, se muestra un enlace para cerrar sesión después de iniciar sesión. (Predeterminado: desactivado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Mostrar el enlace de registro</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Si se activa, el formulario de inicio de sesión muestra un enlace al formulario de registro. (Predeterminado: activado)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Miembro mayor en línea</string>
 </resources>

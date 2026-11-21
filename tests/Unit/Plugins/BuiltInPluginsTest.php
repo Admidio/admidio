@@ -111,6 +111,7 @@ final class BuiltInPluginsTest extends PluginTestCase
                 array(
                     'login_form_plugin_enabled',
                     'login_form_overview_sequence',
+                    'login_form_show_register_link',
                     'login_form_show_email_link',
                     'login_form_show_logout_link',
                     'login_form_enable_ranks',

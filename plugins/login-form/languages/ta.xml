@@ -18,5 +18,7 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">வெளியேறும் இணைப்பைக் காட்டு</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">இயக்கப்பட்டால் உள்நுழைந்த பிறகு வெளியேறும் இணைப்பு காட்டப்படும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
   <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">பதிவுசெய்யும் இணைப்பைக் காட்டு</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">இயக்கப்பட்டால் உள்நுழைவுப் படிவத்தில் பதிவுப் படிவத்திற்கான இணைப்பு காட்டப்படும். (இயல்புநிலை: இயக்கப்பட்டது)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">மூத்த இணைய உறுப்பினர்</string>
 </resources>

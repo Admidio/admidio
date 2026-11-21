@@ -18,5 +18,7 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">แสดงลิงก์ออกจากระบบ</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">เมื่อเปิดใช้งาน จะแสดงลิงก์ออกจากระบบหลังเข้าสู่ระบบ (ค่าเริ่มต้น: ปิด)</string>
   <!-- Plugin preferences -->
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">แสดงลิงก์ลงทะเบียน</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">เมื่อเปิดใช้งาน จะแสดงลิงก์ไปยังแบบฟอร์มลงทะเบียนในแบบฟอร์มเข้าสู่ระบบ (ค่าเริ่มต้น: เปิด)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">สมาชิกออนไลน์อาวุโส</string>
 </resources>

@@ -17,5 +17,7 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Ако е включено, във формуляра за вход се показва връзка за изпращане на имейл до администратора при проблеми с влизането. (По подразбиране: включено)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Показване на връзка за изход</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Ако е включено, след влизане се показва връзка за изход. (По подразбиране: изключено)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Показване на връзка за регистрация</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Ако е включено, във формуляра за вход се показва връзка към формуляра за регистрация. (По подразбиране: включено)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Старши онлайн участник</string>
 </resources>

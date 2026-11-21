@@ -13,9 +13,12 @@
     <string name="PLG_LOGIN_FORM_PREFERENCES_ENABLE_RANKS_DESC">Bei aktivierter Einstellung wird hinter dem Benutzernamen ein Rang entsprechend der Anzahl der Anmeldungen angezeigt. (Standard: aktiviert)</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS">Ränge</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_RANKS_DESC">Hier werden die Ränge festgelegt, die bei aktivierter Einstellung „Ränge anzeigen“ hinter dem Benutzernamen erscheinen. Der Schlüssel ist die Anzahl der Anmeldungen, der Wert ist der Rangname.\n Zum Löschen eines Rangs die Eingaben „Anzahl der Anmeldungen“ und „Mitgliedsrang“ in der Tabelle leeren.</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_REGISTRATION_DISABLED">Die Registrierung ist in den Organisationseinstellungen deaktiviert. Diese Option zeigt die Einstellung, die gilt, sobald die Registrierung aktiviert wird.</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK">E-Mail-Link anzeigen</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Bei aktivierter Einstellung wird im Anmeldeformular ein Link angezeigt, um bei Anmeldeproblemen eine E-Mail an den Administrator zu senden. (Standard: aktiviert)</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Abmeldelink anzeigen</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Bei aktivierter Einstellung wird nach der Anmeldung ein Link zum Abmelden angezeigt. (Standard: deaktiviert)</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Registrierungslink anzeigen</string>
+    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Bei aktivierter Einstellung wird im Anmeldeformular ein Link zum Registrierungsformular angezeigt. (Standard: aktiviert)</string>
     <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior Onlinemitglied</string>
 </resources>

@@ -26,7 +26,7 @@
         <div class="form-alert" style="display: none;">&nbsp;</div>
     </form>
 
-    {if $settings->getBool('registration_module_enabled')}
+    {if $showRegisterLink && $settings->getBool('registration_module_enabled')}
         <div class="card admidio-field-group mt-4 adm-login-widget-registration">
             <div class="card-body">
                 <p>{$l10n->get('SYS_NO_LOGIN_DATA')}</p>
