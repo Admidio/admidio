@@ -204,6 +204,8 @@
 }
 
 #adm_dropdown_user_photo {
+    display: flex;
+    align-items: center;
     min-width: fit-content;
 }
 
