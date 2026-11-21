@@ -26,7 +26,9 @@
         <div class="form-alert" style="display: none;">&nbsp;</div>
     </form>
 
-    {if $showRegisterLink && $settings->getBool('registration_module_enabled')}
-        <a class="icon-link" href="{$urlAdmidio}/modules/registration.php"><i class="bi bi-card-checklist"></i>{$l10n->get('SYS_REGISTRATION')}</a>
+    {if $settings->getBool('registration_module_enabled')}
+        <div class="border-top mt-3 pt-3">
+            <a class="btn btn-secondary" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
+        </div>
     {/if}
 </div>

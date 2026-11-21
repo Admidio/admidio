@@ -17,7 +17,5 @@
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Se attivata, questa opzione mostra nel modulo di accesso un collegamento per inviare un’e-mail all’amministratore in caso di problemi di accesso. (Predefinito: attivato)</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Mostra il collegamento di disconnessione</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Se attivata, questa opzione mostra un collegamento di disconnessione dopo l’accesso. (Predefinito: disattivato)</string>
-    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Mostra il collegamento di registrazione</string>
-    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se attivata, questa opzione mostra nel modulo di accesso un collegamento al modulo di registrazione. (Predefinito: disattivato)</string>
     <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior membro online</string>
 </resources>

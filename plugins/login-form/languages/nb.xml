@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Hvis aktivert vises en lenke i innloggingsskjemaet for å sende e-post til administratoren ved innloggingsproblemer. (Standard: på)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Vis utloggingslenke</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Hvis aktivert vises en utloggingslenke etter innlogging. (Standard: av)</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Vis registreringslenke</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Hvis aktivert vises en lenke til registreringsskjemaet i innloggingsskjemaet. (Standard: av)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior onlinemedlem</string>
 </resources>

@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Αν ενεργοποιηθεί, στη φόρμα σύνδεσης εμφανίζεται σύνδεσμος αποστολής email στον διαχειριστή για προβλήματα σύνδεσης. (Προεπιλογή: ενεργό)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Εμφάνιση συνδέσμου αποσύνδεσης</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Αν ενεργοποιηθεί, εμφανίζεται σύνδεσμος αποσύνδεσης μετά τη σύνδεση. (Προεπιλογή: ανενεργό)</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Εμφάνιση συνδέσμου εγγραφής</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Αν ενεργοποιηθεί, στη φόρμα σύνδεσης εμφανίζεται σύνδεσμος προς τη φόρμα εγγραφής. (Προεπιλογή: ανενεργό)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Παλαιότερο online μέλος</string>
 </resources>

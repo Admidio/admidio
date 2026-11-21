@@ -18,7 +18,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Show logout link</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">If this option is enabled, a link to log out will be displayed after login. (default: false)</string>
   <!-- Plugin preferences -->
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Show registration link</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">If this option is enabled, a link to the registration form will be displayed in the login form. (default: false)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online member</string>
 </resources>

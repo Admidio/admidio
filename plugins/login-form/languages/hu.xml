@@ -18,7 +18,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">A kijelentkezés link megjelenítése</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Ha ez az opció engedélyezve van, a bejelentkezés után megjelenik egy link a kijelentkezéshez. (alapértelmezett: nincs engedélyezve)</string>
   <!-- Plugin preferences -->
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Regisztrációs link megjelenítése</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Ha ez az opció engedélyezve van, a bejelentkezési űrlapon megjelenik a regisztrációs űrlapra mutató link. (alapértelmezett: nincs engedélyezve)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Rangidős online tag</string>
 </resources>

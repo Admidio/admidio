@@ -68,7 +68,6 @@
 
     {include 'sys-template-parts/form.input.tpl' data=$elements['adm_csrf_token']}
     {include 'sys-template-parts/form.select.tpl' data=$elements['login_form_plugin_enabled']}
-    {include 'sys-template-parts/form.checkbox.tpl' data=$elements['login_form_show_register_link']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['login_form_show_email_link']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['login_form_show_logout_link']}
     {include 'sys-template-parts/form.checkbox.tpl' data=$elements['login_form_enable_ranks']}

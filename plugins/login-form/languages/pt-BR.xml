@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Se ativado, o formulário de login apresenta um link para enviar um e-mail ao administrador em caso de problemas de acesso. (Padrão: ativado)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Apresentar o link para sair</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Se ativado, apresenta um link para sair após o login. (Padrão: desativado)</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Apresentar o link de cadastro</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se ativado, o formulário de login apresenta um link para o formulário de cadastro. (Padrão: desativado)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membro Sénior Ativo</string>
 </resources>
