@@ -443,6 +443,10 @@
                             </li>
                         {/if}
                     </ul>
+
+                    <a class="adm-header-login-icon d-md-none" href="{$urlAdmidio}/system/login.php" title="{$l10n->get('SYS_LOGIN')}" aria-label="{$l10n->get('SYS_LOGIN')}">
+                        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                    </a>
                 </div>
             </div>
         {/if}

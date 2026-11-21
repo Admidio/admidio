@@ -121,6 +121,29 @@
     pointer-events: none;
 }
 
+/* Compact login entry on phones. It uses the same 40 px slot as the avatar so the
+   organization name does not move when the visitor logs in. */
+#adm_main_navbar .adm-header-login-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: 50%;
+    color: var(--admidio-header-font-color);
+    font-size: 1.25rem;
+    line-height: 1;
+    text-decoration: none;
+}
+
+#adm_main_navbar .adm-header-login-icon:hover,
+#adm_main_navbar .adm-header-login-icon:focus {
+    color: var(--admidio-header-font-color);
+    background-color: color-mix(in srgb, var(--admidio-header-font-color) 15%, transparent);
+}
+
 @media (max-width: 767px)
 {
     /* navbar should not be fixed at top if in mobile view */
