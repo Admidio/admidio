@@ -28,12 +28,6 @@
             "type": "integer",
             "default": 1
         },
-        "login_form_show_register_link": {
-            "type": "boolean",
-            "default": false,
-            "label": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK",
-            "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC"
-        },
         "login_form_show_email_link": {
             "type": "boolean",
             "default": true,

@@ -17,7 +17,5 @@
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Bei aktivierter Einstellung wird im Anmeldeformular ein Link angezeigt, um bei Anmeldeproblemen eine E-Mail an den Administrator zu senden. (Standard: aktiviert)</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Abmeldelink anzeigen</string>
     <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Bei aktivierter Einstellung wird nach der Anmeldung ein Link zum Abmelden angezeigt. (Standard: deaktiviert)</string>
-    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Registrierungslink anzeigen</string>
-    <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Bei aktivierter Einstellung wird im Anmeldeformular ein Link zum Registrierungsformular angezeigt. (Standard: deaktiviert)</string>
     <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior Onlinemitglied</string>
 </resources>

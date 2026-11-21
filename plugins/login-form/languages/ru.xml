@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Если включено, в форме входа отображается ссылка для отправки письма администратору при проблемах со входом. (По умолчанию: включено)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Показывать ссылку выхода</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Если включено, после входа отображается ссылка выхода. (По умолчанию: выключено)</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Показывать ссылку на регистрацию</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Если включено, в форме входа отображается ссылка на форму регистрации. (По умолчанию: выключено)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Старший участник</string>
 </resources>

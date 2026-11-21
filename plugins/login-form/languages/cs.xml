@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Je-li zapnuto, v přihlašovacím formuláři se zobrazí odkaz pro odeslání e-mailu správci při potížích s přihlášením. (Výchozí: zapnuto)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Zobrazit odkaz na odhlášení</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Je-li zapnuto, po přihlášení se zobrazí odkaz na odhlášení. (Výchozí: vypnuto)</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Zobrazit odkaz na registraci</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Je-li zapnuto, v přihlašovacím formuláři se zobrazí odkaz na registrační formulář. (Výchozí: vypnuto)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Senior online člen</string>
 </resources>

@@ -35,7 +35,6 @@ final class UpdateStepsCode
         // The ranks were switched off with an empty list. Their titles are not taken over: the new
         // ones are translated, the old ones were plain text.
         LegacyConfig::import('login-form', array(
-            'plg_show_register_link' => array('login_form_show_register_link', 'boolval'),
             'plg_show_email_link'    => array('login_form_show_email_link', 'boolval'),
             'plg_show_logout_link'   => array('login_form_show_logout_link', 'boolval'),
             'plg_rank'               => array('login_form_enable_ranks', 'boolval')

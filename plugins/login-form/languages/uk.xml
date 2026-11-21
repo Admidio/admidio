@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">Якщо ввімкнено, у формі входу показується посилання для надсилання листа адміністратору в разі проблем зі входом. (Типово: ввімкнено)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Показувати посилання виходу</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Якщо ввімкнено, після входу показується посилання виходу. (Типово: вимкнено)</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Показувати посилання на реєстрацію</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Якщо ввімкнено, у формі входу показується посилання на форму реєстрації. (Типово: вимкнено)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Старший онлайн-учасник</string>
 </resources>

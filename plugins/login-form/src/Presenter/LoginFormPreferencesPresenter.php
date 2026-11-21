@@ -67,12 +67,6 @@ final class LoginFormPreferencesPresenter
             array('defaultValue' => $values['login_form_plugin_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $settings['login_form_plugin_enabled']['description'])
         );
         $formLoginForm->addCheckbox(
-            'login_form_show_register_link',
-            Language::translateIfTranslationStrId($settings['login_form_show_register_link']['label']),
-            $values['login_form_show_register_link'],
-            array('helpTextId' => $settings['login_form_show_register_link']['description'])
-        );
-        $formLoginForm->addCheckbox(
             'login_form_show_email_link',
             Language::translateIfTranslationStrId($settings['login_form_show_email_link']['label']),
             $values['login_form_show_email_link'],

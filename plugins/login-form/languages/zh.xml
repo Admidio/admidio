@@ -17,7 +17,5 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_EMAIL_LINK_DESC">启用后，在登录表单中显示电子邮件链接，以便在遇到登录问题时联系管理员。（默认：启用）</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">显示退出登录链接</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">启用后，在登录后显示退出登录链接。（默认：禁用）</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">显示注册链接</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">启用后，在登录表单中显示指向注册表单的链接。（默认：禁用）</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">高级在线会员</string>
 </resources>
