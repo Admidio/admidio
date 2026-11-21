@@ -286,7 +286,12 @@ class HtmlPage
         $this->smarty->assign('headline', $this->headline);
         $this->smarty->assign('hasPreviousUrl', $hasPreviousUrl);
         $this->smarty->assign('currentOrganization', $gCurrentOrganization);
-        $this->smarty->assign('organizationName', $gCurrentOrganization->getValue('org_longname'));
+        $organizationName = $gCurrentOrganization->getValue('org_longname');
+        $this->smarty->assign('organizationName', $organizationName);
+        $this->smarty->assign(
+            'organizationNameWords',
+            preg_split('/\s+/u', trim($organizationName), -1, PREG_SPLIT_NO_EMPTY) ?: array($organizationName)
+        );
         $this->smarty->assign('urlAdmidio', ADMIDIO_URL);
         $this->smarty->assign('urlTheme', THEME_URL);
         if (defined('THEME_FALLBACK_URL')) {

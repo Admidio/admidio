@@ -48,9 +48,24 @@
     min-width: 0;
 }
 
-#adm_headline_organization {
+#adm_headline_organization,
+#adm_headline_membership {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* The install button and the user menu must keep their natural width. Otherwise they
+   overflow the header on small screens and the page can be moved sideways. Only the
+   organization name should shrink and be shortened with an ellipsis. */
+#adm_main_navbar .ms-auto {
+    flex-shrink: 0;
+}
+
+/* The logged-out navigation is only as wide as its links. The organization name takes
+   the remaining space, so the header no longer becomes wider than the screen. */
+#adm_navbar_nav {
+    flex: 0 0 auto;
 }
 
 #adm_main_navbar .navbar-brand:hover,
@@ -59,6 +74,7 @@
 }
 
 #adm_main_navbar .navbar-brand img {
+    max-height: var(--adm-logo-max-height, 60px);
     margin-right: 1rem;
 }
 
@@ -72,6 +88,39 @@
     color: color-mix(in srgb, var(--admidio-header-link-color) 10%, black);
 }
 
+#adm_dropdown_user_photo .dropdown-toggle {
+    display: inline-flex;
+    padding: 0;
+    line-height: 0;
+}
+
+#adm_dropdown_user_photo .dropdown-toggle::after {
+    display: none;
+}
+
+#adm_dropdown_user_photo .adm-user-menu-avatar {
+    position: relative;
+    display: inline-flex;
+}
+
+#adm_dropdown_user_photo .adm-user-menu-caret {
+    position: absolute;
+    right: -0.2rem;
+    bottom: -0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    color: var(--admidio-header-font-color);
+    font-size: 0.55rem;
+    line-height: 1;
+    box-shadow: 0 0 0 2px var(--bs-primary);
+    pointer-events: none;
+}
+
 @media (max-width: 767px)
 {
     /* navbar should not be fixed at top if in mobile view */
@@ -79,6 +128,78 @@
     {
         position: relative;
         top: auto;
+    }
+}
+
+@media (max-width: 767.98px)
+{
+    /* use a smaller header on phones so that more of the organization name is visible */
+    #adm_main_navbar
+    {
+        --adm-header-title-size-1: 1.5rem;
+        --adm-header-title-size-2: 1.25rem;
+        --adm-header-title-size-min: 1rem;
+        font-size: 1.3rem;
+        min-height: 3.5rem;
+    }
+
+    #adm_main_navbar .navbar-brand
+    {
+        flex: 1 1 auto;
+        gap: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    #adm_main_navbar .navbar-brand img
+    {
+        flex: 0 0 auto;
+        max-height: min(var(--adm-logo-max-height, 60px), 2.5rem);
+        max-width: 3rem;
+        margin-right: 0;
+        object-fit: contain;
+    }
+
+    #adm_headline_organization
+    {
+        display: -webkit-box;
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        font-size: var(--adm-header-title-size-2, 1.25rem);
+        line-height: 1.15;
+        overflow-wrap: normal;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+
+    #adm_headline_organization .adm-header-title-word
+    {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: bottom;
+    }
+
+    #adm_headline_organization.adm-header-title-measuring
+    {
+        display: block;
+        overflow: visible;
+        -webkit-line-clamp: unset;
+    }
+
+    #adm_pwa_install_container
+    {
+        display: none !important;
+    }
+
+    #adm_dropdown_user_photo .dropdown-toggle
+    {
+        padding: 0;
     }
 }
 
