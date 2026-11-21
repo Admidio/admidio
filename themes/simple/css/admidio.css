@@ -1142,6 +1142,14 @@ tr.admidio-event-highlight {
 /* Overview page */
 /***********************************/
 
+/* The login widget on the overview already sits in a tinted card. Use a slightly
+   darker background for the nested registration card to preserve the contrast it
+   has on the standalone login page. */
+#plugin-login-form .adm-login-widget-registration,
+#plugin-login-form .adm-login-widget-registration .card-body {
+    background-color: color-mix(in srgb, var(--bs-tertiary) 90%, black);
+}
+
 .admidio-plugin-content .list-group-item {
     padding-left: 0;
 }

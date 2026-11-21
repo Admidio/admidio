@@ -27,8 +27,11 @@
     </form>
 
     {if $settings->getBool('registration_module_enabled')}
-        <div class="border-top mt-3 pt-3">
-            <a class="btn btn-secondary" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
+        <div class="card admidio-field-group mt-4 adm-login-widget-registration">
+            <div class="card-body">
+                <p>{$l10n->get('SYS_NO_LOGIN_DATA')}</p>
+                <a class="btn btn-secondary" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
+            </div>
         </div>
     {/if}
 </div>
