@@ -222,26 +222,7 @@ try {
     // $searchColumns = array('log_table', 'log_record_name', 'log_related_name', 'log_field', 'log_field_name', 'log_action', 'log_value_old', 'log_value_new', 'create_first_name', 'create_last_name');
     $searchColumns = array('table_name', 'name', 'related_name', 'field', 'field_name', 'action', 'value_old', 'value_new', 'create_first_name', 'create_last_name');
 
-    if ($getSearch !== '' && count($searchColumns) > 0) {
-        $searchString = explode(' ', $getSearch);
-
-        if (DB_TYPE === Database::PDO_ENGINE_PGSQL) {
-            $searchValue = ' ?::text ';
-        } else {
-            // mysql
-            $searchValue = ' ? ';
-        }
-
-        foreach ($searchString as $searchWord) {
-            // Both sides have to be lowered, otherwise the search is case-sensitive on PostgreSQL.
-            $searchCondition .= ' AND LOWER(CONCAT(' . implode(', \' \', ', array_map(fn($col) => "COALESCE($col, '')", $searchColumns)) . ')) LIKE CONCAT(\'%\', LOWER(' . $searchValue . '), \'%\') ';
-            $queryParamsSearch[] = htmlspecialchars_decode($searchWord, ENT_QUOTES | ENT_HTML5);
-        }
-
-        $searchCondition = ' WHERE ' . substr($searchCondition, 4);
-    }
-
-
+    [$searchCondition, $queryParamsSearch] = ChangelogService::getSearchCondition($getSearch, $searchColumns);
 
     // create sql conditions
     $sqlConditions = '';
@@ -275,6 +256,12 @@ try {
         $queryParamsConditions = array_merge($queryParamsConditions, ChangelogService::$userTables);
         $queryParamsConditions[] = $userTableRestriction;
     }
+
+    // Apply field and role visibility before search, counts, pagination and grouping, including
+    // requests for the detail rows of a grouped change.
+    [$visibilitySql, $visibilityParams] = ChangelogService::getVisibilityRestriction($gCurrentUser, $subject);
+    $sqlConditions .= $visibilitySql;
+    $queryParamsConditions = array_merge($queryParamsConditions, $visibilityParams);
 
     if (!is_null($getId) && $getId > 0) {
         $sqlConditions .= ' AND (log_record_id = ? )';
