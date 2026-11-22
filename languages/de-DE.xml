@@ -591,15 +591,15 @@
   <string name="SYS_CORE_UPDATE_START_DESC">Der Updater prüft, welche Version verfügbar ist und ob dieser Server dafür bereit ist. Es wird nichts verändert, bevor Sie bestätigen.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Update starten oder fortsetzen</string>
   <string name="SYS_CORE_UPDATE_STEPS">Schritte des Updates</string>
-  <string name="SYS_CORE_UPDATE_STEP_CHECK">Voraussetzungen prüfen</string>
-  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Installation vorbereiten</string>
-  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Update prüfen</string>
   <string name="SYS_CORE_UPDATE_STEP_BACKUP">Datenbank sichern</string>
-  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Dateien installieren</string>
+  <string name="SYS_CORE_UPDATE_STEP_CHECK">Voraussetzungen prüfen</string>
   <string name="SYS_CORE_UPDATE_STEP_DATABASE">Datenbank aktualisieren</string>
-  <string name="SYS_CORE_UPDATE_STEP_FINISH">Update abschließen</string>
-  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Vorherige Version wiederherstellen</string>
   <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Update herunterladen</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Abschließen</string>
+  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Dateien ersetzen</string>
+  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Dateien entpacken und vergleichen</string>
+  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Vorherige Version wiederherstellen</string>
+  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Änderungen prüfen</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio wurde auf Version #VAR1# aktualisiert.</string>
   <string name="SYS_CORE_UPDATE_TARGET">Neue Version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio-Update</string>
@@ -1614,6 +1614,8 @@
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">Das Foto wird auf maximal #VAR1# Pixel an der längeren Seite verkleinert. Das Seitenverhältnis bleibt erhalten.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">Sie sollten selbst auf dem Foto zu sehen sein.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Deaktivieren Sie die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Eine dauerhafte Installations-ID ermöglicht es, Berichte über längere Zeit miteinander zu verknüpfen. Der empfangende Server kann die IP-Adresse des Absenders sehen, und die Namen von Drittanbieter-Plugins können Rückschlüsse auf eine Organisation ermöglichen. Das folgende JSON beschreibt die Daten, die übermittelt werden.</string>
   <string name="SYS_PWA_ENABLED">Progressive Web App (PWA) aktivieren</string>
   <string name="SYS_PWA_ENABLED_DESC">Admidio kann als eigenständige Web-App auf dem Smartphone, Tablet oder Desktop installiert werden. Der App-Name richtet sich nach dem Namen der Organisation. Eigene App-Icons können im Ordner adm_my_files/ als app_icon.png oder app_icon_512.png abgelegt werden. Andernfalls wird ein unter „Design“ konfiguriertes PNG-Favicon oder das Standard-Logo als Fallback verwendet.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tippen Sie auf das Drei-Punkte-Menü oben oder unten.</string>
@@ -1835,6 +1837,8 @@
   <string name="SYS_SEND_PHOTO_AS_ECARD">Foto als Grußkarte versenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre private Nachricht wird an die ausgewählte Person gesendet.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Pseudonyme Statistiken senden</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#pseudonyme technische Daten#VAR2# an admidio.org senden. Bei aktivierter Einstellung wird der Versand durch Wartungsaufgaben oder nach Webanfragen geprüft.</string>
   <string name="SYS_SEND_TEST_MAIL">Testmail versenden</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Anmeldenamen und neuem Passwort zuschicken</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
@@ -2164,6 +2168,7 @@
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509-Verschlüsselungszertifikat</string>
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Zertifikat des Clients zum Verschlüsseln von Assertions. Wenn leer, wird das erste Signaturzertifikat verwendet.</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">Aus Datenschutzgründen zeigt dieser Update-Dialog nur die JSON-Struktur mit Platzhaltern. Konkrete Installationsdaten werden ausgeblendet, da aktuell keine gültige Anmeldung vorliegt.</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
   <string name="SYS_STREET">Straße</string>
@@ -2207,6 +2212,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Legen Sie die Vorlage fest, die bei der Erstellung der E-Card vorausgewählt wird. (Standard: Postkarte)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template-Ordner konnte nicht geöffnet/gelesen werden.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">Die Installations-ID wurde noch nicht initialisiert.</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor Sie diese Funktion aufrufen, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse der angemeldeten Person auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>
@@ -2348,10 +2354,6 @@
   <string name="SYS_YOUR_LISTS">Ihre Listen</string>
   <string name="SYS_YOUR_NAME">Ihr Name</string>
   <string name="SYS_Z_TO_A">Z bis A</string>
-  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Das folgende JSON beschreibt die Daten, die übermittelt werden.</string>
-  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">Aus Datenschutzgründen zeigt dieser Update-Dialog nur die JSON-Struktur mit Platzhaltern. Konkrete Installationsdaten werden ausgeblendet, da aktuell keine gültige Anmeldung vorliegt.</string>
-  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Deaktiviere die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
-  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#pseudonyme technische Daten#VAR2# an admidio.org senden. Der Versand wird beim Laden der Organisationsdaten geprüft.</string>
   <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS">Benutzernamen für Gäste anonymisieren</string>
   <string name="SYS_INVENTORY_ANONYMIZE_USER_NAMES_FOR_GUESTS_DESC">Wenn diese Option aktiviert ist, werden die Namen von Verwaltern und Empfängern für Gäste im Inventar durch „Mitglied“ ersetzt. (Voreinstellung: ja)</string>
   <string name="SYS_BORROWINGS">Ausleihen</string>

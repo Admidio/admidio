@@ -252,8 +252,6 @@
   <string name="SYS_ANNOUNCEMENT_CHANGED_TITLE">An announcement was changed at #VAR1#</string>
   <string name="SYS_ANNOUNCEMENT_CREATED_TITLE">A new announcement was created at #VAR1#</string>
   <string name="SYS_ANNUALLY">Annually</string>
-  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. A persistent installation ID allows reports to be linked over time. The receiving server can see the sender’s IP address, and third-party plugin names may identify an organization. The JSON below describes the data to be sent.</string>
-  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">For privacy reasons, this update dialog only shows the JSON structure with placeholders. Actual installation data are hidden because the dialog can be opened before logging in.</string>
   <string name="SYS_APPLY">Apply</string>
   <string name="SYS_APPLY_ALL_AND_UPLOAD">Accept all &amp; upload</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
@@ -596,15 +594,15 @@
   <string name="SYS_CORE_UPDATE_START_DESC">The updater checks which version is available and whether this server is ready for it. Nothing is changed before you confirm.</string>
   <string name="SYS_CORE_UPDATE_START_RESUME">Start or continue update</string>
   <string name="SYS_CORE_UPDATE_STEPS">Steps of the update</string>
-  <string name="SYS_CORE_UPDATE_STEP_CHECK">Check requirements</string>
-  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Prepare installation</string>
-  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Review update</string>
   <string name="SYS_CORE_UPDATE_STEP_BACKUP">Back up database</string>
-  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Install files</string>
+  <string name="SYS_CORE_UPDATE_STEP_CHECK">Check requirements</string>
   <string name="SYS_CORE_UPDATE_STEP_DATABASE">Update database</string>
-  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finish update</string>
-  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Restore previous version</string>
   <string name="SYS_CORE_UPDATE_STEP_DOWNLOAD">Download update</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finish</string>
+  <string name="SYS_CORE_UPDATE_STEP_INSTALL">Replace files</string>
+  <string name="SYS_CORE_UPDATE_STEP_PREPARE">Unpack and compare files</string>
+  <string name="SYS_CORE_UPDATE_STEP_RESTORE">Restore previous version</string>
+  <string name="SYS_CORE_UPDATE_STEP_REVIEW">Review changes</string>
   <string name="SYS_CORE_UPDATE_SUCCESSFUL">Admidio has been updated to version #VAR1#.</string>
   <string name="SYS_CORE_UPDATE_TARGET">New version</string>
   <string name="SYS_CORE_UPDATE_TITLE">Admidio update</string>
@@ -1637,6 +1635,8 @@
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
   <string name="SYS_PROPERTIES">Properties</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Uncheck the checkbox to continue without sending these data and disable monthly sending.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. A persistent installation ID allows reports to be linked over time. The receiving server can see the sender’s IP address, and third-party plugin names may identify an organization. The JSON below describes the data to be sent.</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tap the three-dot menu at the top or bottom.</string>
@@ -1872,7 +1872,6 @@
   <string name="SYS_SENDER_NAME">Sender name</string>
   <string name="SYS_SENDER_NAME_DESC">The display name for the sender\'s email address. This field is required if a sender email address is provided.</string>
   <string name="SYS_SENDER_NOT_LOGGED_IN">The sender was not logged in. The sender information may therefore be incorrect.</string>
-  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Send pseudonymous statistics</string>
   <string name="SYS_SEND_COPY">Send copy of email to my address</string>
   <string name="SYS_SEND_EMAIL">Send email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send emails to former members</string>
@@ -1889,6 +1888,8 @@
   <string name="SYS_SEND_PHOTO_AS_ECARD">Send photo as greeting card</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Your PM will be sent to the selected recipient.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Send pseudonymous statistics</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Send #VAR1#pseudonymous technical data#VAR2# to admidio.org once a month. When enabled, sending is checked by maintenance tasks or after web requests.</string>
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send email with username and password.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">CSV field separator</string>
@@ -2218,6 +2219,7 @@
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509 encryption certificate</string>
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Certificate of the client for encrypting assertions. If empty, the first signing certificate is used.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">For privacy reasons, this update dialog only shows the JSON structure with placeholders. Actual installation data are hidden because the dialog can be opened before logging in.</string>
   <string name="SYS_STATUS_APPROVED">Approved</string>
   <string name="SYS_STATUS_BORROWED">Borrowed</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
@@ -2409,6 +2411,4 @@
   <string name="SYS_YOUR_LISTS">Your lists</string>
   <string name="SYS_YOUR_NAME">Your name</string>
   <string name="SYS_Z_TO_A">Z to A</string>
-  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Uncheck the checkbox to continue without sending these data and disable monthly sending.</string>
-  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Send #VAR1#pseudonymous technical data#VAR2# to admidio.org once a month. Sending is checked when the organization data are loaded.</string>
 </resources>
