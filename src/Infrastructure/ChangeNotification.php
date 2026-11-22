@@ -254,6 +254,14 @@ class ChangeNotification
             $entry[$key] = ($newValue !== '') ? $newValue : $oldValue;
         }
 
+        if ($fieldNameIntern === 'EMAIL') {
+            // These hooks run after commit. Keep raw addresses, independently of display formatting.
+            $entry['email_change'] = array(
+                $entry['email_change'][0] ?? (string)$changeSet->getOldValue('usd_value'),
+                (string)$changeSet->getNewValue('usd_value')
+            );
+        }
+
         $changed = $this->recordChange(
             $entry['profile_changes'],
             'usf:' . $fieldID,
@@ -629,6 +637,7 @@ class ChangeNotification
         global $gSettingsManager, $gL10n, $gCurrentUser;
 
         $this->dispatchCumulatedChanges($userID);
+        $this->sendEmailChangeNotifications($userID);
 
         if ($gSettingsManager->has('system_notifications_profile_changes')
             && $gSettingsManager->getBool('system_notifications_profile_changes')
@@ -721,6 +730,46 @@ class ChangeNotification
         }
 
         $this->clearChanges($userID);
+    }
+
+    /** Notify the previous address of a committed change to a login account's recovery address. */
+    private function sendEmailChangeNotifications(int $userID): void
+    {
+        global $gL10n, $gCurrentOrganization, $gLogger;
+
+        foreach ($this->scopedChanges($userID) as $change) {
+            if (!isset($change['email_change']) || $change['created'] || $change['deleted']) {
+                continue;
+            }
+            [$oldEmail, $newEmail] = $change['email_change'];
+            if ($oldEmail === $newEmail || !filter_var($oldEmail, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+            $identity = $this->identity($change);
+            if ($identity['usr_login_name'] === '') {
+                continue;
+            }
+            try {
+                $mail = $this->createEmailChangeNotification();
+                $mail->setSender($gCurrentOrganization->getValue('org_email_administrator'));
+                $mail->addRecipient($oldEmail);
+                $mail->setSubject($gL10n->get('SYS_EMAIL_ADDRESS_CHANGED_TITLE'));
+                $mail->setText($gL10n->get('SYS_EMAIL_ADDRESS_CHANGED_MESSAGE', array(
+                    $identity['usr_login_name'], $oldEmail, $newEmail,
+                    $gCurrentOrganization->getValue('org_homepage')
+                )));
+                if (!$mail->sendEmail()) {
+                    $gLogger->error('Email address change notification could not be sent');
+                }
+            } catch (Throwable $exception) {
+                $gLogger->error('Email address change notification failed', array('exception' => $exception));
+            }
+        }
+    }
+
+    protected function createEmailChangeNotification(): Email
+    {
+        return new Email();
     }
 
     /**

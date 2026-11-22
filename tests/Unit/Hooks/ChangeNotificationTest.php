@@ -145,6 +145,13 @@ class ChangeNotificationTestRole extends Entity
 /** Reads what the listener collected, which is what this test is about. */
 class ProbeNotification extends ChangeNotification
 {
+    public function __construct()
+    {
+        // Tests dispatch explicitly while their database and globals are still available.
+        $this->format = 'text';
+        $this->registerListeners();
+    }
+
     public function collected(): array
     {
         return $this->changes;
@@ -162,7 +169,8 @@ class ChangeNotificationStubProfileFields
     private array $fields = array(
         1 => array('intern' => 'LAST_NAME', 'name' => 'Last name', 'type' => 'TEXT'),
         2 => array('intern' => 'FIRST_NAME', 'name' => 'First name', 'type' => 'TEXT'),
-        3 => array('intern' => 'BIRTHDAY', 'name' => 'Birthday', 'type' => 'DATE')
+        3 => array('intern' => 'BIRTHDAY', 'name' => 'Birthday', 'type' => 'DATE'),
+        4 => array('intern' => 'EMAIL', 'name' => 'Email', 'type' => 'EMAIL')
     );
 
     public function getPropertyById(int $fieldId, string $column, string $format = ''): array|string
@@ -419,6 +427,39 @@ class ChangeNotificationTest extends EntityHookTestCase
         $unsaved->setValue('usd_value', '1980-07-04');
 
         $this->assertSame(array(), $notification->collected());
+    }
+
+    public function testRecoveryAddressNotificationIsQueuedOnlyAfterCommit(): void
+    {
+        $db = $this->newDatabase();
+        $user = $this->aUser($db);
+        $value = new ChangeNotificationTestUserData($db);
+        $value->setValue('usd_usr_id', $user->getValue('usr_id'));
+        $value->setValue('usd_usf_id', 4);
+        $value->setValue('usd_value', 'old@example.org');
+        $value->save();
+        $id = $value->getValue('usd_id');
+        $notification = $this->newNotification();
+
+        $value->setValue('usd_value', 'unsaved@example.org');
+        $this->assertSame(array(), $notification->collected());
+
+        $db->startTransaction();
+        $value->save();
+        $this->assertSame(array(), $notification->collected());
+        $db->rollback();
+        $this->assertSame(array(), $notification->collected());
+
+        $value = new ChangeNotificationTestUserData($db, $id);
+        $db->startTransaction();
+        $value->setValue('usd_value', 'new@example.org');
+        $value->save();
+        $this->assertSame(array(), $notification->collected());
+        $db->endTransaction();
+        $this->assertSame(
+            array('old@example.org', 'new@example.org'),
+            $notification->collected()[$user->getValue('usr_id')]['email_change']
+        );
     }
 
     public function testAChangeWhoseTransactionIsLostIsNotReported(): void
