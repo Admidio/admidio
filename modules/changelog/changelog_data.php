@@ -63,6 +63,7 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Database;
 use Admidio\Users\Entity\User;
+use Admidio\Roles\Entity\Role;
 use Admidio\Changelog\Service\ChangelogService;
 
 
@@ -328,10 +329,12 @@ try {
 
     $fieldStrings = ChangelogService::getFieldTranslations();
     $recordsHidden = 0;
+    $roleVisibility = array();
 
     while ($row = $fieldHistoryStatement->fetch(PDO::FETCH_BOTH)) {
         ++$rowNumber;
         $rowTable = $row['table_name'];
+        $rowUser = null;
 
         $allowRecordAccess = false;
         // First step: Check view permissions to that particular log entry:
@@ -352,6 +355,37 @@ try {
             // NO access to this record allowed -> Set flag to show warning about records being
             // hidden due to insufficient permissions
             if (!$allowRecordAccess) {
+                ++$recordsHidden;
+                continue;
+            }
+        }
+
+        // Access to a user's history does not grant access to every field or role.
+        // Apply these checks even when the viewer has general access to the table.
+        if ($rowTable === 'user_data') {
+            if ($rowUser === null) {
+                $rowUser = new User($gDb, $gProfileFields);
+                $rowUser->readDataByUuid($row['uuid']);
+            }
+            $fieldNameIntern = $gProfileFields->getPropertyById((int) $row['field'], 'usf_name_intern');
+            if ($rowUser->isNewRecord() || $fieldNameIntern === ''
+                || !$gCurrentUser->allowedViewProfileField($rowUser, $fieldNameIntern)) {
+                ++$recordsHidden;
+                continue;
+            }
+        } elseif ($rowTable === 'members') {
+            $roleReference = (string) ($row['related_id'] ?? '');
+            if (!array_key_exists($roleReference, $roleVisibility)) {
+                $role = new Role($gDb);
+                if (ctype_digit($roleReference)) {
+                    $role->readDataById((int) $roleReference);
+                } elseif ($roleReference !== '') {
+                    $role->readDataByUuid($roleReference);
+                }
+                $roleVisibility[$roleReference] = !$role->isNewRecord()
+                    && $gCurrentUser->hasRightViewRole((int) $role->getValue('rol_id'));
+            }
+            if (!$roleVisibility[$roleReference]) {
                 ++$recordsHidden;
                 continue;
             }
