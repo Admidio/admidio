@@ -19,6 +19,6 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Jika diaktifkan, tautan keluar ditampilkan setelah masuk. (Bawaan: nonaktif)</string>
   <!-- Plugin preferences -->
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Tampilkan tautan pendaftaran</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Jika diaktifkan, tautan ke formulir pendaftaran ditampilkan di formulir masuk. (Bawaan: aktif)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Jika diaktifkan, tautan ke formulir pendaftaran ditampilkan di formulir masuk. (Bawaan: nonaktif)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Anggota daring senior</string>
 </resources>

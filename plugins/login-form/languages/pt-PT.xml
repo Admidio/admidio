@@ -18,6 +18,6 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Apresentar a ligação para terminar sessão</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Se ativado, apresenta uma ligação para terminar sessão após o início de sessão. (Predefinição: desativado)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Apresentar a ligação de registo</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se ativado, o formulário de início de sessão apresenta uma ligação para o formulário de registo. (Predefinição: ativado)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Se ativado, o formulário de início de sessão apresenta uma ligação para o formulário de registo. (Predefinição: desativado)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membro sénior on-line</string>
 </resources>

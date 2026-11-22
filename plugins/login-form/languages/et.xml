@@ -18,6 +18,6 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Kuva väljalogimislink</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Kui lubatud, kuvatakse pärast sisselogimist väljalogimislink. (Vaikimisi: välja lülitatud)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Kuva registreerimislink</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Kui lubatud, kuvatakse sisselogimisvormis link registreerimisvormile. (Vaikimisi: sisse lülitatud)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Kui lubatud, kuvatakse sisselogimisvormis link registreerimisvormile. (Vaikimisi: välja lülitatud)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Vanem võrguliige</string>
 </resources>

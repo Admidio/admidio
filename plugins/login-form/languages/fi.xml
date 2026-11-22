@@ -18,6 +18,6 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Näytä uloskirjautumislinkki</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Kun käytössä, kirjautumisen jälkeen näytetään uloskirjautumislinkki. (Oletus: pois käytöstä)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Näytä rekisteröitymislinkki</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Kun käytössä, kirjautumislomakkeessa näytetään linkki rekisteröitymislomakkeeseen. (Oletus: käytössä)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Kun käytössä, kirjautumislomakkeessa näytetään linkki rekisteröitymislomakkeeseen. (Oletus: pois käytöstä)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Vanhempi on-line jäsen</string>
 </resources>

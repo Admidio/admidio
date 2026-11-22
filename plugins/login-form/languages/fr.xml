@@ -18,6 +18,6 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK">Afficher le lien de déconnexion</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Si cette option est activée, un lien de déconnexion apparaît après la connexion. (Par défaut : désactivée)</string>
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Afficher le lien d’inscription</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Si cette option est activée, le formulaire de connexion contient un lien vers le formulaire d’inscription. (Par défaut : activée)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Si cette option est activée, le formulaire de connexion contient un lien vers le formulaire d’inscription. (Par défaut : désactivée)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Membre senior en ligne</string>
 </resources>

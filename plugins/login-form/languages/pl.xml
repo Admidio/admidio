@@ -19,6 +19,6 @@
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_LOGOUT_LINK_DESC">Jeśli ta opcja jest włączona, po zalogowaniu będzie wyświetlany link do wylogowania. (domyślnie: nie)</string>
   <!-- Plugin preferences -->
   <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK">Pokaż link do rejestracji</string>
-  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Jeśli ta opcja jest włączona, w formularzu logowania będzie wyświetlany link do formularza rejestracyjnego. (domyślnie: tak)</string>
+  <string name="PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC">Jeśli ta opcja jest włączona, w formularzu logowania będzie wyświetlany link do formularza rejestracyjnego. (domyślnie: nie)</string>
   <string name="PLG_LOGIN_FORM_SENIOR_ONLINE_MEMBER">Starszy członek online</string>
 </resources>

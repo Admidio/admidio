@@ -62,10 +62,12 @@
     flex-shrink: 0;
 }
 
-/* The logged-out navigation is only as wide as its links. The organization name takes
-   the remaining space, so the header no longer becomes wider than the screen. */
+/* The logged-out navigation is only as wide as its links and is pushed to the right.
+   The organization name takes the remaining space, so the header no longer becomes
+   wider than the screen. */
 #adm_navbar_nav {
     flex: 0 0 auto;
+    margin-left: auto;
 }
 
 #adm_main_navbar .navbar-brand:hover,
@@ -88,13 +90,13 @@
     color: color-mix(in srgb, var(--admidio-header-link-color) 10%, black);
 }
 
-#adm_dropdown_user_photo .dropdown-toggle {
+#adm_dropdown_user_photo .adm-user-menu-toggle {
     display: inline-flex;
     padding: 0;
     line-height: 0;
 }
 
-#adm_dropdown_user_photo .dropdown-toggle::after {
+#adm_dropdown_user_photo .adm-user-menu-toggle::after {
     display: none;
 }
 
@@ -223,11 +225,6 @@
     #adm_pwa_install_container
     {
         display: none !important;
-    }
-
-    #adm_dropdown_user_photo .dropdown-toggle
-    {
-        padding: 0;
     }
 }
 

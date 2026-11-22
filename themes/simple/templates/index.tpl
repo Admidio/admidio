@@ -17,7 +17,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="{$organizationName|escape}" />
+    <meta name="apple-mobile-web-app-title" content="{$organizationName}" />
     {/if}
 
     <title>{$title}</title>
@@ -371,8 +371,8 @@
 
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
         <a class="navbar-brand d-flex align-items-center text-decoration-none" href="{$urlAdmidio}/modules/overview.php">
-            <img class="adm-header-logo" style="--adm-logo-max-height: {$logoFileMaxHeight}px;" src="{if $logoFile}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$organizationName|escape:'html'}" title="{$organizationName|escape:'html'}">
-            <span id="adm_headline_organization" class="d-lg-none">{foreach $organizationNameWords as $word}<span class="adm-header-title-word">{$word|escape:'html'}</span> {/foreach}</span>
+            <img class="adm-header-logo" style="--adm-logo-max-height: {$logoFileMaxHeight}px;" src="{if $logoFile}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="">
+            <span id="adm_headline_organization" class="d-lg-none">{foreach $organizationNameWords as $word}<span class="adm-header-title-word">{$word}</span> {/foreach}</span>
             <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName}{if $admidioHeadline} - {$admidioHeadline}{/if}</span>
         </a>
 
@@ -391,7 +391,7 @@
                 {/if}
 
                 <span id="adm_dropdown_user_photo" class="dropdown">
-                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{$l10n->get('SYS_MY_PROFILE')}" title="{$l10n->get('SYS_MY_PROFILE')}">
+                    <a class="dropdown-toggle adm-user-menu-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}" title="{$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}">
                         <span class="adm-user-menu-avatar">
                             <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
                             <span class="adm-user-menu-caret" aria-hidden="true"><i class="bi bi-caret-down-fill"></i></span>
