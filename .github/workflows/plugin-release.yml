@@ -81,6 +81,18 @@ jobs:
           [ -f "$DIRECTORY/plugin.php" ] || { echo "::error::$DIRECTORY/plugin.php is missing."; exit 1; }
           jq -e 'type == "object"' "$manifest" > /dev/null || { echo "::error::$manifest is not a JSON object."; exit 1; }
 
+          # Plugin::read() accepts the ID and the version as JSON strings only. jq -r would turn
+          # "version": 1 into the text 1, pass the checks below, and build an archive the installer
+          # refuses.
+          if ! jq -e '(has("id") | not) or (.id | type == "string" and . != "")' "$manifest" > /dev/null; then
+            echo "::error::The \"id\" in plugin.json has to be a non-empty string."
+            exit 1
+          fi
+          if ! jq -e '.version | type == "string" and . != ""' "$manifest" > /dev/null; then
+            echo "::error::plugin.json has to declare the version as a non-empty string, such as \"1.0.0\"."
+            exit 1
+          fi
+
           declared=$(jq -r '.id // empty' "$manifest")
           id="${declared:-$INPUT_ID}"
           if [ -z "$id" ]; then
@@ -97,8 +109,7 @@ jobs:
             exit 1
           fi
 
-          version=$(jq -r '.version // empty' "$manifest")
-          [ -n "$version" ] || { echo "::error::plugin.json does not declare a version."; exit 1; }
+          version=$(jq -r '.version' "$manifest")
 
           # The tag names the release; it has to be the version of the manifest, with or without "v".
           tag="${INPUT_TAG:-$GITHUB_REF_NAME}"
@@ -138,8 +149,23 @@ jobs:
           done
           unset 'prune[${#prune[@]}-1]'
 
-          (cd "$DIRECTORY" && find . -mindepth 1 \( "${prune[@]}" \) -prune -o -type f -print0 \
-            | xargs -0 --no-run-if-empty cp --parents -p -t "$staging/$ID")
+          # A symbolic link to a file of the repository is packed as a regular file, like
+          # "admidio plugin:archive" does; the archive itself holds no links. A link to a directory,
+          # one that leads nowhere or out of the repository would leave a gap in the archive, or put
+          # a file into it that is not part of the release, so the build stops.
+          repository=$(realpath "$GITHUB_WORKSPACE")
+          broken=0
+          while IFS= read -r -d '' link; do
+            target=$(realpath -e "$DIRECTORY/$link" 2>/dev/null) || target=""
+            if [ -z "$target" ] || [ ! -f "$target" ] || [[ "$target" != "$repository"/* ]]; then
+              echo "::error file=$DIRECTORY/${link#./}::The symbolic link ${link#./} does not lead to a file of the repository."
+              broken=1
+            fi
+          done < <(cd "$DIRECTORY" && find . -mindepth 1 \( "${prune[@]}" \) -prune -o -type l -print0)
+          [ "$broken" = 0 ] || exit 1
+
+          (cd "$DIRECTORY" && find . -mindepth 1 \( "${prune[@]}" \) -prune -o \( -type f -o -type l \) -print0 \
+            | xargs -0 --no-run-if-empty cp --parents -L -p -t "$staging/$ID")
 
           # The checkout gives every file the time it ran, and zip stores that time. Use the time of
           # the commit instead, so that building the same commit again gives the same bytes.
