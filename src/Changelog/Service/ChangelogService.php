@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Changelog\Service;
 
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
@@ -1135,6 +1136,158 @@ class ChangelogService {
         }
 
         return $tablesPermitted;
+    }
+
+    /**
+     * SQL permissions shared by the result, search and count queries.
+     * @return array{0: string, 1: array} SQL condition and bound parameters
+     */
+    public static function getReadRestriction(User $user, array $requestedTables = array(), ?User $subject = null): array
+    {
+        $tables = self::getReadableTables($user, $requestedTables, $subject);
+        if (count($tables) === 0) {
+            return array(' AND 1 = 0', array());
+        }
+        $sql = '';
+        $params = array();
+        if (!$user->isAdministrator() || count($requestedTables) > 0) {
+            $sql .= ' AND log_table IN (' . Database::getQmForValues($tables) . ')';
+            $params = $tables;
+        }
+        $userTables = array('users', 'user_data', 'user_relations', 'members');
+        $uuid = self::getUserTableRestriction($user, $subject);
+        if ($uuid !== '') {
+            $sql .= ' AND (log_table NOT IN (' . Database::getQmForValues($userTables) . ') OR log_record_uuid = ?)';
+            $params = array_merge($params, $userTables, array($uuid));
+        }
+        [$visibilitySql, $visibilityParams] = self::getVisibilityRestriction($user, $subject);
+        return array($sql . $visibilitySql, array_merge($params, $visibilityParams));
+    }
+
+    /**
+     * Resolve table access before search and pagination. Per-user grants must also be
+     * constrained by getUserTableRestriction() and getVisibilityRestriction().
+     * @return string[]
+     */
+    public static function getReadableTables(User $user, array $requestedTables = array(), ?User $subject = null) : array {
+        global $gSettingsManager;
+
+        // Changelog disabled globally, or only enabled for administrators
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
+            return array();
+        }
+        if ($gSettingsManager->getInt('changelog_module_enabled') === 2 && !$user->isAdministrator()) {
+            return array();
+        }
+
+        if (count($requestedTables) === 0 && !$user->isAdministrator()
+            && count(self::getPermittedTables($user)) === 0) {
+            return array();
+        }
+
+        $candidates = $requestedTables;
+        if (count($candidates) === 0) {
+            $candidates = array_keys(self::getTableLabel());
+        }
+
+        if ($user->isAdministrator()) {
+            return array_values($candidates);
+        }
+
+        $tablesPermitted = self::getPermittedTables($user);
+
+        // The user tables are shared between all organizations and use per-user permissions:
+        // either the user may administer all contacts (already covered by getPermittedTables), or
+        // a concrete subject was requested whose profile the user is allowed to edit, or - if no
+        // subject was requested at all - the user may at least see the changes to his/her own
+        // data. In the latter two cases the caller MUST restrict the log entries of those tables
+        // to the corresponding user, see getUserTableRestriction().
+        if ($subject !== null && !$subject->isNewRecord()) {
+            if ($user->hasRightEditProfile($subject)) {
+                $tablesPermitted = array_merge($tablesPermitted, array('users', 'user_data', 'user_relations', 'members'));
+            }
+        } elseif ($user->hasRightEditProfile($user)) {
+            $tablesPermitted = array_merge($tablesPermitted, array('users', 'user_data', 'user_relations', 'members'));
+        }
+
+        return array_values(array_intersect($candidates, $tablesPermitted));
+    }
+
+    /**
+     * Return the user the log entries of the shared user tables have to be restricted to.
+     *
+     * getReadableTables() grants access to the user tables on a per-user basis, so whenever the
+     * current user may not administer all contacts, the entries of those tables must additionally
+     * be restricted to the one user he/she is allowed to see. Doing this as an SQL condition (and
+     * not by dropping rows afterwards) keeps the record counts and the paging of the changelog
+     * table correct.
+     *
+     * @param User $user The user whose permissions should be checked
+     * @param User|null $subject If the changelog of one particular user is requested, that user.
+     * @return string The uuid the entries of the user tables must be restricted to, or an empty
+     *                string if the user may read those tables without any restriction.
+     * @throws Exception
+     */
+    public static function getUserTableRestriction(User $user, ?User $subject = null) : string {
+        // administrators and user administrators may read the log of all users
+        if ($user->isAdministrator() || $user->isAdministratorUsers()) {
+            return '';
+        }
+
+        if ($subject !== null && !$subject->isNewRecord() && $user->hasRightEditProfile($subject)) {
+            return (string)$subject->getValue('usr_uuid');
+        }
+
+        // everyone else may only see the changes to his/her own data
+        return (string)$user->getValue('usr_uuid');
+    }
+
+    /**
+     * Restrict sensitive history entries before searching, counting and grouping them.
+     * Table access alone does not grant visibility of individual profile fields or roles.
+     *
+     * @return array{0: string, 1: array} SQL condition and its bound parameters
+     */
+    public static function getVisibilityRestriction(User $user, ?User $subject = null): array
+    {
+        global $gDb, $gProfileFields;
+
+        $fieldIds = array();
+        $restrictedUuid = self::getUserTableRestriction($user, $subject);
+        // Without a subject, non-administrators are restricted to their own history.
+        $fieldSubject = $subject ?? ($restrictedUuid !== '' ? $user : null);
+        $profileFields = clone $gProfileFields;
+        $profileFields->clearUserData();
+        foreach ($profileFields->getProfileFields() as $field) {
+            $name = $field->getValue('usf_name_intern');
+            $visible = $fieldSubject !== null
+                ? !$fieldSubject->isNewRecord() && $user->allowedViewProfileField($fieldSubject, $name)
+                : $profileFields->isVisible($name, $user->isAdministratorUsers());
+            if ($visible) {
+                $fieldIds[] = (string) $field->getValue('usf_id');
+            }
+        }
+
+        $roleReferences = array();
+        $roles = $gDb->queryPrepared('SELECT rol_id, rol_uuid FROM ' . TBL_ROLES);
+        while ($role = $roles->fetch()) {
+            if ($user->hasRightViewRole((int) $role['rol_id'])) {
+                // Current entries use UUIDs; older entries may reference the numeric ID.
+                $roleReferences[] = (string) $role['rol_id'];
+                $roleReferences[] = $role['rol_uuid'];
+            }
+        }
+
+        $fieldCondition = count($fieldIds) > 0
+            ? 'log_field IN (' . Database::getQmForValues($fieldIds) . ')' : '1 = 0';
+        $roleCondition = count($roleReferences) > 0
+            ? 'log_related_id IN (' . Database::getQmForValues($roleReferences) . ')' : '1 = 0';
+
+        return array(
+            " AND (log_table <> 'user_data' OR (" . $fieldCondition . "))"
+            . " AND (log_table <> 'members' OR (" . $roleCondition . "))",
+            array_merge($fieldIds, $roleReferences)
+        );
     }
 
     /**
