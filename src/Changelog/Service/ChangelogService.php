@@ -1739,7 +1739,7 @@ class ChangelogService {
      * @throws Exception
      */
     public static function getOwnChangeRecordName(User $user, string $table, int $recordId, string $recordUuid) : string {
-        global $gDb;
+        global $gDb, $gCurrentOrgId;
 
         if ($recordId <= 0 && $recordUuid === '') {
             return '';
@@ -1750,12 +1750,28 @@ class ChangelogService {
                  WHERE log_table = ?
                    AND log_usr_id_create = ?
                    AND ' . ($recordUuid !== '' ? 'log_record_uuid = ?' : 'log_record_id = ?') . '
+                   AND ' . self::getOrganizationCondition() . '
               ORDER BY log_id DESC
                  LIMIT 1';
         $name = $gDb->queryPrepared($sql, array($table, (int)$user->getValue('usr_id'),
-            $recordUuid !== '' ? $recordUuid : $recordId))->fetchColumn();
+            $recordUuid !== '' ? $recordUuid : $recordId, (int)$gCurrentOrgId))->fetchColumn();
 
         return $name === false ? '' : (string)$name;
+    }
+
+    /**
+     * SQL condition that restricts the entries of adm_log_changes to those visible in the current
+     * organization. adm_log_changes is a global table, so its entries have to be restricted to the
+     * current organization. The user tables are shared between all organizations (a user can be a
+     * member of several organizations), so their entries stay visible and are protected by the
+     * per-user permission check instead. Entries without an organization stay visible, too, so that
+     * the audit trail has no gaps.
+     * @return string The condition with one placeholder that has to be bound to the id of the
+     *                current organization
+     */
+    public static function getOrganizationCondition() : string {
+        return '(log_org_id = ? OR log_org_id IS NULL
+                 OR log_table IN (\'users\', \'user_data\', \'user_relations\'))';
     }
 
     /**

@@ -8694,7 +8694,7 @@ final class CoreTasks
 
     public static function changelogList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser, $gSettingsManager;
+        global $gDb, $gCurrentUser, $gSettingsManager, $gCurrentOrgId;
 
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
@@ -8714,8 +8714,9 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $conditions = array();
-        $params = array();
+        // adm_log_changes is a global table, so the entries have to be restricted to the current organization.
+        $conditions = array(ChangelogService::getOrganizationCondition());
+        $params = array((int)$gCurrentOrgId);
 
         // An administrator that asked for no table also sees the tables of third-party extensions.
         if (!ChangelogService::hasUnrestrictedAccess($gCurrentUser) || $requestedTables !== array()) {
@@ -8809,7 +8810,7 @@ final class CoreTasks
 
     public static function changelogShow(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser, $gSettingsManager;
+        global $gDb, $gCurrentUser, $gSettingsManager, $gCurrentOrgId;
 
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
@@ -8826,8 +8827,9 @@ final class CoreTasks
                     log_usr_id_create AS user_id, log_timestamp_create AS timestamp,
                     log_comment AS comment
                FROM ' . TBL_LOG_CHANGES . '
-              WHERE log_id = ?',
-            array($id)
+              WHERE log_id = ?
+                AND ' . ChangelogService::getOrganizationCondition(),
+            array($id, (int)$gCurrentOrgId)
         )->fetch();
 
         if ($row === false) {

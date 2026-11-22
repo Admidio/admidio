@@ -522,6 +522,36 @@ class ChangelogTest extends DatabaseTestCase
     }
 
     /**
+     * The name of a record a member changed in another organization stays hidden, like the
+     * entries themselves in the history listing, see PR #2343 review.
+     *
+     * @testdox A member does not see the name of an own-change record they changed in another organization
+     */
+    public function testAMemberDoesNotSeeTheNameOfAnOwnChangeRecordFromAnotherOrganization(): void
+    {
+        $this->registerOwnChangeTable('own_changes_test');
+        $data = $this->getFixture()->createAndSaveUser('changelog_own_foreign', 'foreign@example.org', self::ORG_ID);
+        $member = $this->loadUserInOrganization($data['usr_id'], self::ORG_ID);
+        $organization = $this->getFixture()->createAndSaveOrganization('Foreign Changelog Organization', 'FRGCHLG01');
+
+        $sql = 'INSERT INTO ' . TBL_LOG_CHANGES . '
+                       (log_table, log_record_id, log_record_uuid, log_record_name, log_action, log_usr_id_create, log_org_id)
+                VALUES (\'own_changes_test\', ?, ?, ?, \'MODIFY\', ?, ?)';
+        $current = array(911, '00000000-0000-4000-8000-000000000911');
+        $foreign = array(912, '00000000-0000-4000-8000-000000000912');
+        $this->getDatabase()->queryPrepared($sql, array($current[0], $current[1], 'Current title', $data['usr_id'], self::ORG_ID));
+        $this->getDatabase()->queryPrepared($sql, array($foreign[0], $foreign[1], 'Organization B title', $data['usr_id'], $organization['org_id']));
+
+        $names = $this->withCurrentUser($member, self::ORG_ID, true, static fn () => array(
+            ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', $current[0], ''),
+            ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', 0, $current[1]),
+            ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', $foreign[0], ''),
+            ChangelogService::getOwnChangeRecordName($member, 'own_changes_test', 0, $foreign[1])
+        ));
+        $this->assertSame(array('Current title', 'Current title', '', ''), $names);
+    }
+
+    /**
      * Where a permission opens the whole table, the own-changes restriction does not narrow it.
      *
      * @testdox A table that a permission opens in full is not restricted to the own changes

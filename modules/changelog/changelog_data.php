@@ -228,13 +228,8 @@ try {
     $sqlConditions = '';
     $queryParamsConditions = array();
 
-    // adm_log_changes is a global table, so the entries have to be restricted to the current
-    // organization. The user tables are shared between all organizations (a user can be a member
-    // of several organizations), so their entries stay visible and are protected by the per-user
-    // permission check instead. Entries without an organization stay visible, too, so that the
-    // audit trail has no gaps.
-    $sqlConditions .= ' AND (log_org_id = ? OR log_org_id IS NULL
-                             OR log_table IN (\'users\', \'user_data\', \'user_relations\')) ';
+    // adm_log_changes is a global table, so the entries have to be restricted to the current organization.
+    $sqlConditions .= ' AND ' . ChangelogService::getOrganizationCondition() . ' ';
     $queryParamsConditions[] = $gCurrentOrgId;
 
     // Restrict the result to the tables the current user may read. $readableTables is already the
