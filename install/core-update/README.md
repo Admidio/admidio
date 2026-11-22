@@ -376,7 +376,7 @@ For a local test server, `--test-release` puts the public part of a test key int
 
 The web review page offers a checked statistics checkbox and the complete JSON preview when
 the global statistics setting is disabled. If the global setting is already enabled, the checkbox
-is hidden and the existing consent is retained. The preview and choice are kept in the update
+is hidden and the existing installation-wide consent is retained. The preview and choice are kept in the update
 workspace across interruptions. Only a successful database update saves the web choice and sends
 the reviewed snapshot, at most once per update. The global setting defaults to disabled.
 

@@ -715,7 +715,7 @@ class PreferencesPresenter extends PagePresenter
      */
     public function createCommonForm(): string
     {
-        global $gDb, $gCurrentOrgId, $gL10n, $gSettingsManager, $gCurrentSession;
+        global $gDb, $gL10n, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
 

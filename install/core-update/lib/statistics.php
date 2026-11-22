@@ -56,6 +56,11 @@ function statisticsPreview(array $ctx, string $updateId): array
         }
         ksort($plugins);
         $driver = $ctx['pdo']->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $serverVersion = (string)$ctx['pdo']->getAttribute(\PDO::ATTR_SERVER_VERSION);
+        $databaseType = $ctx['config']['dbType'] ?? $driver;
+        if ($databaseType === 'mysql' && stripos($serverVersion, 'MariaDB') !== false) {
+            $databaseType = 'mariadb';
+        }
         $consent = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $prefix . '_preferences'
             . ' WHERE prf_name = ? AND prf_org_id IS NULL', array('system_statistics_enabled'));
         $state['statisticsAlreadyEnabled'] = ($consent['prf_value'] ?? '0') === '1';
@@ -63,7 +68,7 @@ function statisticsPreview(array $ctx, string $updateId): array
         $state['statisticsData'] = array(
             'id' => $id,
             'timestamp' => gmdate('Y-m-d\\TH:i:s\\Z'),
-            'database' => array('type' => $ctx['config']['dbType'] ?? $driver, 'version' => $ctx['pdo']->getAttribute(\PDO::ATTR_SERVER_VERSION)),
+            'database' => array('type' => $databaseType, 'version' => $serverVersion),
             'admidio' => array('version' => $state['targetVersionText'] ?? $state['targetVersion'],
                 'previous_version' => $state['installedVersion'], 'language' => $preference('system_language') ?? 'en', 'plugins' => $plugins),
             'php' => array('version' => PHP_VERSION, 'extensions' => $extensions)

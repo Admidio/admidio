@@ -37,18 +37,28 @@ final class PhaseBTest extends AdmidioTestCase
         parent::tearDown();
     }
 
-    public function testStatisticsPreviewIsRetainedAcrossRequests(): void
+    public static function databaseServerVersions(): array
+    {
+        return array(
+            'MySQL' => array('8.0.40', 'mysql'),
+            'MariaDB' => array('5.5.5-10.11.6-MariaDB', 'mariadb')
+        );
+    }
+
+    /** @dataProvider databaseServerVersions */
+    public function testStatisticsPreviewIsRetainedAcrossRequests(string $serverVersion, string $expectedType): void
     {
         [$ctx, $id] = $this->prepared();
-        $ctx['pdo'] = new class extends \PDO {
-            public function __construct()
+        $ctx['config']['dbType'] = 'mysql';
+        $ctx['pdo'] = new class($serverVersion) extends \PDO {
+            public function __construct(private string $serverVersion)
             {
                 parent::__construct('sqlite::memory:');
             }
 
             public function getAttribute(int $attribute): mixed
             {
-                return $attribute === \PDO::ATTR_SERVER_VERSION ? 'test-version' : parent::getAttribute($attribute);
+                return $attribute === \PDO::ATTR_SERVER_VERSION ? $this->serverVersion : parent::getAttribute($attribute);
             }
         };
         $ctx['pdo']->exec('CREATE TABLE adm_organizations (org_id INTEGER)');
@@ -72,6 +82,7 @@ final class PhaseBTest extends AdmidioTestCase
             return $state;
         });
         $first = U\statisticsPreview($ctx, $id);
+        self::assertSame(array('type' => $expectedType, 'version' => $serverVersion), $first['statisticsData']['database']);
         self::assertTrue($first['statisticsEnabled']);
         self::assertFalse($first['statisticsAlreadyEnabled']);
         self::assertSame($identity, $first['statisticsData']['id']);

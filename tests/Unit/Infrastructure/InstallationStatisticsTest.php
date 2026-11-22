@@ -295,4 +295,20 @@ class InstallationStatisticsTest extends TestCase
             $GLOBALS['gLogger'] = $originalLogger;
         }
     }
+    public function testDisabledStatisticsDoesNotReadDueDate(): void
+    {
+        if (!defined('TBL_PREFERENCES')) {
+            define('TBL_PREFERENCES', 'adm_preferences');
+        }
+        $statement = $this->createMock(PDOStatement::class);
+        $statement->method('fetchColumn')->willReturn('0');
+        $database = $this->getMockBuilder(Database::class)->disableOriginalConstructor()
+            ->onlyMethods(array('queryPrepared'))->getMock();
+        $database->expects($this->once())->method('queryPrepared')
+            ->with($this->anything(), array('system_statistics_enabled'))->willReturn($statement);
+        InstallationStatistics::sendIfDue($database, function (): void {
+            $this->fail('Disabled statistics must not send an HTTP request.');
+        });
+    }
+
 }

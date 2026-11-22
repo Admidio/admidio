@@ -276,8 +276,11 @@ class InstallationStatistics
 
         try {
             $settings = new InstallationSettings($db);
+            if (!$settings->getBool('system_statistics_enabled')) {
+                return;
+            }
             $lastSent = $settings->get('system_statistics_last_sent');
-            if (!$settings->getBool('system_statistics_enabled') || $lastSent === null || !self::isDue($lastSent)) {
+            if ($lastSent === null || !self::isDue($lastSent)) {
                 return;
             }
             $reserved = $settings->withLock(function (InstallationSettings $settings): bool {
