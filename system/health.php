@@ -1,27 +1,31 @@
 <?php
 /**
  ***********************************************************************************************
- * Optional health endpoint for the Docker healthcheck and external monitors.
+ * Health endpoint for the Docker healthcheck and for external monitors.
  *
- * The endpoint is disabled by default and answers 404 until $gHealthEndpoint = true is set in
- * config.php (Docker: ADMIDIO_HEALTH_ENDPOINT=1). It does not start a session, does not set a
- * cookie and writes nothing to the database, so a monitor that calls it every few seconds
- * doesn't show up as "visitors online".
+ * The endpoint is always available, needs no settings and answers with a short text:
  *
- * It checks the connection to the database and the write access to the data folder and answers
- * only with "ok" (200) or "fail" (503). The reason of a failure is written to the PHP error log
- * (not to the Admidio log, because that one is written into the data folder that is checked here).
- * While the maintenance mode is active (adm_my_files/maintenance.json exists, e.g. during an update)
- * the endpoint answers 200 "maintenance", so that an orchestrator doesn't restart the container
- * in the middle of an update.
+ * | Condition                                                    | Answer                     |
+ * |--------------------------------------------------------------|----------------------------|
+ * | no config.php                                                | 200 not installed          |
+ * | maintenance mode (adm_my_files/maintenance.json exists)      | 200 maintenance            |
+ * | connection to the database or a simple query fails           | 503 fail                   |
+ * | the tables of Admidio don't exist                            | 200 not installed          |
+ * | data folder is not writable                                  | 503 fail                   |
+ * | version of the database differs from the file version, or    | 200 update required        |
+ * | the last update was not completed                            |                            |
+ * | otherwise                                                    | 200 ok                     |
  *
- * If $gHealthToken is set in config.php (Docker: ADMIDIO_HEALTH_TOKEN), the token must be sent
- * in the header "X-Health-Token". Without or with a wrong token the endpoint answers 404.
- * If $gForceHTTPS is set, requests that don't come from the loopback address are redirected to
- * https before the token is read.
+ * Only "PHP, database and data folder work" is reported as healthy. States that need an administrator
+ * in the browser (installation, update) stay "200", otherwise an orchestrator would not route traffic to
+ * the container and the administrator could not reach the installation or update page. A monitor can
+ * alert on the text "update required".
  *
- * The script deliberately doesn't load the complete bootstrap (logger, request parameter handling,
- * shutdown handler), so a probe every few seconds stays cheap and doesn't flood the log.
+ * The script starts no session, sets no cookie and writes nothing to the database, so a monitor that
+ * calls it every few seconds doesn't show up as "visitors online". It deliberately doesn't load the
+ * complete bootstrap (logger, request parameter handling, shutdown handler), so a probe stays cheap.
+ * The reason of a failure is written to the PHP error log, not to the Admidio log, because that one is
+ * written into the data folder that is checked here.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -49,34 +53,14 @@ function admHealthResponse(int $statusCode, string $body): void
 $rootPath = dirname(__DIR__);
 
 if (!is_file($rootPath . '/adm_my_files/config.php')) {
-    admHealthResponse(404, 'not found');
+    admHealthResponse(200, 'not installed');
 }
 
 require_once($rootPath . '/adm_my_files/config.php');
 
-if (empty($gHealthEndpoint)) {
-    admHealthResponse(404, 'not found');
-}
-
 // Only the files that are needed for the check are loaded, not the complete bootstrap.
 require_once($rootPath . '/system/bootstrap/init_globals.php');
 require_once($rootPath . '/system/bootstrap/constants.php');
-
-// Force permanent HTTPS redirect, but not for requests from the machine itself (Docker healthcheck on
-// http://localhost). The check is done before the token is read, so the token is never sent over http
-// to a public address.
-$remoteAddress = $_SERVER['REMOTE_ADDR'] ?? '';
-if ($gForceHTTPS && !HTTPS && !in_array($remoteAddress, array('127.0.0.1', '::1'), true)) {
-    header('Location: ' . str_replace('http://', 'https://', CURRENT_URL), true, 301);
-    exit();
-}
-
-if (!empty($gHealthToken)) {
-    $sentToken = $_SERVER['HTTP_X_HEALTH_TOKEN'] ?? '';
-    if (!is_string($sentToken) || !hash_equals((string) $gHealthToken, $sentToken)) {
-        admHealthResponse(404, 'not found');
-    }
-}
 
 // A planned maintenance (e.g. a core update) is not a failure. See bootstrap.php for the file.
 if (is_file(ADMIDIO_PATH . FOLDER_DATA . '/maintenance.json')) {
@@ -95,13 +79,52 @@ try {
     if ($gDb->queryPrepared('SELECT 1', array(), false) === false) {
         throw new RuntimeException('The database did not answer a simple query.');
     }
-
-    if (!is_dir(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
-        throw new RuntimeException('The data folder is not writable.');
-    }
 } catch (Throwable $exception) {
     error_log('Admidio HEALTH: ' . $exception->getMessage());
     admHealthResponse(503, 'fail');
+}
+
+// The same check as in common.php: an empty database is not installed yet. MySQL throws an exception if the
+// table doesn't exist, PostgreSQL returns an empty array.
+try {
+    $tablesExist = !empty($gDb->getTableColumns(TBL_SESSIONS));
+} catch (Throwable $exception) {
+    $tablesExist = false;
+}
+if (!$tablesExist) {
+    admHealthResponse(200, 'not installed');
+}
+
+try {
+    if (!is_dir(ADMIDIO_PATH . FOLDER_DATA) || !is_writable(ADMIDIO_PATH . FOLDER_DATA)) {
+        throw new RuntimeException('The data folder is not writable.');
+    }
+
+    // The version is read directly, Component::checkDatabaseVersion() needs the language object and writes to the log.
+    $statement = $gDb->queryPrepared(
+        'SELECT com_version, com_beta, com_update_completed
+           FROM ' . TBL_COMPONENTS . '
+          WHERE com_type = ?
+            AND com_name_intern = ?',
+        array('SYSTEM', 'CORE')
+    );
+    $component = $statement->fetch();
+} catch (Throwable $exception) {
+    error_log('Admidio HEALTH: ' . $exception->getMessage());
+    admHealthResponse(503, 'fail');
+}
+
+if (!is_array($component)) {
+    // the tables exist, but the system component is missing: the installation or an update was not finished
+    admHealthResponse(200, 'update required');
+}
+
+$databaseVersion = $component['com_version'] . ((int) $component['com_beta'] > 0 ? '-Beta.' . (int) $component['com_beta'] : '');
+$fileVersion = ADMIDIO_VERSION . (ADMIDIO_VERSION_BETA > 0 ? '-Beta.' . ADMIDIO_VERSION_BETA : '');
+$updateCompleted = in_array($component['com_update_completed'], array(true, 1, '1', 't', 'true'), true);
+
+if (!$updateCompleted || version_compare($databaseVersion, $fileVersion) !== 0) {
+    admHealthResponse(200, 'update required');
 }
 
 admHealthResponse(200, 'ok');
