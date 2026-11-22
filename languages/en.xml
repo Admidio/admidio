@@ -404,6 +404,8 @@
   <string name="SYS_COMMAND_LINE_UNKNOWN_ACCOUNT">Unknown account</string>
   <string name="SYS_COMMA_SEPARATED_FILE">Comma-separated file (*.csv)</string>
   <string name="SYS_COMMENT">Comment</string>
+  <string name="SYS_COMMENT_PRIVACY">Comment privacy</string>
+  <string name="SYS_COMMENT_PRIVACY_DESC">If enabled, only administrators and leaders of the event can see the registration comments.</string>
   <string name="SYS_COMMON">General</string>
   <string name="SYS_COMMUNICATION">Communication</string>
   <string name="SYS_COMPACT">Compact</string>

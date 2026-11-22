@@ -444,7 +444,7 @@ class EventFormPresenter extends PagePresenter
         function getEventParticipationFields() {
             return $("#adm_event_participation_right_group, #event_current_user_assigned_group, " +
                 "#dat_max_members_group, #event_right_list_view_group, #event_right_send_mail_group, " +
-                "#dat_allow_comments_group, #dat_additional_guests_group, #event_deadline_group")
+                "#dat_allow_comments_group, #dat_comment_privacy_group, #dat_additional_guests_group, #event_deadline_group")
                 .find("input, select");
         }
 
@@ -452,6 +452,14 @@ class EventFormPresenter extends PagePresenter
             var participationEnabled = $("#event_participation_possible").is(":checked");
             $("#adm_event_participation_right_group").toggleClass("admidio-form-group-required", participationEnabled);
             getEventParticipationFields().prop("disabled", !participationEnabled);
+            setCommentPrivacyVisibility();
+        }
+
+        function setCommentPrivacyVisibility() {
+            var participationEnabled = $("#event_participation_possible").is(":checked");
+            var commentsEnabled = $("#dat_allow_comments").is(":checked");
+            var shouldShow = participationEnabled && commentsEnabled;
+            $("#dat_comment_privacy_group").toggle(shouldShow);
         }
 
         function setLocationCountry() {
@@ -571,6 +579,9 @@ class EventFormPresenter extends PagePresenter
 
         $("#event_participation_possible").click(function() {
             setEventParticipation();
+        });
+        $("#dat_allow_comments").click(function() {
+            setCommentPrivacyVisibility();
         });
         $("#dat_all_day").click(function() {
             setAllDay();
@@ -771,6 +782,7 @@ class EventFormPresenter extends PagePresenter
         $form->addSelectBoxFromSql('adm_event_participation_right', $gL10n->get('SYS_REGISTRATION_POSSIBLE_FOR'), $gDb, $sqlDataView, ['defaultValue' => $roleViewSet, 'multiselect' => true]);
         $form->addCheckbox('event_current_user_assigned', $gL10n->get('SYS_PARTICIPATE_AT_EVENT'), $eventCurrentUserAssigned, ['helpTextId' => 'SYS_PARTICIPATE_AT_EVENT_DESC']);
         $form->addCheckbox('dat_allow_comments', $gL10n->get('SYS_ALLOW_USER_COMMENTS'), (bool)$event->getValue('dat_allow_comments'), ['helpTextId' => 'SYS_ALLOW_USER_COMMENTS_DESC']);
+        $form->addCheckbox('dat_comment_privacy', $gL10n->get('SYS_COMMENT_PRIVACY'), (bool)$event->getValue('dat_comment_privacy'), ['helpTextId' => 'SYS_COMMENT_PRIVACY_DESC']);
         $form->addCheckbox('dat_additional_guests', $gL10n->get('SYS_ALLOW_ADDITIONAL_GUESTS'), (bool)$event->getValue('dat_additional_guests'), ['helpTextId' => 'SYS_ALLOW_ADDITIONAL_GUESTS_DESC']);
         $form->addInput('dat_max_members', $gL10n->get('SYS_PARTICIPANTS_LIMIT'), (int)$event->getValue('dat_max_members'), ['type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'step' => 1, 'helpTextId' => 'SYS_EVENT_MAX_MEMBERS']);
         $form->addInput('event_deadline', $gL10n->get('SYS_DEADLINE'), $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')), ['type' => 'datetime', 'helpTextId' => 'SYS_EVENT_DEADLINE_DESC', 'weekdayFormat' => $weekdayFormat]);
