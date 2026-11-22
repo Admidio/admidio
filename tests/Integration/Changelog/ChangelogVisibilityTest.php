@@ -85,11 +85,11 @@ class ChangelogVisibilityTest extends AdministratorTestCase
         parent::tearDown();
     }
 
-    private function addEntry(string $table, string $field, string $related = ''): int
+    private function addEntry(string $table, string $field, string $related = '', string $value = self::SECRET): int
     {
         $entry = new LogChanges($this->getDatabase());
         $entry->setLogModification($table, 1, $this->member->getValue('usr_uuid'), 'Member',
-            $field, 'Field', 'Old confidential value', self::SECRET);
+            $field, 'Field', 'Old confidential value', $value);
         $entry->setLogRelated($related, 'Role');
         $this->assertTrue($entry->save());
         $id = (int) $entry->getValue('log_id');
@@ -140,6 +140,79 @@ class ChangelogVisibilityTest extends AdministratorTestCase
             )->fetchColumn();
             $this->assertSame(2, (int) $count);
         }
+    }
+
+    public function testSearchCannotRevealRestrictedValuesThroughCountsOrPaging(): void
+    {
+        $public = $this->addEntry('user_data', (string) $this->profileFields->getProperty(self::PUBLIC_FIELD, 'usf_id'), '', 'Public search note');
+        $this->addEntry('user_data', (string) $this->profileFields->getProperty(self::PRIVATE_FIELD, 'usf_id'), '', 'DE89370400440532013000');
+        $this->addEntry('members', 'mem_begin', $this->hiddenRole['rol_uuid'], 'Hidden role secret');
+        $this->withCurrentUser($this->leader, (int) $GLOBALS['gCurrentOrgId'], true, function () use ($public) {
+            [$visibility, $params] = ChangelogService::getVisibilityRestriction($this->leader, $this->member);
+            $restriction = ChangelogService::getUserTableRestriction($this->leader, $this->member);
+            $tables = ChangelogService::getReadableTables($this->leader, array('user_data', 'members'), $this->member);
+            $db = $this->getDatabase();
+            $base = 'SELECT log_id, log_change_uuid, log_value_old, log_value_new FROM ' . TBL_LOG_CHANGES
+                . ' WHERE log_id IN (' . \Admidio\Infrastructure\Database::getQmForValues($this->logIds) . ')'
+                . ' AND log_table IN (' . \Admidio\Infrastructure\Database::getQmForValues($tables) . ')'
+                . ' AND log_record_uuid = ?' . $visibility;
+            $params = array_merge($this->logIds, $tables, array($restriction), $params);
+            foreach (array('DE89370400', 'DE8937040X', 'Hidden role secret', 'Public search note') as $term) {
+                [$search, $searchParams] = ChangelogService::getSearchCondition($term, array('log_value_old', 'log_value_new'));
+                $sql = 'SELECT * FROM (' . $base . ') AS entries' . $search;
+                $bound = array_merge($params, $searchParams);
+                $expected = $term === 'Public search note' ? 1 : 0;
+                $this->assertSame($expected, (int) $db->queryPrepared('SELECT COUNT(*) FROM (' . $sql . ') AS matches', $bound)->fetchColumn());
+                $groupCount = $db->queryPrepared('SELECT COUNT(*) FROM (SELECT log_change_uuid FROM (' . $sql . ') AS visible_entries GROUP BY log_change_uuid) AS changes', $bound)->fetchColumn();
+                $this->assertSame($expected, (int) $groupCount);
+                $ids = $db->queryPrepared($sql . ' ORDER BY log_id LIMIT 1', $bound)->fetchAll(\PDO::FETCH_COLUMN);
+                $this->assertSame($expected ? array($public) : array(), array_map('intval', $ids));
+                $this->assertSame(array(), $db->queryPrepared($sql . ' ORDER BY log_id LIMIT 1 OFFSET 5', $bound)->fetchAll());
+            }
+        });
+    }
+
+    public function testSearchTreatsWildcardsAndEscapeCharactersLiterally(): void
+    {
+        $id = $this->addEntry('user_data', (string) $this->profileFields->getProperty(self::PUBLIC_FIELD, 'usf_id'), '', 'Rate 50% code A_B warning!');
+        foreach (array('50%', 'A_B', 'warning!', 'rate', '50_', 'A%B', 'missing') as $term) {
+            [$search, $params] = ChangelogService::getSearchCondition($term, array('log_value_new'));
+            $sql = 'SELECT * FROM (SELECT log_value_new FROM ' . TBL_LOG_CHANGES . ' WHERE log_id = ?) AS entries' . $search;
+            $count = $this->getDatabase()->queryPrepared('SELECT COUNT(*) FROM (' . $sql . ') AS matches', array_merge(array($id), $params))->fetchColumn();
+            $this->assertSame(in_array($term, array('50_', 'A%B', 'missing'), true) ? 0 : 1, (int) $count, $term);
+        }
+    }
+
+    public function testMemberWithoutTableFilterCannotProbeAnotherUsersHistory(): void
+    {
+        $this->addEntry('user_data', (string) $this->profileFields->getProperty(self::PRIVATE_FIELD, 'usf_id'), '', 'DE89370400440532013000');
+        $fixture = new AdmidioTestFixture($this->getDatabase());
+        $record = $fixture->createAndSaveUser('changelog-reader', 'changelog-reader@example.local');
+        $reader = new User($this->getDatabase(), $this->profileFields, $record['usr_id']);
+        $this->withCurrentUser($reader, (int) $GLOBALS['gCurrentOrgId'], true, function () use ($reader) {
+            $this->assertFalse($reader->isAdministratorUsers());
+            $this->assertFalse($reader->hasRightEditProfile($this->member));
+            $tables = ChangelogService::getReadableTables($reader);
+            $uuid = ChangelogService::getUserTableRestriction($reader);
+            $this->assertSame($reader->getValue('usr_uuid'), $uuid);
+            [$visibility, $visibilityParams] = ChangelogService::getVisibilityRestriction($reader);
+            foreach (array('DE89370400', 'DE8937040X') as $term) {
+                if (count($tables) === 0) {
+                    // The endpoint returns SYS_NO_RIGHTS before running any search.
+                    $this->assertSame(array(), $tables);
+                    continue;
+                }
+                $base = 'SELECT log_value_new FROM ' . TBL_LOG_CHANGES
+                    . ' WHERE log_table IN (' . \Admidio\Infrastructure\Database::getQmForValues($tables) . ')'
+                    . ' AND log_record_uuid = ?' . $visibility;
+                [$search, $params] = ChangelogService::getSearchCondition($term, array('log_value_new'));
+                $count = $this->getDatabase()->queryPrepared(
+                    'SELECT COUNT(*) FROM (' . $base . ') AS entries' . $search,
+                    array_merge($tables, array($uuid), $visibilityParams, $params)
+                )->fetchColumn();
+                $this->assertSame(0, (int) $count);
+            }
+        });
     }
 
 }

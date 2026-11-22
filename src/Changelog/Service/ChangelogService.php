@@ -1788,6 +1788,28 @@ class ChangelogService {
     }
 
     /**
+     * Build a literal, case-insensitive search over trusted SQL column names.
+     * Apply this only to entries already restricted by the viewer's permissions.
+     * @param string[] $columns Internal SQL column names, never request parameters
+     * @return array{0: string, 1: array} SQL WHERE clause and bound parameters
+     */
+    public static function getSearchCondition(string $search, array $columns): array
+    {
+        if ($search === '' || count($columns) === 0) {
+            return array('', array());
+        }
+        $value = DB_TYPE === Database::PDO_ENGINE_PGSQL ? '?::text' : '?';
+        $haystack = 'LOWER(CONCAT(' . implode(", ' ', ", array_map(static fn($column) => "COALESCE($column, '')", $columns)) . '))';
+        $conditions = array();
+        $params = array();
+        foreach (explode(' ', $search) as $word) {
+            $conditions[] = $haystack . " LIKE CONCAT('%', LOWER(" . $value . "), '%') ESCAPE '!'";
+            $params[] = strtr(htmlspecialchars_decode($word, ENT_QUOTES | ENT_HTML5), array('!' => '!!', '%' => '!%', '_' => '!_'));
+        }
+        return array(' WHERE ' . implode(' AND ', $conditions), $params);
+    }
+
+    /**
      * Restrict sensitive history entries before searching, counting and grouping them.
      * Table access alone does not grant visibility of individual profile fields or roles.
      *
