@@ -2,6 +2,7 @@
 namespace Admidio\Changelog\Service;
 
 use InvalidArgumentException;
+use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Image;
 use Admidio\Infrastructure\Language;
@@ -1784,6 +1785,54 @@ class ChangelogService {
 
         // everyone else may only see the changes to his/her own data
         return (string)$user->getValue('usr_uuid');
+    }
+
+    /**
+     * Restrict sensitive history entries before searching, counting and grouping them.
+     * Table access alone does not grant visibility of individual profile fields or roles.
+     *
+     * @return array{0: string, 1: array} SQL condition and its bound parameters
+     */
+    public static function getVisibilityRestriction(User $user, ?User $subject = null): array
+    {
+        global $gDb, $gProfileFields;
+
+        $fieldIds = array();
+        $restrictedUuid = self::getUserTableRestriction($user, $subject);
+        // Without a subject, non-administrators are restricted to their own history.
+        $fieldSubject = $subject ?? ($restrictedUuid !== '' ? $user : null);
+        $profileFields = clone $gProfileFields;
+        $profileFields->clearUserData();
+        foreach ($profileFields->getProfileFields() as $field) {
+            $name = $field->getValue('usf_name_intern');
+            $visible = $fieldSubject !== null
+                ? !$fieldSubject->isNewRecord() && $user->allowedViewProfileField($fieldSubject, $name)
+                : $profileFields->isVisible($name, $user->isAdministratorUsers());
+            if ($visible) {
+                $fieldIds[] = (string) $field->getValue('usf_id');
+            }
+        }
+
+        $roleReferences = array();
+        $roles = $gDb->queryPrepared('SELECT rol_id, rol_uuid FROM ' . TBL_ROLES);
+        while ($role = $roles->fetch()) {
+            if ($user->hasRightViewRole((int) $role['rol_id'])) {
+                // Current entries use UUIDs; older entries may reference the numeric ID.
+                $roleReferences[] = (string) $role['rol_id'];
+                $roleReferences[] = $role['rol_uuid'];
+            }
+        }
+
+        $fieldCondition = count($fieldIds) > 0
+            ? 'log_field IN (' . Database::getQmForValues($fieldIds) . ')' : '1 = 0';
+        $roleCondition = count($roleReferences) > 0
+            ? 'log_related_id IN (' . Database::getQmForValues($roleReferences) . ')' : '1 = 0';
+
+        return array(
+            " AND (log_table <> 'user_data' OR (" . $fieldCondition . "))"
+            . " AND (log_table <> 'members' OR (" . $roleCondition . "))",
+            array_merge($fieldIds, $roleReferences)
+        );
     }
 
     /**

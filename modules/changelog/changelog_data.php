@@ -276,6 +276,12 @@ try {
         $queryParamsConditions[] = $userTableRestriction;
     }
 
+    // Apply field and role visibility before search, counts, pagination and grouping, including
+    // requests for the detail rows of a grouped change.
+    [$visibilitySql, $visibilityParams] = ChangelogService::getVisibilityRestriction($gCurrentUser, $subject);
+    $sqlConditions .= $visibilitySql;
+    $queryParamsConditions = array_merge($queryParamsConditions, $visibilityParams);
+
     if (!is_null($getId) && $getId > 0) {
         $sqlConditions .= ' AND (log_record_id = ? )';
         $queryParamsConditions[] = $getId;
