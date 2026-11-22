@@ -115,7 +115,11 @@ class StatisticsConsentTest extends TestCase
         $page = $this->getMockBuilder(InstallationPresenter::class)->disableOriginalConstructor()->getMock();
         $page->expects($this->exactly(5))->method('assignSmartyVariable')
             ->willReturnCallback(function (string $name, $value) use ($previousVersion, $enabled): void {
-                if ($name === 'statisticsInline' || $name === 'statisticsEnabled') {
+                if ($name === 'statisticsEnabled') {
+                    $this->assertTrue($value);
+                    return;
+                }
+                if ($name === 'statisticsInline') {
                     $this->assertSame($previousVersion !== null, $value);
                     return;
                 }
@@ -147,7 +151,7 @@ class StatisticsConsentTest extends TestCase
         $form = new FormPresenter('confirmation', 'installation.install-admidio.tpl');
         StatisticsConsent::addToForm($form, $page, $previousVersion);
         $this->assertSame(!$enabled, isset($form->getElements()['adm_send_statistics']));
-        $this->assertSame($previousVersion !== null && !$enabled, isset($form->getElements()['adm_send_statistics']['attributes']['checked']));
+        $this->assertSame(!$enabled, isset($form->getElements()['adm_send_statistics']['attributes']['checked']));
         $this->assertSame($enabled ? $_SESSION['installationStatisticsData'] : null, StatisticsConsent::selectedData(array()));
         $this->assertSame($_SESSION['installationStatisticsData'], StatisticsConsent::selectedData(array('adm_send_statistics' => '1')));
         $this->assertSame('stable-tenant', StatisticsConsent::tenantId());

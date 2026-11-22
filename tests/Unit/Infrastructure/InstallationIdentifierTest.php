@@ -112,7 +112,7 @@ final class InstallationIdentifierTest extends TestCase
         $this->pdo->exec('CREATE TABLE adm_organizations (org_id INTEGER)');
         $this->pdo->exec('INSERT INTO adm_organizations VALUES (1), (2), (3)');
         $this->pdo->exec("INSERT INTO " . TBL_PREFERENCES . " VALUES
-            (1, 'system_statistics_enabled', '0'), (2, 'system_statistics_enabled', '1')");
+            (1, 'system_statistics_enabled', '1'), (2, 'system_statistics_enabled', '1')");
         $update = simplexml_load_file(dirname(__DIR__, 3) . '/install/db_scripts/update_6_0.xml');
         $steps = $update->xpath('step[contains(., "system_statistics_enabled")]');
         $this->assertCount(2, $steps);
@@ -122,6 +122,13 @@ final class InstallationIdentifierTest extends TestCase
             }
         }
         $this->assertSame('0', $this->pdo->query(
+            "SELECT prf_value FROM " . TBL_PREFERENCES . " WHERE prf_name = 'system_statistics_enabled' AND prf_org_id IS NULL"
+        )->fetchColumn());
+        $this->pdo->exec("UPDATE " . TBL_PREFERENCES . " SET prf_value = '1' WHERE prf_name = 'system_statistics_enabled'");
+        foreach ($steps as $step) {
+            $this->pdo->exec(str_replace('%PREFIX%', 'adm', (string)$step));
+        }
+        $this->assertSame('1', $this->pdo->query(
             "SELECT prf_value FROM " . TBL_PREFERENCES . " WHERE prf_name = 'system_statistics_enabled' AND prf_org_id IS NULL"
         )->fetchColumn());
         $this->pdo->exec("UPDATE " . TBL_PREFERENCES . " SET prf_value = '0' WHERE prf_name = 'system_statistics_enabled'");

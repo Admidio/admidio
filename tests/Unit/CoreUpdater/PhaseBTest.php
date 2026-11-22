@@ -57,6 +57,8 @@ final class PhaseBTest extends AdmidioTestCase
         $ctx['pdo']->exec('CREATE TABLE adm_components (com_id INTEGER, com_type TEXT, com_name_intern TEXT)');
         $ctx['pdo']->exec("INSERT INTO adm_components VALUES (1, 'PLUGIN', 'enabled-plugin'), (2, 'PLUGIN', 'disabled')");
         $ctx['pdo']->exec("INSERT INTO adm_preferences VALUES (2, 'plugin_enabled_plugin_enabled', '1'), (2, 'plugin_uninstalled_enabled', '1')");
+        // Legacy organization consent must not hide the checkbox for the new global setting.
+        $ctx['pdo']->exec("INSERT INTO adm_preferences VALUES (1, 'system_statistics_enabled', '1')");
         $identity = '12345678-1234-4234-8234-123456789abc';
         $ctx['pdo']->exec("INSERT INTO adm_preferences VALUES (NULL, 'system_tenant_id', '" . $identity . "')");
         foreach (array('enabled-plugin', 'disabled', 'uninstalled') as $plugin) {
@@ -78,8 +80,13 @@ final class PhaseBTest extends AdmidioTestCase
         self::assertSame('5.1.0', $first['statisticsData']['admidio']['version']);
         self::assertSame('5.0.14', $first['statisticsData']['admidio']['previous_version']);
         self::assertMatchesRegularExpression('/^[a-f0-9-]{36}$/', $first['statisticsData']['id']);
-        $ctx['pdo']->exec("INSERT INTO adm_preferences VALUES (1, 'system_statistics_enabled', '1')");
+        $ctx['pdo']->exec("INSERT INTO adm_preferences VALUES (NULL, 'system_statistics_enabled', '1')");
         self::assertSame($first['statisticsData'], U\statisticsPreview($ctx, $id)['statisticsData']);
+        U\updateState($this->root, $id, static function (array $state): array {
+            unset($state['statisticsData']);
+            return $state;
+        });
+        self::assertTrue(U\statisticsPreview($ctx, $id)['statisticsAlreadyEnabled']);
     }
 
     public static function statisticsChoices(): array

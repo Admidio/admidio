@@ -51,9 +51,9 @@ final class StatisticsConsent
         $_SESSION['installationStatisticsAlreadyEnabled'] = $enabled;
         $page->assignSmartyVariable('statisticsInline', $previousVersion !== null);
         $page->assignSmartyVariable('statisticsAlreadyEnabled', $enabled);
-        $page->assignSmartyVariable('statisticsEnabled', $previousVersion !== null);
+        $page->assignSmartyVariable('statisticsEnabled', true);
         if (!$enabled) {
-            $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), $previousVersion !== null);
+            $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), true);
         }
         $page->addJavascript('
             $("#adm_send_statistics").on("change", function () {
