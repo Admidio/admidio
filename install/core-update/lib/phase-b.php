@@ -66,11 +66,11 @@ const INSTALLED_MANIFEST = 'install/update-manifest.json';
  * @param array<string,mixed> $ctx
  * @return array<string,mixed>
  */
-function phaseBConfirm(array $ctx, string $updateId, string $backup, ?bool $statisticsEnabled = null): array
+function phaseBConfirm(array $ctx, string $updateId, string $backup, ?bool $statisticsEnabled = null, bool $saveStatisticsPreference = true): array
 {
     $root = $ctx['config']['rootPath'];
 
-    return withLock($root, static function () use ($ctx, $root, $updateId, $backup, $statisticsEnabled): array {
+    return withLock($root, static function () use ($ctx, $root, $updateId, $backup, $statisticsEnabled, $saveStatisticsPreference): array {
         $state = readState($root, $updateId);
         if ($state['state'] !== 'review' || checksHaveErrors((array)($state['planChecks'] ?? array()))
             || !in_array($backup, array('dump', 'own'), true) || ($backup === 'dump' && ($state['dumpMethod'] ?? '') === '')) {
@@ -79,7 +79,8 @@ function phaseBConfirm(array $ctx, string $updateId, string $backup, ?bool $stat
 
         $cookie = issueCredential($state, time());
         $state = array_merge($state, array('state' => 'ready', 'backup' => $backup, 'lastError' => '',
-            'statisticsEnabled' => !empty($state['statisticsAlreadyEnabled']) || ($statisticsEnabled ?? true)));
+            'statisticsEnabled' => $statisticsEnabled ?? !empty($state['statisticsAlreadyEnabled']),
+            'saveStatisticsPreference' => $saveStatisticsPreference));
         writeState($root, $state);
         updateLog($root, $updateId, 'confirmed by the administrator, database backup: ' . $backup);
         sendCredentialCookie($ctx['config'], $cookie);

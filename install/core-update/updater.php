@@ -259,7 +259,8 @@ function coreUpdateHandleRequest(array $context, array $state, string $action): 
     match ($action) {
         'check' => U\phaseACheck($context, $updateId, $channel, $ref),
         'download' => U\phaseAConfirm($context, $updateId),
-        'install' => U\phaseBConfirm($context, $updateId, (string)($_POST['backup'] ?? ''), ($_POST['statistics'] ?? '') === '1'),
+        'install' => U\phaseBConfirm($context, $updateId, (string)($_POST['backup'] ?? ''),
+            !empty($state['statisticsAlreadyEnabled']) ? null : ($_POST['statistics'] ?? '') === '1'),
         'restore' => U\phaseBRestore($context, $updateId, !empty($_POST['own_database_restored']), !empty($_POST['then_update'])),
         default => throw new UpdaterException('SYS_CORE_UPDATE_REQUEST_INVALID')
     };

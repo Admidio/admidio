@@ -179,7 +179,7 @@ function commandApply(array $ctx, array $options, callable $out, callable $confi
                     return commandResult(EXIT_FAILED, text($texts, 'SYS_CORE_UPDATE_CANCELLED'), $state);
                 }
                 phaseBConfirm($ctx, $updateId, $backup, ($options['statistics'] ?? '') === ''
-                    ? null : $options['statistics'] === 'yes');
+                    ? null : $options['statistics'] === 'yes', false);
                 break;
 
             case 'prepared':

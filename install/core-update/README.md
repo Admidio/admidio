@@ -374,12 +374,16 @@ For a local test server, `--test-release` puts the public part of a test key int
 
 ## Pseudonymous statistics
 
-The review page offers an optional statistics checkbox and the complete JSON preview. The saved
-choice of the first organization is retained; a missing preference defaults to disabled. The
-preview and choice are kept in the update workspace across interruptions. Only a successful
-database update saves the preference and sends the reviewed snapshot, at most once per update.
-The CLI accepts `apply --statistics=yes|no`; omitting it retains the saved choice. With `yes`,
-the preview is printed before confirmation. `--yes` alone does not enable statistics.
+The web review page offers a checked statistics checkbox and the complete JSON preview when
+the global statistics setting is disabled. If the global setting is already enabled, the checkbox
+is hidden and the existing consent is retained. The preview and choice are kept in the update
+workspace across interruptions. Only a successful database update saves the web choice and sends
+the reviewed snapshot, at most once per update. The global setting defaults to disabled.
+
+The CLI accepts `apply --statistics=yes|no`. Omitting it uses the global statistics setting.
+An explicit `yes` or `no` overrides sending for this update only and never changes the global
+setting, including after a successful update. With `yes`, the preview is printed before
+confirmation. `--yes` alone does not enable statistics.
 
 
 Statistics consent, installation identity and the monthly send timestamp are installation-wide.

@@ -91,16 +91,24 @@ final class PhaseBTest extends AdmidioTestCase
 
     public static function statisticsChoices(): array
     {
-        return array('opt out' => array(false, false), 'opt in' => array(true, true), 'default opt in' => array(null, true));
+        return array(
+            'opt out from disabled' => array(false, false, false),
+            'opt in from disabled' => array(true, false, true),
+            'retain opt out' => array(null, false, false),
+            'opt out from enabled' => array(false, true, false),
+            'opt in from enabled' => array(true, true, true),
+            'retain opt in' => array(null, true, true)
+        );
     }
 
     /** @dataProvider statisticsChoices */
-    public function testStatisticsChoiceSurvivesConfirmation(?bool $choice, bool $expected): void
+    public function testStatisticsChoiceSurvivesConfirmation(?bool $choice, bool $alreadyEnabled, bool $expected): void
     {
         [$ctx, $id] = $this->prepared();
         U\updateState($this->root, $id, static fn(array $state): array => array_merge($state,
-            array('state' => 'review', 'planChecks' => array())));
-        $state = U\phaseBConfirm($ctx, $id, 'own', $choice);
+            array('state' => 'review', 'planChecks' => array(), 'statisticsAlreadyEnabled' => $alreadyEnabled)));
+        $state = U\phaseBConfirm($ctx, $id, 'own', $choice, false);
+        self::assertFalse($state['saveStatisticsPreference']);
         self::assertSame($expected, $state['statisticsEnabled']);
         self::assertSame('12345678-1234-4234-8234-123456789abc', $state['statisticsData']['id']);
     }
@@ -110,7 +118,7 @@ final class PhaseBTest extends AdmidioTestCase
         [$ctx, $id] = $this->prepared();
         U\updateState($this->root, $id, static fn(array $state): array => array_merge($state,
             array('state' => 'review', 'planChecks' => array(), 'statisticsAlreadyEnabled' => true)));
-        self::assertTrue(U\phaseBConfirm($ctx, $id, 'own', false)['statisticsEnabled']);
+        self::assertTrue(U\phaseBConfirm($ctx, $id, 'own', null)['statisticsEnabled']);
     }
 
     /**

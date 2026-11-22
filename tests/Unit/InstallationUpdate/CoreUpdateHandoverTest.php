@@ -344,6 +344,28 @@ final class CoreUpdateHandoverTest extends AdmidioTestCase
         $this->assertSame($notes, $this->readState()['databaseNotes']);
     }
 
+    public function testCliStatisticsOptOutDoesNotWriteGlobalPreference(): void
+    {
+        $database = $this->getMockBuilder(\Admidio\Infrastructure\Database::class)
+            ->disableOriginalConstructor()->onlyMethods(array('queryPrepared'))->getMock();
+        $database->expects($this->never())->method('queryPrepared');
+        $originalDatabase = $GLOBALS['gDb'] ?? null;
+        $GLOBALS['gDb'] = $database;
+        try {
+            $this->writeState('database_running', array(
+                'databaseStarted' => true,
+                'statisticsData' => array('id' => 'tenant'),
+                'statisticsEnabled' => false,
+                'saveStatisticsPreference' => false
+            ));
+            CoreUpdateHandover::load(self::UPDATE_ID)->complete();
+            $this->assertSame('completed', $this->readState()['state']);
+            $this->assertTrue($this->readState()['statisticsProcessed']);
+        } finally {
+            $GLOBALS['gDb'] = $originalDatabase;
+        }
+    }
+
     /**
      * @testdox The HTML error page of a failed update step is recorded as text, line by line
      */

@@ -592,7 +592,7 @@ final class CoreTasks
                     array('dump', 'own')),
                 self::opt('on-changed', 'Changed or unknown files are archived and replaced (default), or the update is cancelled.', 'ACTION',
                     false, false, false, array('archive', 'cancel')),
-                self::opt('statistics', 'Send pseudonymous statistics after success; default: retain the saved choice.', 'CHOICE',
+                self::opt('statistics', 'Send pseudonymous statistics for this update only; default: global setting. Never changes the global setting.', 'CHOICE',
                     false, false, false, array('yes', 'no')),
                 self::opt('skip-database', 'Install the files only; maintenance mode stays on until the database is updated.', '', false, false, true),
                 self::opt('dump-password-env', 'Environment variable with the password that encrypts the backup of the database.', 'VAR'),

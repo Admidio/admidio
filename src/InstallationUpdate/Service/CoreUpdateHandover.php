@@ -261,7 +261,9 @@ final class CoreUpdateHandover
 
         if (isset($this->state['statisticsData']) && empty($this->state['statisticsProcessed'])) {
             // Record before delivery: a retry must not send the same report twice.
-            StatisticsConsent::savePreference(!empty($this->state['statisticsEnabled']));
+            if ($this->state['saveStatisticsPreference'] ?? true) {
+                StatisticsConsent::savePreference(!empty($this->state['statisticsEnabled']));
+            }
             $this->update(array('statisticsProcessed' => true));
             StatisticsConsent::send(!empty($this->state['statisticsEnabled']) ? $this->state['statisticsData'] : null);
         }
