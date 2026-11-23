@@ -25,6 +25,7 @@
  *             delete       : delete or cancel an event
  *             export       : export event data in iCal format
  *             subscribe    : subscribe event data in iCal format
+ *             feed         : token protected iCal feed with HTTP Basic authentication
  *             recurrence_scope_form: show modal form to choose recurrence edit/delete scope
  *             participation_form: show the modal form to edit participation details
  *             participate  : user attends to the event
@@ -46,6 +47,7 @@
  ***********************************************************************************************
  */
 
+use Admidio\Events\Service\CalendarFeedAuthService;
 use Admidio\Events\Service\EventService;
 use Admidio\Infrastructure\Exception;
 use Admidio\UI\Presenter\EventFormPresenter;
@@ -55,7 +57,7 @@ try {
     require_once(__DIR__ . '/../system/common.php');
 
     // Initialize and check the parameters
-    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', ['defaultValue' => 'cards', 'validValues' => ['cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data']]);
+    $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', ['defaultValue' => 'cards', 'validValues' => ['cards', 'list_compact', 'list_room', 'list_participants', 'list_description', 'print_cards', 'print_list_compact', 'print_list_room', 'print_list_participants', 'print_list_description', 'new', 'edit', 'save', 'delete', 'export', 'subscribe', 'feed', 'recurrence_scope_form', 'participation_form', 'participate', 'participate_cancel', 'participate_maybe', 'reservation_request_again', 'reservation_status_data']]);
     $getStart = admFuncVariableIsValid($_GET, 'start', 'int');
     $getCatUuid = admFuncVariableIsValid($_GET, 'cat_uuid', 'uuid');
     $getEventUuid = admFuncVariableIsValid($_GET, 'dat_uuid', 'uuid');
@@ -68,6 +70,31 @@ try {
     $getRecurrenceAction = admFuncVariableIsValid($_GET, 'recurrence_action', 'string', array('defaultValue' => 'edit', 'validValues' => array('edit', 'delete')));
     $getUserUuid = admFuncVariableIsValid($_GET, 'user_uuid', 'uuid', $gValidLogin ? array('defaultValue' => $gCurrentUser->getValue('usr_uuid')) : array());
     $getReservationItemId = admFuncVariableIsValid($_GET, 'reservation_item_id', 'int');
+    $getOrgShortName = admFuncVariableIsValid($_GET, 'org_shortname', 'string');
+
+    // Token based feeds authenticate themselves and must never reach the HTML login.
+    if ($getMode === 'feed') {
+        $feedAuthService = new CalendarFeedAuthService($gDb);
+        $feedAuthentication = $feedAuthService->authorize($getOrgShortName);
+        if ($feedAuthentication === null) {
+            exit();
+        }
+
+        $feedAuthService->establishContext($feedAuthentication);
+
+        // A token bound to one calendar always exports that calendar. Tokens
+        // without a calendar may be restricted by the cat_uuid request parameter.
+        // Single-event URLs are deliberately ignored: otherwise a token bound to
+        // one calendar could export individual events from any other calendar.
+        $feedCategoryUuid = (string)$feedAuthentication['feed']->getValue('cfd_cat_uuid', 'database');
+        if ($feedCategoryUuid === '') {
+            $feedCategoryUuid = $getCatUuid;
+        }
+
+        $eventService = new EventService($gDb);
+        $eventService->exportICal('', $feedCategoryUuid, $getDateFrom, $getDateTo, true);
+        exit();
+    }
 
     // check if module is active
     if ($gSettingsManager->getInt('events_module_enabled') === 0) {
@@ -212,7 +239,11 @@ try {
             break;
     }
 } catch (Throwable $e) {
-    if (in_array($getMode, array('participation_form', 'recurrence_scope_form'), true)) {
+    if (($getMode ?? '') === 'feed') {
+        http_response_code(400);
+        header('Content-Type: text/plain; charset=utf-8');
+        echo strip_tags($e->getMessage());
+    } elseif (in_array($getMode, array('participation_form', 'recurrence_scope_form'), true)) {
         $gMessage->showInModalWindow();
         handleException($e);
     } else {
