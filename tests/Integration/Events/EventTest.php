@@ -8,7 +8,11 @@
 namespace Admidio\Tests\Integration\Events;
 
 use Admidio\Events\Entity\Event;
+use Admidio\Events\Repository\EventRecurrenceRepository;
+use Admidio\Events\Service\EventService;
+use Admidio\Events\ValueObject\EventRecurrenceRule;
 use Admidio\Infrastructure\Exception;
+use Admidio\Hooks\Hooks;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -234,6 +238,83 @@ class EventTest extends DatabaseTestCase
         });
 
         $this->assertEquals(0, (int) $db->queryPrepared($countSql, [$eventId])->fetch()['count']);
+    }
+
+    public static function recurrenceDeletionCases(): array
+    {
+        return [['guard'], ['this'], ['series'], ['permanent'], ['rollback']];
+    }
+
+    /** @dataProvider recurrenceDeletionCases */
+    public function testRecurrenceDeletion(string $action): void
+    {
+        $fixture = $this->getFixture();
+        $db = $this->getDatabase();
+        $initialCount = (int) $db->queryPrepared('SELECT COUNT(*) FROM ' . TBL_EVENTS)->fetchColumn();
+        $org = $fixture->createAndSaveOrganization('Series Org', 'seriesorg');
+        $fixture->seedDefaultPreferences($org['org_id']);
+        $category = $fixture->createAndSaveCategory('Calendar', 'EVT', $org['org_id']);
+        [$admin] = $this->makeEventAdmin($fixture, $org['org_id'], 'seriesadmin');
+        $this->withCurrentUser($admin, $org['org_id'], true, function () use ($admin, $org, $category, $db, $action, $initialCount): void {
+            $ids = [];
+            foreach (['2020-01-01', '2030-01-01', '2030-01-02'] as $day) {
+                $ids[] = $this->createEvent($admin, $org['org_id'], $category['cat_id'], 'Series', $day . ' 10:00:00', $day . ' 11:00:00');
+            }
+            $rule = (new EventRecurrenceRepository($db))->save($ids[0], new EventRecurrenceRule('daily'));
+            $ruleId = (int) $rule->getValue('evr_id');
+            foreach ($ids as $index => $id) {
+                $event = new Event($db, $id);
+                $event->setValue('dat_evr_id', $ruleId);
+                $event->setValue('dat_recurrence_status', ['master', 'modified', 'cancelled'][$index]);
+                $event->save();
+            }
+            $master = new Event($db, $ids[0]);
+            if ($action === 'rollback') {
+                $deleted = 0;
+                Hooks::addAction('entity_deleting', function ($changeSet, $entity) use (&$deleted): void {
+                    if ($entity instanceof Event && ++$deleted === 2) {
+                        throw new \RuntimeException('Injected event deletion failure');
+                    }
+                }, Hooks::DEFAULT_PRIORITY, 2, 'series_rollback_test');
+                try {
+                    (new EventService($db))->deleteSeriesData((string) $master->getValue('dat_uuid'));
+                    $this->fail('The injected failure must abort the deletion.');
+                } catch (\RuntimeException $exception) {
+                    $this->assertSame('Injected event deletion failure', $exception->getMessage());
+                    $this->assertSame(2, $deleted);
+                    $this->assertFalse($db->isInTransaction());
+                    // The fixture itself belongs to the enclosing test transaction, which is
+                    // rolled back too. Nothing from either occurrence may have been committed.
+                    $this->assertSame($initialCount, (int) $db->queryPrepared('SELECT COUNT(*) FROM ' . TBL_EVENTS)->fetchColumn());
+                    $this->assertNull((new EventRecurrenceRepository($db))->readById($ruleId));
+                } finally {
+                    Hooks::removeAction('entity_deleting', 'series_rollback_test');
+                }
+                return;
+            }
+            if ($action === 'guard') {
+                try {
+                    $master->delete();
+                    $this->fail('Direct master deletion must be refused.');
+                } catch (Exception $exception) {
+                    $this->assertSame('SYS_RECURRENCE_DELETE_SERIES_REQUIRED', $exception->getTranslationId());
+                }
+            } elseif ($action === 'permanent') {
+                // Start from a non-master occurrence and include history and cancelled exceptions.
+                $occurrence = new Event($db, $ids[1]);
+                (new EventService($db))->deleteSeriesData((string) $occurrence->getValue('dat_uuid'));
+            } else {
+                $occurrence = new Event($db, $ids[1]);
+                (new EventService($db))->deleteData((string) $occurrence->getValue('dat_uuid'), $action);
+                $this->assertSame('cancelled', (new Event($db, $ids[1]))->getValue('dat_recurrence_status'));
+                $this->assertSame('master', (new Event($db, $ids[0]))->getValue('dat_recurrence_status'));
+            }
+            $remaining = (int) $db->queryPrepared(
+                'SELECT COUNT(*) FROM ' . TBL_EVENTS . ' WHERE dat_id IN (?, ?, ?)', $ids
+            )->fetchColumn();
+            $this->assertSame($action === 'permanent' ? 0 : 3, $remaining);
+            $this->assertSame($action === 'permanent', (new EventRecurrenceRepository($db))->readById($ruleId) === null);
+        });
     }
 
     /**

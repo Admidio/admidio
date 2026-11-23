@@ -2861,7 +2861,7 @@ class InventoryTest extends DatabaseTestCase
     public static function cancelledEventReservationCases(): array
     {
         $cases = [];
-        foreach (['this', 'series'] as $scope) {
+        foreach (['this', 'series', 'permanent'] as $scope) {
             foreach ([Reservation::STATUS_REQUESTED, Reservation::STATUS_APPROVED, Reservation::STATUS_BORROWED] as $status) {
                 foreach ([false, true] as $enabled) {
                     $cases[$scope . ', ' . $status . ', enabled=' . (int) $enabled] = [$scope, $status, $enabled];
@@ -2916,10 +2916,17 @@ class InventoryTest extends DatabaseTestCase
                 ['2020-12-01 10:00:00', '2020-12-01 12:00:00', $rows[2]['dat_id']],
             );
             $GLOBALS['gSettingsManager']->set('inventory_reservations_enabled', $enabled ? '1' : '0');
-            (new EventService($this->getDatabase()))->deleteData($rows[1]['dat_uuid'], $scope);
+            if ($scope === 'permanent') {
+                (new EventService($this->getDatabase()))->deleteSeriesData($rows[1]['dat_uuid']);
+            } else {
+                (new EventService($this->getDatabase()))->deleteData($rows[1]['dat_uuid'], $scope);
+            }
             foreach ($rows as $index => $row) {
-                $cancelled = $index === 1 || ($scope === 'series' && $index === 0);
+                $cancelled = $scope === 'permanent' || $index === 1 || ($scope === 'series' && $index === 0);
                 $reservation = new Reservation($this->getDatabase(), (int) $row['ivr_id']);
+                if ($scope === 'permanent') {
+                    $this->assertEmpty($reservation->getValue('ivr_dat_id'));
+                }
                 $expected = $cancelled && $status !== Reservation::STATUS_BORROWED ? Reservation::STATUS_CANCELLED : $status;
                 $this->assertSame($expected, $reservation->getValue('ivr_status'));
                 if ($cancelled && $status === Reservation::STATUS_REQUESTED && $enabled) {

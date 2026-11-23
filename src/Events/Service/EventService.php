@@ -107,6 +107,64 @@ class EventService
     }
 
     /**
+     * Permanently delete a complete series, including past and manually handled occurrences.
+     * This is deliberately separate from deleteData(), which preserves cancellation history.
+     * @throws Exception
+     */
+    public function deleteSeriesData(string $eventUUID): void
+    {
+        $event = new Event($this->database);
+        if ($eventUUID === '' || !$event->readDataByUuid($eventUUID)) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+        if (!$event->isEditable()) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        $this->database->startTransaction();
+        try {
+            $recurrenceId = $this->getEventRecurrenceId($event);
+            // Block new occurrences from acquiring a reference while we collect the series.
+            $this->database->queryPrepared(
+                'SELECT evr_id FROM ' . TBL_EVENT_RECURRENCES . ' WHERE evr_id = ? FOR UPDATE',
+                [$recurrenceId]
+            )->fetchColumn();
+            $repository = new EventRecurrenceRepository($this->database);
+            $recurrence = $repository->readById($recurrenceId);
+            if ($recurrence === null) {
+                throw new Exception('SYS_RECURRENCE_NOT_FOUND');
+            }
+            $masterId = (int) $recurrence->getValue('evr_dat_id_master');
+
+            // Retain the ids before deleting the rule: its FK sets dat_evr_id to NULL.
+            // Lock the occurrences so concurrent changes cannot bypass the permission checks.
+            $ids = $this->database->queryPrepared(
+                'SELECT dat_id FROM ' . TBL_EVENTS . '
+                 WHERE dat_evr_id = ? OR dat_id = ? ORDER BY dat_id FOR UPDATE',
+                [$recurrenceId, $masterId]
+            )->fetchAll(\PDO::FETCH_COLUMN);
+            foreach ($ids as $id) {
+                if (!(new Event($this->database, (int) $id))->isEditable()) {
+                    throw new Exception('SYS_NO_RIGHTS');
+                }
+            }
+
+            $repository->delete($recurrenceId);
+            // Keep the master until the other occurrences and their dependent data are gone.
+            foreach ($ids as $id) {
+                if ((int) $id !== $masterId) {
+                    (new Event($this->database, (int) $id))->delete();
+                }
+            }
+            (new Event($this->database, $masterId))->delete();
+            $this->database->endTransaction();
+        } catch (\Throwable $exception) {
+            $this->database->rollback();
+            throw $exception;
+        }
+    }
+
+    /**
      * Change the participation status of a user for an event.
      * @return array<string,string>
      * @throws Exception
