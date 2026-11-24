@@ -74,6 +74,46 @@ class FileCopyTest extends DatabaseTestCase
         return (int) $this->getDatabase()->queryPrepared('SELECT COUNT(*) AS num FROM ' . TBL_FILES)->fetch()['num'];
     }
 
+    public function testDocumentsAdminCannotDownloadFileOfAnotherOrganization(): void
+    {
+        $fixture = $this->getFixture();
+        $ownerOrg = $fixture->createAndSaveOrganization('Owner organization', 'owner');
+        $otherOrg = $fixture->createAndSaveOrganization('Other organization', 'other');
+        $owner = $this->makeDocumentsAdmin($fixture, $ownerOrg['org_id']);
+        $role = $fixture->createAndSaveRoleWithRights('Other doc admins', $otherOrg['org_id'], ['rol_documents_files' => 1]);
+        $otherUser = $fixture->createAndSaveUser('otheradmin', 'otheradmin@example.local');
+        $fixture->assignUserToRole($otherUser['usr_id'], $role['rol_id']);
+        $otherAdmin = $this->loadUserInOrganization($otherUser['usr_id'], $otherOrg['org_id']);
+        $folderId = $this->createFolder($owner, $ownerOrg['org_id'], 'confidential');
+        $fileId = $this->createFile($owner, $ownerOrg['org_id'], $folderId, 'minutes.txt');
+        $uuid = $this->getDatabase()->queryPrepared(
+            'SELECT fil_uuid FROM ' . TBL_FILES . ' WHERE fil_id = ?', [$fileId]
+        )->fetchColumn();
+
+        $this->withCurrentUser($owner, $ownerOrg['org_id'], true, function () use ($uuid) {
+            $this->assertTrue((new File($this->getDatabase()))->getFileForDownload($uuid));
+        });
+
+        $this->withCurrentUser($otherAdmin, $otherOrg['org_id'], true, function () use ($uuid, $fileId) {
+            $this->assertTrue($GLOBALS['gCurrentUser']->isAdministratorDocumentsFiles());
+            foreach (['download', 'id', 'uuid'] as $method) {
+                $file = new File($this->getDatabase());
+                try {
+                    if ($method === 'download') {
+                        $file->getFileForDownload($uuid);
+                    } elseif ($method === 'id') {
+                        $file->readDataById($fileId);
+                    } else {
+                        $file->readDataByUuid($uuid);
+                    }
+                    $this->fail('Files of another organization must be rejected.');
+                } catch (Exception $exception) {
+                    $this->assertSame(0, (int)$file->getValue('fil_id'));
+                }
+            }
+        });
+    }
+
     /**
      * @testdox A copy keeps the name if the destination folder has no file with this name
      */

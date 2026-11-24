@@ -157,6 +157,27 @@ class File extends Entity
     }
 
     /**
+     * Read a file together with its folder and enforce organization isolation for all callers.
+     * @param string $sqlWhereCondition SQL condition identifying the record
+     * @param array<int,mixed> $queryParams Parameters for the prepared statement
+     * @return bool Returns true if a record is found
+     * @throws Exception
+     */
+    protected function readData(string $sqlWhereCondition, array $queryParams = array()): bool
+    {
+        if (!parent::readData($sqlWhereCondition, $queryParams)) {
+            return false;
+        }
+
+        if ((int)$this->getValue('fol_org_id') !== (int)$GLOBALS['gCurrentOrgId']) {
+            $this->clear();
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        return true;
+    }
+
+    /**
      * Get the relevant icon for the current file
      * @return string Returns the name of the icon
      * @throws Exception
