@@ -3,6 +3,7 @@ namespace Admidio\Events\Entity;
 
 use Admidio\Categories\Entity\Category;
 use Admidio\Events\ValueObject\Participants;
+use Admidio\Events\Repository\EventRecurrenceRepository;
 use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Email;
 use Admidio\Infrastructure\Language;
@@ -163,31 +164,42 @@ class Event extends Entity
         $datId     = (int) $this->getValue('dat_id');
         $datRoleId = (int) $this->getValue('dat_rol_id');
 
-        $this->db->startTransaction();
-
-        // delete all roles assignments that could participate in the event
-        $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $datId);
-        $eventParticipationRoles->delete();
-
-        // if event has participants then the role with their memberships must be deleted
-        if ($datRoleId > 0) {
-            $sql = 'UPDATE '.TBL_EVENTS.'
-                       SET dat_rol_id = NULL
-                     WHERE dat_id = ? -- $datId';
-            $this->db->queryPrepared($sql, array($datId));
-
-            $eventRole = new Role($this->db, $datRoleId);
-            $eventRole->delete(); // TODO Exception handling
+        // A master may only be removed after its complete series has been handled.
+        $recurrenceRepository = new EventRecurrenceRepository($this->db);
+        if ($recurrenceRepository->readByMasterEventId($datId) !== null) {
+            throw new Exception('SYS_RECURRENCE_DELETE_SERIES_REQUIRED');
         }
 
-        // Keep the reservation audit trail when an event disappears. The FK then clears the
-        // event reference, while the cancelled status ensures its former period is not blocked.
-        (new ReservationService($this->db))->cancelEventReservations($datId);
+        $this->db->startTransaction();
 
-        // now delete event
-        parent::delete();
+        try {
+            // delete all roles assignments that could participate in the event
+            $eventParticipationRoles = new RolesRights($this->db, 'event_participation', $datId);
+            $eventParticipationRoles->delete();
 
-        return $this->db->endTransaction();
+            // if event has participants then the role with their memberships must be deleted
+            if ($datRoleId > 0) {
+                $sql = 'UPDATE '.TBL_EVENTS.'
+                           SET dat_rol_id = NULL
+                         WHERE dat_id = ? -- $datId';
+                $this->db->queryPrepared($sql, array($datId));
+
+                $eventRole = new Role($this->db, $datRoleId);
+                $eventRole->delete(); // TODO Exception handling
+            }
+
+            // Keep the reservation audit trail when an event disappears. The FK then clears the
+            // event reference, while the cancelled status ensures its former period is not blocked.
+            (new ReservationService($this->db))->cancelEventReservations($datId);
+
+            // now delete event
+            parent::delete();
+
+            return $this->db->endTransaction();
+        } catch (\Throwable $exception) {
+            $this->db->rollback();
+            throw $exception;
+        }
     }
 
     /**

@@ -1647,6 +1647,7 @@
   <string name="SYS_RECIPIENT">Empfänger</string>
   <string name="SYS_RECIPIENT_EMAIL">Empfängeradresse</string>
   <string name="SYS_RECURRENCE">Wiederholung</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Dieser Termin ist der Haupttermin einer Terminserie. Lösche die vollständige Serie, um ihn endgültig zu entfernen.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Möchtest du nur diesen Termin der Serie absagen: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Das Bearbeiten einer gesamten Serie wird derzeit nicht unterstützt.</string>
   <string name="SYS_RECURRENCE_END_DESC">Legt fest, wann die Wiederholung endet. Auch Wiederholungen ohne Enddatum werden intern begrenzt.</string>

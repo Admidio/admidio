@@ -413,6 +413,7 @@ final class Calendar
             INNER JOIN ' . TBL_CATEGORIES . '
                     ON cat_id = dat_cat_id
                 WHERE cat_id IN (' . Database::getQmForValues($catIdParams) . ')
+                AND (dat_recurrence_status IS NULL OR dat_recurrence_status <> \'cancelled\')
                 AND dat_begin <= ? -- $dateMonthEnd
                 AND dat_end   >= ? -- $dateMonthStart
                     ' . $sqlSyntax . '
