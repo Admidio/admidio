@@ -13,6 +13,7 @@ namespace Admidio\Tests\Integration\Photos;
 
 use Admidio\Infrastructure\Exception;
 use Admidio\Photos\Entity\Album;
+use Admidio\Photos\Service\AlbumService;
 use Admidio\Tests\Support\AdmidioTestFixture;
 use Admidio\Tests\Support\DatabaseTestCase;
 use Admidio\Tests\Support\PermissionContext;
@@ -33,6 +34,10 @@ class AlbumTest extends DatabaseTestCase
      */
     private function createAlbum(User $owner, int $orgId, string $name, ?int $parentId = null): int
     {
+        $this->settingsOf($orgId)->set('system_date', 'Y-m-d');
+        $this->settingsOf($orgId)->set('system_time', 'H:i');
+        $this->settingsOf($orgId)->set('system_notifications_new_entries', 0);
+
         return $this->withCurrentUser($owner, $orgId, true, function () use ($name, $parentId) {
             $album = new Album($this->getDatabase());
             $album->setValue('pho_name', $name);
@@ -69,6 +74,104 @@ class AlbumTest extends DatabaseTestCase
 
             return $album->$method();
         });
+    }
+
+    public function testLockAndUnlockAffectTheEntireTree(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Photo Org', 'phoorg');
+        $admin = $this->makePhotoAdmin($fixture, $org['org_id'], 'phoadmin');
+        $root = $this->createAlbum($admin, $org['org_id'], 'Root');
+        $child = $this->createAlbum($admin, $org['org_id'], 'Child', $root);
+        $grandchild = $this->createAlbum($admin, $org['org_id'], 'Grandchild', $child);
+        $other = $this->createAlbum($admin, $org['org_id'], 'Other');
+        $plain = $fixture->createAndSaveUser('phoplain', 'pp@example.local');
+        $user = $this->loadUserInOrganization($plain['usr_id'], $org['org_id']);
+
+        // Unlocking the root deliberately also clears a separately locked descendant.
+        $this->withCurrentUser($admin, $org['org_id'], true, function () use ($grandchild) {
+            $album = new Album($this->getDatabase(), $grandchild);
+            $album->lock();
+        });
+
+        foreach (array(1, 0) as $locked) {
+            $this->withCurrentUser($admin, $org['org_id'], true, function () use ($root, $locked) {
+                $album = new Album($this->getDatabase(), $root);
+                if ($locked) {
+                    $album->lock();
+                } else {
+                    $album->unlock();
+                }
+            });
+            foreach (array($root, $child, $grandchild) as $id) {
+                $this->assertSame(!$locked, $this->askAs($user, $org['org_id'], $id, 'isVisible'));
+                $this->assertTrue($this->askAs($admin, $org['org_id'], $id, 'isVisible'));
+            }
+            $this->assertTrue($this->askAs($user, $org['org_id'], $other, 'isVisible'));
+        }
+    }
+
+    public function testNewAndMovedAlbumsStayLockedUnderALockedParent(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Photo Org', 'phoorg');
+        $admin = $this->makePhotoAdmin($fixture, $org['org_id'], 'phoadmin');
+        $root = $this->createAlbum($admin, $org['org_id'], 'Root');
+        $moved = $this->createAlbum($admin, $org['org_id'], 'Moved');
+        $grandchild = $this->createAlbum($admin, $org['org_id'], 'Grandchild', $moved);
+
+        $new = $this->withCurrentUser($admin, $org['org_id'], true, function () use ($root, $moved) {
+            $parent = new Album($this->getDatabase(), $root);
+            $parent->lock();
+            $service = new AlbumService($this->getDatabase());
+            $album = new Album($this->getDatabase(), $moved);
+            $service->saveData($album, array(), $parent->getValue('pho_uuid'));
+            $album->unlock();
+            $this->assertTrue((bool)$album->getValue('pho_locked'));
+
+            // Exercise creation through the service without writing photo directories.
+            $newAlbum = $this->getMockBuilder(Album::class)
+                ->setConstructorArgs(array($this->getDatabase()))
+                ->onlyMethods(array('createFolder'))
+                ->getMock();
+            $newAlbum->expects($this->once())->method('createFolder')->willReturn(null);
+            $service->saveData($newAlbum, array(
+                'pho_name' => 'New',
+                'pho_begin' => '2030-07-01',
+                'pho_end' => '2030-07-14'
+            ), $parent->getValue('pho_uuid'));
+            return (int)$newAlbum->getValue('pho_id');
+        });
+        foreach (array($moved, $grandchild, $new) as $id) {
+            $this->assertEquals(1, $this->getDatabase()->queryPrepared(
+                'SELECT pho_locked FROM ' . TBL_PHOTOS . ' WHERE pho_id = ?', array($id)
+            )->fetchColumn());
+        }
+    }
+
+    public function testUpdateRepairsExistingUnlockedDescendants(): void
+    {
+        $fixture = $this->getFixture();
+        $org = $fixture->createAndSaveOrganization('Photo Org', 'phoorg');
+        $admin = $this->makePhotoAdmin($fixture, $org['org_id'], 'phoadmin');
+        $root = $this->createAlbum($admin, $org['org_id'], 'Root');
+        $child = $this->createAlbum($admin, $org['org_id'], 'Child', $root);
+        $grandchild = $this->createAlbum($admin, $org['org_id'], 'Grandchild', $child);
+        $other = $this->createAlbum($admin, $org['org_id'], 'Other');
+        $db = $this->getDatabase();
+        $db->queryPrepared('UPDATE ' . TBL_PHOTOS . ' SET pho_locked = true WHERE pho_id = ?', array($root));
+        \Admidio\InstallationUpdate\Service\UpdateStepsCode::setDatabase($db);
+        for ($run = 0; $run < 2; ++$run) {
+            \Admidio\InstallationUpdate\Service\UpdateStepsCode::updateStep60LockPhotoDescendants();
+            foreach (array($child, $grandchild) as $id) {
+                $this->assertEquals(1, $db->queryPrepared(
+                    'SELECT pho_locked FROM ' . TBL_PHOTOS . ' WHERE pho_id = ?', array($id)
+                )->fetchColumn());
+            }
+            $this->assertEquals(0, $db->queryPrepared(
+                'SELECT pho_locked FROM ' . TBL_PHOTOS . ' WHERE pho_id = ?', array($other)
+            )->fetchColumn());
+        }
     }
 
     /**

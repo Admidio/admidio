@@ -107,5 +107,6 @@
     -->
     <step id="390">UpdateStepsCode::updateStep51ConvertBuiltInPlugins</step>
     <step id="400">UpdateStepsCode::updateStep51CheckFor3rdPartyPlugins</step>
+    <step id="410">UpdateStepsCode::updateStep60LockPhotoDescendants</step>
     <step>stop</step>
 </update>

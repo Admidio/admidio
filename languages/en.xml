@@ -1234,7 +1234,7 @@
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Choose where to store profile pictures: in the database or in the adm_my_files folder. Changing this setting does not move existing pictures to the new location. (Default: database)</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOCK_ALBUM">Lock album</string>
-  <string name="SYS_LOCK_ALBUM_DESC">Locked albums cannot be viewed by visitors or members. For example, you can lock an album until all images have been uploaded.</string>
+  <string name="SYS_LOCK_ALBUM_DESC">Locked albums cannot be viewed by visitors or members. Locking or unlocking an album also locks or unlocks all its sub-albums, including sub-albums that were locked separately. Sub-albums of a locked album cannot be unlocked individually.</string>
   <string name="SYS_LOG">Log</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>

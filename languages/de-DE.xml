@@ -1217,7 +1217,7 @@
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCKED">Gesperrt</string>
   <string name="SYS_LOCK_ALBUM">Album sperren</string>
-  <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
+  <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Beim Sperren oder Entsperren eines Albums werden auch alle Unteralben gesperrt oder entsperrt, einschließlich zuvor separat gesperrter Unteralben. Unteralben eines gesperrten Albums können nicht einzeln entsperrt werden.</string>
   <string name="SYS_LOG">Protokoll</string>
   <string name="SYS_LOGGED_AREAS">Protokollierte Bereiche</string>
   <string name="SYS_LOGGED_AREAS_DESC">Wählen Sie die Bereiche aus, für die die Änderungshistorie geführt wird. Jede Änderung an einem Objekt eines ausgewählten Bereichs wird mit altem und neuem Wert sowie Änderungszeit und verantwortlicher Person protokolliert. Bereiche von deaktivierten Modulen werden nicht angezeigt. Wird ein Bereich abgewählt, werden bestehende Protokolleinträge nicht gelöscht. Dies kann auf der Seite Änderungshistorie erfolgen. Ein Bereich, dessen Objekte nur teilweise protokolliert werden, wird in einem dritten, unbestimmten Zustand angezeigt und bleibt unverändert, bis Sie ihn ein- oder ausschalten.</string>
