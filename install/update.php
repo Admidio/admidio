@@ -8,6 +8,7 @@ use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\InstallationUpdate\Service\CoreUpdateHandover;
 use Admidio\InstallationUpdate\Service\Installation;
+use Admidio\InstallationUpdate\Service\StatisticsConsent;
 use Admidio\InstallationUpdate\Service\Update;
 use Admidio\Organizations\Entity\Organization;
 use Admidio\ProfileFields\ValueObjects\ProfileFields;
@@ -147,6 +148,7 @@ try {
      */
     $coreUpdate = CoreUpdateHandover::fromMaintenance();
     $isCoreUpdate = $getMode === 'core_update' && $coreUpdate !== null;
+    $coreUpdateHandlesStatistics = $coreUpdate?->getStatisticsTenantId() !== null;
 
     // connect to database
     $gDb = Database::createDatabaseInstance();
@@ -347,6 +349,9 @@ try {
                     array('maxLength' => 6, 'class' => 'form-control-small')
                 );
             }
+            if (!$coreUpdateHandlesStatistics) {
+                StatisticsConsent::addToForm($form, $page, $installedDbVersion);
+            }
             $form->addSubmitButton(
                 'adm_next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
@@ -406,10 +411,12 @@ try {
     } elseif ($getMode === 'update') {
         // check form field input and sanitized it from malicious content
         if (isset($_SESSION['updateLoginForm'])) {
-            $_SESSION['updateLoginForm']->validate($_POST);
+            $formValues = $_SESSION['updateLoginForm']->validate($_POST);
         } else {
             throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
         }
+        // Preserve consent and payload locally: doAdmidioUpdate destroys the session.
+        $statisticsData = $coreUpdateHandlesStatistics ? null : StatisticsConsent::selectedData($formValues);
 
         // start the update
         if ($coreUpdate !== null) {
@@ -430,6 +437,12 @@ try {
          */
         if ($coreUpdate !== null) {
             $coreUpdate->complete();
+        }
+
+        // A reviewed core-update snapshot is sent by complete(), using the updater's choice.
+        if (!$coreUpdateHandlesStatistics) {
+            StatisticsConsent::savePreference($statisticsData !== null);
+            StatisticsConsent::send($statisticsData);
         }
 
         echo json_encode(array(

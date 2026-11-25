@@ -1291,8 +1291,8 @@ CREATE TABLE `%PREFIX%_organizations` (
 --
 
 INSERT INTO `%PREFIX%_organizations` (`org_id`, `org_uuid`, `org_shortname`, `org_longname`, `org_org_id_parent`, `org_homepage`, `org_email_administrator`, `org_show_org_select`) VALUES
-(1, 'f04eef83-91ad-40bf-8267-09cd40ce0799', 'DEMO', 'Demo-Organisation', NULL, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1),
-(2, '8418cd76-3ac9-455f-bfb4-ed6561abdb7b', 'TEST', 'Test-Organisation', 1, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1);
+(1, 'f04eef83-91ad-40bf-8267-09cd40ce0799', 'ADM_DEMO', 'Demo-Organisation', NULL, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1),
+(2, '8418cd76-3ac9-455f-bfb4-ed6561abdb7b', 'ADM_TEST', 'Test-Organisation', 1, 'https://www.admidio.org/demo/', 'administrator@admidio.org', 1);
 
 -- --------------------------------------------------------
 

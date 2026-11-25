@@ -19,6 +19,7 @@ use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -39,6 +40,12 @@ const TBL_DATES = TABLE_PREFIX . '_dates';
  */
 final class UpdateStepsCode
 {
+    /** Initialize the installation identity once when upgrading to 6.0, including headless updates. */
+    public static function updateStep60CreateTenantId(): void
+    {
+        InstallationIdentifier::ensure(self::$db, StatisticsConsent::tenantId());
+    }
+
     /**
      * Repair descendants of locked albums without changing independently locked albums.
      * Works across organizations and does not require a current user or organization context.

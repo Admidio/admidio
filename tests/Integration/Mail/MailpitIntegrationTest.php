@@ -26,6 +26,19 @@ class MailpitIntegrationTest extends AdministratorTestCase
         $apiHost = getenv('TEST_MAILPIT_API_HOST') ?: $smtpHost;
         $apiPort = (int)(getenv('TEST_MAILPIT_API_PORT') ?: 8025);
 
+        // A forwarded Docker port can accept TCP while the SMTP service sends no greeting.
+        $socket = @fsockopen($smtpHost, $smtpPort, $errorCode, $errorMessage, 2);
+        if ($socket === false) {
+            $this->markTestSkipped('Mailpit SMTP is unavailable: ' . $errorMessage);
+        }
+        stream_set_timeout($socket, 2);
+        $greeting = fgets($socket);
+        fclose($socket);
+        if (!is_string($greeting) || !str_starts_with($greeting, '220')) {
+            $this->markTestSkipped('Mailpit SMTP did not send a greeting.');
+        }
+
+
         $oldSettings = array(
             'mail_send_method' => $gSettingsManager->getString('mail_send_method'),
             'mail_smtp_host' => $gSettingsManager->getString('mail_smtp_host'),

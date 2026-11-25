@@ -6,6 +6,7 @@ use Admidio\Components\Entity\Component;
 use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\ChangeNotification;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
@@ -206,7 +207,7 @@ if ($gCurrentSession->hasObject('gCurrentUser')) {
      */
     $gCurrentUser  =& $gCurrentSession->getObject('gCurrentUser');
     /**
-     * @var int $gCurrentOrgId The ID of the current registered user or 0 if it's a visitor.
+     * @var int $gCurrentUserId The ID of the current registered user or 0 if it's a visitor.
      */
     $gCurrentUserId = $gCurrentUser->getValue('usr_id');
     $gCurrentUserUUID = $gCurrentUser->getValue('usr_uuid');
@@ -334,4 +335,12 @@ if (PHP_SAPI !== 'cli' && MembershipPeriodService::mayBeDue()) {
     Hooks::addAction('request_finished', static function () use ($gDb): void {
         MembershipPeriodService::runIfDueSilently($gDb);
     }, Hooks::DEFAULT_PRIORITY, 0, 'membership-period');
+}
+
+// Monthly installation statistics also run through maintenance:run. Without cron, check after
+// the response; the installation-wide lock and due date prevent duplicate sends.
+if (PHP_SAPI !== 'cli') {
+    Hooks::addAction('request_finished', static function () use ($gDb): void {
+        InstallationStatistics::sendIfDue($gDb);
+    }, Hooks::DEFAULT_PRIORITY, 0, 'installation-statistics');
 }

@@ -762,7 +762,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">The category #VAR1_BOLD# could not be deleted because #VAR2# entries depend on it.</string>
   <string name="SYS_DONT_SHOW">Do not display</string>
   <string name="SYS_DOWNLOAD_ALBUM">Download album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">Download file</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Download photo</string>
@@ -1525,7 +1524,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio requires #VAR1# or higher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Select option</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ADD_FROM_DIRECTORY">Add from plugin directory</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
@@ -1637,6 +1635,8 @@
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">The photo will be scaled down to at most #VAR1# pixels on the longest side. The aspect ratio is retained.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">You should be in the photo yourself.</string>
   <string name="SYS_PROPERTIES">Properties</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Uncheck the checkbox to continue without sending these data and disable monthly sending.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonymous technical data about this installation are sent to admidio.org after installation or an update and, if enabled in the system settings, once a month. This helps us understand how widely Admidio is used and which technologies are in use, so that we can improve Admidio accordingly. A persistent installation ID allows reports to be linked over time. The receiving server can see the sender’s IP address, and third-party plugin names may identify an organization. The JSON below describes the data to be sent.</string>
   <string name="SYS_PWA_ENABLED">Enable Progressive Web App (PWA)</string>
   <string name="SYS_PWA_ENABLED_DESC">Allows users to install Admidio as a standalone web app on their smartphone, tablet, or desktop. The app name is based on the organization name. Custom app icons can be placed in adm_my_files/ as app_icon.png or app_icon_512.png. Otherwise, a PNG favicon configured under 'Design' or the default logo will be used as a fallback.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tap the three-dot menu at the top or bottom.</string>
@@ -1877,7 +1877,6 @@
   <string name="SYS_SEND_EMAIL">Send email</string>
   <string name="SYS_SEND_EMAIL_FORMER">Send emails to former members</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">If this option is set, then emails could be sent to individual former members, as well as to all former members of a role. (Default: Activated)</string>
-  <string name="SYS_SEND_EMAIL_TO">Send email to #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Send emails to all email addresses of the user</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, emails will be sent to all user email addresses stored in the profile. If the setting is deactivated, emails will only be sent to the email address from the profile field with the internal name EMAIL. (Default: disabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Send greeting card</string>
@@ -1890,6 +1889,8 @@
   <string name="SYS_SEND_PHOTO_AS_ECARD">Send photo as greeting card</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Send private message</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Your PM will be sent to the selected recipient.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Send pseudonymous statistics</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Send #VAR1#pseudonymous technical data#VAR2# to admidio.org once a month. When enabled, sending is checked by maintenance tasks or after web requests.</string>
   <string name="SYS_SEND_TEST_MAIL">Send test mail</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">Send email with username and password.</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">CSV field separator</string>
@@ -1902,6 +1903,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">When enabled, users who are not logged in must enter the alphanumeric captcha text in the corresponding field. This helps prevent spammers from abusing the form. (Default: yes)</string>
+  <string name="SYS_SHOW_DATA">Show data</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
@@ -2219,6 +2221,7 @@
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509 encryption certificate</string>
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Certificate of the client for encrypting assertions. If empty, the first signing certificate is used.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">For privacy reasons, this update dialog only shows the JSON structure with placeholders. Actual installation data are hidden because the dialog can be opened before logging in.</string>
   <string name="SYS_STATUS_APPROVED">Approved</string>
   <string name="SYS_STATUS_BORROWED">Borrowed</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
@@ -2267,6 +2270,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Set the template that is preselected when creating the e-card. (Default: postcard)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template folder could not be opened/read.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">The installation ID has not been initialized.</string>
   <string name="SYS_TEST_MAIL">Test mail</string>
   <string name="SYS_TEST_MAIL_DESC">Save all email settings before using this function.\nA test email with the subject #VAR1_BOLD# will be sent to the logged-in user\'s email address using the saved settings. When sending via SMTP, a delivery log is displayed to help diagnose problems.</string>
   <string name="SYS_TEXT">Text</string>
