@@ -83,7 +83,7 @@ final class PhaseBTest extends AdmidioTestCase
         });
         $first = U\statisticsPreview($ctx, $id);
         self::assertSame(array('type' => $expectedType, 'version' => $serverVersion), $first['statisticsData']['database']);
-        self::assertTrue($first['statisticsEnabled']);
+        self::assertFalse($first['statisticsEnabled']);
         self::assertFalse($first['statisticsAlreadyEnabled']);
         self::assertSame($identity, $first['statisticsData']['id']);
         self::assertSame(array('enabled-plugin' => '1.2.3'), $first['statisticsData']['admidio']['plugins']);
@@ -98,6 +98,14 @@ final class PhaseBTest extends AdmidioTestCase
             return $state;
         });
         self::assertTrue(U\statisticsPreview($ctx, $id)['statisticsAlreadyEnabled']);
+        $ctx['pdo']->exec("DELETE FROM adm_preferences WHERE prf_org_id IS NULL");
+        U\updateState($this->root, $id, static function (array $state): array {
+            unset($state['statisticsData']);
+            return $state;
+        });
+        $firstUpdate = U\statisticsPreview($ctx, $id);
+        self::assertTrue($firstUpdate['statisticsEnabled']);
+        self::assertFalse($firstUpdate['statisticsAlreadyEnabled']);
     }
 
     public static function statisticsChoices(): array

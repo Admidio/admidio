@@ -64,7 +64,7 @@ function statisticsPreview(array $ctx, string $updateId): array
         $consent = dbRow($ctx['pdo'], 'SELECT prf_value FROM ' . $prefix . '_preferences'
             . ' WHERE prf_name = ? AND prf_org_id IS NULL', array('system_statistics_enabled'));
         $state['statisticsAlreadyEnabled'] = ($consent['prf_value'] ?? '0') === '1';
-        $state['statisticsEnabled'] = true;
+        $state['statisticsEnabled'] = $identity === null || $state['statisticsAlreadyEnabled'];
         $state['statisticsData'] = array(
             'id' => $id,
             'timestamp' => gmdate('Y-m-d\\TH:i:s\\Z'),

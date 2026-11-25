@@ -71,14 +71,15 @@ class StatisticsConsentTest extends TestCase
     public static function previousVersions(): array
     {
         return array(
-            'installation' => array(null, false),
-            'update without consent' => array('5.0.0', false),
-            'update with consent' => array('5.0.0', true)
+            'installation' => array(null, false, false),
+            'update without consent' => array('5.0.0', false, true),
+            'update with consent' => array('5.0.0', true, true),
+            'first update without identity' => array('5.0.0', false, false)
         );
     }
 
     /** @dataProvider previousVersions */
-    public function testSharedPreviewWorksWithoutInstalledTables(?string $previousVersion, bool $enabled): void
+    public function testSharedPreviewWorksWithoutInstalledTables(?string $previousVersion, bool $enabled, bool $hasIdentity): void
     {
         foreach (array('ADMIDIO_PATH' => dirname(__DIR__, 3), 'FOLDER_PLUGINS' => '/plugins',
             'ADMIDIO_VERSION_TEXT' => '5.1.0', 'TBL_PREFERENCES' => 'adm_preferences',
@@ -101,11 +102,11 @@ class StatisticsConsentTest extends TestCase
         $database->method('getTableColumns')->willReturn(array('com_id', 'com_name_intern', 'com_version'));
         $database->method('getInformation')->willReturn(array('mysql', '8.0.40'));
         $database->method('getVersion')->willReturn('8.0.40');
-        $database->expects($previousVersion === null ? $this->never() : $this->exactly(2))
-            ->method('queryPrepared')->willReturnCallback(function (string $sql, array $params) use ($enabled): PDOStatement {
+        $database->expects($previousVersion === null ? $this->never() : $this->exactly($hasIdentity ? 2 : 3))
+            ->method('queryPrepared')->willReturnCallback(function (string $sql, array $params) use ($enabled, $hasIdentity): PDOStatement {
                 $statement = $this->createMock(PDOStatement::class);
                 $statement->method('fetchColumn')->willReturn(
-                    $params[0] === 'system_statistics_enabled' ? ($enabled ? '1' : false) : 'stable-tenant'
+                    $params[0] === 'system_statistics_enabled' ? ($enabled ? '1' : false) : ($hasIdentity ? 'stable-tenant' : false)
                 );
                 return $statement;
             });
@@ -114,9 +115,9 @@ class StatisticsConsentTest extends TestCase
         $_SESSION['installationStatisticsData'] = array('id' => 'stable-tenant');
         $page = $this->getMockBuilder(InstallationPresenter::class)->disableOriginalConstructor()->getMock();
         $page->expects($this->exactly(5))->method('assignSmartyVariable')
-            ->willReturnCallback(function (string $name, $value) use ($previousVersion, $enabled): void {
+            ->willReturnCallback(function (string $name, $value) use ($previousVersion, $enabled, $hasIdentity): void {
                 if ($name === 'statisticsEnabled') {
-                    $this->assertTrue($value);
+                    $this->assertSame(!$hasIdentity || $enabled, $value);
                     return;
                 }
                 if ($name === 'statisticsInline') {
@@ -151,7 +152,7 @@ class StatisticsConsentTest extends TestCase
         $form = new FormPresenter('confirmation', 'installation.install-admidio.tpl');
         StatisticsConsent::addToForm($form, $page, $previousVersion);
         $this->assertSame(!$enabled, isset($form->getElements()['adm_send_statistics']));
-        $this->assertSame(!$enabled, isset($form->getElements()['adm_send_statistics']['attributes']['checked']));
+        $this->assertSame(!$enabled && !$hasIdentity, isset($form->getElements()['adm_send_statistics']['attributes']['checked']));
         $this->assertSame($enabled ? $_SESSION['installationStatisticsData'] : null, StatisticsConsent::selectedData(array()));
         $this->assertSame($_SESSION['installationStatisticsData'], StatisticsConsent::selectedData(array('adm_send_statistics' => '1')));
         $this->assertSame('stable-tenant', StatisticsConsent::tenantId());

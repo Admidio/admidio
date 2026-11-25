@@ -22,6 +22,7 @@ final class StatisticsConsent
 
         // Fresh installations have no organization/preferences tables yet.
         $tenantId = $previousVersion !== null ? InstallationIdentifier::get($gDb) : null;
+        $defaultEnabled = $previousVersion === null || $tenantId === null;
         if ($tenantId === null) {
             $tenantId = $_SESSION[self::SESSION_DATA]['id'] ?? Uuid::uuid4()->toString();
         }
@@ -51,9 +52,9 @@ final class StatisticsConsent
         $_SESSION['installationStatisticsAlreadyEnabled'] = $enabled;
         $page->assignSmartyVariable('statisticsInline', $previousVersion !== null);
         $page->assignSmartyVariable('statisticsAlreadyEnabled', $enabled);
-        $page->assignSmartyVariable('statisticsEnabled', true);
+        $page->assignSmartyVariable('statisticsEnabled', $defaultEnabled || $enabled);
         if (!$enabled) {
-            $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), true);
+            $form->addCheckbox('adm_send_statistics', $gL10n->get('SYS_SEND_PSEUDONYMOUS_STATISTICS'), $defaultEnabled || $enabled);
         }
         $page->addJavascript('
             $("#adm_send_statistics").on("change", function () {
