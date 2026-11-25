@@ -1220,7 +1220,7 @@
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCKED">Gesperrt</string>
   <string name="SYS_LOCK_ALBUM">Album sperren</string>
-  <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel ein Album vorübergehen sperren, während du gerade alle Bilder des Albums hochlädst.</string>
+  <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Beim Sperren oder Entsperren eines Albums werden auch alle Unteralben gesperrt oder entsperrt, einschließlich zuvor separat gesperrter Unteralben. Unteralben eines gesperrten Albums können nicht einzeln entsperrt werden.</string>
   <string name="SYS_LOG">Protokoll</string>
   <string name="SYS_LOGGED_AREAS">Protokollierte Bereiche</string>
   <string name="SYS_LOGGED_AREAS_DESC">Wähle die Bereiche aus, für die die Änderungshistorie geführt wird. Jede Änderung an einem Objekt eines ausgewählten Bereichs wird mit altem und neuem Wert sowie Änderungszeit und verantwortlicher Person protokolliert. Bereiche von deaktivierten Modulen werden nicht angezeigt. Wird ein Bereich abgewählt, werden bestehende Protokolleinträge nicht gelöscht. Dies kann auf der Seite Änderungshistorie erfolgen. Ein Bereich, dessen Objekte nur teilweise protokolliert werden, wird in einem dritten, unbestimmten Zustand angezeigt und bleibt unverändert, bis du ihn ein- oder ausschaltest.</string>
@@ -1547,11 +1547,11 @@
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">Die plugin.json dieses Plugins kann nicht gelesen werden: #VAR1#</string>
   <string name="SYS_PLUGIN_PACKAGE_EMPTY">Die Datei ist ein leeres Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_INSTALLED">Das Plugin #VAR1# wurde hinzugefügt. Aktiviere es, um es zu verwenden.</string>
-  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">Der Ordner im Archiv heißt #VAR1# und ist damit kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten.</string>
+  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">#VAR1# ist kein gültiger Plugin-Name. Ein Plugin-Name darf nur Buchstaben, Ziffern, Bindestriche und Unterstriche enthalten. Er wird aus „id“ in plugin.json gelesen, sonst aus dem Namen des Ordners im Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_A_ZIP">Die Datei ist kein ZIP-Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_EXTRACTED">Das Archiv konnte nicht entpackt werden. Prüfe, ob Admidio in seinen temporären Ordner schreiben darf.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_INSTALLED">Das Plugin #VAR1# konnte nicht in den Plugin-Ordner verschoben werden. Prüfe, ob Admidio in diesen Ordner schreiben darf.</string>
-  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">Das Archiv muss genau einen Ordner enthalten, der wie das Plugin benannt ist und alle weiteren Inhalte enthält.</string>
+  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">Das Archiv muss genau einen Ordner enthalten, der alle weiteren Inhalte enthält. Der Ordner ist wie das Plugin benannt, außer plugin.json gibt den Plugin-Namen in „id“ an.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE">Das Archiv enthält keine #VAR1#. Jedes Plugin benötigt diese Datei.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_MANIFEST">Das Archiv enthält keine #VAR1#. Jedes Plugin benötigt diese Datei.</string>
   <string name="SYS_PLUGIN_PACKAGE_REPLACE">Installiertes Plugin ersetzen</string>
@@ -1647,6 +1647,7 @@
   <string name="SYS_RECIPIENT">Empfänger</string>
   <string name="SYS_RECIPIENT_EMAIL">Empfängeradresse</string>
   <string name="SYS_RECURRENCE">Wiederholung</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Dieser Termin ist der Haupttermin einer Terminserie. Lösche die vollständige Serie, um ihn endgültig zu entfernen.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Möchtest du nur diesen Termin der Serie absagen: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Das Bearbeiten einer gesamten Serie wird derzeit nicht unterstützt.</string>
   <string name="SYS_RECURRENCE_END_DESC">Legt fest, wann die Wiederholung endet. Auch Wiederholungen ohne Enddatum werden intern begrenzt.</string>

@@ -77,7 +77,8 @@ use DateTime;
  * getTableLabel() for its title, getFieldTranslations() for the title and type of each of its
  * columns, createLink() for the link to the record, getObjectForTable() for the object the page
  * headline is built from, getRelatedTable() if its entries point at a record of another table,
- * and getPermittedTables() for the users that may read its entries. A third-party extension
+ * getPermittedTables() for the users that may read all of its entries, and getOwnChangeTables() for
+ * the users that may read the entries of the changes they made themselves. A third-party extension
  * registers all of these through registerCallback() instead, see the example at the end of this
  * file.
  *
@@ -139,6 +140,7 @@ class ChangelogService {
         'formatValue' => ['' => []],
         'getRelatedTable' => ['' => []],
         'getPermittedTables' => ['' => []],
+        'getOwnChangeTables' => ['' => []],
     );
 
     /**
@@ -150,7 +152,8 @@ class ChangelogService {
      * method will proceed.
      * @param string $function The method of the ChangelogService class that should be customized. One of
      *     'getTableLabel', 'getTableLabelArray', 'getObjectForTable', 'getFieldTranslations', 'createLink',
-     *     'formatValue', 'getRelatedTable', 'getPermittedTables'. Any other value throws an InvalidArgumentException.
+     *     'formatValue', 'getRelatedTable', 'getPermittedTables', 'getOwnChangeTables'. Any other value throws an
+     *     InvalidArgumentException.
      * @param string $moduleOrKey The module or type that should be customized. If
      *     empty, the callback will be executed for all values, and it will be used
      *     if it evaluates to a non-empty value.
@@ -1676,6 +1679,102 @@ class ChangelogService {
     }
 
     /**
+     * Return the tables in which the user may read the entries of the changes he/she made himself or
+     * herself, for example the activities a member keeps in a third-party extension. Core registers
+     * none; an extension adds its tables through the callback 'getOwnChangeTables'.
+     *
+     * Such a table is readable without a table permission, but only for the entries whose author
+     * is that user, see getOwnChangeRestriction(), which the caller MUST apply.
+     * @param User $user The user
+     * @return string[] List of the tables
+     * @throws Exception
+     */
+    public static function getOwnChangeTables(User $user) : array {
+        $tables = [];
+        $callbacks = self::$customCallbacks['getOwnChangeTables'];
+        if (array_key_exists('', $callbacks)) {
+            $callbacks = array_merge($callbacks, $callbacks['']);
+            unset($callbacks['']);
+        }
+        foreach ($callbacks as $callback) {
+            $val = self::evaluateCallback($callback, $user);
+            if (is_array($val)) {
+                $tables = array_merge($tables, $val);
+            } elseif (!empty($val)) {
+                $tables[] = $val;
+            }
+        }
+
+        return array_values(array_unique($tables));
+    }
+
+    /**
+     * Return the tables whose entries the user may only read where he/she made the change, which
+     * are the tables of getOwnChangeTables() that no permission opens to him/her in full. The caller
+     * restricts their entries to log_usr_id_create = the user, as an SQL condition so that the
+     * record counts and the paging stay correct.
+     * @param User $user The user whose permissions should be checked
+     * @return string[] The tables to restrict; empty if there is nothing to restrict
+     * @throws Exception
+     */
+    public static function getOwnChangeRestriction(User $user) : array {
+        if ($user->isAdministrator()) {
+            return array();
+        }
+
+        return array_values(array_diff(self::getOwnChangeTables($user), self::getPermittedTables($user)));
+    }
+
+    /**
+     * Return the name of a record of a table restricted to the user's own changes, as it was when
+     * the user last changed it. Read access to such a table is no permission to load the record
+     * itself, so its current name must not be shown; the name stored with the user's own log entry
+     * is one he/she has already seen.
+     * @param User $user The user whose own changes are looked up
+     * @param string $table The database table without prefix
+     * @param int $recordId The id of the record, or 0 if the uuid is given
+     * @param string $recordUuid The uuid of the record, or an empty string if the id is given
+     * @return string The record name of the user's latest own change, or an empty string if he/she
+     *                has not changed that record
+     * @throws Exception
+     */
+    public static function getOwnChangeRecordName(User $user, string $table, int $recordId, string $recordUuid) : string {
+        global $gDb, $gCurrentOrgId;
+
+        if ($recordId <= 0 && $recordUuid === '') {
+            return '';
+        }
+
+        $sql = 'SELECT log_record_name
+                  FROM ' . TBL_LOG_CHANGES . '
+                 WHERE log_table = ?
+                   AND log_usr_id_create = ?
+                   AND ' . ($recordUuid !== '' ? 'log_record_uuid = ?' : 'log_record_id = ?') . '
+                   AND ' . self::getOrganizationCondition() . '
+              ORDER BY log_id DESC
+                 LIMIT 1';
+        $name = $gDb->queryPrepared($sql, array($table, (int)$user->getValue('usr_id'),
+            $recordUuid !== '' ? $recordUuid : $recordId, (int)$gCurrentOrgId))->fetchColumn();
+
+        return $name === false ? '' : (string)$name;
+    }
+
+    /**
+     * SQL condition that restricts the entries of adm_log_changes to those visible in the current
+     * organization. adm_log_changes is a global table, so its entries have to be restricted to the
+     * current organization. The user tables are shared between all organizations (a user can be a
+     * member of several organizations), so their entries stay visible and are protected by the
+     * per-user permission check instead. Entries without an organization stay visible, too, so that
+     * the audit trail has no gaps.
+     * @return string The condition with one placeholder that has to be bound to the id of the
+     *                current organization
+     */
+    public static function getOrganizationCondition() : string {
+        return '(log_org_id = ? OR log_org_id IS NULL
+                 OR log_table IN (\'users\', \'user_data\', \'user_relations\'))';
+    }
+
+    /**
      * Database tables that hold data shared between all organizations. They are not protected by
      * per-table permissions, but by the right to edit the profile of the affected user.
      * @var array
@@ -1739,7 +1838,9 @@ class ChangelogService {
             return array_values($candidates);
         }
 
-        $tablesPermitted = self::getPermittedTables($user);
+        // The tables in which a user may read his/her own changes. Where no permission opens them in
+        // full, the caller MUST restrict their entries to that user, see getOwnChangeRestriction().
+        $tablesPermitted = array_merge(self::getPermittedTables($user), self::getOwnChangeTables($user));
 
         // The user tables are shared between all organizations and use per-user permissions:
         // either the user may administer all contacts (already covered by getPermittedTables), or
@@ -2175,5 +2276,8 @@ ChangelogService::registerCallback('getObjectForTable', 'forum_posts', function(
 
 ## Enable per-user detection of access permissions to the tables (based on user's role permission); Admin is always allowed
 ChangelogService::registerCallback('getPermittedTables', '', function(User $user) { if ($user->isAdministratorForum()) return ['forum_topics', 'forum_posts']; });
+
+## Let every user read the entries of the changes he/she made himself/herself, e.g. to the own posts
+ChangelogService::registerCallback('getOwnChangeTables', '', ['forum_topics', 'forum_posts']);
 
 */

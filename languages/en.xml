@@ -1233,7 +1233,7 @@
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Choose where to store profile pictures: in the database or in the adm_my_files folder. Changing this setting does not move existing pictures to the new location. (Default: database)</string>
   <string name="SYS_LOCKED">Locked</string>
   <string name="SYS_LOCK_ALBUM">Lock album</string>
-  <string name="SYS_LOCK_ALBUM_DESC">Locked albums cannot be viewed by visitors or members. For example, you can lock an album until all images have been uploaded.</string>
+  <string name="SYS_LOCK_ALBUM_DESC">Locked albums cannot be viewed by visitors or members. Locking or unlocking an album also locks or unlocks all its sub-albums, including sub-albums that were locked separately. Sub-albums of a locked album cannot be unlocked individually.</string>
   <string name="SYS_LOG">Log</string>
   <string name="SYS_LOGGED_AREAS">Logged areas</string>
   <string name="SYS_LOGGED_AREAS_DESC">Select the areas for which the change history is kept. Every modification of an object of a selected area is logged with its old and new value, the time of the modification and the user. Areas of modules that are switched off are not shown. If an area is deselected, existing log entries are not deleted. This can be done on the change history page. An area whose objects are only logged in part is shown in a third, undetermined state and stays unchanged until it is switched on or off.</string>
@@ -1563,11 +1563,11 @@
   <string name="SYS_PLUGIN_PACKAGE_BROKEN_MANIFEST">The plugin\'s plugin.json file could not be read: #VAR1#</string>
   <string name="SYS_PLUGIN_PACKAGE_EMPTY">The file is an empty archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_INSTALLED">The plugin #VAR1# was added. Enable it to start using it.</string>
-  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">The folder in the archive is called #VAR1#, which cannot be a plugin name. A plugin name may only contain letters, digits, hyphens and underscores.</string>
+  <string name="SYS_PLUGIN_PACKAGE_INVALID_ID">#VAR1# cannot be a plugin name. A plugin name may only contain letters, digits, hyphens and underscores. It is taken from "id" in plugin.json, or else from the name of the folder in the archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_A_ZIP">The file is not a ZIP archive.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_EXTRACTED">The archive could not be unpacked. Check that Admidio may write into its temporary folder.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_INSTALLED">The plugin #VAR1# could not be moved into the plugins folder. Check that Admidio may write into it.</string>
-  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">The archive must contain exactly one folder, named after the plugin, with everything else inside it.</string>
+  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">The archive must contain exactly one folder with everything else inside it. The folder is named after the plugin, unless plugin.json states the plugin name in "id".</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE">The archive contains no #VAR1#. Every plugin needs that file.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_MANIFEST">The archive contains no #VAR1#. Every plugin needs that file.</string>
   <string name="SYS_PLUGIN_PACKAGE_REPLACE">Replace the installed plugin</string>
@@ -1663,6 +1663,7 @@
   <string name="SYS_RECIPIENT">Recipient</string>
   <string name="SYS_RECIPIENT_EMAIL">Email recipient</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">This event is the master of a recurring series. Delete the complete series to permanently remove it.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>

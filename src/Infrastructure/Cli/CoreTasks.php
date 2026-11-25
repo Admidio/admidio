@@ -8700,7 +8700,7 @@ final class CoreTasks
 
     public static function changelogList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser, $gSettingsManager;
+        global $gDb, $gCurrentUser, $gSettingsManager, $gCurrentOrgId;
 
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
@@ -8720,8 +8720,9 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $conditions = array();
-        $params = array();
+        // adm_log_changes is a global table, so the entries have to be restricted to the current organization.
+        $conditions = array(ChangelogService::getOrganizationCondition());
+        $params = array((int)$gCurrentOrgId);
 
         // An administrator that asked for no table also sees the tables of third-party extensions.
         if (!ChangelogService::hasUnrestrictedAccess($gCurrentUser) || $requestedTables !== array()) {
@@ -8736,6 +8737,15 @@ final class CoreTasks
                               OR log_record_uuid = ?)';
             array_push($params, ...ChangelogService::$userTables);
             $params[] = $userTableRestriction;
+        }
+
+        // Tables that are readable for the changes one made oneself only.
+        $ownChangeTables = ChangelogService::getOwnChangeRestriction($gCurrentUser);
+        if ($ownChangeTables !== array()) {
+            $conditions[] = '(log_table NOT IN (' . Database::getQmForValues($ownChangeTables) . ')
+                              OR log_usr_id_create = ?)';
+            array_push($params, ...$ownChangeTables);
+            $params[] = (int)$gCurrentUser->getValue('usr_id');
         }
 
         if ($objectUuid !== '') {
@@ -8806,7 +8816,7 @@ final class CoreTasks
 
     public static function changelogShow(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser, $gSettingsManager;
+        global $gDb, $gCurrentUser, $gSettingsManager, $gCurrentOrgId;
 
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
@@ -8823,8 +8833,9 @@ final class CoreTasks
                     log_usr_id_create AS user_id, log_timestamp_create AS timestamp,
                     log_comment AS comment
                FROM ' . TBL_LOG_CHANGES . '
-              WHERE log_id = ?',
-            array($id)
+              WHERE log_id = ?
+                AND ' . ChangelogService::getOrganizationCondition(),
+            array($id, (int)$gCurrentOrgId)
         )->fetch();
 
         if ($row === false) {
@@ -8843,6 +8854,12 @@ final class CoreTasks
         if ($userTableRestriction !== ''
             && in_array($table, ChangelogService::$userTables, true)
             && (string)$row['record_uuid'] !== $userTableRestriction) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // In a table readable for one's own changes only, a change by somebody else is not.
+        if (in_array($table, ChangelogService::getOwnChangeRestriction($gCurrentUser), true)
+            && (int)$row['user_id'] !== (int)$gCurrentUser->getValue('usr_id')) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
