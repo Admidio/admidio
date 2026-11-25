@@ -7,6 +7,7 @@ use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Menu\ValueObject\MenuNode;
 use Admidio\Preferences\Service\PreferencesService;
+use Admidio\UI\Component\PageExtensions;
 use Smarty\Smarty;
 
 /**
@@ -707,6 +708,11 @@ class PagePresenter
         // three of them touch is handed to the template below, so nothing has to be assigned twice.
         $this->filterText();
         Hooks::doAction('page_before_render', $this);
+
+        // What plugins add to the frame of the page: header bar, profile menu and notices.
+        $this->smarty->assign('headerItems', PageExtensions::getHeaderItems($this));
+        $this->smarty->assign('userMenuItems', $gValidLogin ? PageExtensions::getUserMenuItems($this) : array());
+        $this->smarty->assign('pageNotices', PageExtensions::getNotices($this));
 
         $this->smarty->assign('id', $this->id);
         $this->smarty->assign('title', $this->title);
