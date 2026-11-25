@@ -90,6 +90,14 @@ class PluginsPresenter extends PagePresenter
 
         $this->addActionJavascript();
 
+        // The settings of a plugin open in a dialog that is loaded later, when there is no page any
+        // more to add files to. A panel with a multiselect (roles, languages, ...) needs Select2, so
+        // it is loaded here, as the preferences page does for its panels.
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/css/select2.css');
+        $this->addCssFile(ADMIDIO_URL . FOLDER_LIBS . '/select2-bootstrap-theme/select2-bootstrap-5-theme.css');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/select2.js');
+        $this->addJavascriptFile(ADMIDIO_URL . FOLDER_LIBS . '/select2/js/i18n/' . $gL10n->getLanguageLibs() . '.js');
+
         $this->pageContent .= $this->createListContent();
     }
 
