@@ -72,6 +72,52 @@
     color: color-mix(in srgb, var(--admidio-header-link-color) 10%, black);
 }
 
+/* Items plugins add to the header bar (filter page_header_items). Those without a class of their
+   own take the link color of the header bar on a light, translucent background, so they stay legible
+   on light and dark header colors; the entries of their menus keep the colors of a menu. */
+#adm_main_navbar .admidio-header-item {
+    font-size: 0.875rem;
+    font-weight: normal;
+    padding: 0.25rem 0.6rem;
+}
+
+#adm_main_navbar .admidio-header-item-default {
+    color: var(--admidio-header-link-color);
+    border: 1px solid color-mix(in srgb, var(--admidio-header-link-color) 50%, transparent);
+    background-color: color-mix(in srgb, white 35%, transparent);
+}
+
+#adm_main_navbar .admidio-header-item-default:hover,
+#adm_main_navbar .admidio-header-item-default:focus,
+#adm_main_navbar .show > .admidio-header-item-default {
+    color: var(--admidio-header-link-color);
+    background-color: color-mix(in srgb, white 70%, transparent);
+}
+
+/* a small image of an item, e.g. a flag, at the height of the text */
+.admidio-header-item-image {
+    height: 1em;
+    width: auto;
+    vertical-align: -0.125em;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .15);
+}
+
+#adm_main_navbar .admidio-header-item-menu {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#adm_main_navbar .admidio-header-item-menu .dropdown-item {
+    color: var(--bs-dropdown-link-color);
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+}
+
+#adm_main_navbar .admidio-header-item-menu .dropdown-item.active,
+#adm_main_navbar .admidio-header-item-menu .dropdown-item:active {
+    color: var(--bs-dropdown-link-active-color);
+}
+
 @media (max-width: 767px)
 {
     /* navbar should not be fixed at top if in mobile view */

@@ -242,6 +242,7 @@
 
         {if $validLogin}
             <div class="ms-auto d-flex align-items-center">
+                {include file='sys-template-parts/page.header-items.tpl'}
                 {if $pwaEnabled}
                 <!-- PWA Install Button -->
                 <div id="adm_pwa_install_container" class="btn-group btn-group-sm me-2 d-none" role="group">
@@ -273,6 +274,16 @@
                             <a class="nav-link link-primary" href="#" id="adm_pwa_profile_install_btn"><i class="bi bi-download me-1"></i> {$l10n->get('SYS_INSTALL_APP')}</a>
                         </li>
                         {/if}
+                        {* entries plugins add through the filter page_user_menu_items (see PageExtensions) *}
+                        {if !empty($userMenuItems)}{foreach $userMenuItems as $userMenuItem}
+                            <li id="adm_user_menu_item_{$userMenuItem.id}" class="nav-item mb-2">
+                                {if $userMenuItem.url != ''}
+                                    <a class="nav-link link-primary{if $userMenuItem.popup} openPopup{/if} {$userMenuItem.class}" {if $userMenuItem.popup}href="javascript:void(0);" data-href="{$userMenuItem.url|escape}"{else}href="{$userMenuItem.url|escape}"{/if}{if $userMenuItem.tooltip != ''} title="{$userMenuItem.tooltip|escape}"{/if}>{if $userMenuItem.image != ''}<img class="admidio-header-item-image me-1" src="{$userMenuItem.image|escape}" alt="">{elseif $userMenuItem.icon != ''}<i class="{$userMenuItem.icon} me-1"></i>{/if}{$userMenuItem.label|escape}</a>
+                                {else}
+                                    <span class="{$userMenuItem.class}"{if $userMenuItem.tooltip != ''} title="{$userMenuItem.tooltip|escape}"{/if}>{if $userMenuItem.image != ''}<img class="admidio-header-item-image me-1" src="{$userMenuItem.image|escape}" alt="">{elseif $userMenuItem.icon != ''}<i class="{$userMenuItem.icon} me-1"></i>{/if}{$userMenuItem.label|escape}</span>
+                                {/if}
+                            </li>
+                        {/foreach}{/if}
                         <li class="nav-item">
                             <a class="nav-link link-primary" href="{$urlAdmidio}/system/logout.php">{$l10n->get('SYS_LOGOUT')}</a>
                         </li>
@@ -282,6 +293,7 @@
         {else}
             <div id="adm_navbar_nav" class="collapse navbar-collapse">
                 <div class="ms-auto d-flex align-items-center">
+                    {include file='sys-template-parts/page.header-items.tpl'}
                     {if $pwaEnabled}
                     <!-- PWA Install Button -->
                     <div id="adm_pwa_install_container" class="btn-group btn-group-sm me-2 d-none" role="group">
@@ -341,6 +353,10 @@
                     {if $availableUpdate != ''}
                         {include file="system/update_notice.tpl"}
                     {/if}
+                    {* notices plugins add through the filter page_notices (see PageExtensions) *}
+                    {if !empty($pageNotices)}{foreach $pageNotices as $pageNotice}
+                        <div id="adm_page_notice_{$pageNotice.id}" class="alert alert-{$pageNotice.type} admidio-page-notice" role="status">{$pageNotice.html}</div>
+                    {/foreach}{/if}
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
                         {include file='sys-template-parts/menu.functions.tpl'}
