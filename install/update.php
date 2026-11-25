@@ -148,6 +148,7 @@ try {
      */
     $coreUpdate = CoreUpdateHandover::fromMaintenance();
     $isCoreUpdate = $getMode === 'core_update' && $coreUpdate !== null;
+    $coreUpdateHandlesStatistics = $coreUpdate?->getStatisticsTenantId() !== null;
 
     // connect to database
     $gDb = Database::createDatabaseInstance();
@@ -348,7 +349,9 @@ try {
                     array('maxLength' => 6, 'class' => 'form-control-small')
                 );
             }
-            StatisticsConsent::addToForm($form, $page, $installedDbVersion);
+            if (!$coreUpdateHandlesStatistics) {
+                StatisticsConsent::addToForm($form, $page, $installedDbVersion);
+            }
             $form->addSubmitButton(
                 'adm_next_page',
                 $gL10n->get('INS_UPDATE_DATABASE'),
@@ -413,7 +416,7 @@ try {
             throw new \Admidio\Infrastructure\Exception('SYS_INVALID_PAGE_VIEW');
         }
         // Preserve consent and payload locally: doAdmidioUpdate destroys the session.
-        $statisticsData = StatisticsConsent::selectedData($formValues);
+        $statisticsData = $coreUpdateHandlesStatistics ? null : StatisticsConsent::selectedData($formValues);
 
         // start the update
         if ($coreUpdate !== null) {
@@ -436,8 +439,11 @@ try {
             $coreUpdate->complete();
         }
 
-        StatisticsConsent::savePreference($statisticsData !== null);
-        StatisticsConsent::send($statisticsData);
+        // A reviewed core-update snapshot is sent by complete(), using the updater's choice.
+        if (!$coreUpdateHandlesStatistics) {
+            StatisticsConsent::savePreference($statisticsData !== null);
+            StatisticsConsent::send($statisticsData);
+        }
 
         echo json_encode(array(
             'status' => 'success',

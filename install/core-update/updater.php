@@ -1057,7 +1057,7 @@ function coreUpdateStatistics(array $state, array $texts): string
         . '<div class="form-check"><input class="form-check-input" id="statistics" name="statistics" value="1" type="checkbox" form="install-form"'
         . (!empty($state['statisticsEnabled']) ? ' checked' : '') . '><label class="form-check-label" for="statistics">'
         . U\h(U\text($texts, 'SYS_SEND_PSEUDONYMOUS_STATISTICS')) . '</label></div>'
-        . '<details class="mt-2"><summary>' . U\h(U\text($texts, 'SYS_SEND_PSEUDONYMOUS_STATISTICS')) . '</summary><pre class="bg-body-tertiary border rounded p-3"><code>'
+        . '<details class="mt-2"><summary>' . U\h(U\text($texts, 'SYS_SHOW_DATA')) . '</summary><pre class="bg-body-tertiary border rounded p-3"><code>'
         . U\h((string)json_encode($state['statisticsData'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
         . '</code></pre></details></fieldset>';
 }

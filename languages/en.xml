@@ -1902,6 +1902,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">When enabled, users who are not logged in must enter the alphanumeric captcha text in the corresponding field. This helps prevent spammers from abusing the form. (Default: yes)</string>
+  <string name="SYS_SHOW_DATA">Show data</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>

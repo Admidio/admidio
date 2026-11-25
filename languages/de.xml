@@ -1856,6 +1856,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den Kontakten der aktuellen Organisation optional auch Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive und inaktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Im E-Mailformular wird Gästen bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Dieser muss vor dem E-Mailversand korrekt eingegeben werden. Dies soll sicherstellen, dass das Formular nicht für Spam missbraucht werden kann. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_DATA">Daten anzeigen</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Leere Profilfelder anzeigen</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Diese Einstellung legt fest, ob leere Profilfelder in der Profilansicht angezeigt werden sollen. (Standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>

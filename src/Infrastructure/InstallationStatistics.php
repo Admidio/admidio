@@ -223,7 +223,7 @@ class InstallationStatistics
             }
             return (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         } finally {
-            curl_close($curl);
+            unset($curl);
         }
     }
 

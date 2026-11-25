@@ -54,14 +54,14 @@ trait CliSubprocess
                 return;
             }
 
-            self::markTestSkipped(
+            throw new RuntimeException(
                 'The Admidio command line is disabled in ' . $policyFile . '. Set $gCliEnabled = true'
                 . ' there to run the tests that execute ./admidio as a real process.'
             );
         }
 
         if (is_file(ADMIDIO_PATH . '/adm_my_files/config.php')) {
-            self::markTestSkipped(
+            throw new RuntimeException(
                 'The tests that execute ./admidio as a real process need ' . $policyFile . ', and this'
                 . ' checkout is an Admidio installation of its own, whose configuration the test suite'
                 . ' must not write. Create the file with $gCliEnabled = true, or remove'
