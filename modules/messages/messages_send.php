@@ -273,6 +273,9 @@ try {
         if ($postListUuid !== '') {
             $showList = new ListConfiguration($gDb);
             $showList->readDataByUuid($postListUuid);
+            if (!$showList->isVisible()) {
+                throw new Exception('SYS_NO_RIGHTS');
+            }
             $listName = $showList->getValue('lst_name');
             $receiverName = $gL10n->get('SYS_LIST') . ($listName === '' ? '' : ' - ' . $listName);
         } elseif ($gSettingsManager->getBool('mail_into_to')) {
