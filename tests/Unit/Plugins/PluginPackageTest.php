@@ -10,6 +10,7 @@
 namespace Admidio\Tests\Unit\Plugins;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginPackage;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
@@ -234,6 +235,95 @@ final class PluginPackageTest extends PluginTestCase
     }
 
     /**
+     * @testdox A release tag source archive installs under the ID its manifest states
+     *
+     * GitHub names the folder of such an archive after the repository and the tag and packs the
+     * whole repository into it. The folder is renamed to the ID, and what belongs to developing the
+     * plugin stays out of the installation.
+     */
+    public function testSourceArchiveInstallsUnderTheDeclaredId(): void
+    {
+        $archive = $this->archive(array(
+            'admidio-hello-store-2.1.0/plugin.json' => '{"id": "hello-store", "name": "Hello store", "version": "2.1.0"}',
+            'admidio-hello-store-2.1.0/plugin.php' => self::ENTRY,
+            'admidio-hello-store-2.1.0/src/Greeter.php' => self::ENTRY,
+            'admidio-hello-store-2.1.0/tests/GreeterTest.php' => self::ENTRY,
+            'admidio-hello-store-2.1.0/phpunit.xml' => '<phpunit/>',
+            'admidio-hello-store-2.1.0/.github/workflows/release.yml' => 'on: push',
+            'admidio-hello-store-2.1.0/.gitattributes' => '/tests export-ignore'
+        ));
+
+        $this->assertSame('hello-store', PluginPackage::inspect($archive));
+        $this->assertSame('hello-store', PluginPackage::install($archive));
+
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/admidio-hello-store-2.1.0');
+        $this->assertFileExists($this->pluginsPath . '/hello-store/plugin.json');
+        $this->assertFileExists($this->pluginsPath . '/hello-store/src/Greeter.php');
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/hello-store/tests');
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/hello-store/.github');
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/phpunit.xml');
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/.gitattributes');
+    }
+
+    /**
+     * @testdox The ID the manifest states wins over a folder name that would be a valid ID too
+     */
+    public function testDeclaredIdWinsOverTheFolderName(): void
+    {
+        $archive = $this->archive(array(
+            'hello-store-2/plugin.json' => '{"id": "hello-store", "name": "Hello store", "version": "2.0.0"}',
+            'hello-store-2/plugin.php' => self::ENTRY
+        ));
+
+        $this->assertSame('hello-store', PluginPackage::install($archive));
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/hello-store-2');
+        $this->assertFileExists($this->pluginsPath . '/hello-store/plugin.php');
+    }
+
+    /**
+     * @testdox A manifest that states an unusable ID is refused
+     */
+    public function testUnusableDeclaredIdIsRefused(): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_INVALID_ID');
+
+        PluginPackage::install($this->archive(array(
+            'hello-store-1.0.0/plugin.json' => '{"id": "../hello", "name": "Hello store", "version": "1.0.0"}',
+            'hello-store-1.0.0/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /**
+     * @testdox A folder that is not an ID is still refused when the manifest states none
+     */
+    public function testSourceArchiveWithoutADeclaredIdIsRefused(): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_INVALID_ID');
+
+        PluginPackage::install($this->archive(array(
+            'hello-store-1.0.0/plugin.json' => '{"name": "Hello store", "version": "1.0.0"}',
+            'hello-store-1.0.0/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /**
+     * @testdox The __MACOSX folder the ZIP tool of macOS adds is ignored
+     */
+    public function testMacOsResourceForksAreIgnored(): void
+    {
+        $archive = $this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "1.0.0"}',
+            'hello-store/plugin.php' => self::ENTRY,
+            '__MACOSX/._hello-store' => 'x',
+            '__MACOSX/hello-store/._plugin.php' => 'x'
+        ));
+
+        $this->assertSame('hello-store', PluginPackage::install($archive));
+        $this->assertFileExists($this->pluginsPath . '/hello-store/plugin.php');
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/__MACOSX');
+    }
+
+    /**
      * @testdox An archive can be read without installing anything
      */
     public function testArchiveIsDescribedWithoutBeingInstalled(): void
@@ -343,6 +433,94 @@ final class PluginPackageTest extends PluginTestCase
 
         $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/dropped-in-2.php');
         $this->assertSame('2.0.0', PluginRegistry::get('hello-store')?->version);
+    }
+
+    /**
+     * @testdox Replacing a folder from before the plugin system keeps its config.php until the plugin took it over
+     */
+    public function testReplacingAnOldPluginFolderKeepsItsConfig(): void
+    {
+        mkdir($this->pluginsPath . '/hello-store');
+        file_put_contents($this->pluginsPath . '/hello-store/config.php', '<?php $plg_greeting = 1;');
+        file_put_contents($this->pluginsPath . '/hello-store/old.php', self::ENTRY);
+
+        PluginPackage::install($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.0.0"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )), true);
+
+        $carried = $this->pluginsPath . '/hello-store/' . LegacyConfig::CARRIED_FILE;
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/old.php');
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/config.php');
+        $this->assertSame('<?php $plg_greeting = 1;', file_get_contents($carried));
+
+        // as long as no update step took the settings over, the next version carries them on
+        PluginPackage::install($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.1.0"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )), true);
+        $this->assertSame('<?php $plg_greeting = 1;', file_get_contents($carried));
+
+        // what the plugin's update steps do once they took the settings over
+        unlink($carried);
+        PluginPackage::install($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.2.0"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )), true);
+        $this->assertFileDoesNotExist($carried);
+    }
+
+    /**
+     * @testdox A config.php the new version brings does not replace the settings of the old folder
+     */
+    public function testAConfigOfTheNewVersionDoesNotReplaceTheOldSettings(): void
+    {
+        mkdir($this->pluginsPath . '/hello-store');
+        file_put_contents($this->pluginsPath . '/hello-store/config.php', '<?php $plg_greeting = "custom";');
+
+        PluginPackage::install($this->archive(array(
+            'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.0.0"}',
+            'hello-store/plugin.php' => self::ENTRY,
+            'hello-store/config.php' => '<?php $plg_greeting = "default";'
+        )), true);
+
+        $this->assertSame('<?php $plg_greeting = "custom";', file_get_contents($this->pluginsPath . '/hello-store/' . LegacyConfig::CARRIED_FILE));
+        $this->assertSame(
+            $this->pluginsPath . '/hello-store/' . LegacyConfig::CARRIED_FILE,
+            LegacyConfig::find('hello-store')
+        );
+    }
+
+    /**
+     * @testdox An old config.php that cannot be read stops the replacement and the old folder is kept
+     */
+    public function testAnUnreadableOldConfigStopsTheReplacement(): void
+    {
+        mkdir($this->pluginsPath . '/hello-store');
+        $config = $this->pluginsPath . '/hello-store/config.php';
+        file_put_contents($config, '<?php $plg_greeting = 1;');
+        file_put_contents($this->pluginsPath . '/hello-store/old.php', self::ENTRY);
+        chmod($config, 0000);
+        if (is_readable($config)) {
+            chmod($config, 0644);
+            $this->markTestSkipped('The tests run as a user that can read every file.');
+        }
+
+        try {
+            PluginPackage::install($this->archive(array(
+                'hello-store/plugin.json' => '{"name": "Hello store", "version": "2.0.0"}',
+                'hello-store/plugin.php' => self::ENTRY
+            )), true);
+            $this->fail('The replacement was expected to stop at the config.php it may not read.');
+        } catch (Exception $exception) {
+            $this->assertStringContainsString('SYS_PLUGIN_LEGACY_CONFIG_UNREADABLE', $exception->getMessage());
+        } finally {
+            chmod($config, 0644);
+        }
+
+        $this->assertSame('<?php $plg_greeting = 1;', file_get_contents($config));
+        $this->assertFileExists($this->pluginsPath . '/hello-store/old.php');
+        $this->assertFileDoesNotExist($this->pluginsPath . '/hello-store/plugin.json');
     }
 
     /**

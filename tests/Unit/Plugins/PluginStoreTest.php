@@ -9,6 +9,7 @@
 
 namespace Admidio\Tests\Unit\Plugins;
 
+use Admidio\Infrastructure\Plugins\LegacyConfig;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Tests\Unit\Plugins\Support\PluginTestCase;
@@ -702,6 +703,47 @@ final class PluginStoreTest extends PluginTestCase
 
         $this->assertSame('store-plugin', PluginStore::install('store-plugin'));
         $this->assertFileExists($plugins . '/store-plugin/plugin.json');
+    }
+
+    /**
+     * @testdox A folder from before the plugin system is replaced by the release the catalogue offers
+     */
+    public function testAFolderFromBeforeThePluginSystemIsReplaced(): void
+    {
+        $archive = $this->storePluginArchive('1.0.0');
+        $plugins = $this->makePluginsDirectory();
+
+        mkdir($plugins . '/store-plugin');
+        file_put_contents($plugins . '/store-plugin/store-plugin.php', '<?php');
+        file_put_contents($plugins . '/store-plugin/config.php', '<?php $plg_setting = 1;');
+        PluginRegistry::reset();
+
+        $this->catalogue(array(
+            $this->entry('store-plugin', array(
+                array(
+                    'version' => '1.0.0',
+                    'requires' => array('admidio' => '>=5.1'),
+                    'download' => $archive,
+                    'sha256' => hash_file('sha256', $archive)
+                )
+            ))
+        ));
+
+        $entry = PluginStore::getEntry('store-plugin');
+        $this->assertTrue($entry['legacy']);
+        $this->assertFalse($entry['installed'], 'The old folder was taken for an installed plugin.');
+        $this->assertSame('', $entry['installedVersion']);
+
+        $this->assertSame('store-plugin', PluginStore::install('store-plugin'));
+
+        $this->assertFileExists($plugins . '/store-plugin/plugin.json');
+        $this->assertFileDoesNotExist($plugins . '/store-plugin/store-plugin.php');
+        $this->assertFileExists($plugins . '/store-plugin/' . LegacyConfig::CARRIED_FILE, 'The settings of the old version were lost.');
+
+        PluginStore::reset();
+        $entry = PluginStore::getEntry('store-plugin');
+        $this->assertFalse($entry['legacy']);
+        $this->assertTrue($entry['installed']);
     }
 
     /**

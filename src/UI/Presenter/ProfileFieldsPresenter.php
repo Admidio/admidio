@@ -565,18 +565,21 @@ class ProfileFieldsPresenter extends PagePresenter
             );
 
             $templateRowProfileField['actions'][] = array(
+                'id' => 'edit',
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'edit', 'uuid' => $userField->getValue('usf_uuid'))),
                 'icon' => 'bi bi-pencil-square',
                 'tooltip' => $gL10n->get('SYS_EDIT')
             );
             if ($userField->getValue('usf_system') == 1) {
                 $templateRowProfileField['actions'][] = array(
+                    'id' => 'spacer',
                     'url' => '',
                     'icon' => 'bi bi-trash invisible',
                     'tooltip' => ''
                 );
             } else {
                 $templateRowProfileField['actions'][] = array(
+                    'id' => 'delete',
                     'dataHref' => 'callUrlHideElement(\'adm_profile_field_' . $userField->getValue('usf_uuid') . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/profile-fields.php', array('mode' => 'delete', 'uuid' => $userField->getValue('usf_uuid'))) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                     'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($userField->getValue('usf_name'))),
                     'icon' => 'bi bi-trash',

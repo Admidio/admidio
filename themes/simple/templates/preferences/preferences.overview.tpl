@@ -20,113 +20,118 @@
     }
 </style>
 <script>
-    var $container = $("#overview-sortable");
-    var uniformHeight = 0;
+    (function () {
+        // Desktop and mobile panels can both be loaded. Initialize only the visible list.
+        var $container = $('[id="overview-sortable"]').filter(":visible").first();
+        var uniformHeight = 0;
 
-    // Write the sequence numbers to the hidden inputs
-    function writeSequence() {
-        $container.find(".admidio-overview-plugin").each(function (index) {
-            var key = $(this).data("seq-key");
-            if (key) {
-                $("input[name='"+key+"']").val(index + 1);
-            }
-        });
-    }
-    // Enable/disable button states (first can't move up, last can't move down)
-    function updateMoveButtons() {
-        var $items = $container.find(".admidio-overview-plugin");
-        $items.each(function (i) {
-            var $item = $(this);
-            var $up   = $item.find('.admidio-plugin-move[data-direction="UP"]');
-            var $down = $item.find('.admidio-plugin-move[data-direction="DOWN"]');
-            var isFirst = (i === 0);
-            var isLast  = (i === $items.length - 1);
-            if (isFirst) {
-                $up.css("visibility", "hidden");
-            } else {
-                $up.css("visibility", "visible");
-            }
-            if (isLast) {
-                $down.css("visibility", "hidden");
-            } else {
-                $down.css("visibility", "visible");
-            }
-        });
-    }
-
-    // Click handler for the arrows
-    $(document).on('click', '.admidio-plugin-move', function (e) {
-        e.preventDefault();
-        var $button = $(this);
-
-        // Find the column for this button
-        var $item = $('.admidio-overview-plugin[data-plugin-id="'+ $button.data('plugin-id') +'"]');
-        if (!$item.length) {
-            return;
+        // Write the sequence numbers to the hidden inputs
+        function writeSequence() {
+            $container.find(".admidio-overview-plugin").each(function (index) {
+                var key = $(this).data("seq-key");
+                if (key) {
+                    $container.closest("form").find("input[name='"+key+"']").val(index + 1);
+                }
+            });
+        }
+        // Enable/disable button states (first can't move up, last can't move down)
+        function updateMoveButtons() {
+            var $items = $container.find(".admidio-overview-plugin");
+            $items.each(function (i) {
+                var $item = $(this);
+                var $up   = $item.find('.admidio-plugin-move[data-direction="UP"]');
+                var $down = $item.find('.admidio-plugin-move[data-direction="DOWN"]');
+                var isFirst = (i === 0);
+                var isLast  = (i === $items.length - 1);
+                if (isFirst) {
+                    $up.css("visibility", "hidden");
+                } else {
+                    $up.css("visibility", "visible");
+                }
+                if (isLast) {
+                    $down.css("visibility", "hidden");
+                } else {
+                    $down.css("visibility", "visible");
+                }
+            });
         }
 
-        var direction = String($button.data('direction') || '').toUpperCase();
-        if (direction === 'UP') {
-            var $prevItem = $item.prevAll('.admidio-overview-plugin').first();
-            if ($prevItem.length) {
-                $item.insertBefore($prevItem);
+        // Click handler for the arrows
+        $container.off('click', '.admidio-plugin-move').on('click', '.admidio-plugin-move', function (e) {
+            e.preventDefault();
+            var $button = $(this);
+
+            // Find the column for this button
+            var $item = $button.closest('.admidio-overview-plugin');
+            if (!$item.length) {
+                return;
             }
-        } else if (direction === 'DOWN') {
-            var $nextItem = $item.nextAll('.admidio-overview-plugin').first();
-            if ($nextItem.length) {
-                $item.insertAfter($nextItem);
+
+            var direction = String($button.data('direction') || '').toUpperCase();
+            if (direction === 'UP') {
+                var $prevItem = $item.prevAll('.admidio-overview-plugin').first();
+                if ($prevItem.length) {
+                    $item.insertBefore($prevItem);
+                }
+            } else if (direction === 'DOWN') {
+                var $nextItem = $item.nextAll('.admidio-overview-plugin').first();
+                if ($nextItem.length) {
+                    $item.insertAfter($nextItem);
+                }
+            }
+
+            // Update the sequence numbers after moving
+            writeSequence();
+            // update the visibility of the move buttons
+            updateMoveButtons();
+        });
+
+        // Set every card to the tallest card’s height
+        function equalizeAllHeights() {
+            var $cards = $container.find(".admidio-overview-plugin .card");
+            $cards.css("height", "auto");
+            uniformHeight = 0;
+            $cards.each(function () {
+                var height = $(this).outerHeight(true);
+                if (height > uniformHeight) {
+                    uniformHeight = height;
+                }
+            });
+            if (uniformHeight > 0) {
+                $cards.height(uniformHeight);
             }
         }
 
-        // Update the sequence numbers after moving
-        writeSequence();
-        // update the visibility of the move buttons
-        updateMoveButtons();
-    });
+        if ($container.length) {
+            $container.sortable({
+                items: ".admidio-overview-plugin",
+                handle: ".card",
+                placeholder: "sortable-placeholder admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3",
+                helper: "clone",
+                tolerance: "pointer",
+                distance: 5,
+                start: function (e, ui) {
+                    // make placeholder a full-size ghost card using the uniform height
+                    ui.placeholder.html('<div class="card"></div>');
+                    ui.placeholder.css({ height: uniformHeight, minHeight: uniformHeight, width: "" });
+                    ui.placeholder.children(".card").css({ height: uniformHeight });
+                },
+                change: function (e, ui) {
+                    // keep using the uniform height as you cross rows
+                    ui.placeholder.css({ height: uniformHeight, minHeight: uniformHeight, width: "" });
+                },
+                update: function () {
+                    writeSequence();
+                    updateMoveButtons();
+                }
+            });
 
-    // Set every card to the tallest card’s height
-    function equalizeAllHeights() {
-        var $cards = $container.find(".admidio-overview-plugin .card");
-        $cards.css("height", "auto");
-        uniformHeight = 0;
-        $cards.each(function () {
-            var height = $(this).outerHeight(true);
-            if (height > uniformHeight) {
-                uniformHeight = height;
-            }
-        });
-        if (uniformHeight > 0) {
-            $cards.height(uniformHeight);
+            // initial
+            writeSequence();
+            updateMoveButtons();
+            equalizeAllHeights();
         }
-    }
-
-    if ($container.length) {
-        $container.sortable({
-            items: ".admidio-overview-plugin",
-            handle: ".card",
-            placeholder: "sortable-placeholder admidio-overview-plugin col-sm-6 col-lg-4 col-xl-3",
-            helper: "clone",
-            tolerance: "pointer",
-            distance: 5,
-            start: function (e, ui) {
-                // make placeholder a full-size ghost card using the uniform height
-                ui.placeholder.html('<div class="card"></div>');
-                ui.placeholder.css({ height: uniformHeight, minHeight: uniformHeight, width: "" });
-                ui.placeholder.children(".card").css({ height: uniformHeight });
-            },
-            change: function (e, ui) {
-                // keep using the uniform height as you cross rows
-                ui.placeholder.css({ height: uniformHeight, minHeight: uniformHeight, width: "" });
-            },
-            update: function () {
-                writeSequence();
-            }
-        });
-
-        // initial
-        writeSequence();
-        equalizeAllHeights();
-    }
+    })();
 </script>
 
 <form {foreach $attributes as $attribute}
@@ -167,13 +172,10 @@
                         </div>
                     </div>
                     <div class="d-block d-md-none">
-                        <a class="admidio-plugin-move" href="javascript:void(0)" data-plugin-id="{$overviewPlugin.id}"
-                           data-direction="UP">
-                            <i class="bi bi-arrow-up-circle-fill"></i>{$l10n->get('SYS_MOVE_UP', array('SYS_EXTENSION'))}</a>
-                        <br>
-                        <a class="admidio-plugin-move" href="javascript:void(0)" data-plugin-id="{$overviewPlugin.id}"
-                           data-direction="DOWN">
-                            <i class="bi bi-arrow-down-circle-fill"></i>{$l10n->get('SYS_MOVE_DOWN', array('SYS_EXTENSION'))}</a>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', array('SYS_EXTENSION')), 'class' => 'admidio-plugin-move', 'attributes' => ['data-plugin-id' => "`$overviewPlugin.id`"], 'showText' => true],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', array('SYS_EXTENSION')), 'class' => 'admidio-plugin-move', 'attributes' => ['data-plugin-id' => "`$overviewPlugin.id`"], 'showText' => true]
+                        ]}
                     </div>
                 </div>
             </div>

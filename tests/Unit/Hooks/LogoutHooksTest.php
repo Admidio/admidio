@@ -23,7 +23,7 @@ class LogoutHooksTest extends AdmidioTestCase
         $this->assertNotFalse($resolve, 'logout.php asks the logout_target resolver');
 
         $laterSteps = array(
-            '->startSessionLogout(' => 'the single sign-on clients are told about the logout',
+            "Hooks::resolve('logout_response'" => 'a listener finishes the logout, e.g. the single sign-on clients are told about it',
             "Hooks::doAction('logout'" => 'the logout action is dispatched',
             '$gCurrentSession->logout()' => 'the session is ended'
         );
@@ -42,11 +42,22 @@ class LogoutHooksTest extends AdmidioTestCase
 
         $this->assertNotFalse($redirect, 'logout.php redirects to the answer of the resolver');
         $this->assertGreaterThan($resolve, $redirect);
-        $this->assertLessThan(strpos($source, '->startSessionLogout('), $redirect, 'and does so before the logout begins');
+        $this->assertLessThan(strpos($source, "Hooks::doAction('logout'"), $redirect, 'and does so before the logout begins');
     }
 
     public function testThePageAfterTheLogoutIsFiltered(): void
     {
         $this->assertStringContainsString("Hooks::applyTypedFilters('logout_homepage'", $this->logoutSource());
+    }
+
+    public function testTheLogoutResponseIsAskedForAfterTheSessionIsEnded(): void
+    {
+        $source = $this->logoutSource();
+        $response = strpos($source, "Hooks::resolve('logout_response'");
+
+        $this->assertNotFalse($response, 'logout.php asks the logout_response resolver');
+        $this->assertGreaterThan(strpos($source, '$gCurrentSession->logout()'), $response, 'after the session is ended');
+        $this->assertGreaterThan(strpos($source, "Hooks::applyTypedFilters('logout_homepage'"), $response, 'with the filtered logout homepage');
+        $this->assertStringNotContainsString('SAMLService', $source, 'logout.php does not know the single sign-on module');
     }
 }

@@ -176,6 +176,11 @@
         {include 'sys-template-parts/form.select.tpl' data=$elements['sso_saml_signing_key']}
         {include 'sys-template-parts/form.select.tpl' data=$elements['sso_saml_encryption_key']}
         {include 'sys-template-parts/form.checkbox.tpl' data=$elements['sso_saml_want_requests_signed']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_metadata_valid_days']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_metadata_cache_hours']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_organization_name']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_organization_url']}
+        {include 'sys-template-parts/form.input.tpl' data=$elements['sso_saml_contact_email']}
     </div>
 
 

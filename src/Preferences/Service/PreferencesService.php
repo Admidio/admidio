@@ -15,6 +15,7 @@ use Admidio\Organizations\Entity\Organization;
 use Admidio\Preferences\ValueObject\SettingsManager;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\SSOOrganization;
 
 /**
  * @brief Class with methods to display the module pages.
@@ -759,6 +760,38 @@ class PreferencesService
     }
 
     /**
+     * Write values of preferences into every organization, replacing what is stored.
+     *
+     * This is for a setting that was one for the whole installation before it became a preference,
+     * as the config.php of a plugin from before the plugin system was (see LegacyConfig).
+     *
+     * @param array<string,mixed> $values The values, keyed by the name of the preference.
+     * @throws Exception
+     */
+    public static function setForAllOrganizations(array $values): void
+    {
+        global $gDb, $gSettingsManager;
+
+        if ($values === array()) {
+            return;
+        }
+
+        // SettingsManager stores a boolean as it casts to a string, and false casts to nothing.
+        $values = array_map(static fn (mixed $value): mixed => is_bool($value) ? (int)$value : $value, $values);
+
+        $statement = $gDb->queryPrepared('SELECT org_id FROM ' . TBL_ORGANIZATIONS);
+        while ($organizationId = $statement->fetchColumn()) {
+            $organization = new Organization($gDb, (int)$organizationId);
+            $settingsManager =& $organization->getSettingsManager();
+            $settingsManager->setMulti($values);
+        }
+
+        if (isset($gSettingsManager) && $gSettingsManager instanceof SettingsManager) {
+            $gSettingsManager->resetAll();
+        }
+    }
+
+    /**
      * Remove the named preferences from every organization.
      *
      * The counterpart of seedDefaults(), for a module or plugin that is uninstalled. A preference
@@ -930,6 +963,13 @@ class PreferencesService
             // will trigger an exception on illegal keys
             $keyService->getUsableKey((int) ($formValues['sso_oidc_signing_key'] ?? 0), KeyService::USAGE_OIDC_SIGNING);
         }
+
+        // every organization is an identity provider of its own, which has to be recognizable by its issuer and entity ID
+        SSOOrganization::assertIdentifiersAreUnique(
+            $oidcEnabled ? SSOOrganization::getEffectiveIssuerUrl((string) ($formValues['sso_oidc_issuer_url'] ?? '')) : '',
+            !empty($formValues['sso_saml_enabled'])
+                ? SSOOrganization::getEffectiveEntityId((string) ($formValues['sso_saml_entity_id'] ?? '')) : ''
+        );
 
         $samlEnabled = (bool) ($formValues['sso_saml_enabled'] ?? false);
         if ($samlEnabled) {

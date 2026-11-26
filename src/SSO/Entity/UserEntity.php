@@ -25,6 +25,19 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
         $this->client = $client;
     }
 
+    /**
+     * Whether the user may still log in to Admidio at all: the account is activated, has a login name
+     * and the user is a member of the organization (the conditions of User::checkLogin()). Tokens that
+     * are used without the user, a refresh token above all, must not outlive them.
+     */
+    public function mayLogin(): bool
+    {
+        return !$this->isNewRecord()
+            && (bool) $this->getValue('usr_valid')
+            && (string) $this->getValue('usr_login_name') !== ''
+            && $this->isMemberOfOrganization();
+    }
+
     public function getClient(): OIDCClient {
         return $this->client;
     }
@@ -159,11 +172,12 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
 
                 'email'             => $this->getEmail(),
                 'groups'            => $this->getRoleNames(), // User's roles as groups
-                'locale'            => $this->getLocale(),
+                // no locale claim: Admidio has no language per user, only one for the installation
 
                 'website'           => $this->getValue('WEBSITE'),
-                'gender'            => $this->getValue('GENDER'),
-                'birthdate'         => $this->getValue('BIRTHDAY'),
+                'gender'            => $this->getGenderClaim(),
+                'birthdate'         => $this->getClaimValue('BIRTHDAY'),
+                'updated_at'        => $this->getUpdatedAt(),
             ];
             if (!empty($this->getValue('MOBILE'))) {
                 $userInfo['phone_number'] = $this->getValue('MOBILE');
@@ -174,7 +188,6 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
             $userInfo['address'] = [
                 'street_address' => $this->getValue('STREET'),
                 'locality' => $this->getValue('CITY'),
-                'region' => $this->getValue('BUNDESLAND'),
                 'postal_code' => $this->getValue('POSTCODE'),
                 'country' => $this->getValue('COUNTRY')
             ];
@@ -196,7 +209,7 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
             } elseif ($value === 'roles') {
                 $userInfo[$key] = $groups;
             } else {
-                $userInfo[$key] = $this->getValue($value);
+                $userInfo[$key] = $this->getClaimValue($value);
             }
         }
 
@@ -209,11 +222,47 @@ class UserEntity extends User implements UserEntityInterface, ClaimSetInterface
     }
 
     /**
-     * Gets the user's locale/language from Admidio.
+     * Returns the value of a profile field in the format of an OIDC claim. A date is
+     * returned as YYYY-MM-DD (OIDC Core 1.0, section 5.1) instead of the date format of
+     * the installation, all other fields as Admidio shows them.
      */
-    public function getLocale(): string
+    private function getClaimValue(string $fieldNameIntern): mixed
     {
-        global $gSettingsManager;
-        return $gSettingsManager->get('system_language') ?: 'de'; // Default to German if not set
+        if (!str_starts_with($fieldNameIntern, 'usr_')
+            && $this->mProfileFieldsData->getProperty($fieldNameIntern, 'usf_type') === 'DATE'
+        ) {
+            return $this->getValue($fieldNameIntern, 'Y-m-d');
+        }
+        return $this->getValue($fieldNameIntern);
+    }
+
+    /**
+     * Returns the gender in the values of OIDC Core 1.0, section 5.1, "male" and "female",
+     * instead of the localized text of the profile field. The other options of the field
+     * keep their text, which OIDC allows when neither value applies. The option numbers
+     * are the same as for the vCard export.
+     */
+    private function getGenderClaim(): ?string
+    {
+        return match ((int) $this->getValue('GENDER', 'database')) {
+            0 => null,
+            1 => 'male',
+            2 => 'female',
+            default => (string) $this->getValue('GENDER')
+        };
+    }
+
+    /**
+     * Returns the time of the last change of the user as Unix time (claim updated_at), or
+     * the time of the creation if the user was never changed.
+     */
+    private function getUpdatedAt(): ?int
+    {
+        foreach (array('usr_timestamp_change', 'usr_timestamp_create') as $column) {
+            if ((string) $this->getValue($column) !== '') {
+                return (int) $this->getValue($column, 'U');
+            }
+        }
+        return null;
     }
 }

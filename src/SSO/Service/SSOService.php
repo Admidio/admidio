@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\SSO\Service;
 
+use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Session\Service\LoginService;
 use Admidio\SSO\Entity\SSOClient;
 
@@ -27,6 +28,29 @@ abstract class SSOService {
     }
 
     abstract public function initializeClientObject(Database $database): ?SSOClient;
+
+    /**
+     * Return the query and form parameters of the current request as the client sent them.
+     *
+     * Admidio strips HTML from $_GET and $_POST (global_request_params.php). Protocol values
+     * such as the OIDC state or the SAML RelayState are opaque and must reach the client
+     * unchanged, so the SSO endpoints read the raw request. Whoever shows such a value on a
+     * page has to encode it.
+     * @return array{0:array<string,mixed>,1:array<string,mixed>} The query and the form parameters.
+     */
+    protected static function getRawRequestParameters(): array
+    {
+        parse_str((string) ($_SERVER['QUERY_STRING'] ?? ''), $query);
+
+        $body = $_POST;
+        if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? '')) === 'POST'
+            && str_starts_with(strtolower((string) ($_SERVER['CONTENT_TYPE'] ?? '')), 'application/x-www-form-urlencoded')
+        ) {
+            parse_str((string) file_get_contents('php://input'), $body);
+        }
+
+        return array($query, $body);
+    }
 
     public function createClientObject($clientUUID = null, $clientID = null): ?SSOClient {
         global $gCurrentOrgId;
@@ -135,6 +159,10 @@ abstract class SSOService {
     public function saveData(?string $clientUUID, array $formValues, array $accessRoles = array()): SSOClient
     {
         $client = $this->createClientObject($clientUUID);
+        $this->assertClientIdIsAvailable(
+            $client,
+            (string) ($formValues[$this->columnPrefix . '_client_id'] ?? $client->getValue($this->columnPrefix . '_client_id'))
+        );
 
         $this->db->startTransaction();
         $this->saveCustomClientSettings($formValues, $client);
@@ -198,6 +226,38 @@ abstract class SSOService {
         $this->db->endTransaction();
 
         return $client;
+    }
+
+    /**
+     * Make sure that no other client uses the client ID, so that saving ends in a form error
+     * naming the client that has it instead of a database error.
+     *
+     * @param SSOClient $client The client that is saved (a new record for a new client)
+     * @param string $clientId The client ID that is going to be saved
+     * @throws \Admidio\Infrastructure\Exception If another client uses the client ID
+     * @throws Exception
+     */
+    private function assertClientIdIsAvailable(SSOClient $client, string $clientId): void
+    {
+        global $gCurrentOrgId;
+
+        $prefix = $this->columnPrefix;
+        $sql = 'SELECT ' . $prefix . '_client_name
+                  FROM ' . $this->table . '
+                 WHERE ' . $prefix . '_client_id = ?
+                   AND ' . $prefix . '_uuid <> ?
+                   AND ' . $prefix . '_org_id = ?';
+        $params = array($clientId, (string) $client->getValue($prefix . '_uuid'), $gCurrentOrgId);
+
+        $other = $this->db->queryPrepared($sql, $params)->fetch();
+        if ($other === false) {
+            return;
+        }
+
+        throw new \Admidio\Infrastructure\Exception(
+            'SYS_SSO_CLIENT_ID_EXISTS',
+            array(SecurityUtils::encodeHTML($clientId), SecurityUtils::encodeHTML($other[$prefix . '_client_name']))
+        );
     }
 
     /**

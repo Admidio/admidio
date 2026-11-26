@@ -192,10 +192,10 @@ class AnnouncementsService
 
     public function getRssFeedContent(string $organizationShortName): string
     {
-        global $gCurrentUser, $gCurrentOrganization, $gL10n, $gValidLogin;
+        global $gCurrentOrganization, $gL10n;
 
         $organization = RssFeedAccess::resolveOrganization($this->db, $gCurrentOrganization, $organizationShortName);
-        RssFeedAccess::assertAccessible($organization, 'announcements_module_enabled', $gValidLogin);
+        RssFeedAccess::assertAccessible($organization, 'announcements_module_enabled');
         $organizationName = $organization->getValue('org_longname');
 
         // create RSS feed object with channel information
@@ -206,13 +206,11 @@ class AnnouncementsService
             $organizationName
         );
 
-        $previousUserOrganizationID = $gCurrentUser->getOrganization();
-        try {
-            $gCurrentUser->setOrganization((int)$organization->getValue('org_id'));
-            $announcements = $this->findAll(0, 50);
-        } finally {
-            $gCurrentUser->setOrganization($previousUserOrganizationID);
-        }
+        $announcements = RssFeedAccess::asGuest(
+            $this->db,
+            $organization,
+            fn () => $this->findAll(0, 50)
+        );
 
         if (count($announcements) > 0) {
             foreach ($announcements as $announcement) {

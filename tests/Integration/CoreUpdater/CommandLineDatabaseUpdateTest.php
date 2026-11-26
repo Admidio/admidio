@@ -8,6 +8,7 @@
 
 namespace Admidio\Tests\Integration\CoreUpdater;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\InstallationUpdate\Service\CoreUpdateHandover;
@@ -31,6 +32,9 @@ final class CommandLineDatabaseUpdateTest extends DatabaseTestCase
     /** @var array<string,mixed> */
     private array $globalsBefore = array();
 
+    /** @var bool Whether the change notification already listened to the entity hooks before the test */
+    private bool $changeNotificationListened = false;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,6 +43,8 @@ final class CommandLineDatabaseUpdateTest extends DatabaseTestCase
         foreach (array('loggingEnabled', 'hooksEnabled') as $flag) {
             $this->entityFlags[$flag] = (new ReflectionProperty(Entity::class, $flag))->getValue();
         }
+
+        $this->changeNotificationListened = Hooks::hasAction('membership_created');
 
         foreach (self::UPDATE_GLOBALS as $name) {
             if (array_key_exists($name, $GLOBALS)) {
@@ -58,6 +64,17 @@ final class CommandLineDatabaseUpdateTest extends DatabaseTestCase
         U\deleteDirectory($this->rootPath);
         Entity::setLoggingEnabled($this->entityFlags['loggingEnabled']);
         Entity::setHooksEnabled($this->entityFlags['hooksEnabled']);
+
+        // updateDatabase() creates a ChangeNotification, which listens to the entity hooks for as
+        // long as the process lives. Left there, it makes every later test queue the creations of
+        // users and memberships, which then merge with their deletions in the hook queue.
+        if (!$this->changeNotificationListened) {
+            foreach (array('created', 'updated', 'deleted') as $stage) {
+                foreach (array('user_', 'user_data_', 'membership_') as $entity) {
+                    Hooks::removeAction($entity . $stage, 'change_notification');
+                }
+            }
+        }
         foreach (self::UPDATE_GLOBALS as $name) {
             if (array_key_exists($name, $this->globalsBefore)) {
                 $GLOBALS[$name] = $this->globalsBefore[$name];

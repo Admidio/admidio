@@ -21,3 +21,4 @@
 
     <div class="form-alert" style="display: none;">&nbsp;</div>
 </form>
+{$javascript}

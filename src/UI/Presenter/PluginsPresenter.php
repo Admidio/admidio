@@ -6,6 +6,8 @@ use Admidio\Components\Entity\Component;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Plugins\Plugin;
+use Admidio\Infrastructure\Plugins\PluginCrashGuard;
+use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginPanel;
@@ -105,6 +107,7 @@ class PluginsPresenter extends PagePresenter
 
         $this->smarty->assign('list', $this->getGroups());
         $this->smarty->assign('failures', PluginLoader::getFailures());
+        $this->smarty->assign('crashedPlugins', self::getCrashNotices());
         $this->smarty->assign('l10n', $gL10n);
 
         try {
@@ -112,6 +115,81 @@ class PluginsPresenter extends PagePresenter
         } catch (\Smarty\Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    /**
+     * What the administrators are told about the plugins that are kept out after a crash: one notice
+     * per crashed plugin, with the plugins that are kept out because they require it, and the
+     * address that tries it again. Template: sys-template-parts/plugins.crashed.tpl.
+     *
+     * The plugin administration and the overview show it. Nobody but an administrator can do
+     * anything about a crash, so everybody else gets nothing.
+     * @return array<int,array{message: string, dependants: string, location: string, time: string, retryUrl: string, csrfToken: string}>
+     * @throws Exception
+     */
+    public static function getCrashNotices(): array
+    {
+        global $gCurrentUser, $gCurrentSession, $gL10n, $gSettingsManager;
+
+        if (!isset($gCurrentUser) || !$gCurrentUser->isAdministrator()) {
+            return array();
+        }
+
+        $crashes = PluginCrashGuard::getActive();
+        if ($crashes === array()) {
+            return array();
+        }
+
+        $excluded = PluginRegistry::getExcluded();
+        $notices = array();
+
+        foreach ($crashes as $id => $crash) {
+            $dependants = array();
+            foreach ($excluded as $excludedId => $cause) {
+                if ($cause === $id && $excludedId !== $id) {
+                    $dependants[] = self::getPluginName((string)$excludedId);
+                }
+            }
+
+            $time = \DateTime::createFromFormat(DATE_ATOM, $crash['time']);
+
+            $notices[] = array(
+                'message' => $gL10n->get('SYS_PLUGIN_CRASHED', array(
+                    self::getPluginName($id),
+                    SecurityUtils::encodeHTML($crash['error'])
+                )),
+                'dependants' => $dependants === array() ? ''
+                    : $gL10n->get('SYS_PLUGIN_CRASHED_DEPENDANTS', array(implode(', ', $dependants))),
+                'location' => SecurityUtils::encodeHTML($crash['file'] . ($crash['line'] > 0 ? ':' . $crash['line'] : '')),
+                'time' => $time === false ? SecurityUtils::encodeHTML($crash['time'])
+                    : $time->format($gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time')),
+                'retryUrl' => SecurityUtils::encodeUrl(
+                    ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
+                    array('mode' => 'retry', 'plugin' => $id)
+                ),
+                'csrfToken' => $gCurrentSession->getCsrfToken()
+            );
+        }
+
+        return $notices;
+    }
+
+    /**
+     * The translated name of a plugin, encoded for HTML. A plugin that is kept out is not loaded,
+     * so its language file has to be put on the search path first.
+     * @param string $id
+     * @return string
+     */
+    private static function getPluginName(string $id): string
+    {
+        $plugin = PluginRegistry::get($id);
+        if ($plugin === null) {
+            return SecurityUtils::encodeHTML($id);
+        }
+
+        PluginLoader::registerLanguages($plugin);
+
+        return SecurityUtils::encodeHTML(Language::translateIfTranslationStrId($plugin->name));
     }
 
     /**
@@ -170,10 +248,11 @@ class PluginsPresenter extends PagePresenter
             if (!$row['installed']) {
                 // The same action shape the plugin list uses, so list.functions.tpl renders it.
                 $row['actions'] = array(array(
+                    'id' => 'install',
                     'dataHref' => $this->actionScript((string)$entry['id'], 'store_install'),
-                    'dataMessage' => $gL10n->get('SYS_WANT_INSTALL_FROM_STORE', array($name)),
-                    'icon' => 'bi bi-plus-circle-fill',
-                    'tooltip' => $gL10n->get('SYS_PLUGIN_STORE_INSTALL')
+                    'dataMessage' => $gL10n->get($entry['legacy'] ? 'SYS_WANT_UPDATE_LEGACY_PLUGIN' : 'SYS_WANT_INSTALL_FROM_STORE', array($name)),
+                    'icon' => $entry['legacy'] ? 'bi bi-arrow-clockwise' : 'bi bi-plus-circle-fill',
+                    'tooltip' => $gL10n->get($entry['legacy'] ? 'SYS_PLUGIN_LEGACY_UPDATE' : 'SYS_PLUGIN_STORE_INSTALL')
                 ));
             }
 
@@ -715,10 +794,25 @@ class PluginsPresenter extends PagePresenter
         return match ($plugin->errorCode) {
             Plugin::ERROR_INVALID_ID => $gL10n->get('SYS_PLUGIN_INVALID_ID', array($plugin->id)),
             Plugin::ERROR_ID_CONFLICT => $gL10n->get('SYS_PLUGIN_ID_CONFLICT', array($plugin->id)),
-            Plugin::ERROR_NO_MANIFEST => $gL10n->get('SYS_PLUGIN_NO_MANIFEST', array(Plugin::MANIFEST_FILE)),
+            Plugin::ERROR_NO_MANIFEST => $this->isLegacyWithUpdate($plugin)
+                ? $gL10n->get('SYS_PLUGIN_LEGACY')
+                : $gL10n->get('SYS_PLUGIN_NO_MANIFEST', array(Plugin::MANIFEST_FILE)),
             Plugin::ERROR_INVALID_MANIFEST => $gL10n->get('SYS_PLUGIN_INVALID_MANIFEST', array(Plugin::MANIFEST_FILE)),
             default => $gL10n->get('SYS_PLUGIN_INCOMPATIBLE', array((string)$plugin->error)),
         };
+    }
+
+    /**
+     * Whether a plugin is a folder from before the plugin system that the plugin directory has a
+     * version for. Such a plugin is not broken, it is waiting for that version.
+     * @param Plugin|null $plugin
+     * @return bool
+     * @throws Exception
+     */
+    private function isLegacyWithUpdate(?Plugin $plugin): bool
+    {
+        return $plugin !== null && $plugin->errorCode === Plugin::ERROR_NO_MANIFEST
+            && PluginStore::getEntry($plugin->id) !== null;
     }
 
     /**
@@ -739,6 +833,7 @@ class PluginsPresenter extends PagePresenter
             && $this->getSettingsPanelId($plugin) !== '') {
             // The settings open in a dialog, so that the administrator keeps their place in the list.
             $actions[] = array(
+                'id' => 'settings',
                 'popup' => true,
                 'dataHref' => SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/plugins.php',
@@ -757,6 +852,9 @@ class PluginsPresenter extends PagePresenter
         if ($state === PluginRegistry::STATE_UPDATE
             || (PluginRegistry::isInstalled($id) && PluginStore::getNewerRelease($id) !== null)) {
             $actions[] = $this->action($id, 'update', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_UPDATE', 'SYS_WANT_UPDATE_PLUGIN');
+        } elseif ($this->isLegacyWithUpdate($plugin)) {
+            // the version for the plugin system replaces the old folder and is installed at once
+            $actions[] = $this->action($id, 'store_install', 'bi bi-arrow-clockwise', 'SYS_PLUGIN_LEGACY_UPDATE', 'SYS_WANT_UPDATE_LEGACY_PLUGIN');
         }
 
 
@@ -787,6 +885,7 @@ class PluginsPresenter extends PagePresenter
              * clicked; it is there so that the tooltip can say what is going on.
              */
             $actions[] = array(
+                'id' => 'built_in',
                 'url' => 'javascript:void(0);',
                 'icon' => 'bi bi-shield-lock',
                 'tooltip' => $gL10n->get('SYS_PLUGIN_BUILT_IN')
@@ -798,7 +897,7 @@ class PluginsPresenter extends PagePresenter
              */
             $organizations = PluginRegistry::getEnabledOrganizations($id);
 
-            $actions[] = $this->action(
+            $action = $this->action(
                 $id,
                 'remove',
                 'bi bi-trash',
@@ -807,6 +906,14 @@ class PluginsPresenter extends PagePresenter
                 array(),
                 $organizations === array() ? array($id) : array($id, implode(', ', $organizations))
             );
+
+            // what the plugin itself says removal leaves behind, for example data in other systems
+            $warnings = PluginInstaller::getRemovalWarnings($plugin ?? $id);
+            if ($warnings !== array()) {
+                $action['dataMessage'] .= '<br /><br />' . $gL10n->get('SYS_PLUGIN_REMOVAL_WARNINGS') . '<br />'
+                    . implode('<br />', array_map(static fn (string $warning): string => '&bull; ' . SecurityUtils::encodeHTML($warning), $warnings));
+            }
+            $actions[] = $action;
         }
 
         return $actions;
@@ -853,6 +960,7 @@ class PluginsPresenter extends PagePresenter
         global $gL10n;
 
         return array(
+            'id' => $mode,
             'dataHref' => $this->actionScript($id, $mode, $parameters),
             'dataMessage' => $gL10n->get($message, $messageVariables ?? array($id)),
             'icon' => $icon,

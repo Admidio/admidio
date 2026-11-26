@@ -31,6 +31,10 @@ class ConfirmationMessageEscapingTest extends TestCase
                 'Förderer "A" & O\'Brien'
             ) as $name) {
                 $cases[] = array($template, $name);
+                if ($template === 'sys-template-parts/list.functions.tpl') {
+                    $cases[] = array($template, $name, 2);
+                    $cases[] = array($template, $name, 3);
+                }
             }
         }
         return $cases;
@@ -39,12 +43,13 @@ class ConfirmationMessageEscapingTest extends TestCase
     /**
      * @dataProvider confirmationMessages
      */
-    public function testNamesRemainTextAfterAttributeAndDialogParsing(string $template, string $name): void
+    public function testNamesRemainTextAfterAttributeAndDialogParsing(string $template, string $name, int $actionCount = 1): void
     {
         $smarty = new Smarty();
         $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
         $smarty->setCompileDir(sys_get_temp_dir());
         $smarty->registerPlugin('function', 'array_key_exists', 'Admidio\Infrastructure\Plugins\Smarty::arrayKeyExists');
+        $smarty->registerPlugin('function', 'list_actions', 'Admidio\UI\Component\ListActions::smartyFunction');
         $smarty->registerPlugin('function', 'is_translation_string_id', static fn(array $params): bool => false);
 
         // Input follows the presenter contract: names are escaped for the dialog HTML.
@@ -66,7 +71,7 @@ class ConfirmationMessageEscapingTest extends TestCase
         );
         $entry = array(
             'uuid' => 'entry', 'name' => $escapedName, 'title' => $escapedName,
-            'url' => '', 'urlEdit' => '', 'editable' => true, 'actions' => array($action),
+            'url' => '', 'urlEdit' => '', 'editable' => true, 'actions' => array_fill(0, $actionCount, $action),
             'description' => '', 'text' => '', 'category' => '', 'categoryUUID' => '',
             'userCreatedProfilePhotoUrl' => '', 'userCreatedName' => '', 'userCreatedTimestamp' => '',
             'repliesCount' => 0, 'views' => 0, 'userProfilePhotoUrl' => '',
@@ -101,7 +106,17 @@ class ConfirmationMessageEscapingTest extends TestCase
 
         $document = $this->parseHtml($smarty->fetch($template));
         $links = (new DOMXPath($document))->query('//a[@data-message]');
-        $this->assertCount($template === 'sys-template-parts/list.functions.tpl' ? 2 : 1, $links);
+        // Cards render each action as a desktop icon and in the mobile menu.
+        $expectedCount = in_array($template, array(
+            'modules/announcements.cards.tpl',
+            'modules/forum.cards.tpl',
+            'modules/weblinks.cards.tpl',
+            'modules/photos.albums.tpl'
+        ), true) ? 2 : 1;
+        if ($template === 'sys-template-parts/list.functions.tpl') {
+            $expectedCount = $actionCount > 2 ? $actionCount + 1 : $actionCount;
+        }
+        $this->assertCount($expectedCount, $links);
         foreach ($links as $link) {
             $this->assertFalse($link->hasAttribute('onmouseover'));
             $this->assertFalse($link->hasAttribute('x'));

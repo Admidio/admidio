@@ -12,6 +12,7 @@
 
 namespace Admidio\Tests\Integration\Messages;
 
+use Admidio\Infrastructure\Exception;
 use Admidio\Messages\Entity\Message;
 use Admidio\Messages\Service\MessageService;
 use Admidio\Tests\Support\AdmidioTestFixture;
@@ -101,6 +102,57 @@ class MessageTest extends DatabaseTestCase
         return $this->withCurrentUser($user, self::ORG_ID, true, function () use ($msgId, $question) {
             return $question(new Message($this->getDatabase(), $msgId));
         });
+    }
+
+    public static function existingEmailRequests(): array
+    {
+        return array(
+            'foreign email' => array(false, Message::MESSAGE_TYPE_EMAIL),
+            'own email' => array(true, Message::MESSAGE_TYPE_EMAIL),
+            'foreign email submitted as PM' => array(false, Message::MESSAGE_TYPE_PM),
+            'own email submitted as PM' => array(true, Message::MESSAGE_TYPE_PM)
+        );
+    }
+
+    /**
+     * @dataProvider existingEmailRequests
+     */
+    public function testExistingEmailCannotBeContinued(bool $ownMessage, string $requestedType): void
+    {
+        list($owner, $otherUser) = $this->twoUsers('emailhistory');
+        $message = new Message($this->getDatabase());
+        $message->setValue('msg_type', Message::MESSAGE_TYPE_EMAIL);
+        $message->setValue('msg_usr_id_sender', (int)$owner->getValue('usr_id'));
+        $message->setValue('msg_subject', 'Original subject');
+        $message->addUser((int)$otherUser->getValue('usr_id'));
+        $message->addContent('Original body');
+        $this->assertTrue($message->save());
+
+        $tables = array(TBL_MESSAGES, TBL_MESSAGES_CONTENT, TBL_MESSAGES_RECIPIENTS, TBL_MESSAGES_ATTACHMENTS);
+        $before = array();
+        foreach ($tables as $table) {
+            $before[$table] = $this->getDatabase()->queryPrepared('SELECT * FROM ' . $table . ' ORDER BY 1')->fetchAll();
+        }
+
+        $this->withCurrentUser($ownMessage ? $owner : $otherUser, self::ORG_ID, true, function () use ($message, $requestedType, $otherUser) {
+            $service = new MessageService($this->getDatabase());
+            try {
+                $service->sendData(
+                    $requestedType,
+                    'Injected subject',
+                    'Injected body',
+                    array((string)$otherUser->getValue('usr_uuid')),
+                    (string)$message->getValue('msg_uuid')
+                );
+                $this->fail('An existing EMAIL UUID must be rejected before sending.');
+            } catch (Exception $exception) {
+                $this->assertSame($GLOBALS['gL10n']->get('SYS_INVALID_PAGE_VIEW'), $exception->getMessage());
+            }
+        });
+
+        foreach ($tables as $table) {
+            $this->assertEquals($before[$table], $this->getDatabase()->queryPrepared('SELECT * FROM ' . $table . ' ORDER BY 1')->fetchAll());
+        }
     }
 
     /**

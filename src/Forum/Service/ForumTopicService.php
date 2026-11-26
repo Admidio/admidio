@@ -114,17 +114,17 @@ class ForumTopicService
 
         // check if the current user may create or edit a post in the topic's category
         $topic = new Topic($gDb);
-        $topic->readDataByUuid($topicUUID);
-        if (!$topic->isCategoryEditable()) {
+        if (!$topic->readDataByUuid($topicUUID) || !$topic->isCategoryEditable()) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
         $post = new Post($gDb);
         if ($postUUID !== '') {
-            $post->readDataByUuid($postUUID);
-
-            if (!$post->isEditableByCurrentUser()) {
-                throw new Exception('You are not allowed to edit this post.');
+            // Only edit posts belonging to the topic whose category permissions were checked.
+            if (!$post->readDataByUuid($postUUID)
+                || (int)$post->getValue('fop_fot_id') !== (int)$topic->getValue('fot_id')
+                || !$post->isEditableByCurrentUser()) {
+                throw new Exception('SYS_NO_RIGHTS');
             }
         } else {
             $post->setValue('fop_fot_id', $topic->getValue('fot_id'));

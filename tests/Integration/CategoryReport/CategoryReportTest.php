@@ -17,6 +17,53 @@ use Admidio\Users\Entity\User;
 
 class CategoryReportTest extends AdministratorTestCase
 {
+    public function testProfileColumnsRespectCategoryVisibilityAndHiddenFields(): void
+    {
+        global $gCurrentOrgId, $gCurrentUser, $gProfileFields;
+
+        $previousUser = $gCurrentUser;
+        $previousProfileFields = $gProfileFields;
+        try {
+            $fixture = new AdmidioTestFixture($this->getDatabase());
+            $category = $fixture->createAndSaveCategory('Restricted report fields', 'USF', $gCurrentOrgId);
+            $field = new ProfileField($this->getDatabase());
+            $field->setValue('usf_cat_id', $category['cat_id']);
+            $field->setValue('usf_type', 'TEXT');
+            $field->setValue('usf_name', 'Medical note');
+            $field->save();
+            $columnId = 'p' . $field->getValue('usf_id');
+
+            foreach (array(
+                // Category access, user administrator, hidden field, expected visibility.
+                array(false, false, false, false),
+                array(true, false, false, true),
+                array(true, false, true, false),
+                array(true, true, true, true)
+            ) as [$categoryVisible, $administrator, $hidden, $expected]) {
+                // Only an administrator may save a profile field, so save it before the mock takes over.
+                $gCurrentUser = $previousUser;
+                $field->setValue('usf_hidden', (int)$hidden);
+                $field->save();
+                $gCurrentUser = $this->createMock(User::class);
+                $gCurrentUser->method('isAdministratorUsers')->willReturn($administrator);
+                $gCurrentUser->method('getAllVisibleCategories')->willReturn(
+                    $categoryVisible ? array((int)$category['cat_id']) : array()
+                );
+                $gProfileFields = new ProfileFields($this->getDatabase(), $gCurrentOrgId);
+
+                $generator = new CategoryReportGenerator();
+                $this->assertSame($expected, in_array(
+                    $columnId,
+                    array_column($generator->headerSelection, 'id'),
+                    true
+                ));
+            }
+        } finally {
+            $gCurrentUser = $previousUser;
+            $gProfileFields = $previousProfileFields;
+        }
+    }
+
     protected function tearDown(): void
     {
         global $gSettingsManager;

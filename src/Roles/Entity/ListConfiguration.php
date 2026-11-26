@@ -121,6 +121,12 @@ class ListConfiguration extends Entity
             $number = count($this->columns) + 1;
         }
 
+        // Database drivers may return profile field IDs as numeric strings.
+        // Normalize them before checking whether a string is an allowed special field.
+        if (is_string($field) && ctype_digit($field)) {
+            $field = (int)$field;
+        }
+
         // check if field is a number or a string and if the field is allowed
         if (is_string($field) && !in_array($field, $this->allowedSpecialColumns, true)) {
             return false;

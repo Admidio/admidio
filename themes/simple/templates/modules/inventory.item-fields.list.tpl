@@ -23,14 +23,11 @@
                         {include 'sys-template-parts/parts/form.part.iconhelp.tpl' data=$data}
                     </td>
                     <td>
-                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.uuid}"
-                           data-direction="UP" data-target="adm_item_field_{$itemField.uuid}">
-                            <i class="bi bi-arrow-up-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_UP', array('SYS_FIELD'))}"></i></a>
-                        <a class="admidio-icon-link admidio-field-move" href="javascript:void(0)" data-uuid="{$itemField.uuid}"
-                           data-direction="DOWN" data-target="adm_item_field_{$itemField.uuid}">
-                            <i class="bi bi-arrow-down-circle-fill" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_DOWN', array('SYS_FIELD'))}"></i></a>
-                        <a class="admidio-icon-link">
-                            <i class="bi bi-arrows-move handle" data-bs-toggle="tooltip" title="{$l10n->get('SYS_MOVE_VAR', array('SYS_FIELD'))}"></i></a>
+                        {include 'sys-template-parts/list.move.tpl' moveActions=[
+                            ['direction' => 'UP', 'label' => $l10n->get('SYS_MOVE_UP', array('SYS_FIELD')), 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => "`$itemField.uuid`", 'data-target' => "adm_item_field_`$itemField.uuid`"]],
+                            ['direction' => 'DOWN', 'label' => $l10n->get('SYS_MOVE_DOWN', array('SYS_FIELD')), 'class' => 'admidio-field-move', 'attributes' => ['data-uuid' => "`$itemField.uuid`", 'data-target' => "adm_item_field_`$itemField.uuid`"]],
+                            ['direction' => 'FREE', 'label' => $l10n->get('SYS_MOVE_VAR', array('SYS_FIELD'))]
+                        ]}
                     </td>
                     <td>{$itemField.dataType}</td>
                     <td>{$itemField.mandatory}</td>
@@ -40,12 +37,7 @@
                         {/if}
                     </td>
                     <td class="text-end">
-                       {foreach $itemField.actions as $actionItem}
-                            <a {if isset($actionItem.dataHref)} class="admidio-icon-link admidio-messagebox" href="javascript:void(0);"
-                                data-buttons="yes-no" data-message="{$actionItem.dataMessage|escape:'html'}" data-href="{$actionItem.dataHref}"
-                                    {else} class="admidio-icon-link" href="{$actionItem.url}"{/if}>
-                                <i class="{$actionItem.icon}" data-bs-toggle="tooltip" title="{$actionItem.tooltip}"></i></a>
-                        {/foreach}
+                        {include 'sys-template-parts/list.functions.tpl' listId='inventory-fields' data=$itemField}
                     </td>
                 </tr>
             {/foreach}

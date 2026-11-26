@@ -50,7 +50,8 @@ class RefreshTokenRepository extends TokenRepository implements RefreshTokenRepo
      * A refresh token may only be redeemed while the user is still allowed to use the client it
      * was issued for. Losing the role that granted the access revokes the tokens right away, but a
      * role membership can also simply expire, and nothing in Admidio announces that, so the right
-     * is judged again here. A token that no longer has one is revoked instead of only refused.
+     * is judged again here, as is whether the user may log in at all. A token that no longer has the
+     * right is revoked instead of only refused.
      */
     public function isRefreshTokenRevoked($tokenId): bool {
         if ($this->isTokenRevoked($tokenId)) {
@@ -71,7 +72,7 @@ class RefreshTokenRepository extends TokenRepository implements RefreshTokenRepo
             return false;
         }
 
-        if ($client->hasAccessRight($user)) {
+        if ($user->mayLogin() && $client->hasAccessRight($user)) {
             return false;
         }
 

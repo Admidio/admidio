@@ -67,7 +67,6 @@ class CategoryReportFormPresenter extends PagePresenter
             'fields' => array_values($generator->headerSelection),
             'roleProperties' => array_values($generator->headerRolePropSelection),
             'columns' => $columns,
-            'moveLabel' => $gL10n->get('SYS_MOVE_VAR', array($gL10n->get('SYS_COLUMN'))),
             'deleteLabel' => $gL10n->get('SYS_DELETE')
         ), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT));
         $this->assignSmartyVariable('conditionHelpUrl', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_SYSTEM . '/msg_window.php',

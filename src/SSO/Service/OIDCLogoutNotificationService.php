@@ -75,6 +75,22 @@ class OIDCLogoutNotificationService
 
 
     /**
+     * Return the hidden iframes that load the front-channel logout URIs in the browser.
+     *
+     * @param array<int,string> $logoutUris
+     */
+    public function createFrontChannelFrames(array $logoutUris): string
+    {
+        $frames = '';
+        foreach ($logoutUris as $logoutUri) {
+            $frames .= '<iframe hidden src="'
+                . htmlspecialchars($logoutUri, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                . '"></iframe>';
+        }
+        return $frames;
+    }
+
+    /**
      * Render hidden front-channel logout iframes and continue afterwards.
      *
      * @param array<int,string> $logoutUris
@@ -83,12 +99,7 @@ class OIDCLogoutNotificationService
         array $logoutUris,
         ?string $redirectLocation
     ): ResponseInterface {
-        $frames = '';
-        foreach ($logoutUris as $logoutUri) {
-            $frames .= '<iframe hidden src="'
-                . htmlspecialchars($logoutUri, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
-                . '"></iframe>';
-        }
+        $frames = $this->createFrontChannelFrames($logoutUris);
 
         $continueScript = '';
         if ($redirectLocation !== null) {

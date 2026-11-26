@@ -3,6 +3,7 @@
 namespace Admidio\Infrastructure\Plugins;
 
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 
 /**
@@ -85,6 +86,12 @@ final class PluginRegistry
      * @var array<string,array{comId: int, version: string}>|null
      */
     private static ?array $installations = null;
+
+    /**
+     * The result of getExcluded() in this request, or **null** while it has not been calculated.
+     * @var array<string,string>|null
+     */
+    private static ?array $excluded = null;
 
     /**
      * Overrides the plugins directory. Only used by tests and by the installation of an uploaded
@@ -182,9 +189,9 @@ final class PluginRegistry
     }
 
     /**
-     * The installed plugins, as pluginId => array{comId: int, version: string}. This is one query
-     * per request instead of one per plugin.
-     * @return array<string,array{comId: int, version: string}>
+     * The installed plugins, as pluginId => array{comId: int, uuid: string, version: string,
+     * completed: bool}. This is one query per request instead of one per plugin.
+     * @return array<string,array{comId: int, uuid: string, version: string, completed: bool}>
      * @throws Exception
      */
     public static function getInstallations(): array
@@ -196,7 +203,7 @@ final class PluginRegistry
         }
 
         self::$installations = array();
-        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version
+        $sql = 'SELECT com_id, com_uuid, com_name_intern, com_version, com_update_completed
                   FROM ' . TBL_COMPONENTS . '
                  WHERE com_type = ?';
         $statement = $gDb->queryPrepared($sql, array(self::COMPONENT_TYPE));
@@ -205,7 +212,8 @@ final class PluginRegistry
             self::$installations[(string)$row['com_name_intern']] = array(
                 'comId' => (int)$row['com_id'],
                 'uuid' => (string)$row['com_uuid'],
-                'version' => (string)$row['com_version']
+                'version' => (string)$row['com_version'],
+                'completed' => (bool)$row['com_update_completed']
             );
         }
 
@@ -273,6 +281,33 @@ final class PluginRegistry
     public static function getInstalledVersion(string $id): string
     {
         return self::getInstallations()[$id]['version'] ?? '';
+    }
+
+    /**
+     * Whether the last run of the update scripts of an installed plugin went through to the end.
+     * A run that failed - also the one an installation starts - keeps its checkpoint, and the next
+     * update resumes from there.
+     * @param string $id
+     * @return bool **true** as well for a plugin that is not installed.
+     * @throws Exception
+     */
+    public static function isUpdateCompleted(string $id): bool
+    {
+        return self::getInstallations()[$id]['completed'] ?? true;
+    }
+
+    /**
+     * Whether an installed plugin has to be updated before it may run: its files are newer than
+     * the installed version, or the last run of its update scripts failed half way.
+     * @param Plugin $plugin
+     * @return bool
+     * @throws Exception
+     */
+    public static function isUpdatePending(Plugin $plugin): bool
+    {
+        return self::isInstalled($plugin->id)
+            && (version_compare(self::getInstalledVersion($plugin->id), $plugin->version, '<')
+                || !self::isUpdateCompleted($plugin->id));
     }
 
     /**
@@ -387,7 +422,7 @@ final class PluginRegistry
             return $plugin->checkRequirements(self::getEnabledVersions()) === array()
                 ? self::STATE_AVAILABLE : self::STATE_BROKEN;
         }
-        if (version_compare(self::getInstalledVersion($plugin->id), $plugin->version, '<')) {
+        if (self::isUpdatePending($plugin)) {
             return self::STATE_UPDATE;
         }
 
@@ -396,17 +431,20 @@ final class PluginRegistry
 
     /**
      * Every plugin that should be loaded in this request: installed, enabled for the current
-     * organization, not waiting for an update and with satisfied requirements. Plugin dependencies
-     * are resolved first, so that a plugin is only loaded after the plugins it needs.
+     * organization, not waiting for an update, with satisfied requirements and not kept out after a
+     * crash (see getExcluded()). Plugin dependencies are resolved first, so that a plugin is only
+     * loaded after the plugins it needs.
      * @return array<int,Plugin>
      * @throws Exception
      */
     public static function getLoadable(): array
     {
+        $excluded = self::getExcluded();
+
         $candidates = array();
         foreach (self::all() as $id => $plugin) {
-            if ($plugin->isValid() && self::isEnabled($id)
-                && !version_compare(self::getInstalledVersion($id), $plugin->version, '<')) {
+            if ($plugin->isValid() && !isset($excluded[$id]) && self::isEnabled($id)
+                && !self::isUpdatePending($plugin)) {
                 $candidates[$id] = $plugin;
             }
         }
@@ -415,15 +453,83 @@ final class PluginRegistry
     }
 
     /**
-     * Version of every installed and enabled plugin, to resolve plugin dependencies.
+     * The plugins that are kept out of every request because they crashed, as pluginId => ID of the
+     * plugin that crashed. That is the crashed plugins themselves and every plugin that requires one
+     * of them, directly or through another plugin, because it would fail without it.
+     *
+     * Whether a plugin is enabled stays untouched: it is the decision of an organization, and the
+     * crash is a passing state of the installation (see PluginCrashGuard).
+     * @return array<string,string>
+     */
+    public static function getExcluded(): array
+    {
+        if (self::$excluded !== null) {
+            return self::$excluded;
+        }
+
+        $excluded = array();
+        foreach (array_keys(PluginCrashGuard::getActive()) as $id) {
+            $excluded[$id] = $id;
+        }
+
+        do {
+            $added = false;
+            foreach (self::all() as $id => $plugin) {
+                if (isset($excluded[$id]) || !$plugin->isValid()) {
+                    continue;
+                }
+                foreach (array_keys($plugin->requires['plugins']) as $requiredId) {
+                    if (isset($excluded[$requiredId])) {
+                        $excluded[$id] = $excluded[$requiredId];
+                        $added = true;
+                        break;
+                    }
+                }
+            }
+        } while ($added);
+
+        self::$excluded = $excluded;
+
+        return $excluded;
+    }
+
+    /**
+     * Forget the result of getExcluded(), because the record of crashes or the plugins changed.
+     * @return void
+     */
+    public static function forgetExcluded(): void
+    {
+        self::$excluded = null;
+    }
+
+    /**
+     * Refuse a page of a plugin that is kept out after a crash. Its classes and hooks are not
+     * loaded, so the page could only fail, and the visitor is better told why.
+     * @param Plugin $plugin
+     * @return void
+     * @throws Exception
+     */
+    public static function requireNotExcluded(Plugin $plugin): void
+    {
+        if (isset(self::getExcluded()[$plugin->id])) {
+            PluginLoader::registerLanguages($plugin);
+            throw new Exception('SYS_PLUGIN_CRASHED_PAGE', array(Language::translateIfTranslationStrId($plugin->name)));
+        }
+    }
+
+    /**
+     * Version of every installed and enabled plugin that is not kept out after a crash, to resolve
+     * plugin dependencies.
      * @return array<string,string>
      * @throws Exception
      */
     public static function getEnabledVersions(): array
     {
+        $excluded = self::getExcluded();
+
         $versions = array();
         foreach (self::all() as $id => $plugin) {
-            if ($plugin->isValid() && self::isEnabled($id)) {
+            if ($plugin->isValid() && !isset($excluded[$id]) && self::isEnabled($id)) {
                 $versions[$id] = self::getInstalledVersion($id);
             }
         }
@@ -448,6 +554,7 @@ final class PluginRegistry
     public static function resolvePage(string $id, string $page): string
     {
         $plugin = self::requireEnabled($id);
+        self::requireNotExcluded($plugin);
         $page = basename($page);
         $directory = $plugin->getDirectory(Plugin::DIR_PAGES);
 
@@ -496,7 +603,7 @@ final class PluginRegistry
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        if (version_compare(self::getInstalledVersion($id), $plugin->version, '<')) {
+        if (self::isUpdatePending($plugin)) {
             if (isset($gCurrentUser) && $gCurrentUser->isAdministrator()) {
                 $pluginManagerUrl = SecurityUtils::encodeUrl(
                     ADMIDIO_URL . FOLDER_MODULES . '/plugins.php'
@@ -546,6 +653,7 @@ final class PluginRegistry
         self::$plugins = null;
         self::$installations = null;
         self::$settingOwners = null;
+        self::$excluded = null;
     }
 
     /**
@@ -560,6 +668,7 @@ final class PluginRegistry
         self::$pluginsPath = $path === null ? null : rtrim(str_replace('\\', '/', $path), '/');
         self::$plugins = null;
         self::$settingOwners = null;
+        self::$excluded = null;
     }
 
     /**

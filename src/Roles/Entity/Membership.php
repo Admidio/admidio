@@ -8,7 +8,6 @@ use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Changelog\Entity\LogChanges;
 use Admidio\Changelog\Service\ChangelogService;
-use Admidio\SSO\Service\SSOAccessRevocationService;
 use Admidio\Users\Entity\User;
 use DateTime;
 
@@ -57,6 +56,63 @@ class Membership extends Entity
     public function getHookId(): ?string
     {
         return 'membership';
+    }
+
+    /**
+     * The SQL condition of a membership that is valid on a day, with its parameters for a prepared
+     * statement. A membership is valid from 00:00 of mem_begin up to, but not including, 00:00 of
+     * mem_end: the end date is the first day without membership, which is also what
+     * stopMembership() writes (yesterday, so the membership ends at once).
+     *
+     * Queries use this instead of writing the comparison themselves, so that every part of Admidio
+     * agrees on who is a member on a given day.
+     *
+     * **Code example**
+     * ```
+     * $valid = Membership::getSqlValidCondition();
+     * $sql = 'SELECT mem_usr_id FROM ' . TBL_MEMBERS . ' WHERE mem_rol_id = ? AND ' . $valid['sql'];
+     * $statement = $gDb->queryPrepared($sql, array_merge(array($roleId), $valid['params']));
+     * ```
+     * @param string|null $date The day (Y-m-d), by default today.
+     * @param string $tableAlias Alias of the members table in the query, if it has one.
+     * @return array{sql: string, params: array<int,string>} Returns the condition and its parameters.
+     */
+    public static function getSqlValidCondition(?string $date = null, string $tableAlias = ''): array
+    {
+        $date ??= DATE_NOW;
+        $prefix = $tableAlias === '' ? '' : $tableAlias . '.';
+
+        return array(
+            'sql' => $prefix . 'mem_begin <= ? AND ' . $prefix . 'mem_end > ?',
+            'params' => array($date, $date)
+        );
+    }
+
+    /**
+     * Whether a membership period is valid on a day, by the same rule as getSqlValidCondition().
+     * @param string $begin The start date of the membership (Y-m-d).
+     * @param string $end The end date of the membership (Y-m-d), the first day without membership.
+     * @param string|null $date The day (Y-m-d), by default today.
+     * @return bool Returns **true** if the membership is valid on that day.
+     */
+    public static function isValidPeriod(string $begin, string $end, ?string $date = null): bool
+    {
+        $date ??= DATE_NOW;
+        return strcmp($begin, $date) <= 0 && strcmp($end, $date) > 0;
+    }
+
+    /**
+     * Whether this membership is valid on a day.
+     * @param string|null $date The day (Y-m-d), by default today.
+     * @return bool Returns **true** if the membership is valid on that day.
+     * @throws Exception
+     */
+    public function isValid(?string $date = null): bool
+    {
+        if ($this->newRecord) {
+            return false;
+        }
+        return self::isValidPeriod($this->getValue('mem_begin', 'Y-m-d'), $this->getValue('mem_end', 'Y-m-d'), $date);
     }
 
     /**
@@ -121,40 +177,6 @@ class Membership extends Entity
         return false;
     }
 
-    /**
-     * End the single sign-on access that this membership justified.
-     *
-     * A client whose access is restricted to roles is only checked while an authorization request
-     * is running, so the tokens issued from it would outlive the membership that allowed them.
-     * Nothing happens unless a client actually names this role, which is one cheap query.
-     *
-     * @param int $roleId Role of the membership, by default the one of this record.
-     * @param int $userId User of the membership, by default the one of this record. Both are passed
-     *                    explicitly by delete(), where the record is already gone.
-     * @return void
-     * @throws Exception
-     */
-    private function revokeSSOAccessOfMembership(int $roleId = 0, int $userId = 0): void
-    {
-        if ($roleId === 0) {
-            $roleId = (int) $this->getValue('mem_rol_id');
-        }
-        if ($userId === 0) {
-            $userId = (int) $this->getValue('mem_usr_id');
-        }
-
-        if ($roleId === 0 || $userId === 0) {
-            return;
-        }
-
-        $revocationService = new SSOAccessRevocationService($this->db);
-
-        if (!$revocationService->isRoleUsedForClientAccess($roleId)) {
-            return;
-        }
-
-        $revocationService->revokeLostClientAccess($userId);
-    }
 
     /**
      * Deletes the selected record of the table and renews the user object of the affected user
@@ -170,17 +192,7 @@ class Membership extends Entity
             $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
         }
 
-        $roleId = (int) $this->getValue('mem_rol_id');
-        $userId = (int) $this->getValue('mem_usr_id');
-
-        $returnStatus = parent::delete();
-
-        // Only now is the membership gone, so only now does the access right answer differently.
-        if ($returnStatus) {
-            $this->revokeSSOAccessOfMembership($roleId, $userId);
-        }
-
-        return $returnStatus;
+        return parent::delete();
     }
 
     /**
@@ -202,20 +214,11 @@ class Membership extends Entity
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        // Remembered before the save, which turns a new record into an existing one.
-        $newRecord = $this->isNewRecord();
-
         $returnStatus = parent::save($updateFingerPrint);
 
         if ($returnStatus && isset($gCurrentSession)) {
             // renew a user object of the affected user because of edited role assignment
             $gCurrentSession->reload((int)$this->getValue('mem_usr_id'));
-        }
-
-        if ($returnStatus && !$newRecord) {
-            // A membership that already existed may just have been ended or shortened. A new one
-            // can only add rights, so it cannot cost anybody their single sign-on access.
-            $this->revokeSSOAccessOfMembership();
         }
 
         return $returnStatus;

@@ -245,6 +245,7 @@ final class PreferenceDefinitions
             'changelog_table_others' => array('default' => '0', 'type' => 'bool'),
             'plugin_module_pages' => array('default' => '0', 'type' => 'bool'),
             'plugin_module_pages_applied' => array('default' => '0', 'type' => 'bool', 'internal' => true),
+            'plugin_module_pages_format' => array('default' => '1', 'type' => 'int', 'internal' => true),
             'mail_send_method' => array('default' => 'phpmail', 'type' => 'enum', 'values' => array('phpmail', 'SMTP', 'SMTP_OAUTH')),
             'mail_sending_mode' => array('default' => '0', 'type' => 'enum', 'values' => array('0', '1')),
             'mail_recipients_with_roles' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
@@ -349,6 +350,8 @@ final class PreferenceDefinitions
             'groups_roles_members_per_page' => array('default' => '25', 'type' => 'enum', 'values' => array('10', '25', '50', '100', '-1')),
             'groups_roles_preview_characters' => array('default' => '200', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
             'groups_roles_show_former_members' => array('default' => '2', 'type' => 'enum', 'values' => array('0', '1', '2')),
+            'groups_roles_membership_period_date' => array('default' => '', 'internal' => true),
+            'groups_roles_membership_period_lock' => array('default' => '', 'internal' => true),
             'mail_module_enabled' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'pm_module_enabled' => array('default' => '1', 'type' => 'bool'),
             'mail_delivery_confirmation' => array('default' => '0', 'type' => 'enum', 'values' => array('0', '1', '2')),
@@ -386,6 +389,14 @@ final class PreferenceDefinitions
             'sso_saml_want_requests_signed' => array('default' => '1', 'type' => 'bool'),
             'sso_saml_signing_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
             'sso_saml_encryption_key' => array('default' => '0', 'type' => 'reference', 'validator' => self::VALIDATOR_SSO_KEY),
+            // The metadata of the IdP is valid for this long (validUntil) and may be cached for this long (cacheDuration)
+            'sso_saml_metadata_valid_days' => array('default' => '30', 'type' => 'int', 'minimum' => 1, 'maximum' => 3650, 'required' => true),
+            'sso_saml_metadata_cache_hours' => array('default' => '24', 'type' => 'int', 'minimum' => 1, 'maximum' => 8760, 'required' => true),
+            // Organization and contact person of the metadata; empty means the organization, the Admidio URL and
+            // the e-mail address of the administrator of the installation
+            'sso_saml_organization_name' => array('default' => '', 'maxLength' => 250),
+            'sso_saml_organization_url' => array('default' => '', 'maxLength' => 250),
+            'sso_saml_contact_email' => array('default' => '', 'maxLength' => 250),
             'sso_saml_persistent_id_secret' => array('default' => '', 'internal' => true, 'sensitive' => true),
             'sso_oidc_enabled' => array('default' => '0', 'type' => 'bool'),
             // empty means "use the default admidio URL"; do not seed it with the resolved

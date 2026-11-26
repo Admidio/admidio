@@ -416,7 +416,7 @@ class EventSaveService
     {
         $frequency = (string)($formValues['event_recurrence_frequency'] ?? 'none');
 
-        if ($frequency === 'none') {
+        if ($frequency === '' || $frequency === 'none') {
             return null;
         }
 

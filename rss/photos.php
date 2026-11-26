@@ -24,7 +24,7 @@ try {
     $getOrganization = admFuncVariableIsValid($_GET, 'organization', 'string');
 
     $organization = RssFeedAccess::resolveOrganization($gDb, $gCurrentOrganization, $getOrganization);
-    RssFeedAccess::assertAccessible($organization, 'photo_module_enabled', $gValidLogin);
+    RssFeedAccess::assertAccessible($organization, 'photo_module_enabled');
     $organizationName = $organization->getValue('org_longname');
     $organizationID = (int)$organization->getValue('org_id');
     $organizationSettings = $organization->getSettingsManager();

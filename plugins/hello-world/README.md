@@ -14,6 +14,7 @@ plugins/hello-world/
 ├── plugin.php                         the entry file — included once when the plugin is loaded
 ├── modules/index.php                  a page, an ordinary Admidio module file
 ├── src/Greeting.php                   a class, reached through the "autoload" mapping
+├── src/ListActionExamples.php         the list_row_actions filter: add, hide, reorder, modify
 ├── languages/en.xml                   the language keys of the plugin
 └── templates/plugin.hello-world.tpl   a Smarty template of the plugin
 ```
@@ -25,6 +26,11 @@ else.
 
 The directory name is the plugin ID and the only identity the plugin has. `name` and `description`
 may be language keys, which is what this plugin uses. Everything else is optional:
+
+* `id` — the plugin ID once more. If it is there, it has to equal the directory name, and the
+  installer then accepts an archive whose folder is named differently — such as the source archive
+  GitHub generates for a release tag (`admidio-hello-world-1.2.0/`). The folder is renamed to the ID
+  when the plugin is installed.
 
 * `requires` — version constraints for `admidio` and `php`, plus `extensions` and `plugins`. A
   constraint is a space separated list of terms that all have to match, e.g. `>=5.1 <6.0`; a term
@@ -79,6 +85,34 @@ any public Admidio API — normally it registers hooks:
 Hooks::addFilter('page_headline', array(Greeting::class, 'decorateHeadline'), 20, 2, 'hello-world');
 ```
 
+## The action icons of the lists
+
+Every row of an Admidio list ends with action icons - edit, delete, history, ... The
+`list_row_actions` filter lets a plugin change them in **any** list. It receives the actions of one
+row as an array, the ID of the list and the data of the row, and returns the actions that are shown:
+
+```php
+Hooks::addFilter('list_row_actions', array(ListActionExamples::class, 'adjustActions'), 20, 3, 'hello-world');
+```
+
+An action is an array with an `icon` and a `tooltip` and optionally an `id`, a `url`, a `popup` or a
+`dataMessage` with a `dataHref`. An action with none of the targets is purely informational. Core
+actions have stable IDs (`edit`, `delete`, `copy`, `history`, ...); name your own after the plugin,
+e.g. `hello-world_greet`. `src/ListActionExamples.php` shows the four things a filter can do, each
+as a separate branch:
+
+* **add** an action to the contacts list that shows a message,
+* **reorder** the contacts actions, so that the e-mail icon is the one that stays visible,
+* **hide** the copy action of the announcements,
+* **modify** the delete action of the menu entries, and add an informational icon to the row of this
+  plugin in the plugin manager.
+
+The first action of a row stays visible when the row has more than two actions, the others move
+into the menu of the row. Hiding an action only removes its icon; the page behind it still checks
+the permissions. The list IDs are the ones the core templates pass to `list.functions.tpl`.
+
+The examples do nothing until the preference *Change the action icons of some lists* is switched on.
+
 ## The page
 
 `modules/index.php` is a normal Admidio module file: `require_once` of `system/common.php`,
@@ -97,4 +131,6 @@ file, the classes below `src/` — is refused if it is requested directly.
 1. Install the plugin in *Administration → Extensions*.
 2. Open its page.
 3. Switch on *Show the greeting in every headline* to see the hook change what the core produces.
-4. Disable the plugin and open its page again: it is refused.
+4. Switch on *Change the action icons of some lists* and look at the contacts, announcements, menu
+   and plugin lists.
+5. Disable the plugin and open its page again: it is refused.

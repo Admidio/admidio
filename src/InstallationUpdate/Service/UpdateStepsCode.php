@@ -3,6 +3,7 @@
 namespace Admidio\InstallationUpdate\Service;
 
 use Admidio\CategoryReport\Entity\CategoryReportColumn;
+use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
@@ -365,6 +366,15 @@ final class UpdateStepsCode
                     continue;
                 }
             } else {
+                // The plugin was active in every organization. The version for the plugin system is
+                // enabled per organization, and an organization that already has the preference
+                // keeps it when the plugin is installed, so the plugin stays active everywhere.
+                if (Plugin::isValidId($folderName)) {
+                    PreferencesService::setForAllOrganizations(
+                        array('plugin_' . Plugin::getSettingKey($folderName) . '_enabled' => '1')
+                    );
+                }
+
                 // there is a 3rd party plugin installed, so we try to move it to the new plugin folder
                 $newPluginPath = ADMIDIO_PATH . FOLDER_PLUGINS . DIRECTORY_SEPARATOR . $folderName;
                 try {
@@ -451,7 +461,8 @@ final class UpdateStepsCode
      * else. The SQL step before this one lowercases the column, so a converted plugin is recognized
      * again with everything it already has - its version, its preferences and its data.
      *
-     * A built-in plugin that has no component row at all is installed here, and the menu entry of a
+     * A built-in plugin that has no component row at all is installed here, one whose installation
+     * failed in an earlier attempt is completed, and the menu entry of a
      * plugin that only contributes a widget is removed, because the file it pointed at is gone.
      * @return void
      * @throws Exception
@@ -470,6 +481,12 @@ final class UpdateStepsCode
             if (!PluginRegistry::isInstalled($id)) {
                 PluginInstaller::install($plugin);
                 continue;
+            }
+
+            // An installation of an earlier attempt of this step failed half way. It is completed
+            // now, while the config.php in the old folder that it imports is still there.
+            if (!PluginRegistry::isUpdateCompleted($id)) {
+                PluginInstaller::update($plugin);
             }
 
             // The plugin keeps its component row and every setting an administrator made. What it

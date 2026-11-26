@@ -1,0 +1,251 @@
+<?php
+
+namespace Admidio\Infrastructure\Plugins;
+
+use Admidio\Infrastructure\Exception;
+use Admidio\Preferences\Service\PreferencesService;
+use Closure;
+use PDO;
+use RuntimeException;
+use Throwable;
+
+/**
+ * The config.php of a plugin from before the plugin system.
+ *
+ * Such a plugin was a folder somebody copied into adm_plugins/, and its settings were PHP variables
+ * in a config.php beside its code. The version that is installed through the plugin system keeps
+ * its settings as preferences, so an update step of the plugin takes the old file over once:
+ * ```
+ * LegacyConfig::import('birthday', array(
+ *     'plg_show_age'      => array('birthday_show_age', 'boolval'),
+ *     'plg_show_zeitraum' => array('birthday_show_past', 'intval')
+ * ));
+ * ```
+ * The file was one for the whole installation, so what it holds is written into every
+ * organization. An installation that never had the file keeps the defaults. A file that is there but
+ * can no longer be run stops the update step: the plugin's installation keeps its checkpoint, and the
+ * update of Admidio stops before it removes adm_plugins/, so the file and its settings are still there
+ * when the administrator has corrected it - or deleted it to go on with the defaults.
+ *
+ * @copyright The Admidio Team
+ * @see https://www.admidio.org/
+ * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
+ */
+final class LegacyConfig
+{
+    public const FILE = 'config.php';
+
+    /**
+     * The name the old file gets when the plugin manager replaces the old folder with a new
+     * version. It is a name of its own, so that a config.php the new version brings cannot take its
+     * place. The file is removed once an update step of the plugin took it over with import() and
+     * the installation or update has completed. A version without such a step leaves it alone, so
+     * that a later version can still take the settings over.
+     */
+    public const CARRIED_FILE = 'config.legacy.php';
+
+    /**
+     * The plugins whose carried file import() took over in this request, as ID => true.
+     * @var array<string,bool>
+     */
+    private static array $carriedFilesImported = array();
+
+    /**
+     * The class only offers static methods and must not be instantiated.
+     */
+    private function __construct()
+    {
+    }
+
+    /**
+     * The file an earlier version of the plugin left behind, or **null** if there is none.
+     *
+     * It is looked for in the folder of the plugin itself - as CARRIED_FILE where the plugin
+     * manager put the new version in place (see PluginPackage::moveIntoPlace()), as FILE where the
+     * new files were copied over the old ones - and in adm_plugins/, where the plugins of Admidio
+     * itself were and where a plugin stays that the update could not move.
+     * @param string $pluginId The ID of the plugin, which is the name of its folder.
+     * @param string $legacyFolder The name the folder had in adm_plugins/, if it was a different one.
+     * @return string|null
+     */
+    public static function find(string $pluginId, string $legacyFolder = ''): ?string
+    {
+        $files = array(
+            PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE,
+            PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::FILE,
+            ADMIDIO_PATH . '/adm_plugins/' . ($legacyFolder === '' ? $pluginId : $legacyFolder) . '/' . self::FILE
+        );
+
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                return $file;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove the old file the plugin manager carried over into the folder of the plugin, after the
+     * installation or update of the plugin has completed - but only if an update step took its
+     * settings over with import() in this run. Without that the file is the only copy of the
+     * settings, and it stays for a later version whose update steps import it.
+     * @param string $pluginId The ID of the plugin, which is the name of its folder.
+     * @return void
+     */
+    public static function discardImportedCarriedFile(string $pluginId): void
+    {
+        global $gLogger;
+
+        if (!isset(self::$carriedFilesImported[$pluginId])) {
+            return;
+        }
+        unset(self::$carriedFilesImported[$pluginId]);
+
+        $file = PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE;
+        if (is_file($file) && !@unlink($file) && $gLogger instanceof \Psr\Log\LoggerInterface) {
+            $gLogger->warning('The old configuration of a plugin could not be removed.', array('file' => $file));
+        }
+    }
+
+    /**
+     * Write the settings of the old config.php into the preferences of every organization.
+     * @param string $pluginId The ID of the plugin, which is the name of its folder.
+     * @param array<string,array{0:string,1:callable}> $map For each variable of the old file the
+     *                             preference that replaces it and what turns the old value into the
+     *                             new one, e.g. **'intval'**. A variable the file does not set is
+     *                             skipped.
+     * @param string $legacyFolder The name the folder had in adm_plugins/, if it was a different one.
+     * @return void
+     * @throws Exception
+     */
+    public static function import(string $pluginId, array $map, string $legacyFolder = ''): void
+    {
+        $carried = self::find($pluginId, $legacyFolder) === PluginRegistry::getPluginsPath() . '/' . $pluginId . '/' . self::CARRIED_FILE;
+        $variables = self::read($pluginId, $legacyFolder);
+        $preferences = array();
+
+        foreach ($map as $variable => [$preference, $convert]) {
+            if (isset($variables[$variable])) {
+                $preferences[$preference] = $convert($variables[$variable]);
+            }
+        }
+
+        PreferencesService::setForAllOrganizations($preferences);
+
+        if ($carried) {
+            self::$carriedFilesImported[$pluginId] = true;
+        }
+    }
+
+    /**
+     * A converter for an old setting that names categories, for the map of import(). It turns the
+     * names into the IDs of the categories of that type, or into **All** if the setting says so or
+     * none of the names exists:
+     * ```
+     * 'plg_kal_cat' => array('calendar_show_categories', LegacyConfig::categories('EVT'))
+     * ```
+     * The old file was one for the whole installation, so a name is looked up in every
+     * organization; an organization only ever matches the IDs of its own categories.
+     * @param string $type The type of the categories, e.g. **ANN** or **EVT**.
+     * @return Closure(mixed):array<int,int|string>
+     */
+    public static function categories(string $type): Closure
+    {
+        return static function (mixed $names) use ($type): array {
+            global $gDb;
+
+            $categoryIds = array();
+            foreach (is_array($names) ? $names : array() as $name) {
+                if (strtolower((string)$name) === 'all') {
+                    return array('All');
+                }
+
+                $sql = 'SELECT cat_id FROM ' . TBL_CATEGORIES . ' WHERE cat_name = ? AND cat_type = ?';
+                foreach ($gDb->queryPrepared($sql, array((string)$name, $type))->fetchAll(PDO::FETCH_COLUMN) as $categoryId) {
+                    $categoryIds[] = (int)$categoryId;
+                }
+            }
+
+            return $categoryIds === array() ? array('All') : array_values(array_unique($categoryIds));
+        };
+    }
+
+    /**
+     * A converter for an old setting that lists roles, for the map of import(): the roles it names,
+     * or **All** if it names none.
+     * ```
+     * 'plg_rolle_sql' => array('birthday_roles_sql', array(LegacyConfig::class, 'roles'))
+     * ```
+     * @param mixed $roles
+     * @return array<int,mixed>
+     */
+    public static function roles(mixed $roles): array
+    {
+        return is_array($roles) && $roles !== array() ? array_values($roles) : array('All');
+    }
+
+    /**
+     * The variables the old config.php sets, as name => value.
+     *
+     * The file is included, which runs it - as every page view of the old plugin did. A file that
+     * cannot be read or can no longer run (missing permissions, a syntax error, a function PHP has
+     * dropped) is not taken for a missing one: that would install the plugin with its defaults, and
+     * the update of Admidio would then delete the file with the old folder.
+     * @param string $pluginId The ID of the plugin, which is the name of its folder.
+     * @param string $legacyFolder The name the folder had in adm_plugins/, if it was a different one.
+     * @return array<string,mixed>
+     * @throws Exception If the file exists but cannot be read or run.
+     */
+    public static function read(string $pluginId, string $legacyFolder = ''): array
+    {
+        global $gLogger;
+
+        $file = self::find($pluginId, $legacyFolder);
+        if ($file === null) {
+            return array();
+        }
+
+        // A scope of its own, with the globals a config.php could rely on in the old plugins.
+        $include = static function (string $__file): array {
+            global $gL10n, $gDb, $gSettingsManager, $gCurrentOrganization, $gCurrentOrgId, $gCurrentUser;
+
+            // include only warns about a file it cannot open, and then returns false
+            if (!is_readable($__file)) {
+                throw new RuntimeException('The file cannot be read.');
+            }
+
+            $__known = get_defined_vars();
+            // what the file prints (a BOM, blank lines after its closing tag) must not reach the response
+            ob_start();
+            try {
+                $__included = include $__file;
+            } finally {
+                ob_end_clean();
+            }
+            if ($__included === false) {
+                throw new RuntimeException('The file could not be included.');
+            }
+
+            return array_diff_key(get_defined_vars(), $__known, array('__known' => true, '__included' => true));
+        };
+
+        try {
+            $variables = $include($file);
+        } catch (Throwable $exception) {
+            $gLogger->error(
+                'The old configuration of the plugin "' . $pluginId . '" could not be read.',
+                array('file' => $file, 'error' => $exception->getMessage())
+            );
+
+            throw new Exception('SYS_PLUGIN_LEGACY_CONFIG_UNREADABLE', array($pluginId, $file, $exception->getMessage()));
+        }
+
+        $gLogger->notice(
+            'The old configuration of the plugin "' . $pluginId . '" is taken over.',
+            array('file' => $file)
+        );
+
+        return $variables;
+    }
+}

@@ -36,6 +36,7 @@ use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Service\RegistrationService;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
+use Admidio\Roles\Service\MembershipPeriodService;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Infrastructure\Utils\SystemInfoUtils;
@@ -76,6 +77,7 @@ use Admidio\SSO\Entity\Key;
 use Admidio\SSO\Entity\OIDCClient;
 use Admidio\SSO\Entity\SAMLClient;
 use Admidio\SSO\Service\KeyService;
+use Admidio\SSO\Service\SAMLMetadataRefreshService;
 use Admidio\SSO\Service\OIDCService;
 use Admidio\SSO\Service\SAMLService;
 use Admidio\Users\Entity\User;
@@ -117,6 +119,7 @@ final class CoreTasks
 
         self::registerGeneralTasks();
         self::registerSystemTasks();
+        self::registerMaintenanceJobs();
         self::registerConfigTasks();
         self::registerOrganizationTasks();
         self::registerUserTasks();
@@ -454,13 +457,38 @@ final class CoreTasks
     }
 
     /**
-     * The jobs of maintenance:run, in the order in which they are executed.
-     *
-     * @var array<int,string>
+     * Register the maintenance jobs of Admidio core, in the order in which maintenance:run executes
+     * them. Modules and plugins add theirs with CliTaskRegistry::registerMaintenanceJob().
      */
-    private const MAINTENANCE_JOBS = array(
-        'categories', 'documents', 'sessions', 'auto-logins', 'sso-tokens', 'update-check'
-    );
+    private static function registerMaintenanceJobs(): void
+    {
+        CliTaskRegistry::registerCoreMaintenanceJob('categories', static function (): void {
+            (new Maintenance($GLOBALS['gDb']))->reorganizeCategories();
+        }, 'Reorganize the sequence of the categories.');
+        CliTaskRegistry::registerCoreMaintenanceJob('documents', static function (): void {
+            (new Maintenance($GLOBALS['gDb']))->repairDocumentsFilesPath();
+        }, 'Repair the paths of the documents and files folders.');
+        CliTaskRegistry::registerCoreMaintenanceJob('sessions', static function (): void {
+            self::cleanupSessions(30);
+        }, 'Remove sessions that were inactive for 30 minutes.');
+        CliTaskRegistry::registerCoreMaintenanceJob('auto-logins', static function (): void {
+            self::cleanupAutoLogins();
+        }, 'Remove expired automatic logins.');
+        CliTaskRegistry::registerCoreMaintenanceJob('sso-tokens', static function (): void {
+            self::cleanupSsoTokens();
+        }, 'Remove expired, revoked and used OIDC tokens and codes.');
+        CliTaskRegistry::registerCoreMaintenanceJob('saml-metadata', static function (): string {
+            return self::refreshSamlMetadata();
+        }, 'Refresh the metadata of the SAML clients that are due for it.');
+        CliTaskRegistry::registerCoreMaintenanceJob('update-check', static function (): string {
+            return self::checkForUpdate();
+        }, 'Look for a new release of Admidio, unless the update check is switched off.');
+        CliTaskRegistry::registerCoreMaintenanceJob('memberships', static function (): string {
+            // the cron job repeats a failed run at once, without its retry delay
+            $count = (new MembershipPeriodService($GLOBALS['gDb']))->runIfDue(null, true);
+            return $count === null ? 'done today already, or running' : $count . ' memberships started or ended';
+        }, 'Report the memberships that started or ended since the last run, once per day.');
+    }
 
     private static function registerSystemTasks(): void
     {
@@ -646,13 +674,19 @@ final class CoreTasks
         self::task('maintenance:repair-documents', 'repairDocuments', 'Run the native documents/files path repair operation.',
             'maintenance:repair-documents [--yes]', 'CORE', true, array(),
             array(self::opt('yes', 'Confirm the repair.', '', false, false, true)));
-        self::task('maintenance:run', 'maintenanceRun', 'Run the available native maintenance jobs and report each result.',
+        self::task('maintenance:run', 'maintenanceRun', 'Run the maintenance jobs of core, modules and plugins for one organization (see --organization) and report each result.',
             'maintenance:run [--job=JOB]... [--yes] [--format=table|json|json-api|csv|md|dokuwiki]',
             'CORE', true, array(), array(
-                self::opt('job', 'Maintenance job to run; repeat to select more than one. Without the option every job runs.', 'JOB', false, true, false, self::MAINTENANCE_JOBS),
+                // no list of values: modules and plugins register their jobs after the core commands
+                self::opt('job', 'Maintenance job to run, see maintenance:jobs; repeat to select more than one. Without the option every job runs.', 'JOB', false, true, false),
                 self::opt('yes', 'Confirm maintenance execution.', '', false, false, true),
                 self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
             ));
+        self::task('maintenance:jobs', 'maintenanceJobs', 'List the maintenance jobs that maintenance:run executes.',
+            'maintenance:jobs [--format=table|json|json-api|csv|md|dokuwiki]',
+            'CORE', true, array(), array(
+                self::opt('format', 'Result format.', 'FORMAT', false, false, false, array('table', 'json', 'json-api', 'csv', 'md', 'dokuwiki'))
+            ), array(), null, CliTaskRegistry::ACCESS_VISIBLE);
         self::task(
             'maintenance:mode',
             'maintenanceMode',
@@ -2257,6 +2291,11 @@ final class CoreTasks
             array(),
             array(self::opt('format', 'Output format.', 'FORMAT', false, false, false, array('json', 'json-api')))
         );
+        self::task('sso:saml-metadata-refresh', 'ssoSamlMetadataRefresh',
+            'Fetch the metadata of the SAML clients again from their metadata URLs and apply it.',
+            'sso:saml-metadata-refresh [CLIENT] [--force]', 'CORE', true,
+            array(self::arg('client', 'SAML client UUID/client id. Without it the clients that are due are refreshed.', false)),
+            array(self::opt('force', 'Fetch and apply the metadata even if it did not change; with no CLIENT, refresh every client with a metadata URL.', '', false, false, true)));
         self::task(
             'sso:saml-metadata',
             'ssoSamlMetadata',
@@ -3336,33 +3375,28 @@ final class CoreTasks
 
     public static function maintenanceRun(array $arguments, array $options): int
     {
-        global $gDb;
+        $jobs = CliTaskRegistry::getMaintenanceJobs();
+        $requested = CliApplication::optionValues($options, 'job');
+        foreach ($requested as $jobName) {
+            if (!isset($jobs[$jobName])) {
+                throw new InvalidArgumentException('--job expects one of: ' . implode(', ', array_keys($jobs)) . '.');
+            }
+        }
 
         CliApplication::confirm('Run the selected Admidio maintenance jobs?', $options);
-        $requested = CliApplication::optionValues($options, 'job');
         if (count($requested) === 0) {
             // One crontab entry is supposed to cover the recurring work of an installation.
-            $requested = self::MAINTENANCE_JOBS;
+            $requested = array_keys($jobs);
         }
         $requested = array_values(array_unique($requested));
 
-        $maintenance = new Maintenance($gDb);
-        $jobs = array(
-            'categories' => static fn (): mixed => $maintenance->reorganizeCategories(),
-            'documents' => static fn (): mixed => $maintenance->repairDocumentsFilesPath(),
-            'sessions' => static fn (): mixed => self::cleanupSessions(30),
-            'auto-logins' => static fn (): mixed => self::cleanupAutoLogins(),
-            'sso-tokens' => static fn (): mixed => self::cleanupSsoTokens(),
-            'update-check' => static fn (): mixed => self::checkForUpdate()
-        );
         $rows = array();
         $failures = 0;
 
         foreach ($requested as $jobName) {
             try {
-                // A job that has something to report returns it as text.
-                $result = $jobs[$jobName]();
-                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => is_string($result) ? $result : '');
+                $message = ($jobs[$jobName]['callback'])();
+                $rows[] = array('job' => $jobName, 'status' => 'success', 'message' => is_string($message) ? $message : '');
             } catch (\Throwable $exception) {
                 ++$failures;
                 $rows[] = array(
@@ -3380,6 +3414,21 @@ final class CoreTasks
         );
 
         return $failures === 0 ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_FAILED;
+    }
+
+    public static function maintenanceJobs(array $arguments, array $options): int
+    {
+        $rows = array();
+        foreach (CliTaskRegistry::getMaintenanceJobs() as $job) {
+            $rows[] = array(
+                'job' => $job['name'],
+                'origin' => $job['core'] ? 'core' : 'extension',
+                'description' => $job['description']
+            );
+        }
+
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return CliApplication::EXIT_SUCCESS;
     }
 
     public static function maintenanceMode(array $arguments, array $options): int
@@ -8645,7 +8694,7 @@ final class CoreTasks
 
     public static function changelogList(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser, $gSettingsManager;
+        global $gDb, $gCurrentUser, $gSettingsManager, $gCurrentOrgId;
 
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
@@ -8665,8 +8714,9 @@ final class CoreTasks
             throw new Exception('SYS_NO_RIGHTS');
         }
 
-        $conditions = array();
-        $params = array();
+        // adm_log_changes is a global table, so the entries have to be restricted to the current organization.
+        $conditions = array(ChangelogService::getOrganizationCondition());
+        $params = array((int)$gCurrentOrgId);
 
         // An administrator that asked for no table also sees the tables of third-party extensions.
         if (!ChangelogService::hasUnrestrictedAccess($gCurrentUser) || $requestedTables !== array()) {
@@ -8681,6 +8731,15 @@ final class CoreTasks
                               OR log_record_uuid = ?)';
             array_push($params, ...ChangelogService::$userTables);
             $params[] = $userTableRestriction;
+        }
+
+        // Tables that are readable for the changes one made oneself only.
+        $ownChangeTables = ChangelogService::getOwnChangeRestriction($gCurrentUser);
+        if ($ownChangeTables !== array()) {
+            $conditions[] = '(log_table NOT IN (' . Database::getQmForValues($ownChangeTables) . ')
+                              OR log_usr_id_create = ?)';
+            array_push($params, ...$ownChangeTables);
+            $params[] = (int)$gCurrentUser->getValue('usr_id');
         }
 
         if ($objectUuid !== '') {
@@ -8751,7 +8810,7 @@ final class CoreTasks
 
     public static function changelogShow(array $arguments, array $options): int
     {
-        global $gDb, $gCurrentUser, $gSettingsManager;
+        global $gDb, $gCurrentUser, $gSettingsManager, $gCurrentOrgId;
 
         if ($gSettingsManager->getInt('changelog_module_enabled') === 0) {
             throw new Exception('SYS_MODULE_DISABLED');
@@ -8768,8 +8827,9 @@ final class CoreTasks
                     log_usr_id_create AS user_id, log_timestamp_create AS timestamp,
                     log_comment AS comment
                FROM ' . TBL_LOG_CHANGES . '
-              WHERE log_id = ?',
-            array($id)
+              WHERE log_id = ?
+                AND ' . ChangelogService::getOrganizationCondition(),
+            array($id, (int)$gCurrentOrgId)
         )->fetch();
 
         if ($row === false) {
@@ -8788,6 +8848,12 @@ final class CoreTasks
         if ($userTableRestriction !== ''
             && in_array($table, ChangelogService::$userTables, true)
             && (string)$row['record_uuid'] !== $userTableRestriction) {
+            throw new Exception('SYS_NO_RIGHTS');
+        }
+
+        // In a table readable for one's own changes only, a change by somebody else is not.
+        if (in_array($table, ChangelogService::getOwnChangeRestriction($gCurrentUser), true)
+            && (int)$row['user_id'] !== (int)$gCurrentUser->getValue('usr_id')) {
             throw new Exception('SYS_NO_RIGHTS');
         }
 
@@ -8812,7 +8878,9 @@ final class CoreTasks
                 'version' => $plugin?->version ?? '',
                 'installed_version' => PluginRegistry::getInstalledVersion($id),
                 'installed' => $installed,
-                'enabled' => $installed && PluginRegistry::isEnabled($id)
+                'enabled' => $installed && PluginRegistry::isEnabled($id),
+                // Enabled, but kept out after a crash (or because a plugin it requires crashed).
+                'excluded' => isset(PluginRegistry::getExcluded()[$id])
             );
 
             if ($state !== '' && $rowState !== $state) {
@@ -8865,6 +8933,7 @@ final class CoreTasks
             'installed_version' => PluginRegistry::getInstalledVersion($plugin->id),
             'component_id' => PluginRegistry::getComponentId($plugin->id),
             'enabled' => PluginRegistry::isEnabled($plugin->id),
+            'excluded' => isset(PluginRegistry::getExcluded()[$plugin->id]),
             'author' => $plugin->author,
             'url' => $plugin->homepage,
             'icon' => $plugin->icon,
@@ -9150,6 +9219,10 @@ final class CoreTasks
         }
 
         $organizations = PluginRegistry::getEnabledOrganizations($id);
+        // the warnings are written before the question, so that --yes shows them too
+        foreach (PluginInstaller::getRemovalWarnings($plugin ?? $id) as $warning) {
+            CliApplication::writeWarning('PLUGIN_REMOVAL_WARNING', $warning, $options);
+        }
         CliApplication::confirm(
             'Remove plugin "' . ($plugin?->name ?? $id) . '"'
                 . ($organizations === array()
@@ -9465,6 +9538,23 @@ final class CoreTasks
 
         CliApplication::writeSuccess('OIDC token cleanup completed.', $options);
         return CliApplication::EXIT_SUCCESS;
+    }
+
+    /**
+     * Check the metadata of the SAML clients that are due for it (see SAMLMetadataRefreshService).
+     * A client whose metadata cannot be fetched or is not valid is reported; the job fails only
+     * for an error that keeps it from running at all.
+     */
+    private static function refreshSamlMetadata(): string
+    {
+        global $gDb;
+
+        $rows = (new SAMLMetadataRefreshService($gDb))->refreshDue();
+        $summary = array();
+        foreach ($rows as $row) {
+            $summary[] = $row['client'] . ': ' . $row['result'] . ($row['message'] !== '' ? ' (' . $row['message'] . ')' : '');
+        }
+        return count($rows) === 0 ? 'No SAML metadata is due.' : implode('; ', $summary);
     }
 
     /**
@@ -12005,6 +12095,39 @@ final class CoreTasks
         return $data;
     }
 
+    public static function ssoSamlMetadataRefresh(array $arguments, array $options): int
+    {
+        global $gDb;
+
+        $service = new SAMLMetadataRefreshService($gDb);
+        $force = CliApplication::optionBool($options, 'force', false);
+        $rows = array();
+
+        if (isset($arguments[0])) {
+            [$client] = self::resolveSsoClient((string)$arguments[0], 'saml');
+            $rows[] = array('client' => $client->getIdentifier(), 'result' => $service->refresh($client, $force), 'message' => '');
+        } elseif ($force) {
+            $ids = $gDb->queryPrepared(
+                'SELECT smc_id FROM ' . TBL_SAML_CLIENTS . ' WHERE smc_metadata_url IS NOT NULL AND smc_metadata_url <> ?',
+                array('')
+            )->fetchAll(PDO::FETCH_COLUMN);
+            foreach ($ids as $id) {
+                $client = new SAMLClient($gDb, (int)$id);
+                try {
+                    $rows[] = array('client' => $client->getIdentifier(), 'result' => $service->refresh($client, true), 'message' => '');
+                } catch (\Admidio\Infrastructure\Exception $exception) {
+                    $rows[] = array('client' => $client->getIdentifier(), 'result' => SAMLMetadataRefreshService::FAILED, 'message' => $exception->getTranslationId());
+                }
+            }
+        } else {
+            $rows = $service->refreshDue(PHP_INT_MAX, PHP_INT_MAX);
+        }
+
+        CliApplication::writeRows($rows, CliApplication::optionString($options, 'format', 'table'), $options);
+        return count(array_filter($rows, static fn (array $row): bool => $row['result'] === SAMLMetadataRefreshService::FAILED)) === 0
+            ? CliApplication::EXIT_SUCCESS : CliApplication::EXIT_FAILED;
+    }
+
     private static function setSsoEnabled(array $arguments, array $options, bool $enabled): int
     {
         [$client, $type] = self::resolveSsoClient(
@@ -12449,7 +12572,7 @@ final class CoreTasks
                     'smc_encrypt_assertions' => false,
                     'smc_validate_signatures' => false,
                     'smc_assertion_lifetime' => 600,
-                    'smc_allowed_clock_skew' => 0,
+                    'smc_allowed_clock_skew' => 300,
                     'smc_userid_field' => 'usr_id'
                 );
             }

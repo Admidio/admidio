@@ -9,6 +9,11 @@ use ZipArchive;
 /**
  * A plugin as it arrives: one ZIP archive, from an upload or from the plugin store.
  *
+ * The archive holds one top-level folder with the plugin in it. That folder is named after the
+ * plugin ID, unless the manifest states the ID itself (**"id"** in plugin.json): then the folder may
+ * be called anything, which is what makes the source archive GitHub generates for a release tag
+ * (**repository-1.2.0/**) installable as it is.
+ *
  * Everything an archive contains is written by somebody the installation does not know, so it is
  * checked before a single byte of it reaches the plugins directory. The archive is read twice: once
  * to decide whether it may be extracted at all, and once - into a temporary directory - to read the
@@ -41,6 +46,29 @@ final class PluginPackage
     public const MAX_ENTRIES = 5000;
 
     /**
+     * The largest manifest that is read out of an archive before it is extracted, in bytes.
+     */
+    private const MAX_MANIFEST_BYTES = 1048576;
+
+    /**
+     * Archive entries that are never extracted: a path that has one of these names as any of its
+     * segments is skipped.
+     *
+     * An archive built with create() does not contain them, but the source archive of a release
+     * tag contains the whole repository, and the ZIP tool of macOS adds a **__MACOSX** folder of
+     * resource forks next to the plugin folder. **tests** is skipped for the reason create()
+     * leaves it out: Admidio runs the tests of every plugin that is present. vendor and
+     * node_modules, which create() also leaves out, are extracted: an archive that carries them was
+     * made that way on purpose.
+     * @var array<int,string>
+     */
+    public const SKIPPED = array(
+        '__MACOSX', '.git', '.github', '.svn', '.hg',
+        'tests', 'phpunit.xml', 'phpunit.xml.dist', '.phpunit.result.cache',
+        '.DS_Store', 'Thumbs.db', '.gitignore', '.gitattributes'
+    );
+
+    /**
      * The class only offers static methods and must not be instantiated.
      */
     private function __construct()
@@ -60,13 +88,14 @@ final class PluginPackage
      */
     public static function install(string $archivePath, bool $replace = false): string
     {
-        $id = self::inspect($archivePath);
+        $contents = self::read($archivePath);
+        $id = $contents['id'];
 
         if (!$replace && PluginRegistry::get($id) !== null) {
             throw new Exception('SYS_PLUGIN_ALREADY_EXISTS', array($id));
         }
 
-        $temporary = self::extractToTemporaryDirectory($archivePath, $id);
+        $temporary = self::extractToTemporaryDirectory($archivePath, $contents);
 
         try {
             self::verifyExtractedPlugin($temporary . '/' . $id, $id);
@@ -96,8 +125,9 @@ final class PluginPackage
      */
     public static function describe(string $archivePath): Plugin
     {
-        $id = self::inspect($archivePath);
-        $temporary = self::extractToTemporaryDirectory($archivePath, $id);
+        $contents = self::read($archivePath);
+        $id = $contents['id'];
+        $temporary = self::extractToTemporaryDirectory($archivePath, $contents);
 
         try {
             return self::verifyExtractedPlugin($temporary . '/' . $id, $id);
@@ -120,7 +150,7 @@ final class PluginPackage
      * @var array<int,string>
      */
     public const EXCLUDED = array(
-        '.git', '.svn', '.hg', 'node_modules', 'vendor',
+        '.git', '.github', '.svn', '.hg', 'node_modules', 'vendor',
         'tests', 'phpunit.xml', 'phpunit.xml.dist', '.phpunit.result.cache',
         '.DS_Store', 'Thumbs.db', '.gitignore', '.gitattributes'
     );
@@ -218,10 +248,23 @@ final class PluginPackage
      * This is the gate. Everything it rejects is rejected before any file is written, so a hostile
      * archive never reaches the filesystem at all.
      * @param string $archivePath Absolute path of the ZIP archive.
-     * @return string The plugin ID, which is the name of the single top-level directory.
+     * @return string The plugin ID: the "id" of the manifest, or else the name of the single
+     *                top-level directory.
      * @throws Exception
      */
     public static function inspect(string $archivePath): string
+    {
+        return self::read($archivePath)['id'];
+    }
+
+    /**
+     * The gate of inspect(), with everything extracting the archive needs.
+     * @param string $archivePath Absolute path of the ZIP archive.
+     * @return array{id:string,root:string,entries:array<int,string>} The plugin ID, the name of
+     *         the top-level directory and the entries that are extracted.
+     * @throws Exception
+     */
+    private static function read(string $archivePath): array
     {
         if (!is_file($archivePath)) {
             throw new Exception('SYS_PLUGIN_PACKAGE_UNREADABLE');
@@ -246,10 +289,10 @@ final class PluginPackage
     /**
      * Walk every entry of an opened archive and decide whether it may be extracted.
      * @param ZipArchive $archive
-     * @return string The plugin ID.
+     * @return array{id:string,root:string,entries:array<int,string>}
      * @throws Exception
      */
-    private static function readArchive(ZipArchive $archive): string
+    private static function readArchive(ZipArchive $archive): array
     {
         if ($archive->numFiles === 0) {
             throw new Exception('SYS_PLUGIN_PACKAGE_EMPTY');
@@ -261,8 +304,9 @@ final class PluginPackage
 
         $root = null;
         $extracted = 0;
-        $hasManifest = false;
+        $manifestSize = null;
         $hasEntryFile = false;
+        $entries = array();
 
         for ($index = 0; $index < $archive->numFiles; ++$index) {
             $entry = $archive->statIndex($index);
@@ -278,12 +322,16 @@ final class PluginPackage
                 throw new Exception('SYS_PLUGIN_PACKAGE_TOO_LARGE');
             }
 
+            $segments = explode('/', trim($name, '/'));
+            if (array_intersect($segments, self::SKIPPED) !== array()) {
+                continue;
+            }
+
             /*
              * The first segment of every entry has to be the same directory. An archive that unpacks
              * its files into the current directory would scatter them across plugins/, and one with
              * two top-level directories is not one plugin.
              */
-            $segments = explode('/', trim($name, '/'));
             if (count($segments) < 2 && !str_ends_with($name, '/')) {
                 throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
             }
@@ -295,19 +343,21 @@ final class PluginPackage
             }
 
             if ($name === $root . '/' . Plugin::MANIFEST_FILE) {
-                $hasManifest = true;
+                $manifestSize = (int)$entry['size'];
             }
 
             if ($name === $root . '/' . Plugin::ENTRY_FILE) {
                 $hasEntryFile = true;
             }
+
+            $entries[] = (string)$entry['name'];
         }
 
-        if ($root === null || !Plugin::isValidId($root)) {
-            throw new Exception('SYS_PLUGIN_PACKAGE_INVALID_ID', array((string)$root));
+        if ($root === null) {
+            throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
         }
 
-        if (!$hasManifest) {
+        if ($manifestSize === null) {
             throw new Exception('SYS_PLUGIN_PACKAGE_NO_MANIFEST', array(Plugin::MANIFEST_FILE));
         }
 
@@ -315,7 +365,34 @@ final class PluginPackage
             throw new Exception('SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE', array(Plugin::ENTRY_FILE));
         }
 
-        return $root;
+        $id = $root;
+        if ($manifestSize <= self::MAX_MANIFEST_BYTES) {
+            $id = self::declaredId((string)$archive->getFromName($root . '/' . Plugin::MANIFEST_FILE)) ?? $root;
+        }
+
+        if (!Plugin::isValidId($id)) {
+            throw new Exception('SYS_PLUGIN_PACKAGE_INVALID_ID', array($id));
+        }
+
+        return array('id' => $id, 'root' => $root, 'entries' => $entries);
+    }
+
+    /**
+     * The plugin ID a manifest states itself, or null if it states none.
+     *
+     * A manifest that cannot be decoded states none here; it is refused once the plugin has been
+     * extracted and read, with the error that says what is wrong with it.
+     * @param string $raw The contents of plugin.json.
+     * @return string|null
+     */
+    private static function declaredId(string $raw): ?string
+    {
+        $manifest = json_decode($raw, true);
+        if (!is_array($manifest) || !array_key_exists('id', $manifest)) {
+            return null;
+        }
+
+        return is_string($manifest['id']) ? $manifest['id'] : '';
     }
 
     /**
@@ -345,13 +422,18 @@ final class PluginPackage
 
     /**
      * Extract a checked archive into a temporary directory of its own.
+     *
+     * Only the entries the gate accepted are extracted, and the top-level directory is renamed to
+     * the plugin ID if the archive named it differently.
      * @param string $archivePath
-     * @param string $id The plugin ID, used only to name the temporary directory recognizably.
-     * @return string Absolute path of the temporary directory that now holds the plugin directory.
+     * @param array{id:string,root:string,entries:array<int,string>} $contents What read() found.
+     * @return string Absolute path of the temporary directory that now holds the plugin directory,
+     *                named after the plugin ID.
      * @throws Exception
      */
-    private static function extractToTemporaryDirectory(string $archivePath, string $id): string
+    private static function extractToTemporaryDirectory(string $archivePath, array $contents): string
     {
+        $id = $contents['id'];
         $temporary = rtrim(sys_get_temp_dir(), '/\\') . '/admidio-plugin-' . $id . '-' . uniqid('', true);
 
         if (!@mkdir($temporary, 0o700, true) && !is_dir($temporary)) {
@@ -364,8 +446,12 @@ final class PluginPackage
             throw new Exception('SYS_PLUGIN_PACKAGE_NOT_A_ZIP');
         }
 
-        $extracted = $archive->extractTo($temporary);
+        $extracted = $archive->extractTo($temporary, $contents['entries']);
         $archive->close();
+
+        if ($extracted === true && $contents['root'] !== $id) {
+            $extracted = @rename($temporary . '/' . $contents['root'], $temporary . '/' . $id);
+        }
 
         if ($extracted !== true) {
             self::deleteQuietly($temporary);
@@ -378,7 +464,7 @@ final class PluginPackage
     /**
      * Read the manifest of the extracted plugin and check that it is the plugin the archive claimed.
      *
-     * The archive said which directory it carries; the manifest says what the plugin is. They have to
+     * The archive said which plugin it carries; the manifest says what the plugin is. They have to
      * agree, because the directory name is the identity the rest of Admidio uses.
      * @param string $directory The extracted plugin directory.
      * @param string $id The ID the archive claimed.
@@ -415,6 +501,13 @@ final class PluginPackage
     {
         $target = PluginRegistry::getPluginsPath() . '/' . $id;
 
+        $legacyConfig = self::readLegacyConfig($target, $id);
+        if ($legacyConfig !== null
+            && @file_put_contents($source . '/' . LegacyConfig::CARRIED_FILE, $legacyConfig) === false) {
+            // before the old folder is deleted: it holds the only copy of the settings
+            throw new Exception('SYS_PLUGIN_PACKAGE_NOT_INSTALLED', array($id));
+        }
+
         if (is_dir($target)) {
             self::deleteQuietly($target);
         }
@@ -425,8 +518,65 @@ final class PluginPackage
              * directory is on a different mount than the Admidio installation.
              */
             if (!self::copyDirectory($source, $target)) {
+                // The old folder is gone, and the temporary directory goes too: its settings are put
+                // back where the next attempt finds them.
+                if ($legacyConfig !== null) {
+                    self::restoreLegacyConfig($target, $legacyConfig);
+                }
                 throw new Exception('SYS_PLUGIN_PACKAGE_NOT_INSTALLED', array($id));
             }
+        }
+    }
+
+    /**
+     * The settings of a plugin from before the plugin system that the folder being replaced still
+     * holds, or **null** if it holds none.
+     *
+     * A folder without a manifest is such a plugin, and its config.php holds the settings the
+     * administrator made. A folder that already got them carried over by an earlier replacement
+     * holds them as LegacyConfig::CARRIED_FILE until the update steps of the plugin took them over.
+     * They are carried into the new version under that name, whatever files the new version brings,
+     * so that its update steps can still read them (see LegacyConfig).
+     * @param string $target The folder that is replaced.
+     * @param string $id
+     * @return string|null
+     * @throws Exception If the file is there but cannot be read: the folder must not be deleted then.
+     */
+    private static function readLegacyConfig(string $target, string $id): ?string
+    {
+        if (is_file($target . '/' . LegacyConfig::CARRIED_FILE)) {
+            $file = $target . '/' . LegacyConfig::CARRIED_FILE;
+        } elseif (!is_file($target . '/' . Plugin::MANIFEST_FILE) && is_file($target . '/' . LegacyConfig::FILE)) {
+            $file = $target . '/' . LegacyConfig::FILE;
+        } else {
+            return null;
+        }
+
+        $contents = is_readable($file) ? @file_get_contents($file) : false;
+        if ($contents === false) {
+            throw new Exception('SYS_PLUGIN_LEGACY_CONFIG_UNREADABLE', array($id, $file, 'The file cannot be read.'));
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Write the settings of a plugin from before the plugin system back into its folder, after
+     * putting the new version in place failed. They go back as LegacyConfig::CARRIED_FILE, which
+     * the next attempt carries over even if part of the new version, its manifest included, already
+     * arrived in the folder.
+     * @param string $target The folder of the plugin.
+     * @param string $contents The contents of the old file.
+     * @return void
+     */
+    private static function restoreLegacyConfig(string $target, string $contents): void
+    {
+        global $gLogger;
+
+        $restored = (is_dir($target) || @mkdir($target, 0o755, true))
+            && @file_put_contents($target . '/' . LegacyConfig::CARRIED_FILE, $contents) !== false;
+        if (!$restored) {
+            $gLogger->error('The old configuration of a plugin could not be put back.', array('file' => $target . '/' . LegacyConfig::CARRIED_FILE));
         }
     }
 

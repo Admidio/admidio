@@ -8,12 +8,20 @@ use Admidio\SSO\Entity\SAMLSessionParticipant;
 
 class SAMLSessionParticipantService
 {
+    /** Sign-ins of one session at one client that are remembered for the logout */
+    private const MAX_PARTICIPANTS_PER_CLIENT = 10;
+
     public function __construct(private Database $database)
     {
     }
 
     /**
-     * Persist or update the participant for one Admidio session and SAML client.
+     * Persist the participant for one SAML sign-in of an Admidio session at a SAML client.
+     *
+     * Every sign-in is a session of its own at the service provider and has its own SessionIndex, so a
+     * second sign-in of the same Admidio session at the same client does not replace the first one: the
+     * logout has to address both. The oldest ones beyond a limit are dropped, so that a service provider
+     * that sends the browser to the sign-in again and again cannot fill the table.
      *
      * @throws Exception
      */
@@ -30,7 +38,6 @@ class SAMLSessionParticipantService
         \DateTimeInterface $expiresAt
     ): void {
         $participant = new SAMLSessionParticipant($this->database);
-        $participant->readDataByExternalSessionAndClient($organizationId, $externalSessionId, $clientId);
         $participant->setParticipantData(
             $organizationId,
             $userId,
@@ -44,6 +51,17 @@ class SAMLSessionParticipantService
             $expiresAt
         );
         $participant->save();
+
+        $statement = $this->database->queryPrepared(
+            'SELECT ssp_id FROM ' . TBL_SAML_SESSION_PARTICIPANTS . '
+              WHERE ssp_org_id = ? AND ssp_external_session_id = ? AND ssp_client_id = ?
+              ORDER BY ssp_id DESC',
+            array($organizationId, $externalSessionId, $clientId)
+        );
+        $ids = $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
+        foreach (array_slice($ids, self::MAX_PARTICIPANTS_PER_CLIENT) as $surplusId) {
+            $this->deleteParticipant((int) $surplusId);
+        }
     }
 
     /**

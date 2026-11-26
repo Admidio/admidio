@@ -123,7 +123,6 @@
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_frontchannel_logout_uri']}
             {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_frontchannel_logout_session_required']}
             {include 'sys-template-parts/form.input.tpl' data=$elements['ocl_backchannel_logout_uri']}
-            {include 'sys-template-parts/form.checkbox.tpl' data=$elements['ocl_backchannel_logout_session_required']}
         </div>
     </div>
     <div class="form-alert" style="display: none;">&nbsp;</div>
@@ -131,6 +130,13 @@
     {include file="sys-template-parts/system.info-create-edit.tpl"}
 </form>
 <script>
+    // the sid option only matters when a front-channel URL is given
+    function toggleFrontchannelSession() {
+        $("#ocl_frontchannel_logout_session_required_group").toggle($("#ocl_frontchannel_logout_uri").val().trim() !== "");
+    }
+    $("#ocl_frontchannel_logout_uri").on("input change", toggleFrontchannelSession);
+    toggleFrontchannelSession();
+
     $(".admidio-open-close-caret").click(function() {
         showHideBlock($(this));
     });

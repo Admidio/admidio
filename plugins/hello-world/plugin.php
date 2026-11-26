@@ -14,6 +14,7 @@
 
 use Admidio\Hooks\Hooks;
 use AdmidioPlugin\HelloWorld\Greeting;
+use AdmidioPlugin\HelloWorld\ListActionExamples;
 
 /*
  * This file is included by the plugin loader and is never an entry point of its own. Without the
@@ -29,3 +30,9 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
  * how a plugin should behave: installing it must not change what the installation looks like.
  */
 Hooks::addFilter('page_headline', array(Greeting::class, 'decorateHeadline'), 20, 2, 'hello-world');
+
+/*
+ * Change the action icons of some lists. This does nothing until an administrator switches on the
+ * preference, for the same reason as above.
+ */
+Hooks::addFilter('list_row_actions', array(ListActionExamples::class, 'adjustActions'), 20, 3, 'hello-world');

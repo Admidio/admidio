@@ -259,7 +259,7 @@ class ListData
         $export = $this->createExportFile($filename, $format);
 
         header('Content-Type: ' . $export['contentType']);
-        header('Content-Disposition: attachment; filename="' . $export['filename'] . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $export['filename']));
         header('Cache-Control: max-age=0');
         header('Content-Length: ' . filesize($export['path']));
 

@@ -73,11 +73,13 @@ class RegistrationPresenter extends PagePresenter
             }
 
             $templateRow['actions'][] = array(
+                'id' => 'show_profile',
                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL.FOLDER_MODULES.'/profile/profile.php', array('user_uuid' => $row['usr_uuid'])),
                 'icon' => 'bi bi-eye',
                 'tooltip' => $gL10n->get('SYS_SHOW_PROFILE')
             );
             $templateRow['actions'][] = array(
+                'id' => 'delete',
                 'dataHref' => 'callUrlHideElement(\'user_' . $row['usr_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/registration.php', array('mode' => 'delete_user', 'user_uuid' => $row['usr_uuid'])) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                 'dataMessage' => $gL10n->get('SYS_WANT_DELETE_ENTRY', array($user->getValue('FIRST_NAME') . ' ' .$user->getValue('LAST_NAME'))),
                 'icon' => 'bi bi-trash',

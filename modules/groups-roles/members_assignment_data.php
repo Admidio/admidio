@@ -47,6 +47,7 @@
  *****************************************************************************/
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Roles\Entity\Role;
 
@@ -72,6 +73,12 @@ try {
     // create object of the commited role
     $role = new Role($gDb);
     $role->readDataByUuid($getRoleUuid);
+
+    // Event roles remain accessible when the groups and roles module is disabled.
+    if (!$gSettingsManager->getBool('groups_roles_module_enabled')
+        && $role->getValue('cat_name_intern') !== 'EVENTS') {
+        throw new Exception('SYS_MODULE_DISABLED');
+    }
 
     // check if user is allowed to assign members to this role
     if (!$role->allowedToAssignMembers($gCurrentUser)) {

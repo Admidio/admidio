@@ -51,24 +51,28 @@ class CategoryReportAdministrationPresenter extends PagePresenter
             );
 
             $templateReport['actions'][] = array(
+                'id' => 'run',
                 'url' => SecurityUtils::encodeUrl($baseUrl, array('crt_id' => $reportId)),
                 'icon' => 'bi bi-play-circle',
                 'tooltip' => $gL10n->get('SYS_RUN_REPORT')
             );
             if ($isEditable) {
                 $templateReport['actions'][] = array(
+                    'id' => 'edit',
                     'url' => $templateReport['urlEdit'],
                     'icon' => 'bi bi-pencil-square',
                     'tooltip' => $gL10n->get('SYS_EDIT')
                 );
             }
             $templateReport['actions'][] = array(
+                'id' => 'copy',
                 'url' => SecurityUtils::encodeUrl($baseUrl, array('mode' => 'copy', 'crt_id' => $reportId)),
                 'icon' => 'bi bi-copy',
                 'tooltip' => $gL10n->get('SYS_COPY')
             );
             if ($isEditable) {
                 $templateReport['actions'][] = array(
+                    'id' => 'delete',
                     'dataHref' => 'callUrlHideElement(\'adm_category_report_' . $reportId . '\', \'' .
                         SecurityUtils::encodeUrl($baseUrl, array('mode' => 'report_delete', 'crt_id' => $reportId)) .
                         '\', \'' . $gCurrentSession->getCsrfToken() . '\', \'refreshCategoryReportList\')',

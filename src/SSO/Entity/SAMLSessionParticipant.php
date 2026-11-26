@@ -17,22 +17,6 @@ class SAMLSessionParticipant extends Entity
     }
 
     /**
-     * Read the participant for an Admidio session and SAML client.
-     *
-     * @throws Exception
-     */
-    public function readDataByExternalSessionAndClient(int $organizationId, string $externalSessionId, int $clientId): bool 
-    {
-        return $this->readDataByColumns(
-            array(
-                'ssp_org_id' => $organizationId,
-                'ssp_external_session_id' => $externalSessionId,
-                'ssp_client_id' => $clientId
-            )
-        );
-    }
-
-    /**
      * Initialize or update an active SAML session participant.
      *
      * @throws Exception

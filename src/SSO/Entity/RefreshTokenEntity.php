@@ -38,4 +38,24 @@ class RefreshTokenEntity extends TokenEntity implements RefreshTokenEntityInterf
             $this->addScope($scope);
         }
     }
+
+    /**
+     * Get the authorization code this token stems from, directly or through the refresh tokens
+     * it replaced.
+     *
+     * @return AuthCodeEntity|null The code, or null for a token issued before the link existed
+     *                             or whose code was purged.
+     */
+    public function getAuthCode(): ?AuthCodeEntity
+    {
+        $authCodeId = (int) $this->getValue($this->columnPrefix . '_oac_id');
+        if ($authCodeId <= 0) {
+            return null;
+        }
+
+        $authCode = new AuthCodeEntity($this->db);
+        $authCode->readDataById($authCodeId);
+
+        return $authCode->isNewRecord() ? null : $authCode;
+    }
 }

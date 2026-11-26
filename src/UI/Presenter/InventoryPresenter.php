@@ -1065,6 +1065,7 @@ class InventoryPresenter extends PagePresenter
             $this->itemsData->readItemData($item['ini_uuid']);
             $rowValues = array();
             $rowValues['item_uuid'] = $item['ini_uuid'];
+            $rowValues['uuid'] = $item['ini_uuid'];
             $strikethrough = $this->itemsData->isRetired();
             $columnNumber = 1;
 
@@ -1178,6 +1179,7 @@ class InventoryPresenter extends PagePresenter
                     if (!$this->itemsData->isRetired()) {
                         // Add edit action
                         $rowValues['actions'][] = array(
+                            'id' => 'edit',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-pencil-square',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
@@ -1195,15 +1197,17 @@ class InventoryPresenter extends PagePresenter
                                 $icon = 'bi bi-box-arrow-in-left';
                                 $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                             }
-                            $rowValues['actions'][] = array(
+                            array_unshift($rowValues['actions'], array(
+                                'id' => 'borrow',
                                 'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                                 'icon' => $icon,
                                 'tooltip' => $tooltip
-                            );
+                            ));
                         }
 
                         // Add copy action
                         $rowValues['actions'][] = array(
+                            'id' => 'copy',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'copy' => true)),
                             'icon' => 'bi bi-file-earmark-plus',
                             'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
@@ -1212,6 +1216,7 @@ class InventoryPresenter extends PagePresenter
                         $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$this->itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                         // Add reinstate action
                         $rowValues['actions'][] = array(
+                            'id' => 'reinstate',
                             'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\'' . (($this->getFilterStatus === 0) ? ', \'refreshInventoryTable\'' : '') . ');',
                             'dataMessage' => $dataMessage,
                             'icon' => 'bi bi-eye',
@@ -1223,6 +1228,7 @@ class InventoryPresenter extends PagePresenter
                         if (!$this->itemsData->isRetired()) {
                             // Add retire action
                             $rowValues['actions'][] = array(
+                                'id' => 'delete',
                                 'popup' => true,
                                 'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
                                 'icon' => 'bi bi-trash',
@@ -1232,6 +1238,7 @@ class InventoryPresenter extends PagePresenter
                     } elseif ($gCurrentUser->isAdministratorInventory()) {
                         // Add delete/retire action
                         $rowValues['actions'][] = array(
+                            'id' => 'delete',
                             'popup' => true,
                             'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => $this->getFilterStatus, 'item_uuid' => $item['ini_uuid'], 'item_retired' => $this->itemsData->isRetired())),
                             'icon' => 'bi bi-trash',
@@ -1402,6 +1409,7 @@ class InventoryPresenter extends PagePresenter
                 if (!$itemsData->isRetired()) {
                     // Add edit action
                     $rowValues['actions'][] = array(
+                        'id' => 'edit',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-pencil-square',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_EDIT')
@@ -1419,15 +1427,17 @@ class InventoryPresenter extends PagePresenter
                             $icon = 'bi bi-box-arrow-in-left';
                             $tooltip = $gL10n->get('SYS_INVENTORY_ITEM_RETURN');
                         }
-                        $rowValues['actions'][] = array(
+                        array_unshift($rowValues['actions'], array(
+                            'id' => 'borrow',
                             'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit_borrow', 'item_uuid' => $item['ini_uuid'], 'item_borrowed' => $item_borrowed)),
                             'icon' => $icon,
                             'tooltip' => $tooltip
-                        );
+                        ));
                     }
 
                     // Add copy action
                     $rowValues['actions'][] = array(
+                        'id' => 'copy',
                         'url' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_edit', 'item_uuid' => $item['ini_uuid'], 'copy' => true)),
                         'icon' => 'bi bi-file-earmark-plus',
                         'tooltip' => $gL10n->get('SYS_INVENTORY_ITEM_COPY')
@@ -1436,6 +1446,7 @@ class InventoryPresenter extends PagePresenter
                     $dataMessage = ($this->isKeeperAuthorizedToEdit((int)$itemsData->getValue('KEEPER', 'database'))) ? $gL10n->get('SYS_INVENTORY_KEEPER_ITEM_REINSTATE_DESC', array('SYS_INVENTORY_KEEPER_ITEM_DELETE_DESC', 'SYS_INVENTORY_ITEM_REINSTATE_CONFIRM')) : $gL10n->get('SYS_INVENTORY_ITEM_REINSTATE_CONFIRM');
                     // Add reinstate action
                     $rowValues['actions'][] = array(
+                        'id' => 'reinstate',
                         'dataHref' => 'callUrlHideElement(\'adm_inventory_item_' . $item['ini_uuid'] . '\', \'' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_reinstate', 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())) . '\', \'' . $gCurrentSession->getCsrfToken() . '\')',
                         'dataMessage' => $dataMessage,
                         'icon' => 'bi bi-eye',
@@ -1447,6 +1458,7 @@ class InventoryPresenter extends PagePresenter
                     if (!$itemsData->isRetired()) {
                         // Add retire action
                         $rowValues['actions'][] = array(
+                            'id' => 'delete',
                             'popup' => true,
                             'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_keeper_explain_msg', 'item_uuid' => $item['ini_uuid'])),
                             'icon' => 'bi bi-trash',
@@ -1456,6 +1468,7 @@ class InventoryPresenter extends PagePresenter
                 } elseif ($gCurrentUser->isAdministratorInventory()) {
                     // Add delete/retire action
                     $rowValues['actions'][] = array(
+                        'id' => 'delete',
                         'popup' => true,
                         'dataHref' => SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/inventory.php', array('mode' => 'item_delete_explain_msg', 'items_filter_status' => $this->getFilterStatus, 'item_uuid' => $item['ini_uuid'], 'item_retired' => $itemsData->isRetired())),
                         'icon' => 'bi bi-trash',

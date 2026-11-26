@@ -743,7 +743,7 @@ try {
         $file = ADMIDIO_PATH . FOLDER_TEMP_DATA . '/' . $filename;
 
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: ' . FileSystemUtils::getContentDisposition('attachment', $filename));
 
         // necessary for IE6 to 8, because without it the download with SSL has problems
         header('Cache-Control: private');

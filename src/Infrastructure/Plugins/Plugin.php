@@ -68,6 +68,11 @@ final class Plugin
      */
     public const ERROR_INVALID_ID = 'invalid_id';
     public const ERROR_ID_CONFLICT = 'id_conflict';
+    /**
+     * The internal names of the menu nodes a plugin may name as **menuParent** in its manifest.
+     */
+    public const MENU_PARENTS = array('modules', 'administration', 'extensions');
+
     public const ERROR_NO_MANIFEST = 'no_manifest';
     public const ERROR_INVALID_MANIFEST = 'invalid_manifest';
     public const ERROR_BROKEN_MANIFEST = 'broken_manifest';
@@ -229,6 +234,18 @@ final class Plugin
         }
 
         /*
+         * The ID is the directory name. A manifest may state it as well - the installer then accepts
+         * an archive whose folder is named differently, such as the source archive of a release
+         * tag - but a plugin directory that is not named like it would be a second identity.
+         */
+        if (array_key_exists('id', $manifest) && $manifest['id'] !== $id) {
+            return new self($id, $path, array(), array(), array(), $empty,
+                'The manifest declares the ID "' . (is_scalar($manifest['id']) ? (string)$manifest['id'] : '')
+                . '", but the plugin directory is named "' . $id . '". Rename the directory or correct the ID.',
+                self::ERROR_INVALID_ID);
+        }
+
+        /*
          * The permitted values of an enum may be a plain list or an object that names each value,
          * and after json_decode() with associative arrays the two are indistinguishable as soon as
          * the names are "0", "1", "2" - which is the most common enum there is. Decoding a second
@@ -245,6 +262,12 @@ final class Plugin
         if (!isset($manifest['version']) || !is_string($manifest['version']) || $manifest['version'] === '') {
             return new self($id, $path, $manifest, array(), array(), $empty,
                 'The manifest does not declare a version.', self::ERROR_BROKEN_MANIFEST);
+        }
+
+        if (isset($manifest['menuParent']) && !in_array($manifest['menuParent'], self::MENU_PARENTS, true)) {
+            return new self($id, $path, $manifest, array(), array(), $empty,
+                'The manifest declares an unknown menuParent. Use one of: ' . implode(', ', self::MENU_PARENTS) . '.',
+                self::ERROR_BROKEN_MANIFEST);
         }
 
         $error = null;
@@ -375,6 +398,20 @@ final class Plugin
     }
 
     /**
+     * Internal name of the menu node below which the menu entry of the plugin is created. A plugin
+     * that is a tool for administrators says **"menuParent": "administration"** in its manifest, a
+     * plugin that is a module of its own says **"modules"**; the default is **extensions**. Any other
+     * value makes the manifest broken (see read()), so it never gets here.
+     * @return string
+     */
+    public function getMenuParent(): string
+    {
+        $parent = $this->manifest['menuParent'] ?? 'extensions';
+
+        return in_array($parent, self::MENU_PARENTS, true) ? $parent : 'extensions';
+    }
+
+    /**
      * URL of a page of this plugin, in whichever form is currently live - see PluginPages.
      *
      * Without a page the URL a menu entry should use is returned: the **index.php** of the plugin if
@@ -414,7 +451,9 @@ final class Plugin
 
         foreach ($this->settings as $name => $definition) {
             if (!isset($gSettingsManager) || !$gSettingsManager->has($name)) {
-                $values[$name] = $definition['default'];
+                $values[$name] = $definition['type'] === 'roles'
+                    ? self::toRoleIds($definition['default'])
+                    : $definition['default'];
                 continue;
             }
 
@@ -422,11 +461,40 @@ final class Plugin
                 'int', 'integer' => $gSettingsManager->getInt($name),
                 'bool', 'boolean' => $gSettingsManager->getBool($name),
                 'array' => self::readArraySetting($name),
+                'roles' => self::toRoleIds($gSettingsManager->getString($name)),
                 default => $gSettingsManager->getString($name)
             };
         }
 
         return $values;
+    }
+
+    /**
+     * The role IDs of a setting of the type **roles**.
+     *
+     * Such a setting is a selection of roles of the organization, stored as their IDs in one
+     * comma-separated string and edited as a multi-select in the generated settings form:
+     * ```
+     * "example_roles": { "type": "roles", "default": [], "label": "PLG_EXAMPLE_ROLES" }
+     * ```
+     * An empty list means that no role was chosen, which a plugin usually reads as "no restriction".
+     * Anything that is not an ID is dropped, so the word **All** that older plugins stored for
+     * exactly that reads as the empty list.
+     * @param mixed $value The stored string, or a list as the manifest declares the default.
+     * @return array<int,int>
+     */
+    public static function toRoleIds(mixed $value): array
+    {
+        $roleIds = array();
+
+        foreach (is_array($value) ? $value : explode(',', (string)$value) as $entry) {
+            $entry = is_scalar($entry) ? trim((string)$entry) : '';
+            if (ctype_digit($entry) && (int)$entry > 0) {
+                $roleIds[] = (int)$entry;
+            }
+        }
+
+        return array_values(array_unique($roleIds));
     }
 
     /**

@@ -50,11 +50,14 @@ class ComponentUpdate extends Component
     /**
      * Gets the version parts of a version string
      * @param string $versionString A version string
-     * @return array<int,int> Returns an array with the version parts
+     * @return array<int,int> Returns an array with the version parts, at least major and minor.
+     *                        A missing component counts as 0, so "1" is read as 1.0.
      */
     private static function getVersionArrayFromVersion(string $versionString): array
     {
-        return array_map('intval', explode('.', $versionString));
+        $versionArray = array_map('intval', explode('.', $versionString));
+
+        return $versionArray + array(0, 0);
     }
 
     /**
@@ -117,24 +120,24 @@ class ComponentUpdate extends Component
         $maxUpdateStep = 0;
         $currentVersionArray = self::getVersionArrayFromVersion($this->getValue('com_version'));
 
-        if ($currentVersionArray[0] > 1) {
-            try {
-                // open xml file for this version
-                $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
-            } catch (UnexpectedValueException $exception) {
-                return 0;
-            } catch (Exception $exception) {
-                throw new Exception($exception->getMessage());
+        // Every version is looked up, plugins start at 0.x or 1.x. A version without an update
+        // file has no steps.
+        try {
+            // open xml file for this version
+            $xmlObject = $this->getXmlObject($currentVersionArray[0], $currentVersionArray[1]);
+        } catch (UnexpectedValueException $exception) {
+            return 0;
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
+        }
+
+        // go step by step through the SQL statements until the last one is found
+        foreach ($xmlObject->children() as $updateStep) {
+            if ((string) $updateStep === self::UPDATE_STEP_STOP) {
+                break;
             }
 
-            // go step by step through the SQL statements until the last one is found
-            foreach ($xmlObject->children() as $updateStep) {
-                if ((string) $updateStep === self::UPDATE_STEP_STOP) {
-                    break;
-                }
-
-                $maxUpdateStep = (int) $updateStep['id'];
-            }
+            $maxUpdateStep = (int) $updateStep['id'];
         }
 
         return $maxUpdateStep;

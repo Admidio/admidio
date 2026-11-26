@@ -36,7 +36,8 @@ use Throwable;
  * be able to take the whole installation down, because then it could not be disabled any more.
  * This is the opposite of the policy for hooks, where a failing callback fails the operation it
  * extends: an operation can be aborted, a request that never reaches the plugin administration
- * cannot be repaired.
+ * cannot be repaired. What no catch can intercept, a fatal error while a plugin is loaded, is
+ * handled by PluginCrashGuard, which keeps the plugin out of later requests.
  *
  * @copyright The Admidio Team
  * @see https://www.admidio.org/
@@ -188,6 +189,7 @@ final class PluginLoader
         }
 
         $plugin = PluginRegistry::requireEnabled($id);
+        PluginRegistry::requireNotExcluded($plugin);
         $script = realpath($_SERVER['SCRIPT_FILENAME'] ?? '');
         $pages = $plugin->getDirectory(Plugin::DIR_PAGES);
 
@@ -215,6 +217,9 @@ final class PluginLoader
             return false;
         }
 
+        // A fatal error ends the request before endLoading() runs; the guard then knows which plugin
+        // it was loading and keeps it out of the next request.
+        PluginCrashGuard::beginLoading($plugin->id);
         try {
             self::registerClasses($plugin);
             self::registerLanguages($plugin);
@@ -237,6 +242,8 @@ final class PluginLoader
             unset(self::$loaded[$plugin->id]);
             self::report($plugin->id, $exception->getMessage());
             return false;
+        } finally {
+            PluginCrashGuard::endLoading();
         }
 
         return true;
@@ -326,6 +333,21 @@ final class PluginLoader
         self::$failed = array();
         self::$classMap = array();
         self::$done = false;
+    }
+
+    /**
+     * Make the classes and the texts of a plugin available to its update scripts, without loading it.
+     *
+     * A plugin whose update is pending is not loaded with the others, so in the request that runs
+     * the update nothing has registered the class its update steps are written in. Its entry file
+     * is not included here: it may expect the schema the update is about to create.
+     * @param Plugin $plugin
+     * @return void
+     */
+    public static function prepareForUpdate(Plugin $plugin): void
+    {
+        self::registerClasses($plugin);
+        self::registerLanguages($plugin);
     }
 
     /**
