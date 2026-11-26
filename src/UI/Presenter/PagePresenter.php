@@ -709,10 +709,12 @@ class PagePresenter
         $this->filterText();
         Hooks::doAction('page_before_render', $this);
 
-        // What plugins add to the frame of the page: header bar, profile menu and notices.
-        $this->smarty->assign('headerItems', PageExtensions::getHeaderItems($this));
-        $this->smarty->assign('userMenuItems', $gValidLogin ? PageExtensions::getUserMenuItems($this) : array());
-        $this->smarty->assign('pageNotices', PageExtensions::getNotices($this));
+        // What plugins add to the frame of the page: header bar, profile menu and notices. The
+        // reduced layout has no frame, so the plugins are not asked for it.
+        $hasFrame = !$this->modeInline && !$gLayoutReduced;
+        $this->smarty->assign('headerItems', $hasFrame ? PageExtensions::getHeaderItems($this) : array());
+        $this->smarty->assign('userMenuItems', $hasFrame && $gValidLogin ? PageExtensions::getUserMenuItems($this) : array());
+        $this->smarty->assign('pageNotices', $hasFrame ? PageExtensions::getNotices($this) : array());
 
         $this->smarty->assign('id', $this->id);
         $this->smarty->assign('title', $this->title);
