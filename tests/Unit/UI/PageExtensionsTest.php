@@ -83,15 +83,21 @@ class PageExtensionsTest extends TestCase
             array('id' => 'divider', 'divider' => true),
             array('id' => 'heading', 'header' => true, 'label' => 'Heading'),
             array('id' => 'menu', 'label' => 'Menu', 'items' => array(array('header' => true))),
+            array('id' => 'x" onmouseover="alert(1)', 'label' => 'Example', 'header' => true),
+            array('id' => 'y" onmouseover="alert(1)', 'label' => 'Example', 'divider' => true),
+            array('id' => 'child', 'label' => 'Child', 'items' => array(array('id' => 'z" onmouseover="alert(1)', 'label' => 'Z', 'header' => true))),
+            array('id' => 'nameless', 'icon' => 'bi-gear', 'url' => '/settings'),
             array('id' => 'good', 'label' => 'Good')
         )));
         $this->assertSame(array('good'), array_column(PageExtensions::getHeaderItems(new stdClass()), 'id'),
-            'an entry without id, with a bad icon, a divider or header outside a dropdown and a header without label are dropped');
+            'an entry without id, with a bad icon or id, a divider or header outside a dropdown, a header without label'
+            . ' and an icon without label or tooltip are dropped');
 
         Hooks::reset();
         Hooks::addFilter(PageExtensions::HOOK_USER_MENU_ITEMS, fn(array $items): array => array(
             array('id' => 'nested', 'label' => 'Nested', 'items' => array(array('id' => 'x', 'label' => 'X'))),
             array('divider' => true),
+            array('id' => 'x" onmouseover="alert(1)', 'label' => 'Example', 'header' => true),
             array('id' => 'switch', 'label' => 'Switch')
         ));
         $this->assertSame(array('switch'), array_column(PageExtensions::getUserMenuItems(new stdClass()), 'id'),
