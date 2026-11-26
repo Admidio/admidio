@@ -63,24 +63,84 @@ class PageExtensionsTest extends TestCase
         $this->assertSame(array('a', 'b', 'c'), array_column(PageExtensions::getUserMenuItems(new stdClass()), 'id'));
     }
 
-    public function testAnInvalidAnswerDropsTheExtensionsInsteadOfBreakingThePage(): void
+    public function testAFailingFilterDropsTheExtensionsInsteadOfBreakingThePage(): void
     {
-        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array_merge($items, array(array('label' => 'no id'))));
-        $this->assertSame(array(), PageExtensions::getHeaderItems(new stdClass()));
-
-        Hooks::reset();
-        Hooks::addFilter(PageExtensions::HOOK_USER_MENU_ITEMS, fn(array $items): array => array(
-            array('id' => 'nested', 'label' => 'Nested', 'items' => array(array('id' => 'x', 'label' => 'X')))
-        ));
-        $this->assertSame(array(), PageExtensions::getUserMenuItems(new stdClass()), 'the profile menu has no submenus');
-
-        Hooks::reset();
         Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): string => 'not a list');
         $this->assertSame(array(), PageExtensions::getHeaderItems(new stdClass()));
 
         Hooks::reset();
-        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array(array('id' => 'x', 'label' => 'X', 'icon' => '"><script>')));
+        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, function (array $items): array {
+            throw new \RuntimeException('broken plugin');
+        });
         $this->assertSame(array(), PageExtensions::getHeaderItems(new stdClass()));
+    }
+
+    public function testAnInvalidEntryDropsOnlyItself(): void
+    {
+        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array_merge($items, array(
+            array('label' => 'no id'),
+            array('id' => 'x', 'label' => 'X', 'icon' => '"><script>'),
+            array('id' => 'divider', 'divider' => true),
+            array('id' => 'heading', 'header' => true, 'label' => 'Heading'),
+            array('id' => 'menu', 'label' => 'Menu', 'items' => array(array('header' => true))),
+            array('id' => 'good', 'label' => 'Good')
+        )));
+        $this->assertSame(array('good'), array_column(PageExtensions::getHeaderItems(new stdClass()), 'id'),
+            'an entry without id, with a bad icon, a divider or header outside a dropdown and a header without label are dropped');
+
+        Hooks::reset();
+        Hooks::addFilter(PageExtensions::HOOK_USER_MENU_ITEMS, fn(array $items): array => array(
+            array('id' => 'nested', 'label' => 'Nested', 'items' => array(array('id' => 'x', 'label' => 'X'))),
+            array('divider' => true),
+            array('id' => 'switch', 'label' => 'Switch')
+        ));
+        $this->assertSame(array('switch'), array_column(PageExtensions::getUserMenuItems(new stdClass()), 'id'),
+            'the profile menu has no submenus, dividers or headings');
+    }
+
+    public function testChildrenAreSortedBySequence(): void
+    {
+        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array(
+            array('id' => 'menu', 'label' => 'Menu', 'items' => array(
+                array('id' => 'b', 'label' => 'B', 'sequence' => 50),
+                array('id' => 'a', 'label' => 'A', 'sequence' => 10),
+                array('divider' => true, 'sequence' => 20)
+            ))
+        ));
+
+        $children = PageExtensions::getHeaderItems(new stdClass())[0]['items'];
+        $this->assertSame(array('a', '', 'b'), array_column($children, 'id'));
+        $this->assertTrue($children[1]['divider']);
+    }
+
+    /**
+     * @return array<string,array{0:string,1:string,2:bool}>
+     */
+    public static function urlProvider(): array
+    {
+        return array(
+            'relative' => array('url', '/modules/x.php?a=1', true),
+            'http' => array('url', 'http://example.org/', true),
+            'https' => array('url', 'HTTPS://example.org/', true),
+            'javascript' => array('url', 'javascript:alert(1)', false),
+            'hidden javascript' => array('url', " java\tscript:alert(1)", false),
+            'data link' => array('url', 'data:text/html,<script>alert(1)</script>', false),
+            'image https' => array('image', 'https://example.org/de.svg', true),
+            'image data' => array('image', 'data:image/png;base64,AAAA', true),
+            'image javascript' => array('image', 'javascript:alert(1)', false)
+        );
+    }
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testOnlyRelativeAndHttpUrlsAreAccepted(string $key, string $url, bool $accepted): void
+    {
+        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array(
+            array('id' => 'item', 'label' => 'Item', $key => $url)
+        ));
+
+        $this->assertCount($accepted ? 1 : 0, PageExtensions::getHeaderItems(new stdClass()));
     }
 
     public function testNotices(): void
@@ -97,7 +157,7 @@ class PageExtensionsTest extends TestCase
         Hooks::addFilter(PageExtensions::HOOK_NOTICES, fn(array $notices): array => array_merge($notices, array(
             array('id' => 'bad', 'html' => 'x', 'type' => 'blinking')
         )));
-        $this->assertSame(array(), PageExtensions::getNotices(new stdClass()));
+        $this->assertSame(array('impersonate'), array_column(PageExtensions::getNotices(new stdClass()), 'id'), 'the invalid notice is dropped, the valid one kept');
     }
 
     public function testTemplateEncodesTextsAndUrls(): void
@@ -107,7 +167,8 @@ class PageExtensionsTest extends TestCase
                 array('id' => 'one', 'label' => 'One & two', 'url' => '/x?a=1&b="2"', 'active' => true)
             )),
             array('id' => 'badge', 'label' => 'DevTools', 'class' => 'text-bg-warning'),
-            array('id' => 'dialog', 'label' => 'Dialog', 'url' => '/dialog.php', 'popup' => true),
+            array('id' => 'dialog', 'label' => 'Dialog', 'url' => '/dialog.php', 'popup' => true, 'popupClass' => 'modal-lg'),
+            array('id' => 'icononly', 'icon' => 'bi-gear', 'tooltip' => 'Settings', 'url' => '/settings'),
             array('id' => 'flag', 'label' => 'de', 'image' => '/flags/de.svg?a=1&b=2', 'url' => '/x')
         ));
 
@@ -127,7 +188,11 @@ class PageExtensionsTest extends TestCase
         $this->assertStringContainsString('class="badge me-2 admidio-header-item text-bg-warning"', $html);
         $this->assertStringContainsString('admidio-header-item admidio-header-item-default', $html, 'an item without a class takes the header colors');
         $this->assertStringContainsString('<img class="admidio-header-item-image" src="/flags/de.svg?a=1&amp;b=2" alt="">', $html);
-        $this->assertMatchesRegularExpression('/class="[^"]*openPopup"\s+href="javascript:void\(0\);" data-href="\/dialog.php"/', $html);
+        $this->assertMatchesRegularExpression('/class="[^"]*openPopup"\s+href="javascript:void\(0\);" data-class="modal-lg" data-href="\/dialog.php"/', $html);
+        $this->assertMatchesRegularExpression('/id="adm_header_item_dialog"[^>]*>\s*<span>Dialog<\/span>/', $html, 'a label without an icon is shown on small screens too');
+        $this->assertMatchesRegularExpression('/id="adm_header_item_flag"[^>]*aria-label="de"[^>]*>.*<span class="d-none d-sm-inline">de<\/span>/s', $html, 'next to an image the label hides on small screens and names the item');
+        $this->assertMatchesRegularExpression('/id="adm_header_item_icononly"[^>]*aria-label="Settings"/', $html, 'an icon without label is named by its tooltip');
+        $this->assertStringContainsString('<i class="bi bi-gear" aria-hidden="true"></i>', $html);
 
         $smarty = new Smarty();
         $smarty->setTemplateDir(dirname(__DIR__, 3) . '/themes/simple/templates');
