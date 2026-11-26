@@ -96,6 +96,27 @@ try {
             $page = new DocumentsPresenter($getFolderUUID);
             $page->createList();
             if ($getFolderUUID !== '') {
+                // The breadcrumb should show the path of the folder in the folder hierarchy and not the
+                // order in which the user visited the folders, so rebuild it from the parent folders.
+                $folder = new Folder($gDb);
+                $folder->readDataByUuid($getFolderUUID);
+                $parentFolders = array();
+                $parentFolderId = (int)$folder->getValue('fol_fol_id_parent');
+                while ($parentFolderId > 0) {
+                    $parentFolder = new Folder($gDb, $parentFolderId);
+                    $parentFolderId = (int)$parentFolder->getValue('fol_fol_id_parent');
+                    // the root folder is represented by the start page of the module
+                    if ($parentFolderId > 0) {
+                        array_unshift($parentFolders, $parentFolder);
+                    }
+                }
+                $gNavigation->addStartUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', $gL10n->get('SYS_DOCUMENTS_FILES'), 'bi-file-earmark-arrow-down-fill');
+                foreach ($parentFolders as $parentFolder) {
+                    $gNavigation->addUrl(
+                        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/documents-files.php', array('folder_uuid' => $parentFolder->getValue('fol_uuid'))),
+                        $parentFolder->getValue('fol_name')
+                    );
+                }
                 $gNavigation->addUrl(CURRENT_URL, $page->getHeadline());
             } else {
                 $gNavigation->addStartUrl(CURRENT_URL, $page->getHeadline(), 'bi-file-earmark-arrow-down-fill');
