@@ -6,6 +6,7 @@ use Admidio\Infrastructure\Database;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Entity\Preferences;
+use Admidio\Preferences\Service\PreferenceDefinitions;
 use Admidio\Infrastructure\Utils\SerializationUtils;
 
 /**
@@ -123,6 +124,14 @@ class SettingsManager
     public function disableExceptions()
     {
         $this->throwExceptions = false;
+    }
+
+    /**
+     * @return int The ID of the organization whose settings this object reads and writes.
+     */
+    public function getOrganizationId(): int
+    {
+        return $this->orgId;
     }
 
     /**
@@ -266,6 +275,18 @@ class SettingsManager
     }
 
     /**
+     * A secret of another service, such as a password or a client secret, is stored exactly as it was
+     * entered: removing HTML from it or decoding entities in it would change the secret. It is never
+     * shown in a page, so it needs no protection against HTML.
+     * @param string $name The settings name
+     * @return bool Returns true if the setting is a sensitive preference
+     */
+    private static function isSecret(string $name): bool
+    {
+        return PreferenceDefinitions::exists($name) && PreferenceDefinitions::isSensitive($name);
+    }
+
+    /**
      * Checks if the settings value is a valid type (bool, string, int, float)
      * @param mixed $value The settings value
      * @return bool Returns true if the settings value is true
@@ -328,7 +349,7 @@ class SettingsManager
         $prf = new Preferences($this->db);
         $prf->setValue('prf_org_id', $this->orgId);
         $prf->setValue('prf_name', $name);
-        $prf->setValue('prf_value', $value);
+        $prf->setValue('prf_value', $value, !self::isSecret($name));
         $prf->save();
     }
 
@@ -436,7 +457,7 @@ class SettingsManager
         $found = $prf->readDataByColumns(array('prf_org_id' => $this->orgId, 'prf_name' => $name));
 
         if ($found) {
-            $prf->setValue('prf_value', $value);
+            $prf->setValue('prf_value', $value, !self::isSecret($name));
             $prf->save();
         }
     }

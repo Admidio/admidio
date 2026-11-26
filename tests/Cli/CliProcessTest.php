@@ -14,6 +14,7 @@
 
 namespace Admidio\Tests\Cli;
 
+use Admidio\Infrastructure\Cli\CliApplication;
 use Admidio\Infrastructure\Language;
 use Admidio\Tests\Support\CliSubprocess;
 use Admidio\Tests\Support\DatabaseTestCase;
@@ -853,6 +854,60 @@ class CliProcessTest extends DatabaseTestCase
             if ($roomUuid !== '') {
                 $this->adminCliCleanup(array('room:delete', $roomUuid, '--yes'));
             }
+        }
+    }
+
+    /**
+     * Sending with OAuth 2.0 on the command line: switching to it is validated like in the
+     * preferences, email:test tells that no account is connected, and the account can only be
+     * connected with a refresh token from STDIN.
+     *
+     * @testdox SMTP with OAuth 2.0 is validated and email:test tells why it cannot send
+     */
+    public function testSmtpOAuthIsValidatedAndEmailTestTellsWhyItCannotSend(): void
+    {
+        $settings = array(
+            'mail_send_method' => 'SMTP',
+            'mail_smtp_host' => 'smtp.office365.com',
+            'mail_smtp_port' => '587',
+            'mail_smtp_user' => 'info@example.org',
+            'mail_smtp_oauth_provider' => 'microsoft',
+            'mail_smtp_oauth_grant_type' => 'authorization_code',
+            'mail_smtp_oauth_tenant_id' => '',
+            'mail_smtp_oauth_client_id' => 'client-id'
+        );
+        $original = array();
+        foreach (array_keys($settings) as $name) {
+            $process = $this->runCli(array('--as=admin', 'config:get', $name));
+            $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+            $original[$name] = trim($process->getOutput());
+        }
+
+        try {
+            $this->importPreferences(array_merge($settings, array('mail_smtp_host' => '')));
+            $this->adminCliFails(array('config:set', 'mail_send_method', 'SMTP_OAUTH'), CliApplication::EXIT_USAGE, 'mail_smtp_host');
+
+            $this->adminCliOk(array('config:set', 'mail_smtp_host', 'smtp.office365.com'));
+            $this->adminCliOk(array('config:set', 'mail_send_method', 'SMTP_OAUTH'));
+            $this->adminCliFails(array('email:test'), CliApplication::EXIT_FAILED, 'no account is connected for SMTP with OAuth 2.0');
+
+            $this->adminCliFails(array('email:oauth-connect'), CliApplication::EXIT_USAGE, '--refresh-token-stdin');
+        } finally {
+            $this->importPreferences($original);
+        }
+    }
+
+    /**
+     * @param array<string,string> $preferences Values to store, empty ones included.
+     */
+    private function importPreferences(array $preferences): void
+    {
+        $file = tempnam(sys_get_temp_dir(), 'admidio-preferences-');
+        try {
+            file_put_contents($file, json_encode(array('schema' => 'admidio-preferences', 'version' => 1, 'preferences' => $preferences)));
+            $this->adminCliOk(array('config:import', $file));
+        } finally {
+            unlink($file);
         }
     }
 

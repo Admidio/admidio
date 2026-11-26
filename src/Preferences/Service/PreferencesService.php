@@ -6,6 +6,7 @@ use Admidio\Changelog\Service\ChangelogService;
 use Admidio\Infrastructure\Backups;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -37,6 +38,9 @@ class PreferencesService
 
     /** How long a request waits for the update information of the Admidio server. */
     public const UPDATE_CHECK_TIMEOUT_SECONDS = 5;
+
+    /** Whether the last persisted change removed the connected account of sending with OAuth 2.0. */
+    private bool $smtpOAuthConnectionReset = false;
 
     /**
      * Function to check an update
@@ -370,8 +374,6 @@ class PreferencesService
         // check form field input and sanitized it from malicious content
         $preferencesForm = $gCurrentSession->getFormObject($formData['adm_csrf_token']);
         $formValues = $preferencesForm->validate($formData);
-        // Preferences that Admidio maintains itself and that the panel changes together with the validated ones.
-        $internalValues = array();
 
         // Adapt presentation-specific values before canonical preference validation.
         switch ($panel) {
@@ -414,27 +416,15 @@ class PreferencesService
                 break;
 
             case 'email_dispatch':
-                // Microsoft issues app tokens only within the tenant of the app, not at the common endpoint.
-                if (($formValues['mail_send_method'] ?? '') === 'SMTP_OAUTH'
-                    && ($formValues['mail_smtp_oauth_provider'] ?? '') === 'microsoft'
-                    && ($formValues['mail_smtp_oauth_grant_type'] ?? '') === 'client_credentials'
-                    && (string) ($formValues['mail_smtp_oauth_tenant_id'] ?? '') === '') {
-                    throw new Exception('SYS_FIELD_EMPTY', array('SYS_TENANT_ID'));
-                }
-
-                // The client secret is never shown, so an empty field keeps the stored one; only the
-                // checkbox removes it.
-                if (!empty($formValues['mail_smtp_oauth_client_secret_remove'])) {
-                    $formValues['mail_smtp_oauth_client_secret'] = '';
-                } elseif ((string) ($formValues['mail_smtp_oauth_client_secret'] ?? '') === '') {
+                // The client secret is never shown, so an empty field keeps the stored one; the button
+                // next to it removes it.
+                if ((string) ($formValues['mail_smtp_oauth_client_secret'] ?? '') === '') {
                     unset($formValues['mail_smtp_oauth_client_secret']);
                 }
-                unset($formValues['mail_smtp_oauth_client_secret_remove']);
 
-                if (!empty($formValues['mail_smtp_oauth_refresh_token_remove'])) {
-                    $internalValues['mail_smtp_oauth_refresh_token'] = '';
+                if (($formValues['mail_send_method'] ?? '') === 'SMTP_OAUTH') {
+                    $this->validateSmtpOAuthSettings($formValues);
                 }
-                unset($formValues['mail_smtp_oauth_refresh_token_remove']);
                 break;
 
             case 'update_backup':
@@ -545,7 +535,7 @@ class PreferencesService
         }
 
         if (count($corePreferences) > 0) {
-            $this->persistCorePreferences(PreferenceDefinitions::normalizeValues($corePreferences) + $internalValues);
+            $this->persistCorePreferences(PreferenceDefinitions::normalizeValues($corePreferences));
         }
 
         // clean up
@@ -837,10 +827,15 @@ class PreferencesService
             && $gSettingsManager->getBool('enable_auto_login');
 
         // A refresh token only belongs to the app and the directory that issued it.
-        foreach (array('mail_smtp_oauth_provider', 'mail_smtp_oauth_grant_type', 'mail_smtp_oauth_tenant_id', 'mail_smtp_oauth_client_id') as $settingName) {
-            if (isset($normalized[$settingName]) && $normalized[$settingName] !== $gSettingsManager->getString($settingName)) {
-                $normalized['mail_smtp_oauth_refresh_token'] = '';
-                break;
+        $this->smtpOAuthConnectionReset = false;
+        if ($gSettingsManager->has('mail_smtp_oauth_refresh_token') && $gSettingsManager->getString('mail_smtp_oauth_refresh_token') !== '') {
+            foreach (SmtpOAuth::getIdentitySettingNames() as $settingName) {
+                if (isset($normalized[$settingName])
+                    && (!$gSettingsManager->has($settingName) || $normalized[$settingName] !== $gSettingsManager->getString($settingName))) {
+                    $normalized['mail_smtp_oauth_refresh_token'] = '';
+                    $this->smtpOAuthConnectionReset = true;
+                    break;
+                }
             }
         }
 
@@ -937,6 +932,44 @@ class PreferencesService
         }
 
         return $directory;
+    }
+
+    /**
+     * Check the settings of sending with OAuth 2.0 before they are stored. The preference validator
+     * checks the same rules for the CLI and the configuration import; this one names the missing field
+     * with its label, as the other checks of the form do.
+     * @param array<string,mixed> $formValues Validated values of the email dispatch form; a grant type
+     *        that the chosen provider does not offer is replaced, because the form hides it.
+     * @throws Exception
+     */
+    private function validateSmtpOAuthSettings(array &$formValues): void
+    {
+        global $gSettingsManager;
+
+        $providers = SmtpOAuth::getProviders();
+        $providerId = (string) ($formValues['mail_smtp_oauth_provider'] ?? '');
+        if (isset($providers[$providerId]) && $providers[$providerId]['clientCredentialsScope'] === '') {
+            $formValues['mail_smtp_oauth_grant_type'] = SmtpOAuth::GRANT_AUTHORIZATION_CODE;
+        }
+
+        $missing = SmtpOAuth::getMissingSettings(static function (string $name) use ($formValues, $gSettingsManager): string {
+            if (array_key_exists($name, $formValues)) {
+                return (string) $formValues[$name];
+            }
+            return $gSettingsManager->has($name) ? $gSettingsManager->getString($name) : '';
+        });
+        if ($missing !== array()) {
+            throw new Exception('SYS_FIELD_EMPTY', array(SmtpOAuth::getSettingLabel($missing[0])));
+        }
+    }
+
+    /**
+     * @return bool **true** if the last change of the preferences removed the connected account of
+     *              sending with OAuth 2.0, because the app or the directory changed.
+     */
+    public function smtpOAuthConnectionWasReset(): bool
+    {
+        return $this->smtpOAuthConnectionReset;
     }
 
     /**

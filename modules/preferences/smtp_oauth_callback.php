@@ -35,7 +35,11 @@ try {
     $smtpOAuth = new SmtpOAuth();
     $smtpOAuth->handleAuthorizationResponse($_GET);
 
-    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
+    // the stored refresh token only proves that the sign-in worked; whether the SMTP server accepts
+    // the login shows the test mail
+    $gCurrentSession->reloadAllSessions();
+    $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
+    $gMessage->show($gL10n->get('SYS_SMTP_OAUTH_CONNECTED_CHECK', array($gL10n->get('SYS_SEND_TEST_MAIL'))));
     // => EXIT
 } catch (Throwable $e) {
     handleException($e);

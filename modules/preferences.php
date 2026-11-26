@@ -15,6 +15,8 @@
  *            htaccess       - set directory protection, write htaccess
  *            test_email     - send test email
  *            smtp_oauth_authorize - redirect to the sign-in at the OAuth 2.0 provider of the SMTP server
+ *            smtp_oauth_disconnect - remove the connected account of the OAuth 2.0 SMTP dispatch
+ *            smtp_oauth_secret_remove - remove the stored client secret of the OAuth 2.0 SMTP dispatch
  *            backup         - back up the database into the directory of the backups
  *            backup_download - send a backup from the directory of the backups
  *            backup_delete  - remove a backup from the directory of the backups
@@ -41,7 +43,7 @@ try {
     $getMode = admFuncVariableIsValid($_GET, 'mode', 'string',
         array(
             'defaultValue' => 'html',
-            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'smtp_oauth_authorize', 'backup', 'backup_download', 'backup_delete',
+            'validValues' => array('html', 'html_form', 'save', 'htaccess', 'test_email', 'smtp_oauth_authorize', 'smtp_oauth_disconnect', 'smtp_oauth_secret_remove', 'backup', 'backup_download', 'backup_delete',
                 'update_check', 'changelog_purge')
         ));
     $getPanel = admFuncVariableIsValid($_GET, 'panel', 'string', array('defaultValue' => 'system_information'));
@@ -128,6 +130,28 @@ try {
             $smtpOAuth = new SmtpOAuth();
             header('Location: ' . $smtpOAuth->getAuthorizationUrl(), true, 303);
             exit();
+
+        // Disconnecting and removing the client secret act at once, like connecting does, and do not
+        // wait for the form to be saved.
+        case 'smtp_oauth_disconnect':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            (new SmtpOAuth())->disconnect();
+            $gCurrentSession->reloadAllSessions();
+            $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
+            $gMessage->show($gL10n->get('SYS_SMTP_OAUTH_DISCONNECTED'));
+            // => EXIT
+            break;
+
+        case 'smtp_oauth_secret_remove':
+            SecurityUtils::validateCsrfToken($_POST['adm_csrf_token']);
+
+            (new PreferencesService())->setEditablePreference('mail_smtp_oauth_client_secret', '');
+            $gCurrentSession->reloadAllSessions();
+            $gMessage->setForwardUrl(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('panel' => 'email_dispatch')));
+            $gMessage->show($gL10n->get('SYS_SMTP_OAUTH_CLIENT_SECRET_REMOVED'));
+            // => EXIT
+            break;
 
         // back up the database into the directory of the backups, then show the list of the backups
         case 'backup':

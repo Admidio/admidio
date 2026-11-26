@@ -253,4 +253,35 @@ class EmailSmtpOAuthTest extends AdmidioTestCase
         $this->assertSame('SYS_OAUTH_REQUEST_FAILED', $exception->getTranslationId());
         $this->assertCount(1, $oauth->requests, 'one request instead of two for every recipient');
     }
+
+    /**
+     * The token is fetched inside PHPMailer's login, which wraps the exception. sendEmail() still
+     * reports the failure with the action email_failed, with the reason of the provider.
+     */
+    public function testARefusedTokenIsReportedWithTheActionEmailFailed(): void
+    {
+        $this->configure('SMTP_OAUTH');
+        $failures = array();
+        Hooks::addAction('email_failed', function (string $subject, int $recipients, string $error) use (&$failures): void {
+            $failures[] = array($subject, $recipients, $error);
+        });
+        $email = $this->emailOverTheDoubles((new ScriptedSmtpOAuth())->answerWith(array('error' => 'invalid_client'), 401));
+
+        $this->failureOf(fn () => $email->sendEmail());
+
+        $this->assertSame(array(array('The summer camp', 1, 'SYS_OAUTH_REQUEST_FAILED(invalid_client)')), $failures);
+    }
+
+    public function testWithoutConnectedAccountTheSendingStopsBeforeAnyRequest(): void
+    {
+        $this->configure('SMTP_OAUTH', array('mail_smtp_oauth_grant_type' => 'authorization_code'));
+        $oauth = new ScriptedSmtpOAuth();
+        $email = $this->emailOverTheDoubles($oauth);
+
+        $exception = $this->failureOf(fn () => $email->sendEmail());
+
+        $this->assertInstanceOf(Exception::class, $exception);
+        $this->assertSame('SYS_SMTP_OAUTH_NOT_CONNECTED', $exception->getTranslationId());
+        $this->assertSame(array(), $oauth->requests);
+    }
 }

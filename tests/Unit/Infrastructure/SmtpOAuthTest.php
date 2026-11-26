@@ -8,7 +8,9 @@
 
 namespace Admidio\Tests\Unit\Infrastructure;
 
+use Admidio\Hooks\Hooks;
 use Admidio\Infrastructure\Exception;
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Tests\Support\AdmidioTestCase;
 use Admidio\Tests\Unit\Infrastructure\Support\ScriptedSmtpOAuth;
 use Admidio\Tests\Unit\Infrastructure\Support\SmtpOAuthLanguageDouble;
@@ -17,7 +19,7 @@ use Admidio\Tests\Unit\Infrastructure\Support\SmtpOAuthSettingsDouble;
 
 class SmtpOAuthTest extends AdmidioTestCase
 {
-    private const GLOBALS = array('gSettingsManager', 'gL10n', 'gLogger', 'gCurrentUserId', 'gCurrentOrgId');
+    private const GLOBALS = array('gSettingsManager', 'gL10n', 'gLogger', 'gCurrentUserId', 'gCurrentOrgId', 'gCurrentOrganization');
     private const REDIRECT_URI = 'https://admidio.test/modules/preferences/smtp_oauth_callback.php';
 
     private array $savedGlobals = array();
@@ -32,9 +34,11 @@ class SmtpOAuthTest extends AdmidioTestCase
         foreach (self::GLOBALS as $name) {
             $this->savedGlobals[$name] = $GLOBALS[$name] ?? null;
         }
+        unset($GLOBALS['gCurrentOrganization']);
         $this->savedSession = $_SESSION['smtp_oauth_authorization'] ?? null;
         unset($_SESSION['smtp_oauth_authorization']);
         ScriptedSmtpOAuth::forgetAccessTokens();
+        Hooks::reset();
 
         $GLOBALS['gL10n'] = new SmtpOAuthLanguageDouble();
         $GLOBALS['gLogger'] = new SmtpOAuthLoggerDouble();
@@ -57,6 +61,7 @@ class SmtpOAuthTest extends AdmidioTestCase
             $_SESSION['smtp_oauth_authorization'] = $this->savedSession;
         }
         ScriptedSmtpOAuth::forgetAccessTokens();
+        Hooks::reset();
 
         parent::tearDown();
     }
@@ -426,7 +431,7 @@ class SmtpOAuthTest extends AdmidioTestCase
 
         $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => str_repeat('0', 64), 'code' => 'the-code')));
 
-        $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
+        $this->assertSame('SYS_OAUTH_SIGN_IN_UNKNOWN', $exception->getTranslationId());
         $this->assertSame(array(), $oauth->requests);
         $this->assertSame(array(), $this->settings->writes);
         $this->assertArrayHasKey($state, $_SESSION['smtp_oauth_authorization'], 'a forged answer does not cancel the sign-in that is running');
@@ -453,31 +458,43 @@ class SmtpOAuthTest extends AdmidioTestCase
 
         $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
 
-        $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
+        $this->assertSame('SYS_OAUTH_SIGN_IN_UNKNOWN', $exception->getTranslationId());
         $this->assertCount(1, $oauth->requests);
     }
 
-    /**
-     * @dataProvider anotherSession
-     */
-    public function testASignInStartedByAnotherUserOrInAnotherOrganizationIsRejected(string $global, int $value): void
+    public function testASignInStartedByAnotherUserIsRejected(): void
     {
         $oauth = new ScriptedSmtpOAuth();
         $state = $this->startSignIn($oauth);
-        $GLOBALS[$global] = $value;
+        $GLOBALS['gCurrentUserId'] = 8;
 
         $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
 
-        $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
+        $this->assertSame('SYS_OAUTH_SIGN_IN_UNKNOWN', $exception->getTranslationId());
         $this->assertSame(array(), $oauth->requests);
     }
 
-    public static function anotherSession(): array
+    /**
+     * The callback URL is the same for all organizations, the organization of a sign-in is in the
+     * session. An administrator who switched the organization in between is told where it started.
+     */
+    public function testASignInStartedInAnotherOrganizationNamesThatOrganization(): void
     {
-        return array(
-            'another user' => array('gCurrentUserId', 8),
-            'another organization' => array('gCurrentOrgId', 2)
-        );
+        $GLOBALS['gCurrentOrganization'] = new class {
+            public function getValue(string $column): string
+            {
+                return $column === 'org_longname' ? 'Choir <Alto>' : '';
+            }
+        };
+        $oauth = new ScriptedSmtpOAuth();
+        $state = $this->startSignIn($oauth);
+        $GLOBALS['gCurrentOrgId'] = 2;
+
+        $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code')));
+
+        $this->assertSame('SYS_OAUTH_SIGN_IN_OTHER_ORGANIZATION(Choir &lt;Alto&gt;)', $exception->getMessage());
+        $this->assertSame(array(), $oauth->requests);
+        $this->assertArrayNotHasKey($state, $_SESSION['smtp_oauth_authorization'], 'the code cannot be redeemed later anyway');
     }
 
     public function testTheErrorOfTheProviderIsReportedForAStartedSignIn(): void
@@ -537,7 +554,7 @@ class SmtpOAuthTest extends AdmidioTestCase
 
         $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => array($state), 'code' => 'the-code')));
 
-        $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getTranslationId());
+        $this->assertSame('SYS_OAUTH_SIGN_IN_UNKNOWN', $exception->getTranslationId());
         $this->assertSame(array(), $oauth->requests);
     }
 
@@ -548,7 +565,7 @@ class SmtpOAuthTest extends AdmidioTestCase
 
         $exception = $this->failureOf(fn () => $oauth->handleAuthorizationResponse(array('state' => 'forged', 'error' => 'Your account is blocked, call +1 555 0100')));
 
-        $this->assertSame('SYS_OAUTH_SIGN_IN_EXPIRED', $exception->getMessage());
+        $this->assertSame('SYS_OAUTH_SIGN_IN_UNKNOWN', $exception->getMessage());
     }
 
     public function testASignInWithoutRefreshTokenConnectsNothing(): void
@@ -561,5 +578,214 @@ class SmtpOAuthTest extends AdmidioTestCase
 
         $this->assertSame('SYS_OAUTH_NO_REFRESH_TOKEN', $exception->getTranslationId(), 'the admin learns that offline access is missing');
         $this->assertSame(array(), $this->settings->writes);
+    }
+
+    /**
+     * Microsoft replaces the refresh token with every refresh. The second refresh of a long running
+     * process must use the token of the first one, and both run under the lock of the row.
+     */
+    public function testTwoRefreshesInARowUseTheReplacedRefreshToken(): void
+    {
+        $oauth = (new ScriptedSmtpOAuth())
+            ->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-2', 'expires_in' => 30))
+            ->answerWith(array('access_token' => 'access-2', 'refresh_token' => 'refresh-token-3', 'expires_in' => 3599));
+
+        $oauth->getOauth64();
+        $oauth->getOauth64(); // the first token expires within a minute, so it is refreshed again
+
+        $this->assertSame('refresh-token-1', $oauth->requests[0]['parameters']['refresh_token']);
+        $this->assertSame('refresh-token-2', $oauth->requests[1]['parameters']['refresh_token']);
+        $this->assertSame(array(
+            array('mail_smtp_oauth_refresh_token', 'refresh-token-2'),
+            array('mail_smtp_oauth_refresh_token', 'refresh-token-3')
+        ), $this->settings->writes);
+        $this->assertSame(2, $oauth->locks);
+    }
+
+    /**
+     * Another process refreshed while this one waited for the lock: the token it stored is used,
+     * not the one this process had read before.
+     */
+    public function testTheRefreshUsesTheTokenAnotherProcessStoredWhileWaitingForTheLock(): void
+    {
+        $this->configure(array(), array('mail_smtp_oauth_refresh_token' => 'refresh-token-of-the-other-process'));
+        $oauth = (new ScriptedSmtpOAuth())->answerWith(array('access_token' => 'access-1', 'expires_in' => 3599));
+
+        $oauth->getOauth64();
+
+        $this->assertSame('refresh-token-of-the-other-process', $oauth->requests[0]['parameters']['refresh_token']);
+    }
+
+    public function testAReplacedRefreshTokenThatCannotBeStoredIsLoggedButTheMailIsSent(): void
+    {
+        $oauth = (new ScriptedSmtpOAuth())->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-2', 'expires_in' => 3599));
+        $this->settings->failingWrite = new \RuntimeException('database gone');
+
+        $credentials = base64_decode($oauth->getOauth64());
+
+        $this->assertStringContainsString('auth=Bearer access-1', $credentials);
+        $this->assertStringContainsString('could not be stored', $GLOBALS['gLogger']->messages());
+    }
+
+    /**
+     * Two organizations with the same app and mailbox hold refresh tokens of their own. Each Email
+     * passes the preferences of its organization, so neither uses or overwrites the token of the other.
+     */
+    public function testEveryOrganizationUsesAndStoresItsOwnRefreshToken(): void
+    {
+        $first = new SmtpOAuthSettingsDouble($this->settings->values, array(), 1);
+        $second = new SmtpOAuthSettingsDouble(array('mail_smtp_oauth_refresh_token' => 'refresh-token-of-org-2') + $this->settings->values, array(), 2);
+        $refreshed = array();
+        Hooks::addAction(SmtpOAuth::HOOK_TOKEN_REFRESHED, function (string $provider, int $organization) use (&$refreshed): void {
+            $refreshed[] = $organization;
+        });
+
+        $oauthOfFirst = (new ScriptedSmtpOAuth($first))->answerWith(array('access_token' => 'access-org-1', 'refresh_token' => 'refresh-token-1b', 'expires_in' => 3599));
+        $oauthOfSecond = (new ScriptedSmtpOAuth($second))->answerWith(array('access_token' => 'access-org-2', 'refresh_token' => 'refresh-token-2b', 'expires_in' => 3599));
+        $oauthOfFirst->getOauth64();
+        $oauthOfSecond->getOauth64();
+
+        $this->assertSame('refresh-token-1', $oauthOfFirst->requests[0]['parameters']['refresh_token']);
+        $this->assertSame('refresh-token-of-org-2', $oauthOfSecond->requests[0]['parameters']['refresh_token']);
+        $this->assertSame(array(array('mail_smtp_oauth_refresh_token', 'refresh-token-1b')), $first->writes);
+        $this->assertSame(array(array('mail_smtp_oauth_refresh_token', 'refresh-token-2b')), $second->writes);
+        $this->assertSame(array(1, 2), $refreshed);
+        $this->assertSame(array(), $this->settings->writes, 'the global preferences of the request are not touched');
+    }
+
+    public function testTheActionsReportConnectingRefreshingFailingAndDisconnecting(): void
+    {
+        $events = array();
+        foreach (array(SmtpOAuth::HOOK_CONNECTED, SmtpOAuth::HOOK_TOKEN_REFRESHED, SmtpOAuth::HOOK_REFRESH_FAILED, SmtpOAuth::HOOK_DISCONNECTED) as $hook) {
+            Hooks::addAction($hook, function (mixed ...$arguments) use (&$events, $hook): void {
+                $events[] = array_merge(array($hook), $arguments);
+            });
+        }
+        $oauth = new ScriptedSmtpOAuth();
+        $state = $this->startSignIn($oauth);
+        $oauth->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-2', 'expires_in' => 3599))
+            ->answerWith(array('access_token' => 'access-2', 'refresh_token' => 'refresh-token-3', 'expires_in' => 3599))
+            ->answerWith(array('error' => 'invalid_grant'), 400);
+
+        $oauth->handleAuthorizationResponse(array('state' => $state, 'code' => 'the-code'));
+        $oauth->getOauth64();
+        ScriptedSmtpOAuth::forgetAccessTokens();
+        $this->failureOf(fn () => $oauth->getOauth64());
+        $oauth->disconnect();
+
+        $this->assertSame(array(
+            array(SmtpOAuth::HOOK_CONNECTED, 'microsoft', 1),
+            array(SmtpOAuth::HOOK_TOKEN_REFRESHED, 'microsoft', 1, true),
+            array(SmtpOAuth::HOOK_REFRESH_FAILED, 'microsoft', 1, 'SYS_OAUTH_REQUEST_FAILED(invalid_grant)'),
+            array(SmtpOAuth::HOOK_DISCONNECTED, 'microsoft', 1)
+        ), $events);
+        $this->assertSame('', $this->settings->values['mail_smtp_oauth_refresh_token']);
+    }
+
+    public function testAPluginAddsAProviderWhoseSettingsFillItsUrls(): void
+    {
+        \Admidio\Preferences\Service\PreferenceDefinitions::register('plg_test_region', array('default' => ''));
+        Hooks::addFilter(SmtpOAuth::HOOK_PROVIDERS, function (array $providers): array {
+            $providers['zoho'] = array(
+                'name' => 'Zoho',
+                'authorizationUrl' => 'https://accounts.{plg_test_region}/oauth/v2/auth',
+                'tokenUrl' => 'https://accounts.{plg_test_region}/oauth/v2/token',
+                'scope' => 'ZohoMail.messages.CREATE',
+                'settings' => array('plg_test_region' => array('type' => 'string', 'label' => 'Region', 'fallback' => 'zoho.eu'))
+            );
+            return $providers;
+        });
+        $this->configure(array('mail_smtp_oauth_provider' => 'zoho', 'plg_test_region' => ''));
+        $oauth = (new ScriptedSmtpOAuth())->answerWith(array('access_token' => 'access-1', 'expires_in' => 3599));
+
+        $oauth->getOauth64();
+
+        $this->assertSame('https://accounts.zoho.eu/oauth/v2/token', $oauth->requests[0]['url'], 'the fallback fills an empty setting');
+        $this->assertArrayNotHasKey('scope', $oauth->requests[0]['parameters']);
+        $this->assertContains('plg_test_region', SmtpOAuth::getIdentitySettingNames(), 'changing the region removes the refresh token');
+    }
+
+    public function testAProviderThatAPluginGotWrongIsIgnoredAndLogged(): void
+    {
+        Hooks::addFilter(SmtpOAuth::HOOK_PROVIDERS, function (array $providers): array {
+            $providers['plain'] = array('name' => 'Plain', 'authorizationUrl' => 'http://example.org/auth', 'tokenUrl' => 'http://example.org/token', 'scope' => 'mail');
+            return $providers;
+        });
+
+        $this->assertSame(array('microsoft', 'google'), array_keys(SmtpOAuth::getProviders()));
+        $this->assertStringContainsString('provider "plain" is ignored', $GLOBALS['gLogger']->messages());
+    }
+
+    public function testAProviderThatIsNoLongerAvailableIsReported(): void
+    {
+        $this->configure(array('mail_smtp_oauth_provider' => 'zoho'));
+
+        $exception = $this->failureOf(fn () => (new ScriptedSmtpOAuth())->getOauth64());
+
+        $this->assertSame('SYS_SMTP_OAUTH_PROVIDER_UNAVAILABLE', $exception->getTranslationId());
+    }
+
+    /**
+     * @dataProvider incompleteSettings
+     * @param array<string,string> $values
+     * @param array<int,string> $missing
+     */
+    public function testSendingWithOAuthNeedsServerMailboxAndApp(array $values, array $missing): void
+    {
+        $this->configure($values + array('mail_smtp_host' => 'smtp.office365.com', 'mail_smtp_port' => '587'));
+
+        $this->assertSame($missing, SmtpOAuth::getMissingSettings(fn (string $name): string => $this->settings->values[$name] ?? ''));
+    }
+
+    public static function incompleteSettings(): array
+    {
+        return array(
+            'complete' => array(array(), array()),
+            'nothing entered' => array(
+                array('mail_smtp_host' => '', 'mail_smtp_port' => '0', 'mail_smtp_user' => '', 'mail_smtp_oauth_client_id' => ''),
+                array('mail_smtp_host', 'mail_smtp_port', 'mail_smtp_user', 'mail_smtp_oauth_client_id')
+            ),
+            'sign-in without tenant' => array(array('mail_smtp_oauth_tenant_id' => ''), array()),
+            'application access without tenant' => array(
+                array('mail_smtp_oauth_grant_type' => 'client_credentials', 'mail_smtp_oauth_tenant_id' => ''),
+                array('mail_smtp_oauth_tenant_id')
+            ),
+            'application access at Google' => array(
+                array('mail_smtp_oauth_provider' => 'google', 'mail_smtp_oauth_grant_type' => 'client_credentials'),
+                array('mail_smtp_oauth_grant_type')
+            ),
+            'unknown provider' => array(array('mail_smtp_oauth_provider' => 'zoho'), array('mail_smtp_oauth_provider'))
+        );
+    }
+
+    public function testTheCommandLineConnectsWithARefreshTokenAfterRedeemingIt(): void
+    {
+        $this->configure(array('mail_smtp_oauth_refresh_token' => ''));
+        $oauth = (new ScriptedSmtpOAuth())->answerWith(array('access_token' => 'access-1', 'refresh_token' => 'refresh-token-2', 'expires_in' => 3599));
+
+        $oauth->connectWithRefreshToken("  refresh-token-from-elsewhere\n");
+
+        $this->assertSame('refresh-token-from-elsewhere', $oauth->requests[0]['parameters']['refresh_token']);
+        $this->assertSame(array(array('mail_smtp_oauth_refresh_token', 'refresh-token-2')), $this->settings->writes, 'the replaced token is stored');
+    }
+
+    public function testAWrongRefreshTokenIsNeverStored(): void
+    {
+        $this->configure(array('mail_smtp_oauth_refresh_token' => ''));
+        $oauth = (new ScriptedSmtpOAuth())->answerWith(array('error' => 'invalid_grant'), 400);
+
+        $exception = $this->failureOf(fn () => $oauth->connectWithRefreshToken('wrong'));
+
+        $this->assertSame('SYS_OAUTH_REQUEST_FAILED', $exception->getTranslationId());
+        $this->assertSame(array(), $this->settings->writes);
+    }
+
+    public function testApplicationAccessNeedsNoConnectedAccount(): void
+    {
+        $this->configure(array('mail_smtp_oauth_grant_type' => 'client_credentials'));
+
+        $exception = $this->failureOf(fn () => (new ScriptedSmtpOAuth())->connectWithRefreshToken('refresh'));
+
+        $this->assertSame('SYS_SMTP_OAUTH_NO_SIGN_IN_NEEDED', $exception->getTranslationId());
     }
 }

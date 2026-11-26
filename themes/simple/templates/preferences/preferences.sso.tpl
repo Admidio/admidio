@@ -1,69 +1,9 @@
 <script>
-    $(".admidio-open-close-caret").click(function() {
+    // only the carets of this panel, the preferences page shows several panels at once
+    $("#adm_preferences_form_sso .admidio-open-close-caret").click(function() {
         showHideBlock($(this));
     });
-    $(".copy-container").each(function () {
-        let $element = $(this);
-
-        // Wrap the element in a flex container to maintain full width
-        let $wrapper = $("<div>").css({
-            "display": "flex",
-            "align-items": "center",
-            "width": "100%" // Ensure the wrapper is full-width
-        });
-
-        // Ensure input and textarea elements keep their full width
-        if ($element.is("input, textarea, select")) {
-            $element.css({
-                "flex": "1", // Take up all available space
-                "width": "100%" // Explicitly set full width
-            });
-        }
-
-        // Create the copy button
-        let $copyButton = $("<div>")
-            .addClass("copy-btn")
-            .html('<i class="bi bi-copy"></i>') // Bootstrap copy icon
-            .attr("title", "{$l10n->get('SYS_COPY_CLIPBOARD')}") // Tooltip text
-            .css({
-                "cursor": "pointer",
-                "margin-left": "4px", // Space between text and button
-                "padding": "0px",
-            });
-
-        // Wrap the element and insert the button
-        $element.wrap($wrapper);
-        $element.after($copyButton);
-
-        // Click event to copy text
-        $copyButton.on("click", function () {
-            let textToCopy = "";
-
-            // Determine how to get the value based on the element type
-            if ($element.is("input, textarea, select")) {
-                textToCopy = $element.val(); // Get value for form elements
-                // Input fields with empty value, but a placeholder set, will copy the placeholder text rather than the empty string
-                if (textToCopy === "" && $element.is("input, textarea")) {
-                    textToCopy = $element.attr("placeholder") || "";
-                }
-            } else {
-                textToCopy = $element.text().trim(); // Get text for divs or spans
-            }
-
-            // Copy text to clipboard
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                // Change icon to indicate success
-                $copyButton.html('<i class="bi bi-clipboard-check"></i>');
-
-                // Reset icon after 1.5 seconds
-                setTimeout(() => {
-                    $copyButton.html('<i class="bi bi-copy"></i>');
-                }, 1500);
-            }).catch(err => {
-                console.error("Failed to copy:", err);
-            });
-        });
-    });
+    addCopyButtons($("#adm_preferences_form_sso .copy-container"), "{$l10n->get('SYS_COPY_CLIPBOARD')}");
 
     // Whenever a different certificate is selected, update the textbox showing the cert for copying
     $('#sso_saml_signing_key').on('change', function() {

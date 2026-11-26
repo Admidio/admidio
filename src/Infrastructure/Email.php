@@ -138,7 +138,7 @@ class Email extends PHPMailer
                 $this->SMTPAuth = true;
                 // must be set explicitly, otherwise phpmailer tries the other methods first
                 $this->AuthType = 'XOAUTH2';
-                $this->setOAuth(new SmtpOAuth());
+                $this->setOAuth(new SmtpOAuth($gSettingsManager));
             } else {
                 $this->SMTPAuth = $gSettingsManager->getBool('mail_smtp_auth');
                 // only set auth type if there is a value, otherwise phpmailer will check all methods automatically
@@ -457,6 +457,13 @@ class Email extends PHPMailer
     /**
      * Sends the mail. PHPMailer wraps a failed request of the OAuth access token into its own
      * "SMTP authentication error", so the reason of the provider is thrown instead.
+     *
+     * That reason is deliberately an Admidio exception and not a PHPMailer one: it is a fault of the
+     * configuration, not of a recipient. In single mode and for the packages of a mass mail
+     * deliver() catches only PHPMailer exceptions per mail, so the token is not requested again for
+     * every recipient and every package; the sending stops at the first failure instead. sendEmail()
+     * still reports it with the action email_failed, and MessageService, SystemMail and the other
+     * callers handle every Throwable.
      * @return bool Returns **true** if the mail was sent.
      * @throws Exception|\Admidio\Infrastructure\Exception
      */

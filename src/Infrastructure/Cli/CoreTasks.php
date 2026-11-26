@@ -34,6 +34,7 @@ use Admidio\Infrastructure\Plugins\PluginPages;
 use Admidio\Infrastructure\Plugins\PluginRegistry;
 use Admidio\Infrastructure\Plugins\PluginStore;
 use Admidio\Infrastructure\Service\RegistrationService;
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Infrastructure\Utils\Maintenance;
 use Admidio\Infrastructure\Utils\MaintenanceMode;
 use Admidio\Roles\Service\MembershipPeriodService;
@@ -648,10 +649,34 @@ final class CoreTasks
         self::task(
             'email:test',
             'emailTest',
-            'Send the configured Admidio test email to the acting administrator.',
+            'Send the configured Admidio test email to the acting administrator. A failure reports why, e.g. that no account is'
+                . ' connected for SMTP with OAuth 2.0 or the error of the OAuth 2.0 provider.',
             'email:test',
             'PREFERENCES',
             true
+        );
+        self::task(
+            'email:oauth-connect',
+            'emailOAuthConnect',
+            'Connect the mailbox account for SMTP with OAuth 2.0 with a refresh token read from STDIN. The sign-in itself needs a'
+                . ' browser and is done in the preferences; this command is for a refresh token of the configured app that was'
+                . ' issued elsewhere. It is redeemed once before it is stored. Not needed for application access without sign-in.',
+            'email:oauth-connect --refresh-token-stdin',
+            'PREFERENCES',
+            true,
+            array(),
+            array(self::opt('refresh-token-stdin', 'Read the refresh token from STDIN.', '', true, false, true)),
+            array('admidio email:oauth-connect --refresh-token-stdin < refresh-token.txt')
+        );
+        self::task(
+            'email:oauth-disconnect',
+            'emailOAuthDisconnect',
+            'Remove the connected mailbox account of SMTP with OAuth 2.0. No emails are sent with it until it is connected again.',
+            'email:oauth-disconnect [--yes]',
+            'PREFERENCES',
+            true,
+            array(),
+            array(self::opt('yes', 'Confirm the removal.', '', false, false, true))
         );
         self::task(
             'htaccess:status',
@@ -3306,14 +3331,87 @@ final class CoreTasks
 
     public static function emailTest(array $arguments, array $options): int
     {
-        $service = new PreferencesService();
+        global $gSettingsManager;
 
-        if (!$service->sendTestEmail()) {
+        // the most common reason is told before a mail server is contacted at all
+        if ($gSettingsManager->getString('mail_send_method') === 'SMTP_OAUTH') {
+            $smtpOAuth = new SmtpOAuth($gSettingsManager);
+            if ($smtpOAuth->needsSignIn() && !$smtpOAuth->isConnected()) {
+                throw new RuntimeException(
+                    'The test email could not be sent: no account is connected for SMTP with OAuth 2.0. Connect it in the'
+                    . ' preferences of the email delivery or with email:oauth-connect.'
+                );
+            }
+        }
+
+        try {
+            $sent = (new PreferencesService())->sendTestEmail();
+        } catch (\Throwable $exception) {
+            throw new RuntimeException('The test email could not be sent: ' . self::plainText($exception->getMessage()), 0, $exception);
+        }
+        if (!$sent) {
             throw new RuntimeException('The test email could not be sent.');
         }
 
         CliApplication::writeSuccess('Test email sent.', $options);
         return 0;
+    }
+
+    public static function emailOAuthConnect(array $arguments, array $options): int
+    {
+        global $gSettingsManager;
+
+        if (!CliApplication::optionBool($options, 'refresh-token-stdin', false)) {
+            throw new InvalidArgumentException('email:oauth-connect reads the refresh token from STDIN only: use --refresh-token-stdin.');
+        }
+        $refreshToken = CliApplication::readSecret($options, 'refresh-token', 'refresh-token-stdin');
+
+        try {
+            (new SmtpOAuth($gSettingsManager))->connectWithRefreshToken($refreshToken);
+        } catch (Exception $exception) {
+            throw new RuntimeException('The account could not be connected: ' . self::plainText($exception->getMessage()), 0, $exception);
+        }
+        self::reloadAllSessions();
+
+        CliApplication::writeSuccess('Account for SMTP with OAuth 2.0 connected. Check it with email:test.', $options);
+        return 0;
+    }
+
+    public static function emailOAuthDisconnect(array $arguments, array $options): int
+    {
+        global $gSettingsManager;
+
+        CliApplication::confirm('Remove the connected account of SMTP with OAuth 2.0?', $options);
+        (new SmtpOAuth($gSettingsManager))->disconnect();
+        self::reloadAllSessions();
+
+        CliApplication::writeSuccess('Account for SMTP with OAuth 2.0 disconnected.', $options);
+        return 0;
+    }
+
+    /**
+     * Tells the administrator on the command line that a change of the preferences removed the
+     * connected account of SMTP with OAuth 2.0, which the preferences page shows by its status.
+     * @param array<string,mixed> $options
+     */
+    private static function warnIfSmtpOAuthConnectionWasReset(PreferencesService $service, array $options): void
+    {
+        if ($service->smtpOAuthConnectionWasReset()) {
+            CliApplication::writeWarning(
+                'CLI_SMTP_OAUTH_CONNECTION_RESET',
+                'The connected account of SMTP with OAuth 2.0 was removed, because the provider, the access, the client ID or'
+                . ' a setting of the provider changed. Connect it again in the preferences or with email:oauth-connect.',
+                $options
+            );
+        }
+    }
+
+    /**
+     * @return string A message of Admidio, which is made for a page, as plain text for the terminal.
+     */
+    private static function plainText(string $message): string
+    {
+        return trim(html_entity_decode(strip_tags(str_replace(array('<br />', '<br>'), "\n", $message)), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     }
 
     public static function htaccessStatus(array $arguments, array $options): int
@@ -3581,8 +3679,10 @@ final class CoreTasks
         $name = CliApplication::requireArgument($arguments, 0, 'name');
         $value = CliApplication::requireArgument($arguments, 1, 'value');
 
-        (new PreferencesService())->setEditablePreference($name, $value);
+        $service = new PreferencesService();
+        $service->setEditablePreference($name, $value);
         self::reloadAllSessions();
+        self::warnIfSmtpOAuthConnectionWasReset($service, $options);
 
         CliApplication::writeSuccess('Updated preference ' . $name . '.', $options);
         return 0;
@@ -3653,6 +3753,7 @@ final class CoreTasks
 
         if (!$dryRun) {
             self::reloadAllSessions();
+            self::warnIfSmtpOAuthConnectionWasReset($service, $options);
         }
 
         CliApplication::writeValue(

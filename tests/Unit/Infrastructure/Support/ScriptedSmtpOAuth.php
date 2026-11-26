@@ -41,6 +41,20 @@ class ScriptedSmtpOAuth extends SmtpOAuth
         return $this;
     }
 
+    /** How often the refresh ran under the lock of the refresh token. */
+    public int $locks = 0;
+
+    /**
+     * The row lock needs a database; the stand-in of the preferences answers what the database holds,
+     * as the locking SELECT does.
+     */
+    protected function lockRefreshToken(callable $refresh): array
+    {
+        ++$this->locks;
+
+        return $refresh($this->settings->getString('mail_smtp_oauth_refresh_token', true));
+    }
+
     protected function sendTokenRequest(string $url, array $parameters): array
     {
         $this->requests[] = array('url' => $url, 'parameters' => $parameters);

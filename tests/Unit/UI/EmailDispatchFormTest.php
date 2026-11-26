@@ -109,27 +109,75 @@ class EmailDispatchFormTest extends AdmidioTestCase
 
         $this->assertStringNotContainsString('stored-client-secret', $html);
         $this->assertStringNotContainsString('stored-refresh-token', $html);
-        $this->assertStringContainsString('SYS_CLIENT_SECRET_STORED', $html, 'the placeholder tells that a secret is stored');
+        $this->assertStringContainsString('SYS_SMTP_OAUTH_CLIENT_SECRET_STORED', $html, 'the placeholder tells that a secret is stored');
         $this->assertStringContainsString('autocomplete="new-password"', $html, 'the browser must not fill in the password of the login');
-        $this->assertStringContainsString('id="mail_smtp_oauth_client_secret_remove"', $html);
-        $this->assertStringContainsString('id="mail_smtp_oauth_refresh_token_remove"', $html, 'a connected account can be disconnected');
-        $this->assertStringContainsString('SYS_CONNECTED', $html);
+        $this->assertStringContainsString('SYS_SMTP_OAUTH_CONNECTED', $html);
     }
 
-    public function testWithNothingStoredThereIsNothingToRemove(): void
+    /**
+     * Removing the secret and disconnecting act at once like connecting, instead of being checkboxes
+     * that only act when the form is saved. None of them is a field of the form.
+     */
+    public function testTheAccountActionsAreButtonsOutsideTheForm(): void
+    {
+        $html = $this->render(array('mail_smtp_oauth_client_secret' => 'stored-client-secret', 'mail_smtp_oauth_refresh_token' => 'stored-refresh-token'));
+
+        foreach (array('smtp_oauth_secret_remove', 'smtp_oauth_disconnect', 'smtp_oauth_authorize') as $mode) {
+            $this->assertSame(1, preg_match('/<button[^>]*id="adm_' . $mode . '"[^>]*>/', $html, $button), $mode);
+            $this->assertStringContainsString('mode=' . $mode, $button[0]);
+            $this->assertStringNotContainsString('name=', $button[0]);
+        }
+        $this->assertStringContainsString('data-needs-saved-settings', $this->buttonOf($html, 'smtp_oauth_authorize'), 'connecting reads the saved settings');
+        $this->assertStringNotContainsString('data-needs-saved-settings', $this->buttonOf($html, 'smtp_oauth_disconnect'));
+        $this->assertStringNotContainsString('id="mail_smtp_oauth_client_secret_remove"', $html, 'no checkbox is left');
+        $this->assertStringNotContainsString('id="mail_smtp_oauth_refresh_token_remove"', $html, 'no checkbox is left');
+    }
+
+    public function testWithNothingStoredOnlyConnectingIsOffered(): void
     {
         $html = $this->render();
 
-        $this->assertStringNotContainsString('id="mail_smtp_oauth_client_secret_remove"', $html);
-        $this->assertStringNotContainsString('id="mail_smtp_oauth_refresh_token_remove"', $html);
-        $this->assertStringContainsString('SYS_NOT_CONNECTED', $html);
+        $this->assertStringNotContainsString('id="adm_smtp_oauth_secret_remove"', $html);
+        $this->assertStringNotContainsString('id="adm_smtp_oauth_disconnect"', $html);
+        $this->assertStringContainsString('id="adm_smtp_oauth_authorize"', $html);
+        $this->assertStringContainsString('SYS_SMTP_OAUTH_NOT_CONNECTED_STATUS', $html);
     }
 
-    public function testTheRedirectUriIsShownButNeverPosted(): void
+    public function testTheRedirectUriIsTextToCopyAndNeverPosted(): void
     {
         $html = $this->render();
 
-        $this->assertSame(1, preg_match('/<input[^>]*value="https:\/\/admidio\.test\/modules\/preferences\/smtp_oauth_callback\.php"[^>]*>/', $html, $input));
-        $this->assertStringNotContainsString('name=', $input[0], 'every posted field must be a form element, the URI would be stored as a preference');
+        $this->assertSame(1, preg_match('/<div class="copy-container[^"]*"[^>]*>https:\/\/admidio\.test\/modules\/preferences\/smtp_oauth_callback\.php<\/div>/', $html));
+        $this->assertStringNotContainsString('value="https://admidio.test/modules/preferences/smtp_oauth_callback.php"', $html, 'every posted field must be a form element');
+    }
+
+    /** The form does not borrow texts of the SSO module, a rewording there must not change this page. */
+    public function testTheFormUsesTextsOfItsOwn(): void
+    {
+        $this->assertStringNotContainsString('SYS_SSO_', $this->render());
+    }
+
+    public function testTheProviderComesBeforeTheServerItFillsIn(): void
+    {
+        $html = $this->render();
+
+        $this->assertLessThan(strpos($html, 'id="mail_smtp_host"'), strpos($html, 'id="mail_smtp_oauth_provider"'));
+        $this->assertLessThan(strpos($html, 'id="mail_smtp_host"'), strpos($html, 'name="mail_send_method"'), 'the send method is part of the connection');
+        $this->assertStringContainsString('"host":"smtp.office365.com"', $html, 'the script knows the server of each provider');
+    }
+
+    public function testTheTenantIsDeclaredByTheProviderAndRenderedLikeAPluginSetting(): void
+    {
+        $html = $this->render();
+
+        $this->assertSame(1, preg_match('/<input[^>]*id="mail_smtp_oauth_tenant_id"[^>]*value="contoso\.onmicrosoft\.com"/', $html));
+        $this->assertStringContainsString('"settings":["mail_smtp_oauth_tenant_id"]', $html);
+    }
+
+    private function buttonOf(string $html, string $mode): string
+    {
+        preg_match('/<button[^>]*id="adm_' . $mode . '"[^>]*>/', $html, $button);
+
+        return $button[0] ?? '';
     }
 }

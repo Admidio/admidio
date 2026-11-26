@@ -20,8 +20,16 @@ final class SmtpOAuthSettingsDouble
      * @param array<string,string> $values The preferences as the current request has cached them.
      * @param array<string,string> $database Rows whose value in the database differs from the cache.
      */
-    public function __construct(public array $values = array(), public array $database = array())
+    /** @var \Throwable|null Thrown by set(), as a failing database write would. */
+    public ?\Throwable $failingWrite = null;
+
+    public function __construct(public array $values = array(), public array $database = array(), public int $organizationId = 1)
     {
+    }
+
+    public function getOrganizationId(): int
+    {
+        return $this->organizationId;
     }
 
     public function has(string $name, bool $update = false): bool
@@ -63,6 +71,9 @@ final class SmtpOAuthSettingsDouble
 
     public function set(string $name, $value, bool $update = true): bool
     {
+        if ($this->failingWrite !== null) {
+            throw $this->failingWrite;
+        }
         $this->writes[] = array($name, (string)$value);
         $this->values[$name] = (string)$value;
         $this->database[$name] = (string)$value;

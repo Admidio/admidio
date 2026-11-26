@@ -699,6 +699,9 @@ class FormPresenter
      *                          is set as default and need not set with this parameter.
      *                        - **autocomplete** : Set the html attribute autocomplete to support this feature
      *                          https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
+     *                        - **preserveValue** : If set to **true** the entered value is only trimmed and not freed
+     *                          from HTML. For a secret of another service that must be stored as entered and is never
+     *                          shown in the form again.
      * @throws Exception
      */
     public function addInput(string $id, string $label, string $value, array $options = array()): void
@@ -2512,8 +2515,10 @@ class FormPresenter
             }
 
             if (isset($fieldValues[$element['id']])) {
-                // remove html from every input value
-                $validFieldValues[$element['id']] = StringUtils::strStripTags($fieldValues[$element['id']]);
+                // remove html from every input value, except from a secret that has to be stored as entered
+                $validFieldValues[$element['id']] = empty($element['preserveValue']) || !is_string($fieldValues[$element['id']])
+                    ? StringUtils::strStripTags($fieldValues[$element['id']])
+                    : trim($fieldValues[$element['id']]);
 
                 // a value that the form did not offer must not be accepted, no matter whether the
                 // control submits one value or a list of them
