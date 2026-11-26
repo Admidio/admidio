@@ -115,17 +115,24 @@
     width: 1rem;
     height: 1rem;
     border-radius: 50%;
-    background-color: var(--bs-primary);
-    color: var(--admidio-header-font-color);
-    font-size: 0.55rem;
+    background-color: color-mix(in srgb, var(--bs-primary) 70%, black);
+    color: #fff;
+    font-size: 0.6rem;
     line-height: 1;
-    box-shadow: 0 0 0 2px var(--bs-primary);
+    box-shadow: 0 0 0 2px var(--bs-white);
     pointer-events: none;
+    z-index: 1;
 }
 
-/* Compact login entry on phones. It uses the same 40 px slot as the avatar so the
-   organization name does not move when the visitor logs in. */
-#adm_main_navbar .adm-header-login-icon {
+/* Compact account entries on phones. Login and registration stay visible side
+   by side so both actions are directly reachable on touch devices. */
+#adm_main_navbar .adm-auth-actions {
+    display: inline-flex;
+    align-items: center;
+}
+
+#adm_main_navbar .adm-header-login-icon,
+#adm_main_navbar .adm-header-register-icon {
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
@@ -140,15 +147,31 @@
     text-decoration: none;
 }
 
-#adm_main_navbar .adm-header-login-icon:hover,
-#adm_main_navbar .adm-header-login-icon:focus {
-    color: var(--admidio-header-font-color);
+#adm_main_navbar .adm-header-register-icon {
+    order: -1;
+}
+
+#adm_main_navbar .adm-header-login-icon:active,
+#adm_main_navbar .adm-header-register-icon:active {
     background-color: color-mix(in srgb, var(--admidio-header-font-color) 15%, transparent);
+}
+
+#adm_main_navbar .adm-header-login-icon:focus-visible,
+#adm_main_navbar .adm-header-register-icon:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 /* Optically center the asymmetric box-arrow glyph inside the circular slot. */
 #adm_main_navbar .adm-header-login-icon .bi {
     transform: translateX(0.05em);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    #adm_main_navbar .adm-header-login-icon:hover,
+    #adm_main_navbar .adm-header-register-icon:hover {
+        color: color-mix(in srgb, var(--admidio-header-font-color) 70%, black);
+    }
 }
 
 @media (max-width: 767px)
@@ -289,6 +312,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0;
     line-height: 1;
     color: inherit;
@@ -1166,6 +1191,18 @@ tr.admidio-event-highlight {
 /***********************************/
 /* Overview page */
 /***********************************/
+
+/* Match the rounded corners of the login card and the nested plugin card. */
+#registration_card,
+#plugin-login-form .adm-login-widget-registration {
+    border-radius: var(--bs-card-border-radius);
+    overflow: hidden;
+}
+
+#registration_card .card-body,
+#plugin-login-form .adm-login-widget-registration .card-body {
+    border-radius: inherit;
+}
 
 /* The login widget on the overview already sits in a tinted card. Use a slightly
    darker background for the nested registration card to preserve the contrast it
