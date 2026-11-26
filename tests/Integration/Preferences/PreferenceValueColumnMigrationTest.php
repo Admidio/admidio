@@ -37,7 +37,9 @@ class PreferenceValueColumnMigrationTest extends DatabaseTestCase
         $engine = $this->getDatabase()->getEngine();
         $steps = 0;
         foreach ($update->step as $step) {
-            if (!str_contains((string) $step, 'ALTER TABLE %PREFIX%_preferences')) {
+            // only the steps that widen prf_value; other steps alter the table as well (prf_org_id)
+            if (!str_contains((string) $step, 'ALTER TABLE %PREFIX%_preferences')
+                || !str_contains((string) $step, 'prf_value')) {
                 continue;
             }
             if (!isset($step['database']) || (string) $step['database'] === $engine) {

@@ -34,6 +34,7 @@ function admShutdown()
          * allows it, and the listeners run afterwards. A request that left a transaction open does
          * not dispatch the action - everything a listener wrote would be rolled back with it.
          *
+         * Without fastcgi_finish_request(), listeners run synchronously and can delay the response.
          * The CLI has no response to send; there the listeners simply run at the end.
          */
         if (PHP_SAPI !== 'cli') {

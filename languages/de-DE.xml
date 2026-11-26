@@ -759,7 +759,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Die Kategorie #VAR1_BOLD# kann nicht gelöscht werden, da sie noch #VAR2# abhängige Einträge besitzt.</string>
   <string name="SYS_DONT_SHOW">Nicht anzeigen</string>
   <string name="SYS_DOWNLOAD_ALBUM">Album herunterladen</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Datenbank-Backup herunterladen</string>
   <string name="SYS_DOWNLOAD_FILE">Datei herunterladen</string>
   <string name="SYS_DOWNLOAD_ICAL">iCal herunterladen</string>
   <string name="SYS_DOWNLOAD_PHOTO">Foto herunterladen</string>
@@ -1220,7 +1219,7 @@
   <string name="SYS_LOCATION_PROFILE_PICTURES_DESC">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Voreinstellung: Datenbank)</string>
   <string name="SYS_LOCKED">Gesperrt</string>
   <string name="SYS_LOCK_ALBUM">Album sperren</string>
-  <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Sie können zum Beispiel ein Album vorübergehen sperren, während Sie gerade alle Bilder des Albums hochladen.</string>
+  <string name="SYS_LOCK_ALBUM_DESC">Gesperrte Alben können von Gästen und Mitgliedern nicht eingesehen werden. Beim Sperren oder Entsperren eines Albums werden auch alle Unteralben gesperrt oder entsperrt, einschließlich zuvor separat gesperrter Unteralben. Unteralben eines gesperrten Albums können nicht einzeln entsperrt werden.</string>
   <string name="SYS_LOG">Protokoll</string>
   <string name="SYS_LOGGED_AREAS">Protokollierte Bereiche</string>
   <string name="SYS_LOGGED_AREAS_DESC">Wählen Sie die Bereiche aus, für die die Änderungshistorie geführt wird. Jede Änderung an einem Objekt eines ausgewählten Bereichs wird mit altem und neuem Wert sowie Änderungszeit und verantwortlicher Person protokolliert. Bereiche von deaktivierten Modulen werden nicht angezeigt. Wird ein Bereich abgewählt, werden bestehende Protokolleinträge nicht gelöscht. Dies kann auf der Seite Änderungshistorie erfolgen. Ein Bereich, dessen Objekte nur teilweise protokolliert werden, wird in einem dritten, unbestimmten Zustand angezeigt und bleibt unverändert, bis Sie ihn ein- oder ausschalten.</string>
@@ -1513,7 +1512,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio benötigt #VAR1# oder höher</string>
   <string name="SYS_PIPE">Pipe (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Bitte wählen</string>
-  <string name="SYS_PLUGIN_ADD">Plugin hinzufügen</string>
   <string name="SYS_PLUGIN_ADD_FROM_DIRECTORY">Aus dem Plugin-Verzeichnis hinzufügen</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">Das Plugin #VAR1# ist bereits vorhanden. Seine Dateien werden nur ersetzt, wenn dies ausdrücklich angefordert wurde.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">Das Plugin #VAR1# ist bereits installiert.</string>
@@ -1625,6 +1623,8 @@
   <string name="SYS_PROFILE_PICTURE_HINT_SCALING">Das Foto wird auf maximal #VAR1# Pixel an der längeren Seite verkleinert. Das Seitenverhältnis bleibt erhalten.</string>
   <string name="SYS_PROFILE_PICTURE_HINT_YOURSELF">Sie sollten selbst auf dem Foto zu sehen sein.</string>
   <string name="SYS_PROPERTIES">Eigenschaften</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_CONSENT_DESC">Deaktivieren Sie die Checkbox, um ohne Übermittlung dieser Daten fortzufahren und den monatlichen Versand zu deaktivieren.</string>
+  <string name="SYS_PSEUDONYMOUS_STATISTICS_DESC">Pseudonyme technische Daten dieser Installation werden nach der Installation oder einem Update und bei aktivierter Systemeinstellung einmal im Monat an admidio.org gesendet. Dies hilft uns, einen Überblick über die Verbreitung von Admidio und die genutzten Technologien zu erhalten, um Admidio gezielt weiter zu verbessern. Eine dauerhafte Installations-ID ermöglicht es, Berichte über längere Zeit miteinander zu verknüpfen. Der empfangende Server kann die IP-Adresse des Absenders sehen, und die Namen von Drittanbieter-Plugins können Rückschlüsse auf eine Organisation ermöglichen. Das folgende JSON beschreibt die Daten, die übermittelt werden.</string>
   <string name="SYS_PWA_ENABLED">Progressive Web App (PWA) aktivieren</string>
   <string name="SYS_PWA_ENABLED_DESC">Admidio kann als eigenständige Web-App auf dem Smartphone, Tablet oder Desktop installiert werden. Der App-Name richtet sich nach dem Namen der Organisation. Eigene App-Icons können im Ordner adm_my_files/ als app_icon.png oder app_icon_512.png abgelegt werden. Andernfalls wird ein unter „Design“ konfiguriertes PNG-Favicon oder das Standard-Logo als Fallback verwendet.</string>
   <string name="SYS_PWA_GUIDE_BROWSER_STEP1">Tippen Sie auf das Drei-Punkte-Menü oben oder unten.</string>
@@ -1834,7 +1834,6 @@
   <string name="SYS_SEND_EMAIL">E-Mail senden</string>
   <string name="SYS_SEND_EMAIL_FORMER">E-Mails an Ehemalige senden</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Ist diese Einstellung gesetzt, dann können E-Mails an einzelne ehemalige Mitglieder sowie an alle ehemaligen Mitglieder einer Rolle gesendet werden. (Voreinstellung: ja)</string>
-  <string name="SYS_SEND_EMAIL_TO">Senden Sie eine E-Mail an #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">E-Mails an alle E-Mail-Adressen im Profil senden</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">Ist diese Einstellung aktiviert, werden E-Mails an alle im Profil hinterlegten E-Mail-Adressen gesendet. Ist die Einstellung deaktiviert, werden E-Mails nur an die E-Mail-Adresse aus dem Profilfeld mit dem internen Namen EMAIL gesendet. (Voreinstellung: nein)</string>
   <string name="SYS_SEND_GREETING_CARD">Grußkarte versenden</string>
@@ -1847,6 +1846,8 @@
   <string name="SYS_SEND_PHOTO_AS_ECARD">Foto als Grußkarte versenden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE">Private Nachricht senden</string>
   <string name="SYS_SEND_PRIVATE_MESSAGE_DESC">Ihre private Nachricht wird an die ausgewählte Person gesendet.</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS">Pseudonyme Statistiken senden</string>
+  <string name="SYS_SEND_PSEUDONYMOUS_STATISTICS_DESC">Einmal im Monat #VAR1#pseudonyme technische Daten#VAR2# an admidio.org senden. Bei aktivierter Einstellung wird der Versand durch Wartungsaufgaben oder nach Webanfragen geprüft.</string>
   <string name="SYS_SEND_TEST_MAIL">Testmail versenden</string>
   <string name="SYS_SEND_USERNAME_PASSWORD">E-Mail mit Anmeldenamen und neuem Passwort zuschicken</string>
   <string name="SYS_SEPARATOR_FOR_CSV_FILE">Trennzeichen für CSV-Datei</string>
@@ -1859,6 +1860,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ist diese Option gesetzt, können neben den Kontakten der aktuellen Organisation optional auch Kontakte anderer Organisationen in der Mitgliederverwaltung angezeigt werden. Ansonsten werden nur aktive und inaktive Kontakte der aktuellen Organisation angezeigt. Beim Anlegen neuer Kontakte oder beim Zuweisen von Registrierungen wird jedoch weiterhin die gesamte Datenbank aller Organisationen nach bestehenden Kontakten durchsucht. (Voreinstellung: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Bei gesetzter Einstellung werden neben den aktiven Mitgliedern dieser Organisation auch ehemalige Mitglieder, sowie Mitglieder anderer Organisationen angezeigt.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Im E-Mailformular wird Gästen bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Dieser muss vor dem E-Mailversand korrekt eingegeben werden. Dies soll sicherstellen, dass das Formular nicht für Spam missbraucht werden kann. (Voreinstellung: ja)</string>
+  <string name="SYS_SHOW_DATA">Daten anzeigen</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Leere Profilfelder anzeigen</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Diese Einstellung legt fest, ob leere Profilfelder in der Profilansicht angezeigt werden sollen. (Standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zeige ehemalige Mitglieder</string>
@@ -2207,6 +2209,7 @@
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE">X.509-Verschlüsselungszertifikat</string>
   <string name="SYS_SSO_X509_ENCRYPTION_CERTIFICATE_DESC">Zertifikat des Clients zum Verschlüsseln von Assertions. Wenn leer, wird das erste Signaturzertifikat verwendet.</string>
   <string name="SYS_START" description="Start of a date">Beginn</string>
+  <string name="SYS_STATISTICS_SCHEMA_ONLY_DESC">Aus Datenschutzgründen zeigt dieser Update-Dialog nur die JSON-Struktur mit Platzhaltern. Konkrete Installationsdaten werden ausgeblendet, da aktuell keine gültige Anmeldung vorliegt.</string>
   <string name="SYS_STATUS_CODE_INVALID">Ungültiger Status-Code!</string>
   <string name="SYS_STILL_X_CHARACTERS">noch #VAR1# Zeichen</string>
   <string name="SYS_STREET">Straße</string>
@@ -2250,6 +2253,7 @@
   <string name="SYS_TEMPLATE">Template</string>
   <string name="SYS_TEMPLATE_DESC">Legen Sie die Vorlage fest, die bei der Erstellung der E-Card vorausgewählt wird. (Standard: Postkarte)</string>
   <string name="SYS_TEMPLATE_FOLDER_OPEN">Template-Ordner konnte nicht geöffnet/gelesen werden.</string>
+  <string name="SYS_TENANT_ID_NOT_INITIALIZED">Die Installations-ID wurde noch nicht initialisiert.</string>
   <string name="SYS_TEST_MAIL">Testmail</string>
   <string name="SYS_TEST_MAIL_DESC">Bevor Sie diese Funktion aufrufen, müssen alle Einstellungen für den E-Mail-Versand gespeichert werden!\nEs wird eine einfache E-Mail mit dem Betreff #VAR1_BOLD# an die E-Mail-Adresse der angemeldeten Person auf Grundlage der gespeicherten E-Mail-Einstellungen versendet. Dabei wird beim SMTP-Versand ein Versandprotokoll ausgegeben, welches bei Problemen helfen kann.</string>
   <string name="SYS_TEXT">Text</string>

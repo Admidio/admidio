@@ -58,22 +58,9 @@ try {
 }
 
 if ($configFileWritten) {
-    // start installation
-    $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_INSTALL_ADMIDIO'));
-    $page->assignSmartyVariable('text', $gL10n->get('INS_DATA_FULLY_ENTERED'));
-    $page->assignSmartyVariable('urlInstallation', SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
-
-    $form = new FormPresenter(
-        'adm_installation_install_admidio_form',
-        'installation.install-admidio.tpl',
-        SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')),
-        $page
-    );
-    $form->addSubmitButton(
-        'adm_next_page',
-        $gL10n->get('INS_INSTALL_ADMIDIO'),
-        array('icon' => 'bi-arrow-repeat', 'class' => ' btn-primary admidio-margin-bottom')
-    );
+    // Reload with the written config before showing the final installation confirmation.
+    admRedirect(SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_INSTALLATION . '/installation.php', array('step' => 'start_installation')));
+    exit();
 } else {
     // if user doesn't has write access then create a page with a download link for the config file
     $page->assignSmartyVariable('subHeadline', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
@@ -104,7 +91,7 @@ if ($configFileWritten) {
     );
     $form->addSubmitButton(
         'adm_next_page',
-        $gL10n->get('INS_INSTALL_ADMIDIO'),
+        $gL10n->get('INS_CONTINUE_INSTALLATION'),
         array(
             'icon' => 'bi-arrow-repeat',
             'class' => ' btn-primary admidio-margin-bottom ms-2'
@@ -112,5 +99,7 @@ if ($configFileWritten) {
     );
 }
 
+// The manual-upload form leads to the final confirmation before installation starts.
 $form->addToHtmlPage();
+$_SESSION['installationDownloadConfigForm'] = $form;
 $page->show();

@@ -65,6 +65,7 @@ class AlbumService
         $values['pho_end'] = $end;
 
         $parentId = null;
+        $parentLocked = false;
         if ($parentAlbumUuid !== '' && $parentAlbumUuid !== 'ALL') {
             $parentAlbum = new Album($this->db);
             if (!$parentAlbum->readDataByUuid($parentAlbumUuid)
@@ -72,6 +73,7 @@ class AlbumService
                 throw new Exception('SYS_INVALID_PAGE_VIEW');
             }
 
+            $parentLocked = (bool)$parentAlbum->getValue('pho_locked');
             $parentId = (int)$parentAlbum->getValue('pho_id');
             $this->assertValidParent($album, $parentId);
         }
@@ -106,7 +108,19 @@ class AlbumService
             }
         }
 
-        if ($album->save()) {
+        $this->db->startTransaction();
+        try {
+            $saved = $album->save();
+            if ($parentLocked) {
+                $album->lock();
+            }
+            $this->db->endTransaction();
+        } catch (\Throwable $exception) {
+            $this->db->rollback();
+            throw $exception;
+        }
+
+        if ($saved) {
             if ($isNewRecord) {
                 $error = $album->createFolder();
                 if (is_array($error)) {

@@ -300,6 +300,76 @@ class Album extends Entity
     }
 
     /**
+     * Lock this album and all its descendants.
+     * @throws Exception
+     */
+    public function lock(): void
+    {
+        $this->setLockState(true);
+    }
+
+    /**
+     * Unlock this album and all its descendants, unless its parent is locked.
+     * @throws Exception
+     */
+    public function unlock(): void
+    {
+        $this->setLockState(false);
+    }
+
+    /**
+     * Change the entire tree in one transaction, preserving a locked parent's protection.
+     * @throws Exception
+     */
+    private function setLockState(bool $locked): void
+    {
+        if ($this->isNewRecord()) {
+            throw new Exception('SYS_INVALID_PAGE_VIEW');
+        }
+
+        $this->db->startTransaction();
+        try {
+            $parentId = (int)$this->getValue('pho_pho_id_parent');
+            if (!$locked && $parentId > 0) {
+                $parent = new Album($this->db, $parentId);
+                $locked = (bool)$parent->getValue('pho_locked');
+            }
+            $visited = array();
+            $this->setLockStateRecursive($locked, $visited);
+            $this->db->endTransaction();
+        } catch (\Throwable $exception) {
+            $this->db->rollback();
+            throw $exception;
+        }
+    }
+
+    /**
+     * Update even descendants whose parent's flag already has the requested value.
+     * @param array<int,bool> $visited Albums already processed, guarding against cyclic references.
+     * @throws Exception
+     */
+    private function setLockStateRecursive(bool $locked, array &$visited): void
+    {
+        $albumId = (int)$this->getValue('pho_id');
+        if (isset($visited[$albumId])) {
+            return;
+        }
+        $visited[$albumId] = true;
+        $this->setValue('pho_locked', $locked ? 1 : 0);
+        $this->save();
+
+        $children = $this->db->queryPrepared(
+            'SELECT * FROM ' . TBL_PHOTOS . ' WHERE pho_pho_id_parent = ? AND pho_org_id = ?',
+            array($albumId, (int)$this->getValue('pho_org_id'))
+        )->fetchAll();
+        foreach ($children as $row) {
+            $child = new Album($this->db);
+            $child->setArray($row);
+            $child->setLockStateRecursive($locked, $visited);
+        }
+    }
+
+    /**
      * Send a notification email that a new photo album was created or an existing photo album was changed
      * to all members of the notification role. This role is configured within the global preference
      * **system_notifications_role**. The email contains the photo album title, the name of the current user,

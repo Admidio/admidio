@@ -371,3 +371,31 @@ with it. An installation that skips that release cannot verify later ones and ha
 release by hand. If the private key leaks, publish a new key and announce a manual update.
 
 For a local test server, `--test-release` puts the public part of a test key into the package.
+
+## Pseudonymous statistics
+
+The web review page offers a checked statistics checkbox and the complete JSON preview when
+the global statistics setting is disabled. If the global setting is already enabled, the checkbox
+is hidden and the existing installation-wide consent is retained. The preview and choice are kept in the update
+workspace across interruptions. Only a successful database update saves the web choice and sends
+the reviewed snapshot, at most once per update. The global setting defaults to disabled.
+
+The CLI accepts `apply --statistics=yes|no`. Omitting it uses the global statistics setting.
+An explicit `yes` or `no` overrides sending for this update only and never changes the global
+setting, including after a successful update. With `yes`, the preview is printed before
+confirmation. `--yes` alone does not enable statistics.
+
+
+Statistics consent, installation identity and the monthly send timestamp are installation-wide.
+Demo installations with an organization named `ADM_DEMO` never send to the default endpoint,
+regardless of that organization's ID. An explicitly configured `$gStatisticsUrl` permits demo
+traffic to a test endpoint.
+
+Monthly statistics run through maintenance or the `request_finished` shutdown hook. PHP-FPM
+can finish the response before shutdown listeners run using `fastcgi_finish_request()`. On
+other deployments the listeners run synchronously and may delay the response; shutdown is
+not a background queue. The statistics HTTP request has a two-second connection timeout and
+a five-second total timeout. These limits cover HTTP transport, not database work or other
+shutdown listeners. The session lock is released before listeners run. Failed monthly sends
+reserve a one-hour retry deadline rather than retrying on every request. Explicit installation
+and update sends also run synchronously, including on PHP-FPM.

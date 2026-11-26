@@ -26,6 +26,7 @@ use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Infrastructure\Htaccess;
 use Admidio\Infrastructure\Language;
+use Admidio\Infrastructure\InstallationStatistics;
 use Admidio\Infrastructure\Plugins\Plugin;
 use Admidio\Infrastructure\Plugins\PluginInstaller;
 use Admidio\Infrastructure\Plugins\PluginLoader;
@@ -484,6 +485,9 @@ final class CoreTasks
         CliTaskRegistry::registerCoreMaintenanceJob('update-check', static function (): string {
             return self::checkForUpdate();
         }, 'Look for a new release of Admidio, unless the update check is switched off.');
+        CliTaskRegistry::registerCoreMaintenanceJob('statistics', static function (): void {
+            InstallationStatistics::sendIfDue($GLOBALS['gDb']);
+        }, 'Send monthly installation statistics if enabled and due.');
         CliTaskRegistry::registerCoreMaintenanceJob('memberships', static function (): string {
             // the cron job repeats a failed run at once, without its retry delay
             $count = (new MembershipPeriodService($GLOBALS['gDb']))->runIfDue(null, true);
@@ -576,7 +580,7 @@ final class CoreTasks
             'Install the newest Admidio release with the core updater: check, download, install the files and update the database.'
                 . ' Asks before the download and before the installation unless --yes is given. If an update stops,'
                 . ' continue it with "php install/core-update/cli.php apply --resume".',
-            'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--skip-database]'
+            'update:apply [--channel=CHANNEL] [--ref=REF] [--backup=dump|own] [--on-changed=archive|cancel] [--statistics=yes|no] [--skip-database]'
                 . ' [--dump-password-env=VAR] [--resume] [--dry-run] [--yes] [--format=text|json]',
             'PREFERENCES',
             true,
@@ -589,6 +593,8 @@ final class CoreTasks
                     array('dump', 'own')),
                 self::opt('on-changed', 'Changed or unknown files are archived and replaced (default), or the update is cancelled.', 'ACTION',
                     false, false, false, array('archive', 'cancel')),
+                self::opt('statistics', 'Send pseudonymous statistics for this update only; default: global setting. Never changes the global setting.', 'CHOICE',
+                    false, false, false, array('yes', 'no')),
                 self::opt('skip-database', 'Install the files only; maintenance mode stays on until the database is updated.', '', false, false, true),
                 self::opt('dump-password-env', 'Environment variable with the password that encrypts the backup of the database.', 'VAR'),
                 self::opt('resume', 'Continue the unfinished update.', '', false, false, true),
@@ -3194,7 +3200,7 @@ final class CoreTasks
     public static function updateApply(array $arguments, array $options): int
     {
         $updaterArguments = array('apply');
-        foreach (array('channel', 'ref', 'backup', 'on-changed', 'dump-password-env') as $name) {
+        foreach (array('channel', 'ref', 'backup', 'on-changed', 'statistics', 'dump-password-env') as $name) {
             $value = CliApplication::optionString($options, $name);
             if ($value !== '') {
                 $updaterArguments[] = '--' . $name . '=' . $value;

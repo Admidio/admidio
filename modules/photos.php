@@ -108,8 +108,11 @@ try {
                 $photoAlbum->delete();
                 echo json_encode(array('status' => 'success'));
             } else {
-                $photoAlbum->setValue('pho_locked', $getMode === 'album_lock' ? 1 : 0);
-                $photoAlbum->save();
+                if ($getMode === 'album_lock') {
+                    $photoAlbum->lock();
+                } else {
+                    $photoAlbum->unlock();
+                }
                 echo 'done';
             }
             break;

@@ -19,6 +19,7 @@ use Admidio\Roles\Entity\ListConfiguration;
 use Admidio\Roles\Entity\RolesRights;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationIdentifier;
 use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\Utils\StringUtils;
@@ -39,6 +40,47 @@ const TBL_DATES = TABLE_PREFIX . '_dates';
  */
 final class UpdateStepsCode
 {
+    /** Initialize the installation identity once when upgrading to 6.0, including headless updates. */
+    public static function updateStep60CreateTenantId(): void
+    {
+        InstallationIdentifier::ensure(self::$db, StatisticsConsent::tenantId());
+    }
+
+    /**
+     * Repair descendants of locked albums without changing independently locked albums.
+     * Works across organizations and does not require a current user or organization context.
+     */
+    public static function updateStep60LockPhotoDescendants(): void
+    {
+        $albums = self::$db->queryPrepared(
+            'SELECT pho_id, pho_pho_id_parent, pho_org_id, pho_locked FROM ' . TBL_PHOTOS
+        )->fetchAll();
+        $children = array();
+        $pending = array();
+        foreach ($albums as $album) {
+            $children[(int)$album['pho_org_id']][(int)$album['pho_pho_id_parent']][] = (int)$album['pho_id'];
+            if ($album['pho_locked']) {
+                $pending[] = array((int)$album['pho_id'], (int)$album['pho_org_id']);
+            }
+        }
+
+        $visited = array();
+        while ($pending !== array()) {
+            list($albumId, $orgId) = array_pop($pending);
+            if (isset($visited[$albumId])) {
+                continue;
+            }
+            $visited[$albumId] = true;
+            self::$db->queryPrepared(
+                'UPDATE ' . TBL_PHOTOS . ' SET pho_locked = true WHERE pho_id = ? AND pho_org_id = ?',
+                array($albumId, $orgId)
+            );
+            foreach ($children[$orgId][$albumId] ?? array() as $childId) {
+                $pending[] = array($childId, $orgId);
+            }
+        }
+    }
+
     /**
      * Move category report columns and their conditions to the normalized child table.
      * @throws Exception

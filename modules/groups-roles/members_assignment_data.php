@@ -95,29 +95,50 @@ try {
         }
     }
 
-    // create order statement
-    $orderCondition = '';
-    $orderColumns = array('member_this_orga', 'member_this_role', 'last_name', 'first_name', 'birthday', 'street', 'leader_this_role');
+    // Match the visible columns and their order in members_assignment.php and the response.
+    $orderColumns = array('member_this_orga', 'member_this_role');
+    foreach (array('LAST_NAME' => 'last_name', 'FIRST_NAME' => 'first_name') as $field => $column) {
+        if ($gProfileFields->isVisible($field, $gCurrentUser->isAdministratorUsers())) {
+            $orderColumns[] = $column;
+        }
+    }
+    // The address column may only use a visible address field for sorting.
+    foreach (array('STREET' => 'street', 'POSTCODE' => 'zip_code', 'CITY' => 'city', 'COUNTRY' => 'country') as $field => $column) {
+        if ($gProfileFields->isVisible($field, $gCurrentUser->isAdministratorUsers())) {
+            $orderColumns[] = $column;
+            break;
+        }
+    }
+    if ($gProfileFields->isVisible('BIRTHDAY', $gCurrentUser->isAdministratorUsers())) {
+        $orderColumns[] = 'birthday';
+    }
+    $orderColumns[] = 'leader_this_role';
 
-    if (array_key_exists('order', $_GET)) {
+    $orderParts = array();
+    if (isset($_GET['order']) && is_array($_GET['order'])) {
         foreach ($_GET['order'] as $order) {
-            if (is_numeric($order['column'])) {
-                if ($orderCondition === '') {
-                    $orderCondition = ' ORDER BY ';
-                } else {
-                    $orderCondition .= ', ';
-                }
-
-                if (strtoupper($order['dir']) === 'ASC') {
-                    $orderCondition .= $orderColumns[$order['column']] . ' ASC ';
-                } else {
-                    $orderCondition .= $orderColumns[$order['column']] . ' DESC ';
-                }
+            if (!is_array($order) || !isset($order['column'], $order['dir'])
+                || !is_scalar($order['column']) || !ctype_digit((string)$order['column'])
+                || !array_key_exists($order['column'], $orderColumns)
+                || !is_string($order['dir'])
+                || !in_array(strtoupper($order['dir']), array('ASC', 'DESC'), true)) {
+                continue;
+            }
+            $orderParts[] = $orderColumns[$order['column']] . ' ' . strtoupper($order['dir']);
+        }
+    }
+    if (count($orderParts) === 0) {
+        // A malformed or empty order must not fall back to hidden profile fields.
+        foreach (array('last_name', 'first_name') as $column) {
+            if (in_array($column, $orderColumns, true)) {
+                $orderParts[] = $column . ' ASC';
             }
         }
-    } else {
-        $orderCondition = ' ORDER BY last_name ASC, first_name ASC ';
+        if (count($orderParts) === 0) {
+            $orderParts[] = 'usr_id ASC';
+        }
     }
+    $orderCondition = ' ORDER BY ' . implode(', ', $orderParts) . ' ';
 
     // create search conditions
     $searchCondition = '';

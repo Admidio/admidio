@@ -572,7 +572,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">ไม่สามารถลบหมวดหมู่ #VAR1_BOLD# ได้ เนื่องจาก #VAR2# รายการ ขึ้นอยู่กับ</string>
   <string name="SYS_DONT_SHOW">อย่า แสดง</string>
   <string name="SYS_DOWNLOAD_ALBUM">ดาวน์โหลด อัลบั้ม</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Download database backup</string>
   <string name="SYS_DOWNLOAD_FILE">ดาวน์โหลด ไฟล์</string>
   <string name="SYS_DOWNLOAD_ICAL">Download iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">ดาวน์โหลด รูปภาพ</string>
@@ -1302,7 +1301,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio ต้องใช้ #VAR1# หรือ สูงกว่า</string>
   <string name="SYS_PIPE">ท่อ (|)</string>
   <string name="SYS_PLEASE_CHOOSE">เลือก ตัวเลือก</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1608,7 +1606,6 @@
   <string name="SYS_SEND_EMAIL">ส่ง อีเมล</string>
   <string name="SYS_SEND_EMAIL_FORMER">ส่งอีเมลถึง สมาชิก เก่า</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">หากตั้งค่าตัวเลือกนี้ ระบบสามารถส่งอีเมลไปยังอดีตสมาชิกแต่ละคน รวมถึงอดีตสมาชิกทุกคนที่มีบทบาทด้วย (ค่าเริ่มต้น: เปิดใช้งานแล้ว)</string>
-  <string name="SYS_SEND_EMAIL_TO">ส่งอีเมลไปที่ #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">ส่งอีเมลไปยังที่อยู่อีเมลทั้งหมดของ ผู้ใช้</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">หากเปิดใช้งานการตั้งค่านี้ อีเมลจะถูกส่งไปยังที่อยู่อีเมลของผู้ใช้ทั้งหมดที่จัดเก็บไว้ในโปรไฟล์ หากปิดใช้งานการตั้งค่า อีเมลจะถูกส่งไปยังที่อยู่อีเมลจากฟิลด์โปรไฟล์ที่มีชื่อภายใน EMAIL เท่านั้น (ค่าเริ่มต้น: เปิดใช้งาน)</string>
   <string name="SYS_SEND_GREETING_CARD">ส่ง การ์ด อวยพร</string>

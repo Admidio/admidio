@@ -3,6 +3,7 @@
 namespace Admidio\Preferences\ValueObject;
 
 use Admidio\Infrastructure\Database;
+use Admidio\Infrastructure\InstallationSettings;
 use Admidio\Infrastructure\Entity\Entity;
 use Admidio\Infrastructure\Exception;
 use Admidio\Preferences\Entity\Preferences;
@@ -246,6 +247,9 @@ class SettingsManager
      */
     public function has(string $name, bool $update = false): bool
     {
+        if (array_key_exists($name, InstallationSettings::defaults())) {
+            return false;
+        }
         if (!self::isValidName($name) && $this->throwExceptions) {
             throw new \UnexpectedValueException('Settings name "' . $name . '" is an invalid string!');
         }
@@ -271,7 +275,8 @@ class SettingsManager
      */
     private static function isValidName(string $name): bool
     {
-        return (bool)preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
+        return !array_key_exists($name, InstallationSettings::defaults())
+            && (bool)preg_match('/^[a-z0-9](_?[a-z0-9])*$/', $name);
     }
 
     /**
@@ -311,7 +316,9 @@ class SettingsManager
         $settings = array();
 
         while ($row = $pdoStatement->fetch()) {
-            $settings[$row['prf_name']] = $row['prf_value'];
+            if (!array_key_exists($row['prf_name'], InstallationSettings::defaults())) {
+                $settings[$row['prf_name']] = $row['prf_value'];
+            }
         }
 
         return $settings;

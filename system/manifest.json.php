@@ -7,6 +7,8 @@
  * @license https://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2.0 only
  */
 
+use Admidio\Infrastructure\Service\AppIconService;
+
 try {
     require_once(__DIR__ . '/common.php');
 
@@ -61,17 +63,11 @@ try {
     }
 
     $getIconUrl = function (int $size, string $defaultFilename) use ($customFavicon) {
-        // 1. Dedicated size-specific app icon in adm_my_files/
-        if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/app_icon_' . $size . '.png')) {
-            return ADMIDIO_URL . FOLDER_DATA . '/app_icon_' . $size . '.png';
-        }
-        // 2. Dedicated general app icon in adm_my_files/
-        if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/app_icon.png')) {
-            return ADMIDIO_URL . FOLDER_DATA . '/app_icon.png';
-        }
-        // 3. Organization-specific logo file in adm_my_files/ (e.g. admidio_logo_512.png)
-        if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/' . $defaultFilename)) {
-            return ADMIDIO_URL . FOLDER_DATA . '/' . $defaultFilename;
+        // 1.-3. App icon or organization-specific logo file in adm_my_files/. The folder is protected,
+        //       so the icon is delivered by system/pwa_icon.php.
+        $appIconUrl = AppIconService::getIconUrl($size);
+        if ($appIconUrl !== null) {
+            return $appIconUrl;
         }
         // 4. Check in current theme
         if (defined('THEME_PATH') && file_exists(THEME_PATH . '/images/' . $defaultFilename)) {
@@ -118,16 +114,10 @@ try {
     // Dedicated maskable icon (only if explicitly provided with edge-to-edge solid bleed).
     // Transparent icons must NOT be marked maskable because Android WebAPK will fill
     // transparency with theme_color, which can blend away foreground logos matching theme_color.
-    if (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/app_icon_maskable_512.png')) {
+    $maskableIconUrl = AppIconService::getIconUrl(512, true);
+    if ($maskableIconUrl !== null) {
         $icons[] = array(
-            'src'     => ADMIDIO_URL . FOLDER_DATA . '/app_icon_maskable_512.png',
-            'sizes'   => '512x512',
-            'type'    => 'image/png',
-            'purpose' => 'maskable'
-        );
-    } elseif (file_exists(ADMIDIO_PATH . FOLDER_DATA . '/app_icon_maskable.png')) {
-        $icons[] = array(
-            'src'     => ADMIDIO_URL . FOLDER_DATA . '/app_icon_maskable.png',
+            'src'     => $maskableIconUrl,
             'sizes'   => '512x512',
             'type'    => 'image/png',
             'purpose' => 'maskable'

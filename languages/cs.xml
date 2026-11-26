@@ -574,7 +574,6 @@
   <string name="SYS_DONT_DELETE_CATEGORY">Kategorii #VAR1_BOLD# se nepodařilo smazat kvůli #VAR2# závislým záznamům.</string>
   <string name="SYS_DONT_SHOW">Nezobrazovat</string>
   <string name="SYS_DOWNLOAD_ALBUM">Stáhnout album</string>
-  <string name="SYS_DOWNLOAD_DATABASE_BACKUP">Stáhnout zálohu databáze</string>
   <string name="SYS_DOWNLOAD_FILE">Stáhnout soubor</string>
   <string name="SYS_DOWNLOAD_ICAL">Stáhnout iCal</string>
   <string name="SYS_DOWNLOAD_PHOTO">Stáhnout fotku</string>
@@ -1304,7 +1303,6 @@
   <string name="SYS_PHP_VERSION_REQUIRED">Admidio vyžaduje verzi #VAR1# nebo vyšší</string>
   <string name="SYS_PIPE">Svislítko (|)</string>
   <string name="SYS_PLEASE_CHOOSE">Vyberte možnost</string>
-  <string name="SYS_PLUGIN_ADD">Add plugin</string>
   <string name="SYS_PLUGIN_ALREADY_EXISTS">The plugin #VAR1# already exists. Its files are replaced only if replacement was explicitly requested.</string>
   <string name="SYS_PLUGIN_ALREADY_INSTALLED">The plugin #VAR1# is already installed.</string>
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
@@ -1610,7 +1608,6 @@
   <string name="SYS_SEND_EMAIL">Odeslat e-mail</string>
   <string name="SYS_SEND_EMAIL_FORMER">Odeslat e-mail bývalým členům</string>
   <string name="SYS_SEND_EMAIL_FORMER_DESC">Pokud je tato možnost nastavena, lze posílat e-maily jednotlivým bývalým členům i všem bývalým členům role. (Výchozí: Aktivováno)</string>
-  <string name="SYS_SEND_EMAIL_TO">Odeslat email uživateli #VAR1#</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES">Posílat e-maily na všechny e-mailové adresy uživatele</string>
   <string name="SYS_SEND_EMAIL_TO_ALL_ADDRESSES_DESC">If this setting is activated, emails will be sent to all user email addresses stored in the profile. If the setting is deactivated, emails will only be sent to the email address from the profile field with the internal name EMAIL. (Default: disabled)</string>
   <string name="SYS_SEND_GREETING_CARD">Poslat blahopřání</string>
