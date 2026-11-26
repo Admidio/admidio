@@ -19,7 +19,9 @@ use UnexpectedValueException;
  * - **id** (required) Stable name, lowercase letters, digits, `-` and `_`; a plugin starts it with its
  *   plugin ID. It becomes the HTML id `adm_header_item_<id>`.
  * - **label** (required unless there is an icon or an image) The text, or a translation ID. Next to an
- *   icon or an image it is hidden on small screens and kept as the accessible name of the item.
+ *   icon or an image it is hidden on small screens and kept as the accessible name of the item. An
+ *   item without a label needs a **tooltip**, which then is its accessible name.
+ *   The **id**, **class** and **icon** are checked against their patterns and still encoded.
  * - **icon** (optional) Bootstrap icon class, e.g. `bi-translate`.
  * - **image** (optional) URL of a small image shown instead of the icon, e.g. a flag. It is scaled to
  *   the height of the text.
@@ -154,8 +156,9 @@ final class PageExtensions
             return $entries;
         }
 
+        $sequences = array_column($entries, 'sequence');
         $positions = array_keys($entries);
-        array_multisort(array_column($entries, 'sequence'), SORT_NUMERIC, $positions, SORT_NUMERIC, $entries);
+        array_multisort($sequences, SORT_NUMERIC, $positions, SORT_NUMERIC, $entries);
         return $entries;
     }
 
@@ -233,6 +236,10 @@ final class PageExtensions
         if ($label === '' && $icon === '' && $image === '' && !$divider) {
             throw new UnexpectedValueException('an item needs a "label", an "icon" or an "image".');
         }
+        $tooltip = Language::translateIfTranslationStrId((string)($item['tooltip'] ?? ''));
+        if ($label === '' && $tooltip === '' && !$divider) {
+            throw new UnexpectedValueException('an item without a "label" needs a "tooltip", which becomes its accessible name.');
+        }
         if ($icon !== '' && !preg_match('/^[a-z0-9 -]+$/', $icon)) {
             throw new UnexpectedValueException('the "icon" of an item is a Bootstrap icon class such as "bi-translate".');
         }
@@ -259,7 +266,7 @@ final class PageExtensions
             'url' => $url,
             'popup' => !empty($item['popup']) && $url !== '',
             'popupClass' => (string)preg_replace('/[^A-Za-z0-9 _-]/', '', (string)($item['popupClass'] ?? '')),
-            'tooltip' => Language::translateIfTranslationStrId((string)($item['tooltip'] ?? '')),
+            'tooltip' => $tooltip,
             'class' => (string)preg_replace('/[^A-Za-z0-9 _-]/', '', (string)($item['class'] ?? '')),
             'active' => !empty($item['active']),
             'header' => $header,

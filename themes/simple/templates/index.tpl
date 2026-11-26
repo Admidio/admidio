@@ -276,11 +276,11 @@
                         {/if}
                         {* entries plugins add through the filter page_user_menu_items (see PageExtensions) *}
                         {if !empty($userMenuItems)}{foreach $userMenuItems as $userMenuItem}
-                            <li id="adm_user_menu_item_{$userMenuItem.id}" class="nav-item mb-2">
+                            <li id="adm_user_menu_item_{$userMenuItem.id|escape}" class="nav-item mb-2">
                                 {if $userMenuItem.url != ''}
-                                    <a class="nav-link link-primary{if $userMenuItem.popup} openPopup{/if} {$userMenuItem.class}" {if $userMenuItem.popup}href="javascript:void(0);" data-class="{$userMenuItem.popupClass}" data-href="{$userMenuItem.url|escape}"{else}href="{$userMenuItem.url|escape}"{/if}{if $userMenuItem.tooltip != ''} title="{$userMenuItem.tooltip|escape}"{/if}{if $userMenuItem.label == '' && $userMenuItem.tooltip != ''} aria-label="{$userMenuItem.tooltip|escape}"{/if}>{if $userMenuItem.image != ''}<img class="admidio-header-item-image me-1" src="{$userMenuItem.image|escape}" alt="">{elseif $userMenuItem.icon != ''}<i class="{$userMenuItem.icon} me-1" aria-hidden="true"></i>{/if}{$userMenuItem.label|escape}</a>
+                                    <a class="nav-link link-primary{if $userMenuItem.popup} openPopup{/if} {$userMenuItem.class|escape}" {if $userMenuItem.popup}href="javascript:void(0);" data-class="{$userMenuItem.popupClass|escape}" data-href="{$userMenuItem.url|escape}"{else}href="{$userMenuItem.url|escape}"{/if}{if $userMenuItem.tooltip != ''} title="{$userMenuItem.tooltip|escape}"{/if}{if $userMenuItem.label == '' && $userMenuItem.tooltip != ''} aria-label="{$userMenuItem.tooltip|escape}"{/if}>{if $userMenuItem.image != ''}<img class="admidio-header-item-image me-1" src="{$userMenuItem.image|escape}" alt="">{elseif $userMenuItem.icon != ''}<i class="{$userMenuItem.icon|escape} me-1" aria-hidden="true"></i>{/if}{$userMenuItem.label|escape}</a>
                                 {else}
-                                    <span class="{$userMenuItem.class}"{if $userMenuItem.tooltip != ''} title="{$userMenuItem.tooltip|escape}"{/if}{if $userMenuItem.label == '' && $userMenuItem.tooltip != ''} aria-label="{$userMenuItem.tooltip|escape}"{/if}>{if $userMenuItem.image != ''}<img class="admidio-header-item-image me-1" src="{$userMenuItem.image|escape}" alt="">{elseif $userMenuItem.icon != ''}<i class="{$userMenuItem.icon} me-1" aria-hidden="true"></i>{/if}{$userMenuItem.label|escape}</span>
+                                    <span class="{$userMenuItem.class|escape}"{if $userMenuItem.tooltip != ''} title="{$userMenuItem.tooltip|escape}"{/if}{if $userMenuItem.label == '' && $userMenuItem.tooltip != ''} aria-label="{$userMenuItem.tooltip|escape}"{/if}>{if $userMenuItem.image != ''}<img class="admidio-header-item-image me-1" src="{$userMenuItem.image|escape}" alt="">{elseif $userMenuItem.icon != ''}<i class="{$userMenuItem.icon|escape} me-1" aria-hidden="true"></i>{/if}{$userMenuItem.label|escape}</span>
                                 {/if}
                             </li>
                         {/foreach}{/if}
@@ -355,7 +355,7 @@
                     {/if}
                     {* notices plugins add through the filter page_notices (see PageExtensions) *}
                     {if !empty($pageNotices)}{foreach $pageNotices as $pageNotice}
-                        <div id="adm_page_notice_{$pageNotice.id}" class="alert alert-{$pageNotice.type} admidio-page-notice" role="status">{$pageNotice.html}</div>
+                        <div id="adm_page_notice_{$pageNotice.id|escape}" class="alert alert-{$pageNotice.type|escape} admidio-page-notice" role="status">{$pageNotice.html}</div>
                     {/foreach}{/if}
                     <div class="admidio-content-header">
                         <h1 class="admidio-module-headline">{$headline}</h1>
