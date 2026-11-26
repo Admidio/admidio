@@ -434,14 +434,14 @@
                     {/if}
 
                     <ul class="navbar-nav flex-wrap d-none d-md-flex">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{$urlAdmidio}/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
-                        </li>
                         {if $registrationEnabled}
                             <li class="nav-item">
                                 <a class="nav-link" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
                             </li>
                         {/if}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{$urlAdmidio}/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
+                        </li>
                     </ul>
 
                     <div class="adm-auth-actions d-md-none">
