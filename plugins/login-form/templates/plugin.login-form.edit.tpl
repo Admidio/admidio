@@ -27,6 +27,11 @@
     </form>
 
     {if $showRegisterLink && $settings->getBool('registration_module_enabled')}
-        <a class="icon-link" href="{$urlAdmidio}/modules/registration.php"><i class="bi bi-card-checklist"></i>{$l10n->get('SYS_REGISTRATION')}</a>
+        <div class="card admidio-field-group mt-4 adm-login-widget-registration">
+            <div class="card-body">
+                <p>{$l10n->get('SYS_NO_LOGIN_DATA')}</p>
+                <a class="btn btn-secondary" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
+            </div>
+        </div>
     {/if}
 </div>

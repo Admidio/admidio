@@ -30,7 +30,7 @@
         },
         "login_form_show_register_link": {
             "type": "boolean",
-            "default": false,
+            "default": true,
             "label": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK",
             "description": "PLG_LOGIN_FORM_PREFERENCES_SHOW_REGISTER_LINK_DESC"
         },

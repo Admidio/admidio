@@ -17,7 +17,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="{$organizationName|escape}" />
+    <meta name="apple-mobile-web-app-title" content="{$organizationName}" />
     {/if}
 
     <title>{$title}</title>
@@ -124,6 +124,142 @@
             deferredPrompt = null;
         });
         {/if}
+
+        // Adapt the organization name in the header to the available width on small screens.
+        (function () {
+            var mobileQuery = window.matchMedia('(max-width: 767.98px)');
+            var scheduled = false;
+
+            function scheduleHeaderTitleFit() {
+                if (scheduled) {
+                    return;
+                }
+                scheduled = true;
+                window.requestAnimationFrame(function () {
+                    scheduled = false;
+                    fitHeaderTitle();
+                });
+            }
+
+            function countLines(element) {
+                var lineHeight = parseFloat(window.getComputedStyle(element).lineHeight);
+
+                if (isNaN(lineHeight) || lineHeight <= 0) {
+                    return 1;
+                }
+
+                return Math.max(1, Math.round(element.getBoundingClientRect().height / lineHeight));
+            }
+
+            function fitsInLines(element, fontSize, maxLines) {
+                element.style.fontSize = fontSize + 'px';
+                element.style.removeProperty('-webkit-line-clamp');
+                element.classList.add('adm-header-title-measuring');
+                var lines = countLines(element);
+                element.classList.remove('adm-header-title-measuring');
+                return lines <= maxLines;
+            }
+
+            function getRemSize(navbar, property, fallbackRem) {
+                var value = window.getComputedStyle(navbar).getPropertyValue(property);
+                var rem = parseFloat(value);
+
+                if (isNaN(rem)) {
+                    rem = fallbackRem;
+                }
+
+                return rem * parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+            }
+
+            function fitHeaderTitle() {
+                var navbar = document.getElementById('adm_main_navbar');
+                var title = document.getElementById('adm_headline_organization');
+
+                if (!navbar || !title) {
+                    return;
+                }
+
+                title.classList.remove('adm-header-title-measuring');
+                title.style.removeProperty('font-size');
+                title.style.removeProperty('-webkit-line-clamp');
+
+                if (!mobileQuery.matches) {
+                    return;
+                }
+
+                var singleLineSize = getRemSize(navbar, '--adm-header-title-size-1', 1.5);
+                var doubleLineSize = getRemSize(navbar, '--adm-header-title-size-2', 1.25);
+                var minimumSize = getRemSize(navbar, '--adm-header-title-size-min', 1);
+
+                if (fitsInLines(title, singleLineSize, 1)) {
+                    title.style.fontSize = singleLineSize + 'px';
+                    title.style.setProperty('-webkit-line-clamp', '1');
+                    return;
+                }
+
+                if (fitsInLines(title, doubleLineSize, 2)) {
+                    title.style.fontSize = doubleLineSize + 'px';
+                    title.style.setProperty('-webkit-line-clamp', '2');
+                    return;
+                }
+
+                var low = Math.min(minimumSize, doubleLineSize);
+                var high = doubleLineSize;
+                var best = null;
+
+                if (fitsInLines(title, low, 2)) {
+                    best = low;
+                }
+
+                while (high - low > 0.5) {
+                    var middle = (low + high) / 2;
+
+                    if (fitsInLines(title, middle, 2)) {
+                        best = middle;
+                        low = middle;
+                    } else {
+                        high = middle;
+                    }
+                }
+
+                if (best === null) {
+                    best = low;
+                }
+
+                title.style.fontSize = best + 'px';
+                title.style.setProperty('-webkit-line-clamp', '2');
+            }
+
+            function initializeHeaderTitle() {
+                scheduleHeaderTitleFit();
+
+                if (document.fonts && document.fonts.ready) {
+                    document.fonts.ready.then(scheduleHeaderTitleFit);
+                }
+
+                var logos = document.querySelectorAll('#adm_main_navbar .adm-header-logo');
+                for (var i = 0; i < logos.length; i++) {
+                    if (!logos[i].complete) {
+                        logos[i].addEventListener('load', scheduleHeaderTitleFit);
+                    }
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeHeaderTitle);
+            } else {
+                initializeHeaderTitle();
+            }
+
+            window.addEventListener('resize', scheduleHeaderTitleFit);
+            window.addEventListener('load', scheduleHeaderTitleFit);
+
+            if (mobileQuery.addEventListener) {
+                mobileQuery.addEventListener('change', scheduleHeaderTitleFit);
+            } else if (mobileQuery.addListener) {
+                mobileQuery.addListener(scheduleHeaderTitleFit);
+            }
+        })();
 
         {$javascriptContent}
 
@@ -235,8 +371,8 @@
 
     <nav id="adm_main_navbar" class="navbar fixed-top navbar-light navbar-expand flex-md-row bd-navbar">
         <a class="navbar-brand d-flex align-items-center text-decoration-none" href="{$urlAdmidio}/modules/overview.php">
-            <img class="d-none d-md-block" style="max-height: {$logoFileMaxHeight}px;" src="{if ($logoFile)}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}" title="{$l10n->get('SYS_ADMIDIO_SHORT_DESC')}">
-            <span id="adm_headline_organization" class="d-block d-lg-none">{$organizationName}</span>
+            <img class="adm-header-logo" style="--adm-logo-max-height: {$logoFileMaxHeight}px;" src="{if $logoFile}{$urlAdmidio}/{$logoFile}{else}{get_themed_file filepath='/images/admidio_logo.png'}{/if}" alt="">
+            <span id="adm_headline_organization" class="d-lg-none">{foreach $organizationNameWords as $word}<span class="adm-header-title-word">{$word}</span> {/foreach}</span>
             <span id="adm_headline_membership" class="d-none d-lg-block">{$organizationName}{if $admidioHeadline} - {$admidioHeadline}{/if}</span>
         </a>
 
@@ -255,8 +391,11 @@
                 {/if}
 
                 <span id="adm_dropdown_user_photo" class="dropdown">
-                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                    <a class="dropdown-toggle adm-user-menu-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}" title="{$currentUser->getValue('FIRST_NAME')} {$currentUser->getValue('LAST_NAME')}">
+                        <span class="adm-user-menu-avatar">
+                            <img id="adm_profile_photo" style="max-height: 40px; max-width: 40px;" class="rounded-circle" src="{$urlAdmidio}/modules/profile/profile_photo_show.php?user_uuid={$currentUser->getValue('usr_uuid')}&timestamp={$currentUser->getValue('usr_timestamp_change', 'Y-m-d-H-i-s')}" alt="{$l10n->get('SYS_CURRENT_PROFILE_PICTURE')}" />
+                            <span class="adm-user-menu-caret" aria-hidden="true"><i class="bi bi-caret-down-fill"></i></span>
+                        </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end text-center">
                         <li class="nav-item mb-2">
@@ -294,16 +433,27 @@
                     </div>
                     {/if}
 
-                    <ul class="navbar-nav flex-wrap">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{$urlAdmidio}/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
-                        </li>
+                    <ul class="navbar-nav flex-wrap d-none d-md-flex">
                         {if $registrationEnabled}
                             <li class="nav-item">
                                 <a class="nav-link" href="{$urlAdmidio}/modules/registration.php">{$l10n->get('SYS_REGISTER')}</a>
                             </li>
                         {/if}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{$urlAdmidio}/system/login.php">{$l10n->get('SYS_LOGIN')}</a>
+                        </li>
                     </ul>
+
+                    <div class="adm-auth-actions d-md-none">
+                        <a class="adm-header-login-icon" href="{$urlAdmidio}/system/login.php" title="{$l10n->get('SYS_LOGIN')}" aria-label="{$l10n->get('SYS_LOGIN')}">
+                            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                        </a>
+                        {if $registrationEnabled}
+                            <a class="adm-header-register-icon" href="{$urlAdmidio}/modules/registration.php" title="{$l10n->get('SYS_REGISTER')}" aria-label="{$l10n->get('SYS_REGISTER')}">
+                                <i class="bi bi-person-plus" aria-hidden="true"></i>
+                            </a>
+                        {/if}
+                    </div>
                 </div>
             </div>
         {/if}

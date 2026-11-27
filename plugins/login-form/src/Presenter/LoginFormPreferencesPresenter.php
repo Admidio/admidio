@@ -42,7 +42,7 @@ final class LoginFormPreferencesPresenter
      */
     public static function createForm(PreferencesPresenter $page): string
     {
-        global $gL10n, $gCurrentSession;
+        global $gL10n, $gCurrentSession, $gSettingsManager;
 
         $plugin = PluginRegistry::requireEnabled(LoginForm::PLUGIN_ID);
         $settings = $plugin->settings;
@@ -66,11 +66,17 @@ final class LoginFormPreferencesPresenter
             $selectBoxEntries,
             array('defaultValue' => $values['login_form_plugin_enabled'], 'showContextDependentFirstEntry' => false, 'helpTextId' => $settings['login_form_plugin_enabled']['description'])
         );
+        $registrationEnabled = $gSettingsManager->getBool('registration_module_enabled');
         $formLoginForm->addCheckbox(
             'login_form_show_register_link',
             Language::translateIfTranslationStrId($settings['login_form_show_register_link']['label']),
             $values['login_form_show_register_link'],
-            array('helpTextId' => $settings['login_form_show_register_link']['description'])
+            array(
+                'helpTextId' => $registrationEnabled
+                    ? $settings['login_form_show_register_link']['description']
+                    : 'PLG_LOGIN_FORM_PREFERENCES_REGISTRATION_DISABLED',
+                'property' => $registrationEnabled ? FormPresenter::FIELD_DEFAULT : FormPresenter::FIELD_DISABLED
+            )
         );
         $formLoginForm->addCheckbox(
             'login_form_show_email_link',
