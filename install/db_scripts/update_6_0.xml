@@ -113,6 +113,9 @@
     <step id="440">DELETE FROM %PREFIX%_preferences
         WHERE prf_name IN ('system_statistics_enabled', 'system_statistics_last_sent', 'system_tenant_id')
         AND prf_org_id IS NOT NULL</step>
+    <!-- OAuth 2.0 refresh tokens of the SMTP dispatch are longer than 255 characters. -->
+    <step id="450" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_value text NOT NULL</step>
+    <step id="460" database="pgsql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_value TYPE text</step>
     <!--
         The built-in plugins are installed at the end, on the finished schema: installing a plugin
         runs its update scripts, which need com_update_version. The old folders in adm_plugins are

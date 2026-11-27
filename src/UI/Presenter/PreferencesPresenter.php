@@ -11,6 +11,7 @@ use Admidio\Infrastructure\Entity\Text;
 use Admidio\Infrastructure\Language;
 use Admidio\Infrastructure\InstallationSettings;
 use Admidio\Infrastructure\InstallationStatistics;
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Infrastructure\Utils\FileSystemUtils;
 use Admidio\Infrastructure\Utils\PhpIniUtils;
 use Admidio\Infrastructure\Utils\SecurityUtils;
@@ -1562,20 +1563,21 @@ class PreferencesPresenter extends PagePresenter
         global $gL10n, $gCurrentOrganization, $gSettingsManager, $gCurrentSession;
 
         $formValues = $gSettingsManager->getAll();
+        $preferencesUrl = ADMIDIO_URL . FOLDER_MODULES . '/preferences.php';
 
         $formEmailDispatch = new FormPresenter(
             'adm_preferences_form_email_dispatch',
             'preferences/preferences.email-dispatch.tpl',
-            SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'save', 'panel' => 'email_dispatch')),
+            SecurityUtils::encodeUrl($preferencesUrl, array('mode' => 'save', 'panel' => 'email_dispatch')),
             null,
             array('class' => 'form-preferences')
         );
-        $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'));
-        $formEmailDispatch->addRadioButton(
-            'mail_send_method',
-            $gL10n->get('SYS_SEND_METHOD'),
-            $selectBoxEntries,
-            array('defaultValue' => $formValues['mail_send_method'], 'helpTextId' => 'SYS_SEND_METHOD_DESC')
+
+        // what every mail looks like and to whom it goes
+        $formEmailDispatch->addSeparator(
+            'email_dispatch_properties',
+            $gL10n->get('SYS_EMAIL_DISPATCH_PROPERTIES'),
+            array('collapse' => 'email_dispatch_properties_contents', 'separator_line' => false)
         );
         $selectBoxEntries = array('1' => $gL10n->get('SYS_SYSTEM_EMAIL_WITH_REPLY_TO'), '2' => $gL10n->get('SYS_SYSTEM_EMAIL'), '3' => $gL10n->get('SYS_USER_EMAIL'));
         $formEmailDispatch->addSelectBox(
@@ -1630,6 +1632,33 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_number_recipients'],
             self::preferenceInputOptions('mail_number_recipients', array('helpTextId' => 'SYS_NUMBER_RECIPIENTS_DESC'))
         );
+
+        // how Admidio hands the mails to a mail server: the send method next to its settings
+        $formEmailDispatch->addSeparator(
+            'email_dispatch_connection',
+            $gL10n->get('SYS_EMAIL_DISPATCH_CONNECTION'),
+            array('collapse' => 'email_dispatch_connection_contents', 'separator_line' => false)
+        );
+        $selectBoxEntries = array('phpmail' => $gL10n->get('SYS_PHP_MAIL'), 'SMTP' => $gL10n->get('SYS_SMTP'), 'SMTP_OAUTH' => $gL10n->get('SYS_SMTP_OAUTH'));
+        $formEmailDispatch->addRadioButton(
+            'mail_send_method',
+            $gL10n->get('SYS_SEND_METHOD'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_send_method'], 'helpTextId' => 'SYS_SEND_METHOD_DESC')
+        );
+
+        // The provider comes first, because choosing it fills in the server, the port and the encryption.
+        $providers = SmtpOAuth::getProviders();
+        $selectBoxEntries = array();
+        foreach ($providers as $providerId => $provider) {
+            $selectBoxEntries[$providerId] = Language::translateIfTranslationStrId($provider['name']);
+        }
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_oauth_provider',
+            $gL10n->get('SYS_SMTP_OAUTH_PROVIDER'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_oauth_provider'], 'showContextDependentFirstEntry' => false, 'helpTextId' => 'SYS_SMTP_OAUTH_PROVIDER_DESC')
+        );
         $formEmailDispatch->addInput(
             'mail_smtp_host',
             $gL10n->get('SYS_SMTP_HOST'),
@@ -1683,7 +1712,88 @@ class PreferencesPresenter extends PagePresenter
             $formValues['mail_smtp_password'],
             self::preferenceInputOptions('mail_smtp_password', array('type' => 'password', 'helpTextId' => 'SYS_SMTP_PASSWORD_DESC'))
         );
-        $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl(ADMIDIO_URL . FOLDER_MODULES . '/preferences.php', array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
+
+        // the technical terms of OAuth 2.0 are only named in the help text
+        $selectBoxEntries = array(
+            SmtpOAuth::GRANT_AUTHORIZATION_CODE => $gL10n->get('SYS_SMTP_OAUTH_GRANT_SIGN_IN'),
+            SmtpOAuth::GRANT_CLIENT_CREDENTIALS => $gL10n->get('SYS_SMTP_OAUTH_GRANT_APP')
+        );
+        $formEmailDispatch->addSelectBox(
+            'mail_smtp_oauth_grant_type',
+            $gL10n->get('SYS_SMTP_OAUTH_GRANT_TYPE'),
+            $selectBoxEntries,
+            array('defaultValue' => $formValues['mail_smtp_oauth_grant_type'], 'showContextDependentFirstEntry' => false,
+                'helpTextId' => array('SYS_SMTP_OAUTH_GRANT_TYPE_DESC', array('SYS_SMTP_OAUTH_GRANT_SIGN_IN', 'SYS_SMTP_OAUTH_GRANT_APP')))
+        );
+
+        // The settings a provider declares, e.g. the tenant of Microsoft 365, with the controls of
+        // the generated settings form of a plugin. The template shows those of the chosen provider.
+        $providerSettingIds = array();
+        $providersForScript = array();
+        foreach ($providers as $providerId => $provider) {
+            foreach ($provider['settings'] as $name => $definition) {
+                if (!in_array($name, $providerSettingIds, true)) {
+                    $definition += array('type' => 'string', 'label' => $name, 'description' => '');
+                    PluginSettingsPresenter::addControl($formEmailDispatch, $name, $definition, $formValues[$name] ?? '');
+                    $providerSettingIds[] = $name;
+                }
+            }
+            $providersForScript[$providerId] = array(
+                'smtp' => $provider['smtp'],
+                'appAccess' => $provider['clientCredentialsScope'] !== '',
+                'settings' => array_keys($provider['settings'])
+            );
+        }
+
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_client_id',
+            $gL10n->get('SYS_SMTP_OAUTH_CLIENT_ID'),
+            $formValues['mail_smtp_oauth_client_id'],
+            self::preferenceInputOptions('mail_smtp_oauth_client_id', array('helpTextId' => 'SYS_SMTP_OAUTH_CLIENT_ID_DESC'))
+        );
+        // The client secret is never shown again: an empty field keeps it, and the browser must not
+        // fill in the password of the login. It is stored exactly as entered.
+        $clientSecretStored = $formValues['mail_smtp_oauth_client_secret'] !== '';
+        $formEmailDispatch->addInput(
+            'mail_smtp_oauth_client_secret',
+            $gL10n->get('SYS_SMTP_OAUTH_CLIENT_SECRET'),
+            '',
+            self::preferenceInputOptions('mail_smtp_oauth_client_secret', array(
+                'type' => 'password',
+                'autocomplete' => 'new-password',
+                'preserveValue' => true,
+                'placeholder' => $clientSecretStored ? $gL10n->get('SYS_SMTP_OAUTH_CLIENT_SECRET_STORED') : '',
+                'helpTextId' => 'SYS_SMTP_OAUTH_CLIENT_SECRET_DESC'
+            ))
+        );
+        if ($clientSecretStored) {
+            $formEmailDispatch->addCustomContent(
+                'smtp_oauth_client_secret_remove',
+                '',
+                self::smtpOAuthActionButton('smtp_oauth_secret_remove', 'bi-trash', 'SYS_SMTP_OAUTH_REMOVE_CLIENT_SECRET', $preferencesUrl)
+            );
+        }
+        // the address is registered at the provider, not edited here, so it is shown as text to copy
+        $formEmailDispatch->addCustomContent(
+            'smtp_oauth_redirect_uri',
+            $gL10n->get('SYS_SMTP_OAUTH_REDIRECT_URI'),
+            '<div class="copy-container form-control-plaintext" id="smtp_oauth_redirect_uri_value">' . SecurityUtils::encodeHTML(SmtpOAuth::getRedirectUri()) . '</div>',
+            array('helpTextId' => 'SYS_SMTP_OAUTH_REDIRECT_URI_DESC')
+        );
+        // Connecting reads the saved settings, so it waits until the form has no unsaved changes.
+        // Disconnecting acts at once as well, instead of waiting for the form to be saved.
+        if ($formValues['mail_smtp_oauth_refresh_token'] !== '') {
+            $html = '<p class="text-success"><i class="bi bi-check-circle-fill"></i>' . $gL10n->get('SYS_SMTP_OAUTH_CONNECTED') . '</p>'
+                . self::smtpOAuthActionButton('smtp_oauth_authorize', 'bi-box-arrow-up-right', 'SYS_SMTP_OAUTH_RECONNECT', $preferencesUrl, true) . ' '
+                . self::smtpOAuthActionButton('smtp_oauth_disconnect', 'bi-x-circle', 'SYS_SMTP_OAUTH_DISCONNECT', $preferencesUrl);
+        } else {
+            $html = '<p class="text-danger"><i class="bi bi-exclamation-circle-fill"></i>' . $gL10n->get('SYS_SMTP_OAUTH_NOT_CONNECTED_STATUS') . '</p>'
+                . self::smtpOAuthActionButton('smtp_oauth_authorize', 'bi-box-arrow-up-right', 'SYS_SMTP_OAUTH_CONNECT', $preferencesUrl, true);
+        }
+        $html .= '<div id="adm_smtp_oauth_save_hint" class="form-text text-warning" style="display: none;">' . $gL10n->get('SYS_SMTP_OAUTH_SAVE_BEFORE_CONNECT') . '</div>';
+        $formEmailDispatch->addCustomContent('smtp_oauth_account', $gL10n->get('SYS_SMTP_OAUTH_ACCOUNT'), $html, array('helpTextId' => 'SYS_SMTP_OAUTH_ACCOUNT_DESC'));
+
+        $html = '<a class="btn btn-secondary admidio-send-csrf-token" id="send_test_mail" href="javascript:void(0);" data-url="' . SecurityUtils::encodeUrl($preferencesUrl, array('mode' => 'test_email')) . '" data-csrf-token="' . $gCurrentSession->getCsrfToken() . '">
             <i class="bi bi-envelope-fill"></i>' . $gL10n->get('SYS_SEND_TEST_MAIL') . '</a>';
         $formEmailDispatch->addCustomContent('send_test_email', $gL10n->get('SYS_TEST_MAIL'), $html, array('helpTextId' => $gL10n->get('SYS_TEST_MAIL_DESC', array($gL10n->get('SYS_EMAIL_FUNCTION_TEST', array($gCurrentOrganization->getValue('org_longname')))))));
         $formEmailDispatch->addSubmitButton(
@@ -1694,8 +1804,31 @@ class PreferencesPresenter extends PagePresenter
 
         $smarty = $this->getSmartyTemplate();
         $formEmailDispatch->addToSmarty($smarty);
+        $smarty->assign('smtpOAuthSettingIds', $providerSettingIds);
+        $smarty->assign('smtpOAuthProviders', json_encode($providersForScript, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT));
         $gCurrentSession->addFormObject($formEmailDispatch);
         return $smarty->fetch('preferences/preferences.email-dispatch.tpl');
+    }
+
+    /**
+     * A button of the email dispatch that acts at once, outside the form: it posts the CSRF token to
+     * the mode of the preferences page. The template binds it, so that it can warn about unsaved changes.
+     * @param string $mode The mode of preferences.php.
+     * @param string $icon The Bootstrap icon of the button.
+     * @param string $textId The translation ID of the caption.
+     * @param string $preferencesUrl The URL of preferences.php.
+     * @param bool $needsSavedSettings The action reads the saved settings and is disabled while the form has unsaved changes.
+     * @return string The HTML of the button.
+     */
+    private static function smtpOAuthActionButton(string $mode, string $icon, string $textId, string $preferencesUrl, bool $needsSavedSettings = false): string
+    {
+        global $gL10n, $gCurrentSession;
+
+        return '<button type="button" class="btn btn-secondary admidio-smtp-oauth-action" id="adm_' . $mode . '"'
+            . ' data-url="' . SecurityUtils::encodeUrl($preferencesUrl, array('mode' => $mode)) . '"'
+            . ' data-csrf-token="' . $gCurrentSession->getCsrfToken() . '"'
+            . ($needsSavedSettings ? ' data-needs-saved-settings="1"' : '') . '>'
+            . '<i class="bi ' . $icon . '"></i>' . $gL10n->get($textId) . '</button>';
     }
 
     /**

@@ -125,19 +125,28 @@ class Email extends PHPMailer
         $this->Timeout = 30; // set timeout to 30 seconds
 
         // set sending method
-        if ($gSettingsManager->getString('mail_send_method') === 'SMTP') {
+        $sendMethod = $gSettingsManager->getString('mail_send_method');
+        if ($sendMethod === 'SMTP' || $sendMethod === 'SMTP_OAUTH') {
             $this->isSMTP();
 
             $this->Host = $gSettingsManager->getString('mail_smtp_host');
-            $this->SMTPAuth = $gSettingsManager->getBool('mail_smtp_auth');
             $this->Port = $gSettingsManager->getInt('mail_smtp_port');
             $this->SMTPSecure = $gSettingsManager->getString('mail_smtp_secure');
-            // only set auth type if there is a value, otherwise phpmailer will check all methods automatically
-            if (strlen($gSettingsManager->getString('mail_smtp_authentication_type')) > 0) {
-                $this->AuthType = $gSettingsManager->getString('mail_smtp_authentication_type');
-            }
             $this->Username = $gSettingsManager->getString('mail_smtp_user');
-            $this->Password = $gSettingsManager->getString('mail_smtp_password');
+
+            if ($sendMethod === 'SMTP_OAUTH') {
+                $this->SMTPAuth = true;
+                // must be set explicitly, otherwise phpmailer tries the other methods first
+                $this->AuthType = 'XOAUTH2';
+                $this->setOAuth(new SmtpOAuth($gSettingsManager));
+            } else {
+                $this->SMTPAuth = $gSettingsManager->getBool('mail_smtp_auth');
+                // only set auth type if there is a value, otherwise phpmailer will check all methods automatically
+                if (strlen($gSettingsManager->getString('mail_smtp_authentication_type')) > 0) {
+                    $this->AuthType = $gSettingsManager->getString('mail_smtp_authentication_type');
+                }
+                $this->Password = $gSettingsManager->getString('mail_smtp_password');
+            }
 
             if ($gDebug) {
                 $this->setDebugMode();
@@ -446,6 +455,32 @@ class Email extends PHPMailer
     }
 
     /**
+     * Sends the mail. PHPMailer wraps a failed request of the OAuth access token into its own
+     * "SMTP authentication error", so the reason of the provider is thrown instead.
+     *
+     * That reason is deliberately an Admidio exception and not a PHPMailer one: it is a fault of the
+     * configuration, not of a recipient. In single mode and for the packages of a mass mail
+     * deliver() catches only PHPMailer exceptions per mail, so the token is not requested again for
+     * every recipient and every package; the sending stops at the first failure instead. sendEmail()
+     * still reports it with the action email_failed, and MessageService, SystemMail and the other
+     * callers handle every Throwable.
+     * @return bool Returns **true** if the mail was sent.
+     * @throws Exception|\Admidio\Infrastructure\Exception
+     */
+    public function send()
+    {
+        try {
+            return parent::send();
+        } catch (Exception $e) {
+            if ($e->getPrevious() instanceof \Admidio\Infrastructure\Exception) {
+                throw $e->getPrevious();
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
      * Set a debug modus for sending emails. This will only be useful if you use smtp for sending
      * emails. If you still use PHP mail() there fill be no debug output. With the parameter
      **$outputGlobalVar** you have the option to put the output in a global variable
@@ -457,9 +492,12 @@ class Email extends PHPMailer
         global $gLogger;
 
         $this->SMTPDebug = SMTP::DEBUG_SERVER;
+        // PHPMailer hides the credentials of LOGIN, PLAIN and CRAM-MD5, but not the base64 encoded "user=..." of XOAUTH2
+        $hideCredentials = static fn (string $str): string => preg_replace('/dXNlcj[0-3][A-Za-z0-9+\/]*={0,2}/', '[credentials hidden]', $str);
 
         if ($outputGlobalVar) {
-            $this->Debugoutput = function ($str, $level) {
+            $this->Debugoutput = function ($str, $level) use ($hideCredentials) {
+                $str = $hideCredentials($str);
                 if (isset($GLOBALS['phpmailer_output_debug'])) {
                     $GLOBALS['phpmailer_output_debug'] .= $level . ': ' . $str . '<br />';
                 } else {
@@ -467,7 +505,9 @@ class Email extends PHPMailer
                 }
             };
         } else {
-            $this->Debugoutput = $gLogger;
+            $this->Debugoutput = static function ($str) use ($gLogger, $hideCredentials) {
+                $gLogger->debug(rtrim($hideCredentials($str), "\r\n"));
+            };
         }
     }
 

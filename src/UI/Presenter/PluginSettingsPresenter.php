@@ -90,6 +90,9 @@ final class PluginSettingsPresenter
      *
      * A setting whose type the manifest cannot describe well enough for a form - a list - is shown
      * as a comma-separated text field, which is how it is stored.
+     *
+     * Other forms that edit settings declared in the shape of a manifest use it as well, e.g. the
+     * settings that an OAuth 2.0 provider of the email dispatch declares (see SmtpOAuth).
      * @param FormPresenter $form
      * @param string $name Name of the preference.
      * @param array<string,mixed> $definition The declaration from the manifest.
@@ -97,7 +100,7 @@ final class PluginSettingsPresenter
      * @return void
      * @throws Exception
      */
-    private static function addControl(FormPresenter $form, string $name, array $definition, mixed $value): void
+    public static function addControl(FormPresenter $form, string $name, array $definition, mixed $value): void
     {
         global $gDb, $gCurrentOrgId;
 

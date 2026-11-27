@@ -1,6 +1,7 @@
 <?php
 namespace Admidio\Preferences\Service;
 
+use Admidio\Infrastructure\SmtpOAuth;
 use Admidio\Infrastructure\Utils\StringUtils;
 use Admidio\Inventory\Entity\Reservation;
 use Admidio\Inventory\ValueObjects\ItemsData;
@@ -49,6 +50,7 @@ final class PreferenceDefinitions
     private const VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES = 'inventory_reservation_notification_statuses';
     private const VALIDATOR_SSO_KEY = 'sso_key';
     private const VALIDATOR_OIDC_SIGNING_KEY = 'oidc_signing_key';
+    private const VALIDATOR_SMTP_OAUTH = 'smtp_oauth';
 
     /** @var array<int,string> */
     private const VALIDATORS = array(
@@ -76,6 +78,7 @@ final class PreferenceDefinitions
         self::VALIDATOR_INVENTORY_RESERVATION_NOTIFICATION_STATUSES,
         self::VALIDATOR_SSO_KEY,
         self::VALIDATOR_OIDC_SIGNING_KEY,
+        self::VALIDATOR_SMTP_OAUTH,
     );
 
     /**
@@ -246,7 +249,7 @@ final class PreferenceDefinitions
             'plugin_module_pages' => array('default' => '0', 'type' => 'bool'),
             'plugin_module_pages_applied' => array('default' => '0', 'type' => 'bool', 'internal' => true),
             'plugin_module_pages_format' => array('default' => '1', 'type' => 'int', 'internal' => true),
-            'mail_send_method' => array('default' => 'phpmail', 'type' => 'enum', 'values' => array('phpmail', 'SMTP')),
+            'mail_send_method' => array('default' => 'phpmail', 'type' => 'enum', 'values' => array('phpmail', 'SMTP', 'SMTP_OAUTH'), 'validator' => self::VALIDATOR_SMTP_OAUTH),
             'mail_sending_mode' => array('default' => '0', 'type' => 'enum', 'values' => array('0', '1')),
             'mail_recipients_with_roles' => array('default' => '1', 'type' => 'enum', 'values' => array('0', '1', '2')),
             'mail_number_recipients' => array('default' => '50', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
@@ -255,13 +258,24 @@ final class PreferenceDefinitions
             'mail_sender_email' => array('default' => '', 'maxLength' => 50, 'required' => true, 'validator' => self::VALIDATOR_EMAIL),
             'mail_sender_name' => array('default' => '', 'maxLength' => 50, 'required' => true),
             'mail_send_to_all_addresses' => array('default' => '0', 'type' => 'bool'),
-            'mail_smtp_host' => array('default' => '', 'maxLength' => 50),
+            'mail_smtp_host' => array('default' => '', 'maxLength' => 50, 'validator' => self::VALIDATOR_SMTP_OAUTH),
             'mail_smtp_auth' => array('default' => '1', 'type' => 'bool'),
-            'mail_smtp_port' => array('default' => '587', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999),
+            'mail_smtp_port' => array('default' => '587', 'type' => 'int', 'minimum' => 0, 'maximum' => 9999, 'validator' => self::VALIDATOR_SMTP_OAUTH),
             'mail_smtp_secure' => array('default' => 'tls', 'type' => 'enum', 'values' => array('', 'ssl', 'tls')),
             'mail_smtp_authentication_type' => array('default' => '', 'type' => 'enum', 'values' => array('', 'LOGIN', 'PLAIN', 'CRAM-MD5')),
-            'mail_smtp_user' => array('default' => '', 'maxLength' => 100),
+            'mail_smtp_user' => array('default' => '', 'maxLength' => 100, 'validator' => self::VALIDATOR_SMTP_OAUTH),
             'mail_smtp_password' => array('default' => '', 'sensitive' => true, 'maxLength' => 100),
+            // plugins add providers with the filter smtp_oauth_providers, so the values are only known at runtime
+            'mail_smtp_oauth_provider' => array('default' => 'microsoft', 'type' => 'enum',
+                'values' => static fn (): array => array_keys(SmtpOAuth::getProviders()), 'validator' => self::VALIDATOR_SMTP_OAUTH),
+            'mail_smtp_oauth_grant_type' => array('default' => 'authorization_code', 'type' => 'enum',
+                'values' => array('authorization_code', 'client_credentials'), 'validator' => self::VALIDATOR_SMTP_OAUTH),
+            'mail_smtp_oauth_tenant_id' => array('default' => '', 'maxLength' => 100, 'validator' => self::VALIDATOR_SMTP_OAUTH),
+            'mail_smtp_oauth_client_id' => array('default' => '', 'maxLength' => 255, 'validator' => self::VALIDATOR_SMTP_OAUTH),
+            'mail_smtp_oauth_client_secret' => array('default' => '', 'sensitive' => true, 'maxLength' => 255),
+            // No maxLength: a refresh token of Microsoft is far longer than 255 characters, which is why
+            // prf_value became a text column. It is never edited, only issued by the provider.
+            'mail_smtp_oauth_refresh_token' => array('default' => '', 'internal' => true, 'sensitive' => true),
             'system_notifications_enabled' => array('default' => '1', 'type' => 'bool'),
             'system_notifications_role' => array('default' => '', 'type' => 'reference', 'validator' => self::VALIDATOR_NOTIFICATION_ROLE),
             'system_notifications_new_entries' => array('default' => '0', 'type' => 'bool'),
@@ -1068,6 +1082,29 @@ final class PreferenceDefinitions
                     throw new InvalidArgumentException('Preference "' . $name . '" references an unavailable SSO key.');
                 }
                 return (string)(int)$value;
+            case self::VALIDATOR_SMTP_OAUTH:
+                // Checked against the complete target state, so config:set of a single preference
+                // cannot leave sending with OAuth 2.0 without what it needs. The order of the
+                // config:set commands therefore matters: the send method is switched last.
+                $valueOf = static function (string $settingName) use ($proposedValues, $gSettingsManager): string {
+                    if (array_key_exists($settingName, $proposedValues)) {
+                        return $proposedValues[$settingName];
+                    }
+                    if (isset($gSettingsManager) && $gSettingsManager->has($settingName)) {
+                        return $gSettingsManager->getString($settingName);
+                    }
+                    // a setting of an installation that was not updated yet behaves like its default
+                    return (string)(self::all()[$settingName]['default'] ?? '');
+                };
+                if ($valueOf('mail_send_method') === 'SMTP_OAUTH') {
+                    $missing = SmtpOAuth::getMissingSettings($valueOf);
+                    if ($missing !== array()) {
+                        throw new InvalidArgumentException(
+                            'Sending with OAuth 2.0 (mail_send_method SMTP_OAUTH) needs a valid value for: ' . implode(', ', $missing) . '.'
+                        );
+                    }
+                }
+                return $value;
         }
 
         throw new InvalidArgumentException('No validator exists for preference "' . $name . '".');

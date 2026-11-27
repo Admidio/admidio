@@ -30,6 +30,74 @@ function showHideBlock(element) {
 }
 
 /**
+ * Add a button behind each of the elements that copies its content to the clipboard: the value of a
+ * form control (or its placeholder while it is empty), otherwise the text of the element. An element
+ * that already has its button is skipped, so several panels of one page may call this.
+ * @param {jQuery} $elements The elements, e.g. $(".copy-container").
+ * @param {string} title     The tooltip of the button, e.g. the text of SYS_COPY_CLIPBOARD.
+ */
+function addCopyButtons($elements, title) {
+    $elements.each(function () {
+        let $element = $(this);
+        if ($element.data("copyButtonAdded")) {
+            return;
+        }
+        $element.data("copyButtonAdded", true);
+
+        // Wrap the element in a flex container to maintain full width
+        let $wrapper = $("<div>").css({
+            "display": "flex",
+            "align-items": "center",
+            "width": "100%"
+        });
+
+        // Ensure input and textarea elements keep their full width
+        if ($element.is("input, textarea, select")) {
+            $element.css({
+                "flex": "1",
+                "width": "100%"
+            });
+        }
+
+        let $copyButton = $("<div>")
+            .addClass("copy-btn")
+            .html('<i class="bi bi-copy"></i>')
+            .attr("title", title)
+            .css({
+                "cursor": "pointer",
+                "margin-left": "4px",
+                "padding": "0px"
+            });
+
+        $element.wrap($wrapper);
+        $element.after($copyButton);
+
+        $copyButton.on("click", function () {
+            let textToCopy = "";
+
+            if ($element.is("input, textarea, select")) {
+                textToCopy = $element.val();
+                // an empty field with a placeholder copies the placeholder, e.g. a default URL
+                if (textToCopy === "" && $element.is("input, textarea")) {
+                    textToCopy = $element.attr("placeholder") || "";
+                }
+            } else {
+                textToCopy = $element.text().trim();
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                $copyButton.html('<i class="bi bi-clipboard-check"></i>');
+                setTimeout(() => {
+                    $copyButton.html('<i class="bi bi-copy"></i>');
+                }, 1500);
+            }).catch(err => {
+                console.error("Failed to copy:", err);
+            });
+        });
+    });
+}
+
+/**
  * This function can be used to consistently show or hide a message block with the given message.
  * The HTML element must exist and will not be created.
  * @param {string} id The HTML id of the message block
