@@ -553,13 +553,19 @@ final class Plugin
     }
 
     /**
-     * URL of a static file below **assets/**.
+     * URL of a static file below **assets/**. If the file exists, the URL carries its modification
+     * time as version, like the stylesheets of the theme, so that browsers load it again after an
+     * update of the plugin instead of using their cached copy.
      * @param string $file Relative path below the assets directory, e.g. **css/hello.css**.
      * @return string
      */
     public function getAssetUrl(string $file): string
     {
-        return ADMIDIO_URL . FOLDER_PLUGINS . '/' . $this->id . '/' . self::DIR_ASSETS . '/' . ltrim($file, '/');
+        $file = ltrim($file, '/');
+        $url = ADMIDIO_URL . FOLDER_PLUGINS . '/' . $this->id . '/' . self::DIR_ASSETS . '/' . $file;
+        $path = $this->path . '/' . self::DIR_ASSETS . '/' . $file;
+
+        return is_file($path) ? $url . '?v=' . filemtime($path) : $url;
     }
 
     /**

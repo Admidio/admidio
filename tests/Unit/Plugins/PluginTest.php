@@ -393,7 +393,12 @@ final class PluginTest extends PluginTestCase
         $plugin = Plugin::read(self::fixturePath('hello'));
 
         $this->assertSame(ADMIDIO_URL . '/plugins/hello/modules/list.php', $plugin->getUrl('list.php'));
-        $this->assertSame(ADMIDIO_URL . '/plugins/hello/assets/css/hello.css', $plugin->getAssetUrl('css/hello.css'));
+        $this->assertSame(ADMIDIO_URL . '/plugins/hello/assets/css/missing.css', $plugin->getAssetUrl('css/missing.css'));
+        $this->assertSame(
+            ADMIDIO_URL . '/plugins/hello/assets/css/hello.css?v=' . filemtime(self::fixturePath('hello') . '/assets/css/hello.css'),
+            $plugin->getAssetUrl('css/hello.css'),
+            'an existing asset carries its modification time, so browsers do not keep an outdated copy'
+        );
         $this->assertSame(
             ADMIDIO_URL . '/plugins/dependent/plugin.php',
             Plugin::read(self::fixturePath('dependent'))->getUrl(),
