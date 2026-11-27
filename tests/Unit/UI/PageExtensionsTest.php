@@ -104,6 +104,36 @@ class PageExtensionsTest extends TestCase
             'the profile menu has no submenus, dividers or headings');
     }
 
+    public function testAnEntryWithAFieldOfTheWrongTypeDropsOnlyItself(): void
+    {
+        Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array(
+            array('id' => 'object_label', 'label' => new stdClass()),
+            array('id' => 'array_url', 'label' => 'Array', 'url' => array('/x')),
+            array('id' => new stdClass(), 'label' => 'Object id'),
+            array('id' => 'object_sequence', 'label' => 'Sequence', 'sequence' => new stdClass()),
+            array('id' => 'object_child', 'label' => 'Menu', 'items' => array(array('id' => 'c', 'label' => 'C', 'tooltip' => new stdClass()))),
+            array('id' => 'good', 'label' => 'Good', 'sequence' => '20')
+        ));
+        $items = PageExtensions::getHeaderItems(new stdClass());
+        $this->assertSame(array('good'), array_column($items, 'id'));
+        $this->assertSame(20, $items[0]['sequence']);
+
+        Hooks::addFilter(PageExtensions::HOOK_USER_MENU_ITEMS, fn(array $items): array => array(
+            array('id' => 'broken', 'label' => 'Broken', 'url' => new stdClass()),
+            array('id' => 'class', 'label' => 'Class', 'class' => array('x')),
+            array('id' => 'good', 'label' => 'Good')
+        ));
+        $this->assertSame(array('good'), array_column(PageExtensions::getUserMenuItems(new stdClass()), 'id'));
+
+        Hooks::addFilter(PageExtensions::HOOK_NOTICES, fn(array $notices): array => array(
+            array('id' => 'broken', 'html' => new stdClass()),
+            array('id' => array('x'), 'html' => 'x'),
+            array('id' => 'type', 'html' => 'x', 'type' => new stdClass()),
+            array('id' => 'good', 'html' => 'Good')
+        ));
+        $this->assertSame(array('good'), array_column(PageExtensions::getNotices(new stdClass()), 'id'));
+    }
+
     public function testChildrenAreSortedBySequence(): void
     {
         Hooks::addFilter(PageExtensions::HOOK_HEADER_ITEMS, fn(array $items): array => array(
