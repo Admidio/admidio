@@ -14,6 +14,10 @@ use ZipArchive;
  * be called anything, which is what makes the source archive GitHub generates for a release tag
  * (**repository-1.2.0/**) installable as it is.
  *
+ * An archive may also hold the contents of the plugin folder without the folder itself, as a ZIP
+ * tool makes it from the selected files. Then plugin.json and plugin.php are at its top level, and
+ * the manifest has to state the ID, as there is no folder to take it from.
+ *
  * Everything an archive contains is written by somebody the installation does not know, so it is
  * checked before a single byte of it reaches the plugins directory. The archive is read twice: once
  * to decide whether it may be extracted at all, and once - into a temporary directory - to read the
@@ -249,7 +253,7 @@ final class PluginPackage
      * archive never reaches the filesystem at all.
      * @param string $archivePath Absolute path of the ZIP archive.
      * @return string The plugin ID: the "id" of the manifest, or else the name of the single
-     *                top-level directory.
+     *                top-level directory. An archive without that directory has to state the ID.
      * @throws Exception
      */
     public static function inspect(string $archivePath): string
@@ -261,7 +265,8 @@ final class PluginPackage
      * The gate of inspect(), with everything extracting the archive needs.
      * @param string $archivePath Absolute path of the ZIP archive.
      * @return array{id:string,root:string,entries:array<int,string>} The plugin ID, the name of
-     *         the top-level directory and the entries that are extracted.
+     *         the top-level directory ('' if the plugin is at the top level of the archive) and the
+     *         entries that are extracted.
      * @throws Exception
      */
     private static function read(string $archivePath): array
@@ -302,7 +307,14 @@ final class PluginPackage
             throw new Exception('SYS_PLUGIN_PACKAGE_TOO_LARGE');
         }
 
-        $root = null;
+        /*
+         * A manifest at the top level means the archive holds the contents of the plugin folder
+         * without the folder: then every entry belongs to the plugin. Otherwise one directory has
+         * to hold everything.
+         */
+        $flat = $archive->locateName(Plugin::MANIFEST_FILE) !== false;
+        $root = $flat ? '' : null;
+        $prefix = '';
         $extracted = 0;
         $manifestSize = null;
         $hasEntryFile = false;
@@ -332,21 +344,24 @@ final class PluginPackage
              * its files into the current directory would scatter them across plugins/, and one with
              * two top-level directories is not one plugin.
              */
-            if (count($segments) < 2 && !str_ends_with($name, '/')) {
-                throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
+            if (!$flat) {
+                if (count($segments) < 2 && !str_ends_with($name, '/')) {
+                    throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
+                }
+
+                if ($root === null) {
+                    $root = $segments[0];
+                    $prefix = $root . '/';
+                } elseif ($segments[0] !== $root) {
+                    throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
+                }
             }
 
-            if ($root === null) {
-                $root = $segments[0];
-            } elseif ($segments[0] !== $root) {
-                throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
-            }
-
-            if ($name === $root . '/' . Plugin::MANIFEST_FILE) {
+            if ($name === $prefix . Plugin::MANIFEST_FILE) {
                 $manifestSize = (int)$entry['size'];
             }
 
-            if ($name === $root . '/' . Plugin::ENTRY_FILE) {
+            if ($name === $prefix . Plugin::ENTRY_FILE) {
                 $hasEntryFile = true;
             }
 
@@ -365,10 +380,17 @@ final class PluginPackage
             throw new Exception('SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE', array(Plugin::ENTRY_FILE));
         }
 
-        $id = $root;
+        $declared = null;
         if ($manifestSize <= self::MAX_MANIFEST_BYTES) {
-            $id = self::declaredId((string)$archive->getFromName($root . '/' . Plugin::MANIFEST_FILE)) ?? $root;
+            $declared = self::declaredId((string)$archive->getFromName($prefix . Plugin::MANIFEST_FILE));
         }
+
+        // Without a folder, the plugin ID can only come from the manifest.
+        if ($flat && $declared === null) {
+            throw new Exception('SYS_PLUGIN_PACKAGE_NO_DIRECTORY');
+        }
+
+        $id = $declared ?? $root;
 
         if (!Plugin::isValidId($id)) {
             throw new Exception('SYS_PLUGIN_PACKAGE_INVALID_ID', array($id));
@@ -424,7 +446,8 @@ final class PluginPackage
      * Extract a checked archive into a temporary directory of its own.
      *
      * Only the entries the gate accepted are extracted, and the top-level directory is renamed to
-     * the plugin ID if the archive named it differently.
+     * the plugin ID if the archive named it differently. An archive without that directory is
+     * extracted into a directory named after the plugin ID.
      * @param string $archivePath
      * @param array{id:string,root:string,entries:array<int,string>} $contents What read() found.
      * @return string Absolute path of the temporary directory that now holds the plugin directory,
@@ -446,10 +469,11 @@ final class PluginPackage
             throw new Exception('SYS_PLUGIN_PACKAGE_NOT_A_ZIP');
         }
 
-        $extracted = $archive->extractTo($temporary, $contents['entries']);
+        $target = $contents['root'] === '' ? $temporary . '/' . $id : $temporary;
+        $extracted = $archive->extractTo($target, $contents['entries']);
         $archive->close();
 
-        if ($extracted === true && $contents['root'] !== $id) {
+        if ($extracted === true && $contents['root'] !== '' && $contents['root'] !== $id) {
             $extracted = @rename($temporary . '/' . $contents['root'], $temporary . '/' . $id);
         }
 

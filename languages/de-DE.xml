@@ -1546,7 +1546,7 @@
   <string name="SYS_PLUGIN_PACKAGE_NOT_A_ZIP">Die Datei ist kein ZIP-Archiv.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_EXTRACTED">Das Archiv konnte nicht entpackt werden. Prüfen Sie, ob Admidio in seinen temporären Ordner schreiben darf.</string>
   <string name="SYS_PLUGIN_PACKAGE_NOT_INSTALLED">Das Plugin #VAR1# konnte nicht in den Plugin-Ordner verschoben werden. Prüfen Sie, ob Admidio in diesen Ordner schreiben darf.</string>
-  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">Das Archiv muss genau einen Ordner enthalten, der alle weiteren Inhalte enthält. Der Ordner ist wie das Plugin benannt, außer plugin.json gibt den Plugin-Namen in „id“ an.</string>
+  <string name="SYS_PLUGIN_PACKAGE_NO_DIRECTORY">Das Archiv muss genau einen Ordner enthalten, der alle weiteren Inhalte enthält. Der Ordner ist wie das Plugin benannt, außer plugin.json gibt den Plugin-Namen in „id“ an. Ohne diesen Ordner müssen plugin.json und plugin.php direkt im Archiv liegen, und plugin.json muss den Plugin-Namen in „id“ angeben.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE">Das Archiv enthält keine #VAR1#. Jedes Plugin benötigt diese Datei.</string>
   <string name="SYS_PLUGIN_PACKAGE_NO_MANIFEST">Das Archiv enthält keine #VAR1#. Jedes Plugin benötigt diese Datei.</string>
   <string name="SYS_PLUGIN_PACKAGE_REPLACE">Installiertes Plugin ersetzen</string>

@@ -147,6 +147,8 @@ final class PluginPackageTest extends PluginTestCase
 
     /**
      * @testdox An archive whose files are not inside one directory is refused
+     *
+     * Without a folder, the manifest is the only place the plugin ID can come from.
      */
     public function testArchiveWithoutASingleRootIsRefused(): void
     {
@@ -303,6 +305,60 @@ final class PluginPackageTest extends PluginTestCase
         PluginPackage::install($this->archive(array(
             'hello-store-1.0.0/plugin.json' => '{"name": "Hello store", "version": "1.0.0"}',
             'hello-store-1.0.0/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /**
+     * @testdox An archive without a plugin folder installs under the ID its manifest states
+     *
+     * A ZIP tool asked to compress the selected files of a plugin folder leaves the folder out.
+     */
+    public function testArchiveWithoutAFolderInstallsUnderTheDeclaredId(): void
+    {
+        $archive = $this->archive(array(
+            'plugin.json' => '{"id": "hello-store", "name": "Hello store", "version": "2.1.0"}',
+            'plugin.php' => self::ENTRY,
+            'src/Greeter.php' => self::ENTRY,
+            'tests/GreeterTest.php' => self::ENTRY,
+            '__MACOSX/._plugin.php' => 'x'
+        ));
+
+        $this->assertSame('hello-store', PluginPackage::inspect($archive));
+        $this->assertSame('hello-store', PluginPackage::describe($archive)->id);
+        $this->assertSame('hello-store', PluginPackage::install($archive));
+
+        $this->assertFileExists($this->pluginsPath . '/hello-store/plugin.json');
+        $this->assertFileExists($this->pluginsPath . '/hello-store/plugin.php');
+        $this->assertFileExists($this->pluginsPath . '/hello-store/src/Greeter.php');
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/hello-store/tests');
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/hello-store/__MACOSX');
+        $this->assertFileDoesNotExist($this->pluginsPath . '/plugin.php');
+        $this->assertDirectoryDoesNotExist($this->pluginsPath . '/src');
+    }
+
+    /**
+     * @testdox An archive without a plugin folder still needs the entry file at its top level
+     */
+    public function testArchiveWithoutAFolderNeedsTheEntryFile(): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_NO_ENTRY_FILE');
+
+        PluginPackage::install($this->archive(array(
+            'plugin.json' => '{"id": "hello-store", "name": "Hello store", "version": "1.0.0"}',
+            'hello-store/plugin.php' => self::ENTRY
+        )));
+    }
+
+    /**
+     * @testdox An unusable ID in the manifest of an archive without a plugin folder is refused
+     */
+    public function testArchiveWithoutAFolderAndAnUnusableIdIsRefused(): void
+    {
+        $this->expectExceptionMessage('SYS_PLUGIN_PACKAGE_INVALID_ID');
+
+        PluginPackage::install($this->archive(array(
+            'plugin.json' => '{"id": "../hello", "name": "Hello store", "version": "1.0.0"}',
+            'plugin.php' => self::ENTRY
         )));
     }
 
