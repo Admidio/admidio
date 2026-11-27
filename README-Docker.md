@@ -102,7 +102,10 @@ docker run --detach -it --name "Admidio" \
 * **`--name "Admidio"`:** Docker container name
 * **`--memory="1024m"`:** limit ram usage of docker container to 1GB
 * **`-p 8080:8080`:** published port (see https://docs.docker.com/config/containers/container-networking/#published-ports)
-* **admidio/admidio:latest:** Image name with version tag. We recommend a special version tag to be used instead of latest (e.g.: `admidio/admidio:v4.2.0`)
+* **admidio/admidio:latest:** Image name with version tag. We recommend a version tag instead of latest, because latest will also switch to the next major version:
+  * `admidio/admidio:5.0` always points to the newest 5.0.x release, so you automatically get bugfix and security updates (e.g. with `docker compose pull`)
+  * `admidio/admidio:5.0.19` is a fixed version that never changes
+  * Images up to 5.0.19 were only published with a `v` prefix (e.g. `admidio/admidio:v5.0.19`). These tags are still available
 
 ## Volumes
 * **`-v "Admidio-files:/opt/app-root/src/adm_my_files"`:** admidio config files and data uploads

@@ -6,6 +6,10 @@ on:
       git_tag:
         description: 'Git Tag (z. B. v5.0.3)'
         required: true
+      latest:
+        description: 'Also set the latest tag (newest release line only, not for betas or older versions)'
+        type: boolean
+        default: true
 
 jobs:
   build:
@@ -19,8 +23,19 @@ jobs:
           ref: refs/tags/${{ inputs.git_tag }}
           fetch-depth: 0
 
-      - name: Set release tag
-        run: echo "RELEASE_TAG=${{ inputs.git_tag }}" >> $GITHUB_ENV
+      # Docker tags are created without the "v" prefix of the git tag:
+      # v5.0.19 -> 5.0.19 (exact version) and 5.0 (newest 5.0.x)
+      # Pre-releases and tags that are not semver (e.g. v5.0-Beta.3) only get their exact version.
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: admidio/admidio
+          flavor: latest=false
+          tags: |
+            type=match,pattern=^v?(.+)$,group=1,value=${{ inputs.git_tag }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.git_tag }}
+            type=raw,value=latest,enable=${{ inputs.latest }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -40,6 +55,5 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            admidio/admidio:${{ env.RELEASE_TAG }}
-            admidio/admidio:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

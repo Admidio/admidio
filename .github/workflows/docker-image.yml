@@ -14,8 +14,18 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v7
 
-      - name: Extract release tag
-        run: echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      # Docker tags are created without the "v" prefix of the git tag:
+      # v5.0.19 -> 5.0.19 (exact version) and 5.0 (newest 5.0.x)
+      # Pre-releases and tags that are not semver (e.g. v5.0-Beta.3) only get their exact version.
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: admidio/admidio
+          flavor: latest=false
+          tags: |
+            type=match,pattern=^v?(.+)$,group=1
+            type=semver,pattern={{major}}.{{minor}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -35,5 +45,5 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            admidio/admidio:${{ env.RELEASE_TAG }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
