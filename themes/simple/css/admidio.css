@@ -131,14 +131,12 @@
     align-items: center;
 }
 
-#adm_main_navbar .adm-header-login-icon,
-#adm_main_navbar .adm-header-register-icon {
+#adm_main_navbar .adm-header-icon {
     display: inline-flex;
     flex: 0 0 auto;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    margin: 0 0 0 0.75rem;
     padding: 0;
     border-radius: 50%;
     color: var(--admidio-header-font-color);
@@ -147,29 +145,21 @@
     text-decoration: none;
 }
 
-#adm_main_navbar .adm-header-register-icon {
+#adm_header_register_icon {
     order: -1;
 }
 
-#adm_main_navbar .adm-header-login-icon:active,
-#adm_main_navbar .adm-header-register-icon:active {
+#adm_main_navbar .adm-header-icon:active {
     background-color: color-mix(in srgb, var(--admidio-header-font-color) 15%, transparent);
 }
 
-#adm_main_navbar .adm-header-login-icon:focus-visible,
-#adm_main_navbar .adm-header-register-icon:focus-visible {
+#adm_main_navbar .adm-header-icon:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
 }
 
-/* Optically center the asymmetric box-arrow glyph inside the circular slot. */
-#adm_main_navbar .adm-header-login-icon .bi {
-    transform: translateX(0.05em);
-}
-
 @media (hover: hover) and (pointer: fine) {
-    #adm_main_navbar .adm-header-login-icon:hover,
-    #adm_main_navbar .adm-header-register-icon:hover {
+    #adm_main_navbar .adm-header-icon:hover {
         color: color-mix(in srgb, var(--admidio-header-font-color) 70%, black);
     }
 }
@@ -312,20 +302,32 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    margin: 0 0 0 1rem;
     padding: 0;
+    border: 0;
+    font-size: 1.25rem;
+    letter-spacing: 0;
     line-height: 1;
     color: inherit;
 }
 
+/* Compensate for the list glyph's inset so its visible right edge aligns
+   with the header icons. */
 .admidio-headline-mobile-menu .btn .bi {
     margin-right: 0;
+    transform: translateX(0.125em);
 }
 
+#adm_main_navbar .adm-header-icon .bi::before,
 .admidio-headline-mobile-menu .bi::before {
     vertical-align: 0;
     line-height: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .admidio-headline-mobile-menu .btn:hover {
+        color: color-mix(in srgb, var(--bs-primary) 60%, black);
+    }
 }
 
 .admidio-menu-list {

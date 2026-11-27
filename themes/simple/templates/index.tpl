@@ -445,11 +445,11 @@
                     </ul>
 
                     <div class="adm-auth-actions d-md-none">
-                        <a class="adm-header-login-icon" href="{$urlAdmidio}/system/login.php" title="{$l10n->get('SYS_LOGIN')}" aria-label="{$l10n->get('SYS_LOGIN')}">
+                        <a id="adm_header_login_icon" class="adm-header-icon" href="{$urlAdmidio}/system/login.php" title="{$l10n->get('SYS_LOGIN')}" aria-label="{$l10n->get('SYS_LOGIN')}">
                             <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
                         </a>
                         {if $registrationEnabled}
-                            <a class="adm-header-register-icon" href="{$urlAdmidio}/modules/registration.php" title="{$l10n->get('SYS_REGISTER')}" aria-label="{$l10n->get('SYS_REGISTER')}">
+                            <a id="adm_header_register_icon" class="adm-header-icon" href="{$urlAdmidio}/modules/registration.php" title="{$l10n->get('SYS_REGISTER')}" aria-label="{$l10n->get('SYS_REGISTER')}">
                                 <i class="bi bi-person-plus" aria-hidden="true"></i>
                             </a>
                         {/if}
