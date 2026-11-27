@@ -257,6 +257,16 @@ a {
     hyphens: none;
 }
 
+/* A link button has no background, so it keeps the link colour of Bootstrap instead of the page
+   background colour above, which would make it invisible. */
+.btn-link {
+    color: var(--bs-btn-color);
+}
+
+.btn-link:hover {
+    color: var(--bs-btn-hover-color);
+}
+
 .btn-primary {
     background-color: var(--bs-link-color);
     border-color: var(--bs-link-color);
