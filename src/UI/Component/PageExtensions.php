@@ -110,7 +110,8 @@ final class PageExtensions
 
     /**
      * Run one filter, check every entry and sort them by their sequence. A failing filter drops all
-     * entries, because the list it should have passed on is lost; an invalid entry drops only itself.
+     * entries, because the list it should have passed on is lost; an invalid entry drops only itself,
+     * whatever the check throws.
      * @param callable(mixed):array<string,mixed> $normalize Throws for an invalid entry.
      * @return array<int,array<string,mixed>>
      */
@@ -131,11 +132,11 @@ final class PageExtensions
         foreach ($entries as $index => $entry) {
             try {
                 $valid[] = $normalize($entry);
-            } catch (UnexpectedValueException $exception) {
+            } catch (\Throwable $exception) {
                 self::logError('A page extension was ignored because it is invalid.', array(
                     'hook' => $hook,
                     'position' => $index,
-                    'id' => is_array($entry) ? (string)($entry['id'] ?? '') : '',
+                    'id' => is_array($entry) && is_scalar($entry['id'] ?? null) ? (string)$entry['id'] : '',
                     'error' => $exception->getMessage()
                 ));
             }
@@ -175,6 +176,41 @@ final class PageExtensions
         if ($gLogger instanceof \Psr\Log\LoggerInterface) {
             $gLogger->error($message, $context);
         }
+    }
+
+    /**
+     * Read a text field of an entry. A string or a number is accepted; anything else, e.g. an array or
+     * an object, is refused before it is converted, because the conversion would fail or give "Array".
+     * @param array<mixed> $entry
+     * @param string $key
+     * @param string $default The text if the field is missing.
+     * @return string
+     * @throws UnexpectedValueException
+     */
+    private static function text(array $entry, string $key, string $default = ''): string
+    {
+        $value = $entry[$key] ?? $default;
+        if (!is_string($value) && !is_int($value) && !is_float($value)) {
+            throw new UnexpectedValueException('the "' . $key . '" of an entry is a string.');
+        }
+
+        return (string)$value;
+    }
+
+    /**
+     * Read the sequence of an entry.
+     * @param array<mixed> $entry
+     * @return int The sequence, DEFAULT_SEQUENCE if the field is missing.
+     * @throws UnexpectedValueException
+     */
+    private static function sequence(array $entry): int
+    {
+        $value = $entry['sequence'] ?? self::DEFAULT_SEQUENCE;
+        if (!is_numeric($value)) {
+            throw new UnexpectedValueException('the "sequence" of an entry is a number.');
+        }
+
+        return (int)$value;
     }
 
     /**
@@ -221,22 +257,22 @@ final class PageExtensions
         $divider = !empty($item['divider']);
         $header = !$divider && !empty($item['header']);
 
-        $id = (string)($item['id'] ?? '');
+        $id = self::text($item, 'id');
         if (($id !== '' || (!$divider && !$header)) && !preg_match('/^[a-z0-9][a-z0-9_-]*$/', $id)) {
             throw new UnexpectedValueException('an item needs an "id" of lowercase letters, digits, "-" and "_".');
         }
 
-        $label = Language::translateIfTranslationStrId((string)($item['label'] ?? ''));
-        $icon = (string)($item['icon'] ?? '');
-        $image = self::checkUrl((string)($item['image'] ?? ''), 'image', true);
-        $url = self::checkUrl((string)($item['url'] ?? ''), 'url', false);
+        $label = Language::translateIfTranslationStrId(self::text($item, 'label'));
+        $icon = self::text($item, 'icon');
+        $image = self::checkUrl(self::text($item, 'image'), 'image', true);
+        $url = self::checkUrl(self::text($item, 'url'), 'url', false);
         if ($header && $label === '') {
             throw new UnexpectedValueException('a "header" needs a "label".');
         }
         if ($label === '' && $icon === '' && $image === '' && !$divider) {
             throw new UnexpectedValueException('an item needs a "label", an "icon" or an "image".');
         }
-        $tooltip = Language::translateIfTranslationStrId((string)($item['tooltip'] ?? ''));
+        $tooltip = Language::translateIfTranslationStrId(self::text($item, 'tooltip'));
         if ($label === '' && $tooltip === '' && !$divider) {
             throw new UnexpectedValueException('an item without a "label" needs a "tooltip", which becomes its accessible name.');
         }
@@ -265,13 +301,13 @@ final class PageExtensions
             'image' => $image,
             'url' => $url,
             'popup' => !empty($item['popup']) && $url !== '',
-            'popupClass' => (string)preg_replace('/[^A-Za-z0-9 _-]/', '', (string)($item['popupClass'] ?? '')),
+            'popupClass' => (string)preg_replace('/[^A-Za-z0-9 _-]/', '', self::text($item, 'popupClass')),
             'tooltip' => $tooltip,
-            'class' => (string)preg_replace('/[^A-Za-z0-9 _-]/', '', (string)($item['class'] ?? '')),
+            'class' => (string)preg_replace('/[^A-Za-z0-9 _-]/', '', self::text($item, 'class')),
             'active' => !empty($item['active']),
             'header' => $header,
             'divider' => $divider,
-            'sequence' => (int)($item['sequence'] ?? self::DEFAULT_SEQUENCE),
+            'sequence' => self::sequence($item),
             'items' => $children
         );
     }
@@ -284,19 +320,24 @@ final class PageExtensions
      */
     public static function normalizeNotice(mixed $notice): array
     {
-        if (!is_array($notice) || !preg_match('/^[a-z0-9][a-z0-9_-]*$/', (string)($notice['id'] ?? '')) || !isset($notice['html'])) {
+        if (!is_array($notice)) {
             throw new UnexpectedValueException('a notice is an array with an "id" and "html".');
         }
-        $type = (string)($notice['type'] ?? 'info');
+        $id = self::text($notice, 'id');
+        $html = self::text($notice, 'html');
+        if (!preg_match('/^[a-z0-9][a-z0-9_-]*$/', $id) || !isset($notice['html'])) {
+            throw new UnexpectedValueException('a notice is an array with an "id" and "html".');
+        }
+        $type = self::text($notice, 'type', 'info');
         if (!in_array($type, self::ALERT_TYPES, true)) {
             throw new UnexpectedValueException('the "type" of a notice is one of ' . implode(', ', self::ALERT_TYPES) . '.');
         }
 
         return array(
-            'id' => (string)$notice['id'],
+            'id' => $id,
             'type' => $type,
-            'html' => (string)$notice['html'],
-            'sequence' => (int)($notice['sequence'] ?? self::DEFAULT_SEQUENCE)
+            'html' => $html,
+            'sequence' => self::sequence($notice)
         );
     }
 }
