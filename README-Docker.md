@@ -200,6 +200,21 @@ Possible values: `Europe/Vienna`
 see https://www.admidio.org/dokuwiki/doku.php?id=en:2.0:konfigurationsdatei_config.php#gtimezone
 
 
+## Health check
+
+The image contains a Docker `HEALTHCHECK` that requests `/system/health.php`. The endpoint needs no settings, starts no session and sets no cookie, so it can also be used by external monitors. It answers with a short text:
+
+| Answer | Meaning |
+|---|---|
+| `200 ok` | PHP, the database and the data folder work and the database matches the version of the files |
+| `200 not installed` | there is no `config.php` yet or the database is empty, the web installer is waiting |
+| `200 maintenance` | the maintenance mode is active (`adm_my_files/maintenance.json` exists) |
+| `200 update required` | the version of the database differs from the files or the last update is not completed, open `install/update.php` |
+| `503 fail` | no connection to the database or the data folder is not writable (the reason is written to `docker logs`) |
+
+States that need an administrator in the browser answer `200`, so the container stays healthy and reachable, because swarm and reverse proxies don't route traffic to an unhealthy container. A monitor can alert on the text `update required`.
+
+
 ## Admidio update
 
 run following steps to update to a newer admidio version.

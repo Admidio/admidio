@@ -10,7 +10,7 @@ set -o pipefail  # causes a pipeline (for example, curl -s https://sipb.mit.edu/
 _init () {
     scheme="http://"
     address="localhost:8080"
-    resource="/dockerscripts/healthcheck.sh"
+    resource="/system/health.php"
     start=$(stat -c "%Y" /proc/1)
 }
 
@@ -23,8 +23,10 @@ healthcheck_main () {
     if [ $(( $(date +%s) - start )) -lt 30 ]; then
         exit 0
     else
-        # Get the http response code
-        http_response=$(curl --noproxy "*" -s -k --location -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
+        # Get the http response code of the health endpoint. It answers 200 for "ok", but also for states that
+        # an administrator must solve in the browser (not installed, update required, maintenance), so that the
+        # container stays reachable. Only a failure of PHP, the database or the data folder is not 200.
+        http_response=$(curl --noproxy "*" -s -k -o /dev/null -w "%{http_code}" -X GET ${scheme}${address}${resource})
 
         # If http_response is 200 - server is up.
         if [ "${http_response}" != "200" ]; then
