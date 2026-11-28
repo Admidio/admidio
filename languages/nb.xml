@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Deltakere kan registrere anonyme gjester</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Deltakerne kan legge til flere plasser i registreringen sin. Disse trekkes deretter fra det maksimale antallet deltakere, og de gjenværende ledige plassene reduseres dermed. Dette er f.eks. nyttig hvis en deltaker kan ta med seg flere besøkende og dermed trenger et totalt antall ledige plasser.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Tillat kommentarer under deltakelse</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Tillat kommentarer ved påmelding</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Deltakerne kan kommentere sin deltakelse. Kommentarene kan sees via deltakerlisten</string>
   <string name="SYS_ALL_CONTACTS">Alle kontakter</string>
   <string name="SYS_ALL_DAY">Fulltid</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Resultatet av beregningen er ikke riktig.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Autentiseringskoden var ugyldig.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Autentiseringskode</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Bekreftelseskode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Autentiseringskoden er en del av en captcha. En captcha brukes til å oppdage spam. Bildet brukes til å oppdage om en bruker eller et skript (eller spambot) har fylt ut skjemaet. Vennligst fyll ut resultatet av autentiseringskoden i skjemaet.</string>
   <string name="SYS_CAPTION_SIZE">Bildestørrelse</string>
   <string name="SYS_CAPTION_SIZE_DESC">Størrelsen på bildeteksten er proporsjonal med bildestørrelsen, beregnet med formelen «Bildestørrelse / Devisor». Ved å øke devisoren vil skriftstørrelsen reduseres. (Standard: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Din registrering kan ikke endres fordi den oppgitte sluttdatoen for registreringer er oppnådd eller datoen er tidligere. Ta kontakt med sjefen eller en administrator!</string>
   <string name="SYS_DEBUG_OUTPUT">Feilsøkings-utdata</string>
   <string name="SYS_DECIMAL_NUMBER">Desimaltall</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardtildeling av registrering</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standard rolletildeling ved registrering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Hvis en ny bruker opprettes eller en ny registrering godtas, tildeles denne rollen automatisk til den nye brukeren. Når oppretteren har rett til å tildele roller, vises alle rolletilordninger og kan endres deretter.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfigurasjon</string>
@@ -888,7 +888,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">De her valgte elementfeltene kan redigeres av elementforvalteren når opsjonen \"Redigeringstillatelse for forvalter\" er aktivert.
 Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (Standard: «I lager», «Siste mottaker», «Lånt den», «Mottatt tilbake den»)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Lagerstyringsmodulen kan deaktiveres fullstendig, gjøres tilgjengelig kun for innloggede brukere, begrenses kun til moduladministratorer, gjøres tilgjengelig for moduladministratorer og vareholdere eller gjøres tilgjengelig for medlemmer av en valgt rolle via denne innstillingen. Hvis tilgang kun gis til innloggede brukere, skjules modulen for gjester. Hvis bare moduladministratorer har tilgang, er modulen bare synlig for brukere med tillatelsen \"administrer lager\". (Standard: Aktivert)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Legg til dato</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Sett datoen først i filnavnet</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Når dette alternativet er aktivert, vil gjeldende dato i formatet ÅÅÅÅ-MM-DD bli satt foran navnet på eksportfilen. (Standard: nei)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Tillat negative tall</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Hvis dette alternativet er aktivert, kan negative tall også skrives inn i felt av typen «Tall» eller «Desimaltall». Ellers er bare positive tall tillatt. (Standard: ja)</string>
@@ -901,7 +901,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Datorepresentasjon</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Valg av datoformat som skal brukes for visning av dato- og klokkeslettinformasjon i InventoryManager. (Standard: Dato (DD.MM.ÅÅÅÅ))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">I denne tabellen kan du legge inn oppføringene for datointervallene. En tabellrad kan legges til her for hver påfølgende oppføring i rullegardinlisten.\nListeoppføringen lagres ikke som tekst senere, men på den valgte posisjonen fra listen. Hvis du endrer teksten på en rad, vil alle brukere umiddelbart se den nye teksten.\nDatointervallet må skrives i samme rad, atskilt med |-symbolet etter tittelen. f.eks. Årlig | 1 år\nHvis ingen enhet er spesifisert, antas dager.\nMulige enheter: d: dager, w: uker, m: måneder, y: år</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desimaltrinn</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desimaler</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Antall desimaler som skal vises for felt av typen «Desimaltall». (Standard: 1)</string>
   <string name="SYS_INVENTORY_DESC">InventiryManager lar deg organisere, administrere og spore varer.</string>
   <string name="SYS_INVENTORY_EXPORT">Eksporter</string>
@@ -1115,7 +1115,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">maks. bildestørrelse som kan behandles</string>
   <string name="SYS_MAX_RECEIVER">Maksimalt antall e-postmottakere</string>
   <string name="SYS_MAX_RECEIVER_DESC">Denne verdien definerer det maksimale antallet e-postmottakere. En rolle teller som én mottaker.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Delta med reservasjon</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Tillat foreløpig deltakelse</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Hvis dette alternativet er aktivert, er et tredje alternativ #VAR3_BOLD# tilgjengelig i tillegg til #VAR1_BOLD# og #VAR2_BOLD# når du registrerer deg for et arrangement. (Standard: deaktivert)</string>
   <string name="SYS_MEETINGS">Møter</string>
   <string name="SYS_MEETING_POINT">Oppmøtested</string>
@@ -1747,7 +1747,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SPOUSE">Ektefelle</string>
   <string name="SYS_SSO">Enkel pålogging</string>
   <string name="SYS_SSO_ACS_URL">ACS-URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">URL-adressen for Assertion Consumer Servicer (ACS) er klientens hovedinngangspunkt. Etter vellykket pålogging hos Admidio blir brukeren omdirigert til den URL-adressen og logget inn hos klienten.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Tjenesteleverandøren mottar SAML-svaret på disse URL-ene. Skriv inn én URL per linje. Svaret sendes til den første URL-en hvis forespørselen ikke angir en URL. Forespørselen kan angi en av de andre URL-ene.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1826,16 +1826,16 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SSO_KEY_SETTING">Innstillinger for kryptografiske nøkler</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Last inn klientmetadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Last inn</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du er logget inn, men brukerkontoen har ikke tilgangsrettigheter til tjenesteleverandøren (#VAR1#). Prøv enten å logge inn med en annen konto nedenfor, eller gå tilbake til tjenesteleverandøren.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du er logget inn som #VAR2#, men denne kontoen har ikke tilgang til klienten (#VAR1#). Logg inn nedenfor med en annen konto for å fortsette (dette avslutter økten for #VAR2#), eller avbryt for å gå tilbake til klienten.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Last inn metadata på nytt</string>
   <string name="SYS_SSO_METADATA_STATUS">Status for metadata</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata-URL (valgfritt)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Noen klienter tilbyr en metadatafil med alle nødvendige innstillinger. Automatisk henting av denne metadata-URL-en fungerer bare hvis URL-en er tilgjengelig for Admidio-serveren.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">Metadata-URL eller XML (valgfritt)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Skriv inn URL-en til programmets SAML-metadata eller lim inn metadataene som XML, og velg Last inn. Metadata fra en URL kan oppdateres automatisk. Innlimt XML brukes bare én gang.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Skriv først inn en metadata-URL, eller lim inn metadataene som XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Klientens (tjenesteleverandørens) navn og egenskaper</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Ingen kryptografiske nøkler for signering eller kryptering av SAML- eller OIDC-meldinger er konfigurert!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">Ingen OIDC-klienter (tjenesteleverandører) konfigurert!</string>
@@ -1850,8 +1850,8 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Autentiseringsendepunkt</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL for utlogging via bakkanal</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Utloggingsvarsel mellom servere med et signert token. Valgfritt.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC-krav</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1862,8 +1862,8 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Denne innstillingen gjør Admidio om til en OIDC-identitetsleverandør (idP) for enkel pålogging, som lar andre nettapplikasjoner autentisere brukere mot Admidio-brukerlisten.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL for utlogging via frontkanal</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Utloggingsvarsel via nettleseren (iframe). Valgfritt.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Utsteder</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Den unike identifikatoren for OIDC for denne Admidio-instansen. Vanligvis er dette basis-URL-en til Admidio-installasjonen din. Klienten må konfigureres med nøyaktig samme enhets-ID, ellers vil ikke pålogging fungere.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1957,7 +1957,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_SSO_USERID_UUID">Bruker-UUID (tilfeldig streng på 32 tegn)</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validere signaturer på alle forespørsler som mottas</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 Klientsertifikat</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">SAML-meldinger er kryptografisk signert for å forhindre sikkerhetsangrep. Dette sertifikatet leveres av klienten og må legges inn/kopieres nøyaktig slik det er gitt av klienten. Ellers vil SAML-kommunikasjonen mislykkes, og SSO-pålogging vil ikke være mulig.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Klientens sertifikater for å verifisere signerte SAML-meldinger. Du kan angi flere sertifikater etter hverandre, for eksempel når klienten bytter nøkkel. En melding godtas hvis den kan verifiseres med ett av sertifikatene. Uten et krypteringssertifikat krypteres påstandene med det første sertifikatet.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_APPROVED">Godkjent</string>
   <string name="SYS_STATUS_BORROWED">Utlånt</string>
@@ -2140,7 +2140,7 @@ Alle andre felt er skrivebeskyttet og kan bare endres av moduladministratorer. (
   <string name="SYS_YOUR_CONFIGURATION">Din konfigurasjon</string>
   <string name="SYS_YOUR_EMAIL">Din epost</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Din siste konfigurasjon</string>
-  <string name="SYS_YOUR_LISTS">Egen liste</string>
+  <string name="SYS_YOUR_LISTS">Dine lister</string>
   <string name="SYS_YOUR_NAME">Ditt navn</string>
   <string name="SYS_Z_TO_A">Z til A</string>
 </resources>

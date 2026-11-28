@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Όλα</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Οι συμμετέχοντες μπορούν να εγγράψουν ανώνυμους επισκέπτες</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Οι συμμετέχοντες μπορούν να προσθέσουν επιπλέον θέσεις στην εγγραφή τους. Στη συνέχεια αφαιρούνται από τον μέγιστο αριθμό συμμετεχόντων και οι υπόλοιπες ελεύθερες θέσεις μειώνονται. Αυτό είναι π.χ. χρήσιμο εάν ένας συμμετέχων μπορεί να φέρει περισσότερους επισκέπτες και συνεπώς απαιτούνται περισσότερες ελεύθερες θέσεις.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια στο πλαίσιο της συμμετοχής</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια κατά τη δήλωση συμμετοχής</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Οι συμμετέχοντες μπορούν να σχολιάσουν τη συμμετοχή τους. Τα σχόλια μπορούν να προβληθούν μέσω της λίστας συμμετεχόντων</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Πλήρους απασχόλησης</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Το αποτέλεσμα του υπολογισμού είναι λάθος</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Ο κωδικός αυθεντικοποίησης δεν είναι έγκυρος.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Κωδικός αυθεντικοποίησης</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Κωδικός επαλήθευσης</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Ο κωδικός ελέγχου ταυτότητας είναι μέρος ενός captcha. Ένα captcha χρησιμοποιείται για τον εντοπισμό ανεπιθύμητων μηνυμάτων. Η εικόνα χρησιμοποιείται για τον εντοπισμό εάν ένας χρήστης ή ένα σενάριο (ή ένα ανεπιθύμητο μήνυμα) συμπλήρωσε τη φόρμα.\nΣυμπληρώστε το αποτέλεσμα του κωδικού ελέγχου ταυτότητας στη φόρμα.</string>
   <string name="SYS_CAPTION_SIZE">Μέγεθος λεζάντας</string>
   <string name="SYS_CAPTION_SIZE_DESC">Το μέγεθος της λεζάντας είναι ανάλογο με το μέγεθος της εικόνας, που υπολογίζεται με τον τύπο \"Μέγεθος εικόνας / Devisor\". Με την αύξηση του σχεδιαστή, το μέγεθος της γραμματοσειράς θα μειωθεί. (Default: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Η εγγραφή σας δεν μπορεί να αλλάξει επειδή έχει λήξει η ημερομηνία λήξης για τις εγγραφές ή η ημερομηνία είναι στο παρελθόν. Επικοινωνήστε με τον υπεύθυνο της εκδήλωσης ή έναν διαχειριστή!</string>
   <string name="SYS_DEBUG_OUTPUT">Έξοδος εντοπισμού σφαλμάτων</string>
   <string name="SYS_DECIMAL_NUMBER">Δεκαδικός αριθμός</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Προεπιλεγμένη ανάθεση εγγραφής</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Προεπιλεγμένη ανάθεση ρόλων κατά την εγγραφή</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Εάν δημιουργηθεί ένας νέος χρήστης ή γίνει αποδεκτή μια νέα εγγραφή, τότε αυτός ο ρόλος εκχωρείται αυτόματα στον νέο χρήστη. Όταν ο δημιουργός έχει το δικαίωμα να εκχωρήσει ρόλους, εμφανίζονται όλες οι αντιστοιχίσεις ρόλων και μπορούν να αλλάξουν ανάλογα.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Προεπιλεγμένη διαμόρφωση</string>
@@ -887,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Προσθήκη ημερομηνίας στην αρχή του ονόματος αρχείου</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -900,7 +900,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Δεκαδικά ψηφία</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. επεξεργάσιμο μέγεθος εικόνας</string>
   <string name="SYS_MAX_RECEIVER">Μέγιστος αριθμός παραληπτών αλληλογραφίας</string>
   <string name="SYS_MAX_RECEIVER_DESC">Αυτή η τιμή καθορίζει τον μέγιστο αριθμό παραληπτών αλληλογραφίας. Ένας ρόλος μετράει ως ένας παραλήπτης.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Δηλώστε συμμετοχή με κράτηση</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Να επιτρέπεται προσωρινή δήλωση συμμετοχής</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Εάν αυτή η επιλογή είναι ενεργοποιημένη, θα υπάρχει μια τρίτη επιλογή #VAR3_BOLD# εκτός από τις επιλογές #VAR1_BOLD# και #VAR2_BOLD#. (Default: disabled)</string>
   <string name="SYS_MEETINGS">Συναντήσεις</string>
   <string name="SYS_MEETING_POINT">Meeting point</string>
@@ -1746,7 +1746,7 @@
   <string name="SYS_SPOUSE">Σύζυγος</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Ο πάροχος υπηρεσίας λαμβάνει την απάντηση σύνδεσης SAML σε αυτά τα URL. Εισαγάγετε ένα URL ανά γραμμή. Αν το αίτημα δεν ορίζει URL, η απάντηση αποστέλλεται στο πρώτο. Το αίτημα μπορεί να ορίσει οποιοδήποτε από τα υπόλοιπα.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1825,16 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Φόρτωση</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Έχετε συνδεθεί ως #VAR2#, αλλά αυτός ο λογαριασμός δεν έχει δικαίωμα πρόσβασης στον πελάτη (#VAR1#). Για να συνεχίσετε, συνδεθείτε παρακάτω με άλλον λογαριασμό (η συνεδρία του λογαριασμού #VAR2# θα τερματιστεί) ή ακυρώστε για να επιστρέψετε στον πελάτη.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Επαναφόρτωση μεταδεδομένων</string>
   <string name="SYS_SSO_METADATA_STATUS">Κατάσταση μεταδεδομένων</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">URL ή XML μεταδεδομένων (προαιρετικό)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Εισαγάγετε το URL των μεταδεδομένων SAML της εφαρμογής ή επικολλήστε τα μεταδεδομένα σε μορφή XML και επιλέξτε Φόρτωση. Τα μεταδεδομένα από URL μπορούν να ανανεώνονται αυτόματα, ενώ το XML εφαρμόζεται μία φορά.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Εισαγάγετε πρώτα ένα URL μεταδεδομένων ή επικολλήστε τα μεταδεδομένα σε μορφή XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1849,8 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL αποσύνδεσης μέσω οπίσθιου καναλιού</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Ειδοποίηση αποσύνδεσης μεταξύ διακομιστών με υπογεγραμμένο διακριτικό. Προαιρετικό.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1861,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL αποσύνδεσης μέσω εμπρόσθιου καναλιού</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Ειδοποίηση αποσύνδεσης μέσω προγράμματος περιήγησης (iframe). Προαιρετικό.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1956,7 +1956,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Πιστοποιητικά του πελάτη για την επαλήθευση υπογεγραμμένων μηνυμάτων SAML. Μπορείτε να εισαγάγετε διαδοχικά πολλά πιστοποιητικά, για παράδειγμα κατά την αντικατάσταση του κλειδιού του πελάτη. Ένα μήνυμα γίνεται δεκτό αν επαληθεύεται με κάποιο από αυτά. Χωρίς πιστοποιητικό κρυπτογράφησης, οι δηλώσεις κρυπτογραφούνται με το πρώτο πιστοποιητικό.</string>
   <string name="SYS_START" description="Start of a date">Έναρξη</string>
   <string name="SYS_STATUS_APPROVED">Εγκρίθηκε</string>
   <string name="SYS_STATUS_BORROWED">Δανεισμένο</string>

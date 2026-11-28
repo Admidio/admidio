@@ -230,7 +230,7 @@
   <string name="SYS_ALL">அனைத்தும்</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">பங்கேற்பாளர்கள் பெயர் தெரியாத விருந்தினர்களை பதிவு செய்யலாம்</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">பங்கேற்பாளர்கள் தங்கள் பதிவில் கூடுதல் இடங்களைச் சேர்த்துக்கொள்ளலாம். பின்னர் இவை அதிகபட்ச பங்கேற்பாளர்களின் எண்ணிக்கையிலிருந்து கழிக்கப்பட்டு, மீதமுள்ள காலியிடங்கள் குறைக்கப்படுகின்றன. உதாரணமாக, ஒரு பங்கேற்பாளர் அதிக பார்வையாளர்களை அழைத்து வர விரும்பினால், மொத்தமாக அதிக இடங்கள் தேவைப்படும்போது இது பயனுள்ளதாக இருக்கும்.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">பங்கேற்புக்குள் கருத்துகளை அனுமதிக்கவும்.</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">நிகழ்வுக்குப் பதிவுசெய்யும்போது கருத்துகளை அனுமதி</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">பங்கேற்பாளர்கள் தங்கள் பங்கேற்பு குறித்து கருத்து தெரிவிக்கலாம். அந்தக் கருத்துக்களைப் பங்கேற்பாளர் பட்டியல் வழியாகப் பார்க்கலாம்.</string>
   <string name="SYS_ALL_CONTACTS">அனைத்து தொடர்புகளும்</string>
   <string name="SYS_ALL_DAY">முழு நேரம்</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">கேப்ட்சா</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">கணக்கீட்டின் முடிவு சரியானது அல்ல.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">அங்கீகாரக் குறியீடு தவறானது.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">அங்கீகாரக் குறியீடு</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">சரிபார்ப்புக் குறியீடு</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">இந்த அங்கீகாரக் குறியீடு ஒரு கேப்ட்சாவின் பகுதியாகும். கேப்ட்சா என்பது ஸ்பேமைக் கண்டறியப் பயன்படுத்தப்படுகிறது. ஒரு பயனர் அல்லது ஒரு ஸ்கிரிப்ட் (அல்லது ஸ்பேம்பாட்) படிவத்தை நிரப்பியதா என்பதைக் கண்டறிய இந்தப் படம் பயன்படுத்தப்படுகிறது. தயவுசெய்து அங்கீகாரக் குறியீட்டின் முடிவைப் படிவத்தில் நிரப்பவும்</string>
   <string name="SYS_CAPTION_SIZE">தலைப்பு அளவு</string>
   <string name="SYS_CAPTION_SIZE_DESC">தலைப்பின் அளவு, "படத்தின் அளவு / வகுப்பான்" என்ற சூத்திரத்தின் மூலம் கணக்கிடப்பட்டு, படத்தின் அளவிற்கு விகிதாசாரமாக இருக்கும். வகுப்பானை அதிகரிப்பதன் மூலம் எழுத்துரு அளவு குறைக்கப்படும். (இயல்புநிலை: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">பதிவுகளுக்கான குறிப்பிடப்பட்ட இறுதித் தேதி அடைந்துவிட்டதாலோ அல்லது அந்தத் தேதி கடந்த காலமாக இருப்பதாலோ உங்கள் பதிவை மாற்ற முடியாது. தயவுசெய்து நிகழ்வின் தலைவர் அல்லது ஒரு நிர்வாகியைத் தொடர்பு கொள்ளவும்.!</string>
   <string name="SYS_DEBUG_OUTPUT">பிழைத்திருத்த வெளியீடு</string>
   <string name="SYS_DECIMAL_NUMBER">தசம எண்</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">பதிவு செய்வதற்கான இயல்புநிலை ஒதுக்கீடு</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">பதிவின்போது இயல்புநிலைப் பாத்திரங்களை ஒதுக்குதல்</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">ஒரு புதிய பயனர் உருவாக்கப்பட்டாலோ அல்லது ஒரு புதிய பதிவு ஏற்றுக்கொள்ளப்பட்டாலோ, இந்த பாத்திரம் தானாகவே புதிய பயனருக்கு ஒதுக்கப்படும். உருவாக்குபவருக்கு பாத்திரங்களை ஒதுக்கும் உரிமை இருக்கும்போது, ​​அனைத்து பாத்திர வரைபடங்களும் காட்டப்படும், மேலும் அதற்கேற்ப மாற்றியமைக்கப்படலாம்.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">இயல்புநிலை கட்டமைப்பு</string>
@@ -887,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">பராமரிப்பாளரால் திருத்தக்கூடிய புலங்கள்</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">இங்கு தேர்ந்தெடுக்கப்பட்ட பொருள் புலங்களை, "பொருளைப் பராமரிப்பவருக்கான திருத்தும் அனுமதி" என்ற விருப்பம் செயல்படுத்தப்பட்டிருக்கும்போது, ​​அந்தப் பொருளைப் பராமரிப்பவரால் திருத்த முடியும். மற்ற எல்லாப் புலங்களும் படிக்க மட்டுமேயானவை மற்றும் தொகுதி நிர்வாகிகளால் மட்டுமே மாற்ற முடியும். (இயல்புநிலை: "கடைசி பெறுநர்", "கடன் வாங்கிய தேதி", "திரும்ப ஒப்படைத்த தேதி")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">இந்த அமைப்பின் மூலம் சரக்கு மேலாளர் தொகுதியை முழுமையாக முடக்கலாம், உள்நுழைந்த பயனர்களுக்கு மட்டுமே அணுகும்படி செய்யலாம், தொகுதி நிர்வாகிகளுக்கு மட்டுமே கட்டுப்படுத்தலாம், தொகுதி நிர்வாகிகள் மற்றும் பொருளைப் பராமரிப்பவர்களுக்கு அணுகும்படி செய்யலாம் அல்லது தேர்ந்தெடுக்கப்பட்ட ஒரு பாத்திரத்தின் உறுப்பினர்களுக்கு அணுகும்படி செய்யலாம். உள்நுழைந்த பயனர்களுக்கு மட்டுமே அணுகல் வழங்கப்பட்டால், அந்தத் தொகுதி விருந்தினர்களிடமிருந்து மறைக்கப்படும். தொகுதி நிர்வாகிகளுக்கு மட்டுமே அணுகல் இருந்தால், அந்தத் தொகுதி "சரக்குகளை நிர்வகிக்கும்" அனுமதி கொண்ட பயனர்களுக்கு மட்டுமே தெரியும். (இயல்புநிலை: செயல்படுத்தப்பட்டது)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">தேதியைச் சேர்க்கவும்</string>
+  <string name="SYS_INVENTORY_ADD_DATE">கோப்புப் பெயரின் தொடக்கத்தில் தேதியைச் சேர்</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">இந்த விருப்பம் செயல்படுத்தப்படும்போது, ​​YYYY-MM-DD வடிவத்தில் தற்போதைய தேதி ஏற்றுமதி கோப்பின் பெயரின் தொடக்கத்தில் சேர்க்கப்படும். (இயல்புநிலை: இல்லை)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">எதிர்மறை எண்களை அனுமதிக்கவும்</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">இந்த விருப்பம் இயக்கப்பட்டால், "எண்" அல்லது "தசம எண்" வகை புலங்களில் எதிர்மறை எண்களையும் உள்ளிடலாம். இல்லையெனில், நேர்மறை எண்கள் மட்டுமே அனுமதிக்கப்படும். (இயல்புநிலை: ஆம்)</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">அதிகபட்ச செயலாக்கக்கூடிய பட அளவு</string>
   <string name="SYS_MAX_RECEIVER">அஞ்சல் பெறுநர்களின் அதிகபட்ச எண்ணிக்கை</string>
   <string name="SYS_MAX_RECEIVER_DESC">இந்த மதிப்பு அதிகபட்ச அஞ்சல் பெறுநர்களின் எண்ணிக்கையை வரையறுக்கிறது. ஒரு பங்கு ஒரு பெறுநராகக் கணக்கிடப்படுகிறது.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">முன்பதிவுடன் பங்கேற்கவும்</string>
+  <string name="SYS_MAYBE_PARTICIPATE">தற்காலிகப் பங்கேற்பை அனுமதி</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">இந்த விருப்பம் செயல்படுத்தப்பட்டால், ஒரு நிகழ்வில் பதிவு செய்யும்போது #VAR1_BOLD# மற்றும் #VAR2_BOLD# ஆகியவற்றுடன் கூடுதலாக ஒரு மூன்றாவது விருப்பம் #VAR3_BOLD# கிடைக்கும். (இயல்புநிலை: முடக்கப்பட்டது)</string>
   <string name="SYS_MEETINGS">சந்திப்புகள்</string>
   <string name="SYS_MEETING_POINT">சந்திப்பு இடம்</string>
@@ -1746,7 +1746,7 @@
   <string name="SYS_SPOUSE">மனைவி</string>
   <string name="SYS_SSO">ஒற்றை உள்நுழைவு</string>
   <string name="SYS_SSO_ACS_URL">ACS URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">அசெர்ஷன் கன்ஸ்யூமர் சர்வீசர் (ACS) URL என்பது கிளையண்டின் முக்கிய நுழைவுப் புள்ளியாகும். அட்மிடியோ-வில் வெற்றிகரமாக உள்நுழைந்த பிறகு, பயனர் அந்த URL-க்குத் திருப்பி விடப்பட்டு, கிளையண்டில் உள்நுழைவார்.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">சேவை வழங்குநர் SAML உள்நுழைவுப் பதிலை இந்த URL களில் பெறுகிறார். வரிக்கு ஒரு URL ஐ உள்ளிடுங்கள். கோரிக்கையில் URL குறிப்பிடப்படாவிட்டால் பதில் முதல் URL க்கு அனுப்பப்படும். மற்ற URL களில் எதையும் கோரிக்கையில் குறிப்பிடலாம்.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1825,16 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">குறியாக்கச் சாவி அமைப்புகள்</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">கிளையண்ட் மெட்டாடேட்டாவை ஏற்றவும்</string>
+  <string name="SYS_SSO_LOAD_METADATA">ஏற்று</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">நீங்கள் வெற்றிகரமாக உள்நுழைந்துள்ளீர்கள், ஆனால் பயனர் கணக்கிற்கு சேவை வழங்குநரை (#VAR1#) அணுக அனுமதி இல்லை. கீழே உள்ள வேறு கணக்கில் உள்நுழைய முயற்சிக்கவும் அல்லது சேவை வழங்குநரிடம் திரும்பவும்.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">நீங்கள் #VAR2# ஆக உள்நுழைந்துள்ளீர்கள். இந்தக் கணக்கிற்கு கிளையண்டை (#VAR1#) அணுக அனுமதி இல்லை. தொடர, கீழே வேறொரு கணக்கில் உள்நுழையுங்கள் (இது #VAR2# கணக்கின் அமர்வை முடிக்கும்) அல்லது கிளையண்டிற்குத் திரும்ப ரத்துசெய்யுங்கள்.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">மேல்தரவை மீண்டும் ஏற்று</string>
   <string name="SYS_SSO_METADATA_STATUS">மேல்தரவின் நிலை</string>
-  <string name="SYS_SSO_METADATA_URL">மெட்டாடேட்டா URL (விரும்பினால்))</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">சில கிளையன்ட்கள் தேவையான அனைத்து அமைப்புகளுடன் கூடிய மெட்டாடேட்டா கோப்பை வழங்குகின்றன. இந்த மெட்டாடேட்டா URL இன் தானியங்கி மீட்டெடுப்பு அட்மிடியோ சேவையகத்திற்குக் கிடைத்தால் மட்டுமே செயல்படும்.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">மேல்தரவு URL அல்லது XML (விருப்பத்திற்குரியது)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">பயன்பாட்டின் SAML மேல்தரவு URL ஐ உள்ளிடுங்கள் அல்லது மேல்தரவு XML ஐ ஒட்டுங்கள். பிறகு ஏற்று என்பதைத் தேர்ந்தெடுங்கள். URL இலிருந்து பெறும் மேல்தரவைத் தானாகப் புதுப்பிக்கலாம். ஒட்டிய XML ஒருமுறை பயன்படுத்தப்படும்.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">முதலில் மேல்தரவு URL ஐ உள்ளிடுங்கள் அல்லது மேல்தரவு XML ஐ ஒட்டுங்கள்.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">வாடிக்கையாளர் (சேவை வழங்குநர்) பெயர் மற்றும் பண்புகள்</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">SAML அல்லது OIDC செய்திகளில் கையொப்பமிட அல்லது குறியாக்கம் செய்ய எந்த கிரிப்டோகிராஃபிக் விசைகளும் உள்ளமைக்கப்படவில்லை!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">OIDC கிளையண்டுகள் (சேவை வழங்குநர்கள்) எதுவும் உள்ளமைக்கப்படவில்லை!</string>
@@ -1849,8 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">அங்கீகார முடிவுப்புள்ளி</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">பின்வழி வெளியேற்ற URL</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">கையொப்பமிடப்பட்ட டோக்கனுடன் சேவையகங்களுக்கு இடையிலான வெளியேற்ற அறிவிப்பு. விருப்பத்திற்குரியது.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC கோரிக்கை</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1861,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">இந்த அமைப்பு அட்மிடியோ ஐ ஒற்றை-உள்நுழைவுக்கான OIDC அடையாள வழங்குநராக (idP) மாற்றுகிறது, இது பிற வலை பயன்பாடுகள் அட்மிடியோ பயனர் பட்டியலை மீண்டும் பயனர்களை அங்கீகரிக்க அனுமதிக்கிறது.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">முன்வழி வெளியேற்ற URL</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">உலாவி வழி வெளியேற்ற அறிவிப்பு (iframe). விருப்பத்திற்குரியது.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">வழங்குபவர்</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">இந்த அட்மிடியோ நிகழ்வின் OIDCக்கான தனித்துவமான அடையாளங்காட்டி. பொதுவாக இது உங்கள் அட்மிடியோ நிறுவலின் அடிப்படை URL ஆகும். கிளையன்ட் அதே நிறுவன ஐடியுடன் அமைக்கப்பட வேண்டும், இல்லையெனில் உள்நுழைவு வேலை செய்யாது.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1956,7 +1956,7 @@
   <string name="SYS_SSO_USERID_UUID">பயனர் UUID (சீரற்ற 32 எழுத்துச் சரம்)</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">பெறப்பட்ட அனைத்து கோரிக்கைகளிலும் கையொப்பங்களைச் சரிபார்க்கவும்.</string>
   <string name="SYS_SSO_X509_CERTIFICATE">x509 கிளையன்ட் சான்றிதழ்</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">பாதுகாப்புத் தாக்குதல்களைத் தடுப்பதற்காக, SAML செய்திகள் குறியாக்க முறையில் கையொப்பமிடப்படுகின்றன. இந்தச் சான்றிதழ் வாடிக்கையாளரால் வழங்கப்படுகிறது, மேலும் அது வாடிக்கையாளர் கொடுத்தபடியே துல்லியமாக உள்ளிடப்பட வேண்டும் அல்லது நகலெடுக்கப்பட வேண்டும். இல்லையெனில், SAML தொடர்பு தோல்வியடையும், மேலும் SSO உள்நுழைவு சாத்தியமாகாது.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">கையொப்பமிடப்பட்ட SAML செய்திகளைச் சரிபார்க்கும் கிளையண்டின் சான்றிதழ்கள். கிளையண்ட் தனது விசையை மாற்றும்போது போன்ற சூழலில் பல சான்றிதழ்களை வரிசையாக உள்ளிடலாம். அவற்றில் ஒன்றைக் கொண்டு சரிபார்க்க முடிந்தால் செய்தி ஏற்கப்படும். மறையாக்கச் சான்றிதழ் இல்லாவிட்டால் முதல் சான்றிதழைப் பயன்படுத்தி SAML உறுதிக்கூற்றுகள் மறையாக்கப்படும்.</string>
   <string name="SYS_START" description="Start of a date">தொடங்கு</string>
   <string name="SYS_STATUS_APPROVED">ஒப்புதல் அளிக்கப்பட்டது</string>
   <string name="SYS_STATUS_BORROWED">இரவல் பெறப்பட்டது</string>
@@ -2139,7 +2139,7 @@
   <string name="SYS_YOUR_CONFIGURATION">உங்கள் கட்டமைப்பு</string>
   <string name="SYS_YOUR_EMAIL">உங்கள் மின்னஞ்சல்</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">உங்கள் கடைசி கட்டமைப்பு</string>
-  <string name="SYS_YOUR_LISTS">சொந்த பட்டியல்கள்</string>
+  <string name="SYS_YOUR_LISTS">உங்கள் பட்டியல்கள்</string>
   <string name="SYS_YOUR_NAME">உங்கள் பெயர்</string>
   <string name="SYS_Z_TO_A">இசட் முதல் ஏ</string>
 </resources>

@@ -230,7 +230,7 @@
   <string name="SYS_ALL">ทั้งหมด</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">ผู้เข้าร่วมสามารถลงทะเบียนแขกที่ไม่ระบุชื่อได้</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">ผู้เข้าร่วมสามารถเพิ่มที่นั่งเพิ่มเติมในการลงทะเบียนได้ จากนั้นจะลบออกจากจำนวนผู้เข้าร่วมสูงสุดและที่นั่งว่างที่เหลือจะลดลง สิ่งนี้มีประโยชน์เช่นหากผู้เข้าร่วมสามารถนำผู้มาเยี่ยมชมได้มากขึ้น และต้องใช้สถานที่ฟรีจำนวนทั้งหมด</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">อนุญาตให้แสดงความคิดเห็นในการเข้าร่วม</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">อนุญาตให้แสดงความคิดเห็นเมื่อลงทะเบียนเข้าร่วมกิจกรรม</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">ผู้เข้าร่วมสามารถแสดงความคิดเห็นเกี่ยวกับการเข้าร่วมได้ สามารถดูความคิดเห็นได้ผ่านรายชื่อผู้เข้าร่วม</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">เต็มเวลา</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">แคปช่า</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">ผลการคำนวณไม่ถูกต้อง</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">รหัสการตรวจสอบความถูกต้องไม่ถูกต้อง</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">รหัสยืนยันตัวตน</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">รหัสยืนยัน</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">รหัสการตรวจสอบสิทธิ์เป็นส่วนหนึ่งของ captcha แคปต์ชาใช้สำหรับการตรวจจับสแปม รูปภาพนี้ใช้เพื่อตรวจสอบว่าผู้ใช้หรือสคริปต์ (หรือสแปมบอท) กรอกแบบฟอร์มหรือไม่\nกรุณา กรอกผลลัพธ์ของรหัสการรับรองความถูกต้องลงในแบบฟอร์ม</string>
   <string name="SYS_CAPTION_SIZE">ขนาดคำบรรยาย</string>
   <string name="SYS_CAPTION_SIZE_DESC">ขนาดของคำบรรยายจะเป็นสัดส่วนกับขนาดรูปภาพ คำนวณโดยสูตร \"ขนาดรูปภาพ / ตัวแก้ไข\" เมื่อเพิ่ม devisor ขนาดตัวอักษรจะลดลง (ค่าเริ่มต้น: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">การลงทะเบียนของคุณ ไม่สามารถเปลี่ยนแปลงได้เนื่องจากถึงวันสิ้นสุดการลงทะเบียนที่กำหนดหรือวันที่เป็นวันที่ผ่านมาแล้ว โปรดติดต่อหัวหน้างานหรือผู้ดูแลระบบ!</string>
   <string name="SYS_DEBUG_OUTPUT">ดีบักเอาต์พุต</string>
   <string name="SYS_DECIMAL_NUMBER">เลขทศนิยม</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">การกำหนดค่าเริ่มต้นของการลงทะเบียน</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">การกำหนดบทบาทเริ่มต้นเมื่อลงทะเบียน</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">หากมีการสร้างผู้ใช้ใหม่หรือยอมรับการลงทะเบียนใหม่ บทบาทนี้จะถูกกำหนดให้กับผู้ใช้ใหม่โดยอัตโนมัติ เมื่อผู้สร้างมีสิทธิ์ในการมอบหมายบทบาท การแมปบทบาททั้งหมดจะแสดงขึ้นและสามารถเปลี่ยนแปลงได้ตามนั้น</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">การกำหนดค่าเริ่มต้น</string>
@@ -887,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">เติมวันที่ไว้หน้าชื่อไฟล์</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -900,7 +900,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">ตำแหน่งทศนิยม</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">สูงสุด ขนาดภาพที่ประมวลผลได้</string>
   <string name="SYS_MAX_RECEIVER">จำนวนผู้รับจดหมายสูงสุด</string>
   <string name="SYS_MAX_RECEIVER_DESC">ค่านี้กำหนดจำนวนผู้รับเมลสูงสุด บทบาทนับเป็นผู้รับหนึ่งราย</string>
-  <string name="SYS_MAYBE_PARTICIPATE">เข้าร่วมด้วย การจอง</string>
+  <string name="SYS_MAYBE_PARTICIPATE">อนุญาตให้ตอบรับการเข้าร่วมเบื้องต้น</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">หากเปิดใช้งานตัวเลือกนี้ จะมีตัวเลือกที่สาม #VAR3_BOLD# นอกเหนือจากตัวเลือก #VAR1_BOLD# และ #VAR2_BOLD# (ค่าเริ่มต้น: ปิดการใช้งาน)</string>
   <string name="SYS_MEETINGS">การประชุม</string>
   <string name="SYS_MEETING_POINT">Meeting point</string>
@@ -1746,7 +1746,7 @@
   <string name="SYS_SPOUSE">คู่สมรส</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">ผู้ให้บริการจะได้รับการตอบกลับการเข้าสู่ระบบ SAML ที่ URL เหล่านี้ ป้อนหนึ่ง URL ต่อบรรทัด หากคำขอไม่ระบุ URL ระบบจะส่งการตอบกลับไปยัง URL แรก คำขอสามารถระบุ URL อื่นในรายการได้</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1825,16 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">โหลด</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">คุณเข้าสู่ระบบด้วยบัญชี #VAR2# แต่บัญชีนี้ไม่มีสิทธิ์เข้าถึงไคลเอนต์ (#VAR1#) หากต้องการดำเนินการต่อ ให้เข้าสู่ระบบด้วยบัญชีอื่นด้านล่าง (เซสชันของ #VAR2# จะสิ้นสุดลง) หรือยกเลิกเพื่อกลับไปยังไคลเอนต์</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">โหลดข้อมูลเมตาใหม่</string>
   <string name="SYS_SSO_METADATA_STATUS">สถานะข้อมูลเมตา</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">URL หรือ XML ของข้อมูลเมตา (ไม่บังคับ)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">ป้อน URL ของข้อมูลเมตา SAML ของแอปพลิเคชัน หรือวางข้อมูลเมตาในรูปแบบ XML แล้วเลือกโหลด ข้อมูลเมตาจาก URL สามารถรีเฟรชโดยอัตโนมัติได้ ส่วน XML ที่วางจะใช้เพียงครั้งเดียว</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">ป้อน URL ของข้อมูลเมตาหรือวางข้อมูลเมตาในรูปแบบ XML ก่อน</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1849,8 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL สำหรับออกจากระบบผ่านช่องทางด้านหลัง</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">การแจ้งเตือนการออกจากระบบระหว่างเซิร์ฟเวอร์ด้วยโทเค็นที่ลงนาม ไม่บังคับ</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1861,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL สำหรับออกจากระบบผ่านช่องทางด้านหน้า</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">การแจ้งเตือนการออกจากระบบผ่านเบราว์เซอร์ (iframe) ไม่บังคับ</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1956,7 +1956,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">ใบรับรองของไคลเอนต์สำหรับตรวจสอบข้อความ SAML ที่ลงนาม สามารถป้อนใบรับรองหลายใบต่อกันได้ เช่น เมื่อไคลเอนต์เปลี่ยนคีย์ ระบบจะยอมรับข้อความหากตรวจสอบได้ด้วยใบรับรองใบใดใบหนึ่ง หากไม่ได้กำหนดใบรับรองสำหรับการเข้ารหัส ระบบจะใช้ใบรับรองใบแรกเข้ารหัสข้อมูลรับรอง SAML</string>
   <string name="SYS_START" description="Start of a date">เริ่ม</string>
   <string name="SYS_STATUS_APPROVED">อนุมัติแล้ว</string>
   <string name="SYS_STATUS_BORROWED">ถูกยืมแล้ว</string>
@@ -2139,7 +2139,7 @@
   <string name="SYS_YOUR_CONFIGURATION">การกำหนดค่าของคุณ</string>
   <string name="SYS_YOUR_EMAIL">อีเมลของคุณ</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">การกำหนดค่าล่าสุดของคุณ</string>
-  <string name="SYS_YOUR_LISTS">รายการของตัวเอง</string>
+  <string name="SYS_YOUR_LISTS">รายการของคุณ</string>
   <string name="SYS_YOUR_NAME">ชื่อของคุณ</string>
   <string name="SYS_Z_TO_A">Z ถึง A</string>
 </resources>

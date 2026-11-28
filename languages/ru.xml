@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Все</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Участники могут регистрировать анонимных гостей</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Участники могут добавить к своей регистрации дополнительные места. Затем они вычитаются из максимального количества участников, и таким образом уменьшается количество оставшихся свободных мест. Это полезно, например, если участник может привести с собой больше гостей и, таким образом, ему требуется большее количество свободных мест.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Разрешить комментарии в рамках участия</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Разрешить комментарии при записи на мероприятие</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Участники могут оставлять комментарии относительно своего участия. Комментарии можно просмотреть через список участников</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Полный день</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">Капча</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Результат вычисления неверен.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Код аутентификации оказался недействительным.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Код аутентификации</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Код подтверждения</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Код аутентификации является частью капчи. Капча используется для обнаружения спама. Картинка используется для определения, заполнил ли форму пользователь или скрипт (или спам-бот).\nПожалуйста, введите в форму результат кода аутентификации.</string>
   <string name="SYS_CAPTION_SIZE">Размер надписи</string>
   <string name="SYS_CAPTION_SIZE_DESC">Размер надписи пропорционален размеру изображения и рассчитывается по формуле \«Размер изображения / Девизор\». При увеличении девизора размер шрифта уменьшается. (По умолчанию: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Ваша регистрация не может быть изменена, поскольку указанная дата окончания регистрации уже наступила или дата уже в прошлом. Пожалуйста, свяжитесь с руководителем мероприятия или администратором!</string>
   <string name="SYS_DEBUG_OUTPUT">Дебаг-вывод</string>
   <string name="SYS_DECIMAL_NUMBER">Десятичное число</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Назначение регистрации по умолчанию</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Назначение ролей по умолчанию при регистрации</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Если создается новый пользователь или принимается новая регистрация, то эта роль автоматически назначается новому пользователю. Если у создателя есть право назначать роли, все сопоставления ролей отображаются и могут быть изменены соответствующим образом.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Конфигурация по умолчанию</string>
@@ -887,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Добавлять дату в начало имени файла</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -900,7 +900,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Знаки после запятой</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Максимальный размер обрабатываемого изображения</string>
   <string name="SYS_MAX_RECEIVER">Максимальное количество получателей почты</string>
   <string name="SYS_MAX_RECEIVER_DESC">Это значение определяет максимальное количество получателей почты. Роль считается за одного получателя.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Участие с резервированием</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Разрешить предварительное участие</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Если эта опция активирована, то при регистрации на мероприятие в дополнение к #VAR1_BOLD# и #VAR2_BOLD# будет доступна третья опция #VAR3_BOLD#. (По умолчанию: отключено)</string>
   <string name="SYS_MEETINGS">Встречи</string>
   <string name="SYS_MEETING_POINT">Место встречи</string>
@@ -1746,7 +1746,7 @@
   <string name="SYS_SPOUSE">Супруг</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Поставщик услуг получает ответ SAML на запрос входа по этим URL. Укажите по одному URL на строку. Если в запросе не указан URL, ответ отправляется на первый адрес. В запросе можно указать любой из остальных адресов.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1825,16 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Загрузить</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Вы вошли как #VAR2#, но у этой учётной записи нет доступа к клиенту (#VAR1#). Чтобы продолжить, войдите ниже под другой учётной записью (сеанс #VAR2# будет завершён) или отмените вход, чтобы вернуться к клиенту.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Загрузить метаданные заново</string>
   <string name="SYS_SSO_METADATA_STATUS">Состояние метаданных</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">URL или XML метаданных (необязательно)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Введите URL метаданных SAML приложения или вставьте их в формате XML и выберите «Загрузить». Метаданные по URL можно обновлять автоматически, а вставленный XML применяется только один раз.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Сначала введите URL метаданных или вставьте их в формате XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1849,8 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL выхода через серверный канал</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Уведомление о выходе между серверами с подписанным токеном. Необязательно.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1861,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL выхода через браузерный канал</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Уведомление о выходе через браузер (iframe). Необязательно.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1956,7 +1956,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Сертификаты клиента для проверки подписанных сообщений SAML. Можно указать несколько сертификатов подряд, например на время замены ключа клиента. Сообщение принимается, если его можно проверить одним из сертификатов. Если сертификат для шифрования не задан, утверждения шифруются первым сертификатом.</string>
   <string name="SYS_START" description="Start of a date">Начало</string>
   <string name="SYS_STATUS_APPROVED">Одобрено</string>
   <string name="SYS_STATUS_BORROWED">Выдано</string>
@@ -2139,7 +2139,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Ваша конфигурация</string>
   <string name="SYS_YOUR_EMAIL">Ваша эл. почта</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Ваша последняя конфигурация</string>
-  <string name="SYS_YOUR_LISTS">Собственные списки</string>
+  <string name="SYS_YOUR_LISTS">Ваши списки</string>
   <string name="SYS_YOUR_NAME">Ваше имя</string>
   <string name="SYS_Z_TO_A">От Я до А</string>
 </resources>

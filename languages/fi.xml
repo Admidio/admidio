@@ -232,7 +232,7 @@
   <string name="SYS_ALL">Kaikki</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Osallistujat voivat rekisteröidä nimettömiä vieraita</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Osallistujat voivat lisätä lisäpaikkoja rekisteröintiinsä. Ne vähennetään osallistujamäärän enimmäismäärästä ja jäljellä olevat vapaat paikat vähenevät. Tästä on hyötyä esimerkiksi, jos osallistuja voi tuoda enemmän kävijöitä ja vaatii siten ilmaisia ​​paikkoja.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Salli kommentit osallistumisen sisällä</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Salli kommentit ilmoittautumisen yhteydessä</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Osallistujat voivat kommentoida osallistumistaan. Kommentteja voi tarkastella osallistujaluettelon kautta</string>
   <string name="SYS_ALL_CONTACTS">Kaikki yhteystiedot</string>
   <string name="SYS_ALL_DAY">Kokopäiväinen</string>
@@ -308,7 +308,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Laskennan tulos ei ole oikea.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Todennuskoodi oli virheellinen.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Todennuskoodi</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Vahvistuskoodi</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Todennuskoodi on osa captchaa. Roskapostin havaitsemiseen käytetään captchaa. Kuvaa käytetään havaitsemaan, onko käyttäjä tai komentosarja (tai spambotti) täyttänyt lomakkeen. \nTäytä todennuskoodin tulos lomakkeeseen.</string>
   <string name="SYS_CAPTION_SIZE">Tekstityksen koko</string>
   <string name="SYS_CAPTION_SIZE_DESC">Kuvatekstin koko on verrannollinen kuvan kokoon laskettuna kaavalla \"Kuvakoko / Devisori \". Lisäämällä kehittäjää fonttikoko pienenee. (Oletus: 40)</string>
@@ -536,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Rekisteröitymistäsi ei voi muuttaa, koska ilmoitusten viimeinen päättymispäivä on saavutettu tai päivämäärä on ohi. Ota yhteyttä tapahtuman johtajaan tai järjestelmänvalvojaan!</string>
   <string name="SYS_DEBUG_OUTPUT">Virheenkorjaustila</string>
   <string name="SYS_DECIMAL_NUMBER">desimaaliluku</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Rekisteröinnin oletusmääritys</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Roolien oletusmääritys rekisteröityessä</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Jos uusi käyttäjä luodaan tai uusi rekisteröinti hyväksytään, tämä rooli osoitetaan automaattisesti uudelle käyttäjälle. Kun luojalla on oikeus antaa rooleja, kaikki roolikartat näytetään ja niitä voidaan muuttaa vastaavasti.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Oletusasetukset</string>
@@ -892,7 +892,7 @@
 *** Translated with www.DeepL.com/Translator (free version) ***
 
 </string>
-  <string name="SYS_INVENTORY_ADD_DATE">Lisää päivämäärä</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Lisää päivämäärä tiedostonimen alkuun</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Kun tämä asetus on käytössä, vientitiedoston nimen eteen lisätään nykyinen päivämäärä muodossa YYYY-MM-DD. (Oletus: ei)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Salli negatiiviset luvut</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Jos tämä asetus on käytössä, ”Luku”- tai ”Desimaaliluku”-tyyppisiin kenttiin voidaan syöttää myös negatiivisia lukuja. Muussa tapauksessa sallitaan vain positiiviset luvut. (Oletus: kyllä)</string>
@@ -908,7 +908,7 @@
 
 
 </string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desimaaliväli</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desimaalit</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">”Desimaaliluku”-tyyppisissä kentissä näytettävien desimaalien määrä. (Oletus: 1)</string>
   <string name="SYS_INVENTORY_DESC">Varastohallintaohjelman avulla voit järjestellä, hallita ja seurata tuotteita.</string>
   <string name="SYS_INVENTORY_EXPORT">Vienti</string>
@@ -1122,7 +1122,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">suurin käsiteltävä kuvakoko</string>
   <string name="SYS_MAX_RECEIVER">Sähköpostin vastaanottajien enimmäismäärä</string>
   <string name="SYS_MAX_RECEIVER_DESC">Tämä arvo määrittää sähköpostin vastaanottajien enimmäismäärän. Rooli lasketaan yhdeksi vastaanottajaksi.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Osallistu varauksella</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Salli alustava osallistuminen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Jos tämä asetus on käytössä, tapahtumaan ilmoittautuessa on käytettävissä kolmas vaihtoehto #VAR3_BOLD# #VAR1_BOLD#:n ja #VAR2_BOLD#:n lisäksi. (Oletusasetus: pois käytöstä)</string>
   <string name="SYS_MEETINGS">Kokoukset</string>
   <string name="SYS_MEETING_POINT">Kokouspaikka</string>
@@ -1754,7 +1754,7 @@
   <string name="SYS_SPOUSE">Puoliso</string>
   <string name="SYS_SSO">Yhden kirjautumisen järjestelmä</string>
   <string name="SYS_SSO_ACS_URL">Vahvistuksen vastaanottajan URL-osoite</string>
-  <string name="SYS_SSO_ACS_URL_DESC">Palveluntarjoaja vastaanottaa SAML-kirjautumisvastauksen tällä URL-osoitteella.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Palveluntarjoaja vastaanottaa SAML-kirjautumisvastauksen näihin URL-osoitteisiin. Anna yksi osoite riviä kohti. Jos pyynnössä ei nimetä osoitetta, vastaus lähetetään ensimmäiseen osoitteeseen. Pyyntö voi nimetä minkä tahansa muista osoitteista.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Lisäasetukset</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Salli paikallisverkkopyynnöt</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1833,16 +1833,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Lataa</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Olet kirjautunut tilillä #VAR2#, mutta tällä tilillä ei ole oikeutta käyttää asiakassovellusta (#VAR1#). Jatka kirjautumalla alla toisella tilillä (tämä päättää tilin #VAR2# istunnon) tai palaa asiakassovellukseen peruuttamalla.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Lataa metatiedot uudelleen</string>
   <string name="SYS_SSO_METADATA_STATUS">Metatietojen tila</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">Metatietojen URL tai XML (valinnainen)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Anna sovelluksen SAML-metatietojen URL tai liitä metatiedot XML-muodossa ja valitse Lataa. URL-osoitteesta haettavat metatiedot voidaan päivittää automaattisesti, kun taas liitetty XML otetaan käyttöön vain kerran.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Anna ensin metatietojen URL tai liitä metatiedot XML-muodossa.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1857,8 +1857,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Taustakanavan uloskirjautumisosoite</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Palvelinten välinen uloskirjautumisilmoitus allekirjoitetulla tunnisteella. Valinnainen.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1869,8 +1869,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Selainkanavan uloskirjautumisosoite</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Uloskirjautumisilmoitus selaimen kautta (iframe). Valinnainen.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1964,7 +1964,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Asiakassovelluksen varmenteet allekirjoitettujen SAML-viestien tarkistamiseen. Voit antaa useita varmenteita peräkkäin esimerkiksi asiakassovelluksen avaimen vaihdon ajaksi. Viesti hyväksytään, jos sen voi tarkistaa jollakin varmenteista. Jos salausvarmennetta ei ole, väitteet salataan ensimmäisellä varmenteella.</string>
   <string name="SYS_START" description="Start of a date">Aloita</string>
   <string name="SYS_STATUS_APPROVED">Hyväksytty</string>
   <string name="SYS_STATUS_BORROWED">Lainassa</string>
@@ -2147,7 +2147,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Kokoonpanosi</string>
   <string name="SYS_YOUR_EMAIL">Sähköpostisi</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Viimeiset määritykset</string>
-  <string name="SYS_YOUR_LISTS">Omat luettelot</string>
+  <string name="SYS_YOUR_LISTS">Omat listasi</string>
   <string name="SYS_YOUR_NAME">Nimesi</string>
   <string name="SYS_Z_TO_A">Ö - A</string>
 </resources>

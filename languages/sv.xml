@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Samtliga</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Deltagare kan registrera anonyma gäster</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Deltagarna kan lägga till ytterligare platser i sin registrering. Dessa subtraheras sedan från det maximala antalet deltagare och de tillgängliga lediga platser minskas. Detta är t.ex. användbart om en deltagare vill ta med fler besökare och därmed har behov av fler lediga platser.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Tillåt kommentarer inom deltagande</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Tillåt kommentarer vid anmälan</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Deltagarna kan kommentera sitt deltagande. Kommentarerna kan ses via deltagarlistan</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Heltid</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Resultatet av beräkningen är inte korrekt.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Autentiseringskoden var ogiltig.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Autentiseringskod</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Verifieringskod</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Autentiseringskoden är en del av en captcha. En captcha används för att upptäcka skräppost. Bilden används för att upptäcka om en användare eller ett skript (eller spambot) har fyllt i formuläret. \n Fyll i resultatet av verifieringskoden i formuläret.</string>
   <string name="SYS_CAPTION_SIZE">Bildtext Storlek</string>
   <string name="SYS_CAPTION_SIZE_DESC">Bildtextens storlek är proportionell mot bildstorleken, beräknad med formeln \ &amp;quot;Bildstorlek / Devisor \&amp;quot;. Genom att öka rådgivaren kommer fontstorleken att reduceras. (Standard: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Din registrering kan inte ändras då det angivna slutdatumet för registrering har passerats. Kontakta en ledare för evenemanget eller en administratör!</string>
   <string name="SYS_DEBUG_OUTPUT">Debug -utdata</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaltal.</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardtilldelning för registrering</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardtilldelning av roller vid registrering</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Om en ny användare skapas eller en ny registrering accepteras tilldelas denna roll automatiskt den nya användaren. När skaparen har rätt att tilldela roller visas alla rollkartläggningar och kan ändras i enlighet därmed.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardinställning</string>
@@ -887,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Lägg till datum i början av filnamnet</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -900,7 +900,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimaler</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">max. bearbetbar bildstorlek</string>
   <string name="SYS_MAX_RECEIVER">Maximalt antal e-postmottagare</string>
   <string name="SYS_MAX_RECEIVER_DESC">Detta värde definierar det maximala antalet e-postmottagare. En roll räknas som en mottagare.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Jag får delta</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Tillåt preliminärt deltagande</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Om aktiverat finns en tredje option, #VAR3_BOLD#, tillgänglig i tillägg till #VAR1_BOLD# och #VAR2_BOLD# vid registrering för ett evenemang. (Standard: avaktiverad)</string>
   <string name="SYS_MEETINGS">Möten</string>
   <string name="SYS_MEETING_POINT">Träffpunkt</string>
@@ -1746,7 +1746,7 @@
   <string name="SYS_SPOUSE">Make/maka</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Tjänsteleverantören tar emot SAML-inloggningssvaret på dessa URL:er. Ange en URL per rad. Svaret skickas till den första om begäran inte anger någon URL. Begäran kan ange vilken som helst av de övriga.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1825,16 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Läs in</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du är inloggad som #VAR2#, men det här kontot har inte behörighet att komma åt klienten (#VAR1#). Logga in nedan med ett annat konto för att fortsätta (det avslutar sessionen för #VAR2#), eller avbryt för att återgå till klienten.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Läs in metadata igen</string>
   <string name="SYS_SSO_METADATA_STATUS">Status för metadata</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">Metadata-URL eller XML (valfritt)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Ange URL:en till programmets SAML-metadata eller klistra in metadata i XML-format och välj Läs in. Metadata från en URL kan uppdateras automatiskt. Inklistrad XML tillämpas bara en gång.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Ange först en metadata-URL eller klistra in metadata i XML-format.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1849,8 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL för utloggning via bakkanal</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Utloggningsmeddelande mellan servrar med en signerad token. Valfritt.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1861,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL för utloggning via framkanal</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Utloggningsmeddelande via webbläsaren (iframe). Valfritt.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1956,7 +1956,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Klientens certifikat för verifiering av signerade SAML-meddelanden. Flera certifikat kan anges i följd, exempelvis när klientens nyckel byts. Ett meddelande godtas om det kan verifieras med ett av certifikaten. Om krypteringscertifikat saknas krypteras SAML-intygen med det första certifikatet.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_APPROVED">Godkänd</string>
   <string name="SYS_STATUS_BORROWED">Utlånad</string>
@@ -2139,7 +2139,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Din konfiguration</string>
   <string name="SYS_YOUR_EMAIL">Din epost</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Din senaste konfiguration</string>
-  <string name="SYS_YOUR_LISTS">Egna listor</string>
+  <string name="SYS_YOUR_LISTS">Dina listor</string>
   <string name="SYS_YOUR_NAME">Ditt namn</string>
   <string name="SYS_Z_TO_A">ö till a</string>
 </resources>

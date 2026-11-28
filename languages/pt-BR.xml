@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Todos</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participantes podem registrar convidados anônimos</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participantes podem adicionar assentos aos seus registros, que serão subtraídos do número máximo de participantes e da quantidade de assentos livres remanescentes. Isto é útil se, por exemplo, um participante puder trazer mais visitantes e portanto precisa de assentos livres.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Permitir comentários na participação</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Permitir comentários na inscrição no evento</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Participantes podem comentar em sua participação. Os comentários podem ser vistos via lista de participantes</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Tempo integral</string>
@@ -535,7 +535,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Seu registro não pode ser mudado porque o prazo para registros já foi encerrado. Contate um organizador do evento ou administrador!</string>
   <string name="SYS_DEBUG_OUTPUT">Debug output</string>
   <string name="SYS_DECIMAL_NUMBER">Número decimal</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Atribuição padrão de registro</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Atribuição padrão de funções no cadastro</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Este cargo será atribuído automaticamente quando um novo usuário for criado ou um novo registro for aprovado. Quem tiver permissão para atribuir cargos poderá consultar e alterar essas atribuições.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configuração padrão</string>
@@ -888,7 +888,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Adicionar a data no início do nome do arquivo</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -901,7 +901,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Casas decimais</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1115,7 +1115,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">tamanho máx processável de imagem</string>
   <string name="SYS_MAX_RECEIVER">Número máximo de destinatários de e-mail</string>
   <string name="SYS_MAX_RECEIVER_DESC">Este valor define o número máximo permitido para destinatários de e-mail. Um cargo conta como um destinatário.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Participar com reserva</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Permitir participação provisória</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Se esta opção for ativada, haverá uma terceira opção #VAR3_BOLD# além das opções #VAR1_BOLD# e #VAR2_BOLD#. (Padrão: desativado)</string>
   <string name="SYS_MEETINGS">Encontros</string>
   <string name="SYS_MEETING_POINT">Meeting point</string>
@@ -1747,7 +1747,7 @@
   <string name="SYS_SPOUSE">Cônjuge</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">O provedor de serviços recebe a resposta de login SAML nestas URLs. Insira uma URL por linha. Se a solicitação não indicar uma URL, a resposta será enviada à primeira. A solicitação pode indicar qualquer uma das demais.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1826,16 +1826,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Carregar</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Você entrou como #VAR2#, mas esta conta não tem permissão para acessar o cliente (#VAR1#). Para continuar, entre abaixo com outra conta (isso encerrará a sessão de #VAR2#) ou cancele para voltar ao cliente.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Recarregar metadados</string>
   <string name="SYS_SSO_METADATA_STATUS">Status dos metadados</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">URL ou XML de metadados (opcional)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Insira a URL dos metadados SAML do aplicativo ou cole o XML dos metadados e selecione Carregar. Os metadados de uma URL podem ser atualizados automaticamente. O XML colado é aplicado uma única vez.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Insira primeiro a URL dos metadados ou cole o XML dos metadados.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1850,8 +1850,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL de saída pelo canal de retaguarda</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Notificação de saída entre servidores com um token assinado. Opcional.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1862,8 +1862,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL de saída pelo canal frontal</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Notificação de saída pelo navegador (iframe). Opcional.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1957,7 +1957,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certificados do cliente usados para verificar mensagens SAML assinadas. Você pode inserir vários certificados em sequência, por exemplo, enquanto o cliente troca sua chave. Uma mensagem é aceita se for verificada com um deles. Sem um certificado de criptografia, as asserções são criptografadas com o primeiro certificado.</string>
   <string name="SYS_START" description="Start of a date">Início</string>
   <string name="SYS_STATUS_APPROVED">Aprovado</string>
   <string name="SYS_STATUS_BORROWED">Emprestado</string>
@@ -2140,7 +2140,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Sua configuração</string>
   <string name="SYS_YOUR_EMAIL">Seu e-mail</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Sua última configuração</string>
-  <string name="SYS_YOUR_LISTS">Minhas listas</string>
+  <string name="SYS_YOUR_LISTS">Suas listas</string>
   <string name="SYS_YOUR_NAME">Seu nome</string>
   <string name="SYS_Z_TO_A">Z a A</string>
 </resources>

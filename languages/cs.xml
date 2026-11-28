@@ -232,7 +232,7 @@
   <string name="SYS_ALL">Vše</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Účastníci mohou registrovat anonymní hosty</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Účastníci mohou ke své registraci přidat další místa. Tato místa se pak odečtou od maximálního počtu účastníků a tím se sníží počet zbývajících volných míst. To je užitečné např. tehdy, pokud s sebou účastník může vzít více návštěvníků a vyžaduje tak celkově více volných míst.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Povolit komentáře v rámci účasti</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Povolit komentáře při přihlašování na akci</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Účastníci mohou svou účast komentovat. Komentáře lze zobrazit prostřednictvím seznamu účastníků.</string>
   <string name="SYS_ALL_CONTACTS">Všechny kontakty</string>
   <string name="SYS_ALL_DAY">Celý den</string>
@@ -536,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Vaši registraci nelze změnit, protože bylo dosaženo stanoveného data ukončení registrací nebo je datum v minulosti. Kontaktujte prosím vedoucího události nebo administrátora!</string>
   <string name="SYS_DEBUG_OUTPUT">Ladící výstup - Debug</string>
   <string name="SYS_DECIMAL_NUMBER">Desetinné číslo</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Výchozí přiřazení registrace</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Výchozí přiřazení rolí při registraci</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Pokud je vytvořen nový uživatel nebo přijata nová registrace, je mu automaticky přiřazena tato role. Pokud má tvůrce právo přiřazovat role, zobrazí se všechna mapování rolí a lze je odpovídajícím způsobem změnit.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Výchozí konfigurace</string>
@@ -889,7 +889,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Pole upravitelná správcem</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Zde vybraná pole položek může správce položky upravovat, pokud je povolena možnost „Oprávnění k úpravám pro správce“. Všechna ostatní pole jsou pouze pro čtení a mohou je měnit pouze administrátoři modulu. (Výchozí: „Poslední příjemce“, „Datum zapůjčení“, „Datum vrácení“)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Modul správce inventáře lze prostřednictvím tohoto nastavení zcela zakázat, zpřístupnit pouze přihlášeným uživatelům, omezit výhradně na administrátory modulu, zpřístupnit administrátorům modulu a správcům položek nebo zpřístupnit členům vybrané role. Pokud je přístup povolen pouze přihlášeným uživatelům, modul je před hosty skryt. Pokud mají přístup pouze administrátoři modulu, modul je viditelný pouze uživatelům s oprávněním „spravovat inventář“. (Výchozí: Povoleno)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Připojit datum</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Přidat datum na začátek názvu souboru</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Pokud je tato možnost povolena, bude k názvu exportního souboru připojen aktuální datum ve formátu RRRR-MM-DD. (Výchozí: ne)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Povolit záporná čísla</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Pokud je tato možnost povolena, lze do polí typu „Číslo“ nebo „Desetinné číslo“ zadávat i záporná čísla. V opačném případě jsou povolena pouze kladná čísla. (Výchozí: ano)</string>
@@ -902,7 +902,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Zobrazení data</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Výběr formátu data, který se použije pro zobrazení informací o datu a čase ve správci inventáře. (Výchozí: Datum (DD.MM.RRRR))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Do této tabulky můžete zadat záznamy pro časové intervaly. Pro každý další záznam v rozbalovacím seznamu zde lze přidat řádek tabulky.\nZáznam v seznamu se později neukládá jako text, ale jako vybraná pozice ze seznamu. Pokud změníte text v řádku, všichni uživatelé okamžitě uvidí nový text.\nČasový interval musí být napsán ve stejném řádku oddělený symbolem | za názvem. např. Ročně | 1y \nPokud není uvedena žádná jednotka, předpokládají se dny. \nMožné jednotky: d: dny, w: týdny, m: měsíce, y: roky</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Počet desetinných míst</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desetinná místa</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Počet desetinných míst, která se mají zobrazovat u polí typu „Desetinné číslo“. (Výchozí: 1)</string>
   <string name="SYS_INVENTORY_DESC">Správce inventáře vám umožňuje organizovat, spravovat a sledovat položky.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1116,7 +1116,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. zpracovatelná velikost obrázku</string>
   <string name="SYS_MAX_RECEIVER">Maximální počet příjemců e-mailu</string>
   <string name="SYS_MAX_RECEIVER_DESC">Tato hodnota definuje maximální množství příjemců e-mailu. Role se počítá jako jeden příjemce.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Zúčastnit se s výhradou</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Povolit předběžnou účast</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Je-li tato možnost aktivována, je při registraci na událost k dispozici třetí možnost #VAR3_BOLD# kromě #VAR1_BOLD# a #VAR2_BOLD#. (Výchozí: zakázáno)</string>
   <string name="SYS_MEETINGS">Schůzky</string>
   <string name="SYS_MEETING_POINT">Místo srazu</string>
@@ -1748,7 +1748,7 @@
   <string name="SYS_SPOUSE">Manžel/ka</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Poskytovatel služby přijímá odpověď SAML na přihlášení na těchto adresách URL. Zadejte jednu adresu na řádek. Pokud požadavek žádnou adresu neurčí, odpověď se odešle na první. Požadavek může určit i kteroukoli z ostatních.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1827,16 +1827,16 @@
   <string name="SYS_SSO_KEY_SETTING">Nastavení kryptografického klíče</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Načíst metadata klienta</string>
+  <string name="SYS_SSO_LOAD_METADATA">Načíst</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Jste přihlášeni jako #VAR2#, ale tento účet nemá oprávnění k přístupu ke klientovi (#VAR1#). Chcete-li pokračovat, přihlaste se níže jiným účtem (tím ukončíte relaci účtu #VAR2#) nebo se zrušením vraťte ke klientovi.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Znovu načíst metadata</string>
   <string name="SYS_SSO_METADATA_STATUS">Stav metadat</string>
-  <string name="SYS_SSO_METADATA_URL">URL metadat (volitelné)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">Adresa URL nebo XML metadat (nepovinné)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Zadejte adresu URL metadat SAML aplikace nebo vložte jejich XML a zvolte Načíst. Metadata z adresy URL lze obnovovat automaticky, vložené XML se použije jednorázově.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Nejprve zadejte adresu URL metadat nebo vložte jejich XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nejsou nakonfigurovány žádné kryptografické klíče pro podepisování nebo šifrování zpráv SAML nebo OIDC!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1851,8 +1851,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Adresa URL pro odhlášení přes back-channel</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Oznámení o odhlášení mezi servery s podepsaným tokenem. Nepovinné.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC nárok</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1863,8 +1863,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Adresa URL pro odhlášení přes front-channel</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Oznámení o odhlášení v prohlížeči (iframe). Nepovinné.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1958,7 +1958,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certifikáty klienta pro ověřování podepsaných zpráv SAML. Můžete zadat více certifikátů za sebou, například při výměně klíče klienta. Zpráva je přijata, pokud ji ověří některý z nich. Bez šifrovacího certifikátu se tvrzení šifrují pomocí prvního certifikátu.</string>
   <string name="SYS_START" description="Start of a date">Začátek</string>
   <string name="SYS_STATUS_APPROVED">Schváleno</string>
   <string name="SYS_STATUS_BORROWED">Vypůjčeno</string>
@@ -2141,7 +2141,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Vaše konfigurace</string>
   <string name="SYS_YOUR_EMAIL">Váš e-mail</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Vaše poslední konfigurace</string>
-  <string name="SYS_YOUR_LISTS">Vlastní seznamy</string>
+  <string name="SYS_YOUR_LISTS">Vaše seznamy</string>
   <string name="SYS_YOUR_NAME">Vaše jméno</string>
   <string name="SYS_Z_TO_A">Z až A</string>
 </resources>

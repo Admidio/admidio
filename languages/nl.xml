@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Alle</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Deelnemers kunnen anonieme gasten aanmelden</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Deelnemers kunnen extra plaatsen aan hun aanmelding toevoegen. Deze worden dan afgetrokken van het maximaal aantal deelnemers en het restant aantal vrije plaatsen wordt hierdoor verminderd. Dit kan handig zijn als een deelnemer extra bezoekers meeneemt en dus een aantal vrije plaatsen nodig heeft.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Opmerkingen tijdens aanmelding toestaan</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Opmerkingen bij aanmelding toestaan</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Deelnemers kunnen opmerkingen maken over hun deelname. De opmerkingen kunnen worden bekeken via de deelnemerslijst</string>
   <string name="SYS_ALL_CONTACTS">Alle contacten</string>
   <string name="SYS_ALL_DAY">Hele dag</string>
@@ -306,7 +306,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Het resultaat van de berekening is onjuist.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">De identificatiecode is ongeldig.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Identificatiecode</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Verificatiecode</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">De authenticatiecode is onderdeel van een captcha. Een captcha wordt gebruikt om spam te voorkomen. De afbeelding wordt gebruikt om vast te stellen of een persoon of een script (bijvoorbeeld een spambot) het formulier heeft ingevuld.\nVoer de uitkomst van de authenticatiecode in het formulierveld in.</string>
   <string name="SYS_CAPTION_SIZE">Caption grootte</string>
   <string name="SYS_CAPTION_SIZE_DESC">De afmeting van de afbeeldingstekst wordt proportioneel berekend aan de hand van de afbeeldingsgrootte, volgens de formule \"Beeldformaat / Deler\". Door de deler te verhogen, neemt de lettergrootte af. (Standaard: 40)</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Deze aanmelding kan niet meer worden gewijzigd, omdat de einddatum voor aanmelden is verstreken of het evenement al voorbij is. Neem contact op met een leider van het evenement of met een beheerder!</string>
   <string name="SYS_DEBUG_OUTPUT">Uitvoer debuggen</string>
   <string name="SYS_DECIMAL_NUMBER">Decimaal getal</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaard toewijzing bij registratie</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standaardtoewijzing van rollen bij registratie</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Deze rol wordt automatisch toegewezen wanneer een nieuwe gebruiker wordt aangemaakt of een registratie wordt goedgekeurd. Als degene die de gebruiker aanmaakt rollen mag toewijzen, worden alle roltoewijzingen getoond en kunnen ze worden aangepast.</string>
   <string name="SYS_DEFAULT_COLOR">Standaardkleur</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standaard configuratie</string>
@@ -1125,7 +1125,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. grootte van afbeelding</string>
   <string name="SYS_MAX_RECEIVER">Maximaal aantal ontvangers voor e-mails</string>
   <string name="SYS_MAX_RECEIVER_DESC">Deze waarde geeft aan hoeveel ontvangers u kunt selecteren voor een e-mail. Een rol wordt geteld als een enkele ontvanger.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Onder voorbehoud deelnemen</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Voorlopige deelname toestaan</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Als deze optie is geactiveerd, staat voor de aanmelding van het evenement naast de opties #VAR1_BOLD# en #VAR2_BOLD# nog een derde optie #VAR3_BOLD# ter beschikking. (Standaard: uitgeschakeld)</string>
   <string name="SYS_MEETINGS">Bijeenkomsten</string>
   <string name="SYS_MEETING_POINT">Verzamelpunt</string>
@@ -1783,7 +1783,7 @@
   <string name="SYS_SPOUSE">Levenspartner</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion Consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">Op deze URL ontvangt de service provider het SAML-antwoord na het inloggen.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">De serviceprovider ontvangt het SAML-aanmeldantwoord op deze URL’s. Voer één URL per regel in. Als het verzoek geen URL opgeeft, wordt het antwoord naar de eerste URL gestuurd. Het verzoek kan een van de andere URL’s opgeven.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Geavanceerde instellingen</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Verzoeken naar het lokale netwerk toestaan</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">Standaard mogen SSO-verzoeken vanaf de server (metadata ophalen, back-channel-uitloggen) alleen openbare HTTPS-adressen aanroepen. Schakel dit alleen in als een service provider uitsluitend bereikbaar is via een privéadres in uw eigen netwerk.</string>
@@ -1862,16 +1862,16 @@
   <string name="SYS_SSO_KEY_SETTING">Instellingen van cryptografische sleutels</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">Dit sleuteltype wordt niet ondersteund.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">Het gevraagde gebruik van de sleutel wordt niet ondersteund.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Metadata van de client laden</string>
+  <string name="SYS_SSO_LOAD_METADATA">Laden</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">De gebruiker heeft het inloggen geannuleerd.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">U bent ingelogd, maar uw account heeft geen toegang tot de client (#VAR1#). Log in met een ander account of ga terug naar de client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Je bent aangemeld als #VAR2#, maar dit account heeft geen toegang tot de client (#VAR1#). Meld je hieronder aan met een ander account om door te gaan (hiermee beëindig je de sessie van #VAR2#), of annuleer om terug te gaan naar de client.</string>
   <string name="SYS_SSO_METADATA_INVALID">De gedownloade SAML-metadata is geen geldige XML-metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">De SAML-metadata kon niet worden geladen. Controleer de URL en probeer het opnieuw.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Metadata opnieuw laden</string>
   <string name="SYS_SSO_METADATA_STATUS">Status van metadata</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata-URL (optioneel)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Plak de SAML-metadata-URL van de toepassing en kies daarna 'Metadata van de client laden' om deze instellingen in te vullen.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Voer eerst een SAML-metadata-URL in.</string>
+  <string name="SYS_SSO_METADATA_URL">Metadata-URL of XML (optioneel)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Voer de URL van de SAML-metadata van de toepassing in of plak de metadata als XML en kies Laden. Metadata van een URL kunnen automatisch worden vernieuwd. Geplakte XML wordt eenmalig toegepast.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Voer eerst een metadata-URL in of plak de metadata als XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Naam en eigenschappen van de client</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Er zijn geen cryptografische sleutels ingesteld om SAML- of OIDC-berichten te ondertekenen of te versleutelen.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">Er zijn geen OIDC-clients ingesteld!</string>
@@ -1886,8 +1886,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Geldigheidsduur van autorisatiecodes</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Hoelang een autorisatiecode kan worden gebruikt, in seconden. Codes zijn eenmalig bruikbaar. Standaard: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Autorisatie-URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL voor uitlogmelding via de server</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio stuurt een ondertekend uitlogtoken naar deze URL, zodat de toepassing de sessie kan beëindigen zonder tussenkomst van de browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Afmeld-URL via het achterkanaal</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Afmeldmelding tussen servers met een ondertekend token. Optioneel.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC-claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC-toestemmingen</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wil toegang tot uw Admidio-account.</string>
@@ -1898,8 +1898,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Laat Admidio optreden als OpenID Connect-provider, zodat gebruikers met hun Admidio-account kunnen inloggen bij webtoepassingen.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Sessie-ID (sid) meesturen bij front-channel-uitloggen</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">De OIDC-parameters iss en sid meesturen met verzoeken voor front-channel-uitloggen.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL voor uitlogmelding via de browser</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opent deze URL bij het uitloggen in de browser van de gebruiker, zodat de toepassing de sessie kan beëindigen.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Afmeld-URL via het voorkanaal</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Afmeldmelding via de browser (iframe). Optioneel.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer-URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Openbare issuer-URL van deze OpenID Connect-provider. Laat leeg om de openbare URL van Admidio te gebruiken. Vul dit alleen in als Admidio extern via een andere URL bereikbaar is.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Voer een geldige HTTPS-URL in zonder querystring of fragment. HTTP is alleen toegestaan voor localhost.</string>
@@ -1993,7 +1993,7 @@
   <string name="SYS_SSO_USERID_UUID">Gebruikers-UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Handtekeningen van de service provider controleren</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509-certificaat van de client</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Clientcertificaat waarmee ondertekende SAML-berichten worden gecontroleerd en assertions worden versleuteld.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certificaten van de client waarmee ondertekende SAML-berichten worden geverifieerd. Je kunt meerdere certificaten achter elkaar invoeren, bijvoorbeeld wanneer de client zijn sleutel vervangt. Een bericht wordt geaccepteerd als het met een van de certificaten kan worden geverifieerd. Zonder versleutelingscertificaat worden de assertions versleuteld met het eerste certificaat.</string>
   <string name="SYS_START" description="Start of a date">Vanaf</string>
   <string name="SYS_STATUS_APPROVED">Goedgekeurd</string>
   <string name="SYS_STATUS_BORROWED">Uitgeleend</string>
@@ -2179,7 +2179,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Uw configuratie</string>
   <string name="SYS_YOUR_EMAIL">Uw e-mail</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Uw vorige configuratie</string>
-  <string name="SYS_YOUR_LISTS">Eigen lijsten</string>
+  <string name="SYS_YOUR_LISTS">Je lijsten</string>
   <string name="SYS_YOUR_NAME">Uw naam</string>
   <string name="SYS_Z_TO_A">Z tot A</string>
 </resources>
