@@ -58,6 +58,7 @@ DROP TABLE IF EXISTS %PREFIX%_saml_clients                      CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_logout_transactions          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_saml_session_participants         CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sessions                          CASCADE;
+DROP TABLE IF EXISTS %PREFIX%_sso_auth_failures                 CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_sso_keys                          CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_texts                             CASCADE;
 DROP TABLE IF EXISTS %PREFIX%_user_relations                    CASCADE;
