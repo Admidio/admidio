@@ -203,6 +203,8 @@
   <string name="SYS_ADD_ENTRY">Bejegyzés hozzáadása</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Esemény hozzáadása a naptárhoz</string>
   <string name="SYS_ADD_FIELD">Mező hozzáadása</string>
+  <string name="SYS_ADD_ITEM">Tétel hozzáadása</string>
+  <string name="SYS_ADD_ITEMS">Tételek hozzáadása</string>
   <string name="SYS_ADD_ORGANIZATION">Szervezet hozzáadása</string>
   <string name="SYS_ADD_ROLE">Szerepkör hozzáadása</string>
   <string name="SYS_ADD_TO_DATABASE">Hozzáadás az adatbázishoz</string>
@@ -230,7 +232,7 @@
   <string name="SYS_ALL">Minden</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">A résztvevők névtelen vendégeket regisztrálhatnak</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">A résztvevők további helyeket adhatnak hozzá a regisztrációjukhoz. Ezeket levonjuk a maximális résztvevői létszámból ezzel csökkentve a fennmaradó szabad helyek számát. Ez például akkor hasznos, ha egy résztvevő több látogatót hozhat magával, így több szabad igényelve.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Hozzászólások engedélyezése a résztvevőként</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Megjegyzések engedélyezése a jelentkezéskor</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">A résztvevők kommentálhatják részvételüket. A hozzászólások a résztvevők listáján keresztül tekinthetők meg.</string>
   <string name="SYS_ALL_CONTACTS">Minden névjegy</string>
   <string name="SYS_ALL_DAY">Teljes munkaidő</string>
@@ -248,6 +250,7 @@
   <string name="SYS_APPLY">Alkalmaz</string>
   <string name="SYS_APPOINTMENT">Találkozó</string>
   <string name="SYS_APPOINTMENTS">Találkozók</string>
+  <string name="SYS_APPROVE">Jóváhagyás</string>
   <string name="SYS_ASSIGNED_BY_ROLES">A szerepek alapján</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tagok hozzárendelése és szerkesztése</string>
   <string name="SYS_ASSIGN_FIELDS">Mezők hozzárendelése</string>
@@ -274,17 +277,21 @@
   <string name="SYS_ATTEND_EVENT">Ön feliratkozott a #VAR1_BOLD# eseményre a #VAR2# időpontban.</string>
   <string name="SYS_ATTEND_POSSIBLY">A #VAR1_BOLD# eseményre #VAR2# időpontban előzetesen regisztrált.</string>
   <string name="SYS_AUTHOR">Szerző</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automatikus jóváhagyás</string>
   <string name="SYS_AUTO_DETECT">Automatikus felismerés</string>
   <string name="SYS_AVAILABLE">Elérhető</string>
   <string name="SYS_AVAILABLE_BETA">Elérhető beta</string>
   <string name="SYS_A_TO_Z">A-Z-ig</string>
   <string name="SYS_BACK">Vissza</string>
+  <string name="SYS_BACKUPS">Biztonsági mentések</string>
   <string name="SYS_BACK_TO_ALBUM">Vissza az albumhoz</string>
   <string name="SYS_BACK_TO_FOLDER">Vissza a mappához</string>
   <string name="SYS_BASIC_DATA">Alap adat</string>
   <string name="SYS_BIRTHDAY">Születésnap</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Kölcsönzések</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Aktív kölcsönzések</string>
   <string name="SYS_BOYFRIEND">Barát</string>
   <string name="SYS_BROTHER">Fiútestvér</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -292,6 +299,7 @@
   <string name="SYS_CALENDARS">Naptárak</string>
   <string name="SYS_CANCEL">Mégsem</string>
   <string name="SYS_CANCELLED">Törölve</string>
+  <string name="SYS_CANCEL_ALL">Összes elvetése</string>
   <string name="SYS_CANCEL_EVENT">Lemondta a #VAR1_BOLD# eseményen való részvételét a #VAR2# időpontban.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Tagság lemondása</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Kapcsolat törlése</string>
@@ -300,7 +308,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">A számítás eredménye nem helyes.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">A hitelesítési kód érvénytelen volt.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Azonosító kód</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Ellenőrző kód</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">A hitelesítési kód egy CAPTCHA része. A CAPTCHA-t a spam felismerésére használják. A kép segítségével lehet megállapítani, hogy a űrlapot egy felhasználó vagy egy szkript (vagy spamrobot) töltötte-e ki.\nKérjük, írja be az űrlapba a hitelesítési kód eredményét.</string>
   <string name="SYS_CAPTION_SIZE">Felirat mérete</string>
   <string name="SYS_CAPTION_SIZE_DESC">A felirat mérete arányos a kép méretével, amelyet a „Képméret / Osztószám” képlet alapján számolnak ki. Az osztószám növelésével a betűméret csökken. (Alapértelmezett: 40)</string>
@@ -425,9 +433,33 @@
   <string name="SYS_COPY">Másolás</string>
   <string name="SYS_COPY_CLIPBOARD">Másolás a vágólapra</string>
   <string name="SYS_COPY_ENTRY">Bejegyzés másolása</string>
+  <string name="SYS_COPY_FILE">Fájl másolása</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Az üzenet kért másolata</string>
+  <string name="SYS_COPY_TO">Másolás ide</string>
   <string name="SYS_COPY_VAR">Másolja a #VAR1# értéket</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Frissítés megszakítása</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">A frissítés megszakadt. Nem történt változás.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Csatorna</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Bétaverzió</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stabil verzió</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Ellenőrzés újra</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Folytatás</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Adatbázis frissítése</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Letöltés és előkészítés</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Frissítés telepítése</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Telepített verzió</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Bejelentkezés</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Bejelentkezési név</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Admidio megnyitása</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Jelszó</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Előrehaladás</string>
+  <string name="SYS_CORE_UPDATE_START">Admidio frissítése</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Adatbázis frissítése</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Befejezés</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Új verzió</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Admidio frissítése</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Mit tegyek?</string>
   <string name="SYS_COUNTER">Számláló</string>
   <string name="SYS_COUNTRY">Ország</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -504,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Az Ön regisztrációja nem módosítható, mert a regisztráció megadott határideje lejárt, vagy a dátum már a múltban van. Kérjük, vegye fel a kapcsolatot a rendezvény egyik vezetőjével vagy egy adminisztrátorral!</string>
   <string name="SYS_DEBUG_OUTPUT">Hibakeresési kimenet</string>
   <string name="SYS_DECIMAL_NUMBER">Tizedes szám</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">A regisztráció alapértelmezett hozzárendelése</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Alapértelmezett szerepkörök hozzárendelése regisztrációkor</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Ha új felhasználót hoznak létre vagy új regisztrációt fogadnak el, akkor ez a szerepkör automatikán hozzárendelődik az új felhasználóhoz. Ha a létrehozónak van jogosultsága szerepkörök hozzárendelésére, akkor az összes szerepkör-hozzárendelés megjelenik, és azok ennek megfelelően módosíthatók.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Alapértelmezett beállítások</string>
@@ -626,6 +658,8 @@
   <string name="SYS_EDIT_WEBLINK">Weblink szerkesztése</string>
   <string name="SYS_EDIT_WEBLINKS">Weblinkek szerkesztése</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">A(z) #VAR4# felületén használt #VAR1# fiókod e-mail-címe erről: #VAR2#, erre változott: #VAR3#. Ha nem te engedélyezted a módosítást, azonnal lépj kapcsolatba az adminisztrátorral.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Megváltozott az e-mail-címed</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-mail a rendszergazdának</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">A #VAR1# #VAR2# felhasználó (bejelentkezési név: #VAR3#) profiladatait #VAR4# módosította.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">A #VAR1# #VAR2# felhasználó (bejelentkezési név: #VAR3#) adatai módosultak</string>
@@ -753,6 +787,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">A látogatók számára nincs elérhető dokumentum vagy fájl.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">A kiválasztott mappát nem jelenítheti meg.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Hiba történt a #VAR1# mappa átnevezése közben.</string>
+  <string name="SYS_FOLDER_TREE">Mappafa</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">A #VAR1_BOLD# mappa nem hozható létre a szükséges írási jogosultságok hiányában.\n\nKérj segítséget egy #VAR2#rendszergazdától#VAR3#, hogy ellenőrizze az írási jogosultságokat (FTP-n keresztül a fájl attribútumainak 0777-re vagy drwxrwxrwx-re állításával).</string>
   <string name="SYS_FONT">Betűtípus</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -791,6 +826,7 @@
   <string name="SYS_GROUPS_ROLES">Csoportok &amp; szerepek</string>
   <string name="SYS_GROUPS_ROLES_DESC">A szervezet összes csoportjának és szerepkörének áttekintése és kezelése. Különböző taglisták jeleníthetők meg és exportálhatók, valamint saját listák is létrehozhatók.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Csoporttagság/szerepkör</string>
+  <string name="SYS_GUEST_REQUEST">Vendég kérelme</string>
   <string name="SYS_HALF_YEARLY">Félévente</string>
   <string name="SYS_HEADER_ALREADY_SENT">A HTTP-fejléc már elküldésre került!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Tartalmi modulok és bővítmények</string>
@@ -853,7 +889,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">A gondnok által szerkeszthető mezők</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Az itt kiválasztott tételmezőket a tételkezelő szerkesztheti, ha a „Szerkesztési jogosultság a tételkezelő számára” opció engedélyezve van. Az összes többi mező csak olvasható, és azokat kizárólag a modul rendszergazdái módosíthatják. (Alapértelmezés: „Utolsó kölcsönvevő”, „Kölcsönzés dátuma”, „Visszaadás dátuma”)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Ezzel a beállítással a készletkezelő modul teljesen letiltható, hozzáférhetővé tehető kizárólag bejelentkezett felhasználók számára, kizárólag a modul adminisztrátoraira korlátozható, hozzáférhetővé tehető a modul adminisztrátorai és a tárgykezelők számára, vagy hozzáférhetővé tehető egy kiválasztott szerepkör tagjai számára. Ha a hozzáférést csak bejelentkezett felhasználóknak engedélyezik, akkor a modul el van rejtve a vendégek elől. Ha csak a modul adminisztrátorai rendelkeznek hozzáféréssel, a modul kizárólag azoknak a felhasználóknak látható, akik rendelkeznek a „készletkezelés” jogosultsággal. (Alapértelmezett: Engedélyezve)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Dátum hozzáfűzése</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Dátum hozzáadása a fájlnév elejéhez</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Ha ez az opció be van kapcsolva, az exportált fájl nevéhez az aktuális dátum kerül előtagként hozzáadva ÉÉÉÉ-HH-NN formátumban. (Alapértelmezés: kikapcsolva)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Negatív számok megengedése</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Ha ez az opció engedélyezve van, a „Szám” vagy „Tizedes szám” típusú mezőkbe negatív számok is beírhatók. Ellenkező esetben csak pozitív számok megadása engedélyezett. (Alapértelmezés: igen)</string>
@@ -866,7 +902,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Dátumformátum</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">A leltárkezelőben a dátum- és időadatok megjelenítéséhez használandó dátumformátum kiválasztása. (Alapértelmezett: Dátum (NN.HH.ÉÉÉÉ))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Ebben a táblázatban adhatja meg az időtartamokra vonatkozó bejegyzéseket. A legördülő listában szereplő minden egyes további bejegyzéshez itt lehet egy táblázatsort hozzáadni.\nA listaelemet később nem szövegként tárolja a rendszer, hanem a listából kiválasztott pozíciót. Ha megváltoztatja egy sor szövegét, az új szöveg azonnal láthatóvá válik minden felhasználó számára.\nA dátumintervallumot ugyanabban a sorban kell megadni, a cím után a | szimbólummal elválasztva. Pl.: Évente | 1y \nHa nincs megadva mértékegység, akkor a rendszer napokat feltételez. \nLehetséges mértékegységek: n: napok, w: hetek, h: hónapok, é: évek</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Tizedesek</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Tizedesjegyek</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">A „Tizedes szám” típusú mezőknél megjelenítendő tizedesjegyek száma. (Alapértelmezett: 1)</string>
   <string name="SYS_INVENTORY_DESC">A készletkezelő segítségével rendszerezheti, kezelheti és nyomon követheti a tételeket.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1080,7 +1116,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">a maximális feldolgozható kép mérete</string>
   <string name="SYS_MAX_RECEIVER">A levélcímzettek maximális száma</string>
   <string name="SYS_MAX_RECEIVER_DESC">Ez az érték határozza meg a levelezési címzettek maximális számát. Egy szerepkör egy címzettnek számít.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Részvétel foglalással</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Feltételes részvétel engedélyezése</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Ha ez az opció be van kapcsolva, az eseményre való regisztráció során a #VAR1_BOLD# és a #VAR2_BOLD# mellett egy harmadik opció, a #VAR3_BOLD# is elérhetővé válik. (Alapértelmezett: ki van kapcsolva)</string>
   <string name="SYS_MEETINGS">Találkozások</string>
   <string name="SYS_MEETING_POINT">Találkozási pont</string>
@@ -1100,6 +1136,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Tagok megbízása</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Tagja a #VAR1# szervezetnek</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">A #VAR1# szerepkör/csoport tagja</string>
+  <string name="SYS_MEMBER_REQUEST">Tag kérelme</string>
   <string name="SYS_MEMORY_LIMIT">Memóriakorlát</string>
   <string name="SYS_MENU">Menü</string>
   <string name="SYS_MENU_DESC">A menü itt állítható be. Az URL mellett egy leírás és egy ikon adható. Ezen felül beállítható, hogy ki tekintheti meg a menüpontot.</string>
@@ -1124,12 +1161,14 @@
   <string name="SYS_MONTHS">Hónapok</string>
   <string name="SYS_MORE">Több</string>
   <string name="SYS_MOTHER">Anya</string>
+  <string name="SYS_MOVE">Áthelyezés</string>
   <string name="SYS_MOVE_DOWN">Lejjebb #VAR1#</string>
   <string name="SYS_MOVE_FILE">Fájl áthelyezése</string>
   <string name="SYS_MOVE_FILE_DESC">Válassza ki azt a mappát, ahová át szeretné helyezni a #VAR1_BOLD# fájlt. A fájl megjelenítéséhez szükséges szerepkör-jogosultságok a célmappából kerülnek átvételre.</string>
   <string name="SYS_MOVE_FOLDER">Mappa áthelyezése</string>
   <string name="SYS_MOVE_FOLDER_DESC">Válassza ki azt a mappát, ahová át szeretné helyezni a #VAR1_BOLD# mappát. A célmappában található fájlok megtekintésére és feltöltésére vonatkozó szerepkör-jogosultságok erre a mappára és az összes almappájára is érvényesek lesznek.</string>
   <string name="SYS_MOVE_LEFT">A #VAR1#-et balra mozgatni</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Fájl áthelyezése vagy másolása</string>
   <string name="SYS_MOVE_RIGHT">A #VAR1#-et jobbra mozgatni</string>
   <string name="SYS_MOVE_TO">Ugrás a</string>
   <string name="SYS_MOVE_UP">Feljebb #VAR1#</string>
@@ -1230,11 +1269,13 @@
   <string name="SYS_OPERATING_SYSTEM">Operációs rendszer</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Ellentétes kapcsolat</string>
   <string name="SYS_OPTIONAL">Opcionális</string>
+  <string name="SYS_OR">vagy</string>
   <string name="SYS_ORDER">Rendezés</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Szervezet</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Szervezeti hovatartozás</string>
   <string name="SYS_ORGANIZATION_DESC">A jelenlegi szervezet neve és elérhetőségei, al-szervezetek létrehozásának és megjelenítésének lehetőségével.</string>
+  <string name="SYS_ORIGIN">Eredet</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Az Admidio kizárólag nyilvános HTTPS-címekre küldhet kéréseket. Ez az URL nem használható.</string>
   <string name="SYS_OVERHANG">Túlnyúlás</string>
   <string name="SYS_OVERVIEW">Áttekintés</string>
@@ -1308,6 +1349,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Újrapróbálkozás</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1426,6 +1468,7 @@
   <string name="SYS_RECIPIENT">Címzett</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail címzett</string>
   <string name="SYS_RECURRENCE">Ismétlődés</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Ez az ismétlődő eseménysorozat fő eseménye. A végleges eltávolításához töröld a teljes sorozatot.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Csak a sorozat ezen dátumát szeretné törölni: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Egy teljes sorozat szerkesztése egyelőre nem támogatott.</string>
   <string name="SYS_RECURRENCE_END_DESC">Meghatározza, mikor ér véget az ismétlődés. A végtelen ismétlődések is belső korlátozás alá esnek.</string>
@@ -1465,6 +1508,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Regisztrációját sikeresen megerősítette. Mostantól bejelentkezhet felhasználónevével és jelszavával.</string>
   <string name="SYS_REGULAR_EXPRESSION">Szabályos kifejezés</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Bármilyen szabályos kifejezés tárolható, amelyet a felhasználó által ebbe a profilmezőbe beírt tartalomra alkalmaznak. Ahhoz, hogy a beírt érték a mezőben tárolásra kerüljön, a tartalomnak meg kell felelnie a szabályos kifejezés feltételeinek. A szabályos kifejezés ellenőrzése az adattípus általános feltételei mellett történik.</string>
+  <string name="SYS_REJECT">Elutasítás</string>
   <string name="SYS_RELATED_TO">Kapcsolódó elem</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Kapcsolatok konfigurálása</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Kapcsolatok konfigurálása</string>
@@ -1487,8 +1531,15 @@
   <string name="SYS_REPLACE">Csere</string>
   <string name="SYS_REPLIES_VAR">#VAR1# válaszok</string>
   <string name="SYS_REPLY_TO">Válasz</string>
+  <string name="SYS_REQUESTED_AT">Kérelem időpontja</string>
+  <string name="SYS_REQUESTER">Kérelmező</string>
+  <string name="SYS_REQUEST_AGAIN">Újra kérelmezés</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Kötelező mező</string>
+  <string name="SYS_RESERVATIONS">Foglalások</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Foglalás kezdete</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Foglalás vége</string>
+  <string name="SYS_RESERVATION_REQUEST">Foglalási kérelem benyújtása</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Már be van jelentkezve a rendszerbe. Nem szükséges új jelszót kérnie.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">A kép feldolgozása nem sikerült, mert a felbontás meghaladja a #VAR1# megapixelt.</string>
@@ -1632,6 +1683,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Ha ez az opció be van kapcsolva, a tagkezelő felületen az aktuális szervezet kapcsolattartói mellett opcionálisan megjelenhetnek más szervezetek kapcsolattartói is. Ellenkező esetben csak az aktuális szervezet aktív és inaktív kapcsolattartói jelennek meg. Új kapcsolattartók létrehozásakor vagy regisztrációk hozzárendelésekor azonban továbbra is az összes szervezet teljes adatbázisában történik a meglévő kapcsolattartók keresése. (alapértelmezett: igen)</string>
   <string name="SYS_SHOW_ALL_DESC">Ha ez a beállítás be van kapcsolva, akkor a szervezet aktív tagjain kívül a korábbi tagok és más szervezetek tagjai is megjelennek.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Kijelentkezett felhasználók számára a captcha modul aktiválásakor egy betű-szám kombinációból álló szöveg jelenik meg. A megjelenő szöveget be kell írni a megfelelő mezőbe. Ezzel megelőzhető az űrlap spammerek általi visszaélése. (alapértelmezett: igen)</string>
+  <string name="SYS_SHOW_DATA">Adatok megjelenítése</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Üres profilmezők megjelenítése</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Ez a beállítás határozza meg, hogy az üres profilmezők megjelenjenek-e a profilnézetben. (Alapértelmezett: igen)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Korábbi tagok megjelenítése</string>
@@ -1696,7 +1748,7 @@
   <string name="SYS_SPOUSE">Házastárs</string>
   <string name="SYS_SSO">Egyszeri bejelentkezés</string>
   <string name="SYS_SSO_ACS_URL">Assertion fogyasztói URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">A szolgáltató ezen az URL-címen kapja meg a SAML-bejelentkezési választ.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">A szolgáltató ezeken az URL-címeken kapja meg a SAML-bejelentkezési választ. Soronként egy URL-címet adj meg. Ha a kérés nem ad meg címet, a válasz az első címre érkezik. A kérés a többi cím bármelyikét megadhatja.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Speciális beállítások</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Helyi hálózati lekérdezések engedélyezése</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1743,6 +1795,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Jelszó a kulcs exportálásához</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Folytatás</string>
   <string name="SYS_SSO_INVALID_CLIENT">Érvénytelen ügyfél</string>
   <string name="SYS_SSO_KEY">SSO Kulcs</string>
   <string name="SYS_SSO_KEYS">SSO Kulcsok</string>
@@ -1774,18 +1827,16 @@
   <string name="SYS_SSO_KEY_SETTING">Kriptográfiai kulcsbeállítások</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Ügyfél-metadatok betöltése</string>
+  <string name="SYS_SSO_LOAD_METADATA">Betöltés</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">A(z) #VAR2# fiókkal jelentkeztél be, de ennek a fióknak nincs hozzáférése a klienshez (#VAR1#). A folytatáshoz jelentkezz be alább másik fiókkal (ez lezárja a(z) #VAR2# munkamenetét), vagy válaszd a megszakítást a klienshez való visszatéréshez.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
-  <string name="SYS_SSO_METADATA_URL">Metaadatok URL-címe (opcionális)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Metaadatok újratöltése</string>
+  <string name="SYS_SSO_METADATA_STATUS">Metaadatok állapota</string>
+  <string name="SYS_SSO_METADATA_URL">Metaadatok URL-címe vagy XML-tartalma (nem kötelező)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Add meg az alkalmazás SAML-metaadatainak URL-címét, vagy illeszd be az XML-tartalmat, majd válaszd a Betöltés lehetőséget. Az URL-ről származó metaadatok automatikusan frissíthetők, a beillesztett XML csak egyszer kerül alkalmazásra.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Először add meg a metaadatok URL-címét vagy illeszd be az XML-tartalmukat.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nincs beállítva kriptográfiai kulcs a SAML- vagy OIDC-üzenetek aláírásához vagy titkosításához!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1800,10 +1851,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Kijelentkezési URL a háttércsatornához</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Kijelentkezési értesítés a kiszolgálók között, aláírt tokennel. Nem kötelező.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC-igény</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1814,8 +1863,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Kijelentkezési URL a böngészőcsatornához</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Kijelentkezési értesítés a böngészőn keresztül (iframe). Nem kötelező.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1909,9 +1958,14 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">A kliens tanúsítványai az aláírt SAML-üzenetek ellenőrzéséhez. Több tanúsítvány is megadható egymás után, például a klienskulcs cseréjekor. Az üzenet akkor fogadható el, ha valamelyik tanúsítvánnyal ellenőrizhető. Titkosítási tanúsítvány hiányában az állításokat az első tanúsítvánnyal titkosítja a rendszer.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_APPROVED">Jóváhagyva</string>
+  <string name="SYS_STATUS_BORROWED">Kölcsönözve</string>
   <string name="SYS_STATUS_CODE_INVALID">Érvénytelen állapotkód!</string>
+  <string name="SYS_STATUS_REJECTED">Elutasítva</string>
+  <string name="SYS_STATUS_REQUESTED">Kérelmezve</string>
+  <string name="SYS_STATUS_RETURNED">Visszaadva</string>
   <string name="SYS_STILL_X_CHARACTERS">még mindig #VAR1# karakter</string>
   <string name="SYS_STREET">Utca</string>
   <string name="SYS_SUBJECT">Tárgy</string>
@@ -1994,7 +2048,11 @@
   <string name="SYS_UNLOCK_ALBUM">Album feloldása</string>
   <string name="SYS_UNMANAGED_FILES">Nem kezelt fájlok</string>
   <string name="SYS_UPDATE_AVAILABLE">Frissítés elérhető</string>
+  <string name="SYS_UPDATE_NOTICE">Elérhető az Admidio #VAR1# verziója.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">A frissítés sikeresen megtörtént</string>
+  <string name="SYS_UPLOADING">Feltöltés folyamatban…</string>
+  <string name="SYS_UPLOAD_CANCEL">Feltöltés megszakítása</string>
+  <string name="SYS_UPLOAD_CANCELLED">A feltöltés megszakadt.</string>
   <string name="SYS_UPLOAD_FILES">Fájlok feltöltése</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">A fájlok maximális feltöltési mérete</string>
   <string name="SYS_UPLOAD_PHOTOS">Képfeltöltés</string>
@@ -2068,9 +2126,11 @@
   <string name="SYS_WEDNESDAY">Szerda</string>
   <string name="SYS_WEEKDAY">Hétköznak</string>
   <string name="SYS_WEEKDAYS">Hétköznapok</string>
+  <string name="SYS_WEEKDAY_FORMAT">A hét napjának formátuma</string>
   <string name="SYS_WEEKLY">Heti</string>
   <string name="SYS_WIDTH">Szélesség</string>
   <string name="SYS_WIFE">Feleség</string>
+  <string name="SYS_WITHDRAW">Kérelem visszavonása</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Munkalap (index vagy név)</string>
   <string name="SYS_WRITE_EMAIL">E-mail írása</string>
   <string name="SYS_WRITE_PM">Privát üzenet írása</string>
@@ -2081,7 +2141,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Az Ön konfigurációja</string>
   <string name="SYS_YOUR_EMAIL">Az Ön e-mail címe</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Az Ön legutóbbi beállításai</string>
-  <string name="SYS_YOUR_LISTS">Saját listák</string>
+  <string name="SYS_YOUR_LISTS">Saját listáid</string>
   <string name="SYS_YOUR_NAME">Az ön neve</string>
   <string name="SYS_Z_TO_A">Z től A -ig</string>
 </resources>

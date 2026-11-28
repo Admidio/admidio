@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Πρόσθεσε εκδήλωση στο ημερολόγιο</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Προσθήκη αντικειμένου</string>
+  <string name="SYS_ADD_ITEMS">Προσθήκη αντικειμένων</string>
   <string name="SYS_ADD_ORGANIZATION">Προσθήκη συλλόγου</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Προσθήκη στη βάση δεδομένων</string>
@@ -228,7 +230,7 @@
   <string name="SYS_ALL">Όλα</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Οι συμμετέχοντες μπορούν να εγγράψουν ανώνυμους επισκέπτες</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Οι συμμετέχοντες μπορούν να προσθέσουν επιπλέον θέσεις στην εγγραφή τους. Στη συνέχεια αφαιρούνται από τον μέγιστο αριθμό συμμετεχόντων και οι υπόλοιπες ελεύθερες θέσεις μειώνονται. Αυτό είναι π.χ. χρήσιμο εάν ένας συμμετέχων μπορεί να φέρει περισσότερους επισκέπτες και συνεπώς απαιτούνται περισσότερες ελεύθερες θέσεις.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια στο πλαίσιο της συμμετοχής</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Να επιτρέπονται σχόλια κατά τη δήλωση συμμετοχής</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Οι συμμετέχοντες μπορούν να σχολιάσουν τη συμμετοχή τους. Τα σχόλια μπορούν να προβληθούν μέσω της λίστας συμμετεχόντων</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Πλήρους απασχόλησης</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Εφαρμογή</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
+  <string name="SYS_APPROVE">Έγκριση</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Ρυθμίζεται από τους ρόλους</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Προσδιορισμός και επεξεργασία μελών</string>
   <string name="SYS_ASSIGN_FIELDS">Προσδιορισμός πεδίων</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">Εγγραφήκατε στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Εγγραφήκατε υπό αίρεση στην εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Αυτόματη έγκριση</string>
   <string name="SYS_AUTO_DETECT">Αυτόματη αναγνώριση</string>
   <string name="SYS_AVAILABLE">Διαθέσιμο</string>
   <string name="SYS_AVAILABLE_BETA">Διαθέσιμη έκδση beta</string>
   <string name="SYS_A_TO_Z">Α έως Ω</string>
   <string name="SYS_BACK">Πίσω</string>
+  <string name="SYS_BACKUPS">Αντίγραφα ασφαλείας</string>
   <string name="SYS_BACK_TO_ALBUM">Πίσω στο άλμπουμ</string>
   <string name="SYS_BACK_TO_FOLDER">Πίσω στο φάκελο</string>
   <string name="SYS_BASIC_DATA">Βασικά δεδομένα</string>
   <string name="SYS_BIRTHDAY">Γενέθλια</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Δανεισμοί</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Ενεργοί δανεισμοί</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Αδερφός</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">Ημερολόγια</string>
   <string name="SYS_CANCEL">Ακύρωση</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Απόρριψη όλων</string>
   <string name="SYS_CANCEL_EVENT">Ακυρώσατε τη συμμετοχή για την εκδήλωση #VAR1_BOLD# => #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Ακύρωση συνδρομής</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Διαγραφή σχέσης</string>
@@ -298,7 +306,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Το αποτέλεσμα του υπολογισμού είναι λάθος</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Ο κωδικός αυθεντικοποίησης δεν είναι έγκυρος.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Κωδικός αυθεντικοποίησης</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Κωδικός επαλήθευσης</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Ο κωδικός ελέγχου ταυτότητας είναι μέρος ενός captcha. Ένα captcha χρησιμοποιείται για τον εντοπισμό ανεπιθύμητων μηνυμάτων. Η εικόνα χρησιμοποιείται για τον εντοπισμό εάν ένας χρήστης ή ένα σενάριο (ή ένα ανεπιθύμητο μήνυμα) συμπλήρωσε τη φόρμα.\nΣυμπληρώστε το αποτέλεσμα του κωδικού ελέγχου ταυτότητας στη φόρμα.</string>
   <string name="SYS_CAPTION_SIZE">Μέγεθος λεζάντας</string>
   <string name="SYS_CAPTION_SIZE_DESC">Το μέγεθος της λεζάντας είναι ανάλογο με το μέγεθος της εικόνας, που υπολογίζεται με τον τύπο \"Μέγεθος εικόνας / Devisor\". Με την αύξηση του σχεδιαστή, το μέγεθος της γραμματοσειράς θα μειωθεί. (Default: 40)</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">Αντιγραφή</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
+  <string name="SYS_COPY_FILE">Αντιγραφή αρχείου</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Ζητήσατε αντίγραφο του μηνύματος</string>
+  <string name="SYS_COPY_TO">Αντιγραφή σε</string>
   <string name="SYS_COPY_VAR">Αντιγραφή #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Ακύρωση ενημέρωσης</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Η ενημέρωση ακυρώθηκε. Δεν έγινε καμία αλλαγή.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Κανάλι</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Δοκιμαστική έκδοση beta</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Σταθερή έκδοση</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Επανάληψη ελέγχου</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Συνέχεια</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Ενημέρωση της βάσης δεδομένων</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Λήψη και προετοιμασία</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Εγκατάσταση ενημέρωσης</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Εγκατεστημένη έκδοση</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Είσοδος</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Όνομα σύνδεσης</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Άνοιγμα του Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Κωδικός πρόσβασης</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Πρόοδος</string>
+  <string name="SYS_CORE_UPDATE_START">Ενημέρωση του Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Ενημέρωση βάσης δεδομένων</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Ολοκλήρωση</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Νέα έκδοση</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Ενημέρωση Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Τι πρέπει να κάνω;</string>
   <string name="SYS_COUNTER">Μετρητής</string>
   <string name="SYS_COUNTRY">Χώρα</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -502,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Η εγγραφή σας δεν μπορεί να αλλάξει επειδή έχει λήξει η ημερομηνία λήξης για τις εγγραφές ή η ημερομηνία είναι στο παρελθόν. Επικοινωνήστε με τον υπεύθυνο της εκδήλωσης ή έναν διαχειριστή!</string>
   <string name="SYS_DEBUG_OUTPUT">Έξοδος εντοπισμού σφαλμάτων</string>
   <string name="SYS_DECIMAL_NUMBER">Δεκαδικός αριθμός</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Προεπιλεγμένη ανάθεση εγγραφής</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Προεπιλεγμένη ανάθεση ρόλων κατά την εγγραφή</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Εάν δημιουργηθεί ένας νέος χρήστης ή γίνει αποδεκτή μια νέα εγγραφή, τότε αυτός ο ρόλος εκχωρείται αυτόματα στον νέο χρήστη. Όταν ο δημιουργός έχει το δικαίωμα να εκχωρήσει ρόλους, εμφανίζονται όλες οι αντιστοιχίσεις ρόλων και μπορούν να αλλάξουν ανάλογα.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Προεπιλεγμένη διαμόρφωση</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">Επεξεργασία συνδέσμων</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Η διεύθυνση email του λογαριασμού σας #VAR1# στο #VAR4# άλλαξε από #VAR2# σε #VAR3#. Αν δεν εγκρίνατε αυτή την αλλαγή, επικοινωνήστε αμέσως με τον διαχειριστή σας.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Η διεύθυνση email σας άλλαξε</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Email administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Τα δεδομένα προφίλ του χρήστη #VAR1# #VAR2# (είσοδος: #VAR3#) άλλαξαν από #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Ο χρήστης #VAR1# #VAR2# (είσοδος: #VAR3#) άλλαξε</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Δεν υπάρχουν έγγραφα ή αρχεία διαθέσιμα για τους επισκέπτες.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Δεν επιτρέπεται να εμφανίσετε τον επιλεγμένο φάκελο.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Παρουσιάστηκε σφάλμα κατά τη μετονομασία του φακέλου #VAR1#.</string>
+  <string name="SYS_FOLDER_TREE">Δέντρο φακέλων</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Ο φάκελος #VAR1_BOLD# δεν μπορεί να δημιουργηθεί με τα απαιτούμενα δικαιώματα εγγραφής.\n\nΖητήστε βοήθεια από έναν #VAR2#administrator#VAR3# για να ελέγξετε τα δικαιώματα εγγραφής (χρησιμοποιώντας το FTP αλλάζοντας τα χαρακτηριστικά του αρχείου σε 0777 ή drwxrwxrwx).</string>
   <string name="SYS_FONT">Γραμματοσειρά</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">Ρόλοι Groups &amp;</string>
   <string name="SYS_GROUPS_ROLES_DESC">Επισκόπηση και διαχείριση όλων των ομάδων και ρόλων του συλλόγου. Μπορούν να εμφανιστούν διαφορετικές λίστες μελών, να εξαχθούν και να δημιουργηθούν δικές τους λίστες.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Αίτημα επισκέπτη</string>
   <string name="SYS_HALF_YEARLY">6μηνιαία-ετήσια</string>
   <string name="SYS_HEADER_ALREADY_SENT">Η κεφαλίδα HTTP έχει ήδη σταλεί!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -851,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Προσθήκη ημερομηνίας στην αρχή του ονόματος αρχείου</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -864,7 +900,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Δεκαδικά ψηφία</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1078,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. επεξεργάσιμο μέγεθος εικόνας</string>
   <string name="SYS_MAX_RECEIVER">Μέγιστος αριθμός παραληπτών αλληλογραφίας</string>
   <string name="SYS_MAX_RECEIVER_DESC">Αυτή η τιμή καθορίζει τον μέγιστο αριθμό παραληπτών αλληλογραφίας. Ένας ρόλος μετράει ως ένας παραλήπτης.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Δηλώστε συμμετοχή με κράτηση</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Να επιτρέπεται προσωρινή δήλωση συμμετοχής</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Εάν αυτή η επιλογή είναι ενεργοποιημένη, θα υπάρχει μια τρίτη επιλογή #VAR3_BOLD# εκτός από τις επιλογές #VAR1_BOLD# και #VAR2_BOLD#. (Default: disabled)</string>
   <string name="SYS_MEETINGS">Συναντήσεις</string>
   <string name="SYS_MEETING_POINT">Meeting point</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Ανάθεση μέλους</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Μέλος του συλλόγου #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Αίτημα μέλους</string>
   <string name="SYS_MEMORY_LIMIT">Όριο μνήμης</string>
   <string name="SYS_MENU">Μενού</string>
   <string name="SYS_MENU_DESC">Το μενού μπορεί να διαμορφωθεί εδώ. Δίπλα στη διεύθυνση URL μπορεί να κατατεθεί μια περιγραφή και ένα εικονίδιο. Επιπλέον, μπορεί να προσδιοριστεί ποιος επιτρέπεται να προβάλλει την καταχώριση μενού.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">Περισσότερα</string>
   <string name="SYS_MOTHER">Μητέρα</string>
+  <string name="SYS_MOVE">Μετακίνηση</string>
   <string name="SYS_MOVE_DOWN">Μετακίνηση κάτω #VAR1#</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Μετακίνηση ή αντιγραφή αρχείου</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Μετακίνηση επάνω #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">Λειτουργικό σύστημα</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Αντίθετη σχέση</string>
   <string name="SYS_OPTIONAL">Προαιρετικό</string>
+  <string name="SYS_OR">ή</string>
   <string name="SYS_ORDER">Σειρά</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Σύλλογος</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Προέλευση</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Προεξοχή</string>
   <string name="SYS_OVERVIEW">Ανασκόπηση</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Νέα προσπάθεια</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">Παραλήπτης</string>
   <string name="SYS_RECIPIENT_EMAIL">Ηλεκτρονική διεύθυνση (e-mail) παραλήπτη</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Αυτό είναι το κύριο συμβάν μιας επαναλαμβανόμενης σειράς. Διαγράψτε ολόκληρη τη σειρά για να το αφαιρέσετε οριστικά.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Enter a regular expression to validate this profile field. The entered value must match the expression before it can be saved. This check applies in addition to the data type\'s general validation rules.</string>
+  <string name="SYS_REJECT">Απόρριψη</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Διαμόρφωση σχέσης</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Διαμόρφωση σχέσεων</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">Αντικατάσταση</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Ημερομηνία αιτήματος</string>
+  <string name="SYS_REQUESTER">Αιτών</string>
+  <string name="SYS_REQUEST_AGAIN">Νέο αίτημα</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
+  <string name="SYS_RESERVATIONS">Κρατήσεις</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Κράτηση από</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Κράτηση έως</string>
+  <string name="SYS_RESERVATION_REQUEST">Αίτημα κράτησης</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Είστε ήδη συνδεδεμένοι στο σύστημα. Δεν είναι απαραίτητο να ζητήσετε νέο κωδικό πρόσβασης.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">Μόνο ενεργά μέλη του συλλόγου θα βρίσκονται στη λίστα όταν αυτή η επιλογή δεν είναι ενεργή. Διαφορετικά όλοι οι χρήστες της βάσης δεδομένων θα βρίσκονται στη λίστα.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Για χρήστε εκτός σύνδεσης, ένα αλφαρηθμιτικό κείμενο θα εμφανιστεί όταν η μέθοδος captcha είναι ενεργοποιημένη. Το κείμενο θα πρέπει να εισαχθεί στο αντίστοιχο πεδίο. Αυτό θα αποτρέψει τυχόν εισβολή από spammers. (default: yes)</string>
+  <string name="SYS_SHOW_DATA">Εμφάνιση δεδομένων</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Προβολή πρώην μελών</string>
@@ -1694,7 +1746,7 @@
   <string name="SYS_SPOUSE">Σύζυγος</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Ο πάροχος υπηρεσίας λαμβάνει την απάντηση σύνδεσης SAML σε αυτά τα URL. Εισαγάγετε ένα URL ανά γραμμή. Αν το αίτημα δεν ορίζει URL, η απάντηση αποστέλλεται στο πρώτο. Το αίτημα μπορεί να ορίσει οποιοδήποτε από τα υπόλοιπα.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Συνέχεια</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1772,18 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Φόρτωση</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Έχετε συνδεθεί ως #VAR2#, αλλά αυτός ο λογαριασμός δεν έχει δικαίωμα πρόσβασης στον πελάτη (#VAR1#). Για να συνεχίσετε, συνδεθείτε παρακάτω με άλλον λογαριασμό (η συνεδρία του λογαριασμού #VAR2# θα τερματιστεί) ή ακυρώστε για να επιστρέψετε στον πελάτη.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Επαναφόρτωση μεταδεδομένων</string>
+  <string name="SYS_SSO_METADATA_STATUS">Κατάσταση μεταδεδομένων</string>
+  <string name="SYS_SSO_METADATA_URL">URL ή XML μεταδεδομένων (προαιρετικό)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Εισαγάγετε το URL των μεταδεδομένων SAML της εφαρμογής ή επικολλήστε τα μεταδεδομένα σε μορφή XML και επιλέξτε Φόρτωση. Τα μεταδεδομένα από URL μπορούν να ανανεώνονται αυτόματα, ενώ το XML εφαρμόζεται μία φορά.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Εισαγάγετε πρώτα ένα URL μεταδεδομένων ή επικολλήστε τα μεταδεδομένα σε μορφή XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1798,10 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL αποσύνδεσης μέσω οπίσθιου καναλιού</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Ειδοποίηση αποσύνδεσης μεταξύ διακομιστών με υπογεγραμμένο διακριτικό. Προαιρετικό.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1812,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL αποσύνδεσης μέσω εμπρόσθιου καναλιού</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Ειδοποίηση αποσύνδεσης μέσω προγράμματος περιήγησης (iframe). Προαιρετικό.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1907,9 +1956,14 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Πιστοποιητικά του πελάτη για την επαλήθευση υπογεγραμμένων μηνυμάτων SAML. Μπορείτε να εισαγάγετε διαδοχικά πολλά πιστοποιητικά, για παράδειγμα κατά την αντικατάσταση του κλειδιού του πελάτη. Ένα μήνυμα γίνεται δεκτό αν επαληθεύεται με κάποιο από αυτά. Χωρίς πιστοποιητικό κρυπτογράφησης, οι δηλώσεις κρυπτογραφούνται με το πρώτο πιστοποιητικό.</string>
   <string name="SYS_START" description="Start of a date">Έναρξη</string>
+  <string name="SYS_STATUS_APPROVED">Εγκρίθηκε</string>
+  <string name="SYS_STATUS_BORROWED">Δανεισμένο</string>
   <string name="SYS_STATUS_CODE_INVALID">Μη έγκυρος κωδικός κατάστασης!</string>
+  <string name="SYS_STATUS_REJECTED">Απορρίφθηκε</string>
+  <string name="SYS_STATUS_REQUESTED">Υποβλήθηκε αίτημα</string>
+  <string name="SYS_STATUS_RETURNED">Επιστράφηκε</string>
   <string name="SYS_STILL_X_CHARACTERS">ακόμη #VAR1# χαρακτήρες</string>
   <string name="SYS_STREET">Οδός</string>
   <string name="SYS_SUBJECT">Θέμα</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Ξεκλείδωμα άλμπουμ</string>
   <string name="SYS_UNMANAGED_FILES">μη διαχειριζόμενα αρχεία</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Η έκδοση #VAR1# του Admidio είναι διαθέσιμη.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Επιτυχής ενημέρωση</string>
+  <string name="SYS_UPLOADING">Μεταφόρτωση…</string>
+  <string name="SYS_UPLOAD_CANCEL">Ακύρωση μεταφόρτωσης</string>
+  <string name="SYS_UPLOAD_CANCELLED">Η μεταφόρτωση ακυρώθηκε.</string>
   <string name="SYS_UPLOAD_FILES">Μεταφόρτωση αρχείων</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Μέγιστο μέγεθος αρχείου μεταφόρτωσης</string>
   <string name="SYS_UPLOAD_PHOTOS">Μεταφόρτωση (upload) φωτογραφιών</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">Τετάρτη</string>
   <string name="SYS_WEEKDAY">Ημέρα εβδομάδας</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Μορφή ημέρας της εβδομάδας</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Πλάτος</string>
   <string name="SYS_WIFE">Σύζυγος</string>
+  <string name="SYS_WITHDRAW">Ανάκληση</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Φύλλο εργασίας (αριθμός ή όνομα)</string>
   <string name="SYS_WRITE_EMAIL">Γράψτε email</string>
   <string name="SYS_WRITE_PM">Γράψτε ιδιωτικό μήνυμα</string>

@@ -203,6 +203,8 @@
   <string name="SYS_ADD_ENTRY">Lisää merkintä</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Lisää tapahtuma kalenteriin</string>
   <string name="SYS_ADD_FIELD">Lisää kenttä</string>
+  <string name="SYS_ADD_ITEM">Lisää esine</string>
+  <string name="SYS_ADD_ITEMS">Lisää esineitä</string>
   <string name="SYS_ADD_ORGANIZATION">Lisää organisaatio</string>
   <string name="SYS_ADD_ROLE">Lisää rooli</string>
   <string name="SYS_ADD_TO_DATABASE">Lisää tietokantaan</string>
@@ -230,7 +232,7 @@
   <string name="SYS_ALL">Kaikki</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Osallistujat voivat rekisteröidä nimettömiä vieraita</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Osallistujat voivat lisätä lisäpaikkoja rekisteröintiinsä. Ne vähennetään osallistujamäärän enimmäismäärästä ja jäljellä olevat vapaat paikat vähenevät. Tästä on hyötyä esimerkiksi, jos osallistuja voi tuoda enemmän kävijöitä ja vaatii siten ilmaisia ​​paikkoja.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Salli kommentit osallistumisen sisällä</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Salli kommentit ilmoittautumisen yhteydessä</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Osallistujat voivat kommentoida osallistumistaan. Kommentteja voi tarkastella osallistujaluettelon kautta</string>
   <string name="SYS_ALL_CONTACTS">Kaikki yhteystiedot</string>
   <string name="SYS_ALL_DAY">Kokopäiväinen</string>
@@ -248,6 +250,7 @@
   <string name="SYS_APPLY">Käytä</string>
   <string name="SYS_APPOINTMENT">Tapaaminen</string>
   <string name="SYS_APPOINTMENTS">Tapaamiset</string>
+  <string name="SYS_APPROVE">Hyväksy</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Määritä roolit</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Määritä ja muokkaa jäseniä</string>
   <string name="SYS_ASSIGN_FIELDS">Määritä kentät</string>
@@ -274,17 +277,21 @@
   <string name="SYS_ATTEND_EVENT">Rekisteröidyit tapahtumaan #VAR1_BOLD# #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Ilmoittauduit alustavasti tapahtumaan #VAR1_BOLD# #VAR2#.</string>
   <string name="SYS_AUTHOR">Tekijä</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automaattinen hyväksyntä</string>
   <string name="SYS_AUTO_DETECT">Automaattinen havaitseminen</string>
   <string name="SYS_AVAILABLE">Saatavilla</string>
   <string name="SYS_AVAILABLE_BETA">Käytettävissä oleva beta</string>
   <string name="SYS_A_TO_Z">A - Z</string>
   <string name="SYS_BACK">Takaisin</string>
+  <string name="SYS_BACKUPS">Varmuuskopiot</string>
   <string name="SYS_BACK_TO_ALBUM">Takaisin albumiin</string>
   <string name="SYS_BACK_TO_FOLDER">Takaisin kansioon</string>
   <string name="SYS_BASIC_DATA">Perustieto</string>
   <string name="SYS_BIRTHDAY">Syntymäpäivä</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Lainat</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Aktiiviset lainat</string>
   <string name="SYS_BOYFRIEND">Poikaystävä</string>
   <string name="SYS_BROTHER">Veli</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -292,6 +299,7 @@
   <string name="SYS_CALENDARS">Kalenterit</string>
   <string name="SYS_CANCEL">Peruuta</string>
   <string name="SYS_CANCELLED">Peruttu</string>
+  <string name="SYS_CANCEL_ALL">Hylkää kaikki</string>
   <string name="SYS_CANCEL_EVENT">Peruutit osallistumisen tapahtumaan #VAR1_BOLD# #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Peruuta jäsenyys</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Poista suhde</string>
@@ -300,7 +308,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Laskennan tulos ei ole oikea.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Todennuskoodi oli virheellinen.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Todennuskoodi</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Vahvistuskoodi</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Todennuskoodi on osa captchaa. Roskapostin havaitsemiseen käytetään captchaa. Kuvaa käytetään havaitsemaan, onko käyttäjä tai komentosarja (tai spambotti) täyttänyt lomakkeen. \nTäytä todennuskoodin tulos lomakkeeseen.</string>
   <string name="SYS_CAPTION_SIZE">Tekstityksen koko</string>
   <string name="SYS_CAPTION_SIZE_DESC">Kuvatekstin koko on verrannollinen kuvan kokoon laskettuna kaavalla \"Kuvakoko / Devisori \". Lisäämällä kehittäjää fonttikoko pienenee. (Oletus: 40)</string>
@@ -425,9 +433,33 @@
   <string name="SYS_COPY">Kopioi</string>
   <string name="SYS_COPY_CLIPBOARD">Kopioi leikepöydälle</string>
   <string name="SYS_COPY_ENTRY">Kopioi merkintä</string>
+  <string name="SYS_COPY_FILE">Kopioi tiedosto</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Pyytämäsi kopio viestistä</string>
+  <string name="SYS_COPY_TO">Kopioi kohteeseen</string>
   <string name="SYS_COPY_VAR">Kopioi #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Peruuta päivitys</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Päivitys peruutettiin. Mitään ei muutettu.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Kanava</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Beetaversio</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Vakaa versio</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Tarkista uudelleen</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Jatka</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Päivitä tietokanta</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Lataa ja valmistele</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Asenna päivitys</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Asennettu versio</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Kirjaudu sisään</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Käyttäjätunnus</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Avaa Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Salasana</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Edistyminen</string>
+  <string name="SYS_CORE_UPDATE_START">Päivitä Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Päivitä tietokanta</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Viimeistele</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Uusi versio</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Admidion päivitys</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Mitä minun pitäisi tehdä?</string>
   <string name="SYS_COUNTER">Laskuri</string>
   <string name="SYS_COUNTRY">Maa</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -504,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Rekisteröitymistäsi ei voi muuttaa, koska ilmoitusten viimeinen päättymispäivä on saavutettu tai päivämäärä on ohi. Ota yhteyttä tapahtuman johtajaan tai järjestelmänvalvojaan!</string>
   <string name="SYS_DEBUG_OUTPUT">Virheenkorjaustila</string>
   <string name="SYS_DECIMAL_NUMBER">desimaaliluku</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Rekisteröinnin oletusmääritys</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Roolien oletusmääritys rekisteröityessä</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Jos uusi käyttäjä luodaan tai uusi rekisteröinti hyväksytään, tämä rooli osoitetaan automaattisesti uudelle käyttäjälle. Kun luojalla on oikeus antaa rooleja, kaikki roolikartat näytetään ja niitä voidaan muuttaa vastaavasti.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Oletusasetukset</string>
@@ -626,6 +658,8 @@
   <string name="SYS_EDIT_WEBLINK">Muokkaa verkkolinkkiä</string>
   <string name="SYS_EDIT_WEBLINKS">Muokkaa verkkolinkkejä</string>
   <string name="SYS_EMAIL">S-posti</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Tilisi #VAR1# sähköpostiosoite palvelussa #VAR4# on vaihdettu osoitteesta #VAR2# osoitteeseen #VAR3#. Jos et hyväksynyt muutosta, ota heti yhteyttä ylläpitäjään.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Sähköpostiosoitteesi on muuttunut</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Lähetä sähköpostia järjestelmänvalvojalle</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Käyttäjän #VAR1# #VAR2# (kirjautuminen: #VAR3#) profiilitiedot muutti #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Käyttäjä #VAR1# #VAR2# (kirjautuminen: #VAR3#) muutettiin</string>
@@ -753,6 +787,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Kävijöille ei ole saatavilla asiakirjoja tai tiedostoja.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Valittua kansiota ei saa näyttää.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Virhe, kun kansio #VAR1# nimettiin uudelleen.</string>
+  <string name="SYS_FOLDER_TREE">Kansiopuu</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Kansiota #VAR1_BOLD# ei voitu luoda tarvittavilla kirjoitusoikeuksilla.\n\nPyydä #VAR2#järjestelmänvalvojaa#VAR3# tarkistamaan oikeudet (määritä FTP:n kautta oikeuksiksi 0777 tai drwxrwxrwx).</string>
   <string name="SYS_FONT">Fontti</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -791,6 +826,7 @@
   <string name="SYS_GROUPS_ROLES">Ryhmät &amp; roolit</string>
   <string name="SYS_GROUPS_ROLES_DESC">Katsaus ja hallinta kaikista organisaation ryhmistä ja rooleista. Eri jäsenluetteloita voidaan näyttää, viedä ja omia luetteloita luoda.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Ryhmä-/roolijäsenyys</string>
+  <string name="SYS_GUEST_REQUEST">Vieraan pyyntö</string>
   <string name="SYS_HALF_YEARLY">Puolivuosittain</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP -otsikko on jo lähetetty!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Sisältömoduulit ja laajennukset</string>
@@ -856,7 +892,7 @@
 *** Translated with www.DeepL.com/Translator (free version) ***
 
 </string>
-  <string name="SYS_INVENTORY_ADD_DATE">Lisää päivämäärä</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Lisää päivämäärä tiedostonimen alkuun</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Kun tämä asetus on käytössä, vientitiedoston nimen eteen lisätään nykyinen päivämäärä muodossa YYYY-MM-DD. (Oletus: ei)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Salli negatiiviset luvut</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Jos tämä asetus on käytössä, ”Luku”- tai ”Desimaaliluku”-tyyppisiin kenttiin voidaan syöttää myös negatiivisia lukuja. Muussa tapauksessa sallitaan vain positiiviset luvut. (Oletus: kyllä)</string>
@@ -872,7 +908,7 @@
 
 
 </string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desimaaliväli</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desimaalit</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">”Desimaaliluku”-tyyppisissä kentissä näytettävien desimaalien määrä. (Oletus: 1)</string>
   <string name="SYS_INVENTORY_DESC">Varastohallintaohjelman avulla voit järjestellä, hallita ja seurata tuotteita.</string>
   <string name="SYS_INVENTORY_EXPORT">Vienti</string>
@@ -1086,7 +1122,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">suurin käsiteltävä kuvakoko</string>
   <string name="SYS_MAX_RECEIVER">Sähköpostin vastaanottajien enimmäismäärä</string>
   <string name="SYS_MAX_RECEIVER_DESC">Tämä arvo määrittää sähköpostin vastaanottajien enimmäismäärän. Rooli lasketaan yhdeksi vastaanottajaksi.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Osallistu varauksella</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Salli alustava osallistuminen</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Jos tämä asetus on käytössä, tapahtumaan ilmoittautuessa on käytettävissä kolmas vaihtoehto #VAR3_BOLD# #VAR1_BOLD#:n ja #VAR2_BOLD#:n lisäksi. (Oletusasetus: pois käytöstä)</string>
   <string name="SYS_MEETINGS">Kokoukset</string>
   <string name="SYS_MEETING_POINT">Kokouspaikka</string>
@@ -1106,6 +1142,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Jäsenmääritys</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Organisaation jäsen #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Roolin/ryhmän #VAR1# jäsen </string>
+  <string name="SYS_MEMBER_REQUEST">Jäsenen pyyntö</string>
   <string name="SYS_MEMORY_LIMIT">Muistiraja</string>
   <string name="SYS_MENU">Valikko</string>
   <string name="SYS_MENU_DESC">Valikko voidaan määrittää täällä. URL -osoitteen viereen voidaan tallentaa kuvaus ja kuvake. Lisäksi voidaan määrittää, kuka saa katsella valikkokohdan.</string>
@@ -1130,12 +1167,14 @@
   <string name="SYS_MONTHS">Kuukaudet</string>
   <string name="SYS_MORE">Lisää</string>
   <string name="SYS_MOTHER">Äiti</string>
+  <string name="SYS_MOVE">Siirrä</string>
   <string name="SYS_MOVE_DOWN">Siirry alaspäin #VAR1#</string>
   <string name="SYS_MOVE_FILE">Siirrä tiedosto</string>
   <string name="SYS_MOVE_FILE_DESC">Valitse kansio, johon haluat siirtää #VAR1_BOLD#-tiedoston. Tiedoston näyttämiseen liittyvät roolioikeudet määräytyvät kohdekansion mukaan.</string>
   <string name="SYS_MOVE_FOLDER">Siirrä kansio</string>
   <string name="SYS_MOVE_FOLDER_DESC">Valitse kansio, johon haluat siirtää #VAR1_BOLD#-kansion. Kohdekansion tiedostojen katseluun ja lataamiseen liittyviä roolioikeuksia sovelletaan tähän kansioon ja kaikiin sen alikansioihin.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Siirrä tai kopioi tiedosto</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Siirry kohtaan</string>
   <string name="SYS_MOVE_UP">Siirrä ylös #VAR1#</string>
@@ -1236,11 +1275,13 @@
   <string name="SYS_OPERATING_SYSTEM">Käyttöjärjestelmä</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Vastakkainen suhde</string>
   <string name="SYS_OPTIONAL">Valinnainen</string>
+  <string name="SYS_OR">tai</string>
   <string name="SYS_ORDER">Tilaa</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organisaatio</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organisaatioon kuuluminen</string>
   <string name="SYS_ORGANIZATION_DESC">Nykyisen organisaation nimi ja yhteystiedot sekä mahdollisuus luoda ja näyttää alaorganisaatioita.</string>
+  <string name="SYS_ORIGIN">Alkuperä</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio voi lähettää pyyntöjä vain julkisiin HTTPS-osoitteisiin. Tätä URL-osoitetta ei voi käyttää.</string>
   <string name="SYS_OVERHANG">Ylitys</string>
   <string name="SYS_OVERVIEW">Yleiskatsaus</string>
@@ -1314,6 +1355,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Yritä uudelleen</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1432,6 +1474,7 @@
   <string name="SYS_RECIPIENT">Vastaanottaja</string>
   <string name="SYS_RECIPIENT_EMAIL">Sähköpostin vastaanottaja</string>
   <string name="SYS_RECURRENCE">Toistuminen</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Tämä tapahtuma on toistuvan sarjan päätapahtuma. Poista koko sarja, jos haluat poistaa sen pysyvästi.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Haluatko peruuttaa vain tämän päivämäärän sarjasta: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Koko sarjan muokkaamista ei vielä tueta.</string>
   <string name="SYS_RECURRENCE_END_DESC">Määrittää, milloin toistuminen päättyy. Loputtomat toistumiset rajoitetaan silti sisäisesti.</string>
@@ -1471,6 +1514,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Olet vahvistanut rekisteröitymisesi onnistuneesti. Voit nyt kirjautua sisään käyttäjätunnuksellasi ja salasanallasi.</string>
   <string name="SYS_REGULAR_EXPRESSION">Säännöllinen lauseke</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Tähän profiilikenttään voidaan tallentaa mikä tahansa säännöllinen lauseke, jota sovelletaan käyttäjän syöttämään sisältöön. Sisällön on vastattava säännöllisen lausekkeen ehtoja, jotta syötetty arvo voidaan tallentaa kenttään. Säännöllistä lauseketta tarkistetaan tietotyypin yleisten ehtojen lisäksi.</string>
+  <string name="SYS_REJECT">Hylkää</string>
   <string name="SYS_RELATED_TO">Aiheeseen liittyvä kohde</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Suhteen määritys</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Suhteen määritykset</string>
@@ -1493,8 +1537,15 @@
   <string name="SYS_REPLACE">Korvaa</string>
   <string name="SYS_REPLIES_VAR">#VAR1# vastausta</string>
   <string name="SYS_REPLY_TO">Vastaa</string>
+  <string name="SYS_REQUESTED_AT">Pyynnön ajankohta</string>
+  <string name="SYS_REQUESTER">Pyytäjä</string>
+  <string name="SYS_REQUEST_AGAIN">Pyydä uudelleen</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Pakolliset tiedot</string>
+  <string name="SYS_RESERVATIONS">Varaukset</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Varaa alkaen</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Varaa asti</string>
+  <string name="SYS_RESERVATION_REQUEST">Pyydä varausta</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Olet jo kirjautunut järjestelmään. Uutta salasanaa ei tarvitse pyytää.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Kuvaa ei voitu käsitellä, koska sen resoluutio on suurempi kuin #VAR1# megapikseliä.</string>
@@ -1638,6 +1689,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Jos tämä asetus on valittuna, jäsenhallinnassa voidaan haluttaessa näyttää nykyisen organisaation yhteystietojen lisäksi myös muiden organisaatioiden yhteystiedot. Muussa tapauksessa näytetään vain nykyisen organisaation aktiiviset ja passiiviset yhteystiedot. Uusia yhteystietoja luotaessa tai ilmoittautumisia osoitettaessa koko kaikkien organisaatioiden tietokantaa kuitenkin edelleen haetaan olemassa olevien yhteystietojen varalta. (oletus: kyllä)</string>
   <string name="SYS_SHOW_ALL_DESC">Jos tämä asetus on asetettu, entiset jäsenet sekä muiden organisaatioiden jäsenet näytetään tämän organisaation aktiivisten jäsenten lisäksi.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Kirjautuneille käyttäjille aakkosnumeerinen teksti tulee näkyviin, kun captcha -moduuli aktivoidaan. Annettu teksti on kirjoitettava oikeaan kenttään. Tämän pitäisi estää roskapostittajien lomakkeen väärinkäyttö. (oletus: kyllä)</string>
+  <string name="SYS_SHOW_DATA">Näytä tiedot</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Näytä tyhjät profiilikentät</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Tämä asetus määrittää, näytetäänkö tyhjät profiilikentät profiilinäkymässä. (Oletus: kyllä)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Näytä entiset jäsenet</string>
@@ -1702,7 +1754,7 @@
   <string name="SYS_SPOUSE">Puoliso</string>
   <string name="SYS_SSO">Yhden kirjautumisen järjestelmä</string>
   <string name="SYS_SSO_ACS_URL">Vahvistuksen vastaanottajan URL-osoite</string>
-  <string name="SYS_SSO_ACS_URL_DESC">Palveluntarjoaja vastaanottaa SAML-kirjautumisvastauksen tällä URL-osoitteella.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Palveluntarjoaja vastaanottaa SAML-kirjautumisvastauksen näihin URL-osoitteisiin. Anna yksi osoite riviä kohti. Jos pyynnössä ei nimetä osoitetta, vastaus lähetetään ensimmäiseen osoitteeseen. Pyyntö voi nimetä minkä tahansa muista osoitteista.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Lisäasetukset</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Salli paikallisverkkopyynnöt</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1749,6 +1801,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Jatka</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1780,18 +1833,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Lataa</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Olet kirjautunut tilillä #VAR2#, mutta tällä tilillä ei ole oikeutta käyttää asiakassovellusta (#VAR1#). Jatka kirjautumalla alla toisella tilillä (tämä päättää tilin #VAR2# istunnon) tai palaa asiakassovellukseen peruuttamalla.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Lataa metatiedot uudelleen</string>
+  <string name="SYS_SSO_METADATA_STATUS">Metatietojen tila</string>
+  <string name="SYS_SSO_METADATA_URL">Metatietojen URL tai XML (valinnainen)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Anna sovelluksen SAML-metatietojen URL tai liitä metatiedot XML-muodossa ja valitse Lataa. URL-osoitteesta haettavat metatiedot voidaan päivittää automaattisesti, kun taas liitetty XML otetaan käyttöön vain kerran.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Anna ensin metatietojen URL tai liitä metatiedot XML-muodossa.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1806,10 +1857,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Taustakanavan uloskirjautumisosoite</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Palvelinten välinen uloskirjautumisilmoitus allekirjoitetulla tunnisteella. Valinnainen.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1820,8 +1869,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Selainkanavan uloskirjautumisosoite</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Uloskirjautumisilmoitus selaimen kautta (iframe). Valinnainen.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1915,9 +1964,14 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Asiakassovelluksen varmenteet allekirjoitettujen SAML-viestien tarkistamiseen. Voit antaa useita varmenteita peräkkäin esimerkiksi asiakassovelluksen avaimen vaihdon ajaksi. Viesti hyväksytään, jos sen voi tarkistaa jollakin varmenteista. Jos salausvarmennetta ei ole, väitteet salataan ensimmäisellä varmenteella.</string>
   <string name="SYS_START" description="Start of a date">Aloita</string>
+  <string name="SYS_STATUS_APPROVED">Hyväksytty</string>
+  <string name="SYS_STATUS_BORROWED">Lainassa</string>
   <string name="SYS_STATUS_CODE_INVALID">Virheellinen tilakoodi!</string>
+  <string name="SYS_STATUS_REJECTED">Hylätty</string>
+  <string name="SYS_STATUS_REQUESTED">Pyydetty</string>
+  <string name="SYS_STATUS_RETURNED">Palautettu</string>
   <string name="SYS_STILL_X_CHARACTERS">edelleen #VAR1# merkkiä</string>
   <string name="SYS_STREET">Katu</string>
   <string name="SYS_SUBJECT">Aihe</string>
@@ -2000,7 +2054,11 @@
   <string name="SYS_UNLOCK_ALBUM">Avaa albumin lukitus</string>
   <string name="SYS_UNMANAGED_FILES">Hallitsemattomat tiedostot</string>
   <string name="SYS_UPDATE_AVAILABLE">Päivitys saatavana</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# on saatavilla.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Päivitys onnistui</string>
+  <string name="SYS_UPLOADING">Ladataan palvelimelle…</string>
+  <string name="SYS_UPLOAD_CANCEL">Peruuta palvelimelle lataaminen</string>
+  <string name="SYS_UPLOAD_CANCELLED">Lataaminen palvelimelle peruutettiin.</string>
   <string name="SYS_UPLOAD_FILES">Lähetä tiedostoja</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Enintään tiedoston latauskoko</string>
   <string name="SYS_UPLOAD_PHOTOS">Lähetä kuvia</string>
@@ -2074,9 +2132,11 @@
   <string name="SYS_WEDNESDAY">Keskiviikko</string>
   <string name="SYS_WEEKDAY">Viikonpäivä</string>
   <string name="SYS_WEEKDAYS">Arkipäivinä</string>
+  <string name="SYS_WEEKDAY_FORMAT">Viikonpäivän muoto</string>
   <string name="SYS_WEEKLY">Viikottain</string>
   <string name="SYS_WIDTH">Leveys</string>
   <string name="SYS_WIFE">Vaimo</string>
+  <string name="SYS_WITHDRAW">Peru pyyntö</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Laskentataulukko (hakemisto tai nimi)</string>
   <string name="SYS_WRITE_EMAIL">Kirjoita sähköposti</string>
   <string name="SYS_WRITE_PM">Kirjoita yksityisviesti</string>
@@ -2087,7 +2147,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Kokoonpanosi</string>
   <string name="SYS_YOUR_EMAIL">Sähköpostisi</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Viimeiset määritykset</string>
-  <string name="SYS_YOUR_LISTS">Omat luettelot</string>
+  <string name="SYS_YOUR_LISTS">Omat listasi</string>
   <string name="SYS_YOUR_NAME">Nimesi</string>
   <string name="SYS_Z_TO_A">Ö - A</string>
 </resources>

@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Добавить событие в календарь</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Добавить предмет</string>
+  <string name="SYS_ADD_ITEMS">Добавить предметы</string>
   <string name="SYS_ADD_ORGANIZATION">Добавить организацию</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Добавить в базу данных</string>
@@ -228,7 +230,7 @@
   <string name="SYS_ALL">Все</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Участники могут регистрировать анонимных гостей</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Участники могут добавить к своей регистрации дополнительные места. Затем они вычитаются из максимального количества участников, и таким образом уменьшается количество оставшихся свободных мест. Это полезно, например, если участник может привести с собой больше гостей и, таким образом, ему требуется большее количество свободных мест.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Разрешить комментарии в рамках участия</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Разрешить комментарии при записи на мероприятие</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Участники могут оставлять комментарии относительно своего участия. Комментарии можно просмотреть через список участников</string>
   <string name="SYS_ALL_CONTACTS">All contacts</string>
   <string name="SYS_ALL_DAY">Полный день</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Применить</string>
   <string name="SYS_APPOINTMENT">Назначение</string>
   <string name="SYS_APPOINTMENTS">Назначения</string>
+  <string name="SYS_APPROVE">Одобрить</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Устанавливается по ролям</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Назначение и редактирование участников</string>
   <string name="SYS_ASSIGN_FIELDS">Назначение полей</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">Вы зарегистрировались на мероприятие #VAR1_BOLD# на #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Вы предварительно записались на мероприятие #VAR1_BOLD# на #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Автоматическое одобрение</string>
   <string name="SYS_AUTO_DETECT">Автоопределение</string>
   <string name="SYS_AVAILABLE">Доступно</string>
   <string name="SYS_AVAILABLE_BETA">Доступно в бета-версии</string>
   <string name="SYS_A_TO_Z">От А до Я</string>
   <string name="SYS_BACK">Назад</string>
+  <string name="SYS_BACKUPS">Резервные копии</string>
   <string name="SYS_BACK_TO_ALBUM">Назад к альбому</string>
   <string name="SYS_BACK_TO_FOLDER">Назад к папке</string>
   <string name="SYS_BASIC_DATA">Основные данные</string>
   <string name="SYS_BIRTHDAY">День рождения</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Выдача предметов</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Предметы на руках</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Брат</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">Календари</string>
   <string name="SYS_CANCEL">Отмена</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Отменить всё</string>
   <string name="SYS_CANCEL_EVENT">Вы отменили участие в событии #VAR1_BOLD# на #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Отменить участие</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Удалить взаимоотношения</string>
@@ -298,7 +306,7 @@
   <string name="SYS_CAPTCHA">Капча</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Результат вычисления неверен.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Код аутентификации оказался недействительным.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Код аутентификации</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Код подтверждения</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Код аутентификации является частью капчи. Капча используется для обнаружения спама. Картинка используется для определения, заполнил ли форму пользователь или скрипт (или спам-бот).\nПожалуйста, введите в форму результат кода аутентификации.</string>
   <string name="SYS_CAPTION_SIZE">Размер надписи</string>
   <string name="SYS_CAPTION_SIZE_DESC">Размер надписи пропорционален размеру изображения и рассчитывается по формуле \«Размер изображения / Девизор\». При увеличении девизора размер шрифта уменьшается. (По умолчанию: 40)</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">Копировать</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Копирование записи</string>
+  <string name="SYS_COPY_FILE">Копировать файл</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Запрошенная вами копия сообщения</string>
+  <string name="SYS_COPY_TO">Копировать в</string>
   <string name="SYS_COPY_VAR">Копировать #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Отменить обновление</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Обновление отменено. Изменений нет.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Канал</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Бета-версия</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Стабильная версия</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Проверить снова</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Продолжить</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Обновить базу данных</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Скачать и подготовить</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Установить обновление</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Установленная версия</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Войти</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Имя пользователя</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Открыть Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Пароль</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Ход выполнения</string>
+  <string name="SYS_CORE_UPDATE_START">Обновить Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Обновление базы данных</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Завершить</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Новая версия</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Обновление Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Что делать?</string>
   <string name="SYS_COUNTER">Счетчик</string>
   <string name="SYS_COUNTRY">Страна</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -502,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Ваша регистрация не может быть изменена, поскольку указанная дата окончания регистрации уже наступила или дата уже в прошлом. Пожалуйста, свяжитесь с руководителем мероприятия или администратором!</string>
   <string name="SYS_DEBUG_OUTPUT">Дебаг-вывод</string>
   <string name="SYS_DECIMAL_NUMBER">Десятичное число</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Назначение регистрации по умолчанию</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Назначение ролей по умолчанию при регистрации</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Если создается новый пользователь или принимается новая регистрация, то эта роль автоматически назначается новому пользователю. Если у создателя есть право назначать роли, все сопоставления ролей отображаются и могут быть изменены соответствующим образом.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Конфигурация по умолчанию</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Редактировать гиперссылку</string>
   <string name="SYS_EDIT_WEBLINKS">Редактировать гиперссылки</string>
   <string name="SYS_EMAIL">Эл. почта</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Адрес электронной почты вашей учётной записи #VAR1# на #VAR4# изменён с #VAR2# на #VAR3#. Если вы не давали разрешения на это изменение, немедленно свяжитесь с администратором.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Ваш адрес электронной почты изменён</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Эл. почта администратора</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Данные профиля пользователя #VAR1# #VAR2# (логин: #VAR3#) были изменены #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Пользователь #VAR1# #VAR2# (логин: #VAR3#) был изменен</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Для посетителей нет документов или файлов.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Вам не разрешено отображать выбранную папку.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">При переименовании папки #VAR1# произошла ошибка.</string>
+  <string name="SYS_FOLDER_TREE">Дерево папок</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Папка #VAR1_BOLD# не может быть создана с требуемыми правами на запись.\n\nПожалуйста, обратитесь за помощью к #VAR2#администратору#VAR3#, чтобы проверить права на запись (с помощью FTP, изменив атрибуты файлов на 0777 или drwxrwxrwx).</string>
   <string name="SYS_FONT">Шрифт</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">Группы и роли</string>
   <string name="SYS_GROUPS_ROLES_DESC">Обзор и управление всеми группами и ролями в организации. Можно отображать и экспортировать различные списки участников, а также создавать собственные списки.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Запрос гостя</string>
   <string name="SYS_HALF_YEARLY">Раз в полугодие</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-заголовок уже отправлен!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -851,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Fields editable by the keeper</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">The item fields selected here can be edited by the item keeper when the option "Edit permission for the keeper" is enabled. All other fields are read-only and can only be changed by module administrators. (Default: "Last receiver", "Borrowing date", "Return date")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Choose who can access the inventory manager: everyone, logged-in users, module administrators, module administrators and item keepers, or members of a selected role. You can also disable the module entirely. Restricting access to logged-in users hides it from guests. Restricting access to module administrators makes it visible only to users with the "Manage inventory" permission. (Default: enabled)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Prefix file name with date</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Добавлять дату в начало имени файла</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">When this option is enabled, the current date in the format YYYY-MM-DD will be prefixed to the export file’s name. (Default: no)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Allow negative numbers</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">If this option is enabled, negative numbers can also be entered in fields of type "Number" or "Decimal number". Otherwise, only positive numbers are allowed. (Default: yes)</string>
@@ -864,7 +900,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Date representation</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selection of the date format to be used for displaying date and time information in the inventory manager. (Default: Date (DD.MM.YYYY))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Enter one date interval option per row.\nThe selected position in the list is stored rather than the text. Changing an option\'s text updates it immediately for all users.\nOn each row, enter the label followed by a vertical bar and the date interval, for example: Yearly | 1y\nIf no unit is specified, days are assumed.\nAvailable units: d: days, w: weeks, m: months, y: years</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Decimal places</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Знаки после запятой</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Number of decimal places to be displayed for fields of the type "Decimal number". (Default: 1)</string>
   <string name="SYS_INVENTORY_DESC">Inventory manager enables you to organize, manage, and track items.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1078,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Максимальный размер обрабатываемого изображения</string>
   <string name="SYS_MAX_RECEIVER">Максимальное количество получателей почты</string>
   <string name="SYS_MAX_RECEIVER_DESC">Это значение определяет максимальное количество получателей почты. Роль считается за одного получателя.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Участие с резервированием</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Разрешить предварительное участие</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Если эта опция активирована, то при регистрации на мероприятие в дополнение к #VAR1_BOLD# и #VAR2_BOLD# будет доступна третья опция #VAR3_BOLD#. (По умолчанию: отключено)</string>
   <string name="SYS_MEETINGS">Встречи</string>
   <string name="SYS_MEETING_POINT">Место встречи</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Назначение участников</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Участник организации #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Запрос участника</string>
   <string name="SYS_MEMORY_LIMIT">Ограничение памяти</string>
   <string name="SYS_MENU">Меню</string>
   <string name="SYS_MENU_DESC">Здесь можно настроить меню. Помимо URL-адреса можно поместить описание и иконку. Кроме того, можно определить, кому разрешено просматривать пункт меню.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">Больше</string>
   <string name="SYS_MOTHER">Мать</string>
+  <string name="SYS_MOVE">Переместить</string>
   <string name="SYS_MOVE_DOWN">Переместить вниз #VAR1#</string>
   <string name="SYS_MOVE_FILE">Переместить файл</string>
   <string name="SYS_MOVE_FILE_DESC">Выберите папку, в которую вы хотите переместить файл #VAR1_BOLD#. Разрешения роли для отображения файла будут взяты из целевой папки.</string>
   <string name="SYS_MOVE_FOLDER">Переместить папку</string>
   <string name="SYS_MOVE_FOLDER_DESC">Выберите папку, в которую вы хотите переместить папку #VAR1_BOLD#. Разрешения роли на просмотр и загрузку файлов из целевой папки будут применены к этой папке и всем вложенным папкам.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Переместить или скопировать файл</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Переместить в</string>
   <string name="SYS_MOVE_UP">Переместить вверх #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">Операционная система</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Противоположные отношения</string>
   <string name="SYS_OPTIONAL">Опционально</string>
+  <string name="SYS_OR">или</string>
   <string name="SYS_ORDER">Заказ</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Организация</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Источник</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Доп.места</string>
   <string name="SYS_OVERVIEW">Обзор</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Повторить попытку</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">Получатель</string>
   <string name="SYS_RECIPIENT_EMAIL">Получатель эл. почты</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Это основное мероприятие в повторяющейся серии. Чтобы удалить его навсегда, удалите всю серию.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Вы успешно подтвердили свою регистрацию. Теперь вы можете войти в систему, используя свое имя пользователя и пароль.</string>
   <string name="SYS_REGULAR_EXPRESSION">Регулярное выражение</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Можно сохранить любое регулярное выражение, которое будет применяться к содержимому, введенному пользователем в это поле профиля. Содержимое должно соответствовать условиям регулярного выражения, чтобы введенное значение было сохранено в поле. Регулярное выражение проверяется в дополнение к общим условиям типа данных.</string>
+  <string name="SYS_REJECT">Отклонить</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Конфигурация отношения</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Конфигурация отношений</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">Заменить</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Дата запроса</string>
+  <string name="SYS_REQUESTER">Заявитель</string>
+  <string name="SYS_REQUEST_AGAIN">Запросить снова</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Обязательное поле</string>
+  <string name="SYS_RESERVATIONS">Бронирования</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Забронировать с</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Забронировать до</string>
+  <string name="SYS_RESERVATION_REQUEST">Запросить бронирование</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Вы уже вошли в систему. Нет необходимости запрашивать новый пароль.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Изображение не может быть обработано, поскольку разрешение превышает #VAR1# мегапикселей.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Если этот параметр установлен, бывшие контакты и контакты других организаций могут по желанию отображаться в администрации пользователя в дополнение к активным контактам текущей организации. В противном случае отображаются только активные контакты текущей организации. Однако при создании новых контактов или назначении регистраций поиск существующих контактов по-прежнему выполняется во всей базе данных всех организаций. (по умолчанию: да)</string>
   <string name="SYS_SHOW_ALL_DESC">Если этот параметр установлен, в дополнение к активным участникам данной организации будут отображаться бывшие участники, а также участники других организаций.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Для пользователей, вышедших из системы, при активации модуля Капча будет отображаться буквенно-цифровой текст. Предоставленный текст должен быть введен в соответствующее поле. Это должно предотвратить злоупотребление формой со стороны спамеров. (по умолчанию: да)</string>
+  <string name="SYS_SHOW_DATA">Показать данные</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Показать бывших участников</string>
@@ -1694,7 +1746,7 @@
   <string name="SYS_SPOUSE">Супруг</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Поставщик услуг получает ответ SAML на запрос входа по этим URL. Укажите по одному URL на строку. Если в запросе не указан URL, ответ отправляется на первый адрес. В запросе можно указать любой из остальных адресов.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Продолжить</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1772,18 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Cryptographic key settings</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Load client metadata</string>
+  <string name="SYS_SSO_LOAD_METADATA">Загрузить</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Вы вошли как #VAR2#, но у этой учётной записи нет доступа к клиенту (#VAR1#). Чтобы продолжить, войдите ниже под другой учётной записью (сеанс #VAR2# будет завершён) или отмените вход, чтобы вернуться к клиенту.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
-  <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Загрузить метаданные заново</string>
+  <string name="SYS_SSO_METADATA_STATUS">Состояние метаданных</string>
+  <string name="SYS_SSO_METADATA_URL">URL или XML метаданных (необязательно)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Введите URL метаданных SAML приложения или вставьте их в формате XML и выберите «Загрузить». Метаданные по URL можно обновлять автоматически, а вставленный XML применяется только один раз.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Сначала введите URL метаданных или вставьте их в формате XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">No cryptographic keys are configured for signing or encrypting SAML or OIDC messages.</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1798,10 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL выхода через серверный канал</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Уведомление о выходе между серверами с подписанным токеном. Необязательно.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1812,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL выхода через браузерный канал</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Уведомление о выходе через браузер (iframe). Необязательно.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1907,9 +1956,14 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Сертификаты клиента для проверки подписанных сообщений SAML. Можно указать несколько сертификатов подряд, например на время замены ключа клиента. Сообщение принимается, если его можно проверить одним из сертификатов. Если сертификат для шифрования не задан, утверждения шифруются первым сертификатом.</string>
   <string name="SYS_START" description="Start of a date">Начало</string>
+  <string name="SYS_STATUS_APPROVED">Одобрено</string>
+  <string name="SYS_STATUS_BORROWED">Выдано</string>
   <string name="SYS_STATUS_CODE_INVALID">Неверный код статуса!</string>
+  <string name="SYS_STATUS_REJECTED">Отклонено</string>
+  <string name="SYS_STATUS_REQUESTED">Запрошено</string>
+  <string name="SYS_STATUS_RETURNED">Возвращено</string>
   <string name="SYS_STILL_X_CHARACTERS">все еще #VAR1# символов</string>
   <string name="SYS_STREET">Улица</string>
   <string name="SYS_SUBJECT">Тема</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Разблокировать альбом</string>
   <string name="SYS_UNMANAGED_FILES">Неуправляемые файлы</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Доступна версия Admidio #VAR1#.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Обновление прошло успешно</string>
+  <string name="SYS_UPLOADING">Загрузка…</string>
+  <string name="SYS_UPLOAD_CANCEL">Отменить загрузку</string>
+  <string name="SYS_UPLOAD_CANCELLED">Загрузка отменена.</string>
   <string name="SYS_UPLOAD_FILES">Загрузить файлы</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Макс. размер загружаемого файла</string>
   <string name="SYS_UPLOAD_PHOTOS">Загрузить фотографии</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">Среда</string>
   <string name="SYS_WEEKDAY">Будни</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Формат дня недели</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Ширина</string>
   <string name="SYS_WIFE">Жена</string>
+  <string name="SYS_WITHDRAW">Отозвать запрос</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Рабочий лист (индекс или название)</string>
   <string name="SYS_WRITE_EMAIL">Написать эл/письмо</string>
   <string name="SYS_WRITE_PM">Написать личное сообщение</string>
@@ -2079,7 +2139,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Ваша конфигурация</string>
   <string name="SYS_YOUR_EMAIL">Ваша эл. почта</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Ваша последняя конфигурация</string>
-  <string name="SYS_YOUR_LISTS">Собственные списки</string>
+  <string name="SYS_YOUR_LISTS">Ваши списки</string>
   <string name="SYS_YOUR_NAME">Ваше имя</string>
   <string name="SYS_Z_TO_A">От Я до А</string>
 </resources>

@@ -203,6 +203,8 @@
   <string name="SYS_ADD_ENTRY">Přidat záznam</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Přidat událost do kalendáře</string>
   <string name="SYS_ADD_FIELD">Přidat pole</string>
+  <string name="SYS_ADD_ITEM">Přidat položku</string>
+  <string name="SYS_ADD_ITEMS">Přidat položky</string>
   <string name="SYS_ADD_ORGANIZATION">Přidat organizaci</string>
   <string name="SYS_ADD_ROLE">Přidat roli</string>
   <string name="SYS_ADD_TO_DATABASE">Přidat do databáze</string>
@@ -230,7 +232,7 @@
   <string name="SYS_ALL">Vše</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Účastníci mohou registrovat anonymní hosty</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Účastníci mohou ke své registraci přidat další místa. Tato místa se pak odečtou od maximálního počtu účastníků a tím se sníží počet zbývajících volných míst. To je užitečné např. tehdy, pokud s sebou účastník může vzít více návštěvníků a vyžaduje tak celkově více volných míst.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Povolit komentáře v rámci účasti</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Povolit komentáře při přihlašování na akci</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Účastníci mohou svou účast komentovat. Komentáře lze zobrazit prostřednictvím seznamu účastníků.</string>
   <string name="SYS_ALL_CONTACTS">Všechny kontakty</string>
   <string name="SYS_ALL_DAY">Celý den</string>
@@ -248,6 +250,7 @@
   <string name="SYS_APPLY">Použít</string>
   <string name="SYS_APPOINTMENT">Schůzka</string>
   <string name="SYS_APPOINTMENTS">Schůzky</string>
+  <string name="SYS_APPROVE">Schválit</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Nastaveno rolemi</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Přiřadit a upravit členy</string>
   <string name="SYS_ASSIGN_FIELDS">Přiřadit pole</string>
@@ -274,17 +277,21 @@
   <string name="SYS_ATTEND_EVENT">Přihlásili jste se na akci #VAR1_BOLD# dne #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Přihlásili jste se předběžně na akci #VAR1_BOLD# dne #VAR2#.</string>
   <string name="SYS_AUTHOR">Autor</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automatické schválení</string>
   <string name="SYS_AUTO_DETECT">Automaticky detekovat</string>
   <string name="SYS_AVAILABLE">Dostupné</string>
   <string name="SYS_AVAILABLE_BETA">Dostupná Beta</string>
   <string name="SYS_A_TO_Z">A až Z</string>
   <string name="SYS_BACK">Zpět</string>
+  <string name="SYS_BACKUPS">Zálohy</string>
   <string name="SYS_BACK_TO_ALBUM">Zpět do alba</string>
   <string name="SYS_BACK_TO_FOLDER">Zpět do složky</string>
   <string name="SYS_BASIC_DATA">Základní údaje</string>
   <string name="SYS_BIRTHDAY">Narozeniny</string>
   <string name="SYS_BLUESKY">Modrá obloha</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Výpůjčky</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Aktivní výpůjčky</string>
   <string name="SYS_BOYFRIEND">Přítel</string>
   <string name="SYS_BROTHER">Bratr</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -292,6 +299,7 @@
   <string name="SYS_CALENDARS">Kalendáře</string>
   <string name="SYS_CANCEL">Zrušit</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Zahodit vše</string>
   <string name="SYS_CANCEL_EVENT">Zrušili jste účast na akci #VAR1_BOLD# dne #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Zrušit členství</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Smazat vztah</string>
@@ -425,9 +433,33 @@
   <string name="SYS_COPY">Kopírovar</string>
   <string name="SYS_COPY_CLIPBOARD">Kopírovat do schránky</string>
   <string name="SYS_COPY_ENTRY">Kopírovat záznam</string>
+  <string name="SYS_COPY_FILE">Zkopírovat soubor</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Vámi vyžádaná kopie zprávy</string>
+  <string name="SYS_COPY_TO">Kopírovat do</string>
   <string name="SYS_COPY_VAR">Kopírovat #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Zrušit aktualizaci</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Aktualizace byla zrušena. Nic se nezměnilo.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Kanál</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Beta verze</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stabilní verze</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Zkontrolovat znovu</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Pokračovat</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Aktualizovat databázi</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Stáhnout a připravit</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Nainstalovat aktualizaci</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Nainstalovaná verze</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Přihlásit se</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Přihlašovací jméno</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Otevřít Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Heslo</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Průběh</string>
+  <string name="SYS_CORE_UPDATE_START">Aktualizovat Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Aktualizovat databázi</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Dokončit</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Nová verze</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Aktualizace Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Co mám dělat?</string>
   <string name="SYS_COUNTER">Počítadlo</string>
   <string name="SYS_COUNTRY">Země</string>
   <string name="SYS_COUNTRY_EG" translation="edited">CZE</string>
@@ -504,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Vaši registraci nelze změnit, protože bylo dosaženo stanoveného data ukončení registrací nebo je datum v minulosti. Kontaktujte prosím vedoucího události nebo administrátora!</string>
   <string name="SYS_DEBUG_OUTPUT">Ladící výstup - Debug</string>
   <string name="SYS_DECIMAL_NUMBER">Desetinné číslo</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Výchozí přiřazení registrace</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Výchozí přiřazení rolí při registraci</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Pokud je vytvořen nový uživatel nebo přijata nová registrace, je mu automaticky přiřazena tato role. Pokud má tvůrce právo přiřazovat role, zobrazí se všechna mapování rolí a lze je odpovídajícím způsobem změnit.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Výchozí konfigurace</string>
@@ -626,6 +658,8 @@
   <string name="SYS_EDIT_WEBLINK">Upravit webový odkaz</string>
   <string name="SYS_EDIT_WEBLINKS">Upravit webové odkazy</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">E-mailová adresa vašeho účtu #VAR1# na #VAR4# byla změněna z #VAR2# na #VAR3#. Pokud jste tuto změnu neschválili, ihned kontaktujte správce.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Vaše e-mailová adresa byla změněna</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-mail administrátora</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profilová data uživatele #VAR1# #VAR2# (přihlášení: #VAR3#) byla změněna uživatelem #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Uživatel #VAR1# #VAR2# (přihlášení: #VAR3#) byl změněn</string>
@@ -753,6 +787,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Pro návštěvníky nejsou k dispozici žádné dokumenty ani soubory.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Nemáte oprávnění k zobrazení vybrané složky.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Při přejmenování složky #VAR1# došlo k chybě.</string>
+  <string name="SYS_FOLDER_TREE">Strom složek</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Složku #VAR1_BOLD# nelze vytvořit s požadovanými právy pro zápis.\n\nPožádejte prosím #VAR2#administrátora#VAR3# o pomoc s kontrolou práv pro zápis (pomocí FTP změňte atributy souboru na 0777 nebo drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -791,6 +826,7 @@
   <string name="SYS_GROUPS_ROLES">Skupiny a role</string>
   <string name="SYS_GROUPS_ROLES_DESC">Přehled a správa všech skupin a rolí organizace. Lze zobrazit a exportovat různé seznamy členů a vytvářet vlastní seznamy.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Členství ve skupině/roli</string>
+  <string name="SYS_GUEST_REQUEST">Žádost hosta</string>
   <string name="SYS_HALF_YEARLY">Pololetně</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP hlavička již byla odeslána!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -853,7 +889,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Pole upravitelná správcem</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Zde vybraná pole položek může správce položky upravovat, pokud je povolena možnost „Oprávnění k úpravám pro správce“. Všechna ostatní pole jsou pouze pro čtení a mohou je měnit pouze administrátoři modulu. (Výchozí: „Poslední příjemce“, „Datum zapůjčení“, „Datum vrácení“)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Modul správce inventáře lze prostřednictvím tohoto nastavení zcela zakázat, zpřístupnit pouze přihlášeným uživatelům, omezit výhradně na administrátory modulu, zpřístupnit administrátorům modulu a správcům položek nebo zpřístupnit členům vybrané role. Pokud je přístup povolen pouze přihlášeným uživatelům, modul je před hosty skryt. Pokud mají přístup pouze administrátoři modulu, modul je viditelný pouze uživatelům s oprávněním „spravovat inventář“. (Výchozí: Povoleno)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Připojit datum</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Přidat datum na začátek názvu souboru</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Pokud je tato možnost povolena, bude k názvu exportního souboru připojen aktuální datum ve formátu RRRR-MM-DD. (Výchozí: ne)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Povolit záporná čísla</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Pokud je tato možnost povolena, lze do polí typu „Číslo“ nebo „Desetinné číslo“ zadávat i záporná čísla. V opačném případě jsou povolena pouze kladná čísla. (Výchozí: ano)</string>
@@ -866,7 +902,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Zobrazení data</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Výběr formátu data, který se použije pro zobrazení informací o datu a čase ve správci inventáře. (Výchozí: Datum (DD.MM.RRRR))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Do této tabulky můžete zadat záznamy pro časové intervaly. Pro každý další záznam v rozbalovacím seznamu zde lze přidat řádek tabulky.\nZáznam v seznamu se později neukládá jako text, ale jako vybraná pozice ze seznamu. Pokud změníte text v řádku, všichni uživatelé okamžitě uvidí nový text.\nČasový interval musí být napsán ve stejném řádku oddělený symbolem | za názvem. např. Ročně | 1y \nPokud není uvedena žádná jednotka, předpokládají se dny. \nMožné jednotky: d: dny, w: týdny, m: měsíce, y: roky</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Počet desetinných míst</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Desetinná místa</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Počet desetinných míst, která se mají zobrazovat u polí typu „Desetinné číslo“. (Výchozí: 1)</string>
   <string name="SYS_INVENTORY_DESC">Správce inventáře vám umožňuje organizovat, spravovat a sledovat položky.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1080,7 +1116,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Max. zpracovatelná velikost obrázku</string>
   <string name="SYS_MAX_RECEIVER">Maximální počet příjemců e-mailu</string>
   <string name="SYS_MAX_RECEIVER_DESC">Tato hodnota definuje maximální množství příjemců e-mailu. Role se počítá jako jeden příjemce.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Zúčastnit se s výhradou</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Povolit předběžnou účast</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Je-li tato možnost aktivována, je při registraci na událost k dispozici třetí možnost #VAR3_BOLD# kromě #VAR1_BOLD# a #VAR2_BOLD#. (Výchozí: zakázáno)</string>
   <string name="SYS_MEETINGS">Schůzky</string>
   <string name="SYS_MEETING_POINT">Místo srazu</string>
@@ -1100,6 +1136,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Přiřazení členů</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Člen organizace #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Člen role/skupiny #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Žádost člena</string>
   <string name="SYS_MEMORY_LIMIT">Limit paměti</string>
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">Zde lze konfigurovat menu. Vedle URL lze uložit popis a ikonu. Navíc lze určit, kdo smí položku menu vidět.</string>
@@ -1124,12 +1161,14 @@
   <string name="SYS_MONTHS">Měsíce</string>
   <string name="SYS_MORE">Více</string>
   <string name="SYS_MOTHER">Matka</string>
+  <string name="SYS_MOVE">Přesunout</string>
   <string name="SYS_MOVE_DOWN">Posunout dolů #VAR1#</string>
   <string name="SYS_MOVE_FILE">Přesunout soubor</string>
   <string name="SYS_MOVE_FILE_DESC">Vyberte složku, do které chcete soubor #VAR1_BOLD# přesunout. Oprávnění rolí pro zobrazení souboru jsou převzata z cílové složky.</string>
   <string name="SYS_MOVE_FOLDER">Přesunout složku</string>
   <string name="SYS_MOVE_FOLDER_DESC">Vyberte složku, do které chcete složku #VAR1_BOLD# přesunout. Oprávnění rolí pro prohlížení a nahrávání souborů z cílové složky budou aplikována na tuto složku a všechny podsložky.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Přesunout nebo zkopírovat soubor</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Přesunout do</string>
   <string name="SYS_MOVE_UP">Posunout nahoru #VAR1#</string>
@@ -1230,11 +1269,13 @@
   <string name="SYS_OPERATING_SYSTEM">Operační systém</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Protější vztah</string>
   <string name="SYS_OPTIONAL">Volitelné</string>
+  <string name="SYS_OR">nebo</string>
   <string name="SYS_ORDER">Pořadí</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organizace</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Příslušnost k organizaci</string>
   <string name="SYS_ORGANIZATION_DESC">Název a kontaktní údaje aktuální organizace s možností vytváření a zobrazování podřízených organizací.</string>
+  <string name="SYS_ORIGIN">Původ</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Převis</string>
   <string name="SYS_OVERVIEW">Přehled</string>
@@ -1308,6 +1349,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Zkusit znovu</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1426,6 +1468,7 @@
   <string name="SYS_RECIPIENT">Příjemce</string>
   <string name="SYS_RECIPIENT_EMAIL">Příjemce e-mailu</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Tato událost je hlavní událostí opakované série. Chcete-li ji trvale odstranit, smažte celou sérii.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1465,6 +1508,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Úspěšně jste potvrdili svou registraci. Nyní se můžete přihlásit pomocí svého uživatelského jména a hesla.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulární výraz</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Lze uložit libovolný regulární výraz, který bude aplikován na obsah zadaný uživatelem v tomto profilovém poli. Obsah musí odpovídat podmínkám regulárního výrazu, aby mohla být zadaná hodnota do pole uložena. Regulární výraz se kontroluje nad rámec obecných podmínek datového typu.</string>
+  <string name="SYS_REJECT">Zamítnout</string>
   <string name="SYS_RELATED_TO">Související položka</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Konfigurace vztahů</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Konfigurace vztahů</string>
@@ -1487,8 +1531,15 @@
   <string name="SYS_REPLACE">Nahradit</string>
   <string name="SYS_REPLIES_VAR">Odpovědi: #VAR1#</string>
   <string name="SYS_REPLY_TO">Odpovědět komu</string>
+  <string name="SYS_REQUESTED_AT">Datum podání žádosti</string>
+  <string name="SYS_REQUESTER">Žadatel</string>
+  <string name="SYS_REQUEST_AGAIN">Požádat znovu</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Povinné pole</string>
+  <string name="SYS_RESERVATIONS">Rezervace</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Rezervovat od</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Rezervovat do</string>
+  <string name="SYS_RESERVATION_REQUEST">Požádat o rezervaci</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Již jste přihlášeni do systému. Není nutné žádat o nové heslo.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Obrázek nebylo možné zpracovat, protože rozlišení je větší než #VAR1# megapixelů.</string>
@@ -1632,6 +1683,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Pokud je tato možnost nastavena, mohou být ve správě členů kromě kontaktů aktuální organizace volitelně zobrazeny i kontakty jiných organizací. V opačném případě se zobrazují pouze aktivní a neaktivní kontakty aktuální organizace. Při vytváření nových kontaktů nebo přiřazování registrací se však stále prohledává celá databáze všech organizací. (výchozí: ano)</string>
   <string name="SYS_SHOW_ALL_DESC">Je-li toto nastavení aktivováno, zobrazují se kromě aktivních členů této organizace také bývalí členové a členové jiných organizací.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Odhlášeným uživatelům se při aktivaci modulu captcha zobrazí alfanumerický text. Uvedený text musí být zadán do příslušného pole. To by mělo zabránit zneužití formuláře spammery. (výchozí: ano)</string>
+  <string name="SYS_SHOW_DATA">Zobrazit data</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Zobrazit prázdná profilová pole</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Toto nastavení určuje, zda se mají prázdná profilová pole zobrazovat v náhledu profilu. (Výchozí: ano)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Zobrazit bývalé členy</string>
@@ -1696,7 +1748,7 @@
   <string name="SYS_SPOUSE">Manžel/ka</string>
   <string name="SYS_SSO">Single sign-on</string>
   <string name="SYS_SSO_ACS_URL">Assertion consumer URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">The service provider receives the SAML login response at this URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Poskytovatel služby přijímá odpověď SAML na přihlášení na těchto adresách URL. Zadejte jednu adresu na řádek. Pokud požadavek žádnou adresu neurčí, odpověď se odešle na první. Požadavek může určit i kteroukoli z ostatních.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1743,6 +1795,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Heslo pro export klíče</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Pokračovat</string>
   <string name="SYS_SSO_INVALID_CLIENT">Neplatný klient</string>
   <string name="SYS_SSO_KEY">SSO Klíč</string>
   <string name="SYS_SSO_KEYS">SSO klíče</string>
@@ -1774,18 +1827,16 @@
   <string name="SYS_SSO_KEY_SETTING">Nastavení kryptografického klíče</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Načíst metadata klienta</string>
+  <string name="SYS_SSO_LOAD_METADATA">Načíst</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Jste přihlášeni jako #VAR2#, ale tento účet nemá oprávnění k přístupu ke klientovi (#VAR1#). Chcete-li pokračovat, přihlaste se níže jiným účtem (tím ukončíte relaci účtu #VAR2#) nebo se zrušením vraťte ke klientovi.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
-  <string name="SYS_SSO_METADATA_URL">URL metadat (volitelné)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Znovu načíst metadata</string>
+  <string name="SYS_SSO_METADATA_STATUS">Stav metadat</string>
+  <string name="SYS_SSO_METADATA_URL">Adresa URL nebo XML metadat (nepovinné)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Zadejte adresu URL metadat SAML aplikace nebo vložte jejich XML a zvolte Načíst. Metadata z adresy URL lze obnovovat automaticky, vložené XML se použije jednorázově.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Nejprve zadejte adresu URL metadat nebo vložte jejich XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nejsou nakonfigurovány žádné kryptografické klíče pro podepisování nebo šifrování zpráv SAML nebo OIDC!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1800,10 +1851,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Adresa URL pro odhlášení přes back-channel</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Oznámení o odhlášení mezi servery s podepsaným tokenem. Nepovinné.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC nárok</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1814,8 +1863,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Adresa URL pro odhlášení přes front-channel</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Oznámení o odhlášení v prohlížeči (iframe). Nepovinné.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1909,9 +1958,14 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certifikáty klienta pro ověřování podepsaných zpráv SAML. Můžete zadat více certifikátů za sebou, například při výměně klíče klienta. Zpráva je přijata, pokud ji ověří některý z nich. Bez šifrovacího certifikátu se tvrzení šifrují pomocí prvního certifikátu.</string>
   <string name="SYS_START" description="Start of a date">Začátek</string>
+  <string name="SYS_STATUS_APPROVED">Schváleno</string>
+  <string name="SYS_STATUS_BORROWED">Vypůjčeno</string>
   <string name="SYS_STATUS_CODE_INVALID">Neplatný stavový kód!</string>
+  <string name="SYS_STATUS_REJECTED">Zamítnuto</string>
+  <string name="SYS_STATUS_REQUESTED">Vyžádáno</string>
+  <string name="SYS_STATUS_RETURNED">Vráceno</string>
   <string name="SYS_STILL_X_CHARACTERS">zbývá #VAR1# znaků</string>
   <string name="SYS_STREET">Ulice</string>
   <string name="SYS_SUBJECT">Předmět</string>
@@ -1994,7 +2048,11 @@
   <string name="SYS_UNLOCK_ALBUM">Odemknout album</string>
   <string name="SYS_UNMANAGED_FILES">Nespravované soubory</string>
   <string name="SYS_UPDATE_AVAILABLE">Dostupní aktualizace</string>
+  <string name="SYS_UPDATE_NOTICE">Je dostupná verze Admidio #VAR1#.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Aktualizace úspěšná</string>
+  <string name="SYS_UPLOADING">Nahrávání…</string>
+  <string name="SYS_UPLOAD_CANCEL">Zrušit nahrávání</string>
+  <string name="SYS_UPLOAD_CANCELLED">Nahrávání bylo zrušeno.</string>
   <string name="SYS_UPLOAD_FILES">Nahrát soubory</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Maximální velikost nahrávaného souboru</string>
   <string name="SYS_UPLOAD_PHOTOS">Nahrát fotky</string>
@@ -2068,9 +2126,11 @@
   <string name="SYS_WEDNESDAY">Středa</string>
   <string name="SYS_WEEKDAY">Pracovní den</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Formát dne v týdnu</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Šířka</string>
   <string name="SYS_WIFE">Manželka</string>
+  <string name="SYS_WITHDRAW">Stáhnout žádost</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Pracovní list (index nebo název)</string>
   <string name="SYS_WRITE_EMAIL">Napsat e-mail</string>
   <string name="SYS_WRITE_PM">Napsat soukromou zprávu</string>
@@ -2081,7 +2141,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Vaše konfigurace</string>
   <string name="SYS_YOUR_EMAIL">Váš e-mail</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Vaše poslední konfigurace</string>
-  <string name="SYS_YOUR_LISTS">Vlastní seznamy</string>
+  <string name="SYS_YOUR_LISTS">Vaše seznamy</string>
   <string name="SYS_YOUR_NAME">Vaše jméno</string>
   <string name="SYS_Z_TO_A">Z až A</string>
 </resources>
