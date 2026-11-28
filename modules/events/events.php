@@ -528,8 +528,12 @@ try {
                     }
                 }
 
-                // if the current user is allowed to participate or user could edit this event, then show buttons for participation
-                if ($event->possibleToParticipate() || $gCurrentUser->isAdministratorEvents() || $participants->isLeader($gCurrentUserId)) {
+                // if the current user is allowed to participate, is already a member of the event or user could edit
+                // this event, then show buttons for participation
+                if ($event->possibleToParticipate()
+                    || $participants->isMemberOfEvent($gCurrentUserId)
+                    || $gCurrentUser->isAdministratorEvents()
+                    || $participants->isLeader($gCurrentUserId)) {
                     if ($event->getValue('dat_deadline') !== null) {
                         $outputDeadline = $event->getValue('dat_deadline', $gSettingsManager->getString('system_date') . ' ' . $gSettingsManager->getString('system_time'));
                     }
