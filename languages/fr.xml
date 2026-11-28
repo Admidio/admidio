@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Ajouter un événement à l\'agenda</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Ajouter un article</string>
+  <string name="SYS_ADD_ITEMS">Ajouter des articles</string>
   <string name="SYS_ADD_ORGANIZATION">Ajouter une organistaion</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Ajouter à la base de donnée</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Appliquer</string>
   <string name="SYS_APPOINTMENT">Rendez-vous</string>
   <string name="SYS_APPOINTMENTS">Rendez-vous</string>
+  <string name="SYS_APPROVE">Approuver</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Attribué par les rôles</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assigner et éditer les membres</string>
   <string name="SYS_ASSIGN_FIELDS">Attribuer des champs</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">Vous vous êtes inscrit à l\'événement #VAR1_BOLD# sur #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Vous vous êtes inscrit provisoirement à l\'événement #VAR1_BOLD# sur #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Approbation automatique</string>
   <string name="SYS_AUTO_DETECT">Détection automatique</string>
   <string name="SYS_AVAILABLE">Disponible</string>
   <string name="SYS_AVAILABLE_BETA">Version bêta disponible</string>
   <string name="SYS_A_TO_Z">A à Z</string>
   <string name="SYS_BACK">Retour</string>
+  <string name="SYS_BACKUPS">Sauvegardes</string>
   <string name="SYS_BACK_TO_ALBUM">Retour à l\'album</string>
   <string name="SYS_BACK_TO_FOLDER">Retour au dossier</string>
   <string name="SYS_BASIC_DATA">Simple données</string>
   <string name="SYS_BIRTHDAY">Anniversaire</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Emprunts</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Emprunts en cours</string>
   <string name="SYS_BOYFRIEND">Copain</string>
   <string name="SYS_BROTHER">Frère</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">Calendrier</string>
   <string name="SYS_CANCEL">Annuler</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Tout ignorer</string>
   <string name="SYS_CANCEL_EVENT">Vous avez annulé la participation à l\'événement #VAR1_BOLD# sur #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Mettre fin à l\'adhésion</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Supprimer la relation</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">Copier</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copier l\'entrée</string>
+  <string name="SYS_COPY_FILE">Copier le fichier</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Ci-après la copie de ton courriel envoyé</string>
+  <string name="SYS_COPY_TO">Copier vers</string>
   <string name="SYS_COPY_VAR">Copier #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Annuler la mise à jour</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">La mise à jour a été annulée. Aucune modification n’a été apportée.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Canal</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Version bêta</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Version stable</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Vérifier à nouveau</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Continuer</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Mettre à jour la base de données</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Télécharger et préparer</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Installer la mise à jour</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Version installée</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Connexion</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Identifiant de connexion</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Ouvrir Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Mot de passe</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Progression</string>
+  <string name="SYS_CORE_UPDATE_START">Mettre à jour Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Mettre à jour la base de données</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Terminer</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Nouvelle version</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Mise à jour d’Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Que dois-je faire ?</string>
   <string name="SYS_COUNTER">Compteur</string>
   <string name="SYS_COUNTRY">Pays</string>
   <string name="SYS_COUNTRY_EG" translation="edited">FRA</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Modifier le lien Web</string>
   <string name="SYS_EDIT_WEBLINKS">Modifier les liens web</string>
   <string name="SYS_EMAIL">Courriel</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">L’adresse e-mail de votre compte #VAR1# sur #VAR4# est passée de #VAR2# à #VAR3#. Si vous n’avez pas autorisé cette modification, contactez immédiatement votre administrateur.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Votre adresse e-mail a changé</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Courriel de l\'Administrateur</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Les données de profil de l\'utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été changé par #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Utilisateur #VAR1# #VAR2# (identifiant: #VAR3#) a été changé</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Il n\'y a pas de documents ou de fichiers disponibles pour les visiteurs.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Vous n\'êtes pas autorisé à afficher le dossier sélectionné.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Une erreur s\'est produite quand le dossier #VAR1# a été renommé..</string>
+  <string name="SYS_FOLDER_TREE">Arborescence des dossiers</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Le dossier #VAR1_BOLD# ne peut pas être créé avec les droits d\'écriture.\n\nContactez l\'administrateur #VAR2#Administrateur#VAR3#, afin qu\'il puisse vérifier les droits d\'écriture (définis les attributs du fichier à 0777 ou drwxrwxrwx via FTP).</string>
   <string name="SYS_FONT">Police</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">Groupes &amp; rôles.</string>
   <string name="SYS_GROUPS_ROLES_DESC">Vue d\'ensemble et gestion de tous les groupes et rôles de l\'organisation. Différentes listes de membres peuvent être affichées, exportées et des listes propres peuvent être créées.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Demande d’un invité</string>
   <string name="SYS_HALF_YEARLY">Semestriel</string>
   <string name="SYS_HEADER_ALREADY_SENT">Les en-têtes HTTP ont déjà été envoyés !</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Attribution des membres</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membres de l\'organisation #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Demande d’un membre</string>
   <string name="SYS_MEMORY_LIMIT">Mémoire vive</string>
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">Le menu peut être configuré ici. En plus de l\'URL, une description et une icône peuvent être saisies. Tu peux également spécifier qui est autorisé à voir l\'élément de menu.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">Plus</string>
   <string name="SYS_MOTHER">Mère</string>
+  <string name="SYS_MOVE">Déplacer</string>
   <string name="SYS_MOVE_DOWN">#VAR1# déplacer vers le bas</string>
   <string name="SYS_MOVE_FILE">Déplacer le fichier</string>
   <string name="SYS_MOVE_FILE_DESC">Sélectionnez un dossier vers lequel vous souhaitez déplacer le fichier #VAR1_BOLD#. Les autorisations de rôle pour afficher le fichier proviennent du dossier cible.</string>
   <string name="SYS_MOVE_FOLDER">Déplacer le dossier</string>
   <string name="SYS_MOVE_FOLDER_DESC">Sélectionnez un dossier vers lequel vous souhaitez déplacer le dossier #VAR1_BOLD#. Les autorisations de rôle pour afficher et télécharger des fichiers à partir du dossier cible sont appliquées à ce dossier et à tous les sous-dossiers.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Déplacer ou copier le fichier</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Déplacer dans</string>
   <string name="SYS_MOVE_UP">Monter #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">Système d\'exploitation</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Relation opposée</string>
   <string name="SYS_OPTIONAL">Facultatif</string>
+  <string name="SYS_OR">ou</string>
   <string name="SYS_ORDER">Ordre</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Origine</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Débordement</string>
   <string name="SYS_OVERVIEW">Aperçu</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Réessayer</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">Destinataire</string>
   <string name="SYS_RECIPIENT_EMAIL">Courriel du destinataire</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Cet événement est l’événement principal d’une série récurrente. Supprimez toute la série pour le retirer définitivement.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Vous avez confirmé avec succès votre inscription. Vous pouvez maintenant vous connecter avec votre nom d\'utilisateur et votre mot de passe.</string>
   <string name="SYS_REGULAR_EXPRESSION">Expression régulière</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Il est possible de stocker toute expression régulière qui sera appliquée au contenu saisi par l\'utilisateur dans ce champ de profil. Le contenu doit correspondre aux conditions de l\'expression régulière pour que la valeur saisie soit enregistrée dans le champ. L\'expression régulière est vérifiée en plus des conditions générales du type de données.</string>
+  <string name="SYS_REJECT">Rejeter</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Configuration des relations</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Configurations des relations</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">Remplacer</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Date de la demande</string>
+  <string name="SYS_REQUESTER">Demandeur</string>
+  <string name="SYS_REQUEST_AGAIN">Renouveler la demande</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Entrée requise</string>
+  <string name="SYS_RESERVATIONS">Réservations</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Réserver à partir du</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Réserver jusqu’au</string>
+  <string name="SYS_RESERVATION_REQUEST">Demander une réservation</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Vous êtes déjà connecté au système. Il n\'est pas nécessaire de demander un nouveau mot de passe.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">L\'image n\'a pas pu être traitée car la résolution est supérieure à #VAR1# mégapixels.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Si cette option est activée, les anciens contacts et les contacts d\'autres organisations peuvent éventuellement être affichés dans l\'administration des membres en plus des contacts actifs de l\'organisation actuelle. Dans le cas contraire, seuls les contacts actifs de l\'organisation actuelle sont affichés. Toutefois, lors de la création de nouveaux contacts ou de l\'attribution d\'enregistrements, l\'ensemble de la base de données de toutes les organisations est toujours consultée à la recherche de contacts existants. (par défaut : oui)</string>
   <string name="SYS_SHOW_ALL_DESC">Si ce paramètre est défini, les anciens membres ainsi que les membres d\'autres organisations sont affichés en plus des membres actifs de cette organisation.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Pour les utilisateurs déconnectés, un texte alphanumérique apparaîtra lorsque le module captcha sera activé. Le texte fourni doit être saisi dans le champ approprié. Cela devrait empêcher les spammeurs d\'utiliser le formulaire à mauvais escient. (par défaut : oui)</string>
+  <string name="SYS_SHOW_DATA">Afficher les données</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Afficher les anciens membres</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Continuer</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1777,10 +1830,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Recharger les métadonnées</string>
+  <string name="SYS_SSO_METADATA_STATUS">État des métadonnées</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1798,8 +1849,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1909,7 +1958,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Début</string>
+  <string name="SYS_STATUS_APPROVED">Approuvé</string>
+  <string name="SYS_STATUS_BORROWED">Emprunté</string>
   <string name="SYS_STATUS_CODE_INVALID">Code d\'état invalide !</string>
+  <string name="SYS_STATUS_REJECTED">Rejeté</string>
+  <string name="SYS_STATUS_REQUESTED">Demandé</string>
+  <string name="SYS_STATUS_RETURNED">Rendu</string>
   <string name="SYS_STILL_X_CHARACTERS">encore #VAR1# caractères</string>
   <string name="SYS_STREET">Rue</string>
   <string name="SYS_SUBJECT">Sujet</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Déverrouiller l\'album</string>
   <string name="SYS_UNMANAGED_FILES">Fichiers non gérés</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# est disponible.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Mise à jour réussie</string>
+  <string name="SYS_UPLOADING">Téléversement en cours…</string>
+  <string name="SYS_UPLOAD_CANCEL">Annuler le téléversement</string>
+  <string name="SYS_UPLOAD_CANCELLED">Le téléversement a été annulé.</string>
   <string name="SYS_UPLOAD_FILES">Télécharger des fichiers</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Taille max. du fichier à télécharger</string>
   <string name="SYS_UPLOAD_PHOTOS">Télécharger des photos</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">Mercredi</string>
   <string name="SYS_WEEKDAY">Jour de la semaine</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Format du jour de la semaine</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Largeur</string>
   <string name="SYS_WIFE">Épouse</string>
+  <string name="SYS_WITHDRAW">Retirer la demande</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Feuille de calcul (index ou nom)</string>
   <string name="SYS_WRITE_EMAIL">Écrire un courriel</string>
   <string name="SYS_WRITE_PM">Écrire un message privé</string>

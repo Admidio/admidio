@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Lisage sündmus kalendrisse</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Lisa ese</string>
+  <string name="SYS_ADD_ITEMS">Lisa esemed</string>
   <string name="SYS_ADD_ORGANIZATION">Lisage organisatsioon</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Lisa andmebaasi</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Rakenda</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
+  <string name="SYS_APPROVE">Kinnita</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Määratud rollide järgi</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Liikmete määramine ja muutmine</string>
   <string name="SYS_ASSIGN_FIELDS">Määra väljad</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">Registreerusite #VAR2# sündmusele #VAR1_BOLD#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Registreerusite ajutiselt #VAR1_BOLD# sündmusele #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automaatne kinnitamine</string>
   <string name="SYS_AUTO_DETECT">Automaatne tuvastus</string>
   <string name="SYS_AVAILABLE">Saadaval</string>
   <string name="SYS_AVAILABLE_BETA">Saadaval beetaversioon</string>
   <string name="SYS_A_TO_Z">A kuni Z</string>
   <string name="SYS_BACK">tagasi</string>
+  <string name="SYS_BACKUPS">Varukoopiad</string>
   <string name="SYS_BACK_TO_ALBUM">Tagasi albumisse</string>
   <string name="SYS_BACK_TO_FOLDER">Tagasi kausta</string>
   <string name="SYS_BASIC_DATA">Põhiandmed</string>
   <string name="SYS_BIRTHDAY">Sünnipäev</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Laenutused</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Aktiivsed laenutused</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Vend</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">Kalendrid</string>
   <string name="SYS_CANCEL">Tühista</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Hülga kõik</string>
   <string name="SYS_CANCEL_EVENT">Tühistasite #VAR2# üritusel #VAR1_BOLD# osalemise.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Tühista liikmelisus</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Kustuta seos või sugulus</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">Koopia</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Kopeeri kirje</string>
+  <string name="SYS_COPY_FILE">Kopeeri fail</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Teie soovitud sõnumi koopia</string>
+  <string name="SYS_COPY_TO">Kopeeri kausta</string>
   <string name="SYS_COPY_VAR">Kopeeri #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Tühista uuendus</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Uuendus tühistati. Midagi ei muudetud.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Kanal</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Beetaversioon</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stabiilne versioon</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Kontrolli uuesti</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Jätka</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Uuenda andmebaasi</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Laadi alla ja valmista ette</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Paigalda uuendus</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Paigaldatud versioon</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Logi sisse</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Kasutajanimi</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Ava Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Parool</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Edenemine</string>
+  <string name="SYS_CORE_UPDATE_START">Uuenda Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Uuenda andmebaasi</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Lõpeta</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Uus versioon</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Admidio uuendus</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Mida peaksin tegema?</string>
   <string name="SYS_COUNTER">loendaja</string>
   <string name="SYS_COUNTRY">Riik</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">Muutke veebilinke</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Sinu konto #VAR1# e-posti aadress keskkonnas #VAR4# muudeti aadressilt #VAR2# aadressiks #VAR3#. Kui sa ei ole seda muudatust lubanud, võta kohe ühendust administraatoriga.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Sinu e-posti aadress on muutunud</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Meili administraator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Kasutaja #VAR1# #VAR2# (login: #VAR3#) profiiliandmeid muutis #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Kasutaja #VAR1# #VAR2# (sisselogimine: #VAR3#) on muudetud</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Külastajatele pole dokumente ega faile saadaval.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Teil ei ole lubatud valitud kausta kuvada.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Kausta #VAR1# ümbernimetamisel ilmnes viga.</string>
+  <string name="SYS_FOLDER_TREE">Kaustapuu</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Kausta #VAR1_BOLD# ei saa luua vajalike kirjutamisõigustega.\n\nKirjutusõiguste kontrollimiseks (kasutades FTP-d failiatribuutide muutmiseks 0777 või drwxrwxrwx) paluge abi #VAR2#administraatorilt#VAR3#.</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">Grupid &amp; rollid</string>
   <string name="SYS_GROUPS_ROLES_DESC">Ülevaade ja organisatsiooni juhtimine kõikidest gruppides ja rollides. Erinevaid liikmeloendeid saab kuvada, eksportida ja luua oma nimekirju.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Külalise taotlus</string>
   <string name="SYS_HALF_YEARLY">Poole aasta tagant</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP päis on juba saadetud!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Liikme määramine</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Organisatsiooni #VAR1# liige</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Liikme taotlus</string>
   <string name="SYS_MEMORY_LIMIT">Mälulimiit</string>
   <string name="SYS_MENU">Menüü</string>
   <string name="SYS_MENU_DESC">Menüüd saab seadistada siin. URL-i kõrvale saab paigutada kirjelduse ja ikooni. Lisaks saab määrata, kellel on lubatud menüükirjet vaadata.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">Rohkem</string>
   <string name="SYS_MOTHER">Ema</string>
+  <string name="SYS_MOVE">Teisalda</string>
   <string name="SYS_MOVE_DOWN">Liigu alla #VAR1#</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Teisalda või kopeeri fail</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Liigu üles #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">Operatsioonisüsteem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Vastupidine suhe</string>
   <string name="SYS_OPTIONAL">Valikuline</string>
+  <string name="SYS_OR">või</string>
   <string name="SYS_ORDER">Telli</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organisatsioon</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Päritolu</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Üleulatuvus</string>
   <string name="SYS_OVERVIEW">Ülevaade</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Proovi uuesti</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">Saaja</string>
   <string name="SYS_RECIPIENT_EMAIL">E-kirja saaja</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">See on korduva sarja põhisündmus. Selle jäädavalt eemaldamiseks kustuta kogu sari.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Olete oma registreerimise edukalt kinnitanud. Nüüd saate oma kasutajanime ja parooliga sisse logida.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulaarne väljend</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Salvestada saab mis tahes regulaaravaldist, mida rakendatakse selle profiilivälja kasutaja sisestatud sisule. Sisu peab vastama regulaaravaldise tingimustele, et sisestatud väärtus väljale salvestataks. Regulaaravaldist kontrollitakse lisaks andmetüübi üldtingimustele.</string>
+  <string name="SYS_REJECT">Lükka tagasi</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Seoste konfiguratsioon</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Seoste konfiguratsioonid</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">Asenda</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Taotluse aeg</string>
+  <string name="SYS_REQUESTER">Taotleja</string>
+  <string name="SYS_REQUEST_AGAIN">Taotle uuesti</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Nõutav sisend</string>
+  <string name="SYS_RESERVATIONS">Broneeringud</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Broneeri alates</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Broneeri kuni</string>
+  <string name="SYS_RESERVATION_REQUEST">Taotle broneeringut</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Olete juba süsteemi sisse logitud. Uut parooli pole vaja nõuda.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">Kui see säte on määratud, kuvatakse lisaks selle organisatsiooni aktiivsetele liikmetele nii endisi kui ka teiste organisatsioonide liikmeid.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Väljalogitud kasutajatele ilmub captcha mooduli aktiveerimisel tähtnumbriline tekst. Esitatud tekst tuleb sisestada õigele väljale. See peaks vältima rämpspostitajate poolt vormi kuritarvitamist. (vaikimisi: jah)</string>
+  <string name="SYS_SHOW_DATA">Kuva andmed</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Näita endisi liikmeid</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Jätka</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1777,10 +1830,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Laadi metaandmed uuesti</string>
+  <string name="SYS_SSO_METADATA_STATUS">Metaandmete olek</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1798,8 +1849,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1909,7 +1958,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Alusta</string>
+  <string name="SYS_STATUS_APPROVED">Kinnitatud</string>
+  <string name="SYS_STATUS_BORROWED">Välja laenutatud</string>
   <string name="SYS_STATUS_CODE_INVALID">Vigane olekukood!</string>
+  <string name="SYS_STATUS_REJECTED">Tagasi lükatud</string>
+  <string name="SYS_STATUS_REQUESTED">Taotletud</string>
+  <string name="SYS_STATUS_RETURNED">Tagastatud</string>
   <string name="SYS_STILL_X_CHARACTERS">ikka #VAR1# tähemärki</string>
   <string name="SYS_STREET">Tänav</string>
   <string name="SYS_SUBJECT">Teema</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Ava album</string>
   <string name="SYS_UNMANAGED_FILES">Haldamata failid</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# on saadaval.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Värskendus õnnestus</string>
+  <string name="SYS_UPLOADING">Üleslaadimine…</string>
+  <string name="SYS_UPLOAD_CANCEL">Tühista üleslaadimine</string>
+  <string name="SYS_UPLOAD_CANCELLED">Üleslaadimine tühistati.</string>
   <string name="SYS_UPLOAD_FILES">Laadi failid üles</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max faili üleslaadimise suurus</string>
   <string name="SYS_UPLOAD_PHOTOS">Fotode üleslaadimine</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">kolmapäev</string>
   <string name="SYS_WEEKDAY">argipäev</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Nädalapäeva vorming</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Laius</string>
   <string name="SYS_WIFE">Naine</string>
+  <string name="SYS_WITHDRAW">Võta taotlus tagasi</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Tööleht (register või nimi)</string>
   <string name="SYS_WRITE_EMAIL">Kirjutage e-mail</string>
   <string name="SYS_WRITE_PM">Kirjuta privaatsõnum</string>

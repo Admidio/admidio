@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">பதிவைச் சேர்க்கவும்</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">நிகழ்வை நாட்காட்டில் சேர்க்கவும்</string>
   <string name="SYS_ADD_FIELD">புலத்தைச் சேர்</string>
+  <string name="SYS_ADD_ITEM">பொருளைச் சேர்</string>
+  <string name="SYS_ADD_ITEMS">பொருட்களைச் சேர்</string>
   <string name="SYS_ADD_ORGANIZATION">நிறுவனத்தைச் சேர்</string>
   <string name="SYS_ADD_ROLE">பதவியை சேர்</string>
   <string name="SYS_ADD_TO_DATABASE">தரவுத்தளத்தில் சேர்</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">விண்ணப்பிக்கவும்</string>
   <string name="SYS_APPOINTMENT">நியமனம்</string>
   <string name="SYS_APPOINTMENTS">நியமனங்கள்</string>
+  <string name="SYS_APPROVE">ஒப்புதல் அளி</string>
   <string name="SYS_ASSIGNED_BY_ROLES">பதவிகளால் அமைக்கப்பட்டது</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">உறுப்பினர்களை ஒதுக்கி திருத்தவும்</string>
   <string name="SYS_ASSIGN_FIELDS">புலங்களை ஒதுக்கவும்</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">நீங்கள் #VAR2# அன்று நடைபெறும் #VAR1_BOLD# நிகழ்விற்காகப் பதிவு செய்துள்ளீர்கள்</string>
   <string name="SYS_ATTEND_POSSIBLY">நீங்கள் #VAR2# அன்று நடைபெறும் #VAR1_BOLD# நிகழ்விற்காக தற்காலிகமாகப் பதிவு செய்துள்ளீர்கள்.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">தானியங்கி ஒப்புதல்</string>
   <string name="SYS_AUTO_DETECT">தானாகக் கண்டறியவும்</string>
   <string name="SYS_AVAILABLE">கிடைக்கிறது</string>
   <string name="SYS_AVAILABLE_BETA">பீட்டா பதிப்பு உள்ளது</string>
   <string name="SYS_A_TO_Z">ஏ முதல் இசட் வரை</string>
   <string name="SYS_BACK">பின்னால்</string>
+  <string name="SYS_BACKUPS">காப்புப்பிரதிகள்</string>
   <string name="SYS_BACK_TO_ALBUM">புகைப்பட தொகுப்பிற்குத் திரும்பு</string>
   <string name="SYS_BACK_TO_FOLDER">கோப்புறைக்குத் திரும்பு</string>
   <string name="SYS_BASIC_DATA">அடிப்படை தரவு</string>
   <string name="SYS_BIRTHDAY">பிறந்தநாள்</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">இரவல்கள்</string>
+  <string name="SYS_BORROWINGS_ACTIVE">நடப்பிலுள்ள இரவல்கள்</string>
   <string name="SYS_BOYFRIEND">காதலன்</string>
   <string name="SYS_BROTHER">சகோதரர்</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">நாட்காட்டிகள்</string>
   <string name="SYS_CANCEL">ரத்து செய்</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">அனைத்தையும் நிராகரி</string>
   <string name="SYS_CANCEL_EVENT">நீங்கள் #VAR2# அன்று நடைபெறும் #VAR1_BOLD# நிகழ்வில் உங்கள் பங்கேற்பை ரத்து செய்துவிட்டீர்கள்.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">உறுப்பினர் பதவியை ரத்து செய்</string>
   <string name="SYS_CANCEL_RELATIONSHIP">இணைப்பை நீக்கவும்</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">நகலெடு</string>
   <string name="SYS_COPY_CLIPBOARD">கிளிப்போர்டுக்கு நகலெடுக்கவும்</string>
   <string name="SYS_COPY_ENTRY">உள்ளீட்டை நகலெடுக்கவும்</string>
+  <string name="SYS_COPY_FILE">கோப்பை நகலெடு</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">நீங்கள் கோரிய செய்தியின் நகல்</string>
+  <string name="SYS_COPY_TO">இங்கு நகலெடு</string>
   <string name="SYS_COPY_VAR">#VAR1# ஐ நகலெடுக்கவும்</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">புதுப்பிப்பை ரத்துசெய்</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">புதுப்பிப்பு ரத்துசெய்யப்பட்டது. எதுவும் மாறவில்லை.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">வெளியீட்டு வழி</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">பீட்டா பதிப்பு</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">நிலையான பதிப்பு</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">மீண்டும் சரிபார்</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">தொடர்</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">தரவுத்தளத்தைப் புதுப்பி</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">பதிவிறக்கித் தயார்செய்</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">புதுப்பிப்பை நிறுவு</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">நிறுவப்பட்ட பதிப்பு</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">உள்நுழை</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">உள்நுழைவுப் பெயர்</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Admidioவைத் திற</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">கடவுச்சொல்</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">முன்னேற்றம்</string>
+  <string name="SYS_CORE_UPDATE_START">Admidioவைப் புதுப்பி</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">தரவுத்தளத்தைப் புதுப்பிக்கவும்</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">முடி</string>
+  <string name="SYS_CORE_UPDATE_TARGET">புதிய பதிப்பு</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Admidio புதுப்பிப்பு</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">நான் என்ன செய்ய வேண்டும்?</string>
   <string name="SYS_COUNTER">எண்ணிக்கை</string>
   <string name="SYS_COUNTRY">நாடு</string>
   <string name="SYS_COUNTRY_EG" translation="edited">ஜிஇஆர்</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">வலை இணைப்பைத் திருத்து</string>
   <string name="SYS_EDIT_WEBLINKS">வலை இணைப்புகளைத் திருத்து</string>
   <string name="SYS_EMAIL">மின்னஞ்சல்</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">#VAR4# தளத்தில் உள்ள உங்கள் #VAR1# கணக்கின் மின்னஞ்சல் முகவரி #VAR2# என்பதிலிருந்து #VAR3# என மாற்றப்பட்டுள்ளது. இந்த மாற்றத்தை நீங்கள் அனுமதிக்கவில்லை என்றால், உடனடியாக உங்கள் நிர்வாகியைத் தொடர்புகொள்ளுங்கள்.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">உங்கள் மின்னஞ்சல் முகவரி மாறியுள்ளது</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">நிர்வாகிக்கு மின்னஞ்சல் அனுப்பு</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">#VAR1# #VAR2# (உள்நுழைவு: #VAR3#) என்ற பயனரின் சுயவிவரத் தரவு #VAR4# என்பவரால் மாற்றப்பட்டது.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">பயனர் #VAR1# #VAR2# (உள்நுழைவு: #VAR3#) மாற்றப்பட்டார்</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">பார்வையாளர்களுக்கு எந்த ஆவணங்களும் கோப்புகளும் கிடைக்கவில்லை.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">தேர்ந்தெடுக்கப்பட்ட கோப்புறையைக் காண்பிக்க உங்களுக்கு அனுமதி இல்லை.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">#VAR1# கோப்புறையின் பெயர் மாற்றப்பட்டபோது ஒரு பிழை ஏற்பட்டது.</string>
+  <string name="SYS_FOLDER_TREE">கோப்புறை மரம்</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">தேவையான எழுதும் அனுமதிகளுடன் #VAR1_BOLD# கோப்புறையை உருவாக்க முடியவில்லை.\n\nஎழுதும் அனுமதிகளைச் சரிபார்க்க (FTP ஐப் பயன்படுத்தி கோப்புப் பண்புகளை 0777 அல்லது drwxrwxrwx ஆக மாற்றுவதன் மூலம்) தயவுசெய்து ஒரு #VAR2#நிர்வாகியிடம்#VAR3# உதவி கேளுங்கள்.</string>
   <string name="SYS_FONT">எழுத்துரு</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">குழுக்கள் மற்றும் பங்குகள்</string>
   <string name="SYS_GROUPS_ROLES_DESC">நிறுவனத்தின் அனைத்து குழுக்கள் மற்றும் பாத்திரங்களின் மேலோட்டம் மற்றும் மேலாண்மை. வெவ்வேறு உறுப்பினர் பட்டியல்களைக் காண்பிக்கலாம், ஏற்றுமதி செய்யலாம் மற்றும் சொந்தப் பட்டியல்களை உருவாக்கலாம்.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">குழு/பங்கு உறுப்பினர் நிலை</string>
+  <string name="SYS_GUEST_REQUEST">விருந்தினரின் கோரிக்கை</string>
   <string name="SYS_HALF_YEARLY">அரை ஆண்டு</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP தலைப்பு ஏற்கனவே அனுப்பப்பட்டது!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">உள்ளடக்க தொகுதிகள் (ஆவணங்கள், நிகழ்வுகள், அறிவிப்புகள் போன்றவை)</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">உறுப்பினர் ஒதுக்கீடு</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">#VAR1# அமைப்பின் உறுப்பினர்</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">#VAR1# பங்கு/குழுவின் உறுப்பினர்</string>
+  <string name="SYS_MEMBER_REQUEST">உறுப்பினரின் கோரிக்கை</string>
   <string name="SYS_MEMORY_LIMIT">நினைவக வரம்பு</string>
   <string name="SYS_MENU">பட்டி</string>
   <string name="SYS_MENU_DESC">பட்டியை இங்கே உள்ளமைக்கலாம். URL-க்கு அருகில் ஒரு விளக்கத்தையும் ஒரு ஐகானையும் சேர்க்கலாம். கூடுதலாக, பட்டி உள்ளீட்டை யார் பார்க்க அனுமதிக்கப்படுகிறார்கள் என்பதையும் தீர்மானிக்கலாம்.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">மாதங்கள்</string>
   <string name="SYS_MORE">மேலும்</string>
   <string name="SYS_MOTHER">தாய்</string>
+  <string name="SYS_MOVE">நகர்த்து</string>
   <string name="SYS_MOVE_DOWN">கீழே நகர்த்தவும் #VAR1#</string>
   <string name="SYS_MOVE_FILE">கோப்பை நகர்த்தவும்</string>
   <string name="SYS_MOVE_FILE_DESC">நீங்கள் #VAR1_BOLD# கோப்பை நகர்த்த விரும்பும் கோப்புறையைத் தேர்ந்தெடுக்கவும். கோப்பைக் காண்பிப்பதற்கான பங்கு அனுமதிகள் இலக்கு கோப்புறையிலிருந்து எடுக்கப்படும்.</string>
   <string name="SYS_MOVE_FOLDER">கோப்புறையை நகர்த்தவும்</string>
   <string name="SYS_MOVE_FOLDER_DESC">நீங்கள் #VAR1_BOLD# கோப்புறையை நகர்த்த விரும்பும் கோப்புறையைத் தேர்ந்தெடுக்கவும். இலக்கு கோப்புறையிலிருந்து கோப்புகளைப் பார்ப்பதற்கும் பதிவேற்றுவதற்குமான பங்கு அனுமதிகள் இந்தக் கோப்புறையிலும் அனைத்து துணைக் கோப்புறைகளுக்கும் பயன்படுத்தப்படும்.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">கோப்பை நகர்த்து அல்லது நகலெடு</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">இதற்கு நகர்த்தவும்</string>
   <string name="SYS_MOVE_UP">மேலே நகர்த்தவும் #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">இயக்க முறைமை</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">எதிர் உறவு</string>
   <string name="SYS_OPTIONAL">விருப்பத்திற்குரியது</string>
+  <string name="SYS_OR">அல்லது</string>
   <string name="SYS_ORDER">வரிசை</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">அமைப்பு</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">அமைப்பு இணைப்பு</string>
   <string name="SYS_ORGANIZATION_DESC">துணை அமைப்புகளை உருவாக்கும் மற்றும் காண்பிக்கும் விருப்பத்துடன் தற்போதைய அமைப்பின் பெயர் மற்றும் தொடர்பு விவரங்கள்.</string>
+  <string name="SYS_ORIGIN">மூலம்</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">மேல்நீட்சி</string>
   <string name="SYS_OVERVIEW">கண்ணோட்டம்</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">மீண்டும் முயல்</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">பெறுநர்</string>
   <string name="SYS_RECIPIENT_EMAIL">மின்னஞ்சல் பெறுநர்</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">இது தொடர்ச்சியாக நடைபெறும் நிகழ்வுகளின் முதன்மை நிகழ்வு. இதை நிரந்தரமாக அகற்ற முழுத் தொடரையும் நீக்குங்கள்.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">உங்கள் பதிவை வெற்றிகரமாக உறுதிப்படுத்தியுள்ளீர்கள். இப்போது உங்கள் பயனர்பெயர் மற்றும் கடவுச்சொல்லைப் பயன்படுத்தி உள்நுழையலாம்.</string>
   <string name="SYS_REGULAR_EXPRESSION">வழக்கமான வெளிப்பாடு</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">இந்த சுயவிவரப் புலத்தில் பயனர் உள்ளிடும் உள்ளடக்கத்திற்குப் பயன்படுத்தப்படும் எந்தவொரு வழக்கமான வெளிப்பாட்டையும் சேமிக்க முடியும். உள்ளிடப்பட்ட மதிப்பு புலத்தில் சேமிக்கப்படுவதற்கு, அந்த உள்ளடக்கம் வழக்கமான வெளிப்பாட்டின் நிபந்தனைகளுடன் பொருந்த வேண்டும். தரவு வகையின் பொதுவான நிபந்தனைகளுக்கு மேலதிகமாக வழக்கமான வெளிப்பாடு சரிபார்க்கப்படுகிறது.</string>
+  <string name="SYS_REJECT">நிராகரி</string>
   <string name="SYS_RELATED_TO">தொடர்புடைய உருப்படி</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">உறவு உள்ளமைவு</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">உறவு உள்ளமைவுகள்</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">மாற்று</string>
   <string name="SYS_REPLIES_VAR">#VAR1# பதில்கள்</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">கோரிக்கை நேரம்</string>
+  <string name="SYS_REQUESTER">கோரியவர்</string>
+  <string name="SYS_REQUEST_AGAIN">மீண்டும் கோரு</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">தேவையான உள்ளீடு</string>
+  <string name="SYS_RESERVATIONS">முன்பதிவுகள்</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">முன்பதிவு தொடக்கம்</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">முன்பதிவு முடிவு</string>
+  <string name="SYS_RESERVATION_REQUEST">முன்பதிவைக் கோரு</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">நீங்கள் ஏற்கனவே கணினியில் உள்நுழைந்துள்ளீர்கள். புதிய கடவுச்சொல்லைக் கோர வேண்டிய அவசியமில்லை.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">படத்தின் தெளிவுத்திறன் #VAR1# மெகாபிக்சலை விட அதிகமாக இருப்பதால், அதைச் செயலாக்க முடியவில்லை.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">இந்த விருப்பம் அமைக்கப்பட்டிருந்தால், தற்போதைய அமைப்பின் தொடர்புகளுக்கு கூடுதலாக, மற்ற அமைப்புகளின் தொடர்புகளையும் உறுப்பினர் நிர்வாகத்தில் விருப்பப்படி காட்டலாம். இல்லையெனில், தற்போதைய அமைப்பின் செயலில் உள்ள மற்றும் செயலில் இல்லாத தொடர்புகள் மட்டுமே காட்டப்படும். இருப்பினும், புதிய தொடர்புகளை உருவாக்கும்போது அல்லது பதிவுகளை ஒதுக்கும்போது, ​​அனைத்து அமைப்புகளின் முழு தரவுத்தளமும் ஏற்கனவே உள்ள தொடர்புகளுக்காகத் தேடப்படும். (இயல்புநிலை: ஆம்)</string>
   <string name="SYS_SHOW_ALL_DESC">இந்த அமைப்பு அமைக்கப்பட்டிருந்தால், இந்த அமைப்பின் செயலில் உள்ள உறுப்பினர்களுக்கு கூடுதலாக, முன்னாள் உறுப்பினர்களும் மற்ற அமைப்புகளின் உறுப்பினர்களும் காட்டப்படுவார்கள்.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">உள்நுழையாத பயனர்களுக்கு, கேப்ட்சா தொகுதி செயல்படுத்தப்படும்போது ஒரு எழுத்து-எண் உரை தோன்றும். வழங்கப்பட்ட உரையை சரியான புலத்தில் உள்ளிட வேண்டும். இது ஸ்பேமர்களால் படிவம் தவறாகப் பயன்படுத்தப்படுவதைத் தடுக்கும். (இயல்புநிலை: ஆம்)</string>
+  <string name="SYS_SHOW_DATA">தரவைக் காட்டு</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">காலியான சுயவிவரப் புலங்களைக் காட்டு</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">சுயவிவரக் காட்சியில் காலியான சுயவிவரப் புலங்கள் காட்டப்பட வேண்டுமா என்பதை இந்த அமைப்பு தீர்மானிக்கிறது. (இயல்புநிலை: ஆம்)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">முன்னாள் உறுப்பினர்களைக் காட்டு</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">விசை ஏற்றுமதிக்கான கடவுச்சொல்</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">ஏற்றுமதி செய்யப்பட்ட தனிப்பட்ட விசை மற்றும் சான்றிதழ் பாதுகாப்பு காரணங்களுக்காக ஒரு கடவுச்சொல் மூலம் குறியாக்கம் செய்யப்படலாம் மற்றும் செய்யப்பட வேண்டும். பதிவிறக்கம் செய்யப்பட்ட கோப்பைத் திறக்க அல்லது இறக்குமதி செய்ய இந்தக் கடவுச்சொல் தேவைப்படுகிறது. இந்தக் கடவுச்சொல் இல்லாமல், கோப்பிலிருந்து விசையை மீட்டெடுக்க முடியாது. வெற்று கடவுச்சொல்லைப் பயன்படுத்துவது சாத்தியம், ஆனால் அது கடுமையாகத் தவிர்க்கப்பட வேண்டும்!</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">தொடர்</string>
   <string name="SYS_SSO_INVALID_CLIENT">தவறான கிளையன்ட்</string>
   <string name="SYS_SSO_KEY">SSO விசை</string>
   <string name="SYS_SSO_KEYS">SSO விசைகள்</string>
@@ -1777,10 +1830,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">நீங்கள் வெற்றிகரமாக உள்நுழைந்துள்ளீர்கள், ஆனால் பயனர் கணக்கிற்கு சேவை வழங்குநரை (#VAR1#) அணுக அனுமதி இல்லை. கீழே உள்ள வேறு கணக்கில் உள்நுழைய முயற்சிக்கவும் அல்லது சேவை வழங்குநரிடம் திரும்பவும்.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">மேல்தரவை மீண்டும் ஏற்று</string>
+  <string name="SYS_SSO_METADATA_STATUS">மேல்தரவின் நிலை</string>
   <string name="SYS_SSO_METADATA_URL">மெட்டாடேட்டா URL (விரும்பினால்))</string>
   <string name="SYS_SSO_METADATA_URL_DESC">சில கிளையன்ட்கள் தேவையான அனைத்து அமைப்புகளுடன் கூடிய மெட்டாடேட்டா கோப்பை வழங்குகின்றன. இந்த மெட்டாடேட்டா URL இன் தானியங்கி மீட்டெடுப்பு அட்மிடியோ சேவையகத்திற்குக் கிடைத்தால் மட்டுமே செயல்படும்.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1798,8 +1849,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">அங்கீகார முடிவுப்புள்ளி</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC கோரிக்கை</string>
@@ -1909,7 +1958,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">x509 கிளையன்ட் சான்றிதழ்</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">பாதுகாப்புத் தாக்குதல்களைத் தடுப்பதற்காக, SAML செய்திகள் குறியாக்க முறையில் கையொப்பமிடப்படுகின்றன. இந்தச் சான்றிதழ் வாடிக்கையாளரால் வழங்கப்படுகிறது, மேலும் அது வாடிக்கையாளர் கொடுத்தபடியே துல்லியமாக உள்ளிடப்பட வேண்டும் அல்லது நகலெடுக்கப்பட வேண்டும். இல்லையெனில், SAML தொடர்பு தோல்வியடையும், மேலும் SSO உள்நுழைவு சாத்தியமாகாது.</string>
   <string name="SYS_START" description="Start of a date">தொடங்கு</string>
+  <string name="SYS_STATUS_APPROVED">ஒப்புதல் அளிக்கப்பட்டது</string>
+  <string name="SYS_STATUS_BORROWED">இரவல் பெறப்பட்டது</string>
   <string name="SYS_STATUS_CODE_INVALID">செல்லாத நிலை குறியீடு!</string>
+  <string name="SYS_STATUS_REJECTED">நிராகரிக்கப்பட்டது</string>
+  <string name="SYS_STATUS_REQUESTED">கோரப்பட்டது</string>
+  <string name="SYS_STATUS_RETURNED">திருப்பி அளிக்கப்பட்டது</string>
   <string name="SYS_STILL_X_CHARACTERS">இன்னும் #VAR1# எழுத்துக்கள்</string>
   <string name="SYS_STREET">தெரு</string>
   <string name="SYS_SUBJECT">பொருள்</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">ஆல்பத்தைத் திறக்கவும்</string>
   <string name="SYS_UNMANAGED_FILES">நிர்வகிக்கப்படாத கோப்புகள்</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# கிடைக்கிறது.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">புதுப்பிக்கப்பட்டது</string>
+  <string name="SYS_UPLOADING">பதிவேற்றப்படுகிறது…</string>
+  <string name="SYS_UPLOAD_CANCEL">பதிவேற்றத்தை ரத்துசெய்</string>
+  <string name="SYS_UPLOAD_CANCELLED">பதிவேற்றம் ரத்துசெய்யப்பட்டது.</string>
   <string name="SYS_UPLOAD_FILES">கோப்புகளைப் பதிவேற்றவும்</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">அதிகபட்ச கோப்பு பதிவேற்ற அளவு</string>
   <string name="SYS_UPLOAD_PHOTOS">புகைப்படங்களைப் பதிவேற்றவும்</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">புதன்</string>
   <string name="SYS_WEEKDAY">வாரநாள்</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">வார நாளின் வடிவம்</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">அகலம்</string>
   <string name="SYS_WIFE">துணைவி</string>
+  <string name="SYS_WITHDRAW">கோரிக்கையைத் திரும்பப் பெறு</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">பணித்தாள் (குறியீடு அல்லது பெயர்)</string>
   <string name="SYS_WRITE_EMAIL">மின்னஞ்சல் எழுதவும்</string>
   <string name="SYS_WRITE_PM">தனிப்பட்ட செய்தியை எழுதுங்கள்</string>

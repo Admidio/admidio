@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Add event to calendar</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">เพิ่มรายการ</string>
+  <string name="SYS_ADD_ITEMS">เพิ่มหลายรายการ</string>
   <string name="SYS_ADD_ORGANIZATION">เพิ่ม องค์กร</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">เพิ่มลงใน ฐานข้อมูล</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">นำมาใช้</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
+  <string name="SYS_APPROVE">อนุมัติ</string>
   <string name="SYS_ASSIGNED_BY_ROLES">กำหนดตาม บทบาท</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">กำหนดและแก้ไข สมาชิก</string>
   <string name="SYS_ASSIGN_FIELDS">กำหนด ฟิลด์</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">You signed up for the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">คุณได้ลงทะเบียน เบื้องต้น สำหรับกิจกรรม #VAR1_BOLD# บน #VAR2#</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">อนุมัติอัตโนมัติ</string>
   <string name="SYS_AUTO_DETECT">ตรวจจับ อัตโนมัติ</string>
   <string name="SYS_AVAILABLE">มีอยู่</string>
   <string name="SYS_AVAILABLE_BETA">เบต้าที่มีอยู่</string>
   <string name="SYS_A_TO_Z">A ถึง Z</string>
   <string name="SYS_BACK">กลับ</string>
+  <string name="SYS_BACKUPS">ข้อมูลสำรอง</string>
   <string name="SYS_BACK_TO_ALBUM">กลับไปที่อัลบั้ม</string>
   <string name="SYS_BACK_TO_FOLDER">กลับไปที่โฟลเดอร์</string>
   <string name="SYS_BASIC_DATA">ข้อมูลพื้นฐาน</string>
   <string name="SYS_BIRTHDAY">วันเกิด</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">การยืม</string>
+  <string name="SYS_BORROWINGS_ACTIVE">รายการที่กำลังยืม</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">พี่ชาย</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">ปฏิทิน</string>
   <string name="SYS_CANCEL">ยกเลิก</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">ละทิ้งทั้งหมด</string>
   <string name="SYS_CANCEL_EVENT">You canceled your participation in the event #VAR1_BOLD# on #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">ยกเลิก การเป็นสมาชิก</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Delete relationship</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">สำเนา</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">คัดลอก รายการ</string>
+  <string name="SYS_COPY_FILE">คัดลอกไฟล์</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">สำเนาข้อความที่คุณร้องขอ</string>
+  <string name="SYS_COPY_TO">คัดลอกไปยัง</string>
   <string name="SYS_COPY_VAR">คัดลอก #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">ยกเลิกการอัปเดต</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">ยกเลิกการอัปเดตแล้ว ไม่มีการเปลี่ยนแปลงใด ๆ</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">ช่องทาง</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">เวอร์ชันเบตา</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">เวอร์ชันเสถียร</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">ตรวจสอบอีกครั้ง</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">ดำเนินการต่อ</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">อัปเดตฐานข้อมูล</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">ดาวน์โหลดและเตรียมพร้อม</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">ติดตั้งการอัปเดต</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">เวอร์ชันที่ติดตั้ง</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">เข้าสู่ระบบ</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">ชื่อผู้ใช้</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">เปิด Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">รหัสผ่าน</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">ความคืบหน้า</string>
+  <string name="SYS_CORE_UPDATE_START">อัปเดต Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">อัพเดตฐานข้อมูล</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">เสร็จสิ้น</string>
+  <string name="SYS_CORE_UPDATE_TARGET">เวอร์ชันใหม่</string>
+  <string name="SYS_CORE_UPDATE_TITLE">การอัปเดต Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">ฉันควรทำอย่างไร?</string>
   <string name="SYS_COUNTER">เคาน์เตอร์</string>
   <string name="SYS_COUNTRY">ประเทศ</string>
   <string name="SYS_COUNTRY_EG" translation="edited">เกอร์</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">แก้ไข ลิงค์ เว็บ</string>
   <string name="SYS_EMAIL">อีเมล</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">ที่อยู่อีเมลของบัญชี #VAR1# ของคุณบน #VAR4# เปลี่ยนจาก #VAR2# เป็น #VAR3# หากคุณไม่ได้อนุญาตให้เปลี่ยนแปลง โปรดติดต่อผู้ดูแลระบบทันที</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">ที่อยู่อีเมลของคุณเปลี่ยนแล้ว</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">ผู้ดูแลระบบอีเมล</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">ข้อมูลโปรไฟล์ของผู้ใช้ #VAR1# #VAR2# (เข้าสู่ระบบ: #VAR3#) ถูกเปลี่ยนโดย #VAR4#</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">ผู้ใช้ #VAR1# #VAR2# (เข้าสู่ระบบ: #VAR3#) มี การเปลี่ยนแปลง</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">ไม่มีเอกสารหรือไฟล์สำหรับผู้เยี่ยมชม</string>
   <string name="SYS_FOLDER_NO_RIGHTS">คุณไม่ได้รับอนุญาตให้แสดง โฟลเดอร์ ที่ เลือก</string>
   <string name="SYS_FOLDER_RENAME_ERROR">เกิดข้อผิดพลาดขณะเปลี่ยนชื่อโฟลเดอร์ #VAR1#</string>
+  <string name="SYS_FOLDER_TREE">ผังโฟลเดอร์</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">ไม่สามารถสร้างโฟลเดอร์ #VAR1_BOLD# โดยมี สิทธิ์การเขียนที่จำเป็น\n\nโปรด ขอความช่วยเหลือจาก #VAR2#administrator#VAR3# เพื่อตรวจสอบสิทธิ์ในการเขียน (โดยใช้ FTP เปลี่ยนแอตทริบิวต์ของไฟล์เป็น 0777 หรือ drwxrwxrwx )</string>
   <string name="SYS_FONT">แบบอักษร</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">กลุ่ม &amp; บทบาท</string>
   <string name="SYS_GROUPS_ROLES_DESC">ภาพรวมและการบริหารจัดการทุกกลุ่มและบทบาทขององค์กร รายชื่อสมาชิกที่แตกต่างกันสามารถแสดง ส่งออก และสร้างรายชื่อของตัวเองได้</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">คำขอจากผู้เยี่ยมชม</string>
   <string name="SYS_HALF_YEARLY">ครึ่งปี</string>
   <string name="SYS_HEADER_ALREADY_SENT">ส่วนหัว HTTP ส่งแล้ว!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">การมอบหมายสมาชิก</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">สมาชิกขององค์กร #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">คำขอจากสมาชิก</string>
   <string name="SYS_MEMORY_LIMIT">ขีดจำกัดหน่วยความจำ</string>
   <string name="SYS_MENU">เมนู</string>
   <string name="SYS_MENU_DESC">สามารถกำหนดค่าเมนูได้ที่นี่ ข้าง URL สามารถฝากคำอธิบายและไอคอนได้ นอกจากนี้ยังสามารถกำหนดได้ว่าใครได้รับอนุญาตให้ดูรายการเมนู</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">มากกว่า</string>
   <string name="SYS_MOTHER">แม่</string>
+  <string name="SYS_MOVE">ย้าย</string>
   <string name="SYS_MOVE_DOWN">เลื่อนลง #VAR1#</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">ย้ายหรือคัดลอกไฟล์</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">เลื่อนขึ้น #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">ระบบปฏิบัติการ</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">ความสัมพันธ์ตรงกันข้าม</string>
   <string name="SYS_OPTIONAL">ไม่จำเป็น</string>
+  <string name="SYS_OR">หรือ</string>
   <string name="SYS_ORDER">คำสั่ง</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">องค์กร</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">ที่มา</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">ยื่นออกมา</string>
   <string name="SYS_OVERVIEW">ภาพรวม</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">ลองอีกครั้ง</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">ผู้รับ</string>
   <string name="SYS_RECIPIENT_EMAIL">ผู้รับอีเมล์</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">กิจกรรมนี้เป็นกิจกรรมหลักของชุดกิจกรรมที่เกิดซ้ำ หากต้องการลบกิจกรรมนี้อย่างถาวร ให้ลบทั้งชุด</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
   <string name="SYS_REGULAR_EXPRESSION">การแสดงออกปกติ</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">คุณสามารถจัดเก็บนิพจน์ทั่วไปที่จะนำไปใช้กับเนื้อหาที่ผู้ใช้ป้อนในฟิลด์โปรไฟล์นี้ เนื้อหาจะต้องตรงกับเงื่อนไขของนิพจน์ทั่วไปเพื่อให้ ค่าที่ป้อนถูกจัดเก็บไว้ในฟิลด์ นิพจน์ทั่วไปจะถูกตรวจสอบเพิ่มเติมจากเงื่อนไขทั่วไปของประเภทข้อมูล</string>
+  <string name="SYS_REJECT">ปฏิเสธ</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">การกำหนดค่าความสัมพันธ์</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">การกำหนดค่าความสัมพันธ์</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">แทนที่</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">เวลาที่ยื่นคำขอ</string>
+  <string name="SYS_REQUESTER">ผู้ยื่นคำขอ</string>
+  <string name="SYS_REQUEST_AGAIN">ยื่นคำขออีกครั้ง</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">ข้อมูล ที่จำเป็น</string>
+  <string name="SYS_RESERVATIONS">การจอง</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">จองตั้งแต่</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">จองจนถึง</string>
+  <string name="SYS_RESERVATION_REQUEST">ขอจอง</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">คุณได้เข้าสู่ระบบแล้ว ไม่จำเป็นต้องขอรหัสผ่านใหม่</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">หากตั้งค่านี้ สมาชิกเดิมและสมาชิกขององค์กรอื่นๆ จะแสดงนอกเหนือจากสมาชิกที่ใช้งานอยู่ขององค์กรนี้</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">สำหรับผู้ใช้ที่ออกจากระบบ ข้อความตัวอักษรและตัวเลขจะปรากฏขึ้นเมื่อเปิดใช้งานโมดูล captcha ต้อง ป้อน ข้อความที่ระบุ ลงในช่องที่ถูกต้อง สิ่งนี้ควรป้องกันการใช้แบบฟอร์มในทางที่ผิดโดยผู้ส่งอีเมลขยะ (ค่าเริ่มต้น: ใช่)</string>
+  <string name="SYS_SHOW_DATA">แสดงข้อมูล</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">โชว์อดีต สมาชิก.</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">ดำเนินการต่อ</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1777,10 +1830,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">โหลดข้อมูลเมตาใหม่</string>
+  <string name="SYS_SSO_METADATA_STATUS">สถานะข้อมูลเมตา</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1798,8 +1849,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1909,7 +1958,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">เริ่ม</string>
+  <string name="SYS_STATUS_APPROVED">อนุมัติแล้ว</string>
+  <string name="SYS_STATUS_BORROWED">ถูกยืมแล้ว</string>
   <string name="SYS_STATUS_CODE_INVALID">รหัสสถานะไม่ถูกต้อง!</string>
+  <string name="SYS_STATUS_REJECTED">ปฏิเสธแล้ว</string>
+  <string name="SYS_STATUS_REQUESTED">ยื่นคำขอแล้ว</string>
+  <string name="SYS_STATUS_RETURNED">คืนแล้ว</string>
   <string name="SYS_STILL_X_CHARACTERS">ยังคงเป็น #VAR1# อักขระ</string>
   <string name="SYS_STREET">ถนน</string>
   <string name="SYS_SUBJECT">เรื่อง</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Unlock album</string>
   <string name="SYS_UNMANAGED_FILES">ไฟล์ที่ไม่มีการจัดการ</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# พร้อมใช้งานแล้ว</string>
   <string name="SYS_UPDATE_SUCCESSFUL">อัปเดต สำเร็จ</string>
+  <string name="SYS_UPLOADING">กำลังอัปโหลด…</string>
+  <string name="SYS_UPLOAD_CANCEL">ยกเลิกการอัปโหลด</string>
+  <string name="SYS_UPLOAD_CANCELLED">ยกเลิกการอัปโหลดแล้ว</string>
   <string name="SYS_UPLOAD_FILES">อัพโหลดไฟล์</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">สูงสุด ขนาดอัพโหลดไฟล์</string>
   <string name="SYS_UPLOAD_PHOTOS">อัพโหลดรูปภาพ</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">วันพุธ</string>
   <string name="SYS_WEEKDAY">วันธรรมดา</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">รูปแบบวันในสัปดาห์</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">ความกว้าง</string>
   <string name="SYS_WIFE">ภรรยา</string>
+  <string name="SYS_WITHDRAW">ถอนคำขอ</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">แผ่นงาน (ดัชนีหรือชื่อ)</string>
   <string name="SYS_WRITE_EMAIL">เขียน อีเมล</string>
   <string name="SYS_WRITE_PM">เขียน ข้อความ ส่วนตัว</string>

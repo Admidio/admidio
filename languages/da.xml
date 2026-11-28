@@ -203,6 +203,8 @@
   <string name="SYS_ADD_ENTRY">Tilføj post</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Tilføj aktivitet til kalender</string>
   <string name="SYS_ADD_FIELD">Tilføj felt</string>
+  <string name="SYS_ADD_ITEM">Tilføj genstand</string>
+  <string name="SYS_ADD_ITEMS">Tilføj genstande</string>
   <string name="SYS_ADD_ORGANIZATION">Tilføj organisation</string>
   <string name="SYS_ADD_ROLE">Tilføj rolle</string>
   <string name="SYS_ADD_TO_DATABASE">Tilføj til database</string>
@@ -248,6 +250,7 @@
   <string name="SYS_APPLY">Udfør</string>
   <string name="SYS_APPOINTMENT">Aftale</string>
   <string name="SYS_APPOINTMENTS">Aftaler</string>
+  <string name="SYS_APPROVE">Godkend</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Sat af rollerne</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tildel og rediger medlemmer</string>
   <string name="SYS_ASSIGN_FIELDS">Tilføj felter</string>
@@ -274,17 +277,21 @@
   <string name="SYS_ATTEND_EVENT">Du tilmeldte dig aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Du har lavet en midlertidig tilmelding til aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="SYS_AUTHOR">Forfatter</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automatisk godkendelse</string>
   <string name="SYS_AUTO_DETECT">Find pr. automatik</string>
   <string name="SYS_AVAILABLE">Tilgængelig</string>
   <string name="SYS_AVAILABLE_BETA">Tilgængelig Beta</string>
   <string name="SYS_A_TO_Z">A til Z</string>
   <string name="SYS_BACK">Tilbage</string>
+  <string name="SYS_BACKUPS">Sikkerhedskopier</string>
   <string name="SYS_BACK_TO_ALBUM">Tilbage til album</string>
   <string name="SYS_BACK_TO_FOLDER">Tilbage til folder</string>
   <string name="SYS_BASIC_DATA">Stamdata</string>
   <string name="SYS_BIRTHDAY">Fødselsdag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Udlån</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Aktive udlån</string>
   <string name="SYS_BOYFRIEND">Kæreste</string>
   <string name="SYS_BROTHER">Bror</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -292,6 +299,7 @@
   <string name="SYS_CALENDARS">Kalendere</string>
   <string name="SYS_CANCEL">Afbryd</string>
   <string name="SYS_CANCELLED">Aflyst</string>
+  <string name="SYS_CANCEL_ALL">Kassér alle</string>
   <string name="SYS_CANCEL_EVENT">Du aflyste din deltagelse i aktiviteten #VAR1_BOLD# den #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Afslut medlemsskab</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Slet relation</string>
@@ -425,9 +433,33 @@
   <string name="SYS_COPY">Kopier</string>
   <string name="SYS_COPY_CLIPBOARD">Kopier til udklipsholder</string>
   <string name="SYS_COPY_ENTRY">Kopiér posten</string>
+  <string name="SYS_COPY_FILE">Kopiér fil</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Din ønskede kopi af beskeden</string>
+  <string name="SYS_COPY_TO">Kopiér til</string>
   <string name="SYS_COPY_VAR">Kopier #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Annuller opdatering</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Opdateringen blev annulleret. Intet blev ændret.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Kanal</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Betaversion</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stabil version</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Kontrollér igen</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Fortsæt</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Opdater databasen</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Hent og klargør</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Installér opdatering</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installeret version</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Log ind</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Brugernavn</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Åbn Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Kodeord</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Status</string>
+  <string name="SYS_CORE_UPDATE_START">Opdater Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Opdater database</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Afslut</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Ny version</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Opdatering af Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Hvad skal jeg gøre?</string>
   <string name="SYS_COUNTER">Tæller</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -626,6 +658,8 @@
   <string name="SYS_EDIT_WEBLINK">Rediger weblink</string>
   <string name="SYS_EDIT_WEBLINKS">Rediger web links</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">E-mailadressen til din konto #VAR1# på #VAR4# er ændret fra #VAR2# til #VAR3#. Kontakt straks din administrator, hvis du ikke har godkendt ændringen.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Din e-mailadresse er blevet ændret</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">E-mail Administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildataene for brugeren #VAR1# #VAR2# (login: #VAR3#) blev ændret af #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Bruger #VAR1# #VAR2#(login: #VAR3#) blev ændret</string>
@@ -753,6 +787,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Der er ikke nogen dokumenter eller filer tilgængelige for gæster.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du har ikke ret til at se den valgte folder.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">En fejl opstod imens folderen #VAR1# blev omdøbt.</string>
+  <string name="SYS_FOLDER_TREE">Mappetræ</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Folderen #VAR1_BOLD# kan ikke oprettes med de krævede skriverettigheder.\n\nVenligst snak med en  #VAR2#administrator#VAR3# om at få hjælp til at undersøge om skriverettighederne er i orden på folderen. (Dette kan gøres med et FTP program, du skal ændre rettigheden til 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -791,6 +826,7 @@
   <string name="SYS_GROUPS_ROLES">Grupper &amp; roller</string>
   <string name="SYS_GROUPS_ROLES_DESC">Overblik og administration af alle grupper og roller i organisationen. Forskellige medlemslister kan vises, eksporteret og egne lister kan oprettes.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Gruppe-/rollemedlemskab</string>
+  <string name="SYS_GUEST_REQUEST">Anmodning fra gæst</string>
   <string name="SYS_HALF_YEARLY">Halvårligt</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP Header er allerede sendt!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Indholdsmoduler og plugins</string>
@@ -1100,6 +1136,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Medlemskabs tildeling</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem af organisation #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Medlem af rolle/gruppe #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Anmodning fra medlem</string>
   <string name="SYS_MEMORY_LIMIT">hukommelses grænse</string>
   <string name="SYS_MENU">Menu</string>
   <string name="SYS_MENU_DESC">Menuen kan konfigureres her. Ved siden af webadressen kan en beskrivelse og et ikon deponeres. Derudover kan det bestemmes, hvem der har tilladelse til at se menu indgangen.</string>
@@ -1124,12 +1161,14 @@
   <string name="SYS_MONTHS">Måneder</string>
   <string name="SYS_MORE">Mere</string>
   <string name="SYS_MOTHER">Mor</string>
+  <string name="SYS_MOVE">Flyt</string>
   <string name="SYS_MOVE_DOWN">Flyt ned #VAR1#</string>
   <string name="SYS_MOVE_FILE">Flyt filen</string>
   <string name="SYS_MOVE_FILE_DESC">Vælg en mappe, som du vil flytte #VAR1_BOLD# filen til. Rolletilladelserne til at vise filen er taget fra målmappen.</string>
   <string name="SYS_MOVE_FOLDER">Flyt folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Vælg en mappe, som du vil flytte #VAR1_BOLD#-mappen til. Rolletilladelserne til at se og uploade filer fra målmappen anvendes på denne mappe og alle undermapper.</string>
   <string name="SYS_MOVE_LEFT">Flyt #VAR1# til venstre</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Flyt eller kopiér fil</string>
   <string name="SYS_MOVE_RIGHT">Flyt #VAR1# til højre</string>
   <string name="SYS_MOVE_TO">Flyt til</string>
   <string name="SYS_MOVE_UP">Flyt op #VAR1#</string>
@@ -1230,11 +1269,13 @@
   <string name="SYS_OPERATING_SYSTEM">Operativ system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Modsat relation</string>
   <string name="SYS_OPTIONAL">Valgbar</string>
+  <string name="SYS_OR">eller</string>
   <string name="SYS_ORDER">Orden</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organisationens tilhørsforhold</string>
   <string name="SYS_ORGANIZATION_DESC">Navn og kontaktoplysninger på den aktuelle organisation med mulighed for at oprette og vise underorganisationer.</string>
+  <string name="SYS_ORIGIN">Oprindelse</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio kan kun sende anmodninger til offentlige HTTPS-adresser. Denne URL kan ikke bruges.</string>
   <string name="SYS_OVERHANG">Overbooking</string>
   <string name="SYS_OVERVIEW">Oversigt</string>
@@ -1308,6 +1349,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">Arkivet kunne ikke skrives til #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Inkompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">Dette plugin er en del af Admidio og kan ikke fjernes. Deaktiver det, hvis du ikke vil bruge det.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Prøv igen</string>
   <string name="SYS_PLUGIN_DISABLE">Deaktiver plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin deaktiveret med succes.</string>
   <string name="SYS_PLUGIN_ENABLE">Aktiver plugin</string>
@@ -1426,6 +1468,7 @@
   <string name="SYS_RECIPIENT">Modtager</string>
   <string name="SYS_RECIPIENT_EMAIL">E-mail modtager</string>
   <string name="SYS_RECURRENCE">Gentagelse</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Denne begivenhed er hovedbegivenheden i en tilbagevendende serie. Slet hele serien for at fjerne den permanent.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Vil du kun aflyse denne dato i serien: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Redigering af en hel serie understøttes endnu ikke.</string>
   <string name="SYS_RECURRENCE_END_DESC">Definerer, hvornår gentagelsen stopper. Uendelige gentagelser er stadig begrænset internt.</string>
@@ -1465,6 +1508,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du har bekræftet din registrering. Du kan nu logge ind med dit brugernavn og adgangskode.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regulært udtryk</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Ethvert regulært udtryk kan gemmes, som vil blive anvendt på brugerens indtastede indhold i dette profilfelt. Indholdet skal matche betingelserne for det regulære udtryk, for at den indtastede værdi kan gemmes i feltet. Det regulære udtryk kontrolleres ud over de generelle betingelser for datatypen.</string>
+  <string name="SYS_REJECT">Afvis</string>
   <string name="SYS_RELATED_TO">Relateret vare</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relations konfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relations konfigurationer</string>
@@ -1487,8 +1531,15 @@
   <string name="SYS_REPLACE">Udskift</string>
   <string name="SYS_REPLIES_VAR">#VAR1# svar</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Anmodet den</string>
+  <string name="SYS_REQUESTER">Anmodet af</string>
+  <string name="SYS_REQUEST_AGAIN">Anmod igen</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Påkrævet indtastning</string>
+  <string name="SYS_RESERVATIONS">Reservationer</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Reservér fra</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Reservér til</string>
+  <string name="SYS_RESERVATION_REQUEST">Anmod om reservation</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">‎Du er allerede logget på systemet. Det er ikke nødvendigt at anmode om en ny adgangskode.‎</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Billedet kunne ikke behandles, fordi opløsningen er større end #VAR1# Megapixel.</string>
@@ -1632,6 +1683,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Hvis denne indstilling er angivet, kan kontakter fra andre organisationer valgfrit vises i medlemsadministrationen ud over kontakterne i den aktuelle organisation. Ellers vises kun aktive og inaktive kontakter i den aktuelle organisation. Men når du opretter nye kontakter eller tildeler registreringer, søges der stadig i hele databasen for alle organisationer efter eksisterende kontakter. (standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Hvis denne indstilling er sat, vil tidligere medlemmer såvel som medlemmer af andre organisationer blive vist sammen med de aktive  medlemmer af denne organisation. </string>
   <string name="SYS_SHOW_CAPTCHA_DESC">For udloggede brugere vises en alfanumerisk tekst, når captcha-modulet er aktiveret. Den medfølgende tekst skal indtastes i det rigtige felt. Dette skal forhindre misbrug af formularen fra spammere. (standard: ja)</string>
+  <string name="SYS_SHOW_DATA">Vis data</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Vis tomme profil felter</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Denne indstilling bestemmer, om tomme profilfelter skal vises i profilvisningen. (Standard: ja)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Vis tidligere medlemmer</string>
@@ -1743,6 +1795,7 @@
   <string name="SYS_SSO_EXPLANATION">Som identitetsudbyder lader Admidio brugere logge ind på andre webapplikationer med deres Admidio-konto. Både SAML 2.0 og OpenID Connect (OIDC) protokollerne understøttes.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Adgangskode til nøgleeksport</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Beskyt den eksporterede private nøgle med en adgangskode. Denne adgangskode er nødvendig for at importere filen senere. En tom adgangskode efterlader eksporten ubeskyttet og frarådes kraftigt.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Fortsæt</string>
   <string name="SYS_SSO_INVALID_CLIENT">Ugyldig klient</string>
   <string name="SYS_SSO_KEY">SSO-nøgle</string>
   <string name="SYS_SSO_KEYS">SSO-nøgler</string>
@@ -1779,10 +1832,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Du er logget ind, men din konto har ikke tilladelse til at få adgang til klienten (#VAR1#). Log ind med en anden konto eller returner til klienten.</string>
   <string name="SYS_SSO_METADATA_INVALID">De downloadede SAML-metadata er ikke gyldige XML-metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Kunne ikke indlæse SAML-metadata. Tjek URL\'en og prøv igen.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Eller indsætte metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Anvend indsat metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">Hvis Admidio ikke kan nå metadata-URL\'en (f.eks. på et internt netværk), indsæt applikationens metadatafilindhold her i stedet.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Indsæt først indholdet af metadatafilen.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Genindlæs metadata</string>
+  <string name="SYS_SSO_METADATA_STATUS">Status for metadata</string>
   <string name="SYS_SSO_METADATA_URL">URL-adresse til metadata (valgfrit)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Indsæt applikationens SAML-metadata-URL, og vælg derefter Indlæs metadata for at udfylde disse indstillinger.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Indtast først en SAML-metadata-URL.</string>
@@ -1800,8 +1851,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Autorisationskodens levetid</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Hvor længe en autorisationskode kan bruges, på sekunder. Koder er engangsbrug. Standard: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Autorisations-URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Krav om sessionsidentifikator (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Inkluder OIDC sid-kravet i back-channel logout-tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout-notifikations-URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sender et signeret logout-token til denne URL, så applikationen kan afslutte sin session uden at bruge browseren.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC-påstand</string>
@@ -1911,7 +1960,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 klientcertifikat</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Klientcertifikat bruges til at verificere signerede SAML-beskeder og til at kryptere assertioner.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_APPROVED">Godkendt</string>
+  <string name="SYS_STATUS_BORROWED">Udlånt</string>
   <string name="SYS_STATUS_CODE_INVALID">Ugyldig status kode!</string>
+  <string name="SYS_STATUS_REJECTED">Afvist</string>
+  <string name="SYS_STATUS_REQUESTED">Anmodet</string>
+  <string name="SYS_STATUS_RETURNED">Returneret</string>
   <string name="SYS_STILL_X_CHARACTERS">still #VAR1# karakterer</string>
   <string name="SYS_STREET">Vej</string>
   <string name="SYS_SUBJECT">Emne</string>
@@ -1994,7 +2048,11 @@
   <string name="SYS_UNLOCK_ALBUM">Lås album op</string>
   <string name="SYS_UNMANAGED_FILES">Filer uden ejer</string>
   <string name="SYS_UPDATE_AVAILABLE">Opdatering tilgængelig</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# er tilgængelig.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Opdatering udført sucessfuldt</string>
+  <string name="SYS_UPLOADING">Uploader…</string>
+  <string name="SYS_UPLOAD_CANCEL">Annuller upload</string>
+  <string name="SYS_UPLOAD_CANCELLED">Upload blev annulleret.</string>
   <string name="SYS_UPLOAD_FILES">Overfør filer</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">max. overførsels filstørrelse</string>
   <string name="SYS_UPLOAD_PHOTOS">Overfør billede</string>
@@ -2068,9 +2126,11 @@
   <string name="SYS_WEDNESDAY">onsdag</string>
   <string name="SYS_WEEKDAY">Ugedag</string>
   <string name="SYS_WEEKDAYS">Hverdage</string>
+  <string name="SYS_WEEKDAY_FORMAT">Format for ugedag</string>
   <string name="SYS_WEEKLY">Ugentligt</string>
   <string name="SYS_WIDTH">Bredde</string>
   <string name="SYS_WIFE">Kone</string>
+  <string name="SYS_WITHDRAW">Træk tilbage</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">‎Regneark (indeks eller navn)‎</string>
   <string name="SYS_WRITE_EMAIL">Skriv e-mail</string>
   <string name="SYS_WRITE_PM">Skriv privat besked</string>
