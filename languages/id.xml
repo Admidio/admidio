@@ -200,6 +200,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Tambahkan Acara ke kalender</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Tambah barang</string>
+  <string name="SYS_ADD_ITEMS">Tambah beberapa barang</string>
   <string name="SYS_ADD_ORGANIZATION">Add organization</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Add to database</string>
@@ -245,6 +247,7 @@
   <string name="SYS_APPLY">Applica</string>
   <string name="SYS_APPOINTMENT">Appointment</string>
   <string name="SYS_APPOINTMENTS">Appointments</string>
+  <string name="SYS_APPROVE">Setujui</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Set by the roles</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Assign and edit members</string>
   <string name="SYS_ASSIGN_FIELDS">Assign fields</string>
@@ -271,17 +274,21 @@
   <string name="SYS_ATTEND_EVENT">Anda mendaftar untuk acara tersebut #VAR1_BOLD# di #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Anda menandatangani tentatif untuk acara tersebut #VAR1_BOLD# di #VAR2#. </string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Persetujuan otomatis</string>
   <string name="SYS_AUTO_DETECT">Auto-detect</string>
   <string name="SYS_AVAILABLE">Available</string>
   <string name="SYS_AVAILABLE_BETA">Available beta version</string>
   <string name="SYS_A_TO_Z">A to Z</string>
   <string name="SYS_BACK">Back</string>
+  <string name="SYS_BACKUPS">Cadangan</string>
   <string name="SYS_BACK_TO_ALBUM">Back to album</string>
   <string name="SYS_BACK_TO_FOLDER">Back to folder</string>
   <string name="SYS_BASIC_DATA">Basic data</string>
   <string name="SYS_BIRTHDAY">Compleanno</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Peminjaman</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Peminjaman aktif</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Brother</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -289,6 +296,7 @@
   <string name="SYS_CALENDARS">Calendars</string>
   <string name="SYS_CANCEL">Batal</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Buang semua</string>
   <string name="SYS_CANCEL_EVENT">Anda membatalkan partisipasi untuk acara tersebut #VAR1_BOLD# di #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Cancel membership</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Delete relationship</string>
@@ -422,9 +430,32 @@
   <string name="SYS_COPY">Copia</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Copy entry</string>
+  <string name="SYS_COPY_FILE">Salin berkas</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Your requested copy of the message</string>
+  <string name="SYS_COPY_TO">Salin ke</string>
   <string name="SYS_COPY_VAR">Copy #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Batalkan pembaruan</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Pembaruan dibatalkan. Tidak ada perubahan.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Saluran</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Versi beta</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Versi stabil</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Periksa kembali</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Lanjutkan</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Perbarui basis data</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Unduh dan siapkan</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Pasang pembaruan</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Versi terpasang</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Accedi</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Nama pengguna</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Buka Admidio</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Kemajuan</string>
+  <string name="SYS_CORE_UPDATE_START">Perbarui Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Aggiorna database</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Selesai</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Versi baru</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Pembaruan Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Apa yang harus saya lakukan?</string>
   <string name="SYS_COUNTER">Contatore</string>
   <string name="SYS_COUNTRY">Nazione</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -623,6 +654,8 @@
   <string name="SYS_EDIT_WEBLINK">Edit web link</string>
   <string name="SYS_EDIT_WEBLINKS">Edit web links</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Alamat email untuk akun #VAR1# Anda di #VAR4# telah diubah dari #VAR2# menjadi #VAR3#. Jika Anda tidak mengizinkan perubahan ini, segera hubungi administrator Anda.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Alamat email Anda telah berubah</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Email administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">The profile data of the user #VAR1# #VAR2# (login: #VAR3#) was changed by #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">User #VAR1# #VAR2# (login: #VAR3#) was changed</string>
@@ -750,6 +783,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">There are no documents or files available for visitors.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">You do not have permission to view the selected folder.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">An error occurred while renaming the folder #VAR1#.</string>
+  <string name="SYS_FOLDER_TREE">Pohon folder</string>
   <string name="SYS_FOLDER_WRITE_ACCESS">The folder #VAR1_BOLD# could not be created with the required write permissions.\n\nPlease ask an #VAR2#administrator#VAR3# to check the permissions (use FTP to set the permissions to 0777 or drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -788,6 +822,7 @@
   <string name="SYS_GROUPS_ROLES">Groups &amp; roles</string>
   <string name="SYS_GROUPS_ROLES_DESC">View and manage all groups and roles in the organization. Display and export member lists, or create custom lists.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Permintaan tamu</string>
   <string name="SYS_HALF_YEARLY">Half-yearly</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP header already sent!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -1097,6 +1132,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Member assignment</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Member of organization #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Permintaan anggota</string>
   <string name="SYS_MEMORY_LIMIT">Limite di memoria</string>
   <string name="SYS_MENU">Menù</string>
   <string name="SYS_MENU_DESC">Configure the menu here. Enter a URL, description, and icon for each item, and choose who can see it.</string>
@@ -1121,12 +1157,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">More</string>
   <string name="SYS_MOTHER">Mother</string>
+  <string name="SYS_MOVE">Pindahkan</string>
   <string name="SYS_MOVE_DOWN">Pindah ke bawah #VAR1#</string>
   <string name="SYS_MOVE_FILE">Move file</string>
   <string name="SYS_MOVE_FILE_DESC">Select a folder to which you want to move the #VAR1_BOLD# file. The role permissions for displaying the file are taken from the target folder.</string>
   <string name="SYS_MOVE_FOLDER">Move folder</string>
   <string name="SYS_MOVE_FOLDER_DESC">Select a folder to which you want to move the #VAR1_BOLD# folder. The role permissions for viewing and uploading files from the target folder are applied to this folder and all subfolders.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Pindahkan atau salin berkas</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Move to</string>
   <string name="SYS_MOVE_UP">Pindah ke atas #VAR1#</string>
@@ -1227,11 +1265,13 @@
   <string name="SYS_OPERATING_SYSTEM">Operating system</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Opposite relationship</string>
   <string name="SYS_OPTIONAL">Opzionale</string>
+  <string name="SYS_OR">atau</string>
   <string name="SYS_ORDER">Ordine</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organizzazione</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Asal</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Eccedenti</string>
   <string name="SYS_OVERVIEW">Panoramica</string>
@@ -1305,6 +1345,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Coba lagi</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1423,6 +1464,7 @@
   <string name="SYS_RECIPIENT">Destinatario</string>
   <string name="SYS_RECIPIENT_EMAIL">Email recipient</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Acara ini adalah acara utama dalam rangkaian berulang. Hapus seluruh rangkaian untuk menghapusnya secara permanen.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1462,6 +1504,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">You have successfully confirmed your registration. You can now log in with your username and password.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Enter a regular expression to validate this profile field. The entered value must match the expression before it can be saved. This check applies in addition to the data type\'s general validation rules.</string>
+  <string name="SYS_REJECT">Tolak</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationship configuration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationship configurations</string>
@@ -1484,8 +1527,15 @@
   <string name="SYS_REPLACE">Replace</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Waktu permintaan</string>
+  <string name="SYS_REQUESTER">Pemohon</string>
+  <string name="SYS_REQUEST_AGAIN">Ajukan kembali</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Required input</string>
+  <string name="SYS_RESERVATIONS">Reservasi</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Reservasi mulai</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Reservasi hingga</string>
+  <string name="SYS_RESERVATION_REQUEST">Ajukan reservasi</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">You are already logged in to the system. It is not necessary to request a new password.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">The image could not be processed because its resolution exceeds #VAR1# megapixels.</string>
@@ -1629,6 +1679,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">If this option is set, contacts of other organizations can optionally be displayed in the member administration in addition to the contacts of the current organization. Otherwise, only active and inactive contacts of the current organization are displayed. However, when creating new contacts or assigning registrations, the entire database of all organizations is still searched for existing contacts. (Default: yes)</string>
   <string name="SYS_SHOW_ALL_DESC">If this setting is set, former members as well as members of other organizations are displayed in addition to the active members of this organization.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">When enabled, users who are not logged in must enter the alphanumeric captcha text in the corresponding field. This helps prevent spammers from abusing the form. (Default: yes)</string>
+  <string name="SYS_SHOW_DATA">Tampilkan data</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Show former members</string>
@@ -1740,6 +1791,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Lanjutkan</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1776,10 +1828,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Muat ulang metadata</string>
+  <string name="SYS_SSO_METADATA_STATUS">Status metadata</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1797,8 +1847,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1908,7 +1956,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Avvia</string>
+  <string name="SYS_STATUS_APPROVED">Disetujui</string>
+  <string name="SYS_STATUS_BORROWED">Dipinjam</string>
   <string name="SYS_STATUS_CODE_INVALID">Invalid status code!</string>
+  <string name="SYS_STATUS_REJECTED">Ditolak</string>
+  <string name="SYS_STATUS_REQUESTED">Diajukan</string>
+  <string name="SYS_STATUS_RETURNED">Dikembalikan</string>
   <string name="SYS_STILL_X_CHARACTERS">ancora #VAR1# caratteri</string>
   <string name="SYS_STREET">Street</string>
   <string name="SYS_SUBJECT">Subject</string>
@@ -1991,7 +2044,11 @@
   <string name="SYS_UNLOCK_ALBUM">Sblocca album</string>
   <string name="SYS_UNMANAGED_FILES">File non gestiti</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# tersedia.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Update successful</string>
+  <string name="SYS_UPLOADING">Mengunggah…</string>
+  <string name="SYS_UPLOAD_CANCEL">Batalkan pengunggahan</string>
+  <string name="SYS_UPLOAD_CANCELLED">Pengunggahan dibatalkan.</string>
   <string name="SYS_UPLOAD_FILES">Upload files</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Max. file upload size</string>
   <string name="SYS_UPLOAD_PHOTOS">Carica foto</string>
@@ -2065,9 +2122,11 @@
   <string name="SYS_WEDNESDAY">Mercoledì</string>
   <string name="SYS_WEEKDAY">Weekday</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Format hari dalam pekan</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Width</string>
   <string name="SYS_WIFE">Wife</string>
+  <string name="SYS_WITHDRAW">Tarik permintaan</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Worksheet (index or name)</string>
   <string name="SYS_WRITE_EMAIL">Write email</string>
   <string name="SYS_WRITE_PM">Write private message</string>

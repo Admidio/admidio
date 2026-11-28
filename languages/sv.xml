@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Lägg till evenemang i kalendern</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Lägg till föremål</string>
+  <string name="SYS_ADD_ITEMS">Lägg till flera föremål</string>
   <string name="SYS_ADD_ORGANIZATION">﻿Lägg till organisation</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Lägg till i databasen</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Lägg till</string>
   <string name="SYS_APPOINTMENT">Utnämnd</string>
   <string name="SYS_APPOINTMENTS">Utnämningar</string>
+  <string name="SYS_APPROVE">Godkänn</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Satt utifrån roller</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Tilldela och redigera medlemmar</string>
   <string name="SYS_ASSIGN_FIELDS">Tilldela fält</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">Du registrerade dig för evenemanget #VAR1_BOLD# den #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Du registrerade dig för evenemanget #VAR1_BOLD# den #VAR2#. </string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Automatiskt godkännande</string>
   <string name="SYS_AUTO_DETECT">Automatisk upptäckt</string>
   <string name="SYS_AVAILABLE">Tillgänglig</string>
   <string name="SYS_AVAILABLE_BETA">Tillgänglig</string>
   <string name="SYS_A_TO_Z">A-Ö</string>
   <string name="SYS_BACK">Tillbaka</string>
+  <string name="SYS_BACKUPS">Säkerhetskopior</string>
   <string name="SYS_BACK_TO_ALBUM">Tillbaka till albumet</string>
   <string name="SYS_BACK_TO_FOLDER">Tillbaka till mappen</string>
   <string name="SYS_BASIC_DATA">Grunddata</string>
   <string name="SYS_BIRTHDAY">Födelsedag</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Utlån</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Pågående utlån</string>
   <string name="SYS_BOYFRIEND">Pojkvän</string>
   <string name="SYS_BROTHER">Syskon</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">Kalendrar</string>
   <string name="SYS_CANCEL">Avbryt</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Förkasta alla</string>
   <string name="SYS_CANCEL_EVENT">Du avbröt deltagandet för evenemanget #VAR1_BOLD# den #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Uppsägning av Medlemskap</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Ta bort relation</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">Kopiera</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Kopiera inlägget</string>
+  <string name="SYS_COPY_FILE">Kopiera fil</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Din begärda kopia av meddelandet</string>
+  <string name="SYS_COPY_TO">Kopiera till</string>
   <string name="SYS_COPY_VAR">Kopiera #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Avbryt uppdatering</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Uppdateringen avbröts. Ingenting ändrades.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Kanal</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Betaversion</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Stabil version</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Kontrollera igen</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Fortsätt</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Uppdatera databasen</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Ladda ned och förbered</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Installera uppdatering</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Installerad version</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Logga in</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Användarnamn</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Öppna Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Lösenord</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Förlopp</string>
+  <string name="SYS_CORE_UPDATE_START">Uppdatera Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Uppdatera databas</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Slutför</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Ny version</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Uppdatering av Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Vad ska jag göra?</string>
   <string name="SYS_COUNTER">Träffar</string>
   <string name="SYS_COUNTRY">Land</string>
   <string name="SYS_COUNTRY_EG" translation="edited">CRA</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Redigera webb-länk</string>
   <string name="SYS_EDIT_WEBLINKS">Redigera webblänkar</string>
   <string name="SYS_EMAIL">E-post</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">E-postadressen för ditt konto #VAR1# på #VAR4# har ändrats från #VAR2# till #VAR3#. Kontakta genast administratören om du inte har godkänt ändringen.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Din e-postadress har ändrats</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Mejla administratören</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Profildata för användaren #VAR1# #VAR2# (inloggning: #VAR3#) ändrades av #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Användare #VAR1# #VAR2# (inloggning: #VAR3#) har ändrats</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Det finns inga dokument eller filer tillgängliga för besökare.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Du får inte visa vald mapp.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">Ett fel uppstod när mappen #VAR1# bytt namn.</string>
+  <string name="SYS_FOLDER_TREE">Mappträd</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Mappen #VAR1_BOLD# kan inte skapas med nödvändiga skrivbehörigheter. \n\nBe en #VAR2#administratör#VAR3# att kontrollera skrivbehörigheter (att ändra filattribut till 0777 eller drwxrwxrwx).</string>
   <string name="SYS_FONT">Typsnitt</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">Grupper &amp; roller</string>
   <string name="SYS_GROUPS_ROLES_DESC">Översikt och hantering av alla grupper och roller i organisationen. Olika medlemslistor kan visas, exporteras och egna listor kan skapas.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Begäran från gäst</string>
   <string name="SYS_HALF_YEARLY">Halvårligt</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-header har redan skickats!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Medlemuppdrag</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Medlem av organisationen #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Begäran från medlem</string>
   <string name="SYS_MEMORY_LIMIT">Minnes gräns</string>
   <string name="SYS_MENU">Meny</string>
   <string name="SYS_MENU_DESC">Menyn kan konfigureras här. Förutom URL-adressen kan en beskrivning och en ikon deponeras. Dessutom kan det bestämmas vem som får se menyposten.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">Mera</string>
   <string name="SYS_MOTHER">Mor</string>
+  <string name="SYS_MOVE">Flytta</string>
   <string name="SYS_MOVE_DOWN">Flytta ner #VAR1#</string>
   <string name="SYS_MOVE_FILE">Flytta fil</string>
   <string name="SYS_MOVE_FILE_DESC">Välj en mapp dit du vill flytta filen #VAR1_BOLD#. Behörigheten för att visa filen ärvs från mål-mappen.</string>
   <string name="SYS_MOVE_FOLDER">Flytta mapp</string>
   <string name="SYS_MOVE_FOLDER_DESC">Välj mappen dit du vill flytta mappen #VAR1_BOLD#. Målmappens rollbehörigheter för att visa och ladda upp filer kommer tillämpas på den här mappen och dess undermappar.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Flytta eller kopiera fil</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Flytta till</string>
   <string name="SYS_MOVE_UP">Flytta upp #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">Operativsystem</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Motsatt relation</string>
   <string name="SYS_OPTIONAL">Tillval</string>
+  <string name="SYS_OR">eller</string>
   <string name="SYS_ORDER">Beställning</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organisation</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Ursprung</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Hänga över</string>
   <string name="SYS_OVERVIEW">Översikt</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Försök igen</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">Mottagare</string>
   <string name="SYS_RECIPIENT_EMAIL">E- postmottagare</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Det här är huvudaktiviteten i en återkommande serie. Ta bort hela serien för att ta bort den permanent.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Du har verifierat din registrering. Nu kan du logga in med ditt användarnamn och lösenord.</string>
   <string name="SYS_REGULAR_EXPRESSION">Regular expression</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Alla reguljära uttryck som lagras kommer tillämpas på värdet som användaren matar in i profilfält. Innehållet måste matcha villkoren i det reguljära uttrycket för att det angivna värdet ska lagras i fältet. Det reguljära uttrycket kontrolleras utöver de allmänna villkoren för datatypen.</string>
+  <string name="SYS_REJECT">Avslå</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Relationskonfiguration</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Relationskonfigurationer</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">Byt ut</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Begärd den</string>
+  <string name="SYS_REQUESTER">Begärd av</string>
+  <string name="SYS_REQUEST_AGAIN">Begär igen</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Inmatning krävs</string>
+  <string name="SYS_RESERVATIONS">Bokningar</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Boka från</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Boka till</string>
+  <string name="SYS_RESERVATION_REQUEST">Begär bokning</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Du är redan inloggad på systemet. Det är inte nödvändigt att begära ett nytt lösenord.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Bilden kunde inte hanteras eftersom upplösningen är större än #VAR1# megapixel.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Om aktiverat kan tidigare kontakter och kontakter i andra organisationer visas i medlemsadministrationen utöver den aktuella organisationens aktiva kontakter. I annat fall visas endast aktiva kontakter i den aktuella organisationen. Vid skapande av nya kontakter eller tilldelning av registreringar söks dock fortfarande hela databasen för alla organisationer efter befintliga kontakter. (Standard: ja)</string>
   <string name="SYS_SHOW_ALL_DESC">Endast aktiva medlemmar i denna organisation kommer att listas om detta alternativ inte är inställt. Annars listas alla användare av databasen.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">För utloggade användare kommer en alfanumerisk text att visas när captcha-modulen är aktiverad. Den medföljande texten måste anges i rätt fält. Detta bör förhindra missbruk av formuläret av spammare. (standard: ja)</string>
+  <string name="SYS_SHOW_DATA">Visa data</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Visa tidigare medlemmar</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Fortsätt</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1777,10 +1830,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Läs in metadata igen</string>
+  <string name="SYS_SSO_METADATA_STATUS">Status för metadata</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1798,8 +1849,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1909,7 +1958,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_APPROVED">Godkänd</string>
+  <string name="SYS_STATUS_BORROWED">Utlånad</string>
   <string name="SYS_STATUS_CODE_INVALID">Ogiltig statuskod</string>
+  <string name="SYS_STATUS_REJECTED">Avslagen</string>
+  <string name="SYS_STATUS_REQUESTED">Begärd</string>
+  <string name="SYS_STATUS_RETURNED">Återlämnad</string>
   <string name="SYS_STILL_X_CHARACTERS">fortfarande #VAR1# tecken</string>
   <string name="SYS_STREET">Gata</string>
   <string name="SYS_SUBJECT">Ämne</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Lås upp albumet</string>
   <string name="SYS_UNMANAGED_FILES">Ohanterade filer</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# finns tillgänglig.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Uppdateringen lyckades</string>
+  <string name="SYS_UPLOADING">Laddar upp…</string>
+  <string name="SYS_UPLOAD_CANCEL">Avbryt uppladdning</string>
+  <string name="SYS_UPLOAD_CANCELLED">Uppladdningen avbröts.</string>
   <string name="SYS_UPLOAD_FILES">Ladda upp filer</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Maximal storlek för uppladdning</string>
   <string name="SYS_UPLOAD_PHOTOS">Ladda upp foton</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">Onsdag</string>
   <string name="SYS_WEEKDAY">Veckodag</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Format för veckodag</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Bredd</string>
   <string name="SYS_WIFE">Fru</string>
+  <string name="SYS_WITHDRAW">Dra tillbaka</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Arbetsblad (index eller namn)</string>
   <string name="SYS_WRITE_EMAIL">Skriv e-post</string>
   <string name="SYS_WRITE_PM">Skriv privat meddelande</string>

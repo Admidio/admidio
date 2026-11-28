@@ -201,6 +201,8 @@
   <string name="SYS_ADD_ENTRY">Add entry</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Додати подію до календаря</string>
   <string name="SYS_ADD_FIELD">Add field</string>
+  <string name="SYS_ADD_ITEM">Додати предмет</string>
+  <string name="SYS_ADD_ITEMS">Додати предмети</string>
   <string name="SYS_ADD_ORGANIZATION">Add organization</string>
   <string name="SYS_ADD_ROLE">Add role</string>
   <string name="SYS_ADD_TO_DATABASE">Додати до бази даних</string>
@@ -246,6 +248,7 @@
   <string name="SYS_APPLY">Застосувати</string>
   <string name="SYS_APPOINTMENT">Призначення</string>
   <string name="SYS_APPOINTMENTS">Призначення</string>
+  <string name="SYS_APPROVE">Схвалити</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Встановлюється за ролями</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Призначення та редагування учасників</string>
   <string name="SYS_ASSIGN_FIELDS">Призначення полів</string>
@@ -272,17 +275,21 @@
   <string name="SYS_ATTEND_EVENT">Ви зареєструвалися на захід #VAR1_BOLD# на #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Ви попередньо записалися на захід #VAR1_BOLD# на #VAR2#.</string>
   <string name="SYS_AUTHOR">Author</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Автоматичне схвалення</string>
   <string name="SYS_AUTO_DETECT">Автовизначення</string>
   <string name="SYS_AVAILABLE">Доступно</string>
   <string name="SYS_AVAILABLE_BETA">Доступно в бета-версії</string>
   <string name="SYS_A_TO_Z">Від А до Я</string>
   <string name="SYS_BACK">Назад</string>
+  <string name="SYS_BACKUPS">Резервні копії</string>
   <string name="SYS_BACK_TO_ALBUM">Назад до альбому</string>
   <string name="SYS_BACK_TO_FOLDER">Назад до папки</string>
   <string name="SYS_BASIC_DATA">Основні дані</string>
   <string name="SYS_BIRTHDAY">День народження</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Позики</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Активні позики</string>
   <string name="SYS_BOYFRIEND">Boyfriend</string>
   <string name="SYS_BROTHER">Брат</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -290,6 +297,7 @@
   <string name="SYS_CALENDARS">Календарі</string>
   <string name="SYS_CANCEL">Скасування</string>
   <string name="SYS_CANCELLED">Canceled</string>
+  <string name="SYS_CANCEL_ALL">Відкинути все</string>
   <string name="SYS_CANCEL_EVENT">Ви скасували участь у події #VAR1_BOLD# на #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Скасувати участь</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Видалити взаємовідносини</string>
@@ -423,9 +431,33 @@
   <string name="SYS_COPY">Копіювати</string>
   <string name="SYS_COPY_CLIPBOARD">Copy to clipboard</string>
   <string name="SYS_COPY_ENTRY">Копіювання запису</string>
+  <string name="SYS_COPY_FILE">Копіювати файл</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Запитана вами копія повідомлення</string>
+  <string name="SYS_COPY_TO">Копіювати до</string>
   <string name="SYS_COPY_VAR">Копіювати #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Скасувати оновлення</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Оновлення скасовано. Змін немає.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Канал</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Бета-версія</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Стабільна версія</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Перевірити ще раз</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Продовжити</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Оновити базу даних</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Завантажити й підготувати</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Установити оновлення</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Установлена версія</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Увійти</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Ім’я користувача</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Відкрити Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Пароль</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Перебіг</string>
+  <string name="SYS_CORE_UPDATE_START">Оновити Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Оновлення бази даних</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Завершити</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Нова версія</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Оновлення Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Що мені робити?</string>
   <string name="SYS_COUNTER">Лічильник</string>
   <string name="SYS_COUNTRY">Країна</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -624,6 +656,8 @@
   <string name="SYS_EDIT_WEBLINK">Редагувати гіперпосилання</string>
   <string name="SYS_EDIT_WEBLINKS">Редагувати гіперпосилання</string>
   <string name="SYS_EMAIL">Ел. пошта</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Електронну адресу вашого облікового запису #VAR1# на #VAR4# змінено з #VAR2# на #VAR3#. Якщо ви не дозволяли цю зміну, негайно зверніться до адміністратора.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Вашу електронну адресу змінено</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Ел. пошта адміністратора</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Дані профілю користувача #VAR1# #VAR2# (логін: #VAR3#) були змінені #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Користувач #VAR1# #VAR2# (логін: #VAR3#) було змінено</string>
@@ -751,6 +785,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Для відвідувачів немає документів або файлів.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Вам не дозволено відображати вибрану папку.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">При перейменуванні папки #VAR1# сталася помилка.</string>
+  <string name="SYS_FOLDER_TREE">Дерево тек</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Не вдалося створити папку #VAR1_BOLD# з потрібними правами на запис.\n\nПопросіть #VAR2#адміністратора#VAR3# перевірити права (через FTP встановіть атрибути 0777 або drwxrwxrwx).</string>
   <string name="SYS_FONT">Шрифт</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -789,6 +824,7 @@
   <string name="SYS_GROUPS_ROLES">Групи та ролі</string>
   <string name="SYS_GROUPS_ROLES_DESC">Огляд та керування всіма групами та ролями в організації. Можна відображати та експортувати різні списки учасників, а також створювати власні списки.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Group/role membership</string>
+  <string name="SYS_GUEST_REQUEST">Запит гостя</string>
   <string name="SYS_HALF_YEARLY">Раз на півріччя</string>
   <string name="SYS_HEADER_ALREADY_SENT">HTTP-заголовок вже надіслано!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Content modules and plugins</string>
@@ -1098,6 +1134,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Призначення учасників</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Учасник організації #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Member of role/group #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Запит учасника</string>
   <string name="SYS_MEMORY_LIMIT">Обмеження пам'яті</string>
   <string name="SYS_MENU">Меню</string>
   <string name="SYS_MENU_DESC">Тут можна налаштувати меню. Крім URL-адреси можна помістити опис та іконку. Крім того, можна визначити, кому можна переглядати пункт меню.</string>
@@ -1122,12 +1159,14 @@
   <string name="SYS_MONTHS">Months</string>
   <string name="SYS_MORE">Більше</string>
   <string name="SYS_MOTHER">Мати</string>
+  <string name="SYS_MOVE">Перемістити</string>
   <string name="SYS_MOVE_DOWN">Перемістити вниз #VAR1#</string>
   <string name="SYS_MOVE_FILE">Перемістити файл</string>
   <string name="SYS_MOVE_FILE_DESC">Виберіть папку, в яку ви хочете перемістити файл #VAR1_BOLD#.</string>
   <string name="SYS_MOVE_FOLDER">Перемістити папку</string>
   <string name="SYS_MOVE_FOLDER_DESC">Виберіть папку, до якої потрібно перемістити папку #VAR1_BOLD#. Дозволи ролі для перегляду та завантаження файлів з цільової папки будуть застосовані до цієї папки та всіх вкладених папок.</string>
   <string name="SYS_MOVE_LEFT">Move #VAR1# left</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Перемістити або скопіювати файл</string>
   <string name="SYS_MOVE_RIGHT">Move #VAR1# right</string>
   <string name="SYS_MOVE_TO">Перемістити до</string>
   <string name="SYS_MOVE_UP">Перемістити вгору #VAR1#</string>
@@ -1228,11 +1267,13 @@
   <string name="SYS_OPERATING_SYSTEM">Операційна система</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Протилежні відносини</string>
   <string name="SYS_OPTIONAL">Опційно</string>
+  <string name="SYS_OR">або</string>
   <string name="SYS_ORDER">Замовлення</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Організація</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Organization affiliation</string>
   <string name="SYS_ORGANIZATION_DESC">Name and contact details of the current organization with the option of creating and displaying sub-organizations.</string>
+  <string name="SYS_ORIGIN">Походження</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio may only send requests to public HTTPS addresses. This URL cannot be used.</string>
   <string name="SYS_OVERHANG">Додаткові місця</string>
   <string name="SYS_OVERVIEW">Огляд</string>
@@ -1306,6 +1347,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Спробувати ще раз</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1424,6 +1466,7 @@
   <string name="SYS_RECIPIENT">Отримувач</string>
   <string name="SYS_RECIPIENT_EMAIL">Одержувач ел. пошти</string>
   <string name="SYS_RECURRENCE">Recurrence</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Це головна подія в повторюваній серії. Щоб вилучити її назавжди, видаліть усю серію.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Do you want to cancel only this date of the series: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editing an entire series is not supported yet.</string>
   <string name="SYS_RECURRENCE_END_DESC">Defines when the recurrence stops. Never-ending recurrences are still limited internally.</string>
@@ -1463,6 +1506,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">Ви успішно підтвердили свою реєстрацію. Тепер ви можете увійти до системи, використовуючи своє ім'я користувача та пароль.</string>
   <string name="SYS_REGULAR_EXPRESSION">Регулярний вираз</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Можна зберегти будь-який регулярний вираз, який буде застосовуватися до вмісту, введеного користувачем у це поле профілю. Вміст повинен відповідати умовам регулярного виразу, щоб введене значення було збережено у полі. Регулярний вираз перевіряється на додаток до загальних умов типу даних.</string>
+  <string name="SYS_REJECT">Відхилити</string>
   <string name="SYS_RELATED_TO">Related item</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Конфігурація відносин</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Конфігурація відносин</string>
@@ -1485,8 +1529,15 @@
   <string name="SYS_REPLACE">Замінити</string>
   <string name="SYS_REPLIES_VAR">#VAR1# replies</string>
   <string name="SYS_REPLY_TO">Reply to</string>
+  <string name="SYS_REQUESTED_AT">Дата запиту</string>
+  <string name="SYS_REQUESTER">Заявник</string>
+  <string name="SYS_REQUEST_AGAIN">Подати запит повторно</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Обов'язкове поле</string>
+  <string name="SYS_RESERVATIONS">Бронювання</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Бронювати з</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Бронювати до</string>
+  <string name="SYS_RESERVATION_REQUEST">Подати запит на бронювання</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Ви вже увійшли до системи. Немає потреби запитувати новий пароль.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Зображення не може бути оброблено, оскільки роздільна здатність перевищує #VAR1# мегапікселів.</string>
@@ -1630,6 +1681,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Якщо цей параметр встановлений, колишні контакти та контакти інших організацій можуть за бажанням відображатися в адміністрації користувача на додаток до активних контактів поточної організації. Інакше відображаються лише активні контакти поточної організації. Однак при створенні нових контактів або призначенні реєстрацій пошук існуючих контактів, як і раніше, виконується у всій базі даних усіх організацій. (за замовчуванням: так)</string>
   <string name="SYS_SHOW_ALL_DESC">Якщо цей параметр встановлений, на додаток до активних учасників цієї організації будуть відображатися колишні учасники, а також учасники інших організацій.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Для користувачів, що вийшли з системи, під час активації модуля Капча буде відображатися буквено-цифровий текст.</string>
+  <string name="SYS_SHOW_DATA">Показати дані</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Show empty profile fields</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">This setting determines whether empty profile fields should be displayed in the profile view. (Default: yes)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Показати колишніх учасників</string>
@@ -1741,6 +1793,7 @@
   <string name="SYS_SSO_EXPLANATION">As an identity provider, Admidio lets users sign in to other web applications with their Admidio account. Both the SAML 2.0 and OpenID Connect (OIDC) protocols are supported.</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Password for key export</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protect the exported private key with a password. This password is required to import the file later. An empty password leaves the export unprotected and is strongly discouraged.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Продовжити</string>
   <string name="SYS_SSO_INVALID_CLIENT">Invalid client</string>
   <string name="SYS_SSO_KEY">SSO key</string>
   <string name="SYS_SSO_KEYS">SSO keys</string>
@@ -1777,10 +1830,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Повторно завантажити метадані</string>
+  <string name="SYS_SSO_METADATA_STATUS">Стан метаданих</string>
   <string name="SYS_SSO_METADATA_URL">Metadata URL (optional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1798,8 +1849,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
@@ -1909,7 +1958,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Початок</string>
+  <string name="SYS_STATUS_APPROVED">Схвалено</string>
+  <string name="SYS_STATUS_BORROWED">Позичено</string>
   <string name="SYS_STATUS_CODE_INVALID">Неправильний код статусу!</string>
+  <string name="SYS_STATUS_REJECTED">Відхилено</string>
+  <string name="SYS_STATUS_REQUESTED">Запитано</string>
+  <string name="SYS_STATUS_RETURNED">Повернено</string>
   <string name="SYS_STILL_X_CHARACTERS">досі #VAR1# символів</string>
   <string name="SYS_STREET">Вулиця</string>
   <string name="SYS_SUBJECT">Тема</string>
@@ -1992,7 +2046,11 @@
   <string name="SYS_UNLOCK_ALBUM">Розблокувати альбом</string>
   <string name="SYS_UNMANAGED_FILES">Некеровані файли</string>
   <string name="SYS_UPDATE_AVAILABLE">Update available</string>
+  <string name="SYS_UPDATE_NOTICE">Доступна версія Admidio #VAR1#.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Оновлення пройшло успішно</string>
+  <string name="SYS_UPLOADING">Завантаження на сервер…</string>
+  <string name="SYS_UPLOAD_CANCEL">Скасувати завантаження на сервер</string>
+  <string name="SYS_UPLOAD_CANCELLED">Завантаження на сервер скасовано.</string>
   <string name="SYS_UPLOAD_FILES">Завантажити файли</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Макс. розмір файлу, що завантажується</string>
   <string name="SYS_UPLOAD_PHOTOS">Завантажити фотографії</string>
@@ -2066,9 +2124,11 @@
   <string name="SYS_WEDNESDAY">Середовище</string>
   <string name="SYS_WEEKDAY">Будні</string>
   <string name="SYS_WEEKDAYS">Weekdays</string>
+  <string name="SYS_WEEKDAY_FORMAT">Формат дня тижня</string>
   <string name="SYS_WEEKLY">Weekly</string>
   <string name="SYS_WIDTH">Ширина</string>
   <string name="SYS_WIFE">Дружина</string>
+  <string name="SYS_WITHDRAW">Відкликати запит</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Робочий лист (індекс або назва)</string>
   <string name="SYS_WRITE_EMAIL">Написати ел/лист</string>
   <string name="SYS_WRITE_PM">Написати особисте повідомлення</string>

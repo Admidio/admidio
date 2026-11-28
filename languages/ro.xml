@@ -203,6 +203,8 @@
   <string name="SYS_ADD_ENTRY">Adăugați o poziție</string>
   <string name="SYS_ADD_EVENT_TO_CALENDAR">Adaugă eveniment în calendar</string>
   <string name="SYS_ADD_FIELD">Adaugă câmp</string>
+  <string name="SYS_ADD_ITEM">Adaugă obiect</string>
+  <string name="SYS_ADD_ITEMS">Adaugă obiecte</string>
   <string name="SYS_ADD_ORGANIZATION">Adaugă organizație</string>
   <string name="SYS_ADD_ROLE">Adaugă rol</string>
   <string name="SYS_ADD_TO_DATABASE">Adaugă la baza de date</string>
@@ -248,6 +250,7 @@
   <string name="SYS_APPLY">Aplică</string>
   <string name="SYS_APPOINTMENT">Întâlnire</string>
   <string name="SYS_APPOINTMENTS">Întâlniri</string>
+  <string name="SYS_APPROVE">Aprobă</string>
   <string name="SYS_ASSIGNED_BY_ROLES">Stabilit în funcție de roluri</string>
   <string name="SYS_ASSIGN_EDIT_MEMBERS">Alocarea și editarea membrilor</string>
   <string name="SYS_ASSIGN_FIELDS">Atribuie câmpuri</string>
@@ -274,17 +277,21 @@
   <string name="SYS_ATTEND_EVENT">Te-ai înscris la evenimentul #VAR1_BOLD# pe #VAR2#.</string>
   <string name="SYS_ATTEND_POSSIBLY">Te-ai înscris provizoriu la evenimentul #VAR1_BOLD# pe #VAR2#.</string>
   <string name="SYS_AUTHOR">Autor</string>
+  <string name="SYS_AUTOMATIC_APPROVAL">Aprobare automată</string>
   <string name="SYS_AUTO_DETECT">Detectare automată</string>
   <string name="SYS_AVAILABLE">Disponibil</string>
   <string name="SYS_AVAILABLE_BETA">Disponibil Beta</string>
   <string name="SYS_A_TO_Z">De la A la Z</string>
   <string name="SYS_BACK">Înapoi</string>
+  <string name="SYS_BACKUPS">Copii de siguranță</string>
   <string name="SYS_BACK_TO_ALBUM">Înapoi la album</string>
   <string name="SYS_BACK_TO_FOLDER">Înapoi la dosar</string>
   <string name="SYS_BASIC_DATA">Date de bază</string>
   <string name="SYS_BIRTHDAY">Zi de naștere</string>
   <string name="SYS_BLUESKY">Bluesky</string>
   <string name="SYS_BOLD">Bold</string>
+  <string name="SYS_BORROWINGS">Împrumuturi</string>
+  <string name="SYS_BORROWINGS_ACTIVE">Împrumuturi active</string>
   <string name="SYS_BOYFRIEND">Prieten</string>
   <string name="SYS_BROTHER">Frate/Soră</string>
   <string name="SYS_BULLETED_LIST">Bulleted list</string>
@@ -292,6 +299,7 @@
   <string name="SYS_CALENDARS">Calendare</string>
   <string name="SYS_CANCEL">Anulează</string>
   <string name="SYS_CANCELLED">Anulat</string>
+  <string name="SYS_CANCEL_ALL">Renunță la toate</string>
   <string name="SYS_CANCEL_EVENT">Ați anulat participarea la evenimentul #VAR1_BOLD# din #VAR2#.</string>
   <string name="SYS_CANCEL_MEMBERSHIP">Anulează calitatea de membru</string>
   <string name="SYS_CANCEL_RELATIONSHIP">Ștergeți relația</string>
@@ -425,9 +433,33 @@
   <string name="SYS_COPY">Copiere</string>
   <string name="SYS_COPY_CLIPBOARD">Copiere în clipboard</string>
   <string name="SYS_COPY_ENTRY">Copiați datele</string>
+  <string name="SYS_COPY_FILE">Copiază fișierul</string>
   <string name="SYS_COPY_LINK">Copy link</string>
   <string name="SYS_COPY_OF_YOUR_EMAIL">Copia mesajului solicitat</string>
+  <string name="SYS_COPY_TO">Copiază în</string>
   <string name="SYS_COPY_VAR">Copierea #VAR1#</string>
+  <string name="SYS_CORE_UPDATE_CANCEL">Anulează actualizarea</string>
+  <string name="SYS_CORE_UPDATE_CANCELLED">Actualizarea a fost anulată. Nu s-a modificat nimic.</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL">Canal</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_BETA">Versiune beta</string>
+  <string name="SYS_CORE_UPDATE_CHANNEL_STABLE">Versiune stabilă</string>
+  <string name="SYS_CORE_UPDATE_CHECK_AGAIN">Verifică din nou</string>
+  <string name="SYS_CORE_UPDATE_CONTINUE">Continuă</string>
+  <string name="SYS_CORE_UPDATE_DATABASE_MANUAL">Actualizează baza de date</string>
+  <string name="SYS_CORE_UPDATE_DOWNLOAD">Descarcă și pregătește</string>
+  <string name="SYS_CORE_UPDATE_INSTALL">Instalează actualizarea</string>
+  <string name="SYS_CORE_UPDATE_INSTALLED_VERSION">Versiune instalată</string>
+  <string name="SYS_CORE_UPDATE_LOGIN">Autentificare</string>
+  <string name="SYS_CORE_UPDATE_LOGIN_NAME">Nume de utilizator</string>
+  <string name="SYS_CORE_UPDATE_OPEN_ADMIDIO">Deschide Admidio</string>
+  <string name="SYS_CORE_UPDATE_PASSWORD">Parolă</string>
+  <string name="SYS_CORE_UPDATE_PROGRESS">Progres</string>
+  <string name="SYS_CORE_UPDATE_START">Actualizează Admidio</string>
+  <string name="SYS_CORE_UPDATE_STEP_DATABASE">Actualizare bază de date</string>
+  <string name="SYS_CORE_UPDATE_STEP_FINISH">Finalizează</string>
+  <string name="SYS_CORE_UPDATE_TARGET">Versiune nouă</string>
+  <string name="SYS_CORE_UPDATE_TITLE">Actualizare Admidio</string>
+  <string name="SYS_CORE_UPDATE_WHAT_NOW">Ce trebuie să fac?</string>
   <string name="SYS_COUNTER">Contor</string>
   <string name="SYS_COUNTRY">Țară</string>
   <string name="SYS_COUNTRY_EG" translation="edited">GER</string>
@@ -626,6 +658,8 @@
   <string name="SYS_EDIT_WEBLINK">Editați link web</string>
   <string name="SYS_EDIT_WEBLINKS">Editați linkuri web</string>
   <string name="SYS_EMAIL">Email</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_MESSAGE">Adresa de e-mail a contului tău #VAR1# de pe #VAR4# a fost schimbată din #VAR2# în #VAR3#. Dacă nu ai autorizat această schimbare, contactează imediat administratorul.</string>
+  <string name="SYS_EMAIL_ADDRESS_CHANGED_TITLE">Adresa ta de e-mail a fost schimbată</string>
   <string name="SYS_EMAIL_ADMINISTRATOR">Email administrator</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_MESSAGE">Datele de profil ale utilizatorului #VAR1# #VAR2# (autentificare: #VAR3#) au fost modificate de #VAR4#.</string>
   <string name="SYS_EMAIL_CHANGE_NOTIFICATION_TITLE">Utilizatorul #VAR1# #VAR2# (autentificare: #VAR3#) a fost modificat</string>
@@ -753,6 +787,7 @@
   <string name="SYS_FOLDER_NO_FILES_VISITOR">Nu există documente sau fișiere disponibile pentru vizitatori.</string>
   <string name="SYS_FOLDER_NO_RIGHTS">Nu aveți permisiunea de a afișa folderul selectat.</string>
   <string name="SYS_FOLDER_RENAME_ERROR">A apărut o eroare în timpul redenumirii folderului #VAR1#.</string>
+  <string name="SYS_FOLDER_TREE">Arbore de directoare</string>
   <string name="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link">Dosarul #VAR1_BOLD# nu poate fi creat cu permisiunile de scriere necesare.\n\nVă rugăm să solicitați ajutorul unui #VAR2# administrator #VAR3# pentru a verifica permisiunile de scriere (utilizând FTP pentru a modifica atributele fișierului la 0777 sau drwxrwxrwx).</string>
   <string name="SYS_FONT">Font</string>
   <string name="SYS_FONT_SIZE">Font size</string>
@@ -791,6 +826,7 @@
   <string name="SYS_GROUPS_ROLES">Grupuri și roluri</string>
   <string name="SYS_GROUPS_ROLES_DESC">Prezentare generală și gestionarea tuturor grupurilor și rolurilor organizației. Se pot afișa și exporta diferite liste de membri și se pot crea liste proprii.</string>
   <string name="SYS_GROUP_ROLE_MEMBERSHIP">Apartenența la grup/rol</string>
+  <string name="SYS_GUEST_REQUEST">Cerere de la un vizitator</string>
   <string name="SYS_HALF_YEARLY">Pe șase luni</string>
   <string name="SYS_HEADER_ALREADY_SENT">Antetul HTTP a fost deja trimis!</string>
   <string name="SYS_HEADER_CONTENT_MODULES">Module de conținut și pluginuri</string>
@@ -1100,6 +1136,7 @@
   <string name="SYS_MEMBER_ASSIGNMENT">Atribuirea membrilor</string>
   <string name="SYS_MEMBER_OF_ORGANIZATION" description="MEM_MEMBER_OF">Membru al organizației #VAR1#</string>
   <string name="SYS_MEMBER_OF_ROLE_GROUP">Membru al rolului/grupului #VAR1#</string>
+  <string name="SYS_MEMBER_REQUEST">Cerere de la un membru</string>
   <string name="SYS_MEMORY_LIMIT">Limită de memorie</string>
   <string name="SYS_MENU">Meniu</string>
   <string name="SYS_MENU_DESC">Meniul poate fi configurat aici. Lângă adresa URL se poate adăuga o descriere și o pictogramă. În plus, se poate stabili cine are dreptul să vizualizeze intrarea din meniu.</string>
@@ -1124,12 +1161,14 @@
   <string name="SYS_MONTHS">Luni</string>
   <string name="SYS_MORE">Mai mult</string>
   <string name="SYS_MOTHER">Mama</string>
+  <string name="SYS_MOVE">Mută</string>
   <string name="SYS_MOVE_DOWN">Deplasare în jos #VAR1#</string>
   <string name="SYS_MOVE_FILE">Mutare fișier</string>
   <string name="SYS_MOVE_FILE_DESC">Selectați un folder în care doriți să mutați fișierul #VAR1_BOLD#. Permisiunile de rol pentru afișarea fișierului sunt preluate din folderul țintă.</string>
   <string name="SYS_MOVE_FOLDER">Mutați dosarul</string>
   <string name="SYS_MOVE_FOLDER_DESC">Selectați un folder în care doriți să mutați folderul #VAR1_BOLD#. Permisiunile de rol pentru vizualizarea și încărcarea fișierelor din folderul țintă se aplică acestui folder și tuturor subfolderelor.</string>
   <string name="SYS_MOVE_LEFT">Deplasează #VAR1# spre stânga</string>
+  <string name="SYS_MOVE_OR_COPY_FILE">Mută sau copiază fișierul</string>
   <string name="SYS_MOVE_RIGHT">Deplasează #VAR1# spre dreapta</string>
   <string name="SYS_MOVE_TO">Mutre la</string>
   <string name="SYS_MOVE_UP">Mutare în sus #VAR1#</string>
@@ -1230,11 +1269,13 @@
   <string name="SYS_OPERATING_SYSTEM">Sistem de operare</string>
   <string name="SYS_OPPOSITE_RELATIONSHIP">Relație opusă</string>
   <string name="SYS_OPTIONAL">Opțional</string>
+  <string name="SYS_OR">sau</string>
   <string name="SYS_ORDER">Ordine</string>
   <string name="SYS_ORDERED_LIST">Numbered list</string>
   <string name="SYS_ORGANIZATION">Organizație</string>
   <string name="SYS_ORGANIZATION_AFFILIATION">Afilerea organizației</string>
   <string name="SYS_ORGANIZATION_DESC">Numele și datele de contact ale organizației actuale, cu opțiunea de a crea și afișa suborganizații.</string>
+  <string name="SYS_ORIGIN">Origine</string>
   <string name="SYS_OUTBOUND_URL_NOT_ALLOWED">Admidio poate trimite solicitări numai către adrese HTTPS publice. Această adresă URL nu poate fi utilizată.</string>
   <string name="SYS_OVERHANG">Debordant</string>
   <string name="SYS_OVERVIEW">Prezentare generală</string>
@@ -1308,6 +1349,7 @@
   <string name="SYS_PLUGIN_ARCHIVE_NOT_WRITABLE">The archive could not be written to #VAR1#.</string>
   <string name="SYS_PLUGIN_BROKEN">Incompatible plugins</string>
   <string name="SYS_PLUGIN_BUILT_IN">This plugin is part of Admidio and cannot be removed. Disable it if you do not want to use it.</string>
+  <string name="SYS_PLUGIN_CRASHED_RETRY">Încearcă din nou</string>
   <string name="SYS_PLUGIN_DISABLE">Disable plugin</string>
   <string name="SYS_PLUGIN_DISABLED">Plugin successfully disabled.</string>
   <string name="SYS_PLUGIN_ENABLE">Enable plugin</string>
@@ -1426,6 +1468,7 @@
   <string name="SYS_RECIPIENT">Destinatar</string>
   <string name="SYS_RECIPIENT_EMAIL">Destinatar e-mail</string>
   <string name="SYS_RECURRENCE">Recurență</string>
+  <string name="SYS_RECURRENCE_DELETE_SERIES_REQUIRED">Acesta este evenimentul principal al unei serii recurente. Șterge întreaga serie pentru a-l elimina definitiv.</string>
   <string name="SYS_RECURRENCE_DELETE_THIS_CONFIRM">Doriți să anulați doar această dată din serie: #VAR1_BOLD#?</string>
   <string name="SYS_RECURRENCE_EDIT_SERIES_NOT_SUPPORTED">Editarea unei serii întregi nu este încă acceptată.</string>
   <string name="SYS_RECURRENCE_END_DESC">Stabilește momentul în care recurența încetează. Recurențele fără sfârșit sunt totuși limitate la nivel intern.</string>
@@ -1465,6 +1508,7 @@
   <string name="SYS_REGISTRATION_VALIDATION_OK_SELF">V-ați confirmat cu succes înregistrarea. Acum vă puteți conecta cu numele de utilizator și parola.</string>
   <string name="SYS_REGULAR_EXPRESSION">Expresie comună</string>
   <string name="SYS_REGULAR_EXPRESSION_DESC">Se poate stoca orice expresie regulată care va fi aplicată conținutului introdus de utilizator în acest câmp al profilului. Conținutul trebuie să corespundă condițiilor expresiei regulate pentru ca valoarea introdusă să fie stocată în câmp. Expresia regulată este verificată în plus față de condițiile generale ale tipului de date.</string>
+  <string name="SYS_REJECT">Respinge</string>
   <string name="SYS_RELATED_TO">Element asociat</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATION">Configurația relației</string>
   <string name="SYS_RELATIONSHIP_CONFIGURATIONS">Configurația relațiilor</string>
@@ -1487,8 +1531,15 @@
   <string name="SYS_REPLACE">Înlocuiește</string>
   <string name="SYS_REPLIES_VAR">#VAR1# răspunsuri</string>
   <string name="SYS_REPLY_TO">Răspuns la</string>
+  <string name="SYS_REQUESTED_AT">Data cererii</string>
+  <string name="SYS_REQUESTER">Solicitant</string>
+  <string name="SYS_REQUEST_AGAIN">Solicită din nou</string>
   <string name="SYS_REQUEST_FAILED">The request could not be completed. Please check your internet connection and try again.</string>
   <string name="SYS_REQUIRED_INPUT">Informații necesare</string>
+  <string name="SYS_RESERVATIONS">Rezervări</string>
+  <string name="SYS_RESERVATION_PERIOD_FROM">Rezervă de la</string>
+  <string name="SYS_RESERVATION_PERIOD_TO">Rezervă până la</string>
+  <string name="SYS_RESERVATION_REQUEST">Solicită rezervarea</string>
   <string name="SYS_RESET_PW_AREADY_LOGGED_IN">Sunteți deja conectat la sistem. Nu este necesar să solicitați o nouă parolă.</string>
   <string name="SYS_RESIZE_IMAGE">Resize image</string>
   <string name="SYS_RESOLUTION_TOO_LARGE">Imaginea nu a putut fi procesată deoarece rezoluția este mai mare de #VAR1# megapixeli.</string>
@@ -1632,6 +1683,7 @@
   <string name="SYS_SHOW_ALL_CONTACTS_DESC">Dacă această opțiune este activată, contactele altor organizații pot fi afișate opțional în administrarea membrilor, pe lângă contactele organizației curente. În caz contrar, sunt afișate numai contactele active și inactive ale organizației curente. Cu toate acestea, atunci când se creează contacte noi sau se atribuie înregistrări, întreaga bază de date a tuturor organizațiilor este în continuare căutată pentru contactele existente. (implicit: da)</string>
   <string name="SYS_SHOW_ALL_DESC">Dacă această setare este activată, pe lângă membrii activi ai acestei organizații sunt afișați și foștii membri, precum și membrii altor organizații.</string>
   <string name="SYS_SHOW_CAPTCHA_DESC">Pentru utilizatorii care nu sunt conectați, va apărea un text alfanumeric atunci când modulul captcha este activat. Textul furnizat trebuie introdus în câmpul corespunzător. Acest lucru ar trebui să împiedice utilizarea abuzivă a formularului de către spammeri. (implicit: da)</string>
+  <string name="SYS_SHOW_DATA">Afișează datele</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS">Afișează câmpurile goale din profil</string>
   <string name="SYS_SHOW_EMPTY_PROFILE_FIELDS_DESC">Această setare determină dacă câmpurile goale ale profilului trebuie afișate în vizualizarea profilului. (Implicit: da)</string>
   <string name="SYS_SHOW_FORMER_MEMBERS">Afișează foștii membri</string>
@@ -1743,6 +1795,7 @@
   <string name="SYS_SSO_EXPLANATION">În calitate de furnizor de identitate, Admidio le permite utilizatorilor să se autentifice în alte aplicații web folosind contul lor Admidio. Sunt acceptate atât protocolul SAML 2.0, cât și OpenID Connect (OIDC).</string>
   <string name="SYS_SSO_EXPORT_PASSWORD">Parolă pentru exportul cheii</string>
   <string name="SYS_SSO_EXPORT_PASSWORD_DESC">Protejați cheia privată exportată cu o parolă. Această parolă este necesară pentru a importa fișierul ulterior. Dacă se lasă câmpul pentru parolă gol, exportul rămâne neprotejat, iar această practică este puternic descurajată.</string>
+  <string name="SYS_SSO_FORM_POST_CONTINUE">Continuă</string>
   <string name="SYS_SSO_INVALID_CLIENT">Client invalid</string>
   <string name="SYS_SSO_KEY">Cheie SSO</string>
   <string name="SYS_SSO_KEYS">Chei SSO</string>
@@ -1779,10 +1832,8 @@
   <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
-  <string name="SYS_SSO_METADATA_PASTE">Or paste metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_BUTTON">Apply pasted metadata</string>
-  <string name="SYS_SSO_METADATA_PASTE_DESC">If Admidio cannot reach the metadata URL (e.g. on an internal network), paste the application's metadata file content here instead.</string>
-  <string name="SYS_SSO_METADATA_PASTE_REQUIRED">Paste the metadata file content first.</string>
+  <string name="SYS_SSO_METADATA_RELOAD">Reîncarcă metadatele</string>
+  <string name="SYS_SSO_METADATA_STATUS">Starea metadatelor</string>
   <string name="SYS_SSO_METADATA_URL">URL metadate (opțional)</string>
   <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
   <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
@@ -1800,8 +1851,6 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED">Require session identifier (sid) for back-channel logout</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Include the OIDC sid claim in back-channel logout tokens.</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
   <string name="SYS_SSO_OIDC_CLAIM">Cerere OIDC</string>
@@ -1911,7 +1960,12 @@
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
   <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
+  <string name="SYS_STATUS_APPROVED">Aprobat</string>
+  <string name="SYS_STATUS_BORROWED">Împrumutat</string>
   <string name="SYS_STATUS_CODE_INVALID">Cod de stare invalid!</string>
+  <string name="SYS_STATUS_REJECTED">Respins</string>
+  <string name="SYS_STATUS_REQUESTED">Solicitat</string>
+  <string name="SYS_STATUS_RETURNED">Returnat</string>
   <string name="SYS_STILL_X_CHARACTERS">încă #VAR1# caractere</string>
   <string name="SYS_STREET">Stradă</string>
   <string name="SYS_SUBJECT">Subiect</string>
@@ -1994,7 +2048,11 @@
   <string name="SYS_UNLOCK_ALBUM">Deblochează albumul</string>
   <string name="SYS_UNMANAGED_FILES">Fișiere neadministrate</string>
   <string name="SYS_UPDATE_AVAILABLE">Actualizare disponibilă</string>
+  <string name="SYS_UPDATE_NOTICE">Admidio #VAR1# este disponibil.</string>
   <string name="SYS_UPDATE_SUCCESSFUL">Actualizat cu succes</string>
+  <string name="SYS_UPLOADING">Se încarcă…</string>
+  <string name="SYS_UPLOAD_CANCEL">Anulează încărcarea</string>
+  <string name="SYS_UPLOAD_CANCELLED">Încărcarea a fost anulată.</string>
   <string name="SYS_UPLOAD_FILES">Încărcați fișier</string>
   <string name="SYS_UPLOAD_MAX_FILESIZE">Dimensiunea max. a fișierului încărcat</string>
   <string name="SYS_UPLOAD_PHOTOS">Incărcare fotografii</string>
@@ -2068,9 +2126,11 @@
   <string name="SYS_WEDNESDAY">Miercuri</string>
   <string name="SYS_WEEKDAY">Zi din săptămână</string>
   <string name="SYS_WEEKDAYS">Zilele lucrătoare</string>
+  <string name="SYS_WEEKDAY_FORMAT">Formatul zilei săptămânii</string>
   <string name="SYS_WEEKLY">Săptămânal</string>
   <string name="SYS_WIDTH">Lățime</string>
   <string name="SYS_WIFE">Soție</string>
+  <string name="SYS_WITHDRAW">Retrage cererea</string>
   <string name="SYS_WORKSHEET_NAMEINDEX">Foaie de lucru (index sau nume)</string>
   <string name="SYS_WRITE_EMAIL">Scrie e-mail</string>
   <string name="SYS_WRITE_PM">Compune mesaj privat</string>
