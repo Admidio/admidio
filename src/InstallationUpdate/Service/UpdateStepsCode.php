@@ -44,6 +44,34 @@ final class UpdateStepsCode
     }
 
     /**
+     * Default list configurations must be shared so that other users can view them.
+     * @throws Exception
+     */
+    public static function updateStep50ShareDefaultLists(): void
+    {
+        self::$db->queryPrepared('UPDATE ' . TBL_LISTS . ' SET lst_global = true
+            WHERE lst_global = false
+              AND lst_id IN (SELECT rol_lst_id FROM ' . TBL_ROLES . ' WHERE rol_lst_id IS NOT NULL)');
+
+        // Preferences store IDs as strings. Convert them in PHP for MySQL and PostgreSQL compatibility.
+        $statement = self::$db->queryPrepared('SELECT prf_org_id, prf_value FROM ' . TBL_PREFERENCES . '
+            WHERE prf_name IN (?, ?, ?)', array(
+                'groups_roles_default_configuration',
+                'events_list_configuration',
+                'contacts_list_configuration'
+            ));
+
+        while ($preference = $statement->fetch()) {
+            $listId = (int)$preference['prf_value'];
+            if ($listId > 0) {
+                self::$db->queryPrepared('UPDATE ' . TBL_LISTS . ' SET lst_global = true
+                    WHERE lst_id = ? AND lst_org_id = ? AND lst_global = false',
+                    array($listId, (int)$preference['prf_org_id']));
+            }
+        }
+    }
+
+    /**
      * Add the column crt_col_conditions where step 1920 never ran. db.sql did not get the column,
      * and a fresh installation marks all update steps as done, so these installations lack it, while
      * the update to 6.0 migrates it. MySQL has no ADD COLUMN IF NOT EXISTS.
