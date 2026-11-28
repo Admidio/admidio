@@ -689,7 +689,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Ihre Anmeldung kann nicht mehr verändert werden, da das vorgegebene Enddatum für Anmeldungen erreicht wurde oder die Veranstaltung in der Vergangenheit liegt. Bitte wenden Sie sich an die Veranstaltungsleitung oder eine administrierende Person!</string>
   <string name="SYS_DEBUG_OUTPUT">Debug-Ausgabe</string>
   <string name="SYS_DECIMAL_NUMBER">Dezimalzahl</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardzuordnung bei Registrierung</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Standardrollen bei der Registrierung zuweisen</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Wird ein neues Profil angelegt oder eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch der betreffenden Person zugeordnet. Wer das Recht hat, Rollen zuzuordnen, sieht alle Rollenzuordnungen und kann sie entsprechend anpassen.</string>
   <string name="SYS_DEFAULT_COLOR">Standardfarbe</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Standardkonfiguration</string>
@@ -1048,7 +1048,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Editierbare Eigenschaftsfelder durch den Verwalter</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Die hier ausgewählten Eigenschaftsfelder können von den Verwaltern der Gegenstände bearbeitet werden, wenn die Option \"Editierberechtigung für den Verwalter\" aktiviert ist. Alle anderen Felder sind schreibgeschützt und können nur von Modul-Administrator:innen geändert werden. (Voreinstellung: \"Letzter Empfänger\", \"Ausleihdatum\", \"Rückgabedatum\")</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Die Inventarverwaltung kann über diese Einstellung komplett deaktiviert, nur für angemeldete Personen, nur für Modul-Administrator:innen, für Modul-Administrator:innen und Gegenstandsverwalter oder für Modul-Administrator:innen und Mitglieder der ausgewählten Rollen freigegeben werden. Haben nur angemeldete Personen Zugriff, so wird das Modul für Gäste ausgeblendet. Wenn nur Modul-Administrator:innen Zugriff haben, ist das Modul nur für Personen mit der Berechtigung \"Inventar verwalten\" sichtbar. (Voreinstellung: Aktiviert)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Datum anfügen</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Datum dem Dateinamen voranstellen</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Wenn diese Option aktiviert ist, wird an den Dateinamen der Exportdatei das aktuelle Datum im Format JJJJ-MM-TT vorangestellt. (Voreinstellung: nein)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Negative Zahlen erlauben</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Wenn diese Option aktiviert ist, können in Feldern des Typs \"Zahl\" oder \"Dezimalzahl\" auch negative Zahlen eingetragen werden. Andernfalls sind nur positive Zahlen erlaubt. (Voreinstellung: ja)</string>
@@ -2038,7 +2038,7 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">Gültigkeitsdauer eines Autorisierungscodes in Sekunden. Codes können nur einmal verwendet werden. Standard: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authentifizierungs-Endpunkt</string>
   <string name="SYS_SSO_OIDC_AUTHORIZATION_FAILED">Die Anmeldeanfrage der Anwendung konnte nicht verarbeitet werden: #VAR1#</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Back-Channel-Abmelde-URI</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Back-Channel-Abmelde-URL</string>
   <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Abmeldemeldung von Server zu Server mit signiertem Token. Optional.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC claim</string>
   <string name="SYS_SSO_OIDC_CLIENT_UNKNOWN">Die Anwendung, die Sie hierher geschickt hat, ist in Admidio nicht registriert (Client-ID #VAR1#). Eine Anmeldung ist nicht möglich. Bitte informieren Sie den Administrator der Anwendung.</string>
@@ -2051,7 +2051,7 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Admidio als OpenID-Connect-Provider aktivieren. Dadurch ist die Anmeldung bei anderen Webanwendungen über ein Admidio-Konto möglich.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Sitzungskennung (sid) bei Front-Channel-Abmeldung senden</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Die OIDC-Parameter iss und sid mit Front-Channel-Abmeldeanfragen senden.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Front-Channel-Abmelde-URI</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Front-Channel-Abmelde-URL</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Abmeldemeldung über den Browser (iframe). Optional.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Aussteller</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Der eindeutige Bezeichner für OIDC dieser Admidio-Instanz. Normalerweise ist dies die Basis-URL Ihrer Admidio-Installation. Der Client muss mit genau der gleichen Entity-ID eingerichtet werden, sonst funktioniert die Anmeldung nicht.</string>

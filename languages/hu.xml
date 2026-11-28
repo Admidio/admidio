@@ -232,7 +232,7 @@
   <string name="SYS_ALL">Minden</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">A résztvevők névtelen vendégeket regisztrálhatnak</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">A résztvevők további helyeket adhatnak hozzá a regisztrációjukhoz. Ezeket levonjuk a maximális résztvevői létszámból ezzel csökkentve a fennmaradó szabad helyek számát. Ez például akkor hasznos, ha egy résztvevő több látogatót hozhat magával, így több szabad igényelve.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Hozzászólások engedélyezése a résztvevőként</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Megjegyzések engedélyezése a jelentkezéskor</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">A résztvevők kommentálhatják részvételüket. A hozzászólások a résztvevők listáján keresztül tekinthetők meg.</string>
   <string name="SYS_ALL_CONTACTS">Minden névjegy</string>
   <string name="SYS_ALL_DAY">Teljes munkaidő</string>
@@ -308,7 +308,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">A számítás eredménye nem helyes.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">A hitelesítési kód érvénytelen volt.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Azonosító kód</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Ellenőrző kód</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">A hitelesítési kód egy CAPTCHA része. A CAPTCHA-t a spam felismerésére használják. A kép segítségével lehet megállapítani, hogy a űrlapot egy felhasználó vagy egy szkript (vagy spamrobot) töltötte-e ki.\nKérjük, írja be az űrlapba a hitelesítési kód eredményét.</string>
   <string name="SYS_CAPTION_SIZE">Felirat mérete</string>
   <string name="SYS_CAPTION_SIZE_DESC">A felirat mérete arányos a kép méretével, amelyet a „Képméret / Osztószám” képlet alapján számolnak ki. Az osztószám növelésével a betűméret csökken. (Alapértelmezett: 40)</string>
@@ -536,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Az Ön regisztrációja nem módosítható, mert a regisztráció megadott határideje lejárt, vagy a dátum már a múltban van. Kérjük, vegye fel a kapcsolatot a rendezvény egyik vezetőjével vagy egy adminisztrátorral!</string>
   <string name="SYS_DEBUG_OUTPUT">Hibakeresési kimenet</string>
   <string name="SYS_DECIMAL_NUMBER">Tizedes szám</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">A regisztráció alapértelmezett hozzárendelése</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Alapértelmezett szerepkörök hozzárendelése regisztrációkor</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Ha új felhasználót hoznak létre vagy új regisztrációt fogadnak el, akkor ez a szerepkör automatikán hozzárendelődik az új felhasználóhoz. Ha a létrehozónak van jogosultsága szerepkörök hozzárendelésére, akkor az összes szerepkör-hozzárendelés megjelenik, és azok ennek megfelelően módosíthatók.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Alapértelmezett beállítások</string>
@@ -889,7 +889,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">A gondnok által szerkeszthető mezők</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Az itt kiválasztott tételmezőket a tételkezelő szerkesztheti, ha a „Szerkesztési jogosultság a tételkezelő számára” opció engedélyezve van. Az összes többi mező csak olvasható, és azokat kizárólag a modul rendszergazdái módosíthatják. (Alapértelmezés: „Utolsó kölcsönvevő”, „Kölcsönzés dátuma”, „Visszaadás dátuma”)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Ezzel a beállítással a készletkezelő modul teljesen letiltható, hozzáférhetővé tehető kizárólag bejelentkezett felhasználók számára, kizárólag a modul adminisztrátoraira korlátozható, hozzáférhetővé tehető a modul adminisztrátorai és a tárgykezelők számára, vagy hozzáférhetővé tehető egy kiválasztott szerepkör tagjai számára. Ha a hozzáférést csak bejelentkezett felhasználóknak engedélyezik, akkor a modul el van rejtve a vendégek elől. Ha csak a modul adminisztrátorai rendelkeznek hozzáféréssel, a modul kizárólag azoknak a felhasználóknak látható, akik rendelkeznek a „készletkezelés” jogosultsággal. (Alapértelmezett: Engedélyezve)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Dátum hozzáfűzése</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Dátum hozzáadása a fájlnév elejéhez</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Ha ez az opció be van kapcsolva, az exportált fájl nevéhez az aktuális dátum kerül előtagként hozzáadva ÉÉÉÉ-HH-NN formátumban. (Alapértelmezés: kikapcsolva)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Negatív számok megengedése</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Ha ez az opció engedélyezve van, a „Szám” vagy „Tizedes szám” típusú mezőkbe negatív számok is beírhatók. Ellenkező esetben csak pozitív számok megadása engedélyezett. (Alapértelmezés: igen)</string>
@@ -902,7 +902,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Dátumformátum</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">A leltárkezelőben a dátum- és időadatok megjelenítéséhez használandó dátumformátum kiválasztása. (Alapértelmezett: Dátum (NN.HH.ÉÉÉÉ))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">Ebben a táblázatban adhatja meg az időtartamokra vonatkozó bejegyzéseket. A legördülő listában szereplő minden egyes további bejegyzéshez itt lehet egy táblázatsort hozzáadni.\nA listaelemet később nem szövegként tárolja a rendszer, hanem a listából kiválasztott pozíciót. Ha megváltoztatja egy sor szövegét, az új szöveg azonnal láthatóvá válik minden felhasználó számára.\nA dátumintervallumot ugyanabban a sorban kell megadni, a cím után a | szimbólummal elválasztva. Pl.: Évente | 1y \nHa nincs megadva mértékegység, akkor a rendszer napokat feltételez. \nLehetséges mértékegységek: n: napok, w: hetek, h: hónapok, é: évek</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Tizedesek</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Tizedesjegyek</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">A „Tizedes szám” típusú mezőknél megjelenítendő tizedesjegyek száma. (Alapértelmezett: 1)</string>
   <string name="SYS_INVENTORY_DESC">A készletkezelő segítségével rendszerezheti, kezelheti és nyomon követheti a tételeket.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1116,7 +1116,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">a maximális feldolgozható kép mérete</string>
   <string name="SYS_MAX_RECEIVER">A levélcímzettek maximális száma</string>
   <string name="SYS_MAX_RECEIVER_DESC">Ez az érték határozza meg a levelezési címzettek maximális számát. Egy szerepkör egy címzettnek számít.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Részvétel foglalással</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Feltételes részvétel engedélyezése</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Ha ez az opció be van kapcsolva, az eseményre való regisztráció során a #VAR1_BOLD# és a #VAR2_BOLD# mellett egy harmadik opció, a #VAR3_BOLD# is elérhetővé válik. (Alapértelmezett: ki van kapcsolva)</string>
   <string name="SYS_MEETINGS">Találkozások</string>
   <string name="SYS_MEETING_POINT">Találkozási pont</string>
@@ -1748,7 +1748,7 @@
   <string name="SYS_SPOUSE">Házastárs</string>
   <string name="SYS_SSO">Egyszeri bejelentkezés</string>
   <string name="SYS_SSO_ACS_URL">Assertion fogyasztói URL</string>
-  <string name="SYS_SSO_ACS_URL_DESC">A szolgáltató ezen az URL-címen kapja meg a SAML-bejelentkezési választ.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">A szolgáltató ezeken az URL-címeken kapja meg a SAML-bejelentkezési választ. Soronként egy URL-címet adj meg. Ha a kérés nem ad meg címet, a válasz az első címre érkezik. A kérés a többi cím bármelyikét megadhatja.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Speciális beállítások</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Helyi hálózati lekérdezések engedélyezése</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1827,16 +1827,16 @@
   <string name="SYS_SSO_KEY_SETTING">Kriptográfiai kulcsbeállítások</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Ügyfél-metadatok betöltése</string>
+  <string name="SYS_SSO_LOAD_METADATA">Betöltés</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">A(z) #VAR2# fiókkal jelentkeztél be, de ennek a fióknak nincs hozzáférése a klienshez (#VAR1#). A folytatáshoz jelentkezz be alább másik fiókkal (ez lezárja a(z) #VAR2# munkamenetét), vagy válaszd a megszakítást a klienshez való visszatéréshez.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Metaadatok újratöltése</string>
   <string name="SYS_SSO_METADATA_STATUS">Metaadatok állapota</string>
-  <string name="SYS_SSO_METADATA_URL">Metaadatok URL-címe (opcionális)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">Metaadatok URL-címe vagy XML-tartalma (nem kötelező)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Add meg az alkalmazás SAML-metaadatainak URL-címét, vagy illeszd be az XML-tartalmat, majd válaszd a Betöltés lehetőséget. Az URL-ről származó metaadatok automatikusan frissíthetők, a beillesztett XML csak egyszer kerül alkalmazásra.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Először add meg a metaadatok URL-címét vagy illeszd be az XML-tartalmukat.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nincs beállítva kriptográfiai kulcs a SAML- vagy OIDC-üzenetek aláírásához vagy titkosításához!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1851,8 +1851,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Kijelentkezési URL a háttércsatornához</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Kijelentkezési értesítés a kiszolgálók között, aláírt tokennel. Nem kötelező.</string>
   <string name="SYS_SSO_OIDC_CLAIM">OIDC-igény</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1863,8 +1863,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Kijelentkezési URL a böngészőcsatornához</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Kijelentkezési értesítés a böngészőn keresztül (iframe). Nem kötelező.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1958,7 +1958,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">A kliens tanúsítványai az aláírt SAML-üzenetek ellenőrzéséhez. Több tanúsítvány is megadható egymás után, például a klienskulcs cseréjekor. Az üzenet akkor fogadható el, ha valamelyik tanúsítvánnyal ellenőrizhető. Titkosítási tanúsítvány hiányában az állításokat az első tanúsítvánnyal titkosítja a rendszer.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_APPROVED">Jóváhagyva</string>
   <string name="SYS_STATUS_BORROWED">Kölcsönözve</string>
@@ -2141,7 +2141,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Az Ön konfigurációja</string>
   <string name="SYS_YOUR_EMAIL">Az Ön e-mail címe</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Az Ön legutóbbi beállításai</string>
-  <string name="SYS_YOUR_LISTS">Saját listák</string>
+  <string name="SYS_YOUR_LISTS">Saját listáid</string>
   <string name="SYS_YOUR_NAME">Az ön neve</string>
   <string name="SYS_Z_TO_A">Z től A -ig</string>
 </resources>

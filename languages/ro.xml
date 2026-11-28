@@ -232,7 +232,7 @@
   <string name="SYS_ALL">Toate</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Participanții pot înregistra oaspeți anonimi</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Participanții pot adăuga locuri suplimentare la înregistrarea lor. Acestea sunt apoi scăzute din numărul maxim de participanți, iar numărul de locuri libere rămase este astfel redus. Acest lucru este util, de exemplu, dacă un participant poate aduce mai mulți vizitatori și are nevoie, prin urmare, de un număr total mai mare de locuri libere.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Permiteți comentarii în cadrul participării</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Permite comentarii la înscrierea la eveniment</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Participanții pot comenta participarea lor. Comentariile pot fi vizualizate prin intermediul listei participanților.</string>
   <string name="SYS_ALL_CONTACTS">Toate contactele</string>
   <string name="SYS_ALL_DAY">Normă întreagă</string>
@@ -308,7 +308,7 @@
   <string name="SYS_CAPTCHA">Captcha</string>
   <string name="SYS_CAPTCHA_CALC_CODE_INVALID">Rezultatul calculului nu este corect.</string>
   <string name="SYS_CAPTCHA_CODE_INVALID">Codul de autentificare nu este valid.</string>
-  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Cod de autentificare</string>
+  <string name="SYS_CAPTCHA_CONFIRMATION_CODE">Cod de verificare</string>
   <string name="SYS_CAPTCHA_DESCRIPTION">Codul de autentificare face parte dintr-un captcha. Un captcha este utilizat pentru detectarea spamului. Imaginea este utilizată pentru a detecta dacă un utilizator sau un script (sau spambot) a completat formularul. Vă rugăm să introduceți rezultatul codului de autentificare în formular.</string>
   <string name="SYS_CAPTION_SIZE">Dimensiunea capturii</string>
   <string name="SYS_CAPTION_SIZE_DESC">Dimensiunea legendei este proporțională cu dimensiunea imaginii, calculată după formula „Dimensiunea imaginii / Divizor”. Prin mărirea divizorului, dimensiunea fontului va fi redusă. (Implicit: 40)</string>
@@ -536,7 +536,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Înregistrarea dvs. nu poate fi modificată deoarece data limită pentru înregistrări a fost depășită sau data este trecută. Vă rugăm să contactați un organizator al evenimentului sau un administrator!</string>
   <string name="SYS_DEBUG_OUTPUT">Ieșire de depanare</string>
   <string name="SYS_DECIMAL_NUMBER">Număr zecimal</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Atribuirea implicită a înregistrării</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Atribuirea implicită a rolurilor la înregistrare</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Dacă se creează un utilizator nou sau se acceptă o înregistrare nouă, acest rol este atribuit automat utilizatorului nou. Când creatorul are dreptul de a atribui roluri, toate mapările de roluri sunt afișate și pot fi modificate în consecință.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Configurație implicită</string>
@@ -889,7 +889,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Câmpuri editabile de către administrator</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Câmpurile articolului selectate aici pot fi editate de către deținătorul articolului atunci când opțiunea „Permisiune de editare pentru deținător” este activată. Toate celelalte câmpuri sunt numai pentru citire și pot fi modificate numai de administratorii modulului. (Implicit: „Ultimul destinatar”, „Data împrumutului”, „Data returnării”)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Modulul de gestionare a inventarului poate fi complet dezactivat, accesibil numai utilizatorilor conectați, restricționat exclusiv administratorilor modulului, accesibil administratorilor modulului și responsabililor cu articolele sau accesibil membrilor unui rol selectat prin această setare. Dacă accesul este acordat numai utilizatorilor conectați, modulul este ascuns oaspeților. Dacă numai administratorii modulului au acces, modulul este vizibil numai utilizatorilor cu permisiunea „gestionare inventar”. (Implicit: Activat)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Data adăugării</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Adaugă data la începutul numelui fișierului</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Când această opțiune este activată, data curentă în formatul AAAA-LL-ZZ va fi prefixată la numele fișierului de export. (Implicit: nu)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Permite numere negative</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Dacă această opțiune este activată, numerele negative pot fi introduse și în câmpurile de tip „Număr” sau „Număr zecimal”. În caz contrar, sunt permise numai numerele pozitive. (Implicit: da)</string>
@@ -902,7 +902,7 @@
   <string name="SYS_INVENTORY_DATETIME_FORMAT">Formatul datei</string>
   <string name="SYS_INVENTORY_DATETIME_FORMAT_DESC">Selectarea formatului de dată care va fi utilizat pentru afișarea informațiilor privind data și ora în managerul de inventar. (Implicit: Data (ZZ.LL.AAAA))</string>
   <string name="SYS_INVENTORY_DATE_INTERVAL_LIST_DESC">În acest tabel, puteți introduce intrările pentru intervalele de date. Aici se poate adăuga un rând de tabel pentru fiecare intrare ulterioară din caseta listă derulantă. Intrarea din listă nu este stocată ulterior ca text, ci poziția selectată din listă. Dacă modificați textul dintr-un rând, toți utilizatorii vor vedea imediat noul text. Intervalul de date trebuie scris în același rând, separat de simbolul | după titlu. De exemplu: Anual | 1 an. Dacă nu este specificată nicio unitate, se presupune că este vorba de zile. Unități posibile: d: zile, w: săptămâni, m: luni, y: ani.</string>
-  <string name="SYS_INVENTORY_DECIMAL_PLACES">Pași zecimali</string>
+  <string name="SYS_INVENTORY_DECIMAL_PLACES">Zecimale</string>
   <string name="SYS_INVENTORY_DECIMAL_PLACES_DESC">Numărul de zecimale care vor fi afișate pentru câmpurile de tip „Număr zecimal”. (Implicit: 1)</string>
   <string name="SYS_INVENTORY_DESC">Managerul de inventar vă permite să organizați, să gestionați și să urmăriți articolele.</string>
   <string name="SYS_INVENTORY_EXPORT">Export</string>
@@ -1116,7 +1116,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">dimensiunea maximă a imaginii care poate fi procesată</string>
   <string name="SYS_MAX_RECEIVER">Numărul maxim de destinatari ai mesajului</string>
   <string name="SYS_MAX_RECEIVER_DESC">Această valoare definește numărul maxim de destinatari ai mesajului. Un rol este considerat un singur destinatar.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Participă cu rezervare</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Permite participarea provizorie</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Dacă această opțiune este activată, o a treia opțiune #VAR3_BOLD# este disponibilă în plus față de #VAR1_BOLD# și #VAR2_BOLD# la înregistrarea pentru un eveniment. (Implicit: dezactivat)</string>
   <string name="SYS_MEETINGS">Întâlniri</string>
   <string name="SYS_MEETING_POINT">Punct de întâlnire</string>
@@ -1748,7 +1748,7 @@
   <string name="SYS_SPOUSE">Soț/soție</string>
   <string name="SYS_SSO">Autentificare unică (SSO)</string>
   <string name="SYS_SSO_ACS_URL">URL-ul consumatorului de aserțiuni</string>
-  <string name="SYS_SSO_ACS_URL_DESC">Furnizorul de servicii primește răspunsul de autentificare SAML la această adresă URL.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Furnizorul de servicii primește răspunsul de autentificare SAML la aceste URL-uri. Introdu câte un URL pe linie. Dacă solicitarea nu precizează niciun URL, răspunsul se trimite la primul. Solicitarea poate preciza oricare dintre celelalte URL-uri.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Setări avansate</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Permite solicitările din rețeaua locală</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">În mod implicit, cererile SSO de pe partea serverului (preluarea metadatelor, deconectarea prin canal secundar) pot accesa numai adrese HTTPS publice. Activați această opțiune numai dacă un furnizor de servicii este accesibil exclusiv printr-o adresă privată din propria rețea.</string>
@@ -1827,16 +1827,16 @@
   <string name="SYS_SSO_KEY_SETTING">Setări cheie criptografică</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Încărcare metadate client</string>
+  <string name="SYS_SSO_LOAD_METADATA">Încarcă</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">You are signed in, but your account does not have permission to access the client (#VAR1#). Sign in with a different account or return to the client.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Te-ai autentificat ca #VAR2#, dar acest cont nu are permisiunea de a accesa clientul (#VAR1#). Pentru a continua, autentifică-te mai jos cu alt cont (sesiunea contului #VAR2# se va încheia) sau anulează pentru a reveni la client.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Reîncarcă metadatele</string>
   <string name="SYS_SSO_METADATA_STATUS">Starea metadatelor</string>
-  <string name="SYS_SSO_METADATA_URL">URL metadate (opțional)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Paste the application’s SAML metadata URL, then choose Load metadata to fill these settings.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">URL sau XML pentru metadate (opțional)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Introdu URL-ul metadatelor SAML ale aplicației sau lipește conținutul lor XML, apoi alege Încarcă. Metadatele de la un URL pot fi actualizate automat, iar conținutul XML lipit se aplică o singură dată.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Introdu mai întâi URL-ul metadatelor sau lipește conținutul lor XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Client name and properties</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nu sunt configurate chei criptografice pentru semnarea sau criptarea mesajelor SAML sau OIDC!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">No OIDC clients configured!</string>
@@ -1851,8 +1851,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Authorization URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">URL de deconectare prin canalul din spate</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Notificare de deconectare între servere, cu un jeton semnat. Opțional.</string>
   <string name="SYS_SSO_OIDC_CLAIM">Cerere OIDC</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1863,8 +1863,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">Enable Admidio to act as an OpenID Connect provider, allowing users to sign in to web applications using their Admidio accounts.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">URL de deconectare prin canalul frontal</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Notificare de deconectare prin browser (iframe). Opțional.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer URL</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Public issuer URL of this OpenID Connect provider. Leave empty to use Admidio’s public URL. Set this only if Admidio is exposed at a different external URL.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1958,7 +1958,7 @@
   <string name="SYS_SSO_USERID_UUID">User UUID</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Validate service provider signatures</string>
   <string name="SYS_SSO_X509_CERTIFICATE">X.509 client certificate</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Client certificate used to verify signed SAML messages and to encrypt assertions.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certificatele clientului folosite la verificarea mesajelor SAML semnate. Poți introduce mai multe certificate consecutiv, de exemplu atunci când clientul își schimbă cheia. Un mesaj este acceptat dacă poate fi verificat cu unul dintre ele. În lipsa unui certificat de criptare, aserțiunile sunt criptate cu primul certificat.</string>
   <string name="SYS_START" description="Start of a date">Start</string>
   <string name="SYS_STATUS_APPROVED">Aprobat</string>
   <string name="SYS_STATUS_BORROWED">Împrumutat</string>
@@ -2141,7 +2141,7 @@
   <string name="SYS_YOUR_CONFIGURATION">Configurație</string>
   <string name="SYS_YOUR_EMAIL">E-mail</string>
   <string name="SYS_YOUR_LAST_CONFIGURATION">Ultima configurație</string>
-  <string name="SYS_YOUR_LISTS">Liste proprii</string>
+  <string name="SYS_YOUR_LISTS">Listele tale</string>
   <string name="SYS_YOUR_NAME">Numele</string>
   <string name="SYS_Z_TO_A">De la Z la A</string>
 </resources>

@@ -230,7 +230,7 @@
   <string name="SYS_ALL">Wszystkie</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS">Uczestnicy mogą rejestrować anonimowych gości</string>
   <string name="SYS_ALLOW_ADDITIONAL_GUESTS_DESC">Uczestnicy mogą dodać więcej osób do swojej rejestracji, co zmniejsza liczbę całkowitych wolnych miejsc. To przydatne np. jeśli jeden z uczestników chce przyjść z osobami towarzyszącymi i potrzebuje dodatkowych miejsc z puli.</string>
-  <string name="SYS_ALLOW_USER_COMMENTS">Pozwalaj komentować w ramach uczestnictwa</string>
+  <string name="SYS_ALLOW_USER_COMMENTS">Zezwalaj na komentarze przy zapisie na wydarzenie</string>
   <string name="SYS_ALLOW_USER_COMMENTS_DESC">Uczestnicy mogą komentować swój udział. Komentarze można przeglądać za pośrednictwem listy uczestników</string>
   <string name="SYS_ALL_CONTACTS">Wszystkie kontakty</string>
   <string name="SYS_ALL_DAY">Cały dzień</string>
@@ -534,7 +534,7 @@
   <string name="SYS_DEADLINE_ATTENTION">Twoja rejestracja nie może zostać zmieniona, ponieważ podana data zakończenia rejestracji została przekroczona lub data już minęła. Prosimy o kontakt z liderem wydarzenia lub administratorem!</string>
   <string name="SYS_DEBUG_OUTPUT">Dane wyjściowe Debug</string>
   <string name="SYS_DECIMAL_NUMBER">Liczba dziesiętna</string>
-  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Domyślne przypisanie rejestracji</string>
+  <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION">Domyślne przypisanie ról przy rejestracji</string>
   <string name="SYS_DEFAULT_ASSIGNMENT_REGISTRATION_DESC">Jeśli nowy użytkownik zostaje utworzony lub nowa rejestracja zostaje zaakceptowana, ta rola jest automatycznie przypisywana nowemu użytkownikowi. Kiedy twórca ma dostęp do przypisywania ról, wszystkie mapowania ról są wyświetlone i mogą zostać zmienione.</string>
   <string name="SYS_DEFAULT_COLOR">Default color</string>
   <string name="SYS_DEFAULT_CONFIGURATION">Domyślna konfiguracja</string>
@@ -887,7 +887,7 @@
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS">Pola edytowalne przez opiekuna</string>
   <string name="SYS_INVENTORY_ACCESS_EDIT_FIELDS_DESC">Wybrane tutaj pola przedmiotu mogą być edytowane przez opiekuna przedmiotu, gdy opcja „Uprawnienie opiekuna do edycji” jest włączona. Wszystkie pozostałe pola są tylko do odczytu i mogą być zmieniane wyłącznie przez administratorów modułu. (domyślnie: „Ostatni odbiorca”, „Data wypożyczenia”, „Data zwrotu”)</string>
   <string name="SYS_INVENTORY_ACCESS_TO_MODULE_DESC">Za pomocą tego ustawienia moduł inwentarza może zostać całkowicie wyłączony, udostępniony tylko zalogowanym użytkownikom, ograniczony wyłącznie do administratorów modułu, udostępniony administratorom modułu i opiekunom przedmiotów albo udostępniony członkom wybranej roli. Jeśli dostęp jest przyznany tylko zalogowanym użytkownikom, moduł jest ukryty dla gości. Jeśli dostęp mają tylko administratorzy modułu, moduł jest widoczny wyłącznie dla użytkowników z uprawnieniem „zarządzanie inwentarzem”. (domyślnie: włączony)</string>
-  <string name="SYS_INVENTORY_ADD_DATE">Dodaj datę</string>
+  <string name="SYS_INVENTORY_ADD_DATE">Dodaj datę na początku nazwy pliku</string>
   <string name="SYS_INVENTORY_ADD_DATE_DESC">Jeśli ta opcja jest włączona, bieżąca data w formacie YYYY-MM-DD zostanie dodana na początku nazwy pliku eksportu. (domyślnie: nie)</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS">Zezwalaj na liczby ujemne</string>
   <string name="SYS_INVENTORY_ALLOW_NEGATIVE_NUMBERS_DESC">Jeśli ta opcja jest włączona, w polach typu „Liczba” lub „Liczba dziesiętna” można wprowadzać również liczby ujemne. W przeciwnym razie dozwolone są tylko liczby dodatnie. (domyślnie: tak)</string>
@@ -1114,7 +1114,7 @@
   <string name="SYS_MAX_PROCESSABLE_IMAGE_SIZE">Maks. rozmiar przetwarzanego zdjęcia</string>
   <string name="SYS_MAX_RECEIVER">Maksymalna liczba odbiorców wiadomości</string>
   <string name="SYS_MAX_RECEIVER_DESC">Ta wartość określa maksymalną liczbę odbiorców poczty. Rola liczy się jako jeden odbiorca.</string>
-  <string name="SYS_MAYBE_PARTICIPATE">Weź udział z rezerewacją</string>
+  <string name="SYS_MAYBE_PARTICIPATE">Zezwalaj na wstępne zgłoszenie udziału</string>
   <string name="SYS_MAYBE_PARTICIPATE_DESC">Jeśli ta opcja jest aktywna, podczas rejestracji na wydarzenie dostępna jest trzecia opcja #VAR3_BOLD# oprócz #VAR1_BOLD# i #VAR2_BOLD#. (domyślnie: wyłączone)</string>
   <string name="SYS_MEETINGS">Spotkania</string>
   <string name="SYS_MEETING_POINT">Miejsce spotkania</string>
@@ -1746,7 +1746,7 @@
   <string name="SYS_SPOUSE">Małżonek/a</string>
   <string name="SYS_SSO">Logowanie jednokrotne (SSO)</string>
   <string name="SYS_SSO_ACS_URL">Adres URL ACS</string>
-  <string name="SYS_SSO_ACS_URL_DESC">Adres URL Assertion Consumer Service (ACS) jest głównym punktem wejścia klienta. Po pomyślnym zalogowaniu w Admidio użytkownik zostanie przekierowany pod ten adres URL i zalogowany w kliencie.</string>
+  <string name="SYS_SSO_ACS_URL_DESC">Dostawca usługi odbiera odpowiedź SAML na logowanie pod tymi adresami URL. Wprowadź po jednym adresie w każdym wierszu. Jeśli żądanie nie wskazuje adresu, odpowiedź jest wysyłana na pierwszy z listy. Żądanie może wskazać dowolny z pozostałych adresów.</string>
   <string name="SYS_SSO_ADVANCED_PROPERTIES">Advanced settings</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK">Allow local network requests</string>
   <string name="SYS_SSO_ALLOW_PRIVATE_NETWORK_DESC">By default, server-side SSO requests (metadata retrieval, back-channel logout) may only call public HTTPS addresses. Enable this only if a service provider is reachable solely under a private address in your own network.</string>
@@ -1825,16 +1825,16 @@
   <string name="SYS_SSO_KEY_SETTING">Ustawienia kluczy kryptograficznych</string>
   <string name="SYS_SSO_KEY_TYPE_UNSUPPORTED">This key type is not supported.</string>
   <string name="SYS_SSO_KEY_USAGE_INVALID">The requested key use is not supported.</string>
-  <string name="SYS_SSO_LOAD_METADATA">Wczytaj metadane klienta</string>
+  <string name="SYS_SSO_LOAD_METADATA">Wczytaj</string>
   <string name="SYS_SSO_LOGIN_CANCELLED">Authentication was canceled by the user.</string>
-  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Zalogowano pomyślnie, ale konto użytkownika nie ma uprawnień dostępu do dostawcy usług (#VAR1#). Spróbuj zalogować się poniżej innym kontem albo wróć do dostawcy usług.</string>
+  <string name="SYS_SSO_LOGIN_MISSING_PERMISSIONS">Jesteś zalogowany jako #VAR2#, ale to konto nie ma uprawnień dostępu do klienta (#VAR1#). Aby kontynuować, zaloguj się poniżej na inne konto (spowoduje to zakończenie sesji konta #VAR2#) lub anuluj, aby wrócić do klienta.</string>
   <string name="SYS_SSO_METADATA_INVALID">The downloaded SAML metadata is not valid XML metadata.</string>
   <string name="SYS_SSO_METADATA_LOAD_FAILED">Could not load the SAML metadata. Check the URL and try again.</string>
   <string name="SYS_SSO_METADATA_RELOAD">Wczytaj ponownie metadane</string>
   <string name="SYS_SSO_METADATA_STATUS">Stan metadanych</string>
-  <string name="SYS_SSO_METADATA_URL">Adres URL metadanych (opcjonalny)</string>
-  <string name="SYS_SSO_METADATA_URL_DESC">Niektórzy klienci udostępniają plik metadanych zawierający wszystkie wymagane ustawienia. Automatyczne pobieranie tych metadanych działa tylko wtedy, gdy ten adres URL jest dostępny dla serwera Admidio.</string>
-  <string name="SYS_SSO_METADATA_URL_REQUIRED">Enter a SAML metadata URL first.</string>
+  <string name="SYS_SSO_METADATA_URL">Adres URL lub XML metadanych (opcjonalnie)</string>
+  <string name="SYS_SSO_METADATA_URL_DESC">Wprowadź adres URL metadanych SAML aplikacji albo wklej metadane w formacie XML, a następnie wybierz Wczytaj. Metadane z adresu URL można odświeżać automatycznie, a wklejony XML jest stosowany jednorazowo.</string>
+  <string name="SYS_SSO_METADATA_URL_REQUIRED">Najpierw wprowadź adres URL metadanych lub wklej metadane w formacie XML.</string>
   <string name="SYS_SSO_NAME_PROPERTIES">Nazwa i właściwości klienta (dostawcy usług)</string>
   <string name="SYS_SSO_NO_KEYS_FOUND">Nie skonfigurowano żadnych kluczy kryptograficznych do podpisywania lub szyfrowania wiadomości SAML albo OIDC!</string>
   <string name="SYS_SSO_NO_OIDC_CLIENTS_FOUND">Nie skonfigurowano klientów OIDC (dostawców usług)!</string>
@@ -1849,8 +1849,8 @@
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME">Authorization code lifetime</string>
   <string name="SYS_SSO_OIDC_AUTH_CODE_LIFETIME_DESC">How long an authorization code can be used, in seconds. Codes are single-use. Default: 600.</string>
   <string name="SYS_SSO_OIDC_AUTH_ENDPOINT">Endpoint uwierzytelniania</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Server logout notification URL</string>
-  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Admidio sends a signed logout token to this URL so the application can end its session without using the browser.</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI">Adres URL wylogowania przez kanał zaplecza</string>
+  <string name="SYS_SSO_OIDC_BACKCHANNEL_LOGOUT_URI_DESC">Powiadomienie o wylogowaniu przesyłane między serwerami z podpisanym tokenem. Opcjonalne.</string>
   <string name="SYS_SSO_OIDC_CLAIM">Claim OIDC</string>
   <string name="SYS_SSO_OIDC_CONSENTS">OIDC access consents</string>
   <string name="SYS_SSO_OIDC_CONSENT_DESC">#VAR1# wants to access your Admidio account.</string>
@@ -1861,8 +1861,8 @@
   <string name="SYS_SSO_OIDC_ENABLED_DESC">To ustawienie zmienia Admidio w dostawcę tożsamości OIDC (IdP) dla logowania jednokrotnego, co pozwala innym aplikacjom internetowym uwierzytelniać użytkowników na podstawie listy użytkowników Admidio.</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED">Send session identifier (sid) for front-channel logout</string>
   <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_SESSION_REQUIRED_DESC">Send the OIDC iss and sid parameters with front-channel logout requests.</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Browser logout notification URL</string>
-  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Admidio opens this URL in the user’s browser during logout so the application can end its session.</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI">Adres URL wylogowania przez kanał przeglądarki</string>
+  <string name="SYS_SSO_OIDC_FRONTCHANNEL_LOGOUT_URI_DESC">Powiadomienie o wylogowaniu przez przeglądarkę (iframe). Opcjonalne.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL">Issuer</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_DESC">Unikalny identyfikator OIDC tej instancji Admidio. Zazwyczaj jest to podstawowy adres URL instalacji Admidio. Klient musi być skonfigurowany dokładnie z tą samą wartością, w przeciwnym razie logowanie nie będzie działać.</string>
   <string name="SYS_SSO_OIDC_ISSUER_URL_INVALID">Enter a valid HTTPS URL without query string or fragment. HTTP is allowed only for localhost.</string>
@@ -1956,7 +1956,7 @@
   <string name="SYS_SSO_USERID_UUID">UUID użytkownika (losowy ciąg 32 znaków)</string>
   <string name="SYS_SSO_VALIDATE_SIGNATURES">Weryfikuj podpisy wszystkich otrzymanych żądań</string>
   <string name="SYS_SSO_X509_CERTIFICATE">Certyfikat klienta X.509</string>
-  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Wiadomości SAML są podpisywane kryptograficznie, aby zapobiegać atakom bezpieczeństwa. Ten certyfikat jest dostarczany przez klienta i musi zostać wprowadzony lub skopiowany dokładnie w takiej postaci, w jakiej podał go klient. W przeciwnym razie komunikacja SAML nie powiedzie się i logowanie SSO nie będzie możliwe.</string>
+  <string name="SYS_SSO_X509_CERTIFICATE_DESC">Certyfikaty klienta służące do weryfikacji podpisanych komunikatów SAML. Można wpisać kolejno kilka certyfikatów, np. podczas wymiany klucza klienta. Komunikat zostaje przyjęty, jeśli można go zweryfikować jednym z nich. Jeśli nie podano certyfikatu do szyfrowania, asercje są szyfrowane przy użyciu pierwszego certyfikatu.</string>
   <string name="SYS_START" description="Start of a date">Początek</string>
   <string name="SYS_STATUS_APPROVED">Zatwierdzono</string>
   <string name="SYS_STATUS_BORROWED">Wypożyczono</string>
